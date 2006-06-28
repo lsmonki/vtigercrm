@@ -19,7 +19,7 @@ $result = $adb->query($sql);
 $inv_id = $adb->query_result($result,0,'id');
 if($inv_id == '')
 {
-        $inv_id=$adb->getUniqueID('inventory_tandc');
+        $inv_id=$adb->getUniqueID('vtiger_inventory_tandc');
         $sql="insert into vtiger_inventory_tandc values( '".$inv_id ."','".$inv_type."','". $inv_tandc."')";
 }
 else
