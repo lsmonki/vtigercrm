@@ -973,7 +973,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 {
 	global $log;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
-	global $adb;
+	global $adb,$current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol=getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
 	$tabname = getParentTab();
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
@@ -1016,7 +1019,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		if($temp_val != '' && $temp_val != 0)
 		{       //changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
-                        $value = $temp_val;
+                        $value = convertFromDollar($temp_val,$rate);
 		}
 		else
 		{
@@ -1327,6 +1330,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$servicetax = getProductTaxPercentage('Service',$entity_id,'default');
 
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'", "'.$vattax.'","'.$salestax.'","'.$servicetax.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
@@ -1339,6 +1343,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$servicetax = getProductTaxPercentage('Service',$entity_id,'default');
 
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					$unitprice = convertFromDollar($unitprice,$rate);
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$vattax.'","'.$salestax.'","'.$servicetax.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
@@ -1509,6 +1514,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 			}
+		}
+		elseif($fieldname == 'hdnGrandTotal' || $fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
+		{
+			$value = convertFromDollar($temp_val,$rate);
 		}
 		else
 		{
