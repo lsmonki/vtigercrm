@@ -115,6 +115,7 @@ class User {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
+	var $homeorder_array = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','HDB');
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
@@ -868,7 +869,6 @@ function get_user_groups($id)
 			$button = '';
 			$query = 'select vtiger_users.*,vtiger_groups.* from vtiger_users inner join vtiger_users2group on vtiger_users.id=vtiger_users2group.userid left join vtiger_groups on vtiger_groups.groupid=vtiger_users2group.groupid where vtiger_users.id='.$id;
 			$log->debug("Exiting get_contacts method ...");
-			echo '<pre>';print_r(getAllGroupInfo($query));echo '</pre>';
 			return getAllGroupInfo($query);
 			}
 
@@ -880,6 +880,54 @@ function get_user_groups($id)
 	        $log->debug("module name is ".$module_name);
 		//GS Save entity being called with the modulename as parameter
 		$this->saveentity($module_name);
+	}
+	function getHomeOrder($id="")	
+	{
+		global $log;
+		global $adb;
+		$log->debug("Entering in function getHomeOrder($id)");
+		if($id == '')
+		{
+			for($i = 0;$i < count($this->homeorder_array);$i++)
+                        {
+				$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+			}
+		}else
+		{
+			$query = "select homeorder from vtiger_users where id=$id";
+			$homeorder = $adb->query_result($adb->query($query),0,'homeorder');
+			for($i = 0;$i < count($this->homeorder_array);$i++)
+			{
+				if(!stristr($homeorder,$this->homeorder_array[$i]))
+				{
+					$return_array[$this->homeorder_array[$i]] = '';
+				}else
+				{
+					$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+				}
+					
+			}
+
+		}
+
+		$log->debug("Exiting from function getHomeOrder($id)");
+		return $return_array;
+	}
+	function saveHomeOrder($id)
+	{
+		if($id == '')
+			return null;
+		global $log,$adb;
+                $log->debug("Entering in function saveHomeOrder($id)");
+		for($i = 0;$i < count($this->homeorder_array);$i++)
+                {
+			if($_REQUEST[$this->homeorder_array[$i]] != '')
+				$save_array[] = $this->homeorder_array[$i];
+		}
+		$homeorder = implode(',',$save_array);	
+		$query = "update vtiger_users set homeorder ='$homeorder' where id=$id";
+		$adb->query($query);
+                $log->debug("Exiting from function saveHomeOrder($id)");
 	}
 
 }
