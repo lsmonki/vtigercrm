@@ -1504,6 +1504,10 @@ function setObjectValuesFromRequest($focus)
 {
 	global $log;
 	$log->debug("Entering setObjectValuesFromRequest(".$focus.") method ...");
+	global $current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
 	if(isset($_REQUEST['record']))
 	{
 		$focus->id = $_REQUEST['record'];
@@ -1519,6 +1523,27 @@ function setObjectValuesFromRequest($focus)
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
 		}
+		if(isset($_REQUEST['txtTax']))
+		{
+			$value = convertToDollar($_REQUEST['txtTax'],$rate);
+			$focus->column_fields['txtTax'] = $value;
+		}
+		if(isset($_REQUEST['txtAdjustment']))
+		{
+			$value = convertToDollar($_REQUEST['txtAdjustment'],$rate);
+			$focus->column_fields['txtAdjustment'] = $value;
+		}
+		if(isset($_REQUEST['hdnSubTotal']))
+		{
+			$value = convertToDollar($_REQUEST['hdnSubTotal'],$rate);
+			$focus->column_fields['hdnSubTotal'] = $value;
+		}
+		if(isset($_REQUEST['hdnGrandTotal']))
+		{
+			$value = convertToDollar($_REQUEST['hdnGrandTotal'],$rate);
+			$focus->column_fields['hdnGrandTotal'] = $value;
+		}
+
 	}
 	$log->debug("Exiting setObjectValuesFromRequest method ...");
 }
