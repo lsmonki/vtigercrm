@@ -28,7 +28,7 @@ $id=$adb->query_result($adb->query($sql),0,"id");
 
 if($id=='')
 {
-	$id = $adb->getUniqueID("systems");
+	$id = $adb->getUniqueID("vtiger_systems");
 	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
 }
 else
