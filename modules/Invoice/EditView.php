@@ -31,11 +31,13 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings,$mod_strings,$currentModule,$log;
+global $app_strings,$mod_strings,$currentModule,$log,$current_user;
 
 $focus = new Invoice();
 $smarty = new vtigerCRM_Smarty();
-
+$currencyid=fetchCurrency($current_user->id);
+$rate_symbol = getCurrencySymbolandCRate($currencyid);
+$rate = $rate_symbol['rate'];
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
@@ -53,10 +55,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("TAXVALUE", $txtTax);
-	$smarty->assign("ADJUSTMENTVALUE", $txtAdj);
-	$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
-	$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
+	$smarty->assign("TAXVALUE", convertFromDollar($txtTax,$rate));
+	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($txtAdj,$rate));
+	$smarty->assign("SUBTOTAL", convertFromDollar($quote_focus->column_fields['hdnSubTotal'],$rate));
+	$smarty->assign("GRANDTOTAL", convertFromDollar($quote_focus->column_fields['hdnGrandTotal'],$rate));
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
@@ -74,10 +76,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
-	$smarty->assign("TAXVALUE", $txtTax);
-	$smarty->assign("ADJUSTMENTVALUE", $txtAdj);
-	$smarty->assign("SUBTOTAL", $so_focus->column_fields['hdnSubTotal']);
-	$smarty->assign("GRANDTOTAL", $so_focus->column_fields['hdnGrandTotal']);
+	$smarty->assign("TAXVALUE", convertFromDollar($txtTax,$rate));
+	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($txtAdj,$rate));
+	$smarty->assign("SUBTOTAL", convertFromDollar($so_focus->column_fields['hdnSubTotal'],$rate));
+	$smarty->assign("GRANDTOTAL", convertFromDollar($so_focus->column_fields['hdnGrandTotal'],$rate));
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 
     }
@@ -251,10 +253,10 @@ elseif($focus->mode == 'edit')
 	$associated_prod = getAssociatedProducts("Invoice",$focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
-	$smarty->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
-	$smarty->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
-	$smarty->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
+	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
+	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
+	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
@@ -265,6 +267,7 @@ elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (iss
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
+	$InvTotal = convertFromDollar($InvTotal,$rate);
         $smarty->assign("MODE", $focus->mode);
 	$smarty->assign("TAXVALUE", "0.000");
 	$smarty->assign("ADJUSTMENTVALUE", "0.000");
