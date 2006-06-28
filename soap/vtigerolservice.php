@@ -372,7 +372,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
      $seed_user = new User();
      $user_id = $seed_user->retrieve_user_id($username);
      	
-     $crmid = $adb->getUniqueID("crmentity");
+     $crmid = $adb->getUniqueID("vtiger_crmentity");
      
      $upload_file_path = decideFilePath();
    	
