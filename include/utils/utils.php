@@ -1216,7 +1216,10 @@ function getDBInsertDateValue($value)
 
 function getUnitPrice($productid)
 {
-	global $log;
+	global $log,$current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
 	$log->debug("Entering getUnitPrice(".$productid.") method ...");
         $log->info("in getUnitPrice productid ".$productid);
 
@@ -1224,6 +1227,7 @@ function getUnitPrice($productid)
         $query = "select unit_price from vtiger_products where productid=".$productid;
         $result = $adb->query($query);
         $up = $adb->query_result($result,0,'unit_price');
+	$up = convertFromDollar($up,$rate);
 	$log->debug("Exiting getUnitPrice method ...");
         return $up;
 }
