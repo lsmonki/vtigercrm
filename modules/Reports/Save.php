@@ -89,7 +89,7 @@ for ($i=0;$i<count($allKeys);$i++)
 //<<<<<<<advancedfilter>>>>>>>>
 if($reportid == "")
 {
-	$genQueryId = $adb->getUniqueID("selectquery");
+	$genQueryId = $adb->getUniqueID("vtiger_selectquery");
 	if($genQueryId != "")
 	{
 		$iquerysql = "insert into vtiger_selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
