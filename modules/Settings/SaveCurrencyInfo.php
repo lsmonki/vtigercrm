@@ -24,7 +24,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 }
 else
 {
-        $sql = "insert into vtiger_currency_info values(".$db->getUniqueID("currency_info").",'".$currency_name."','".$currency_code."','".$currency_symbol."','".$conversion_rate."','".$currency_status."','0')";
+        $sql = "insert into vtiger_currency_info values(".$db->getUniqueID("vtiger_currency_info").",'".$currency_name."','".$currency_code."','".$currency_symbol."','".$conversion_rate."','".$currency_status."','0')";
 }
 $adb->query($sql);
 $loc = "Location: index.php?module=Settings&action=CurrencyListView&parenttab=".$_REQUEST['parenttab'];
