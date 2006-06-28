@@ -542,7 +542,8 @@ class CRMEntity
   //code added by richie ends
   function insertIntoEntityTable($table_name, $module)
   {
-	  global $log;	
+	  global $log;
+  	  global $current_user;	  
 	   $log->info("function insertIntoCrmEntity ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
