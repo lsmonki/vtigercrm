@@ -345,7 +345,7 @@ function getNavigationValues($display, $noofrows, $limit)
 	$log->debug("Entering getNavigationValues(".$display.",".$noofrows.",".$limit.") method ...");
 	$navigation_array = Array();   
 	global $limitpage_navigation;
-/*	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
+	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
 		$navigation_array['start'] =1;
 		$navigation_array['first'] = 1;
 		$navigation_array['end'] = 1;
@@ -357,7 +357,7 @@ function getNavigationValues($display, $noofrows, $limit)
 		$navigation_array['verylast'] =1;
 		$log->debug("Exiting getNavigationValues method ...");
 		return $navigation_array;
-	}*/
+	}
 	if($noofrows != 0)
 	$start = ((($display * $limit) - $limit)+1);
 	else
@@ -633,7 +633,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								if(isPermitted("Activities",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."&start=".$navigation_array['current']."&allflag=".$navigation_array['allflag']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
