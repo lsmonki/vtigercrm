@@ -23,7 +23,7 @@ function DisableSharing()
                 }
                 else
                 {
-                        alert("Please select atleast one user");
+                        alert("Please select at least one user");
                         return false;
                 }
         }
@@ -43,7 +43,7 @@ function DisableSharing()
                 }
                 else
                 {
-                        alert("Please select atleast one user");
+                        alert("Please select at least one user");
                         return false;
                 }
         }

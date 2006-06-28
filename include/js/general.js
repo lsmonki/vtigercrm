@@ -1649,7 +1649,7 @@ function SelectAll(mod)
                 }
                 else
 		{
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 }
         }
@@ -1670,7 +1670,7 @@ function SelectAll(mod)
                 }
                  else
                 {
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 }
         }

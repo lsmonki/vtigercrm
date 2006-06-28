@@ -238,7 +238,7 @@ function massDeleteReport()
 			
 	}else
 	{
-		alert('Please select atleast one Report');
+		alert('Please select at least one Report');
 		return false;
 	}
 }
@@ -318,7 +318,7 @@ function MoveReport(id,foldername)
 			
 	}else
 	{
-		alert('Please select atleast one Report');
+		alert('Please select at least one Report');
 		return false;
 	}
 }

@@ -26,7 +26,7 @@ function massDelete()
                 {rdelim}
                 else
                 {ldelim}
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 {rdelim}
         {rdelim}
@@ -47,7 +47,7 @@ function massDelete()
                 {rdelim}
                else
                 {ldelim}
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 {rdelim}
        {rdelim}

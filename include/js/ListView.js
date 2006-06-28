@@ -29,7 +29,7 @@ function change(obj,divid)
 	}
 	else
 	{
-		alert("Please select atleast one entity");
+		alert("Please select at least one entity");
 		return false;
 	}
 	fnvshobj(obj,divid);
@@ -56,7 +56,7 @@ function massDelete(module)
         }
         else
         {
-            alert("Please select atleast one entity");
+            alert("Please select at least one entity");
             return false;
         }
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))

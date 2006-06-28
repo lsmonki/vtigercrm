@@ -31,7 +31,7 @@ function eMail(module,oButton)
 	}
 	else
 	{
-		alert("Please select atleast one entity");
+		alert("Please select at least one entity");
 		return false;
 	}
 	allids = document.massdelete.idlist.value;	
@@ -56,7 +56,7 @@ function massMail(module)
                 }
                 else
                 {
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 }
         }
@@ -77,7 +77,7 @@ function massMail(module)
                 }
                 else
                 {
-                        alert("Please select atleast one entity");
+                        alert("Please select at least one entity");
                         return false;
                 }
         }

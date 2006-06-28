@@ -144,7 +144,7 @@ function validate()
 	if(document.newGroupForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 
-		alert('Group should have atleast one member. Select a member to the group');
+		alert('Group should have at least one member. Select a member to the group');
 		return false;
 	{rdelim}
 	dup_validation();	
