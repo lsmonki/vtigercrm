@@ -104,6 +104,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 	$smarty->assign("USERNAME_READONLY", "readonly");
 }
 
+$smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 
 
 

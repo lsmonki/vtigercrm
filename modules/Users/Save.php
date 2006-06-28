@@ -80,6 +80,7 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	
 	setObjectValuesFromRequest(&$focus);
 	$focus->saveentity("Users");
+	$focus->saveHomeOrder($focus->id);
 	$return_id = $focus->id;
 
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
