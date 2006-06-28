@@ -1875,6 +1875,17 @@ ul li{
 	z-index:2000;
 }
 
+#locateMap{
+	width:120px;
+	background-color:#CCCCCC;
+	border:1px solid #DDDDDD;
+	padding-top:5px;
+	position:absolute;
+	display:none;
+	z-index:2000;
+}
+
+
 a.reportMnu{
 	font-size:11px;
 	color:#0070BA;
@@ -1885,7 +1896,7 @@ a.reportMnu{
 	border-bottom:1px solid #E1E1E1;
 	padding-left:20px;
 	padding-top:3px;
-}	
+}
 
 a.reportMnu:Hover{
 	font-size:11px;
