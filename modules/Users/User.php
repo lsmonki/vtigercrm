@@ -708,6 +708,14 @@ class User {
 	function retrieve_entity_info($record, $module)
 	{
 		global $adb,$log;
+		$log->debug("Entering into retrieve_entity_info($record, $module) method.");
+
+		if($record == '')
+		{
+			$log->debug("record is empty. returning null");
+			return null;
+		}
+
 		$result = Array();
 		foreach($this->tab_name_index as $table_name=>$index)
 		{
@@ -730,6 +738,11 @@ class User {
 		}
 		$this->column_fields["record_id"] = $record;
 		$this->column_fields["record_module"] = $module;
+
+		$this->id = $record;
+		$log->debug("Exit from retrieve_entity_info($record, $module) method.");
+
+		return $this;
 	}
 	function uploadAndSaveFile($id,$module,$file_details)
 	{
