@@ -368,7 +368,7 @@ function getNavigationValues($display, $noofrows, $limit)
 	{
 		$end = $noofrows;
 	}
-	$paging = ceil ($noofrows / $limit);
+	if($paging != 0) {$paging = ceil ($noofrows / $limit);}
 	// Display the navigation
 	if ($display > 1) {
 		$previous = $display - 1;
