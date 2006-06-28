@@ -192,8 +192,7 @@ function callEditDiv(modulename,mode,id)
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&sh
-areid='+id,
+                        postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
