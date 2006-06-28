@@ -713,7 +713,7 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	fclose($handle);	
 
 	//Now store this file information in db and relate with the ticket
-	$attachmentid = $adb->getUniqueID("crmentity");
+	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 	$date_var = date('YmdHis');
 	$description = 'CustomerPortal Attachment';
 
