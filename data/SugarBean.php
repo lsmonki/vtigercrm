@@ -73,7 +73,7 @@ class SugarBean
 			if($this->new_schema && 
 				$this->new_with_id == false)
 			{
-                          $this->id = $adb->getUniqueID("users");
+                          $this->id = $adb->getUniqueID("vtiger_users");
 			}
                         
 			$query = "INSERT into ".$this->table_name;
