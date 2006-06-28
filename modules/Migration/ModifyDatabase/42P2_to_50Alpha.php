@@ -3197,8 +3197,35 @@ Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_rel
 
 Execute("insert into vtiger_field values (2,".$conn->getUniqueID("vtiger_field").",'campaignid','vtiger_potential',1,'58','campaignid','Campaign Source',1,0,0,100,12,1,1,'N~O',1,null,'BAS')");
 
+//Added on 28-06-06
+//Campaigns module added in Leads and Contacts RelatedList
+Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Leads").",".getTabid("Campaigns").",'get_campaigns',6,'Campaigns',0)");
+Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Contacts").",".getTabid("Campaigns").",'get_campaigns',11,'Campaigns',0)");
 
+//campaignid removed from vtiger_leaddetails and vtiger_contactdetails tables
+Execute("alter table vtiger_leaddetails drop column campaignid");
+Execute("alter table vtiger_contactdetails drop column campaignid");
 
+//Contact Name has been removed from Events Information
+Execute("delete from vtiger_field where tabid=16 and fieldname='contact_id'");
+
+//queries to resequence the fields
+$fieldname=array('eventstatus','sendnotification','activitytype','location','createdtime','modifiedtime','taskpriority','notime','visibility');
+$tablename=array('vtiger_activity','vtiger_activity','vtiger_activity','vtiger_activity','vtiger_crmentity','vtiger_crmentity','vtiger_activity','vtiger_activity','vtiger_activity');
+
+$sequence = array(10,11,12,13,14,15,16,17,18);
+for($j = 0;$j < 9;$j++)
+{
+	Execute("update vtiger_field set sequence=".$sequence[$j]." where tablename='".$tablename[$j]."' && fieldname='".$fieldname[$j]."' and tabid=16");
+}
+
+//Campaign has been removed from field table
+Execute("delete from vtiger_field where tabid=7 and fieldname='campaignid'");
+Execute("delete from vtiger_field where tabid=4 and fieldname='campaignid'");
+
+//Query added to have Calendar under Marketing and Support
+$conn->query("insert into vtiger_parenttabrel values (2,17,7)");
+$conn->query("insert into vtiger_parenttabrel values (4,17,9)");
 
 
 
