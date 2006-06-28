@@ -49,7 +49,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
                 $attachmentid = $adb->query_result($result,0,'attachmentsid');
 	        if($attachmentid != '')
 	        {
-	                $attachquery = "select * from vtiger_attachments where vtiger_attachmentsid = ".$attachmentid;
+	                $attachquery = "select * from vtiger_attachments where attachmentsid = ".$attachmentid;
 	                $result = $adb->query($attachquery);
 	                $filename = $adb->query_result($result,0,'name');
 	                $filetype = $adb->query_result($result,0,'type');
@@ -59,7 +59,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 	                $_FILES['filename']['type'] = $filetype;
 
 			//we should read the file and calculate the size, without setting vtiger_filesize, attachment will not save
-	                $filesize = vtiger_filesize($filepath.$filename);
+	                $filesize = filesize($filepath.$filename);
 	                $_FILES['filename']['size'] = $filesize;
 	        }
 }
