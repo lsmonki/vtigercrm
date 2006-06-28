@@ -49,7 +49,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	$arr_data =Array();
 	$label_fld = Array();
 	$data_fld = Array();
-
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol=getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
+	$curr_symbol = $rate_symbol['symbol'];
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
@@ -761,10 +764,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] =$mod_strings[$fieldlabel];
 		$display_val = '';
-		$currencyid=fetchCurrency($current_user->id);
-		$rate_symbol = getCurrencySymbolandCRate($currencyid);
-		$rate = $rate_symbol['rate'];
-		$curr_symbol = $rate_symbol['symbol'];
 	        if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{
 	 	    $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
@@ -860,11 +859,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	else
 	{
-	
 	 $label_fld[] =$mod_strings[$fieldlabel];
-          if($col_fields[$fieldname]=='0')
-                $col_fields[$fieldname]='';
-	
+        if($col_fields[$fieldname]=='0')
+              $col_fields[$fieldname]='';
+	 if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ))
+	 {
+		$label_fld[] = convertFromDollar($col_fields[$fieldname],$rate);
+	 }
+	else
 		$label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[]=$uitype;
@@ -895,8 +897,10 @@ function getDetailAssociatedProducts($module,$focus)
 	global $adb;
 	global $theme;
 	global $log;
-	global $app_strings;
-	
+	global $app_strings,$current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol=getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$log->debug("in getDetailAssociatedProducts. Module is  ".$module);
@@ -964,6 +968,9 @@ function getDetailAssociatedProducts($module,$focus)
 		{	
 			$output .= '<td>'.$qtyinstock.'</td>';
 		}
+		$unitprice = convertFromDollar($unitprice,$rate);
+		$listprice = convertFromDollar($listprice,$rate);
+		$total_with_tax = convertFromDollar($total_with_tax,$rate);
 		$output .= '<td style="padding:3px;">'.$qty.'</td>';
 		$output .= '<td style="padding:3px;">'.$unitprice.'</td>';
 		$output .= '<td style="padding:3px;">'.$listprice.'</td>';
@@ -979,22 +986,22 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
 	$output .= '<td><div align="right"><b>'.$app_strings['LBL_SUB_TOTAL'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
+	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['hdnSubTotal'],$rate).'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .=  '<td>&nbsp;</td>';
 	$output .= '<td><div align="right"><b>'.$app_strings['LBL_TAX'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
+	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['txtTax'],$rate).'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .= '<td>&nbsp;</td>';
 	$output .= '<td><div align="right"><b>'.$app_strings['LBL_ADJUSTMENT'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
+	$output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['txtAdjustment'],$rate).'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .= '<td>&nbsp;</td>';
 	$output .= '<td><div align="right"><b>'.$app_strings['LBL_GRAND_TOTAL'].':</b></div></td>';
-	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
+	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate).'</div></td>';
 	$output .= '</tr>';
 	$output .= '</table>';
 
