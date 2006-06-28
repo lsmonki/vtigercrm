@@ -104,7 +104,7 @@ function mandatoryCheck()
   <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
   <td class="showPanelBg" valign="top" width="100%">
    <div class="small" style="padding: 20px;">
-      <span class="lvtHeaderText">{$APP.$MODULE} &gt; {$MOD.New_Custom_View}</span> <br>
+	<span class="lvtHeaderText"><a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a> &gt; {$MOD.New_Custom_View}</span> <br>
       <hr noshade="noshade" size="1">
       <form name="EditView" method="post" enctype="multipart/form-data" action="index.php">
             <table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
