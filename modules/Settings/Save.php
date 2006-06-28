@@ -12,6 +12,7 @@
 require_once("include/database/PearDatabase.php");
 
 $server=$_REQUEST['server'];
+$port=$_REQUEST['port'];
 $server_username=$_REQUEST['server_username'];
 $server_password=$_REQUEST['server_password'];
 $server_type = $_REQUEST['server_type'];
@@ -28,10 +29,10 @@ $id=$adb->query_result($adb->query($sql),0,"id");
 if($id=='')
 {
 	$id = $adb->getUniqueID("systems");
-	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
 }
 else
-	$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."' where id = ".$id;
+	$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
 
 $adb->query($sql);
 if($server_type == 'backup')
@@ -54,8 +55,22 @@ if($server_type == 'backup')
 		ftp_close($conn_id);
 	}
 }
+
+if($server_type == 'proxy')
+{
+	$action = 'ProxyServerConfig&proxy_server_mode=edit';
+	if (!$sock = fsockopen($server, $port, $errno, $errstr, 30))
+	{
+	       $error_str = $errstr.' : '.$errno ;
+	}else
+	{
+	       $action = 'ProxyServerConfig';
+	        fclose($sock);
+	}
+}
+
 //Added code to send a test mail to the currently logged in user
-if($server_type != 'backup')
+if($server_type != 'backup' && $server_type != 'proxy')
 {
 	require_once("modules/Emails/mail.php");
 	global $current_user;
