@@ -1000,15 +1000,20 @@ function insertIntoTicketCommentTable($table_name, $module)
 }
 function insertIntoFAQCommentTable($table_name, $module)
 {
-	 global $log;
+	global $log;
 	$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 
         $current_time = date('Y-m-d H:i:s');
 
-	if($_REQUEST['comments'] != '')
+	if($this->column_fields['comments'] != '')
+		$comment = $this->column_fields['comments'];
+	else
+		$comment = $_REQUEST['comments'];
+
+	if($comment != '')
 	{
-		$comment = addslashes($_REQUEST['comments']);
+		$comment = addslashes($comment);
 		$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
 		$adb->query($sql);
 	}

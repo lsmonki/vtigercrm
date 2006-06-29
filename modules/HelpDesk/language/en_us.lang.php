@@ -136,6 +136,7 @@ $mod_strings = Array(
 'LBL_TICKET_RESOLUTION'=>'Solution Information',
 'Solution'=>'Solution',
 'Add Comment'=>'Add Comment',
+'LBL_ADD_COMMENT'=>'Add Comment',//give the same value given to the above string 'Add Comment'
 
 //Added for 4.2 Release -- CustomView
 'Ticket ID'=>'Ticket ID',

@@ -107,6 +107,7 @@ $mod_strings = Array(
 'Question'=>'Question',
 'Answer'=>'Answer',
 'Comments'=>'Comments',
+'LBL_COMMENTS'=>'Comments',//give the same value given to the above string 'Comments'
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 
@@ -116,6 +117,7 @@ $mod_strings = Array(
 'Product Name'=>'Product Name',
 'FAQ Id'=>'FAQ Id',
 'Add Comment'=>'Add Comment',
+'LBL_ADD_COMMENT'=>'Add Comment',//give the same value given to the above string 'Add Comment'
 'LBL_COMMENT_INFORMATION'=>'Comment Information',
 'Status'=>'Status',
 

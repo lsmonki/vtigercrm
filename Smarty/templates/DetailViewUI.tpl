@@ -97,6 +97,10 @@
                                                        </div>
                                                   </td>
                                              {elseif $keyid eq '19' || $keyid eq '20'} <!--TextArea/Description-->
+						<!-- we will empty the value of ticket and faq comment -->
+						{if $label eq $MOD.LBL_ADD_COMMENT}
+							{assign var=keyval value=''}
+						{/if}
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
                                               		<div id="editarea_{$label}" style="display:none;">
                                               		  <textarea id="txtbox_{$label}" name="{$keyfldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">{$keyval}</textarea>                                            		  
