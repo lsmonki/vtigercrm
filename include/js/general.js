@@ -819,30 +819,33 @@ function formValidate() {
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
-		{
+	{
 
-			if(getObj(fieldname[j]) != null)
+		if(getObj(fieldname[j]) != null)
+		{
+			if(fieldname[j] == "date_start")
 			{
-				if(fieldname[j] == "date_start")
-				{
-					var datelabel = fieldlabel[j]
-						var datefield = fieldname[j]
-						var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-				}
-				if(fieldname[j] == "time_start")
-				{
-					var timelabel = fieldlabel[j]
-						var timefield = fieldname[j]
-						var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-				}
-				if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
-				{
-					var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-						var statuslabel = fieldlabel[j++]
-				}
+				var datelabel = fieldlabel[j]
+					var datefield = fieldname[j]
+					var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
+			if(fieldname[j] == "time_start")
+			{
+				var timelabel = fieldlabel[j]
+					var timefield = fieldname[j]
+					var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+			}
+			if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
+			{
+				var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+					var statuslabel = fieldlabel[j++]
+			}
+		}else
+		{
+			return true;
 		}
-		if(statusvalue == "Planned")
+	}
+	if(statusvalue == "Planned")
         {
                 var dateelements=splitDateVal(startdatevalue)
 
