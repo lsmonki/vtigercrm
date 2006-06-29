@@ -55,34 +55,34 @@ function getPendingActivities($mode)
 
 	if($activity_view == 'Today')
 	{	
-		$later = date("Y-m-d",strtotime("$today + 1 day"));
+		$later = date("Y-m-d",strtotime("$today +1 day"));
 	}	
 	else if($activity_view == 'This Week')
 	{
-		$later = date("Y-m-d", strtotime("$today + 7 days"));
+		$later = date("Y-m-d", strtotime("$today +7 days"));
 	}
 	else if($activity_view == 'This Month')
 	{	
-		$later = date("Y-m-d", strtotime("$today + 1 month"));
+		$later = date("Y-m-d", strtotime("$today +1 month"));
 	}	
 	else if($activity_view == 'This Year')	
 	{
-		$later = date("Y-m-d", strtotime("$today + 1 year"));
+		$later = date("Y-m-d", strtotime("$today +1 year"));
 	}
 	else if($activity_view == 'OverDue')	
 	{
 		$later = date("Y-m-d", strtotime("$today +1 day"));
 	}
-	$last_tendays = date("Y-m-d",strtotime("$today - 10 days"));
+	$last_tendays = date("Y-m-d",strtotime("$today -10 days"));
 	if($mode != 1)
 	{
 		//for upcoming avtivities
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) AND (((date_start > '$today' AND date_start < '$later'))  OR (vtiger_recurringevents.recurringdate between '$today' and '$later') ) AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) AND ((date_start > '$today' AND date_start < '$later')  OR (vtiger_recurringevents.recurringdate between '$today' and '$later') ) AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
 	}	
 	else
 	{
 		//for pending activities for the last 10 days
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) AND (due_date > '$last_tendays' AND due_date <= '$today') OR (vtiger_recurringevents.recurringdate > '$last_tendays' AND vtiger_recurringevents.recurringdate <= '$today') AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) AND ((due_date > '$last_tendays' AND due_date <= '$today') OR (vtiger_recurringevents.recurringdate > '$last_tendays' AND vtiger_recurringevents.recurringdate <= '$today')) AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
 	}
 	$res = $adb->query($list_query);
 	$noofrecords = $adb->num_rows($res);
