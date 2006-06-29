@@ -2855,4 +2855,21 @@ border-width:1px;
 .thickBorder {
 	border: 2px solid #999999;
 }
+.trackerBorder {
+	border-width:2px;
+	border-style:solid;
+	border-color:#999999;
+	background-color:#ffffff;
+}
+.trackerHeading {
+	border-bottom:1px solid #cccccc;
+	background-color:#efefef;
+}
+.trackerListBullet {
+	border-right:1px dotted #cccccc;
+	background-color:#f9f9f9;
+}
+.trackerList {
+	border-bottom:1px solid #eeeeee;
+}
 
