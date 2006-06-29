@@ -488,6 +488,7 @@ $mod_strings = Array(
 'GRT'=>'My Group Allocation',
 'OLTSO'=>'Top Sales Orders',
 'ILTI'=>'Top Invoices',
+'HDB'=>'HomePage Dashborad',
 //Added for 5.0 alpha
 'LBL_GROUP_NAME_ERROR'=>'Group Name already exists!',
 'MNL'=>'My New Leads',
