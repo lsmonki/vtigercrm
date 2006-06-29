@@ -100,5 +100,11 @@ else
 	$smarty->assign("QUERY_STRING","$app_strings[LBL_SEARCH_STRING]");
 
 global $module_menu;
+
+
+require_once('data/Tracker.php');
+$tracFocus=new Tracker();
+$list = $tracFocus->get_recently_viewed($current_user->id);
+$smarty->assign("TRACINFO",$list);
 $smarty->display("Header.tpl");
 ?>
