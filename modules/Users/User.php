@@ -819,48 +819,6 @@ class User {
 		return;
 	}
 
-
-
-
-
-
-
-
-//Function Call for Related List -- Start
-        function get_contacts($id)
-	{
-			global $log;
-                        $log->debug("Entering get_contacts(".$id.") method ...");
-			global $app_strings;
-
-			$focus = new Contact();
-
-			
-			
-			$button = '';
-			$query = 'select vtiger_contactdetails.*, vtiger_crmentity.* from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.smownerid='.$id.' and vtiger_crmentity.deleted=0';
-			$log->debug("Exiting get_contacts method ...");
-			return GetRelatedList('Users','Contacts',$focus,$query,$button,$returnset);
-        }
-
-
-
-
-//Function Call for Related List -- Start
-        function get_activities($id)
-	{
-			global $log;
-                        $log->debug("Entering get_contacts(".$id.") method ...");
-			global $app_strings;
-
-			$focus = new Activity();
-			
-			$button = '';
-			$query = 'select vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where vtiger_crmentity.smownerid='.$id.' and (vtiger_activity.activitytype="Meeting" || vtiger_activity.activitytype="Task" || vtiger_activity.activitytype="Call" ) and vtiger_crmentity.deleted=0';
-			$log->debug("Exiting get_contacts method ...");
-			return GetRelatedList('Users','Activities',$focus,$query,$button,$returnset);
-        }
-
 	function save($module_name) 
 	{
 		global $log;
