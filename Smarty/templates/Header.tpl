@@ -470,5 +470,26 @@ function openwin()
 {ldelim}
             window.open("index.php?module=Users&action=about_us","aboutwin","height=520,width=515,top=200,left=300")
 {rdelim}
+
 </script>
+
+
+<div id="tracker" style="display:none;position:absolute;z-index:100000001;" onmouseout="fninvsh('tracker');" onMouseOver="fnvshNrm('tracker');">
+
+	<table class="trackerBorder" border="0" cellpadding="5" cellspacing="0" width="200">
+	<tbody><tr style="cursor:move;"><td colspan="2" class="trackerHeading small" id="Track_Handle"><strong>Last Viewed</strong></td><td align="right" style="padding:5px;" class="trackerHeading small">
+		<a href="javascript:;"><img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('tracker')" hspace="5" align="absmiddle"></a>
+		</td></tr>
+	{foreach name=trackinfo item=trackelements from=$TRACINFO}
+	<tr><td class="trackerListBullet small" align="center" width="12">{$smarty.foreach.trackinfo.iteration}</td><td class="trackerList small"> <a href="index.php?module={$trackelements.module_name}&action=DetailView&record={$trackelements.crmid}">{$trackelements.item_summary}</a> </td><td class="trackerList small">&nbsp;</td></tr>
+	{/foreach}
+	</tbody></table>
+</div>	
+<script>
+	var THandle = document.getElementById("Track_Handle");
+	var TRoot   = document.getElementById("tracker");
+	Drag.init(THandle, TRoot);
+</script>		
+
+
 
