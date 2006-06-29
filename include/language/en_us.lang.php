@@ -204,9 +204,9 @@ $app_strings = Array(
 
 'LBL_LIST_USERIP'=>'User IP',
 
-'LBL_LIST_SIGNIN'=>'Signin Time',
+'LBL_LIST_SIGNIN'=>'Sign in Time',
 
-'LBL_LIST_SIGNOUT'=>'Signout Time',
+'LBL_LIST_SIGNOUT'=>'Sign out Time',
 
 'LBL_LIST_STATUS'=>'Status',
 
