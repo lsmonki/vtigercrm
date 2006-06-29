@@ -51,6 +51,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<input type="hidden" name="curr_row" value="{$CURR_ROW}">
 					<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
 					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
+					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
 
 				</td>
 				<td width="20%" class="dvtCellLabel">

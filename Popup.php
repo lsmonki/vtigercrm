@@ -296,7 +296,7 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-$smarty->assign("POPUP_TYPE", $popuptype);
+$smarty->assign("POPUPTYPE", $popuptype);
 
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
