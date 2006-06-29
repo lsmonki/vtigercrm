@@ -1709,10 +1709,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("HelpDesk").",'get_tickets',1,'HelpDesk',0)");
 
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Activities").",'get_activities',2,'Activities',0)");
-
-	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",0,'get_attachments',3,'Attachments',0)");
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Quotes").",'get_quotes',4,'Quotes',0)");
