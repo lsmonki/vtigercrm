@@ -489,7 +489,7 @@
 				{else}
 					<td width="30%" align=left class="dvtCellInfo">
 						<input name="{$fldname}" {$disable_status} tabindex="{$vt_tab}" type="checkbox">
-						<input name="{$fldname}" type="hidden" value="{$fldvalue}">
+						<input name="{$fldname}" type="hidden" value="off">
 					</td>
 				{/if}
 		{elseif $uitype eq 98}<!-- Role Selection Popup -->		

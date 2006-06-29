@@ -61,42 +61,6 @@ function check_duplicate()
 		{include file='SetMenu.tpl'}
 	{/if}
 
-
-	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr><td align="left">
-		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
-		<tr>
-			<td rowspan="2"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
-			<td>	
-				<span class="lvtHeaderText">
-				{if $PARENTTAB neq ''}	
-				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
-				{else}
-                                <span class="lvtHeaderText">
-                                <b>{$APP.LBL_MY_PREFERENCES}</b>
-                                </span>
-                                {/if}
-			</td>
-			<td rowspan="2" nowrap>
-				<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small crmbutton save"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
-				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small crmbutton cancel" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
-						
-			</td>
-	 	</tr>
-		<tr>
-			{if $MODE eq 'edit'}
-				<td><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
-				<b class="small">{$UMOD.LBL_EDIT_VIEW} {$FIRST_NAME} {$LAST_NAME}</b>
-			{else}
-				<td><span class="genHeaderGrayBig">{$UMOD.LBL_NEW_USER_BUTTON_LABEL}</span><br>
-				<b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
-			{/if}
-			</td>
-                </tr>
-		</table>
-	</td>
-	</tr>
-	<tr><td class="padTab" align="left">
 		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="record" value="{$ID}">
@@ -112,7 +76,52 @@ function check_duplicate()
 		<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
 		<input type="hidden" name="namedays" value="">			
 		<input type="hidden" name="weekstart" value="1">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="settingsSelUITopLine">
+	<tr><td align="left">
+		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
+		<tr>
+			<td rowspan="2"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
+			<td>	
+				<span class="lvtHeaderText">
+				{if $PARENTTAB neq ''}	
+				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> &gt; <a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a> &gt; 
+					{if $MODE eq 'edit'}
+						{$UMOD.LBL_EDITING} "{$USERNAME}" 
+					{else}
+						{$UMOD.LBL_CREATE_NEW_USER}
+					{/if}
+					</b></span>
+				{else}
+                                <span class="lvtHeaderText">
+                                <b>{$APP.LBL_MY_PREFERENCES}</b>
+                                </span>
+                                {/if}
+			</td>
+			<td rowspan="2" nowrap>&nbsp;
+			</td>
+	 	</tr>
+		<tr>
+			{if $MODE eq 'edit'}
+				<td><b class="small">{$UMOD.LBL_EDIT_VIEW} "{$USERNAME}"</b>
+			{else}
+				<td><b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
+			{/if}
+			</td>
+                </tr>
+		</table>
+	</td>
+	</tr>
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+		<td nowrap align="right">
+				<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small crmbutton save"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
+				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small crmbutton cancel" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
+						
+		</td>
+	</tr>
+	<tr><td class="padTab" align="left">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 		<tr><td colspan="2">
 			<table align="center" border="0" cellpadding="0" cellspacing="0" width="99%">
@@ -141,7 +150,7 @@ function check_duplicate()
 			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>4.sdjhfsjkhfjalkssdjhfsjkhfjalks</strong>
+					<strong>4.{$UMOD.LBL_HOME_PAGE_COMP}</strong>
 				     </td>
 				     <td class="small" align="right">&nbsp;</td>	
 			        </tr>
@@ -164,17 +173,6 @@ function check_duplicate()
 				{/foreach}
 			    	</table>	
 				<br>
-			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-			    	<tr>
-				     <td class="big">	
-					<strong>5.kssdjhfsjkhfjalks</strong>
-				     </td>
-				     <td class="small" align="right">&nbsp;</td>	
-			        </tr>
-			    	</table>
-			    	<table border="0" cellpadding="5" cellspacing="0" width="100%">
-					<tr><td>&nbsp;</td><td></td></tr>	
-			    	</table>	
 				<tr><td colspan=4>&nbsp;</td></tr>
 							
 					        <tr>
@@ -192,10 +190,10 @@ function check_duplicate()
 				  </td></tr>
 				<tr><td class="small"><div align="right"><a href="#top">{$MOD.LBL_SCROLL}</a></div></td></tr>
 				</table>
-				</form>	
 			</td>
 			</tr>
 			</table>
+			</form>	
 </td>
 </tr>
 </table>

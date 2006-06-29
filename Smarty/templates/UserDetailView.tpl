@@ -47,9 +47,9 @@
 		<input type="hidden" name="return_id">
 		<input type="hidden" name="forumDisplay">
 		{if $CATEGORY eq 'Settings'}
-			<input type="hidden" name="parenttab" value="{$PARENTTAB}">
+		<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 		{/if}	
-	        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+	        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="settingsSelUITopLine">
 		<tr>
 		    <td style="border-bottom:1px dashed #CCCCCC;">
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
@@ -57,35 +57,32 @@
 			    <td rowspan="2"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>	
 			    <td>
 			    {if $CATEGORY eq 'Settings'}
-				<span class="lvtHeaderText">
-				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
+				<span class="heading2">
+				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> &gt; <a href="index.php?module=Administration&action=index&parenttab=Settings"> {$MOD.LBL_USERS} </a>&gt;"{$USERNAME}" </b></span>
 			    {else}
-				<span class="lvtHeaderText">	
+				<span class="heading2">	
 				<b>{$APP.LBL_MY_PREFERENCES}</b>
 			   	</span>
 			    {/if}
 			    <span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>					
 			    </td>
-			    <td rowspan="2" nowrap>
-				{if $CATEGORY eq 'Settings'}
-                                	{$DUPLICATE_BUTTON}
-                        	{/if}
-				{$EDIT_BUTTON}
+			    <td rowspan="2" nowrap>&nbsp;					
 			    </td>	
 			</tr>
 			<tr>
-			    <td>sssssssssss</td>
+			    <td>{$UMOD.LBL_USERDETAIL_INFO} "{$USERNAME}"</td>
 			</tr>
 		    </table>
 		</td>
 	    </tr>
-	    <tr><td>&nbsp;</td></tr>
-	    <tr valign="center">
-	    	<td class="small" align="center">
-			{$CHANGE_PW_BUTTON}
-			{$LOGIN_HISTORY_BUTTON}
-		</td>
-	    </tr>
+	    <tr><td colspan="2">&nbsp;</td></tr>
+	    <tr>
+		<td rowspan="2" nowrap align="right">
+			{if $CATEGORY eq 'Settings'}
+                               	{$DUPLICATE_BUTTON}
+                       	{/if}
+			{$EDIT_BUTTON}
+		</td>&nbsp;</tr>
 	    <tr><td colspan="2">&nbsp;</td></tr>
 	    <tr>
 		<td colspan="2">
@@ -161,13 +158,32 @@
 			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>5.{$UMOD.LBL_LOGIN_HISTORY}</strong>
+					<strong>5.My Groups</strong>
 				     </td>
-				     <td class="small" align="right">&nbsp;</td>	
+				     <td class="small" align="right">
+					{if $GROUP_COUNT > 0}
+					<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchGroups_js({$ID});">
+					{else}
+						&nbsp;
+					{/if}
+					</td>	
 			        </tr>
 			    </table>
 			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr><td>&nbsp;</td><td></td></tr>	
+				<tr><td align="left"><div id="user_group_cont" style="display:none;"></div></td></tr>	
+			    </table>	
+
+			<br>
+			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+			    	<tr>
+				     <td class="big">	
+					<strong>6.{$UMOD.LBL_LOGIN_HISTORY}</strong>
+				     </td>
+				     <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
+			        </tr>
+			    </table>
+			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr><td align="left"><div id="login_history_cont" style="display:none;"></div></td><td></td></tr>	
 			    </table>	
 
 			</td>
@@ -209,4 +225,70 @@ function ShowHidefn(divid)
 	else
 		Effect.Appear(divid);
 {rdelim}
+{literal}
+function fetchlogin_js(id)
+{
+	if($('login_history_cont').style.display != 'none')
+		Effect.Fade('login_history_cont');
+	else
+		fetchLoginHistory(id);
+
+}
+function fetchLoginHistory(id)
+{
+        $("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&file=ShowHistory&ajax=true&record='+id,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                $("login_history_cont").innerHTML= response.responseText;
+				Effect.Appear('login_history_cont');
+                        }
+                }
+        );
+
+}
+function fetchGroups_js(id)
+{
+	if($('user_group_cont').style.display != 'none')
+		Effect.Fade('user_group_cont');
+	else
+		fetchUserGroups(id);
+}
+function fetchUserGroups(id)
+{
+        $("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&file=UserGroups&ajax=true&record='+id,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                $("user_group_cont").innerHTML= response.responseText;
+				Effect.Appear('user_group_cont');
+                        }
+                }
+        );
+
+}
+function getListViewEntries_js(module,url)
+{
+	$("status").style.display="inline";
+        new Ajax.Request(
+        	'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                	method: 'post',
+                        postBody:"module="+module+"&action="+module+"Ajax&file=ShowHistory&ajax=true&"+url,
+			onComplete: function(response) {
+                        	$("status").style.display="none";
+                                $("login_history_cont").innerHTML= response.responseText;
+                  	}
+                }
+        );
+}
+{/literal}
 </script>
