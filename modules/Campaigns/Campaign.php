@@ -30,7 +30,7 @@ class Campaign extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_campaign'=>'campaignid','vtiger_campaignscf'=>'campaignid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('campaignname','smownerid','expectedcost');
+	var $sortby_fields = Array('campaignname','smownerid','campaigntype','product_id','expectedrevenue','closingdate','campaignstatus','expectedresponse','targetaudience');
 
 	var $list_fields = Array(
 					'Campaign Name'=>Array('campaign'=>'campaignname'),
