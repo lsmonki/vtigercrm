@@ -11,7 +11,10 @@ function change(obj,divid)
 {
 	var select_options  =  document.getElementsByName('selected_id');
 	var x = select_options.length;
-	var viewid = document.massdelete.viewname.value;
+	if(typeof(document.massdelete.viewname) != 'undefined')
+		var viewid = document.massdelete.viewname.value;
+	else
+		var viewid ='';		
 	idstring = "";
 
 	xx = 0;
@@ -38,8 +41,12 @@ function massDelete(module)
 {
 		var select_options  =  document.getElementsByName('selected_id');
 		var x = select_options.length;
-		var viewid = document.massdelete.viewname.value;
-        idstring = "";
+		if(typeof(document.massdelete.viewname) != 'undefined')
+			var viewid = document.massdelete.viewname.value;
+		else
+			var viewid ='';		
+
+		idstring = "";
 
         xx = 0;
         for(i = 0; i < x ; i++)
