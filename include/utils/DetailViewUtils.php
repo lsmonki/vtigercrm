@@ -58,7 +58,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
         if($col_fields[$fieldname]=='--None--')
                 $col_fields[$fieldname]='';
-	if($uitype == 116)
+	if($uitype == 99)
+	{
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = $col_fields[$fieldname];
+		if($fieldname == 'confirm_password')
+			return null;
+	}elseif($uitype == 116)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
                 $label_fld[] = getCurrencyName($col_fields[$fieldname]);
@@ -1084,7 +1090,10 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-		$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+		if(is_array($custfld))
+		{
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+		}
 		$i++;
 		if($i<$noofrows)
 		{
@@ -1099,7 +1108,10 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$tabid = $adb->query_result($result,$i,"tabid");
 
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			if(is_array($custfld))
+			{
+				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			}
 		}
 
 	}

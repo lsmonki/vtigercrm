@@ -2763,6 +2763,30 @@ function getAllGroupName()
 
 }
 
+/** Function to get groupid and groupname of all for the given groupid 
+  * @returns $grpArray -- Group Array in the following format:
+  * $grpArray=Array($grpid1=>$grpname); 
+ */
+function getGroupDetails($id)
+{
+	global $log;
+	$log->debug("Entering getAllGroupDetails() method ...");
+	global $adb;
+	$query="select * from vtiger_groups where groupid = $id";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	if($num_rows < 1)
+		return null;
+	$group_details=Array();
+	$grpid=$adb->query_result($result,0,'groupid');
+	$grpname=$adb->query_result($result,0,'groupname');
+	$grpdesc=$adb->query_result($result,0,'description');
+	$group_details=Array($grpid,$grpname,$grpdesc);
+		
+	$log->debug("Exiting getAllGroupDetails method ...");
+	return $group_details;
+
+}
 /** Function to get group information of all vtiger_groups 
   * @returns $grpInfoArray -- Group Informaton array in the following format: 
   * $grpInfoArray=Array($grpid1=>Array($grpname,description) $grpid2=>Array($grpname,description),............,$grpidn=>Array($grpname,description)); 
