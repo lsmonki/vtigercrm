@@ -59,10 +59,7 @@ $_SESSION['user_orderby'] = $orderby;
 $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 $list_result = $adb->query($list_query);
 //Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $no_of_users['user'], '10');
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val'];
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$no_of_users['user'];
+$navigation_array = getNavigationValues($start, $adb->num_rows($list_result), $no_of_users['user']);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Administration","index",'');
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));

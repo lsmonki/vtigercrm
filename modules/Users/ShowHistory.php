@@ -9,13 +9,12 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Users/User.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 #require_once('modules/Users/User.php');
 require_once('include/utils/utils.php');
@@ -23,7 +22,7 @@ require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
 global $app_list_strings;
-global $current_language;
+global $current_language, $current_user, $adb;
 $current_module_strings = return_module_language($current_language, 'Users');
 
 global $list_max_entries_per_page;
@@ -34,28 +33,54 @@ $log = LoggerManager::getLogger('login_list');
 global $currentModule;
 
 global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
 
-$focus = new User();
+$focus = new LoginHistory();
 
-if(isset($_REQUEST['record'])) {
-	$focus->retrieve_entity_info($_REQUEST['record'],"Users");
+$smarty = new vtigerCRM_Smarty;
+
+$category = getParenttab();
+
+if(is_admin($current_user))
+{
+	$qry = "Select * from vtiger_loginhistory";
+	$qry_result = $adb->query($qry);
+	$no_of_rows = $adb->num_rows($qry_result);
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$focus->id = "";
+else
+{
+	$qry = "Select * from vtiger_loginhistory where user_name='".$current_user->user_name."'";
+	$qry_result = $adb->query($qry);
+	$no_of_rows = $adb->num_rows($qry_result);
 }
 
-// focus_list is the means of passing data to a ListView.
-global $focus_list;
+//Retreiving the start value from request
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+{
+        $start = $_REQUEST['start'];
+}
+else
+	$start=1;
 
-if (!isset($where)) $where = "";
+//Retreive the Navigation array
+$navigation_array = getNavigationValues($start, $no_of_rows, '10');
 
-$seedLogin = new LoginHistory();
 
-$ListView = new ListView();
-$ListView->initNewXTemplate('modules/Users/ShowHistory.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']);
-$ListView->setHeaderText($button);
-$ListView->setQuery($where, "", "login_id", "LOGIN");
-$ListView->processListView($seedLogin, "main", "LOGIN");
+$start_rec = $navigation_array['start'];
+$end_rec = $navigation_array['end_val'];
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$no_of_rows;
 
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Users","ShowHistory",'');
+
+$smarty->assign("MOD", $current_module_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("LIST_HEADER",$focus->getHistoryListViewHeader());
+$smarty->assign("LIST_ENTRIES",$focus->getHistoryListViewEntries($navigation_array, $sorder, $sortby));
+$smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("CATEGORY",$category);
+
+$smarty->display("ShowHistoryContents.tpl");
 ?>

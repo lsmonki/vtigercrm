@@ -43,6 +43,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
     $focus->retrieve_entity_info($_REQUEST['record'],'Users');
+	$smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
 }else
 {
 	$mode='create';
@@ -110,6 +111,6 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 
 $smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
 
-	$smarty->display('UserEditView.tpl');
+$smarty->display('UserEditView.tpl');
 
 ?>

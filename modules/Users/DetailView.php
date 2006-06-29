@@ -83,10 +83,6 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 //the user might belong to multiple groups
-if($focus->id != 1)
-{
- $groupids = fetchUserGroupids($focus->id);
-}
 $log->info("User detail view");
 
 $category = getParenttab();
@@ -99,7 +95,7 @@ $smod_strings = return_module_language($current_language, 'Settings');
 $smarty->assign("MOD", $smod_strings);
 
 $smarty->assign("APP", $app_strings);
-
+$smarty->assign("GROUP_COUNT",count(getGroupDetails($focus->id)));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
@@ -139,16 +135,9 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='crmButton small edit' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 	
-		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='classBtn' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=165,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=100, top=126, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
+		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='crmButton password small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=165,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=200, top=226, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 		$smarty->assign('CHANGE_PW_BUTTON',$buttons);
 	
-	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
-	$smarty->assign('LOGIN_HISTORY_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='ListMailAccount'\" type='submit' name='ListMailServerAccount' value=' ".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_LABEL']." '>";
-	$smarty->assign('LIST_MAILSERVER_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_CHANGE_HOMEPAGE_TITLE']."' class='classBtn' align='center' onclick=\"this.form.return_module.value='Users';  this.form.return_action.value='DetailView';  this.form.action.value='EditHomeOrder';  this.form.record.value='$focus->id';\"  type='submit' name='EditHomeOrder'  value='  ".$mod_strings['LBL_CHANGE_HOMEPAGE_LABEL']."  '>";
-	$smarty->assign('CHANGE_HOMEPAGE_BUTTON',$buttons);
-
 	
 }
 if (is_admin($current_user)) 
@@ -184,7 +173,7 @@ $smarty->assign("MODULE", 'Users');
 $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
-
+$smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
 
 $smarty->display("UserDetailView.tpl");
 

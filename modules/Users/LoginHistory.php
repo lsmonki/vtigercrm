@@ -18,7 +18,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 
 // Contact is used to store customer information.
-class LoginHistory extends SugarBean {
+class LoginHistory {
 	var $log;
 	var $db;
 
@@ -51,11 +51,77 @@ class LoginHistory extends SugarBean {
 		$this->db = new PearDatabase();
 	}
 	
+	var $sortby_fields = Array('user_name', 'user_ip', 'login_time', 'logout_time', 'status');	 
+       	
 	// This is the list of vtiger_fields that are in the lists.
-	var $list_fields = Array('login_id', 'user_name', 'user_ip', 'login_time', 'logout_time', 'status');	
-		
-	var $default_order_by = "login_id";
+	var $list_fields = Array(
+			'User Name'=>Array('vtiger_loginhistory'=>'user_name'), 
+			'User IP'=>Array('vtiger_loginhistory'=>'user_ip'), 
+			'Signin Time'=>Array('vtiger_loginhistory'=>'login_time'),
+		        'Signout Time'=>Array('vtiger_loginhistory'=>'logout_time'), 
+			'Status'=>Array('vtiger_loginhistory'=>'status'),
+		);	
+	
+	var $list_fields_name = Array(
+		'User Name'=>'user_name',
+		'User IP'=>'user_ip',
+		'Signin Time'=>'login_time',
+		'Signout Time'=>'logout_time',
+		'Status'=>'status'
+		);	
+	var $default_order_by = "login_time";
+	var $default_sort_order = 'DESC';
 
+
+	function getHistoryListViewHeader()
+	{
+		global $app_strings;
+		
+		$header_array = array($app_strings['LBL_LIST_USER_NAME'], $app_strings['LBL_LIST_USERIP'], $app_strings['LBL_LIST_SIGNIN'], $app_strings['LBL_LIST_SIGNOUT'], $app_strings['LBL_LIST_STATUS']);
+
+		return $header_array;
+		
+	}
+
+	function getHistoryListViewEntries($navigation_array, $sorder='', $orderby='')
+	{
+		global $adb, $current_user;	
+
+		if($sorder != '' && $order_by != '')
+		{
+			if(is_admin($current_user))
+	       			$list_query = "Select * from vtiger_loginhistory order by ".$order_by." ".$sorder;
+			else	
+	       			$list_query = "Select * from vtiger_loginhistory where user_name=".$current_user->user_name." order by ".$order_by." ".$sorder;
+				
+		}	
+		else
+		{
+			if(is_admin($current_user))
+				$list_query = "Select * from vtiger_loginhistory order by ".$this->default_order_by." ".$this->default_sort_order;
+			else	
+				$list_query = "Select * from vtiger_loginhistory where user_name='".$current_user->user_name."' order by ".$this->default_order_by." ".$this->default_sort_order;
+				
+		}
+		$result = $adb->query($list_query);
+		$entries_list = array();
+		
+		for($i = $navigation_array['start']; $i <= $navigation_array['end_val']; $i++)
+		{
+			$entries = array();
+			$loginid = $adb->query_result($result, $i-1, 'login_id');
+
+			$entries[] = $adb->query_result($result, $i-1, 'user_name');
+			$entries[] = $adb->query_result($result, $i-1, 'user_ip');
+			$entries[] = $adb->query_result($result, $i-1, 'login_time');
+			$entries[] = $adb->query_result($result, $i-1, 'logout_time');
+			$entries[] = $adb->query_result($result, $i-1, 'status');
+
+			$entries_list[] = $entries;
+		}		
+		return $entries_list;
+		
+	}
 	
 	/** Records the Login info */
 	function user_login(&$usname,&$usip,&$intime)

@@ -861,19 +861,6 @@ class User {
 			return GetRelatedList('Users','Activities',$focus,$query,$button,$returnset);
         }
 
-function get_user_groups($id)
-{
-		global $log;
-                        $log->debug("Entering get_contacts(".$id.") method ...");
-			global $app_strings;
-			$button = '';
-			$query = 'select vtiger_users.*,vtiger_groups.* from vtiger_users inner join vtiger_users2group on vtiger_users.id=vtiger_users2group.userid left join vtiger_groups on vtiger_groups.groupid=vtiger_users2group.groupid where vtiger_users.id='.$id;
-			$log->debug("Exiting get_contacts method ...");
-			return getAllGroupInfo($query);
-			}
-
-
-	
 	function save($module_name) 
 	{
 		global $log;
