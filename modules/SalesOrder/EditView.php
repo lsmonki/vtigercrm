@@ -52,6 +52,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView 
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$smarty->assign("QUOTE_ID", $quoteid);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
 	$smarty->assign("TAXVALUE", convertFromDollar($quote_focus->column_fields['txtTax'],$rate));
