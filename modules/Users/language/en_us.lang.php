@@ -240,7 +240,8 @@ $mod_strings = Array(
 // Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
 'LBL_DETAIL_VIEW'=>'Detail View of',
-'LBL_EDIT_VIEW'=>'Edit View of',
+'LBL_EDIT_VIEW'=>'Editing details of the user',
+'LBL_EDITING'=>'Editing user',
 'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
 'LBL_GROUPS'=>'Groups',
 'LBL_ADD_GROUP_BUTTON'=>'Add Group',
@@ -572,6 +573,7 @@ $mod_strings = Array(
 'LBL_HIDE'=>'Hide',
 'LBL_HOME_PAGE_COMP'=>'Home Page Components',
 'LBL_LOGIN_HISTORY'=>'Login History',
+'LBL_USERDETAIL_INFO'=>'Viewing details about the user',
 );
 
 ?>
