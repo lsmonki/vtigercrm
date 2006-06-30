@@ -22,7 +22,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 		if($id != '')
 		{
 			$record = $_REQUEST['parentid'];
-			$sql = "insert into vtiger_seactivityrel values (".$id.",".$_REQUEST["parentid"].")";
+			$sql = "insert into vtiger_cntactivityrel values (".$id.",".$_REQUEST["parentid"].")";
 			$adb->query($sql);
 		}
 	}
@@ -32,7 +32,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$record = $_REQUEST["parid"];
-	$sql = "insert into vtiger_seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
+	$sql = "insert into vtiger_cntactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 }
