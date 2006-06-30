@@ -34,7 +34,7 @@ The latest version of Snoopy can be obtained from:
 http://snoopy.sourceforge.com
 
 *************************************************/
-
+require_once("include/database/PearDatabase.php");
 class Snoopy
 {
 	/**** Public variables ****/
@@ -43,8 +43,8 @@ class Snoopy
 
 	var $host			=	"www.php.net";		// host name we are connecting to
 	var $port			=	80;					// port we are connecting to
-	var $proxy_host		=	"192.168.4.158";					// proxy host to use
-	var $proxy_port		=	"80";					// proxy port to use
+	var $proxy_host		=	"";					// proxy host to use
+	var $proxy_port		=	"";					// proxy port to use
 	var $agent			=	"Snoopy v1.0";		// agent we masquerade as
 	var	$referer		=	"";					// referer info to pass
 	var $cookies		=	array();			// array of cookies to pass
@@ -63,8 +63,8 @@ class Snoopy
 												// NOTE: this currently does not respect
 												// dates, domains or paths.
 	
-	var	$user			=	"jerijohn";					// user for http authentication
-	var	$pass			=	"jerijohn";					// password for http authentication
+	var	$user			=	"";					// user for http authentication
+	var	$pass			=	"";					// password for http authentication
 	
 	// http accept types
 	var $accept			=	"image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*";
@@ -112,6 +112,20 @@ class Snoopy
 	
 	var $_isproxy		=	true;				// set if using a proxy server
 	var $_fp_timeout	=	60;					// timeout for socket connection
+	function Snoopy()
+	{
+		global $adb;
+		$query = "select * from vtiger_systems where server_type='proxy'";
+		$result = $adb->query($query);
+		$noofrows = $adb->num_rows($result);
+		if($noofrows != 0)
+		{
+			$this->proxy_host=$adb->query_result($result,0,"server");
+			$this->proxy_port=$adb->query_result($result,0,"server_port");
+			$this->user=$adb->query_result($result,0,"server_username");
+			$this->pass=$adb->query_result($result,0,"server_password");
+		}
+	}
 
 /*======================================================================*\
 	Function:	fetch
