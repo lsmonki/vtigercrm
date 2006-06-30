@@ -150,6 +150,7 @@ class http {
   PRIVATE getFromUrl() method to scrape content from url.
   */
   function getFromUrl($url, $user="", $pwd="") {
+	  global $adb;
     $this->log .= "getFromUrl() called<br />";
     preg_match("~([a-z]*://)?([^:^/]*)(:([0-9]{1,5}))?(/.*)?~i", $url, $parts);
   	$protocol = $parts[1];
@@ -163,17 +164,24 @@ class http {
         $port = "80";
       }
     }
-	$server = '';
-	$port = '';
-	$user = "";    // added
-	$pwd = "";    // added
-	$proxy_cont = '';
-
+    $query = "select * from vtiger_systems where server_type='proxy'";
+    $result = $adb->query($query);
+    $noofrows = $adb->num_rows($result);
+    if($noofrows != 0)
+    {
+	    $server = $adb->query_result($result,0,"server");
+	    $port = $adb->query_result($result,0,"server_port");
+	    $user = $adb->query_result($result,0,"server_username"); // added
+	    $pwd = $adb->query_result($result,0,"server_password");    // added
+    }
+    
 	  if ($path == "") { $path = "/"; }
 
-		if (!$sock = fsockopen($server, $port, $errno, $errstr, $this->connect_timeout)) {
+		if (!$sock = @fsockopen($server, $port, $errno, $errstr, $this->connect_timeout)) {
       $this->log .= "Could not open connection. Error "
         .$errno.": ".$errstr."<br />\n";
+	echo '<b><font color="red">Kindly set proxy server settings under Settings tab</font></b>';
+	die;
       return false;
     }
   if (!$sock)    {return false;}
