@@ -38,13 +38,13 @@ function getHomepageDB()
                 $cnt_table=$graph_details[6];
 	       	$test_target_val=$graph_details[7];
 
-                $width=400;
+                $width=425;
                 $height=225;
                 $top=30;
                 $left=140;
                 $bottom=120;
                 $title=$graph_title;
-		$sHTML = render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"pie");
+		$sHTML = render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
 		return $sHTML;
 		
         }
