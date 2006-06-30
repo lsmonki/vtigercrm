@@ -79,7 +79,11 @@ class CustomView extends CRMEntity{
 		$this->smownerid = $current_user->id;
 	}
 
-	// Mike Crowe Mod --------------------------------------------------------getViewId
+
+	/** To get the customViewId of the specified module 
+	  * @param $module -- The module Name:: Type String
+	  * @returns  customViewId :: Type Integer 
+	 */	
 	function getViewId($module)
 	{
 		global $adb;
@@ -108,33 +112,15 @@ class CustomView extends CRMEntity{
 
 	}
 	
-	// Mike Crowe Mod --------------------------------------------------------getGroupId
-	function getGroupId($module)
-	{
-		if(isset($_REQUEST['gname']) == false)
-		{
-			if ( isset($_SESSION["cg$module"]) )
-			{
-				$groupid = $_SESSION["cg$module"];
-			}
-			elseif($this->setdefaultgroupid != "")
-			{
-				$groupid = $this->setdefaultgroupid;
-			}else
-			{
-				$groupid = "0";
-			}
-		}
-		else
-		{
-			$groupid =  $_REQUEST['gname'];
-		}
-		$_SESSION["cg$module"] = $groupid;
-		return $groupid;
-	}
-
-	// to get the available vtiger_customviews for a module
 	// return type array
+	/** to get the details of a customview
+	  * @param $cvid :: Type Integer
+	  * @returns  $customviewlist Array in the following format
+	  * $customviewlist = Array('viewname'=>value,
+	  *                         'setdefault'=>defaultchk,
+	  *                         'setmetrics'=>setmetricschk)   	    
+	 */	
+
 	function getCustomViewByCvid($cvid)
 	{
 		global $adb;
@@ -152,6 +138,13 @@ class CustomView extends CRMEntity{
 		}
 		return $customviewlist;		
 	}	
+
+	/** to get the customviewCombo for the class variable customviewmodule
+	  * @param $viewid :: Type Integer
+	  * $viewid will make the corresponding selected
+	  * @returns  $customviewCombo :: Type String 
+	 */	
+
 	function getCustomViewCombo($viewid='')
 	{
 		global $adb;
@@ -179,6 +172,17 @@ class CustomView extends CRMEntity{
 		}
 		return $shtml;
 	}
+
+	/** to get the getColumnsListbyBlock for the given module and Block 
+	  * @param $module :: Type String 
+	  * @param $block :: Type Integer
+	  * @returns  $columnlist Array in the format 
+	  * $columnlist = Array ($fieldlabel =>'$fieldtablename:$fieldcolname:$fieldname:$module_$fieldlabel1:$fieldtypeofdata',
+	                         $fieldlabel1 =>'$fieldtablename1:$fieldcolname1:$fieldname1:$module_$fieldlabel11:$fieldtypeofdata1',
+					|
+			         $fieldlabeln =>'$fieldtablenamen:$fieldcolnamen:$fieldnamen:$module_$fieldlabel1n:$fieldtypeofdatan')
+	 */	
+
 	function getColumnsListbyBlock($module,$block)
 	{
 		global $adb;
@@ -209,12 +213,12 @@ class CustomView extends CRMEntity{
 		//Added on 14-10-2005 -- added ticket id in list
 		if($module == 'HelpDesk' && $block == 25)
 		{
-			$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+			$module_columnlist['vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I'] = 'Ticket ID';
 		}
 		//Added to include vtiger_activity type in vtiger_activity vtiger_customview list
 		if($module == 'Activities' && $block == 19)
 		{
-			$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
+			$module_columnlist['vtiger_activity:activitytype:activitytype:Activities_Activity_Type:C'] = 'Activity Type';
 		}
 
 		for($i=0; $i<$noofrows; $i++)
@@ -234,7 +238,7 @@ class CustomView extends CRMEntity{
 			{
 				$fieldlabel = "Start Date";
 				if($module == 'Activities' && $block == 19)
-					$module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
+					$module_columnlist['vtiger_activity:time_start::Activities_Start_Time:I'] = 'Start Time';
 
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
@@ -249,6 +253,26 @@ class CustomView extends CRMEntity{
 		return $module_columnlist;
 	}
 
+	/** to get the getModuleColumnsList for the given module 
+	  * @param $module :: Type String
+	  * @returns  $ret_module_list Array in the following format
+	  * $ret_module_list = 
+		Array ('module' =>
+				Array('BlockLabel1' => 
+						Array('$fieldtablename:$fieldcolname:$fieldname:$module_$fieldlabel1:$fieldtypeofdata'=>$fieldlabel,
+	                                        Array('$fieldtablename1:$fieldcolname1:$fieldname1:$module_$fieldlabel11:$fieldtypeofdata1'=>$fieldlabel1,
+				Array('BlockLabel2' => 
+						Array('$fieldtablename:$fieldcolname:$fieldname:$module_$fieldlabel1:$fieldtypeofdata'=>$fieldlabel,
+	                                        Array('$fieldtablename1:$fieldcolname1:$fieldname1:$module_$fieldlabel11:$fieldtypeofdata1'=>$fieldlabel1,
+					 |
+				Array('BlockLabeln' => 
+						Array('$fieldtablename:$fieldcolname:$fieldname:$module_$fieldlabel1:$fieldtypeofdata'=>$fieldlabel,
+	                                        Array('$fieldtablename1:$fieldcolname1:$fieldname1:$module_$fieldlabel11:$fieldtypeofdata1'=>$fieldlabel1,
+	 
+
+	 */	
+
+
 	function getModuleColumnsList($module)
 	{
 		foreach($this->module_list[$module] as $key=>$value)
@@ -262,6 +286,14 @@ class CustomView extends CRMEntity{
 		return $ret_module_list;
 	}
 
+	/** to get the getModuleColumnsList for the given customview 
+	  * @param $cvid :: Type Integer
+	  * @returns  $columnlist Array in the following format
+	  * $columnlist = Array( $columnindex => $columnname,
+	  *			 $columnindex1 => $columnname1,  
+	  *					|
+	  *			 $columnindexn => $columnnamen)  
+	  */	
 	function getColumnsListByCvid($cvid)
 	{
 		global $adb;
@@ -270,7 +302,6 @@ class CustomView extends CRMEntity{
 		$sSQL .= " inner join vtiger_customview on vtiger_customview.cvid = vtiger_cvcolumnlist.cvid";
 		$sSQL .= " where vtiger_customview.cvid =".$cvid." order by vtiger_cvcolumnlist.columnindex";
 		$result = $adb->query($sSQL);
-		
 		while($columnrow = $adb->fetch_array($result))
 		{
 			$columnlist[$columnrow['columnindex']] = $columnrow['columnname'];
