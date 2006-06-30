@@ -131,6 +131,15 @@ if($image_error=="false")
 
 	$local_log->debug("Saved record with id of ".$return_id);
 
+	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns")
+	{
+		if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
+		{
+			$sql = "insert into vtiger_campaigncontrel values (".$_REQUEST['return_id'].",".$focus->id.")";
+			$adb->query($sql);
+		}
+	}
+
 	//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
 	if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 	{
