@@ -288,7 +288,7 @@ function SearchContactsByEmail($username,$emailaddress)
 function AddMessageToContact($username,$contactid,$msgdtls)
 {
 	global $adb;
-     require_once('modules/Users/User.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Emails/Email.php');
 	
 	$seed_user = new User();
@@ -296,40 +296,40 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	
 	foreach($msgdtls as $msgdtl)
 	{
-     	if(isset($msgdtl))
-     	{    
-          	$email = new Email();
-               //$log->debug($msgdtls['contactid']);
-          	$email_body = str_replace("'", "''", $msgdtl['body']);
-          	$email_subject = str_replace("'", "''",$msgdtl['subject']);
-          	$date_sent = getDisplayDate($msgdtl['datesent']);
-                
-          	$email->column_fields[subject] = $email_subject;
-          	$email->column_fields[assigned_user_id] = $user_id;
-          	$email->column_fields[date_start] = $date_sent;
-          	$email->column_fields[description]  = htmlentities($email_body);
-         	$email->column_fields[activitytype] = 'Emails'; 
-          	$email->save("Emails");
-          
-          	$email->set_emails_contact_invitee_relationship($email->id,$contactid);
-          	$email->set_emails_se_invitee_relationship($email->id,$contactid);
-          	$email->set_emails_user_invitee_relationship($email->id,$user_id);
-		$sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
-		$result = $adb->query($sql);
-		$camodulerow = $adb->fetch_array($result);
-		if(isset($camodulerow))
-		{
-			$emailid = $camodulerow["email"];
-			$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
-			$adb->query($query);
+     		if(isset($msgdtl))
+     		{    
+          		$email = new Email();
+			//$log->debug($msgdtls['contactid']);
+			$email_body = str_replace("'", "''", $msgdtl['body']);
+			$email_subject = str_replace("'", "''",$msgdtl['subject']);
+			$date_sent = getDisplayDate($msgdtl['datesent']);
+
+			$email->column_fields[subject] = $email_subject;
+			$email->column_fields[assigned_user_id] = $user_id;
+			$email->column_fields[date_start] = $date_sent;
+			$email->column_fields[description]  = htmlentities($email_body);
+			$email->column_fields[activitytype] = 'Emails'; 
+			$email->save("Emails");
+
+			$email->set_emails_contact_invitee_relationship($email->id,$contactid);
+			$email->set_emails_se_invitee_relationship($email->id,$contactid);
+			$email->set_emails_user_invitee_relationship($email->id,$user_id);
+			$sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
+			$result = $adb->query($sql);
+			$camodulerow = $adb->fetch_array($result);
+			if(isset($camodulerow))
+			{
+				$emailid = $camodulerow["email"];
+				$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
+				$adb->query($query);
+			}
+			return $email->id;
 		}
-		return $email->id;
-          }
-          else
-          {
-               return "";
-          }
-     }
+		else
+		{
+			return "";
+		}
+	}
 }
 
 function LoginToVtiger($userid,$password)
@@ -363,74 +363,74 @@ function LoginToVtiger($userid,$password)
 
 function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username)
 {
-     global $adb;
-     require_once('modules/Users/User.php');
-     require_once('include/utils/utils.php');
-     
-     $date_var = date('YmdHis');
-     
-     $seed_user = new User();
-     $user_id = $seed_user->retrieve_user_id($username);
-     	
-     $crmid = $adb->getUniqueID("vtiger_crmentity");
-     
-     $upload_file_path = decideFilePath();
-   	
-     $handle = fopen($upload_file_path.$filename,"wb");
-     fwrite($handle,base64_decode($filedata),$filesize);
-     fclose($handle);
+	global $adb;
+	require_once('modules/Users/User.php');
+	require_once('include/utils/utils.php');
 
-     $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
-     values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
-     
-     $entityresult = $adb->query($sql1);	
-     $filetype="application/octet-stream";
-     
-     if($entityresult != false)
-     {
-    	$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) 
-               values(".$crmid.",'".$filename."',' ','".$filetype."','".$upload_file_path."')";
-    	    
-        $result=$adb->query($sql2);
-     
-        $sql3='insert into vtiger_seattachmentsrel values('.$emailid.','.$crmid.')';
-        $adb->query($sql3);
-     
-        return $crmid;   
-     }
-     else
-     {
-   		 //$server->setError("Invalid username and/or password"); 
-          return "";
-     }
+	$date_var = date('YmdHis');
+
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($username);
+
+	$crmid = $adb->getUniqueID("vtiger_crmentity");
+
+	$upload_file_path = decideFilePath();
+
+	$handle = fopen($upload_file_path.$crmid."_".$filename,"wb");
+	fwrite($handle,base64_decode($filedata),$filesize);
+	fclose($handle);
+
+	$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
+			values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+
+	$entityresult = $adb->query($sql1);	
+	$filetype="application/octet-stream";
+
+	if($entityresult != false)
+	{
+		$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) 
+				values(".$crmid.",'".$filename."',' ','".$filetype."','".$upload_file_path."')";
+
+		$result=$adb->query($sql2);
+
+		$sql3='insert into vtiger_seattachmentsrel values('.$emailid.','.$crmid.')';
+		$adb->query($sql3);
+
+		return $crmid;   
+	}
+	else
+	{
+		//$server->setError("Invalid username and/or password"); 
+		return "";
+	}
 }
 
 function GetContacts($username)
 {
-    global $adb;
-    require_once('modules/Contacts/Contact.php');
-     
-    $seed_contact = new Contact();
-    $output_list = Array();
-     
-    $query = $seed_contact->get_contactsforol($username);
-    $result = $adb->query($query);
-    
-    while($contact = $adb->fetch_array($result))
-  	{
-        if($contact["birthdate"] == "0000-00-00")
-        {
-	        	$contact["birthdate"] = "";
-        }
-        if($contact["salutation"] == "--None--")
-        {
-          	$contact["salutation"] = "";
-        }
-        
-        $namelist = explode(" ", $contact["last_name"]);
-        if(isset($namelist))
-        {
-        	if(count($namelist) >= 2) 
+	global $adb;
+	require_once('modules/Contacts/Contact.php');
+
+	$seed_contact = new Contact();
+	$output_list = Array();
+
+	$query = $seed_contact->get_contactsforol($username);
+	$result = $adb->query($query);
+
+	while($contact = $adb->fetch_array($result))
+	{
+		if($contact["birthdate"] == "0000-00-00")
+		{
+			$contact["birthdate"] = "";
+		}
+		if($contact["salutation"] == "--None--")
+		{
+			$contact["salutation"] = "";
+		}
+
+		$namelist = explode(" ", $contact["last_name"]);
+		if(isset($namelist))
+		{
+			if(count($namelist) >= 2) 
 			{
 				$contact["last_name"] = $namelist[count($namelist)-1];       	
 				for($i=0; $i<count($namelist)-2; $i++)
@@ -442,7 +442,7 @@ function GetContacts($username)
 					$middlename = implode(" ",$middlename);
 				}
 			}
-        }
+		}
 
 		$output_list[] = Array(
 				"id" => $contact["id"],
@@ -476,11 +476,11 @@ function GetContacts($username)
 				"description" => "",
 				"category" => "",        
 			  	);
-  	}
-  	
-    //to remove an erroneous compiler warning
-    $seed_contact = $seed_contact;
-    return $output_list;
+	}
+
+	//to remove an erroneous compiler warning
+	$seed_contact = $seed_contact;
+	return $output_list;
 }
 
 function AddContacts($username,$cntdtls)
@@ -499,44 +499,46 @@ function AddContacts($username,$cntdtls)
 	
 	foreach($cntdtls as $cntrow)
 	{
-      if(isset($cntrow))
-      {
-  			$contact->column_fields[salutation]=$cntrow["title"];		
-      	$contact->column_fields[firstname]=$cntrow["firstname"];
-      	if($cntrow["middlename"] != "")
-      	{
-      		$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
-      	}else
-      	{
-      		$contact->column_fields[lastname]=$cntrow["lastname"];
-      	}
-      	$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
-      	$contact->column_fields[email]=$cntrow["emailaddress"];
-      	$contact->column_fields[title]=$cntrow["jobtitle"];
-      	$contact->column_fields[department]=$cntrow["department"];
-      	$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
-          $contact->column_fields[phone]= $cntrow["officephone"];
-          $contact->column_fields[homephone]= $cntrow["homephone"];
-          $contact->column_fields[otherphone]= $cntrow["otherphone"];
-          $contact->column_fields[fax]= $cntrow["fax"];
-      	$contact->column_fields[mobile]=$cntrow["mobile"];
-      	$contact->column_fields[assistant]= $cntrow["asstname"];
-          $contact->column_fields[assistantphone]= $cntrow["asstphone"];     
-      	//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-      	$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
-      	$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
-      	$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
-      	$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
-      	$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
-      	$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
-      	$contact->column_fields[othercity]=$cntrow["othercity"];
-      	$contact->column_fields[otherstate]=$cntrow["otherstate"];
-      	$contact->column_fields[otherzip]=$cntrow["otherzip"];
-      	$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
-          $contact->column_fields[assigned_user_id]=$user_id;   
-  		$contact->column_fields[description]= $cntrow["description"];
-       	$contact->save("Contacts");	
-			}	
+		if(isset($cntrow))
+		{
+			$contact->column_fields[salutation]=$cntrow["title"];		
+ 			$contact->column_fields[firstname]=$cntrow["firstname"];
+			
+			if($cntrow["middlename"] != "")
+			{
+				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
+			}else
+			{
+				$contact->column_fields[lastname]=$cntrow["lastname"];
+			}
+
+			$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
+			$contact->column_fields[email]=$cntrow["emailaddress"];
+			$contact->column_fields[title]=$cntrow["jobtitle"];
+			$contact->column_fields[department]=$cntrow["department"];
+			$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
+			$contact->column_fields[phone]= $cntrow["officephone"];
+			$contact->column_fields[homephone]= $cntrow["homephone"];
+			$contact->column_fields[otherphone]= $cntrow["otherphone"];
+			$contact->column_fields[fax]= $cntrow["fax"];
+			$contact->column_fields[mobile]=$cntrow["mobile"];
+			$contact->column_fields[assistant]= $cntrow["asstname"];
+			$contact->column_fields[assistantphone]= $cntrow["asstphone"];     
+			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+			$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
+			$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
+			$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
+			$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
+			$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
+			$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
+			$contact->column_fields[othercity]=$cntrow["othercity"];
+			$contact->column_fields[otherstate]=$cntrow["otherstate"];
+			$contact->column_fields[otherzip]=$cntrow["otherzip"];
+			$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
+			$contact->column_fields[assigned_user_id]=$user_id;   
+			$contact->column_fields[description]= $cntrow["description"];
+			$contact->save("Contacts");	
+		}	
 	}
 	$contact = $contact;	
 	return $contact->id;
@@ -558,47 +560,47 @@ function UpdateContacts($username,$cntdtls)
 	
 	foreach($cntdtls as $cntrow)
 	{
-      if(isset($cntrow))
-      {
-				$contact->retrieve_entity_info($cntrow["id"],"Contacts");
-  			$contact->column_fields[salutation]=$cntrow["title"];		
-      	$contact->column_fields[firstname]=$cntrow["firstname"];
-      	if($cntrow["middlename"] != "")
-      	{
-      		$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
-      	}else
-      	{
-      		$contact->column_fields[lastname]=$cntrow["lastname"];
-      	}
-      	$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
-      	$contact->column_fields[email]=$cntrow["emailaddress"];
-      	$contact->column_fields[title]=$cntrow["jobtitle"];
-      	$contact->column_fields[department]=$cntrow["department"];
-      	$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
-        $contact->column_fields[phone]= $cntrow["officephone"];
-        $contact->column_fields[homephone]= $cntrow["homephone"];
-        $contact->column_fields[otherphone]= $cntrow["otherphone"];
-        $contact->column_fields[fax]= $cntrow["fax"];
-      	$contact->column_fields[mobile]=$cntrow["mobile"];
-      	$contact->column_fields[assistant]= $cntrow["asstname"];
-        $contact->column_fields[assistantphone]= $cntrow["asstphone"];     
-      	//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-      	$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
-      	$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
-      	$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
-      	$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
-      	$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
-      	$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
-      	$contact->column_fields[othercity]=$cntrow["othercity"];
-      	$contact->column_fields[otherstate]=$cntrow["otherstate"];
-      	$contact->column_fields[otherzip]=$cntrow["otherzip"];
-      	$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
-        $contact->column_fields[assigned_user_id]=$user_id;   
-  		  $contact->column_fields[description]= $cntrow["description"];
-  		  $contact->id = $cntrow["id"];
-  		  $contact->mode = "edit";
-       	$contact->save("Contacts");	
-			}	
+		if(isset($cntrow))
+		{
+			$contact->retrieve_entity_info($cntrow["id"],"Contacts");
+			$contact->column_fields[salutation]=$cntrow["title"];		
+			$contact->column_fields[firstname]=$cntrow["firstname"];
+			if($cntrow["middlename"] != "")
+			{
+				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
+			}else
+			{
+				$contact->column_fields[lastname]=$cntrow["lastname"];
+			}
+			$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
+			$contact->column_fields[email]=$cntrow["emailaddress"];
+			$contact->column_fields[title]=$cntrow["jobtitle"];
+			$contact->column_fields[department]=$cntrow["department"];
+			$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
+			$contact->column_fields[phone]= $cntrow["officephone"];
+			$contact->column_fields[homephone]= $cntrow["homephone"];
+			$contact->column_fields[otherphone]= $cntrow["otherphone"];
+			$contact->column_fields[fax]= $cntrow["fax"];
+			$contact->column_fields[mobile]=$cntrow["mobile"];
+			$contact->column_fields[assistant]= $cntrow["asstname"];
+			$contact->column_fields[assistantphone]= $cntrow["asstphone"];     
+			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+			$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
+			$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
+			$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
+			$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
+			$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
+			$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
+			$contact->column_fields[othercity]=$cntrow["othercity"];
+			$contact->column_fields[otherstate]=$cntrow["otherstate"];
+			$contact->column_fields[otherzip]=$cntrow["otherzip"];
+			$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
+			$contact->column_fields[assigned_user_id]=$user_id;   
+			$contact->column_fields[description]= $cntrow["description"];
+			$contact->id = $cntrow["id"];
+			$contact->mode = "edit";
+			$contact->save("Contacts");	
+		}	
 	}	
 	$contact = $contact;
 	return $contact->id;
@@ -606,62 +608,62 @@ function UpdateContacts($username,$cntdtls)
 
 function DeleteContacts($username,$crmid)
 {
-  global $current_user;
+	global $current_user;
 	require_once('modules/Users/User.php');
 	require_once('modules/Contacts/Contact.php');
-	 
+
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve($user_id);
- 
-  $contact = new Contact();
-  $contact->id = $crmid;
-  $contact->mark_deleted($contact->id);
-  
-  $contact = $contact;
-  return $contact->id;
+
+	$contact = new Contact();
+	$contact->id = $crmid;
+	$contact->mark_deleted($contact->id);
+
+	$contact = $contact;
+	return $contact->id;
 }
 
 function retrieve_account_id($account_name,$user_id)
 {
-    
-		if($account_name=="")
-    {
-        return null;
-    }
 
-    $query = "select vtiger_account.accountname vtiger_accountname,vtiger_account.accountid vtiger_accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname='" .$account_name."'";
+	if($account_name=="")
+	{
+		return null;
+	}
+
+	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname='" .$account_name."'";
 
 
-	  $db = new PearDatabase();
-    $result=  $db->query($query) or die ("Not able to execute insert");
-    
-    $rows_count =  $db->getRowCount($result);
-    if($rows_count==0)
-    {
-    	require_once('modules/Accounts/Account.php');
-	    $account = new Account();
-    	$account->column_fields[accountname] = $account_name;
-    	$account->column_fields[assigned_user_id]=$user_id;
-    	//$account->saveentity("Accounts");
-    	$account->save("Accounts");
-        //mysql_close();
-    	return $account->id;
-    }
-    else if ($rows_count==1)
-    {
-        $row = $db->fetchByAssoc($result, 0);
-        //mysql_close();
-        return $row["accountid"];	    
-    }
-    else
-    {
-        $row = $db->fetchByAssoc($result, 0);
-        //mysql_close();
-        return $row["accountid"];	    
-    }
-    
+	$db = new PearDatabase();
+	$result=  $db->query($query) or die ("Not able to execute insert");
+
+	$rows_count =  $db->getRowCount($result);
+	if($rows_count==0)
+	{
+		require_once('modules/Accounts/Account.php');
+		$account = new Account();
+		$account->column_fields[accountname] = $account_name;
+		$account->column_fields[assigned_user_id]=$user_id;
+		//$account->saveentity("Accounts");
+		$account->save("Accounts");
+		//mysql_close();
+		return $account->id;
+	}
+	else if ($rows_count==1)
+	{
+		$row = $db->fetchByAssoc($result, 0);
+		//mysql_close();
+		return $row["accountid"];	    
+	}
+	else
+	{
+		$row = $db->fetchByAssoc($result, 0);
+		//mysql_close();
+		return $row["accountid"];	    
+	}
+
 }
 
 function GetTasks($username)
@@ -670,52 +672,52 @@ function GetTasks($username)
 	require_once('modules/Activities/Activity.php');
 		
 	$seed_task = new Activity();
-    $output_list = Array();
+	$output_list = Array();
   
-    $query = $seed_task->get_tasksforol($username);
-    $result = $adb->query($query);
+	$query = $seed_task->get_tasksforol($username);
+	$result = $adb->query($query);
     
-    while($task = $adb->fetch_array($result))
-  	{
+	while($task = $adb->fetch_array($result))
+	{
   		if($task["startdate"] == "0000-00-00" || $task["startdate"] == NULL)
-        {
-	       	$task["startdate"] = "";
-        }
-        if($task["duedate"] == "0000-00-00" || $task["duedate"] == NULL)
-        {
-	       	$task["duedate"] = "";
-        }
+        	{
+		       	$task["startdate"] = "";
+        	}
+        	if($task["duedate"] == "0000-00-00" || $task["duedate"] == NULL)
+        	{
+		       	$task["duedate"] = "";
+        	}
         
-        if($task["status"] == "Not Started")
-        {
-       		$task["status"] = "0";
-        }else if($task["status"] == "In Progress")
-        {
-        	$task["status"] = "1";
-        }else if($task["status"] == "Completed")
-        {
-        	$task["status"] = "2";
-        }else if($task["status"] == "Deferred")
-        {
-        	$task["status"] = "4";
-        }else if($task["status"] == "Pending Input" || $task["status"] == "Planned")
-        {
-        	$task["status"] = "3";
-        }else
-        {
-        	$task["status"] = "0";
-        }
+        	if($task["status"] == "Not Started")
+        	{
+       			$task["status"] = "0";
+        	}else if($task["status"] == "In Progress")
+        	{
+        		$task["status"] = "1";
+        	}else if($task["status"] == "Completed")
+        	{
+        		$task["status"] = "2";
+        	}else if($task["status"] == "Deferred")
+        	{
+        		$task["status"] = "4";
+        	}else if($task["status"] == "Pending Input" || $task["status"] == "Planned")
+        	{
+        		$task["status"] = "3";
+        	}else
+        	{
+        		$task["status"] = "0";
+        	}
         
-        if($task["priority"] == "High")
-        {
-       		$task["priority"] = "2";
-        }else if($task["priority"] == "Low")
-        {
-        	$task["priority"] = "0";
-        }else if($task["priority"] == "Medium")
-        {
-        	$task["priority"] = "1";
-        }
+        	if($task["priority"] == "High")
+        	{
+       			$task["priority"] = "2";
+        	}else if($task["priority"] == "Low")
+        	{
+        		$task["priority"] = "0";
+        	}else if($task["priority"] == "Medium")
+        	{
+        		$task["priority"] = "1";
+        	}
         
 		$output_list[] = Array(
 						"id" => $task["taskid"],
@@ -728,7 +730,7 @@ function GetTasks($username)
 						"contactname" => $task["firstname"]." ".$task["lastname"],
 						"category" => "",        
 						);
-  	}
+	}
 	$seed_task = $seed_task;
 	return $output_list;
 }
@@ -748,8 +750,8 @@ function AddTasks($username,$taskdtls)
 	
 	foreach($taskdtls as $taskrow)
 	{
-      	if(isset($taskrow))
-      	{
+      		if(isset($taskrow))
+      		{
 			if($taskrow["status"] == "0")
 			{
 				$taskrow["status"] = "Not Started";
@@ -811,8 +813,8 @@ function UpdateTasks($username,$taskdtls)
 	
 	foreach($taskdtls as $taskrow)
 	{
-      if(isset($taskrow))
-      {
+		if(isset($taskrow))
+		{
 			if($taskrow["status"] == "0")
 			{
 				$taskrow["status"] = "Not Started";
@@ -833,16 +835,16 @@ function UpdateTasks($username,$taskdtls)
 				$taskrow["status"] = "Not Started";
 			}
         
-    		if($taskrow["priority"] == "2")
-            {
-           		$taskrow["priority"] = "High";
-            }else if($taskrow["priority"] == "0")
-            {
-            	$taskrow["priority"] = "Low";
-            }else if($taskrow["priority"] == "1")
-            {
-            	$taskrow["priority"] = "Medium";
-            }
+    			if($taskrow["priority"] == "2")
+			{
+           			$taskrow["priority"] = "High";
+           		}else if($taskrow["priority"] == "0")
+           		{
+           			$taskrow["priority"] = "Low";
+           		}else if($taskrow["priority"] == "1")
+           		{
+           		 	$taskrow["priority"] = "Medium";
+           		}
 					
 			$task->retrieve_entity_info($taskrow["id"],"Activities");
 			$task->column_fields[subject] = $taskrow["subject"];
@@ -859,8 +861,8 @@ function UpdateTasks($username,$taskdtls)
 			$task->mode="edit";
 
 			$task->save("Activities");
-      }
-  }
+		}
+	}
 	return $task->id;
 }
 
@@ -892,32 +894,32 @@ function GetClndr($username)
 	$query = $seed_clndr->get_calendarsforol($username);
 	$result = $adb->query($query);
     
-    while($clndr = $adb->fetch_array($result))
+	while($clndr = $adb->fetch_array($result))
   	{
   		if($clndr["startdate"] == "0000-00-00" || $clndr["startdate"] == NULL)
-        {
+        	{
 	        	$clndr["startdate"] = "";
-        }
-        if($clndr["duedate"] == "0000-00-00" || $clndr["duedate"] == NULL)
-        {
+		}
+	        if($clndr["duedate"] == "0000-00-00" || $clndr["duedate"] == NULL)
+        	{
 	        	$clndr["duedate"] = "";
-        }
+        	}
 		
-	   //this seperates the $$clndr["startdate"] into an array - YYYY-MM-DD
-	   $expldstartdate = explode("-", $clndr["startdate"]);
-	   $expldtimestart = explode(":", $clndr["startime"]);	
+		//this seperates the $$clndr["startdate"] into an array - YYYY-MM-DD
+		$expldstartdate = explode("-", $clndr["startdate"]);
+		$expldtimestart = explode(":", $clndr["startime"]);	
 
-	   $expldduedate = explode("-", $clndr["duedate"]);
+		$expldduedate = explode("-", $clndr["duedate"]);
 
-	   //this makes a timestamp out of the exploded date this number is in seconds
-	   $startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
-		
-       $duedtm = mktime($expldtimestart[0]+$clndr["duehours"], $expldtimestart[1]+$clndr["dueminutes"], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
-       
-	   $clndr["startdate"] = date("Y-m-d H:i:s", $startdtm);
-	   $clndr["duedate"] = date("Y-m-d H:i:s", $duedtm);
+		//this makes a timestamp out of the exploded date this number is in seconds
+		$startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
 
-	   $output_list[] = Array(
+		$duedtm = mktime($expldtimestart[0]+$clndr["duehours"], $expldtimestart[1]+$clndr["dueminutes"], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
+
+		$clndr["startdate"] = date("Y-m-d H:i:s", $startdtm);
+		$clndr["duedate"] = date("Y-m-d H:i:s", $duedtm);
+
+		$output_list[] = Array(
 						"id" => $clndr["clndrid"],
 						"subject" => $clndr["subject"],
 						"startdate" => $clndr["startdate"],
@@ -947,8 +949,8 @@ function AddClndr($username,$clndrdtls)
 	
 	foreach($clndrdtls as $clndrow)
 	{
-      if(isset($clndrow))
-      {
+		if(isset($clndrow))
+		{
 			$astartdtm = explode(" ",$clndrow["startdate"]);
 			$aduedtm = explode(" ",$clndrow["duedate"]);
 			
@@ -975,8 +977,8 @@ function AddClndr($username,$clndrdtls)
 			$clndr->column_fields[activitytype]="Meeting";
 			$clndr->column_fields[assigned_user_id]=$user_id;
 			$clndr->save("Activities");
-      }
-  }
+		}
+	}
 	return $clndr->id;
 }
 
@@ -996,8 +998,8 @@ function UpdateClndr($username,$clndrdtls)
 	
 	foreach($clndrdtls as $clndrow)
 	{
-      if(isset($clndrow))
-      {
+		if(isset($clndrow))
+		{
 			$astartdtm = explode(" ",$clndrow["startdate"]);
 			$aduedtm = explode(" ",$clndrow["duedate"]);
 			
@@ -1027,8 +1029,8 @@ function UpdateClndr($username,$clndrdtls)
 			$clndr->id = $clndrow["id"];
 			$clndr->mode="edit";
 			$clndr->save("Activities");
-      }
-  }
+		}
+	}
 	return $clndr->id;
 }
 
@@ -1052,24 +1054,24 @@ function DeleteClndr($username,$crmid)
 //To find the Difference between time
 function get_time_difference( $start, $end )
 {
-    $uts['start'] = strtotime( $start );
-    $uts['end'] = strtotime( $end );
-    if( $uts['start']!==-1 && $uts['end']!==-1 )
-    {
-        if( $uts['end'] >= $uts['start'] )
-        {
-            $diff    =    $uts['end'] - $uts['start'];
-            if( $days=intval((floor($diff/86400))) )
-                $diff = $diff % 86400;
-            if( $hours=intval((floor($diff/3600))) )
-                $diff = $diff % 3600;
-            if( $minutes=intval((floor($diff/60))) )
-                $diff = $diff % 60;
-            $diff    =    intval( $diff );            
-            return( array('days'=>$days, 'hours'=>$hours, 'minutes'=>$minutes, 'seconds'=>$diff) );
-        }
-    }
-    return( false );
+	$uts['start'] = strtotime( $start );
+	$uts['end'] = strtotime( $end );
+	if( $uts['start']!==-1 && $uts['end']!==-1 )
+	{
+		if( $uts['end'] >= $uts['start'] )
+		{
+			$diff    =    $uts['end'] - $uts['start'];
+			if( $days=intval((floor($diff/86400))) )
+			$diff = $diff % 86400;
+			if( $hours=intval((floor($diff/3600))) )
+			$diff = $diff % 3600;
+			if( $minutes=intval((floor($diff/60))) )
+			$diff = $diff % 60;
+			$diff    =    intval( $diff );            
+			return( array('days'=>$days, 'hours'=>$hours, 'minutes'=>$minutes, 'seconds'=>$diff) );
+		}
+	}
+	return( false );
 }
 
 $server->service(utf8_encode($HTTP_RAW_POST_DATA)); 

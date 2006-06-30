@@ -71,72 +71,67 @@ $server->register(
 	        
 function get_tickets_columns($user_name, $password)
 {
-    require_once('modules/HelpDesk/HelpDesk.php');
-    if(isPermitted("HelpDesk","index") == "yes")
-    { 
-    $helpdesk = new HelpDesk();
-    return $helpdesk->getColumnNames_Hd();
-    }
-    else
-    return null;
+	require_once('modules/HelpDesk/HelpDesk.php');
+	if(isPermitted("HelpDesk","index") == "yes")
+	{ 
+		$helpdesk = new HelpDesk();
+		return $helpdesk->getColumnNames_Hd();
+	}
+	else
+		return null;
 }
 
 function get_contacts_columns($user_name, $password)
 {
-    require_once('modules/Contacts/Contact.php');
-    if(isPermitted("Contacts","index") == "yes")
-    {
-	    $contact = new Contact();
-	    return $contact->getColumnNames();	   
-    }
- else
-    return null;
+	require_once('modules/Contacts/Contact.php');
+	if(isPermitted("Contacts","index") == "yes")
+	{
+		$contact = new Contact();
+		return $contact->getColumnNames();	   
+	}
+	else
+		return null;
 
 }
 
 
 function get_accounts_columns($user_name, $password)
 {
-    require_once('modules/Accounts/Account.php');
-    if(isPermitted("Accounts","index") == "yes")
-    {
-	    $account = new Account();
-	    return $account->getColumnNames_Acnt();
-    }
- else
-    return null;
+	require_once('modules/Accounts/Account.php');
+	if(isPermitted("Accounts","index") == "yes")
+	{
+		$account = new Account();
+		return $account->getColumnNames_Acnt();
+	}
+	else
+		return null;
 
 }
 
 
 function get_leads_columns($user_name, $password)
 {
-    require_once('modules/Leads/Lead.php');
- if(isPermitted("Leads","index") == "yes")
-     {
-    $lead = new Lead();
-    return $lead->getColumnNames_Lead();
-    }
- else
-    return null;
-
+	require_once('modules/Leads/Lead.php');
+	if(isPermitted("Leads","index") == "yes")
+	{
+		$lead = new Lead();
+		return $lead->getColumnNames_Lead();
+	}
+	else
+		return null;
 }
 
 function get_user_columns($user_name, $password)
 {
-    require_once('modules/Users/User.php');
-     if(isPermitted("Users","index") == "yes")
-         {
-		 
-    $user = new User();
-    return $user->getColumnNames_User();
-    }
- else
-    return null;
-
+	require_once('modules/Users/User.php');
+	if(isPermitted("Users","index") == "yes")
+	{
+		$user = new User();
+		return $user->getColumnNames_User();
+	}
+	else
+		return null;
 }
-
-
 
 
 function create_session($user_name, $password)
