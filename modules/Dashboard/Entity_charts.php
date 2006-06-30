@@ -15,7 +15,7 @@ require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 include("modules/Dashboard/horizontal_bargraph.php");
-//include("modules/Dashboard/vertical_bargraph.php");
+include("modules/Dashboard/vertical_bargraph.php");
 include("modules/Dashboard/pie_graph.php");
 
 //To get the vtiger_account names
