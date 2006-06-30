@@ -11,6 +11,12 @@
 
 require_once("language/en_us.lang.php");
 
+@session_start();
+if(isset($_SESSION['customer_id']) && isset($_SESSION['customer_name']))
+{
+	header("Location: index.php?action=index&module=Tickets");
+	exit;
+}
 if($_REQUEST['close_window'] == 'true')
 {
    ?>
