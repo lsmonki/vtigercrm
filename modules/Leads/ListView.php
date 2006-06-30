@@ -171,9 +171,9 @@ if(isset($order_by) && $order_by != '')
         $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
-$list_result = $adb->query($query);
 //Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
+$count_result = $adb->query("select count(*) count ".substr($query, strpos($query,'FROM'),strlen($query)));
+$noofrows = $adb->query_result($count_result,0,"count");
 
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
@@ -185,6 +185,14 @@ $start = $_SESSION['lvs'][$currentModule]['start'];
 
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+
+//limiting the query
+if ($start_rec ==0) 
+	$limit_start_rec = 0;
+else
+	$limit_start_rec = $start_rec -1;
+	
+$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 
 //mass merge for word templates -- *Raj*17/11
@@ -216,6 +224,14 @@ if(isPermitted("Leads","Merge") == 'yes')
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+
+//limiting the query
+if ($start_rec ==0) 
+	$limit_start_rec = 0;
+else
+	$limit_start_rec = $start_rec -1;
+	
+$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

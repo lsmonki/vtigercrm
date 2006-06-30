@@ -129,11 +129,7 @@ if(isset($order_by) && $order_by != '')
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
-$list_result = $adb->query($list_query);
-
 //Constructing the list view 
-
-
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -143,7 +139,9 @@ $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("SINGLE_MOD",'Note');
 //Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
+//Retreiving the no of rows
+$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
+$noofrows = $adb->query_result($count_result,0,"count");
 
 if($viewnamedesc['viewname'] == 'All')
 {
@@ -166,6 +164,14 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 // Raju Ends
+
+//limiting the query
+if ($start_rec ==0) 
+	$limit_start_rec = 0;
+else
+	$limit_start_rec = $start_rec -1;
+	
+$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

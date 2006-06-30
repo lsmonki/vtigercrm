@@ -151,11 +151,11 @@ else
 	$list_query .= ' order by vtiger_campaign.campaignid DESC';
 }
 
-$list_result = $adb->query($list_query);
 //Constructing the list view
 
 //Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
+$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
+$noofrows = $adb->query_result($count_result,0,"count");
 
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
@@ -173,6 +173,14 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+
+//limiting the query
+if ($start_rec ==0) 
+	$limit_start_rec = 0;
+else
+	$limit_start_rec = $start_rec -1;
+	
+$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))

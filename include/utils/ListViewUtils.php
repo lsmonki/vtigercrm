@@ -516,7 +516,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	}
 	//end
 	if($navigation_array['start'] !=0)
-	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	for ($i=1; $i<=$noofrows; $i++)
+	//for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
 		$list_header =Array();
 		//Getting the entityid
@@ -1463,7 +1464,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					if($module == "Contacts")
 					{
 						$query="SELECT vtiger_contactdetails.imagename FROM vtiger_contactdetails WHERE lastname='".$temp_val."'";
-						//echo $query;
 						$result = $adb->query($query);
 						$imagename=$adb->query_result($result,0,'imagename');
 						if($imagename != '')
