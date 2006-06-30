@@ -280,7 +280,7 @@ class HelpDesk extends CRMEntity {
 				$where_conditions = " and ( ".$where_conditions." ) ";
 
 			$query .= $where_conditions;
-			$this->db->println("where condition for customer vtiger_portal tickets search : ".$where_conditions);
+			$this->db->println("where condition for customer portal tickets search : ".$where_conditions);
 		}
 
 		$query .= " order by vtiger_crmentity.crmid desc";

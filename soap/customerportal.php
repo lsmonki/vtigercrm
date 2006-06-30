@@ -155,7 +155,13 @@ $server->wsdl->addComplexType(
         'array',
         '',
         array(
-                'files' => array('filename'=>'xsd:string','filecontents'=>'tns:xsd:string'),
+                'files' => array(
+					'fileid'=>'xsd:string','type'=>'tns:xsd:string',
+					'filename'=>'xsd:string','type'=>'tns:xsd:string',
+					'filesize'=>'xsd:string','type'=>'tns:xsd:string',
+					'filetype'=>'xsd:string','type'=>'tns:xsd:string',
+					'filecontents'=>'xsd:string','type'=>'tns:xsd:string'
+				),
              )
 );
 
@@ -366,7 +372,7 @@ function get_KBase_details($id='')
 		$result['faq'][$k]['faqcreatedtime'] = $adb->query_result($faq_result,$k,'createdtime');
 		$result['faq'][$k]['faqmodifiedtime'] = $adb->query_result($faq_result,$k,'modifiedtime');
 
-		$faq_comment_query = "select * from vtiger_faqcomments where vtiger_faqid=".$faqid." order by createdtime DESC";
+		$faq_comment_query = "select * from vtiger_faqcomments where faqid=".$faqid." order by createdtime DESC";
 		$faq_comment_result = $adb->query($faq_comment_query);
 		$faq_comment_noofrows = $adb->num_rows($faq_comment_result);
 		for($l=0;$l<$faq_comment_noofrows;$l++)
@@ -650,16 +656,19 @@ function get_ticket_creator($ticketid)
 
 function get_picklists($picklist_name)
 {
-	global $adb;
+	global $adb, $log;
+	$log->debug("Entering into function get_picklists($picklist_name)");
+	
 	$picklist_array = Array();
 
-	$res = $adb->query("select * from ".$picklist_name);
+	$res = $adb->query("select * from vtiger_".$picklist_name);
 	for($i=0;$i<$adb->num_rows($res);$i++)
 	{
 		$picklist_val = $adb->query_result($res,$i,$picklist_name);
 		$picklist_array[$i] = $picklist_val;
 	}
 
+	$log->debug("Exit from function get_picklists($picklist_name)");
 	return $picklist_array;
 }
 
@@ -678,16 +687,16 @@ function get_ticket_attachments($userid,$ticketid)
 		$filename = $adb->query_result($res,$i,'name');
 		$filepath = $adb->query_result($res,$i,'path');
 
-		$filesize = vtiger_filesize($filepath.$filename);
 		$fileid = $adb->query_result($res,$i,'attachmentsid');
+		$filesize = filesize($filepath.$fileid."_".$filename);
 		$filetype = $adb->query_result($res,$i,'type');
 
-		$filecontents = base64_encode(file_get_contents($filepath.$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
+		$filecontents = base64_encode(file_get_contents($filepath.$fileid."_".$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
 
-		$output[$i]['filetype'] = $filetype;
-		$output[$i]['filename'] = $filename;
-		$output[$i]['filesize'] = $filesize;
 		$output[$i]['fileid'] = $fileid;
+		$output[$i]['filename'] = $filename;
+		$output[$i]['filetype'] = $filetype;
+		$output[$i]['filesize'] = $filesize;
 		$output[$i]['filecontents'] = $filecontents;
 	}
 
@@ -702,8 +711,9 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	//decide the file path where we should upload the file in the server
 	$upload_filepath = decideFilePath();
 
-	$upload_dir = $root_directory.'test/upload/';
-	$new_filename = $ticketid.'_'.$filename;
+	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
+
+	$new_filename = $attachmentid.'_'.$filename;
 
 	$data = base64_decode($filecontents);
 
@@ -713,14 +723,13 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	fclose($handle);	
 
 	//Now store this file information in db and relate with the ticket
-	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 	$date_var = date('YmdHis');
 	$description = 'CustomerPortal Attachment';
 
 	$crmquery = "insert into vtiger_crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."','".$date_var."')";
 	$crmresult = $adb->query($crmquery);
 
-	$attachmentquery = "insert into vtiger_attachments values(".$attachmentid.",'".$new_filename."','".$description."','".$filetype."','".$upload_filepath."')";
+	$attachmentquery = "insert into vtiger_attachments values(".$attachmentid.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
 	$attachmentreulst = $adb->query($attachmentquery);
 
 	$relatedquery = $sql1 = "insert into vtiger_seattachmentsrel values('".$ticketid."','".$attachmentid."')";
