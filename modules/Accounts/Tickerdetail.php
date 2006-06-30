@@ -8,8 +8,8 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-include("modules/Accounts/Account.php");
-include("getCompanyProfile.php");
+require_once("modules/Accounts/Account.php");
+require_once("getCompanyProfile.php");
 $variable = $_REQUEST['tickersymbol'];
 $url = "http://moneycentral.msn.com/investor/research/profile.asp?Symbol=".trim($variable);
 $data = getComdata($url,trim($variable));
