@@ -50,7 +50,7 @@ $log->debug("Exiting makeRandomPassword method ...");
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $log;
+global $log,$adb;
 $focus = new Contact();
 
 setObjectValuesFromRequest(&$focus);

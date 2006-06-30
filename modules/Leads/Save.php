@@ -19,7 +19,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 
 $local_log =& LoggerManager::getLogger('index');
-global $log;
+global $log,$adb;
 $focus = new Lead();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
@@ -68,6 +68,17 @@ $local_log->debug("Saved record with id of ".$return_id);
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns")
+{
+	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
+	{
+		$sql = "insert into vtiger_campaignleadrel values (".$_REQUEST['return_id'].",".$focus->id.")";
+		$adb->query($sql);
+	}
+}
+
+
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 
 //Code to save the custom vtiger_field info into database
