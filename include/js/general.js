@@ -1687,6 +1687,11 @@ function SelectAll(mod)
                         return false;
                 }
 }
+function ShowEmail(id)
+{
+       url = 'index.php?module=Emails&action=EmailsAjax&file=DetailView&record='+id;
+       openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+}
 
 var bSaf = (navigator.userAgent.indexOf('Safari') != -1);
 var bOpera = (navigator.userAgent.indexOf('Opera') != -1);

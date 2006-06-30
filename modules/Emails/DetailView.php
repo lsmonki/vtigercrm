@@ -45,9 +45,9 @@ if(isset($_REQUEST['record']))
 	$result = $adb->query($query);
     	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));
-	$smarty->assign('TO_MAIL',$to_email);	
-	$smarty->assign('CC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'cc_email')));	
-    	$smarty->assign('BCC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'bcc_email')));	
+	$smarty->assign('TO_MAIL',to_html($to_email));	
+	$smarty->assign('CC_MAIL',to_html(ereg_replace('###',', ',$adb->query_result($result,0,'cc_email'))));	
+    	$smarty->assign('BCC_MAIL',to_html(ereg_replace('###',', ',$adb->query_result($result,0,'bcc_email'))));	
     	$smarty->assign('EMAIL_FLAG',$adb->query_result($result,0,'email_flag'));	
 	if($focus->column_fields['name'] != '')
 	        $focus->name = $focus->column_fields['name'];		
@@ -131,14 +131,8 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 	else $smarty->assign("NAME", "");
 
 $entries = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
-if($_REQUEST['mode'] != 'ajax')
-	$smarty->assign("BLOCKS" , $entries);
-else	
-{
-	$entries['Email Information']['4']['Description']['value'] = from_html($entries['Email Information']['4']['Description']['value']);
-	$smarty->assign("BLOCKS", $entries['Email Information']);
-}
-	
+$entries['Email Information']['4']['Description']['value'] = from_html($entries['Email Information']['4']['Description']['value']);
+$smarty->assign("BLOCKS", $entries['Email Information']);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -157,7 +151,7 @@ $smarty->assign("CHECK", $check_button);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SENDER",$email_id);
 if($_REQUEST['mode'] != 'ajax')
-	$smarty->display("DetailView.tpl");
+	$smarty->display("EmailDetailView.tpl");
 else
 	$smarty->display("EmailDetails.tpl")
 ?>

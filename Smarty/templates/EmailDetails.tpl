@@ -24,7 +24,7 @@
 				{/if}
 				{foreach item=row from=$BLOCKS}	
 				{foreach item=elements key=title from=$row}	
-					{if $title eq 'Attachment' && $elements.value != ''}
+					{if $elements.fldname eq 'filename' && $elements.value != ''}
 						<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay')"/>
 					{/if}
 				{/foreach}
@@ -41,8 +41,8 @@
 <tr>
 	<td height="250" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
 	{foreach item=row from=$BLOCKS}	
-	{foreach item=elements key=title from=$row}	
-		{if $title eq 'Subject'}
+	{foreach item=elements from=$row}	
+		{if $elements.fldname eq 'subject'}
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	{if $EMAIL_FLAG neq 'WEBMAIL'}
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
@@ -54,7 +54,7 @@
 	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$elements.value}&nbsp;</td></tr>
 			<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 		</table>
-		{elseif $title eq 'Description'}
+		{elseif $elements.fldname eq 'description'}
 		<div>
 			{$BLOCKS.4.Description.value}
 		</div>
@@ -66,7 +66,7 @@
 </table>
 {foreach item=row from=$BLOCKS}	
 	{foreach item=elements key=title from=$row}	
-	{if $title eq 'Attachment'}
+	{if $elements.fldname eq 'filename'}
 	<div id="reportLay" style="width:130px;" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 		{foreach item=attachments from=$elements.options}

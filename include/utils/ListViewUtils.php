@@ -696,7 +696,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					{
 						$list_result_count = $i-1;
 						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
-						$value = '<a href="javascript:;" onClick="OpenCompose(\''.$entity_id.'\',\'edit\');">'.$tmp_value.'</a>';
+						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.$tmp_value.'</a>';
 
 					}
 					else
@@ -2724,7 +2724,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 
 	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
 	if($module == 'Emails')
-	        $edit_link = 'javascript:;" onclick="OpenCompose(\'123\',\'edit\');';
+	        $edit_link = 'javascript:;" onclick="OpenCompose(\''.$entity_id.'\',\'edit\');';
 	return $edit_link;
 }
 
