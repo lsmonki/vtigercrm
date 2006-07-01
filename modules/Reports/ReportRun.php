@@ -834,6 +834,7 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
 			{
 				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_invoice.accountid
+					left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
 					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
