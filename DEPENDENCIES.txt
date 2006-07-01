@@ -1,2 +1,3 @@
 #pkg	pkgvers	relpath	statusmodified	statusexternaldep	dowloadurl
-adodb	adodb-4.90	adodb/	snapshot	unknown	http://prdownloads.sourceforge.net/adodb/adodb490.tgz
+adodb	adodb-4.90	adodb/	false	unknown	http://prdownloads.sourceforge.net/adodb/adodb490.tgz
+FCKeditor	FCKeditor-2.2	include/fckeditor/	true	unknown	http://prdownloads.sourceforge.net/fckeditor/FCKeditor-2.2.gz.tar
