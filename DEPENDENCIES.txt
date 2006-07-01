@@ -1,6 +1,6 @@
 #pkg	pkgvers	relpath	statusmodified	statusexternaldep	dowloadurl
-adodb	adodb-4.90	adodb/	false	unknown	http://prdownloads.sourceforge.net/adodb/adodb490.tgz
-FCKeditor	FCKeditor-2.2	include/fckeditor/	true	unknown	http://prdownloads.sourceforge.net/fckeditor/FCKeditor-2.2.gz.tar
+adodb	adodb-4.90	adodb	false	unknown	http://prdownloads.sourceforge.net/adodb/adodb490.tgz
+FCKeditor	FCKeditor-2.2	include/fckeditor	true	unknown	http://prdownloads.sourceforge.net/fckeditor/FCKeditor-2.2.gz.tar
 fpdf	fpdf-1.53	include/fpdf	true	unknown	http://www.fpdf.org/en/dl.php?v=153&f=tgz
 Image_Canvas	Image_Canvas-0.3.0	include/Image	true	unknown	http://pear.php.net/get/Image_Canvas-0.3.0.tgz
 Image_Color	Image_Color-1.0.2	include/Image	true	unknown	http://pear.php.net/get/Image_Color-1.0.2.tgz
