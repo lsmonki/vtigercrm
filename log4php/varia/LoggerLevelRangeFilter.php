@@ -58,7 +58,7 @@ require_once(LOG4PHP_DIR . '/spi/LoggerFilter.php');
  * @log4j-author based on code by Ceki G&uuml;lc&uuml; 
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @subpackage varia
  * @since 0.6

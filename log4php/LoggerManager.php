@@ -32,7 +32,7 @@ require_once(LOG4PHP_DIR . '/LoggerHierarchy.php');
  * Use the LoggerManager to get Logger instances.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.18 $
  * @package log4php
  * @see Logger
  * @todo create a configurator selector  

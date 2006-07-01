@@ -40,7 +40,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
  *
  * @author Domenico Lordi <lordi@interfree.it>
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.10 $
  * @package log4php
  * @subpackage appenders
  */

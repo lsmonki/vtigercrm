@@ -75,7 +75,7 @@ define('LOG4PHP_LOGGER_PATTERN_PARSER_DATE_FORMAT_DATE',       'd M Y H:i:s,u');
  * a chained list of {@link LoggerPatternConverter} converters.</p>
  * 
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $ 
+ * @version $Revision: 1.10 $ 
  * @package log4php
  * @subpackage helpers
  *

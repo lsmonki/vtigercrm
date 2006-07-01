@@ -152,7 +152,7 @@ define('LOG4PHP_LOGGER_PATTERN_LAYOUT_TTCC_CONVERSION_PATTERN',    '%r [%t] %p %
  * </pre>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.7 $
  * @package log4php
  * @subpackage layouts
  * @since 0.3 

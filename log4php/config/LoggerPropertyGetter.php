@@ -24,7 +24,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
 
 /**
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @subpackage config
  * @since 0.5

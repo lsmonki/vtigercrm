@@ -29,7 +29,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
  * {@link Logger} or a sub-class of {@link Logger}.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.3 $
  * @package log4php
  * @subpackage spi
  * @since 0.5 

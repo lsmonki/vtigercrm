@@ -33,7 +33,7 @@ require_once(LOG4PHP_DIR . '/LoggerManager.php');
  * <p>For XML based configuration see {@link LoggerDOMConfigurator}.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @since 0.5
  */
@@ -59,7 +59,7 @@ class LoggerBasicConfigurator extends LoggerConfigurator {
         $layout = LoggerLayout::factory('LoggerLayoutTTCC');
         $appender->setLayout($layout);
 
-        $root->addAppender($appender);
+        $root->addAppender($appender));
     }
 
     /**

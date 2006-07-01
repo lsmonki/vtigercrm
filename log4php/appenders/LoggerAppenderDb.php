@@ -35,7 +35,7 @@ require_once('DB.php');
  * <p>See examples in test directory.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.7 $
  * @package log4php
  * @subpackage appenders
  * @since 0.3

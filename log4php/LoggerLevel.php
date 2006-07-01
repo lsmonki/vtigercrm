@@ -43,7 +43,7 @@ define('LOG4PHP_LEVEL_ALL_INT',    -2147483648);
  * level set.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.11 $
  * @package log4php
  * @since 0.5
  */

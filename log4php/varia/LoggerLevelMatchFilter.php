@@ -40,7 +40,7 @@ require_once(LOG4PHP_DIR . '/spi/LoggerFilter.php');
  * {@link LOG4PHP_LOGGER_FILTER_NEUTRAL} is returned.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @subpackage varia
  * @since 0.6

@@ -77,7 +77,7 @@ define('LOG4PHP_LOGGER_DOM_CONFIGURATOR_XMLNS', 'HTTP://WWW.VXR.IT/LOG4PHP/');
  * subdirectories.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.12 $
  * @package log4php
  * @subpackage xml
  * @since 0.4 

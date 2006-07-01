@@ -29,7 +29,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
  * <p>You need to recode methods to output messages in a different way.</p> 
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.9 $
  * @package log4php
  */
 class LoggerLog {

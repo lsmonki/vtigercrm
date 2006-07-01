@@ -28,7 +28,7 @@ require_once(LOG4PHP_DIR . '/Logger.php');
  * Creates instances of {@link Logger} with a given name.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @since 0.5 
  */

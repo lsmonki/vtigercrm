@@ -30,7 +30,7 @@ require_once(LOG4PHP_DIR . '/spi/LoggerLoggingEvent.php');
  * This class has been deprecated and replaced by the Logger subclass.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.17 $
  * @package log4php
  * @see Logger
  */

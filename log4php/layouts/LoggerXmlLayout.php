@@ -44,7 +44,7 @@ require_once(LOG4PHP_DIR . '/LoggerLayout.php');
  * a correct XML file.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.16 $
  * @package log4php
  * @subpackage layouts
  */

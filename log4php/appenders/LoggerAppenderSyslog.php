@@ -37,7 +37,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
  * - <b>INFO  &gt; level &gt;= DEBUG</b> to LOG_DEBUG
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.11 $
  * @package log4php
  * @subpackage appenders
  */ 

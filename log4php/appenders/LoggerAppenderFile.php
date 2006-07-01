@@ -26,12 +26,6 @@ require_once(LOG4PHP_DIR . '/LoggerAppenderSkeleton.php');
 require_once(LOG4PHP_DIR . '/helpers/LoggerOptionConverter.php');
 require_once(LOG4PHP_DIR . '/LoggerLog.php');
 
-if (!defined('ROOT_DIR')) define('ROOT_DIR', LOG4PHP_DIR . '/..');
-if (!defined('LOG_READ'))
-{
-	include(ROOT_DIR . '/config.php');
-	define('LOG_READ', $log_readable);
-}
 /**
  * FileAppender appends log events to a file.
  *
@@ -39,7 +33,7 @@ if (!defined('LOG_READ'))
  * {@link $append}.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.15 $
  * @package log4php
  * @subpackage appenders
  */
@@ -81,11 +75,6 @@ class LoggerAppenderFile extends LoggerAppenderSkeleton {
         $fileName = $this->getFile();
         LoggerLog::debug("LoggerAppenderFile::activateOptions() opening file '{$fileName}'");
         $this->fp = @fopen($fileName, ($this->getAppend()? 'a':'w'));
-
-	// Denying read option for log file. Added for Vulnerability fix
-        if (is_readable($fileName) and (LOG_READ == 0)) chmod ($fileName,0200);
-        if (!is_readable($fileName) and (LOG_READ == 1)) chmod ($fileName,0600);
-
         if ($this->fp) {
             if ($this->getAppend())
                 fseek($this->fp, 0, SEEK_END);

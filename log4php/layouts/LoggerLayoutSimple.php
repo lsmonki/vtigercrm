@@ -47,7 +47,7 @@ require_once(LOG4PHP_DIR . '/LoggerLayout.php');
  * <samp> INFO - "A message" </samp>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.8 $
  * @package log4php
  * @subpackage layouts
  */  

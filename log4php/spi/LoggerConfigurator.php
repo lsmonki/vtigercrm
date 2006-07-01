@@ -40,7 +40,7 @@ define('LOG4PHP_LOGGER_CONFIGURATOR_NULL',      'null');
  * Implemented by classes capable of configuring log4php using a URL.
  *  
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @package log4php
  * @subpackage spi  
  * @since 0.5
