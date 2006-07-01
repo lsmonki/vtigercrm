@@ -5,3 +5,4 @@ fpdf-1.53              include/fpdf           true      unknown       unknown   
 Image_Canvas-0.3.0     include/Image          true      unknown       unknown   http://pear.php.net/get/Image_Canvas-0.3.0.tgz
 Image_Color-1.0.2      include/Image          true      unknown       unknown   http://pear.php.net/get/Image_Color-1.0.2.tgz
 Image_Graph-0.7.2      include/Image          true      unknown       unknown   http://pear.php.net/get/Image_Graph-0.7.2.tgz
+log4php-0.9            log4php                false     true          unknown   http://www.vxr.it/log4php/log4php-0.9.tar.gz       
