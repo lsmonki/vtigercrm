@@ -53,7 +53,8 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
 $smarty->assign("THEME", $theme);
-$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
@@ -65,7 +66,7 @@ else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD",$app_strings['Potential']);
+$smarty->assign("SINGLE_MOD", 'Opportunity');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

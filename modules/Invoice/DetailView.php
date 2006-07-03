@@ -63,7 +63,7 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD", $app_strings['Invoice']);
+$smarty->assign("SINGLE_MOD", 'Invoice');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

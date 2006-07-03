@@ -53,7 +53,7 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("TICKETID", $_REQUEST['record']);
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD",$app_strings['Ticket']);
+$smarty->assign("SINGLE_MOD", 'HelpDesk');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($_REQUEST['record']));

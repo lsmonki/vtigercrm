@@ -57,7 +57,7 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("MODULE", $currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
+$smarty->assign("SINGLE_MOD", 'Vendor');
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

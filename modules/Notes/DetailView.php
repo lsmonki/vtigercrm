@@ -82,7 +82,8 @@ if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUES
 if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 
 $smarty->assign("THEME", $theme);
-$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -93,7 +94,7 @@ if ( isset($focus->filename) && $focus->filename != '')
 	$smarty->assign("FILELINK", $fileurl);
 }
 
-$smarty->assign("SINGLE_MOD",$app_strings['Note']);
+$smarty->assign("SINGLE_MOD", 'Note');
 
 if(isPermitted("Notes","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

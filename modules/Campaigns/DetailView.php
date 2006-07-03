@@ -41,7 +41,7 @@ else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD",$app_strings['Campaign']);
+$smarty->assign("SINGLE_MOD",'Campaign');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

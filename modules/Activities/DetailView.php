@@ -122,7 +122,7 @@ $smarty->assign("BLOCKS", getBlocks($tab_type,"detail_view",'',$focus->column_fi
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD", $app_strings['Activity']);
+$smarty->assign("SINGLE_MOD", 'Activity');
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 

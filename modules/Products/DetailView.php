@@ -54,7 +54,7 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD",$app_strings['Product']);
+$smarty->assign("SINGLE_MOD", 'Product');
 
 if(isPermitted("Products","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

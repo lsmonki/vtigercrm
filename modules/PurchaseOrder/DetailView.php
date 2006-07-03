@@ -63,7 +63,7 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD",$app_strings['PurchaseOrder']);
+$smarty->assign("SINGLE_MOD", 'PurchaseOrder');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
