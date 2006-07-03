@@ -15,25 +15,25 @@ global $mod_strings;
 $match_condition = $_REQUEST['search_match'];
 if(trim($_REQUEST['search_ticketid']) != '')
 {
-	$where .= "troubletickets.ticketid = '".addslashes($_REQUEST['search_ticketid'])."'&&&";
+	$where .= "vtiger_troubletickets.ticketid = '".addslashes($_REQUEST['search_ticketid'])."'&&&";
 }
 if(trim($_REQUEST['search_title']) != '')
 {
-	//$where .= "troubletickets.title = '".$_REQUEST['search_title']."'&&&";
-	$where .= "troubletickets.title = like '%".addslashes(trim($_REQUEST['search_title']))."%'&&&";
+	//$where .= "vtiger_troubletickets.title = '".$_REQUEST['search_title']."'&&&";
+	$where .= "vtiger_troubletickets.title = like '%".addslashes(trim($_REQUEST['search_title']))."%'&&&";
 }
 
 if(trim($_REQUEST['search_ticketstatus']) != '')
 {
-	$where .= "troubletickets.status = '".$_REQUEST['search_ticketstatus']."'&&&";
+	$where .= "vtiger_troubletickets.status = '".$_REQUEST['search_ticketstatus']."'&&&";
 }
 if(trim($_REQUEST['search_ticketpriority']) != '')
 {
-	$where .= "troubletickets.priority = '".$_REQUEST['search_ticketpriority']."'&&&";
+	$where .= "vtiger_troubletickets.priority = '".$_REQUEST['search_ticketpriority']."'&&&";
 }
 if(trim($_REQUEST['search_ticketcategory']) != '')
 {
-	$where .= "troubletickets.category = '".$_REQUEST['search_ticketcategory']."'&&&";
+	$where .= "vtiger_troubletickets.category = '".$_REQUEST['search_ticketcategory']."'&&&";
 }
 $where = trim($where,'&&&');
 
