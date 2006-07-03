@@ -172,6 +172,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
 	$log->debug("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id']);
 	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
 	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 } 
  
  
