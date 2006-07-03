@@ -1308,7 +1308,7 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 function getAssociatedProducts($module,$focus,$seid='')
 {
 	global $log;
-	$log->debug("Entering getAssociatedProducts(".$module.",".$focus.",".$seid=''.") method ...");
+	$log->debug("Entering getAssociatedProducts($module,$focus,$seid='') method ...");
 	global $adb;
 	$output = '';
 	global $theme,$current_user;
@@ -1397,9 +1397,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
 		//Added to pass the tax percentage values
-		if(!isset($vat)) $vat = 0;
-		if(!isset($sales)) $sales = 0;
-		if(!isset($service)) $service = 0;
+		if(!isset($vat)) $vat = getTaxPercentage('VAT');//Set the default config value
+		if(!isset($sales)) $sales = getTaxPercentage('Sales');//Set the default config value
+		if(!isset($service)) $service = getTaxPercentage('Service');//Set the default config value
 		$product_Detail[$i]['txtVATTax'.$i] = $vat;//getProductTaxPercentage('VAT',$productid,'default');
 		$product_Detail[$i]['txtSalesTax'.$i] = $sales;//getProductTaxPercentage('Sales',$productid,'default');
 		$product_Detail[$i]['txtServiceTax'.$i] = $service;//getProductTaxPercentage('Service',$productid,'default');
@@ -1420,7 +1420,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 function getNoOfAssocProducts($module,$focus,$seid='')
 {
 	global $log;
-	$log->debug("Entering getNoOfAssocProducts(".$module.",".$focus.",".$seid=''.") method ...");
+	$log->debug("Entering getNoOfAssocProducts($module,$focus,$seid='') method ...");
 	global $adb;
 	$output = '';
 	if($module == 'Quotes')
