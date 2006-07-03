@@ -265,7 +265,7 @@ class HelpDesk extends CRMEntity {
 				$this->db->println('key : '.$key.'...........value : '.$value);
 				$val = explode(" = ",$value);
 				$this->db->println('val0 : '.$val[0].'...........val1 : '.$val[1]);
-				if($val[0] == 'troubletickets.title')
+				if($val[0] == 'vtiger_troubletickets.title')
 				{
 					$where_conditions .= $val[0]."  ".$val[1];
 					if($count != $key) 	$where_conditions .= $join;
