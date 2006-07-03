@@ -28,6 +28,11 @@ if($ajaxaction == "DETAILVIEW")
 	{
 		$modObj = new HelpDesk();
 		$modObj->retrieve_entity_info($crmid,"HelpDesk");
+		
+		//Added to avoid the comment save, when we edit other fields through ajax edit
+		if($fieldname != 'comments')
+			$modObj->column_fields['comments'] = '';
+
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";
