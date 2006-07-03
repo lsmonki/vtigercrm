@@ -981,7 +981,7 @@ function insertIntoTicketCommentTable($table_name, $module)
 	global $current_user;
 
         $current_time = date('Y-m-d H:i:s');
-	if($_REQUEST['assigned_user_id'] != '')
+	if($this->column_fields['assigned_user_id'] != '')
 		$ownertype = 'user';
 	else
 		$ownertype = 'customer';
