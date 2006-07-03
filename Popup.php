@@ -205,6 +205,11 @@ if($currentModule == 'PriceBooks')
 }
 else
 {
+		if(isset($_REQUEST['recordid']) && $_REQUEST['recordid'] != '')
+		{		
+			$smarty->assign("RECORDID",$_REQUEST['recordid']);
+			$url_string .='&recordid='.$_REQUEST['recordid'];
+		}
         $where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
         $query = getListQuery($currentModule,$where_relquery);
 }
@@ -280,6 +285,8 @@ $focus->popup_type=$popuptype;
 $url_string .='&popuptype='.$popuptype;
 if(isset($_REQUEST['select']) && $_REQUEST['select'] == 'enable')
 	$url_string .='&select=enable';
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != '')
+	$url_string .='&return_module='.$_REQUEST['return_module'];
 $listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 

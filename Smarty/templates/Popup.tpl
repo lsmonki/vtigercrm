@@ -18,7 +18,6 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
-
         opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid;
 {rdelim}
 
@@ -52,6 +51,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
 					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
 					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
+					<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
 
 				</td>
 				<td width="20%" class="dvtCellLabel">
@@ -139,6 +139,8 @@ function gethiddenelements()
 		urlstring +='&fldname='+getObj('fldname_pb').value;	
 	if(getObj('productid_pb').value != '')
 		urlstring +='&productid='+getObj('productid_pb').value;	
+	if(getObj('recordid').value != '')
+		urlstring +='&recordid='+getObj('recordid').value;	
 	return urlstring;
 {rdelim}
 																									

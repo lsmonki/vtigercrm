@@ -91,7 +91,7 @@ class Email extends CRMEntity {
 	*/
 	function get_contacts($id)
 	{
-		global $log;
+		global $log,$adb;
 		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $mod_strings;
 		global $app_strings;
@@ -215,7 +215,7 @@ class Email extends CRMEntity {
 	  */
 	function get_attachments($id)
 	{
-		global $log;
+		global $log,$adb;
 		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
 		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
