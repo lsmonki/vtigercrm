@@ -13,7 +13,7 @@
 	<tbody><tr>
 	<td align="left" width="10%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
 	<td align="left" width="20%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
-	<td align="left" width="70%"><input name="print" value=" Print Report " class="classBtn" type="button"></td>
+	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" onClick="goToPrintReport({$REPORTID});" class="classBtn" type="button"></td>
 	</tr>
 	</tbody>
 </table>
@@ -56,7 +56,7 @@
 	<tbody><tr>
 	<td align="left" width="10%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
 	<td align="left" width="20%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
-	<td align="left" width="70%"><input name="print" value="{$MOD.LBL_PRINT_REPORT}" class="classBtn" type="button"></td>
+	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" class="classBtn" onClick="goToPrintReport({$REPORTID});" type="button"></td>
 	</tr>
 	</tbody>
 </table>

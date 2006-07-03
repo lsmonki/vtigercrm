@@ -173,5 +173,10 @@ function ReportInfor()
 	getObj('report_info').innerHTML = reportinfr;
 }
 ReportInfor();
-</SCRIPT>
+
 {/literal}
+function goToPrintReport(id) 
+{ldelim}
+	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value,"{$MOD.LBL_Print_REPORT}","width=750,height=800,resizable=0,scrollbars=1,left=100");
+{rdelim}
+</SCRIPT>

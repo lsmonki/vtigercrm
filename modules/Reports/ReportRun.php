@@ -1426,6 +1426,182 @@ class ReportRun extends CRMEntity
 				}
 			}			
 			return $coltotalhtml;
+		}elseif($outputformat == "PRINT")
+		{
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
+			$result = $adb->query($sSQL);
+			$y=$adb->num_fields($result);
+
+			if($result)
+			{
+				for ($x=0; $x<$y; $x++)
+				{
+					$fld = $adb->field_name($result, $x);
+					$header .= "<th>".str_replace($modules," ",$fld->name)."</th>";
+				}
+				
+				$noofrows = $adb->num_rows($result);
+				$custom_field_values = $adb->fetch_array($result);
+				$groupslist = $this->getGroupingList($this->reportid);
+
+				do
+				{
+					$arraylists = Array();
+					if(count($groupslist) == 1)
+					{
+						$newvalue = $custom_field_values[0];
+					}elseif(count($groupslist) == 2)
+					{
+						$newvalue = $custom_field_values[0];
+						$snewvalue = $custom_field_values[1];
+					}elseif(count($groupslist) == 3)
+					{
+						$newvalue = $custom_field_values[0];
+                                                $snewvalue = $custom_field_values[1];
+						$tnewvalue = $custom_field_values[2];
+					}
+					
+					if($newvalue == "") $newvalue = "-";
+
+					if($snewvalue == "") $snewvalue = "-";
+
+					if($tnewvalue == "") $tnewvalue = "-";
+ 
+					$valtemplate .= "<tr>";
+					
+					for ($i=0; $i<$y; $i++)
+					{
+						$fld = $adb->field_name($result, $i);
+						$fieldvalue = $custom_field_values[$i];
+
+						if($fieldvalue == "" )
+						{
+							$fieldvalue = "-";
+						}
+						if(($lastvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($this->reporttype == "summary")
+							{
+								$valtemplate .= "<td style='border-top:1px dotted #FFFFFF;'>&nbsp;</td>";									
+							}else
+							{
+								$valtemplate .= "<td>".$fieldvalue."</td>";
+							}
+						}else if(($secondvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($lastvalue == $newvalue)
+							{
+								$valtemplate .= "<td style='border-top:1px dotted #FFFFFF;'>&nbsp;</td>";	
+							}else
+							{
+								$valtemplate .= "<td>".$fieldvalue."</td>";
+							}
+						}
+						else if(($thirdvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($secondvalue == $snewvalue)
+							{
+								$valtemplate .= "<td style='border-top:1px dotted #FFFFFF;'>&nbsp;</td>";
+							}else
+							{
+								$valtemplate .= "<td>".$fieldvalue."</td>";
+							}
+						}
+						else
+						{
+							if($this->reporttype == "tabular")
+							{
+								$valtemplate .= "<td>".$fieldvalue."</td>";
+							}else
+							{
+								$valtemplate .= "<td>".$fieldvalue."</td>";
+							}
+						}
+					  }
+					 $valtemplate .= "</tr>";
+					 $lastvalue = $newvalue;
+					 $secondvalue = $snewvalue;
+					 $thirdvalue = $tnewvalue;
+				$arr_val[] = $arraylists;
+				}while($custom_field_values = $adb->fetch_array($result));
+				
+				$sHTML = '<tr>'.$header.'</tr>'.$valtemplate;	
+				$return_data[] = $sHTML;
+				$return_data[] = $noofrows;
+				return $return_data;
+			}
+		}elseif($outputformat == "PRINT_TOTAL")
+		{
+			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+			if(isset($this->totallist))
+			{
+				if($sSQL != "")
+				{
+					$result = $adb->query($sSQL);
+					$y=$adb->num_fields($result);
+					$custom_field_values = $adb->fetch_array($result);
+
+					$coltotalhtml .= '<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center" class="printReport" ><tr><th>Totals</th><th>SUM</th><th>AVG</th><th>MIN</th><th>MAX</th></tr>';
+
+					foreach($this->totallist as $key=>$value)
+					{
+						$fieldlist = explode(":",$key);
+						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = str_replace($escapedchars," ",$fieldlist[3]);
+					}
+
+					for($i =0;$i<$y;$i++)
+					{
+						$fld = $adb->field_name($result, $i);
+						$keyhdr[$fld->name] = $custom_field_values[$i];
+					}
+					foreach($totclmnflds as $key=>$value)
+					{
+
+						$coltotalhtml .= '<tr valign=top><td>'.str_replace($modules," ",$value).'</td>';
+						$arraykey = trim($value).'_SUM';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td>&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_AVG';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td>&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MIN';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td>&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MAX';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td>&nbsp;</td>';
+						}
+
+						$coltotalhtml .= '<tr>';
+					}
+
+					$coltotalhtml .= "</table>";
+				}
+			}			
+			return $coltotalhtml;
 		}
 	}
 
