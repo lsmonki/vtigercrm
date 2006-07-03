@@ -1005,7 +1005,7 @@ class ReportRun extends CRMEntity
 				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id  
 				left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid 
 				left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid 
-				left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=crmentityRelProducts.crmid 
+				left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_crmentityRelProducts.crmid 
 				left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_crmentityRelProducts.crmid 
 				left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_crmentityRelProducts.crmid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1019,10 +1019,10 @@ class ReportRun extends CRMEntity
 				on vtiger_crmentityHelpDesk.crmid=vtiger_troubletickets.ticketid 
 				inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
 				left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
-				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid 
+				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid 
 				left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid
 				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_crmentityRelHelpDesk.crmid
-				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentityHelpDesk.smownerid=usersHelpDesk.id 
+				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentityHelpDesk.smownerid=vtiger_usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentityHelpDesk.deleted=0 ";
 		}
