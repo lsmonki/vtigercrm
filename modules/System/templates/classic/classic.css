@@ -1,30 +1,36 @@
-A {
+/* A {
   text-decoration: none;
-	color:#003399;
 }
 A:link {
-	color:#003399;
+  color: #486591;
+  background-color: transparent;
+}
+A:visited {
+  color: #6f6c81;
   background-color: transparent;
 }
 A:active {
   color: blue;
   background-color: transparent;
-}
+} 
+
 body {
   color: #000000;
   background-color: #fefefe;
   text-decoration: none;
-  font-family: Verdana,Helvetica,sans-serif;
+  font-family: arial,Verdana,Helvetica,sans-serif;
   font-size: 11px;
   font-weight: normal;
-}
+} */
 font {
   color: #000000;
   text-decoration: none;
-  font-family: Verdana,Helvetica,sans-serif;
+  font-family: arial, Verdana,Helvetica,sans-serif;
   font-size: 11px;
   font-weight: normal;
 }
+
+/*
 H1 {
   color: #000000;
   background-color: transparent;
@@ -69,3 +75,5 @@ tr.boxbody {
   color: #fefefe;
   background-color: #e6e6e6;
 }
+
+*/
