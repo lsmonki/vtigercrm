@@ -70,7 +70,7 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 		
 	}
 	$standCustFld=array_chunk($standCustFld,2);	
-	$standCustFld=array_chunk($standCustFld,2);	
+	$standCustFld=array_chunk($standCustFld,4);	
 	return $standCustFld;
 }
 
