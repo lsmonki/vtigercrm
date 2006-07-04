@@ -557,18 +557,18 @@ function getWhereCondition($currentModule)
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			if($tab_col == "vtiger_crmentity.smownerid")
 			{
-				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'users.user_name')." or";	
-				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'groups.groupname')." )".$matchtype;	
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_users.user_name')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_groups.groupname')." )".$matchtype;	
 			}
 			elseif($tab_col == "vtiger_activity.status")
 			{
-				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'activity.status')." or";	
-				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'activity.eventstatus')." )".$matchtype;	
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
 			}
 			elseif($tab_col == "vtiger_cntactivityrel.contactid")
 			{
-				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'contactdetails.firstname')." or";	
-				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'contactdetails.lastname')." )".$matchtype;	
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.firstname')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.lastname')." )".$matchtype;	
 			}
 			elseif(in_array($column_name,$column_array))
                         {
