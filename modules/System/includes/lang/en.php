@@ -19,14 +19,14 @@
 //
 // $Id: en.php,v 1.18 2005/12/31 17:25:02 bigmichi1 Exp $
 
-$text['title']          = 'System Information';
+$text['title']          = 'Server Hardware Information';
 
-$text['vitals']         = 'System Vital';
+$text['vitals']         = 'Generic Details';
 $text['hostname']       = 'Canonical Hostname';
 $text['ip']             = 'Listening IP';
 $text['kversion']       = 'Kernel Version';
-$text['dversion']       = 'Distro Name';
-$text['uptime']         = 'Uptime';
+$text['dversion']       = 'OS/ Distribution ';
+$text['uptime']         = 'Server uptime';
 $text['users']          = 'Current Users';
 $text['loadavg']        = 'Load Averages';
 
@@ -51,12 +51,12 @@ $text['errors']         = 'Err/Drop';
 
 $text['connections']    = 'Established Network Connections';
 
-$text['memusage']       = 'Memory Usage';
-$text['phymem']         = 'Physical Memory';
+$text['memusage']       = 'Server Memory';
+$text['phymem']         = 'Hardware Memory (RAM)';
 $text['swap']           = 'Disk Swap';
 
-$text['fs']             = 'Mounted Filesystems';
-$text['mount']          = 'Mount';
+$text['fs']             = 'Server Drives and Volumes';
+$text['mount']          = 'Mount/Drive';
 $text['partition']      = 'Partition';
 
 $text['percent']        = 'Percent Capacity';

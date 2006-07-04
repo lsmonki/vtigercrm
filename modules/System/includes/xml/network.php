@@ -50,21 +50,21 @@ function html_network () {
 
     $textdir = direction();
     
-    $_text = "<table border=\"0\" width=\"100%\" align=\"center\">\n"
+    $_text = "<table border=\"0\" cellspacing=0 cellpadding=5 width=\"100%\" align=\"center\">\n"
            . "  <tr>\n"
-	   . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['device'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['received'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['sent'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['errors'] . "</b></font></td>\n"
+			. "    <td width=40% class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['device'] . "</b></font></td>\n"
+           . "    <td width=20% class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['received'] . "</b></font></td>\n"
+           . "    <td width=20% class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['sent'] . "</b></font></td>\n"
+           . "    <td width=20% class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['errors'] . "</b></font></td>\n"
 	   . "  </tr>\n";
 	   
     for ($i=1, $max = sizeof($XPath->getDataParts("/phpsysinfo/Network")); $i < $max; $i++) {
         if ($XPath->match("/phpsysinfo/Network/NetDevice[$i]/Name")) {
             $_text .= "  <tr>\n";
-            $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Name") . "</font></td>\n";
-            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/RxBytes") / 1024) . "</font></td>\n";
-            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/TxBytes") / 1024) . "</font></td>\n";
-            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Errors") . '/' . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Drops") . "</font></td>\n";
+            $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Name") . "</font></td>\n";
+            $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/RxBytes") / 1024) . "</font></td>\n";
+            $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/TxBytes") / 1024) . "</font></td>\n";
+            $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Errors") . '/' . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Drops") . "</font></td>\n";
             $_text .= "  </tr>\n";
         }
     }

@@ -93,59 +93,59 @@ function html_memory () {
         $cached .= "&nbsp;&nbsp;" . $XPath->getData("/phpsysinfo/Memory/CachedPercent") . "% ";
     }
 
-    $_text = "<table border=\"0\" width=\"100%\" align=\"center\">\n"
+    $_text = "<table cellspacing=0 cellpadding=5 border=\"0\" width=\"100%\" align=\"center\">\n"
            . "  <tr>\n"
-	   . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['type'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['percent'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['free'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['used'] . "</b></font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['size'] . "</b></font></td>\n"
+	   . "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['type'] . "</b></font></td>\n"
+           . "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['percent'] . "</b></font></td>\n"
+           . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['free'] . "</b></font></td>\n"
+           . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['used'] . "</b></font></td>\n"
+           . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['size'] . "</b></font></td>\n"
 	   . "  </tr>\n"
 	   
            . "  <tr>\n"
-	   . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $text['phymem'] . "</font></td>\n"
-           . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $ram . "</font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Free")) . "</font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Used")) . "</font></td>\n"
-           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Total")) . "</font></td>\n"
+	   . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $text['phymem'] . "</font></td>\n"
+           . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $ram . "</font></td>\n"
+           . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Free")) . "</font></td>\n"
+           . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Used")) . "</font></td>\n"
+           . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Total")) . "</font></td>\n"
 	   . "  </tr>\n";
 
     if (isset($app)) {
       $_text .= "  <tr>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['app'] . "</font></td>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $app . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/App")) . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['app'] . "</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $app . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/App")) . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
 	      . "  </tr>\n";
     }
 
     if (isset($buffers)) {
       $_text .= "  <tr>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['buffers'] . "</font></td>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $buffers . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Buffers")) . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['buffers'] . "</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $buffers . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Buffers")) . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
 	      . "  </tr>\n";
     }
 
     if (isset($cached)) {
       $_text .= "  <tr>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['cached'] . "</font></td>\n"
-    	      . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $cached . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Cached")) . "</font></td>\n"
-	      . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">- " . $text['cached'] . "</font></td>\n"
+    	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $cached . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Memory/Cached")) . "</font></td>\n"
+	      . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">&nbsp;</font></td>\n"
 	      . "  </tr>\n";
     }
 
     $_text .= "  <tr>\n"
-            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $text['swap'] . "</font></td>\n"
-            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $swap . "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Free")) . "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Used")) . "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Total")) . "</font></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $text['swap'] . "</font></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $swap . "</font></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Free")) . "</font></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Used")) . "</font></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swap/Total")) . "</font></td>\n"
 	    . "  </tr>\n";
 
     if (($max = sizeof($XPath->getDataParts("/phpsysinfo/Swapdevices"))) > 2) {
@@ -153,11 +153,11 @@ function html_memory () {
         $swapdev = create_bargraph($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Used"), $XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Size"), $scale_factor);
         $swapdev .= "&nbsp;&nbsp;" . $XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Percent") . "% ";
         $_text .= "  <tr>\n"
-		. "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"> - " . $XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Device/Name") . "</font></td>\n"
-                . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $swapdev . "</font></td>\n"
-                . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Free")) . "</font></td>\n"
-                . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Used")) . "</font></td>\n"
-                . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Size")) . "</font></td>\n"
+		. "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"> - " . $XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Device/Name") . "</font></td>\n"
+                . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $swapdev . "</font></td>\n"
+                . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Free")) . "</font></td>\n"
+                . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Used")) . "</font></td>\n"
+                . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Swapdevices/Mount[$i]/Size")) . "</font></td>\n"
 		. "  </tr>\n";
       }
     }

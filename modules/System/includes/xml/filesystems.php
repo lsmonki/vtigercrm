@@ -68,19 +68,19 @@ function html_filesystems () {
     $counted_devlist = array();
     $scale_factor = 2;
 
-    $_text  = "<table border=\"0\" width=\"100%\" align=\"center\">\n";
+    $_text  = "<table cellspacing=0 cellpadding=5 border=\"0\" width=\"100%\" align=\"center\">\n";
     $_text .= "  <tr>\n";
 
     if ($show_mount_point) {
-      $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['mount'] . "</b></font></td>\n";
+      $_text .= "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['mount'] . "</b></font></td>\n";
     }
 
-    $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['type'] . "</b></font></td>\n"
-            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['partition'] . "</b></font></td>\n"
-            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['percent'] . "</b></font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['free'] . "</b></font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['used'] . "</b></font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['size'] . "</b></font></td>\n  </tr>\n";
+    $_text .= "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['type'] . "</b></font></td>\n"
+            . "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['partition'] . "</b></font></td>\n"
+            . "    <td class=\"colHeader small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['percent'] . "</b></font></td>\n"
+            . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['free'] . "</b></font></td>\n"
+            . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['used'] . "</b></font></td>\n"
+            . "    <td class=\"colHeader small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['size'] . "</b></font></td>\n  </tr>\n";
 
     for ($i=1, $max = sizeof($XPath->getDataParts('/phpsysinfo/FileSystem')); $i < $max; $i++) {
         if ($XPath->match("/phpsysinfo/FileSystem/Mount[$i]/MountPointID")) {
@@ -98,19 +98,19 @@ function html_filesystems () {
             $_text .= "  <tr>\n";
 
             if ($show_mount_point) {
-              $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint") . "</font></td>\n";
+              $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint") . "</font></td>\n";
             }
-            $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type") . "</font></td>\n"
-                    . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name") . "</font></td>\n"
-                    . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">"
+            $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type") . "</font></td>\n"
+                    . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name") . "</font></td>\n"
+                    . "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">"
                     . create_bargraph($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used"), $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size"), $scale_factor, $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type"))
                     . "&nbsp;" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Percent") . "%";
 		    if( $XPath->match( "/phpsysinfo/FileSystem/Mount[$i]/Inodes" ) )
 	    $_text .= " (" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Inodes") . "%)";
 	    $_text .= "</font></td>\n"
-                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free")) . "</font></td>\n"
-                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used")) . "</font></td>\n"
-                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size")) . "</font></td>\n"
+                    . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free")) . "</font></td>\n"
+                    . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used")) . "</font></td>\n"
+                    . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size")) . "</font></td>\n"
                     . "  </tr>\n";
         }
     }
@@ -118,17 +118,17 @@ function html_filesystems () {
     $_text .= "  <tr>\n";
 
     if ($show_mount_point) {
-      $_text .= "  <td colspan=\"3\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
+      $_text .= "  <td class=\"listTableRow small\" colspan=\"3\" align=\"" . $textdir['right'] . "\" valign=\"top\"><b><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
     } else {
-      $_text .= "  <td colspan=\"2\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
+      $_text .= "  <td class=\"listTableRow small\" colspan=\"2\" align=\"" . $textdir['right'] . "\" valign=\"top\"><b><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
     }
 
-    $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">"
+    $_text .= "    <td class=\"listTableRow small\" align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>"
             . create_bargraph($sum['used'], $sum['size'], $scale_factor)
             . "&nbsp;" . round(100 / $sum['size'] *  $sum['used']) . "%" .  "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['free']) . "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['used']) . "</font></td>\n"
-            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['size']) . "</font></td>\n  </tr>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><b><font size=\"-1\"><b>" . format_bytesize($sum['free']) . "</font></b></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><b><font size=\"-1\"><b>" . format_bytesize($sum['used']) . "</font></b></td>\n"
+            . "    <td class=\"listTableRow small\" align=\"" . $textdir['right'] . "\" valign=\"top\"><b><font size=\"-1\"><b>" . format_bytesize($sum['size']) . "</font></b></td>\n  </tr>\n"
             . "</table>\n";
 
     return $_text;

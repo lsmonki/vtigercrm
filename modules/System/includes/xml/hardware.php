@@ -188,47 +188,47 @@ function html_hardware ()
         } 
     } 
 
-    $_text = "<table border=\"0\" width=\"100%\" align=\"center\">\n";
+    $_text = "<table cellspacing=0 cellpadding=5 border=\"0\" width=\"100%\" align=\"center\">\n";
 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Number")) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['numcpu'] . "</font></td>\n    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Number") . "</font></td>\n  </tr>\n";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['numcpu'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Number") . "</font></td>\n  </tr>\n";
     } 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Model")) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['cpumodel'] . "</font></td>\n    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Model") . "</font></td>\n  </tr>\n";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['cpumodel'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Model") . "</font></td>\n  </tr>\n";
     } 
 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Cpuspeed")) {
         $tmp_speed = $XPath->getData("/phpsysinfo/Hardware/CPU/Cpuspeed");
         if ($tmp_speed < 1000) {
-            $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['cpuspeed'] . "</font></td>\n    <td><font size=\"-1\">" . $tmp_speed . " MHz</font></td>\n  </tr>\n";
+            $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['cpuspeed'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $tmp_speed . " MHz</font></td>\n  </tr>\n";
         } else {
-            $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['cpuspeed'] . "</font></td>\n    <td><font size=\"-1\">" . round($tmp_speed / 1000, 2) . " GHz</font></td>\n  </tr>\n";
+            $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['cpuspeed'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . round($tmp_speed / 1000, 2) . " GHz</font></td>\n  </tr>\n";
         } 
     } 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Busspeed")) {
         $tmp_speed = $XPath->getData("/phpsysinfo/Hardware/CPU/Busspeed");
         if ($tmp_speed < 1000) {
-            $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['busspeed'] . "</font></td>\n    <td><font size=\"-1\">" . $tmp_speed . " MHz</font></td>\n  </tr>\n";
+            $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['busspeed'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $tmp_speed . " MHz</font></td>\n  </tr>\n";
         } else {
-            $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['busspeed'] . "</font></td>\n    <td><font size=\"-1\">" . round($tmp_speed / 1000, 2) . " GHz</font></td>\n  </tr>\n";
+            $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['busspeed'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . round($tmp_speed / 1000, 2) . " GHz</font></td>\n  </tr>\n";
         } 
     } 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Cache")) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['cache'] . "</font></td>\n    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Cache") . "</font></td>\n  </tr>\n";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['cache'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Cache") . "</font></td>\n  </tr>\n";
     } 
     if ($XPath->match("/phpsysinfo/Hardware/CPU/Bogomips")) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['bogomips'] . "</font></td>\n    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Bogomips") . "</font></td>\n  </tr>\n";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['bogomips'] . "</font></td>\n    <td class=\"cellText small\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Hardware/CPU/Bogomips") . "</font></td>\n  </tr>\n";
     } 
 
-    $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['pci'] . "</font></td>\n    <td>";
+    $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['pci'] . "</font></td>\n    <td class=\"cellText small\">";
     if ($pci_devices) {
-        $_text .= "<table>" . $pci_devices . "</table>";
+        $_text .= "<table border=0 cellspacing=0 cellpadding=2>" . $pci_devices . "</table>";
     } else {
         $_text .= "<font size=\"-1\"><i>" . $text['none'] . "</i></font>";
     } 
     $_text .= "</td>\n  </tr>\n";
 
-    $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['ide'] . "</font></td>\n    <td>";
+    $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['ide'] . "</font></td>\n    <td class=\"cellText small\">";
     if ($ide_devices) {
         $_text .= "<table>" . $ide_devices . "</table>";
     } else {
@@ -237,11 +237,11 @@ function html_hardware ()
     $_text .= "</td>\n  </tr>\n";
 
     if ($scsi_devices) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['scsi'] . "</font></td>\n    <td><table>" . $scsi_devices . "</table></td>\n  </tr>";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['scsi'] . "</font></td>\n    <td class=\"cellText small\"><table>" . $scsi_devices . "</table></td>\n  </tr>";
     } 
 
     if ($usb_devices) {
-        $_text .= "  <tr>\n    <td valign=\"top\"><font size=\"-1\">" . $text['usb'] . "</font></td>\n    <td><table>" . $usb_devices . "</table></td>\n  </tr>";
+        $_text .= "  <tr>\n    <td class=\"cellLabel small\" align=right valign=\"top\"><font size=\"-1\">" . $text['usb'] . "</font></td>\n    <td class=\"cellText small\"><table>" . $usb_devices . "</table></td>\n  </tr>";
     } 
 
     $_text .= "</table>";
