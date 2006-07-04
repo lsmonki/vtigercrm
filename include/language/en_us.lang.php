@@ -944,6 +944,9 @@ $app_strings = Array(
 'LBL_EXPAND_COLLAPSE'=>'Expand/Collapse',
 'LBL_RCPY_ADDRESS'=>'Copy Shipping address',
 'LBL_LCPY_ADDRESS'=>'Copy Billing address',
+'LBL_RECORD_ID'=>'Record ID',
+'LBL_ACTION_DATE'=>'Action Date',
+
 );
 
 
