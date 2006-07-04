@@ -28,7 +28,7 @@
 		<hbox>
 		  <spacer flex="1"/>
 		  <label style="color:red" value="*"/>	
-		  <label value="Note Subject:" style="padding: 0px;margin-top: 3px;" />
+		  <label value="RSS url:" style="padding: 0px;margin-top: 3px;" />
 		  <hbox style="width: 25em">
 			 <textbox id="txtrssurl" flex="1"/>
 		  </hbox>
