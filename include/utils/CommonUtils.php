@@ -463,9 +463,17 @@ function getQuoteName($quote_id)
 	$log->debug("Entering getQuoteName(".$quote_id.") method ...");
 	$log->info("in getQuoteName ".$quote_id);
         global $adb;
-        $sql = "select * from vtiger_quotes where quoteid=".$quote_id;
-        $result = $adb->query($sql);
-        $quote_name = $adb->query_result($result,0,"subject");
+	if($quote_id != NULL && $quote_id != '')
+	{
+        	$sql = "select * from vtiger_quotes where quoteid=".$quote_id;
+        	$result = $adb->query($sql);
+        	$quote_name = $adb->query_result($result,0,"subject");
+	}
+	else
+	{
+		$log->debug("Quote Id is empty.");
+		$quote_name = '';
+	}
 	$log->debug("Exiting getQuoteName method ...");
         return $quote_name;
 }
