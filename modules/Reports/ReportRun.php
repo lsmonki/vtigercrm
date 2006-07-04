@@ -80,9 +80,10 @@ class ReportRun extends CRMEntity
 		$fieldname = $selectedfields[3];
 		if($fieldname == "parent_id")
 		{
-			if($this->primarymodule == "HelpDesk")
+			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
 			{
 				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then vtiger_contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
+				return $querycolumn;
 			}
 			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
 			{
