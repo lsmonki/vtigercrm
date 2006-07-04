@@ -476,20 +476,22 @@
 			<td width="20%" class="dvtCellLabel" align=right>
 				{$fldlabel}
 			</td>
-				{if ($secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record) || ($MODE == 'create')}
-					{assign var="disable_status" value=""}
-				{else}
-					{assign var="disable_status" value="disabled"}
-				{/if}	
 				{if $fldvalue eq 'on'}
 					<td width="30%" align=left class="dvtCellInfo">
-						<input name="{$fldname}" {$disable_status} tabindex="{$vt_tab}" type="checkbox"  checked>
-						<input name="{$fldname}" type="hidden" value="{$fldvalue}">
+						{if ($secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record) || ($MODE == 'create')}
+							<input name="{$fldname}" tabindex="{$vt_tab}" type="checkbox" checked>
+						{else}
+							<input name="{$fldname}" type="hidden" value="on">
+							<input name="{$fldname}" disabled tabindex="{$vt_tab}" type="checkbox" checked>
+						{/if}	
 					</td>
 				{else}
 					<td width="30%" align=left class="dvtCellInfo">
-						<input name="{$fldname}" {$disable_status} tabindex="{$vt_tab}" type="checkbox">
-						<input name="{$fldname}" type="hidden" value="off">
+						{if ($secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record) || ($MODE == 'create')}
+							<input name="{$fldname}" tabindex="{$vt_tab}" type="checkbox">
+						{else}
+							<input name="{$fldname}" disabled tabindex="{$vt_tab}" type="checkbox">
+						{/if}	
 					</td>
 				{/if}
 		{elseif $uitype eq 98}<!-- Role Selection Popup -->		
