@@ -260,16 +260,24 @@ class ADODB_DataDict {
 	// Executes the sql array returned by GetTableSQL and GetIndexSQL
 	function ExecuteSQLArray($sql, $continueOnError = true)
 	{
+		global $log;
 		$rez = 2;
 		$conn = &$this->connection;
 		$saved = $conn->debug;
 		foreach($sql as $line) {
 			
 			if ($this->debug) $conn->debug = true;
+			$log->fatal($line);
 			$ok = $conn->Execute($line);
 			$conn->debug = $saved;
 			if (!$ok) {
-				if ($this->debug) ADOConnection::outp($conn->ErrorMsg());
+				$log->fatal("Table Creation Error: Query Failed");
+				$log->fatal(" ");
+				if ($this->debug)]
+			       	{
+					$log->fatal("InstallError: ".$conn->ErrorMsg());
+					ADOConnection::outp($conn->ErrorMsg());
+				}		
 				if (!$continueOnError) return 0;
 				$rez = 1;
 			}
