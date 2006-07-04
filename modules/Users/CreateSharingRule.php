@@ -250,8 +250,12 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <div id="sharingRule" class="fixedLay">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
-<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$app_strings[$sharing_module].' - '.$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>
-<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>'.$mod_strings[LBL_CLOSE].'</a></td>
+<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$app_strings[$sharing_module].' - ';
+if($mode == 'edit')
+    	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
+else
+	$output .=$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>';
+$output .= '<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>'.$mod_strings[LBL_CLOSE].'</a></td>
 
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>

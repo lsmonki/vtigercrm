@@ -312,6 +312,7 @@ $mod_strings = Array(
 'LBL_WELCOME_PROFILE_CREATE'=>'Welcome to Privilege Profile Creator ',
 'LBL_SELECT_CHOICE_NEW_PROFILE'=>'Select your choice of creating the new profile',
 'LBL_ADD_CUSTOM_RULE'=>'Add Custom Privilege Rule',
+'LBL_EDIT_CUSTOM_RULE'=>'Edit Custom Privilege Rule',
 'LBL_CLOSE'=>'Close',
 'LBL_SELECT_ENTITY'=>'Select an entity below',
 'LBL_CAN_BE_ACCESSED_BY'=>'Can be accessed by',
