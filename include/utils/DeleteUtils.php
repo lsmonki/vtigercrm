@@ -69,6 +69,11 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = 'delete from vtiger_vendorcontactrel where contactid='.$record.' and vendorid='.$return_id;
 			$adb->query($sql);
 		}
+		if($return_module == 'Vendors')
+		{
+			$sql = "delete from vtiger_vendorcontactrel where vendorid=$return_id and contactid=$record";
+			$adb->query($sql);
+		}
 	break;
 	case Potentials:
 		if($return_module == 'Accounts')
