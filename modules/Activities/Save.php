@@ -164,8 +164,9 @@ if(isset($_REQUEST['year']) && $_REQUEST['year']!='') $year='&year='.$_REQUEST['
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
 if($_REQUEST['start'] !='')$page='&start='.$_REQUEST['start'];
-header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page");
+header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab");
 
 //Function to get the vtiger_activity details for mail body
 function getActivityDetails($description)
