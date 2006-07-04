@@ -168,7 +168,12 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 
            </tr>
 {/foreach}
-	<tr><td colspan="2" align="right" valign="bottom"><a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a></td></tr>
+	<tr><td colspan="2" align="right" valign="bottom">
+		{if $modulename neq 'CustomView'}
+	                <a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a>
+                {else}
+        	        &nbsp;
+                {/if}
 	</table>
 				
 			</div>
