@@ -57,7 +57,7 @@ $num_rows = $adb->num_rows($list_result);
 
 $record_string= "Total No of Rows: ".$num_rows;
 
-//Retreiving the array of already releated vtiger_products;
+//Retreiving the array of already releated products;
 
 $sql1="select vtiger_crmentity.crmid, vtiger_pricebookproductrel.pricebookid,vtiger_products.unit_price from vtiger_pricebookproductrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebookproductrel.productid inner join vtiger_products on vtiger_products.productid=vtiger_pricebookproductrel.productid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=".$productid;
 $res1 = $adb->query($sql1);

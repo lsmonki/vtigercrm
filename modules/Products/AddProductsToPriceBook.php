@@ -180,7 +180,7 @@ $record_string= "Total No of Rows: ".$num_rows;
 
 //Retreiving the array of already releated vtiger_products;
 
-$sql1 = "select productid from vtiger_pricebookproductrel where vtiger_pricebookid=".$pricebook_id;
+$sql1 = "select productid from vtiger_pricebookproductrel where pricebookid=".$pricebook_id;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
 $prod_array = Array();
@@ -224,7 +224,7 @@ $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
 	
-	 $log->info("Products :: Showing the List of vtiger_products to be added in price book");
+	 $log->info("Products :: Showing the List of products to be added in price book");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{
