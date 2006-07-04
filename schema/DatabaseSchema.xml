@@ -237,7 +237,6 @@
 		<field name="fieldid" type="I" size="19">
 			<key />
 			<autoincrement />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="30">
 			<notnull />
@@ -296,12 +295,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_field" alter="true">
+	<constraint>ADD CONSTRAINT fk_1_vtiger_field FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+	<opt>Type=InnoDB</opt>
+	<data>
+	</data>
+</table>
+
 	<table name="vtiger_account">
 		<field name="accountid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountname" type="C" size="100">
 			<unique />
@@ -343,11 +348,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_account" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_account FOREIGN KEY (accountid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_accountbillads">
 		<field name="accountaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -358,12 +369,18 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_accountbillads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_accountbillads FOREIGN KEY (accountaddressid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_accountshipads">
 		<field name="accountaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -375,21 +392,33 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_accountshipads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_accountshipads FOREIGN KEY (accountaddressid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_accountscf">
 		<field name="accountid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_accountscf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_accountscf FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contactdetails">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="salutation" type="C" size="50">
@@ -430,11 +459,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_contactdetails" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contactdetails FOREIGN KEY (contactid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contactsubdetails">
 		<field name="contactsubscriptionid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="homephone" type="C" size="50" />
 		<field name="otherphone" type="C" size="50" />
@@ -452,11 +487,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_contactsubdetails" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contactsubdetails FOREIGN KEY (contactsubscriptionid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contactaddress">
 		<field name="contactaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="mailingcity" type="C" size="40" />
 		<field name="mailingstreet" type="C" size="250" />
@@ -474,20 +515,32 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_contactaddress" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contactaddress FOREIGN KEY (contactaddressid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contactscf">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_contactscf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contactscf FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_portalinfo">
 		<field name="id" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="user_name" type="C" size="50" />
 		<field name="user_password" type="C" size="30" />
@@ -504,20 +557,32 @@
 		<field name="isactive" type="I" size="1" />
 	</table>
 
+<table name="vtiger_portalinfo" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_portalinfo FOREIGN KEY (id) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_customerdetails">
 		<field name="customerid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="portal" type="C" size="3" />
 		<field name="support_start_date" type="D" />
 		<field name="support_end_date" type="D" />
 	</table>
 
+<table name="vtiger_customerdetails" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_customerdetails FOREIGN KEY (customerid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_leaddetails">
 		<field name="leadid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="email" type="C" size="100" />
 		<field name="interest" type="C" size="50" />
@@ -571,11 +636,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leaddetails" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leaddetails FOREIGN KEY (leadid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_leadsubdetails">
 		<field name="leadsubscriptionid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="currency" type="C" size="20">
 			<default value="Dollars" />
@@ -594,11 +665,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leadsubdetails" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadsubdetails FOREIGN KEY (leadsubscriptionid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_leadaddress">
 		<field name="leadaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -616,21 +693,33 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leadaddress" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadaddress FOREIGN KEY (leadaddressid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_leadscf">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leadscf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadscf FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_notes">
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contact_id" type="I" size="19">
 			<default value="0" />
@@ -653,11 +742,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_notes" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_notes FOREIGN KEY (notesid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_potential">
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="potentialname" type="C" size="120">
@@ -710,6 +805,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_potential" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_potential FOREIGN KEY (potentialid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_potstagehistory">
 		<field name="historyid" type="I" size="19">
 			<key />
@@ -717,7 +819,6 @@
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="amount" type="N" />
 		<field name="stage" type="C" size="100" />
@@ -732,21 +833,33 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_potstagehistory" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_potstagehistory FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_potentialscf">
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_potentialscf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_potentialscf FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_activity">
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100">
 			<notnull />
@@ -806,10 +919,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_activity" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_activity FOREIGN KEY (activityid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_attachments">
 		<field name="attachmentsid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="name" type="C" size="100">
 			<notnull />
@@ -829,6 +948,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_attachments" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_attachments FOREIGN KEY (attachmentsid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_seattachmentsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
@@ -837,7 +963,6 @@
 		<field name="attachmentsid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_attachments(attachmentsid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seattachmentsrel_attachmentsid_idx">
@@ -845,7 +970,6 @@
 		</index>
 		<index name="seattachmentsrel_crmid_idx">
 			<col>crmid</col>
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</index>
 		<index name="seattachmentsrel_attachmentsid_crmid_idx">
 			<col>attachmentsid</col>
@@ -853,6 +977,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_seattachmentsrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_seattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments(attachmentsid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_seattachmentsrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_tracker">
 		<field name="id" type="I" size="11">
@@ -868,7 +1000,6 @@
 	<table name="vtiger_competitor">
 		<field name="competitorid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="competitorname" type="C" size="100">
 			<notnull />
@@ -880,14 +1011,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_competitor" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_competitor FOREIGN KEY (competitorid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_potcompetitorrel">
 		<field name="potentialid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="competitorid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_competitor(competitorid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="potcompetitorrel_potentialid_idx">
@@ -899,12 +1035,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_potcompetitorrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_potcompetitorrel FOREIGN KEY (competitorid) REFERENCES vtiger_competitor(competitorid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_potcompetitorrel FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_vendor">
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorname" type="C" size="100" />
 		<field name="phone" type="C" size="100" />
@@ -923,10 +1066,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_vendor" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_vendor FOREIGN KEY (vendorid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_products">
 		<field name="productid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productname" type="C" size="50">
 			<notnull />
@@ -968,6 +1117,13 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_products" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_products FOREIGN KEY (productid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_currency">
 		<field name="currencyid" type="I" size="19">
@@ -1044,7 +1200,6 @@
 	<table name="vtiger_productcollaterals">
 		<field name="productid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="date_entered" type="T">
 			<notnull />
@@ -1069,6 +1224,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_productcollaterals" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_productcollaterals FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_role">
 		<field name="roleid" type="C" size="255">
 			<key />
@@ -1083,11 +1245,9 @@
 	<table name="vtiger_user2role">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleid" type="C" size="255">
 			<notnull />
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="user2role_roleid_idx">
@@ -1095,6 +1255,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_user2role" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_user2role FOREIGN KEY (roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_user2role FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_groups">
 		<field name="groupid" type="I" size="19">
@@ -1113,11 +1281,9 @@
 	<table name="vtiger_users2group">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="userid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="users2group_groupname_uerid_idx">
@@ -1126,51 +1292,75 @@
 		</index>
 	</table>
 
+<table name="vtiger_users2group" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_users2group FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_users2group FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_group2grouprel">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="containsgroupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_group2grouprel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_group2grouprel FOREIGN KEY (containsgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_group2role">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleid" type="C" size="255">
 			<key />
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 	</table>
+
+<table name="vtiger_group2role" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_group2role FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_group2role FOREIGN KEY (roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_group2rs">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleandsubid" type="C" size="255">
 			<key />
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 	</table>
+
+<table name="vtiger_group2rs" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_group2rs FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_group2rs FOREIGN KEY (roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_leadpotrel">
 		<field name="leadid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadpotrel_leadid_idx">
@@ -1179,6 +1369,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_leadpotrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadpotrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_leadpotrel FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_campaign">
 		<field name="campaignname" type="C" size="255" />
@@ -1220,23 +1418,27 @@
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_campaignscf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_campaignscf FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_campaigncontrel">
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0"/>
-			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0"/>
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaigncontrel_contractid_idx">
@@ -1245,17 +1447,23 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_campaigncontrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_campaigncontrel FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_campaigncontrel FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_campaignleadrel">
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="leadid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaignleadrel_leadid_campaignid_idx">
@@ -1265,11 +1473,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_campaignleadrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_campaignleadrel FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_campaignleadrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_leadcontrel">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<notnull />
@@ -1278,21 +1493,26 @@
 
 		<index name="leadcontrel_contactid_idx">
 			<col>contactid</col>
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_leadcontrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadcontrel FOREIGN KEY (leadcontrel_contactid_idx) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_leadcontrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_leadacctrel">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadacctrel_accountid_idx">
@@ -1301,17 +1521,23 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leadacctrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadacctrel FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_leadacctrel FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contpotentialrel">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="contpotentialrel_potentialid_idx">
@@ -1322,6 +1548,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_contpotentialrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contpotentialrel FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_contpotentialrel FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_dealintimation">
 		<field name="dealintimationid" type="I" size="19">
@@ -1369,12 +1603,10 @@
 		<field name="contactid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="cntactivityrel_contactid_idx">
@@ -1383,7 +1615,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<!-- Lead Assignment Rule -->
+<table name="vtiger_cntactivityrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_cntactivityrel FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_cntactivityrel FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_lar">
 		<field name="larid" type="I" size="19">
 			<key />
@@ -1395,7 +1634,6 @@
 		<field name="createdby" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="createdon" type="D">
 			<notnull />
@@ -1411,16 +1649,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_lar" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_lar FOREIGN KEY (createdby) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_crmentitynotesrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="crmentitynotesrel_notesid_idx">
@@ -1432,10 +1675,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_crmentitynotesrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_crmentitynotesrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_crmentitynotesrel FOREIGN KEY (notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_troubletickets">
 		<field name="ticketid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100" />
 		<field name="parent_id" type="C" size="100" />
@@ -1462,13 +1712,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_troubletickets" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_troubletickets FOREIGN KEY (ticketid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_ticketcomments">
 		<field name="commentid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
 		<field name="ticketid" type="I" size="19">
-			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="comments" type="X" />
 		<field name="ownerid" type="I" size="19">
@@ -1486,16 +1742,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_ticketcomments" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_ticketcomments FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_salesmanactivityrel">
 		<field name="smid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="salesmanactivityrel_activityid_idx">
@@ -1507,16 +1768,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_salesmanactivityrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_salesmanactivityrel FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_salesmanactivityrel FOREIGN KEY (smid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_vendorcontactrel">
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="vendorcontactrel_vendorid_idx">
@@ -1528,16 +1795,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_vendorcontactrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_vendorcontactrel FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_vendorcontactrel FOREIGN KEY (vendorid) REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_salesmanticketrel">
 		<field name="smid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="id" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="salesmanticketrel_smid_idx">
@@ -1549,14 +1822,20 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_salesmanticketrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_salesmanticketrel FOREIGN KEY (id) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_salesmanticketrel FOREIGN KEY (smid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_seactivityrel">
 		<field name="crmid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seactivityrel_activityid_idx">
@@ -1568,16 +1847,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_seactivityrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_seactivityrel FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_seactivityrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_seproductsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seproductsrel_productid_idx">
@@ -1589,16 +1874,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_seproductsrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_seproductsrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_seproductsrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_seticketsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ticketid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seticketsrel_crmid_idx">
@@ -1609,6 +1900,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_seticketsrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_seticketsrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_seticketsrel FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_headers">
 		<field name="fileid" type="I" size="3">
@@ -1665,10 +1964,8 @@
 	<table name="vtiger_leadgrouprelation">
 		<field name="leadid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadgrouprelation_leadid_idx">
@@ -1680,13 +1977,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_leadgrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_leadgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_leadgrouprelation FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_accountgrouprelation">
 		<field name="accountid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="accountgrouprelation_groupname_idx">
@@ -1695,13 +1998,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_accountgrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_contactgrouprelation">
 		<field name="contactid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="contactgrouprelation_groupname_idx">
@@ -1710,13 +2019,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_contactgrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_contactgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_potentialgrouprelation">
 		<field name="potentialid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="potentialgrouprelation_groupname_idx">
@@ -1725,13 +2040,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_potentialgrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_potentialgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_campaigngrouprelation">
 		<field name="campaignid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaigngrouprelation_IDX1">
@@ -1740,13 +2061,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_campaigngrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_campaigngrouprelation FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_campaigngrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_activitygrouprelation">
 		<field name="activityid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="activitygrouprelation_activityid_idx">
@@ -1758,13 +2085,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_activitygrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_activitygrouprelation FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_activitygrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_ticketgrouprelation">
 		<field name="ticketid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="ticketgrouprelation_ticketid_idx">
@@ -1775,6 +2108,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_ticketgrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_ticketgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_ticketgrouprelation FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_systems">
 		<field name="id" type="I" size="19">
@@ -1808,13 +2149,19 @@
 	<table name="vtiger_defaultcv">
 		<field name="tabid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="defaultviewname" type="C" size="50">
 			<notnull />
 		</field>
 		<field name="query" type="X" />
 	</table>
+
+<table name="vtiger_defaultcv" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_defaultcv FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_emailtemplates">
 		<field name="foldername" type="C" size="100" />
@@ -1842,7 +2189,6 @@
 		<field name="id" type="I" size="11">
 			<key />
 			<autoincrement />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="product_id" type="C" size="100" />
 		<field name="question" type="X">
@@ -1862,13 +2208,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_faq" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_faq FOREIGN KEY (id) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_faqcomments">
 		<field name="commentid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
 		<field name="faqid" type="I" size="19">
-			<constraint>REFERENCES vtiger_faq(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="comments" type="X" />
 		<field name="createdtime" type="T">
@@ -1880,6 +2232,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_faqcomments" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_faqcomments FOREIGN KEY (faqid) REFERENCES vtiger_faq(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_files">
 		<field name="id" type="C" size="36">
@@ -1928,12 +2287,10 @@
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="senotesrel_notesid_idx">
@@ -1944,6 +2301,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_senotesrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_senotesrel FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_senotesrel FOREIGN KEY (notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_ticketstracktime">
 		<field name="ticket_id" type="I" size="11">
@@ -1972,21 +2337,33 @@
 		<field name="ticketid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_ticketcf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_ticketcf FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_productcf">
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_productcf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_productcf FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_users_last_import">
 		<field name="id" type="I" size="36">
@@ -2039,7 +2416,6 @@
 		</field>
 	</table>
 
-	<!-- Dropdown fields -->
 	<table name="vtiger_accountdepstatus">
 		<field name="deploymentstatusid" type="I" size="19">
 			<key />
@@ -2814,7 +3190,6 @@
 	<table name="vtiger_profile2globalpermissions">
 		<field name="profileid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_profile(profileid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="globalactionid" type="I" size="19">
 			<key />
@@ -2827,6 +3202,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_profile2globalpermissions" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_profile2globalpermissions FOREIGN KEY (profileid) REFERENCES vtiger_profile(profileid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_profile2tab">
 		<field name="profileid" type="I" size="11" />
@@ -2918,10 +3300,16 @@
 			<notnull />
 		</field>
 		<field name="permission" type="I" size="19">
-			<constraint>REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="editstatus" type="I" size="19" />
 	</table>
+
+<table name="vtiger_def_org_share" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_def_org_share FOREIGN KEY (permission) REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_def_org_field">
 		<field name="tabid" type="I" size="10" />
@@ -2992,7 +3380,6 @@
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="potentialid" type="I" size="19" />
@@ -3000,10 +3387,8 @@
 		<field name="quoteid" type="I" size="19" />
 		<field name="vendorterms" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorid" type="I" size="19">
-			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
@@ -3029,13 +3414,20 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_salesorder" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_salesorder FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_salesorder FOREIGN KEY (salesorderid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_salesorder FOREIGN KEY (vendorid) REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_sogrouprelation">
 		<field name="salesorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="sogrouprelation_groupname_idx">
@@ -3044,11 +3436,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_sogrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_sogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_sobillads">
 		<field name="sobilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3060,11 +3459,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_sobillads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_sobillads FOREIGN KEY (sobilladdressid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_soshipads">
 		<field name="soshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3076,24 +3481,35 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_soshipads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_soshipads FOREIGN KEY (soshipaddressid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_salesordercf">
 		<field name="salesorderid" type="I" size="19">
 			<key />
 			<default value="0"/>
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_salesordercf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_salesordercf FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_soproductrel">
 		<field name="salesorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3109,6 +3525,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_soproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_soproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_soproductrel FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_notificationscheduler">
 		<field name="schedulednotificationid" type="I" size="19">
@@ -3132,12 +3556,10 @@
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="activityproductrel_activityid_idx">
@@ -3148,6 +3570,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_activityproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_activityproductrel FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_activityproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_relatedlists">
 		<field name="relation_id" type="I" size="19">
@@ -3189,18 +3619,23 @@
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_vendorcf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_vendorcf FOREIGN KEY (vendorid) REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_pricebook">
 		<field name="pricebookid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bookname" type="C" size="100" />
 		<field name="active" type="I" size="1" />
@@ -3209,24 +3644,35 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_pricebook" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_pricebook FOREIGN KEY (pricebookid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_pricebookcf">
 		<field name="pricebookid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_pricebookcf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_pricebookcf FOREIGN KEY (pricebookid) REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_pricebookproductrel">
 		<field name="pricebookid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="listprice" type="N" size="11.3" />
 
@@ -3238,6 +3684,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_pricebookproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_pricebookproductrel FOREIGN KEY (pricebookid) REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_pricebookproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_mail_accounts">
 		<field name="account_id" type="I" size="11">
@@ -3273,17 +3727,14 @@
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="potentialid" type="I" size="19">
-			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quotestage" type="C" size="200" />
 		<field name="validtill" type="D" />
 		<field name="team" type="C" size="200" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="currency" type="C" size="100" />
 		<field name="subtotal" type="N" size="11.3" />
@@ -3309,11 +3760,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotes" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotes FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_quotes FOREIGN KEY (quoteid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_quotes FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotesbillads">
 		<field name="quotebilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3325,11 +3784,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotesbillads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotesbillads FOREIGN KEY (quotebilladdressid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotesshipads">
 		<field name="quoteshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3341,13 +3806,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotesshipads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotesshipads FOREIGN KEY (quoteshipaddressid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotegrouprelation">
 		<field name="quoteid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="quotegrouprelation_groupname_idx">
@@ -3356,24 +3826,36 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotegrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotescf">
 		<field name="quoteid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotescf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotescf FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotesproductrel">
 		<field name="quoteid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3390,24 +3872,28 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_quotesproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotesproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_quotesproductrel FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_purchaseorder">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="quoteid" type="I" size="19">
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorid" type="I" size="19">
-			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="requisition_no" type="C" size="100" />
 		<field name="tracking_no" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
@@ -3433,13 +3919,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_purchaseorder" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_purchaseorder FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_purchaseorder FOREIGN KEY (purchaseorderid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_purchaseorder FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_4_vtiger_purchaseorder FOREIGN KEY (vendorid) REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_pogrouprelation">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="pogrouprelation_groupname_purchaseorderid_idx">
@@ -3449,11 +3943,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_pogrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_pogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_pobillads">
 		<field name="pobilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3465,11 +3966,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_pobillads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_pobillads FOREIGN KEY (pobilladdressid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_poshipads">
 		<field name="poshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3481,24 +3988,35 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_poshipads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_poshipads FOREIGN KEY (poshipaddressid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_purchaseordercf">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_purchaseordercf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_purchaseordercf FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_poproductrel">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3515,16 +4033,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_poproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_poproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_poproductrel FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoice">
 		<field name="invoiceid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="salesorderid" type="I" size="19">
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="customerno" type="C" size="100" />
 		<field name="contactid" type="I" size="19" />
@@ -3551,13 +4075,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_invoice" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoice FOREIGN KEY (invoiceid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_invoice FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoicegrouprelation">
 		<field name="invoiceid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="invoicegrouprelation_groupname_invoiceid_idx">
@@ -3567,11 +4097,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_invoicegrouprelation" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoicegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoicebillads">
 		<field name="invoicebilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3583,11 +4120,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_invoicebillads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoicebillads FOREIGN KEY (invoicebilladdressid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoiceshipads">
 		<field name="invoiceshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3599,24 +4142,35 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_invoiceshipads" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoiceshipads FOREIGN KEY (invoiceshipaddressid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoicecf">
 		<field name="invoiceid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_invoicecf" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoicecf FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoiceproductrel">
 		<field name="invoiceid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3632,6 +4186,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_invoiceproductrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoiceproductrel FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_invoiceproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_activity_reminder">
 		<field name="activity_id" type="I" size="11">
@@ -3674,7 +4236,6 @@
 		<field name="cvid" type="I" size="19">
 			<key />
 			<notnull />
-			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3693,10 +4254,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_cvcolumnlist" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_cvcolumnlist FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_cvstdfilter">
 		<field name="cvid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<default value="" />
@@ -3717,10 +4284,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_cvstdfilter" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_cvstdfilter FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_cvadvfilter">
 		<field name="cvid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3742,10 +4315,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_cvadvfilter" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_cvadvfilter FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_customaction">
 		<field name="cvid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="250">
 			<notnull />
@@ -3762,6 +4341,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_customaction" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_customaction FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_selectquery">
 		<field name="queryid" type="I" size="19">
@@ -3783,7 +4369,6 @@
 	<table name="vtiger_selectcolumn">
 		<field name="queryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3800,10 +4385,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_selectcolumn" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_selectcolumn FOREIGN KEY (queryid) REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_relcriteria">
 		<field name="queryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3824,6 +4415,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_relcriteria" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_relcriteria FOREIGN KEY (queryid) REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_reportfolder">
 		<field name="folderid" type="I" size="19">
@@ -3850,7 +4448,6 @@
 		</field>
 		<field name="folderid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_reportfolder (folderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="reportname" type="C" size="100">
 			<default value="" />
@@ -3864,7 +4461,6 @@
 		<field name="queryid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="state" type="C" size="50">
 			<default value="SAVED" />
@@ -3885,10 +4481,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_report" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_report FOREIGN KEY (folderid) REFERENCES vtiger_reportfolder (folderid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_report FOREIGN KEY (queryid) REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_reportmodules">
 		<field name="reportmodulesid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="primarymodule" type="C" size="50">
 			<notnull />
@@ -3901,13 +4504,19 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_reportmodules" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_reportmodules FOREIGN KEY (reportmodulesid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_reportsortcol">
 		<field name="sortcolid" type="I" size="19">
 			<key />
 		</field>
 		<field name="reportid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<default value="" />
@@ -3919,10 +4528,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_reportsortcol" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_reportsortcol FOREIGN KEY (reportid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_reportdatefilter">
 		<field name="datefilterid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="datecolumnname" type="C" size="250">
 			<default value="" />
@@ -3943,10 +4558,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_reportdatefilter" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_reportdatefilter FOREIGN KEY (datefilterid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_reportsummary">
 		<field name="reportsummaryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="summarytype" type="I" size="19">
 			<key />
@@ -3961,6 +4582,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_reportsummary" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_reportsummary FOREIGN KEY (reportsummaryid) REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_usageunit">
 		<field name="usageunitid" type="I" size="19">
@@ -4264,22 +4892,27 @@
 	<table name="vtiger_org_share_action2tab">
 		<field name="share_action_id" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_org_share_action2tab" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_org_share_action2tab FOREIGN KEY (share_action_id) REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_org_share_action2tab FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_moduleowners">
 		<field name="tabid" type="I" size="19">
 			<key />
 			<unique />
 			<default value="0" />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="user_id" type="C" size="11">
 			<notnull />
@@ -4290,6 +4923,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_moduleowners" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_moduleowners FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_ownernotify">
 		<field name="crmid" type="I" size="19" />
@@ -4309,7 +4949,6 @@
 		</field>
 		<field name="tabid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relationtype" type="C" size="200">
 		</field>
@@ -4319,16 +4958,20 @@
 		</index>
 	</table>
 
+<table name="vtiger_datashare_module_rel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_module_rel FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_grp2grp">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4341,16 +4984,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_grp2grp" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_grp2grp FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_grp2grp FOREIGN KEY (share_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_grp2grp FOREIGN KEY (to_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_grp2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4363,16 +5012,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_grp2role" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_grp2role FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_grp2role FOREIGN KEY (share_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_grp2role FOREIGN KEY (to_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_grp2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4385,16 +5040,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_grp2rs" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_grp2rs FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_grp2rs FOREIGN KEY (share_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_grp2rs FOREIGN KEY (to_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_role2group">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4407,16 +5068,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_role2group" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_role2group FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_role2group FOREIGN KEY (to_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_role2group FOREIGN KEY (share_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_role2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4429,16 +5096,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_role2role" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_role2role FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_role2role FOREIGN KEY (share_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_role2role FOREIGN KEY (to_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_role2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4451,16 +5124,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_role2rs" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_role2rs FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_role2rs FOREIGN KEY (share_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_role2rs FOREIGN KEY (to_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_rs2grp">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4473,16 +5152,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_rs2grp" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_rs2grp FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_rs2grp FOREIGN KEY (to_groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_rs2grp FOREIGN KEY (share_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_rs2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4495,16 +5180,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_rs2role" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_rs2role FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_rs2role FOREIGN KEY (share_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_rs2role FOREIGN KEY (to_roleid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_rs2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4517,15 +5208,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_datashare_rs2rs" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_rs2rs FOREIGN KEY (shareid) REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_rs2rs FOREIGN KEY (share_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_datashare_rs2rs FOREIGN KEY (to_roleandsubid) REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_datashare_relatedmodules">
 		<field name="datashare_relatedmodule_id" type="I" size="19">
 			<key />
 		</field>
 		<field name="tabid" type="I" size="19">
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedto_tabid" type="I" size="19">
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<index name="datashare_relatedmodules_tabid_idx">
 			<col>tabid</col>
@@ -4535,6 +5233,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_datashare_relatedmodules" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_datashare_relatedmodules FOREIGN KEY (relatedto_tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_datashare_relatedmodules FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_datashare_relatedmodule_permission">
 		<field name="shareid" type="I" size="19">
@@ -4577,15 +5283,12 @@
 	<table name="vtiger_tmp_read_user_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_user_sharing_per_userid_shareduserid_idx">
@@ -4595,18 +5298,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_read_user_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_read_user_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_read_user_sharing_per FOREIGN KEY (shareduserid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_read_user_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_read_group_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_group_sharing_per_userid_sharedgroupid_idx">
@@ -4616,18 +5325,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_read_group_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_read_group_sharing_per FOREIGN KEY (sharedgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_read_group_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_read_group_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_write_user_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_user_sharing_per_userid_shareduserid_idx">
@@ -4637,18 +5352,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_write_user_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_write_user_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_write_user_sharing_per FOREIGN KEY (shareduserid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_write_user_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_write_group_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_group_sharing_per_UK1">
@@ -4658,22 +5379,27 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_write_group_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_write_group_sharing_per FOREIGN KEY (sharedgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_write_group_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_write_group_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_read_user_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_user_rel_sharing_per_userid_shared_reltabid_idx">
@@ -4684,22 +5410,28 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_read_user_rel_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_read_user_rel_sharing_per FOREIGN KEY (relatedtabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_read_user_rel_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_read_user_rel_sharing_per FOREIGN KEY (shareduserid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_4_vtiger_tmp_read_user_rel_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_read_group_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_group_rel_sharing_per_userid_sharedgroupid_tabid">
@@ -4710,22 +5442,28 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_read_group_rel_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_read_group_rel_sharing_per FOREIGN KEY (sharedgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_read_group_rel_sharing_per FOREIGN KEY (relatedtabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_read_group_rel_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_4_vtiger_tmp_read_group_rel_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_write_user_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_user_rel_sharing_per_userid_sharduserid_tabid_idx">
@@ -4736,22 +5474,28 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_tmp_write_user_rel_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_write_user_rel_sharing_per FOREIGN KEY (relatedtabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_write_user_rel_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_write_user_rel_sharing_per FOREIGN KEY (shareduserid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_4_vtiger_tmp_write_user_rel_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_tmp_write_group_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_group_rel_sharing_per_userid_sharedgroupid_tabid_idx">
@@ -4761,6 +5505,16 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_tmp_write_group_rel_sharing_per" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_tmp_write_group_rel_sharing_per FOREIGN KEY (sharedgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_tmp_write_group_rel_sharing_per FOREIGN KEY (relatedtabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_3_vtiger_tmp_write_group_rel_sharing_per FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_4_vtiger_tmp_write_group_rel_sharing_per FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_parenttabrel">
 		<field name="parenttabid" type="I" size="3">
@@ -4928,7 +5682,6 @@
 		<field name="chat_from" type="I" size="20">
 			<default value="0" />
 			<notnull />
-			<constraint>REFERENCES vtiger_chat_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="chat_to" type="I" size="20">
 			<default value="0" />
@@ -4953,6 +5706,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_chat_msg" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_chat_msg FOREIGN KEY (chat_from) REFERENCES vtiger_chat_users(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_chat_pchat">
 		<field name="id" type="I" size="20">
 			<autoincrement />
@@ -4961,7 +5721,6 @@
 		</field>
 		<field name="msg" type="I" size="20">
 			<default value="0"/>
-			<constraint>REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="chat_pchat_msg_idx">
@@ -4971,6 +5730,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+<table name="vtiger_chat_pchat" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_chat_pchat FOREIGN KEY (msg) REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_chat_pvchat">
 		<field name="id" type="I" size="20">
 			<autoincrement />
@@ -4979,7 +5745,6 @@
 		</field>
 		<field name="msg" type="I" size="20">
 			<default value="0"/>
-			<constraint>REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
 		</field>
 		<index name="chat_pvchat_msg_idx">
 			<col>msg</col>
@@ -4987,6 +5752,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_chat_pvchat" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_chat_pvchat FOREIGN KEY (msg) REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_freetags">
 		<field name="id" type="I" size="19">
@@ -5035,6 +5807,7 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
 	<table name="vtiger_emaildetails">
 		<field name="emailid" type="I" size="19">
 			<notnull />
@@ -5097,7 +5870,6 @@
 	<table name="vtiger_producttaxrel">
 		<field name="productid" type="I" size="11">
 			<notnull />
-			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="taxid" type="I" size="3">
 			<notnull />
@@ -5114,6 +5886,14 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_producttaxrel" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_producttaxrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_status">
 		<field name="statusid" type="I" size="19">
 			<key />
@@ -5137,6 +5917,7 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
 	<table name="vtiger_activity_view">
 		<field name="activity_viewid" type="I" size="19">
 			<key />
@@ -5160,6 +5941,7 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
 	<table name="vtiger_lead_view">
 		<field name="lead_viewid" type="I" size="19">
 			<key />
@@ -5183,6 +5965,7 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
 	<table name="vtiger_date_format">
 		<field name="date_formatid" type="I" size="19">
 			<key />
@@ -5214,7 +5997,6 @@
 		</field>
 		<field name="purchaseorderid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorname" type="C" size="100" />
 		<field name="total" type="N" />
@@ -5226,6 +6008,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_postatushistory" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_postatushistory FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_sostatushistory">
 		<field name="historyid" type="I" size="19">
 			<key />
@@ -5233,7 +6023,6 @@
 		</field>
 		<field name="salesorderid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountname" type="C" size="100" />
 		<field name="total" type="N" />
@@ -5245,6 +6034,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_sostatushistory" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_sostatushistory FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_quotestagehistory">
 		<field name="historyid" type="I" size="19">
 			<key />
@@ -5252,7 +6049,6 @@
 		</field>
 		<field name="quoteid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountname" type="C" size="100" />
 		<field name="total" type="N" />
@@ -5264,6 +6060,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_quotestagehistory" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_quotestagehistory FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+
 	<table name="vtiger_invoicestatushistory">
 		<field name="historyid" type="I" size="19">
 			<key />
@@ -5271,7 +6075,6 @@
 		</field>
 		<field name="invoiceid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountname" type="C" size="100" />
 		<field name="total" type="N" />
@@ -5283,6 +6086,13 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+<table name="vtiger_invoicestatushistory" alter="true">
+<constraint>ADD CONSTRAINT fk_1_vtiger_invoicestatushistory FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
 
 	<table name="vtiger_audit_trial">
 		<field name="auditid" type="I" size="19">
