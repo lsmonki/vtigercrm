@@ -34,6 +34,8 @@ displayModuleList(document.getElementById('global_search_module'));
 	<div id="global_list_{$SEARCH_MODULE}" style="display:block">
 {elseif $MODULE eq 'Contacts' && $SEARCH_MODULE eq ''}
 	<div id="global_list_{$MODULE}" style="display:block">
+{elseif $SEARCH_MODULE neq ''}
+	<div id="global_list_{$MODULE}" style="display:none">
 {else}
 	<div id="global_list_{$MODULE}" style="display:block">
 {/if}
