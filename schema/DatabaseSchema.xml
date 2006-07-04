@@ -6102,6 +6102,7 @@
 		<field name="userid" type="I" size="19" />
 		<field name="module" type="C" size="255" />
 		<field name="action" type="C" size="255" />
+		<field name="recordid" type="I" size="19" />
 		<field name="actiondate" type="T"/>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
