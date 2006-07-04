@@ -23,6 +23,20 @@ $server = new soap_server;
 $server->configureWSDL('vtigersoap');
 
 $server->register(
+ 	    'create_session',
+ 	    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+ 	    array('return'=>'xsd:string'),
+ 	    $NAMESPACE);
+
+
+ 	$server->register(
+ 	    'end_session',
+ 	    array('user_name'=>'xsd:string'),
+ 	    array('return'=>'xsd:string'),
+ 	    $NAMESPACE);
+
+
+$server->register(
     'contact_by_email',
     array('user_name'=>'xsd:string','email_address'=>'xsd:string'),
     array('return'=>'tns:contact_detail_array'),
@@ -35,6 +49,60 @@ $server->register(
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
+
+$server->wsdl->addComplexType(
+ 	    'contact_detail',
+ 	    'complexType',
+ 	    'struct',
+ 	    'all',
+ 	    '',
+ 	    array(
+ 	        'email_address' => array('name'=>'email_address','type'=>'xsd:string'),
+ 	        'first_name' => array('name'=>'first_name','type'=>'xsd:string'),
+	        'last_name' => array('name'=>'last_name','type'=>'xsd:string'),
+ 	        'primary_address_city' => array('name'=>'primary_address_city','type'=>'xsd:string'),
+ 	        'account_name' => array('name'=>'account_name','type'=>'xsd:string'),
+ 	                                'account_id' => array('name'=>'account_id','type'=>'xsd:string'),
+ 	        'id' => array('name'=>'id','type'=>'xsd:string'),
+ 	        'salutation' => array('name'=>'salutation','type'=>'xsd:string'),
+ 	        'title'=> array('name'=>'title','type'=>'xsd:string'),
+ 	        'phone_mobile'=> array('name'=>'phone_mobile','type'=>'xsd:string'),
+ 	        'reports_to'=> array('name'=>'reports_to','type'=>'xsd:string'),
+ 	        'primary_address_city'=> array('name'=>'primary_address_city','type'=>'xsd:string'),
+ 	        'primary_address_street'=> array('name'=>'primary_address_street','type'=>'xsd:string'),
+ 	        'primary_address_state'=> array('name'=>'primary_address_state','type'=>'xsd:string'),
+ 	        'primary_address_postalcode'=> array('name'=>'primary_address_postalcode','type'=>'xsd:string'),
+ 	        'primary_address_country'=> array('name'=>'primary_address_country','type'=>'xsd:string'),
+ 	        'alt_address_city'=> array('name'=>'alt_address_city','type'=>'xsd:string'),
+ 	        'alt_address_street'=> array('name'=>'alt_address_street','type'=>'xsd:string'),
+ 	        'alt_address_state'=> array('name'=>'alt_address_state','type'=>'xsd:string'),
+ 	        'alt_address_postalcode'=> array('name'=>'alt_address_postalcode','type'=>'xsd:string'),
+ 	        'alt_address_country'=> array('name'=>'alt_address_country','type'=>'xsd:string'),
+ 	
+ 	        'office_phone'=> array('name'=>'office_phone','type'=>'xsd:string'),
+ 	        'home_phone'=> array('name'=>'home_phone','type'=>'xsd:string'),
+ 	        'other_phone'=> array('name'=>'other_phone','type'=>'xsd:string'),
+ 	        'fax'=> array('name'=>'fax','type'=>'xsd:string'),
+ 	        'department'=> array('name'=>'fax','type'=>'xsd:string'),
+ 	        'birthdate'=> array('name'=>'birthdate','type'=>'xsd:string'),
+ 	        'assistant_name'=> array('name'=>'assistant_name','type'=>'xsd:string'),
+ 	        'assistant_phone'=> array('name'=>'assistant_phone','type'=>'xsd:string')
+ 	
+ 	    )
+ 	);
+
+    $server->wsdl->addComplexType(
+	    'contact_detail_array',
+	    'complexType',
+	    'array',
+	    '',
+	    'SOAP-ENC:Array',
+	    array(),
+	    array(
+		    array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:contact_detail[]')
+	    ),
+	    'tns:contact_detail'
+    );
     
     
     
@@ -137,6 +205,18 @@ function contact_by_email($user_name,$email_address)
 		$seed_contact = $seed_contact;
 		return $output_list;
 }
+
+
+
+	function create_session($user_name, $password)
+	{
+ 	        return "TempSessionID";
+ 	}
+ 	
+ 	function end_session($user_name)
+ 	{
+ 	        return "Success";       
+ 	}
 
 
 $server->service($HTTP_RAW_POST_DATA); 
