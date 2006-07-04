@@ -20,7 +20,6 @@ function VTIGER_LoadURL(URL)
 {
     // Set the document's location to the incoming URL
     window._content.document.location = URL;
-
     // Make sure we get the focus
     window.content.focus();
 }
@@ -32,7 +31,6 @@ function save_vtigeruserlogin()
 	var save_username = trim(document.getElementById("txtusername").value);
 	var save_password = trim(document.getElementById("txtpassword").value);
         var save_url=trim(document.getElementById("txturl").value);
-	//get_checkvalue=document.getElementById("login_check").checked;
 	vtiger_pref.setCharPref("Settings.Conf.temp_variable","true");
 	if(save_username=="" || save_password=="" || save_url=="")
 	{
@@ -664,6 +662,7 @@ function add_vendor_to_vtigercrm()
 			}catch(errorObject)
 			{
 				alert(" Error while parsing response from the vtiger CRM server");
+				alert(errorObject.description);
 			}
 		}
 
@@ -913,8 +912,8 @@ function add_rss_to_vtigercrm()
 				}
 				else
 				{
-					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
-					{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes()){
+
 						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
 						{
 							alert("RSS added to vtiger CRM successfully");
@@ -930,11 +929,10 @@ function add_rss_to_vtigercrm()
 			
 			}catch(errorObject)
 			{
-				alert(" Error while parsing response from the vtiger CRM server");
+				alert(" Error while parsing response from the vtiger CRM server. Kindly check your proxy settings");
 			}
 		}
 
   
 	window.close();
 }
-
