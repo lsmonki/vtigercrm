@@ -321,6 +321,10 @@ $mod_strings = Array(
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 'LBL_SYSTEM_INFO'=>'System Information',
 'LBL_PROXY_SETTINGS'=>'Proxy Server Settings',
+'LBL_AUDIT_TRAIL'=>'Audit Trail Information',
+'LBL_ENABLE_AUDIT_TRAIL'=>'Enable Audit Trail',
+'LBL_USER_AUDIT'=>'Select User',
+'LBL_VIEW_AUDIT_TRAIL'=>'View Audit Trail',
 
 'LBL_CURRENCY_CONFIGURATION'=>'- Currency Information',
 
