@@ -754,7 +754,7 @@ $app_strings = Array(
 'Campaigns'=>'Campaigns',
 'PriceBooks'=>'PriceBooks',
 'Notes'=>'Notes',
-'Faq'=>'Faq',
+'Faq'=>'FAQ',
 'Dashboards'=>'Dashboard',
 'Reports'=>'Reports',
 'Vendors'=>'Vendors',
@@ -978,7 +978,7 @@ $app_list_strings = Array(
 
 				, 'HelpDesk'=>'HelpDesk'
 
-				, 'Faq'=>'Faq'
+				, 'Faq'=>'FAQ'
 
 				, 'Calendar'=>'Calendar'
 
