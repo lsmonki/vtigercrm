@@ -228,11 +228,18 @@ function verify_data(form) {
                 errorMessage += "\n temp directory path";
                 form.root_directory.focus();
         }
-
+	if(document.getElementById('check_createdb').checked == true)
+	{
+		if (trim(form.root_user.value) =='') {
+			isError = true;
+			errorMessage += "\n root username";
+			form.root_user.focus();
+		}
+	}
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert("Missing required vtiger_fields: " + errorMessage);
+		alert("Missing required fields: " + errorMessage);
 		return false;
 	}
 
@@ -331,7 +338,7 @@ function verify_data(form) {
                <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
               </tr>
               <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>
+               <td nowrap bgcolor="#F5F5F5"><strong>Password</strong></td>
                <td bgcolor="white" align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
@@ -347,7 +354,7 @@ function verify_data(form) {
                <td bgcolor="white" align="left"><input type="text" class="dataInput" name="root_user" value="" /></td>
               </tr>
               <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>Root Password</strong> <sup><font color=red>*</font></sup></td>
+               <td nowrap bgcolor="#F5F5F5"><strong>Root Password</strong></td>
                <td bgcolor="white" align="left"><input type="password" class="dataInput" name="root_password" value="" /></td>
               </tr>
 			  </table>

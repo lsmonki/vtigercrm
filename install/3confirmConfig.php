@@ -64,7 +64,7 @@ if($db_type)
 
 			// drop the current database if it exists
 			$dropdb_conn = &NewADOConnection($db_type);
-			if($dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name))
+			if(@$dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name))
 			{
 				$query = "drop database ".$db_name;
 				$dropdb_conn->Execute($query);
@@ -74,7 +74,7 @@ if($db_type)
 			// create the new database
 			$db_creation_failed = true;
 			$createdb_conn = &NewADOConnection($db_type);
-			if($createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
+			if(@$createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
 				$query = "create database ".$db_name;
 				if($createdb_conn->Execute($query)) {
 					$db_creation_failed = false;
@@ -84,7 +84,7 @@ if($db_type)
 		}
 
 		// test the connection to the database
-		if($conn->Connect($db_hostname, $db_username, $db_password, $db_name))
+		if(@$conn->Connect($db_hostname, $db_username, $db_password, $db_name))
 		{
 			$db_exist_status = true;
 		}
