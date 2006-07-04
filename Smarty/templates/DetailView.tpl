@@ -101,7 +101,6 @@ function DeleteTag(id)
 
 		{include file='Buttons_List1.tpl'}
 
-		<input type="hidden" name="parenttab" value={$CATEGORY}></input>
 <!-- Contents -->
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>

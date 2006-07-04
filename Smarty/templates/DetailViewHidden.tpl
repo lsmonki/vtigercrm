@@ -10,12 +10,12 @@
  ********************************************************************************/
 -->*}
 {*//Hidden fields for modules DetailView//  *}
+<input type="hidden" name="parenttab" value="{$CATEGORY}">
 {if $MODULE eq 'Accounts'}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="record" value="{$ID}">
 	<input type="hidden" name="isDuplicate" value=false>
 	<input type="hidden" name="action">
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
 	<input type="hidden" name="return_module">
 	<input type="hidden" name="return_action">
 	<input type="hidden" name="return_id">
@@ -37,7 +37,6 @@
 	<input type="hidden" name="isDuplicate" value=false>
 	<input type="hidden" name="action">
 	<input type="hidden" name="return_module">
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
 	<input type="hidden" name="return_action">
 	<input type="hidden" name="return_id">
 	<input type="hidden" name="reports_to_id">
@@ -93,7 +92,6 @@
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="action">
         <input type="hidden" name="isDuplicate" value=false>
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
         <input type="hidden" name="mode">
         <input type="hidden" name="record" value="{$ID}">
         <input type="hidden" name="return_module" value="{$RETURN_MODULE}">
@@ -105,7 +103,6 @@
         <input type="hidden" name="isDuplicate" value=false>
         <input type="hidden" name="action">
         <input type="hidden" name="return_module">
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
         <input type="hidden" name="return_action">
         <input type="hidden" name="return_id">
 {elseif $MODULE eq 'Emails'}
@@ -144,7 +141,6 @@
         <input type="hidden" name="record" value="{$ID}">
         <input type="hidden" name="isDuplicate" value=false>
         <input type="hidden" name="action">
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
         <input type="hidden" name="convertmode">
         <input type="hidden" name="return_module">
         <input type="hidden" name="return_action">
@@ -163,7 +159,6 @@
         <input type="hidden" name="record" value="{$ID}">
         <input type="hidden" name="isDuplicate" value=false>
         <input type="hidden" name="action">
-	<input type="hidden" name="parenttab" value="{$CATEGORY}">
         <input type="hidden" name="return_module">
         <input type="hidden" name="return_action">
         <input type="hidden" name="return_id">
@@ -178,7 +173,6 @@
         <input type="hidden" name="entity_id">
 	{if $MODULE eq 'SalesOrder'}
         	<input type="hidden" name="convertmode">
-		<input type="hidden" name="parenttab" value="{$CATEGORY}">
 	{/if}
 {elseif $MODULE eq 'Activities'}
 	<input type="hidden" name="module" value="Activities">
