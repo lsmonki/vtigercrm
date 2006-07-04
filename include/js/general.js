@@ -1638,6 +1638,7 @@ function SelectAll(mod)
 {
 
         x = document.selectall.selected_id.length;
+	var y=0;
         var entity_id = window.opener.document.getElementById('parent_id').value
         var module = window.opener.document.getElementById('return_module').value
         document.selectall.action.value='updateRelations'
@@ -1648,7 +1649,8 @@ function SelectAll(mod)
 
                 if (document.selectall.selected_id.checked)
                 {
-                        document.selectall.idlist.value=document.selectall.selected_id.value;
+			idstring = document.selectall.selected_id.value;
+                        y=1;
                 }
                 else
 		{
@@ -1658,34 +1660,34 @@ function SelectAll(mod)
         }
         else
         {
-                xx = 0;
+                y=0;
                 for(i = 0; i < x ; i++)
                 {
                         if(document.selectall.selected_id[i].checked)
                         {
-                                idstring = document.selectall.selected_id[i].value +";"+idstring
-                        xx++
+                                idstring = document.selectall.selected_id[i].value +";"+idstring;
+                  		y=y+1;
                         }
                 }
-                if (xx != 0)
-                {
-                        document.selectall.idlist.value=idstring;
-                }
-                 else
-                {
-                        alert("Please select at least one entity");
-                        return false;
-                }
+	}
+	if (y != 0)
+        {
+        	document.selectall.idlist.value=idstring;
         }
-                if(confirm("Are you sure you want to add the selected "+xx+" records ?"))
-                {
-                        opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
+        else
+        {
+                alert("Please select at least one entity");
+                return false;
+        }
+        if(confirm("Are you sure you want to add the selected "+y+" records ?"))
+        {
+                opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
                 self.close();
-                }
-		else
-                {
-                        return false;
-                }
+        }
+	else
+        {
+                return false;
+        }
 }
 function ShowEmail(id)
 {
