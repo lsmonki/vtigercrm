@@ -155,7 +155,7 @@ else
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$num_of_products = getNoOfAssocProducts("Invoice",$focus);
-	$associated_prod = getAssociatedProducts("Invoice",$focus);
+	$INVOICE_associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
@@ -262,8 +262,15 @@ elseif($focus->mode == 'edit')
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
-	$smarty->assign("MODE", $focus->mode);
-	$se_array=getProductDetailsBlockInfo($focus->mode,"",$focus,$num_of_products,$associated_prod);
+	//$se_array=getProductDetailsBlockInfo($focus->mode,"",$focus,$num_of_products,$associated_prod);
+        $smarty->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = $INVOICE_associated_prod;
+	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+        $smarty->assign("MODE", $focus->mode);
+	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
+	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
+	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
+	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] != '')) {
 	$smarty->assign("ROWCOUNT", $num_of_products);

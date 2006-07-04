@@ -146,7 +146,7 @@ else
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
-	$associated_prod = getAssociatedProducts("SalesOrder",$focus);
+	$SO_associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
@@ -261,7 +261,8 @@ elseif($focus->mode == 'edit')
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
 	$smarty->assign("ROWCOUNT", $num_of_products);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $SO_associated_prod);
+	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	$smarty->assign("MODE", $focus->mode);
 	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
 	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
