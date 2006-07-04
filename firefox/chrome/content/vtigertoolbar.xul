@@ -31,18 +31,18 @@
 						
 						<menuseparator/>
 
-						<menu label="HelpDesk">
+						<menu label="TalkBack">
 							<menupopup>
              							<menuitem label="About Us"
 									  oncommand="VTIGER_LoadURL('http://www.vtiger.com/aboutus.html')"/>
               							<menuitem label="Contact Us"
 						                          oncommand="VTIGER_LoadURL('http://www.vtiger.com/contactus.html')"/>
-              							<menuitem label="Help"
-						                          oncommand="VTIGER_LoadURL('http://www.vtiger.com/products/crm/document.html')"/>    
+              							<menuitem label="Support"
+									oncommand="VTIGER_LoadURL('http://www.vtiger.com/portal/index.php')"/>    
            						 </menupopup>
 						 </menu>
 					 	 
-						 <menuitem label="News and Articles" tooltiptext="vtigerCRM News and Articles" oncommand="VTIGER_LoadURL('http://www.vtiger.com/news/vtiger-crm-open-source.html')" />
+						 <menuitem label="Blogs" tooltiptext="vtigerCRM Blogs" oncommand="VTIGER_LoadURL('http://blogs.vtiger.com')" />
 						 						
 						<menuseparator/>		
 						
