@@ -946,6 +946,7 @@ $app_list_strings = Array(
                                 , 'Q'
                                 , 'R'
                                 , 'S'
+                                , 'T'
                                 , 'U'
                                 , 'V'
                                 , 'W'
