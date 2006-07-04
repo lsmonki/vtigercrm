@@ -125,9 +125,10 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$query .= ' ORDER BY '.$order_by.' '.$sorder;
 	$url_qry .="&order_by=".$order_by;
 	
-	$list_result = $adb->query($query);
 	//Retreiving the no of rows
-	$noofrows = $adb->num_rows($list_result);
+	$count_query = "select count(*) count ".substr($query, strpos($query,'from'),strlen($query));
+	$count_result = $adb->query(substr($count_query, strpos($count_query,'select'),strpos($count_query,'ORDER')));
+	$noofrows = $adb->query_result($count_result,0,"count");
 	
 	//Setting Listview session object while sorting/pagination
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
@@ -141,6 +142,17 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
 
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+	
+	$start_rec = $navigation_array['start'];
+	$end_rec = $navigation_array['end_val'];
+
+	//limiting the query
+	if ($start_rec ==0) 
+		$limit_start_rec = 0;
+	else
+		$limit_start_rec = $start_rec -1;
+
+	$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 	//Retreive the List View Table Header
 	if($noofrows == 0)
@@ -173,8 +185,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		{
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
 		}
-		$start_rec = $navigation_array['start'];
-		$end_rec = $navigation_array['end_val'];
 
 		$navigationOutput = Array();
 		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
