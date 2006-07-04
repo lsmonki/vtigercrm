@@ -2737,6 +2737,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 {
 	$current_module = $_REQUEST['module'];
+	$viewname = $_SESSION['lvs'][$current_module]['viewname'];
 
 	//This is added to avoid the del link in Product related list for the following modules
 	$avoid_del_links = Array("PurchaseOrder","SalesOrder","Quotes","Invoice");
@@ -2758,7 +2759,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 		$del_link .= "&return_module=$module&return_action=index";
 	}
 
-	$del_link .= "&parenttab=".$_REQUEST["parenttab"];
+	$del_link .= "&parenttab=".$_REQUEST["parenttab"]."&return_viewname=".$viewname;
 	
 	return $del_link;
 }
