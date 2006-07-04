@@ -142,8 +142,17 @@ function sensex_info()
 
 
 									      <tr>
+										{if $header== 'Address Information' && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+                                                                                <td colspan=2 class="detailedViewHeader">
+                                                                                <b>{$header}</b></td>
+                                                                                <td class="detailedViewHeader">
+                                                                                <input name="cpy" onclick="return copyAddressLeft(EditView)" type="radio"><b>{$APP.LBL_RCPY_ADDRESS}</b></td>
+                                                                                <td class="detailedViewHeader">
+                                                                                <input name="cpy" onclick="return copyAddressRight(EditView)" type="radio"><b>{$APP.LBL_LCPY_ADDRESS}</b></td>
+                                                                                {else}
 										<td colspan=4 class="detailedViewHeader">
 											<b>{$header}</b>
+										{/if}
 										</td>
 									      </tr>
 
