@@ -36,6 +36,7 @@
 	  
 		<hbox>
 		  <spacer flex="1"/>
+		  <label style="color:red" value="*"/>	
 		  <label style="padding: 0px;margin-top: 3px;" value="Site URL:"/>
 		  <hbox style="width: 25em">
 			  <textbox id="txtsiteurl" flex="1"/>
