@@ -555,13 +555,20 @@ else
 	
 
 //auditing
-$date_var = date('YmdHis');
-$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',$date_var)";
-$adb->query($query);
 
+$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
+$result = $adb->query($qry);
+$server = $adb->query_result($result,0,'server');
+
+if($server == 'enabled')
+{
+	$date_var = date('YmdHis');
+	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',$date_var)";
+	$adb->query($query);
+}
 
 //logging the security Information
-$seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.'  #######');
+$seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.' :: RecordID --> '.$record.' #######');
 
 if(!$skipSecurityCheck)
 {
