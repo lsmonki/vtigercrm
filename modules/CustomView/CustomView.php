@@ -243,7 +243,9 @@ class CustomView extends CRMEntity{
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			$module_columnlist[$optionvalue] = $fieldlabel;
+			//added to escape attachments fields in customview as we have multiple attachments
+			if($module != 'HelpDesk' || $fieldname !='filename')
+				$module_columnlist[$optionvalue] = $fieldlabel;
 			if($fieldtype[1] == "M")
 			{
 				$this->mandatoryvalues[] = "'".$optionvalue."'";
