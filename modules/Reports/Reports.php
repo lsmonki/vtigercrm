@@ -375,7 +375,9 @@ class Reports extends CRMEntity{
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			$optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;
-			$module_columnlist[$optionvalue] = $fieldlabel;
+			//added to escape attachments fields in Reports as we have multiple attachments
+                        if($module != 'HelpDesk' || $fieldname !='filename')
+				$module_columnlist[$optionvalue] = $fieldlabel;
 		}
 		$log->info("Reports :: FieldColumns->Successfully returned ColumnslistbyBlock".$module.$block);
 		return $module_columnlist;
