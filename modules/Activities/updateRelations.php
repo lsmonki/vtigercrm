@@ -29,7 +29,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 		header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 	
 }
-elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '' && $_REQUEST['destination_module'] == 'Contacts')
 {
 	$record = $_REQUEST["parid"];
 	$sql = "insert into vtiger_cntactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
@@ -56,10 +56,10 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 	}
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 }
-elseif(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
+elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '' && $_REQUEST['destination_module'] == 'Users')
 {
-	$record = $_REQUEST['record'];
-	$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
+	$record = $_REQUEST['parid'];
+	$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 	
