@@ -363,6 +363,10 @@ function BasicSearch($module,$search_field,$search_string)
 		$replace = array('','','=');
 		$where= str_replace($search,$replace,$where);
 	}
+	if($_REQUEST['type'] == 'alpbt')
+	{
+	        $where = str_replace_once("%", "", $where);
+	}
 	$log->debug("Exiting BasicSearch method ...");
 	return $where;
 }
@@ -642,5 +646,23 @@ function getdashboardcondition()
 		$where .= $clause;
 	}
 	return $where."#@@#".$url_string;
+}
+
+/**This function is used to replace only the first occurence of a given string
+Param $needle - string to be replaced
+Param $replace - string to be replaced with
+Param $replace - given string
+Return type is string
+*/
+function str_replace_once($needle, $replace, $haystack)
+{
+	// Looks for the first occurence of $needle in $haystack
+	// and replaces it with $replace.
+	$pos = strpos($haystack, $needle);
+	if ($pos === false) {
+		// Nothing found
+		return $haystack;
+	}
+	return substr_replace($haystack, $replace, $pos, strlen($needle));
 }
 ?>
