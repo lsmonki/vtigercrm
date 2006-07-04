@@ -112,10 +112,11 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
+	require_once('include/utils/CommonUtils.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
-	$current_user->retrieve($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$date_sent = getDisplayDate($date_sent);
 
