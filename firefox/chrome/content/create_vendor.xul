@@ -51,8 +51,8 @@
 	  
 	    	<hbox>
 		  <spacer flex="1"/>
-		  <label style="color:red" value="*"/>
-		  <label style="padding: 0px;margin-top: 3px;" value="Company:"/>
+		  <label style="color:red" value=""/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Website:"/>
 		  <hbox style="width: 25em">
 			  <textbox id="txtvendorwebsite" flex="1"/>
 
