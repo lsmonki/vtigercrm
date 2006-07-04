@@ -73,17 +73,16 @@
 
 			<!--<toolbarbutton id="VTIGER-FORUM" label="Forum Topic" tooltiptext="Click to go to vtiger forum"  class="menuitem-iconic" oncommand="VTIGER_LoadURL('http://www.vtiger.com/discussions/'); event.preventBubble();" />-->
 
-			<toolbaritem id="VTIGER-FORUM-SEARCH" align="center" >
+			<!--toolbaritem id="VTIGER-FORUM-SEARCH" align="center" >
 				<label id="" value="Search in Forums:" />
 			</toolbaritem>
 			<toolbaritem id="VTIGER-Search-Item"  persist="width">
 				<hbox style="width:15em">
 					<textbox id="VTIGER-SearchTerms" flex="1" />
-				</hbox>
+				</hbox -->
 				<!--<menulist id="VTIGER-SearchTerms" editable="true" flex="1" minwidth="200"  onkeypress="if(event.which == 13) { VTIGER_InvokeTool(event, 'VTIGER-SEARCH-ICON', 'VTIGER-SearchTermsMenu', 'VTIGER-SearchTerms');}">
 					<menupopup id="VTIGER-SearchTermsMenu" onpopupshowing="VTIGER_PopulateResult()" />
 				</menulist>-->
-			</toolbaritem>
 			<toolbaritem>
 				<toolbarbutton id="VTIGER-SEARCH-ICON" tooltiptext="Forum Search" oncommand="VTIGER_InvokeTool(event, 'VTIGER-SEARCH-ICON', 'VTIGER-SearchTermsMenu', 'VTIGER-SearchTerms');"/>
   			<toolbarseparator/>	
