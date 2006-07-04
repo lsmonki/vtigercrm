@@ -130,7 +130,7 @@ class Campaign extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_contactdetails.lastname,
 			vtiger_contactdetails.firstname,
