@@ -260,7 +260,6 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		   Array('vtiger_activity:status:taskstatus:Activities_Status:V',
                          'vtiger_activity:activitytype:activitytype:Activities_Type:V',
                          'vtiger_activity:subject:subject:Activities_Subject:V',
-                         'vtiger_cntactivityrel:contactid:contact_id:Activities_Contact_Name:I',
                          'vtiger_seactivityrel:crmid:parent_id:Activities_Related_to:V',
                          'vtiger_activity:date_start:date_start:Activities_Start_Date:D',
                          'vtiger_activity:due_date:due_date:Activities_End_Date:D',
