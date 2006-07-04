@@ -30,6 +30,8 @@
                         {elseif $header eq 'Products'}
                                 {if $MODULE eq 'PriceBooks'}
                                 <input title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="small" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
+				{elseif $MODULE eq 'Vendors'}
+					<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'; this.form.parent_id.value='';" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
                                 {else}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
 				{/if}
