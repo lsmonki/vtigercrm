@@ -76,7 +76,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 	break;
 	case Potentials:
-		if($return_module == 'Accounts')
+		if($return_module == 'Accounts' || $return_module == 'Campaigns')
 		{
 			//we can call $focus->mark_deleted($record)
 			$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$record;
