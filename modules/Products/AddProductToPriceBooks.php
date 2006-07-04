@@ -50,7 +50,7 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" ali
 $list_query = getListQuery("PriceBooks");
 $xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
-$list_query .= ' ORDER BY vtiger_pricebookid DESC ';
+$list_query .= ' ORDER BY pricebookid DESC ';
 
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);

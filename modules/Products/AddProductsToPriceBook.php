@@ -58,7 +58,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	$where_clauses = Array();
 	//Added for Custom Field Search
-	$sql="select * from vtiger_field where vtiger_tablename='productcf' order by vtiger_fieldlabel";
+	$sql="select * from vtiger_field where tablename='productcf' order by fieldlabel";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
