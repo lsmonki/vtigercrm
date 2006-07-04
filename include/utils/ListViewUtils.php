@@ -2550,10 +2550,9 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Activities")
 	{
-		$reltable = 'vtiger_seactivityrel';
+		$reltable = 'vtiger_cntactivityrel';
 		$condition = 'WHERE activityid = '.$recordid;
-		$selectfield = 'crmid';
-		$field = 'contactid';
+		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Leads" && $returnmodule == "Campaigns")
