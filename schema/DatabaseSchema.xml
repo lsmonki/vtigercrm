@@ -1601,6 +1601,7 @@
 
 	<table name="vtiger_cntactivityrel">
 		<field name="contactid" type="I" size="19">
+			<key />
 			<notnull />
 			<default value="0" />
 		</field>
