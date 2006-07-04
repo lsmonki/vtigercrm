@@ -18,7 +18,10 @@
 <input type="hidden" name="return_module" id="return_module" value="{$MODULE}">
 <input type="hidden" name="return_action" value="CallRelatedList">
 <input type="hidden" name="return_id" value="{$id}">
-<input type="hidden" name="parent_id" id="parent_id" value="{$id}">
+{* Avoid to pass the parent id when create product from Vendors relatedlist, product saved but not listed in Product LV *}
+{if $MODULE neq 'Vendors'}
+	<input type="hidden" name="parent_id" id="parent_id" value="{$id}">
+{/if}
 <input type="hidden" name="parenttab" id="parenttab" value="{$CATEGORY}">
 <input type="hidden" name="action">
 {if $MODULE eq 'Activities'}
