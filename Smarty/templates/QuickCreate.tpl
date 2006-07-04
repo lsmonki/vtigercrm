@@ -294,6 +294,10 @@
                                                           <td width="20%" class="dvtCellLabel" align=right>
                                                            {$fldlabel}</td>
                                                           <td width="30%" align=left class="dvtCellInfo">
+	<td width="30%" align=left class="dvtCellInfo">
+				<input name="{$fldname}" type="hidden" value="{$secondvalue}">
+				<input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+			</td>
 		
 							{elseif $uitype eq 55} 
                                                           <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
