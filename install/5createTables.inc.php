@@ -86,6 +86,7 @@ function create_default_users() {
 	$user->column_fields["imagename"] = 'shanky.jpg';
         $user->column_fields["tagcloud"] = '';	
         $user->column_fields["activity_view"] = 'This Year';	
+	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
@@ -129,6 +130,7 @@ function create_default_users() {
 	// added by jeri to populate default image and tagcloud for admin	
 	$user->column_fields["imagename"] = 'ela.jpg';
         $user->column_fields["activity_view"] = 'This Year';	
+	$user->column_fields["lead_view"] = 'Today';
         $user->column_fields["tagcloud"] = '';	
 	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
