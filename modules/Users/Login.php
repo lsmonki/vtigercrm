@@ -178,7 +178,7 @@ function set_focus() {
 																		</tr>
 																		<tr>
 																				<td class="small" align="right">
-																						<?php echo $current_module_strings['LBL_USER_NAME'] ?>
+																						<?php echo $current_module_strings['LBL_USER_NAME'] ?>:
 																				</td>
 																				<td class="small">
 																						<input class="textbox" type="text"  name="user_name"   value="<?php echo $login_user_name ?>" vtiger_tabindex="1">
