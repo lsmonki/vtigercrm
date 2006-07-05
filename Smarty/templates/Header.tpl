@@ -64,10 +64,10 @@
 		<tr>
 			{foreach key=maintabs item=detail from=$HEADERS}
 				{if $maintabs ne $CATEGORY}
-				  <td class=tabUnSelected align=center><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
+				  <td class=tabUnSelected align=center nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
 				  <td class=tabSeperator><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
 				{else}
-				  <td class=tabSelected align=center><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
+				  <td class=tabSelected align=center nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
 				  <td class=tabSeperator><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
 				{/if}
 			{/foreach}
