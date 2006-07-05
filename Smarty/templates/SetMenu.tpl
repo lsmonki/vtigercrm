@@ -146,6 +146,8 @@
                                 {else}
                                 <tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
                                 {/if}
+				              <tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
+                
 				</table>
 			</td>
 			<td width=90% class="small settingsSelectedUI" valign=top >
