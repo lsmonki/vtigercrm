@@ -70,8 +70,13 @@ $smarty->assign("LIST_HEADER",$focus->getAuditTrailHeader());
 $smarty->assign("LIST_ENTRIES",$focus->getAuditTrailEntries($userid, $navigation_array, $sorder, $sortby));
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("USERID", $userid);
 $smarty->assign("CATEGORY",$category);
 
-$smarty->display("ShowAuditTrailContents.tpl");
+
+if($_REQUEST['ajax'] !='')
+	$smarty->display("ShowAuditTrailContents.tpl");
+else	
+	$smarty->display("ShowAuditTrail.tpl");
 
 ?>
