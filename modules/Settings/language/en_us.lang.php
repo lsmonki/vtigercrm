@@ -630,7 +630,7 @@ $mod_strings = Array(
 'LBL_MODULE'=>'CRM Module',
 'LBL_OWNER'=>'Assigned Owner',
 'LBL_MIGRATION'=>'Migrate from Previous Version',
-'LBL_MIGRATION_INFO'=>' - Migration from previous Version of vTiger',
+'LBL_MIGRATION_INFO'=>'Migration from previous Version of vTiger',
 
 //Added for 5 GA - Description of Settings UI
 
