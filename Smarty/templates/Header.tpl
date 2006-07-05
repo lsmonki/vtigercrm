@@ -444,7 +444,7 @@ function getFormValidate(divValidate)
 </div>
 
 
-<div id="status" class="fixedLay" style="display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
+<div id="status" style="display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
 <script>
 function openwin()
 {ldelim}
