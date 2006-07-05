@@ -13,7 +13,7 @@
 					<tr><td class="settingsTabList" nowrap><a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a></td></tr>
 				{/if}
 
-				{if $smarty.request.action eq 'listroles' ||  $smarty.request.action eq 'RoleDetailView' ||  $smarty.request.action eq 'saverole' ||  $smarty.request.action eq 'createrole'} 		
+				{if $smarty.request.action eq 'listroles' ||  $smarty.request.action eq 'RoleDetailView' ||  $smarty.request.action eq 'saverole' ||  $smarty.request.action eq 'createrole' || $smarty.request.action eq 'RoleDeleteStep1'} 		
 					<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td></tr>
 				{else}	
 					<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td></tr>
