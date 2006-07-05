@@ -147,7 +147,7 @@ function showAuditTrail()
 {
 	
 	var userid = $('user_list').options[$('user_list').selectedIndex].value;
-	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=750,height=800,resizable=0,scrollbars=1,left=100");
+	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=650,height=800,resizable=0,scrollbars=1,left=100");
 	
 
 }
