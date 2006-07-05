@@ -53,8 +53,8 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="'.$image_path.'tbarImport-Faded.gif" alt="{$APP.LBL_IMPORT} {$APP.$MODULE}" title="{$APP.LBL_IMPORT} {$APP.$MODULE}" border="0"></td>
-                <td style="padding-right:10px"><img src="'.$image_path.'tbarExport-Faded.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="'.$image_path.'tbarImport-Faded.gif" border="0"></td>
+                <td style="padding-right:10px"><img src="'.$image_path.'tbarExport-Faded.gif" border="0"></td>
 			</tr>
 		</table>	
 	</td>
