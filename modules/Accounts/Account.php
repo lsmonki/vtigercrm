@@ -507,25 +507,46 @@ class Account extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
 			LEFT JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_troubletickets.parent_id
+			LEFT JOIN vtiger_contactdetails
+			        ON vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id=vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_ticketgrouprelation
 				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
-			WHERE vtiger_account.accountid = ".$id ;
+			WHERE  vtiger_troubletickets.parent_id=".$id." or " ;
+
+		$query .= "vtiger_troubletickets.parent_id in(SELECT vtiger_contactdetails.contactid
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_contactgrouprelation
+				ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_contactdetails.accountid = ".$id;
+
+			
 		//Appending the security parameter
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$tab_id=getTabid('HelpDesk');
+		$tab_id=getTabid('Contacts');
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
-			$sec_parameter=getListViewSecurityParameter('HelpDesk');
+			$sec_parameter=getListViewSecurityParameter('Contacts');
 			$query .= ' '.$sec_parameter;
 
 		}
-		/*$query .= " UNION ALL
+
+		$query .= ") ";
+		
+		/*
+		$query .= " UNION ALL
 			SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
 			vtiger_troubletickets.status, vtiger_troubletickets.priority,
@@ -545,7 +566,7 @@ class Account extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
 			WHERE vtiger_account.accountid = ".$id;
-		*/
+		*/	
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
