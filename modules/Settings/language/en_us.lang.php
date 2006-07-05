@@ -325,6 +325,7 @@ $mod_strings = Array(
 'LBL_ENABLE_AUDIT_TRAIL'=>'Enable Audit Trail',
 'LBL_USER_AUDIT'=>'Select User',
 'LBL_VIEW_AUDIT_TRAIL'=>'View Audit Trail',
+'LBL_AUDIT_TRAIL_DESC'=>'Display Audit Trail of Users who access CRM',
 
 'LBL_CURRENCY_CONFIGURATION'=>'- Currency Information',
 
