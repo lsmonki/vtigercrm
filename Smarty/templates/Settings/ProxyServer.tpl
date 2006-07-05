@@ -27,7 +27,7 @@
 				<input type="hidden" name="proxy_server_mode">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}proxyserver.gif" alt="proxyserver" width="48" height="48" border=0 title="proxyserver"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}proxy.gif" alt="proxy" width="48" height="48" border=0 title="proxy"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_PROXY_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>
