@@ -25,6 +25,7 @@ require_once('include/logging.php');
 require_once('include/utils/UserInfoUtil.php');
 $log =& LoggerManager::getLogger('index');
 
+
 global $adb;
 $user_name = $_REQUEST['userName'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
@@ -52,14 +53,39 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"] != '')
 	$focus->id = $_REQUEST["record"];
 }
 else
+{
     $focus->mode='';
+}    
+
+
+if($_REQUEST['changepassword'] == 'true')
+{
+	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
+	$focus->id = $_REQUEST['record'];
+if (isset($_POST['new_password'])) {
+		$new_pass = $_POST['new_password'];
+		$new_passwd = $_POST['new_password'];
+		$new_pass = md5($new_pass);
+		$old_pass = $_POST['old_password'];
+		$uname = $_POST['user_name'];
+		if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
+		
+			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
+		exit;
+}
+}
 	
+}	
+
+    
 //save user Image
-$image_upload_array=SaveImage($_FILES,'user',$focus->id,$focus->mode);
-$focus->imagename = $image_upload_array['imagename'];
-$image_error = $image_upload_array['imageerror'];
-$errormessage = $image_upload_array['errormessage'];
-$saveimage = $image_upload_array['saveimage'];
+if(! $_REQUEST['changepassword'] == 'true')
+{
+	$image_upload_array=SaveImage($_FILES,'user',$focus->id,$focus->mode);
+	$focus->imagename = $image_upload_array['imagename'];
+	$image_error = $image_upload_array['imageerror'];
+	$errormessage = $image_upload_array['errormessage'];
+	$saveimage = $image_upload_array['saveimage'];
 	
 if(strtolower($current_user->is_admin) == 'off'  && $current_user->id != $focus->id){
 		$log->fatal("SECURITY:Non-Admin ". $current_user->id . " attempted to change settings for user:". $focus->id);
@@ -72,7 +98,6 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 		exit;
 	}
 	
-			
 	if (!isset($_POST['is_admin'])) $_REQUEST["is_admin"] = 'off';
 	//Code contributed by mike crowe for rearrange the home page and tab
 	if (!isset($_POST['deleted'])) $_REQUEST["deleted"] = '0';
@@ -119,6 +144,12 @@ else
   }
 }
 
+//Creating the Privileges Flat File
+require_once('modules/Users/CreateUserPrivilegeFile.php');
+createUserPrivilegesfile($focus->id);
+createUserSharingPrivilegesfile($focus->id);
+
+}
 if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = $_POST['return_module'];
 else $return_module = "Users";
 if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = $_POST['return_action'];
@@ -129,10 +160,7 @@ if(isset($_POST['parenttab'])) $parenttab = $_POST['parenttab'];
 
 $log->debug("Saved record with id of ".$return_id);
 
-//Creating the Privileges Flat File
-require_once('modules/Users/CreateUserPrivilegeFile.php');
-createUserPrivilegesfile($focus->id);
-createUserSharingPrivilegesfile($focus->id);
+
 
 if($_REQUEST['modechk'] == 'prefview')
 	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
