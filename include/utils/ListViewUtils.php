@@ -1995,7 +1995,7 @@ function getListQuery($module,$where='')
 			vtiger_invoice.*,
 			vtiger_invoicebillads.*,
 			vtiger_invoiceshipads.*,
-			vtiger_salesorder.subject AS salessubject
+			vtiger_salesorder.subject AS salessubject,
 			vtiger_account.accountname
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
