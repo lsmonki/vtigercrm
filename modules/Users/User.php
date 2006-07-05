@@ -34,6 +34,7 @@ require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Contacts/Contact.php');
+require_once('data/Tracker.php');
 
 // User is used to store customer information.
 class User {
@@ -387,6 +388,7 @@ class User {
 	 */
 	function change_password($user_password, $new_password)
 	{
+		
 		$usr_name = $this->column_fields["user_name"];
 		global $mod_strings;
 		global $current_user;
@@ -402,13 +404,13 @@ class User {
 
 		if (!is_admin($current_user)) {
 			//check old password first
-			$query = "SELECT user_name FROM $this->table_name WHERE id='$this->id'";
+			$query = "SELECT user_name,user_password FROM $this->table_name WHERE id='$this->id'";
 			$result =$this->db->query($query, true);	
 			$row = $this->db->fetchByAssoc($result);
 			$this->log->debug("select old password query: $query");
 			$this->log->debug("return result of $row");
 
-			if($row == null)
+			if($encrypted_password != $this->db->query_result($result,0,'user_password'))
 			{
 				$this->log->warn("Incorrect old password for $usr_name");
 				$this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
@@ -874,6 +876,21 @@ class User {
 		$adb->query($query);
                 $log->debug("Exiting from function saveHomeOrder($id)");
 	}
+
+	/**
+	 * Track the viewing of a detail record.  This leverages get_summary_text() which is object specific
+	 * params $user_id - The user that is viewing the record.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function track_view($user_id, $current_module,$id='')
+	{
+		$this->log->debug("About to call vtiger_tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
+
+		$tracker = new Tracker();
+		$tracker->track_view($user_id, $current_module, $id, '');
+	}	
 
 }
 ?>
