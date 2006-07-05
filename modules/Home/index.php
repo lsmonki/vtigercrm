@@ -140,7 +140,9 @@ foreach ( explode(",",$home_section_order) as $section )
 	if(isPermitted('Dashboard','index') == "yes")
 	{
 		require_once('modules/Dashboard/HomepageDB.php');
-		$home_values['Dashboard']=getHomepageDB();
+		$dashboard = getHomepageDB();
+		if($dashboard != null)
+			$home_values['Dashboard']=$dashboard;
 	}
 	        break;
     }
