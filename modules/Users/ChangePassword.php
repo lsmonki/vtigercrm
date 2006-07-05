@@ -65,6 +65,7 @@ function set_password(form) {
 		window.opener.document.DetailView.new_password.value = form.new_password.value;
 		window.opener.document.DetailView.return_module.value = 'Users';
 		window.opener.document.DetailView.return_action.value = 'DetailView';
+		window.opener.document.DetailView.changepassword.value = 'true';
 		window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value;
 		window.opener.document.DetailView.action.value = 'Save';
 		window.opener.document.DetailView.submit();
@@ -87,7 +88,7 @@ function set_password(form) {
 </tr>
 <?php if (!is_admin($current_user)) {
 	echo "<tr>";
-	echo "<td width='40%' class='dvtCellLabel' align='right'><b>".$mod_strings['LBL_OLD_PASSWORD']."</b></td>\n";
+	echo "<td width='40%' class='dvtCellLabel' align='right'><b> ".$mod_strings['LBL_OLD_PASSWORD']."</b></td>\n";
 	echo "<td width='60%' class='dvtCellInfo'><input name='old_password' type='password' tabindex='1' size='15' maxlength='15'></td>\n";
 	echo "<input name='is_admin' type='hidden' value='1'>";
 	echo "</tr><tr>\n";
