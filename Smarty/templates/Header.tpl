@@ -12,26 +12,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-{literal}
-<style>
-DIV.fixedLay{
-	position:fixed;
-}
-</style>
-<!--[if lte IE 6]>
-<STYLE type=text/css>HTML {
-	OVERFLOW: auto; HEIGHT: 100%;
-}
-BODY {  
-	margin:0 0 0 0;
-	OVERFLOW: auto; HEIGHT: 100%;
-}
-DIV.fixedLay {
-	POSITION: absolute;
-}
-</STYLE>
-<![endif]-->
-{/literal}
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
