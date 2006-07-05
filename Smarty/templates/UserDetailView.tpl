@@ -37,7 +37,8 @@
 		<input type="hidden" name="record" value="{$ID}">
 		<input type="hidden" name="isDuplicate" value=false>
 		<input type="hidden" name="action">
-		{if $CATEGORY eq 'Settings'}
+		<input type="hidden" name="changepassword">
+		{if $CATEGORY neq 'Settings'}
 			<input type="hidden" name="modechk" value="prefview">
 		{/if}
 		<input type="hidden" name="old_password">
