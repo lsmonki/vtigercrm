@@ -22,7 +22,7 @@ global $app_strings;
 global $mod_strings;
 global $app_list_strings;
 global $current_language, $current_user, $adb;
-$current_module_strings = return_module_language($current_language, 'Users');
+$current_module_strings = return_module_language($current_language, 'Settings');
 
 global $list_max_entries_per_page;
 global $urlPrefix;
@@ -64,8 +64,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Users","ShowAuditTrail",'');
 
 $smarty->assign("MOD", $current_module_strings);
+$smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME_PATH",$theme_path);
 $smarty->assign("LIST_HEADER",$focus->getAuditTrailHeader());
 $smarty->assign("LIST_ENTRIES",$focus->getAuditTrailEntries($userid, $navigation_array, $sorder, $sortby));
 $smarty->assign("RECORD_COUNTS", $record_string);
