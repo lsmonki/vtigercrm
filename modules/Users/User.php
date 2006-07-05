@@ -369,7 +369,7 @@ class User {
 		$this->loadPreferencesFromDB($row['user_preferences']);
 
 
-		if ($this->status != "Inactive") $this->authenticated = true;
+		if ($row['status'] != "Inactive") $this->authenticated = true;
 
 		unset($_SESSION['loginattempts']);
 		return $this;

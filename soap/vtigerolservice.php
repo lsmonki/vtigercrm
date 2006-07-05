@@ -343,7 +343,7 @@ function LoginToVtiger($userid,$password)
 	
 	if($password != "")
 	{
-		$objuser->user_name = $userid;
+		$objuser->column_fields['user_name'] = $userid;
 		$objuser->load_user($password);
 		if($objuser->is_authenticated())
 		{
