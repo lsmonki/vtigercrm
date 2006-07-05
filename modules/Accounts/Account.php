@@ -525,7 +525,7 @@ class Account extends CRMEntity {
 			$query .= ' '.$sec_parameter;
 
 		}
-		$query .= " UNION ALL
+		/*$query .= " UNION ALL
 			SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
 			vtiger_troubletickets.status, vtiger_troubletickets.priority,
@@ -545,6 +545,7 @@ class Account extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
 			WHERE vtiger_account.accountid = ".$id;
+		*/
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}

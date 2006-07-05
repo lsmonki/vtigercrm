@@ -126,8 +126,8 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$url_qry .="&order_by=".$order_by;
 	
 	//Retreiving the no of rows
-	$count_query = "select count(*) count ".substr($query, strpos($query,'from'),strlen($query));
-	$count_result = $adb->query(substr($count_query, strpos($count_query,'select'),strpos($count_query,'ORDER')));
+	$count_query = "select count(*) count ".substr($query, stripos($query,'from'),strlen($query));
+	$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER')));
 	$noofrows = $adb->query_result($count_result,0,"count");
 	
 	//Setting Listview session object while sorting/pagination
