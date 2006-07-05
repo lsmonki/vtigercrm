@@ -14,9 +14,9 @@ function getHomepageDB()
 	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
 	$type='recordsforuser';
 	if(!$is_admin)
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.smownerid=".$current_user->id;
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.smownerid=".$current_user->id." and vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns')";
 	else	
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity";
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns')";
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
