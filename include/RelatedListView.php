@@ -124,6 +124,14 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		
 	$query .= ' ORDER BY '.$order_by.' '.$sorder;
 	$url_qry .="&order_by=".$order_by;
+	//Added for PHP version less than 5
+	if (!function_exists("stripos"))
+	{
+		function stripos($query,$needle)
+		{
+			return strpos(strtolower($query),strtolower($needle));
+		}
+	}
 	
 	//Retreiving the no of rows
 	$count_query = "select count(*) count ".substr($query, stripos($query,'from'),strlen($query));
