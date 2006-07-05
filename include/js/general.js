@@ -1630,7 +1630,7 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 	}
-	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
 
 //Function added for Mass select in Popup - Philip
@@ -1692,7 +1692,7 @@ function SelectAll(mod)
 function ShowEmail(id)
 {
        url = 'index.php?module=Emails&action=EmailsAjax&file=DetailView&record='+id;
-       openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+       openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
 
 var bSaf = (navigator.userAgent.indexOf('Safari') != -1);
