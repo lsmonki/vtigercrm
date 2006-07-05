@@ -23,6 +23,141 @@ background-attachment: fixed;
 
 <body class="background">
 <p><img src="themes/images/vtiger.jpg" height="48" width="112"> </p>
+<h1>vtiger CRM 5.0 Beta 2: Release Notes</h1>
+<p><b>Date: July 05, 2006</b></p>
+<p> vtiger CRM 5.0 Beta 2 release is ready for end-user community testing. The intent of this release is to showcase to the vtiger community, the significant changes made after v5 Beta release i.e., changes since May, 06'. The noteworthy features in v5 Beta 2 are New user interface for Settings module, Audit Trails as part of the security management, complete Web mail integration (including Outgoing and Incoming mail capability),  edit custom fields, enhanced user interface for Calendar, optimized the database queries further for List Views function in all the modules, and others.</p>
+<p><b>IMPORTANT NOTES:</b> </p>
+<ul>
+  <li>We strongly recommend CRM community NOT to USE <b>vtiger CRM 5 Beta 2 </b>for any real-time deployments. In case you are looking for an immediate CRM solution for your business, please consider using the <b>vtiger CRM 4.2.3</b> (latest stable version), which can be downloaded from <a href="http://www.vtiger.com"><b>vtiger.com</b></a>.</li>
+  <li>vtiger CRM user interface can be best viewed in Mozilla/Firefox. We have some page loading page formatting issues in Internet Explorer, which will be fixed very soon. </li>
+  <li>JpGraph used for generating dashboards has been replaced by ImageGraph, a third party charting software.</li>
+  <li class="style1">Database migration script is provided for migrating data from v4.2.3 to v5 Beta 2 only for testing purpose. Hence users are strongly recommended to take a backup of the the v4.2.3 data before testing the migration script.</li>
+  <li class="style1">Database migration script is not provided for migrating data from v 5 Beta to v5 Beta 2. Hence users are strongly recommended to take a backup of the the v 5 Beta data before testing the migration script.</li>
+</ul>
+<p><b><i>Appeal to Developers, Testers, Analysts, Writers, and real end users! </i> </b></p>
+<p>Jump-start to the vtiger Public Discussions and post your valuable suggestions &amp; comments to help us deliver a world class open source CRM for you in another few weeks time. It is very simple to start working with vtiger CRM 5 Beta 2,</p>
+<p><b><font size="3">Step 1:</font></b> Browse through <a href="http://www.vtiger.com/products/crm/demo_5beta/index.php"><b>Live Demo</b></a></p>
+<p><b><font size="3">Step 2:</font></b> Download product from the <a href="http://vtiger.com/index.php?option=com_content&amp;task=view&amp;id=70&amp;Itemid=109"><b>vtiger.com</b></a> and install in your favorite Operating System.</p>
+<p><b><font size="3">Step 3:</font></b> Post your suggestions &amp; comments at vtiger Discussions under : <a href="http://forums.vtiger.com/index.php?c=10"><b>vtiger CRM 5.x</b></a> category</p>
+<p><b><a name="TOC3" id="TOC3"></a>Table of Contents</b></p>
+<ol>
+  <li><a href="#Summary5_Beta2">Summary</a></li>
+  <li><a href="#Features5_Beta2">Features</a></li>
+  <li><a href="#v5_Bug_Fixes_Beta2">Bug Fixes</a></li>
+  <li><a href="#KI5_Beta2">Known Issues </a></li>
+</ol>
+<h3><a name="Summary5_Beta2" id="Summary5_Beta2"></a>1. Summary</h3>
+<table border="1" cellpadding="5" cellspacing="0" width="73%">
+  <tbody>
+    <tr bgcolor="#ccccff">
+      <td width="5%"><b><font color="#990000">S. No</font></b></td>
+      <td width="40%"><b><font color="#990000">Item</font></b></td>
+      <td width="55%"><b><font color="#990000">Status</font></b></td>
+    </tr>
+    <tr>
+      <td width="5%">1 </td>
+      <td width="40%">Features</td>
+      <td width="55%">
+        <p>12</p></td>
+    </tr>
+    <tr>
+      <td width="5%">3</td>
+      <td width="40%">Product Size</td>
+      <td width="55%">Platform Independent - <b>5.2 MB<br />
+        </b>Windows (EXE) - <b>26 MB</b><br />
+        Linux (BIN) - <b>40 MB</b></td>
+    </tr>
+    <tr>
+      <td width="5%">4</td>
+      <td width="40%">Database Migration</td>
+      <td width="55%"><b><font color="#ff0000">Available only for the Testing Purpose. Data (Migration script from v4.2.3 to v5 Beta 2) </font></b></td>
+    </tr>
+    <tr>
+      <td width="5%">5</td>
+      <td width="40%">vtiger CRM - PHP Documentation</td>
+      <td width="55%">Download from vtigercrm project in SF.net. URL: <a href="http://api.vtiger.com/index.php">Click Here</a></td>
+    </tr>
+    <tr>
+      <td width="5%">6</td>
+      <td width="40%">Product Documentation</td>
+      <td width="55%"><p>Available at the <a href="http://www.vtiger.com/wiki/index.php/Main_Page">Wiki</a></p></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="Features5_Beta2" id="Features5_Beta2"></a>2. Features</h3>
+<table border="1">
+  <tr>
+    <td><strong>S. No </strong></td>
+    <td><strong>Feature</strong></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Proxy Server configuration for accessing RSS feeds and information based on Ticker Symbol</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Vertical bar chart in Home page </td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Security Management support for Emails module</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Database table prefix support for a deploying vtiger CRM in other working databases</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Audit Trial support for tracking all users system access details </td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Last 5 records visited</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>New User interface for Settings module</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>Print Report function</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>Email Detail View from Related List </td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>Attach multiple documents to email message</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>Delete option for Tag cloud</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>AJAX based edit option for User details </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table border="1" width="60%">
+  <tbody>
+    <tr>
+      <td>
+        <p><b>Note: </b></p>
+        <p><b>Configuring Web services to update Publicly traded company profiles (With Ticker symbol in Accounts)</b> In Account module, if ticker symbol is specified, company profile will be displayed on top of Edit view page. For this specify the server name, port number, user name and password has in class_http/class_http.php under &lt;vtiger CRM Home&gt; directory.</p>
+        <p>Line: 166</p>
+        <p>Assign values to the given variables: $server,$port,$user,$pwd</p></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="v5_Bug_Fixes_Beta2" id="v5_Bug_Fixes_Beta2"></a>Bug Fixes</h3>
+<p>We have fixed about 1000 issues after v5 Beta release. For more details, kindly refer to the vtiger CRM Bug Tracker:</p>
+<p><a href="http://vtiger.fosslabs.com/cgi-bin/trac.cgi/query?status=closed&group=owner&version=5.0.0&order=priority%20">http://vtiger.fosslabs.com/cgi-bin/trac.cgi/query?status=closed&amp;group=owner&amp;version=5.0.0&amp;order=priority </a></p>
+<h3><a name="KI5_Beta2" id="KI5_Beta2"></a>4. Known Issues</h3>
+<p>As of July 5, 2006 there are about 100 open issues. For more details, kindly refer to the vtiger CRM Bug Tracker:</p>
+<p><a href="http://vtiger.fosslabs.com/cgi-bin/trac.cgi/query?status=new&status=assigned&status=reopened&group=owner&version=5.0.0&order=priority">http://vtiger.fosslabs.com/cgi-bin/trac.cgi/query?status=new&amp;status=assigned&amp;status=reopened&amp;group=owner&amp;version=5.0.0&amp;order=priority</a></p>
+<hr />
 <h1>vtiger CRM 5.0 Beta: Release Notes</h1>
 <p><b>Date: May 31, 2006</b></p>
 <p> vtiger CRM 5.0 Beta release is ready for end-user community testing. The intent of this release is to showcase to the vtiger community, the significant changes made after v5 Alpha 5 release i.e., changes since Apr , 06' . The noteworthy features in v5 Beta are complete Web mail integration (including Outgoing and Incoming mail capability), Office Plugin, Outlook Plugin, Customer Portal, Web-Forms, Firefox Toolbar, 
@@ -48,7 +183,6 @@ new user interface for Calendar, optimized the database queries for List Views f
 <ol>
   <li><a href="#Summary5_Beta">Summary</a></li>
   <li><a href="#Features5_Beta">Features</a></li>
-  <li><a href="#v5_Bug_Fixes_Beta">Bug Fixes</a></li>
   <li><a href="#KI5_Beta">Known Issues </a></li>
 </ol>
 <h3><a name="Summary5_Beta" id="Summary5_Beta"></a>1. Summary</h3>
