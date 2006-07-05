@@ -35,7 +35,7 @@
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_AUDIT_TRAIL}</b></td>
 				</tr>
 				<tr>
-					<td valign=top class="small">{$MOD.LBL_USER_DESCRIPTION}</td>
+					<td valign=top class="small">{$MOD.LBL_AUDIT_TRAIL_DESC}</td>
 				</tr>
 				</table>
 				
