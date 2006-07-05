@@ -145,7 +145,8 @@
 <script>
 function validate() {
 	if (!emptyCheck("server","Proxy Server Name","text")) return false
-		if (!emptyCheck("server_username","Proxy User Name","text")) return false
+		if (!emptyCheck("port","Port Number","text")) return false
+			if (!emptyCheck("server_username","Proxy User Name","text")) return false
 				if (!emptyCheck("server_password","Proxy Password","text")) return false
 			return true;
 
