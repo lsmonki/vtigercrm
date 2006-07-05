@@ -34,7 +34,7 @@
 	    <td class="padTab" align="left">
 		<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form">
 		<input type="hidden" name="module" value="Users">
-		<input type="hidden" name="record" value="{$ID}">
+		<input type="hidden" name="record" id="userid" value="{$ID}">
 		<input type="hidden" name="isDuplicate" value=false>
 		<input type="hidden" name="action">
 		<input type="hidden" name="changepassword">
@@ -79,6 +79,7 @@
 	    <tr><td colspan="2">&nbsp;</td></tr>
 	    <tr>
 		<td rowspan="2" nowrap align="right">
+			<input type="button" onclick="showAuditTrail();" value="{$MOD.LBL_VIEW_AUDIT_TRAIL}" class="crmButton small save"></input>
 			{if $CATEGORY eq 'Settings'}
                                	{$DUPLICATE_BUTTON}
                        	{/if}
@@ -291,5 +292,11 @@ function getListViewEntries_js(module,url)
                 }
         );
 }
+function showAuditTrail()
+{
+	var userid =  document.getElementById('userid').value;
+	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=650,height=800,resizable=0,scrollbars=1,left=100");
+}
+
 {/literal}
 </script>
