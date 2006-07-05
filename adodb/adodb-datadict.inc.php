@@ -273,7 +273,7 @@ class ADODB_DataDict {
 			if (!$ok) {
 				$log->fatal("Table Creation Error: Query Failed");
 				$log->fatal(" ");
-				if ($this->debug)]
+				if ($this->debug)
 			       	{
 					$log->fatal("InstallError: ".$conn->ErrorMsg());
 					ADOConnection::outp($conn->ErrorMsg());
