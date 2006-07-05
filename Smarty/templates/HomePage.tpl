@@ -157,7 +157,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		<td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
            </tr>
 	{foreach item=elements from=$tabledetail.Entries}
-	    <tr style="height:25px;">
+	    <tr style="height:25px;" align="left">
 		{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics'}
 		<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
 		{elseif $tabledetail.Title.2 eq 'home_metrics'}
@@ -182,7 +182,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		{else}
                         <div class="MatrixLayer" style="float:left;width:63%;" id="homepagedb">
                         <table width="100%" height="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-                          <tr><td>
+                          <tr align="left"><td>
                                 {$tabledetail}
                           </td></tr>
                         </table>
