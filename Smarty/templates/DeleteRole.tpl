@@ -16,9 +16,17 @@ function openPopup(del_roleid){ldelim}
                 window.open("index.php?module=Users&action=UsersAjax&file=RolePopup&maskid="+del_roleid+"&parenttab=Settings","roles_popup_window","height=425,width=640,toolbar=no,menubar=no,dependent=yes,resizable =no");
         {rdelim}
 </script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tr>
+    <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+    <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+    <br>
+
+    <div align=center>
+
 	{include file='SetMenu.tpl'}
+
 <form name="newProfileForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteRole">
@@ -61,3 +69,11 @@ function openPopup(del_roleid){ldelim}
 </td>
 </tr>
 </table>
+</td>
+</tr>
+</table>
+</div>
+<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+</tr>
+</table>
+<br>
