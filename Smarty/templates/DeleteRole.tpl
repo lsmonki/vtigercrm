@@ -18,8 +18,7 @@ function openPopup(del_roleid){ldelim}
 </script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top" class="showPanelBg">
+	{include file='SetMenu.tpl'}
 <form name="newProfileForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteRole">
