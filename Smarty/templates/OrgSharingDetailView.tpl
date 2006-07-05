@@ -124,7 +124,7 @@ DIV.fixedLay {
                           <td class="listTableRow small">{$elements.2}</td>
                           <td class="listTableRow small">{$elements.3}</td>
                           <td align="center" class="listTableRow small">
-				<a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" height="15" width="16" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" height="15" width="16" border=0></a></td>
+				<a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" border=0></a></td>
                         </tr>
                      {/foreach} 
                     </table>

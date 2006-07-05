@@ -117,7 +117,7 @@ ul {ldelim}color:black;{rdelim}
 					</tr>
 					</table>
 
-					<div id='RoleTreeFull'>
+					<div id='RoleTreeFull'  onMouseMove="displayCoords(event)"> 
                 			        {include file='RoleTree.tpl'}
 		                	</div>
 
