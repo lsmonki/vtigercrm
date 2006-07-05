@@ -1,7 +1,11 @@
 
 <table width="100%" border="0">
 	<tr class="small">
-		<td align="left" >{$RECORD_COUNTS}</td>
+		<td align="left" >
+		{if $LIST_ENTRIES neq ''}
+			{$RECORD_COUNTS}
+		{/if}
+		</td>
 			{$NAVIGATION}
 	</tr>
 </table>
@@ -17,6 +21,11 @@
 		 {foreach item=data from=$entity}	
 			 <td>{$data}</td>
 		 {/foreach}
+	</tr>
+	{foreachelse}
+	<tr bgcolor=white>
+	<td colspan="4" height="300px" align="center"><b><font size="6px">{$MOD.LBL_NO_DATA}</font></b>
+	</td>
 	</tr>
 	{/foreach}
 </table>
