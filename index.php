@@ -562,8 +562,12 @@ $server = $adb->query_result($result,0,'server');
 
 if($server == 'enabled')
 {
+	if($record == '')
+		$auditrecord = 0;
+	else
+		$auditrecord = $record;	
 	$date_var = date('YmdHis');
-	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',$date_var)";
+	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',".$auditrecord.",$date_var)";
 	$adb->query($query);
 }
 
