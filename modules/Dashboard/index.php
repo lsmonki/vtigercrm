@@ -78,7 +78,7 @@ $log = LoggerManager::getLogger('dashboard');
 			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" alt="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." title="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." border=0></td>	
+						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" border=0></td>	
 					 <td style="padding-right:10px"><img src="<?echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
 				</tr>
 				</table>
@@ -103,8 +103,8 @@ $log = LoggerManager::getLogger('dashboard');
                <td class="small" align="left" width="5%">
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" alt="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
-                <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" alt="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" border="0"></td>
+                <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" border="0"></td>
 			</tr>
 		</table>	
 	</td>
