@@ -299,7 +299,7 @@
 
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}/inventory.gif" alt="{$MOD.INVENTORYNOTIFICATION}" title="{$MOD.INVENTORYNOTIFICATION}"></a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.INVENTORYNOTIFICATION}" title="{$MOD.INVENTORYNOTIFICATION}"></a></td>
 							<td class=big valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td>
 						</tr>
 						<tr>
@@ -473,11 +473,11 @@
 					<!-- empty-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}proxy.gif" alt="{$MOD.LBL_PROXY_SETTINGS}" title="{$MOD.LBL_PROXY_SETTINGS}"></a></td>
 							<td class=big valign=top><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td>
 						</tr>
 						<tr>
-							<td class="small" valign=top>&nbsp;</td>
+							<td class="small" valign=top>{$MOD.LBL_PROXY_DESCRIPTION}</td>
 						</tr>
 
 						</table>
@@ -486,12 +486,12 @@
 					<!-- empty-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}audit.gif" alt="{$MOD.LBL_AUDIT_TRAIL}" title="{$MOD.LBL_AUDIT_TRAIL}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td>
 						</tr>
 
 						<tr>
-							<td class="small" valign=top>&nbsp;</td>
+							<td class="small" valign=top>{$MOD.LBL_AUDIT_DESCRIPTION}</td>
 						</tr>
 						</table>
 					</td>
