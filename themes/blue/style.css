@@ -2601,7 +2601,8 @@ ul {
 }
 
 .settingsUI {
-
+	
+	text-align:left;
 	background-color:#efefef;
 	border:2px solid #777777;
 
@@ -2609,6 +2610,7 @@ ul {
 
 
 .settingsTabHeader {
+	text-align:left;
 	font-family:  Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height:25px;
@@ -2623,6 +2625,7 @@ ul {
 }
 
 .settingsTabList {
+	text-align:left;
 	font-family:  Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	line-height:20px;
@@ -2634,6 +2637,7 @@ ul {
 	border-bottom:1px solid #d3d3d3;
 }
 .settingsTabSelected {
+	text-align:left;
 	font-family:  Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	line-height:20px;
