@@ -41,9 +41,9 @@ elseif(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 	$sql="select * from vtiger_announcement where creatorid=".$current_user->id;
 	$is_announce=$adb->query($sql);
 	if($adb->num_rows($is_announce) > 0)
-		$query="update vtiger_announcement set announcement=".$adb->formatString("announcement","announcement",$announcement).",time=".$adb->formatString("announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
+		$query="update vtiger_announcement set announcement=".$adb->formatString("vtiger_announcement","announcement",$announcement).",time=".$adb->formatString("vtiger_announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
 	else
-		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("announcement","announcement",$announcement).",'announcement','".$date_var."')";
+		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("vtiger_announcement","announcement",$announcement).",'announcement','".$date_var."')";
 	$result=$adb->query($query);
 	echo $announcement;
 }
