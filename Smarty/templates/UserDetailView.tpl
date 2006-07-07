@@ -55,7 +55,7 @@
 		    <td style="border-bottom:1px dashed #CCCCCC;">
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
 			<tr>
-			    <td rowspan="2"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>	
+			    <td rowspan="2"><img src="{$IMAGE_PATH}ico-users.gif" align="absmiddle"></td>	
 			    <td>
 			    {if $CATEGORY eq 'Settings'}
 				<span class="heading2">
