@@ -43,8 +43,8 @@ $portal_inputs.='<div style="display:block;position:relative;" id="orgLay">
 
 		<tr>
 			<td colspan="2" align="center">
-					<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
-					<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL}  " class="classBtn" onclick="fninvsh(\'orgLay\');" type="button">
+					<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="classBtn" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
+					<input name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="classBtn" onclick="fninvsh(\'orgLay\');" type="button">
 			</td>
 		</tr>
 		<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
