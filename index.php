@@ -360,7 +360,24 @@ if($use_current_login)
         foreach ($moduleList as $mod) {
                 $moduleDefaultFile[$mod] = "modules/".$currentModule."/index.php";
         }
+
+	//auditing
+
+	$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
+
+	$result = $adb->query($qry);
+	$server = $adb->query_result($result,0,'server');
 	
+	if($server == 'enabled')
+	{
+		if($record == '')
+			$auditrecord = 0							else
+			$auditrecord = $record;	
+
+	$date_var = date('YmdHis');
+											$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',".$auditrecord.",$date_var)";
+												$adb->query($query);
+											}	
 	
 	$log->debug('Current user is: '.$current_user->user_name);
 }
@@ -552,24 +569,6 @@ else
 	$theme = $default_theme;
 }
 
-	
-
-//auditing
-
-$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
-$result = $adb->query($qry);
-$server = $adb->query_result($result,0,'server');
-
-if($server == 'enabled')
-{
-	if($record == '')
-		$auditrecord = 0;
-	else
-		$auditrecord = $record;	
-	$date_var = date('YmdHis');
-	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',".$auditrecord.",$date_var)";
-	$adb->query($query);
-}
 
 //logging the security Information
 $seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.' :: RecordID --> '.$record.' #######');
