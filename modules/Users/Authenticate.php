@@ -40,7 +40,7 @@ if($focus->is_authenticated())
 {
 
 	$date_var = date('YmdHis');
-	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate',$date_var)";
+	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate',0,$date_var)";
 	$adb->query($query);
 
 
