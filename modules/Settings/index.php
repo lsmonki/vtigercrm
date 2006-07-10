@@ -19,6 +19,9 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
+$smarty->assign("APP", $app_strings);
+$smarty->assign("MODULE", 'Settings');
+$smarty->assign("CATEGORY", 'Settings');
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->display("Settings.tpl");

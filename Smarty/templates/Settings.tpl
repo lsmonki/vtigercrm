@@ -12,7 +12,7 @@
 
 <style type="text/css">@import url(themes/blue/style.css);</style>
 <body class=small>
-<br>
+	{include file="Buttons_List1.tpl"}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
         <td valign="top"><img src="themes/blue/images/showPanelTopLeft.gif"></td>
