@@ -691,6 +691,7 @@ $mod_strings = Array(
 'LBL_CUSTOM_MAPP_INFO'=>'Only Leads module support mapping of fields with other modules.',
 'LBL_MAPPING_OTHER_MODULES'=>'Mapping with other Modules',
 'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
+'LBL_ROLE_HIERARCHY_TREE'=>'Roles & Hierarchy Tree',
 'LBL_EDIT_FIELD_MAPPING'=>'Editing Field Mapping',
 );
 
