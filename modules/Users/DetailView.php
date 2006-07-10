@@ -160,6 +160,10 @@ if (is_admin($current_user))
 
 }
 
+if(is_admin($current_user))
+	$smarty->assign("IS_ADMIN", true);
+else
+	$smarty->assign("IS_ADMIN", false);
 
 $lead_tables = Array('vtiger_users','vtiger_user2role');
 $tabid = getTabid("Users");

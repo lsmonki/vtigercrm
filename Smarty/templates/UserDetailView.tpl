@@ -79,7 +79,9 @@
 	    <tr><td colspan="2">&nbsp;</td></tr>
 	    <tr>
 		<td rowspan="2" nowrap align="right">
+		{if $IS_ADMIN eq 'true'}
 			<input type="button" onclick="showAuditTrail();" value="{$MOD.LBL_VIEW_AUDIT_TRAIL}" class="crmButton small save"></input>
+		{/if}
 			{if $CATEGORY eq 'Settings'}
                                	{$DUPLICATE_BUTTON}
                        	{/if}
