@@ -629,8 +629,10 @@ else
 {
         $theme = $default_theme;
 }
-
-if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax")
+$Ajx_module= $module;
+if($module == 'Events')
+	$Ajx_module = 'Activities';
+if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $Ajx_module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax")
 {
 	// Under the SPL you do not have the right to remove this copyright statement.	
 	$copyrightstatement="<style>
