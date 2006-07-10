@@ -138,7 +138,7 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $adb->println("company_name_array");
 $adb->println($company_name_array);
 
-$cloudtag = Array ('InvoiceTag', 'AccntTag', 'ContactTag', 'TktTag');
+$cloudtag = Array ('SO_vendtl', 'X-CEED', 'X-CEED', 'vtiger_50usr');
 
 for($i = 0; $i < $company_name_count; $i++)
 {
