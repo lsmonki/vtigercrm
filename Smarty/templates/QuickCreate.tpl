@@ -363,7 +363,6 @@
 							{/foreach}
 						</tr>
 							{/foreach}
-						<tr><td colspan="4">&nbsp;</td></tr>	
 					
 					</table>	
 		
