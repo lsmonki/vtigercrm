@@ -1630,7 +1630,7 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 	}
-	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
 
 //Function added for Mass select in Popup - Philip
