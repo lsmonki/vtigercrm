@@ -19,7 +19,7 @@
 	<tr><td colspan="4"><hr></td></tr>
 
 	<tr><td colspan="4" class="genHeaderSmall">
-		<b><font class="required">*</font>Note: Donot remove or alter the values within {ldelim}  {rdelim}</b>
+		<b><font class="required">*</font>{$CMOD.LBL_NOTE_DO_NOT_REMOVE_INFO}</b>
 		</td>
 	</tr>
 
