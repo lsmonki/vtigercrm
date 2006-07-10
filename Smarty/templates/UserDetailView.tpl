@@ -121,9 +121,8 @@
 					   {assign var=keycntimage value=$data.cntimage}
 					   {assign var=keyadmin value=$data.isadmin}
 					   
-					   <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
 					   {if $label ne ''}
-					   <td class="dvtCellLabel" align=right width=25%>{$label}</td>
+					   <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{include file="DetailViewUI.tpl"}
 					   {else}
                                     	   <td class="dvtCellLabel" align=right>&nbsp;</td>
