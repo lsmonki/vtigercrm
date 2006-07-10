@@ -422,5 +422,5 @@ function CreateReport(module)
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
-	window.open(winName, "ReportWindow","width=760px,height=620px,scrollbars=yes");
+	window.open(winName, "ReportWindow","width=760px,height=685px,scrollbars=yes");
 }
