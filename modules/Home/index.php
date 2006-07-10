@@ -54,7 +54,7 @@ if($row != null)
 }
 if( count($home_section_order) < 1 )
 {
-	$home_section_order = array("ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","HDB");
+	$home_section_order = array("ALVT","HDB","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI");
 }
 
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
