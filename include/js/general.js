@@ -1692,7 +1692,7 @@ function SelectAll(mod)
 function ShowEmail(id)
 {
        url = 'index.php?module=Emails&action=EmailsAjax&file=DetailView&record='+id;
-       openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
+       openPopUp('xComposeEmail',this,url,'createemailWin',820,695,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
 
 var bSaf = (navigator.userAgent.indexOf('Safari') != -1);
