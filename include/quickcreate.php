@@ -35,7 +35,12 @@ $smarty->assign("APP",$app_strings);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("MODULE",$module);
+if($module == 'Activities')
+	$smarty->assign("MODULE", $app_strings['Task']);
+elseif($module == "HelpDesk")
+	$smarty->assign("MODULE", $app_strings['Ticket']);
+else
+	$smarty->assign("MODULE",rtrim($module,'s'));
 $smarty->assign("USERID",$current_user->id);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
