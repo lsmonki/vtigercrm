@@ -2442,4 +2442,22 @@ function getSingleFieldValue($tablename, $fieldname, $idname, $id)
 	return $fieldval;
 }
 
+/**	Function used to retrieve the announcements from database
+ *	The function accepts no argument and returns the announcements
+ *	return string $announcement  - List of announments for the CRM users 
+ */
+
+function get_announcements()
+{
+	global $adb;
+	$sql="select * from vtiger_announcement order by time";
+	$result=$adb->query($sql);
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$announce = getUserName($adb->query_result($result,$i,'creatorid')).' :  '.$adb->query_result($result,$i,'announcement').'   ';
+		if($adb->query_result($result,$i,'announcement')!='')
+			$announcement.=$announce;
+	}
+	return $announcement;
+}
 ?>

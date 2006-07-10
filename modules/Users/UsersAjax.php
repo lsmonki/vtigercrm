@@ -20,20 +20,7 @@ if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
 {
 	require_once('modules/Users/CreateSharingRule.php');	
 }
-elseif(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
-{
-	$announcement='';
-	$sql="select * from vtiger_announcement order by time";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-		$announce = getUserName($adb->query_result($result,$i,'creatorid')).' :  '.$adb->query_result($result,$i,'announcement').'   ';
-		if($adb->query_result($result,$i,'announcement')!='')
-			$announcement.=$announce;
-	}
-	echo $announcement; 
-		
-}elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
+elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
 {
 	$date_var = date('YmdHis');
 	$announcement = $_REQUEST['announcement'];

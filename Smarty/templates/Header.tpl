@@ -17,7 +17,7 @@
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
-	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small onLoad="Announcement_rss()">
+	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small>
 	<a name="top"></a>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
@@ -34,7 +34,7 @@
 		<td width=100% align=center>
 		<table border=0 cellspacing=0 cellpadding=2 width=90% class="rssDisplay">
 		 <tr>
-		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;</marquee></td>
+		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee></td>
 		 {*<td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>*}
 		 </tr>
 		</table>
@@ -178,24 +178,6 @@ function fetch_calc()
 		{rdelim}
 	);
 {rdelim}
-
-function Announcement_rss()
-{ldelim}
-	new Ajax.Request(
-                'index.php',
-                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-                        method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&announce_rss=yes',
-                        onComplete: function(response)
-                                        {ldelim}
-						if($("rss").innerHTML != response.responseText)
-							$("rss").innerHTML=response.responseText;
-                                        {rdelim}
-                {rdelim}
-        );
-
-{rdelim}
-setInterval("Announcement_rss()",300000)
 </script>
 
 <script>
