@@ -125,13 +125,13 @@ if(isset($_REQUEST['module']))
 {
 	$module = $_REQUEST['module'];	
 
-	if ($dir = @opendir("./modules")) 
+	if ($dir = @opendir($root_directory."modules")) 
 	{
 		while (($file = readdir($dir)) !== false) 
 		{
            		if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic") 
 			{
-			   	if(is_dir("./modules/".$file)) 
+			   	if(is_dir($root_directory."modules/".$file)) 
 				{
 					if(!($file[0] == '.')) 
 					{
