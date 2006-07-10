@@ -15,7 +15,7 @@
 <tr>
 <td>
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class=small>
-	<tr>	<td class="qcHeader" background="{$IMAGE_PATH}qcBg.gif"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$MODULE}</b></td><td class="qcHeader" align=right><img src="{$IMAGE_PATH}qcName.gif"></td></tr>
+	<tr>	<td class="qcHeader" background="{$IMAGE_PATH}qcBg.gif"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$QCMODULE}</b></td><td class="qcHeader" align=right><img src="{$IMAGE_PATH}qcName.gif"></td></tr>
 	</table>
 
 	<table border=0 cellspacing=0 cellpadding=5 width="100%" class=small>

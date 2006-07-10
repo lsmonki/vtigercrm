@@ -14,7 +14,7 @@ require_once("include/utils/CommonUtils.php");
 require_once("include/FormValidationUtil.php");
 
 global $mod_strings,$current_user;
-global $app_strings;
+global $app_strings, $currentModule;
 global $adb;
 global $app_list_strings;
 global $theme;
@@ -36,15 +36,16 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 if($module == 'Activities')
-	$smarty->assign("MODULE", $app_strings['Task']);
+	$smarty->assign("QCMODULE", $app_strings['Task']);
 elseif($module == "HelpDesk")
-	$smarty->assign("MODULE", $app_strings['Ticket']);
+	$smarty->assign("QCMODULE", $app_strings['Ticket']);
 else
-	$smarty->assign("MODULE",rtrim($module,'s'));
+	$smarty->assign("QCMODULE",rtrim($module,'s'));
 $smarty->assign("USERID",$current_user->id);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+$smarty->assign("MODULE", $currentModule);
 $smarty->assign("CATEGORY",$category);
 
 $smarty->display("QuickCreate.tpl");
