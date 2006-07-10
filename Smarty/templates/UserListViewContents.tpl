@@ -36,9 +36,9 @@
 	<td class="listTableRow small" valign=top>{$listvalues.7}</td>
 	<td class="listTableRow small" valign=top>{$listvalues.6}</td>
 	{if $listvalues.4 eq 'Active'}
-	<td class="listTableRow small active" valign=top>{$listvalues.4}</td>
+	<td class="listTableRow small active" valign=top>{$APP[$listvalues.4]}</td>
 	{else}
-	<td class="listTableRow small inactive" valign=top>{$listvalues.4}</td>
+	<td class="listTableRow small inactive" valign=top>{$APP[$listvalues.4]}</td>
 	{/if}	
 
 </tr>
