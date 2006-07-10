@@ -28,6 +28,14 @@
 		<td colspan="2"><img src="{$IMAGE_PATH}report_newHdr.gif" ></td>
 		</tr>
 		<tr>
+		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
+		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
+		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
+		&nbsp;<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
+		</td>
+		</tr>
+		<tr>
 		<td width="25%" valign="top" bgcolor="#CCCCCC" >
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 			<tr><td id="step1label" class="lvtSel" height="30" style="padding-left:10px;">1. {$MOD.LBL_REPORT_DETAILS}</td></tr>
