@@ -164,7 +164,7 @@ function SaveRssFeeds()
 	<td>&nbsp;</td>
 	</tr>
 </table>
-	<div id="PopupLay" class="fixedLay">
+	<div id="PopupLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
 	<td class="genHeaderSmall" align="left"><img src="{$IMAGE_PATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
