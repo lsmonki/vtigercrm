@@ -52,6 +52,13 @@
 	<td class="lvtCol" style="padding: 5px;" align="right"><b>{$MOD.LBL_SUBJECT}</b></td>
 	<td class="dvtCellLabel" style="padding: 5px;">&nbsp;{$elements.value}</td>
    </tr>
+   <tr>
+	<td colspan="3" class="dvtCellLabel" style="padding: 10px;" align="center"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " alt="{$MOD.LBL_FORWARD_BUTTON}" title="{$MOD.LBL_FORWARD_BUTTON}" class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
+	<input type="button" title="{$APP.LBL_EDIT}" alt="{$APP.LBL_EDIT}" name="edit" value=" {$APP.LBL_EDIT} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+
+	<input name="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_LABEL}" alt="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="classWebBtn" type="button" onClick="window.close()">
+	&nbsp;</td>
+   </tr>
    {elseif $elements.fldname eq 'description'}
    <tr>
 	<td style="padding: 5px;" colspan="3" valign="top"><div style="overflow:auto;height:415px;width:100%;">{$BLOCKS.4.Description.value}</div></td>
