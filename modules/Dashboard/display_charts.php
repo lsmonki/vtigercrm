@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 
-	require_once("modules/Dashboard/Entity_charts.php");
+require_once("modules/Dashboard/Entity_charts.php");
 	
 global $tmp_dir;
 global $mod_strings,$app_strings;
@@ -131,106 +131,6 @@ $graph_array = Array(
 
 
 ?>
-
-<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
-<tr><td style="height:2px"></td></tr>
-<tr>
-	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap><? echo $app_strings['Analytics'];?> &gt; <a class="hdrLink" href="index.php?action=index&parenttab=Analytics&module=Dashboard"><? echo $app_strings['Dashboard'] ?></a></td>
-
-	<td  nowrap width="8%">
-		<table border=0 cellspacing=0 cellpadding=0>
-		<tr>
-			<td class="sep1" style="width:1px;"></td>
-			<td class=small>
-				<table border=0 cellspacing=0 cellpadding=5>
-				<tr>
-						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" alt="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." title="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." border=0></td>	
-					 <td style="padding-right:10px"><img src="<?echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
-				</tr>
-				</table>
-	</td>
-			</tr>
-			</table>
-	</td>
-	<td width="20">&nbsp;</td>
-                <td class="small" width="10%" align="left">
-				<table border=0 cellspacing=0 cellpadding=5>
-
-				<tr>
-					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="<?echo $image_path;?>btnL3Calendar.gif" alt="<? echo $app_strings['LBL_CALENDAR_ALT']; ?>" title="<? echo $app_strings['LBL_CALENDAR_TITLE']; ?>" border=0></a></a></td>
-					<td style="padding-right:0px"><a href="javascript:;"><img src="<?echo $image_path;?>btnL3Clock.gif" alt="<? echo $app_strings['LBL_CLOCK_ALT']; ?>" title="<? echo $app_strings['LBL_CLOCK_TITLE']; ?>" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
-					<td style="padding-right:0px"><a href="#"><img src="<?echo $image_path;?>btnL3Calc.gif" alt="<? echo $app_strings['LBL_CALCULATOR_ALT']; ?>" title="<? echo $app_strings['LBL_CALCULATOR_TITLE']; ?>" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
-					<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="<?echo $image_path;?>tbarChat.gif" alt="<? echo $app_strings['LBL_CHAT_ALT']; ?>" title="<? echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
-                    </td>	
-				</tr>
-				</table>
-	</td>
-	<td width="20">&nbsp;</td>
-               <td class="small" align="left" width="5%">
-		<table border=0 cellspacing=0 cellpadding=5>
-			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" alt="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
-                <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" alt="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
-			</tr>
-		</table>	
-	</td>
-	<td width="20">&nbsp;</td>
-                <td class="small" align="left">	
-				<table border=0 cellspacing=0 cellpadding=5>
-				<tr>
-				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onClick="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
-				</tr>
-				</table>
-	</td>			
-	</tr>
-	</table>
-	</td>
-</tr>
-<tr><td style="height:2px"></td></tr>
-</TABLE>
-	
-
-<!--
-</TABLE> -->
-
-
-
-<table class="dashMain" cellspacing="0" cellpadding="0" align="center">
-   <tr>
-    <th colspan="3"><img src="themes/blue/images/topBnr.gif" width="840" height="67" /></th>
-  </tr>
-  <tr><td colspan="3">&nbsp;</td></tr>
-
-  <tr>
-    <td width="20%" nowrap valign="top">
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF">
-          	<tr><td class="dashMnuUnSel">
-                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
-               </td></tr>              
-               <?php 
-                 $mnuHTML = "";
-                 foreach($graph_array as $key=>$value)   
-                 {
-                    if($type == $key)
-                    {
-                         $mnuHTML .= '<tr><td class="dashMnuSel">
-                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
-                                      </td></tr>';
-                    }else
-                    {
-                         $mnuHTML .= '<tr><td class="dashMnuUnSel">
-                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
-                                      </td></tr>';
-                    }
-                 }
-                 echo $mnuHTML;
-               ?>
-	    </table>
-	</td>
-     <td width="79%" bgcolor="#CBCBCB" valign="top" style="padding-right:10px;" align="left">
-		<table class="dashInner"  cellpadding="0" cellspacing="0">
-		<tr><td class="lvtHeaderText" align="left" height="10"></td></tr>
-		<tr><td><div id="dashChart">
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 				<!--char goes here-->
 				<?php 
@@ -534,12 +434,3 @@ $graph_array = Array(
 	?>
 
 			</table>
-	</div></td></tr>
-		</table>
-	  <br />
-</td>
-
- <td width="1%"></td>
-  </tr>
-  <tr><td colspan="3" height="30">&nbsp;</td></tr>
-</table>

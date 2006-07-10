@@ -196,8 +196,8 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&pbss_refresh=true"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
-[<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
+</em>[<a href="javascript:;" onClick="loadDashBoard('DashboardHome');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+[<a href="index.php?module=<?php echo $currentModule;?>&action=index&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php }
 }

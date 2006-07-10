@@ -132,9 +132,8 @@ $log = LoggerManager::getLogger('dashboard');
 
   <tr>
     <td width="20%" nowrap valign="top">
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF">
-			<tr><td class="dashMnuSel">
-                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
+		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF" style="cursor:pointer;">
+			<tr><td class="dashMnuSel" id="DashboardHome_mnu" onClick="loadDashBoard('DashboardHome');"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
                </td></tr>
                <?php 
                  $mnuHTML = "";
@@ -142,13 +141,11 @@ $log = LoggerManager::getLogger('dashboard');
                  {
                     if($type == $key)
                     {
-                         $mnuHTML .= '<tr><td class="dashMnuSel">
-                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
+                         $mnuHTML .= '<tr><td id="'.$key.'_mnu" class="dashMnuSel" onClick="loadDashBoard(\''.$key.'\');">'.$value.'</a>
                                       </td></tr>';
                     }else
                     {
-                         $mnuHTML .= '<tr><td class="dashMnuUnSel">
-                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
+                         $mnuHTML .= '<tr><td id="'.$key.'_mnu" class="dashMnuUnSel" onClick="loadDashBoard(\''.$key.'\');">'.$value.'</a>
                                       </td></tr>';
                     }
                  }
@@ -161,98 +158,8 @@ $log = LoggerManager::getLogger('dashboard');
 		<table class="dashInner"  cellpadding="0" cellspacing="0">
 		<tr><td class="lvtHeaderText" align="left" height="10"></td></tr>
 		<tr><td><div id="dashChart">
-			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-			  <tr>
-				<td><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="le">
-				 		 <tr>
-
-				 		   <td rowspan="2" valign="top"><span class="dashSerial">1</span></td>
-				 		   <td nowrap><span class="genHeaderSmall"><?echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
-				 		 </tr>
-					     <tr>
-					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
-					     </tr>
-					</table>
-
-				</td>
-			  </tr>
-			  <tr>
-				<td height="200"><?php include ("modules/Dashboard/Chart_pipeline_by_sales_stage.php");?></td>
-			  </tr>
-			  <tr>
-				<td><hr noshade="noshade" size="1" /></td>
-			  </tr>
-
-			  <!-- SCEOND CHART  -->
-			  
-			  <tr>
-				<td><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="le">
-				 		 <tr>
-				 		   <td rowspan="2" valign="top"><span class="dashSerial">2</span></td>
-				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_MONTH_BY_OUTCOME'];?></span></td>
-				 		 </tr>
-					     <tr>
-
-					       <td><span class="big"><? echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
-					     </tr>
-					</table>
-				</td>
-			  </tr>
-			  <tr>
-				<td height="200"><?php include ("modules/Dashboard/Chart_outcome_by_month.php"); ?></td>
-
-			  </tr>
-			  <tr>
-				<td><hr noshade="noshade" size="1" /></td>
-			  </tr>
-			  
-			  <!-- THIRD CHART  -->
-			  
-			  <tr>
-				<td><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="le">
-				 		 <tr>
-				 		   <td rowspan="2" valign="top"><span class="dashSerial">3</span></td>
-				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME'];?></span></td>
-				 		 </tr>
-					     <tr>
-
-					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
-					     </tr>
-					</table>
-				</td>
-			  </tr>
-			  <tr>
-				<td height="200"><?php include ("modules/Dashboard/Chart_lead_source_by_outcome.php");?></td>
-
-			  </tr>
-			  <tr>
-				<td><hr noshade="noshade" size="1" /></td>
-			  </tr>
-			  
-			  <!-- FOURTH CHART  -->
-			  
-			  <tr>
-				<td><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="le">
-				 		 <tr>
-				 		   <td rowspan="2" valign="top"><span class="dashSerial">4</span></td>
-				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_FORM_TITLE'];?></span></td>
-				 		 </tr>
-					     <tr>
-
-					       <td><span class="big"><? echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
-					     </tr>
-					</table>
-				</td>
-			  </tr>
-			  <tr>
-				<td height="200"><?php include ("modules/Dashboard/Chart_pipeline_by_lead_source.php") ?></td>
-
-			  </tr>
-			  <tr>
-				<td><hr noshade="noshade" size="1" /></td>
-			  </tr>
-			</table>
-	</div></td></tr>
+			<? require_once('modules/Dashboard/DashboardHome.php'); ?>	
+		</div></td></tr>
 		</table>
 	  <br />
 </td>
@@ -261,4 +168,29 @@ $log = LoggerManager::getLogger('dashboard');
   </tr>
   <tr><td colspan="3" height="30">&nbsp;</td></tr>
 </table>
-
+<script>
+var gMnuSel = 'DashboardHome_mnu';
+function loadDashBoard(type)
+{
+	show('status');
+	if(type != 'DashboardHome')
+		url = 'module=Dashboard&action=DashboardAjax&file=display_charts&type='+type;
+	else	
+		url = 'module=Dashboard&action=DashboardAjax&file=DashboardHome';
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: url,
+			onComplete: function(response)
+			{
+				$("dashChart").innerHTML=response.responseText;
+				hide('status');
+				$(gMnuSel).className = 'dashMnuUnSel';
+				gMnuSel = type+'_mnu';
+				$(gMnuSel).className = 'dashMnuSel';	
+			}
+		}
+	);	
+}
+</script>
