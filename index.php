@@ -371,13 +371,14 @@ if($use_current_login)
 	if($server == 'enabled')
 	{
 		if($record == '')
-			$auditrecord = 0							else
+			$auditrecord = 0;						
+		else
 			$auditrecord = $record;	
 
-	$date_var = date('YmdHis');
-											$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',".$auditrecord.",$date_var)";
-												$adb->query($query);
-											}	
+		$date_var = date('YmdHis');
+		$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',".$auditrecord.",$date_var)";
+		$adb->query($query);
+	}	
 	
 	$log->debug('Current user is: '.$current_user->user_name);
 }
