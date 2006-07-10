@@ -190,23 +190,22 @@ function DeleteTag(id)
 			{assign var=keycntimage value=$data.cntimage}
 			   {assign var=keyadmin value=$data.isadmin}
 							   
-			   <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
 
 				{if $label ne ''}
 					{if $keycntimage ne ''}
-						<td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
+						<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$keycntimage}</td>
 					{elseif $label neq 'Tax Class'}<!-- Avoid to display the label Tax Class -->
 						{if $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
-							<td class="dvtCellLabel" align=right width=25%>{$label} ({$keycursymb})</td>
+							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label} ({$keycursymb})</td>
 						{else}
-							<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{/if}
 					{/if}  
-						{if $EDIT_PERMISSION eq 'yes'}
-							{include file="DetailViewUI.tpl"}
-						{else}
-							{include file="DetailViewFields.tpl"}
-						{/if}
+					{if $EDIT_PERMISSION eq 'yes'}
+						{include file="DetailViewUI.tpl"}
+					{else}
+						{include file="DetailViewFields.tpl"}
+					{/if}
 				{else} 
 					<td class="dvtCellLabel" align=right>&nbsp;</td>
 					<td class="dvtCellInfo" align=left >&nbsp;</td>
