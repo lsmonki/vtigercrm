@@ -186,6 +186,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
                                 {$tabledetail}
                           </td></tr>
                         </table>
+			</div>
                 {/if}
 {/foreach}
 </div>
