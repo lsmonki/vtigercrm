@@ -89,7 +89,39 @@ class User {
 	var $module_id='id';
 	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
 	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
-	var $column_fields = Array();
+	var $column_fields = Array('user_name'=>'','is_admin' =>'','user_password'=>'','confirm_password'=>'',
+	'first_name' =>'',
+	'last_name' =>'',
+	'roleid' =>'',
+	'email1' =>'',
+	'status' =>'',
+	'activity_view' =>'',
+	'lead_view' =>'',
+	'currency_id' =>'',
+	'hour_format' =>'',
+	'end_hour' =>'',
+	'start_hour' =>'',
+	'title' =>'',
+	'phone_work' =>'',
+	'department' =>'',
+	'phone_mobile' =>'',
+	'reports_to_id' =>'',
+	'phone_other' =>'',
+	'email2' =>'',
+	'phone_fax' =>'',
+	'yahoo_id' =>'',
+	'phone_home' =>'',
+	'imagename' =>'',
+	'date_format' =>'',
+	'tagcloud' =>'',
+	'signature' =>'',
+	'description' =>'',
+	'address_street' =>'',
+	'address_city' =>'',
+	'address_state' =>'',
+	'address_postalcode' =>'',
+	'address_country' =>'',
+);
 	var $table_name = "vtiger_users";
 
 	// This is the list of fields that are in the lists.
@@ -158,7 +190,6 @@ class User {
 		$this->log = LoggerManager::getLogger('user');
 		$this->log->debug("Entering User() method ...");
 		$this->db = new PearDatabase();
-		$this->column_fields = getColumnFields('Users');
 		$this->log->debug("Exiting User() method ...");
 
 	}
