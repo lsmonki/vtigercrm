@@ -30,9 +30,9 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
-		&nbsp;<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
+		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
+		&nbsp;<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
 		<tr>
@@ -111,9 +111,9 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
-		&nbsp;<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
+		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
+		&nbsp;<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
 	</form>	

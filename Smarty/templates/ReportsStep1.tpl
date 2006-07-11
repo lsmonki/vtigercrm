@@ -36,9 +36,9 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
-		<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
+		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
+		<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
 		<tr>
@@ -105,9 +105,9 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
-		<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
+		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
+		<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
 	</form>	
