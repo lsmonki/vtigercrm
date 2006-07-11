@@ -894,47 +894,47 @@ class CRMEntity
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
 		  $groupname = $_REQUEST['assigned_group_name'];
-		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_leaddetails')
+		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_leaddetails')
 		  {
 			  insert2LeadGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_account')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_account')
 		  {
 			  insert2AccountGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_contactdetails')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_contactdetails')
 		  {
 			  insert2ContactGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_potential')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_potential')
 		  {
 			  insert2PotentialGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_quotes')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_quotes')
 		  {
 			  insert2QuoteGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_salesorder')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_salesorder')
 		  {
 			  insert2SoGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_invoice')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_invoice')
 		  {
 			  insert2InvoiceGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_purchaseorder')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_purchaseorder')
 		  {
 			  insert2PoGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_activity') 
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_activity') 
 		  {
 			  insert2ActivityGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_troubletickets') 
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_troubletickets') 
 		  {
 			  insert2TicketGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_campaign')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_campaign')
 		  {
 			  insert2CampaignGroupRelation($this->id,$groupname);
 		  }
