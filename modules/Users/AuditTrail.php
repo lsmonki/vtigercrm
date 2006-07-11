@@ -59,19 +59,36 @@ class AuditTrail{
 		
 	var $default_order_by = "actiondate";
 	var $default_sort_order = 'DESC';
+/**
+ * Function to get the Headers of Audit Trail Information like Module, Action, RecordID, ActionDate.
+ * Returns Header Values like Module, Action etc in an array format.
+**/
 
 	function getAuditTrailHeader()
 	{
+		global $log;
+		$log->debug("Entering getAuditTrailHeader() method ...");
 		global $app_strings;
 		
 		$header_array = array($app_strings['LBL_MODULE'], $app_strings['LBL_ACTION'], $app_strings['LBL_RECORD_ID'], $app_strings['LBL_ACTION_DATE']);
 
+		$log->debug("Exiting getAuditTrailHeader() method ...");
 		return $header_array;
 		
 	}
 
+/**
+  * Function to get the Audit Trail Information values of the actions performed by a particular User.
+  * @param integer $userid - User's ID
+  * @param $navigation_array - Array values to navigate through the number of entries.
+  * @param $sortorder - DESC
+  * @param $orderby - actiondate
+  * Returns the audit trail entries in an array format.
+**/
 	function getAuditTrailEntries($userid, $navigation_array, $sorder='', $orderby='')
 	{
+		global $log;
+		$log->debug("Entering getAuditTrailEntries(".$userid.") method ...");
 		global $adb, $current_user;
 		
 		if($sorder != '' && $order_by != '')
@@ -96,6 +113,7 @@ class AuditTrail{
 			
 			$entries_list[] = $entries;
 		}
+		$log->debug("Exiting getAuditTrailEntries() method ...");
 		return $entries_list;	
 	}
 	}

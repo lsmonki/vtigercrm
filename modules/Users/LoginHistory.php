@@ -45,7 +45,7 @@ class LoginHistory {
 		,"logout_time"
 		,"status"
 		);
-
+	
 	function LoginHistory() {
 		$this->log = LoggerManager::getLogger('loginhistory');
 		$this->db = new PearDatabase();
@@ -72,19 +72,34 @@ class LoginHistory {
 	var $default_order_by = "login_time";
 	var $default_sort_order = 'DESC';
 
-
+/**
+ * Function to get the Header values of Login History.
+ * Returns Header Values like UserName, IP, LoginTime etc in an array format.
+**/
 	function getHistoryListViewHeader()
 	{
+		global $log;
+		$log->debug("Entering getHistoryListViewHeader method ...");
 		global $app_strings;
 		
 		$header_array = array($app_strings['LBL_LIST_USER_NAME'], $app_strings['LBL_LIST_USERIP'], $app_strings['LBL_LIST_SIGNIN'], $app_strings['LBL_LIST_SIGNOUT'], $app_strings['LBL_LIST_STATUS']);
 
+		$log->debug("Exiting getHistoryListViewHeader method ...");
 		return $header_array;
 		
 	}
 
+/**
+  * Function to get the Login History values of the User.
+  * @param $navigation_array - Array values to navigate through the number of entries.
+  * @param $sortorder - DESC
+  * @param $orderby - login_time
+  * Returns the login history entries in an array format.
+**/
 	function getHistoryListViewEntries($navigation_array, $sorder='', $orderby='')
 	{
+		global $log;
+		$log->debug("Entering getHistoryListViewEntries() method ...");
 		global $adb, $current_user;	
 
 		if($sorder != '' && $order_by != '')
@@ -118,7 +133,8 @@ class LoginHistory {
 			$entries[] = $adb->query_result($result, $i-1, 'status');
 
 			$entries_list[] = $entries;
-		}		
+		}	
+		log->debug("Exiting getHistoryListViewEntries() method ...");
 		return $entries_list;
 		
 	}
@@ -126,7 +142,7 @@ class LoginHistory {
 	/** Records the Login info */
 	function user_login(&$usname,&$usip,&$intime)
 	{
-		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signedin')";
+		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signed in')";
 		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 		
@@ -143,7 +159,7 @@ class LoginHistory {
                         return;
                 }
 		// update the user login info.
-		$query = "Update vtiger_loginhistory set logout_time =".$this->db->formatDate($outtime).", status='Signedoff' where login_id = $loginid";
+		$query = "Update vtiger_loginhistory set logout_time =".$this->db->formatDate($outtime).", status='Signed off' where login_id = $loginid";
 		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 	}
