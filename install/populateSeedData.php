@@ -452,7 +452,7 @@ for($i=0; $i<10; $i++)
 		$category 	= 	"Hardware";		
 		$website 	=	"";
 		$manufacturer	= 	"";
-		$commission_rate=	rand(10,99);
+		$commission_rate=	rand(10,20);
 		$unit_price	=	rand(100,999);
 		$product_image_name = '';
 	}
@@ -461,13 +461,13 @@ for($i=0; $i<10; $i++)
 		$account_key = array_rand($account_ids);
 		$product->column_fields["parent_id"]=$account_ids[$account_key];
 
-		$usageunit	=	"";
-		$qty_per_unit	=	"";
-		$qty_in_stock	=	"";
+		$usageunit	=	"Each";
+		$qty_per_unit	=	1;
+		$qty_in_stock	=	rand(10000, 99999);
 		$category 	= 	"Software";	
 		$website 	=	"www.vtiger.com";
 		$manufacturer	= 	"vtiger";
-		$commission_rate=	0;
+		$commission_rate=	rand(1,10);
 		$unit_price	=	$subscription_rate[$i];
 		$product_image_name = $product_image_array[$i];
 	}
