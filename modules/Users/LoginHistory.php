@@ -134,7 +134,7 @@ class LoginHistory {
 
 			$entries_list[] = $entries;
 		}	
-		log->debug("Exiting getHistoryListViewEntries() method ...");
+		$log->debug("Exiting getHistoryListViewEntries() method ...");
 		return $entries_list;
 		
 	}
