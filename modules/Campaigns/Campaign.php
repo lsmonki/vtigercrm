@@ -72,6 +72,35 @@ class Campaign extends CRMEntity {
 		$this->column_fields = getColumnFields('Campaigns');
 	}
 
+	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	function getSortOrder()
+	{
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['CAMPAIGN_SORT_ORDER'] != '')?($_SESSION['CAMPAIGN_SORT_ORDER']):($this->default_sort_order));
+
+		$log->debug("Exiting getSortOrder method ...");
+		return $sorder;
+	}
+
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['CAMPAIGN_ORDER_BY'] != '')?($_SESSION['CAMPAIGN_ORDER_BY']):($this->default_order_by));
+
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}
+	// Mike Crowe Mod --------------------------------------------------------
+
+	
 	function get_contacts($id)
         {
 		global $log;
