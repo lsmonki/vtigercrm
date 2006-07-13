@@ -17,7 +17,7 @@ global $adb;
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 {
 	$portalid = $_REQUEST['record'];
-	$query="select * from vtiger_portal where vtiger_portalid =$portalid";
+	$query="select * from vtiger_portal where portalid =$portalid";
 	$result=$adb->query($query);
 	$portalname = $adb->query_result($result,0,'portalname');
         $portalurl = $adb->query_result($result,0,'portalurl');		
