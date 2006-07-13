@@ -35,6 +35,11 @@ if (version_compare(phpversion(), '5.0') < 0) {
 
 global $currentModule;
 
+ /** Function to  return a string with backslashes stripped off
+   * @param $value -- value:: Type string
+   * @returns $value -- value:: Type string array
+ */
+	  
  function stripslashes_checkstrings($value){
         if(is_string($value)){
                 return stripslashes($value);
@@ -56,6 +61,10 @@ if(isset($_REQUEST['PHPSESSID']))
 	//Setting the same session id to Forums as in CRM
         $sid=$_REQUEST['PHPSESSID'];
 }	
+
+/** Function to set, character set in the header, as given in include/language/*_lang.php
+ */
+	 
 function insert_charset_header()
 {
  	global $app_strings, $default_charset;

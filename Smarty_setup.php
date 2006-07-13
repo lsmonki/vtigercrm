@@ -12,6 +12,8 @@
 require('Smarty/libs/Smarty.class.php');
 class vtigerCRM_Smarty extends Smarty{
 	
+	/**This function sets the smarty directory path for the member variables	
+	*/
 	function vtigerCRM_Smarty()
 	{
 		$this->Smarty();

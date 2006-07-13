@@ -23,7 +23,10 @@ if (substr(phpversion(), 0, 1) == "5") {
 	ini_set("zend.ze1_compatibility_mode", "1");
 }
 
-
+/** Function to  return a string with backslashes stripped off
+ * @param $value -- value:: Type string
+ * @returns $value -- value:: Type string array
+ */
  function stripslashes_checkstrings($value){
  	if(is_string($value)){
  		return stripslashes($value);

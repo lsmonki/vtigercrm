@@ -34,6 +34,8 @@ $data_print['default_charset'] = "utf-8";
 require_once("config.inc.php");
 require_once("include/utils/utils.php");
 
+/** Function to set, character set in the header, as given in include/language/*_lang.php
+ */
   function insert_charset_header()
  	{
  	global $app_strings, $default_charset;
