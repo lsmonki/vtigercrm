@@ -17,7 +17,10 @@ require_once('include/utils/GetUserGroups.php');
 require_once('include/utils/GetGroupUsers.php');
 
 
-//$userid=1;
+/** Creates a file with all the user, user-role,user-profile, user-groups informations 
+  * @param $userid -- user id:: Type integer
+  * @returns user_privileges_userid file under the user_privileges directory
+ */
 
 function createUserPrivilegesfile($userid)
 {
@@ -101,7 +104,10 @@ function createUserPrivilegesfile($userid)
 	}
 }
 
-
+/** Creates a file with all the organization default sharing permissions and custom sharing permissins specific for the specified user. In this file the information of the other users whose data is shared with the specified user is stored.   
+  * @param $userid -- user id:: Type integer
+  * @returns sharing_privileges_userid file under the user_privileges directory
+ */
 function createUserSharingPrivilegesfile($userid)
 {
 	global $adb;
@@ -367,6 +373,17 @@ function createUserSharingPrivilegesfile($userid)
 	}
 }
 
+
+/** Gives an array which contains the information for what all roles, groups and user data is to be shared with the spcified user for the specified module 
+
+  * @param $module -- module name:: Type varchar
+  * @param $userid -- user id:: Type integer
+  * @param $def_org_share -- default organization sharing permission array:: Type array
+  * @param $current_user_roles -- roleid:: Type varchar
+  * @param $parent_roles -- parent roles:: Type varchar
+  * @param $current_user_groups -- user id:: Type integer
+  * @returns $mod_share_permission -- array which contains the id of roles,group and users data shared with specifed user for the specified module
+ */
 function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups)
 {
 	global $adb;
@@ -1004,7 +1021,17 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 	return $mod_share_permission;
 }
 
+/** Gives an array which contains the information for what all roles, groups and user's related module data that is to be shared  for the specified parent module and shared module 
 
+  * @param $par_mod -- parent module name:: Type varchar
+  * @param $share_mod -- shared module name:: Type varchar
+  * @param $userid -- user id:: Type integer
+  * @param $def_org_share -- default organization sharing permission array:: Type array
+  * @param $mod_sharingrule_members -- Sharing Rule Members array:: Type array
+  * @param $$mod_share_read_per -- Sharing Module Read Permission array:: Type array
+  * @param $$mod_share_write_per -- Sharing Module Write Permission array:: Type array
+  * @returns $related_mod_sharing_permission; -- array which contains the id of roles,group and users related module data to be shared 
+ */
 function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_members,$mod_share_read_per,$mod_share_write_per,$def_org_share)
 {
 
@@ -1236,7 +1263,11 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 }
 
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
 
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructArray($var)
 {
 	if (is_array($var))
@@ -1251,6 +1282,11 @@ function constructArray($var)
    	}
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructSingleStringValueArray($var)
 {
 
@@ -1276,6 +1312,11 @@ function constructSingleStringValueArray($var)
         }
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructSingleStringKeyValueArray($var)
 {
 
@@ -1302,7 +1343,11 @@ function constructSingleStringKeyValueArray($var)
 }
 
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
 
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructSingleArray($var)
 {
 	if (is_array($var))
@@ -1317,6 +1362,11 @@ function constructSingleArray($var)
    	}
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructSingleCharArray($var)
 {
 	if (is_array($var))
@@ -1331,6 +1381,12 @@ function constructSingleCharArray($var)
    	}
 }
 
+
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructTwoDimensionalArray($var)
 {
 	if (is_array($var))
@@ -1350,6 +1406,11 @@ function constructTwoDimensionalArray($var)
    	}
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructTwoDimensionalValueArray($var)
 {
 	if (is_array($var))
@@ -1369,6 +1430,11 @@ function constructTwoDimensionalValueArray($var)
    	}
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructTwoDimensionalCharIntSingleArray($var)
 {
 	if (is_array($var))
@@ -1388,6 +1454,11 @@ function constructTwoDimensionalCharIntSingleArray($var)
    	}
 }
 
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructTwoDimensionalCharIntSingleValueArray($var)
 {
 	if (is_array($var))
@@ -1407,6 +1478,10 @@ function constructTwoDimensionalCharIntSingleValueArray($var)
    	}
 }
 
+
+/** Function to populate the read/wirte Sharing permissions data of user/groups for the specified user into the database 
+  * @param $userid -- user id:: Type integer
+ */
 
 function populateSharingtmptables($userid)
 {
@@ -1445,6 +1520,12 @@ function populateSharingtmptables($userid)
 	}			 
 }
 
+/** Function to populate the read/wirte Sharing permissions data for the specified user into the database 
+  * @param $userid -- user id:: Type integer
+  * @param $enttype -- can have the value of User or Group:: Type varchar
+  * @param $module -- module name:: Type varchar
+  * @param $pertype -- can have the value of read or write:: Type varchar
+ */
 function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 {
 	global $adb;	
@@ -1530,6 +1611,14 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 
 }
 
+
+/** Function to populate the read/wirte Sharing permissions related module data for the specified user into the database 
+  * @param $userid -- user id:: Type integer
+  * @param $enttype -- can have the value of User or Group:: Type varchar
+  * @param $module -- module name:: Type varchar
+  * @param $relmodule -- related module name:: Type varchar
+  * @param $pertype -- can have the value of read or write:: Type varchar
+ */
 
 function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$pertype)
 {
