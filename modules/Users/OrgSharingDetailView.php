@@ -82,6 +82,11 @@ $custom_access['Invoice'] = getSharingRuleList('Invoice');
 
 $smarty->assign("MODSHARING", $custom_access);
 
+/** returns the list of sharing rules for the specified module
+  * @param $module -- Module Name:: Type varchar
+  * @returns $access_permission -- sharing rules list info array:: Type array
+  *
+ */
 function getSharingRuleList($module)
 {
 	global $adb;
