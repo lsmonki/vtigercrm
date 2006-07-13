@@ -83,6 +83,11 @@ if($_REQUEST['ajax'] != 'true')
 else
 	$smarty->display('CustomFieldEntries.tpl');
 
+	/**
+	* Function to get customfield entries
+	* @param string $module - Module name
+	* return array  $cflist - customfield entries
+	*/
 function getCFListEntries($module)
 {
 	$tabid = getTabid($module);
@@ -119,6 +124,12 @@ function getCFListEntries($module)
 	}
 	return $cflist;
 }
+
+/**
+* Function to Lead customfield Mapping entries
+* @param integer  $cfid   - Lead customfield id
+* return array    $label  - customfield mapping
+*/
 function getListLeadMapping($cfid)
 {
 	global $adb;
