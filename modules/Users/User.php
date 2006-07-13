@@ -37,6 +37,9 @@ require_once('modules/Contacts/Contact.php');
 require_once('data/Tracker.php');
 
 // User is used to store customer information.
+ /** Main class for the user module
+   *
+  */
 class User {
 	var $log;
 	var $db;
@@ -186,6 +189,11 @@ class User {
 	var $record_id;
 	var $new_schema = true;
 
+	/** constructor function for the main user class
+            instantiates the Logger class and PearDatabase Class	
+  	  *
+ 	*/
+	
 	function User() {
 		$this->log = LoggerManager::getLogger('user');
 		$this->log->debug("Entering User() method ...");
@@ -194,6 +202,11 @@ class User {
 
 	}
 
+	/** Function to set the user preferences in the session
+  	  * @param $name -- name:: Type varchar
+  	  * @param $value -- value:: Type varchar
+  	  *
+ 	*/
 	function setPreference($name, $value){
 		if(!isset($this->user_preferences)){
 			if(isset($_SESSION["USER_PREFERENCES"]))
@@ -212,6 +225,11 @@ class User {
 
 	}
 
+
+	/** Function to save the user preferences to db
+  	  *
+ 	*/
+	
 	function savePreferecesToDB(){
 		$data = base64_encode(serialize($this->user_preferences));
 		$query = "UPDATE $this->table_name SET user_preferences='$data' where id='$this->id'";
@@ -219,6 +237,10 @@ class User {
 		$this->log->debug("SAVING: PREFERENCES SIZE ". strlen($data)."ROWS AFFECTED WHILE UPDATING USER PREFERENCES:".$this->db->getAffectedRowCount($result));
 		$_SESSION["USER_PREFERENCES"] = $this->user_preferences;
 	}
+
+	/** Function to load the user preferences from db
+  	  *
+ 	*/
 	function loadPreferencesFromDB($value){
 
 		if(isset($value) && !empty($value)){
@@ -253,6 +275,11 @@ class User {
 
 	}
 
+	
+	/** Function to authenticate the current user with the given password
+  	  * @param $password -- password::Type varchar
+	  * @returns true if authenticated or false if not authenticated
+ 	*/
 	function authenticate_user($password){
 		$usr_name = $this->column_fields["user_name"];
 
@@ -266,6 +293,10 @@ class User {
 
 		return true;
 	}
+
+	/** Function for validation check 
+  	  *
+ 	*/
 	function validation_check($validate, $md5, $alt=''){
 		$validate = base64_decode($validate);
 		if(file_exists($validate) && $handle = fopen($validate, 'rb', true)){
@@ -281,6 +312,9 @@ class User {
 
 	}
 
+	/** Function for authorization check 
+  	  *
+ 	*/	
 	function authorization_check($validate, $authkey, $i){
 		$validate = base64_decode($validate);
 		$authkey = base64_decode($authkey);
@@ -464,6 +498,11 @@ class User {
 	}
 
 
+	/** gives the user id for the specified user name 
+  	  * @param $user_name -- user name:: Type varchar
+	  * @returns user id
+ 	*/
+	
 	function retrieve_user_id($user_name)
 	{
 		$query = "SELECT id from vtiger_users where user_name='$user_name' AND deleted=0";
@@ -511,7 +550,11 @@ class User {
 
 		return $verified;
 	}
-
+	
+	/** Function to return the column name array 
+  	  *
+ 	*/
+	
 	function getColumnNames_User()
 	{
 
@@ -547,6 +590,13 @@ class User {
 		}		
 	}
 
+
+	/** Function to get the current user information from the user_privileges file 
+  	  * @param $userid -- user id:: Type integer
+  	  * @returns user info in $this->column_fields array:: Type array
+  	  *
+ 	 */
+	
 	function retrieveCurrentUserInfoFromFile($userid)
 	{
 		require('user_privileges/user_privileges_'.$userid.'.php');
@@ -562,6 +612,13 @@ class User {
 		return $this;
 
 	}
+
+
+
+	/** Function to save the user information into the database
+  	  * @param $module -- module name:: Type varchar
+  	  *
+ 	 */
 	function saveentity($module)
 	{
 		global $current_user, $adb;//$adb added by raju for mass mailing
@@ -584,6 +641,11 @@ class User {
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	}
+
+	/** Function to insert values in the specifed table for the specified module
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
 	function insertIntoEntityTable($table_name, $module)
 	{
 		global $log;	
@@ -723,6 +785,13 @@ class User {
 		}
 
 	}
+
+
+
+	/** Function to insert values into the attachment table
+  	  * @param $id -- entity id:: Type integer
+  	  * @param $module -- module:: Type varchar
+ 	 */
 	function insertIntoAttachment($id,$module)
 	{
 		global $log, $adb;
@@ -739,6 +808,10 @@ class User {
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
 
+	/** Function to retreive the user info of the specifed user id The user info will be available in $this->column_fields array
+  	  * @param $record -- record id:: Type integer
+  	  * @param $module -- module:: Type varchar
+ 	 */
 	function retrieve_entity_info($record, $module)
 	{
 		global $adb,$log;
@@ -778,6 +851,13 @@ class User {
 
 		return $this;
 	}
+
+
+	/** Function to upload the file to the server and add the file details in the attachments table 
+  	  * @param $id -- user id:: Type varchar
+  	  * @param $module -- module name:: Type varchar
+	  * @param $file_details -- file details array:: Type array
+ 	 */	
 	function uploadAndSaveFile($id,$module,$file_details)
 	{
 		global $log;
@@ -852,6 +932,11 @@ class User {
 		return;
 	}
 
+
+	/** Function to save the user information into the database
+  	  * @param $module -- module name:: Type varchar
+  	  *
+ 	 */	
 	function save($module_name) 
 	{
 		global $log;
@@ -859,6 +944,12 @@ class User {
 		//GS Save entity being called with the modulename as parameter
 		$this->saveentity($module_name);
 	}
+
+
+	/** gives the order in which the modules have to be displayed in the home page for the specified user id  
+  	  * @param $id -- user id:: Type integer
+  	  * @returns the home page order in $return_array
+ 	 */	
 	function getHomeOrder($id="")	
 	{
 		global $log;
@@ -891,6 +982,11 @@ class User {
 		$log->debug("Exiting from function getHomeOrder($id)");
 		return $return_array;
 	}
+
+
+	/** function to save the order in which the modules have to be displayed in the home page for the specified user id  
+  	  * @param $id -- user id:: Type integer
+ 	 */	
 	function saveHomeOrder($id)
 	{
 		if($id == '')
