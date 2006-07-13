@@ -175,6 +175,11 @@ foreach($modArr as $fld_module => $fld_label)
 	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
 	header($loc);
 
+ /** returns value 0 if request permission is on else returns value 1
+  * @param $req_per -- Request Permission:: Type varchar
+  * @returns $permission - can have value 0 or 1:: Type integer
+  *
+ */
 function getPermissionValue($req_per)
 {
 	if($req_per == 'on')
