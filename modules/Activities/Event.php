@@ -84,6 +84,11 @@ class Event extends SugarBean {
 	var $new_schema = true;
 
 
+    /**
+     * Function to get count of tasks
+     * @param  string  $user_name   - User Name
+     * returns the count of type integer
+     */
     function getCount($user_name) 
     {
 	global $log;
