@@ -29,7 +29,11 @@ require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 $roleid= $_REQUEST['roleid'];
 
-//Standard PickList Fields
+/** gives the role info, role profile info and role user info details in an array  for the specified role id
+  * @param $roleid -- role id:: Type integer
+  * @returns $return_data -- array contains role info, role profile info and role user info. This array is used to construct the detail view for the specified role id :: Type varchar
+  *
+ */
 function getStdOutput($roleid)
 {
 	//Retreiving the related vtiger_profiles
