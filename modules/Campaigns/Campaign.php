@@ -73,6 +73,10 @@ class Campaign extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**
+	 * Function to get sort order
+	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -86,6 +90,10 @@ class Campaign extends CRMEntity {
 		return $sorder;
 	}
 
+	/**
+	 * Function to get order by
+	 * return string  $order_by    - fieldname(eg: 'campaignname')
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -100,7 +108,11 @@ class Campaign extends CRMEntity {
 	}
 	// Mike Crowe Mod --------------------------------------------------------
 
-	
+	/**
+	 * Function to get Campaign related Contacts
+	 * @param  integer   $id      - campaignid
+	 * returns related Contacts record in array format
+	 */
 	function get_contacts($id)
         {
 		global $log;
@@ -115,6 +127,12 @@ class Campaign extends CRMEntity {
 		$log->debug("Exiting get_contacts method ...");
                 return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
         }
+
+	/**
+	 * Function to get Campaign related Leads
+	 * @param  integer   $id      - campaignid
+	 * returns related Leads record in array format
+	 */
 	function get_leads($id)
         {
 		global $log;
@@ -130,6 +148,12 @@ class Campaign extends CRMEntity {
 		$log->debug("Exiting get_leads method ...");
                 return GetRelatedList('Campaigns','Leads',$focus,$query,$button,$returnset);
         }
+
+	/**
+	 * Function to get Campaign related Potentials
+	 * @param  integer   $id      - campaignid
+	 * returns related potentials record in array format
+	 */
 	function get_opportunities($id)
 	{
 		global $log;
@@ -147,6 +171,12 @@ class Campaign extends CRMEntity {
 		return GetRelatedList('Campaigns','Potentials',$focus,$query,$button,$returnset);
 
 	}
+
+	/**
+	 * Function to get Campaign related Activities
+	 * @param  integer   $id      - campaignid
+	 * returns related activities record in array format
+	 */
 	function get_activities($id)
 	{
 		global $log;
