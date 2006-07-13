@@ -36,6 +36,67 @@ $smarty->assign("GROUPINFO", getStdOutput($groupInfoArr,$groupId, $mod_strings))
 $smarty->assign("GROUPID",$groupId);
 $smarty->assign("GROUP_NAME",$groupInfoArr[0]);
 
+
+/** Gives the group info and the group member info array 
+  * @param $groupInfoArr -- Group Info Array got by calling getGroupInfo($groupId):: Type array
+  * @param $groupID -- group id::Type integer
+  * @param $mod_strings -- i18n mod strings array::Type array
+  * @returns $returndata:: Type array, Example array format given below
+	Array
+	(
+    	[0] => Array
+        	(
+            		[groupname] => vtiger grp
+            		[description] => 
+        	)
+
+    	[1] => Array
+        (
+            [Role] => Array
+                (
+                    [0] => Array
+                        (
+                            [membername] => CEO
+                            [memberid] => H2
+                            [membertype] => Role
+                            [memberaction] => RoleDetailView
+                            [actionparameter] => roleid
+                        )
+
+                )
+
+            [Role and Subordinates] => Array
+                (
+                    [0] => Array
+                        (
+                            [membername] => Vice President
+                            [memberid] => H3
+                            [membertype] => Role and Subordinates
+                            [memberaction] => RoleDetailView
+                            [actionparameter] => roleid
+                        )
+
+                )
+
+            [User] => Array
+                (
+                    [0] => Array
+                        (
+                            [membername] => standarduser
+                            [memberid] => 2
+                            [membertype] => User
+                            [memberaction] => DetailView
+                            [actionparameter] => record
+                        )
+
+                )
+
+        )
+
+	)
+  *
+  *
+ */
 function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 {
 	global $adb;
