@@ -92,6 +92,10 @@ class Lead extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**
+	 * Function to get sort order
+ 	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	 */
 	function getSortOrder()
 	{	
 		global $log;
@@ -105,6 +109,10 @@ class Lead extends CRMEntity {
 		return $sorder;
 	}
 
+	/**
+	 * Function to get order by
+	 * return string  $order_by    - fieldname(eg: 'leadname')
+ 	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -121,6 +129,11 @@ class Lead extends CRMEntity {
 
 
 
+	/** Function to export the lead records in CSV Format
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Leads Query.
+	*/
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
@@ -175,6 +188,8 @@ class Lead extends CRMEntity {
 
 	
 	/** Returns a list of the associated tasks
+ 	 * @param  integer   $id      - leadid
+ 	 * returns related Task or Event record in array format
 	*/
 function get_activities($id)
 {
@@ -222,6 +237,8 @@ function get_campaigns($id)
 
 
 	/** Returns a list of the associated emails
+ 	 * @param  integer   $id      - leadid
+ 	 * returns related emails record in array format
 	*/
 function get_emails($id)
 {
@@ -246,6 +263,11 @@ function get_emails($id)
 	return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
 }
 
+/**
+ * Function to get Lead related Task & Event which have activity type Held, Completed or Deferred.
+ * @param  integer   $id      - leadid
+ * returns related Task or Event record in array format
+ */
 function get_history($id)
 {
 	global $log;
@@ -271,6 +293,11 @@ function get_history($id)
 	return getHistory('Leads',$query,$id);
 }
 
+/**
+ * Function to get Lead related Attachments
+ * @param  integer   $id      - leadid
+ * returns related Attachment record in array format
+ */
 function get_attachments($id)
 {
 	global $log;
@@ -311,6 +338,11 @@ function get_attachments($id)
 	return getAttachmentsAndNotes('Leads',$query,$id);
 }
 	
+/**
+* Function to get lead related Products 
+* @param  integer   $id      - leadid
+* returns related Products record in array format
+*/
 function get_products($id)
 {
 	global $log;
@@ -333,7 +365,11 @@ function get_products($id)
 	$log->debug("Exiting get_products method ...");
 	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
 }
-
+	
+	/** Function to get the Combo List Values of Leads Field
+	 * @param string $list_option 
+	 * Returns Combo List Options 
+	*/
 	function get_lead_field_options($list_option)
 	{
 		global $log;
@@ -343,7 +379,10 @@ function get_products($id)
 		return $comboFieldArray[$list_option];
 	}
 	
-//Used By vtigerCRM Word Plugin
+/** Function to get the Columnnames of the Leads Record
+* Used By vtigerCRM Word Plugin
+* Returns the Merge Fields for Word Plugin
+*/
 function getColumnNames_Lead()
 {
 	global $log;
