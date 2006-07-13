@@ -76,6 +76,8 @@ class Faq extends CRMEntity {
 	var $default_order_by = 'id';
 	var $default_sort_order = 'DESC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function Faq() {
 		$this->log =LoggerManager::getLogger('faq');
 		$this->log->debug("Entering Faq() method ...");

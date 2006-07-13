@@ -58,7 +58,7 @@ class ImportOpportunity extends Potential {
 				        	//"add_date_closed"
 				        	//"add_sales_stage"
 				       );
-
+	/*
         function add_lead_source()
         {
                 if ( isset($this->lead_source) &&
@@ -106,11 +106,13 @@ class ImportOpportunity extends Potential {
                 }
 
         }
-
+	*/
 
 	//exactly the same function from ImportAccount.php
 	// lets put this in one place.. 
 
+	/**     function used to create or map with existing account if the potential is map with an account during import
+         */
 	function add_create_account()
         {
 		global $adb;
@@ -202,7 +204,7 @@ class ImportOpportunity extends Potential {
 
         }	
 
-
+	/*
 	function fix_website()
 	{
 		if ( isset($this->website) &&
@@ -211,7 +213,7 @@ class ImportOpportunity extends Potential {
 			$this->website = substr($this->website,7);
 		}	
 	}
-
+	*/
 	
 	// This is the list of vtiger_fields that are importable.
 	// some if these do not map directly to database columns
@@ -233,6 +235,8 @@ class ImportOpportunity extends Potential {
 
 	var $importable_fields = Array();
 
+	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
+	 */
 	function ImportOpportunity() {
 		$this->log = LoggerManager::getLogger('import_opportunity');
 		$this->db = new PearDatabase();

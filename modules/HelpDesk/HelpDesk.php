@@ -72,6 +72,8 @@ class HelpDesk extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'DESC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function HelpDesk() 
 	{
 		$this->log =LoggerManager::getLogger('helpdesk');
@@ -82,6 +84,9 @@ class HelpDesk extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**	Function used to get the sort order for HelpDesk listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -94,6 +99,9 @@ class HelpDesk extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for HelpDesk listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -425,6 +433,10 @@ class HelpDesk extends CRMEntity {
         	return $customername;
 	}
 	
+	/**	Function used to get the Activity History
+	 *	@param	int	$id - ticket id to which we want to display the activity history
+	 *	return  array	which will be returned from the function getHistory
+	 */
 	function get_history($id)
 	{
 		global $log;

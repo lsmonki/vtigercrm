@@ -22,6 +22,9 @@
 
 require_once('Smarty_setup.php');
 
+/**	function used to show the error message occured during import process
+ *	@param	string	$message - Error message to display in the screen, where the passed error message will be displayed in screen using Importerror.tpl file
+ */
 function show_error_import($message)
 {
 	global $import_mod_strings;

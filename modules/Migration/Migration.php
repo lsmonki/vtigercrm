@@ -36,12 +36,22 @@ class Migration
 	var $new_mysql_password;
 	var $new_dbname;
 
+	/**	Constructor with old database and new database connections
+	 */
 	function Migration($old='',$new='')
 	{
 		$this->oldconn = $old;
 		$this->conn = $new;
 		$this->conn->println("Database Object has been created.");
 	}
+
+	/**	function used to set the Old database parameters in the migration object properties
+	 *	@param string $hostname - old database hostname
+	 *	@param int $mysql_port - old database mysql port number
+	 *	@param string $mysql_username - old database mysql user name
+	 *	@param string $mysql_password - old database mysql password
+	 *	@param string $dbname - old database name
+	 */
 	function setOldDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
 		$this->old_hostname = $hostname;
@@ -51,6 +61,14 @@ class Migration
 		$this->old_dbname = $dbname;
 		$this->conn->println("Old Database Parameters has been set.");
 	}
+
+	/**	function used to set the Current ie., new 5.0 database parameters in the migration object properties
+	 *	@param string $hostname - new database hostname
+	 *	@param int $mysql_port - new database mysql port number
+	 *	@param string $mysql_username - new database mysql user name
+	 *	@param string $mysql_password - new database mysql password
+	 *	@param string $dbname - new database name
+	 */
 	function setNewDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
 		$this->new_hostname = $hostname;
@@ -61,6 +79,13 @@ class Migration
 		$this->conn->println("New Database Parameters has been set.");
 	}
 
+	/**	function used to take the database dump
+	 *	@param string $host_name - host name in where the database is available
+	 *	@param int $mysql_port - mysql port number 
+	 *	@param string $mysql_username - mysql user name
+	 *	@param string $mysql_password - mysql password
+	 *	@param string $dbname - database name
+	 */
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
 		$this->conn->println("Inside the function takeDatabaseDump. Going to take the old database dump...");
@@ -104,6 +129,10 @@ class Migration
 		return $dump_filename;
 	}
 
+	/**	function used to drop the database
+	 *	@param object $conn - adodb object which is connected with the current(new) database 
+	 *	@param string $dbname - database name which we want to drop
+	 */
 	function dropDatabase($conn,$dbname)
 	{
 		$this->conn->println("Inside the function dropDatabase. Going to drop the new database...");
@@ -112,6 +141,11 @@ class Migration
 
 		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database has been dropped.';
 	}
+
+	/**     function used to create the database
+	 *	@param object $conn - adodb object which is connected with the current(new) database
+	 *	@param string $dbname - database name which we want to drop
+	 */
 	function createDatabase($conn,$dbname)
 	{
 		$this->conn->println("Inside the function createDatabase. Going to create the new database...");
@@ -124,6 +158,14 @@ class Migration
 		$conn->connect();
 	}
 
+	/**	function used to apply the dump data to a database
+	 *	@param string $host_name - host name
+	 *	@param int $mysql_port - mysql port number
+	 *	@param string $mysql_username - mysql user name
+	 *	@param string $mysql_password - mysql password
+	 *	@param string $dbname - database name to which we want to apply the dump
+	 *	@param string $dumpfile - dump file which contains the data dump of a database
+	 */
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
 	{
 		$this->conn->println("Inside the function applyDumpData.");
@@ -161,6 +203,10 @@ class Migration
 	}
 
 
+	/**	function used to get the tabid
+	 *	@param string $module - module to which we want to get the tabid
+	 *	return int $tabid - tabid of the module
+	 */
 	function localGetTabID($module)
 	{
 		global $conn;
@@ -172,6 +218,9 @@ class Migration
 		return $tabid;
 	}
 
+	/**	function used to get the table count of the new database
+	 *	return int $tables - number of tables available in the new database
+	 */
 	function getTablesCountInNewDatabase()
 	{
 		$this->conn->println("Inside the function getTablesCountInNewDatabase");
@@ -182,6 +231,9 @@ class Migration
 		return $tables;
 	}
 
+	/**	function used to get the table count of the old database
+	 *	return int $tables - number of tables available in the old database
+	 */
 	function getTablesCountInOldDatabase()
 	{
 		$this->conn->println("Inside the function getTablesCountInOldDatabase");
@@ -192,6 +244,9 @@ class Migration
 		return $tables;
 	}
 
+	/**	function used to modify the database from old version to match with new version
+	 *	@param object $conn - adodb object which is connected with the current(new) database 
+	 */
 	function modifyDatabase($conn)
 	{
 		$this->conn->println("Inside the function modifyDatabase");
@@ -214,6 +269,11 @@ class Migration
 		$conn->println("Mickie ---- Ends\n\n\n");
 	}
 
+	/**	function used to run the migration process based on the option selected and values given
+	 *	@param int $same_databases - 1 if both databases are same otherwise 0
+	 *	@param string $option - selected migration option (dbsource or dumpsource)
+	 *	@param string $old_dump_file_name - dump file name of the old database which is optional when we use dbsource
+	 */
 	function migrate($same_databases, $option, $old_dump_file_name='')
 	{
 		//1. Migration Procedure -- when we give the Source Database values

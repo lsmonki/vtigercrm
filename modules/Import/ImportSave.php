@@ -12,6 +12,19 @@
 $count = 0;
 $skip_required_count = 0;
 
+/**	function used to save the records into database
+ *	@param array $rows - array of total rows of the csv file
+ *	@param array $rows1 - rows to be saved
+ *	@param object $focus - object of the corresponding import module
+ *	@param int $ret_field_count - total number of fields(columns) available in the csv file
+ *	@param int $col_pos_to_field - field position in the mapped array
+ *	@param int $start - starting row count value to import
+ *	@param int $recordcount - count of records to be import ie., number of records to import
+ *	@param string $module - import module
+ *	@param int $totalnoofrows - total number of rows available
+ *	@param int $skip_required_count - number of records skipped
+ 	This function will redirect to the ImportStep3 if the available records is greater than the record count (ie., number of records import in a single loop) otherwise (total records less than 500) then it will be redirected to import step last
+ */
 function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$start,$recordcount,$module,$totalnoofrows,$skip_required_count)
 {
 	global $current_user;

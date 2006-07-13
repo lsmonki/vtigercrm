@@ -49,7 +49,7 @@ class ImportAccount extends Account {
 						//,"fix_website"
 				       );
 
-
+	/*
 	function fix_website()
 	{
 		if ( isset($this->website) &&
@@ -118,7 +118,7 @@ class ImportAccount extends Account {
 				" ". $this->shipping_address_street_4; 
 		} 
 	}
-
+	*/
 
 	// This is the list of vtiger_fields that are importable.
 	// some if these do not map directly to database columns
@@ -162,6 +162,8 @@ class ImportAccount extends Account {
 
 		var $importable_fields = Array();
 
+		/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
+		 */
 	function ImportAccount() {
 		
 		$this->log = LoggerManager::getLogger('import_account');

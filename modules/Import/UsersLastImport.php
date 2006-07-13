@@ -55,19 +55,28 @@ class UsersLastImport extends SugarBean
 	var $list_fields = Array();
 	var $list_fields_name = Array();
 	var $list_link_field;
-		
+	
+	/**	Constructor
+	 */	
 	function UsersLastImport() {
 		$this->log = LoggerManager::getLogger('UsersLastImport');
 		$this->db = new PearDatabase();
 	}
 
+	/**	function used to delete ie., update the deleted as 1 in vtiger_users_last_import table
+	 *	@param int $user_id - user id to whom's last imported records to delete
+	 */
 	function mark_deleted_by_user_id($user_id)
         {
                 $query = "UPDATE $this->table_name set deleted=1 where assigned_user_id='$user_id'";
                 $this->db->query($query,true,"Error marking last imported vtiger_accounts deleted: ");
         }
 
-
+	/**	function used to get the list query of the imported records
+	 *	@param reference &$order_by - reference of the variable order_by to add with the query
+	 *	@param reference &$where - where condition to add with the query
+	 *	return string $query - list query to get the imported records list with the passed where and order by
+	 */
 	function create_list_query(&$order_by, &$where)
 	{
 		global $current_user;
@@ -165,7 +174,7 @@ class UsersLastImport extends SugarBean
 
 	}
 
-	
+	/*
 	function list_view_parse_additional_sections(&$list_form)
 	{
 		if ($this->bean_type == "Contacts")
@@ -182,7 +191,12 @@ class UsersLastImport extends SugarBean
                 return $list_form;
 
         }
-
+	*/
+	
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported records of the current user
+	 *	@param int $user_id - user id, whose last imported records want to be deleted
+	 *	return int $count - number of total deleted records (contacts, accounts, opportunities, leads and products)
+	 */
 	function undo($user_id)
 	{
 		$count = 0;
@@ -196,6 +210,10 @@ class UsersLastImport extends SugarBean
 		return $count;
 	}
 
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported contacts of the current user
+	 *	@param int $user_id - user id, whose last imported contacts want to be deleted
+	 *	return int $count - number of deleted contacts 
+	 */
 	function undo_contacts($user_id)
 	{
 		$count = 0;
@@ -219,6 +237,10 @@ class UsersLastImport extends SugarBean
 		return $count;
 	}
 
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported leads of the current user
+	 *	@param int $user_id - user id, whose last imported leads want to be deleted
+	 *	return int $count - number of deleted leads
+	 */
 	function undo_leads($user_id)
 	{
 		$count = 0;
@@ -242,6 +264,10 @@ class UsersLastImport extends SugarBean
 		return $count;
 	}
 
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported accounts of the current user
+	 *	@param int $user_id - user id, whose last imported accounts want to be deleted
+	 *	return int $count - number of deleted accounts
+	 */
 	function undo_accounts($user_id)
 	{
 		// this should just be a loop foreach module type
@@ -266,6 +292,10 @@ class UsersLastImport extends SugarBean
 		return $count;
 	}
 
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported potentials of the current user
+	 *	@param int $user_id - user id, whose last imported potentials want to be deleted
+	 *	return int $count - number of deleted potentials
+	 */
 	function undo_opportunities($user_id)
 	{
 		// this should just be a loop foreach module type
@@ -290,6 +320,10 @@ class UsersLastImport extends SugarBean
 		return $count;
 	}
 
+	/**	function used to delete (update deleted=1 in crmentity table) the last imported products of the current user
+	 *	@param int $user_id - user id, whose last imported products want to be deleted
+	 *	return int $count - number of deleted products
+	 */
 	function undo_products($user_id)
 	{
 		$count = 0;

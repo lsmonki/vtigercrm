@@ -51,7 +51,7 @@ class ImportContact extends Contact {
 						//,"add_primary_address_streets"
 						//,"add_alt_address_streets"
 					);
-
+	/*
 	function add_salutation()
 	{
 		if ( isset($this->salutation) &&
@@ -147,7 +147,10 @@ class ImportContact extends Contact {
                 $this->last_name = join(' ',$name_arr);
 
         }
+	*/
 
+	/**	function used to create or map with existing account if the contact has mapped with an account during import
+	 */
 	function add_create_account()
         {
 		global $adb;
@@ -175,7 +178,7 @@ class ImportContact extends Contact {
 		//Modified to remove the spaces at first and last in vtiger_account name -- after 4.2 patch 2
 		$acc_name = trim(addslashes($acc_name));
 
-		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account,crmentity WHERE vtiger_accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
 
                 $result = $adb->query($query)	or die("Error selecting sugarbean: ".mysql_error());
 
@@ -267,6 +270,8 @@ class ImportContact extends Contact {
 
 	var $importable_fields = Array();
 		
+	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
+	 */
 	function ImportContact() {
 		$this->log = LoggerManager::getLogger('import_contact');
 		$this->db = new PearDatabase();

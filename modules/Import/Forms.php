@@ -174,6 +174,15 @@ EOQ;
 	return $the_script;
 }
 
+/**	function used to form the combo values with the available importable fields
+ *	@param array reference &$column_fields - reference of the column fields which will be like lastname=>1, etc where as the key is the field name based on the import module and value is 1
+ *	@param int $colnum - column number
+ *	@param array reference &$required_fields - required fields of the import module
+ *	@param string $suggest_field - field to show as selected in the combo box
+ *	@param array  $translated_fields - list of fields which are available to map
+ *	@param string $module - tablename for the import module
+ *	return the combo box with the fields which are available to map
+ */
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {
 /*

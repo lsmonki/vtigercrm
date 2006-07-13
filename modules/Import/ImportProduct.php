@@ -44,6 +44,8 @@ class ImportProduct extends Product {
 
 	var $importable_fields = Array();
 
+	/**   function used to set the assigned_user_id value in the column_fields when we map the username during import
+         */
 	function assign_user()
 	{
 		global $current_user;
@@ -78,6 +80,8 @@ class ImportProduct extends Product {
 		}
 	}
 
+	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
+	 */
 	function ImportProduct() {
 		
 		$this->log = LoggerManager::getLogger('import_product');
