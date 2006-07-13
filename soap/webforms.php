@@ -61,6 +61,16 @@ $server->register(
 	$NAMESPACE);
 
 
+/**	function used to create lead from webform from the passed details
+ *	@param string $lastname	- last name of the lead
+ *	@param string $email - email of the lead
+ *	@param string $phone - phone number of the lead
+ *	@param string $company - company name of the lead
+ *	@param string $country - country name of the lead
+ *	@param string $description - description to create a lead
+ *	@param int $assigned_user_id - assigned to user for the lead
+ *	return message success or failure about the lead creation 
+ */
 function create_lead_from_webform($lastname, $email, $phone, $company, $country, $description, $assigned_user_id)
 {
 	global $adb;
@@ -95,6 +105,16 @@ function create_lead_from_webform($lastname, $email, $phone, $company, $country,
 	return $msg;
 }
 
+/**	function used to create contact from webform from the passed details
+ *	@param string $first_name	- first name to create contact
+ *	@param string $last_name	- last name to create contact
+ *	@param string $email_address - email address to create contact
+ *	@param string $home_phone - phone number of home to create contact
+ *	@param string $department - department to create contact
+ *	@param string $description - description to create contact
+ *	@param int $assigned_user_id - assigned to user for the contact
+ *	return message success or failure about the contact creation 
+ */
 function create_contact_from_webform($first_name, $last_name, $email_address, $home_phone, $department,$description, $assigned_user_id)
 {
 	global $adb;
@@ -130,6 +150,10 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 	return $msg;
 }
 
+/**	function used to unsubscribe the mail
+ *	@param string $emailid - email address to unsubscribe
+ *	return message about the success or failure status about the unsubscribe
+ */
 function unsubscribe_email($emailid)
 {
 	global $adb;

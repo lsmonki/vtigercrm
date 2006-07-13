@@ -284,6 +284,10 @@ $server->register(
 
 
 
+/**	function used to get the list of ticket comments
+ *	@param int $ticketid - ticket id
+ *	return array $response - ticket comments and details as a array with elements comments, owner and createdtime which will be returned from the function get_ticket_comments_list
+ */
 function get_ticket_comments($ticketid)
 {
 	$seed_ticket = new HelpDesk();
@@ -293,6 +297,11 @@ function get_ticket_comments($ticketid)
 
 	return $response;
 }
+
+/**	function used to get the combo values ie., picklist values of the HelpDesk module and also the list of products
+ *	@param string $id - empty string (we wont use this value, just an input element)
+ *	return array $output - array which contains the product id, product name, ticketpriorities, ticketseverities, ticketcategories and module owners list
+ */
 function get_combo_values($id)
 {
 	global $adb;
@@ -334,6 +343,11 @@ function get_combo_values($id)
 
 	return $output;
 }
+
+/**	function to get the Knowledge base details
+ *	@param string $id - empty string (we wont use this value, just an input element)
+ *	return array $result - array which contains the faqcategory, all product ids , product names and all faq details
+ */
 function get_KBase_details($id='')
 {
 	global $adb;
@@ -390,7 +404,11 @@ function get_KBase_details($id='')
 	return $result;
 }
 
-
+/**	function to save the faq comment
+ *	@param int $faqid - faq id
+ *	@param string $comment - comment to be added with the FAQ
+ *	return array $result - This function will call get_KBase_details and return that array
+ */
 function save_faq_comment($faqid,$comment)
 {
 	global $adb;
@@ -400,6 +418,14 @@ function save_faq_comment($faqid,$comment)
 	$result = get_KBase_details('');
 	return $result;
 }
+
+/**	function used to get the tickets list
+ *	@param string $user_name - customer name who has loggedin in the customer portal
+ *	@param int $id - customer id ie., contact id who has loggedin in the customer portal
+ *	@param string $where - where condition to get the tickets based on this condition if the customer enter the search criteria where as this is optional
+ *	@param string $match - all or any, which will be entered when the customer entered multiple search conditions and whether we want to search all or any of the give conditions
+ *	return array $output_list - This function will call get_user_tickets_list function and return the array with the ticket details
+ */
 function get_tickets_list($user_name,$id,$where='',$match='')
 {
 
@@ -437,6 +463,18 @@ function get_tickets_list($user_name,$id,$where='',$match='')
     return $output_list;
 }
 
+/**	function used to create ticket which has been created from customer portal
+ *	@param string $title - title of the ticket
+ *	@param string $description - description of the ticket
+ *	@param string $priority - priority of the ticket
+ *	@param string $severity - severity of the ticket
+ *	@param string $category - category of the ticket
+ *	@param string $user_name - customer name
+ *	@param string $parent_id - parent id ie., customer id as this customer is the parent for this ticket
+ *	@param string $product_id - product id for the ticket
+ *	@param string $module - module name where as based on this module we will get the module owner and assign this ticket to that corresponding user
+ *	return array - currently created ticket array, if this is not created then all tickets list will be returned
+ */
 function create_ticket($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id,$module)
 {
 	global $adb;
@@ -510,6 +548,13 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	//return $tickets_list;
 	//return $ticket->id;
 }
+
+/**	function used to update the ticket comment which is added from the customer portal
+ *	@param int $ticketid - ticket id
+ *	@param int $ownerid - customer ie., contact id who has added this ticket comment
+ *	@param string $comments - comment which is added from the customer portal
+ *	return void
+ */
 function update_ticket_comment($ticketid,$ownerid,$comments)
 {
 	global $adb;
@@ -521,6 +566,10 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
 	$adb->query($updatequery);
 }
 
+/**	function used to close the ticket
+ *	@param int $ticketid - ticket id
+ *	return string - success or failure message will be returned based on the ticket close update query
+ */
 function close_current_ticket($ticketid)
 {
 	global $adb;
@@ -531,6 +580,12 @@ function close_current_ticket($ticketid)
 	else
 		return "<br><b>Ticket could not be closed.</br>";
 }
+
+/**	function used to authenticate whether the customer has access or not
+ *	@param string $username - customer name for the customer portal
+ *	@param string $password - password for the customer portal
+ *	return array $list - returns array with all the customer details
+ */
 function authenticate_user($username,$password)
 {
 	global $adb;
@@ -547,6 +602,12 @@ function authenticate_user($username,$password)
 	return $list;
 }
 
+/**	function used to change the password for the customer portal
+ *	@param int $id - customer id ie., contact id
+ *	@param string $username - customer name
+ *	@param string $password - new password to change
+ *	return array $list - returns array with all the customer details
+ */
 function change_password($id,$username,$password)
 {
 	global $adb;
@@ -557,6 +618,12 @@ function change_password($id,$username,$password)
 
         return $list;
 }
+
+/**	function used to update the login details for the customer
+ *	@param int $id - customer id
+ *	@param $flag - login/logout, based on the login login or logout time will be updated for the customer
+ *	return $list - empty value
+ */
 function update_login_details($id,$flag)
 {
         global $adb;
@@ -580,6 +647,11 @@ function update_login_details($id,$flag)
 
         return $list;
 }
+
+/**	function used to send mail to the customer when he forgot the password and want to retrieve the password
+ *	@param string $mailid - email address of the customer
+ *	return message about the mail sending whether entered mail id is correct or not or is there any problem in mail sending
+ */
 function send_mail_for_password($mailid)
 {
 	global $adb;
@@ -644,6 +716,10 @@ function send_mail_for_password($mailid)
 
 }
 
+/**	function used to get the ticket creater 
+ *	@param int $ticketid - ticket id
+ *	return int $creator - ticket created user id will be returned ie., smcreatorid from crmentity table
+ */
 function get_ticket_creator($ticketid)
 {
 	global $adb;
@@ -654,6 +730,10 @@ function get_ticket_creator($ticketid)
 	return $creator;
 }
 
+/**	function used to get the picklist values
+ *	@param string $picklist_name - picklist name you want to retrieve from database
+ *	return array $picklist_array - all values of the corresponding picklist will be returned as a array
+ */
 function get_picklists($picklist_name)
 {
 	global $adb, $log;
@@ -672,7 +752,11 @@ function get_picklists($picklist_name)
 	return $picklist_array;
 }
 
-//Added function to get the vtiger_attachments of the ticket
+/**	function to get the attachments of a ticket
+ *	@param int $userid - customer id
+ *	@param int $ticketid - ticket id
+ *	return array $output - This will return all the file details related to the ticket
+ */
 function get_ticket_attachments($userid,$ticketid)
 {
 
@@ -703,6 +787,14 @@ function get_ticket_attachments($userid,$ticketid)
 	return $output;
 }
 
+/**	function to add attachment for a ticket ie., the passed contents will be write in a file and the details will be stored in database
+ *	@param int $ticketid - ticket id
+ *	@param string $filename - file name to be attached with the ticket
+ *	@param string $filetype - file type
+ *	@param int $filesize - file size
+ *	@param string $filecontents - file contents as base64 encoded format
+ *	return void
+ */
 function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $filecontents)
 {
 	global $adb;
