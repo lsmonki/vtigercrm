@@ -224,7 +224,6 @@ function getPendingActivities($mode)
 			}
 		}
 		// Code by Jaguar Ends
-		$entries['noofactivities'] = $noofrecords;
 		$entries[$event['id']] = array(
 				'0' => '<a href="index.php?action=DetailView&module='.$event["module"].'&activity_mode='.$activity_type.'&record='.$event["id"].''.$return_url.'" style="'.$font_color.';">'.$event["name"].'</a>',
 				'IMAGE' => '<IMG src="'.$image_path.$event["type"].'s.gif">',
@@ -236,6 +235,8 @@ function getPendingActivities($mode)
 				'RECURRINGTYPE' => ereg_replace('--','',$event['recurringtype']),
 				);
 	}
+	if($noofrecords > 0)
+		$entries['noofactivities'] = $noofrecords;
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	$log->debug("Exiting getPendingActivities method ...");
 		return $values;

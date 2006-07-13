@@ -213,7 +213,6 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	<td align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
 	</tr>
 	{/foreach}
-	<tr><td colspan="3" height="10"></td></tr>
 	</table>
 	</td>
 	</tr>
@@ -242,9 +241,6 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	<td align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
 	</tr>
 	{/foreach}
-	<tr>
-	<td colspan="3" height="10"></td>
-	</tr>
 	</table></td>
 	</tr>
 	</table>
