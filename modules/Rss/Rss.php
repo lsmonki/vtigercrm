@@ -174,8 +174,8 @@ class vtigerRSS extends CRMEntity
 		return $shtml;
 	}
 
-	/** Function to get the vtiger_rssurl for the given id  
-	  * This Function accepts the vtiger_rssid as argument and returns the vtiger_rssurl for that id
+	/** Function to get the rssurl for the given id  
+	  * This Function accepts the rssid as argument and returns the rssurl for that id
 	 */
 	function getRssUrlfromId($rssid)
 	{
@@ -228,6 +228,10 @@ class vtigerRSS extends CRMEntity
 		return $shtml;
 	}
 
+	/** Function to get the StarredRSSFeeds lists   
+	  * This Function accepts no argument and returns the rss feeds of 
+	  * the starred Feeds as HTML strings
+	 */
 	function getTopStarredRSSFeeds()
 	{
 		global $adb;
@@ -245,8 +249,8 @@ class vtigerRSS extends CRMEntity
 		return $shtml;
 	}
 	
-	/** Function to get the vtiger_rssfeed lists for the starred Rss feeds  
-	  * This Function accepts no argument and returns the vtiger_rss feeds of 
+	/** Function to get the rssfeed lists for the starred Rss feeds  
+	  * This Function accepts no argument and returns the rss feeds of 
 	  * the starred Feeds as HTML strings
 	 */
 	function getStarredRssHTML()
@@ -293,8 +297,8 @@ class vtigerRSS extends CRMEntity
 
 	}
 
-	/** Function to get the vtiger_rssfeed lists for the given vtiger_rssid  
-	  * This Function accepts the vtiger_rssid as argument and returns the vtiger_rss feeds as HTML strings
+	/** Function to get the rssfeed lists for the given rssid  
+	  * This Function accepts the rssid as argument and returns the rss feeds as HTML strings
 	 */
 	function getSelectedRssHTML($rssid)
 	{
@@ -390,9 +394,9 @@ class vtigerRSS extends CRMEntity
 
 }
 
-/** Function to get the vtiger_rsstitle for the given vtiger_rssid  
- * This Function accepts the vtiger_rssid as an optional argument and returns the title
- * if no id is passed it will return the tittle of the starred vtiger_rss
+/** Function to get the rsstitle for the given rssid  
+ * This Function accepts the rssid as an optional argument and returns the title
+ * if no id is passed it will return the tittle of the starred rss
  */
 function gerRssTitle($id='')
 {
