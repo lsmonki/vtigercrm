@@ -213,7 +213,7 @@ class Order extends CRMEntity {
 		where vtiger_crmentity.crmid=".$id."
 		order by createdtime desc";
 		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
+		return getAttachmentsAndNotes('PurchaseOrder',$query,$id);
 	}
 
 	/**	Function used to get the Status history of the Purchase Order

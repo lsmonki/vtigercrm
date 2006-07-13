@@ -220,7 +220,7 @@ class SalesOrder extends CRMEntity {
 		where vtiger_crmentity.crmid=".$id."
 		order by createdtime desc";
 	$log->debug("Exiting get_attachments method ...");
-	return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid='salesorderid');
+	return getAttachmentsAndNotes('SalesOrder',$query,$id);
 	}
 
 /** Function to get vtiger_invoices associated with the id
