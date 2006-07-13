@@ -110,6 +110,10 @@ class Activity extends CRMEntity {
 
 	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**
+	 * Function to get sort order
+	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	 */
 	function getSortOrder()
 	{	
 		global $log;                                                                                                  $log->debug("Entering getSortOrder() method ...");
@@ -121,6 +125,10 @@ class Activity extends CRMEntity {
 		return $sorder;
 	}
 	
+	/**
+	 * Function to get order by
+	 * return string  $order_by    - fieldname(eg: 'subject')
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -137,6 +145,11 @@ class Activity extends CRMEntity {
 
 
 //Function Call for Related List -- Start
+	/**
+	 * Function to get Activity related Contacts
+	 * @param  integer   $id      - activityid
+	 * returns related Contacts record in array format
+	 */
         function get_contacts($id)
 	{
 			global $log;
@@ -147,18 +160,18 @@ class Activity extends CRMEntity {
 
 			$button = '';
 
-			if(isPermitted("Contacts",3,"") == 'yes')
-			{
-				$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-			}
 			$returnset = '&return_module=Activities&return_action=CallRelatedList&activity_mode=Events&return_id='.$id;
-
 
 			$query = 'select vtiger_users.user_name,vtiger_contactdetails.accountid,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_cntactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
 			$log->debug("Exiting get_contacts method ...");
 			return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
         }
-
+	
+	/**
+	 * Function to get Activity related Users
+	 * @param  integer   $id      - activityid
+	 * returns related Users record in array format
+	 */
         function get_users($id)
 	{
 			global $adb,$log;
@@ -279,6 +292,11 @@ class Activity extends CRMEntity {
 
 		}
 
+	/**
+         * Function to get activities for given criteria
+	 * @param   string   $criteria     - query string
+	 * returns  activity records in array format($list) or null value
+         */	 
   	function get_full_list($criteria)
   	{
 	 global $log;
@@ -318,6 +336,11 @@ class Activity extends CRMEntity {
 
 	
 //calendarsync
+    /**
+     * Function to get meeting count
+     * @param  string   $user_name        - User Name
+     * return  integer  $row["count(*)"]  - count
+     */
     function getCount_Meeting($user_name) 
 	{
 		global $log;
@@ -340,7 +363,11 @@ class Activity extends CRMEntity {
 	    return $this->process_list_query1($query);   
     }       
 //calendarsync
-
+	/**
+	 * Function to get task count
+	 * @param  string   $user_name        - User Name
+	 * return  integer  $row["count(*)"]  - count
+	 */
     function getCount($user_name) 
     {
 	    global $log;
@@ -355,6 +382,13 @@ class Activity extends CRMEntity {
         return $row["count(*)"];
     }       
 
+    /**
+     * Function to get list of task for user with given limit
+     * @param  string   $user_name        - User Name
+     * @param  string   $from_index       - query string
+     * @param  string   $offset           - query string 
+     * returns tasks in array format
+     */
     function get_tasks($user_name,$from_index,$offset)
     {   
 	global $log;
@@ -365,7 +399,11 @@ class Activity extends CRMEntity {
     
     }
 	
-
+    /**
+     * Function to process the activity list query
+     * @param  string   $query     - query string
+     * return  array    $response  - activity lists
+     */
     function process_list_query1($query)
     {
 	    global $log;
@@ -407,7 +445,15 @@ class Activity extends CRMEntity {
 	$log->debug("Exiting process_list_query1 method ...");
         return $response;
     }
-		
+
+    	/**
+	 * Function to get reminder for activity
+	 * @param  integer   $activity_id     - activity id
+	 * @param  string    $reminder_time   - reminder time
+	 * @param  integer   $reminder_sent   - 0 or 1
+	 * @param  integer   $recurid         - recuring eventid
+	 * @param  string    $remindermode    - string like 'edit'	 
+	 */	
 	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
 	{
 		global $log;
@@ -442,6 +488,11 @@ class Activity extends CRMEntity {
 	}
 
 //Used for vtigerCRM Outlook Add-In
+/**
+ * Function to get tasks to display in outlookplugin
+ * @param   string    $username     -  User name
+ * return   string    $query        -  sql query 
+ */
 function get_tasksforol($username)
 {
 	global $log;
@@ -459,6 +510,9 @@ function get_tasksforol($username)
 	return $query;
 }
 
+/**
+ * Function to get calendar query for outlookplugin
+ * @param   string    $username     -  User name                                                                            * return   string    $query        -  sql query                                                                            */ 
 function get_calendarsforol($user_name)
 {
 	global $log;
