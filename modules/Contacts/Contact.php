@@ -131,6 +131,10 @@ class Contact extends CRMEntity {
 	}
 
     	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**
+	* Function to get sort order
+	* return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	*/
 	function getSortOrder()
 	{	
 		global $log;
@@ -142,7 +146,10 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting getSortOrder method ...");
 		return $sorder;
 	}
-
+	/**
+	* Function to get order by
+	* return string  $order_by    - fieldname(eg: 'Contactname')
+	*/
 	function getOrderBy()
 	{
 		global $log;
@@ -155,32 +162,44 @@ class Contact extends CRMEntity {
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
+	/** Function to get the number of Contacts assigned to a particular User.
+	*  @param varchar $user name - Assigned to User
+	*  Returns the count of contacts assigned to user.
+	*/
+	function getCount($user_name) 
+	{
+		global $log;
+		$log->debug("Entering getCount(".$user_name.") method ...");
+		$query = "select count(*) from vtiger_contactdetails  inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0";
 
-    function getCount($user_name) 
-    {
-	global $log;
-	$log->debug("Entering getCount(".$user_name.") method ...");
-        $query = "select count(*) from vtiger_contactdetails  inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0";
+		$result = $this->db->query($query,true,"Error retrieving contacts count");
+		$rows_found =  $this->db->getRowCount($result);
+		$row = $this->db->fetchByAssoc($result, 0);
 
-        $result = $this->db->query($query,true,"Error retrieving contacts count");
-        $rows_found =  $this->db->getRowCount($result);
-        $row = $this->db->fetchByAssoc($result, 0);
 
-    
-	$log->debug("Exiting getCount method ...");
-        return $row["count(*)"];
-    }       
-
+		$log->debug("Exiting getCount method ...");
+		return $row["count(*)"];
+	}       
+	/** Function to get the Contact Details assigned to a given User ID which has a valid Email Address.
+	* @param varchar $user_name - User Name (eg. Admin)
+	* @param varchar $email_address - Email Addr of each contact record.
+	* Returns the query.
+	*/
         function get_contacts1($user_name,$email_address)
-    {   
-	global $log;
-	$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
-      $query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as vtiger_account_name,vtiger_account.accountid as vtiger_account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%" .$email_address ."%' limit 50";
-    
-	$log->debug("Exiting get_contacts1 method ...");
-      return $this->process_list_query1($query);
-    }
+	{   
+		global $log;
+		$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
+		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as vtiger_account_name,vtiger_account.accountid as vtiger_account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%" .$email_address ."%' limit 50";
 
+		$log->debug("Exiting get_contacts1 method ...");
+		return $this->process_list_query1($query);
+	}
+	/** Function to get the Contact Details assigned to a particular User based on the starting count and the number of subsequent records.
+	*  @param varchar $user_name - Assigned User
+	*  @param integer $from_index - Initial record number to be displayed 
+	*  @param integer $offset - Count of the subsequent records to be displayed.
+	*  Returns Query.
+	*/
     function get_contacts($user_name,$from_index,$offset)
     {   
 	global $log;
@@ -192,7 +211,10 @@ class Contact extends CRMEntity {
     }
 
 
-
+    /** Function to process list query for a given query
+    *  @param $query
+    *  Returns the results of query in array format 
+    */
     function process_list_query1($query)
     {
 	global $log;
@@ -298,7 +320,11 @@ class Contact extends CRMEntity {
 		return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
 
 	}
-
+	/**
+	* Function to get Contact related Task & Event which have activity type Held, Completed or Deferred.
+	* @param  integer   $id      - contactid
+	* returns related Task or Event record in array format
+	*/
 	function get_history($id)
 	{
 		global $log;
@@ -322,7 +348,11 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_history method ...");
 		return getHistory('Contacts',$query,$id);
 	}
-	
+	/**
+	* Function to get Contact related Tickets.
+	* @param  integer   $id      - contactid
+	* returns related Ticket records in array format
+	*/
 	function get_tickets($id)
 	{
 		global $log;
@@ -338,7 +368,11 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
 	}
-
+	/**
+	* Function to get Contact related Attachments
+	* @param  integer   $id - contactid
+	* returns related Attachment record in array format
+	*/
 	function get_attachments($id)
 	{
 		global $log;
@@ -370,7 +404,11 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Contacts',$query,$id);
 	  }
-	 
+	  /**
+	  * Function to get Contact related Quotes
+	  * @param  integer   $id  - contactid
+	  * returns related Quotes record in array format
+	  */
 	 function get_quotes($id)
 	 {	
 		global $log;
@@ -389,7 +427,11 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
 	  }
-	 
+	/**
+	 * Function to get Contact related SalesOrder 
+ 	 * @param  integer   $id  - contactid
+	 * returns related SalesOrder record in array format
+	 */	 
 	 function get_salesorder($id)
 	 {	
 		 global $log;
@@ -410,7 +452,11 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting get_salesorder method ...");
 		 return GetRelatedList('Contacts','SalesOrder',$focus,$query,$button,$returnset);
 	 }
-	 
+	 /**
+	 * Function to get Contact related Products 
+	 * @param  integer   $id  - contactid
+	 * returns related Products record in array format
+	 */
 	 function get_products($id)
 	 {
 		 global $log;
@@ -431,7 +477,12 @@ class Contact extends CRMEntity {
 		$log->debug("Exiting get_products method ...");
 		 return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
 	 }
-	 
+
+	/**
+	 * Function to get Contact related PurchaseOrder 
+ 	 * @param  integer   $id  - contactid
+	 * returns related PurchaseOrder record in array format
+	 */	 
 	 function get_purchase_orders($id)
 	 {
 		global $log;
@@ -505,10 +556,11 @@ class Contact extends CRMEntity {
 		return GetRelatedList('Contacts','Campaigns',$focus,$query,$button,$returnset);
 
 	}
-
-
-
-
+	/** Function to export the contact records in CSV Format
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Contacts Query.
+	*/
         function create_export_query(&$order_by, &$where)
         {
 		global $log;
@@ -547,7 +599,10 @@ class Contact extends CRMEntity {
         }
 
 	
-//Used By vtigerCRM Word Add-In
+/** Function to get the Columnnames of the Contacts
+* Used By vtigerCRM Word Plugin
+* Returns the Merge Fields for Word Plugin
+*/
 function getColumnNames()
 {
 	global $log;
@@ -566,8 +621,12 @@ function getColumnNames()
 	return $mergeflds;
 }
 //End 
-
-//Used By vtigerCRM Outlook Add-In
+/** Function to get the Contacts assigned to a user with a valid email address.
+* @param varchar $username - User Name
+* @param varchar $emailaddress - Email Addr for each contact.
+* Used By vtigerCRM Outlook Plugin
+* Returns the Query 
+*/
 function get_searchbyemailid($username,$emailaddress)
 {
 	global $log;
@@ -587,6 +646,10 @@ function get_searchbyemailid($username,$emailaddress)
 	return $this->process_list_query1($query);
 }
 
+/** Function to get the Contacts associated with the particular User Name.
+*  @param varchar $user_name - User Name
+*  Returns query
+*/
 function get_contactsforol($user_name)
 {
 	global $log;
