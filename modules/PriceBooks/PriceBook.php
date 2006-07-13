@@ -49,6 +49,8 @@ class PriceBook extends CRMEntity {
 	var $default_order_by = 'bookname';
 	var $default_sort_order = 'ASC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function PriceBook() {
 		$this->log =LoggerManager::getLogger('pricebook');
 		$this->log->debug("Entering PriceBook() method ...");
@@ -58,6 +60,9 @@ class PriceBook extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**	Function used to get the sort order for Product listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -70,6 +75,9 @@ class PriceBook extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for Product listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRICEBOOK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -82,6 +90,10 @@ class PriceBook extends CRMEntity {
 		return $order_by;
 	}	
 
+	/**	function used to get the products which are related to the pricebook
+	 *	@param int $id - pricebook id
+         *      @return array - array which will be returned from the function getPriceBookRelatedProducts with parameters query, product object and returnset value
+        **/
 	function get_pricebook_products($id)
 	{
 		global $log;
@@ -98,12 +110,18 @@ class PriceBook extends CRMEntity {
 		$log->debug("Exiting get_pricebook_products method ...");
 		return getPriceBookRelatedProducts($query,$focus,$returnset);
 	}
+
+	/**	function used to get whether the pricebook has related with a product or not
+	 *	@param int $id - product id
+	 *	return true or false - return false if there are no pricebooks available or associated pricebooks for the product is equal to total number of pricebooks elase return true
+	 */
 	function get_pricebook_noproduct($id)
 	{
 		global $log;
 		$log->debug("Entering get_pricebook_noproduct(".$id.") method ...");
 		 
-		$query = "select vtiger_crmentity.crmid, vtiger_pricebook.* from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0";                                                                                                  $result = $this->db->query($query);
+		$query = "select vtiger_crmentity.crmid, vtiger_pricebook.* from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0";
+		$result = $this->db->query($query);
 		$no_count = $this->db->num_rows($result);
 		if($no_count !=0)
 		{

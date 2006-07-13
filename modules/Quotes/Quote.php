@@ -97,6 +97,8 @@ class Quote extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function Quote() {
 		$this->log =LoggerManager::getLogger('quote');
 		$this->db = new PearDatabase();
@@ -104,6 +106,9 @@ class Quote extends CRMEntity {
 	}
 	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**	Function used to get the sort order for Quote listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -116,6 +121,9 @@ class Quote extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for Quotes listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['QUOTES_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -129,6 +137,10 @@ class Quote extends CRMEntity {
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
 
+	/**	function used to get the list of sales orders which are related to the Quotes
+	 *	@param int $id - quote id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_salesorder($id)
 	{
 		global $log;
@@ -144,7 +156,11 @@ class Quote extends CRMEntity {
 		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
 	}
-	
+
+	/**	function used to get the list of activities which are related to the Quotes
+	 *	@param int $id - quote id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_activities($id)
 	{	
 		global $log;
@@ -161,6 +177,11 @@ class Quote extends CRMEntity {
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Quotes','Activities',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the the activity history related to the quote
+	 *	@param int $id - quote id
+	 *	return array - array which will be returned from the function GetHistory
+	 */
 	function get_history($id)
 	{
 		global $log;

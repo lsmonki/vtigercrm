@@ -92,6 +92,8 @@ class Invoice extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function Invoice() {
 		$this->log =LoggerManager::getLogger('Invoice');
 		$this->log->debug("Entering Invoice() method ...");
@@ -101,6 +103,9 @@ class Invoice extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**	Function used to get the sort order for Invoice listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['INVOICE_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -113,6 +118,9 @@ class Invoice extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for Invoice listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['INVOICE_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -125,6 +133,10 @@ class Invoice extends CRMEntity {
 		return $order_by;
 	}	
 
+
+	/**	function used to get the name of the current object
+	 *	return string $this->name - name of the current object
+	 */
 	function get_summary_text()
 	{
 		global $log;
@@ -132,6 +144,12 @@ class Invoice extends CRMEntity {
 		$log->debug("Exiting get_summary_text method ...");
 		return $this->name;
 	}
+
+
+	/**	function used to get the list of activities which are related to the invoice
+	 *	@param int $id - invoice id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_activities($id)
 	{
 		global $log;
@@ -148,6 +166,11 @@ class Invoice extends CRMEntity {
 		$log->debug("Exiting get_activities method ...");
 		return  GetRelatedList('Invoice','Activities',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the the activity history related to the quote
+	 *	@param int $id - invoice id
+	 *	return array - array which will be returned from the function GetHistory
+	 */
 	function get_history($id)
 	{
 		global $log;
@@ -171,6 +194,12 @@ class Invoice extends CRMEntity {
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Invoice',$query,$id);
 	}
+
+
+	/**	function used to get the attachment which are related to the invoice
+	 *	@param int $id - invoice id to which we want to retrieve the attachments and notes
+         *      @return array - array which will be returned from the function getAttachmentsAndNotes with parameters module, query, invoice id
+        **/
 	function get_attachments($id)
 	{
 		global $log;

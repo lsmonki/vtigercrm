@@ -89,10 +89,10 @@ class Order extends CRMEntity {
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
 
-/** Constructor Function for Order class
- *  This function creates an instance of LoggerManager class using getLogger method
- *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
-*/
+	/** Constructor Function for Order class
+	 *  This function creates an instance of LoggerManager class using getLogger method
+	 *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
+	 */
 	function Order() {
 		$this->log =LoggerManager::getLogger('PurchaseOrder');
 		$this->db = new PearDatabase();
@@ -100,6 +100,9 @@ class Order extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**	Function used to get the sort order for Purchase Order listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PURCHASEORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -112,6 +115,9 @@ class Order extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for Purchase Order listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PURCHASEORDER_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -124,10 +130,10 @@ class Order extends CRMEntity {
 		return $order_by;
 	}	
 
-/** Function to get activities associated with the id
- *  This function accepts the id as arguments and execute the MySQL query using the id
- *  and sends the query and the id as arguments to renderRelatedActivities() method 
-*/
+	/** Function to get activities associated with the id
+	 *  This function accepts the id as arguments and execute the MySQL query using the id
+	 *  and sends the query and the id as arguments to renderRelatedActivities() method 
+	 */
 	function get_activities($id)
 	{
 		global $log;
@@ -145,10 +151,10 @@ class Order extends CRMEntity {
 		return GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
 	}
 
-/** Function to get history associated with the id
- *  This function accepts the id as arguments and execute the MySQL query using the id
- *  and sends the query and the id as arguments to renderRelatedHistory() method
-*/
+	/** Function to get history associated with the id
+	 *  This function accepts the id as arguments and execute the MySQL query using the id
+	 *  and sends the query and the id as arguments to renderRelatedHistory() method
+	 */
 	function get_history($id)
 	{
 		global $log;
@@ -173,10 +179,10 @@ class Order extends CRMEntity {
 		return getHistory('PurchaseOrder',$query,$id);
 	}
 
-/** Function to get vtiger_attachments associated with the id
- *  This function accepts the id as arguments and execute the MySQL query using the id
- *  and sends the query and the id as arguments to renderRelatedAttachments() method.
-*/
+	/** Function to get vtiger_attachments associated with the id
+	 *  This function accepts the id as arguments and execute the MySQL query using the id
+	 *  and sends the query and the id as arguments to renderRelatedAttachments() method.
+	 */
 	function get_attachments($id)
 	{
 		global $log;
@@ -213,7 +219,7 @@ class Order extends CRMEntity {
 		where vtiger_crmentity.crmid=".$id."
 		order by createdtime desc";
 		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('PurchaseOrder',$query,$id);
+		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
 	}
 
 	/**	Function used to get the Status history of the Purchase Order

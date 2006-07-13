@@ -55,6 +55,8 @@ class Vendor extends CRMEntity {
 	var $default_order_by = 'vendorname';
 	var $default_sort_order = 'ASC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function Vendor() {
 		$this->log =LoggerManager::getLogger('vendor');
 		$this->log->debug("Entering Vendor() method ...");
@@ -63,6 +65,10 @@ class Vendor extends CRMEntity {
 		$this->log->debug("Exiting Vendor method ...");
 	}
 
+	/**	function used to get the list of products which are related to the vendor
+	 *	@param int $id - vendor id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_products($id)
 	{
 		global $log;
@@ -79,6 +85,11 @@ class Vendor extends CRMEntity {
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of purchase orders which are related to the vendor
+	 *	@param int $id - vendor id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_purchase_orders($id)
 	{
 		global $log;
@@ -95,6 +106,11 @@ class Vendor extends CRMEntity {
 		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of contacts which are related to the vendor
+	 *	@param int $id - vendor id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_contacts($id)
 	{
 		global $log;

@@ -69,6 +69,8 @@ class Product extends CRMEntity {
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
 
+	/**	Constructor which will set the column_fields in this object
+	 */
 	function Product() {
 		$this->log =LoggerManager::getLogger('product');
 		$this->log->debug("Entering Product() method ...");
@@ -76,7 +78,10 @@ class Product extends CRMEntity {
 		$this->column_fields = getColumnFields('Products');
 		$this->log->debug("Exiting Product method ...");
 	}
-	
+
+	/**	Function used to get the sort order for Product listview
+	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -89,6 +94,9 @@ class Product extends CRMEntity {
 		return $sorder;
 	}
 
+	/**	Function used to get the order by value for Product listview
+	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -101,13 +109,15 @@ class Product extends CRMEntity {
 		return $order_by;
 	}
 
+	/**	function used to get the attachment which are related to the product
+	 *	@param int $id - product id to which we want to retrieve the attachments and notes
+         *      @return array - array which will be returned from the function getAttachmentsAndNotes with parameters module, query, product id
+        **/
 	function get_attachments($id)
 	{
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted vtiger_crmentity.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+
 		$query = "SELECT vtiger_notes.title, 'Notes      ' AS ActivityType,
 			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
 				crm2.modifiedtime AS lastmodified,
@@ -153,8 +163,13 @@ class Product extends CRMEntity {
 
 		$log->debug("Exiting get_attachments method ...");
         	return getAttachmentsAndNotes('Products',$query,$id);
-		}
+	}
 
+	/**	function used to get the list of potentials which are related to the product
+	 *	@param int $id - product id 
+	 *	@return void
+	 *	 but this function will call the function renderRelatedPotentials with parameter query
+	 */
 	function get_opportunities($id)
 	{
 		global $log;
@@ -170,12 +185,17 @@ class Product extends CRMEntity {
 				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+			inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_opportunities method ...");
           renderRelatedPotentials($query);
         }
 
+	/**	function used to get the list of tickets which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_tickets($id)
 	{
 		global $log;
@@ -212,7 +232,10 @@ class Product extends CRMEntity {
 		return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
 	}
 
-
+	/**	function used to get the list of activities which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_activities($id)
 	{
 		global $log;
@@ -262,6 +285,11 @@ class Product extends CRMEntity {
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of quotes which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_quotes($id)
 	{
 		global $log;
@@ -297,6 +325,11 @@ class Product extends CRMEntity {
 		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of purchase orders which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_purchase_orders($id)
 	{
 		global $log;
@@ -329,6 +362,11 @@ class Product extends CRMEntity {
 		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of sales orders which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_salesorder($id)
 	{
 		global $log;
@@ -363,6 +401,11 @@ class Product extends CRMEntity {
 		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of invoices which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_invoices($id)
 	{
 		global $log;
@@ -395,6 +438,11 @@ class Product extends CRMEntity {
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
 	}
+
+	/**	function used to get the list of pricebooks which are related to the product
+	 *	@param int $id - product id
+	 *	return array - array which will be returned from the function GetRelatedList
+	 */
 	function get_product_pricebooks($id)
 	{     
 		global $log;
@@ -420,6 +468,10 @@ class Product extends CRMEntity {
 		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
 	}
 
+	/**	function used to get the number of vendors which are related to the product
+	 *	@param int $id - product id
+	 *	return int number of rows - return the number of products which do not have relationship with vendor
+	 */
 	function product_novendor()
 	{
 		global $log;
@@ -429,13 +481,17 @@ class Product extends CRMEntity {
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_products.vendor_id = ''";
+			AND vtiger_products.vendor_id is NULL";
 		$result=$this->db->query($query);
 		$log->debug("Exiting product_novendor method ...");
 		return $this->db->num_rows($result);
 	}
 	
-	
+	/**	function used to get the export query for product
+	 *	@param reference &$order_by - reference of the order by variable which will be added with the query
+	 *	@param reference &$where - reference of the where variable which will be added with the query
+	 *	return string $query - return the query which will give the list of products to export
+	 */	
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
