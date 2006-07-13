@@ -34,7 +34,11 @@ class DateTime
 	var $format;
 	var $tz;
 	var $ts_def;
-	
+	/**
+	 * Constructor for DateTime class
+	 * @param array  $timearr - collection of string
+	 * @param string $check   - check string
+	 */
 	function DateTime(&$timearr,$check)
 	{
 		if (! isset( $timearr) || count($timearr) == 0 )
@@ -86,7 +90,14 @@ class DateTime
                 }
 	}
 
-	
+	/**
+	  * function to get date and time using index
+	  * @param integer       $index - number between 0 to 23
+	  * @param string        $day   - date  
+	  * @param string        $month - month
+	  * @param string        $year  - year
+	  * return DateTime obj  $datetimevalue
+	  */
 	function getTodayDatetimebyIndex($index,$day='', $month='', $year='')
 	{
 		if($day == '')
@@ -108,6 +119,12 @@ class DateTime
 		$datetimevalue = new DateTime($day_array,true);
                 return $datetimevalue;
 	}
+	/**
+	 * function to get days in week using index
+	 * @param integer       $index - number between 0 to 6
+	 * return DateTime obj  $datetimevalue
+	 */
+
 	function getThisweekDaysbyIndex($index)
         {
                 $week_array = array();
@@ -121,6 +138,16 @@ class DateTime
                 $datetimevalue = new DateTime($week_array,true);
                 return $datetimevalue;
         }
+
+	/**
+	 * function to get days in month using index
+	 * @param integer       $index - number between 0 to 42
+	 * @param string        $day   - date
+	 * @param string        $month - month
+	 * @param string        $year  - year
+	 * return DateTime obj  $datetimevalue
+	 */
+
 	function getThismonthDaysbyIndex($index,$day='', $month='', $year='')
         {
 		if($day == '')
@@ -136,6 +163,13 @@ class DateTime
                 $datetimevalue = new DateTime($month_array,true);
                 return $datetimevalue;
         }
+
+	/**
+	* function to get months in year using index
+	* @param integer       $index - number between 0 to 11
+	* return DateTime obj  $datetimevalue
+	*/
+
 	function getThisyearMonthsbyIndex($index)
         {
                 $year_array = array();
@@ -150,6 +184,11 @@ class DateTime
                 return $datetimevalue;
         }
 	
+	/**
+	* function to get hour end time 
+	* return DateTime obj  $datetimevalue
+	*/
+
 	function getHourendtime()
         {
                 $date_array = array();
@@ -162,6 +201,11 @@ class DateTime
 		$datetimevalue = new DateTime($date_array,true);
                 return $datetimevalue;
         }
+
+	/**
+	* function to get day end time
+	* return DateTime obj  $datetimevalue
+	*/
 	function getDayendtime()
         {
                 $date_array = array();
@@ -175,6 +219,10 @@ class DateTime
                 return $datetimevalue;
         }
 
+	/**
+	* function to get month end time
+	* return DateTime obj  $datetimevalue
+	*/
 	function getMonthendtime()
         {
                 $date_array = array();
@@ -188,31 +236,62 @@ class DateTime
                 return $datetimevalue;
         }
 	
+	/**
+	* function to get day of week
+	* return string $this->day  - day (eg: Monday)
+	*/
 	function get_Date()
 	{
 		return $this->day;
 	}
+
+	/**
+	* function to short month name
+	* return string $this->month_inshort  - month name (eg: Jan)
+	*/
 	function getmonthName_inshort()
 	{
 		return $this->month_inshort;
 	}	
+	/**
+	* function to month name
+	* return string $this->month  - month name
+	*/
 	function getMonth()
         {
                 return $this->month;
         }
+	/**
+	 * function to month name
+	 * return string $this->month_inlong  - month name
+	 */
 	function getmonthName()
 	{
 		return $this->month_inlong;
 	}
 	
+	/**
+	* function to month name
+	* return string $this->month_inlong  - month name
+	*/
 	function getdayofWeek()
 	{
 		return $this->dayofweek_inlong;
 	}
+	/**
+	* function to day of week in short
+	* return string $this->dayofweek_inshort  - day of week (eg: Mon)
+	*/
+
 	function getdayofWeek_inshort()
 	{
 		return $this->dayofweek_inshort;
 	}
+
+	/**
+	* function to set values for DateTime object
+	* @param integer   $ts  - Time stamp
+	*/
 	function setDateTime($ts)
 	{
 		global $mod_strings;
@@ -257,6 +336,10 @@ class DateTime
 
 
 	}
+
+	/**
+	* function to get values from DateTime object
+	*/
 	function getDateTime()
         {
                 global $mod_strings;
@@ -298,15 +381,28 @@ class DateTime
                 $this->ts = mktime($hour,$minute,$second,$month,$day,$year);
                 $this->setDateTime($this->ts);
 	}
+	/**
+	* function to get mysql formatted date 
+	* return formatted date in string format 
+	*/
 	function get_formatted_date()
         {
                 return $this->year."-".$this->z_month."-".$this->z_day;
         }
+	/**
+	* function to get mysql formatted time
+	* return formatted time in string format
+	*/
         function get_formatted_time()
         {
                 return $this->z_hour.":".$this->min;
         }
 	
+	/**
+	* function to get date depends on mode value
+	* @param string $mode  - 'increment' or 'decrement'
+	* return DateTime obj
+	*/
 	function get_changed_day($mode)
 	{
 		if($mode == 'increment')
@@ -322,6 +418,11 @@ class DateTime
                 return new DateTime($date_data,true);
 	}
 	
+	/**
+	* function to get changed week depends on mode value
+	* @param string $mode  - 'increment' or 'decrement'
+	* return DateTime obj
+	*/
 	function get_first_day_of_changed_week($mode)
 	{
 		$first_day = $this->getThisweekDaysbyIndex(0);
@@ -337,6 +438,11 @@ class DateTime
 		return new DateTime($date_data,true);
 	}
 	
+	/**
+	* function to get month depends on mode value
+	* @param string $mode  - 'increment' or 'decrement'
+	* return DateTime obj
+	*/
 	function get_first_day_of_changed_month($mode)
 	{
 		if($mode == 'increment')
@@ -366,6 +472,11 @@ class DateTime
                 return new DateTime($date_data,true);
 	}
 
+	/**
+	* function to get year depends on mode value
+	* @param string $mode  - 'increment' or 'decrement'
+	* return DateTime obj
+	*/
 	function get_first_day_of_changed_year($mode)
 	{
 		if($mode == 'increment')
@@ -381,6 +492,10 @@ class DateTime
                 return new DateTime($date_data,true);	
 	}
 	
+	/**
+	* function to get date string 
+	* return date string 
+	*/
 	function get_date_str()
         {
 
