@@ -39,6 +39,7 @@ $focus->load_user($user_password);
 if($focus->is_authenticated())
 {
 
+	//Inserting entries for audit trail during login
 	$date_var = date('YmdHis');
 	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate',0,$date_var)";
 	$adb->query($query);
@@ -57,7 +58,6 @@ if($focus->is_authenticated())
 	//Security related entries start
 	require_once('include/utils/UserInfoUtil.php');
 	$profileid = fetchUserProfileId($focus->id);	
-	//setting the role into the session
 
 	createUserPrivilegesfile($focus->id);
 		
