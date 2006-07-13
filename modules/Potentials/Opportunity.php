@@ -103,6 +103,10 @@ class Potential extends CRMEntity {
 
 	var $new_schema = true;
 	
+	/**
+	* Function to get sort order
+	* return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	*/
 	function getSortOrder()
 	{
 		global $log;
@@ -115,6 +119,10 @@ class Potential extends CRMEntity {
 		return $sorder;
 	}
 
+	/**
+	* Function to get order by
+	* return string  $order_by    - fieldname(eg: 'Potentialname')
+	*/
 	function getOrderBy()
 	{
 		global $log;
@@ -127,6 +135,11 @@ class Potential extends CRMEntity {
 		return $order_by;
 	}	
 
+	/** Function to create list query 
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Query.
+	*/
 	function create_list_query($order_by, $where)
 	{
 		global $log;
@@ -161,7 +174,11 @@ class Potential extends CRMEntity {
 		return $query;
 	}
 
-
+	/** Function to export the Opportunities records in CSV Format
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Potentials Query.
+	*/
 	function create_export_query($order_by, $where)
 	{
 		global $log;
@@ -258,7 +275,11 @@ class Potential extends CRMEntity {
 
 	}
 
-
+	 /**
+	 * Function to get Contact related Products 
+	 * @param  integer   $id  - contactid
+	 * returns related Products record in array format
+	 */
 	function get_products($id)
 	{
 		global $log;
@@ -329,9 +350,14 @@ class Potential extends CRMEntity {
 
 		return $return_data;
 	}
-
-		function get_history($id)
-		{
+	
+	/**
+	* Function to get Potential related Task & Event which have activity type Held, Completed or Deferred.
+	* @param  integer   $id 
+	* returns related Task or Event record in array format
+	*/
+	function get_history($id)
+	{
 			global $log;
 			$log->debug("Entering get_history(".$id.") method ...");
 			$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
@@ -355,6 +381,11 @@ class Potential extends CRMEntity {
 		return getHistory('Potentials',$query,$id);
 	}
 
+	/**
+	* Function to get Potential related Attachments
+	* @param  integer   $id
+	* returns related Attachment record in array format
+	*/
 	function get_attachments($id)
 	{
 		 global $log;
@@ -395,6 +426,11 @@ class Potential extends CRMEntity {
 		return getAttachmentsAndNotes('Potentials',$query,$id);
 	}
 
+	  /**
+	  * Function to get Potential related Quotes
+	  * @param  integer   $id  - potentialid
+	  * returns related Quotes record in array format
+	  */
 	function get_quotes($id)
 	{
 		 global $log;
@@ -417,6 +453,12 @@ class Potential extends CRMEntity {
 		$log->debug("Exiting get_quotes method ...");
 		return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 	}
+
+	/**
+	 * Function to get Potential related SalesOrder 
+ 	 * @param  integer   $id  - potentialid
+	 * returns related SalesOrder record in array format
+	 */	 
 	function get_salesorder($id)
 	{
 		global $log;
