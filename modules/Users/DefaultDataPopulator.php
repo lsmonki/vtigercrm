@@ -16,6 +16,9 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
+/** Class to populate the default required data during installation  
+ */
+
 class DefaultDataPopulator extends CRMEntity {
 		
 	function DefaultDataPopulator() {
@@ -25,6 +28,9 @@ class DefaultDataPopulator extends CRMEntity {
 
 	var $new_schema = true;
 
+
+	/** Function to populate the default required data during installation  
+ 	*/
 	function create_tables () {
 		global $app_strings;
 
