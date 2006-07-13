@@ -104,7 +104,9 @@ if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_o
 
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
 
-//Code to save the custom vtiger_field info into database
+/** Function to save Accounts custom field info into database
+* @param integer $entity_id - accountid
+*/
 function save_customfields($entity_id)
 {
 	global $log;
