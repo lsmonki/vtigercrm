@@ -52,6 +52,14 @@ $server->register(
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
+$server->register(
+	'unsubscribe_email',
+	array(
+		'email_address'=>'xsd:string'
+	     ),
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
 
 function create_lead_from_webform($lastname, $email, $phone, $company, $country, $description, $assigned_user_id)
 {
@@ -122,7 +130,35 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 	return $msg;
 }
 
+function unsubscribe_email($emailid)
+{
+	global $adb;
+	$adb->println("Enter into the function unsubscribe_email($emailid)");
+	
+	$contact_res = $adb->query("select emailoptout from vtiger_contactdetails where email=\"$emailid\"");
+	$contact_noofrows = $adb->num_rows($contact_res);
+	$emailoptout = $adb->query_result($contact_res,0,'emailoptout');
 
+	if($contact_noofrows > 0)
+	{
+		if($emailoptout != 1)
+		{
+			$adb->query("update vtiger_contactdetails set emailoptout=1 where email=\"$emailid\"");
+			$msg = "You have been unsubscribed.";
+		}
+		else
+		{
+			$msg = "You are already unsubscribed.";
+		}
+	}
+	else
+	{
+		$msg = "There are no record available for this mail address.";
+	}
+
+	$adb->println("Exit from the function unsubscribe_email($emailid)");
+	return $msg;
+}
 
 
 //$log->fatal("In soap.php");
