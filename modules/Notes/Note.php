@@ -80,6 +80,11 @@ class Note extends CRMEntity {
 
 	var $new_schema = true;
 
+	/** Function to export the notes in CSV Format
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Notes Query.
+	*/
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
