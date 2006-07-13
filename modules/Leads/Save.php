@@ -81,7 +81,9 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 
-//Code to save the custom vtiger_field info into database
+/** Function to save the Lead custom fields info into database
+ *  @param integer $entity_id - leadid
+*/
 function save_customfields($entity_id)
 {
 	$log->debug("Entering save_customfields(".$entity_id.") method ...");
