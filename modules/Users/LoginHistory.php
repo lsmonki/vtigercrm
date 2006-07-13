@@ -142,7 +142,12 @@ class LoginHistory {
 		
 	}
 	
-	/** Records the Login info */
+	/** Function that Records the Login info of the User 
+	 *  @param ref variable $usname :: Type varchar
+	 *  @param ref variable $usip :: Type varchar
+	 *  @param ref variable $intime :: Type timestamp
+	 *  Returns the query result which contains the details of User Login Info
+	*/
 	function user_login(&$usname,&$usip,&$intime)
 	{
 		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signed in')";
@@ -152,6 +157,12 @@ class LoginHistory {
 		return $result;
 	}
 	
+	/** Function that Records the Logout info of the User 
+	 *  @param ref variable $usname :: Type varchar
+	 *  @param ref variable $usip :: Type varchar
+	 *  @param ref variable $outime :: Type timestamp
+	 *  Returns the query result which contains the details of User Logout Info
+	*/
 	function user_logout(&$usname,&$usip,&$outtime)
 	{
 		$logid_qry = "SELECT max(login_id) AS login_id from vtiger_loginhistory where user_name='$usname' and user_ip='$usip'";
@@ -167,6 +178,11 @@ class LoginHistory {
                         or die("MySQL error: ".mysql_error());
 	}
 
+	/** Function to create list query 
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Query.
+	*/
   	function create_list_query(&$order_by, &$where)
   	{
 		// Determine if the vtiger_account name is present in the where clause.
