@@ -21,6 +21,12 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 $smarty->assign("IMAGE_PATH", $image_path);
 
+/**
+ * Function to get Account custom fields
+ * @param integer $leadid      - lead customfield id
+ * @param integer $accountid   - account customfield id
+ * return array   $accountcf   - account customfield
+ */
 function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
@@ -44,6 +50,12 @@ function getAccountCustomValues($leadid,$accountid)
 	return $accountcf;
 }
 
+/**
+ * Function to get contact custom fields
+ * @param integer $leadid      - lead customfield id
+ * @param integer $contactid   - contact customfield id
+ * return array   $contactcf   - contact customfield
+ */
 function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
@@ -66,6 +78,12 @@ function getContactCustomValues($leadid,$contactid)
         return $contactcf;
 }	
 
+/**
+ * Function to get potential custom fields
+ * @param integer $leadid      - lead customfield id
+ * @param integer $potentialid - potential customfield id
+ * return array   $potentialcf - potential customfield
+ */
 function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
@@ -87,6 +105,11 @@ function getPotentialCustomValues($leadid,$potentialid)
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
         return $potentialcf;
 }
+
+/**
+ * Function to get leads mapping custom fields
+ * return array   $leadcf - mapping custom fields
+ */
 
 function customFieldMappings()
 {
