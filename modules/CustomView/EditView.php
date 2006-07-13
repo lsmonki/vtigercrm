@@ -144,7 +144,68 @@ $smarty->assign("RETURN_ACTION", "index");
 
 $smarty->display("CustomView.tpl");
 
-//step2
+/** to get the custom columns for the given module and columnlist  
+  * @param $module (modulename):: type String 
+  * @param $columnslist (Module columns list):: type Array 
+  * @param $selected (selected or not):: type String (Optional)
+  * @returns  $advfilter_out array in the following format 
+  *	$advfilter_out = Array ('BLOCK1 NAME'=>
+  * 					Array(0=>
+  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
+  *						      'text'=>$fieldlabel,
+  *					      	      'selected'=><selected or ''>),
+  *			      		      1=>
+  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
+  *						      'text'=>$fieldlabel1,
+  *					      	      'selected'=><selected or ''>)
+  *					      ),
+  *								|
+  *								|
+  *					      n=>
+  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
+  *						      'text'=>$fieldlabeln,
+  *					      	      'selected'=><selected or ''>)
+  *					      ), 
+  *				'BLOCK2 NAME'=>
+  * 					Array(0=>
+  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
+  *						      'text'=>$fieldlabel,
+  *					      	      'selected'=><selected or ''>),
+  *			      		      1=>
+  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
+  *						      'text'=>$fieldlabel1,
+  *					      	      'selected'=><selected or ''>)
+  *					      )
+  *								|
+  *								|
+  *					      n=>
+  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
+  *						      'text'=>$fieldlabeln,
+  *					      	      'selected'=><selected or ''>)
+  *					      ), 
+  *
+  *					||
+  *					||
+  *				'BLOCK_N NAME'=>
+  * 					Array(0=>
+  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
+  *						      'text'=>$fieldlabel,
+  *					      	      'selected'=><selected or ''>),
+  *			      		      1=>
+  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
+  *						      'text'=>$fieldlabel1,
+  *					      	      'selected'=><selected or ''>)
+  *					      )
+  *								|
+  *								|
+  *					      n=>
+  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
+  *						      'text'=>$fieldlabeln,
+  *					      	      'selected'=><selected or ''>)
+  *					      ), 
+  *
+  */
+
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
 	global $oCustomView;
@@ -194,9 +255,14 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	}
 	return $advfilter_out;
 }
-//step2
 
-//step3
+       /** to get the standard filter criteria  
+	* @param $module(module name) :: Type String 
+	* @param $elected (selection status) :: Type String (optional)
+	* @returns  $filter Array in the following format
+	* $filter = Array( 0 => array('value'=>$tablename:$colname:$fieldname:$fieldlabel,'text'=>$mod_strings[$field label],'selected'=>$selected),
+	* 		     1 => array('value'=>$$tablename1:$colname1:$fieldname1:$fieldlabel1,'text'=>$mod_strings[$field label1],'selected'=>$selected),	
+	*/	
 function getStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
@@ -242,9 +308,15 @@ function getStdFilterHTML($module,$selected="")
 
 	return $stdfilter;
 }
-//step3
 
-//step4
+      /** to get the Advanced filter criteria  
+	* @param $selected :: Type String (optional)
+	* @returns  $AdvCriteria Array in the following format
+	* $AdvCriteria = Array( 0 => array('value'=>$tablename:$colname:$fieldname:$fieldlabel,'text'=>$mod_strings[$field label],'selected'=>$selected),
+	* 		     1 => array('value'=>$$tablename1:$colname1:$fieldname1:$fieldlabel1,'text'=>$mod_strings[$field label1],'selected'=>$selected),	
+	*		                             		|	
+	* 		     n => array('value'=>$$tablenamen:$colnamen:$fieldnamen:$fieldlabeln,'text'=>$mod_strings[$field labeln],'selected'=>$selected))	
+	*/
 function getAdvCriteriaHTML($selected="")
 {
 	global $adv_filter_options;
