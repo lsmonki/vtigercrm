@@ -30,7 +30,6 @@ global $adb;
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Activity();
-
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
@@ -168,7 +167,11 @@ if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
 if($_REQUEST['start'] !='')$page='&start='.$_REQUEST['start'];
 header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab");
 
-//Function to get the vtiger_activity details for mail body
+/**
+ * Function to get the vtiger_activity details for mail body
+ * @param   string   $description       - activity description
+ * return   string   $list              - HTML in string format
+ */
 function getActivityDetails($description)
 {
 	global $log;
