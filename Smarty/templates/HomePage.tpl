@@ -180,7 +180,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 			</div>
 			{/if}	
 		{else}
-                        <div class="MatrixLayer" style="float:left;width:63%;" id="homepagedb">
+                        <div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
                         <table width="100%" height="100%" border="0" cellpadding="5" cellspacing="0" class="small">
                           <tr align="left"><td>
                                 {$tabledetail}
