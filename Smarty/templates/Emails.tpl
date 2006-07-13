@@ -13,6 +13,7 @@
 <script language="javascript">
 function ShowFolders(folderid)
 {ldelim}
+	gselectedrowid = 0;
 	$("status").style.display="inline";
 	gFolderid = folderid;
 	getObj('search_text').value = '';

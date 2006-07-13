@@ -22,9 +22,9 @@
 			<td>
 			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
 </span></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.0}</b></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.1}</b></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.2}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.0}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.1}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.2}</b></td>
         </tr>
 		{/foreach}
     </table>
