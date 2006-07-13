@@ -33,7 +33,13 @@ class UploadFile
 		$this->field_name = $field_name;
 		$log->debug("Exiting UploadFile method ...");
         }
-
+	
+	/** Function to get the url of the attachment
+	  * @param $stored_file_name -- stored_file_name:: Type string
+	  * @param $bean_id -- bean_id:: Type integer
+	  * @returns urlstring -- urlstring:: Type string
+	  *
+	  */
 	function get_url($stored_file_name,$bean_id)
 	{
 		global $log;
@@ -47,6 +53,13 @@ class UploadFile
                 //return $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
 	}
 
+	/** Function to duplicate and copy a file to another location
+	  * @param $old_id -- old_id:: Type integer
+	  * @param $new_id -- new_id:: Type integer
+	  * @param $file_name -- filename:: Type string
+	  *
+	  */
+
 	function duplicate_file($old_id, $new_id, $file_name)
 	{
 		global $log;
@@ -59,6 +72,10 @@ class UploadFile
 		$log->debug("Exiting duplicate_file method ...");
 	}
 	
+	/** Function to get the status of the file upload
+	  * @returns boolean
+	  */
+
 	function confirm_upload()
 	{
 		global $log;
@@ -90,6 +107,9 @@ class UploadFile
 		return true;
 	}
 
+	/** Function to get the stored file name
+	  */
+
 	function get_stored_file_name()
 	{
 		global $log;
@@ -97,6 +117,9 @@ class UploadFile
 		$log->debug("Exiting get_stored_file_name method ...");
 		return $this->stored_file_name;
 	}
+
+	/** Function to generate a filename for storing
+	  */
 
 	function create_stored_filename()
 	{
@@ -116,6 +139,12 @@ class UploadFile
 		$log->debug("Exiting create_stored_filename method ...");
 		return $stored_file_name;
 	}
+
+	/** Function is to move a file and store it in given location
+	  * @param $bean_id -- $bean_id:: Type integer
+	  * @returns boolean
+	  *
+	  */
 
 	function final_move($bean_id)
 	{
@@ -137,6 +166,13 @@ class UploadFile
 
 
 	}
+
+	/** Function deletes a file for a given file name
+	  * @param $bean_id -- bean_id:: Type integer
+	  * @param $file_name -- file name:: Type string
+	  * @returns boolean
+	  *
+	  */
 
 	function unlink_file($bean_id,$file_name)
         {

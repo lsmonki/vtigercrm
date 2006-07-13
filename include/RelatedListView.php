@@ -14,6 +14,20 @@ require_once('include/utils/UserInfoUtil.php');
 require_once("include/utils/utils.php");
 require_once("include/ListView/ListViewSession.php");
 
+/** Function to get related list entries in detailed array format
+  * @param $module -- modulename:: Type string
+  * @param $relatedmodule -- relatedmodule:: Type string
+  * @param $focus -- focus:: Type object
+  * @param $query -- query:: Type string
+  * @param $button -- buttons:: Type string
+  * @param $returnset -- returnset:: Type string
+  * @param $id -- id:: Type string
+  * @param $edit_val -- edit value:: Type string
+  * @param $del_val -- delete value:: Type string
+  * @returns $related_entries -- related entires:: Type string array
+  *
+  */
+
 function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='')
 {
 	$log = LoggerManager::getLogger('account_list');
@@ -204,6 +218,14 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 }
 
+/** Function to get related list entries in detailed array format
+  * @param $parentmodule -- parentmodulename:: Type string
+  * @param $query -- query:: Type string
+  * @param $id -- id:: Type string
+  * @returns $entries_list -- entries list:: Type string array
+  *
+  */
+
 function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 {
 	global $log;
@@ -304,6 +326,14 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	return $return_data;
 
 }
+
+/** Function to get related list entries in detailed array format
+  * @param $parentmodule -- parentmodulename:: Type string
+  * @param $query -- query:: Type string
+  * @param $id -- id:: Type string
+  * @returns $return_data -- return data:: Type string array
+  *
+  */
 
 function getHistory($parentmodule,$query,$id)
 {

@@ -25,6 +25,8 @@ class PopulateComboValues
 
 	/** 
 	 * To populate the default combo values for the combo vtiger_tables
+	 * @param $values -- values:: Type string array
+	 * @param $tableName -- tablename:: Type string 
 	 */
 	function insertComboValues($values, $tableName)
 	{

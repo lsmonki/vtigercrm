@@ -10,6 +10,10 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
+/** Function to  returns the combo field values in array format
+  * @param $combofieldNames -- combofieldNames:: Type string array
+  * @returns $comboFieldArray -- comboFieldArray:: Type string array
+ */
 function getComboArray($combofieldNames)
 {
 	global $log;

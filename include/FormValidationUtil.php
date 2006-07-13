@@ -13,6 +13,13 @@
  * File containing methods to proceed with the ui validation for all the forms
  *
  */
+/** Function to get the details for fieldlabels for a given table array
+  * @param $tablearray -- tablearray:: Type string array (table names in array)
+  * @param $tabid -- tabid:: Type integer 
+  * @returns $fieldName_array -- fieldName_array:: Type string array (field name details)
+  *
+ */
+
 
 function getDBValidationData($tablearray,$tabid='')
 {
