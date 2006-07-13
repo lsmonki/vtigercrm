@@ -91,6 +91,13 @@ else
 {
 	echo $mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule;
 }
+
+	/** Function to get the StdfilterHTML strings for the given  primary module 
+	 *  @ param $module : Type String
+	 *  @ param $selected : Type String(optional)	
+	 *  This Generates the HTML Combo strings for the standard filter for the given reports module  
+	 *  This Returns a HTML sring
+	 */
 function getPrimaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
@@ -130,6 +137,12 @@ function getPrimaryStdFilterHTML($module,$selected="")
 	return $shtml;
 }
 
+	/** Function to get the StdfilterHTML strings for the given secondary module 
+	 *  @ param $module : Type String
+	 *  @ param $selected : Type String(optional)	
+	 *  This Generates the HTML Combo strings for the standard filter for the given reports module  
+	 *  This Returns a HTML sring
+	 */
 function getSecondaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
@@ -173,6 +186,11 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	}
 	return $shtml;
 }
+	/** Function to get the reports under a report folder 
+	 *  @ param $folderid : Type Integer 
+	 *  This Returns $reports_array in the following format 
+	 *  		$reports_array = array ($reportid=>$reportname,$reportid=>$reportname1,.............,$reportidn=>$reportname)
+	 */
 function getReportsinFolder($folderid)
 {
 	global $adb;

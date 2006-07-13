@@ -28,6 +28,11 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }
 
+/** To Delete a Report 
+  * @param $reportid -- The report id
+  * @returns nothing
+  */
+       
 function DeleteReport($reportid)
 {
 	global $adb;

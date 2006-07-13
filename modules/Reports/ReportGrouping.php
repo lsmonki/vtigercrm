@@ -66,6 +66,12 @@ if(isset($_REQUEST["record"]))
 }
 
 
+	/** Function to get the combo values for the Primary module Columns 
+	 *  @ param $module(module name) :: Type String
+	 *  @ param $selected (<selected or ''>) :: Type String
+	 *  This function generates the combo values for the columns  for the given module 
+	 *  and return a HTML string 
+	 */
 
 function getPrimaryColumns_GroupingHTML($module,$selected="")
 {
@@ -109,6 +115,12 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
         return $shtml;
 }
 
+	/** Function to get the combo values for the Secondary module Columns 
+	 *  @ param $module(module name) :: Type String
+	 *  @ param $selected (<selected or ''>) :: Type String
+	 *  This function generates the combo values for the columns for the given module 
+	 *  and return a HTML string 
+	 */
 function getSecondaryColumns_GroupingHTML($module,$selected="")
 {
         global $ogReport;

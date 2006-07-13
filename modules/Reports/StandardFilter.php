@@ -48,6 +48,11 @@ if(isset($_REQUEST["record"]) == false)
 }
 
 
+	/** Function to get the HTML strings for the primarymodule standard filters
+	 * @ param $module : Type String
+	 * @ param $selected : Type String(optional)
+	 *  This Returns a HTML combo srings
+	 */
 function getPrimaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
@@ -87,6 +92,11 @@ function getPrimaryStdFilterHTML($module,$selected="")
 	return $shtml;
 }
 
+	/** Function to get the HTML strings for the secondary  standard filters
+	 * @ param $module : Type String
+	 * @ param $selected : Type String(optional)
+	 *  This Returns a HTML combo srings for the secondary modules
+	 */
 function getSecondaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
