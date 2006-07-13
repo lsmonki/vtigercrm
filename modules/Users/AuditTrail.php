@@ -16,6 +16,9 @@ require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 
+/** This class is used to track all the operations done by the particular User while using vtiger crm. 
+ *  It is intended to be called when the check for audit trail is enabled.
+ **/
 class AuditTrail{
 
 	var $log;
