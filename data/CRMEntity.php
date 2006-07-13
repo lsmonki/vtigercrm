@@ -389,7 +389,9 @@ class CRMEntity
 		}
 	}
 
-
+	/** Function to insert values in the vtiger_crmentity for the specified module
+  	  * @param $module -- module:: Type varchar
+ 	 */	
 
   function insertIntoCrmEntity($module)
   {
@@ -469,6 +471,9 @@ class CRMEntity
     }
 
 
+	/** Function to insert values in vtiger_salesmanactivityrel table for the specified module
+  	  * @param $module -- module:: Type varchar
+ 	 */
 
   function insertIntoSmActivityRel($module)
   {
@@ -486,6 +491,10 @@ class CRMEntity
 
   }
   //code added by richie starts
+
+	/** Function to get the update ticket history for the specified ticketid
+  	  * @param $id -- $ticketid:: Type Integer 
+ 	 */	
   function constructUpdateLog($id)
   {
     global $adb;
@@ -539,7 +548,10 @@ class CRMEntity
 
     return $updatelog;
   }
-  //code added by richie ends
+	/** Function to insert values in the specifed table for the specified module
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */
   function insertIntoEntityTable($table_name, $module)
   {
 	  global $log;
@@ -942,6 +954,10 @@ class CRMEntity
 	  }
 
   }
+	/** Function to delete a record in the specifed table 
+  	  * @param $table_name -- table name:: Type varchar
+	  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
+ 	 */
 function deleteRelation($table_name)
 {
          global $adb;
@@ -956,6 +972,11 @@ function deleteRelation($table_name)
          }
 
 }
+	/** Function to attachment filename of the given entity 
+  	  * @param $notesid -- crmid:: Type Integer
+	  * The function will get the attachmentsid for the given entityid from vtiger_seattachmentsrel table and get the attachmentsname from vtiger_attachments table 
+	  * returns the 'filename'
+ 	 */
 function getOldFileName($notesid)
 {
 	   global $log;
@@ -973,6 +994,10 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	return "'".$filename."'";
 }
+	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
 function insertIntoTicketCommentTable($table_name, $module)
 {
 	global $log;
@@ -998,6 +1023,10 @@ function insertIntoTicketCommentTable($table_name, $module)
 	        $adb->query($sql);
 	}
 }
+	/** Function to insert values in vtiger_faqcomments table for the specified module,
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
 function insertIntoFAQCommentTable($table_name, $module)
 {
 	global $log;
@@ -1018,6 +1047,10 @@ function insertIntoFAQCommentTable($table_name, $module)
 		$adb->query($sql);
 	}
 }
+	/** Function to insert values in vtiger_faqcomments table for the specified module,
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */
 function insertIntoReminderTable($table_name,$module,$recurid)
 {
 	 global $log;
@@ -1056,6 +1089,11 @@ $log->debug("reminder_time is ".$reminder_time);
 }
 
 // Code included by Minnie - starts
+	/** Function to insert values in vtiger_invitees table for the specified module,tablename ,invitees_array
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+	  * @param $invitees_array Array
+ 	 */
 function insertIntoInviteeTable($table_name,$module,$invitees_array)
 {
 	global $log,$adb;
@@ -1074,6 +1112,10 @@ function insertIntoInviteeTable($table_name,$module,$invitees_array)
 // Code included by Minnie - Ends
 
 // Code included by Jaguar - starts 
+	/** Function to insert values in vtiger_recurringevents table for the specified tablename,module
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
 function insertIntoRecurringTable($table_name,$module)
 {
 	global $log;
@@ -1186,7 +1228,11 @@ $log->debug("type is ".$type);
 
 // Code included by Jaguar - Ends 
 
-	
+	/** Function to retrive the information of the given recordid ,module 
+  	  * @param $record -- Id:: Type Integer
+  	  * @param $module -- module:: Type varchar
+	  * This function retrives the information from the database and sets the value in the class columnfields array
+ 	 */
   function retrieve_entity_info($record, $module)
   {
     global $adb,$log;
@@ -1226,6 +1272,9 @@ $log->debug("type is ".$type);
     $this->column_fields["record_module"] = $module;
   }
 
+	/** Function to saves the values in all the tables mentioned in the class variable $tab_name for the specified module
+  	  * @param $module -- module:: Type varchar
+ 	 */
 	function save($module_name) 
 	{
 		global $log;
