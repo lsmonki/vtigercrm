@@ -19,6 +19,10 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+
+/**Function to get the top Accounts order by Amount in Descending Order
+ * Returns the top account based on maximum amount. 
+*/
 function getTopAccounts()
 {
 	$log = LoggerManager::getLogger('top accounts_list');
