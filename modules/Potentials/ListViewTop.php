@@ -19,6 +19,10 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+
+/**Function to get the top Potentials order by Amount in Descending Order
+ * Returns the top potentials based on maximum amount. 
+*/
 function getTopPotentials()
 {
 	$log = LoggerManager::getLogger('top opportunity_list');
