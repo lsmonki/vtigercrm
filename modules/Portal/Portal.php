@@ -10,6 +10,12 @@
 ********************************************************************************/
 
 
+/** Function to save the portal in database 
+ *  @param $portalname : Type String
+ *  @param $portalurl : Type String
+ *  This function saves the portal with the given $portalname,$portalurl
+ *  This Returns $portalid 
+ */
 function SavePortal($portalname,$portalurl)
 {
 	global $adb;
@@ -20,7 +26,13 @@ function SavePortal($portalname,$portalurl)
 	$result=$adb->query($query);
 	return $portalid;
 }
-
+/** Function to update the portal in database 
+ *  @param $portalname : Type String
+ *  @param $portalurl : Type String
+ *  @param $portalid : Type Integer 
+ *  This function updates the portal with the given $portalname,$portalurl
+ *  This Returns $portalid 
+ */
 function UpdatePortal($portalname,$portalurl,$portalid)
 {
 	global $adb;
