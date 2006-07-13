@@ -45,7 +45,13 @@ if($_REQUEST['fld_module'] != '')
 else
 	$smarty->assign("DEF_MODULE",'Leads');
 
-//Standard PickList Fields
+/** Function to get the field label/permission array to construct the default orgnization field UI for the specified profile 
+  * @param $fieldListResult -- mysql query result that contains the field label and uitype:: Type array
+  * @param $mod_strings -- i18n language mod strings array:: Type array
+  * @param $profileid -- profile id:: Type integer
+  * @returns $standCustFld -- field label/permission array :: Type varchar
+  *
+ */	
 function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 {
 	global $adb;
