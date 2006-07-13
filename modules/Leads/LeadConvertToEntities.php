@@ -43,7 +43,10 @@ $row = $focus->column_fields;
 $date_entered = date('YmdHis');
 $date_modified = date('YmdHis');
 
-//function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields -Jag
+/** Function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields.
+ *  @param string $type - Field Type (eg: text, list)
+ *  @param integer $type_id - Field Type ID 
+*/
 function getInsertValues($type,$type_id)
 {
 	global $id,$adb,$log;
@@ -130,6 +133,10 @@ function getInsertValues($type,$type_id)
 }
 //function Ends
 
+/**	Function used to get the lead related Notes and Attachments with other entities Account, Contact and Potential
+ *	@param integer $id - leadid
+ *	@param integer $accountid -  related entity id (accountid)
+ */
 function getRelatedNotesAttachments($id,$accountid)
 {
 	global $adb,$log,$id;
@@ -171,6 +178,10 @@ function getRelatedNotesAttachments($id,$accountid)
 	
 }
 
+/**	Function used to get the lead related activities with other entities Account and Contact 
+ *	@param integer $accountid - related entity id
+ *	@param integer $contact_id -  related entity id 
+ */
 function getRelatedActivities($accountid,$contact_id)
 {
 	global $adb,$log,$id;	
