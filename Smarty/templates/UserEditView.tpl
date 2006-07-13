@@ -11,6 +11,7 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 
 <script language="JavaScript" type="text/javascript">
 
