@@ -102,6 +102,10 @@ class Account extends CRMEntity {
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	/**
+	 * Function to get sort order
+ 	 * return string  $sorder    - sortorder string either 'ASC' or 'DESC'
+	 */
 	function getSortOrder()
 	{
 		global $log;
@@ -113,7 +117,10 @@ class Account extends CRMEntity {
 		$log->debug("Exiting getSortOrder() method ...");
 		return $sorder;
 	}
-
+	/**
+	 * Function to get order by
+	 * return string  $order_by    - fieldname(eg: 'accountname')
+ 	 */
 	function getOrderBy()
 	{
 		global $log;
@@ -271,7 +278,11 @@ class Account extends CRMEntity {
 		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 
 	}
-
+	/**
+	 * Function to get Account related Task & Event which have activity type Held, Completed or Deferred.
+ 	 * @param  integer   $id      - accountid
+ 	 * returns related Task or Event record in array format
+ 	 */
 	function get_history($id)
 	{
 		global $log;
@@ -311,7 +322,11 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Accounts',$query,$id);
 	}
-
+	/**
+	 * Function to get Account related Attachments
+ 	 * @param  integer   $id      - accountid
+ 	 * returns related Attachment record in array format
+ 	 */
 	function get_attachments($id)
 	{
 		 global $log;
@@ -364,6 +379,11 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Accounts',$query,$id);
 	}
+	/**
+	* Function to get Account related Quotes
+	* @param  integer   $id      - accountid
+	* returns related Quotes record in array format
+	*/
 	function get_quotes($id)
 	{
 		global $log;
@@ -404,6 +424,11 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
+	/**
+	* Function to get Account related Invoices 
+	* @param  integer   $id      - accountid
+	* returns related Invoices record in array format
+	*/
 	function get_invoices($id)
 	{
 		global $log;
@@ -444,6 +469,12 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
+
+	/**
+	* Function to get Account related SalesOrder 
+	* @param  integer   $id      - accountid
+	* returns related SalesOrder record in array format
+	*/
 	function get_salesorder($id)
 	{
 		global $log;
@@ -485,6 +516,11 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_salesorder method ...");		
 		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
+	/**
+	* Function to get Account related Tickets
+	* @param  integer   $id      - accountid
+	* returns related Ticket record in array format
+	*/
 	function get_tickets($id)
 	{
 		global $log;
@@ -570,7 +606,11 @@ class Account extends CRMEntity {
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
-
+	/**
+	* Function to get Account related Products 
+	* @param  integer   $id      - accountid
+	* returns related Products record in array format
+	*/
 	function get_products($id)
 	{
 		global $log;
@@ -607,7 +647,11 @@ class Account extends CRMEntity {
 		return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
 	}
 
-
+	/** Function to export the account records in CSV Format
+	* @param reference variable - order by is passed when the query is executed
+	* @param reference variable - where condition is passed when the query is executed
+	* Returns Export Accounts Query.
+	*/
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
@@ -684,8 +728,10 @@ class Account extends CRMEntity {
 		return $query;
 	}
 
-
-	//Used By vtigerCRM Word Plugin
+	/** Function to get the Columnnames of the Account Record
+	* Used By vtigerCRM Word Plugin
+	* Returns the Merge Fields for Word Plugin
+	*/
 	function getColumnNames_Acnt()
 	{
 		global $log;
