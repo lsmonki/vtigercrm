@@ -542,6 +542,11 @@ if($mode == 'view')
 else
 	$smarty->display("EditProfile.tpl");
 
+/** returns html image code based on the input id
+  * @param $id -- Role Name:: Type varchar
+  * @returns $value -- html image code:: Type varcha:w
+  *
+ */	
 function getGlobalDisplayValue($id,$actionid)
 {
 	global $image_path;
@@ -566,6 +571,12 @@ function getGlobalDisplayValue($id,$actionid)
 
 }
 
+
+/** returns html check box code based on the input id
+  * @param $id -- Role Name:: Type varchar
+  * @returns $value -- html check box code:: Type varcha:w
+  *
+ */
 function getGlobalDisplayOutput($id,$actionid)
 {
 	if($actionid == '1')
@@ -594,6 +605,12 @@ function getGlobalDisplayOutput($id,$actionid)
 
 }
 
+
+/** returns html image code based on the input id
+  * @param $id -- Role Name:: Type varchar
+  * @returns $value -- html image code:: Type varcha:w
+  *
+ */
 function getDisplayValue($id)
 {
 	global $image_path;
@@ -618,6 +635,12 @@ function getDisplayValue($id)
 
 }
 
+
+/** returns html check box code based on the input id
+  * @param $id -- Role Name:: Type varchar
+  * @returns $value -- html check box code:: Type varcha:w
+  *
+ */
 function getDisplayOutput($id,$tabid,$actionid)
 {
 	if($actionid == '')
