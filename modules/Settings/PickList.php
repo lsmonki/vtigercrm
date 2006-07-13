@@ -43,6 +43,12 @@ if($_REQUEST['directmode'] != 'ajax')
 else
 	$smarty->display("Settings/PickListContents.tpl");
 	
+	/** Function to get picklist fields for the given module 
+	 *  @ param $fld_module
+	 *  It gets the picklist details array for the given module in the given format
+	 *  			$fieldlist = Array(Array('fieldlabel'=>$fieldlabel,'generatedtype'=>$generatedtype,'columnname'=>$columnname,'fieldname'=>$fieldname,'value'=>picklistvalues))	
+	 */
+
 function getUserFldArray($fld_module)
 {
 	global $adb;
@@ -100,6 +106,12 @@ function getUserFldArray($fld_module)
     return $fieldlist;
 }
 
+	/** Function to get picklist values for the given field  
+	 *  @ param $tablename
+	 *  It gets the picklist values for the given fieldname
+	 *  			$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)	
+	 */
+
 function getPickListValues($tablename)
 {
 	global $adb;	
@@ -112,6 +124,10 @@ function getPickListValues($tablename)
 	}
 	return $fldVal;
 }
+	/** Function to get modules which has picklist values  
+	 *  It gets the picklist modules and return in an array in the following format 
+	 *  			$modules = Array($tabid=>$tablabel,$tabid1=>$tablabel1,$tabid2=>$tablabel2,-------------,$tabidn=>$tablabeln)	
+	 */
 function getPickListModules()
 {
 	global $adb;

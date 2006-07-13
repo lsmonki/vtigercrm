@@ -78,6 +78,11 @@ if($_REQUEST['file_mode'] != 'ajax')
 else
 	$smarty->display("Settings/ModuleOwnersContents.tpl");
 	
+	/** Function to get the module owner for the tabid
+	 *  @ param $tabid
+	 *  It gets the module owner for the given tabid from vtiger_moduleowners table
+	 *  returns the userid of the module owner for the given tabid
+	 */
 function getModuleOwner($tabid)
 {
 	global $adb;
@@ -87,7 +92,9 @@ function getModuleOwner($tabid)
 
 	return $userid;
 }
-
+	/** Function to get the module List to which the owners can be assigned 
+	 *  It gets the module list and returns in an array 
+	 */
 function getModuleNameList()
 {
 	global $adb;
@@ -101,6 +108,12 @@ function getModuleNameList()
 	}
 	return $mod_array;
 }
+	/** Function to get combostrings of users 
+	 *  @ $user_array : type Array
+	 *  @ $modulename : Type String 
+	 *  returns the html string for module owners for the given module owners
+	 */
+
 function getUserCombo($user_array,$name)
 {
 	global $adb;
