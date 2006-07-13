@@ -73,6 +73,9 @@ class Email extends CRMEntity {
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
 
+	/** This function will set the columnfields for Email module 
+	*/
+
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
 		$this->log->debug("Entering Email() method ...");
