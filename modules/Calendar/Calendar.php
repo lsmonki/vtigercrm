@@ -35,7 +35,10 @@ class Calendar
 		$this->date_time = new DateTime($data,true);
 		$this->constructLayout();
 	}
-	/*To get view Label
+	/**
+	 * Function to get calendarview Label
+	 * @param string  $view   - calendarview
+	 * return string  - calendarview Label 
 	*/
 	function getCalendarView($view)
 	{
@@ -52,7 +55,8 @@ class Calendar
 		}
 	}
 
-	/*To construct layout wrt view
+	/**
+	 * Function to set values for calendar object depends on calendar view
 	*/
 	function constructLayout()
 	{
@@ -117,6 +121,11 @@ class Calendar
 		}
 	}
 
+	/**
+	 * Function to get date info depends on calendarview
+	 * @param  string   $type  - string 'increment' or 'decrment'
+	 */
+
 	function get_datechange_info($type)
 	{
 		if($type == 'next')
@@ -143,6 +152,11 @@ class Calendar
 		return $day->get_date_str();
 	}
 	
+	/**
+	 * Function to get activities
+	 * @param  array $current_user  - user data
+	 * @param  string $free_busy    - 
+	 */
 	function add_Activities($current_user,$free_busy='')
 	{
 		if($current_user->hour_format == '')
@@ -212,6 +226,12 @@ class Layout
         var $end_time;
 	var $activities = Array();
 	
+	/**
+	* Constructor for Layout class
+	* @param  string   $view - calendarview
+	* @param  string   $time - time string 
+	*/
+
 	function Layout($view,$time)
         {
                 $this->view = $view;
@@ -223,6 +243,11 @@ class Layout
                 if ( $view == 'hour')
                         $this->end_time = $this->start_time->getHourendtime();
         }
+
+	/**
+	* Function to get view 
+	* return currentview
+	*/
 
 	function getView()
 	{
