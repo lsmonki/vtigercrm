@@ -87,6 +87,15 @@ $mask_roleid=$_REQUEST['maskid'];
 
 $roleout ='';
 $roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
+
+/** recursive function to construct the role tree ui 
+  * @param $hrarray -- Hierarchial role tree array with only the roleid:: Type array
+  * @param $roleout -- html string ouput of the constucted role tree ui:: Type varchar 
+  * @param $role_det -- Roledetails array got from calling getAllRoleDetails():: Type array
+  * @param $mask_roleid -- role id to be masked from selecting in the tree:: Type integer 
+  * @returns $role_out -- html string ouput of the constucted role tree ui:: Type string
+  *
+ */
 function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 {
 	global $theme;
