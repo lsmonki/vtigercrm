@@ -20,8 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-/**Function to get the top Accounts order by Amount in Descending Order
- * Returns the top account based on maximum amount. 
+/**Function to get the top 5 Accounts order by Amount in Descending Order
+ *return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
 */
 function getTopAccounts()
 {
