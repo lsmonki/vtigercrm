@@ -69,7 +69,12 @@ class CustomView extends CRMEntity{
 	var $mandatoryvalues;
 	
 	var $showvalues;
-
+	
+	/** This function sets the currentuser id to the class variable smownerid,  
+	  * modulename to the class variable customviewmodule
+	  * @param $module -- The module Name:: Type String(optional)
+	  * @returns  nothing 
+	 */
 	function CustomView($module="")
 	{
 		global $current_user,$adb;
@@ -312,6 +317,14 @@ class CustomView extends CRMEntity{
 		return $columnlist;
 	}
 
+	/** to get the standard filter fields or the given module 
+	  * @param $module :: Type String
+	  * @returns  $stdcriteria_list Array in the following format
+	  * $stdcriteria_list = Array( $tablename:$columnname:$fieldname:$module_$fieldlabel => $fieldlabel,
+	  *			 $tablename1:$columnname1:$fieldname1:$module_$fieldlabel1 => $fieldlabel1,  
+	  *					|
+	  *			 $tablenamen:$columnnamen:$fieldnamen:$module_$fieldlabeln => $fieldlabeln)  
+	  */	
 	function getStdCriteriaByModule($module)
 	{
 		global $adb;
@@ -361,7 +374,15 @@ class CustomView extends CRMEntity{
 		return $stdcriteria_list;
 
 	}
-
+	
+	/** to get the standard filter criteria  
+	  * @param $selcriteria :: Type String (optional)
+	  * @returns  $filter Array in the following format
+	  * $filter = Array( 0 => array('value'=>$filterkey,'text'=>$mod_strings[$filterkey],'selected'=>$selected)
+	  * 		     1 => array('value'=>$filterkey1,'text'=>$mod_strings[$filterkey1],'selected'=>$selected)	
+	  *		                             		|	
+	  * 		     n => array('value'=>$filterkeyn,'text'=>$mod_strings[$filterkeyn],'selected'=>$selected)	
+	  */	
 	function getStdFilterCriteria($selcriteria = "")
 	{
 		global $mod_strings; 
@@ -413,11 +434,16 @@ class CustomView extends CRMEntity{
 
 	}
 
+	/** to get the standard filter criteria scripts  
+	  * @returns  $jsStr : Type String
+	  * This function will return the script to set the start data and end date 
+	  * for the standard selection criteria
+	  */	
 	function getCriteriaJS()
 	{
 	
 		
-    $today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
+		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
 		$tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
 		$yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
 
@@ -457,32 +483,32 @@ class CustomView extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
     
-    if(date("m") <= 4)
+		if(date("m") <= 4)
 		{
-		  $cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-		  $nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
-    }else if(date("m") > 4 and date("m") <= 8)
-    {
-		  $pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-		  $cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+		}else if(date("m") > 4 and date("m") <= 8)
+    		{
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  	$cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      			$nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
       
-    }else
-    {
-		  $nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
-		  $pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
-    }
+    		}else
+    		{
+		  	$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
+		  	$pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      			$cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
+    		}
     
 		$sjsStr = '<script language="JavaScript" type="text/javaScript">
 			function showDateRange( type )
@@ -638,6 +664,12 @@ class CustomView extends CRMEntity{
 		return $sjsStr;
 	}
 	
+	/** to get the standard filter for the given customview Id  
+	  * @param $cvid :: Type Integer
+	  * @returns  $stdfilterlist Array in the following format
+	  * $stdfilterlist = Array( 'columnname' =>  $tablename:$columnname:$fieldname:$module_$fieldlabel,'stdfilter'=>$stdfilter,'startdate'=>$startdate,'enddate'=>$enddate) 
+	  */	
+
 	function getStdFilterByCvid($cvid)
 	{
 		global $adb;
@@ -653,26 +685,33 @@ class CustomView extends CRMEntity{
 
 		if($stdfilterrow["stdfilter"] == "custom")
 		{
-  			if($stdfilterrow["startdate"] != "0000-00-00")
-  			{
-  				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
-  			}
-  			if($stdfilterrow["enddate"] != "0000-00-00")
-  			{
-  				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
-  			}
+			if($stdfilterrow["startdate"] != "0000-00-00")
+			{
+				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
+			}
+			if($stdfilterrow["enddate"] != "0000-00-00")
+			{
+				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
+			}
 		}else  //if it is not custom get the date according to the selected duration
 		{
-		    $datefilter = $this->getDateforStdFilterBytype($stdfilterrow["stdfilter"]);
-		    $stdfilterlist["startdate"] = $datefilter[0];
-		    $stdfilterlist["enddate"] = $datefilter[1];
-    }
+			$datefilter = $this->getDateforStdFilterBytype($stdfilterrow["stdfilter"]);
+			$stdfilterlist["startdate"] = $datefilter[0];
+			$stdfilterlist["enddate"] = $datefilter[1];
+		}
 
 		return $stdfilterlist;
 	}
-	
-	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
-    function getAdvFilterByCvid($cvid)
+
+	/** to get the Advanced filter for the given customview Id  
+	  * @param $cvid :: Type Integer
+	  * @returns  $stdfilterlist Array in the following format
+	  * $stdfilterlist = Array( 0=>Array('columnname' =>  $tablename:$columnname:$fieldname:$module_$fieldlabel,'comparator'=>$comparator,'value'=>$value),
+	  *			    1=>Array('columnname' =>  $tablename1:$columnname1:$fieldname1:$module_$fieldlabel1,'comparator'=>$comparator1,'value'=>$value1),
+	  *		   			|
+	  *			    4=>Array('columnname' =>  $tablename4:$columnname4:$fieldname4:$module_$fieldlabel4,'comparator'=>$comparatorn,'value'=>$valuen),
+	  */	
+    	function getAdvFilterByCvid($cvid)
 	{
 		global $adb;
 		global $modules;
@@ -691,8 +730,15 @@ class CustomView extends CRMEntity{
 
 		return $advfilterlist;
 	}
-    //<<<<<<<<advanced filter>>>>>>>>>>>>>>
 
+
+	/** to get the customview Columnlist Query for the given customview Id  
+	  * @param $cvid :: Type Integer
+	  * @returns  $getCvColumnList as a string 
+	  * This function will return the columns for the given customfield in comma seperated values in the format
+	  *                     $tablename.$columnname,$tablename1.$columnname1, ------ $tablenamen.$columnnamen  
+	  * 
+	  */	
 	function getCvColumnListSQL($cvid)
 	{
 		$columnslist = $this->getColumnsListByCvid($cvid);
@@ -728,6 +774,12 @@ class CustomView extends CRMEntity{
 		return $returnsql;
 	}
 
+	/** to get the customview stdFilter Query for the given customview Id  
+	  * @param $cvid :: Type Integer
+	  * @returns  $stdfiltersql as a string 
+	  * This function will return the standard filter criteria for the given customfield 
+	  * 
+	  */	
 	function getCVStdFilterSQL($cvid)
 	{
 		global $adb;
@@ -764,6 +816,12 @@ class CustomView extends CRMEntity{
 		}
 		return $stdfiltersql;
 	}
+	/** to get the customview AdvancedFilter Query for the given customview Id  
+	  * @param $cvid :: Type Integer
+	  * @returns  $advfiltersql as a string 
+	  * This function will return the advanced filter criteria for the given customfield 
+	  * 
+	  */	
 	function getCVAdvFilterSQL($cvid)
 	{
 		$advfilter = $this->getAdvFilterByCvid($cvid);
@@ -810,6 +868,14 @@ class CustomView extends CRMEntity{
 		return $advfsql;
 	}
 	
+	/** to get the realvalues for the given value   
+	  * @param $tablename :: type string 
+	  * @param $fieldname :: type string 
+	  * @param $comparator :: type string 
+	  * @param $value :: type string 
+	  * @returns  $value as a string in the following format
+	  *	  $tablename.$fieldname comparator
+	  */
 	function getRealValues($tablename,$fieldname,$comparator,$value)
 	{
 		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
@@ -861,6 +927,12 @@ class CustomView extends CRMEntity{
 		return $value;
 	}
 	
+	/** to get the entityId for the given module   
+	  * @param $setype :: type string 
+	  * @returns  $parent_id as a string of comma seperated id 
+	  *       $id,$id1,$id2, ---- $idn
+	  */
+
 	function getSalesEntityId($setype)
 	{
                 global $log;
@@ -882,6 +954,11 @@ class CustomView extends CRMEntity{
 		return $parent_id;
 	}
 
+	/** to get the salesorder id for the given sales order subject   
+	  * @param $so_name :: type string 
+	  * @returns  $so_id as a Integer
+	  */
+
 	function getSoId($so_name)
 	{
 		global $log;
@@ -895,6 +972,11 @@ class CustomView extends CRMEntity{
 		}
 		return $so_id;
 	}
+
+	/** to get the Product id for the given Product Name   
+	  * @param $product_name :: type string 
+	  * @returns  $productid as a Integer
+	  */
 
 	function getProductId($product_name)
 	{
@@ -910,6 +992,11 @@ class CustomView extends CRMEntity{
 		return $productid;
 	}
 
+	/** to get the Quote id for the given Quote Name   
+	  * @param $quote_name :: type string 
+	  * @returns  $quote_id as a Integer
+	  */
+	  
 	function getQuoteId($quote_name)
 	{
 		global $log;
@@ -924,6 +1011,11 @@ class CustomView extends CRMEntity{
 		return $quote_id;
 	}
 
+	/** to get the Potential  id for the given Potential Name   
+	  * @param $pot_name :: type string 
+	  * @returns  $potentialid as a Integer
+	  */
+
 	function getPotentialId($pot_name)
 	{
 		 global $log;
@@ -937,6 +1029,13 @@ class CustomView extends CRMEntity{
 		}
 		return $potentialid;
 	}
+	
+	/** to get the Vendor id for the given Vendor Name   
+	  * @param $vendor_name :: type string 
+	  * @returns  $vendor_id as a Integer
+	  */
+
+
 	function getVendorId($vendor_name)
 	{
 		 global $log;
@@ -951,6 +1050,12 @@ class CustomView extends CRMEntity{
 		return $vendor_id;
 	}
 	
+	/** to get the Contact id for the given Contact Name   
+	  * @param $contact_name :: type string 
+	  * @returns  $contact_id as a Integer
+	  */
+
+
 	function getContactId($contact_name)
 	{
 		global $log;
@@ -965,6 +1070,11 @@ class CustomView extends CRMEntity{
 		return $contact_id;
 	}
 
+	/** to get the Account id for the given Account Name   
+	  * @param $account_name :: type string 
+	  * @returns  $accountid as a Integer
+	  */
+
 	function getAccountId($account_name)
 	{
 		 global $log;
@@ -978,6 +1088,12 @@ class CustomView extends CRMEntity{
 		}		
 		return $accountid;
 	}
+
+	/** to get the comparator value for the given comparator and value   
+	  * @param $comparator :: type string 
+	  * @param $value :: type string
+	  * @returns  $rtvalue in the format $comparator $value
+	  */
 
 	function getAdvComparator($comparator,$value)
 	{
@@ -1033,10 +1149,17 @@ class CustomView extends CRMEntity{
 
 		return $rtvalue;
 	}
+
+	/** to get the date value for the given type   
+	  * @param $type :: type string 
+	  * @returns  $datevalue array in the following format 
+	  *             $datevalue = Array(0=>$startdate,1=>$enddate)
+	  */
+
 	function getDateforStdFilterBytype($type)
 	{
 		$thisyear = date("Y");
-    $today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
+    		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
 		$tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
 		$yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
 
@@ -1075,191 +1198,198 @@ class CustomView extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
-    if(date("m") <= 4)
+    		if(date("m") <= 4)
 		{
-		  $cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-		  $nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
-    }else if(date("m") > 4 and date("m") <= 8)
-    {
-		  $pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-		  $cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+		  	$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  	$nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      			$pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
+		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+    		}else if(date("m") > 4 and date("m") <= 8)
+    		{
+		  	$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  	$cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      			$nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
       
-    }else
-    {
-		  $nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
-		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
-		  $pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      $cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
-    }
+    		}else
+    		{
+		  	$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
+		  	$pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      			$cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
+    		}
     
 		if($type == "today" )
 		{
 
-		$datevalue[0] = $today;
-		$datevalue[1] = $today;
+			$datevalue[0] = $today;
+			$datevalue[1] = $today;
 		}
 		elseif($type == "yesterday" )
 		{
 
-		$datevalue[0] = $yesterday;
-		$datevalue[1] = $yesterday;
+			$datevalue[0] = $yesterday;
+			$datevalue[1] = $yesterday;
 		}
 		elseif($type == "tomorrow" )
 		{
 
-		$datevalue[0] = $tomorrow;
-		$datevalue[1] = $tomorrow;
+			$datevalue[0] = $tomorrow;
+			$datevalue[1] = $tomorrow;
 		}
 		elseif($type == "thisweek" )
 		{
 
-		$datevalue[0] = $thisweek0;
-		$datevalue[1] = $thisweek1;
+			$datevalue[0] = $thisweek0;
+			$datevalue[1] = $thisweek1;
 		}
 		elseif($type == "lastweek" )
 		{
 
-		$datevalue[0] = $lastweek0;
-		$datevalue[1] = $lastweek1;
+			$datevalue[0] = $lastweek0;
+			$datevalue[1] = $lastweek1;
 		}
 		elseif($type == "nextweek" )
 		{
 
-		$datevalue[0] = $nextweek0;
-		$datevalue[1] = $nextweek1;
+			$datevalue[0] = $nextweek0;
+			$datevalue[1] = $nextweek1;
 		}
 		elseif($type == "thismonth" )
 		{
 
-		$datevalue[0] =$currentmonth0;
-		$datevalue[1] = $currentmonth1;
+			$datevalue[0] =$currentmonth0;
+			$datevalue[1] = $currentmonth1;
 		}
 
 		elseif($type == "lastmonth" )
 		{
 
-		$datevalue[0] = $lastmonth0;
-		$datevalue[1] = $lastmonth1;
+			$datevalue[0] = $lastmonth0;
+			$datevalue[1] = $lastmonth1;
 		}
 		elseif($type == "nextmonth" )
 		{
 
-		$datevalue[0] = $nextmonth0;
-		$datevalue[1] = $nextmonth1;
+			$datevalue[0] = $nextmonth0;
+			$datevalue[1] = $nextmonth1;
 		}           
 		elseif($type == "next7days" )
 		{
 
-		$datevalue[0] = $today;
-		$datevalue[1] = $next7days;
+			$datevalue[0] = $today;
+			$datevalue[1] = $next7days;
 		}                
 		elseif($type == "next30days" )
 		{
 
-		$datevalue[0] =$today;
-		$datevalue[1] =$next30days;
+			$datevalue[0] =$today;
+			$datevalue[1] =$next30days;
 		}                
 		elseif($type == "next60days" )
 		{
 
-		$datevalue[0] = $today;
-		$datevalue[1] = $next60days;
+			$datevalue[0] = $today;
+			$datevalue[1] = $next60days;
 		}                
 		elseif($type == "next90days" )
 		{
 
-		$datevalue[0] = $today;
-		$datevalue[1] = $next90days;
+			$datevalue[0] = $today;
+			$datevalue[1] = $next90days;
 		}        
 		elseif($type == "next120days" )
 		{
-
-		$datevalue[0] = $today;
-		$datevalue[1] = $next120days;
+	
+			$datevalue[0] = $today;
+			$datevalue[1] = $next120days;
 		}        
 		elseif($type == "last7days" )
 		{
 
-		$datevalue[0] = $last7days;
-		$datevalue[1] = $today;
+			$datevalue[0] = $last7days;
+			$datevalue[1] = $today;
 		}                        
 		elseif($type == "last30days" )
 		{
 
-		$datevalue[0] = $last30days;
-		$datevalue[1] =  $today;
+			$datevalue[0] = $last30days;
+			$datevalue[1] =  $today;
 		}                
 		elseif($type == "last60days" )
 		{
 
-		$datevalue[0] = $last60days;
-		$datevalue[1] = $today;
+			$datevalue[0] = $last60days;
+			$datevalue[1] = $today;
 		}        
 		else if($type == "last90days" )
 		{
 
-		$datevalue[0] = $last90days;
-		$datevalue[1] = $today;
+			$datevalue[0] = $last90days;
+			$datevalue[1] = $today;
 		}        
 		elseif($type == "last120days" )
 		{
 
-		$datevalue[0] = $last120days;
-		$datevalue[1] = $today;
+			$datevalue[0] = $last120days;
+			$datevalue[1] = $today;
 		}        
 		elseif($type == "thisfy" )
 		{
 
-		$datevalue[0] = $currentFY0;
-		$datevalue[1] = $currentFY1;
+			$datevalue[0] = $currentFY0;
+			$datevalue[1] = $currentFY1;
 		}                
 		elseif($type == "prevfy" )
 		{
 
-		$datevalue[0] = $lastFY0;
-		$datevalue[1] = $lastFY1;
+			$datevalue[0] = $lastFY0;
+			$datevalue[1] = $lastFY1;
 		}                
 		elseif($type == "nextfy" )
 		{
 
-		$datevalue[0] = $nextFY0;
-		$datevalue[1] = $nextFY1;
+			$datevalue[0] = $nextFY0;
+			$datevalue[1] = $nextFY1;
 		}                
 		elseif($type == "nextfq" )
 		{
 
-		$datevalue[0] = $nFq;
-		$datevalue[1] = $nFq1;
+			$datevalue[0] = $nFq;
+			$datevalue[1] = $nFq1;
 		}                        
 		elseif($type == "prevfq" )
 		{
 
-		$datevalue[0] = $pFq;
-		$datevalue[1] = $pFq1;
+			$datevalue[0] = $pFq;
+			$datevalue[1] = $pFq1;
 		}                
 		elseif($type == "thisfq")
 		{
-		$datevalue[0] = $cFq;
-		$datevalue[1] = $cFq1;
+			$datevalue[0] = $cFq;
+			$datevalue[1] = $cFq1;
 		}
 		else
 		{
-		$datevalue[0] = "";
-		$datevalue[1] = "";
+			$datevalue[0] = "";
+			$datevalue[1] = "";
 		}
 
 		return $datevalue;
 	}
+
+	/** to get the customview query for the given customview   
+	  * @param $viewid (custom view id):: type Integer 
+	  * @param $listquery (List View Query):: type string 
+	  * @param $module (Module Name):: type string 
+	  * @returns  $query 
+	  */
 
 	function getModifiedCvListQuery($viewid,$listquery,$module)
 	{
@@ -1303,7 +1433,13 @@ class CustomView extends CRMEntity{
 		}
 		return $query;
 	}
-	
+
+	/** to get the Key Metrics for the home page query for the given customview  to find the no of records 
+	  * @param $viewid (custom view id):: type Integer 
+	  * @param $listquery (List View Query):: type string 
+	  * @param $module (Module Name):: type string 
+	  * @returns  $query 
+	  */
 	function getMetricsCvListQuery($viewid,$listquery,$module)
 	{
 		if($viewid != "" && $listquery != "")
@@ -1328,6 +1464,14 @@ class CustomView extends CRMEntity{
                 return $query;
 	}
 	
+	/** to get the custom action details for the given customview  
+	  * @param $viewid (custom view id):: type Integer 
+	  * @returns  $calist array in the following format 
+	  * $calist = Array ('subject'=>$subject,
+  			     'module'=>$module,
+	     		     'content'=>$content,
+			     'cvid'=>$custom view id)
+	  */
 	function getCustomActionDetails($cvid)
 	{
 		global $adb;
