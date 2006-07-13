@@ -422,6 +422,13 @@ foreach($customviews as $key=>$customview)
 	}
 }
 
+	/** to store the details of the customview in vtiger_customview table
+	  * @param $viewname :: Type String
+	  * @param $setdefault :: Type Integer 
+	  * @param $setmetrics :: Type Integer 
+	  * @param $cvmodule :: Type String
+	  * @returns  $customviewid of the stored custom view :: Type integer
+	 */	
 function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 {
 	global $adb;
@@ -438,6 +445,10 @@ function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 	return $genCVid;
 }
 
+	/** to store the custom view columns of the customview in vtiger_cvcolumnlist table
+	  * @param $cvid :: Type Integer
+	  * @param $columnlist :: Type Array of columnlists
+	 */
 function insertCvColumns($CVid,$columnslist)
 {
 	global $adb;
@@ -452,6 +463,14 @@ function insertCvColumns($CVid,$columnslist)
 	}
 }
 
+	/** to store the custom view stdfilter of the customview in vtiger_cvstdfilter table
+	  * @param $cvid :: Type Integer
+	  * @param $filtercolumn($tablename:$columnname:$fieldname:$fieldlabel) :: Type String
+	  * @param $filtercriteria(filter name) :: Type String
+	  * @param $startdate :: Type String
+	  * @param $enddate :: Type String
+	  * returns nothing 
+	 */
 function insertCvStdFilter($CVid,$filtercolumn,$filtercriteria,$startdate,$enddate)
 {
 	global $adb;
@@ -465,6 +484,12 @@ function insertCvStdFilter($CVid,$filtercolumn,$filtercriteria,$startdate,$endda
 		$stdfilterresult = $adb->query($stdfiltersql);
 	}
 }
+
+	/** to store the custom view advfilter of the customview in vtiger_cvadvfilter table
+	  * @param $cvid :: Type Integer
+	  * @param $filters :: Type Array('columnname'=>$tablename:$columnname:$fieldname:$fieldlabel,'comparator'=>$comparator,'value'=>$value)
+	  * returns nothing 
+	 */
 
 function insertCvAdvFilter($CVid,$filters)
 {
