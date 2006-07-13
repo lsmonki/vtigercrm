@@ -20,6 +20,9 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
+/** Function to get the 5 New Leads 
+ *return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
+*/
 function getNewLeads()
 {
 	global $log;
@@ -124,6 +127,10 @@ function getNewLeads()
 	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;
 }
+/** Function to get the Lead View from the Combo List
+ *  @param string $lead_view - (eg today, last 2 days)
+ *  Returns the Lead view select option
+*/
 function getLeadView($lead_view)	
 {	
 	global $log;
