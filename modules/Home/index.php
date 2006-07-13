@@ -147,6 +147,11 @@ foreach ( explode(",",$home_section_order) as $section )
 	        break;
     }
 }
+
+	/** Function to get the ActivityType for the given entity id
+	 *  @param entityid : Type Integer
+	 *  return the activity type for the given id
+	 */
 function getActivityType($id)
 {
 	global $adb;
@@ -162,7 +167,6 @@ $result=$adb->query($query);
 $tagcloud_js=$adb->query_result($result,0,'tagcloud');
 $smarty->assign("TAGCLOUD_JS",$tagcloud_js);
 $smarty->assign("TAGCLOUD_CSS",ereg_replace('/js/','/css/',$tagcloud_js));
-//$smarty->assign("LOGINHISTORY",getLoginHistory());
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
@@ -179,36 +183,37 @@ $freetag = new freetag();
 $smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
 $smarty->display("HomePage.tpl");
 
-function getLoginHistory()
-{
-	global $current_user;
-	global $adb;
-	global $app_strings;
-	$i=0;
-	$userid= $current_user->id;
-	$query="select * from vtiger_loginhistory inner join vtiger_users on vtiger_loginhistory.user_name=vtiger_users.user_name where vtiger_users.id=".$userid;
-	$result=$adb->query($query);
-	$count=$adb->num_rows($result);
-	$logout_time=$adb->query_result($result,$count-2,'logout_time');
-	if($logout_time !='' && $logout_time != '0000-00-00 00:00:00' && $count >= 2)
-	{
-		$query ="select * from vtiger_crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
-		$result=$adb->query($query);
-		$entry_list=array();
-		for(;$i < $adb->num_rows($result);$i++)
-		{
-			$entries=array();
-			$entries['setype'] =$adb->query_result($result,$i,'setype');	
-			$entries['modifiedby'] = getUserName($adb->query_result($result,$i,'modifiedby'));
-			$entries['modifiedtime'] = $adb->query_result($result,$i,'modifiedtime');
-			$entries['crmid'] = $adb->query_result($result,$i,'crmid');
-			$entry_list[]=$entries;	
-		}
-		if($i > 0)
-			return $entry_list;
-	}
-}
-	
+	/** Function to get the Tasks assigned to the group for the currentUser 
+	 *  This function accepts no arguments
+	 * @returns  $group related tasks Array in the following format
+	 * $values = Array('Title'=>Array(0=>'image name',
+	 *				 1=>'My Group Allocation',
+	 *			 	 2=>'home_mygrp'
+	 *			 	),
+	 *		  'Header'=>Array(0=>'Entity Name',
+	 *	  			  1=>'Group Name',
+	 *				  2=>'Entity Type'	
+	 *			  	),
+	 *		  'Entries'=>Array($id=>Array(
+	 *			  			0=>$name,
+	 *						1=>$groupname,
+	 *						2=>$entityname
+	 *					       ),
+	 *				   $id1=>Array(
+         *                                               0=>$name1,
+         *                                               1=>$groupname1,
+	 *						 2=>$entityname1	
+         *                                              ),
+	 *					|
+	 *					|
+         *				   $idn=>Array(
+         *                                               0=>$namen,
+         *                                               1=>$groupnamen,
+	 *						 2=>$entitynamen		
+         *                                              )	
+	 *				  )
+	 *
+        */
 function getGroupTaskLists()
 {
 	//get all the group relation tasks
