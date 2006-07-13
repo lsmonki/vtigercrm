@@ -9,6 +9,10 @@
 *
  ********************************************************************************/
 require_once("modules/Dashboard/Entity_charts.php");
+/**
+ * Function to get Dashboard in homepage
+ * return the graph - $sHTML
+ */
 function getHomepageDB()
 {
 	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
