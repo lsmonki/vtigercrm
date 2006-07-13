@@ -15,6 +15,13 @@ require_once('modules/Products/Product.php');
 require_once('include/utils/UserInfoUtil.php');
 
 // functions added for group calendar	-Jaguar
+	/**
+	 * Function to get duration
+	 * @param string     $time_start            -   activity start time
+	 * @param string     $duration_hours        -   duration in hours
+	 * @param string     $duration_minutes      -   duration in minutes
+	 * return string     $end_time              -   time string
+	 */
 	function get_duration($time_start,$duration_hours,$duration_minutes)
 	{
 		global $log;
@@ -37,6 +44,11 @@ require_once('include/utils/UserInfoUtil.php');
 		return $end_time;
 	}	
 
+	/**
+	 * Function to convert time to number 
+	 * @param string     $time_start            -   activity start time
+	 * return integer    $start_time            -   time
+	 */
 	function time_to_number($time_start)
 	{
 		global $log;
@@ -55,6 +67,16 @@ require_once('include/utils/UserInfoUtil.php');
 		return $start_time;
 	}
 
+	/**
+	  * Function to status availability of user
+	  * @param string     $owner                   -   ownername
+	  * @param integer    $userid                  -   userid
+	  * @param integer    $activity_id             -   activityid
+	  * @param string     $avail_date              -   date in string format
+	  * @param string     $activity_start_time     -   time string 
+	  * @param string     $activity_end_time       -   time string 
+	  * return string     $availability            -   html img tag in string
+	  */
 	function status_availability($owner,$userid,$activity_id,$avail_date,$activity_start_time,$activity_end_time)	
 	{
 		global $adb,$image_path,$log;
