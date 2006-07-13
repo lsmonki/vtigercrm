@@ -85,6 +85,15 @@ $num_rows=$adb->num_rows($result);
 
 $roleout ='';
 $roleout .= indent($hrarray,$roleout,$role_det);
+
+/** recursive function to construct the role tree ui 
+  * @param $hrarray -- Hierarchial role tree array with only the roleid:: Type array
+  * @param $roleout -- html string ouput of the constucted role tree ui:: Type varchar 
+  * @param $role_det -- Roledetails array got from calling getAllRoleDetails():: Type array 
+  * @returns $role_out -- html string ouput of the constucted role tree ui:: Type string
+  *
+ */
+
 function indent($hrarray,$roleout,$role_det)
 {
 	global $theme;
