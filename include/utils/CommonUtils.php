@@ -2178,6 +2178,8 @@ function getEntityName($module, $ids_list)
 	$log->debug("Exiting getEntityName method ...");
 }
 
+/**Function to get all permitted modules for a user with their parent
+*/
 
 function getAllParenttabmoduleslist()
 {

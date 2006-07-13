@@ -1535,7 +1535,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	return $value; 
 }
 
-
+/** Function to get the list query for a module
+  * @param $module -- module name:: Type string
+  * @param $where -- where:: Type string
+  * @returns $query -- query:: Type query 
+  */
 function getListQuery($module,$where='')
 {
 	global $log;
@@ -2055,6 +2059,10 @@ function getListQuery($module,$where='')
 	return $query;
 }
 
+/**Function returns the list of records which an user is entiled to view
+*Param $module - module name
+*Returns a database query - type string
+*/
 
 function getReadEntityIds($module)
 {
@@ -2228,8 +2236,20 @@ function getReadEntityIds($module)
 
 }
 
-
-//parameter $viewid added for vtiger_customview 27/5
+/** Function to get alphabetical search links
+*Param $module - module name
+*Param $action - action
+*Param $fieldname - vtiger_field name
+*Param $query - query
+*Param $type - search type
+*Param $popuptype - popup type
+*Param $recordid - record id
+*Param $return_module - return module
+*Param $append_url - url string to be appended 
+*Param $viewid - custom view id
+*Param $groupid - group id
+*Returns an string value
+ */
 function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='',$groupid='')
 {
 	global $log;
@@ -2253,7 +2273,12 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	return $list;
 }
 
-
+/**Function to get parent name for a given parent id
+*Param $module - module name 
+*Param $list_result- result set
+*Param $rset - result set index
+*Returns an string value
+*/
 function getRelatedToEntity($module,$list_result,$rset)
 {
 	global $log;
@@ -2330,6 +2355,12 @@ function getRelatedToEntity($module,$list_result,$rset)
 
 }
 
+/**Function to get parent name for a given parent id
+*Param $module - module name 
+*Param $list_result- result set
+*Param $rset - result set index
+*Returns an string value
+*/
 
 //used in home page listTop vtiger_files
 function getRelatedTo($module,$list_result,$rset)
@@ -2463,6 +2494,15 @@ function getRelatedTo($module,$list_result,$rset)
 
 
 }
+
+/**Function to get the table headers for a listview
+*Param $navigation_arrray - navigation values in array 
+*Param $url_qry - url string 
+*Param $module - module name 
+*Param $action- action file name
+*Param $viewid - view id
+*Returns an string value
+*/
 
 
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
@@ -2605,9 +2645,13 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	return $where_relquery;
 }
 
-/**This function stores the variables sent in list view url string.
-Param $lv_array - list view session array
-Return type void.
+/**This function stores the variables in session sent in list view url string.
+*Param $lv_array - list view session array
+*Param $noofrows - no of rows
+*Param $max_ent - maximum entires
+*Param $module - module name
+*Param $related - related module
+*Return type void.
 */
 
 function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
@@ -2644,6 +2688,15 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 			$_SESSION['lvs'][$currentModule]['start'] = $start;
 	}
 }
+
+/**Function to get the table headers for related listview
+*Param $navigation_arrray - navigation values in array 
+*Param $url_qry - url string 
+*Param $module - module name 
+*Param $action- action file name
+*Param $viewid - view id
+*Returns an string value
+*/
 
 //Temp function to be be deleted
 function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='CallRelatedList',$viewid='')

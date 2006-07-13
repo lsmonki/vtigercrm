@@ -41,7 +41,14 @@
   require_once('include/utils/DeleteUtils.php');
   require_once('include/utils/SearchUtils.php');
   require_once('include/FormValidationUtil.php');
-  
+ 
+/** Function to return a full name
+  * @param $row -- row:: Type integer
+  * @param $first_column -- first column:: Type string
+  * @param $last_column -- last column:: Type string
+  * @returns $fullname -- fullname:: Type string 
+  *
+*/
 function return_name(&$row, $first_column, $last_column)
 {
 	global $log;
@@ -79,7 +86,11 @@ function return_name(&$row, $first_column, $last_column)
 	return $full_name;
 }
 
-//login utils
+/** Function to return language 
+  * @returns $languages -- languages:: Type string 
+  *
+*/
+
 function get_languages()
 {
 	global $log;
@@ -88,6 +99,12 @@ function get_languages()
 	$log->debug("Exiting get_languages method ...");
 	return $languages;
 }
+
+/** Function to return language 
+  * @param $key -- key:: Type string
+  * @returns $languages -- languages:: Type string 
+  *
+*/
 
 //seems not used
 function get_language_display($key)
@@ -98,6 +115,12 @@ function get_language_display($key)
 	$log->debug("Exiting get_language_display method ...");
 	return $languages[$key];
 }
+
+/** Function returns the user array 
+  * @param $assigned_user_id -- assigned_user_id:: Type string
+  * @returns $user_list -- user list:: Type array 
+  *
+*/
 
 function get_assigned_user_name(&$assigned_user_id)
 {
@@ -113,6 +136,15 @@ function get_assigned_user_name(&$assigned_user_id)
 	$log->debug("Exiting get_assigned_user_name method ...");
 	return "";
 }
+
+/** Function returns the user key in user array 
+  * @param $add_blank -- boolean:: Type boolean
+  * @param $status -- user status:: Type string
+  * @param $assigned_user -- user id:: Type string
+  * @param $private -- sharing type:: Type string
+  * @returns $user_array -- user array:: Type array 
+  *
+*/
 
 //used in module file
 function get_user_array($add_blank=true, $status="Active", $assigned_user="",$private="")
@@ -175,6 +207,13 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	$log->debug("Exiting get_user_array method ...");
 	return $user_array;
 }
+
+/** Function skips executing arbitary commands given in a string
+  * @param $string -- string:: Type string
+  * @param $maxlength -- maximun length:: Type integer
+  * @returns $string -- escaped string:: Type string 
+  *
+*/
 
 function clean($string, $maxLength)
 {
@@ -539,6 +578,10 @@ function create_guid()
 
 }
 
+/** Function to create guid section for a given character
+  * @param $characters -- characters:: Type string
+  * @returns $return -- integer:: Type integer``
+  */
 function create_guid_section($characters)
 {
 	global $log;
@@ -551,6 +594,11 @@ function create_guid_section($characters)
 	$log->debug("Exiting create_guid_section method ...");
 	return $return;
 }
+
+/** Function to ensure length
+  * @param $string -- string:: Type string
+  * @param $length -- length:: Type string
+  */
 
 function ensure_length(&$string, $length)
 {
@@ -752,7 +800,9 @@ function array_csort() {
    return $marray;
 }
 
-
+/** Function to set default varibles on to the global variable
+  * @param $defaults -- default values:: Type array
+       */
 function set_default_config(&$defaults)
 {
 	global $log;
@@ -776,6 +826,12 @@ $toHtml = array(
         "'" =>  '&#039;',
 );
 
+/** Function to convert the given string to html
+  * @param $string -- string:: Type string
+  * @param $ecnode -- boolean:: Type boolean
+    * @returns $string -- string:: Type string 
+      *
+       */
 function to_html($string, $encode=true){
 	global $log;
 	$log->debug("Entering to_html(".$string.",".$encode.") method ...");
@@ -787,6 +843,12 @@ function to_html($string, $encode=true){
         return $string;
 }
 
+/** Function to get the assigned user name or group name
+  * @param $id -- user id:: Type integer
+  * @param $module -- module name:: Type string
+    * @returns $string -- string:: Type string 
+      *
+       */
 
 //it seems the fun ction is not used
 function get_assigned_user_or_group_name($id,$module)
@@ -818,6 +880,12 @@ function get_assigned_user_or_group_name($id,$module)
 	return $tempval[0];
 }
 
+/** Function to get the tabname for a given id
+  * @param $tabid -- tab id:: Type integer
+    * @returns $string -- string:: Type string 
+      *
+       */
+
 function getTabname($tabid)
 {
 	global $log;
@@ -831,6 +899,12 @@ function getTabname($tabid)
 	return $tabname;
 
 }
+
+/** Function to get the tab module name for a given id
+  * @param $tabid -- tab id:: Type integer
+    * @returns $string -- string:: Type string 
+      *
+       */
 
 function getTabModuleName($tabid)
 {
@@ -854,6 +928,11 @@ function getTabModuleName($tabid)
         return $tabname;
 }
 
+/** Function to get column fields for a given module
+  * @param $module -- module:: Type string
+    * @returns $column_fld -- column field :: Type array 
+      *
+       */
 
 function getColumnFields($module)
 {
@@ -875,6 +954,12 @@ function getColumnFields($module)
 	return $column_fld;	
 }
 
+/** Function to get a users's mail id
+  * @param $userid -- userid :: Type integer
+    * @returns $email -- email :: Type string 
+      *
+       */
+
 function getUserEmail($userid)
 {
 	global $log;
@@ -891,6 +976,12 @@ function getUserEmail($userid)
 	$log->debug("Exiting getUserEmail method ...");
         return $email;
 }		
+
+/** Function to get a userid for outlook
+  * @param $username -- username :: Type string
+    * @returns $user_id -- user id :: Type integer 
+       */
+
 //outlook security
 function getUserId_Ol($username)
 {
@@ -913,6 +1004,13 @@ function getUserId_Ol($username)
 	$log->debug("Exiting getUserId_Ol method ...");
 	return $user_id;
 }	
+
+
+/** Function to get a action id for a given action name
+  * @param $action -- action name :: Type string
+    * @returns $actionid -- action id :: Type integer 
+       */
+
 //outlook security
 
 function getActionid($action)
@@ -931,6 +1029,10 @@ function getActionid($action)
 	return $actionid;
 }
 
+/** Function to get a action for a given action id
+  * @param $action id -- action id :: Type integer
+    * @returns $actionname-- action name :: Type string 
+       */
 
 
 function getActionname($actionid)
@@ -947,6 +1049,10 @@ function getActionname($actionid)
 	return $actionname;
 }
 
+/** Function to get a assigned user id for a given entity
+  * @param $record -- entity id :: Type integer
+    * @returns $user_id -- user id :: Type integer 
+       */
 
 function getUserId($record)
 {
@@ -959,6 +1065,11 @@ function getUserId($record)
 	$log->debug("Exiting getUserId method ...");
 	return $user_id;	
 }
+
+/** Function to get a user id or group id for a given entity
+  * @param $record -- entity id :: Type integer
+    * @returns $ownerArr -- owner id :: Type array 
+       */
 
 function getRecordOwnerId($record)
 {
@@ -1034,6 +1145,10 @@ function getRecordOwnerId($record)
 
 }
 
+/** Function to insert value to profile2field table
+  * @param $profileid -- profileid :: Type integer
+       */
+
 
 function insertProfile2field($profileid)
 {
@@ -1054,6 +1169,9 @@ function insertProfile2field($profileid)
 	$log->debug("Exiting insertProfile2field method ...");
 }
 
+/** Function to insert into default org field
+       */
+
 function insert_def_org_field()
 {
 	global $log;
@@ -1071,6 +1189,12 @@ function insert_def_org_field()
 	$log->debug("Exiting insert_def_org_field() method ...");
 }
 
+/** Function to insert value to profile2field table
+  * @param $fld_module -- field module :: Type string
+  * @param $profileid -- profileid :: Type integer
+  * @returns $result -- result :: Type string
+  */
+	 
 function getProfile2FieldList($fld_module, $profileid)
 {
 	global $log;
@@ -1085,6 +1209,12 @@ function getProfile2FieldList($fld_module, $profileid)
 	$log->debug("Exiting getProfile2FieldList method ...");
 	return $result;
 }
+
+/** Function to insert value to profile2fieldPermissions table
+  * @param $fld_module -- field module :: Type string
+  * @param $profileid -- profileid :: Type integer
+  * @returns $return_data -- return_data :: Type string
+  */
 
 //added by jeri
 
@@ -1108,6 +1238,12 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 	return $return_data;
 }
 
+/** Function to getProfile2allfieldsListinsert value to profile2fieldPermissions table
+  * @param $mod_array -- mod_array :: Type string
+  * @param $profileid -- profileid :: Type integer
+  * @returns $profilelist -- profilelist :: Type string
+  */
+
 function getProfile2AllFieldList($mod_array,$profileid)
 {
 	global $log;
@@ -1124,6 +1260,11 @@ function getProfile2AllFieldList($mod_array,$profileid)
 	$log->debug("Exiting getProfile2AllFieldList method ...");
 	return $profilelist;	
 }
+
+/** Function to getdefaultfield organisation list for a given module
+  * @param $fld_module -- module name :: Type string
+  * @returns $result -- string :: Type object
+  */
 
 //end of fn added by jeri
 
@@ -1142,6 +1283,12 @@ function getDefOrgFieldList($fld_module)
 	return $result;
 }
 
+/** Function to getQuickCreate for a given tabid
+  * @param $tabid -- tab id :: Type string
+  * @param $actionid -- action id :: Type integer
+  * @returns $QuickCreateForm -- QuickCreateForm :: Type boolean
+  */
+
 function getQuickCreate($tabid,$actionid)
 {
 	global $log;
@@ -1159,6 +1306,13 @@ function getQuickCreate($tabid,$actionid)
 	return $QuickCreateForm;
 
 }
+
+/** Function to getQuickCreate for a given tabid
+  * @param $tabid -- tab id :: Type string
+  * @param $actionid -- action id :: Type integer
+  * @returns $QuickCreateForm -- QuickCreateForm :: Type boolean
+  */
+
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
 	global $log;
@@ -1180,6 +1334,10 @@ function ChangeStatus($status,$activityid,$activity_mode='')
 	$log->debug("Exiting ChangeStatus method ...");
  }
 
+/** Function to set date values compatible to database (YY_MM_DD)
+  * @param $value -- value :: Type string
+  * @returns $insert_date -- insert_date :: Type string
+  */
 
 function getDBInsertDateValue($value)
 {
@@ -1214,6 +1372,11 @@ function getDBInsertDateValue($value)
 	return $insert_date;
 }
 
+/** Function to get unitprice for a given product id
+  * @param $productid -- product id :: Type integer
+  * @returns $up -- up :: Type string
+  */
+
 function getUnitPrice($productid)
 {
 	global $log,$current_user;
@@ -1232,6 +1395,11 @@ function getUnitPrice($productid)
         return $up;
 }
 
+/** Function to upload product image file 
+  * @param $mode -- mode :: Type string
+  * @param $id -- id :: Type integer
+  * @returns $ret_array -- return array:: Type array
+  */
 
 function upload_product_image_file($mode,$id)
 {
@@ -1282,6 +1450,12 @@ function upload_product_image_file($mode,$id)
 
 }
 
+/** Function to upload product image file 
+  * @param $id -- id :: Type integer
+  * @param $deleted_array -- images to be deleted :: Type array
+  * @returns $imagename -- imagelist:: Type array
+  */
+
 function getProductImageName($id,$deleted_array='')
 {
 	global $log;
@@ -1307,6 +1481,12 @@ function getProductImageName($id,$deleted_array='')
 		return $image_name;	
 	}
 }
+
+/** Function to get Contact images 
+  * @param $id -- id :: Type integer
+  * @returns $imagename -- imagename:: Type string
+  */
+
 function getContactImageName($id)
 {
 	global $log;
@@ -1320,6 +1500,17 @@ function getContactImageName($id)
         return $image_name;
 
 }
+
+/** Function to update sub total in inventory 
+  * @param $module -- module name :: Type string
+  * @param $tablename -- tablename :: Type string
+  * @param $colname -- colname :: Type string
+  * @param $colname1 -- coluname1 :: Type string
+  * @param $entid_fld -- entity field :: Type string
+  * @param $entid -- entid :: Type integer
+  * @param $prod_total -- totalproduct :: Type integer
+  */
+
 function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,$prod_total)
 {
 	global $log;
@@ -1339,6 +1530,13 @@ function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,
         $adb->query($sub_query);
 	$log->debug("Exiting updateSubTotal method ...");
 }
+
+/** Function to get Inventory Total 
+  * @param $return_module -- return module :: Type string
+  * @param $id -- entity id :: Type integer
+  * @returns $total -- total:: Type integer
+  */
+
 function getInventoryTotal($return_module,$id)
 {
 	global $log;
@@ -1370,6 +1568,11 @@ function getInventoryTotal($return_module,$id)
 	return $total;
 }
 
+/** Function to update product quantity 
+  * @param $product_id -- product id :: Type integer
+  * @param $upd_qty -- quantity :: Type integer
+  */
+
 function updateProductQty($product_id, $upd_qty)
 {
 	global $log;
@@ -1380,6 +1583,11 @@ function updateProductQty($product_id, $upd_qty)
 	$log->debug("Exiting updateProductQty method ...");
 
 }
+
+/** Function to get account information 
+  * @param $parent_id -- parent id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
 
 function get_account_info($parent_id)
 {
@@ -1393,6 +1601,13 @@ function get_account_info($parent_id)
         return $accountid;
 }
 
+/** Function to get quick create form fields 
+  * @param $fieldlabel -- field label :: Type string
+  * @param $uitype -- uitype :: Type integer
+  * @param $fieldname -- field name :: Type string
+  * @param $tabid -- tabid :: Type integer
+  * @returns $return_field -- return field:: Type string
+  */
 
 //for Quickcreate-Form
 
@@ -1469,7 +1684,14 @@ function get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid)
 			break;
 	}
 }	
-		
+
+/** Function to get quick create form fields 
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @param $tid -- tabid :: Type integer
+  * @returns $form_field -- return field:: Type string
+  */
+
 function get_textmanField($label,$name,$tid)
 {
 	global $log;
@@ -1505,6 +1727,12 @@ function get_textmanField($label,$name,$tid)
 	
 }	
 
+/** Function to get textfield for website field  
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @returns $form_field -- return field:: Type string
+  */
+
 function get_textwebField($label,$name)
 {
 	global $log;
@@ -1518,6 +1746,12 @@ function get_textwebField($label,$name)
 	return $form_field;
 	
 }
+
+/** Function to get textfield   
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @returns $form_field -- return field:: Type string
+  */
 
 function get_textField($label,$name)
 {
@@ -1543,6 +1777,13 @@ function get_textField($label,$name)
 	}
 	
 }
+
+/** Function to get account textfield   
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @param $tid -- tabid :: Type integer
+  * @returns $form_field -- return field:: Type string
+  */
 
 function get_textaccField($label,$name,$tid)
 {
@@ -1573,6 +1814,13 @@ function get_textaccField($label,$name,$tid)
 	}	
 		
 }
+
+/** Function to get combo field values   
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @returns $form_field -- return field:: Type string
+  */
+
 function get_textcomboField($label,$name)
 {
 	global $log;
@@ -1665,6 +1913,13 @@ function get_textcomboField($label,$name)
 	
 }
 
+/** Function to get date field    
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @param $tid -- tabid :: Type integer
+  * @returns $form_field -- return field:: Type string
+  */
+
 
 function get_textdateField($label,$name,$tid)
 {
@@ -1731,6 +1986,12 @@ function get_textdateField($label,$name,$tid)
 	
 }
 
+/** Function to get duration text field in activity  
+  * @param $label -- field label :: Type string
+  * @param $name -- field name :: Type string
+  * @param $tid -- tabid :: Type integer
+  * @returns $form_field -- return field:: Type string
+  */
 
 function get_textdurationField($label,$name,$tid)
 {
@@ -1754,6 +2015,12 @@ function get_textdurationField($label,$name,$tid)
 		return $form_field;
 	}	
 }
+
+/** Function to get email text field  
+  * @param $module -- module name :: Type name
+  * @param $id -- entity id :: Type integer
+  * @returns $hidden -- hidden:: Type string
+  */
 
 //Added to get the parents list as hidden for Emails -- 09-11-2005
 function getEmailParentsList($module,$id)
@@ -1851,6 +2118,11 @@ function getDateFromDateAndtime($date_time)
 }
 
 
+/** Function to get header for block in edit/create and detailview  
+  * @param $header_label -- header label :: Type string
+  * @returns $output -- output:: Type string
+  */
+
 function getBlockTableHeader($header_label)
 {
 	global $log;
@@ -1890,6 +2162,13 @@ function getTableNameForField($module,$fieldname)
 	return $tablename;
 }
 
+/** Function to get parent record owner  
+  * @param $tabid -- tabid :: Type integer
+  * @param $parModId -- parent module id :: Type integer
+  * @param $record_id -- record id :: Type integer
+  * @returns $parentRecOwner -- parentRecOwner:: Type integer
+  */
+
 function getParentRecordOwner($tabid,$parModId,$record_id)
 {
 	global $log;
@@ -1907,6 +2186,11 @@ function getParentRecordOwner($tabid,$parModId,$record_id)
 	return $parentRecOwner;
 }
 
+/** Function to get potential related accounts   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
 function getPotentialsRelatedAccounts($record_id)
 {
 	global $log;
@@ -1919,6 +2203,10 @@ function getPotentialsRelatedAccounts($record_id)
 	return $accountid;
 }
 
+/** Function to get email related accounts   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
 function getEmailsRelatedAccounts($record_id)
 {
 	global $log;
@@ -1930,6 +2218,10 @@ function getEmailsRelatedAccounts($record_id)
 	$log->debug("Exiting getEmailsRelatedAccounts method ...");
 	return $accountid;
 }
+/** Function to get email related Leads   
+  * @param $record_id -- record id :: Type integer
+  * @returns $leadid -- leadid:: Type integer
+  */
 
 function getEmailsRelatedLeads($record_id)
 {
@@ -1943,6 +2235,11 @@ function getEmailsRelatedLeads($record_id)
 	return $leadid;
 }
 
+/** Function to get HelpDesk related Accounts   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
 function getHelpDeskRelatedAccounts($record_id)
 {
 	global $log;
@@ -1955,6 +2252,10 @@ function getHelpDeskRelatedAccounts($record_id)
         return $accountid;
 }
 
+/** Function to get Quotes related Accounts   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
 
 function getQuotesRelatedAccounts($record_id)
 {
@@ -1968,6 +2269,10 @@ function getQuotesRelatedAccounts($record_id)
         return $accountid;
 }
 
+/** Function to get Quotes related Potentials   
+  * @param $record_id -- record id :: Type integer
+  * @returns $potid -- potid:: Type integer
+  */
 
 function getQuotesRelatedPotentials($record_id)
 {
@@ -1981,6 +2286,11 @@ function getQuotesRelatedPotentials($record_id)
         return $potid;
 }
 
+/** Function to get Quotes related Potentials   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
 function getSalesOrderRelatedAccounts($record_id)
 {
 	global $log;
@@ -1993,6 +2303,10 @@ function getSalesOrderRelatedAccounts($record_id)
         return $accountid;
 }
 
+/** Function to get SalesOrder related Potentials   
+  * @param $record_id -- record id :: Type integer
+  * @returns $potid -- potid:: Type integer
+  */
 
 function getSalesOrderRelatedPotentials($record_id)
 {
@@ -2005,6 +2319,10 @@ function getSalesOrderRelatedPotentials($record_id)
 	$log->debug("Exiting getSalesOrderRelatedPotentials method ...");
         return $potid;
 }
+/** Function to get SalesOrder related Quotes   
+  * @param $record_id -- record id :: Type integer
+  * @returns $qtid -- qtid:: Type integer
+  */
 
 function getSalesOrderRelatedQuotes($record_id)
 {
@@ -2018,6 +2336,11 @@ function getSalesOrderRelatedQuotes($record_id)
         return $qtid;
 }
 
+/** Function to get Invoice related Accounts   
+  * @param $record_id -- record id :: Type integer
+  * @returns $accountid -- accountid:: Type integer
+  */
+
 function getInvoiceRelatedAccounts($record_id)
 {
 	global $log;
@@ -2029,6 +2352,10 @@ function getInvoiceRelatedAccounts($record_id)
 	$log->debug("Exiting getInvoiceRelatedAccounts method ...");
         return $accountid;
 }
+/** Function to get Invoice related SalesOrder   
+  * @param $record_id -- record id :: Type integer
+  * @returns $soid -- soid:: Type integer
+  */
 
 function getInvoiceRelatedSalesOrder($record_id)
 {
@@ -2182,6 +2509,10 @@ function Graph_n_table_format($period_type,$date_value)
         return $values;
 }
 
+/** Function to get image count for a given product   
+  * @param $id -- product id :: Type integer
+  * @returns count -- count:: Type integer
+  */
 
 function getImageCount($id)
 {
@@ -2197,6 +2528,12 @@ function getImageCount($id)
 	return count($image_lists);
 
 }
+
+/** Function to get user image for a given user   
+  * @param $id -- user id :: Type integer
+  * @returns $image_name -- image name:: Type string
+  */
+
 function getUserImageName($id)
 {
 	global $log;
@@ -2211,6 +2548,9 @@ function getUserImageName($id)
 
 }
 
+/** Function to get all user images for displaying it in listview   
+  * @returns $image_name -- image name:: Type array
+  */
 
 function getUserImageNames()
 {
@@ -2252,6 +2592,9 @@ function strip_selected_tags($text, $tags = array())
     return $text;
 }
 
+/** Function to check whether user has opted for internal mailer
+  * @returns $int_mailer -- int mailer:: Type boolean
+    */
 function useInternalMailer() {
 	global $current_user,$adb;
 	return $adb->query_result($adb->query("select int_mailer from vtiger_mail_accounts where user_id='".$current_user->id."'"),0,"int_mailer");
