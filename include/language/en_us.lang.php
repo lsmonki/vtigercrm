@@ -946,7 +946,7 @@ $app_strings = Array(
 'LBL_LCPY_ADDRESS'=>'Copy Billing address',
 'LBL_RECORD_ID'=>'Record ID',
 'LBL_ACTION_DATE'=>'Action Date',
-
+'LBL_HOMEPAGE_DASHBOARD'=>'HomePage Dashboard',
 );
 
 
