@@ -51,6 +51,7 @@ class Migration
 	 *	@param string $mysql_username - old database mysql user name
 	 *	@param string $mysql_password - old database mysql password
 	 *	@param string $dbname - old database name
+	 *	@return void
 	 */
 	function setOldDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
@@ -68,6 +69,7 @@ class Migration
 	 *	@param string $mysql_username - new database mysql user name
 	 *	@param string $mysql_password - new database mysql password
 	 *	@param string $dbname - new database name
+	 *      @return void
 	 */
 	function setNewDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
@@ -85,6 +87,7 @@ class Migration
 	 *	@param string $mysql_username - mysql user name
 	 *	@param string $mysql_password - mysql password
 	 *	@param string $dbname - database name
+	 *      @return string $dump_filename - return the dump filename
 	 */
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
@@ -132,6 +135,7 @@ class Migration
 	/**	function used to drop the database
 	 *	@param object $conn - adodb object which is connected with the current(new) database 
 	 *	@param string $dbname - database name which we want to drop
+	 *      @return void
 	 */
 	function dropDatabase($conn,$dbname)
 	{
@@ -145,6 +149,7 @@ class Migration
 	/**     function used to create the database
 	 *	@param object $conn - adodb object which is connected with the current(new) database
 	 *	@param string $dbname - database name which we want to drop
+	 *      @return void
 	 */
 	function createDatabase($conn,$dbname)
 	{
@@ -165,6 +170,7 @@ class Migration
 	 *	@param string $mysql_password - mysql password
 	 *	@param string $dbname - database name to which we want to apply the dump
 	 *	@param string $dumpfile - dump file which contains the data dump of a database
+	 *      @return void
 	 */
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
 	{
@@ -205,7 +211,7 @@ class Migration
 
 	/**	function used to get the tabid
 	 *	@param string $module - module to which we want to get the tabid
-	 *	return int $tabid - tabid of the module
+	 *	@return int $tabid - return the tabid of the module
 	 */
 	function localGetTabID($module)
 	{
@@ -219,7 +225,7 @@ class Migration
 	}
 
 	/**	function used to get the table count of the new database
-	 *	return int $tables - number of tables available in the new database
+	 *	@return int $tables - return the number of tables available in the new database
 	 */
 	function getTablesCountInNewDatabase()
 	{
@@ -232,7 +238,7 @@ class Migration
 	}
 
 	/**	function used to get the table count of the old database
-	 *	return int $tables - number of tables available in the old database
+	 *	@return int $tables - return the number of tables available in the old database
 	 */
 	function getTablesCountInOldDatabase()
 	{
@@ -246,6 +252,7 @@ class Migration
 
 	/**	function used to modify the database from old version to match with new version
 	 *	@param object $conn - adodb object which is connected with the current(new) database 
+	 *      @return void
 	 */
 	function modifyDatabase($conn)
 	{
@@ -273,6 +280,7 @@ class Migration
 	 *	@param int $same_databases - 1 if both databases are same otherwise 0
 	 *	@param string $option - selected migration option (dbsource or dumpsource)
 	 *	@param string $old_dump_file_name - dump file name of the old database which is optional when we use dbsource
+	 *      @return void
 	 */
 	function migrate($same_databases, $option, $old_dump_file_name='')
 	{

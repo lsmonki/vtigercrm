@@ -83,9 +83,8 @@ class HelpDesk extends CRMEntity {
 		$this->log->debug("Exiting HelpDesk method ...");
 	}
 
-	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**	Function used to get the sort order for HelpDesk listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -100,7 +99,7 @@ class HelpDesk extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for HelpDesk listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -116,8 +115,7 @@ class HelpDesk extends CRMEntity {
 
 	/**     Function to form the query to get the list of activities
          *      @param  int $id - ticket id
-         *      @return void
-         *       but this function will call the function renderRelatedActivities with parameters query and ticket id
+	 *	@return array - return an array which will be returned from the function GetRelatedList
         **/
 	function get_activities($id)
 	{
@@ -140,7 +138,7 @@ class HelpDesk extends CRMEntity {
 
 	/**     Function to get the Ticket History information as in array format
 	 *	@param int $ticketid - ticket id
-	 *	return array with title and the ticket history informations in the following format
+	 *	@return array - return an array with title and the ticket history informations in the following format
 							array(	
 								header=>array('0'=>'title'),
 								entries=>array('0'=>'info1','1'=>'info2',etc.,)
@@ -166,10 +164,9 @@ class HelpDesk extends CRMEntity {
 		return $return_value;
 	}
 
-	/**	Function to form the query to get the list of vtiger_attachments and vtiger_notes
+	/**	Function to form the query to get the list of attachments and notes
 	 *	@param  int $id - ticket id
-	 *	@return void
-	 *	 but this function will call the function renderRelatedAttachments with parameters query and ticket id
+         *      @return array - return an array which will be returned from the function getAttachmentsAndNotes
 	**/
 	function get_attachments($id)
 	{
@@ -243,7 +240,7 @@ class HelpDesk extends CRMEntity {
 	/**	Function to form the query which will give the list of tickets based on customername and id ie., contactname and contactid
 	 *	@param  string $user_name - name of the customer ie., contact name
 	 *	@param  int    $id	 - contact id 
-	 * 	@return array  which is return from the function process_list_query
+	 * 	@return array  - return an array which will be returned from the function process_list_query
 	**/
 	function get_user_tickets_list($user_name,$id,$where='',$match='')
 	{
@@ -296,7 +293,7 @@ class HelpDesk extends CRMEntity {
 		return $this->process_list_query($query);
 	}
 
-	/**	Function to process the query and return the result with number of rows
+	/**	Function to process the list query and return the result with number of rows
 	 *	@param  string $query - query 
 	 *	@return array  $response - array(	list           => array(   
 											$i => array(key => val)   
@@ -345,8 +342,8 @@ class HelpDesk extends CRMEntity {
 	        return $response;
 	}
 
-	/**	Function to get the HelpDesk vtiger_field labels in caps letters without space
-	 *	return array $mergeflds - array(	key => val	)    where   key=0,1,2..n & val = ASSIGNEDTO,RELATEDTO, .,etc
+	/**	Function to get the HelpDesk field labels in caps letters without space
+	 *	@return array $mergeflds - array(	key => val	)    where   key=0,1,2..n & val = ASSIGNEDTO,RELATEDTO, .,etc
 	**/
 	function getColumnNames_Hd()
 	{
@@ -368,7 +365,7 @@ class HelpDesk extends CRMEntity {
 
 	/**     Function to get the list of comments for the given ticket id
 	 *      @param  int  $ticketid - Ticket id
-	 *      @return list $list - the list of comments which are formed as boxed info with div tags.
+	 *      @return list $list - return the list of comments and comment informations as a html output where as these comments and comments informations will be formed in div tag.
 	**/
 	function getCommentInformation($ticketid)
 	{
@@ -417,7 +414,7 @@ class HelpDesk extends CRMEntity {
 		return $list;
 	}
 
-	/**     Function to get the Customer Name who has made comment to the ticket from the vtiger_portal
+	/**     Function to get the Customer Name who has made comment to the ticket from the customer portal
 	 *      @param  int    $id   - Ticket id
 	 *      @return string $customername - The contact name
 	**/
@@ -435,7 +432,7 @@ class HelpDesk extends CRMEntity {
 	
 	/**	Function used to get the Activity History
 	 *	@param	int	$id - ticket id to which we want to display the activity history
-	 *	return  array	which will be returned from the function getHistory
+	 *	@return  array	- return an array which will be returned from the function getHistory
 	 */
 	function get_history($id)
 	{

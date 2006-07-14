@@ -88,7 +88,7 @@ class Faq extends CRMEntity {
 
 	/**     Function to get the list of comments for the given FAQ id
          *      @param  int  $faqid - FAQ id
-         *      @return list $list - the list of comments which are formed as boxed info with div tags.
+	 *      @return list $list - return the list of comments and comment informations as a html output where as these comments and comments informations will be formed in div tag.
         **/	
 	function getFAQComments($faqid)
 	{

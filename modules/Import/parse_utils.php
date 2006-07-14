@@ -23,7 +23,7 @@
  *	@param character $delimiter - delimiter of the csv file
  *	@param int $max_lines - maximum number of lines to parse
  *	@param int $has_header - if the file has header then 1 otherwise 0
- *	return array $ret_array which will be "rows"=>&$rows, "field_count"=>$field_count where as &rows is the reference of rows which contains all the parsed rows and $field_count is the number of fields available per row
+ *	@return array $ret_array - return an array which will be "rows"=>&$rows, "field_count"=>$field_count where as &rows is the reference of rows which contains all the parsed rows and $field_count is the number of fields available per row
  */
 function parse_import($file_name,$delimiter,$max_lines,$has_header)
 {
@@ -86,7 +86,7 @@ function parse_import($file_name,$delimiter,$max_lines,$has_header)
  *	@param character $delimiter - delimiter of the csv file
  *	@param int $max_lines - maximum number of lines to parse
  *	@param int $has_header - if the file has header then 1 otherwise 0
- *	return array $ret_array which will be "rows"=>&$rows, "field_count"=>$field_count where as &rows is the reference of rows which contains all the parsed rows and $field_count is the number of fields available per row
+ *	@return array $ret_array - return an array which will be "rows"=>&$rows, "field_count"=>$field_count where as &rows is the reference of rows which contains all the parsed rows and $field_count is the number of fields available per row
  */
 function parse_import_act($file_name,$delimiter,$max_lines,$has_header)
 {

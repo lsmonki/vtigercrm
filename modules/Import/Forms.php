@@ -181,7 +181,7 @@ EOQ;
  *	@param string $suggest_field - field to show as selected in the combo box
  *	@param array  $translated_fields - list of fields which are available to map
  *	@param string $module - tablename for the import module
- *	return the combo box with the fields which are available to map
+ *	@return picklist $output - return the combo box ie., picklist with the fields which are available to map
  */
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {

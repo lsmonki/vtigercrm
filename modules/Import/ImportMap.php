@@ -69,7 +69,7 @@ class ImportMap extends SugarBean
 	}
 
 	/**	function used to get the id, name, module and content as string
-	 *	return string Object:ImportMap id=$this->id name=$this->name module=$this->module content=$this->content
+	 *	@return string Object:ImportMap id=$this->id name=$this->name module=$this->module content=$this->content
 	 */
 	function toString()
 	{
@@ -82,7 +82,7 @@ class ImportMap extends SugarBean
 	 *	@param string $module - module name in which we have saved the mapping
 	 *	@param string $has_header - has_header value
 	 *	@param string $content - all fields which are concatenated with & symbol
-	 *	return int $result - return 1 if the mapping contents updated
+	 *	@return int $result - return 1 if the mapping contents updated
 	 */
         function save_map( $owner_id, $name, $module, $has_header,$content )
         {
@@ -109,7 +109,7 @@ class ImportMap extends SugarBean
 	/**	function used to publish or unpublish the mapping
 	 *	@param int $user_id - user id who is publishing the map
 	 *	@param string $flag - yes or no
-	 *	return value - if flag is yes then update the db and return 1 otherwise return -1
+	 *	@return value - if flag is yes then update the db and return 1 otherwise return -1
 	 */
         function mark_published($user_id,$flag)
         {
@@ -148,7 +148,7 @@ class ImportMap extends SugarBean
 
 	/**	function to retrieve all the column fields and set as properties
 	 *	@param array $fields_array - fields array of the corresponding module
-	 *	return array $obj_arr - object which contains the retrieved column_field values as properties
+	 *	@return array $obj_arr - return an array which contains the retrieved column_field values as properties
 	 */
 	function retrieve_all_by_string_fields($fields_array) 
 	{ 
@@ -176,7 +176,7 @@ class ImportMap extends SugarBean
 
 	/**	function used to get the list of saved mappings
 	 *	@param string $module - module name which we currently importing
-	 *	return array $map_lists - return the list of mappings in the format of [id]=>name
+	 *	@return array $map_lists - return the list of mappings in the format of [id]=>name
 	 */
 	function getSavedMappingsList($module)
 	{
@@ -193,7 +193,7 @@ class ImportMap extends SugarBean
 
 	/**	function used to retrieve the mapping content for the passed mapid
 	 *	@param int $mapid - mapid for the selected map
-	 *	return array $mapping_arr - return the array which contains the mapping_arr[name]=value from the content of the map
+	 *	@return array $mapping_arr - return the array which contains the mapping_arr[name]=value from the content of the map
 	 */
 	function getSavedMappingContent($mapid)
 	{
