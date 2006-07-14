@@ -14,6 +14,8 @@ $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
 require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
+require_once('include/logging.php');
+$cal_log =& LoggerManager::getLogger('calendar');
 if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 {
 	$type = $_REQUEST['type'];
