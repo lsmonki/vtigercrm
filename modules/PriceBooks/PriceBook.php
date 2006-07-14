@@ -27,7 +27,7 @@ class PriceBook extends CRMEntity {
 
 	var $sortby_fields = Array('bookname');		  
 
-        // This is the list of vtiger_fields that are in the lists.
+        // This is the list of fields that are in the lists.
 	var $list_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname'),
                                 'Active'=>Array('pricebook'=>'active')
@@ -59,9 +59,8 @@ class PriceBook extends CRMEntity {
 		$this->log->debug("Exiting PriceBook method ...");
 	}
 
-	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
-	/**	Function used to get the sort order for Product listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	/**	Function used to get the sort order for PriceBook listview
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -75,8 +74,8 @@ class PriceBook extends CRMEntity {
 		return $sorder;
 	}
 
-	/**	Function used to get the order by value for Product listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRICEBOOK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	/**	Function used to get the order by value for PriceBook listview
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRICEBOOK_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -92,7 +91,7 @@ class PriceBook extends CRMEntity {
 
 	/**	function used to get the products which are related to the pricebook
 	 *	@param int $id - pricebook id
-         *      @return array - array which will be returned from the function getPriceBookRelatedProducts with parameters query, product object and returnset value
+         *      @return array - return an array which will be returned from the function getPriceBookRelatedProducts
         **/
 	function get_pricebook_products($id)
 	{
@@ -113,7 +112,7 @@ class PriceBook extends CRMEntity {
 
 	/**	function used to get whether the pricebook has related with a product or not
 	 *	@param int $id - product id
-	 *	return true or false - return false if there are no pricebooks available or associated pricebooks for the product is equal to total number of pricebooks elase return true
+	 *	@return true or false - if there are no pricebooks available or associated pricebooks for the product is equal to total number of pricebooks then return false, else return true
 	 */
 	function get_pricebook_noproduct($id)
 	{

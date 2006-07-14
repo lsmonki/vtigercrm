@@ -105,9 +105,8 @@ class Quote extends CRMEntity {
 		$this->column_fields = getColumnFields('Quotes');
 	}
 	
-	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**	Function used to get the sort order for Quote listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -122,7 +121,7 @@ class Quote extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for Quotes listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['QUOTES_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['QUOTES_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -135,11 +134,10 @@ class Quote extends CRMEntity {
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
-	// Mike Crowe Mod --------------------------------------------------------
 
 	/**	function used to get the list of sales orders which are related to the Quotes
 	 *	@param int $id - quote id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - return an array which will be returned from the function GetRelatedList
 	 */
 	function get_salesorder($id)
 	{
@@ -159,7 +157,7 @@ class Quote extends CRMEntity {
 
 	/**	function used to get the list of activities which are related to the Quotes
 	 *	@param int $id - quote id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - return an array which will be returned from the function GetRelatedList
 	 */
 	function get_activities($id)
 	{	
@@ -180,7 +178,7 @@ class Quote extends CRMEntity {
 
 	/**	function used to get the the activity history related to the quote
 	 *	@param int $id - quote id
-	 *	return array - array which will be returned from the function GetHistory
+	 *	@return array - return an array which will be returned from the function GetHistory
 	 */
 	function get_history($id)
 	{
@@ -210,7 +208,7 @@ class Quote extends CRMEntity {
 
 	/**	Function used to get the Quote Stage history of the Quotes
 	 *	@param $id - quote id
-	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 *	@return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are arrays which contains header values and all column values of all entries
 	 */
 	function get_quotestagehistory($id)
 	{	

@@ -102,9 +102,8 @@ class Invoice extends CRMEntity {
 		$this->log->debug("Exiting Invoice method ...");
 	}
 
-	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**	Function used to get the sort order for Invoice listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['INVOICE_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['INVOICE_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -119,7 +118,7 @@ class Invoice extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for Invoice listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['INVOICE_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['INVOICE_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -135,7 +134,7 @@ class Invoice extends CRMEntity {
 
 
 	/**	function used to get the name of the current object
-	 *	return string $this->name - name of the current object
+	 *	@return string $this->name - name of the current object
 	 */
 	function get_summary_text()
 	{
@@ -148,7 +147,7 @@ class Invoice extends CRMEntity {
 
 	/**	function used to get the list of activities which are related to the invoice
 	 *	@param int $id - invoice id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - return an array which will be returned from the function GetRelatedList
 	 */
 	function get_activities($id)
 	{
@@ -169,7 +168,7 @@ class Invoice extends CRMEntity {
 
 	/**	function used to get the the activity history related to the quote
 	 *	@param int $id - invoice id
-	 *	return array - array which will be returned from the function GetHistory
+	 *	@return array - return an array which will be returned from the function GetHistory
 	 */
 	function get_history($id)
 	{
@@ -196,17 +195,15 @@ class Invoice extends CRMEntity {
 	}
 
 
-	/**	function used to get the attachment which are related to the invoice
+	/**	function used to get the attachments which are related to the invoice
 	 *	@param int $id - invoice id to which we want to retrieve the attachments and notes
-         *      @return array - array which will be returned from the function getAttachmentsAndNotes with parameters module, query, invoice id
+         *      @return array - return an array which will be returned from the function getAttachmentsAndNotes
         **/
 	function get_attachments($id)
 	{
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		
 		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
 		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
 		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
@@ -219,11 +216,9 @@ class Invoice extends CRMEntity {
 			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
+		
 		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		// Inserted order by createdtime desc
+
 		$query .= "select vtiger_attachments.description  title ,'Attachments'  ActivityType,
 		vtiger_attachments.name filename, vtiger_attachments.type FileType, crm2.modifiedtime lastmodified,
 		vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
@@ -234,13 +229,14 @@ class Invoice extends CRMEntity {
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
+
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Invoice',$query,$id);
 	}
 
 	/**	Function used to get the Status history of the Invoice
 	 *	@param $id - invoice id
-	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 *	@return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are arrays which contains header values and all column values of all entries
 	 */
 	function get_invoicestatushistory($id)
 	{	

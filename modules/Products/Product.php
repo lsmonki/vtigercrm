@@ -80,7 +80,7 @@ class Product extends CRMEntity {
 	}
 
 	/**	Function used to get the sort order for Product listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRODUCTS_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -95,7 +95,7 @@ class Product extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for Product listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['HELPDESK_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRODUCTS_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -111,7 +111,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the attachment which are related to the product
 	 *	@param int $id - product id to which we want to retrieve the attachments and notes
-         *      @return array - array which will be returned from the function getAttachmentsAndNotes with parameters module, query, product id
+         *      @return array - array which will be returned from the function getAttachmentsAndNotes
         **/
 	function get_attachments($id)
 	{
@@ -167,8 +167,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of potentials which are related to the product
 	 *	@param int $id - product id 
-	 *	@return void
-	 *	 but this function will call the function renderRelatedPotentials with parameter query
+	 *	@return void - but this function will call the function renderRelatedPotentials with parameter query
 	 */
 	function get_opportunities($id)
 	{
@@ -194,7 +193,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of tickets which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_tickets($id)
 	{
@@ -234,7 +233,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of activities which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_activities($id)
 	{
@@ -288,7 +287,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of quotes which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_quotes($id)
 	{
@@ -328,7 +327,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of purchase orders which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_purchase_orders($id)
 	{
@@ -365,7 +364,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of sales orders which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_salesorder($id)
 	{
@@ -404,7 +403,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of invoices which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_invoices($id)
 	{
@@ -441,7 +440,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the list of pricebooks which are related to the product
 	 *	@param int $id - product id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_product_pricebooks($id)
 	{     
@@ -470,7 +469,7 @@ class Product extends CRMEntity {
 
 	/**	function used to get the number of vendors which are related to the product
 	 *	@param int $id - product id
-	 *	return int number of rows - return the number of products which do not have relationship with vendor
+	 *	@return int number of rows - return the number of products which do not have relationship with vendor
 	 */
 	function product_novendor()
 	{
@@ -490,7 +489,7 @@ class Product extends CRMEntity {
 	/**	function used to get the export query for product
 	 *	@param reference &$order_by - reference of the order by variable which will be added with the query
 	 *	@param reference &$where - reference of the where variable which will be added with the query
-	 *	return string $query - return the query which will give the list of products to export
+	 *	@return string $query - return the query which will give the list of products to export
 	 */	
 	function create_export_query(&$order_by, &$where)
 	{

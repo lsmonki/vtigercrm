@@ -14,8 +14,8 @@
  ********************************************************************************/
 
 
-/**	function used to get the top 5 sales orders
- *	return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
+/**	function used to get the top 5 sales orders from Listview query
+ *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
 function getTopSalesOrder()
 {

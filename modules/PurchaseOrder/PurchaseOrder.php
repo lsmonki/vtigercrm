@@ -99,9 +99,8 @@ class Order extends CRMEntity {
 		$this->column_fields = getColumnFields('PurchaseOrder');
 	}
 
-	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**	Function used to get the sort order for Purchase Order listview
-	 *	return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PURCHASEORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PURCHASEORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
 	function getSortOrder()
 	{
@@ -116,7 +115,7 @@ class Order extends CRMEntity {
 	}
 
 	/**	Function used to get the order by value for Purchase Order listview
-	 *	return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PURCHASEORDER_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PURCHASEORDER_ORDER_BY'] if this session value is empty then default order by will be returned. 
 	 */
 	function getOrderBy()
 	{
@@ -130,7 +129,7 @@ class Order extends CRMEntity {
 		return $order_by;
 	}	
 
-	/** Function to get activities associated with the id
+	/** Function to get activities associated with the Purchase Order
 	 *  This function accepts the id as arguments and execute the MySQL query using the id
 	 *  and sends the query and the id as arguments to renderRelatedActivities() method 
 	 */
@@ -151,7 +150,7 @@ class Order extends CRMEntity {
 		return GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
 	}
 
-	/** Function to get history associated with the id
+	/** Function to get the activities history associated with the Purchase Order
 	 *  This function accepts the id as arguments and execute the MySQL query using the id
 	 *  and sends the query and the id as arguments to renderRelatedHistory() method
 	 */
@@ -179,7 +178,7 @@ class Order extends CRMEntity {
 		return getHistory('PurchaseOrder',$query,$id);
 	}
 
-	/** Function to get vtiger_attachments associated with the id
+	/** Function to get the attachments associated with the Purchase Order
 	 *  This function accepts the id as arguments and execute the MySQL query using the id
 	 *  and sends the query and the id as arguments to renderRelatedAttachments() method.
 	 */
@@ -187,9 +186,7 @@ class Order extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+
 		$query = "select vtiger_notes.title, 'Notes      '  ActivityType, vtiger_notes.filename,
 		vtiger_attachments.type FileType, crm2.modifiedtime lastmodified,
 		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
@@ -202,11 +199,9 @@ class Order extends CRMEntity {
 			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
+		
 		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		// Inserted order by createdtime desc
+
 		$query .= "select vtiger_attachments.description  title ,'Attachments'  ActivityType,
 		vtiger_attachments.name  filename, vtiger_attachments.type  FileType, crm2.modifiedtime  lastmodified,
 		vtiger_attachments.attachmentsid  attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
@@ -218,13 +213,14 @@ class Order extends CRMEntity {
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id."
 		order by createdtime desc";
+
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
 	}
 
 	/**	Function used to get the Status history of the Purchase Order
 	 *	@param $id - purchaseorder id
-	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 *	@return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are arrays which contains header values and all column values of all entries
 	 */
 	function get_postatushistory($id)
 	{	

@@ -67,7 +67,7 @@ class Vendor extends CRMEntity {
 
 	/**	function used to get the list of products which are related to the vendor
 	 *	@param int $id - vendor id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_products($id)
 	{
@@ -88,7 +88,7 @@ class Vendor extends CRMEntity {
 
 	/**	function used to get the list of purchase orders which are related to the vendor
 	 *	@param int $id - vendor id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_purchase_orders($id)
 	{
@@ -109,7 +109,7 @@ class Vendor extends CRMEntity {
 
 	/**	function used to get the list of contacts which are related to the vendor
 	 *	@param int $id - vendor id
-	 *	return array - array which will be returned from the function GetRelatedList
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_contacts($id)
 	{
