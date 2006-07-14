@@ -271,8 +271,8 @@ class DateTime
 	}
 	
 	/**
-	* function to month name
-	* return string $this->month_inlong  - month name
+	* function to day of week 
+	* return string $this->dayofweek_inlong  - day of week 
 	*/
 	function getdayofWeek()
 	{
