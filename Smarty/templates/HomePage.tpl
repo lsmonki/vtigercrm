@@ -21,23 +21,6 @@
 
 
 {*<!--Home Page Entries  -->*}
-{* login history commented out
-{if isset($LOGINHISTORY.0)}
-    <div id="loginhistory" style="float:left;position:absolute;left:300px;top:150px;height:100px:width:200px;overflow:auto;border:1px solid #dadada;">
-    <table border="0" cellpadding="4" cellspacing="0" width="100%">
-        <tr><td class=tblPro1ColHeader>{$MOD.LBL_LOGIN_ID}</td><td class=tblPro1ColHeader>{$MOD.LBL_TYPE}</td><td class=tblPro1ColHeader>{$MOD.LBL_MODIFIED_BY}</t
-d><td class=tblPro1ColHeader nowrap><img src="{$IMAGE_PATH}tblPro1BtnHide.gif" alt="Close" align="right" border="0" onClick
-="document.getElementById('loginhistory').style.display='none';">{$MOD.LBL_MODIFIED_TIME}</td></tr>
-        {foreach key=label item=detail from=$LOGINHISTORY}
-            <tr><td class=tblPro1DataCell>{$detail.crmid}</td><td class=tblPro1DataCell>{$detail.setype}</td><td class=tblP
-ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modifiedtime}</td></tr>
-        {/foreach}
-    </table>
-    </div>
-{/if}
-*}
-
-
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
@@ -182,9 +165,13 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		{else}
                         <div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
                         <table width="100%" height="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-                          <tr align="left"><td>
+			<tr style="cursor:move;height:30px;">
+				<td align="left" style="border-bottom:1px solid #666666;"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
+				<td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
+		         </tr>
+                         <tr align="left"><td>
                                 {$tabledetail}
-                          </td></tr>
+                        </td></tr>
                         </table>
 			</div>
                 {/if}
@@ -268,44 +255,8 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 
 
 
-<!-- 
-					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
-    					<tr>
-    					   <td class="rightMailMergeHeader"><b>Tag Cloud</b></td>
-    					</tr>
-    					<tr style="height:25px">
-    						<td class="rightMailMergeContent">
-        						<table border=0 cellspacing=0 cellpadding=0 width=100% >
-          						<tr><td>
-          						<table width="250" border="0" cellspacing="0" cellpadding="0">
-            						<tr>
-            						  <td colspan="3"><img src="{$IMAGE_PATH}cloud_top.gif" width=250 height=38 alt=""></td>
-            						</tr>
-            						<tr>
-              						<td width="16" height="10"><img src="{$IMAGE_PATH}cloud_top_left.gif" width="16" height="10"></td>
-              						<td width="221" height="10"><img src="{$IMAGE_PATH}tagcloud_03.gif" width="221" height="10"></td>
-              						<td width="13" height="10"><img src="{$IMAGE_PATH}cloud_top_right.gif" width="13" height="10"></td>
-            						</tr>
-            						<tr>
-            						  <td class="cloudLft"></td>
-            						  <td><span id="tagfields">{$ALL_TAG}</span></td>
-            						  <td class="cloudRht"></td>
-            						</tr>
-            						<tr>
-            						<td width="16" height="13"><img src="{$IMAGE_PATH}cloud_btm_left.gif" width="16" height="13"></td>
-            						<td width="221" height="13"><img src="{$IMAGE_PATH}cloud_btm_bdr.gif" width="221" height="13"></td>
-            						<td width="13" height="13"><img src="{$IMAGE_PATH}cloud_btm_right.gif" width="13" height="13"></td>
-            						</tr>
-          						</table>
-      						    </td></tr>
-    						    </table>
-    					</td>
-    				</tr>
-				</table>
-
--->
 </td>
-						<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 
 </tr>
 </table>
