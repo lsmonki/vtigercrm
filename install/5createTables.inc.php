@@ -45,7 +45,7 @@ if (is_file("config_override.php")) {
 
 $db = new PearDatabase();
 
-$log =& LoggerManager::getLogger('create_table');
+$log =& LoggerManager::getLogger('INSTALL');
 
 function eecho($msg = FALSE) {
 	if ($useHtmlEntities) {
