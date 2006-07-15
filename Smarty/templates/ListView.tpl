@@ -278,11 +278,11 @@ function alphabetic(module,url,dataid)
 				 </td>	
        		       </tr>
 			 </table>
-                         <div  style="width:100%;border-top:1px solid #999999;border-bottom:1px solid #999999">
+                         <div  style="width:100%;border-top:1px solid #999999;border-bottom:1px solid #999999;height:370px;">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
 			      <tr>
              			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
-				 {foreach item=header from=$LISTHEADER}
+				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
         			 <td class="lvtCol">{$header}</td>
 			         {/foreach}
 			      </tr>
@@ -293,6 +293,50 @@ function alphabetic(module,url,dataid)
 				 <td>{$data}</td>
 	                         {/foreach}
 			      </tr>
+			      {foreachelse}
+				<tr><td style="background-color:#efefef;height:340px" align="center" colspan="{$smarty.foreach.listviewforeach.iteration+1}">
+						<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 35%; position: relative; z-index: 10000000;">
+							{assign var=vowel_conf value='LBL_A'}
+							{if $MODULE eq 'Accounts' || $MODULE eq 'Invoice'}
+								{assign var=vowel_conf value='LBL_AN'}
+							{/if}
+							{assign var=MODULE_CREATE value=$SINGLE_MOD}
+							{if $MODULE eq 'HelpDesk'}
+								{assign var=MODULE_CREATE value='Ticket'}
+							{/if}
+
+							{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
+							
+							<table border="0" cellpadding="5" cellspacing="0" width="98%">
+							<tr>
+								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+							</tr>
+							<tr>
+							<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_CAN_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE} {$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
+								   {if $MODULE neq 'Activities'}	
+						  			&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE}</a><br>
+								   {else}
+									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Activities&amp;activity_mode=Events&amp;return_action=DetailView&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_AN} {$APP.Event}</a><br>
+									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Activities&amp;activity_mode=Task&amp;return_action=DetailView&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_A} {$APP.Task}</a>
+								   {/if}
+								</td>
+							</tr>
+							</table> 
+							{else}
+							<table border="0" cellpadding="5" cellspacing="0" width="98%">
+							<tr>
+								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+							</tr>
+							<tr>
+								<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE}<br>
+								</td>
+							</tr>
+							</table>
+							{/if}
+						</div>					
+				</td></tr>	
 			      {/foreach}
 			 </table>
 			 </div>
