@@ -2149,7 +2149,7 @@ function getTableNameForField($module,$fieldname)
 	global $adb;
 	$tabid = getTabid($module);
 
-	$sql = "select tablename from vtiger_field where tabid=".$tabid." and fieldname like '%".$fieldname."%'";
+	$sql = "select tablename from vtiger_field where tabid=".$tabid." and columnname like '%".$fieldname."%'";
 	$res = $adb->query($sql);
 
 	$tablename = '';
