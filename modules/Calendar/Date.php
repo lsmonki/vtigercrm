@@ -246,7 +246,7 @@ class DateTime
 	}
 
 	/**
-	* function to short month name
+	* function to get month name in short
 	* return string $this->month_inshort  - month name (eg: Jan)
 	*/
 	function getmonthName_inshort()
@@ -254,7 +254,7 @@ class DateTime
 		return $this->month_inshort;
 	}	
 	/**
-	* function to month name
+	* function to get month name
 	* return string $this->month  - month name
 	*/
 	function getMonth()
@@ -262,7 +262,7 @@ class DateTime
                 return $this->month;
         }
 	/**
-	 * function to month name
+	 * function to get month name
 	 * return string $this->month_inlong  - month name
 	 */
 	function getmonthName()
@@ -271,7 +271,7 @@ class DateTime
 	}
 	
 	/**
-	* function to day of week 
+	* function to get day of week 
 	* return string $this->dayofweek_inlong  - day of week 
 	*/
 	function getdayofWeek()
@@ -279,7 +279,7 @@ class DateTime
 		return $this->dayofweek_inlong;
 	}
 	/**
-	* function to day of week in short
+	* function to get day of week in short
 	* return string $this->dayofweek_inshort  - day of week (eg: Mon)
 	*/
 
