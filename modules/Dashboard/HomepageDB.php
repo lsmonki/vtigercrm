@@ -13,14 +13,12 @@ require_once("modules/Dashboard/Entity_charts.php");
  * Function to get Dashboard in homepage
  * return the graph - $sHTML
  */
-function getHomepageDB()
-{
 	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
 	$type='recordsforuser';
 	if(!$is_admin)
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.smownerid=".$current_user->id." and vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns')";
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.smownerid=1 and vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
 	else	
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns')";
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
@@ -42,21 +40,20 @@ function getHomepageDB()
                 $cnt_table=$graph_details[6];
 	       	$test_target_val=$graph_details[7];
 
-                $width=425;
+                $width=500;
                 $height=225;
                 $top=30;
                 $left=140;
                 $bottom=120;
                 $title=$graph_title;
 		$sHTML = render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
-		return $sHTML;
+		echo $sHTML;
 		
         }
 	else
 	{
-	
+		echo $mod_strings[LBL_NO_DATA];	
 	}
-}
 
 
 ?>

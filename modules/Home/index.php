@@ -139,10 +139,8 @@ foreach ( explode(",",$home_section_order) as $section )
 	case 'HDB':
 	if(isPermitted('Dashboard','index') == "yes")
 	{
-		require_once('modules/Dashboard/HomepageDB.php');
-		$dashboard = getHomepageDB();
-		if($dashboard != null)
-			$home_values['Dashboard']=$dashboard;
+		$smarty->assign('IS_HOMEDASH','true');
+		$home_values['Dashboard']="true";
 	}
 	        break;
     }

@@ -165,12 +165,12 @@
 		{else}
                         <div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
                         <table width="100%" height="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-			<tr style="cursor:move;height:30px;">
-				<td align="left" style="border-bottom:1px solid #666666;"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
+			<tr style="cursor:move;">
+				<td align="left" style="border-bottom:1px solid #666666;height:32px;"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 				<td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 		         </tr>
-                         <tr align="left"><td>
-                                {$tabledetail}
+			<tr align="center"><td id="dashborad_cont" colspan="2" style="height:227px;">&nbsp;
+                                
                         </td></tr>
                         </table>
 			</div>
@@ -271,18 +271,38 @@
 		});
 	 
 		//new Sortable.create('MainMatrix','div');
+
+function fetch_homeDB()
+{
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Dashboard&action=DashboardAjax&file=HomepageDB',
+			onComplete: function(response)
+			{
+				$("dashborad_cont").style.display = 'none';
+				$("dashborad_cont").innerHTML=response.responseText;
+				Effect.Appear("dashborad_cont");
+			}
+		}
+	);
+}
 </script>
 {/literal}
 <script>
 function showhide(tab)
 {ldelim}
-//alert(document.getElementById(tab))
 var divid = document.getElementById(tab);
 if(divid.style.display!='none')
 	hide(tab)
 else
 	show(tab)
 {rdelim}
+
+{if $IS_HOMEDASH eq 'true'}
+fetch_homeDB();
+{/if}
 </script>
 
 	
