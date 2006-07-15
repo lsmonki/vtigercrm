@@ -748,7 +748,7 @@ $app_strings = Array(
 'PriceBook'=>'Price Books',
 'PurchaseOrder'=>'Purchase Order',
 'SalesOrder'=> 'Sales Order',
-'Invoice'=>'Invoices',
+'Invoice'=>'Invoice',
 'Calendar'=>'Calendar',
 'Home'=>'Home',
 'Campaigns'=>'Campaigns',
@@ -797,6 +797,7 @@ $app_strings = Array(
 'Account'=>'Account',
 'Contact'=>'Contact',
 'Potential'=>'Potential',
+'Opportunity'=>'Potential',
 'Product'=>'Product',
 'Email'=>'Email',
 'Activity'=>'Activity',
@@ -852,8 +853,8 @@ $app_strings = Array(
 'Start Date'=>'Start Date',
 'Related to'=>'Related To',
 'Recurring Type'=> 'Recurring Type',
-'SalesOrder'=> 'Sales Orders',
-'PurchaseOrder'=> 'Purchase Orders',
+'SalesOrders'=> 'Sales Orders',
+'PurchaseOrder'=> 'Purchase Order',
 'LBL_QUOTE_NAME'=>'Quote Name',
  //Added Orders in activity parent type selection / Related list
 'LBL_NEW_QUOTE_BUTTON_TITLE'=>'New Quote [Alt+Q]',
@@ -947,6 +948,15 @@ $app_strings = Array(
 'LBL_RECORD_ID'=>'Record ID',
 'LBL_ACTION_DATE'=>'Action Date',
 'LBL_HOMEPAGE_DASHBOARD'=>'HomePage Dashboard',
+'LBL_NO'=>'No',
+'LBL_FOUND'=>'Found',
+'LBL_YOU_CAN_CREATE'=>'You can Create',
+'LBL_NOW'=>'now',
+'LBL_CLICK_THE_LINK'=>'Click the link below',
+'LBL_CREATE'=>'Create',
+'LBL_A'=>'a',
+'LBL_AN'=>'an',
+'LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE'=>'You are not allowed to create',
 );
 
 
