@@ -88,6 +88,7 @@ $mod_strings = Array(
 'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
 'LBL_VERT_BAR_CHART'=>'Vertical Bar Chart',
 'LBL_PIE_CHART'=>'Pie Chart',
+'LBL_NO_DATA'=>'No data available',
 );
 
 ?>
