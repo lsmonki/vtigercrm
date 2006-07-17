@@ -51,11 +51,11 @@ $smarty->assign("RELATEDLISTS", $related_array);
 
 $cvObj = new CustomView("Contacts");
 $cvcombo = $cvObj->getCustomViewCombo();
-$smarty->assign("CONTCVCOMBO","<select id='cont_cv_list' onchange='loadCvList(\"Contacts\",".$_REQUEST["record"].");'><option>-- Select One --</option>".$cvcombo."</select>");
+$smarty->assign("CONTCVCOMBO","<select id='cont_cv_list' onchange='loadCvList(\"Contacts\",".$_REQUEST["record"].");'><option>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
 
 $cvObj = new CustomView("Leads");
 $cvcombo = $cvObj->getCustomViewCombo();
-$smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"Leads\",".$_REQUEST["record"].");'> <option>-- Select One --</option>".$cvcombo."</select>");
+$smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"Leads\",".$_REQUEST["record"].");'> <option>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
 
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

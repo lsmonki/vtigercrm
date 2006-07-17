@@ -52,7 +52,8 @@ $mod_strings = Array(
 'Actual Sales Count'=>'Actual Sales Count',
 'Actual Response Count'=>'Actual Response Count',
 'Actual ROI'=>'Actual ROI',
-
+'Select One'=>'Select One',
+'LBL_LOAD_LIST'=>'Load List',
 );
 
 ?>
