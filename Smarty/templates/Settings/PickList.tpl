@@ -171,11 +171,13 @@ function SavePickList(fieldname,module)
 	$("status").style.display="inline";
 	Effect.Puff($('editdiv'),{duration:2});
 	var body = $("picklist_values").value;
+
 	new Ajax.Request(
-        	'index.php',
+        	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body,
 	        {queue: {position: 'end', scope: 'command'},
-        		method: 'post',
-		        postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body,
+        		method: 'get',
+		        postBody: null,
+		        /* postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body, */
 		        onComplete: function(response) {
 					$("status").style.display="none";
         				$("picklist_datas").innerHTML=response.responseText;
