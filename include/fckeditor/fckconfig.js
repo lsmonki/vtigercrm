@@ -79,7 +79,6 @@ FCKConfig.ToolbarSets["Default"] = [
 	['Bold','Italic','Underline','-'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Image','SpellCheck'],
 	['TextColor','BGColor'],
 	'/',
 	['FontFormat','FontName','FontSize'],
