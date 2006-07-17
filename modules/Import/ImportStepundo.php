@@ -17,7 +17,6 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
