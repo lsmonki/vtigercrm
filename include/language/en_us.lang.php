@@ -957,6 +957,10 @@ $app_strings = Array(
 'LBL_A'=>'a',
 'LBL_AN'=>'an',
 'LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE'=>'You are not allowed to create',
+'LBL_TRANSFER_OWNERSHIP'=>'Transfer Ownership to',
+'LBL_SELECT_STATUS'=>'Select New Status',
+'LBL_UPDATE_OWNER'=>'Update Owner',
+'LBL_UPDATE_STATUS'=>'Update Status',
 );
 
 

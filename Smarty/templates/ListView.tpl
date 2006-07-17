@@ -392,15 +392,15 @@ function alphabetic(module,url,dataid)
 <div id="changeowner" class="statechange">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
+	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">{$APP.LBL_CHANGE_OWNER}</td>
 	<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changeowner')">Close</a></td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changeowner')">{$APP.LBL_CLOSE}</a></td>
 </tr>
 <tr>
 	<td colspan="3">&nbsp;</td>
 </tr>
 <tr>
-	<td width="50%"><b>Transfer Ownership to</b></td>
+	<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
 	<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
@@ -412,8 +412,8 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td colspan="3" align="center">
 	&nbsp;&nbsp;
-	<input type="button" name="button" class="small" value="Update Owner" onClick="ajaxChangeStatus('owner')">
-	<input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('changeowner')">
+	<input type="button" name="button" class="small" value="{$APP.LBL_UPDATE_OWNER}" onClick="ajaxChangeStatus('owner')">
+	<input type="button" name="button" class="small" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="fninvsh('changeowner')">
 </td>
 </tr>
 </table>
@@ -424,15 +424,15 @@ function alphabetic(module,url,dataid)
 <div id="changestatus" class="statechange">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Status Information</td>
+	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">{$APP.LBL_CHANGE_STATUS}</td>
 	<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changestatus')">Close</a></td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changestatus')">{$APP.LBL_CLOSE}</a></td>
 </tr>
 <tr>
 	<td colspan="3">&nbsp;</td>
 </tr>
 <tr>
-	<td width="50%"><b>Select New Status</b></td>
+	<td width="50%"><b>{$APP.LBL_SELECT_STATUS}</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
 	<select name="lead_status" id="lead_status" class="detailedViewTextBox">
@@ -444,7 +444,7 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td colspan="3" align="center">
 	&nbsp;&nbsp;
-	<input type="button" name="button" class="small" value="Update Status" onClick="ajaxChangeStatus('status')">
+	<input type="button" name="button" class="small" value="{$APP.LBL_UPDATE_STATUS}" onClick="ajaxChangeStatus('status')">
 </td>
 </tr>
 </table>
