@@ -327,7 +327,7 @@ class jpgraph {
 			$marker->setFontSize(8);
 			$gbplot->setMarker($marker);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			//$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -610,7 +610,8 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total;
 			$title->setText($titlestr);
 
 			// Create the xaxis labels
@@ -662,7 +663,7 @@ class jpgraph {
 			$gbplot->setMarker($marker);
 
 			// Finally setup the title
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			//$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -983,7 +984,7 @@ class jpgraph {
 
 			// Finally setup the title
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			//$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -1212,7 +1213,7 @@ $title->setText($titlestr);
 			$legend_box->setFillColor('#F5F5F5');
 			$legend_box->showShadow();
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			//$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_LEFT);
 
