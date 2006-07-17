@@ -966,7 +966,7 @@ class CustomView extends CRMEntity{
 		global $adb;
 		if($so_name != '')
 		{
-			$sql = "select vtiger_salesorderid from vtiger_salesorder where subject='".$so_name."'";
+			$sql = "select salesorderid from vtiger_salesorder where subject='".$so_name."'";
 			$result = $adb->query($sql);
 			$so_id = $adb->query_result($result,0,"salesorderid");
 		}
@@ -1023,7 +1023,7 @@ class CustomView extends CRMEntity{
 		global $adb;
 		if($pot_name != '')
 		{
-			$sql = "select vtiger_potentialid from vtiger_potential where vtiger_potentialname='".$pot_name."'";
+			$sql = "select potentialid from vtiger_potential where potentialname='".$pot_name."'";
 			$result = $adb->query($sql);
 			$potentialid = $adb->query_result($result,0,"potentialid");
 		}
@@ -1043,7 +1043,7 @@ class CustomView extends CRMEntity{
 		global $adb;
 		if($vendor_name != '')
 		{
-			$sql = "select vtiger_vendorid from vtiger_vendor where vtiger_vendorname='".$vendor_name."'";
+			$sql = "select vendorid from vtiger_vendor where vendorname='".$vendor_name."'";
 			$result = $adb->query($sql);
 			$vendor_id = $adb->query_result($result,0,"vendorid");
 		}
@@ -1082,7 +1082,7 @@ class CustomView extends CRMEntity{
 		global $adb;
 		if($account_name != '')
 		{
-			$sql = "select vtiger_accountid from vtiger_account where vtiger_accountname='".$account_name."'";
+			$sql = "select accountid from vtiger_account where accountname='".$account_name."'";
 			$result = $adb->query($sql);
 			$accountid = $adb->query_result($result,0,"accountid");
 		}		
