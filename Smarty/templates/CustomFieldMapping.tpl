@@ -22,7 +22,7 @@
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
-					<td class="heading2" valign="bottom"><b>{$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_STUDIO} &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
+					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
 				</tr>
 
 				<tr>
@@ -51,8 +51,8 @@
 				<table class="listTable" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td rowspan="2" class="colHeader small" width="2%">#</td>
-					<td rowspan="2" class="colHeader small" width="15%">Field Label</td>
-					<td rowspan="2" class="colHeader small" width="15%">Field Type </td>
+					<td rowspan="2" class="colHeader small" width="15%">{$MOD.FieldLabel}</td>
+					<td rowspan="2" class="colHeader small" width="15%">{$MOD.FieldType}</td>
 					<td colspan="3" class="colHeader small" valign="top"><div align="center">{$MOD.LBL_MAPPING_OTHER_MODULES}</div></td>
 				</tr>
 				<tr>
@@ -107,7 +107,7 @@
 				</table>
 				<table border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
-		  			<td class="small" align="right" nowrap="nowrap"><a href="#top">[Scroll to Top]</a></td>
+		  			<td class="small" align="right" nowrap="nowrap"><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 				</tr>
 				</table>
 				</form>

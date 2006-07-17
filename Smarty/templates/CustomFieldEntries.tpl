@@ -35,9 +35,9 @@
 				      </tr>
 
 					<tr>
-					  <td class="colHeader small" valign="top" width="18%">Accounts</td>
-					  <td class="colHeader small" valign="top" width="18%">Contacts</td>
-					  <td class="colHeader small" valign="top" width="19%">Potentials</td>
+					  <td class="colHeader small" valign="top" width="18%">{$APP.Accounts}</td>
+					  <td class="colHeader small" valign="top" width="18%">{$APP.Contacts}</td>
+					  <td class="colHeader small" valign="top" width="19%">{$APP.Potentials}</td>
 					</tr>
 					{else}
 					<tr>
