@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('TicketStatisticsUtil.php');
 
@@ -37,26 +37,25 @@ else
 $totOpenTickets = getTotalNoofOpenTickets();
 $totClosedTickets = getTotalNoofClosedTickets();
 
-$xtpl=new XTemplate ('modules/HelpDesk/CumulStatistics.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$xtpl->assign("ALLOPEN", outBar($totOpenTickets, $image_path, $singleUnit));
-$xtpl->assign("ALLCLOSED", outBar($totClosedTickets, $image_path, $singleUnit));
-$xtpl->assign("ALLTOTAL", outBar($totTickets, $image_path, $singleUnit));
-$xtpl->assign("PRIORITIES", showPriorities($image_path, $singleUnit)); 
-$xtpl->assign("CATEGORIES", showCategories($image_path, $singleUnit)); 
-$xtpl->assign("USERS", showUserBased($image_path, $singleUnit)); 
+$smarty->assign("ALLOPEN", outBar($totOpenTickets, $image_path, $singleUnit));
+$smarty->assign("ALLCLOSED", outBar($totClosedTickets, $image_path, $singleUnit));
+$smarty->assign("ALLTOTAL", outBar($totTickets, $image_path, $singleUnit));
+$smarty->assign("PRIORITIES", showPriorities($image_path, $singleUnit)); 
+$smarty->assign("CATEGORIES", showCategories($image_path, $singleUnit)); 
+$smarty->assign("USERS", showUserBased($image_path, $singleUnit)); 
 
-$xtpl->parse("main");
+$smarty->display('CumulStatistics.tpl');;
 
-$xtpl->out("main");
 
 ?>
