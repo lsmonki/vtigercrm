@@ -33,7 +33,8 @@ foreach($field_module as $fld_module)
 {
 	$fieldListResult = getDefOrgFieldList($fld_module);
 	$noofrows = $adb->num_rows($fieldListResult);
-	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid);
+	$language_strings = return_module_language($current_language,$fld_module);
+	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $language_strings,$profileid);
 }
 
 if($_REQUEST['fld_module'] != '')
@@ -48,7 +49,7 @@ else
   * @returns $standCustFld -- field label/permission array :: Type varchar
   *
  */	
-function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
+function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
 	$standCustFld = Array();
@@ -63,7 +64,11 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 						$readonly = 'disabled';
                 }
 
-		$standCustFld []= $mandatory.' '.$adb->query_result($fieldListResult,$i,"fieldlabel");
+		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
+		if($lang_strings[$fieldlabel] !='')
+			$standCustFld []= $mandatory.' '.$lang_strings[$fieldlabel];
+		else
+			$standCustFld []= $mandatory.' '.$fieldlabel;
 		if($adb->query_result($fieldListResult,$i,"visible") == 0)
 		{
 			$visible = "checked";

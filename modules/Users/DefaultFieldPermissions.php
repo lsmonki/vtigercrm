@@ -37,7 +37,8 @@ foreach($field_module as $fld_module)
 {
 	$fieldListResult = getDefOrgFieldList($fld_module);
 	$noofrows = $adb->num_rows($fieldListResult);
-	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid);
+	$language_strings = return_module_language($current_language,$fld_module);
+	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $language_strings,$profileid);
 }
 
 if($_REQUEST['fld_module'] != '')
@@ -47,12 +48,12 @@ else
 
 /** Function to get the field label/permission array to construct the default orgnization field UI for the specified profile 
   * @param $fieldListResult -- mysql query result that contains the field label and uitype:: Type array
-  * @param $mod_strings -- i18n language mod strings array:: Type array
+  * @param $lang_strings -- i18n language mod strings array:: Type array
   * @param $profileid -- profile id:: Type integer
   * @returns $standCustFld -- field label/permission array :: Type varchar
   *
  */	
-function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
+function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
 	global $image_path;
@@ -60,7 +61,12 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 	for($i=0; $i<$noofrows; $i++,$row++)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		$standCustFld []= $adb->query_result($fieldListResult,$i,"fieldlabel");
+		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
+		if($lang_strings[$fieldlabel] !='')
+			$standCustFld []= $lang_strings[$fieldlabel];
+		else
+			$standCustFld []= $fieldlabel;
+			
 		
 		if($adb->query_result($fieldListResult,$i,"visible") == 0)
 		{
