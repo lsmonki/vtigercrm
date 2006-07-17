@@ -12,11 +12,7 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-/*********************************************************************************
- * {LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/themes/Amazon/header.html,v 1.14 2004/07/04 04:00:48 sugarclint Exp {LBL_CURRENCY_SYM}
- ********************************************************************************/
 -->
-<!-- BEGIN: main -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD html 4.01 Transitional//EN">
 <html>
 <head>
