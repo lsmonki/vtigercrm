@@ -138,7 +138,7 @@
 			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>4.{$UMOD.LBL_HOME_PAGE_COMP}</strong>
+					<strong>4. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
 				     </td>
 				     <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
 			        </tr>
@@ -162,7 +162,7 @@
 			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>5.My Groups</strong>
+					<strong>5. {$UMOD.LBL_MY_GROUPS}</strong>
 				     </td>
 				     <td class="small" align="right">
 					{if $GROUP_COUNT > 0}
@@ -181,7 +181,7 @@
 			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>6.{$UMOD.LBL_LOGIN_HISTORY}</strong>
+					<strong>6. {$UMOD.LBL_LOGIN_HISTORY}</strong>
 				     </td>
 				     <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
 			        </tr>

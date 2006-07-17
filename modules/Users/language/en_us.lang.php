@@ -244,6 +244,7 @@ $mod_strings = Array(
 'LBL_EDITING'=>'Editing user',
 'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
 'LBL_GROUPS'=>'Groups',
+'LBL_MY_GROUPS'=>'My Groups',
 'LBL_ADD_GROUP_BUTTON'=>'Add Group',
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
 'LBL_NEW_WORD_TEMPLATE'=>'New Template',
