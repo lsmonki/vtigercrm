@@ -202,8 +202,8 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 			<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' &nbsp; " class="classBtn" />&nbsp;&nbsp;
-					<input type="button" name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="classBtn" onclick="fninvsh(\'orgLay\');" />
+					<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' &nbsp; " class="crmButton small save" />&nbsp;
+					<input type="button" name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmButton small cancel" onclick="fninvsh(\'orgLay\');" />
 				</td>
 			</tr>
 			<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
