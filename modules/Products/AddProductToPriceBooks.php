@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBook.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
@@ -24,16 +24,13 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 $productname = getProductName($productid);
 
-$xtpl=new XTemplate ('modules/Products/AddProductToPriceBooks.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
+$smarty=new vtigerCRM_Smarty; 
+
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
 
 $focus = new PriceBook();
-
-
-
-
 
 $other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" align="center">
 	<form name="addToPB" method="POST">
@@ -48,7 +45,7 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" ali
 //Retreive the list from Database
 
 $list_query = getListQuery("PriceBooks");
-$xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
+$smarty->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
 $list_query .= ' ORDER BY pricebookid DESC ';
 
@@ -82,7 +79,7 @@ for($i=0; $i<$num_rows; $i++)
 	}
 }
 
-$xtpl->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
+$smarty->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
 
 //Retreive the List View Table Header
@@ -96,7 +93,7 @@ $list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PRODUCT_UNIT
 $list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
 $list_header .= '</tr>';
 
-$xtpl->assign("LISTHEADER", $list_header);
+$smarty->assign("LISTHEADER", $list_header);
 
 $list_body ='';
 for($i=0; $i<$num_rows; $i++)
@@ -124,11 +121,10 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$xtpl->assign("LISTENTITY", $list_body);
-$xtpl->assign("RETURN_ID", $productid);
+$smarty->assign("LISTENTITY", $list_body);
+$smarty->assign("RETURN_ID", $productid);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("AddProductToPriceBooks.tpl");
 
 
 
