@@ -86,7 +86,7 @@ following values "Call","Meeting" or "Task".',
 'less_or_equal'=>'less or equal', 
 'greater_or_equal'=>'greater or equal', 
  
-//Strings added to translate vtiger_field label vtiger_groups 
+//Strings added to translate field label vtiger_groups 
 'Address'=>'Address', 
 'Information'=>'Information', 
 'Description'=>'Description', 
@@ -96,7 +96,7 @@ following values "Call","Meeting" or "Task".',
 '- Task Information'=>'- Task Information', 
 '- Task Description'=>'- Task Description', 
  
-//Strings added for helpdesk module vtiger_fields 
+//Strings added for helpdesk module fields 
 'Title'=>'Title', 
 'Assigned To'=>'Assigned To', 
 'Related to'=>'Related to', 
@@ -109,7 +109,7 @@ following values "Call","Meeting" or "Task".',
 'Modified Time'=>'Modified Time', 
 'Attachment'=>'Attachment', 
  
-//Strings added for Leads module vtiger_fields 
+//Strings added for Leads module fields 
 'First Name'=>'First Name', 
 'Phone'=>'Phone', 
 'Last Name'=>'Last Name', 
@@ -128,7 +128,7 @@ following values "Call","Meeting" or "Task".',
 'Country'=>'Country', 
 'State'=>'State', 
  
-//Strings added for Accounts module vtiger_fields 
+//Strings added for Accounts module fields 
 'Account Name'=>'Account Name', 
 'Ticker Symbol'=>'Ticker Symbol', 
 'Other Phone'=>'Other Phone', 
@@ -153,7 +153,7 @@ following values "Call","Meeting" or "Task".',
 'Billing Country'=>'Billing Country', 
  
  
-//Strings added for Contacts module vtiger_fields 
+//Strings added for Contacts module fields 
  
 'Office Phone'=>'Office Phone', 
 'Home Phone'=>'Home Phone', 
@@ -175,7 +175,7 @@ following values "Call","Meeting" or "Task".',
 'Other Country'=>'Other Country', 
  
  
-//Strings added for Potential module vtiger_fields 
+//Strings added for Potential module fields 
  
 'Potential Name'=>'Potential Name', 
 'Amount'=>'Amount', 
@@ -185,7 +185,7 @@ following values "Call","Meeting" or "Task".',
 'Probability'=>'Probability', 
  
  
-//Strings added for Quotes module vtiger_fields 
+//Strings added for Quotes module fields 
 'Subject'=>'Subject', 
 'Quote Stage'=>'Quote Stage', 
 'Valid Till'=>'Valid Till', 
@@ -195,7 +195,7 @@ following values "Call","Meeting" or "Task".',
 'Shipping'=>'Shipping', 
 'Inventory Manager'=>'Inventory Manager', 
  
-//Strings added for Sales Orders module vtiger_fields 
+//Strings added for Sales Orders module fields 
 'Customer No'=>'Customer No', 
 'Quote Name'=>'Quote Name', 
 'Purchase Order'=>'Purchase Order', 
@@ -204,11 +204,11 @@ following values "Call","Meeting" or "Task".',
 'Sales Commission'=>'Sales Commission', 
 'Excise Duty'=>'Excise Duty', 
  
-//Strings added for Invoices module vtiger_fields 
+//Strings added for Invoices module fields 
 'Sales Order'=>'Sales Order', 
 'Invoice Date'=>'Invoice Date', 
  
-//Strings added for Product module vtiger_fields 
+//Strings added for Product module fields 
 'Product Code'=>'Product Code', 
 'Product Active'=>'Product Active', 
 'Product Category'=>'Product Category', 
@@ -224,16 +224,16 @@ following values "Call","Meeting" or "Task".',
 'Product Sheet'=>'Product Sheet', 
 'GL Account'=>'GL Account', 
  
-//Strings added for Price book module vtiger_fields 
+//Strings added for Price book module fields 
 'Price Book Name'=>'Price Book Name', 
 'Active'=>'Active', 
  
-//Strings added for tasks & events module vtiger_fields 
+//Strings added for tasks & events module fields 
 'Start Date & Time'=>'Start Date & Time', 
  
 //error message 
-'Missing required vtiger_fields'=>'Missing required vtiger_fields', 
-//Strings added for vtiger_campaigns 
+'Missing required fields'=>'Missing required vtiger_fields', 
+//Strings added for campaigns 
 'Campaign Name'=>'Campaign Name', 
 'Campaign Type'=>'Campaign Type', 
 'Product'=>'Product', 
@@ -255,10 +255,10 @@ following values "Call","Meeting" or "Task".',
  
  
  
-//Added for vtiger_customview.tpl 
+//Added for customview.tpl 
  
 'LBL_Select_a_Column'=>'Select a Column', 
-'Missing_required_fields'=>'Missing required vtiger_fields', 
+'Missing_required_fields'=>'Missing required fields', 
 'Details'=>'Details', 
 'New_Custom_View'=>'New Custom view', 
 'LBL_AF_HDR5'=>'Simple Time Filter allows you to select date based on  
