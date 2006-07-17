@@ -11,10 +11,7 @@ function change(obj,divid)
 {
 	var select_options  =  document.getElementsByName('selected_id');
 	var x = select_options.length;
-	if(typeof(document.massdelete.viewname) != 'undefined')
-		var viewid = document.massdelete.viewname.value;
-	else
-		var viewid ='';		
+	var viewid =getviewId();		
 	idstring = "";
 
 	xx = 0;
@@ -37,15 +34,24 @@ function change(obj,divid)
 	}
 	fnvshobj(obj,divid);
 }
+function getviewId()
+{
+	if(typeof(document.getElementById("viewname")) != 'undefined')
+	{
+		var oViewname = document.getElementById("viewname");
+		var viewid = oViewname.options[oViewname.selectedIndex].value;
+	}
+	else
+	{
+		var viewid ='';		
+	}
+	return viewid;	
+}
 function massDelete(module)
 {
 		var select_options  =  document.getElementsByName('selected_id');
 		var x = select_options.length;
-		if(typeof(document.massdelete.viewname) != 'undefined')
-			var viewid = document.massdelete.viewname.value;
-		else
-			var viewid ='';		
-
+		var viewid =getviewId();		
 		idstring = "";
 
         xx = 0;

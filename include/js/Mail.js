@@ -13,7 +13,7 @@ function eMail(module,oButton)
 {
 	var select_options  =  document.getElementsByName('selected_id');
 	var x = select_options.length;
-	var viewid = document.massdelete.viewname.value;
+	var viewid =getviewId();		
 	var idstring= new Array();
 
 	xx = 0;
@@ -27,14 +27,14 @@ function eMail(module,oButton)
 	}
 	if (xx != 0)
 	{
-                document.massdelete.idlist.value=idstring.join(':');
+                document.getElementById('idlist').value=idstring.join(':');
 	}
 	else
 	{
 		alert("Please select at least one entity");
 		return false;
 	}
-	allids = document.massdelete.idlist.value;	
+	allids = document.getElementById('idlist').value;	
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(module,allids);
 }
@@ -43,45 +43,30 @@ function eMail(module,oButton)
 function massMail(module)
 {
 
-    x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
+	var select_options  =  document.getElementsByName('selected_id');
+	x = select_options.length;
+	var viewid =getviewId();		
 	idstring = "";
 
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select at least one entity");
-                        return false;
-                }
-        }
-        else
-        {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                                xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-                else
-                {
-                        alert("Please select at least one entity");
-                        return false;
-                }
-        }
-        document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module="+module+"&return_action=index&viewname="+viewid;
+	xx = 0;
+	for(i = 0; i < x ; i++)
+	{
+		if(select_options[i].checked)
+		{
+			idstring = select_options[i].value +";"+idstring
+				xx++
+		}
+	}
+	if (xx != 0)
+	{
+		document.getElementById('idlist').value=idstring;
+	}
+	else
+	{
+		alert("Please select at least one entity");
+		return false;
+	}
+	document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module="+module+"&return_action=index&viewname="+viewid;
 }
 
 //added by rdhital for better emails

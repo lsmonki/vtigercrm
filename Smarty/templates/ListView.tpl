@@ -221,7 +221,7 @@ function alphabetic(module,url,dataid)
 	   <div id="ListViewContents" class="small" style="width:100%;position:relative;">
      <form name="massdelete" method="POST">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
-     <input name="idlist" type="hidden">
+     <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
@@ -259,7 +259,7 @@ function alphabetic(module,url,dataid)
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                                                    <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
+                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
                                                     {if $ALL eq 'All'}
 							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
 							<span class="small">|</span>
@@ -295,7 +295,7 @@ function alphabetic(module,url,dataid)
 			      </tr>
 			      {foreachelse}
 				<tr><td style="background-color:#efefef;height:340px" align="center" colspan="{$smarty.foreach.listviewforeach.iteration+1}">
-						<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 35%; position: relative; z-index: 10000000;">
+						<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 10000000;">
 							{assign var=vowel_conf value='LBL_A'}
 							{if $MODULE eq 'Accounts' || $MODULE eq 'Invoice'}
 								{assign var=vowel_conf value='LBL_AN'}
