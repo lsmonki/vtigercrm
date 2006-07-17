@@ -29,7 +29,6 @@ include("modules/Dashboard/pie_graph.php");
 function get_account_name($acc_id)
 {
 	global $adb;
-
 	$acc_qry="select accountname from vtiger_account where accountid =".$acc_id;
 	$acc_result=$adb->query($acc_qry);
 	$no_acc_rows=$adb->num_rows($acc_result);
@@ -57,7 +56,7 @@ function get_account_name($acc_id)
 function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$query,$graph_for,$title,$added_qry="",$module="",$graph_type)
 {
 
-	global $adb;
+	global $adb,$current_user;
 	global $days,$date_array,$period_type;
 
 	//$where= " and vtiger_crmentity.smownerid=".$user_id." and vtiger_crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
@@ -283,7 +282,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
-						$link_val="index.php?module=".$name."&action=index";
+						$link_val="index.php?module=".$name."&action=index&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
 					else
 						$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
 

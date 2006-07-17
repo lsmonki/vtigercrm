@@ -15,10 +15,11 @@ require_once("modules/Dashboard/Entity_charts.php");
  */
 	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
 	$type='recordsforuser';
-	if(!$is_admin)
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.smownerid=1 and vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
-	else	
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Products','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
+	//require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	//if($is_admin)
+	//	$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
+	//else	
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0 and vtiger_crmentity.smownerid=".$current_user->id;
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
@@ -40,7 +41,7 @@ require_once("modules/Dashboard/Entity_charts.php");
                 $cnt_table=$graph_details[6];
 	       	$test_target_val=$graph_details[7];
 
-                $width=500;
+                $width=425;
                 $height=225;
                 $top=30;
                 $left=140;
