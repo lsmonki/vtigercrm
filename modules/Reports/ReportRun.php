@@ -1116,7 +1116,7 @@ class ReportRun extends CRMEntity
 				left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
 				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid 
 				left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid
-				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_crmentityRelHelpDesk.crmid
+				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id 
 				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentityHelpDesk.smownerid=vtiger_usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentityHelpDesk.deleted=0 ";
