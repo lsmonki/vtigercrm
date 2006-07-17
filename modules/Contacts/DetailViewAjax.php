@@ -31,6 +31,11 @@ if($ajaxaction == "DETAILVIEW")
 		 $cntObj->id = $crmid;
 		 $cntObj->mode = "edit";
 		 $cntObj->save("Contacts");
+		 if($fieldname =='email')
+		 {
+			 $sql = "update vtiger_portalinfo set user_name='".$fieldvalue."' where id=".$crmid;
+			 $adb->query($sql);
+		 }
 		 if($cntObj->id != "")
 		 {
 			 echo ":#:SUCCESS";
