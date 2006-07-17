@@ -19,7 +19,7 @@
  * theme basis.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once("include/utils/utils.php");
 
@@ -33,22 +33,22 @@ require_once($theme_path.'layout_utils.php');
 
 global $app_strings;
 
-$xtpl=new XTemplate ($theme_path."loginheader.html");
-$xtpl->assign("APP", $app_strings);
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("APP", $app_strings);
 
 
 if(isset($app_strings['LBL_CHARSET']))
 {
-	$xtpl->assign("LBL_CHARSET", $app_strings['LBL_CHARSET']);
+	$smarty->assign("LBL_CHARSET", $app_strings['LBL_CHARSET']);
 }
 else
 {
-	$xtpl->assign("LBL_CHARSET", $default_charset);
+	$smarty->assign("LBL_CHARSET", $default_charset);
 }
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+
+$smarty->display('loginheader.tpl');
 
 ?>
