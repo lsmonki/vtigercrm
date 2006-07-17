@@ -131,7 +131,7 @@ $log = LoggerManager::getLogger('dashboard');
   <tr><td colspan="3">&nbsp;</td></tr>
 
   <tr>
-    <td width="20%" nowrap valign="top">
+    <td width="140" nowrap valign="top">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF" style="cursor:pointer;">
 			<tr><td class="dashMnuSel" id="DashboardHome_mnu" onClick="loadDashBoard('DashboardHome');"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
                </td></tr>
@@ -154,7 +154,7 @@ $log = LoggerManager::getLogger('dashboard');
 		</table>
 	</td>
 
-    <td width="79%" bgcolor="#CBCBCB" valign="top" style="padding-right:10px;" align="left">
+    <td width="695" bgcolor="#CBCBCB" valign="top" style="padding-right:10px;" align="left">
 		<table class="dashInner"  cellpadding="0" cellspacing="0">
 		<tr><td class="lvtHeaderText" align="left" height="10"></td></tr>
 		<tr><td><div id="dashChart">
@@ -164,15 +164,18 @@ $log = LoggerManager::getLogger('dashboard');
 	  <br />
 </td>
 
- <td width="1%"></td>
+ <td width="5"></td>
   </tr>
   <tr><td colspan="3" height="30">&nbsp;</td></tr>
 </table>
+<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+<script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script>
 var gMnuSel = 'DashboardHome_mnu';
 function loadDashBoard(type)
 {
 	show('status');
+	Effect.Fade("dashChart");
 	if(type != 'DashboardHome')
 		url = 'module=Dashboard&action=DashboardAjax&file=display_charts&type='+type;
 	else	
@@ -184,11 +187,13 @@ function loadDashBoard(type)
 			postBody: url,
 			onComplete: function(response)
 			{
+				
 				$("dashChart").innerHTML=response.responseText;
 				hide('status');
 				$(gMnuSel).className = 'dashMnuUnSel';
 				gMnuSel = type+'_mnu';
 				$(gMnuSel).className = 'dashMnuSel';	
+				Effect.Appear("dashChart");
 			}
 		}
 	);	
