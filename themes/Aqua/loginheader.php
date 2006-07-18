@@ -19,7 +19,7 @@
  * theme basis.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once("include/utils/utils.php");
 
@@ -33,22 +33,22 @@ require_once($theme_path.'layout_utils.php');
 
 global $app_strings;
 
-$xtpl=new XTemplate ($theme_path."loginheader.html");
-$xtpl->assign("APP", $app_strings);
+//$xtpl=new XTemplate ($theme_path."loginheader.html");
+//$xtpl->assign("APP", $app_strings);
 
 
 if(isset($app_strings['LBL_CHARSET']))
 {
-	$xtpl->assign("LBL_CHARSET", $app_strings['LBL_CHARSET']);
+	//$xtpl->assign("LBL_CHARSET", $app_strings['LBL_CHARSET']);
 }
 else
 {
-	$xtpl->assign("LBL_CHARSET", $default_charset);
+	//$xtpl->assign("LBL_CHARSET", $default_charset);
 }
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->parse("main");
-$xtpl->out("main");
+//$xtpl->assign("THEME", $theme);
+//$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+//$xtpl->parse("main");
+//$xtpl->out("main");
 
 ?>
