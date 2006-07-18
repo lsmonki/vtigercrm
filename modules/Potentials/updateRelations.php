@@ -15,7 +15,7 @@ global $adb;
 //if($_REQUEST['module']=='Users')
 //	$sql = "insert into salesmanactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 //else
-if($_REQUEST['module']=='Potentials')
+if($_REQUEST['destination_module']=='Contacts')
 	$sql = "insert into contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 else
 	$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
