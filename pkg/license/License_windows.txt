@@ -43,7 +43,6 @@ For Windows
 
 19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
-20. XTemplate is used under GNU LGPL downloaded from http://sourceforge.net/projects/xtpl/ available at <vtiger CRM Home>/vtigerCRM/XTemplate/LICENSE
 
 21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#   
 22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
