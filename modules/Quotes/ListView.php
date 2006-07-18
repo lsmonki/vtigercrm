@@ -172,8 +172,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($potentialname)) $search_form->assign("POTENTIALNAME", $potentialname);
 	if (isset($accountname)) $search_form->assign("ACCOUNTNAME", $accountname);
 	
-	if (isset($quotestage)) $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], $quotestage, $advsearch));
-	else $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], '', $advsearch));
+	if (isset($quotestage)) $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], $quotestage, 'true'));
+	else $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], '', 'true'));
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
