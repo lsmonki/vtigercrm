@@ -87,9 +87,9 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	}
 	 
 }
-echo get_form_header("Product Search", "", false);
+echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
-$xtpl->assign("PRODUCTLISTHEADER", get_form_header("Products List", "", false ));
+$xtpl->assign("PRODUCTLISTHEADER", get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], "", false ));
 
 $focus = new Product();
 
