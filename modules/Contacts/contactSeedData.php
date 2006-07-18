@@ -21141,6 +21141,9 @@ $company_name_array = Array(
 "EDFG Group Limited",
 "vtigerCRM Inc",
 "X-CEED INC 99"
+"demovtiger"
+"usable-vtiger"
+"gooduivtiger"
 );
 
 $street_address_array = Array(
