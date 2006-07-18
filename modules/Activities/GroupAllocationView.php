@@ -59,7 +59,7 @@ if(isset($_REQUEST['query']))
 
 $title_display = $current_module_strings['LBL_GROUP_ALLOCATION_TITLE'];
 $ListView = new ListView();
-$ListView->initNewXTemplate('modules/Activities/GroupAllocationView.html',$current_module_strings);
+//$ListView->initNewXTemplate('modules/Activities/GroupAllocationView.html',$current_module_strings);
 $ListView->setCurrentModule("Home");
 $ListView->setHeaderTitle($title_display);
 
