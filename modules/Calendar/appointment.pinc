@@ -1933,7 +1933,7 @@ class appointment extends tutos_base {
 		}
 
 		$q.=" ((activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1."')";
-		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != null ))";//query modified by Jag
+		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start IS NOT null ))";//query modified by Jag
 		#$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
 		#$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
 		#$q .= " OR (date_start < ". $sx1 .")";
@@ -2026,7 +2026,7 @@ class appointment extends tutos_base {
 		$q.=" activity.activitytype in ('Call','Meeting') AND ";
 
 		$q.=" ((activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1."')";
-		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != null ))";//query modified by Jag
+		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start IS NOT null ))";//query modified by Jag
 
 		$q .= " AND crmentity.deleted = 0)";
 		$q .= " and crmentity.smownerid=0 and users2group.userid=".$current_user->id;	
@@ -2092,7 +2092,7 @@ class appointment extends tutos_base {
 			AND activity.date_start < '". $to ."'
 			AND activity.date_start >= '". $from."'
 			AND (activity.date_start like (activity.due_date)
-				OR (activity.date_start != null ))
+				OR (activity.date_start IS NOT null ))
 			AND crmentity.smownerid ='".$current_user->id."'
 			AND salesmanactivityrel.smid = '".$current_user->id."'
 		 	AND crmentity.deleted = 0
@@ -2143,7 +2143,7 @@ class appointment extends tutos_base {
 			AND activity.date_start < '". $to ."'
 			AND activity.date_start >= '". $from."'
 			AND (activity.date_start like (activity.due_date)
-				OR (activity.date_start != null ))
+				OR (activity.date_start IS NOT null ))
 			AND crmentity.smownerid=0
 			AND users2group.userid=".$current_user->id."
 		 	AND crmentity.deleted = 0
