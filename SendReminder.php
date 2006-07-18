@@ -34,7 +34,7 @@ $log =& LoggerManager::getLogger('SendReminder');
 $log->debug(" invoked SendReminder ");
 
 //modified query for recurring events -Jag
- 	$query="select crmentity.crmid,seactivityrel.crmid as setype,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid left outer join seactivityrel on seactivityrel.activityid = activity.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid";
+ 	$query="select vtiger_crmentity.crmid,vtiger_seactivityrel.crmid as setype,vtiger_activity.*,vtiger_activity_reminder.reminder_time,vtiger_activity_reminder.reminder_sent,vtiger_activity_reminder.recurringid,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_activity_reminder on vtiger_activity.activityid=vtiger_activity_reminder.activity_id left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid where DATE_FORMAT(vtiger_activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and vtiger_crmentity.crmid != 0 and vtiger_activity.eventstatus = 'Planned' and vtiger_activity_reminder.reminder_sent = 0 group by vtiger_activity.activityid,vtiger_recurringevents.recurringid";
 
 $result = $adb->query($query);
 
@@ -74,7 +74,7 @@ if($adb->num_rows($result) >= 1)
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
 			$log->debug(" InSide  REMINDER");
-			$query_user="SELECT users.email1,salesmanactivityrel.smid FROM salesmanactivityrel inner join users on users.id=salesmanactivityrel.smid where salesmanactivityrel.activityid =".$activity_id." and users.deleted=0"; 
+			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =".$activity_id." and vtiger_users.deleted=0"; 
 			$user_result = $adb->query($query_user);		
 			if($adb->num_rows($user_result)>=1)
 			{
@@ -91,7 +91,7 @@ if($adb->num_rows($result) >= 1)
 			$from ="reminders@localserver.com";
 			
 			// Retriving the Subject and message from reminder table		
-			$sql = "select active,notificationsubject,notificationbody from notificationscheduler where schedulednotificationid=7";
+			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=7";
 			$result_main = $adb->query($sql);
 
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
@@ -102,7 +102,7 @@ if($adb->num_rows($result) >= 1)
 			if(count($to_addr) >=1)
 			{
 				send_mail($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
-				$upd_query = "UPDATE activity_reminder SET reminder_sent=1 where activity_id=".$activity_id;
+				$upd_query = "UPDATE vtiger_activity_reminder SET reminder_sent=1 where activity_id=".$activity_id;
 
 				if($recur_id!=0)
 				{
@@ -148,7 +148,7 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 
 	if($mail_server=='')
 	{
-		$mailserverresult=$adb->query("select * from systems where server_type='email'");
+		$mailserverresult=$adb->query("select * from vtiger_systems where server_type='email'");
 		$mail_server = $adb->query_result($mailserverresult,0,'server');
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
@@ -210,14 +210,14 @@ function getParentMailId($returnmodule,$parentid)
 	global $adb;
         if($returnmodule == 'Leads')
         {
-                $tablename = 'leaddetails';
+                $tablename = 'vtiger_leaddetails';
                 $idname = 'leadid';
         }
         if($returnmodule == 'Contacts' || $returnmodule == 'HelpDesk')
         {
 		if($returnmodule == 'HelpDesk')
 			$parentid = $_REQUEST['contact_id'];
-                $tablename = 'contactdetails';
+                $tablename = 'vtiger_contactdetails';
                 $idname = 'contactid';
         }
 	if($parentid != '')
@@ -244,7 +244,7 @@ function getParentInfo($value)
  	$parent_module = getSalesEntityType($value);
 	if($parent_module == "Leads")
 	{
-		$sql = "select * from leaddetails where leadid=".$value;
+		$sql = "select * from vtiger_leaddetails where leadid=".$value;
 		$result = $adb->query($sql);
 		$first_name = $adb->query_result($result,0,"firstname");
 		$last_name = $adb->query_result($result,0,"lastname");
@@ -253,7 +253,7 @@ function getParentInfo($value)
 	}
 	elseif($parent_module == "Accounts")
 	{
-		$sql = "select * from  account where accountid=".$value;
+		$sql = "select * from  vtiger_account where accountid=".$value;
 		$result = $adb->query($sql);
 		$account_name = $adb->query_result($result,0,"accountname");
 
@@ -261,7 +261,7 @@ function getParentInfo($value)
 	}
 	elseif($parent_module == "Potentials")
 	{
-		$sql = "select * from  potential where potentialid=".$value;
+		$sql = "select * from  vtiger_potential where potentialid=".$value;
 		$result = $adb->query($sql);
 		$potentialname = $adb->query_result($result,0,"potentialname");
 
