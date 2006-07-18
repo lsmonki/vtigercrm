@@ -90,8 +90,8 @@ function create_default_users() {
 	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
-	$admin_email ="admin@administrator.com";
-        $user->column_fields["email"] = $admin_email;
+	$admin_email ="admin@vtigeruser.com";
+        $user->column_fields["email1"] = $admin_email;
 	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='CEO'";
 	$db->checkConnection();
@@ -135,8 +135,8 @@ function create_default_users() {
 	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
-	$std_email ="standarduser@standarduser.com";
-        $user->column_fields["email"] = $std_email;
+	$std_email ="standarduser@vtigeruser.com";
+        $user->column_fields["email1"] = $std_email;
 	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='Vice President'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
