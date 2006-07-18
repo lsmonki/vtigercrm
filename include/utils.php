@@ -4254,9 +4254,10 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	$count = count($alphabetical_search_values);
   
 	// building alphabetical search bar from array values
+	$list = '';
 	for($i =0;$i<$count;$i++)
 	{
-		$list = '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$alphabetical_search_values[$i].$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$alphabetical_search_values[$i].'</a></td>';
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$alphabetical_search_values[$i].$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$alphabetical_search_values[$i].'</a></td>';
 	}
 	
 	return $list;
