@@ -97,6 +97,10 @@ else
 	$desc .= '<br><br>Solution : <br>'.$focus->column_fields['solution'];
 	$desc .= getTicketComments($focus->id);
 
+	$desc .= '<br><br><br>';
+	$desc .= '<br><br><br>';
+	$desc .= '<br><br><br>';
+	$desc .= '<br>Regards, HelpDesk Team<br>';
 	$email_body = $desc;
 }
 $_REQUEST['return_id'] = $return_id;
