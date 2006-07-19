@@ -13,6 +13,7 @@ $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
 require_once("modules/Calendar/calendarLayout.php");
+require_once('include/utils/utils.php');
 require_once("modules/Calendar/Calendar.php");
 require_once('include/logging.php');
 $cal_log =& LoggerManager::getLogger('calendar');
@@ -78,12 +79,34 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			$calendar_arr['calendar']->add_Activities($current_user);
 		}
 		$calendar_arr['view'] = $mysel;
-		if($type == 'hourview')
+		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'listview' || $type == 'hourview')
 		{
-			getHourView($calendar_arr,'ajax');
+			if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption'] != null)
+			{
+				if($_REQUEST['viewOption'] == 'hourview')
+				{
+					getHourView($calendar_arr,'ajax');
+				}
+				elseif($_REQUEST['viewOption'] == 'listview')
+				{
+					getEventListView($calendar_arr);
+				}
+			}
 		}
-		elseif($type == 'listview')
+		elseif($type == 'change_status')
 		{
+			$return_id = $_REQUEST['record'];
+			if(isset($_REQUEST['status']))
+			{
+				$status = $_REQUEST['status'];
+				$activity_type = "Task";
+			}
+			elseif(isset($_REQUEST['eventstatus']))
+			{
+				$status = $_REQUEST['eventstatus'];
+				$activity_type = "Events";
+			}
+			ChangeStatus($status,$return_id,$activity_type);
 			getEventListView($calendar_arr);
 		}
 		else
