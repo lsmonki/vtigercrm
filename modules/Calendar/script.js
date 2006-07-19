@@ -397,9 +397,9 @@ function fnRedirect(view,hour,day,month,year) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Calendar&action=CalendarAjax&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type='+OptionData+'&parenttab=My Home Page&ajax=true',
+                        postBody: 'module=Calendar&action=CalendarAjax&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type='+OptionData+'&viewOption='+OptionData+'&ajax=true',
                         onComplete: function(response) {
-                                $("hrView_default").style.display = "none";
+				$("hrView_default").style.display = "none";
                                 $("toggleDiv").innerHTML=response.responseText;
                         }
                 }
@@ -433,7 +433,7 @@ function getMiniCal(){
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Calendar&action=CalendarAjax&type=minical&parenttab=My Home Page&ajax=true',
+                        postBody: 'module=Calendar&action=CalendarAjax&type=minical&&ajax=true',
                         onComplete: function(response) {
                                 $("miniCal").innerHTML=response.responseText;
                         }
@@ -447,9 +447,23 @@ function getCalSettings(){
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Calendar&action=CalendarAjax&type=settings&parenttab=My Home Page&ajax=true',
+                        postBody: 'module=Calendar&action=CalendarAjax&type=settings&ajax=true',
                         onComplete: function(response) {
                                 $("calSettings").innerHTML=response.responseText;
+                        }
+                }
+
+          );
+}
+
+function updateStatus(record,status,view,hour,day,month,year){
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Calendar&action=CalendarAjax&record='+record+'&'+status+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_status&ajax=true',
+                        onComplete: function(response) {
+                        $("toggleDiv").innerHTML=response.responseText;
                         }
                 }
 
@@ -495,24 +509,70 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
         var actdelete = document.getElementById("taskactdelete");
         var changeowner = document.getElementById("taskchangeowner");
     }
-    document.getElementById("idlist").value = id;	
-    complete.href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+heldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    pending.href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+notheldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("idlist").value = id;
+    document.change_owner.hour.value = hour;
+    document.change_owner.day.value = day;
+    document.change_owner.view.value = view;
+    document.change_owner.month.value = month;
+    document.change_owner.year.value = year;
+    complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+")";
+    pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+")";
     postpone.href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode="+activity_mode;
-    actdelete.href="index.php?return_module=Calendar&return_action=index&action=massdelete&module=Users&idlist="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    changeowner.href="javascript:fnvshNrm('act_changeowner');";
+    actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+")";
+    changeowner.href="javascript:dispLayer('act_changeowner');";
 
+}
+
+function dispLayer(lay)
+{
+	var tagName = document.getElementById(lay);
+        tagName.style.visibility = 'visible';
+        tagName.style.display = 'block';
 }
 
 function calendarChangeOwner()
 {
-	document.change_owner.action.value = "updateLeadDBStatus";
-	document.change_owner.module.value = "Users";
-	document.change_owner.return_module.value = "Calendar";
-	document.change_owner.return_action.value = "index";
-	document.change_owner.user_id.value = document.getElementById('activity_owner').options[document.getElementById('activity_owner').options.selectedIndex].value;
-	fninvsh('act_changeowner');
-	window.document.change_owner.submit();
+	var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+	var user_id = document.getElementById('activity_owner').options[document.getElementById('activity_owner').options.selectedIndex].value;
+	var idlist = document.change_owner.idlist.value;
+        var view   = document.change_owner.view.value;
+        var day    = document.change_owner.day.value;
+        var month  = document.change_owner.month.value;
+        var year   = document.change_owner.year.value;
+        var hour   = document.change_owner.hour.value;
+	 new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=CalendarAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner&viewOption='+OptionData+'&ajax=true',
+                        onComplete: function(response) {
+				if(OptionData == 'listview')
+					$("hrView_default").style.display = "none";
+				$("toggleDiv").innerHTML=response.responseText;
+                        }
+                }
+
+          );
+
+}
+
+function delActivity(id,view,hour,day,month,year)
+{
+        var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+         new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=CalendarAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&ajax=true',
+                        onComplete: function(response) {
+                                if(OptionData == 'listview')
+                                        $("hrView_default").style.display = "none";
+                                $("toggleDiv").innerHTML=response.responseText;
+                        }
+                }
+
+          );
+
 }
 
 
