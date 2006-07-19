@@ -106,7 +106,7 @@ while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
   $ticketid = $myrow[1];
-  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Too many tickets pending",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Dear Sir/Madam <br><br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br><br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
