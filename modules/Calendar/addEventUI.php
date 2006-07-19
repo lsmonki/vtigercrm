@@ -151,8 +151,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 ?>
        
 	<!-- Add Event DIV starts-->
-	<script language="JavaScript" type="text/javascript" src="general.js"></script>	
-
+	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>	
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
@@ -628,10 +627,13 @@ setObjects();
 	<form name="change_owner">
 	<input type="hidden" value="" name="idlist" id="idlist">
 	<input type="hidden" value="" name="action">
+	<input type="hidden" value="" name="hour">
+	<input type="hidden" value="" name="day">
+	<input type="hidden" value="" name="month">
+	<input type="hidden" value="" name="year">
+	<input type="hidden" value="" name="view">
 	<input type="hidden" value="" name="module">
 	<input type="hidden" value="" name="user_id">
-	<input type="hidden" value="" name="return_module">
-	<input type="hidden" value="" name="return_action">
 	<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
 			<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
@@ -654,7 +656,7 @@ setObjects();
 	<tr>
         	<td colspan="3" align="center">
 	        &nbsp;&nbsp;
-        		<input type="button" name="button" class="small" value="Update Owner" onClick="calendarChangeOwner()">
+        		<input type="button" name="button" class="small" value="Update Owner" onClick="calendarChangeOwner();fninvsh('act_changeowner');">
 		        <input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_changeowner')">	
 		</td>
 	</tr>
