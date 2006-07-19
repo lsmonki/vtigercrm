@@ -74,7 +74,13 @@ if(count($ids_list) > 0)
 
 if($return_module == 'Calendar')
 {
-	header("Location: index.php?module=$return_module&action=index");
+	$view       = $_REQUEST['view'];
+	$day        = $_REQUEST['day'];
+	$month      = $_REQUEST['month'];
+	$year       = $_REQUEST['year'];
+	$type       = $_REQUEST['type'];
+	$viewOption = $_REQUEST['viewOption'];
+	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption);
 }
 else
 {
