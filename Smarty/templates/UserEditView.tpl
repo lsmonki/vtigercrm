@@ -161,14 +161,14 @@ function check_duplicate()
 					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
 					    {if $homeitems neq ''}
 					    	<td class="dvtCellInfo" align="center" width="5%">
-					   	<input name="{$values}" value="{$values}" checked type="radio"></td><td class="dvtCellInfo" align="left" width="20%">Show</td> 		
+					   	<input name="{$values}" value="{$values}" checked type="radio"></td><td class="dvtCellInfo" align="left" width="20%">{$UMOD.LBL_SHOW}</td> 		
 					    	<td class="dvtCellInfo" align="center" width="5%">
-					   	<input name="{$values}" value="" type="radio"></td><td class="dvtCellInfo" align="left">Hide</td> 		
+					   	<input name="{$values}" value="" type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDE}</td> 		
 					    {else}	
 					    	<td class="dvtCellInfo" align="center" width="5%">
-					   	<input name="{$values}" value="{$values}" type="radio"></td><td class="dvtCellInfo" align="left">Show</td> 		
+					   	<input name="{$values}" value="{$values}" type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOW}</td> 		
 					    	<td class="dvtCellInfo" align="center" width="5%">
-					   	<input name="{$values}" value="" checked type="radio"></td><td class="dvtCellInfo" align="left">Hide</td> 		
+					   	<input name="{$values}" value="" checked type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDE}</td> 		
 					    {/if}	
 					</tr>			
 				{/foreach}
