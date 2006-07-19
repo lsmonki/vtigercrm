@@ -17,7 +17,7 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 }
 ?>
 <form name="frmrepstr">
-<input type="hidden" name="subject" value="<?echo $templatedetails[2];?>"></input>
+<input type="hidden" name="subject" value="<?php echo $templatedetails[2];?>"></input>
 <textarea name="repstr" style="visibility:hidden">
 <?php echo nl2br($templatedetails[1]); ?>
 </textarea>
