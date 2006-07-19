@@ -21140,9 +21140,9 @@ $company_name_array = Array(
 "t3M Invest A/S",
 "EDFG Group Limited",
 "vtigerCRM Inc",
-"X-CEED INC 99"
-"demovtiger"
-"usable-vtiger"
+"X-CEED INC 99",
+"demovtiger",
+"usable-vtiger",
 "gooduivtiger"
 );
 
