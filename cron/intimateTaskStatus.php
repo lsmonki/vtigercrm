@@ -45,7 +45,7 @@ while ($myrow = mysql_fetch_row($result))
   $status=$myrow[0];
   if($status != 'Completed')
   {
-	 sendmail($emailaddress,$emailaddress,"Task Not completed","Not completed task",$mailserver,$mailuname,$mailpwd,"");	
+	 sendmail($emailaddress,$emailaddress,"Task Not completed","Dear Sir/Madam,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br> Thank You<br><br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 }
