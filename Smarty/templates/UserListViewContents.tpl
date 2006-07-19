@@ -2,7 +2,7 @@
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 <tr>
 	<td class="big"><strong>{$MOD.LBL_USERS_LIST}</strong></td>
-	<td class="small" align=right>{$CMOD.LBL_TOTAL} {$USER_COUNT.user} {$MOD.LBL_USERS} ({$USER_COUNT.admin} {$CMOD.LBL_ADMINS}, {$USER_COUNT.nonadmin} {$CMOD.LBL_STD_USERS})</td>
+	<td class="small" align=right>&nbsp;</td>
 </tr>
 </table>
 					
