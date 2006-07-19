@@ -65,7 +65,7 @@ while ($myrow = mysql_fetch_row($result))
   if($stage == 'Closed Won' &&  $amount > 10000)
   {
     
-    sendmail($emailaddress,$emailaddress,"Big Deal Closed Successfully!","Time to Party! Big Deal Closed!!!!",$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,"Big Deal Closed Successfully!","Dear Team,<br><br>Time to Party! <br><br>Big Deal Closed!!!!<br> <br> Time to hit the dance floor!<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -86,7 +86,7 @@ while ($myrow = mysql_fetch_row($result))
   if($status != 'Completed')
   {
 
-    sendmail($emailaddress,$emailaddress,"Pending Ticket notification","Ticket number ".$ticketid ." yet to be closed",$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,"Pending Ticket notification","Dear Sir/Madam,<br><br> This is to bring to your kind attention that ticket number ".$ticketid ." is yet to be closed<br><br> Thank You,<br><br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -139,7 +139,7 @@ $result = mysql_query("SELECT productname from vtiger_products where expiry_date
 while ($myrow = mysql_fetch_row($result))
 {
   $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support Ending","Support Ends for ".$productname ."\n Renew support please",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Support Ending","Dear Sir/Madam,<br><br> This is to inform you that the support for ".$productname ."\n ends shortly. Kindly renew your support please<br> Thank You,<br><br> Regards,<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
