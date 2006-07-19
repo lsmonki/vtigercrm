@@ -548,6 +548,7 @@ function getTodosListView($cal, $check='')
 function getDayViewLayout(& $cal,$type)
 {
 	global $current_user,$app_strings,$cal_log,$adb;
+	$no_of_rows = 1;
 	$cal_log->debug("Entering getDayViewLayout() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
 	$user_details = getAllUserName();
@@ -558,9 +559,22 @@ function getDayViewLayout(& $cal,$type)
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
 	$dayview_layout = '';
-	$dayview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
+	$dayview_layout .= '<br /><!-- HOUR VIEW LAYER STARTS HERE -->
                 <div id="hrView_'.$type.'">
-                        <table border="0" cellpadding="10" cellspacing="0" width="98%">';
+                        <table border="0" cellpadding="10" cellspacing="0" width="900">';
+	$dayview_layout .= '<tr>
+				<td id="mainContent" style="border-top: 1px solid rgb(204, 204, 204);">
+					<table border="0" cellpadding="5" cellspacing="0" width="100%">';
+	for($j=0;$j<24;$j++)
+	{
+		$slice = $cal['calendar']->slices[$j];
+		$act = $cal['calendar']->day_slice[$slice]->activities;
+		if(!empty($act))
+		{
+			$temprows = count($act);
+			$no_of_rows = ($no_of_rows>$temprows)?$no_of_rows:$temprows;
+		}
+	}
         for($i=$day_start_hour;$i<=$day_end_hour;$i++)
         {
 		
@@ -597,23 +611,13 @@ function getDayViewLayout(& $cal,$type)
 		$temp_ts = $cal['calendar']->date_time->ts;
 		$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 		$dayview_layout .= '<tr>
-					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%" onMouseOver="show(\'create_'.$hour.''.$sub_str.'\')" onMouseOut="fnHide_Event(\'create_'.$hour.''.$sub_str.'\')" valign=top>
-						<span class="genHeaderBig">'.$hour.'</span>
-						<span class="genHeaderGray">'.$sub_str.'</span><br>
-						<div id="create_'.$hour.''.$sub_str.'" style="display: none;">
-                                                        <a onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
-                                                </div>
-					</td>
-					<td style="border-bottom: 1px solid rgb(204, 204, 204);" height="65">';
+					<td class="lvtCol" height="75"  width="10%" onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')">'.$hour.''.$sub_str.'</td>';
 		//to get events in Dayview
-		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i]);
-		$dayview_layout .=' </td>		
-				    </tr>';
+		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i],$no_of_rows);
+		$dayview_layout .= '</tr>';
 	}
-	$dayview_layout .= '<tr><td style="border-right: 1px solid rgb(102, 102, 102);">&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td colspan="2">&nbsp;</td></tr>
-                                    </table>
-			</div>
+	$dayview_layout .= '</table>
+			</td></tr></table></div>
 		</div>';
 	if($type != 'ajax')
         {
@@ -937,17 +941,21 @@ function getYearViewLayout(& $cal,$type)
  * @param  string    $slice       - date:time(eg: 2006-07-13:10)
  * returns string    $eventlayer  - hmtl in string format
  */
-function getdayEventLayer(& $cal,$slice)
+function getdayEventLayer(& $cal,$slice,$rows)
 {
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering getdayEventLayer() method...");
 	$eventlayer = '';
 	$arrow_img_name = '';
+	$rows = $rows + 1;
+	$last_colwidth = 100 / $rows;
+	$width = 100 / $rows ;
 	$act = $cal['calendar']->day_slice[$slice]->activities;
 	if(!empty($act))
 	{
 		for($i=0;$i<count($act);$i++)
 		{
+			$rowspan = 1;
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
 			$id = $act[$i]->record;
@@ -957,34 +965,43 @@ function getdayEventLayer(& $cal,$slice)
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
 			$duration_min = $act[$i]->duration_minute;
+			if($duration_min != '00')
+				$rowspan = $duration_hour+$rowspan;
+			else
+				$rowspan = $duration_hour;
+			$row_cnt = $rowspan;
 			$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
 			$start_hour = $st_end_time['starttime'];
 			$end_hour = $st_end_time['endtime'];
 			$account_name = $act[$i]->accountname;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
-			$eventlayer .='<div class ="eventLay" id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
-					<table border="0" cellpadding="0" cellspacing="0" width="95%">
-						<tr onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');">
-						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
-						<td align="left" width="85%"><span class="fontBold">'.$account_name.'</span><br>
-							<b>'.$start_hour.'</b>&nbsp;,<span class="orgTab">'.$subject.'</span>&nbsp;
-							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_VIEW'].']</a>
-							<a href="index.php?action=EditView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_EDIT'].']</a>
-					
-						</td>
-						<td align="right" width="5%">
-							<div id="'.$arrow_img_name.'" style="display: none;">
-								<img onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0">
-							</div>
-						</td>
-						</tr>
-					</table>
-				</div><br>';
+			$height = $rowspan * 75;
+			$eventlayer .= '<td class="dvtCellInfo" rowspan="'.$rowspan.'" colspan="1" width="'.$width.'%" >';
+			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');">
+			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td><img src="'.$image.'" align="middle" border="0" height="19" width="19"></td>
+					<td width="95%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
+				</tr>
+				<tr>
+					<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
+					<td><a href="#"><span class="orgTab">'.$subject.'</span></a></td>
+				</tr>
+			</table>
+
+			</div>';
+			$eventlayer .= '</td>';
 		}
-		$cal_log->debug("Exiting getdayEventLayer() method...");
-		return $eventlayer;
+		$eventlayer .= '<td class="dvtCellInfo" rowspan="1" width="'.$last_colwidth.'%">&nbsp;</td>';
 	}
+	else
+	{
+		$eventlayer .= '<td class="dvtCellInfo" colspan="'.($rows - 1).'" width="'.($last_colwidth * ($rows - 1)).'%" rowspan="1">&nbsp;</td>';
+		$eventlayer .= '<td class="dvtCellInfo" rowspan="1" width="'.$last_colwidth.'%">&nbsp;</td>';
+	}
+	$cal_log->debug("Exiting getdayEventLayer() method...");
+	return $eventlayer;
 }
 
 /**
