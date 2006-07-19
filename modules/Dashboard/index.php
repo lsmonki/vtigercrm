@@ -69,7 +69,7 @@ $log = LoggerManager::getLogger('dashboard');
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap><? echo $app_strings['Analytics'];?> &gt; <a class="hdrLink" href="index.php?action=index&parenttab=Analytics&module=Dashboard"><? echo $app_strings['Dashboard'] ?></a></td>
+	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap><?php echo $app_strings['Analytics'];?> &gt; <a class="hdrLink" href="index.php?action=index&parenttab=Analytics&module=Dashboard"><?php echo $app_strings['Dashboard'] ?></a></td>
 
 	<td  nowrap width="8%">
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -78,8 +78,8 @@ $log = LoggerManager::getLogger('dashboard');
 			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" border=0></td>	
-					 <td style="padding-right:10px"><img src="<?echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
+						<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo $image_path;?>btnL3Add-Faded.gif" border=0></td>	
+					 <td style="padding-right:10px"><img src="<?php echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
 				</tr>
 				</table>
 	</td>
@@ -91,10 +91,10 @@ $log = LoggerManager::getLogger('dashboard');
 				<table border=0 cellspacing=0 cellpadding=5>
 
 				<tr>
-					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="<?echo $image_path;?>btnL3Calendar.gif" alt="<? echo $app_strings['LBL_CALENDAR_ALT']; ?>" title="<? echo $app_strings['LBL_CALENDAR_TITLE']; ?>" border=0></a></a></td>
-					<td style="padding-right:0px"><a href="javascript:;"><img src="<?echo $image_path;?>btnL3Clock.gif" alt="<? echo $app_strings['LBL_CLOCK_ALT']; ?>" title="<? echo $app_strings['LBL_CLOCK_TITLE']; ?>" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
-					<td style="padding-right:0px"><a href="#"><img src="<?echo $image_path;?>btnL3Calc.gif" alt="<? echo $app_strings['LBL_CALCULATOR_ALT']; ?>" title="<? echo $app_strings['LBL_CALCULATOR_TITLE']; ?>" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
-					<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="<?echo $image_path;?>tbarChat.gif" alt="<? echo $app_strings['LBL_CHAT_ALT']; ?>" title="<? echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
+					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="<?php echo $image_path;?>btnL3Calendar.gif" alt="<?php echo $app_strings['LBL_CALENDAR_ALT']; ?>" title="<?php echo $app_strings['LBL_CALENDAR_TITLE']; ?>" border=0></a></a></td>
+					<td style="padding-right:0px"><a href="javascript:;"><img src="<?php echo $image_path;?>btnL3Clock.gif" alt="<?php echo $app_strings['LBL_CLOCK_ALT']; ?>" title="<?php echo $app_strings['LBL_CLOCK_TITLE']; ?>" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
+					<td style="padding-right:0px"><a href="#"><img src="<?php echo $image_path;?>btnL3Calc.gif" alt="<?php echo $app_strings['LBL_CALCULATOR_ALT']; ?>" title="<?php echo $app_strings['LBL_CALCULATOR_TITLE']; ?>" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
+					<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="<?php echo $image_path;?>tbarChat.gif" alt="<?php echo $app_strings['LBL_CHAT_ALT']; ?>" title="<?php echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
                     </td>	
 				</tr>
 				</table>
@@ -103,8 +103,8 @@ $log = LoggerManager::getLogger('dashboard');
                <td class="small" align="left" width="5%">
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" border="0"></td>
-                <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo $image_path;?>tbarImport-Faded.gif" border="0"></td>
+                <td style="padding-right:10px"><img src="<?php echo $image_path;?>tbarExport-Faded.gif" border="0"></td>
 			</tr>
 		</table>	
 	</td>
@@ -112,7 +112,7 @@ $log = LoggerManager::getLogger('dashboard');
                 <td class="small" align="left">	
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onClick="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
+				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onClick="fnvshobj(this,'allMenu')"><img src="<?php echo $image_path;?>btnL3AllMenu.gif" alt="<?php echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<?php echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
 				</tr>
 				</table>
 	</td>			
@@ -133,7 +133,7 @@ $log = LoggerManager::getLogger('dashboard');
   <tr>
     <td width="140" nowrap valign="top">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF" style="cursor:pointer;">
-			<tr><td class="dashMnuSel" id="DashboardHome_mnu" onClick="loadDashBoard('DashboardHome');"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
+			<tr><td class="dashMnuSel" id="DashboardHome_mnu" onClick="loadDashBoard('DashboardHome');"><?php echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
                </td></tr>
                <?php 
                  $mnuHTML = "";
