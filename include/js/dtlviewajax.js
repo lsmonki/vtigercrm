@@ -91,8 +91,9 @@ function handleEdit()
      fnhide(globaldtlviewspanid);
 	 if(globaluitype != 53)
 	 {
-		 globaltempvalue = getObj(globaltxtboxid).value;
-     	 getObj(globaltxtboxid).focus();
+		globaltempvalue = getObj(globaltxtboxid).value;
+		if(getObj(globaltxtboxid).type != 'hidden')
+	     	 	getObj(globaltxtboxid).focus();
 	 }
      fnhide('crmspanid');
      itsonview=true;
