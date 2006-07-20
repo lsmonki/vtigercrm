@@ -40,8 +40,8 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 			<tr><td id="step1label" class="lvtSel" height="30" style="padding-left:10px;">1. {$MOD.LBL_REPORT_DETAILS}</td></tr>
 			<tr><td id="step2label" class="lvtCol" height="30" style="padding-left:10px;">2. {$MOD.LBL_RELATIVE_MODULE} </td></tr>
-			<tr><td class="lvtCol" height="30" style="padding-left:10px;">3.{$MOD.LBL_REPORT_TYPE} </td></tr>
-			<tr><td class="lvtCol" height="30" style="padding-left:10px;">4.{$MOD.LBL_SELECT_COLUMNS}</td></tr>
+			<tr><td class="lvtCol" height="30" style="padding-left:10px;">3. {$MOD.LBL_REPORT_TYPE} </td></tr>
+			<tr><td class="lvtCol" height="30" style="padding-left:10px;">4. {$MOD.LBL_SELECT_COLUMNS}</td></tr>
 			<tr><td class="lvtCol" height="30" style="padding-left:10px;">5. {$MOD.LBL_SPECIFY_GROUPING}</td></tr>
 			<tr><td class="lvtCol" height="30" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 			<tr><td class="lvtCol" height="30" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
