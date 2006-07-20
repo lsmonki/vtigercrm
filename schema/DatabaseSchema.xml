@@ -3401,6 +3401,10 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
+		<field name="taxtype" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="11.3" />
+		<field name="discount_amount" type="N" size="11.3" />
+		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
@@ -3505,35 +3509,6 @@
 </data>
 </table>
 
-	<table name="vtiger_soproductrel">
-		<field name="salesorderid" type="I" size="19">
-			<key />
-		</field>
-		<field name="productid" type="I" size="19">
-			<key />
-		</field>
-		<field name="quantity" type="I" size="19" />
-		<field name="listprice" type="N" size="11.3" />
-		<field name="vattax" type="N" size="7.3" />
-		<field name="salestax" type="N" size="7.3" />
-		<field name="servicetax" type="N" size="7.3" />
-
-		<index name="soproductrel_salesorderid_idx">
-			<col>salesorderid</col>
-		</index>
-		<index name="soproductrel_productid_idx">
-			<col>productid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_soproductrel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_soproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_soproductrel FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
 
 	<table name="vtiger_notificationscheduler">
 		<field name="schedulednotificationid" type="I" size="19">
@@ -3746,6 +3721,10 @@
 		<field name="tax" type="N" size="11.3" />
 		<field name="adjustment" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
+		<field name="taxtype" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="11.3" />
+		<field name="discount_amount" type="N" size="11.3" />
+		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 
@@ -3851,36 +3830,6 @@
 </data>
 </table>
 
-	<table name="vtiger_quotesproductrel">
-		<field name="quoteid" type="I" size="19">
-			<key />
-		</field>
-		<field name="productid" type="I" size="19">
-			<key />
-		</field>
-		<field name="quantity" type="I" size="19" />
-		<field name="listprice" type="N" size="11.3" />
-		<field name="vattax" type="N" size="7.3" />
-		<field name="salestax" type="N" size="7.3" />
-		<field name="servicetax" type="N" size="7.3" />
-
-		<index name="quotesproductrel_quoteid_idx">
-			<col>quoteid</col>
-		</index>
-		<index name="quotesproductrel_productid_idx">
-			<col>productid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_quotesproductrel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_quotesproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_quotesproductrel FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
 	<table name="vtiger_purchaseorder">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
@@ -3905,6 +3854,10 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
+		<field name="taxtype" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="11.3" />
+		<field name="discount_amount" type="N" size="11.3" />
+		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="terms_conditions" type="X" />
 		<field name="postatus" type="C" size="200" />
 
@@ -4012,35 +3965,6 @@
 </data>
 </table>
 
-	<table name="vtiger_poproductrel">
-		<field name="purchaseorderid" type="I" size="19">
-			<key />
-		</field>
-		<field name="productid" type="I" size="19">
-			<key />
-		</field>
-		<field name="quantity" type="I" size="19" />
-		<field name="listprice" type="N" size="11.3" />
-		<field name="vattax" type="N" size="7.3" />
-		<field name="salestax" type="N" size="7.3" />
-		<field name="servicetax" type="N" size="7.3" />
-
-		<index name="poproductrel_quoteid_idx">
-			<col>quoteid</col>
-		</index>
-		<index name="poproductrel_productid_idx">
-			<col>productid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_poproductrel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_poproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_poproductrel FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
 
 	<table name="vtiger_invoice">
 		<field name="invoiceid" type="I" size="19">
@@ -4064,6 +3988,10 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
+		<field name="taxtype" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="11.3" />
+		<field name="discount_amount" type="N" size="11.3" />
+		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="shipping" type="C" size="100" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
@@ -4166,35 +4094,6 @@
 </data>
 </table>
 
-	<table name="vtiger_invoiceproductrel">
-		<field name="invoiceid" type="I" size="19">
-			<key />
-		</field>
-		<field name="productid" type="I" size="19">
-			<key />
-		</field>
-		<field name="quantity" type="I" size="19" />
-		<field name="listprice" type="N" size="11.3" />
-		<field name="vattax" type="N" size="7.3" />
-		<field name="salestax" type="N" size="7.3" />
-		<field name="servicetax" type="N" size="7.3" />
-
-		<index name="invoiceproductrel_invoice_idx">
-			<col>invoice</col>
-		</index>
-		<index name="invoiceproductrel_productid_idx">
-			<col>productid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_invoiceproductrel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_invoiceproductrel FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_invoiceproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
 
 	<table name="vtiger_activity_reminder">
 		<field name="activity_id" type="I" size="11">
@@ -5860,6 +5759,7 @@
 		</field>
 		<field name="percentage" type="N" size="7.3">
 		</field>
+		<field name="deleted" type="I" size="1" />
 
 		<index name="inventorytaxinfo_taxname_idx">
 			<col>taxname</col>
@@ -6107,4 +6007,52 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="vtiger_inventoryproductrel">
+		<field name="id" type="I" size="19" />
+		<field name="productid" type="I" size="19" />
+		<field name="quantity" type="I" size="19" />
+		<field name="listprice" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="7.3" />
+		<field name="discount_amount" type="N" size="7.3" />
+		<field name="comment" type="C" size="100" />
+
+		<index name="inventoryproductrel_id_idx">
+			<col>id</col>
+		</index>
+		<index name="inventoryproductrel_productid_idx">
+			<col>productid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_shippingtaxinfo">
+		<field name="taxid" type="I" size="3">
+			<KEY/>
+			<notnull />
+			<autoincrement />
+		</field>
+		<field name="taxname" type="C" size="50">
+		</field>
+		<field name="percentage" type="N" size="7.3">
+		</field>
+		<field name="deleted" type="I" size="1" />
+
+		<index name="shippingtaxinfo_taxname_idx">
+			<col>taxname</col>
+		</index>
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_inventoryshippingrel">
+		<field name="id" type="I" size="19" />
+
+		<index name="inventoryishippingrel_id_idx">
+			<col>id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+
+	
 </schema>

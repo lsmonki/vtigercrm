@@ -624,55 +624,24 @@
 				{/foreach}
 			</td>
 		{elseif $uitype eq 83} <!-- Handle the Tax in Inventory -->
-			{if $VAT_CHECK eq 1}
-				{assign var=vat_check value="checked"}
-				{assign var=vat_show value="visible"}
-			{else}
-				{assign var=vat_check value=""}
-				{assign var=vat_show value="hidden"}
-			{/if}
-			{if $SALES_CHECK eq 1}
-				{assign var=sales_check value="checked"}
-				{assign var=sales_show value="visible"}
-			{else}
-				{assign var=sales_check value=""}
-				{assign var=sales_show value="hidden"}
-			{/if}
-			{if $SERVICE_CHECK eq 1}
-				{assign var=service_check value="checked"}
-				{assign var=service_show value="visible"}
-			{else}
-				{assign var=service_check value=""}
-				{assign var=service_show value="hidden"}
-			{/if}
+			{foreach item=tax key=count from=$TAX_DETAILS}
+				{if $tax.check_value eq 1}
+					{assign var=check_value value="checked"}
+					{assign var=show_value value="visible"}
+				{else}
+					{assign var=check_value value=""}
+					{assign var=show_value value="hidden"}
+				{/if}
+				<td align="right" class="dvtCellLabel" style="border:0px solid red;">
+					{$tax.taxname} {$APP.COVERED_PERCENTAGE}
+					<input type="checkbox" name="{$tax.check_name}" id="{$tax.check_name}" class="small" onclick="fnshowHide(this,'{$tax.taxname}')" {$check_value}>
+				</td>
+				<td class="dvtCellInfo" align="left" style="border:0px solid red;">
+					<input type="text" class="detailedViewTextBox" name="{$tax.taxname}" id="{$tax.taxname}" value="{$tax.percentage}" style="visibility:{$show_value};" onBlur="fntaxValidation('{$tax.taxname}')">
+				</td>
+			   </tr>
+			{/foreach}
 
-			<td align="right" class="dvtCellLabel" style="border:0px solid red;">
-				{$APP.LBL_VAT} {$APP.COVERED_PERCENTAGE}
-				<input type="checkbox" name="vat_check" id="vat_check" class="small" onclick="fnshowHide(this,'vat_tax')" {$vat_check}>
-			</td>
-			<td class="dvtCellInfo" align="left" style="border:0px solid red;">
-				<input type="text" class="detailedViewTextBox" name="vat_tax" id="vat_tax" value="{$VAT_TAX}" style="visibility:{$vat_show};" onBlur="fntaxValidation('vat_tax')">
-			</td>
-			<td colspan="2" class="dvtCellInfo" style="border:0px solid red;">&nbsp;</td>
-		   </tr>
-		   <tr>
-			<td align="right" class="dvtCellLabel" style="border:0px solid red;">
-				{$APP.LBL_SALES} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
-				<input type="checkbox" name="sales_check" id="sales_check" class="small" onClick="fnshowHide(this,'sales_tax')" {$sales_check}>
-			</td> 
-			<td class="dvtCellInfo" align="left" style="border:0px solid red;">
-				<input type="text" class="detailedViewTextBox" name="sales_tax" id="sales_tax" value="{$SALES_TAX}" style="visibility:{$sales_show};" onBlur="fntaxValidation('sales_tax')">
-			</td>
-			<td colspan="2" class="dvtCellInfo" style="border:0px solid red;">&nbsp;</td>
-		   </tr>
-		   <tr>
-			<td align="right" class="dvtCellLabel">
-				{$APP.LBL_SERVICE} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
-				<input type="checkbox" name="service_check" id="service_check" class="small" onClick="fnshowHide(this,'service_tax')" {$service_check}>
-			</td>
-			<td class="dvtCellInfo" align="left">
-				<input type="text" class="detailedViewTextBox" name="service_tax" id="service_tax" value="{$SERVICE_TAX}" style="visibility:{$service_show};" onBlur="fntaxValidation('service_tax')">
-			</td>
 			<td colspan="2" class="dvtCellInfo">&nbsp;</td>
 		{/if}
 	{/foreach}

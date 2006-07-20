@@ -929,19 +929,19 @@ function getDetailAssociatedProducts($module,$focus)
 
 	if($module == 'Quotes')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_quotesproductrel.* from vtiger_quotesproductrel inner join vtiger_products on vtiger_products.productid=vtiger_quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where quoteid=".$focus->id;
 	}
 	elseif($module == 'PurchaseOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_poproductrel.* from vtiger_poproductrel inner join vtiger_products on vtiger_products.productid=vtiger_poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where purchaseorderid=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_soproductrel.* from vtiger_soproductrel inner join vtiger_products on vtiger_products.productid=vtiger_soproductrel.productid where salesorderid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where salesorderid=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_invoiceproductrel.* from vtiger_invoiceproductrel inner join vtiger_products on vtiger_products.productid=vtiger_invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where invoiceid=".$focus->id;
 	}
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);

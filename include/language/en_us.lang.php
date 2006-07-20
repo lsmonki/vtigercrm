@@ -961,6 +961,17 @@ $app_strings = Array(
 'LBL_SELECT_STATUS'=>'Select New Status',
 'LBL_UPDATE_OWNER'=>'Update Owner',
 'LBL_UPDATE_STATUS'=>'Update Status',
+
+//added for tax calculations - after 5beta2
+'LBL_NET_PRICE'=>'Net Price',
+'LBL_TOOLS'=>'Tools',
+'LBL_DISCOUNT'=>'Discount',
+'LBL_TOTAL_AFTER_DISCOUNT'=>'Total After Discount',
+'LBL_NET_TOTAL'=>'Net Total',
+'LBL_SHIPPING_AND_HANDLING_CHARGES'=>'Shipping & Handling Charges',
+'LBL_TAX_FOR_SHIPPING_AND_HANDLING'=>'Taxes For Shipping and Handling',
+
+
 );
 
 

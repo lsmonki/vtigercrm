@@ -644,6 +644,12 @@ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'tax','vtiger_quotes',1,'1','txtTax','Tax',1,0,0,100,13,51,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_quotes',1,'1','txtAdjustment','Adjustment',1,0,0,100,20,51,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_quotes',1,'1','hdnGrandTotal','Total',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+//Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
+ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'taxtype','vtiger_quotes',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'discount_percent','vtiger_quotes',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_quotes',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_quotes',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_quotes',1,'73','account_id','Account Name',1,0,0,100,16,51,1,'I~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,51,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,51,2,'T~O',1,null,'BAS')");
@@ -697,6 +703,12 @@ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_purchaseorder',1,'1','exciseduty','Excise Duty',1,0,0,100,12,57,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_purchaseorder',1,'1','hdnGrandTotal','Total',1,0,0,100,13,57,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_purchaseorder',1,'1','hdnSubTotal','Sub Total',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+//Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
+ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'taxtype','vtiger_purchaseorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'discount_percent','vtiger_purchaseorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_purchaseorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_purchaseorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+ 
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'postatus','vtiger_purchaseorder',1,'15','postatus','Status',1,0,0,100,15,57,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,16,57,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,17,57,2,'T~O',1,null,'BAS')");
@@ -753,6 +765,12 @@ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_salesorder',1,'1','exciseduty','Excise Duty',1,0,0,100,13,63,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_salesorder',1,'1','hdnGrandTotal','Total',1,0,0,100,14,63,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_salesorder',1,'1','hdnSubTotal','Total',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+//Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'taxtype','vtiger_salesorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'discount_percent','vtiger_salesorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_salesorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_salesorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_salesorder',1,'73','account_id','Account Name',1,0,0,100,16,63,1,'I~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,63,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,63,2,'T~O',1,null,'BAS')");
@@ -811,6 +829,12 @@ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_invoice',1,'1','exciseduty','Excise Duty',1,0,0,100,11,69,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_invoice',1,'1','hdnSubTotal','Sub Total',1,0,0,100,12,69,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_invoice',1,'1','hdnGrandTotal','Total',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+//Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
+ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'taxtype','vtiger_invoice',1,'15','hdnTaxType','Tax Type',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'discount_percent','vtiger_invoice',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_invoice',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_invoice',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+
 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_invoice',1,'73','account_id','Account Name',1,0,0,100,14,69,1,'I~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'invoicestatus','vtiger_invoice',1,'15','invoicestatus','Status',1,0,0,100,15,69,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,16,69,1,'V~M',1,null,'BAS')");
@@ -2165,11 +2189,7 @@ title';
 	$this->db->query("insert into vtiger_parenttabrel values (3,9,11)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,17,12)");
 		
-	//Added to populate the default inventory tax informations
-	$this->db->query("insert into vtiger_inventorytaxinfo values(".$this->db->getUniqueID("vtiger_inventorytaxinfo").",'VAT','4.5')");
-	$this->db->query("insert into vtiger_inventorytaxinfo values(".$this->db->getUniqueID("vtiger_inventorytaxinfo").",'Sales','10')");
-	$this->db->query("insert into vtiger_inventorytaxinfo values(".$this->db->getUniqueID("vtiger_inventorytaxinfo").",'Service','12.5')");
-	
+
 	}
 }
 ?>

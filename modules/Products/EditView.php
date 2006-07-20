@@ -119,39 +119,36 @@ if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$smarty->assign("MODE", $focus->mode);
-
-	$vat_tax = getProductTaxPercentage('VAT',$focus->id);
-	$sales_tax = getProductTaxPercentage('Sales',$focus->id);
-	$service_tax = getProductTaxPercentage('Service',$focus->id);
 }
 
-$vat_check = 1;
-$sales_check = 1;
-$service_check = 1;
-if($vat_tax == '')
+//Tax handling - starts
+$tax_details = getAllTaxes();
+
+for($i=0;$i<count($tax_details);$i++)
 {
-	$vat_tax = getTaxPercentage('VAT');
-	$vat_check = 0;
-}
-if($sales_tax == '')
-{
-	$sales_tax = getTaxPercentage('Sales');
-	$sales_check = 0;
-}
-if($service_tax == '')
-{
-	$service_tax = getTaxPercentage('Service');
-	$service_check = 0;
+	$tax_details[$i]['check_name'] = $tax_details[$i]['taxname'].'_check';
+	$tax_details[$i]['check_value'] = 0;
 }
 
-//Following values has been added to display the Tax information
-$smarty->assign("VAT_TAX", $vat_tax);
-$smarty->assign("SALES_TAX", $sales_tax);
-$smarty->assign("SERVICE_TAX", $service_tax);
+if($focus->mode == 'edit')
+{
+	for($i=0;$i<count($tax_details);$i++)
+	{
+		$tax_value = getProductTaxPercentage($tax_details[$i]['taxname'],$focus->id);
+		$tax_details[$i]['percentage'] = $tax_value;
+		$tax_details[$i]['check_value'] = 1;
+		//if the tax is not associated with the product then we should get the default value and unchecked
+		if($tax_value == '')
+		{
+			$tax_details[$i]['check_value'] = 0;
+			$tax_details[$i]['percentage'] = getTaxPercentage($tax_details[$i]['taxname']);
+		}
+	}
+}
 
-$smarty->assign("VAT_CHECK", $vat_check);
-$smarty->assign("SALES_CHECK", $sales_check);
-$smarty->assign("SERVICE_CHECK", $service_check);
+$smarty->assign("TAX_DETAILS", $tax_details);
+//Tax handling - ends
+
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);

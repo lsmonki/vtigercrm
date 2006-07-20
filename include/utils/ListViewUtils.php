@@ -1326,14 +1326,24 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					$row_id = $_REQUEST['curr_row'];
 
-					$vattax = getProductTaxPercentage('VAT',$entity_id,'default');
-					$salestax = getProductTaxPercentage('Sales',$entity_id,'default');
-					$servicetax = getProductTaxPercentage('Service',$entity_id,'default');
+					//To get all the tax types and values and pass it to product details
+					$tax_str = '';
+					$tax_details = getAllTaxes();
+					for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+					{
+						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
+					}
+					$tax_str = trim($tax_str,',');
+
+					//$vattax = getProductTaxPercentage('VAT',$entity_id,'default');
+					//$salestax = getProductTaxPercentage('Sales',$entity_id,'default');
+					//$servicetax = getProductTaxPercentage('Service',$entity_id,'default');
 
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'", "'.$vattax.'","'.$salestax.'","'.$servicetax.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{

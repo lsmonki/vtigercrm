@@ -1502,57 +1502,39 @@ $log->debug("type is ".$type);
 	{
 		global $adb, $log;
 		$log->debug("Entering into insertTaxInformation($tablename, $module) method ...");
+		$tax_details = getAllTaxes();
 
 		$tax_per = '';
-		//Save the Product - VAT tax relationship if VAT tax check box is enabled
+		//Save the Product - tax relationship if corresponding tax check box is enabled
 		//Delete the existing tax if any
 		if($this->mode == 'edit')
 		{
-			$tax_array = Array('VAT','Sales','Service');
-			foreach($tax_array as $tax_type)
+			for($i=0;$i<count($tax_details);$i++)
 			{
-				$taxid = getTaxId($tax_type);
+				$taxid = getTaxId($tax_details[$i]['taxname']);
 				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
 				$adb->query($sql);
 			}
 		}
-		if($_REQUEST['vat_check'] == 'on' || $_REQUEST['vat_check'] == 1)
+		for($i=0;$i<count($tax_details);$i++)
 		{
-			$taxid = getTaxId('VAT');
-			$tax_per = $_REQUEST['vat_tax'];
-			if($tax_per == '')
-				$tax_per = getTaxPercentage('VAT');
+			$tax_name = $tax_details[$i]['taxname'];
+			$tax_checkname = $tax_details[$i]['taxname']."_check";
+			if($_REQUEST[$tax_checkname] == 'on' || $_REQUEST[$tax_checkname] == 1)
+			{
+				$taxid = getTaxId($tax_name);
+				$tax_per = $_REQUEST[$tax_name];
+				if($tax_per == '')
+				{
+					$log->debug("Tax selected but value not given so default value will be saved.");
+					$tax_per = getTaxPercentage($tax_name);
+				}
+				
+				$log->debug("Going to save the Product - $tax_name tax relationship");
 
-			$log->debug("Going to save the Product - VAT tax relationship");
-
-			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-			$adb->query($sql);
-		}
-		//Save the Product - Sales tax relationship if Sales tax check box is enabled
-		if($_REQUEST['sales_check'] == 'on' || $_REQUEST['sales_check'] == 1)
-		{
-			$taxid = getTaxId('Sales');
-			$tax_per = $_REQUEST['sales_tax'];
-			if($tax_per == '')
-				$tax_per = getTaxPercentage('Sales');
-
-			$log->debug("Going to save the Product - Sales tax relationship");
-
-			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-			$adb->query($sql);
-		}
-		//Save the Product - Service tax relationship if Service tax check box is enabled
-		if($_REQUEST['service_check'] == 'on' || $_REQUEST['service_check'] == 1)
-		{
-			$taxid = getTaxId('Service');
-			$tax_per = $_REQUEST['service_tax'];
-			if($tax_per == '')
-				$tax_per = getTaxPercentage('Service');
-
-			$log->debug("Going to save the Product - Service tax relationship");
-
-			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-			$adb->query($sql);
+				$query = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
+				$adb->query($query);
+			}
 		}
 
 		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");

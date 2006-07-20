@@ -262,32 +262,18 @@
                         </td>    
 			 
 						{elseif $keyid eq 83}<!-- Handle the Tax in Inventory -->
-							<td align="right" class="dvtCellLabel">
-							{$APP.LBL_VAT} {$APP.COVERED_PERCENTAGE}
+							{foreach item=tax key=count from=$TAX_DETAILS}
+								<td align="right" class="dvtCellLabel">
+									{$tax.taxname} {$APP.COVERED_PERCENTAGE}
 							
-							</td>
-							<td class="dvtCellInfo" align="left">
-							{$VAT_TAX}
-							</td>
-							<td colspan="2" class="dvtCellInfo">&nbsp;</td>
-						   </tr>
-		   				   <tr>
-							<td align="right" class="dvtCellLabel">
-							{$APP.LBL_SALES} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
-							</td> 
-							<td class="dvtCellInfo" align="left">
-								{$SALES_TAX}
-							</td>	
-							<td colspan="2" class="dvtCellInfo">&nbsp;</td>
-						   </tr>
-				   		   <tr>
-							<td align="right" class="dvtCellLabel">
-								{$APP.LBL_SERVICE} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
-							</td>
-							<td class="dvtCellInfo" align="left" >
-								{$SERVICE_TAX}
-							</td>
-	
+								</td>
+								<td class="dvtCellInfo" align="left">
+									{$tax.percentage}
+								</td>
+								<td colspan="2" class="dvtCellInfo">&nbsp;</td>
+							   </tr>
+							{/foreach}
+
 
 				{elseif $keyid eq 69}<!-- for Image Reflection -->
                                                   	<td align="left" width=25%">{$keyval}</td>
