@@ -2296,7 +2296,7 @@ function getSalesOrderRelatedAccounts($record_id)
 	global $log;
 	$log->debug("Entering getSalesOrderRelatedAccounts(".$record_id.") method ...");
 	global $adb;
-        $query="select accountid from vtiger_salesorder where salesorder=".$record_id;
+        $query="select accountid from vtiger_salesorder where salesorderid=".$record_id;
         $result=$adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
 	$log->debug("Exiting getSalesOrderRelatedAccounts method ...");
@@ -2313,7 +2313,7 @@ function getSalesOrderRelatedPotentials($record_id)
 	global $log;
 	$log->debug("Entering getSalesOrderRelatedPotentials(".$record_id.") method ...");
 	global $adb;
-        $query="select potentialid from vtiger_salesorder where salesorder=".$record_id;
+        $query="select potentialid from vtiger_salesorder where salesorderid=".$record_id;
         $result=$adb->query($query);
         $potid=$adb->query_result($result,0,'potentialid');
 	$log->debug("Exiting getSalesOrderRelatedPotentials method ...");
@@ -2329,7 +2329,7 @@ function getSalesOrderRelatedQuotes($record_id)
 	global $log;
 	$log->debug("Entering getSalesOrderRelatedQuotes(".$record_id.") method ...");
 	global $adb;
-        $query="select quoteid from vtiger_salesorder where salesorder=".$record_id;
+        $query="select quoteid from vtiger_salesorder where salesorderid=".$record_id;
         $result=$adb->query($query);
         $qtid=$adb->query_result($result,0,'quoteid');
 	$log->debug("Exiting getSalesOrderRelatedQuotes method ...");
