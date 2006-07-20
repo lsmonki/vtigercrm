@@ -33,7 +33,7 @@ $mod_strings = Array(
 'LBL_ALL_RSS_FEEDS'=>'All RSS Feeds',
 
 'LBL_MORE'=>'More...',
-'LBL_SUBJECT'=>'Suject',
+'LBL_SUBJECT'=>'Subject',
 'LBL_SENDER'=>'Sender',
 'LBL_CATEGORY'=>'Category :',
 'LBL_FEED'=>'Feed :',
