@@ -81,7 +81,7 @@
 	<tbody>
 	<tr>
 	<td class="genHeaderSmall" nowrap align="left" width="30%">{$MOD.LBL_ADD_NEW_GROUP}</td>
-	<td align="right"><a href="javascript:fninvsh('orgLay');"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
+	<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
 	<tr>
@@ -98,7 +98,7 @@
 	<tr>
 	<td colspan="2" align="center">
 	<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="AddFolder();" type="button">&nbsp;&nbsp;
-	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" onclick="fninvsh('orgLay');" type="button">
+	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" onclick="closeEditReport();" type="button">
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
@@ -109,6 +109,13 @@
 {*<!-- Contents -->*}
 {literal}
 <script>
+function closeEditReport()
+{
+	$('folder_id').value = '';
+	$('folder_name').value = '';
+	$('folder_desc').value='';
+	fninvsh('orgLay')
+}
 
 function DeleteFolder(id)
 {
