@@ -832,7 +832,7 @@ class CustomView extends CRMEntity{
 				if(isset($advfltrow))
 				{
 					$columns = explode(":",$advfltrow["columnname"]);
-					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "" && $advfltrow["value"] != "")
+					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "")
 					{
 
 						$valuearray = explode(",",trim($advfltrow["value"]));
@@ -1115,7 +1115,7 @@ class CustomView extends CRMEntity{
 				$rtvalue = " <> ".$adb->quote($value);
 			}else
 			{
-				$rtvalue = "is NOT NULL";
+				$rtvalue = " is NOT NULL";
 			}
 		}
 		if($comparator == "s")
