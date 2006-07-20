@@ -19,7 +19,7 @@
 		<td class="dvtCellLabel" style="padding:5px;" width="75%" align="right">
 		<input type="button" name="Edit" value=" Rename " class="classBtn" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
 		<td class="dvtCellLabel" style="padding:5px;" align="right">
-		<input type="button" name="delete" value=" Delete Group " class="classBtn" onClick="DeleteFolder('{$reportfolder.id}');">
+		<input type="button" name="delete" value=" Delete Folder " class="classBtn" onClick="DeleteFolder('{$reportfolder.id}');">
 		</td>
 		</tr>
 		<tr>
