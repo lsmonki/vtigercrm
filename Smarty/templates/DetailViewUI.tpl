@@ -117,13 +117,7 @@
                                                        </div>
                                                   </td>
                                              {elseif $keyid eq '50' || $keyid eq '73' || $keyid eq '51'} <!--AccountPopup-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
-                                              		<div id="editarea_{$label}" style="display:none;">                                              		  
-                                                         <input readonly id="popuptxt_{$label}" name="account_name" type="text" value="{$keyval}"><input id="txtbox_{$label}" name="{$keyfldname}" type="hidden" value="{$keysecid}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>
-                                                         <!--AccountPopup/WithClear-->{if $keyid eq '51'} &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>{/if} 
-                                              		  <br><input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                                                       </div>
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq '57'} <!--ContactPopup-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
@@ -142,75 +136,51 @@
                                                        </div>
                                                   </td>
                                              {elseif $keyid eq '75' || $keyid eq '81'} <!--VendorPopup-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
-                                              		<div id="editarea_{$label}" style="display:none;">
-                                                         <input id="popuptxt_{$label}" name="vendor_name" readonly type="text" style="border:1px solid #bababa;" value="{$keyval}"><input id="txtbox_{$label}" name="{$fldname}" type="hidden" value="{$keysecid}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>
-                                                         {if $uitype eq 75}&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value='';this.form.vendor_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>{/if}                                              		  
-                                                         <br><input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                                                       </div>
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq 76} <!--PotentialPopup-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
-                                              		<div id="editarea_{$label}" style="display:none;">                                              		  
-                                                         <input id="popuptxt_{$label}" name="potential_name" readonly type="text" style="border:1px solid #bababa;" value="{$keyval}"><input id="txtbox_{$label}" name="{$keyfldname}" type="hidden" value="{$keysecid}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.potential_id.value=''; this.form.potential_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
-                                                         <br><input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                                                       </div>
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq 78} <!--QuotePopup-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
-                                              		<div id="editarea_{$label}" style="display:none;">                                              		  
-                                                         <input id="popuptxt_{$label}" name="quote_name" readonly type="text" style="border:1px solid #bababa;" value="{$keyval}"><input id="txtbox_{$label}" name="{$keyfldname}" type="hidden" value="{$keysecid}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.quote_id.value=''; this.form.quote_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
-                                                         <br><input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                                                       </div>
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq 82} <!--Email Body-->
                                                   <td colspan="3" width=100% class="dvtCellInfo" align="left"><div id="dtlview_{$label}" style="width:100%;height:200px;overflow:hidden;border:1px solid gray" class="detailedViewTextBox" onmouseover="this.className='detailedViewTextBoxOn'" onmouseout="this.className='detailedViewTextBox'">{$keyval}</div>
                                                   </td>
                                              {elseif $keyid eq 80} <!--SalesOrderPopup-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><a href="{$keyseclink}">{$keyval}</a></span>
-                                              		<div id="editarea_{$label}" style="display:none;">                                              		  
-                                                         <input id="popuptxt_{$label}" name="salesorder_name" readonly type="text" style="border:1px solid #bababa;" value="{$keyval}"><input id="txtbox_{$label}" name="{$keyfldname}" type="hidden" value="{$keysecid}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=''; this.form.salesorder_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
-                                                         <br><input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                                                       </div>
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
-					{elseif $keyid eq '53'} <!--Assigned To-->
-                    <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">
-				
-                    &nbsp;<span id="dtlview_{$label}">
-                    {if $keyoptions.0 eq 'User' && $keyadmin eq 1}
-                        <a href="{$keyseclink.0}">{$keyval}</a>         
-                    {elseif $keyoptions.0 eq 'Group' && $keyadmin eq 1}
-                        <a href="{$keyseclink.1}">{$keyval}</a>         
-					{else}	
-                        {$keyval}
-                    {/if}
-					&nbsp;
-                    </span>
-                    <div id="editarea_{$label}" style="display:none;">
-                   	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
-					{if $keyoptions.0 eq 'User'}
-						<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
-						{if $keyoptions.2 neq ''}
-							<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
+					     {elseif $keyid eq '53'} <!--Assigned To-->
+                    				  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
+                    				{if $keyoptions.0 eq 'User' && $keyadmin eq 1}
+			                        	<a href="{$keyseclink.0}">{$keyval}</a>         
+			                        {elseif $keyoptions.0 eq 'Group' && $keyadmin eq 1}
+                        				<a href="{$keyseclink.1}">{$keyval}</a>         
+						{else}	
+                        				{$keyval}
+                    				{/if}
+					&nbsp;</span>
+                    				<div id="editarea_{$label}" style="display:none;">
+			                   	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
+						{if $keyoptions.0 eq 'User'}
+							<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
+							{if $keyoptions.2 neq ''}
+								<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
+							{/if}
+							<span id="assign_user" style="display: block;">
+						{else}
+							<input name="assigntype" id="assigntype" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
+							<input name="assigntype" checked="checked" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
+							<span id="assign_user" style="display: none;">
 						{/if}
-						<span id="assign_user" style="display: block;">
-					{else}
-						<input name="assigntype" id="assigntype" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
-						<input name="assigntype" checked="checked" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
-						<span id="assign_user" style="display: none;">
-					{/if}
-                   	<select id="txtbox_U{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
-                    {foreach item=arr key=id from=$keyoptions.1}
-                    	{foreach key=sel_value item=value from=$arr}
-                       		 <option value="{$id}" {$value}>{$sel_value}</option>
-                        {/foreach}
-                    {/foreach}
-                    </select>
-					</span>
+                   				<select id="txtbox_U{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
+				                    {foreach item=arr key=id from=$keyoptions.1}
+				                    	{foreach key=sel_value item=value from=$arr}
+                       						 <option value="{$id}" {$value}>{$sel_value}</option>
+				                        {/foreach}
+				                    {/foreach}
+			                    	</select>
+						</span>
 					{if $keyoptions.0 eq 'Group'}
 						<span id="assign_team" style="display: block;">
 					{else}
