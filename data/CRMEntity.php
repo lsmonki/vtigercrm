@@ -791,113 +791,116 @@ class CRMEntity
 
 		  	$adb->query($sql1); 
 		  }
-
-		  if($_REQUEST['assigntype'] == 'T')
-		  {
-			  $groupname = $_REQUEST['assigned_group_name'];
-			  //echo 'about to update lead group relation';
-			  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
+		  //to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
+		  if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
+		  {	  
+			  if($_REQUEST['assigntype'] == 'T')
 			  {
-				  updateLeadGroupRelation($this->id,$groupname);
-			  }
-                          elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-			  {
-				  updateAccountGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-			  {
-				  updateContactGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-			  {
-				  updatePotentialGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-			  {
-				  updateQuoteGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-			  {
-				  updateSoGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-			  {
-				  updateInvoiceGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-			  {
-				  updatePoGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-			  {
-				  updateTicketGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-			  {
-				  updateCampaignGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
-			  {
-				 if($table_name == 'vtiger_activity')
-				 {
-				   updateActivityGroupRelation($this->id,$groupname);
-				 }
-			  }
-			   	
-
-		  }
-		  else
-		  {
-			  //echo 'about to update lead group relation again!';
-			  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
-			  {
-				  updateLeadGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-			  {
-				  updateAccountGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-			  {
-				  updateContactGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-			  {
-				  updatePotentialGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-			  {
-				  updateQuoteGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-			  {
-				  updateSoGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-			  {
-				  updateInvoiceGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-			  {
-				  updatePoGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-			  {
-				  updateTicketGroupRelation($this->id,'');
-			  }
-			  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-			  {
-				  updateCampaignGroupRelation($this->id,$groupname);
-			  }
-			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
-			  {
-				  if($table_name == 'vtiger_activity')
-                                  {
-			             updateActivityGroupRelation($this->id,$groupname);
+				  $groupname = $_REQUEST['assigned_group_name'];
+				  //echo 'about to update lead group relation';
+				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
+				  {
+					  updateLeadGroupRelation($this->id,$groupname);
 				  }
-			  }
-			  	
+				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
+				  {
+					  updateAccountGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
+				  {
+					  updateContactGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
+				  {
+					  updatePotentialGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
+				  {
+					  updateQuoteGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
+				  {
+					  updateSoGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
+				  {
+					  updateInvoiceGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
+				  {
+					  updatePoGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
+				  {
+					  updateTicketGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
+				  {
+					  updateCampaignGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
+				  {
+					  if($table_name == 'vtiger_activity')
+					  {
+						  updateActivityGroupRelation($this->id,$groupname);
+					  }
+				  }
 
+
+			  }
+			  else
+			  {
+				  //echo 'about to update lead group relation again!';
+				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
+				  {
+					  updateLeadGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
+				  {
+					  updateAccountGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
+				  {
+					  updateContactGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
+				  {
+					  updatePotentialGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
+				  {
+					  updateQuoteGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
+				  {
+					  updateSoGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
+				  {
+					  updateInvoiceGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
+				  {
+					  updatePoGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
+				  {
+					  updateTicketGroupRelation($this->id,'');
+				  }
+				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
+				  {
+					  updateCampaignGroupRelation($this->id,$groupname);
+				  }
+				  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
+				  {
+					  if($table_name == 'vtiger_activity')
+					  {
+						  updateActivityGroupRelation($this->id,$groupname);
+					  }
+				  }
+
+
+			  }
 		  }
 
 	  }
