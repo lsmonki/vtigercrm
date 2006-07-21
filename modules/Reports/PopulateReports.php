@@ -226,13 +226,13 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'Last Month Activities',
                        'reportfolder'=>'Activity Reports',
-                       'description'=>'Last Month Activites',
+                       'description'=>'Last Month Activities',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'0','advfilterid'=>''),
 
 		 Array('reportname'=>'This Month Activities',
                        'reportfolder'=>'Activity Reports',
-                       'description'=>'This Month Activites',
+                       'description'=>'This Month Activities',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'1','advfilterid'=>''),
 
