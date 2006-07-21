@@ -122,9 +122,9 @@
 				</td>
 				<td width=10% class="cellText small">
 						{if $tax.deleted eq 0}
-							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&disable=true&taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enable.jpg" border="0" align="absmiddle"></a>
+							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&disable=true&taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="Enable me" title="Disable me"></a>
 						{else}
-							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&enable=true&taxname={$tax.taxname}">Enable</a>
+							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&enable=true&taxname={$tax.taxname}"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="Enable me" title="Enable me"></a>
 						{/if}
 				</td>
 			   </tr>
@@ -192,9 +192,9 @@
 			</td>
 			<td width=10% class="cellText small"> 
 				{if $tax.deleted eq 0}
-						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_disable=true&sh_taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enable.jpg" border="0" align="absmiddle"></a>
+						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_disable=true&sh_taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="Enable me" title="Disable me"></a>
 					{else}
-						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_enable=true&sh_taxname={$tax.taxname}">Enable</a>
+						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_enable=true&sh_taxname={$tax.taxname}"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="Enable me" title="Enable me"></a>
 					{/if}
 			</td>
 		   </tr>
