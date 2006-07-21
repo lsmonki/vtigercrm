@@ -100,7 +100,7 @@ if($server_type != 'backup' && $server_type != 'proxy')
 	$to_email = getUserEmailId('id',$current_user->id);
 	$from_email = $to_email;
 	$subject = 'Test mail about the mail server configuration.';
-	$description = 'Dear '.$current_user->user_name.', <br><br> This is a test mail which is sent during the outgoing mail server configuration process for vtiger system. <br><br>Thanks  and  Regards<br><br><br> Team vTiger <br><br>'.$current_user->user_name;
+	$description = 'Dear '.$current_user->user_name.', <br><br> This is a test mail sent to confirm if a mail is actually being sent through the vtiger system. You are free to delete this mail.<br> Thanks  and  Regards<br> Team vTiger <br><br>';
 	if($to_email != '')
 	{
 		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
