@@ -22,7 +22,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $tax_details = getAllTaxes();
-$sh_tax_details = getAllTaxes('sh');
+$sh_tax_details = getAllTaxes('all','sh');
 
 //To save the edited value
 if($_REQUEST['save_tax'] == 'true')
@@ -89,7 +89,7 @@ elseif(($_REQUEST['sh_disable'] == 'true' || $_REQUEST['sh_enable'] == 'true') &
 if($getlist)
 {
 	$tax_details = getAllTaxes();
-	$sh_tax_details = getAllTaxes('sh');
+	$sh_tax_details = getAllTaxes('all','sh');
 }
 
 $smarty->assign("TAX_COUNT", count($tax_details));

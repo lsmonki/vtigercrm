@@ -341,4 +341,84 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 	$log->debug("Exit from function addInventoryHistory");
 }
 
+/**	Function used to get the list of Tax types as a array
+ *	@param string $available - available or empty where as default is all, if available then the taxes which are available now will be returned otherwise all taxes will be returned
+ *      @param string $sh - sh or empty, if sh passed then the shipping and handling related taxes will be returned
+ *	return array $taxtypes - return all the tax types as a array
+ */
+function getAllTaxes($available='all', $sh='')
+{
+	global $adb, $log;
+	$log->debug("Entering into the function getAllTaxes($sh)");
+	$taxtypes = Array();
+	if($sh != '' && $sh == 'sh')
+		$tablename = 'vtiger_shippingtaxinfo';
+	else
+		$tablename = 'vtiger_inventorytaxinfo';
+	
+	//This where condition is added to get all products or only availble products
+	if($available != 'all' && $available == 'available')
+	{
+		$where = " where $tablename.deleted=0";
+	}
+	
+	$res = $adb->query("select * from $tablename $where order by deleted");
+	$noofrows = $adb->num_rows($res);
+	for($i=0;$i<$noofrows;$i++)
+	{
+		$taxtypes[$i]['taxid'] = $adb->query_result($res,$i,'taxid');
+		$taxtypes[$i]['taxname'] = $adb->query_result($res,$i,'taxname');
+		$taxtypes[$i]['percentage'] = $adb->query_result($res,$i,'percentage');
+		$taxtypes[$i]['deleted'] = $adb->query_result($res,$i,'deleted');
+	}
+	$log->debug("Exit from the function getAllTaxes($sh)");
+	
+	return $taxtypes;
+}
+
+/**	Function used to get all the tax details which are associated to the given product
+ *	@param int $productid - product id to which we want to get all the associated taxes
+ *	@param string $available - available or empty or available_associated where as default is all, if available then the taxes which are available now will be returned, if all then all taxes will be returned otherwise if the value is available_associated then all the associated taxes even they are not available and all the available taxes will be retruned
+ *	@return array $tax_details - tax details as a array with productid, taxid, taxname, percentage and deleted
+ */
+function getTaxDetailsForProduct($productid, $available='all')
+{
+	global $log, $adb;
+	$log->debug("Entering into function getTaxDetailsForProduct($productid)");
+	if($productid != '')
+	{
+		//where condition added to avoid to retrieve the non available taxes
+		$where = '';
+		if($available != 'all' && $available == 'available')
+		{
+			$where = ' and vtiger_inventorytaxinfo.deleted=0';
+		}
+		if($available != 'all' && $available == 'available_associated')
+		{
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 group by vtiger_producttaxrel.taxid";
+		}
+		else
+		{
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo INNER JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid $where";
+		}
+		$res = $adb->query($query);
+		for($i=0;$i<$adb->num_rows($res);$i++)
+		{
+			$tax_details[$i]['productid'] = $adb->query_result($res,$i,'productid');
+			$tax_details[$i]['taxid'] = $adb->query_result($res,$i,'taxid');
+			$tax_details[$i]['taxname'] = $adb->query_result($res,$i,'taxname');
+			$tax_details[$i]['percentage'] = $adb->query_result($res,$i,'taxpercentage');
+			$tax_details[$i]['deleted'] = $adb->query_result($res,$i,'deleted');
+		}
+	}
+	else
+	{
+		$log->debug("Product id is empty. we cannot retrieve the associated products.");
+	}
+
+	$log->debug("Exit from function getTaxDetailsForProduct($productid)");
+	return $tax_details;
+}
+
+
 ?>

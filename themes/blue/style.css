@@ -2915,3 +2915,26 @@ border-width:1px;
 	border-bottom:1px solid #eeeeee;
 }
 
+/* Inventory */
+
+.lineOnTop {
+	border-top:1px solid #999999;
+}
+
+.discountUI{
+	border:3px solid #CCCCCC;
+	width:200px;
+	padding:5px;
+	position:absolute;
+	background-color:#FFFFFF;
+	display:none;
+}
+
+.TaxShow{
+	display:inline-table;
+}
+
+.TaxHide{
+	display:none;
+}
+

@@ -169,7 +169,7 @@
 
 		<!-- Table to display the List of S&H Tax Values - Starts -->
 		<table id="sh_add_tax" border=0 cellspacing=0 cellpadding=5 width=100% class="listRow">
-		   {if $TAX_COUNT eq 0}
+		   {if $SH_TAX_COUNT eq 0}
 			<tr><td>No taxes available. Please Add Tax.</td></tr>
 		   {else}
 		   	{foreach item=tax key=count from=$SH_TAX_VALUES}

@@ -67,7 +67,7 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 
 //Added to display the Tax informations
-$tax_details = getAllTaxes();
+$tax_details = getTaxDetailsForProduct($focus->id);
 
 for($i=0;$i<count($tax_details);$i++)
 {

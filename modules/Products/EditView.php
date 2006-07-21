@@ -121,8 +121,11 @@ if($focus->mode == 'edit')
 	$smarty->assign("MODE", $focus->mode);
 }
 
-//Tax handling - starts
-$tax_details = getAllTaxes();
+//Tax handling (get the available taxes only) - starts
+if($focus->mode == 'edit')
+	$tax_details = getTaxDetailsForProduct($focus->id,'available_associated');
+else
+	$tax_details = getAllTaxes('available');
 
 for($i=0;$i<count($tax_details);$i++)
 {
