@@ -53,6 +53,10 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 	$focus->user_name = "";
 	$mode='create';
+
+	//When duplicating the user the password fields should be empty
+	$focus->column_fields['user_password']='';
+	$focus->column_fields['confirm_password']='';
 }
 
 global $theme;
