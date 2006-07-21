@@ -198,6 +198,7 @@ $mod_strings = Array(
 'LBL_EVTDTL'=>'Event Details',
 'LBL_ACTION'=>'Actions',
 'LBL_CURSTATUS'=>'Current Status',
+'LBL_ASSINGEDTO'=>'Assigned To',
 'LBL_STATUS'=>'Status',
 'LBL_PENDING'=>'Pending',
 'LBL_MORE'=>'More',
