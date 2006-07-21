@@ -972,6 +972,12 @@ $app_strings = Array(
 'LBL_TAX_FOR_SHIPPING_AND_HANDLING'=>'Taxes For Shipping and Handling',
 'LBL_FINISH'=>'Finish',
 'LBL_IMAGE_DELETED'=>'Image Deleted',
+'LBL_TAX_MODE'=>'Tax Mode',
+'LBL_CLEAR_COMMENT'=>'Clear Comment',
+'LBL_ZERO_DISCOUNT'=>'Zero Discount',
+'LBL_OF_PRICE'=>'of Price',
+'LBL_DIRECT_PRICE_REDUCTION'=>'Direct Price Reduction',
+
 );
 
 

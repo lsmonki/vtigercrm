@@ -75,8 +75,11 @@ function displayCoords(event,obj,mode,curr_row)
 
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
-	<td colspan="6" class="detailedViewHeader">
+	<td colspan="5" class="detailedViewHeader">
 		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
+	</td>
+	<td class="detailedViewHeader" align="right">
+		<b>{$APP.LBL_TAX_MODE}</b>
 	</td>
 	<td class="detailedViewHeader">
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(this);">
@@ -119,7 +122,7 @@ function displayCoords(event,obj,mode,curr_row)
 			<td class="small" id="setComment">
 				<textarea id="comment1" name="comment1" class=small style="width:70%;height:40px"></textarea>
 				<br>
-				[<a href="javascript:;" onclick="getObj('comment1').value='';";>Clear Comment</a>]
+				[<a href="javascript:;" onclick="getObj('comment1').value='';";>{$APP.LBL_CLEAR_COMMENT}</a>]
 			</td>
 		   </tr>
 		</table>
@@ -150,15 +153,15 @@ function displayCoords(event,obj,mode,curr_row)
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
-						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1)">&nbsp; Zero Discount</td>
+						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1)">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 						<td class="lineOnTop">&nbsp;</td>
 					   </tr>
 					   <tr>
-						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp; % of Price</td>
+						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp; % {$APP.LBL_OF_PRICE}</td>
 						<td align="right"><input type="text" class="small" size="2" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1)">&nbsp;%</td>
 					   </tr>
 					   <tr>
-						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp;Direct Price Reduction</td>
+						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
 						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1)"></td>
 					   </tr>
 					</table>
@@ -237,15 +240,15 @@ function displayCoords(event,obj,mode,curr_row)
 				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
-				<td align="left" class="lineOnTop"><input type="radio" name="discount" checked onclick="setDiscount(this,'_final')">&nbsp; Zero Discount</td>
+				<td align="left" class="lineOnTop"><input type="radio" name="discount" checked onclick="setDiscount(this,'_final')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 				<td class="lineOnTop">&nbsp;</td>
 			   </tr>
 			   <tr>
-				<td align="left"><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp; % of Price</td>
+				<td align="left"><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp; % {$APP.LBL_OF_PRICE}</td>
 				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')">&nbsp;%</td>
 			   </tr>
 			   <tr>
-				<td align="left" nowrap><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp;Direct Price Reduction</td>
+				<td align="left" nowrap><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
 				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')"></td>
 			   </tr>
 			</table>
