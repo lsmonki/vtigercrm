@@ -71,11 +71,11 @@
 					<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
                           <tr>
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
-                            <td width="80%" class="small cellText"><strong>{$MAILSERVER}</strong></td>
+                            <td width="80%" class="small cellText"><strong>{$MAILSERVER}&nbsp;</strong></td>
                           </tr>
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
-                            <td class="small cellText">{$USERNAME}</td>
+                            <td class="small cellText">{$USERNAME}&nbsp;</td>
                           </tr>
                           <tr>
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>

@@ -87,11 +87,11 @@
 	         	    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
                         <tr>
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
-                            <td width="80%" class="small cellText"><strong>{$FTPSERVER}</strong></td>
+                            <td width="80%" class="small cellText"><strong>{$FTPSERVER}&nbsp;</strong></td>
                         </tr>
                         <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
-                            <td class="small cellText">{$FTPUSER}</td>
+                            <td class="small cellText">{$FTPUSER}&nbsp;</td>
                         </tr>
                         <tr>
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
