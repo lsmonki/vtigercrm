@@ -512,18 +512,18 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	$subject = '[From Portal][ Ticket ID : '.$ticket->id.' ] '.$title;
 	$contents = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
 
-	//get the contact email id who creates the ticket from vtiger_portal and use this email as from email id in email
+	//get the contact email id who creates the ticket from portal and use this email as from email id in email
 	$result = $adb->query("select email from vtiger_contactdetails where contactid=".$parent_id);
 	$contact_email = $adb->query_result($result,0,'email');
 	$from_email = $contact_email;
 
 	//send mail to assigned to user
 	$to_email = getUserEmailId('id',$user_id);
-	$adb->println("Send mail to the user who is the owner of the module about the vtiger_portal ticket");
+	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
 	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
 
-	//send mail to the customer(contact who creates the ticket from vtiger_portal)
-	$adb->println("Send mail to the customer(contact) who creates the vtiger_portal ticket");
+	//send mail to the customer(contact who creates the ticket from portal)
+	$adb->println("Send mail to the customer(contact) who creates the portal ticket");
 	$mail_status = send_mail('Contacts',$contact_email,'',$from_email,$subject,$contents);
 
 	$tickets_list =  get_tickets_list($user_name,$parent_id); 
@@ -712,7 +712,7 @@ function send_mail_for_password($mailid)
 		return "false@@@<b>Mail could not be sent</b>";
 	}
 	else
-		return "true@@@<b>Mail has been sent to your mail id with the customer vtiger_portal login details</b>";
+		return "true@@@<b>Mail has been sent to your mail id with the customer portal login details</b>";
 
 }
 
