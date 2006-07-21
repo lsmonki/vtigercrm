@@ -28,14 +28,6 @@
 		<td colspan="2"><img src="{$IMAGE_PATH}report_newHdr.gif" ></td>
 		</tr>
 		<tr>
-		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
-		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
-		&nbsp;<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
-		</td>
-		</tr>
-		<tr>
 		<td width="25%" valign="top" bgcolor="#CCCCCC" >
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 			<tr><td id="step1label" class="lvtSel" height="30" style="padding-left:10px;">1. {$MOD.LBL_REPORT_DETAILS}</td></tr>
@@ -59,7 +51,7 @@
 			<tr>
 			<td width="25%" align="right" style="padding-right:5px;"><b>{$MOD.LBL_REPORT_NAME} : </b></td>
 			<td width="75%" align="left" style="padding-left:5px;">
-			<input type="text" name="reportname" class="txtBox">
+			<input type="text" name="reportname" class="txtBox" value="{$REPORTNAME}">
 			</td>
 			</tr>
 			<tr>
@@ -67,7 +59,11 @@
 			<td width="75%" align="left" style="padding-left:5px;">
 			<select name="reportfolder" class="txtBox">
 			{foreach item=folder from=$REP_FOLDERS}
-			<option value="{$folder.id}">{$folder.name}</option>
+			{if $FOLDERID eq $folder.id}
+				<option value="{$folder.id}" selected>{$folder.name}</option>
+			{else}
+				<option value="{$folder.id}">{$folder.name}</option>
+			{/if}
 			{/foreach}
 			</select>
 			</td>
@@ -75,11 +71,11 @@
 			<tr>
 			<td align="right" style="padding-right:5px;" valign="top"><b>{$MOD.LBL_DESCRIPTION}: </b></td>
 			<td align="left" style="padding-left:5px;">
-			<textarea name="reportdes" class="txtBox" rows="5"></textarea>
+			<textarea name="reportdes" class="txtBox" rows="5">{$REPORTDESC}</textarea>
 			</td>
 			</tr>
 			<tr>
-			<td colspan="2" height="287">&nbsp;</td>
+			<td colspan="2" height="299">&nbsp;</td>
 			</tr>
 		</table>
 		</div>
@@ -97,7 +93,11 @@
 			<select name="secondarymodule" class="txtBox">
 			<option value="">--None--</option>
 			{foreach item=relmod from=$RELATEDMODULES}
-			<option value="{$relmod}">{$relmod}</option>
+			{if $SEC_MODULE eq $relmod}
+				<option selected value="{$relmod}">{$APP.$relmod}</option>
+			{else}
+				<option value="{$relmod}">{$APP.$relmod}</option>
+			{/if}
 			{/foreach}
 			</select>
 			</td>
@@ -111,8 +111,8 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
-		&nbsp;<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
+		<input type="button" name="back_rep" id="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
+		&nbsp;<input type="button" name="next" id="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
 		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
@@ -120,7 +120,14 @@
 	</table>
 </body>
 </html>
+{if $BACK_WALK eq 'true'}
 {literal}
 <script>
+	hide('step1');
+	show('step2');
+	document.getElementById('back_rep').disabled = false;
+	getObj('step1label').className = 'lvtCol'; 
+	getObj('step2label').className = 'lvtSel';
 </script>
 {/literal}
+{/if}

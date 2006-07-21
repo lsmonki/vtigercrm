@@ -27,19 +27,12 @@
 		<input type="hidden" name='module' value='Reports'/>
 		<input type="hidden" name='reload' value='true'/>
 		<input type="hidden" name='action' value='Save'/>
+		<input type="hidden" name='file' value=''/>
 		<input type="hidden" name='reportName' value="{$REPORT_NAME}"/>
 		<input type="hidden" name='reportDesc' value="{$REPORT_DESC}"/>
 		<input type="hidden" name='folder' value="{$FOLDERID}"/>
 		<tr>
 		<td colspan="2"><img src="{$IMAGE_PATH}report_newHdr.gif" ></td>
-		</tr>
-		<tr>
-		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
-		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
-		<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
-		</td>
 		</tr>
 		<tr>
 		<td width="25%" valign="top" bgcolor="#CCCCCC" >
@@ -105,8 +98,8 @@
 		<tr>
 		<td background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
-		<input type="button" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
+		<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
+		<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
 		&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
@@ -114,9 +107,19 @@
 	</table>
 </body>
 </html>
-{literal}
 <script>
+var finish_text = '  {$APP.LBL_FINISH}   ' 
+var next_text = '  {$APP.LNK_LIST_NEXT}  ';
+{literal}
 setObjects();
 hideTabs();
 </script>
 {/literal}
+<script>
+{if $BACK_WALK neq 'true'}
+	document.getElementById('back_rep').disabled = true;
+	var backwalk_flag = false;
+{else}
+	var backwalk_flag = true;
+{/if}
+</script>

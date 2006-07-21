@@ -18,7 +18,7 @@
 	</td>
 	</tr>
 	<tr><td colspan="2">
-	<div style="overflow:auto;height:416px">
+	<div style="overflow:auto;height:417px">
 	<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
 		<tbody>
 		<tr>	

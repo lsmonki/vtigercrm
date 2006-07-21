@@ -28,7 +28,7 @@
 			<tr>
 				<td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
+            <td style="padding-right:0px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
                         <td>&nbsp;</td>
             <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
                         <td>&nbsp;</td>
@@ -80,7 +80,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody>
 	<tr>
-	<td class="genHeaderSmall" nowrap align="left" width="30%">{$MOD.LBL_ADD_NEW_GROUP}</td>
+	<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_GROUP}</td>
 	<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
@@ -109,6 +109,17 @@
 {*<!-- Contents -->*}
 {literal}
 <script>
+function createrepFolder(oLoc,divid)
+{
+	{/literal}
+	$('editfolder_info').innerHTML=' {$MOD.LBL_ADD_NEW_GROUP} ';
+	{literal}
+	getObj('fldrsave_mode').value = 'save';	
+	$('folder_id').value = '';
+	$('folder_name').value = '';
+	$('folder_desc').value='';
+	fnvshobj(oLoc,divid);
+}
 function closeEditReport()
 {
 	$('folder_id').value = '';
@@ -116,7 +127,6 @@ function closeEditReport()
 	$('folder_desc').value='';
 	fninvsh('orgLay')
 }
-
 function DeleteFolder(id)
 {
 	var title = 'folder'+id;
@@ -183,6 +193,9 @@ function AddFolder()
 }
 function EditFolder(id,name,desc)
 {
+{/literal}
+	$('editfolder_info').innerHTML= ' {$MOD.LBL_RENAME_FOLDER} '; 	
+{literal}
 	getObj('folder_name').value = name;
 	getObj('folder_desc').value = desc;
 	getObj('folder_id').value = id;

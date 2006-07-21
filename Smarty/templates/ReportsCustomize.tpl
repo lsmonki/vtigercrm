@@ -17,9 +17,9 @@
 		<tr>
 		<td class="dvtCellLabel" style="padding:5px;" width="5%" align="right">
 		<td class="dvtCellLabel" style="padding:5px;" width="75%" align="right">
-		<input type="button" name="Edit" value=" Rename " class="classBtn" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
+		<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="classBtn" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
 		<td class="dvtCellLabel" style="padding:5px;" align="right">
-		<input type="button" name="delete" value=" Delete Folder " class="classBtn" onClick="DeleteFolder('{$reportfolder.id}');">
+		<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="classBtn" onClick="DeleteFolder('{$reportfolder.id}');">
 		</td>
 		</tr>
 		<tr>
@@ -31,15 +31,15 @@
 			<tbody>
 			<tr>
 			<td class="lvtCol" width="5%"><input type="checkbox" name="selectall" onclick='toggleSelect(this.checked,"selected_id{$reportfolder.id}")' value="checkbox" /></td>
-			<td class="lvtCol" width="35%">{$MOD.LBL_REPORT_NAME}</td>
-			<td class="lvtCol" width="50%">{$MOD.LBL_DESCRIPTION}</td>
+			<td class="lvtCol" align="left" width="35%">{$MOD.LBL_REPORT_NAME}</td>
+			<td class="lvtCol" align="left" width="50%">{$MOD.LBL_DESCRIPTION}</td>
 			<td class="lvtCol" width="10%">{$MOD.LBL_TOOLS}</td>
 			</tr>
 			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
 			<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
 			<td><input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
-			<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
-			<td>{$reportdetails.description}</td>
+			<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
+			<td align="left">{$reportdetails.description}</td>
 			<td align="center" nowrap>
 			{if $reportdetails.customizable eq '1'}
 			<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="Customize..." border="0"></a>
@@ -66,9 +66,9 @@
 
 <div style="display: none; left: 193px; top: 106px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
+	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;" align="left"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
 	<tr>
-	<td>
+	<td align="left">
 	{foreach item=folder from=$REPT_FOLDERS}
 	<a href="javascript:;" onClick="MoveReport('{$folder.id}','{$folder.name}');" class="reportMnu">- {$folder.name}</a>
 	{/foreach}
