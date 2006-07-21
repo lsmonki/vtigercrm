@@ -15,7 +15,17 @@ $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
 require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
-$mysel= $_GET['view'];
+$mysel= $_REQUEST['view'];
+$subtab = $_REQUEST['subtab'];
+$viewBox = $_REQUEST['viewBox'];
+if(empty($viewBox))
+{
+	$viewBox = 'hourview';
+}
+if(empty($subtab))
+{
+	$subtab = 'event';
+}
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 if(empty($mysel))
@@ -70,6 +80,6 @@ if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year'
         $calendar_arr['calendar']->add_Activities($current_user);
 }
 $calendar_arr['view'] = $mysel;
-calendar_layout($calendar_arr);
+calendar_layout($calendar_arr,$viewBox,$subtab);
 ?>
 
