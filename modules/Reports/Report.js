@@ -338,6 +338,7 @@ function saveAndRunReport()
         
 function changeSteps1() 
 {
+	
 	if(getObj('step5').style.display != 'none')
 	{
 		saveAndRunReport();
@@ -347,12 +348,22 @@ function changeSteps1()
 		{
 			if(getObj(divarray[i]).style.display != 'none')
 			{
+				if(i == 1 && selectedColumnsObj.options.length == 0)
+				{
+					alert("Selected Columns cannot be empty");
+					return false;
+				}	
+				if(divarray[i] == 'step4')
+				{
+					document.getElementById("next").value = finish_text;	
+				}
 				hide(divarray[i]);
 				show(divarray[i+1]);
 				tableid = divarray[i]+'label';
 				newtableid = divarray[i+1]+'label';
 				getObj(tableid).className = 'lvtCol'; 
 				getObj(newtableid).className = 'lvtSel';
+				document.getElementById('back_rep').disabled = false;
 				break;
 			}
 
@@ -363,13 +374,20 @@ function changeStepsback1()
 {
 	if(getObj('step1').style.display != 'none')
 	{
-		window.history.back();
+		document.NewReport.action.value='ReportsAjax';
+		document.NewReport.file.value='NewReport0';
+		document.NewReport.submit();
 	}else
 	{
 		for(i = 0; i < divarray.length ;i++)
 		{
 			if(getObj(divarray[i]).style.display != 'none')
 			{
+				if(divarray[i] == 'step2' && !backwalk_flag)
+				{
+					document.getElementById('back_rep').disabled = true;
+				}
+				document.getElementById("next").value = next_text+'>';	
 				hide(divarray[i]);
 				show(divarray[i-1]);
 				tableid = divarray[i]+'label';
@@ -393,7 +411,7 @@ function changeSteps()
 		{
 			hide('step1');
 			show('step2');
-			getObj('back_rep').disabled = false;
+			document.getElementById('back_rep').disabled = false;
 			getObj('step1label').className = 'lvtCol'; 
 			getObj('step2label').className = 'lvtSel';
 		}
@@ -407,7 +425,7 @@ function changeStepsback()
 {
 	hide('step2');
 	show('step1');
-	getObj('back_rep').disabled = true
+	document.getElementById('back_rep').disabled = true;
 	getObj('step1label').className = 'lvtSel'; 
 	getObj('step2label').className = 'lvtCol';
 }
@@ -422,5 +440,5 @@ function CreateReport(module)
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
-	window.open(winName, "ReportWindow","width=760px,height=685px,scrollbars=yes");
+	window.open(winName, "ReportWindow","width=740px,height=625px,scrollbars=yes");
 }
