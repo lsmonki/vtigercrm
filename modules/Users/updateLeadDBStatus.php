@@ -80,7 +80,8 @@ if($return_module == 'Calendar')
 	$year       = $_REQUEST['year'];
 	$type       = $_REQUEST['type'];
 	$viewOption = $_REQUEST['viewOption'];
-	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption);
+	$subtab     = $_REQUEST['subtab'];
+	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
 }
 else
 {
