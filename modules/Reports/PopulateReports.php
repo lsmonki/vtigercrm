@@ -214,7 +214,7 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'Potential Pipeline',
                        'reportfolder'=>'Potential Reports',
-                       'description'=>'Potential Pipline',
+                       'description'=>'Potential Pipeline',
                        'reporttype'=>'summary',
                        'sortid'=>'2','stdfilterid'=>'','advfilterid'=>''),
 
