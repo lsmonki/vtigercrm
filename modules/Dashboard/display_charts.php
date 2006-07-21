@@ -73,6 +73,9 @@ $tickets_by_account="select vtiger_troubletickets.*, vtiger_account.* from vtige
 //Query for tickets by contact
 $tickets_by_contact="select vtiger_troubletickets.*, vtiger_contactdetails.* from vtiger_troubletickets inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id";
 
+//Query for product by category
+
+$product_category = "select vtiger_products.*,vtiger_crmentity.deleted from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid where vtiger_crmentity.deleted=0";
 
 /**This function generates the security parameters for a given module based on the assigned profile 
 *Param $module - module name
@@ -97,6 +100,7 @@ function dashboard_check($module)
         * All Rights Reserved.
         * Contributor(s): ______________________________________..
  */
+
 $graph_array = Array(
 	  "leadsource" => $mod_strings['leadsource'],
           "leadstatus" => $mod_strings['leadstatus'],
@@ -222,7 +226,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['productcategory'];
                             $module="Products";
                             $where="";
-                            $query=$products_query." ".dashboard_check($module);
+                            $query=$product_category." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Charts for Products by Quantity in stock
