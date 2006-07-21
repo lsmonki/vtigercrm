@@ -57,7 +57,7 @@ if($result[$i]['ticketid'] == $ticketid)
 		<table width="95%"  border="0" cellspacing="0" cellpadding="5" align="center">
 		   <tr>
 			<td colspan="3" class="detailedViewHeader"><b>'.$mod_strings['LBL_TICKET_INFORMATION'].'</b></td>
-			<td class="detailedViewHeader"><div align="right">'.$ticket_close_link.'</div></td>	
+			<td class="detailedViewHeader"><div align="right">'.$ticket_close_link.'</div>&nbsp;</td>	
 		   </tr>  
 		   <tr>
 			<td class="dvtCellLabel" align="right">'.$mod_strings['LBL_TITLE'].'</td>
