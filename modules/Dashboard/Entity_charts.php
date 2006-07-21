@@ -413,7 +413,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 	}
 	else
 	{
-                 echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+                 echo $mod_strings['LBL_NO_DATA'];
 	}
 	
 }
