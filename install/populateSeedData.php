@@ -353,6 +353,7 @@ for($i=0; $i<10; $i++)
 	// Fill in a bogus address
 	$key = array_rand($street_address_array);
 	//$lead->address_street = $street_address_array[$key];
+	$lead->column_fields["lane"] = $street_address_array[$key];
 	$key = array_rand($city_array);
 	$lead->column_fields["city"] = $city_array[$key];
 	$lead->column_fields["state"] = "CA";
@@ -414,7 +415,7 @@ for($i=0; $i<10; $i++)
 
 	
 	// Fill in a bogus address
-	$vendor->column_fields["treet"] = $street_address_array[rand(0,$street_address_count-1)]; 
+	$vendor->column_fields["street"] = $street_address_array[rand(0,$street_address_count-1)]; 
 	$key = array_rand($city_array);
 	$vendor->column_fields["city"] = $city_array[$key];
 	$vendor->column_fields["state"] = "CA";
@@ -595,6 +596,19 @@ for($i=0;$i<5;$i++)
 	$quote->column_fields["carrier"] = $carrier_array[$i];
 	$quote->column_fields["inventorymanager"] = $invmgr_array[$i];
 
+	$quote->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
+	$quote->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
+	$quote->column_fields["bill_state"] = "CA";
+	$quote->column_fields["bill_code"] = rand(10000, 99999);
+	$quote->column_fields["bill_country"] = 'USA';	
+
+	$quote->column_fields["ship_street"] = $account->column_fields["bill_street"];
+	$quote->column_fields["ship_city"] = $account->column_fields["bill_city"];
+	$quote->column_fields["ship_state"] = $account->column_fields["bill_state"];
+	$quote->column_fields["ship_code"] = $account->column_fields["bill_code"];
+	$quote->column_fields["ship_country"] = $account->column_fields["bill_country"];	
+
+	
 	$quote->save("Quotes");
 
 	$quote_ids[] = $quote->id;
@@ -628,6 +642,19 @@ for($i=0;$i<5;$i++)
 	$so->column_fields["hdnGrandTotal"] = $sototal_array[$i];
 	$so->column_fields["carrier"] = $carrier_array[$i];
 
+	$so->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
+	$so->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
+	$so->column_fields["bill_state"] = "CA";
+	$so->column_fields["bill_code"] = rand(10000, 99999);
+	$so->column_fields["bill_country"] = 'USA';	
+
+	$so->column_fields["ship_street"] = $account->column_fields["bill_street"];
+	$so->column_fields["ship_city"] = $account->column_fields["bill_city"];
+	$so->column_fields["ship_state"] = $account->column_fields["bill_state"];
+	$so->column_fields["ship_code"] = $account->column_fields["bill_code"];
+	$so->column_fields["ship_country"] = $account->column_fields["bill_country"];	
+
+	
 	$so->save("SalesOrder");
 
 	$salesorder_ids[] = $so->id;
@@ -662,6 +689,19 @@ for($i=0;$i<5;$i++)
 	$po->column_fields["hdnGrandTotal"] = $pototal_array[$i];
 	$po->column_fields["carrier"] = $carrier_array[$i];
 	$po->column_fields["tracking_no"] = $trkno_array[$i];
+
+	$po->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
+	$po->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
+	$po->column_fields["bill_state"] = "CA";
+	$po->column_fields["bill_code"] = rand(10000, 99999);
+	$po->column_fields["bill_country"] = 'USA';	
+
+	$po->column_fields["ship_street"] = $account->column_fields["bill_street"];
+	$po->column_fields["ship_city"] = $account->column_fields["bill_city"];
+	$po->column_fields["ship_state"] = $account->column_fields["bill_state"];
+	$po->column_fields["ship_code"] = $account->column_fields["bill_code"];
+	$po->column_fields["ship_country"] = $account->column_fields["bill_country"];	
+		
 	
 	$po->save("PurchaseOrder");
 
@@ -694,6 +734,19 @@ for($i=0;$i<5;$i++)
 	$invoice->column_fields["subject"] = $isubj_array[$i];
 	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];	
 	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
+
+	$invoice->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
+	$invoice->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
+	$invoice->column_fields["bill_state"] = "CA";
+	$invoice->column_fields["bill_code"] = rand(10000, 99999);
+	$invoice->column_fields["bill_country"] = 'USA';	
+
+	$invoice->column_fields["ship_street"] = $account->column_fields["bill_street"];
+	$invoice->column_fields["ship_city"] = $account->column_fields["bill_city"];
+	$invoice->column_fields["ship_state"] = $account->column_fields["bill_state"];
+	$invoice->column_fields["ship_code"] = $account->column_fields["bill_code"];
+	$invoice->column_fields["ship_country"] = $account->column_fields["bill_country"];	
+	
 	
 	$invoice->save("Invoice");
 
