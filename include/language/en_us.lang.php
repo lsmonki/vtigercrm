@@ -970,7 +970,7 @@ $app_strings = Array(
 'LBL_NET_TOTAL'=>'Net Total',
 'LBL_SHIPPING_AND_HANDLING_CHARGES'=>'Shipping & Handling Charges',
 'LBL_TAX_FOR_SHIPPING_AND_HANDLING'=>'Taxes For Shipping and Handling',
-
+'LBL_FINISH'=>'Finish',
 
 );
 
