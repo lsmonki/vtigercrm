@@ -39,6 +39,17 @@ if($_REQUEST['reportmodule'] != '')
 	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['reportmodule']));
 	$list_report_form->assign("REP_MODULE",$_REQUEST['reportmodule']);
 }
+if($_REQUEST['reportName'] !='')
+{
+	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['primarymodule']));
+	$list_report_form->assign("REPORTNAME",$_REQUEST['reportName']);
+	$list_report_form->assign("REPORTDESC",$_REQUEST['reportDesc']);
+	$list_report_form->assign("FOLDERID",$_REQUEST['folder']);
+	$list_report_form->assign("REP_MODULE",$_REQUEST['primarymodule']);
+	$list_report_form->assign("SEC_MODULE",$_REQUEST['secondarymodule']);
+	$list_report_form->assign("BACK_WALK",'true');
+		
+}
 $repObj = new Reports ();
 $list_report_form->assign("REP_FOLDERS",$repObj->sgetRptFldr());
 $list_report_form->assign("IMAGE_PATH", $image_path);

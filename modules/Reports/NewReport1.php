@@ -59,6 +59,7 @@ if(isset($_REQUEST["record"]))
 	$ogReport = new Reports();
 	$ogReport->getPriModuleColumnsList($primarymodule);
 	$ogReport->getSecModuleColumnsList($secondarymodule);
+	$list_report_form->assign('BACK_WALK','true');
 }
 $list_report_form->assign('PRI_MODULE',$primarymodule);
 $list_report_form->assign('SEC_MODULE',$secondarymodule);
