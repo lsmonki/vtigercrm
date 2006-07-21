@@ -673,7 +673,10 @@ function delimage(id)
 			postBody: 'module=Contacts&action=ContactsAjax&file=DelImage&recordid='+id,
 			onComplete: function(response)
 				    {ldelim}
-					$("replaceimage").innerHTML=response.responseText;
+					if(response.responseText.indexOf("SUCESS")>-1)
+						$("replaceimage").innerHTML='{$APP.LBL_IMAGE_DELETED}';
+					else
+						alert("Error while Deleting")
 				    {rdelim}
 		{rdelim}
 	);

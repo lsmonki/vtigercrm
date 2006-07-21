@@ -443,7 +443,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$image_path = $adb->query_result($image_res,0,'path');
 			$image_name = $adb->query_result($image_res,0,'name');
 			$imgpath = $image_path.$image_id."_".$image_name;
-			$label_fld[] ='<img src="'.$imgpath.'" class="reflect" width="450" height="300" alt="">';
+			if($image_name != '')
+				$label_fld[] ='<img src="'.$imgpath.'" class="reflect" width="450" height="300" alt="">';
+			else
+				$label_fld[] = '';
 		}
 
 	}
