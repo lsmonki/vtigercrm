@@ -151,7 +151,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 ?>
        
 	<!-- Add Event DIV starts-->
-	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>	
+	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
@@ -404,15 +404,55 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 							<div id="repeatOptions" style="display:none">
 								<table border=0 cellspacing=0 cellpadding=2>
 								<tr>
-								<td><?echo $mod_strings['LBL_REPEATEVENT']?></td>
+								<!--td><?echo $mod_strings['LBL_REPEATEVENT']?></td>
 								<td><select class=small name="repeat_option">
 									<option value="Daily">Daily</option>
 									<option value="Weekly">Weekly</option>
 									<option value="Monthly">Monthly</option>
 									<option value="Yearly">Yearly</option>
-								</select></td>
+								</select></td-->
+								<td>Repeat once in every</td>
+								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
+								<td><select ><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
 								</tr>
 								</table>
+
+								<div id="repeatWeekUI" style="display:none;">
+								<table border=0 cellspacing=0 cellpadding=2>
+									<tr>
+										<td><input type="checkbox"></td><td>Sun</td>
+										<td><input type="checkbox"></td><td>Mon</td>
+										<td><input type="checkbox"></td><td>Tue</td>
+										<td><input type="checkbox"></td><td>Wed</td>
+										<td><input type="checkbox"></td><td>Thu</td>
+										<td><input type="checkbox"></td><td>Fri</td>
+										<td><input type="checkbox"></td><td>Sat</td>
+								</tr>
+								</table>
+								</div>
+
+								<div id="repeatMonthUI" style="display:none;">
+								<table border=0 cellspacing=0 cellpadding=2>
+									<tr>
+										<td>
+											<table border=0 cellspacing=0 cellpadding=2>
+												<tr>
+													<td><input type="radio" checked name="repeatMonth"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2"></td><td>day of the month</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table border=0 cellspacing=0 cellpadding=2>
+												<tr>
+													<td><input type="radio" name="repeatMonth"></td><td>on</td><td><select class=small><option>First</option><option>Last</option></td><td><select class=small><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								</div>
 								
 							</div>
 								
@@ -633,6 +673,7 @@ setObjects();
 	<input type="hidden" value="" name="year">
 	<input type="hidden" value="" name="view">
 	<input type="hidden" value="" name="module">
+	<input type="hidden" value="" name="subtab">
 	<input type="hidden" value="" name="user_id">
 	<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
