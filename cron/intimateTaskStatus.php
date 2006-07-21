@@ -45,7 +45,7 @@ while ($myrow = mysql_fetch_row($result))
   $status=$myrow[0];
   if($status != 'Completed')
   {
-	 sendmail($emailaddress,$emailaddress,"Task Not completed","Dear Sir/Madam,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br> Thank You<br><br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
+	 sendmail($emailaddress,$emailaddress,"Task Not completed","Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br> Thank You<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 }
@@ -65,7 +65,7 @@ while ($myrow = mysql_fetch_row($result))
   if($stage == 'Closed Won' &&  $amount > 10000)
   {
     
-    sendmail($emailaddress,$emailaddress,"Big Deal Closed Successfully!","Dear Team,<br><br>Time to Party! <br><br>Big Deal Closed!!!!<br> <br> Time to hit the dance floor!<br>",$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,"Big Deal Closed Successfully!","Dear Team,<br>Congratulations!Time to Party! <br>We closed a deal worth more than 10000!!!!<br> Time to hit the dance floor!<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -86,7 +86,7 @@ while ($myrow = mysql_fetch_row($result))
   if($status != 'Completed')
   {
 
-    sendmail($emailaddress,$emailaddress,"Pending Ticket notification","Dear Sir/Madam,<br><br> This is to bring to your kind attention that ticket number ".$ticketid ." is yet to be closed<br><br> Thank You,<br><br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,"Pending Ticket notification","Dear Admin,<br> This is to bring to your kind attention that ticket number ".$ticketid ." is yet to be closed<br> Thank You,<br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -106,7 +106,7 @@ while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
   $ticketid = $myrow[1];
-  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Dear Sir/Madam <br><br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br><br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
@@ -122,7 +122,7 @@ $result = mysql_query("SELECT productname FROM vtiger_products where start_date 
 while ($myrow = mysql_fetch_row($result))
 {
   $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support starting","Support Starts for ".$productname ."\n Congratulations! Your support starts from today",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Support starting","Hello! Support Starts for ".$productname ."\n Congratulations! Your support starts from today",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
@@ -139,7 +139,7 @@ $result = mysql_query("SELECT productname from vtiger_products where expiry_date
 while ($myrow = mysql_fetch_row($result))
 {
   $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support Ending","Dear Sir/Madam,<br><br> This is to inform you that the support for ".$productname ."\n ends shortly. Kindly renew your support please<br> Thank You,<br><br> Regards,<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Support Ending","Dear Admin,<br> This is to inform you that the support for ".$productname ."\n ends shortly. Kindly renew your support please<br>Regards,<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
