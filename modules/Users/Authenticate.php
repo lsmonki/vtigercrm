@@ -40,10 +40,23 @@ if($focus->is_authenticated())
 {
 
 	//Inserting entries for audit trail during login
-	$date_var = date('YmdHis');
-	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate',0,$date_var)";
-	$adb->query($query);
 
+	$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
+
+	$result = $adb->query($qry);
+	$server = $adb->query_result($result,0,'server');
+	
+	if($server == 'enabled')
+	{
+		if($record == '')
+			$auditrecord = '';						
+		else
+			$auditrecord = $record;	
+	
+		$date_var = date('YmdHis');
+		$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";
+		$adb->query($query);
+	}
 
 	
 	// Recording the login info
