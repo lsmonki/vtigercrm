@@ -608,12 +608,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 						if($name == "First Name")
 						{
 							$first_name = $adb->query_result($list_result,$i-1,"firstname");
-							$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$first_name.'</a>';
+							$value = '<a href="index.php?action=DetailView&module='.$module.'&parenttab='.$tabname.'&record='.$entity_id.'">'.$first_name.'</a>';
 
 						}
 
@@ -634,7 +634,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								if(isPermitted("Activities",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
@@ -681,13 +681,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						else
 							$product_name = '';
 
-						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+						$value = '<a href="index.php?module=Products&action=DetailView&parenttab='.$tabname.'&record='.$product_id.'">'.$product_name.'</a>';
 					}
 					elseif($module == 'Quotes' && $name == 'Potential Name')
 					{
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
 						$potential_name = getPotentialName($potential_id);
-						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.$potential_name.'</a>';
 					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
 					{
