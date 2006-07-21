@@ -65,7 +65,8 @@ if($returnmodule == 'Emails')
 }
 elseif($returnmodule == 'Calendar')
 {
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']);
+	$subtab = $_REQUEST['subtab'];
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab);
 }
 			
 elseif($returnmodule!='Faq')
