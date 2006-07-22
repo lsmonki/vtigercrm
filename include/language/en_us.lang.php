@@ -977,6 +977,7 @@ $app_strings = Array(
 'LBL_ZERO_DISCOUNT'=>'Zero Discount',
 'LBL_OF_PRICE'=>'of Price',
 'LBL_DIRECT_PRICE_REDUCTION'=>'Direct Price Reduction',
+'LBL_INDIVIDUAL'=>'Individual',
 
 );
 
