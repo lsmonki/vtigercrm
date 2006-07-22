@@ -2915,6 +2915,22 @@ border-width:1px;
 	border-bottom:1px solid #eeeeee;
 }
 
+/* Table Definitions */
+.crmTable {
+	border:1px solid #dadada;
+}
+.crmTableColHeading {
+	background-color:#CCCCCC;
+	border-left:1px solid #eaeaea;
+	border-top:1px solid #eaeaea;
+	border-right:1px solid #999999;
+	border-bottom:1px solid #999999;
+}
+.crmTableRow {
+	border-bottom:1px dotted #dadada;
+	border-right:1px dotted #dadada
+}
+
 /* Inventory */
 
 .lineOnTop {
