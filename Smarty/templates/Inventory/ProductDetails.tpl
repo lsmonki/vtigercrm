@@ -23,7 +23,7 @@ if(!e)
   
 function displayCoords(event,obj,mode,curr_row) 
 {ldelim}
-	if(mode != 'discount_final')
+	if(mode != 'discount_final' && mode != 'sh_tax_div_title' && mode != 'group_tax_div_title')
 	{ldelim}
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
@@ -41,6 +41,14 @@ function displayCoords(event,obj,mode,curr_row)
 	else if(mode == 'discount_final')
 	{ldelim}
 		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML;
+	{rdelim}
+	else if(mode == 'sh_tax_div_title')
+	{ldelim}
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value;
+	{rdelim}
+	else if(mode == 'group_tax_div_title')
+	{ldelim}
+		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+document.getElementById("netTotal").innerHTML;
 	{rdelim}
 
 	var move_Element = document.getElementById(obj).style;
@@ -83,8 +91,8 @@ function displayCoords(event,obj,mode,curr_row)
 	</td>
 	<td class="detailedViewHeader">
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(this);">
-			<OPTION value="individual" selected>Individual</OPTION>
-			<OPTION value="group">Group</OPTION>
+			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
+			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
 		</select>
 	</td>
    </tr>
@@ -100,15 +108,24 @@ function displayCoords(event,obj,mode,curr_row)
 	<td width=12% nowrap class="small crmTableColHeading" align="right"><b>{$APP.LBL_TOTAL}</b></td>
 	<td width=13% valign="top" class="small crmTableColHeading" align="right"><b>{$APP.LBL_NET_PRICE}</b></td>
    </tr>
+
+
+
+
+
+
+<!-- Following code is added for form the first row. Based on these we should form additional rows using script -->
+
    <!-- Product Details First row - Starts -->
    <tr valign="top" id="row1">
 
-	<!-- row1, column1 - delete link-->
+	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">&nbsp;
 		<input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1">
 	</td>
+	<!-- column 1 - delete link - ends -->
 
-	<!-- row1, column1 - Product Name-->
+	<!-- column 2 - Product Name - starts -->
 	<td class="crmTableRow small lineOnTop">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
 		   <tr>
@@ -127,13 +144,21 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		</table>
 	</td>
-	<!-- row1, column2 - Quantity in Stock -->
+	<!-- column 2 - Product Name - ends -->
+
+	<!-- column 3 - Quantity in Stock - starts -->
 	<td id="qtyInStock1" class="crmTableRow small lineOnTop" >{$QTY_IN_STOCK}</td>
-	<!-- row1, column 3 - Quantity -->
+	<!-- column 3 - Quantity in Stock - ends -->
+
+
+	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop">
 		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this); loadTaxes_Ajax(this);" value=""/>
 	</td>
-	<!-- row1, column 4 - List Price, Discount, Total After Discount and Tax -->
+	<!-- column 4 - Quantity - ends -->
+
+
+	<!-- column 5 - List Price with Discount, Total After Discount and Tax as table - starts -->
 	<td class="crmTableRow small lineOnTop" align="right">
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
@@ -185,7 +210,10 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		</table> 
 	</td>
-	<!-- row1, column 5 - Product Total -->
+	<!-- column 5 - List Price with Discount, Total After Discount and Tax as table - ends -->
+
+
+	<!-- column 6 - Product Total - starts -->
 	<td class="crmTableRow small lineOnTop" align="right">
 		<table width="100%" cellpadding="5" cellspacing="0">
 		   <tr>
@@ -202,11 +230,26 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		</table>
 	</td>
-	<!-- row1, column 6 - Net Price -->
+	<!-- column 6 - Product Total - ends -->
+
+
+	<!-- column 7 - Net Price - starts -->
 	<td id="netPrice1"  valign="bottom" class="crmTableRow small lineOnTop" align="right"><b>&nbsp;</b></td>
+	<!-- column 7 - Net Price - ends -->
+
    </tr>
    <!-- Product Details First row - Ends -->
 </table>
+<!-- Upto this has been added for form the first row. Based on these above we should form additional rows using script -->
+
+
+
+
+
+
+
+
+
 
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable">
    <!-- Add Product Button -->
@@ -222,10 +265,11 @@ function displayCoords(event,obj,mode,curr_row)
 
 
 
+
    <!-- Product Details Final Total Discount, Tax and Shipping&Hanling  - Starts -->
    <tr valign="top">
 	<td width="88%" class="crmTableRow small lineOnTop" align="right"><b>{$APP.LBL_NET_TOTAL}</b></td>
-	<td width="12%" id="netTotal" class="crmTableRow small lineOnTop" align="right"><b>&nbsp;</b></td>
+	<td width="12%" id="netTotal" class="crmTableRow small lineOnTop" align="right">0.00</td>
    </tr>
 
    <tr valign="top">
@@ -259,7 +303,38 @@ function displayCoords(event,obj,mode,curr_row)
    </tr>
 
    <tr id="group_tax_row" valign="top" class="TaxHide">
-	<td class="crmTableRow small lineOnTop" align="right">(+)&nbsp;<b><a href="#">{$APP.LBL_TAX}</a></td>
+	<td class="crmTableRow small lineOnTop" align="right">
+		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'group_tax_div','group_tax_div_title',''); calcGroupTax();" >{$APP.LBL_TAX}</a></b>
+				<!-- Pop Div For Group TAX -->
+				<div class="discountUI" id="group_tax_div">
+					Group Tax
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+					   <tr>
+						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
+						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
+					   </tr>
+
+					{foreach item=tax_detail name=group_tax_loop key=loop_count from=$GROUP_TAXES}
+
+					   <tr>
+						<td align="left" class="lineOnTop">
+							<input type="text" class="small" size="3" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
+						</td>
+						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
+						<td align="right" class="lineOnTop">
+							<input type="text" class="small" size="4" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
+						</td>
+					   </tr>
+
+					{/foreach}
+					<input type="hidden" id="group_tax_count" value="{$smarty.foreach.group_tax_loop.iteration}">
+
+					</table>
+
+				</div>
+				<!-- End Popup Div Group Tax -->
+
+	</td>
 	<td id="tax_final" class="crmTableRow small lineOnTop" align="right">0.00</td>
    </tr>
    <tr valign="top">
@@ -270,16 +345,45 @@ function displayCoords(event,obj,mode,curr_row)
 		<input id="shipping_handling_charge" name="shipping_handling_charge" type="text" class="small" style="width:40px" align="right" value="0.00">
 	</td>
    </tr>
+
    <tr valign="top">
 	<td class="crmTableRow small" align="right">
-		(+)&nbsp;<b><a href="#">{$APP.LBL_TAX_FOR_SHIPPING_AND_HANDLING} </a></b>
+		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'shipping_handling_div','sh_tax_div_title',''); calcSHTax();" >{$APP.LBL_TAX_FOR_SHIPPING_AND_HANDLING} </a></b>
+
+				<!-- Pop Div For Shipping and Handlin TAX -->
+				<div class="discountUI" id="shipping_handling_div">
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+					   <tr>
+						<td id="sh_tax_div_title" colspan="2" nowrap align="left" ></td>
+						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
+					   </tr>
+
+					{foreach item=tax_detail name=sh_loop key=loop_count from=$SH_TAXES}
+
+					   <tr>
+						<td align="left" class="lineOnTop">
+							<input type="text" class="small" size="3" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcSHTax()">&nbsp;%
+						</td>
+						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
+						<td align="right" class="lineOnTop">
+							<input type="text" class="small" size="4" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
+						</td>
+					   </tr>
+
+					{/foreach}
+					<input type="hidden" id="sh_tax_count" value="{$smarty.foreach.sh_loop.iteration}">
+
+					</table>
+				</div>
+				<!-- End Popup Div for Shipping and Handling TAX -->
+
 	</td>
 	<td id="shipping_handling_tax" class="crmTableRow small" align="right">0.00</td>
    </tr>
    <tr valign="top">
 	<td class="crmTableRow small" align="right">
 		{$APP.LBL_ADJUSTMENT}
-		<select name="adjustmentType" class=small>
+		<select id="adjustmentType" name="adjustmentType" class=small>
 			<option value="+">Add</option>
 			<option value="-">Deduct</option>
 		</select>

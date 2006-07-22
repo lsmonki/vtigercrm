@@ -287,7 +287,14 @@ function calcTotal(currObj) {
 		//loadTaxes_Ajax(currObj)
 		//calcDiscountTotal(currObj)
 
-		var netprice = totalAfterDiscount+eval(document.getElementById("taxTotal"+rowId).innerHTML);
+		var netprice = 0.00;
+		var tax_type = document.getElementById("taxtype").value;
+		//if the tax type is individual then add the tax with net price
+		if(tax_type == 'individual')
+			netprice = totalAfterDiscount+eval(document.getElementById("taxTotal"+rowId).innerHTML);
+		else
+			netprice = totalAfterDiscount;
+
 		getObj("netPrice"+rowId).innerHTML=roundValue(netprice.toString())
 
 	}
@@ -297,6 +304,8 @@ function calcTotal(currObj) {
 function calcGrandTotal() {
 	var netTotal = 0.0, grandTotal = 0.0;
 	var discount_final = 0.0, finalTax = 0.0, sh_amount = 0.0, sh_tax = 0.0, adjustment = 0.0;
+
+	var taxtype = document.getElementById("taxtype").value;
 
 	var max_row_count = 2;
 	for (var i=1;i<max_row_count;i++) 
@@ -316,18 +325,23 @@ function calcGrandTotal() {
 	//	txtAdjVal = parseFloat(getObj("txtAdjustment").value);
 
 	discount_final = document.getElementById("discount_final").innerHTML
+
 	//get the final tax based on the group or individual tax selection
-	//if()
-	finalTax = document.getElementById("tax_final").innerHTML
+	var taxtype = document.getElementById("taxtype").value;
+	if(taxtype = 'group')
+		finalTax = document.getElementById("tax_final").innerHTML
 
 	sh_amount = getObj("shipping_handling_charge").value
 	sh_tax = document.getElementById("shipping_handling_tax").innerHTML
+
 	adjustment = getObj("adjustment").value
 
 	//Add or substract the adjustment based on selection
-	//if()
-
-	grandTotal = eval(netTotal)-eval(discount_final)+eval(finalTax)+eval(sh_amount)+eval(sh_tax)+eval(adjustment)
+	adj_type = document.getElementById("adjustmentType").value;
+	if(adj_type == '+')
+		grandTotal = eval(netTotal)-eval(discount_final)+eval(finalTax)+eval(sh_amount)+eval(sh_tax)+eval(adjustment)
+	else
+		grandTotal = eval(netTotal)-eval(discount_final)+eval(finalTax)+eval(sh_amount)+eval(sh_tax)-eval(adjustment)
 
 	document.getElementById("grandTotal").innerHTML = roundValue(grandTotal.toString())
 }
@@ -635,6 +649,39 @@ function calcCurrentTax(tax_name, curr_row, tax_row)
 		tax_total = tax_total + eval(new_amount_lbl[i].value);
 	}
 	document.getElementById("taxTotal"+curr_row).innerHTML = tax_total;
+}
+
+function calcGroupTax()
+{
+	var group_tax_count = document.getElementById("group_tax_count").value;
+	var net_total = document.getElementById("netTotal").innerHTML;
+	var group_tax_total = 0.00, tax_amount=0.00;
+
+	for(var i=1;i<=group_tax_count;i++)
+	{
+		tax_amount = eval(net_total)*eval(document.getElementById("group_tax_percentage"+i).value)/eval(100);
+		document.getElementById("group_tax_amount"+i).value = tax_amount;
+		group_tax_total = eval(group_tax_total) + eval(tax_amount);
+	}
+
+	document.getElementById("tax_final").innerHTML = group_tax_total;
+}
+
+function calcSHTax()
+{
+	var sh_tax_count = document.getElementById("sh_tax_count").value;
+	var sh_charge = document.getElementById("shipping_handling_charge").value;
+	var sh_tax_total = 0.00, tax_amount=0.00;
+
+	for(var i=1;i<=sh_tax_count;i++)
+	{
+		tax_amount = eval(sh_charge)*eval(document.getElementById("sh_tax_percentage"+i).value)/eval(100);
+		document.getElementById("sh_tax_amount"+i).value = tax_amount;
+		sh_tax_total = eval(sh_tax_total) + eval(tax_amount);
+	}
+
+	document.getElementById("shipping_handling_tax").innerHTML = sh_tax_total;
+
 }
 
 function calculateInventoryTotal(currObj)
