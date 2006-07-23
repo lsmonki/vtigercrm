@@ -15,8 +15,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contact_id','product_id');
-$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname');
+$column_array=array('accountid','contact_id','product_id','campaignid');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
@@ -261,7 +261,7 @@ function get_usersid($table_name,$column_name,$search_string)
 	else
 	{
 		//$where="$table_name.$column_name =''";
-		$where="groups.groupname like '%".$search_string."%' ";
+		$where="vtiger_groups.groupname like '%".$search_string."%' ";
 	}	
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
@@ -331,14 +331,30 @@ function BasicSearch($module,$search_field,$search_string)
 		$where="$table_name.$column_name like '%".$search_string."%'";	
 	}else
 	{	
-		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and fieldname='".$search_field."'";
+		//Check added for tickets by accounts/contacts in dashboard
+		$search_field_first = $search_field;
+		if($module=='HelpDesk' && ($search_field == 'contactid' || $search_field == 'account_id'))
+		{
+			$search_field = "parent_id";
+		}
+		//Check ends
+		
+		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
 		{
 			$column_name=$adb->query_result($result,0,'columnname');
-			$table_name=$adb->query_result($result,0,'tablename');
 
+			//Check added for tickets by accounts/contacts in dashboard
+			if ($column_name == 'parent_id')
+		        {
+				if ($search_field_first	== 'account_id') $search_field_first = 'accountid';
+				if ($search_field_first	== 'contactid') $search_field_first = 'contact_id';
+				$column_name = $search_field_first;
+			}
+			//Check ends
+			$table_name=$adb->query_result($result,0,'tablename');
 			if($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);

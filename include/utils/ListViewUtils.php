@@ -1583,6 +1583,8 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 				AND vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid
+			LEFT JOIN vtiger_products 
+				ON vtiger_products.productid = vtiger_troubletickets.product_id 
 			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{

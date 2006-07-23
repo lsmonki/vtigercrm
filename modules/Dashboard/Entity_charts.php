@@ -280,6 +280,9 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						$graph_for="ticketpriorities";
 					}
 
+					//added to get valid url in dashbord for tickets by team
+					if($graph_for == "ticketgroupname") $graph_for = "smownerid";
+
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
 						$link_val="index.php?module=".$name."&action=index&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;

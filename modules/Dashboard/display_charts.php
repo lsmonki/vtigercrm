@@ -40,8 +40,8 @@ $leads_query="select vtiger_crmentity.crmid,vtiger_crmentity.createdtime, vtiger
 $account_query="select vtiger_crmentity.*, vtiger_account.*, vtiger_accountscf.* from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid inner join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid inner join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid left join vtiger_accountgrouprelation on vtiger_accountscf.accountid=vtiger_accountgrouprelation.accountid left join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
 
 
-//Query For Products
-$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.*, vtiger_poproductrel.purchaseorderid, vtiger_quotesproductrel.quoteid, vtiger_invoiceproductrel.invoiceid,vtiger_productcf.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_poproductrel on vtiger_products.productid = vtiger_poproductrel.productid left join vtiger_quotesproductrel on vtiger_products.productid = vtiger_quotesproductrel.productid left join vtiger_invoiceproductrel on vtiger_products.productid = vtiger_invoiceproductrel.productid left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid where vtiger_crmentity.deleted=0 ";
+//Query For Products qty in stock
+$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_products.productid = vtiger_inventoryproductrel.id where vtiger_crmentity.deleted=0 ";
 
 //Query for Potential
 $potential_query= "select  vtiger_crmentity.*,vtiger_account.accountname, vtiger_potential.*, vtiger_potentialscf.*, vtiger_potentialgrouprelation.groupname from vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_potential.accountid = vtiger_account.accountid inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
@@ -232,7 +232,7 @@ $graph_array = Array(
 		    //Charts for Products by Quantity in stock
 		    elseif (($type == "productbyqtyinstock") && (getFieldVisibilityPermission('Products',$user_id,'qtyinstock') == "0"))
 		    {
-			$graph_by="productid";
+			$graph_by="productname";
 			    $graph_title=$mod_strings['productbyqtyinstock'];
 			    $module="Products";
 			    $where="";
@@ -403,8 +403,8 @@ $graph_array = Array(
 		    //Campaigns by Contact
 		    elseif (($type == "contactbycampaign") && (getFieldVisibilityPermission('Campaigns',$user_id,'campaignid') == "0"))
 		    {
-			    $graph_by="campaignid";
-			    $graph_title=$mod_strings['ticketsbycampaign'];
+			    $graph_by="campaignname";
+			    $graph_title=$mod_strings['contactbycampaign'];
 			    $module="Campaigns";
 			    $where="";
 			    $query=$campaign_query." ".dashboard_check($module);
