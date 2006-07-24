@@ -149,7 +149,6 @@ $mod_strings = Array(
 'Products related to Contacts'=>'Products related to Contacts',
 'Open Quotes'=>'Open Quotes',
 'Quotes Detailed Report'=>'Quotes Detailed Report',
-'Quotes detailed report'=>'Quotes detailed report',
 'Quotes that are Open'=>'Quotes that are Open',
 'PurchaseOrder by Contacts'=>'PurchaseOrder by Contacts',
 'PurchaseOrder Detailed Report'=>'PurchaseOrder Detailed Report',
