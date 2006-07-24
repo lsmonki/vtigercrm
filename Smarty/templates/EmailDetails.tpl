@@ -45,13 +45,13 @@
 		{if $elements.fldname eq 'subject'}
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	{if $EMAIL_FLAG neq 'WEBMAIL'}
-	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
-	<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>{$CC_MAIL}&nbsp;</td></tr>
-	<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td>&nbsp;</td><td>{$BCC_MAIL}&nbsp;</td></tr>
+	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>
+	<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td align="left">&nbsp;</td><td align="left">{$CC_MAIL}&nbsp;</td></tr>
+	<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td align="left">&nbsp;</td><td align="left">{$BCC_MAIL}&nbsp;</td></tr>
 	{else}
-	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
+	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>
 	{/if}
-	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$elements.value}&nbsp;</td></tr>
+	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td align="left">&nbsp;</td><td align="left">{$elements.value}&nbsp;</td></tr>
 			<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 		</table>
 		{elseif $elements.fldname eq 'description'}
