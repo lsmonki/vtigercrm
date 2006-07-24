@@ -15,6 +15,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 //Constructing the Role Array
 $roleDetails=getAllRoleDetails();
+//Removing the Organisation role from the role array
+unset($roleDetails['H1']);
 $output='';
 
 //Constructing the Group Array
