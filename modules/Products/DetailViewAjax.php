@@ -12,7 +12,7 @@
 require_once('include/logging.php');
 require_once('modules/Products/Product.php');
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb,$current_user;
 
 $local_log =& LoggerManager::getLogger('ProductsAjax');
 
@@ -28,6 +28,10 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj = new Product();
 		$modObj->retrieve_entity_info($crmid,"Products");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
+		if($fieldname == 'unit_price')//unit price converted to dollar value while saving
+		{
+			$modObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);	
+		}
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";
 		$modObj->save("Products");
