@@ -1104,7 +1104,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,'currency_name');
 			$currency_id=$adb->query_result($pickListResult,$j,'id');
-			if($value == $pickListValue)
+			if($value == $currency_id)
 			{
 				$chk_val = "selected";	
 				$found = true;
