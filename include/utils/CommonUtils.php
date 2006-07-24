@@ -1896,7 +1896,7 @@ function sendNotificationToOwner($module,$focus)
 		$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
 		$description .= 'The '.$mod_name.' has been assigned to you.';
 	}
-	$description .= 'The '.$mod_name.' details are:<br><br>';
+	$description .= '<br>The '.$mod_name.' details are:<br><br>';
 	$description .= $mod_name.' Id : '.$focus->id.'<br>';
 
 	foreach($object_column_fields as $fieldname => $fieldlabel)
@@ -1904,7 +1904,7 @@ function sendNotificationToOwner($module,$focus)
 		$description .= $fieldlabel.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
 	}
 
-	$description .= '<br><br>Thanks <br>'.$current_user->user_name;
+	$description .= '<br><br>Thank You <br>';
 	$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
 
 	$log->debug("Exiting sendNotificationToOwner method ...");
