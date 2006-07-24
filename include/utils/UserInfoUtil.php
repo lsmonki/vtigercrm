@@ -1446,8 +1446,15 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 	//Checking for Action Permission
-	//echo '******* '.$actionid.'  *********** '.$profileActionPermission[$tabid][$actionid];
-	if($profileActionPermission[$tabid][$actionid] != 0)
+	//echo '******* '.$actionid.'  ***********&'.$profileActionPermission[$tabid][$actionid].'&';
+	if($profileActionPermission[$tabid][$actionid] == '')
+	{
+		$permission = "yes";
+		$log->debug("Exiting isPermitted method ...");
+		return $permission;
+	}	
+	
+	if($profileActionPermission[$tabid][$actionid] != 0 && $profileActionPermission[$tabid][$actionid] != '')
 	{
 		$permission = "no";
 		$log->debug("Exiting isPermitted method ...");
@@ -1471,6 +1478,7 @@ function isPermitted($module,$actionname,$record_id='')
 			return $permission;			
 		}
 	}
+	
 	//Retreiving the RecordOwnerId
 	$recOwnType='';
 	$recOwnId='';	
@@ -1516,7 +1524,7 @@ function isPermitted($module,$actionname,$record_id='')
 			return $permission;
 		}	 
 	}	
-
+	
 	//Checking for Default Org Sharing permission
 	if($others_permission_id == 0)
 	{
