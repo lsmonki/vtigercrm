@@ -447,7 +447,7 @@ elseif($mode=='edit')
 			$readonly = '';
 			$field=array();
 
-			if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -491,7 +491,7 @@ elseif($mode=='create')
 				$readonly = '';
 				$field=array();
 
-				if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -532,7 +532,7 @@ elseif($mode=='create')
 				$readonly = '';
 				$field=array();
 
-				if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
