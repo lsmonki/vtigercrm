@@ -249,8 +249,17 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <input type="hidden" id="rel_module_lists" name="rel_module_lists" value="'.$relatedmodule.'">
 <div id="sharingRule" class="fixedLay">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
-<tr>
-<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$app_strings[$sharing_module].' - ';
+<tr>';
+
+if($sharing_module == 'Accounts')
+{
+	$display_module = $app_strings['Accounts'].' & '.$app_strings['Contacts'];	
+}
+else
+{
+	$display_module = $app_strings[$sharing_module];	
+}
+$output .= '<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$display_module.' - ';
 if($mode == 'edit')
     	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
 else
@@ -260,7 +269,7 @@ $output .= '<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
-<td><b>'.$mod_strings[LBL_STEP].' 1 : '.$app_strings[$sharing_module].' '.$app_strings[LBL_LIST_OF].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
+<td><b>'.$mod_strings[LBL_STEP].' 1 : '.$display_module.' '.$app_strings[LBL_LIST_OF].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
 <td>&nbsp;</td>
 
 </tr>
