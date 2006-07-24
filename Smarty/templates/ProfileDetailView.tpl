@@ -160,16 +160,16 @@
 					{$TAB_PRIV[$tabid][1]}
 			          </div></td>
 			          <td class="small cellLabel" width="40%"><p>{$APP[$modulename]}</p></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][1]}
 			          </div></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][3]}
 			          </div></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
-			          <td class="small cellText" width="22%"><div align="center">
+			          <td class="small cellText" width="22%">&nbsp;<div align="center">
 				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
 				<img src="{$IMAGE_PATH}showDown.gif" alt="{$CMOD.LBL_SHOW_FIELDS}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
 				{/if}

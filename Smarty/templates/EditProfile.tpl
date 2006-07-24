@@ -171,16 +171,16 @@
 					{$TAB_PRIV[$tabid][1]}
 			          </div></td>
 			          <td class="small cellLabel" width="40%"><p>{$APP[$modulename]}</p></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][1]}
 			          </div></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][3]}
 			          </div></td>
-			          <td class="small cellText" width="15%"><div align="center">
+			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
-			          <td class="small cellText" width="22%"><div align="center">
+			          <td class="small cellText" width="22%">&nbsp;<div align="center">
 				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
 				<img src="{$IMAGE_PATH}showDown.gif" id="img_{$tabid}" alt="{$CMOD.LBL_SHOW_FIELDS}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
 				{/if}
@@ -317,7 +317,9 @@ function showAllImages()
 {
 	for(var j=0;j < Imagid_array.length;j++)
 	{
-		$(Imagid_array[j]).style.display = 'block';	
+
+		if(typeof($(Imagid_array[j])) != 'undefined')
+			$(Imagid_array[j]).style.display = 'block';	
 	}
 }
 function invokeedit_all()
@@ -359,7 +361,8 @@ function unSelectView(id)
 	{
 		var imageid = 'img_'+id;
 		var viewid = 'tab_chk_4_'+id;	
-		$(imageid).style.display = 'block';
+		if(typeof($(imageid)) != 'undefined')
+			$(imageid).style.display = 'block';
 		$('tab_chk_com_'+id).checked = true; 
 	}
 }
@@ -373,7 +376,8 @@ function unSelectCreate(id)
 	{
 		var imageid = 'img_'+id;
 		var viewid = 'tab_chk_4_'+id;	
-		$(imageid).style.display = 'block';
+		if(typeof($(imageid)) != 'undefined')
+			$(imageid).style.display = 'block';
 		$('tab_chk_com_'+id).checked = true;
 		$(viewid).checked = true;
 	}
@@ -387,7 +391,8 @@ function unSelectDelete(id)
 	{
 		var imageid = 'img_'+id;
 		var viewid = 'tab_chk_4_'+id;	
-		$(imageid).style.display = 'block';
+		if(typeof($(imageid)) != 'undefined')
+			$(imageid).style.display = 'block';
 		$('tab_chk_com_'+id).checked = true;
 		$(viewid).checked = true;
 	}
@@ -404,14 +409,16 @@ function hideTab(id)
 	{
 		unselect_view_all();
 		unselect_edit_all();
-		$(imageid).style.display = 'none';
+		if(typeof($(imageid)) != 'undefined')
+			$(imageid).style.display = 'none';
 		$(contid).className = 'hideTable';
 		$(createid).checked = false;
 		$(deleteid).checked = false;
 		$(viewid).checked = false;
 	}else
 	{
-		$(imageid).style.display = 'block';
+		if(typeof($(imageid)) != 'undefined')
+			$(imageid).style.display = 'block';
 		$(createid).checked = true;
 		$(deleteid).checked = true;
 		$(viewid).checked = true;
