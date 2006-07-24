@@ -25,6 +25,6 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 <script language="javascript">
 window.opener.document.getElementById('subject').value = window.document.frmrepstr.subject.value
 window.opener.document.getElementById('description').value = window.document.frmrepstr.repstr.value
-opener.oFCKeditor.ReplaceTextarea();
+window.opener.oFCKeditor.ReplaceTextarea();
 window.close();
 </script>

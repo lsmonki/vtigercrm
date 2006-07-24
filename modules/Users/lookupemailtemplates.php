@@ -46,7 +46,7 @@ do
 {
   printf("<tr class='lvtColData' onmouseover=\"this.className='lvtColDataHover'\" onmouseout=\"this.className='lvtColData'\" bgcolor='white'> <td height='25'>");
  $templatename = $temprow["templatename"]; 
-  echo "<a href='javascript:;' onclick=\"submittemplate(".$temprow['templateid'].");\">".$temprow["templatename"]."</a></td>";
+  echo "<a href='javascript:submittemplate(".$temprow['templateid'].");'>".$temprow["templatename"]."</a></td>";
    printf("<td height='25'>%s</td>",$temprow["description"]);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
