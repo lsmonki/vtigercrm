@@ -520,8 +520,8 @@ $mod_strings = Array(
 //Added for Access Privileges
 
 'LBL_GLOBAL_FIELDS_MANAGER'=>'Global Fields Manager',
-'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Global Access Privileges',
-'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Access Privileges',
+'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Organization Sharing Rules',
+'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Sharing Rules',
 'LBL_BOTH'=>'Both',
 'LBL_VIEW'=>'View',
 'LBL_RECALCULATE_BUTTON'=>'Recalculate',
