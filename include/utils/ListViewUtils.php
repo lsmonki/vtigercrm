@@ -744,7 +744,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 		$links_info = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
 		if($del_link != '')
-			$links_info .=	" | <a href=\"javascript:;\" onclick='confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
+			$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
 
 		$list_header[] = $links_info;
 
