@@ -190,8 +190,8 @@
 			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr><td align="left"><div id="login_history_cont" style="display:none;"></div></td><td></td></tr>	
 			    </table>	
+			    <br>	
 			{/if}	
-			<br>
 			</td>
 			</tr>
 		        <tr><td>&nbsp;</td></tr>
@@ -230,6 +230,7 @@ function ShowHidefn(divid)
 	else
 		Effect.Appear(divid);
 {rdelim}
+	
 {literal}
 function fetchlogin_js(id)
 {
@@ -280,21 +281,7 @@ function fetchUserGroups(id)
         );
 
 }
-function getListViewEntries_js(module,url)
-{
-	$("status").style.display="inline";
-        new Ajax.Request(
-        	'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                	method: 'post',
-                        postBody:"module="+module+"&action="+module+"Ajax&file=ShowHistory&ajax=true&"+url,
-			onComplete: function(response) {
-                        	$("status").style.display="none";
-                                $("login_history_cont").innerHTML= response.responseText;
-                  	}
-                }
-        );
-}
+
 function showAuditTrail()
 {
 	var userid =  document.getElementById('userid').value;
@@ -302,4 +289,21 @@ function showAuditTrail()
 }
 
 {/literal}
+</script>
+<script>
+function getListViewEntries_js(module,url)
+{ldelim}
+	$("status").style.display="inline";
+        new Ajax.Request(
+        	'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                	method: 'post',
+                        postBody:"module="+module+"&action="+module+"Ajax&file=ShowHistory&record={$ID}&ajax=true&"+url,
+			onComplete: function(response) {ldelim}
+                        	$("status").style.display="none";
+                                $("login_history_cont").innerHTML= response.responseText;
+                  	{rdelim}
+                {rdelim}
+        );
+{rdelim}
 </script>
