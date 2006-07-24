@@ -17,7 +17,7 @@ global $list_max_entries_per_page;
 $log = LoggerManager::getLogger('user_list');
 
 global $mod_strings;
-global $currentModule;
+global $currentModule, $current_user;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -65,6 +65,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Adm
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("LIST_HEADER",getListViewHeader($focus,"Users",$url_string,$sorder,$order_by,"",""));
