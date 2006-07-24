@@ -99,28 +99,18 @@ class LoginHistory {
   * @param $orderby - login_time
   * Returns the login history entries in an array format.
 **/
-	function getHistoryListViewEntries($navigation_array, $sorder='', $orderby='')
+	function getHistoryListViewEntries($username, $navigation_array, $sorder='', $orderby='')
 	{
 		global $log;
 		$log->debug("Entering getHistoryListViewEntries() method ...");
 		global $adb, $current_user;	
-
+		
 		if($sorder != '' && $order_by != '')
-		{
-			if(is_admin($current_user))
-	       			$list_query = "Select * from vtiger_loginhistory order by ".$order_by." ".$sorder;
-			else	
-	       			$list_query = "Select * from vtiger_loginhistory where user_name=".$current_user->user_name." order by ".$order_by." ".$sorder;
-				
-		}	
+	       			$list_query = "Select * from vtiger_loginhistory where user_name='".$username."' order by ".$order_by." ".$sorder;
 		else
-		{
-			if(is_admin($current_user))
-				$list_query = "Select * from vtiger_loginhistory order by ".$this->default_order_by." ".$this->default_sort_order;
-			else	
-				$list_query = "Select * from vtiger_loginhistory where user_name='".$current_user->user_name."' order by ".$this->default_order_by." ".$this->default_sort_order;
-				
-		}
+				$list_query = "Select * from vtiger_loginhistory where user_name='".$username."' order by ".$this->default_order_by." ".$this->default_sort_order;
+
+
 		$result = $adb->query($list_query);
 		$entries_list = array();
 		

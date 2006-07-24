@@ -42,18 +42,11 @@ $smarty = new vtigerCRM_Smarty;
 
 $category = getParenttab();
 
-if(is_admin($current_user))
-{
-	$qry = "Select * from vtiger_loginhistory";
-	$qry_result = $adb->query($qry);
-	$no_of_rows = $adb->num_rows($qry_result);
-}
-else
-{
-	$qry = "Select * from vtiger_loginhistory where user_name='".$current_user->user_name."'";
-	$qry_result = $adb->query($qry);
-	$no_of_rows = $adb->num_rows($qry_result);
-}
+$userid = $_REQUEST['record'];
+$username = getUserName($userid);
+$qry = "Select * from vtiger_loginhistory where user_name= '$username'";
+$qry_result = $adb->query($qry);
+$no_of_rows = $adb->num_rows($qry_result);
 
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -77,7 +70,7 @@ $smarty->assign("MOD", $current_module_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("LIST_HEADER",$focus->getHistoryListViewHeader());
-$smarty->assign("LIST_ENTRIES",$focus->getHistoryListViewEntries($navigation_array, $sorder, $sortby));
+$smarty->assign("LIST_ENTRIES",$focus->getHistoryListViewEntries($username, $navigation_array, $sorder, $sortby));
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("CATEGORY",$category);
