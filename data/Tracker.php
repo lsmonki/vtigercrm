@@ -179,31 +179,40 @@ $log->info("in  track view method ".$current_module);
             $so = $adb->query_result($result,0,'subject');
             $item_summary = $so;
           }
-	  elseif($current_module =='Vendor')
+	  elseif($current_module =='Vendors')
           {
-            $query = 'select vtiger_vendorname from vtiger_vendor where vendorid=' .$item_id;
+            $query = 'select vendorname from vtiger_vendor where vendorid=' .$item_id;
             $result = $this->db->query($query);
             $vendor = $adb->query_result($result,0,'vendorname');
             $item_summary = $vendor;
           }
-	  elseif($current_module =='PriceBook')
+	  elseif($current_module =='PriceBooks')
           {
             $query = 'select bookname from vtiger_pricebook where pricebookid=' .$item_id;
             $result = $this->db->query($query);
             $pb = $adb->query_result($result,0,'bookname');
             $item_summary = $pb;
           }	
-  elseif($current_module =='Campaigns')
+  	  elseif($current_module =='Campaigns')
           {
             $query = 'select campaignname from vtiger_campaign where campaignid=' .$item_id;
             $result = $this->db->query($query);
             $pb = $adb->query_result($result,0,'campaignname');
             $item_summary = $pb;
-          }	
+          }
+  	  elseif($current_module =='Faq')
+          {
+            $query = 'select question from vtiger_faq where id=' .$item_id;
+            $result = $this->db->query($query);
+            $pb = $adb->query_result($result,0,'question');
+	    if(strlen($pb) > 30)
+	    {
+		    $pb=substr($pb,0,30).'...';
+	    } 	    
+            $item_summary = $pb;
+          }		  
 	 
 	 #if condition added to skip vtiger_faq in last viewed history
-	  if ($current_module != 'Faq')
-	  {		
           $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
           
           $this->log->info("Track Item View: ".$query);
@@ -212,7 +221,6 @@ $log->info("in  track view method ".$current_module);
           
           
           $this->prune_history($user_id);
-	  }
     }
 
     /**
@@ -261,10 +269,7 @@ $log->info("in  track view method ".$current_module);
 		else
 		{
 			
-			$per = isPermitted($module,4,$entity_id);
-			//echo "permission is".$per;
-			//echo "<BR>";
-			//echo "<BR>";
+			$per = isPermitted($module,'DetailView',$entity_id);
 			
 		}
 		if($per == 'yes')
