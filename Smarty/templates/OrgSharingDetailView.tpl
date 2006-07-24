@@ -130,8 +130,9 @@ DIV.fixedLay {
                           <td class="listTableRow small">{$elements.2}</td>
                           <td class="listTableRow small">{$elements.3}</td>
                           <td align="center" class="listTableRow small">
-				<a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" border=0></a></td>
+				<a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" border=0></a>|<a href="javascript:;" onclick='confirmdelete("index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}")'><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" border=0></a></td>
                         </tr>
+
                      {/foreach} 
                     </table>
 	<!-- End of Module Display -->
@@ -246,5 +247,15 @@ function fnwriteRules(module,related)
 		soucre.innerHTML = module +" {$APP.LBL_LIST_OF} <b>\"" + select1 + "\"</b> {$CMOD.LBL_CAN_BE_ACCESSED} <b>\"" +select2 + "\"</b> {$CMOD.LBL_IN_PERMISSION} "+select3;
 		soucre1.innerHTML = "<b>{$CMOD.LBL_RELATED_MODULE_RIGHTS}</b> " + relatedstring;
 {rdelim}
+
+
+		function confirmdelete(url)
+		{ldelim}
+			if(confirm("Are you sure?"))
+			{ldelim}
+				document.location.href=url;
+			{rdelim}
+		{rdelim}
+	
 
 </script>
