@@ -48,6 +48,8 @@ function DeleteRssFeeds(id)
         	                onComplete: function(response) {
 	        	                $("status").style.display="none";
                                 	$("rssfeedscont").innerHTML=response.responseText;
+					$("mysite").src = '';
+					$("rsstitle").innerHTML = "&nbsp";
                         	}
                 	}
         	);
@@ -57,7 +59,7 @@ function DeleteRssFeeds(id)
 function SaveRssFeeds()
 {
 	$("status").style.display="inline";
-	rssurl = $('rssurl').value;
+	var rssurl = $('rssurl').value;
 	rssurl = rssurl.replace(/&/gi,"##amp##");
 	new Ajax.Request(
 		'index.php',
@@ -129,7 +131,7 @@ function SaveRssFeeds()
 					</div>
 				</td>
 				</tr>
-				<tr><td valign="top" bgcolor="#FFFFFF"><div id="rssfolders">{$RSSFEEDS}</div></td></tr>
+				<tr><td valign="top" bgcolor="#FFFFFF" align="left"><div id="rssfolders">{$RSSFEEDS}</div></td></tr>
 				</table>
 				
 			</td></tr>
@@ -173,7 +175,7 @@ function SaveRssFeeds()
 	<tr><td colspan="2"><hr /></td></tr>
 	<tr>
 	<td align="right" width="30%"><b>{$MOD.LBL_FEED}</b></td>
-	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" /></td>
+	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" value=""/></td>
 	</tr>
 	
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
