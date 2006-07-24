@@ -162,7 +162,7 @@ foreach($modArr as $fld_module => $fld_label)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype				== 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 		{
 			$visible_value = 0;
 		}
