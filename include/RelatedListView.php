@@ -228,7 +228,7 @@ else
 	$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 	$list .= '<tr class="ModuleListTitle" height=20>';
 
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 	$list .= '<td width="30%" class="moduleListTitle">';
 
 	$class_black="";
@@ -237,7 +237,7 @@ else
 		$class_black='class="blackLine"';
 	}
 	$list .= $app_strings['LBL_TITLE_OR_DESCRIPTION'].'</td>';
-	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 	$list .= '<td width="10%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
@@ -281,13 +281,13 @@ else
 	$i=1;
 	while($row = $adb->fetch_array($result))
 	{
-        	if($row[1] == 'Notes')
+        	if(trim($row[1]) == 'Notes')
 	        {
         	        $module = 'Notes';
                 	$editaction = 'EditView';
 	                $deleteaction = 'Delete';
         	}
-	        elseif($row[1] == 'Attachments')
+	        elseif(trim($row[1]) == 'Attachments')
 	        {
 	                $module = 'uploads';
 	                $editaction = 'upload';
@@ -301,29 +301,29 @@ else
 
 		$list .= '<tr class="'. $trowclass.'">';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>'; 
 
 		if($module == 'Notes')
 			$list .= '<td width="30%"><a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["crmid"] .'&return_id='.$_REQUEST['record'].'">'.$row[0].'</td>';
 		elseif($module == 'uploads')
 			$list .= '<td width="30%">'.$row[0].'</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= $row[1];
+		$list .=  $row[1];
 		$list .= '</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type=' . $row[1] . '&fileid=' . $row[5] . '&filename=' . urlencode($row[2]) . '">' . $row[2] . '</a>';
+		$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type=' . trim($row[1]) . '&fileid=' . $row[5] . '&filename=' . urlencode($row[2]) . '">' . $row[2] . '</a>';
 		$list .= '</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
 		$list .= $row[3];
 		$list .= '</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
 
 		if($row[4] != '0000-00-00 00:00:00')
@@ -331,10 +331,10 @@ else
 		else
                         $list .= '';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 
-		if($row[1] == 'Notes')
+		if(trim($row[1]) == 'Notes')
 			$list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row[2].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
 //		$list .= '<a href="index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
 		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"];
@@ -399,7 +399,7 @@ function getHistory($parentmodule,$query,$id)
 		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%" >';
 		$list .= '<tr class="ModuleListTitle" height=20>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="4%" class="moduleListTitle"></td>';
 
 // Armando Lüscher 15.07.2005 -> §scrollableTables
@@ -412,31 +412,31 @@ function getHistory($parentmodule,$query,$id)
 			$class_black='class="blackLine"';	
 		}
 
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="25%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_SUBJECT'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_STATUS'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LIST_CONTACT_NAME'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_RELATED_TO'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td width="10%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_ACTION'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 		$list .= '<td class="moduleListTitle">';
 
 		$list .= '</td>';
@@ -477,15 +477,15 @@ function getHistory($parentmodule,$query,$id)
 	
 			$list .= '<tr class="'. $trowclass.'">';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="4%"><IMG SRC="'.$image_path.'/'.$icon.'"></td>';
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
 			$list .= '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$list .= '</td>';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 			$list .= $status;
 			$list .= '</td>';
@@ -495,24 +495,24 @@ function getHistory($parentmodule,$query,$id)
 			if($ros['lastname'] != 'NULL')
 				$contactname .= $row['lastname'];
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;">';
 			$list .= '<a href="index.php?module=Contacts&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$contactname;
 			$list .= '</td>';
 
 			$parentname = getRelatedTo('Activities',$result,$i-1);
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;">';
 			$list .= $parentname;
 			$list .= '</td>';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
 			$modifiedtime = getDisplayDate($row['modifiedtime']);
 			$list .= $modifiedtime;
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 
 			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
@@ -528,7 +528,7 @@ function getHistory($parentmodule,$query,$id)
 	
 			$list .= '</td>';
 			
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 
 			$list .= '</tr>';
 			$i++;
