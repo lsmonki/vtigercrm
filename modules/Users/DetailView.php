@@ -27,6 +27,7 @@ require_once('include/utils/utils.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/utils/GetUserGroups.php');
 
 global $current_user;
 global $theme;
@@ -95,7 +96,12 @@ $smod_strings = return_module_language($current_language, 'Settings');
 $smarty->assign("MOD", $smod_strings);
 
 $smarty->assign("APP", $app_strings);
-$smarty->assign("GROUP_COUNT",count(getGroupDetails($focus->id)));
+
+$oGetUserGroups = new GetUserGroups();
+$oGetUserGroups->getAllUserGroups($focus->id);
+
+
+$smarty->assign("GROUP_COUNT",count($oGetUserGroups->user_groups));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
