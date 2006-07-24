@@ -25,19 +25,23 @@ if($ajaxaction == "DETAILVIEW")
      $fieldvalue = $_REQUEST["fieldValue"];
      if($crmid != "")
 	 {
-		$acntObj = new Account();
+	     $acntObj = new Account();
 	     $acntObj->retrieve_entity_info($crmid,"Accounts");
 	     $acntObj->column_fields[$fieldname] = $fieldvalue;
+	     if($fieldname == 'annual_revenue')//annual revenue converted to dollar value while saving
+	     {
+		     $acntObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);
+	     }	     
 	     $acntObj->id = $crmid;
-  		$acntObj->mode = "edit";
-       	$acntObj->save("Accounts");
-          if($acntObj->id != "")
-		{
+  	     $acntObj->mode = "edit";
+       	     $acntObj->save("Accounts");
+             if($acntObj->id != "")
+	     {
 			echo ":#:SUCCESS";
-		}else
-		{
+	     }else
+	     {
 			echo ":#:FAILURE";
-		}   
+	     }   
 	}else
 	{
          echo ":#:FAILURE";
