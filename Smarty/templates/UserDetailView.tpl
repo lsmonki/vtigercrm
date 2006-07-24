@@ -178,6 +178,7 @@
 			    </table>	
 
 			<br>
+			{if $IS_ADMIN eq 'true'}
 			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
@@ -189,10 +190,10 @@
 			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr><td align="left"><div id="login_history_cont" style="display:none;"></div></td><td></td></tr>	
 			    </table>	
-
+			{/if}	
+			<br>
 			</td>
 			</tr>
-			
 		        <tr><td>&nbsp;</td></tr>
 			
 	  	</table>
