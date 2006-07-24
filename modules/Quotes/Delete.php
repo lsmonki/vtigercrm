@@ -31,9 +31,6 @@ if(!isset($_REQUEST['record']))
 
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-//code added for returning back to the current view after delete from list view
-if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&parenttab=".$parenttab."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&parenttab=".$parenttab."&record=".$_REQUEST['return_id']);
 ?>
