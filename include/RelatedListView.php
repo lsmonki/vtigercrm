@@ -311,11 +311,11 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		{
 			$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"];
 
-			$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href="javascript:;" onclick=confirmdelete("'.$del_param.'")>'.$app_strings['LNK_DELETE'].'</a>';
+			$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
 		}
 		else
 		{
-			$entries[] = '<a href="javascript:;" onclick=confirmdelete("'.$del_param.'")>'.$app_strings['LNK_DELETE'].'</a>';
+			$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
 		}
 		$entries_list[] = $entries;
 	}
