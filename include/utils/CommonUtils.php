@@ -2462,4 +2462,17 @@ function get_announcements()
 	}
 	return $announcement;
 }
+
+/**	Function used to retrieve the rate converted into dollar tobe saved into database
+ *	The function accepts the price in the current currency
+ *	return integer $conv_price  - 
+ */
+ function getConvertedPrice($price) 
+ {
+	 global $current_user;
+	 $currencyid=fetchCurrency($current_user->id);
+	 $rate_symbol = getCurrencySymbolandCRate($currencyid);
+	 $conv_price = convertToDollar($price,$rate_symbol['rate']);
+	 return $conv_price;
+ }
 ?>
