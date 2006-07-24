@@ -130,9 +130,15 @@ function indent($hrarray,$roleout,$role_det)
 
 			$roleout.='<td nowrap><div id="layer_'.$roleid.'" class="drag_Element">
 													<a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="'.$image_path.'/Rolesadd.gif" align="absmiddle" border="0" alt="Add Role" title="Add Role"></a>
-													<a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit"><img src="'.$image_path.'/RolesEdit.gif" align="absmiddle" border="0" alt="Edit Role" title="Edit Role"></a>
-													<a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="'.$image_path.'/RolesDelete.gif" align="absmiddle" border="0" alt="Delete Role" title="Delete Role"></a>
-													<a href="#" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="'.$image_path.'/RolesMove.gif" align="absmiddle" border="0" alt="Move Role" title="Move Role"></a>
+													<a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit"><img src="'.$image_path.'/RolesEdit.gif" align="absmiddle" border="0" alt="Edit Role" title="Edit Role"></a>';
+
+			if($roleid != 'H1' && $roleid != 'H2' && $roleid != 'H3' && $roleid != 'H4' && $roleid != 'H5')
+			{
+							
+				$roleout .=	'<a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="'.$image_path.'/RolesDelete.gif" align="absmiddle" border="0" alt="Delete Role" title="Delete Role"></a>';
+			}		
+													
+		        $roleout .='<a href="#" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="'.$image_path.'/RolesMove.gif" align="absmiddle" border="0" alt="Move Role" title="Move Role"></a>
 												</div></td></tr></table>';
 //			$roleout .=	'&nbsp;<a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid='.$roleid.'">View</a>';		
 
