@@ -15,7 +15,7 @@
   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 		<tr>
 		{if $BLOCKS neq ''}
-			<td>
+			<td align="left">
 			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
 				{if $EMAIL_FLAG neq 'WEBMAIL'}
 			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;

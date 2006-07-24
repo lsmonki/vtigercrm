@@ -20,22 +20,22 @@ function ShowFolders(folderid)
 	switch(folderid)
 	{ldelim}
 		case 1:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_ALLMAILS}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_ALLMAILS}</b>';
 			break;
 		case 2:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_CONTACTS}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_TO_CONTACTS}</b>';
 			break;
 		case 3:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_ACCOUNTS}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_TO_ACCOUNTS}</b>';
 			break;
 		case 4:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_LEADS}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_TO_LEADS}</b>';
 			break;
 		case 5:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_USERS}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_TO_USERS}</b>';
 			break;
 		case 6:
-			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_QUAL_CONTACT}';
+			getObj('mail_fldrname').innerHTML = '<b>{$MOD.LBL_QUAL_CONTACT}</b>';
 	{rdelim}
 	
 	new Ajax.Request(
@@ -110,11 +110,11 @@ function ShowFolders(folderid)
 							<tr>
 							<td width="25%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
 							<td width="2%">&nbsp;</td>
-							<td width="65%" class="subHdr"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
+							<td width="65%" class="subHdr" align="center"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
 							</tr>
 							
 							<tr>
-								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:5px; ">
+								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left">
 								<!-- Mailbox Tree -->
 								<!-- Inbox -->
 								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
@@ -152,7 +152,7 @@ function ShowFolders(folderid)
 									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 									<input name="idlist" type="hidden">
 										<tr>
-											<td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;</td>
+											<td width="25%" align="left"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;</td>
 											<td width="50%" align="right" class="small">
 												<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" onkeyUp="Searchfn();">&nbsp;
 											</td>
