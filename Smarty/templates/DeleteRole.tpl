@@ -35,7 +35,7 @@ function openPopup(del_roleid){ldelim}
 <tr>
 	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">{$CMOD.LBL_DELETE_ROLE}</td>
 	<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";>Close</a></td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="window.history.back();">{$APP.LBL_BACK}</a></td>
 </tr>
 <tr>
 	<td colspan="3">&nbsp;</td>
