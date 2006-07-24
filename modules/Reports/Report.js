@@ -174,46 +174,66 @@ function addColumn()
 	{
 		selectedColumnsObj.options[i].selected=false
 	}
+	addColumnStep1();
+}
 
-	for (i=0;i<availListObj.length;i++) 
+function addColumnStep1()
+{
+	if (availListObj.options.selectedIndex > -1)
 	{
-		if (availListObj.options[i].selected==true) 
+		for (i=0;i<availListObj.length;i++) 
 		{
-			for (j=0;j<selectedColumnsObj.length;j++) 
+			if (availListObj.options[i].selected==true) 
 			{
-				if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+				var rowFound=false;
+				for (j=0;j<selectedColumnsObj.length;j++) 
 				{
-					var rowFound=true
-						var existingObj=selectedColumnsObj.options[j]
-						break
+					if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+					{
+						var rowFound=true;
+						var existingObj=selectedColumnsObj.options[j];
+						break;
+					}
 				}
-			}
 
-			if (rowFound!=true) 
-			{
-				var newColObj=document.createElement("OPTION")
+				if (rowFound!=true) 
+				{
+					var newColObj=document.createElement("OPTION")
 					newColObj.value=availListObj.options[i].value
 					if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
 					else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
-						selectedColumnsObj.appendChild(newColObj)
-							availListObj.options[i].selected=false
-							newColObj.selected=true
-							rowFound=false
-			} 
-			else 
-			{
-				existingObj.selected=true
+					selectedColumnsObj.appendChild(newColObj)
+					newColObj.selected=true
+				} 
+				else 
+				{
+					existingObj.selected=true
+				}
+				availListObj.options[i].selected=false
+				addColumnStep1();
 			}
 		}
+	}else
+	{
+		exit();
 	}
 }
 
 function delColumn() 
 {
-	for (i=0;i<=selectedColumnsObj.options.length;i++) 
+	if (selectedColumnsObj.options.selectedIndex > -1)
 	{
-		if (selectedColumnsObj.options.selectedIndex>=0)
-			selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+		for (i=0;i < selectedColumnsObj.options.length;i++) 
+		{
+			if(selectedColumnsObj.options[i].selected == true)
+			{
+				selectedColumnsObj.remove(i);
+				delColumn();
+			}
+		}
+	}else
+	{
+		exit();
 	}
 }
 
@@ -230,57 +250,67 @@ function formSelectColumnString()
 function moveUp() 
 {
 	var currpos=selectedColumnsObj.options.selectedIndex
-		if (currpos>0) 
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos>0) 
+	{
+		var prevpos=selectedColumnsObj.options.selectedIndex-1
+
+		if (browser_ie) 
 		{
-			var prevpos=selectedColumnsObj.options.selectedIndex-1
-
-				if (browser_ie) 
-				{
-					temp=selectedColumnsObj.options[prevpos].innerText
-						selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
-						selectedColumnsObj.options[currpos].innerText=temp     
-				} 
-				else if (browser_nn4 || browser_nn6) 
-				{
-					temp=selectedColumnsObj.options[prevpos].text
-						selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
-						selectedColumnsObj.options[currpos].text=temp
-				}
-			temp=selectedColumnsObj.options[prevpos].value
-				selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
-				selectedColumnsObj.options[currpos].value=temp
-
-				selectedColumnsObj.options[prevpos].selected=true
-				selectedColumnsObj.options[currpos].selected=false
+			temp=selectedColumnsObj.options[prevpos].innerText
+			selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[currpos].innerText=temp     
+		} 
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[prevpos].text
+			selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[currpos].text=temp
 		}
+		temp=selectedColumnsObj.options[prevpos].value
+		selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+		selectedColumnsObj.options[prevpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+		}
+		
 }
 
 function moveDown() 
 {
 	var currpos=selectedColumnsObj.options.selectedIndex
-		if (currpos<selectedColumnsObj.options.length-1)	
-		{
-			var nextpos=selectedColumnsObj.options.selectedIndex+1
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos<selectedColumnsObj.options.length-1)	
+	{
+		var nextpos=selectedColumnsObj.options.selectedIndex+1
 
-				if (browser_ie) 
-				{	
-					temp=selectedColumnsObj.options[nextpos].innerText
-						selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
-						selectedColumnsObj.options[currpos].innerText=temp
-				}
-				else if (browser_nn4 || browser_nn6) 
-				{
-					temp=selectedColumnsObj.options[nextpos].text
-						selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
-						selectedColumnsObj.options[currpos].text=temp
-				}
-			temp=selectedColumnsObj.options[nextpos].value
-				selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
-				selectedColumnsObj.options[currpos].value=temp
-
-				selectedColumnsObj.options[nextpos].selected=true
-				selectedColumnsObj.options[currpos].selected=false
+		if (browser_ie) 
+		{	
+			temp=selectedColumnsObj.options[nextpos].innerText
+			selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[currpos].innerText=temp
 		}
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[nextpos].text
+			selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[currpos].text=temp
+		}
+		temp=selectedColumnsObj.options[nextpos].value
+		selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+
+		selectedColumnsObj.options[nextpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+	}
 }
 
 function disableMove() 
