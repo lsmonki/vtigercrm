@@ -94,7 +94,17 @@ $other_text ['del'] = $app_strings[LBL_MASS_DELETE];
 
 
 //Retreive the list from Database
-$list_query = getListQuery("Faq");
+//Retreive the list from Database
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Faq");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Faq");
+}else
+{
+	$list_query = getListQuery("Faq");
+}
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
@@ -128,7 +138,6 @@ if(isset($order_by) && $order_by != '')
 
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-
 //Constructing the list view 
 
 $smarty->assign("MOD", $mod_strings);
@@ -179,7 +188,7 @@ if($viewid !='')
 $url_string .= "&viewname=".$viewid;
 
 //Retreive the List View Table Header
-$listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search = getSearchListHeaderValues($focus,"Faq",$url_string,$sorder,$order_by,"",$oCustomView);
