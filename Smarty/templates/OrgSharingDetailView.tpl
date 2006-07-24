@@ -92,6 +92,7 @@ DIV.fixedLay {
 				<br><br>
 		  <!-- Custom Access Module Display Table -->
 		  <div id="customdiv">
+			
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 				<tr>
 					<td class="big"><strong>2. {$CMOD.LBL_CUSTOM_ACCESS_PRIVILEGES}</strong></td>
@@ -100,10 +101,15 @@ DIV.fixedLay {
 				</table>
 				<!-- Start of Module Display -->
 				{foreach  key=modulename item=details from=$MODSHARING}
+				{assign var="mod_display" value=$APP.$modulename}
+				{if $mod_display eq 'Accounts'}
+					{assign var="xx" value=$APP.Contacts}
+					{assign var="mod_display" value=$mod_display|cat:" & $xx"}
+				{/if}
 				{if $details.0 neq ''}
 				<table width="100%" border="0" cellpadding="5" cellspacing="0" class="listTableTopButtons">
                   		<tr>
-		                    <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$APP.$modulename}</b>&nbsp; </td>
+		                    <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                 		    <td align="right">
 					<input class="crmButton small save" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv('{$modulename}','create','')">
 				    </td>
@@ -112,7 +118,7 @@ DIV.fixedLay {
 				<table width="100%" cellpadding="5" cellspacing="0" class="listTable" >
                     		<tr>
                     		<td width="7%" class="colHeader small" nowrap>{$CMOD.LBL_RULE_NO}</td>
-                          	<td width="20%" class="colHeader small" nowrap>{$APP.$modulename} {$CMOD.LBL_OF}</td>
+                          	<td width="20%" class="colHeader small" nowrap>{$mod_display} {$CMOD.LBL_OF}</td>
                           	<td width="25%" class="colHeader small" nowrap>{$CMOD.LBL_CAN_BE_ACCESSED}</td>
                           	<td width="40%" class="colHeader small" nowrap>{$CMOD.LBL_PRIVILEGES}</td>
                           	<td width="8%" class="colHeader small" nowrap>{$APP.Tools}</td>
@@ -129,7 +135,8 @@ DIV.fixedLay {
                      {/foreach} 
                     </table>
 	<!-- End of Module Display -->
-	<!-- Start FOR NO DATA -->	
+	<!-- Start FOR NO DATA -->
+
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 			<tr><td>&nbsp;</td></tr>
 			</table>
@@ -137,7 +144,7 @@ DIV.fixedLay {
                     <table width="100%" cellpadding="0" cellspacing="0" class="listTable"><tr><td>
 		      <table width="100%" border="0" cellpadding="5" cellspacing="0" class="listTableTopButtons">
                       <tr>
-                        <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$APP.$modulename}</b>&nbsp; </td>
+                        <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                         <td align="right">
 				<input class="crmButton small save" type="button" name="Create" value="{$APP.LBL_ADD_ITEM} {$CMOD.LBL_PRIVILEGES}" onClick="callEditDiv('{$modulename}','create','')">
 			</td>
