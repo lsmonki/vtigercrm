@@ -103,8 +103,13 @@ class CustomView extends CRMEntity{
 				$viewid = $this->setdefaultviewid;
 			}else
 			{
-				$query="select cvid from vtiger_customview where viewname='All' and entitytype='".$module."'";
+				$query="select cvid from vtiger_customview where setdefault=1 and entitytype='".$module."'";
 				$cvresult=$adb->query($query);
+				if($adb->num_rows($cvresult) == 0)
+				{
+					$query="select cvid from vtiger_customview where viewname='All' and entitytype='".$module."'";
+					$cvresult=$adb->query($query);
+				}
 				$viewid = $adb->query_result($cvresult,0,'cvid');;
 			}
 		}
@@ -164,8 +169,13 @@ class CustomView extends CRMEntity{
 			{
 				$cvrow['viewname'] = $app_strings['COMBO_ALL'];
 			}
-														
-			if($cvrow['cvid'] == $viewid)
+			
+			if($cvrow['setdefault'] == 1 && $viewid =='')
+                        {
+	                         $shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+		                 $this->setdefaultviewid = $cvrow['cvid'];
+			}			
+			elseif($cvrow['cvid'] == $viewid)
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];
