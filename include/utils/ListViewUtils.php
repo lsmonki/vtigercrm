@@ -683,7 +683,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 						$value = '<a href="index.php?module=Products&action=DetailView&parenttab='.$tabname.'&record='.$product_id.'">'.$product_name.'</a>';
 					}
-					elseif($module == 'Quotes' && $name == 'Potential Name')
+					elseif(($module == 'Quotes' && $name == 'Potential Name') || ($module == 'SalesOrder' && $name == 'Potential Name'))
 					{
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
 						$potential_name = getPotentialName($potential_id);
