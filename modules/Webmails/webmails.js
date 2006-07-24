@@ -67,6 +67,7 @@ function showRelationships(mid) {
 	// TODO: present the user with a simple DHTML div to
 	// choose what type of relationship they would like to create
 	// before creating it.
+	alert('Are you sure you wish to Qualify this Mail as Contact?');
         add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
