@@ -26,15 +26,15 @@
 <tr>
 	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
 	<td class="listTableRow small" nowrap valign=top><a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}"><img src="{$IMAGE_PATH}settingsActBtnEdit.gif" alt="{$APP.LBL_EDIT_BUTTON}" title="{$APP.LBL_EDIT_BUTTON}" border="0"></a>
-	{if $userid neq 1 && $userid neq 2}	
+	{if $userid neq 1 && $userid neq 2 && $userid neq $CURRENT_USERID}	
 	<img src="{$IMAGE_PATH}settingsActBtnDelete.gif" onclick="deleteUser('{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/></a>
 	{/if}
 	<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}&isDuplicate=true"><img src="{$IMAGE_PATH}settingsActBtnDuplicate.gif" alt="{$APP.LBL_DUPLICATE_BUTTON}" title="{$APP.LBL_DUPLICATE_BUTTON}" border="0"></a>
 </td>
 	<td class="listTableRow small" valign=top><b><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.3} </a></b><br><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.1} {$listvalues.0}</a> ({$listvalues.2})</td>
-	<td class="listTableRow small" valign=top>{$listvalues.5}</td>
-	<td class="listTableRow small" valign=top>{$listvalues.7}</td>
-	<td class="listTableRow small" valign=top>{$listvalues.6}</td>
+	<td class="listTableRow small" valign=top>{$listvalues.5}&nbsp;</td>
+	<td class="listTableRow small" valign=top>{$listvalues.7}&nbsp;</td>
+	<td class="listTableRow small" valign=top>{$listvalues.6}&nbsp;</td>
 	{if $listvalues.4 eq 'Active'}
 	<td class="listTableRow small active" valign=top>{$APP[$listvalues.4]}</td>
 	{else}

@@ -44,8 +44,8 @@
 		{/if}
 		<input type="hidden" name="old_password">
 		<input type="hidden" name="new_password">
-		<input type="hidden" name="return_module">
-		<input type="hidden" name="return_action">
+		<input type="hidden" name="return_module" value="Users">
+		<input type="hidden" name="return_action" value="ListView">
 		<input type="hidden" name="return_id">
 		<input type="hidden" name="forumDisplay">
 		{if $CATEGORY eq 'Settings'}
@@ -87,6 +87,9 @@
                                	{$DUPLICATE_BUTTON}
                        	{/if}
 			{$EDIT_BUTTON}
+		{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq 2 & $ID neq $CURRENT_USERID}
+			<input type="button" onclick="deleteUser({$ID});" class="crmButton small cancel" value="{$UMOD.LBL_DELETE}"></input>
+		{/if}
 		</td>&nbsp;</tr>
 	    <tr><td colspan="2">&nbsp;</td></tr>
 	    <tr>
@@ -194,6 +197,7 @@
 			{/if}	
 			</td>
 			</tr>
+			
 		        <tr><td>&nbsp;</td></tr>
 			
 	  	</table>
@@ -217,7 +221,7 @@
 </table>
 <br>
 {$JAVASCRIPT}
-
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <!-- added for validation -->
 <script language="javascript">
   var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
@@ -230,7 +234,6 @@ function ShowHidefn(divid)
 	else
 		Effect.Appear(divid);
 {rdelim}
-	
 {literal}
 function fetchlogin_js(id)
 {
@@ -288,6 +291,28 @@ function showAuditTrail()
 	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=650,height=800,resizable=0,scrollbars=1,left=100");
 }
 
+function deleteUser(userid)
+{
+        $("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=UsersAjax&file=UserDeleteStep1&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='+userid,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                $("tempdiv").innerHTML= response.responseText;
+                        }
+                }
+        );
+}
+function transferUser(del_userid)
+{
+        $("status").style.display="inline";
+        $("DeleteLay").style.display="none";
+        var trans_userid=$('transfer_user_id').options[$('transfer_user_id').options.selectedIndex].value;
+	window.document.location.href = 'index.php?module=Users&action=DeleteUser&ajax_delete=false&delete_user_id='+del_userid+'&transfer_user_id='+trans_userid;
+}
 {/literal}
 </script>
 <script>
@@ -307,3 +332,4 @@ function getListViewEntries_js(module,url)
         );
 {rdelim}
 </script>
+
