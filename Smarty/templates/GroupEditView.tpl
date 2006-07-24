@@ -168,6 +168,7 @@ function validate()
 				<input type="hidden" name="mode" value="{$MODE}">
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="groupId" value="{$GROUPID}">
+				<input type="hidden" name="returnaction" value="{$RETURN_ACTION}">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="Groups" width="48" height="48" border=0 title="Roles"></td>
 					{if $MODE eq 'edit'}
