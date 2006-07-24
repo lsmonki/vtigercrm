@@ -58,6 +58,7 @@ $focus->save("Leads");
 
 $return_id = $focus->id;
 	 $log->info("the return id is ".$return_id);
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Leads";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
@@ -79,7 +80,7 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns
 }
 
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname");
 
 /** Function to save the Lead custom fields info into database
  *  @param integer $entity_id - leadid
