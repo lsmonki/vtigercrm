@@ -412,16 +412,22 @@ function hideTab(id)
 		if(typeof($(imageid)) != 'undefined')
 			$(imageid).style.display = 'none';
 		$(contid).className = 'hideTable';
-		$(createid).checked = false;
-		$(deleteid).checked = false;
-		$(viewid).checked = false;
+		if(typeof($(createid)) != 'undefined')
+			$(createid).checked = false;
+		if(typeof($(deleteid)) != 'undefined')
+			$(deleteid).checked = false;
+		if(typeof($(viewid)) != 'undefined')
+			$(viewid).checked = false;
 	}else
 	{
 		if(typeof($(imageid)) != 'undefined')
 			$(imageid).style.display = 'block';
-		$(createid).checked = true;
-		$(deleteid).checked = true;
-		$(viewid).checked = true;
+		if(typeof($(createid)) != 'undefined')
+			$(createid).checked = true;
+		if(typeof($(deleteid)) != 'undefined')
+			$(deleteid).checked = true;
+		if(typeof($(viewid)) != 'undefined')
+			$(viewid).checked = true;
 		var fieldid = id +'_field_';
 		for(var i = 0;i < document.profileform.elements.length;i++)
                 {
@@ -440,5 +446,14 @@ function selectUnselect(oCheckbox)
 		unselect_edit_all();
 	}
 }
+function initialiseprofile()
+{
+	var module_array = Array(1,2,4,6,7,8,9,10,13,14,15,17,18,19,20,21,22,23,24,25,26,27);
+	for (var i=0;i < module_array.length;i++)
+	{
+		hideTab(module_array[i]);
+	}	
+}
+initialiseprofile();
 {/literal}
 </script>
