@@ -102,7 +102,7 @@ DIV.fixedLay {
 				<!-- Start of Module Display -->
 				{foreach  key=modulename item=details from=$MODSHARING}
 				{assign var="mod_display" value=$APP.$modulename}
-				{if $mod_display eq 'Accounts'}
+				{if $mod_display eq $APP.Accounts}
 					{assign var="xx" value=$APP.Contacts}
 					{assign var="mod_display" value=$mod_display|cat:" & $xx"}
 				{/if}
@@ -237,6 +237,12 @@ function fnwriteRules(module,related)
 		var select1 = tagName.options[tagName.selectedIndex].text;
 		var select2 = tagName2.options[tagName2.selectedIndex].text;
 		var select3 = tagName3.options[tagName3.selectedIndex].text;
+
+		if(module == '{$APP.Accounts}')
+		{ldelim}
+			module = '{$APP.Accounts} & {$APP.Contacts}';	
+		{rdelim}
+
 		soucre.innerHTML = module +" {$APP.LBL_LIST_OF} <b>\"" + select1 + "\"</b> {$CMOD.LBL_CAN_BE_ACCESSED} <b>\"" +select2 + "\"</b> {$CMOD.LBL_IN_PERMISSION} "+select3;
 		soucre1.innerHTML = "<b>{$CMOD.LBL_RELATED_MODULE_RIGHTS}</b> " + relatedstring;
 {rdelim}
