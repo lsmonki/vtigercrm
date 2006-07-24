@@ -87,7 +87,7 @@
        </tr>
        <tr>
            <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>{$MOD.LBL_LIST_PASSWORD}</td>
-           <td class="dvtCellInfo"><input type="password" name="server_password" value="{$SERVER_PASSWORD}"  class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
+           <td class="dvtCellInfo"><input type="password" name="server_password" value="{$SERVERPASSWORD}"  class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>
