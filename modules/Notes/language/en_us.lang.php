@@ -65,6 +65,7 @@ $mod_strings = Array(
 'Last Modified'=>'Last Modified',
 'File'=>'File',
 'LBL_ALL'=>'All',
+'Title'=>'Title',
 
 );
 
