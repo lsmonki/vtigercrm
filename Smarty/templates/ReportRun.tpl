@@ -42,7 +42,13 @@
 	<tr>
 	<td style="border-left: 1px solid rgb(109, 109, 109);"></td>
 	<td style="padding: 10px; text-align: left;" width="70%">
-	<span class="genHeaderGrayBig">{$REPORTNAME}</span>&nbsp;&nbsp;
+	<span class="genHeaderGrayBig">
+	{if $MOD.$REPORTNAME neq ''}
+		{$MOD.$REPORTNAME}
+	{else}
+		{$REPORTNAME}
+	{/if}
+	</span>&nbsp;&nbsp;
 	( <a href="javascript:;" onClick="editReport('{$REPORTID}');">{$MOD.LBL_CUSTOMIZE_REPORT}</a> )<br>
 	<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
 	</td>
@@ -50,10 +56,18 @@
 	<b>{$MOD.LBL_SELECT_ANOTHER_REPORT} : </b><br>
 	<select name="another_report" class="detailedViewTextBox" onChange="selectReport()">
 	{foreach key=report_in_fld_id item=report_in_fld_name from=$REPINFOLDER}
-	{if $report_in_fld_id neq $REPORTID}
-		<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
-	{else}	
-		<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
+	{if $MOD.$report_in_fld_name neq ''} 
+		{if $report_in_fld_id neq $REPORTID}
+			<option value={$report_in_fld_id}>{$MOD.$report_in_fld_name}</option>
+		{else}	
+			<option value={$report_in_fld_id} "selected">{$MOD.$report_in_fld_name}</option>
+		{/if}
+	{else}
+		{if $report_in_fld_id neq $REPORTID}
+			<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
+		{else}	
+			<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
+		{/if}
 	{/if}
 	{/foreach}
 	</select>&nbsp;&nbsp;
@@ -96,7 +110,7 @@
 	</td>
 	</tr>
 	<tr>
-	<td align="center" colspan="4"><input name="generatenw" value=" Generate Now " class="classBtn" type="button" onClick="generateReport({$REPORTID});"></td>
+	<td align="center" colspan="4"><input name="generatenw" value=" {$MOD.LBL_GENERATE_NOW} " class="classBtn" type="button" onClick="generateReport({$REPORTID});"></td>
 	</tr>
 	</tbody>
 </table>

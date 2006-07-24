@@ -19,7 +19,11 @@
 		<tr>
 		<td class="reportHdr">
 		<img src="{$IMAGE_PATH}Reports_arrow.gif" width="20" height="20" align="absmiddle" />&nbsp;
-		{$reportfolder.name}	
+		{if $MOD[$reportfolder.name] neq ''}
+			{$MOD[$reportfolder.name]}
+		{else}
+			{$reportfolder.name}
+		{/if}
 		</td>
 		</tr>
 		<tr>
@@ -35,14 +39,22 @@
 			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
 				<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
 				<td>{$smarty.foreach.reportdtls.iteration}</td>
-				<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
-				<td>{$reportdetails.description}</td>
+				{if $MOD[$reportdetails.reportname] neq ''}
+					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$MOD[$reportdetails.reportname]}</a></td>
+				{else}
+					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
+				{/if}
+				{if $MOD[$reportdetails.description] neq ''}
+					<td>{$MOD[$reportdetails.description]}</td>
+				{else}
+					<td>{$reportdetails.description}</td>
+				{/if}
 				<td align="center" nowrap>
 				{if $reportdetails.customizable eq '1'}
-				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="Customize..." border="0"></a>
+				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="{$MOD.LBL_CUSTOMIZE_BUTTON}..." border="0"></a>
 				{/if}
 				{if $reportdetails.state neq 'SAVED'}
-				&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" title="Delete..." border="0"></a>
+				&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" title="{$MOD.LBL_DELETE}..." border="0"></a>
 				{/if}
 				</td>
 				</tr>

@@ -26,7 +26,13 @@
 	<table cellpadding="0" cellspacing="0" width="100%">
 		<tbody><tr>
 		<td align="left" width="75%">
-		<span class="genHeaderGray">{$REPORTNAME}</span><br>
+		<span class="genHeaderGray">
+		{if $MOD.$REPORTNAME neq ''}
+			{$MOD.$REPORTNAME}
+		{else}
+			{$REPORTNAME}
+		{/if}
+		</span><br>
 		</td>
 		<td align="right" width="25%">
 		<span class="genHeaderGray">{$APP.LBL_TOTAL} : {$REPORTHTML.1}  {$APP.LBL_RECORDS}</span>
