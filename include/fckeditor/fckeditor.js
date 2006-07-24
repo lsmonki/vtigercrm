@@ -73,8 +73,13 @@ FCKeditor.prototype.ReplaceTextarea = function()
 {
 	if(document.getElementById('description___Config') != null)	
 	{
-		document.getElementById('description___Config').parentNode.removeChild(document.getElementById('description___Config'));
-		document.getElementById('description___Frame').parentNode.removeChild(document.getElementById('description___Frame'));
+		var oConfig = document.getElementsByName('description___Config');
+		var oFrame = document.getElementsByName('description___Frame');
+		for(vi=0;vi < oConfig.length;vi++)
+		{
+			oConfig[vi].style.display = 'none';
+			oFrame[vi].style.display = 'none';
+		}
 	}
 	if ( !this.CheckBrowser || this._IsCompatibleBrowser() )
 	{
@@ -123,7 +128,7 @@ FCKeditor.prototype._GetConfigHtml = function()
 		sConfig += escape(o) + '=' + escape( this.Config[o] ) ;
 	}
 
-	return '<input type="hidden" id="' + this.InstanceName + '___Config" value="' + sConfig + '" style="display:none" />' ;
+	return '<input type="hidden" id="' + this.InstanceName + '___Config" name="' + this.InstanceName + '___Config" value="' + sConfig + '" style="display:none" />' ;
 }
 
 FCKeditor.prototype._GetIFrameHtml = function()
@@ -133,7 +138,7 @@ FCKeditor.prototype._GetIFrameHtml = function()
 	var sLink = this.BasePath + 'editor/' + sFile + '?InstanceName=' + this.InstanceName ;
 	if (this.ToolbarSet) sLink += '&Toolbar=' + this.ToolbarSet ;
 
-	return '<iframe id="' + this.InstanceName + '___Frame" src="' + sLink + '" width="' + this.Width + '" height="' + this.Height + '" frameborder="no" scrolling="no"></iframe>' ;
+	return '<iframe id="' + this.InstanceName + '___Frame" name="' + this.InstanceName + '___Frame" name="" src="' + sLink + '" width="' + this.Width + '" height="' + this.Height + '" frameborder="no" scrolling="no"></iframe>' ;
 }
 
 FCKeditor.prototype._IsCompatibleBrowser = function()
