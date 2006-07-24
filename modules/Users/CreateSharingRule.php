@@ -206,7 +206,7 @@ if($size > 0)
 
 		$relatedlistscombo.='<tr><td align="right" nowrap style="padding-right:10px;"><b>'.$app_strings[$rel_module].' :</b></td>
 			<td width="70%">';
-		$relatedlistscombo.='<select id="'.$rel_module.'_accessopt" name="'.$rel_module.'_accessopt" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>
+		$relatedlistscombo.='<select id="'.$rel_module.'_accessopt" name="'.$rel_module.'_accessopt" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')">
 			<option value="0" '.$ro_selected.' >'.$mod_strings["Read Only "].'</option>
 			<option value="1" '.$rw_selected.' >'.$mod_strings["Read/Write"].'</option>
 			</select></td></tr>';
@@ -277,7 +277,7 @@ $output .= '<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40
 <td style="padding-left:20px;text-align:left;">';
 //combovalues
 
-$output.='<select id="'.$sharing_module.'_share" name="'.$sharing_module.'_share" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>'.$fromComboValues.'</select>';	
+$output.='<select id="'.$app_strings[$sharing_module].'_share" name="'.$sharing_module.'_share" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>'.$fromComboValues.'</select>';	
 $output.='</td>
 
 <td>&nbsp;</td>
@@ -291,13 +291,13 @@ $output.='</td>
 <tr>
 <td style="padding-left:20px;text-align:left;">
 
-<select id="'.$sharing_module.'_access" name="'.$sharing_module.'_access" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>';
+<select id="'.$app_strings[$sharing_module].'_access" name="'.$sharing_module.'_access" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
 
 $output.=$toComboValues.'</select>
 
 </td><td>
 
-<select	id="share_memberType" name="share_memberType" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>';
+<select	id="share_memberType" name="share_memberType" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
 $output .= $sharPerCombo;
 $output .= '</select>
 
