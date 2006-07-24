@@ -235,14 +235,14 @@ function getGroupTaskLists()
 			if($query !='')
 			$query .= " union all ";
 			//Get the activities assigned to group
-			$query .= "select vtiger_activity.activityid id,vtiger_activity.subject,vtiger_activitygrouprelation.groupname,'Activities' as Type from vtiger_activity inner join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_activity.activityid inner join vtiger_groups on vtiger_activitygrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0 and ((vtiger_activity.eventstatus !='held'and (vtiger_activity.status is null or vtiger_activity.status ='')) or (vtiger_activity.status !='completed' and (vtiger_activity.eventstatus is null or vtiger_activity.eventstatus=''))) and vtiger_activitygrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+			$query .= "select vtiger_activity.activityid id,vtiger_activity.subject as name,vtiger_activitygrouprelation.groupname,'Activities' as Type from vtiger_activity inner join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_activity.activityid inner join vtiger_groups on vtiger_activitygrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0 and ((vtiger_activity.eventstatus !='held'and (vtiger_activity.status is null or vtiger_activity.status ='')) or (vtiger_activity.status !='completed' and (vtiger_activity.eventstatus is null or vtiger_activity.eventstatus=''))) and vtiger_activitygrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 		}
 		if(isPermitted('HelpDesk','index') == "yes")
                 {
 			if($query !='')
 			$query .= " union all ";
 			//Get the tickets assigned to group (status not Closed -- hardcoded value)
-			$query .= "select vtiger_troubletickets.ticketid,vtiger_troubletickets.title,vtiger_ticketgrouprelation.groupname,'Tickets   ' as Type from vtiger_troubletickets inner join vtiger_ticketgrouprelation on vtiger_ticketgrouprelation.ticketid=vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid inner join vtiger_groups on vtiger_ticketgrouprelation.groupname=vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status != 'Closed' and vtiger_ticketgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+			$query .= "select vtiger_troubletickets.ticketid,vtiger_troubletickets.title as name,vtiger_ticketgrouprelation.groupname,'Tickets   ' as Type from vtiger_troubletickets inner join vtiger_ticketgrouprelation on vtiger_ticketgrouprelation.ticketid=vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid inner join vtiger_groups on vtiger_ticketgrouprelation.groupname=vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status != 'Closed' and vtiger_ticketgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 
 		}
 		$log->info("Here is the where clause for the list view: $query");
@@ -269,7 +269,7 @@ function getGroupTaskLists()
 				if($row["type"] == "Tickets")
 				{	
 					$list = '<a href=index.php?module=HelpDesk';
-					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["subject"].'</a>';
+					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["name"].'</a>';
 				}
 				elseif($row["type"] == "Activities")
 				{
@@ -283,7 +283,7 @@ function getGroupTaskLists()
 					{
 						$list .= '&activity_mode=Events';
 					}
-					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["subject"].'</a>';
+					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["name"].'</a>';
 				}
 				else
 				{
