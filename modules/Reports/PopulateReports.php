@@ -274,7 +274,7 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'Quotes Detailed Report',
                        'reportfolder'=>'Quote Reports',
-                       'description'=>'Quotes detailed report',
+                       'description'=>'Quotes Detailed Report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
