@@ -44,6 +44,7 @@ if(isset($_REQUEST['amount']))
 $focus->save("Potentials");
 $return_id = $focus->id;
 
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Potentials";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
@@ -59,6 +60,6 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 //Added to send mail to the vtiger_potential-owner about the Potential
 $status = sendNotificationToOwner('Potentials',&$focus);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
 
 ?>
