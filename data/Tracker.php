@@ -71,7 +71,7 @@ $log->info("in  track view method ".$current_module);
 
         $esc_item_id = addslashes($item_id);
         
-
+//No genius required. Just add an if case and change the query so that it puts the tracker entry whenever you touch on the DetailView of the required entity
          //get the first name and last name from the respective modules
           if($current_module =='Leads')
           {
@@ -193,7 +193,13 @@ $log->info("in  track view method ".$current_module);
             $pb = $adb->query_result($result,0,'bookname');
             $item_summary = $pb;
           }	
-
+  elseif($current_module =='Campaigns')
+          {
+            $query = 'select campaignname from vtiger_campaign where campaignid=' .$item_id;
+            $result = $this->db->query($query);
+            $pb = $adb->query_result($result,0,'campaignname');
+            $item_summary = $pb;
+          }	
 	 
 	 #if condition added to skip vtiger_faq in last viewed history
 	  if ($current_module != 'Faq')
