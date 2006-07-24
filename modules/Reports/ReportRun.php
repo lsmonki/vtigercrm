@@ -1323,7 +1323,7 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-		global $mod_strings;
+		global $mod_strings,$current_language;
 
 		if($outputformat == "HTML")
 		{
@@ -1336,7 +1336,7 @@ class ReportRun extends CRMEntity
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
-					$header .= "<td class='rptCellLabel'>".str_replace($modules," ",$fld->name)."</td>";
+					$header .= "<td class='rptCellLabel'>".$this->getLstringforReportHeaders($fld->name)."</td>";
 				}
 
 				$noofrows = $adb->num_rows($result);
@@ -1480,7 +1480,7 @@ class ReportRun extends CRMEntity
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 
-					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>Totals</td><td class='rptCellLabel'>SUM</td><td class='rptCellLabel'>AVG</td><td class='rptCellLabel'>MIN</td><td class='rptCellLabel'>MAX</td></tr>";
+					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>".$mod_strings[Totals]."</td><td class='rptCellLabel'>".$mod_strings[SUM]."</td><td class='rptCellLabel'>".$mod_strings[AVG]."</td><td class='rptCellLabel'>".$mod_strings[MIN]."</td><td class='rptCellLabel'>".$mod_strings[MAX]."</td></tr>";
 
 					foreach($this->totallist as $key=>$value)
 					{
@@ -1551,7 +1551,7 @@ class ReportRun extends CRMEntity
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
-					$header .= "<th>".str_replace($modules," ",$fld->name)."</th>";
+					$header .= "<th>".$this->getLstringforReportHeaders($fld->name)."</th>";
 				}
 				
 				$noofrows = $adb->num_rows($result);
@@ -1656,7 +1656,7 @@ class ReportRun extends CRMEntity
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 
-					$coltotalhtml .= '<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center" class="printReport" ><tr><th>Totals</th><th>SUM</th><th>AVG</th><th>MIN</th><th>MAX</th></tr>';
+					$coltotalhtml .= '<table width="100%" border="0" cellpadding="5" cellspacing="0" align="center" class="printReport" ><tr><th>'.$mod_strings[Totals].'</th><th>'.$mod_strings[SUM].'</th><th>'.$mod_strings[AVG].'</th><th>'.$mod_strings[MIN].'</th><th>'.$mod_strings[MAX].'</th></tr>';
 
 					foreach($this->totallist as $key=>$value)
 					{
@@ -1812,6 +1812,21 @@ class ReportRun extends CRMEntity
 		}
 		$log->info("ReportRun :: Successfully returned getColumnsToTotalColumns".$reportid);
 		return $sSQL;
+	}
+	/** Function to convert the Report Header Names into i18n
+	 *  @param $fldname: Type Varchar
+	 *  Returns Language Converted Header Strings	
+	 **/ 
+	function getLstringforReportHeaders($fldname)
+	{
+		global $modules,$current_language;
+		$rep_header = ltrim(str_replace($modules," ",$fldname));
+		$rep_header_temp = ereg_replace(" ","_",$rep_header);
+		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
+		$temp_mod_strings = return_module_language($current_language,$rep_module);	
+		if($temp_mod_strings[$rep_header] != '')
+			$rep_header = $temp_mod_strings[$rep_header];
+		return $rep_header;  
 	}
 
 }

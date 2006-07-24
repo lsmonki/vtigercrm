@@ -425,6 +425,7 @@ class Reports extends CRMEntity{
 
 	function getSelectedStdFilterCriteria($selecteddatefilter = "")
 	{
+		global $mod_strings;
 
 		$datefiltervalue = Array("custom","prevfy","thisfy","nextfy","prevfq","thisfq","nextfq",
 				"yesterday","today","tomorrow","lastweek","thisweek","nextweek","lastmonth","thismonth",
@@ -442,10 +443,10 @@ class Reports extends CRMEntity{
 		{
 			if($selecteddatefilter == $datefiltervalue[$i])
 			{
-				$sshtml .= "<option selected value='".$datefiltervalue[$i]."'>".$datefilterdisplay[$i]."</option>";
+				$sshtml .= "<option selected value='".$datefiltervalue[$i]."'>".$mod_strings[$datefilterdisplay[$i]]."</option>";
 			}else
 			{
-				$sshtml .= "<option value='".$datefiltervalue[$i]."'>".$datefilterdisplay[$i]."</option>";
+				$sshtml .= "<option value='".$datefiltervalue[$i]."'>".$mod_strings[$datefilterdisplay[$i]]."</option>";
 			}
 		}
 

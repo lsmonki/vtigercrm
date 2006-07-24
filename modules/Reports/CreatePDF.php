@@ -370,7 +370,7 @@ if(isset($arr_val))
 	$count = 0;
 	foreach($arr_val[0] as $key=>$value)
 	{
-		$headerHTML .= '<td width="'.$col_width[$count].'" bgcolor="#DDDDDD">'.$key.'</td>';
+		$headerHTML .= '<td width="'.$col_width[$count].'" bgcolor="#DDDDDD">'.$oReportRun->getLstringforReportHeaders($key).'</td>';
 		$count = $count + 1;
 	}
 	
