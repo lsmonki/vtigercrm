@@ -92,12 +92,19 @@ function verify_data(form) {
 		set_fieldfocus(errorMessage,oField_miss);
 	}
 	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		errorMessage='"' + form.email1.value + '" is $err_invalid_email_address';
-		set_fieldfocus(errorMessage,form.email1);
+		alert("The email id '"+form.email1.value+"' in the email field is $err_invalid_email_address");
+		form.email1.focus();
+		exit();
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		errorMessage='"' + form.email2.value + '" value in other email field is $err_invalid_email_address';
-		set_fieldfocus(errorMessage,form.email2);
+		alert("The email id '"+form.email2.value+"' in other email field is $err_invalid_email_address");
+		form.email2.focus();
+		exit();
+	}
+	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value)) {
+		alert("The email id '"+form.yahoo_id.value+"' in yahoo email field is $err_invalid_email_address");
+		form.yahoo_id.focus();
+		exit();
 	}
 	if(form.mode.value != 'edit')
 	{
