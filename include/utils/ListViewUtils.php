@@ -2787,6 +2787,8 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 	}
 
 	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
+	//Appending view name while editing from ListView
+	$edit_link .= "&return_viewname=".$_SESSION['lvs'][$module]["viewname"];
 	if($module == 'Emails')
 	        $edit_link = 'javascript:;" onclick="OpenCompose(\''.$entity_id.'\',\'edit\');';
 	return $edit_link;
