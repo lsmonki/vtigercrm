@@ -534,11 +534,10 @@ function fnAddProductRow(module,image_path){
 
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
-    	var count = rowCnt;//prev;
+    	var count = eval(prev)-1;//As the table has two headers, we should reduce the count
     	var row = tableName.insertRow(prev);
 		row.id = "row"+count;
-		
-	
+
 	
 	var colone = row.insertCell(0);
 	var coltwo = row.insertCell(1);
@@ -731,6 +730,7 @@ function calcSHTax()
 	calcTotal();
 }
 
+/*
 function calculateInventoryTotal(currObj)
 {
 	//First check for duplication
@@ -743,6 +743,6 @@ function calculateInventoryTotal(currObj)
 	calcTotal();
 
 }
-
+*/
 
 
