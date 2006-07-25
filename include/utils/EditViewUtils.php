@@ -1320,19 +1320,19 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$product_Detail = Array();
 	if($module == 'Quotes')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_quotesproductrel.* from vtiger_quotesproductrel inner join vtiger_products on vtiger_products.productid=vtiger_quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'PurchaseOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_poproductrel.* from vtiger_poproductrel inner join vtiger_products on vtiger_products.productid=vtiger_poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_soproductrel.* from vtiger_soproductrel inner join vtiger_products on vtiger_products.productid=vtiger_soproductrel.productid where salesorderid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_invoiceproductrel.* from vtiger_invoiceproductrel inner join vtiger_products on vtiger_products.productid=vtiger_invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'Potentials')
 	{
@@ -1353,38 +1353,32 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$productid=$adb->query_result($result,$i-1,'productid');
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
-		$vat=$adb->query_result($result,$i-1,'vattax');
-		$sales=$adb->query_result($result,$i-1,'salestax');
-		$service=$adb->query_result($result,$i-1,'servicetax');
 
 		if($listprice == '')
 			$listprice = $unitprice;
 		if($qty =='')
 			$qty = 1;
 		$total = $qty*$listprice;
-		$total_with_tax = $total+($vat*$total/100)+($sales*$total/100)+($service*$total/100);
+		$total_with_tax = $total;
 
-		$product_id_var = 'hdnProductId'.$i;
 		$status_var = 'hdnRowStatus'.$i;
-		$qty_var = 'txtQty'.$i;
-		$list_price_var = 'txtListPrice'.$i;	
+		$qty_var = 'qty'.$i;
+		$list_price_var = 'listPrice'.$i;	
 		$total_var = 'total'.$i;
 		
 		if($i%2 == 0)		$row_class = "evenListRow";
 		else			$row_class = "oddListRow";
 
-		$product_Detail[$i]['txtProduct'.$i]= $productname;
+		$product_Detail[$i]['productName'.$i]= $productname;
 
 		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
-		$unitprice=convertFromDollar($unitprice,$rate);
 		$listprice=convertFromDollar($listprice,$rate);
 		$total_with_tax =convertFromDollar($total_with_tax,$rate);
-		$product_Detail[$i]['txtQty'.$i]=$qty;
-		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
-		$product_Detail[$i]['txtListPrice'.$i]=$listprice;
+		$product_Detail[$i]['qty'.$i]=$qty;
+		$product_Detail[$i]['listPrice'.$i]=$listprice;
 		$product_Detail[$i]['total'.$i]=$total_with_tax;
 
 		if($i != 1)
@@ -1394,15 +1388,6 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		$product_Detail[$i]['hdnProductId'.$i] = $productid;
 		$product_Detail[$i]['hdnRowStatus'.$i] = '';
-		$product_Detail[$i]['hdnTotal'.$i] = $total;
-
-		//Added to pass the tax percentage values
-		if(!isset($vat)) $vat = getTaxPercentage('VAT');//Set the default config value
-		if(!isset($sales)) $sales = getTaxPercentage('Sales');//Set the default config value
-		if(!isset($service)) $service = getTaxPercentage('Service');//Set the default config value
-		$product_Detail[$i]['txtVATTax'.$i] = $vat;//getProductTaxPercentage('VAT',$productid,'default');
-		$product_Detail[$i]['txtSalesTax'.$i] = $sales;//getProductTaxPercentage('Sales',$productid,'default');
-		$product_Detail[$i]['txtServiceTax'.$i] = $service;//getProductTaxPercentage('Service',$productid,'default');
 
 	}
 	$log->debug("Exiting getAssociatedProducts method ...");
@@ -1425,19 +1410,19 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 	$output = '';
 	if($module == 'Quotes')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_quotesproductrel.* from vtiger_quotesproductrel inner join vtiger_products on vtiger_products.productid=vtiger_quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'PurchaseOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_poproductrel.* from vtiger_poproductrel inner join vtiger_products on vtiger_products.productid=vtiger_poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_soproductrel.* from vtiger_soproductrel inner join vtiger_products on vtiger_products.productid=vtiger_soproductrel.productid where salesorderid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_invoiceproductrel.* from vtiger_invoiceproductrel inner join vtiger_products on vtiger_products.productid=vtiger_invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id;
 	}
 	elseif($module == 'Potentials')
 	{

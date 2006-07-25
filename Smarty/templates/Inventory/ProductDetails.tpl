@@ -48,7 +48,8 @@ function displayCoords(event,obj,mode,curr_row)
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+document.getElementById("netTotal").innerHTML;
+		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
+		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount;
 	{rdelim}
 
 	var move_Element = document.getElementById(obj).style;
@@ -83,14 +84,18 @@ function displayCoords(event,obj,mode,curr_row)
 
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
-	<td colspan="5" class="detailedViewHeader">
+   	{if $MODULE neq 'PurchaseOrder'}
+			<td colspan="5" class="detailedViewHeader">
+	{else}
+			<td colspan="4" class="detailedViewHeader">
+	{/if}
 		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
 	</td>
 	<td class="detailedViewHeader" align="right">
 		<b>{$APP.LBL_TAX_MODE}</b>
 	</td>
 	<td class="detailedViewHeader">
-		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(this);">
+		<select id="taxtype" name="taxtype" onchange="decideTaxDiv();">
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
 		</select>
@@ -102,7 +107,9 @@ function displayCoords(event,obj,mode,curr_row)
    <tr>
 	<td width=5% valign="top" class="small crmTableColHeading" align="right"><b>{$APP.LBL_TOOLS}</b></td>
 	<td width=40% class="small crmTableColHeading"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
-	<td width=10% class="small crmTableColHeading"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
+	{if $MODULE neq 'PurchaseOrder'}
+		<td width=10% class="small crmTableColHeading"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
+	{/if}
 	<td width=10% class="small crmTableColHeading"><b>{$APP.LBL_QTY}</b></td>
 	<td width=10% class="small crmTableColHeading" align="right"><b>{$APP.LBL_LIST_PRICE}</b></td>
 	<td width=12% nowrap class="small crmTableColHeading" align="right"><b>{$APP.LBL_TOTAL}</b></td>
@@ -147,13 +154,15 @@ function displayCoords(event,obj,mode,curr_row)
 	<!-- column 2 - Product Name - ends -->
 
 	<!-- column 3 - Quantity in Stock - starts -->
-	<td id="qtyInStock1" class="crmTableRow small lineOnTop" >{$QTY_IN_STOCK}</td>
+	{if $MODULE neq 'PurchaseOrder'}
+		<td class="crmTableRow small lineOnTop" ><span id="qtyInStock1">{$QTY_IN_STOCK}</span></td>
+	{/if}
 	<!-- column 3 - Quantity in Stock - ends -->
 
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop">
-		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this); loadTaxes_Ajax(this);" value=""/>
+		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(); loadTaxes_Ajax(1);" value=""/>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -163,13 +172,12 @@ function displayCoords(event,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
+				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal()"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
 			</td>
 		   </tr>
 		   <tr>
 			<td align="right" style="padding:5px;" nowrap>
 				(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'discount_div1','discount','1')" >{$APP.LBL_DISCOUNT}</a> : </b>
-				<!-- Popup Discount DIV -->
 				<div class="discountUI" id="discount_div1">
 					<input type="hidden" id="discount_type1" name="discount_type1" value="">
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
@@ -191,7 +199,6 @@ function displayCoords(event,obj,mode,curr_row)
 					   </tr>
 					</table>
 				</div>
-				<!-- End Div -->
 			</td>
 		   </tr>
 		   <tr>
@@ -202,10 +209,8 @@ function displayCoords(event,obj,mode,curr_row)
 		   <tr id="individual_tax_row1" class="TaxShow">
 			<td align="right" style="padding:5px;" nowrap>
 				(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'tax_div1','tax','1')" >{$APP.LBL_TAX} </a> : </b>
-				<!-- Pop Div For TAX -->
 				<div class="discountUI" id="tax_div1">
 				</div>
-				<!-- End Popup Div -->
 			</td>
 		   </tr>
 		</table> 
@@ -234,7 +239,7 @@ function displayCoords(event,obj,mode,curr_row)
 
 
 	<!-- column 7 - Net Price - starts -->
-	<td id="netPrice1"  valign="bottom" class="crmTableRow small lineOnTop" align="right"><b>&nbsp;</b></td>
+	<td valign="bottom" class="crmTableRow small lineOnTop" align="right"><span id="netPrice1"><b>&nbsp;</b></span></td>
 	<!-- column 7 - Net Price - ends -->
 
    </tr>
@@ -255,11 +260,7 @@ function displayCoords(event,obj,mode,curr_row)
    <!-- Add Product Button -->
    <tr>
 	<td colspan="3">
-		{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			<input type="button" name="Button" class="small" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}');" />
-		{else}
-			<input type="button" name="Button" class="small" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}');" />
-		{/if}
+			<input type="button" name="Button" class="small" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
@@ -284,30 +285,31 @@ function displayCoords(event,obj,mode,curr_row)
 				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
-				<td align="left" class="lineOnTop"><input type="radio" name="discount" checked onclick="setDiscount(this,'_final')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 				<td class="lineOnTop">&nbsp;</td>
 			   </tr>
 			   <tr>
-				<td align="left"><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp; % {$APP.LBL_OF_PRICE}</td>
+				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final')">&nbsp; % {$APP.LBL_OF_PRICE}</td>
 				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')">&nbsp;%</td>
 			   </tr>
 			   <tr>
-				<td align="left" nowrap><input type="radio" name="discount" onclick="setDiscount(this,'_final')">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final')">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
 				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')"></td>
 			   </tr>
 			</table>
 		</div>
 		<!-- End Div -->
 	</td>
-	<td id="discount_final" class="crmTableRow small lineOnTop" align="right">0.00</td>
+	<td id="discountTotal_final" class="crmTableRow small lineOnTop" align="right">0.00</td>
    </tr>
 
+
+   <!-- Group Tax - starts -->
    <tr id="group_tax_row" valign="top" class="TaxHide">
 	<td class="crmTableRow small lineOnTop" align="right">
 		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'group_tax_div','group_tax_div_title',''); calcGroupTax();" >{$APP.LBL_TAX}</a></b>
 				<!-- Pop Div For Group TAX -->
 				<div class="discountUI" id="group_tax_div">
-					Group Tax
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
@@ -318,11 +320,11 @@ function displayCoords(event,obj,mode,curr_row)
 
 					   <tr>
 						<td align="left" class="lineOnTop">
-							<input type="text" class="small" size="3" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
+							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
 						</td>
 						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
 						<td align="right" class="lineOnTop">
-							<input type="text" class="small" size="4" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
+							<input type="text" class="small" size="6" name="{$tax_detail.taxname}_group_amount" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
 						</td>
 					   </tr>
 
@@ -337,12 +339,15 @@ function displayCoords(event,obj,mode,curr_row)
 	</td>
 	<td id="tax_final" class="crmTableRow small lineOnTop" align="right">0.00</td>
    </tr>
+   <!-- Group Tax - ends -->
+
+
    <tr valign="top">
 	<td class="crmTableRow small" align="right">
 		(+)&nbsp;<b>{$APP.LBL_SHIPPING_AND_HANDLING_CHARGES} </b>
 	</td>
 	<td class="crmTableRow small" align="right">
-		<input id="shipping_handling_charge" name="shipping_handling_charge" type="text" class="small" style="width:40px" align="right" value="0.00">
+		<input id="shipping_handling_charge" name="shipping_handling_charge" type="text" class="small" style="width:40px" align="right" value="0.00" onBlur="calcSHTax();">
 	</td>
    </tr>
 
@@ -362,11 +367,11 @@ function displayCoords(event,obj,mode,curr_row)
 
 					   <tr>
 						<td align="left" class="lineOnTop">
-							<input type="text" class="small" size="3" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcSHTax()">&nbsp;%
+							<input type="text" class="small" size="3" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcSHTax()">&nbsp;%
 						</td>
 						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
 						<td align="right" class="lineOnTop">
-							<input type="text" class="small" size="4" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
+							<input type="text" class="small" size="4" name="{$tax_detail.taxname}_sh_amount" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
 						</td>
 					   </tr>
 
@@ -383,13 +388,13 @@ function displayCoords(event,obj,mode,curr_row)
    <tr valign="top">
 	<td class="crmTableRow small" align="right">
 		{$APP.LBL_ADJUSTMENT}
-		<select id="adjustmentType" name="adjustmentType" class=small>
+		<select id="adjustmentType" name="adjustmentType" class=small onchange="calcTotal();">
 			<option value="+">Add</option>
 			<option value="-">Deduct</option>
 		</select>
 	</td>
 	<td class="crmTableRow small" align="right">
-		<input id="adjustment" name="adjustment" type="text" class="small" style="width:40px" align="right" value="0.00">
+		<input id="adjustment" name="adjustment" type="text" class="small" style="width:40px" align="right" value="0.00" onBlur="calcTotal();">
 	</td>
    </tr>
    <tr valign="top">
@@ -398,6 +403,8 @@ function displayCoords(event,obj,mode,curr_row)
    </tr>
 </table>
 		<input type="hidden" name="totalProductCount" id="totalProductCount" value="">
+		<input type="hidden" name="subtotal" id="subtotal" value="">
+		<input type="hidden" name="total" id="total" value="">
 
 
 

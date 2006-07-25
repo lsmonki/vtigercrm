@@ -149,9 +149,9 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 	$log->debug("Entering into function addTaxType($taxlabel, $taxvalue, $sh)");
 
 	if($sh != '' && $sh == 'sh')
-		$query = "alter table vtiger_inventoryshippingrel add column $taxlabel int(19) default NULL";
+		$query = "alter table vtiger_inventoryshippingrel add column $taxlabel decimal(7,3) default NULL";
 	else
-		$query = "alter table vtiger_inventoryproductrel add column $taxlabel int(19) default NULL";
+		$query = "alter table vtiger_inventoryproductrel add column $taxlabel decimal(7,3) default NULL";
 
 	$res = $adb->query($query);
 	if($res)

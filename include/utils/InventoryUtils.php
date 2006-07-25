@@ -420,5 +420,166 @@ function getTaxDetailsForProduct($productid, $available='all')
 	return $tax_details;
 }
 
+/**	Function used to delete the Inventory product details for the passed entity
+ *	@param int $objectid - entity id to which we want to delete the product details from REQUEST values where as the entity will be Purchase Order, Sales Order, Quotes or Invoice
+ *	@param string $return_old_values - string which contains the string return_old_values or may be empty, if the string is return_old_values then before delete old values will be retrieved
+ *	@return array $ext_prod_arr - if the second input parameter is 'return_old_values' then the array which contains the productid and quantity which will be retrieved before delete the product details will be returned otherwise return empty
+ */
+function deleteInventoryProductDetails($objectid, $return_old_values='')
+{
+	global $log, $adb;
+	$log->debug("Entering into function deleteInventoryProductDetails($objectid, $return_old_values='').");
+	
+	$ext_prod_arr = Array();
+
+	if($return_old_values == 'return_old_values')
+	{
+		$query1  = "select * from vtiger_inventoryproductrel where id=".$objectid;
+        	$result1 = $adb->query($query1);
+        	$num_rows = $adb->num_rows($result1);
+        	for($i=0; $i<$num_rows;$i++)
+        	{
+        	        $pro_id = $adb->query_result($result1,$i,"productid");
+        	        $pro_qty = $adb->query_result($result1,$i,"quantity");
+        	        $ext_prod_arr[$pro_id] = $pro_qty;
+        	}
+	}
+	
+        $query2 = "delete from vtiger_inventoryproductrel where id=".$objectid;
+        $adb->query($query2);
+
+	$log->debug("Exit from function deleteInventoryProductDetails($objectid, $return_old_values='').");
+	return $ext_prod_arr;
+}
+
+/**	Function used to save the Inventory product details for the passed entity
+ *	@param object reference $focus - object reference to which we want to save the product details from REQUEST values where as the entity will be Purchase Order, Sales Order, Quotes or Invoice
+ *	@param string $module - module name
+ *	@return void
+ */
+function saveInventoryProductDetails($focus, $module)
+{
+	global $log, $adb;
+	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
+
+	//To get the currency rate for the current user
+	global $current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
+
+	$ext_prod_arr = Array();
+	if($module != 'PurchaseOrder')
+	{
+		//First we will retrieve the existing product details and store it in a array and then delete all the existing product details and save new values
+
+		if($focus->mode == 'edit')
+			$ext_prod_arr = deleteInventoryProductDetails($focus->id,'return_old_values');
+	}
+
+	$tot_no_prod = $_REQUEST['totalProductCount'];
+
+	for($i=1; $i<=$tot_no_prod; $i++)
+	{
+	        $prod_id = $_REQUEST['hdnProductId'.$i];
+	        $qty = $_REQUEST['qty'.$i];
+	        $listprice = $_REQUEST['listPrice'.$i];
+		$listprice = convertToDollar($listprice,$rate);
+		$comment = addslashes($_REQUEST['comment'.$i]);
+
+		$query ="insert into vtiger_inventoryproductrel(id, productid, quantity, listprice, comment) values($focus->id, $prod_id , $qty, $listprice, \"$comment\")";
+		$adb->query($query);
+
+		if($module != 'PurchaseOrder')
+		{
+			//update the stock with existing details
+			updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,$module);
+		}
+
+		$taxes_for_product = getTaxDetailsForProduct($prod_id,'all');
+
+		//we should update discount and tax details
+		$updatequery = "update vtiger_inventoryproductrel set ";
+
+		//set the discount percentage or discount amount in update query, then set the tax values
+		if($_REQUEST['discount_type'.$i] == 'percentage')
+			$updatequery .= " discount_percent='".$_REQUEST['discount_percentage'.$i]."',";
+		elseif($_REQUEST['discount_type'.$i] == 'amount')
+			$updatequery .= " discount_amount='".$_REQUEST['discount_amount'.$i]."',";
+
+
+		if($_REQUEST['taxtype'] == 'group')
+		{
+			for($tax_count=0;$tax_count<count($taxes_for_product);$tax_count++)
+			{
+				$tax_name = $taxes_for_product[$tax_count]['taxname'];
+				$request_tax_name = $tax_name."_group_percentage";
+			
+				$updatequery .= "$tax_name = '".$_REQUEST[$request_tax_name]."',";
+			}
+			$updatequery = trim($updatequery,',')." where id=$focus->id and productid=$prod_id";
+		}
+		else
+		{
+			for($tax_count=0;$tax_count<count($taxes_for_product);$tax_count++)
+			{
+				$tax_name = $taxes_for_product[$tax_count]['taxname'];
+				$request_tax_name = $tax_name."_percentage".$i;
+			
+				$updatequery .= "$tax_name = '".$_REQUEST[$request_tax_name]."',";
+			}
+			$updatequery = trim($updatequery,',')." where id=$focus->id and productid=$prod_id";
+		}
+		$adb->query($updatequery);
+	}
+
+	//we should update the netprice (subtotal), group discount, S&H charge, S&H taxes, adjustment and total
+	//netprice, group discount, S&H amount, adjustment and total to entity table
+
+	$updatequery = "update $focus->table_name set ";
+
+	//for subtotal ie., nettotal
+	$updatequery .= " subtotal='".$_REQUEST['subtotal']."',";
+
+	//for discount percentage or discount amount
+	if($_REQUEST['discount_type_final'] == 'percentage')
+		$updatequery .= " discount_percent='".$_REQUEST['discount_percentage_final']."',";
+	elseif($_REQUEST['discount_type_final'] == 'amount')
+		$updatequery .= " discount_amount='".$_REQUEST['discount_amount_final']."',";
+
+	//for S&H amount
+	$updatequery .= " s_h_amount='".$_REQUEST['shipping_handling_charge']."',";
+
+	//for adjustment
+	$updatequery .= " adjustment='".$_REQUEST['adjustmentType'].$_REQUEST['adjustment']."',";
+
+	//for total
+	$updatequery .= " total='".$_REQUEST['total']."'";
+
+	$adb->query($updatequery);
+
+	//to save the S&H tax details in vtiger_inventoryshipping rel table
+	$sh_tax_details = getAllTaxes('all','sh');
+	$sh_query_fields = "id,";
+	$sh_query_values = "$focus->id,";
+	for($i=0;$i<count($sh_tax_details);$i++)
+	{
+		$tax_name = $sh_tax_details[$i]['taxname']."_sh_percent";
+		if($_REQUEST[$tax_name] != '')
+		{
+			$sh_query_fields .= $sh_tax_details[$i]['taxname'].",";
+			$sh_query_values .= $_REQUEST[$tax_name].",";
+		}
+	}
+	$sh_query_fields = trim($sh_query_fields,',');
+	$sh_query_values = trim($sh_query_values,',');
+
+	$sh_query = "insert into vtiger_inventoryshippingrel(".$sh_query_fields.") values(".$sh_query_values.")";
+	$adb->query($sh_query);
+
+	$log->debug("Exit from function saveInventoryProductDetails($focus, $module).");
+}
+
+
 
 ?>

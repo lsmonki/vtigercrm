@@ -18,6 +18,8 @@ $rowid = $_REQUEST['curr_row'];
 $product_total = $_REQUEST['productTotal'];
 
 $tax_details = getTaxDetailsForProduct($productid,'all');//we should pass available instead of all if we want to display only the available taxes.
+$associated_tax_count = count($tax_details);
+
 
 $tax_div = '
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
@@ -31,25 +33,29 @@ $tax_div = '
 $net_tax_total = 0.00;
 for($i=0;$i<count($tax_details);$i++)
 {
-	$j = $i+1;
 	$tax_name = $tax_details[$i]['taxname'];
 	$tax_percentage = $tax_details[$i]['percentage'];
-	$tax_name_percentage = $tax_name."_percentage".$j;
-	$tax_name_total = "popup_tax_row".$rowid;//$tax_name."_total".$j;
+	$tax_name_percentage = $tax_name."_percentage".$rowid;
+	$tax_name_total = "popup_tax_row".$rowid;//$tax_name."_total".$rowid;
 	$tax_total = $product_total*$tax_percentage/100.00;
 
 	$net_tax_total += $tax_total;
 	$tax_div .= '
 		   <tr>
 			<td align="left" class="lineOnTop">
-				<input type="text" class="small" size="2" id="'.$tax_name_percentage.'" value="'.$tax_percentage.'" onBlur="calcCurrentTax(\''.$tax_name_percentage.'\','.$rowid.','.$i.')">&nbsp;%
+				<input type="text" class="small" size="5" name="'.$tax_name_percentage.'" id="'.$tax_name_percentage.'" value="'.$tax_percentage.'" onBlur="calcCurrentTax(\''.$tax_name_percentage.'\','.$rowid.','.$i.')">&nbsp;%
 			</td>
 			<td align="center" class="lineOnTop">'.$tax_name.'</td>
 			<td align="right" class="lineOnTop">
-				<input type="text" class="small" size="4" name="'.$tax_name_total.'" style="cursor:pointer;" value="'.$tax_total.'" readonly>
+				<input type="text" class="small" size="6" name="'.$tax_name_total.'" id="'.$tax_name_total.'" style="cursor:pointer;" value="'.$tax_total.'" readonly>
 			</td>
 		   </tr>
 	    ';
+}
+
+if($associated_tax_count == 0)
+{
+	$tax_div .= '<tr><td colspan="3" align="left" class="lineOnTop">No taxes associated with this product.</td></tr>';
 }
 
 $tax_div .= '</table>';
