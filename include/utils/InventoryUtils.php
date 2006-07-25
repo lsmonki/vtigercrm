@@ -448,6 +448,9 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
         $query2 = "delete from vtiger_inventoryproductrel where id=".$objectid;
         $adb->query($query2);
 
+        $query3 = "delete from vtiger_inventoryshippingrel where id=".$objectid;
+        $adb->query($query3);
+
 	$log->debug("Exit from function deleteInventoryProductDetails($objectid, $return_old_values='').");
 	return $ext_prod_arr;
 }
