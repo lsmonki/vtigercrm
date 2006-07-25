@@ -651,6 +651,8 @@ $app_strings = Array(
 
 'COMBO_USERS'=>'Users',
 
+'COMBO_CAMPAIGNS'=>'Campaigns',
+
 
 'LBL_SELECT'=>'Select',
 

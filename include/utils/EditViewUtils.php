@@ -733,7 +733,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$parent_name = $adb->query_result($result,0,"subject");
 					$invoice_selected = "selected";
 				}
-
+				if($parent_module == "Campaigns")
+				{
+					$sql = "select campaignname from vtiger_campaign where campaignid=".$value;
+					$result = $adb->query($sql);
+					$parent_name = $adb->query_result($result,0,"campaignname");
+					$campaign_selected = "selected";
+				}
 			}
 
 		}
@@ -745,7 +751,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $app_strings['COMBO_QUOTES'],
                                 $app_strings['COMBO_PORDER'],
                                 $app_strings['COMBO_SORDER'],
-                                $app_strings['COMBO_INVOICES']
+                                $app_strings['COMBO_INVOICES'],
+				$app_strings['COMBO_CAMPAIGNS']
                                         );
 			$editview_label[] = array($lead_selected,
                                 $account_selected,
@@ -753,9 +760,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $quote_selected,
                                 $purchase_selected,
                                 $sales_selected,
-                                $invoice_selected
+                                $invoice_selected,
+				$campaign_selected
                                         );
-                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup");
+                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup","Campaigns&action=Popup");
                 }
                 else
                 {
