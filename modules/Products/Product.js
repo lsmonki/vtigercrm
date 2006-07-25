@@ -80,17 +80,21 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,vattax,salestax,servicetax,curr_row) {
-        window.opener.document.EditView.elements["txtProduct"+curr_row].value = product_name;
+function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row) {
+        window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
-	window.opener.document.EditView.elements["txtListPrice"+curr_row].value = unitprice;
-	getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
+	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
+	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
 
-	getOpenerObj("txtVATTax"+curr_row).value = vattax;
-	getOpenerObj("txtSalesTax"+curr_row).value = salestax;
-	getOpenerObj("txtServiceTax"+curr_row).value = servicetax;
-
-	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
+	var tax_array = new Array();
+	var tax_details = new Array();
+	tax_array = taxstr.split(',');
+	for(var i=0;i<tax_array.length;i++)
+	{
+		tax_details = tax_array[i].split('=');
+	}
+	
+	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
 function set_return_product(product_id, product_name) {
