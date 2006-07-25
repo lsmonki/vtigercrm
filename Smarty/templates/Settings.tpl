@@ -460,8 +460,8 @@
 					<!-- empty -->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
-							<td class=big valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
+							<td class=big valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
 
 						</tr>
 						<tr>

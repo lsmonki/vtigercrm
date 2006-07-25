@@ -131,10 +131,10 @@
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings">{$MOD.LBL_TAX_SETTINGS}</a></td></tr>
 				{/if}
-				{if $smarty.request.action eq 'systemconfig'}
-				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
+				{if $smarty.request.action eq 'listsysconfig'}
+				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=System&action=listsysconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
 				{else}
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=System&action=listsysconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
 				{/if}
 				{if $smarty.request.action eq 'ProxyServerConfig'}
                                 <tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td></tr>
