@@ -27,7 +27,7 @@ function openPopup(del_roleid){ldelim}
 
 	{include file='SetMenu.tpl'}
 
-<form name="newProfileForm" action="index.php">
+<form name="newProfileForm" action="index.php" onsubmit="return roleDeleteValidate()">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteRole">
 <input type="hidden" name="delete_role_id" value="{$ROLEID}">	
@@ -77,3 +77,17 @@ function openPopup(del_roleid){ldelim}
 </tr>
 </table>
 <br>
+<script>
+{literal}
+function roleDeleteValidate()
+{
+	if(document.getElementById('role_name').value == '')
+	{
+		alert('Specfiy the Role to Transfer Existing Roles Users');
+		return false;
+	}
+	return true;
+}
+{/literal}
+</script>
+
