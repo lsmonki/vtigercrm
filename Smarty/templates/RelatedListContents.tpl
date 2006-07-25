@@ -31,7 +31,7 @@
                                 {if $MODULE eq 'PriceBooks'}
                                 <input title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="small" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
 				{elseif $MODULE eq 'Potentials'}
-					<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Product}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button">&nbsp;
+					<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Product}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">&nbsp;
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
 					
 				{elseif $MODULE eq 'Vendors'}
@@ -42,18 +42,18 @@
 			{elseif $header eq 'Leads'}
 				{if $MODULE eq 'Campaigns'}
 				{$LEADCVCOMBO} <span id="lead_list_button"><input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="small" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button"></span>
-				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Lead}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button">
+				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Lead}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{/if}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Lead}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Leads'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Lead}"></td>
 			{elseif $header eq 'Contacts' }
 				{if $MODULE eq 'Activities' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
-				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button"></td>
+				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 				{elseif $MODULE eq 'Emails'}
 				<input title="{$APP.LBL_BULK_MAILS}" accessykey="F" class="small" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="{$APP.LBL_BULK_MAILS}" type="submit">&nbsp;
-				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button"></td>
+				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 				{elseif $MODULE eq 'Campaigns'}
 				{$CONTCVCOMBO}  <span id="contact_list_button"><input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="small" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button"></span>
-				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button">
+				<input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
 				{else}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
@@ -70,7 +70,7 @@
 			{elseif $header eq 'HelpDesk'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Ticket}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Ticket}"></td>
 			{elseif $header eq 'Campaigns'}
-                                <input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaign}" LANGUAGE=javascript onclick='return window.open("index.php?module=Campaigns&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button"></td>
+                                <input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaign}" LANGUAGE=javascript onclick='return window.open("index.php?module=Campaigns&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 			{elseif $header eq 'Attachments'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Note}" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Note}">&nbsp;
 				<input type="hidden" name="fileid">

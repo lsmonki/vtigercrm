@@ -52,6 +52,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
 					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
 					<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
+					<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
 
 				</td>
 				<td width="20%" class="dvtCellLabel">
@@ -145,6 +146,9 @@ function gethiddenelements()
 		urlstring +='&productid='+getObj('productid_pb').value;	
 	if(getObj('recordid').value != '')
 		urlstring +='&recordid='+getObj('recordid').value;	
+	var return_module = document.getElementById('return_module').value;
+	if(return_module != '')
+		urlstring += '&return_module='+return_module;
 	return urlstring;
 {rdelim}
 																									
