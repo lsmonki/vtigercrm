@@ -746,6 +746,7 @@ $app_strings = Array(
 'HelpDesk'=>'HelpDesk',
 'Activities'=>'Activities',
 'Events'=>'Events',
+'Tasks'=>'Tasks',
 'Quotes'=>'Quotes',
 'PriceBook'=>'Price Books',
 'PurchaseOrder'=>'Purchase Order',
