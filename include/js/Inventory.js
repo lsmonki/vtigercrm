@@ -83,92 +83,6 @@ function getProdListBody() {
 	return prodListBody;
 }
 
-/*function delRow(rowId) {
-   var rowId=parseInt(rowId.substr(rowId.indexOf("w")+1,rowId.length))
-      //removing the corresponding row
-   var prodListBody=getProdListBody()
-   prodListBody.removeChild(getObj("row"+rowId))
-      //assigning new innerHTML after deleting a row
-   var newInnerHTML="<tr class='moduleListTitle' height='20' id='tablehead'>"+getObj("tablehead").innerHTML+"</tr>"
-   newInnerHTML+="<tr id='tableheadline'>"+getObj("tableheadline").innerHTML+"</tr>";
-      var rowArray=new Array(rowCnt-1);
-      if (browser_nn4 || browser_nn6) {
-       var product=new Array(rowCnt-1)
-       var qty=new Array(rowCnt-1)
-       var listPrice=new Array(rowCnt-1)
-       var productId=new Array(rowCnt-1)
-       var total=new Array(rowCnt-1)
-       var rowStatus=new Array(rowCnt-1)
-   }
-      for (var i=1,k=0;i<=rowId-1;i++,k++) {
-       if (i%2==0) var rowClass="evenListRow"
-       else var rowClass="oddListRow"
-              rowArray[k]="<tr id='row"+i+"' class='"+rowClass+"'>"+getObj("row"+i).innerHTML+"</tr>"
-       newInnerHTML+=rowArray[k]
-              if (browser_nn4 || browser_nn6) {
-           product[k]=getObj("txtProduct"+i).value
-           qty[k]=getObj("txtQty"+i).value
-           listPrice[k]=getObj("txtListPrice"+i).value
-           total[k]=getObj("hdnTotal"+i).value
-           productId[k]=getObj("hdnProductId"+i).value
-           rowStatus[k]=getObj("hdnRowStatus"+i).value
-       }
-   }
-      for (var i=rowId+1;i<=rowCnt;i++,k++) {
-       rowArray[k]=getObj("row"+i).innerHTML
-       var temp=rowArray[k]
-       temp=temp.replace("row"+i,"row"+(i-1))
-       temp=temp.replace("txtProduct"+i,"txtProduct"+(i-1))
-       temp=temp.replace("txtProduct"+i,"txtProduct"+(i-1))
-       temp=temp.replace("qtyInStock"+i,"qtyInStock"+(i-1))
-       temp=temp.replace("txtQty"+i,"txtQty"+(i-1))
-       temp=temp.replace("txtQty"+i,"txtQty"+(i-1))
-       temp=temp.replace("unitPrice"+i,"unitPrice"+(i-1))
-       temp=temp.replace("txtListPrice"+i,"txtListPrice"+(i-1))
-       temp=temp.replace("txtListPrice"+i,"txtListPrice"+(i-1))
-       temp=temp.replace("total"+i,"total"+(i-1))
-       temp=temp.replace("delRow"+i,"delRow"+(i-1))
-       temp=temp.replace("hdnProductId"+i,"hdnProductId"+(i-1))
-       temp=temp.replace("hdnProductId"+i,"hdnProductId"+(i-1))
-       temp=temp.replace("hdnRowStatus"+i,"hdnRowStatus"+(i-1))
-       temp=temp.replace("hdnRowStatus"+i,"hdnRowStatus"+(i-1))
-       temp=temp.replace("hdnTotal"+i,"hdnTotal"+(i-1))
-       temp=temp.replace("hdnTotal"+i,"hdnTotal"+(i-1))
-              if ((i-1)%2==0) var rowClass="evenListRow"
-       else var rowClass="oddListRow"
-              rowArray[k]="<tr id='row"+(i-1)+"' class='"+rowClass+"'>"+temp+"</tr>"
-       newInnerHTML+=rowArray[k]
-              if (browser_nn4 || browser_nn6) {
-           product[k]=getObj("txtProduct"+i).value
-           qty[k]=getObj("txtQty"+i).value
-           listPrice[k]=getObj("txtListPrice"+i).value
-           total[k]=getObj("hdnTotal"+i).value
-           productId[k]=getObj("hdnProductId"+i).value
-           rowStatus[k]=getObj("hdnRowStatus"+i).value
-       }           }
-
-   var prodListBody=getProdListBody()
-   prodList.innerHTML=listTableStart+newInnerHTML+"</table>"
-
-   rowCnt--
-
-   for (var i=1,k=0;i<=rowCnt;i++,k++) {
-       if (browser_nn4 || browser_nn6) {
-           getObj("txtProduct"+i).value=product[k]
-           getObj("txtQty"+i).value=qty[k]
-           getObj("txtListPrice"+i).value=listPrice[k]
-           getObj("hdnTotal"+i).value=total[k]
-           getObj("hdnProductId"+i).value=productId[k]
-           getObj("hdnRowStatus"+i).value=rowStatus[k]
-       }
-   }
-
-   calcGrandTotal()
-}*/
-
-/*  New Delete Function */
-
-//  Don't take risk by changing this function 
 
 function deleteRow(module,i)
 {
@@ -481,7 +395,7 @@ function fnAddProductRow(module,image_path){
 	
 	//Delete link
 	colone.className = "crmTableRow small";
-	colone.innerHTML='<input id="hdnRowStatus'+count+'" name="hdnRowStatus'+count+'" type="hidden"><img src="themes/blue/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
+	colone.innerHTML='<img src="themes/blue/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
 
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
