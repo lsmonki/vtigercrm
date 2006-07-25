@@ -594,6 +594,46 @@ function saveInventoryProductDetails($focus, $module)
 	$log->debug("Exit from function saveInventoryProductDetails($focus, $module).");
 }
 
+/**	function used to get the tax type for the entity (PO, SO, Quotes or Invoice)
+ *	@param string $module - module name
+ *	@param int $id - id of the PO or SO or Quotes or Invoice
+ *	@return string $taxtype - taxtype for the given entity which will be individual or group
+ */
+function getInventoryTaxType($module, $id)
+{
+	global $log, $adb;
 
+	$log->debug("Entering into function getInventoryTaxType($module, $id).");
+
+	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
+	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	
+	$res = $adb->query("select ".$inv_id_array[$module]." from ".$inv_table_array[$module]." where ".$inv_id_array[$module]."=".$id);
+
+	$taxtype = $adb->query_result($res,0,'taxtype');
+
+	$log->debug("Exit from function getInventoryTaxType($module, $id).");
+
+	return $taxtype;
+}
+
+/**	function used to get the taxvalue which is associated with a product for PO/SO/Quotes or Invoice
+ *	@param int $id - id of PO/SO/Quotes or Invoice
+ *	@param int $productid - product id
+ *	@param string $taxname - taxname to which we want the value
+ *	@return float $taxvalue - tax value
+ */
+function getInventoryProductTaxValue($id, $productid, $taxname)
+{
+	global $log, $adb;
+
+	$res = $adb->query("select $taxname from vtiger_inventoryproductrel where id = $id and productid = $productid");
+	$taxvalue = $adb->query_result($res,0,$taxname);
+
+	if($taxvalue == '')
+		$taxvalue = '0.00';
+
+	return $taxvalue;
+}
 
 ?>
