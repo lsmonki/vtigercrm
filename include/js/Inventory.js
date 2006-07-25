@@ -175,97 +175,12 @@ function deleteRow(module,i)
 	rowCnt--;
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
-	document.getElementById('proTab').deleteRow(i);
-	for(loop_count=i+1;loop_count<prev;loop_count++)
-	{
-
-		var row_id = "row" + loop_count;
-		var new_id = "row" + (loop_count - 1);
-
-		if(module == 'PurchaseOrder')
-		{						
-			var stack = new Array("txtProduct","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
-			var stack_new = new Array("txtProduct","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
-		}
-		else
-		{
-			var stack = new Array("txtProduct","qtyInStock","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
-			var stack_new = new Array("txtProduct","qtyInStock","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
-		}
-
-		for(inner_loop=0;inner_loop<stack.length;inner_loop++)
-		{
-			stack_new[inner_loop] = getObj(stack[inner_loop]+loop_count).value;
-		}
-
-		document.getElementById(row_id).id=new_id;
-		document.getElementById('vat'+row_id).id='vat'+new_id;
-		document.getElementById('sales'+row_id).id='sales'+new_id;
-		document.getElementById('service'+row_id).id='service'+new_id;
-
-		var temp = document.getElementById(new_id).innerHTML;
-		var vatTemp = document.getElementById('vat'+new_id).innerHTML;
-		var salesTemp = document.getElementById('sales'+new_id).innerHTML;
-		var serviceTemp = document.getElementById('service'+new_id).innerHTML;
-
-		temp = temp.replace('txtProduct'+loop_count,'txtProduct'+(loop_count-1));
-		temp = temp.replace('txtProduct'+loop_count,'txtProduct'+(loop_count-1));
-
-		if(module != 'PurchaseOrder')
-		{
-			temp = temp.replace('qtyInStock'+loop_count,'qtyInStock'+(loop_count-1));
-		}
-
-		temp = temp.replace('txtQty'+loop_count,'txtQty'+(loop_count-1));
-		temp = temp.replace('txtQty'+loop_count,'txtQty'+(loop_count-1));
-		temp = temp.replace('unitPrice'+loop_count,'unitPrice'+(loop_count-1));
-		temp = temp.replace('txtListPrice'+loop_count,'txtListPrice'+(loop_count-1));
-		temp = temp.replace('txtListPrice'+loop_count,'txtListPrice'+(loop_count-1));
-		temp = temp.replace('total'+loop_count,'total'+(loop_count-1));
-		temp = temp.replace('hdnTaxTotal'+loop_count,'hdnTaxTotal'+(loop_count-1));
-		temp = temp.replace('hdnTaxTotal'+loop_count,'hdnTaxTotal'+(loop_count-1));
-		temp = temp.replace('txtTaxTotal'+loop_count,'txtTaxTotal'+(loop_count-1));
-		temp = temp.replace('txtTaxTotal'+loop_count,'txtTaxTotal'+(loop_count-1));
-		temp = temp.replace('hdnProductId'+loop_count,'hdnProductId'+(loop_count-1));
-		temp = temp.replace('hdnProductId'+loop_count,'hdnProductId'+(loop_count-1));
-		temp = temp.replace('hdnRowStatus'+loop_count,'hdnRowStatus'+(loop_count-1));
-		temp = temp.replace('hdnRowStatus'+loop_count,'hdnRowStatus'+(loop_count-1));
-		temp = temp.replace('hdnTotal'+loop_count,'hdnTotal'+(loop_count-1));
-		temp = temp.replace('hdnTotal'+loop_count,'hdnTotal'+(loop_count-1));
-		temp = temp.replace('tax_Lay'+loop_count,'tax_Lay'+(loop_count-1));
-		temp = temp.replace('tax_Lay'+loop_count,'tax_Lay'+(loop_count-1));	
-
-		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
-		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
-		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
-		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
-		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
-		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
-		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
-		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
-
-		document.getElementById(new_id).innerHTML = temp;
-		document.getElementById('vat'+new_id).innerHTML = vatTemp;
-		document.getElementById('sales'+new_id).innerHTML = salesTemp;
-		document.getElementById('service'+new_id).innerHTML = serviceTemp;
-
-		for(inner_loop=0;inner_loop<stack.length;inner_loop++)
-		{
-			getObj(stack[inner_loop]+(loop_count-1)).value = stack_new[inner_loop];
-		}
-
-	}
-	calcGrandTotal()
+//	document.getElementById('proTab').deleteRow(i);
+	document.getElementById("row"+i).style.display = 'none';
+	document.getElementById("hdnProductId"+i).value = "";
+	//document.getElementById("productName"+i).value = "";
+	document.getElementById('deleted'+i).value = 1;
+	calcTotal()
 }
 /*  End */
 
@@ -275,27 +190,31 @@ function calcTotal() {
 
 	var max_row_count = document.getElementById('proTab').rows.length;
 	max_row_count = eval(max_row_count)-2;//Because the table has two header rows. so we will reduce two from row length
-
+	var netprice = 0.00;
 	for(var i=1;i<=max_row_count;i++)
 	{
 		rowId = i;
+		
+		if(document.getElementById('deleted'+rowId).value == 0)
+		{
+			
+			var total=eval(getObj("qty"+rowId).value*getObj("listPrice"+rowId).value);
+			getObj("productTotal"+rowId).innerHTML=roundValue(total.toString())
 
-		var total=eval(getObj("qty"+rowId).value*getObj("listPrice"+rowId).value);
-		getObj("productTotal"+rowId).innerHTML=roundValue(total.toString())
+			var totalAfterDiscount = eval(total-document.getElementById("discountTotal"+rowId).innerHTML);
+			getObj("totalAfterDiscount"+rowId).innerHTML=roundValue(totalAfterDiscount.toString())
 
-		var totalAfterDiscount = eval(total-document.getElementById("discountTotal"+rowId).innerHTML);
-		getObj("totalAfterDiscount"+rowId).innerHTML=roundValue(totalAfterDiscount.toString())
+			
+			var tax_type = document.getElementById("taxtype").value;
+			//if the tax type is individual then add the tax with net price
+			if(tax_type == 'individual')
+				netprice = totalAfterDiscount+eval(document.getElementById("taxTotal"+rowId).innerHTML);
+			else
+				netprice = totalAfterDiscount;
+			
+			getObj("netPrice"+rowId).innerHTML=roundValue(netprice.toString())
 
-		var netprice = 0.00;
-		var tax_type = document.getElementById("taxtype").value;
-		//if the tax type is individual then add the tax with net price
-		if(tax_type == 'individual')
-			netprice = totalAfterDiscount+eval(document.getElementById("taxTotal"+rowId).innerHTML);
-		else
-			netprice = totalAfterDiscount;
-
-		getObj("netPrice"+rowId).innerHTML=roundValue(netprice.toString())
-
+		}
 	}
 	calcGrandTotal()
 }
@@ -311,12 +230,16 @@ function calcGrandTotal() {
 
 	for (var i=1;i<=max_row_count;i++) 
 	{
-		if (document.getElementById("netPrice"+i).innerHTML=="") 
-			document.getElementById("netPrice"+i).innerHTML = 0.0
-		if (!isNaN(document.getElementById("netPrice"+i).innerHTML)) 
-			netTotal += parseFloat(document.getElementById("netPrice"+i).innerHTML)
+		if(document.getElementById('deleted'+i).value == 0)
+		{
+			
+			if (document.getElementById("netPrice"+i).innerHTML=="") 
+				document.getElementById("netPrice"+i).innerHTML = 0.0
+			if (!isNaN(document.getElementById("netPrice"+i).innerHTML))
+				netTotal += parseFloat(document.getElementById("netPrice"+i).innerHTML)
+		}
 	}
-
+//	alert(netTotal);
 	document.getElementById("netTotal").innerHTML = netTotal;
 	document.getElementById("subtotal").value = netTotal;
 
@@ -537,6 +460,7 @@ function fnAddProductRow(module,image_path){
     	var count = eval(prev)-1;//As the table has two headers, we should reduce the count
     	var row = tableName.insertRow(prev);
 		row.id = "row"+count;
+		row.style.verticalAlign = "top";
 
 	
 	var colone = row.insertCell(0);
@@ -557,7 +481,7 @@ function fnAddProductRow(module,image_path){
 	
 	//Delete link
 	colone.className = "crmTableRow small";
-	colone.innerHTML='<input id="hdnRowStatus'+count+'" name="hdnRowStatus'+count+'" type="hidden"><img src="themes/blue/images/delete.gif" border="0" onclick="">';
+	colone.innerHTML='<input id="hdnRowStatus'+count+'" name="hdnRowStatus'+count+'" type="hidden"><img src="themes/blue/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
 
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
@@ -582,7 +506,9 @@ function fnAddProductRow(module,image_path){
 	colsix.innerHTML = '<table width="100%" cellpadding="5" cellspacing="0"><tr><td id="productTotal'+count+'" align="right">&nbsp;</td></tr><tr><td id="discountTotal'+count+'" align="right">0.00</td></tr><tr><td id="totalAfterDiscount'+count+'" align="right">&nbsp;</td></tr><tr><td id="taxTotal'+count+'" align="right">0.00</td></tr></table>';
 
 	//Net Price
-	colseven.className = "crmTableRow small"
+	colseven.className = "crmTableRow small";
+	colseven.align = "right";
+	colseven.style.verticalAlign = "bottom";
 	colseven.innerHTML = '<span id="netPrice'+count+'"><b>&nbsp;</b></span>';
 	
 	//This is to show or hide the individual or group tax

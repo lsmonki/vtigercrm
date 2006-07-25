@@ -395,7 +395,7 @@ function getTaxDetailsForProduct($productid, $available='all')
 		}
 		if($available != 'all' && $available == 'available_associated')
 		{
-			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 group by vtiger_producttaxrel.taxid";
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 group by vtiger_inventorytaxinfo.taxid";
 		}
 		else
 		{
@@ -493,6 +493,10 @@ function saveInventoryProductDetails($focus, $module)
 	        $listprice = $_REQUEST['listPrice'.$i];
 		$listprice = convertToDollar($listprice,$rate);
 		$comment = addslashes($_REQUEST['comment'.$i]);
+
+		//if the product is deleted then we should avoid saving the deleted products
+		if($_REQUEST["deleted".$i] == 1)
+			continue;
 
 		$query ="insert into vtiger_inventoryproductrel(id, productid, quantity, listprice, comment) values($focus->id, $prod_id , $qty, $listprice, \"$comment\")";
 		$adb->query($query);

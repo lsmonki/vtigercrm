@@ -129,6 +129,7 @@ function displayCoords(event,obj,mode,curr_row)
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">&nbsp;
 		<input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1">
+		<input type="hidden" id="deleted1" name="deleted1" value="0">
 	</td>
 	<!-- column 1 - delete link - ends -->
 
