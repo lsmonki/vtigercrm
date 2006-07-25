@@ -82,9 +82,9 @@ $role_det = getAllRoleDetails();
 $query = "select * from vtiger_role";
 $result = $adb->query($query);
 $num_rows=$adb->num_rows($result);
-$mask_roleid='';
-$mask_roleid=$_REQUEST['maskid'];
-
+$mask_roleid=Array();
+$del_roleid=$_REQUEST['maskid'];
+$mask_roleid= getRoleAndSubordinatesRoleIds($del_roleid);
 $roleout ='';
 $roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
 
@@ -118,13 +118,16 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		else if($roledepth != 0){
 			$roleout .= '<img src="'.$image_path.'/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="Expand/Collapse" title="Expand/Collapse" align="absmiddle">';	
 		}
-		else{
+		else
+		{
 			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="Root" title="Root" align="absmiddle">';
 		}	
-		if($roledepth == 0 || $mask_roleid == $roleid){
+		if($roledepth == 0 || in_array($roleid,$mask_roleid))
+		{
 			$roleout .= '&nbsp;<b class="genHeaderGray">'.$rolename.'</b>';
 		}
-		else{
+		else
+		{
 			$roleout .= '&nbsp;<a href="javascript:loadValue(\'user_'.$roleid.'\',\''.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
 		}
  		$roleout .=  '</li>';
