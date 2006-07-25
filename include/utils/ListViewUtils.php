@@ -316,7 +316,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                                 $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
                                                         }
                                                 }
-                                                $name = "<a href='index.php?module=".$module."&action=Popup".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                                $name = "<a href='javascript:;' onClick=\"getListViewSorted_js('".$module."','".$sort_qry."&order_by=".$col."&sorder=".$sorder."')\" class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
                                                 $arrow = '';
                                         }
                                         else
