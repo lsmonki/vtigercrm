@@ -73,14 +73,14 @@
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
 			{if $CNT eq 1}
-                                <select class=small style="width:120px" title="Create New" onclick="QCreate(this);">
+                                <select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
 					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
                         {/foreach}
                                 </select>
                         {else}
-                                <select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
+                                <select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
 					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
@@ -191,8 +191,12 @@ function QCreate(qcoptions)
 	if(module == 'Events')
 	{ldelim}
 		module = 'Activities';
-		action = 'Activities';
 		var urlstr = '&activity_mode=Events';
+	{rdelim}
+	else if(module == 'Activities')
+	{ldelim}
+		module = 'Activities';
+		var urlstr = '&activity_mode=Task';
 	{rdelim}
 	else
 		var urlstr = '';

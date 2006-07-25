@@ -37,7 +37,7 @@
 	<form name="ActivitySave" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
 	<input type="hidden" name="record" value="">
-	<input type="hidden" name="activity_mode" value="Task">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="assigned_user_id" value="{$USERID}">
 	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="due_date" value="">
@@ -45,7 +45,7 @@
         <form name="EventSave" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php">
         <input type="hidden" name="module" value="Activities">
         <input type="hidden" name="record" value="">
-        <input type="hidden" name="activity_mode" value="Events">
+        <input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
         <input type="hidden" name="assigned_user_id" value="{$USERID}">
         <input type="hidden" name="action" value="Save">
         <input type="hidden" name="due_date" value="">
