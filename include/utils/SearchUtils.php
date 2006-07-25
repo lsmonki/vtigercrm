@@ -221,6 +221,8 @@ function Search($module)
                 {
                 }
 		$url_string = "&search_field=".$search_column."&search_text=".$search_string."&searchtype=BasicSearch";
+		if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
+			$url_string .= "&type=".$_REQUEST['type'];
 		return $where."#@@#".$url_string;
 		$log->debug("Exiting Search method ...");
         }
