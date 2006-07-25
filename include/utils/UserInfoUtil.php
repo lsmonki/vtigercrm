@@ -1446,8 +1446,10 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 	//Checking for Action Permission
-	//echo '******* '.$actionid.'  ***********&'.$profileActionPermission[$tabid][$actionid].'&';
-	if($profileActionPermission[$tabid][$actionid] == '')
+		//echo '<BR>';
+		//echo '******* '.$actionid.'  ***********'.$tabid.'%%%%%%%%%%%%%%%%%%%%%%%'.$profileActionPermission[$tabid][$actionid];
+		//echo '<BR>';
+	if(strlen($profileActionPermission[$tabid][$actionid]) <  1 && $profileActionPermission[$tabid][$actionid] == '')
 	{
 		$permission = "yes";
 		$log->debug("Exiting isPermitted method ...");
@@ -1471,7 +1473,7 @@ function isPermitted($module,$actionname,$record_id='')
 	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
-		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendor'  || $module == 'PriceBook')
+		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
