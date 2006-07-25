@@ -179,28 +179,47 @@
 				          <td colspan="6" class="small settingsSelectedUI">
 						<table class="small" border="0" cellpadding="2" cellspacing="0" width="100%">
 			        	    	<tbody>
-						<tr id="gva">
+						<tr>
+							{if $modulename eq 'Activities'}
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
+							{else}
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
+							{/if}
 					        </tr>
 						{foreach item=row_values from=$FIELD_PRIVILEGES[$tabid]}
-				            	<tr id="gva">
+				            	<tr>
 						      {foreach item=element from=$row_values}
 					              <td valign="top">{$element.1}</td>
 					              <td>{$element.0}</td>
 						      {/foreach}
 				                </tr>
 						{/foreach}
-					        <tr id="gva">
+						{if $modulename eq 'Activities'}
+						<tr>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}  ({$APP.Events})</td>
+					        </tr>
+						{foreach item=row_values from=$FIELD_PRIVILEGES[16]}
+				            	<tr>
+						      {foreach item=element from=$row_values}
+					              <td valign="top">{$element.1}</td>
+					              <td>{$element.0}</td>
+						      {/foreach}
+				                </tr>
+						{/foreach}
+						{/if}
+						{if $UTILITIES_PRIV[$tabid] neq ''}
+					        <tr>
 					              <td colspan="6" class="small colHeader" valign="top">{$CMOD.LBL_TOOLS_TO_BE_SHOWN} </td>
 						</tr>
-							{foreach item=util_value from=$UTILITIES_PRIV[$tabid]}
-							<tr id="gva">
+						{/if}
+						{foreach item=util_value from=$UTILITIES_PRIV[$tabid]}
+						<tr>
 							{foreach item=util_elements from=$util_value}
 					              		<td valign="top">{$util_elements.1}</td>
 						                <td>{$APP[$util_elements.0]}</td>
 							{/foreach}
-				                	</tr>
-							{/foreach}
+				               	</tr>
+						{/foreach}
 					        </tbody>
 						</table>
 					</td>
