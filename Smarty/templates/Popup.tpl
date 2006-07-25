@@ -78,14 +78,16 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 </div>
 </body>
 <script>
+var gPopupAlphaSearchUrl = '';
 function callSearch(searchtype)
 {ldelim}
-	for(i=1;i<=26;i++)
+    for(i=1;i<=26;i++)
     {ldelim}
         var data_td_id = 'alpha_'+ eval(i);
         getObj(data_td_id).className = 'searchAlph';
     {rdelim}
-	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+    gPopupAlphaSearchUrl = '';
+    search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
     search_txt_val=document.basicSearch.search_text.value;
     var urlstring = '';
     if(searchtype == 'Basic')
@@ -109,12 +111,14 @@ function callSearch(searchtype)
 {rdelim}	
 function alphabetic(module,url,dataid)
 {ldelim}
+    document.basicSearch.search_text.value = '';	
     for(i=1;i<=26;i++)
     {ldelim}
 	var data_td_id = 'alpha_'+ eval(i);
 	getObj(data_td_id).className = 'searchAlph';
     {rdelim}
     getObj(dataid).className = 'searchAlphselected';
+    gPopupAlphaSearchUrl = '&'+url;	
     var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     urlstring +=gethiddenelements();
     new Ajax.Request(
@@ -147,8 +151,31 @@ function gethiddenelements()
 function getListViewEntries_js(module,url)
 {ldelim}
 	popuptype = document.getElementById('popup_type').value;
-        var urlstring ="module="+module+"&action="+module+"Ajax&popuptype="+popuptype+"&file=Popup&ajax=true&"+url;
+        var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
+	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+	search_txt_val=document.basicSearch.search_text.value;
+    	if(search_txt_val != '')
+		urlstring += '&query=true&search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
+	if(gPopupAlphaSearchUrl != '')
+		urlstring += gPopupAlphaSearchUrl;	
+	else
+		urlstring += '&popuptype='+popuptype;	
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: urlstring,
+                                onComplete: function(response) {ldelim}
+                                        $("ListViewContents").innerHTML= response.responseText;
+				{rdelim}
+			{rdelim}
+		);
+{rdelim}
+
+function getListViewSorted_js(module,url)
+{ldelim}
+        var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true"+url;
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
