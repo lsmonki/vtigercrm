@@ -47,46 +47,10 @@ if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == '
 }
 
 $focus->save("PurchaseOrder");
-if($focus->mode == 'edit')
-{
-        $query1 = "delete from vtiger_poproductrel where purchaseorderid=".$focus->id;
-        $adb->query($query1);
 
-}
-//Printing the total Number of rows
-$tot_no_prod = $_REQUEST['totalProductCount'];
-for($i=1; $i<=$tot_no_prod; $i++)
-{
-        $product_id_var = 'hdnProductId'.$i;
-        $status_var = 'hdnRowStatus'.$i;
-        $qty_var = 'txtQty'.$i;
-        $list_price_var = 'txtListPrice'.$i;
 
-	$vat_var = 'txtVATTax'.$i;
-	$sales_var = 'txtSalesTax'.$i;
-	$service_var = 'txtServiceTax'.$i;
-	
-        $prod_id = $_REQUEST[$product_id_var];
-        $prod_status = $_REQUEST[$status_var];
-        $qty = $_REQUEST[$qty_var];
-        $listprice = $_REQUEST[$list_price_var];
-	$listprice = convertToDollar($listprice,$rate);
-	$vat = $_REQUEST[$vat_var];
-	$sales = $_REQUEST[$sales_var];
-	$service = $_REQUEST[$service_var];
-
-        if($prod_status != 'D')
-        {
-
-                $query ="insert into vtiger_poproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
-                $adb->query($query);
-		if($update_prod_stock == 'true')
-                {
-                        addToProductStock($prod_id,$qty);
-                }
-		
-        }
-}
+//Based on the total Number of rows we will save the product relationship with this entity
+saveInventoryProductDetails(&$focus, 'PurchaseOrder');
 
 
 $return_id = $focus->id;

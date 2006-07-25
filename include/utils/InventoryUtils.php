@@ -469,12 +469,16 @@ function saveInventoryProductDetails($focus, $module)
 	$rate = $rate_symbol['rate'];
 
 	$ext_prod_arr = Array();
-	if($module != 'PurchaseOrder')
+	if($focus->mode == 'edit')
 	{
-		//First we will retrieve the existing product details and store it in a array and then delete all the existing product details and save new values
+		$return_old_values = '';
+		if($module != 'PurchaseOrder')
+		{
+			$return_old_values = 'return_old_values';
+		}
 
-		if($focus->mode == 'edit')
-			$ext_prod_arr = deleteInventoryProductDetails($focus->id,'return_old_values');
+		//we will retrieve the existing product details and store it in a array and then delete all the existing product details and save new values, retrieve the old value and update stock only for SO, Quotes and Invoice not for PO
+		$ext_prod_arr = deleteInventoryProductDetails($focus->id,$return_old_values);
 	}
 
 	$tot_no_prod = $_REQUEST['totalProductCount'];
@@ -533,13 +537,14 @@ function saveInventoryProductDetails($focus, $module)
 		$adb->query($updatequery);
 	}
 
-	//we should update the netprice (subtotal), group discount, S&H charge, S&H taxes, adjustment and total
-	//netprice, group discount, S&H amount, adjustment and total to entity table
+	//we should update the netprice (subtotal), taxtype, group discount, S&H charge, S&H taxes, adjustment and total
+	//netprice, group discount, taxtype, S&H amount, adjustment and total to entity table
 
-	$updatequery = "update $focus->table_name set ";
+	$updatequery  = " update $focus->table_name set ";
 
-	//for subtotal ie., nettotal
 	$updatequery .= " subtotal='".$_REQUEST['subtotal']."',";
+
+	$updatequery .= " taxtype='".$_REQUEST['taxtype']."',";
 
 	//for discount percentage or discount amount
 	if($_REQUEST['discount_type_final'] == 'percentage')
@@ -547,18 +552,20 @@ function saveInventoryProductDetails($focus, $module)
 	elseif($_REQUEST['discount_type_final'] == 'amount')
 		$updatequery .= " discount_amount='".$_REQUEST['discount_amount_final']."',";
 
-	//for S&H amount
 	$updatequery .= " s_h_amount='".$_REQUEST['shipping_handling_charge']."',";
 
-	//for adjustment
 	$updatequery .= " adjustment='".$_REQUEST['adjustmentType'].$_REQUEST['adjustment']."',";
 
-	//for total
 	$updatequery .= " total='".$_REQUEST['total']."'";
+
+	$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	//Added where condition to which entity we want to update these values
+	//$updatequery .= " where ".$focus->$module_id."=$focus->id";
+	$updatequery .= " where ".$id_array[$module]."=$focus->id";
 
 	$adb->query($updatequery);
 
-	//to save the S&H tax details in vtiger_inventoryshipping rel table
+	//to save the S&H tax details in vtiger_inventoryshippingrel table
 	$sh_tax_details = getAllTaxes('all','sh');
 	$sh_query_fields = "id,";
 	$sh_query_values = "$focus->id,";

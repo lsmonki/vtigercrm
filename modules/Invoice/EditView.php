@@ -324,6 +324,16 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 
+//in create new Invoice, get all available product taxes and shipping & Handling taxes
+if($focus->mode != 'edit')
+{
+	$tax_details = getAllTaxes('available');
+	$sh_tax_details = getAllTaxes('available','sh');
+
+	$smarty->assign("GROUP_TAXES",$tax_details);
+	$smarty->assign("SH_TAXES",$sh_tax_details);
+}
+
 
 
 

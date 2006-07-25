@@ -41,56 +41,9 @@ setObjectValuesFromRequest(&$focus);
 $log->debug("The Field Value Array -----> ".$focus->column_fields);
 $focus->save("Quotes");
 
-$ext_prod_arr = Array();
-if($focus->mode == 'edit')
-{	
-	$query2  = "select * from vtiger_quotesproductrel where quoteid=".$focus->id;
-	$result2 = $adb->query($query2);
-	$num_rows = $adb->num_rows($result2);
-	for($i=0; $i<$num_rows;$i++)
-	{
-		$pro_id = $adb->query_result($result2,$i,"productid");	
-		$pro_qty = $adb->query_result($result2,$i,"quantity");
-		$ext_prod_arr[$pro_id] = $pro_qty;	
-	}
-	
-	 $log->debug("Deleting from vtiger_quotesproductrel vtiger_table ");
-	$query1 = "delete from vtiger_quotesproductrel where quoteid=".$focus->id;
-	$adb->query($query1);
 
-}
-//Printing the total Number of rows
-$tot_no_prod = $_REQUEST['totalProductCount'];
-$log->debug("The total Product Count is  ".$tot_no_prod);
-for($i=1; $i<=$tot_no_prod; $i++)
-{
-	$product_id_var = 'hdnProductId'.$i;
-	$status_var = 'hdnRowStatus'.$i;
-	$qty_var = 'txtQty'.$i;
-	$list_price_var = 'txtListPrice'.$i;
-
-	$vat_var = 'txtVATTax'.$i;
-	$sales_var = 'txtSalesTax'.$i;
-	$service_var = 'txtServiceTax'.$i;
-
-	$prod_id = $_REQUEST[$product_id_var];
-	$prod_status = $_REQUEST[$status_var];
-	$qty = $_REQUEST[$qty_var];
-	$listprice = $_REQUEST[$list_price_var];
-	$listprice = convertToDollar($listprice,$rate);
-	$vat = $_REQUEST[$vat_var];
-	$sales = $_REQUEST[$sales_var];
-	$service = $_REQUEST[$service_var];
-
-	if($prod_status != 'D')
-	{
-		
-		$query ="insert into vtiger_quotesproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
-		$adb->query($query);
-		//Checking the re-order level and sending mail	
-		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,'Quotes');
-	}
-}
+//Based on the total Number of rows we will save the product relationship with this entity
+saveInventoryProductDetails(&$focus, 'Quotes');
 
 
 $return_id = $focus->id;
