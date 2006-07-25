@@ -32,11 +32,14 @@ setlocale (LC_ALL, $text['locale']);
 @header('Content-Type: text/html; charset=' . $charset);
 
 global $XPath;
+global $theme;
+$theme_path="themes/".$theme."/";
 
 echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
 echo "<html>\n";
 echo created_by();
 echo "<head>\n";
+echo "<style type='text/css'>@import url('$theme_path/style.css');</style>\n";
 echo "  <title>" . $text['title'], " -- ", $XPath->getData('/phpsysinfo/Vitals/Hostname'), " --</title>\n";
 
 if (isset($charset) && $charset == 'euc-jp') {
