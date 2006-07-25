@@ -150,15 +150,8 @@ $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 //Retreiving the no of rows
 $count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
-$noofrows = 0;
-if($adb->num_rows($count_result)!=0)
-{
-	for($k=0;$k < $adb->num_rows($count_result);$k++)
-        {
-		$noofrows = $noofrows + $adb->query_result($count_result,$k,"count");
-	}
-}
-										
+$noofrows = $adb->num_rows($count_result);
+
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
 {
