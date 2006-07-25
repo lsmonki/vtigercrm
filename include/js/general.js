@@ -818,6 +818,7 @@ function formValidate() {
 		}
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
+	
         for (var j=0; j<fieldname.length; j++)
 	{
 
@@ -882,7 +883,6 @@ function formValidate() {
                 else return true
 
 	 }//end
-
 
 	return true
 }
@@ -1144,27 +1144,32 @@ function fnhide(divId)
     id.style.display = 'none';
 }
 
-function fnLoadValues(obj1,obj2,SelTab,unSelTab){
+function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
+	
+   var oform = document.forms['EditView'];
+   oform.action.value='Save';	
+   if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
+   if(formValidate())
+   {	
+	   var tabName1 = document.getElementById(obj1);
 
-   var tabName1 = document.getElementById(obj1);
+	   var tabName2 = document.getElementById(obj2);
 
-   var tabName2 = document.getElementById(obj2);
+	   var tagName1 = document.getElementById(SelTab);
 
-   var tagName1 = document.getElementById(SelTab);
+	   var tagName2 = document.getElementById(unSelTab);
 
-   var tagName2 = document.getElementById(unSelTab);
+	   if(tabName1.className == "dvtUnSelectedCell")
 
-   if(tabName1.className == "dvtUnSelectedCell")
+		   tabName1.className = "dvtSelectedCell";
 
-       tabName1.className = "dvtSelectedCell";
+	   if(tabName2.className == "dvtSelectedCell")
 
-   if(tabName2.className == "dvtSelectedCell")
+		   tabName2.className = "dvtUnSelectedCell";   
+	   tagName1.style.display='block';
 
-       tabName2.className = "dvtUnSelectedCell";   
-   tagName1.style.display='block';
-
-   tagName2.style.display='none';
-
+	   tagName2.style.display='none';
+   }
 }
 
 function fnCopy(source,design){
