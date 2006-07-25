@@ -215,7 +215,11 @@ else
 }
 			
 
-list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
+{
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	$url_string .="&query=true".$ustring;
+}
 
 if(isset($where) && $where != '')
 {
@@ -246,6 +250,7 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 // Setting the record count string
+/*
 if ($navigation_array['start'] == 1)
 {
         if($noofrows != 0)
@@ -274,7 +279,10 @@ else
                 $start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
                 $end_rec = $noofrows;
         }
-}
+}*/
+
+$start_rec = $navigation_array['start'];
+$end_rec = $navigation_array['end_val']; 
 if($navigation_array['start'] != 0)
 	$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
