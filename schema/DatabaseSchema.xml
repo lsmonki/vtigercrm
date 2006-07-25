@@ -3401,7 +3401,7 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
-		<field name="taxtype" type="N" size="11.3" />
+		<field name="taxtype" type="C" size="25" />
 		<field name="discount_percent" type="N" size="11.3" />
 		<field name="discount_amount" type="N" size="11.3" />
 		<field name="s_h_amount" type="N" size="11.3" />
@@ -3721,7 +3721,7 @@
 		<field name="tax" type="N" size="11.3" />
 		<field name="adjustment" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
-		<field name="taxtype" type="N" size="11.3" />
+		<field name="taxtype" type="C" size="25" />
 		<field name="discount_percent" type="N" size="11.3" />
 		<field name="discount_amount" type="N" size="11.3" />
 		<field name="s_h_amount" type="N" size="11.3" />
@@ -3854,7 +3854,7 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
-		<field name="taxtype" type="N" size="11.3" />
+		<field name="taxtype" type="C" size="25" />
 		<field name="discount_percent" type="N" size="11.3" />
 		<field name="discount_amount" type="N" size="11.3" />
 		<field name="s_h_amount" type="N" size="11.3" />
@@ -3988,7 +3988,7 @@
 		<field name="exciseduty" type="N" size="11.3" />
 		<field name="subtotal" type="N" size="11.3" />
 		<field name="total" type="N" size="11.3" />
-		<field name="taxtype" type="N" size="11.3" />
+		<field name="taxtype" type="C" size="25" />
 		<field name="discount_percent" type="N" size="11.3" />
 		<field name="discount_amount" type="N" size="11.3" />
 		<field name="s_h_amount" type="N" size="11.3" />
