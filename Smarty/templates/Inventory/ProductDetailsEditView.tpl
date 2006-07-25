@@ -113,20 +113,33 @@ function displayCoords(event,obj,mode,curr_row)
    </tr>
 
    {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
+	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
 	{assign var="comment" value="comment"|cat:$row_no}
 	{assign var="qtyInStock" value="qtyInStock"|cat:$row_no}
 	{assign var="qty" value="qty"|cat:$row_no}
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
-	{assign var="total" value="total"|cat:$row_no}
-	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
-	{assign var="hdnRowStatus" value="hdnRowStatus"|cat:$row_no}
-	{assign var="hdnTotal" value="hdnTotal"|cat:$row_no}
+	{assign var="productTotal" value="productTotal"|cat:$row_no}
+
+	{assign var="discount_percent" value="discount_percent"|cat:$row_no}
+	{assign var="checked_discount_percent" value="checked_discount_percent"|cat:$row_no}
+	{assign var="style_discount_percent" value="style_discount_percent"|cat:$row_no}
+	{assign var="discount_amount" value="discount_amount"|cat:$row_no}
+	{assign var="checked_discount_amount" value="checked_discount_amount"|cat:$row_no}
+	{assign var="style_discount_amount" value="style_discount_amount"|cat:$row_no}
+	{assign var="checked_discount_zero" value="checked_discount_zero"|cat:$row_no}
+
+	{assign var="discountTotal" value="discountTotal"|cat:$row_no}
+	{assign var="totalAfterDiscount" value="totalAfterDiscount"|cat:$row_no}
+	{assign var="taxTotal" value="taxTotal"|cat:$row_no}
+	{assign var="netPrice" value="netPrice"|cat:$row_no}
 
 
    <tr id="row{$row_no}" valign="top">
-	<td  class="crmTableRow small lineOnTop">&nbsp;
-		<input type="hidden" id="{$hdnRowStatus}" name="{$hdnRowStatus}">
+
+	<!-- column 1 - delete link - starts -->
+	<td  class="crmTableRow small lineOnTop">
+		<input type="hidden" id="deleted{$row_no}" name="deleted{$row_no}" value="0">
 	</td>
 
 	<!-- column 2 - Product Name - starts -->
@@ -141,7 +154,7 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		   <tr>
 			<td class="small" id="setComment">
-				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px"></textarea>
+				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
 				<br>
 				[<a href="javascript:;" onclick="getObj('comment1').value='';";>{$APP.LBL_CLEAR_COMMENT}</a>]
 			</td>
@@ -182,16 +195,16 @@ function displayCoords(event,obj,mode,curr_row)
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
-						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" checked onclick="setDiscount(this,'{$row_no}')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" {$data.$checked_discount_zero} onclick="setDiscount(this,'{$row_no}')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 						<td class="lineOnTop">&nbsp;</td>
 					   </tr>
 					   <tr>
-						<td align="left"><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="0" style="visibility:hidden" onBlur="setDiscount(this,'{$row_no}')">&nbsp;%</td>
+						<td align="left"><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')" {$data.$checked_discount_percent}>&nbsp; % {$APP.LBL_OF_PRICE}</td>
+						<td align="right"><input type="text" class="small" size="2" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" {$data.$style_discount_percent} onBlur="setDiscount(this,'{$row_no}')">&nbsp;%</td>
 					   </tr>
 					   <tr>
-						<td align="left" nowrap><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-						<td align="right"><input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,{$row_no})"></td>
+						<td align="left" nowrap><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')" {$data.$checked_discount_amount}>&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+						<td align="right"><input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" size="5" value="{$data.$discount_amount}" {$data.$style_discount_amount} onBlur="setDiscount(this,{$row_no})"></td>
 					   </tr>
 					</table>
 				</div>
@@ -206,7 +219,32 @@ function displayCoords(event,obj,mode,curr_row)
 			<td align="right" style="padding:5px;" nowrap>
 				(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'tax_div{$row_no}','tax','{$row_no}')" >{$APP.LBL_TAX} </a> : </b>
 				<div class="discountUI" id="tax_div{$row_no}">
+					<!-- we will form the table with all taxes -->
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+					   <tr>
+						<td nowrap align="left" >Set Tax for : {$data.$totalAfterDiscount}</td>
+						<td>&nbsp;</td>
+						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
+					   </tr>
+
+					{foreach key=tax_row_no item=tax_data from=$data.taxes}
+					   {assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
+					   {assign var="popup_tax_rowname" value="popup_tax_row"|cat:$row_no}
+					   <tr>
+						<td align="left" class="lineOnTop">
+							<input type="text" class="small" size="5" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" onBlur="calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no})">&nbsp;%
+						</td>
+						<td align="center" class="lineOnTop">{$tax_data.taxname}</td>
+						<td align="right" class="lineOnTop">
+							<input type="text" class="small" size="6" name="{$popup_tax_rowname}" id="{$popup_tax_rowname}" style="cursor:pointer;" value="0.0" readonly>
+						</td>
+					   </tr>
+
+					{/foreach}
+
+					</table>
 				</div>
+				<!-- This above div is added to display the tax informations -->
 			</td>
 		   </tr>
 		</table>
@@ -218,31 +256,27 @@ function displayCoords(event,obj,mode,curr_row)
 	<td class="crmTableRow small lineOnTop" align="right">
 		<table width="100%" cellpadding="5" cellspacing="0">
 		   <tr>
-			<td id="productTotal{$row_no}" align="right">&nbsp;</td>
+			<td id="productTotal{$row_no}" align="right">{$data.$productTotal}</td>
 		   </tr>
 		   <tr>
-			<td id="discountTotal{$row_no}" align="right">0.00</td>
+			<td id="discountTotal{$row_no}" align="right">{$data.$discountTotal}</td>
 		   </tr>
 		   <tr>
-			<td id="totalAfterDiscount{$row_no}" align="right">0.00</td>
+			<td id="totalAfterDiscount{$row_no}" align="right">{$data.$totalAfterDiscount}</td>
 		   </tr>
 		   <tr>
-			<td id="taxTotal{$row_no}" align="right">0.00</td>
+			<td id="taxTotal{$row_no}" align="right">{$data.$taxTotal}</td>
 		   </tr>
 		</table>
 	</td>
 	<!-- column 6 - Product Total - ends -->
 
-		<!-- Added to calculate the tax and total values when page loads -->
-		<script>loadTaxes_Ajax("{$row_no}");</script>
-		<!-- This above div is added to display the tax informations --> 
-
-
 	<!-- column 7 - Net Price - starts -->
 	<td valign="bottom" class="crmTableRow small lineOnTop" align="right">
-		<span id="netPrice{$row_no}"><b>&nbsp;</b></span>
+		<span id="netPrice{$row_no}"><b>{$data.$netPrice}</b></span>
 	</td>
 	<!-- column 7 - Net Price - ends -->
+
 
    </tr>
    <!-- Product Details First row - Ends -->
@@ -402,5 +436,18 @@ function displayCoords(event,obj,mode,curr_row)
 
 <!-- Upto this Added to display the Product Details -->
 
+{foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
+	<!-- This is added to call the function calcCurrentTax which will calculate the tax amount from percentage -->
+	{foreach key=tax_row_no item=tax_data from=$data.taxes}
+		{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
+			<script>calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no});</script>
+	{/foreach}
+{/foreach}
+
+
+<!-- Added to calculate the tax and total values when page loads -->
+<!-- <script>loadTaxes_Ajax("{$row_no}");</script> -->
+<script>calcTotal();</script>
+<!-- This above div is added to display the tax informations --> 
 
 
