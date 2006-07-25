@@ -1355,50 +1355,98 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$num_rows=$adb->num_rows($result);
 	for($i=1;$i<=$num_rows;$i++)
 	{
+		$hdnProductId = $adb->query_result($result,$i-1,'productid');
 		$productname=$adb->query_result($result,$i-1,'productname');
-		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$comment=$adb->query_result($result,$i-1,'comment');
 		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
-		$productid=$adb->query_result($result,$i-1,'productid');
 		$qty=$adb->query_result($result,$i-1,'quantity');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 
 		if($listprice == '')
 			$listprice = $unitprice;
 		if($qty =='')
 			$qty = 1;
-		$total = $qty*$listprice;
-		$total_with_tax = $total;
 
-		$status_var = 'hdnRowStatus'.$i;
-		$qty_var = 'qty'.$i;
-		$list_price_var = 'listPrice'.$i;	
-		$total_var = 'total'.$i;
-		
-		if($i%2 == 0)		$row_class = "evenListRow";
-		else			$row_class = "oddListRow";
+		//calculate productTotal
+		$productTotal = $qty*$listprice;
 
+		//Delete link in First column
+		if($i != 1)
+		{
+			$product_Detail[$i]['delRow'.$i]="Del";
+		}
+
+		$product_Detail[$i]['hdnProductId'.$i] = $hdnProductId;
 		$product_Detail[$i]['productName'.$i]= $productname;
+		$product_Detail[$i]['comment'.$i]= $comment;
 
 		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
 		$listprice=convertFromDollar($listprice,$rate);
-		$total_with_tax =convertFromDollar($total_with_tax,$rate);
+		$productTotal =convertFromDollar($productTotal,$rate);
 		$product_Detail[$i]['qty'.$i]=$qty;
 		$product_Detail[$i]['listPrice'.$i]=$listprice;
-		$product_Detail[$i]['total'.$i]=$total_with_tax;
+		$product_Detail[$i]['productTotal'.$i]=$productTotal;
 
-		if($i != 1)
+		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
+		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
+		$discountTotal = '0.00';
+		//Based on the discount percent or amount we will show the discount details
+		if($discount_percent != 'NULL' && $discount_percent != '')
 		{
-			$product_Detail[$i]['delRow'.$i]="Del";
+			$product_Detail[$i]['discount_percent'.$i] = $discount_percent;
+			$product_Detail[$i]['checked_discount_percent'.$i] = ' checked';
+			$product_Detail[$i]['style_discount_percent'.$i] = ' style="visibility:visible"';
+			$product_Detail[$i]['style_discount_amount'.$i] = ' style="visibility:hidden"';
+			$discountTotal = $productTotal*$discount_percent/100;
+		}
+		elseif($discount_amount != 'NULL' && $discount_amount != '')
+		{
+			$product_Detail[$i]['discount_amount'.$i] = $discount_amount;
+			$product_Detail[$i]['checked_discount_amount'.$i] = ' checked';
+			$product_Detail[$i]['style_discount_amount'.$i] = ' style="visibility:visible"';
+			$product_Detail[$i]['style_discount_percent'.$i] = ' style="visibility:hidden"';
+			$discountTotal = $discount_amount;
+		}
+		else
+		{
+			$product_Detail[$i]['checked_discount_zero'.$i] = ' checked';
+		}
+		$totalAfterDiscount = $productTotal-$discountTotal;
+		$product_Detail[$i]['discountTotal'.$i] = $discountTotal;
+		$product_Detail[$i]['totalAfterDiscount'.$i] = $totalAfterDiscount;
+
+		//First we will get all associated taxes as array
+		$tax_details = getTaxDetailsForProduct($hdnProductId,'all');
+		//Now retrieve the tax values from the current query with the name
+		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+		{
+			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_value = getInventoryProductTaxValue($focus->id, $hdnProductId, $tax_name);
+			$product_Detail[$i]['taxes'][$tax_count]['taxname'] = $tax_name;
+			$product_Detail[$i]['taxes'][$tax_count]['percentage'] = $tax_value;
 		}
 
-		$product_Detail[$i]['hdnProductId'.$i] = $productid;
-		$product_Detail[$i]['hdnRowStatus'.$i] = '';
+		$taxTotal = '0.00';
+		$product_Detail[$i]['taxTotal'.$i] = $taxTotal;
 
+		//Calculate netprice
+		$netPrice = $totalAfterDiscount+$taxTotal;
+		$taxtype = getInventoryTaxType($module,$focus->id);
+		if($taxtype == 'individual')
+		{
+			//Add the tax with product total and assign to netprice
+			$netPrice = $netPrice+$taxTotal;
+		}
+		$product_Detail[$i]['netPrice'.$i] = $netPrice;
 	}
 	$log->debug("Exiting getAssociatedProducts method ...");
+
+	//echo '<pre>';print_r($product_Detail);echo '</pre>';
+
 	return $product_Detail;
 
 }
