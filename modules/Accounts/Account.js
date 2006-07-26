@@ -20,8 +20,15 @@ function set_return(product_id, product_name) {
 function set_return_specific(product_id, product_name) {
         
         //getOpenerObj used for DetailView 
-        var fldName = getOpenerObj("account_name");
-        var fldId = getOpenerObj("account_id");
+	if(document.getElementById('from_link').value != '')
+	{
+		var fldName = window.opener.document.QcEditView.account_name;
+		var fldId = window.opener.document.QcEditView.account_id;
+	}else
+	{	
+		var fldName = window.opener.document.EditView.account_name;
+		var fldId = window.opener.document.EditView.account_id;
+	}
         fldName.value = product_name;
         fldId.value = product_id;
 }
