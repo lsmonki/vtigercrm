@@ -130,7 +130,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		//Here we can change the max list entries per page per module
 		$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
 
-		$listview_header = getListViewHeader($focus,$module,"","","","",$oCustomView);
+		$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
 		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
 
 		//Do not display the Header if there are no entires in listview_entries
