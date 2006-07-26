@@ -117,7 +117,6 @@ class Calendar
 					array_push($this->slices,  $layout->start_time->z_month);
 				}
 				break;
-			case 'share':
 		}
 	}
 
@@ -167,9 +166,21 @@ class Calendar
 		{
 			list($sthour,$stmin)= explode(":",$current_user->start_hour);
 			$hr = $sthour+0;
-			list($endhour,$endmin)=explode(":",$current_user->end_hour);
 			$this->day_start_hour=$hr;
+		}	
+		else
+		{
+			$this->day_start_hour=8;
+		}
+		if(isset($current_user->end_hour) && $current_user->end_hour !='')
+		{
+			list($endhour,$endmin)=explode(":",$current_user->end_hour);
+			$endhour = $endhour+0;
 			$this->day_end_hour=$endhour;
+		}
+		else
+		{
+			$this->day_end_hour=24;
 		}
 		if ( $this->view == 'week')
 		{
