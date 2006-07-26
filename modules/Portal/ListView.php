@@ -23,6 +23,8 @@ global $adb;
 	
 $query="select * from vtiger_portal";
 $result=$adb->query($query);
+//Getting the Default URL Value if any
+$default_url = $adb->query_result($result,0,'portalurl');
 $no_of_portals=$adb->num_rows($result);
 $portal_info=array();
 for($i=0 ; $i<$no_of_portals; $i++)
@@ -34,10 +36,12 @@ for($i=0 ; $i<$no_of_portals; $i++)
 	$portal_array['portalurl'] = $portalurl;
 	$portal_info[]=$portal_array;
 }
+
 $smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MOD", $mod_strings);
+$smarty->assign("DEFAULT_URL", $default_url);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("PORTAL_COUNT", count($portal_info));
 $smarty->assign("PORTALS", $portal_info);
