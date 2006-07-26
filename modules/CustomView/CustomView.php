@@ -28,8 +28,10 @@ $adv_filter_options = array("e"=>"equals",
                             "k"=>"does not contain",
                             "l"=>"less than",
                             "g"=>"greater than",
-                            "m"=>"less or equal",
-                            "h"=>"greater or equal"
+			    "m"=>"less or equal",
+			    "h"=>"greater or equal",
+			    "b"=>"is blank",
+			    "o"=>"is not blank"
                             );
 
 class CustomView extends CRMEntity{
@@ -58,6 +60,8 @@ class CustomView extends CRMEntity{
 
 	var $list_fields;
 
+	var $smownerid;
+
 	var $list_fields_name;
 
 	var $setdefaultviewid;
@@ -70,9 +74,12 @@ class CustomView extends CRMEntity{
 
 	function CustomView($module="")
 	{
+		global $current_user,$adb;
 		$this->customviewmodule = $module;
 		$this->escapemodule[] =	$module."_";
 		$this->escapemodule[] = "_";
+		
+		$this->smownerid = $current_user->id;
 	}
 
 	// to get the available customviews for a module
@@ -91,15 +98,17 @@ class CustomView extends CRMEntity{
 			$customviewlist["viewname"] = $cvrow["viewname"];
 			$customviewlist["setdefault"] = $cvrow["setdefault"];
 			$customviewlist["setmetrics"] = $cvrow["setmetrics"];
+			$this->smownerid = $cvrow['smownerid'];
 		}
 		return $customviewlist;		
 	}	
 	function getCustomViewCombo()
 	{
-		global $adb;
+		global $adb, $current_user;
         $tabid = getTabid($this->customviewmodule);
-        $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
-        $ssql .= " where tab.tabid=".$tabid;
+        $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype inner join users on customview.smownerid = users.id";
+	$ssql .= " where (users.is_admin='on' OR customview.smownerid=".$current_user->id.") AND tab.tabid=".$tabid;
+	$ssql .= " ORDER BY customview.viewname";
         $result = $adb->query($ssql);
         $shtml = '';
         
@@ -109,6 +118,8 @@ class CustomView extends CRMEntity{
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];
+
+				$this->smownerid = $cvrow['smownerid'];
 			}
 			else
 			{
@@ -604,9 +615,16 @@ class CustomView extends CRMEntity{
 				{
 					//echo $advfltrow["columnname"];
 					$columns = explode(":",$advfltrow["columnname"]);
+					// special case for is null/is not null -- no value associated
+					switch ( $advfltrow["comparator"]  )
+					{
+						case "b":
+						case "o":
+							$advfltrow["value"] = "something";
+							break;
+					}
 					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "" && $advfltrow["value"] != "")
 					{
-						
 						$valuearray = explode(",",trim($advfltrow["value"]));
 						if(isset($valuearray) && count($valuearray) > 1)
 						{
@@ -634,11 +652,17 @@ class CustomView extends CRMEntity{
 	
 	function getRealValues($tablename,$fieldname,$comparator,$value)
 	{
+		global $current_user;
+
 		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
 		{
 			// BUG this doesn't work with non equilvalent comparisons
 			$org_value = $value;
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value));
+			if($value == "{ME}") {
+				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$current_user->id);
+			} else {
+				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value));
+			}
 			// hack to get "assigned to" to check group name as well
 			if($_REQUEST['module'] == 'Activities' || $_REQUEST['module'] == 'Emails') {
 				$value = '(('.$value.' AND NOT '.$tablename.".".$fieldname.$this->getAdvComparator($comparator, 0).') OR activitygrouprelation.groupname'.$this->getAdvComparator($comparator, $org_value).')';
@@ -674,8 +698,13 @@ class CustomView extends CRMEntity{
 		{
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value));
 		}
+		else if($fieldname == "assigned_user_id")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value));
+		}
 		else if($fieldname == "crmid" || $fieldname == "parent_id")
 		{
+			
 			$value = $tablename.".".$fieldname." in (".$this->getSalesEntityId($value).") ";
 		}
 		else
@@ -816,9 +845,20 @@ class CustomView extends CRMEntity{
 		fLabels['l'] = 'less than';
 		fLabels['g'] = 'greater than';
 		fLabels['m'] = 'less or equal';
-		fLabels['h'] = 'greater or equal';*/
+		fLabels['h'] = 'greater or equal';
+		fLabels['b'] = 'is null';
+		fLabels['o'] = 'is not null';
+		*/
 		//require_once('include/database/PearDatabase.php');
 
+		if($comparator == "b")
+		{
+			$rtvalue = " in (NULL, '')";
+		}
+		if($comparator == "o")
+		{
+			$rtvalue = " not in (NULL, '')";
+		}
 		if($comparator == "e")
 		{
 			if(trim($value) != "")
@@ -826,7 +866,7 @@ class CustomView extends CRMEntity{
                                 $rtvalue = " = ".$adb->quote($value);
                         }else
                         {
-                                $rtvalue = " is NULL";
+                                $rtvalue = " in (NULL, '')";
                         }
 		}
 		if($comparator == "n")
@@ -836,7 +876,7 @@ class CustomView extends CRMEntity{
                                 $rtvalue = " <> ".$adb->quote($value);
                         }else
                         {
-                                $rtvalue = "is NOT NULL";
+                                $rtvalue = "NOT IN (NULL, '')";
                         }
 		}
 		if($comparator == "s")

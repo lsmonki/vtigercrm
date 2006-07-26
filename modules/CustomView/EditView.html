@@ -20,6 +20,7 @@
 <input type="hidden" name="cvmodule" value="{CVMODULE}">
 <input type="hidden" name="return_module" value="{RETURN_MODULE}">
 <input type="hidden" name="record" value="{CUSTOMVIEWID}">
+<input type="hidden" name="smownerid" value="{SMOWNERID}">
 <input type="hidden" name="return_action" value="{RETURN_ACTION}">
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
@@ -40,6 +41,8 @@ fLabels['l'] = 'less than';
 fLabels['g'] = 'greater than';
 fLabels['m'] = 'less or equal';
 fLabels['h'] = 'greater or equal';
+fLabels["b"] = "is blank";
+fLabels["o"] = "is not blank";
 var noneLabel;
 
 function trimfValues(value)
@@ -200,7 +203,8 @@ function goto_CustomAction(module)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td><div align="center">
-                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+				{CANSAVE}
+                <input type="submit" class="button" name="saveNew" value="{APP.LBL_SAVE_BUTTON_LABEL} as New"  tabindex="3">
                 <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
 		{CUSTOMACTIONBUTTON}
             </div></td>
@@ -348,6 +352,7 @@ function goto_CustomAction(module)
           <td> <ul>
               <li>{MOD.LBL_AF_HDR2}</li>
               <li>{MOD.LBL_AF_HDR3}</li>
+              <li>{MOD.LBL_AF_HDR4}</li>
               <!--<li>Place quotation marks around data that includes commas. For
                 example, &quot;200,000&quot;,&quot;1,000,000&quot; searches for
                 200,000 or 1,000,000.</li>
@@ -420,7 +425,8 @@ function goto_CustomAction(module)
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td><div align="center">
-                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+				{CANSAVE}
+                <input type="submit" class="button" name="saveNew" value="{APP.LBL_SAVE_BUTTON_LABEL} as New"  tabindex="3">
                 <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
             </div></td>
         </tr>

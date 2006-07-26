@@ -10,11 +10,15 @@
  ********************************************************************************/
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb,$current_user;
 global $vtlog;
 
 $cvid = $_REQUEST["record"];
 $cvmodule = $_REQUEST["cvmodule"];
+
+if ( $_REQUEST["saveNew"] ) {
+	$cvid = "";
+}
 
 if($cvmodule != "")
 {
@@ -101,8 +105,10 @@ if($cvmodule != "")
 		  }
 		  $vtlog->logthis("CustomView :: Save :: setdefault upated successfully","info");
 
-		  $customviewsql = "insert into customview(cvid,viewname,setdefault,setmetrics,entitytype)";
-		  $customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
+		  $smownerid = (int) $_REQUEST['smownerid'];
+		  if(!$smownerid || $_REQUEST['saveNew']) $smownerid = $current_user->id;
+		  $customviewsql = "insert into customview(cvid,smownerid,viewname,setdefault,setmetrics,entitytype)";
+		  $customviewsql .= " values($genCVid,$smownerid,'$viewname',$setdefault,$setmetrics,'$cvmodule')";
 		  //echo $customviewsql;
 		  $customviewresult = $adb->query($customviewsql);
 		  $vtlog->logthis("CustomView :: Save :: customview created successfully","info");

@@ -98,6 +98,7 @@ else
 	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
 	$vtlog->logthis('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid,'info');
 
+	if ( $oCustomView->smownerid == $current_user->id )
 	$xtpl->assign("VIEWNAME",$customviewdtls["viewname"]);
 
 	if($customviewdtls["setdefault"] == 1)
@@ -151,6 +152,13 @@ else
 		$xtpl->assign("CUSTOMACTIONBUTTON",$cactionhtml);
 	}
 }
+
+// current user can only save his own records
+if ( $oCustomView->smownerid == $current_user->id )
+{
+	$xtpl->assign("CANSAVE", '<INPUT type="submit" class="button" name="save" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'"  tabindex="2">');	
+}
+$xtpl->assign("SMOWNERID", $oCustomView->smownerid );
 
 $xtpl->assign("RETURN_MODULE", $cvmodule);
 $xtpl->assign("RETURN_ACTION", "index");

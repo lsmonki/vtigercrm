@@ -3250,6 +3250,11 @@
 		<field name="cvid" type="I" size="19">
 			<key />
 		</field>
+		<field name="smownerid" type="I" size="19">
+			<notnull />
+			<default value="1" />
+			<constraint>REFERENCES users (id) ON DELETE CASCADE</constraint>
+		</field>
 		<field name="viewname" type="C" size="100">
 			<notnull />
 		</field>

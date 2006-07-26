@@ -34,6 +34,8 @@ $mod_strings = Array(
 'LBL_SF_ENDDATE'=>'End Date',
 'LBL_AF_HDR1'=>'Set the search conditions to further restrict the list.',
 'LBL_AF_HDR2'=>'You can use &quot;or&quot; filters by entering multiple items in the third column.',
-'LBL_AF_HDR3'=>'You can enter up to 10 items, separated by commas. For example: CA, NY, TX, FL searches for CA or NY or TX or FL.',);
+'LBL_AF_HDR3'=>'You can enter up to 10 items, separated by commas. For example: CA, NY, TX, FL searches for CA or NY or TX or FL.',
+'LBL_AF_HDR4'=>'You can create a generic search for the current user by specifying <b>{ME}</b> as the value for &quot;Assigned To&quot;',
+);
 
 ?>
