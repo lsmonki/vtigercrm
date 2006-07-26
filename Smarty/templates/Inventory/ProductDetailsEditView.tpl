@@ -113,6 +113,7 @@ function displayCoords(event,obj,mode,curr_row)
    </tr>
 
    {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
+	{assign var="deleted" value="deleted"|cat:$row_no}
 	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
 	{assign var="comment" value="comment"|cat:$row_no}
@@ -121,6 +122,7 @@ function displayCoords(event,obj,mode,curr_row)
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
 	{assign var="productTotal" value="productTotal"|cat:$row_no}
 
+	{assign var="discount_type" value="discount_type"|cat:$row_no}
 	{assign var="discount_percent" value="discount_percent"|cat:$row_no}
 	{assign var="checked_discount_percent" value="checked_discount_percent"|cat:$row_no}
 	{assign var="style_discount_percent" value="style_discount_percent"|cat:$row_no}
@@ -139,7 +141,7 @@ function displayCoords(event,obj,mode,curr_row)
 
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">
-		<input type="hidden" id="deleted{$row_no}" name="deleted{$row_no}" value="0">
+		<input type="hidden" id="{$deleted}" name="{$deleted}" value="0">
 	</td>
 
 	<!-- column 2 - Product Name - starts -->
@@ -188,7 +190,7 @@ function displayCoords(event,obj,mode,curr_row)
 			<td align="right" style="padding:5px;" nowrap>
 				(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'discount_div{$row_no}','discount','{$row_no}')" >{$APP.LBL_DISCOUNT}</a> : </b>
 				<div class="discountUI" id="discount_div{$row_no}">
-					<input type="hidden" id="discount_type{$row_no}" name="discount_type{$row_no}" value="">
+					<input type="hidden" id="discount_type{$row_no}" name="discount_type{$row_no}" value="{$data.$discount_type}">
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title{$row_no}" nowrap align="left" ></td>
@@ -430,7 +432,7 @@ function displayCoords(event,obj,mode,curr_row)
 	<td id="grandTotal" name="grandTotal" class="crmTableRow big lineOnTop" align="right">{$GRANDTOTAL}</td>
    </tr>
 </table>
-		<input type="hidden" name="totalProductCount" id="totalProductCount" value="">
+		<input type="hidden" name="totalProductCount" id="totalProductCount" value="{$row_no}">
 		<input type="hidden" name="subtotal" id="subtotal" value="">
 		<input type="hidden" name="total" id="total" value="">
 
