@@ -45,8 +45,15 @@ function set_return(product_id, product_name) {
 }
 function set_return_specific(product_id, product_name) {
         //getOpenerObj used for DetailView 
-        var fldName = getOpenerObj("product_name");
-        var fldId = getOpenerObj("product_id");
+	if(document.getElementById('from_link').value != '')
+	{
+		var fldName = window.opener.document.QcEditView.product_name;
+		var fldId = window.opener.document.QcEditView.product_id;
+	}else
+	{	
+		var fldName = window.opener.document.EditView.product_name;
+		var fldId = window.opener.document.EditView.product_id;
+	}
         fldName.value = product_name;
         fldId.value = product_id;
 }
