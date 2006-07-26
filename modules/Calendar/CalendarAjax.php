@@ -18,6 +18,33 @@ require_once("modules/Calendar/Calendar.php");
 require_once('include/logging.php');
 $cal_log =& LoggerManager::getLogger('calendar');
 $cal_log->debug("In CalendarAjax file");
+$mysel = $_REQUEST['view'];
+$calendar_arr = Array();
+$calendar_arr['IMAGE_PATH'] = $image_path;
+$date_data = array();
+if ( isset($_REQUEST['day']))
+{
+	$date_data['day'] = $_REQUEST['day'];
+}
+if ( isset($_REQUEST['month']))
+{
+	$date_data['month'] = $_REQUEST['month'];
+}
+if ( isset($_REQUEST['week']))
+{
+	$date_data['week'] = $_REQUEST['week'];
+}
+if ( isset($_REQUEST['year']))
+{
+	if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
+	{
+		print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+		exit;
+	}
+	$date_data['year'] = $_REQUEST['year'];
+}
+
+		
 if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 {
 	$type = $_REQUEST['type'];
@@ -28,9 +55,8 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 	        $temp_module = $currentModule;
         	$mod_strings = return_module_language($current_language,'Calendar');
 	        $currentModule = 'Calendar';
-        	$calendar_arr = Array();
 		$calendar_arr['IMAGE_PATH'] = $image_path;
-	        $calendar_arr['calendar'] = new Calendar('month');
+	        $calendar_arr['calendar'] = new Calendar('month',$date_data);
         	$calendar_arr['view'] = 'month';
 	        $calendar_arr['size'] = 'small';
 		$calendar_arr['calendar']->add_Activities($current_user);
@@ -45,38 +71,10 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 	}
 	else
 	{
-		$mysel = $_REQUEST['view'];
 		$subtab = $_REQUEST['subtab']; 
-		$calendar_arr = Array();
-		$calendar_arr['IMAGE_PATH'] = $image_path;
 		if(empty($mysel))
 		{
 			$mysel = 'day';
-		}
-		$date_data = array();
-		if ( isset($_REQUEST['day']))
-		{
-			$date_data['day'] = $_REQUEST['day'];
-		}
-
-		if ( isset($_REQUEST['month']))
-		{
-			$date_data['month'] = $_REQUEST['month'];
-		}
-
-		if ( isset($_REQUEST['week']))
-		{
-			$date_data['week'] = $_REQUEST['week'];
-		}
-
-		if ( isset($_REQUEST['year']))
-		{
-			if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
-			{
-				print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
-				exit;
-			}
-			$date_data['year'] = $_REQUEST['year'];
 		}
 		$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 		
@@ -111,7 +109,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			die("view:".$calendar_arr['calendar']->view." is not defined");
 		}
 		
-		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'change_status')
+		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'change_status' || $type == 'activity_postpone')
 		{
 			if($type == 'change_status')
 			{
@@ -127,6 +125,9 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$activity_type = "Events";
 				}
 				ChangeStatus($status,$return_id,$activity_type);
+			}
+			if($type == 'activity_postpone')
+			{
 			}
 			if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption'] != null && $subtab == 'event')
 			{
