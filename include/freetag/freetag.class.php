@@ -57,8 +57,10 @@ class freetag {
 	/**
 	 * @access private
 	 * @param string Whether to normalize tags at all.
+	 * value 0 saves the tag in case insensitive mode
+	 * value 1 save the tag in lower case
 	 */
-	var $_normalize_tags = 1;
+	var $_normalize_tags = 0;
 	/**
 	 * @access private
 	 * @param string Whether to prevent multiple vtiger_users from tagging the same object. By default, set to block (ala Upcoming.org)
