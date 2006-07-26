@@ -122,6 +122,10 @@ $mod_strings = Array(
 
 'LBL_PICKLIST_FIELD_SETTINGS'=>'Picklist Field Settings:',
 
+'LBL_FIELD_ORDERING'=>'Field Ordering in Blocks',
+
+'LBL_FIELD_ORDERING_DESC'=>'Change the order of fields within Blocks (and between blocks)',
+
 
 
 //SETTINGS/CustomFieldList.php,ComboFieldList.php,CreateCustomField.php
