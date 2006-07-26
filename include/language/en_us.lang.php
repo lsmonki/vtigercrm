@@ -840,6 +840,7 @@ $app_strings = Array(
 'Total'=>'Total Amount',
 'First Name'=>'First Name',
 'Last Name'=>'Last Name',
+'User Name'=>'User Name',
   /* For purchase order related list in vendor */
 'LBL_PORDER_BUTTON_TITLE'=>'New Purchase Order [Alt+O]',
 'LBL_PORDER_BUTTON'=>'New Purchase Order',

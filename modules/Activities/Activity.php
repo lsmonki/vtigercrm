@@ -172,125 +172,25 @@ class Activity extends CRMEntity {
 	 * @param  integer   $id      - activityid
 	 * returns related Users record in array format
 	 */
+
         function get_users($id)
-	{
-			global $adb,$log;
-			$log->debug("Entering get_users(".$id.") method ...");
-			$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax,vtiger_activity.date_start,vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id  inner join vtiger_activity on vtiger_activity.activityid=vtiger_salesmanactivityrel.activityid where vtiger_activity.activityid='.$id;
-			$activity_id=$id;
+	{	
+		global $log;
+                $log->debug("Entering get_contacts(".$id.") method ...");
+		global $app_strings;
 
-			global $mod_strings;
-			global $app_strings;
+		$focus = new User();
 
-			$result=$adb->query($query);   
+		$button = '';
 
+		$returnset = '&return_module=Activities&return_action=CallRelatedList&return_id='.$id;
 
-			$noofrows = $adb->num_rows($result);
-
-			$header[] = $app_strings['LBL_LIST_NAME'];
-			$header[] = $app_strings['LBL_LIST_USER_NAME'];
-			$header[] = $app_strings['LBL_EMAIL'];
-			$header[] = $app_strings['LBL_PHONE']; 
+		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax,vtiger_activity.date_start,vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id  inner join vtiger_activity on vtiger_activity.activityid=vtiger_salesmanactivityrel.activityid where vtiger_activity.activityid='.$id;
+		$log->debug("Exiting get_users method ...");
+		return GetRelatedList('Activities','Users',$focus,$query,$button,$returnset);
 
 
-
-			while($row = $adb->fetch_array($result))
-			{
-
-				global $current_user;
-
-				$entries = Array();	
-
-				if(is_admin($current_user))
-				{
-					$entries[] = '<a href="index.php?module=Users&action=DetailView&parenttab=Settings&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['last_name'].' '.$row['first_name'].'</a>';
-					$entries[] = '<a href="index.php?module=Users&action=DetailView&parenttab=Settings&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['user_name'].'</a>';
-				}
-				else
-				{
-					$entries[] = $row['last_name'].' '.$row['first_name'];
-					$entries[] = $row['user_name'];
-				}	
-
-
-				$entries[] = '<a href="mailto:'.$row["email1"].'"]">'.$row['email1'].'</a>';
-				if($email == '')	$email = $row['email2'];
-				if($email == '')	$email = $row['yahoo_id'];
-				$entries[] = $row['phone_home'];
-				if($phone == '')	$phone = $row['phone_work'];
-				if($phone == '')        $phone = $row['phone_other'];
-				if($phone == '')	$phone = $row['phone_fax'];
-
-				if(is_admin($current_user))
-				{		
-					$list .= '<a href="index.php?module=Users&action=EditView&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  | ';
-				}
-
-			// To display the dates for the Group calendar starts -Jaguar
-			$recur_dates_qry='select distinct(recurringdate) from vtiger_recurringevents where activityid='.$activity_id;
-			$recur_result=$adb->query($recur_dates_qry);
-			$noofrows_recur = $adb->num_rows($recur_result);
-			if($noofrows_recur==0)
-			{
-				$recur_dates_qry='select vtiger_activity.date_start,vtiger_recurringevents.* from vtiger_activity left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid where vtiger_recurringevents.activityid is NULL and vtiger_activity.activityid='.$activity_id;
-				$recur_result=$adb->query($recur_dates_qry);
-				$noofrows_recur = $adb->num_rows($recur_result);
-
-			}
-				//Added for Group Calendar -Jaguar
-
-
-				$act_date_start= getDBInsertDateValue($row['date_start']); //getting the Date format - Jaguar
-				$act_due_date= getDBInsertDateValue($row['due_date']);
-
-				$act_time_start=$row['time_start'];
-				$act_mins_dur=$row['duration_minutes'];
-
-				$activity_start_time=time_to_number($act_time_start);	
-				$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
-
-				$activity_owner_qry='select vtiger_users.user_name,vtiger_users.id AS userid from vtiger_users,vtiger_crmentity where vtiger_users.id=vtiger_crmentity.smownerid and vtiger_crmentity.crmid='.$id;
-				$result_owner=$adb->query($activity_owner_qry);
-
-				while($row_owner = $adb->fetch_array($result_owner))
-				{
-					$owner=$row_owner['userid'];
-				}
-
-				$recur_dates_qry='select recurringdate from vtiger_recurringevents where activityid ='.$activity_id;
-				$recur_result=$adb->query($recur_dates_qry);
-				$noofrows_recur = $adb->num_rows($recur_result);
-				$userid=$row['id'];
-				if($noofrows_recur !=0)
-				{
-					while($row_recur = $adb->fetch_array($recur_result))
-					{
-						$recur_dates=getDBInsertDateValue($row_recur['recurringdate']);
-						$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
-						$log->info("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates);
-
-
-					}
-				}
-				else
-				{
-					$recur_dates=$act_date_start;
-					$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
-					$log->info("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available  date".$recur_dates);		
-				}
-				// Group Calendar coding	
-
-
-				$entries_list[]=$entries;
-			}
-
-
-			if($entries_list != '')
-				$return_data = array('header'=>$header, 'entries'=>$entries_list);
-			$log->debug("Exiting get_users method ...");
-			return $return_data;
-
-		}
+	}
 
 	/**
          * Function to get activities for given criteria
