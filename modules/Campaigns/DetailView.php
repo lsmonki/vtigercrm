@@ -16,10 +16,11 @@ require_once('include/utils/utils.php');
 
 $focus = new Campaign();
 
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record']!= null ) 
 {
     $focus->retrieve_entity_info($_REQUEST['record'],"Campaigns");
     $focus->name=$focus->column_fields['campaignname'];
+    $focus->id = $_REQUEST['record'];
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
@@ -53,6 +54,7 @@ if(isPermitted("Campaigns","Delete",$_REQUEST['record']) == 'yes')
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("ID", $_REQUEST['record']);
 
 

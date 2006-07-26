@@ -24,7 +24,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit'; 	
 	$focus->retrieve_entity_info($_REQUEST['record'],"Campaigns");
-	$focus->name=$focus->column_fields['ticket_title'];		
+	$focus->name=$focus->column_fields['campaignname'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
@@ -71,6 +71,7 @@ if($focus->mode == 'edit')
 {
         $smarty->assign("MODE", $focus->mode);
         $smarty->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 }
 
 if(isset($_REQUEST['return_module'])) 

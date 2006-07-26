@@ -21,7 +21,7 @@ $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->retrieve_entity_info($_REQUEST['record'],"Campaigns");
     $focus->id = $_REQUEST['record'];
-    $focus->name=$focus->column_fields['groupname'];
+    $focus->name=$focus->column_fields['campaignname'];
 
 $log->debug("id is ".$focus->id);
 
