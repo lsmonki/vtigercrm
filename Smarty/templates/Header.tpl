@@ -22,6 +22,7 @@
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+	<script language="JavaScript" type="text/javascript" src="include/js/QuickCreate.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
@@ -227,111 +228,111 @@ function getFormValidate(divValidate)
 {
   var st = document.getElementById('qcvalidate');
   eval(st.innerHTML);
-  for (var i=0; i<fieldname.length; i++) {
-		if(getObj(fieldname[i]) != null)
+  for (var i=0; i<qcfieldname.length; i++) {
+		var curr_fieldname = qcfieldname[i];	
+		if(window.document.QcEditView[curr_fieldname] != null)
 		{
-			var type=fielddatatype[i].split("~")
+			var type=qcfielddatatype[i].split("~")
+			var input_type = window.document.QcEditView[curr_fieldname].type	
 				if (type[1]=="M") {
-					if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
+					if (!qcemptyCheck(curr_fieldname,qcfieldlabel[i],input_type))
 						return false
 				}
-
 			switch (type[0]) {
 				case "O"  : break;
 				case "V"  : break;
 				case "C"  : break;
 				case "DT" :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	 
 						if (type[1]=="M")
-							if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
+							if (!qcemptyCheck(type[2],qcfieldlabel[i],getObj(type[2]).type))
+								return false
+						if(typeof(type[3])=="undefined") var currdatechk="OTH"
+						else var currdatechk=type[3]
+
+						if (!qcdateTimeValidate(curr_fieldname,type[2],qcfieldlabel[i],currdatechk))
+							return false
+						if (type[4]) {
+							if (!dateTimeComparison(curr_fieldname,type[2],qcfieldlabel[i],type[5],type[6],type[4]))
 								return false
 
-									if(typeof(type[3])=="undefined") var currdatechk="OTH"
-									else var currdatechk=type[3]
-
-										if (!dateTimeValidate(fieldname[i],type[2],fieldlabel[i],currdatechk))
-											return false
-												if (type[4]) {
-													if (!dateTimeComparison(fieldname[i],type[2],fieldlabel[i],type[5],type[6],type[4]))
-														return false
-
-												}
+						}
 					}		
 				break;
 				case "D"  :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	
 						if(typeof(type[2])=="undefined") var currdatechk="OTH"
 						else var currdatechk=type[2]
 
-							if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+							if (!qcdateValidate(curr_fieldname,qcfieldlabel[i],currdatechk))
 								return false
 									if (type[3]) {
-										if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+										if (!qcdateComparison(curr_fieldname,qcfieldlabel[i],type[4],type[5],type[3]))
 											return false
 									}
 					}	
 				break;
 				case "T"  :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	 
 						if(typeof(type[2])=="undefined") var currtimechk="OTH"
 						else var currtimechk=type[2]
 
-							if (!timeValidate(fieldname[i],fieldlabel[i],currtimechk))
+							if (!timeValidate(curr_fieldname,qcfieldlabel[i],currtimechk))
 								return false
 									if (type[3]) {
-										if (!timeComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+										if (!timeComparison(curr_fieldname,qcfieldlabel[i],type[4],type[5],type[3]))
 											return false
 									}
 					}
 				break;
 				case "I"  :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	
-						if (getObj(fieldname[i]).value.length!=0)
+						if (window.document.QcEditView[curr_fieldname].value.length!=0)
 						{
-							if (!intValidate(fieldname[i],fieldlabel[i]))
+							if (!qcintValidate(curr_fieldname,qcfieldlabel[i]))
 								return false
-									if (type[2]) {
-										if (!numConstComp(fieldname[i],fieldlabel[i],type[2],type[3]))
-											return false
-									}
+							if (type[2]) {
+								if (!qcnumConstComp(curr_fieldname,qcfieldlabel[i],type[2],type[3]))
+									return false
+							}
 						}
 					}
 				break;
 				case "N"  :
 					case "NN" :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{
-						if (getObj(fieldname[i]).value.length!=0)
+						if (window.document.QcEditView[curr_fieldname].value.length!=0)
 						{
 							if (typeof(type[2])=="undefined") var numformat="any"
 							else var numformat=type[2]
 
 								if (type[0]=="NN") {
 
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+									if (!numValidate(curr_fieldname,qcfieldlabel[i],numformat,true))
 										return false
 								} else {
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+									if (!numValidate(curr_fieldname,qcfieldlabel[i],numformat))
 										return false
 								}
 							if (type[3]) {
-								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
+								if (!numConstComp(curr_fieldname,qcfieldlabel[i],type[3],type[4]))
 									return false
 							}
 						}
 					}
 				break;
 				case "E"  :
-					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					if (window.document.QcEditView[curr_fieldname] != null && window.document.QcEditView[curr_fieldname].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{
-						if (getObj(fieldname[i]).value.length!=0)
+						if (window.document.QcEditView[curr_fieldname].value.length!=0)
 						{
 							var etype = "EMAIL"
-								if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+								if (!qcpatternValidate(curr_fieldname,qcfieldlabel[i],etype))
 									return false
 						}
 					}
@@ -340,62 +341,56 @@ function getFormValidate(divValidate)
 		}
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
-        for (var j=0; j<fieldname.length; j++)
+        for (var j=0; j<qcfieldname.length; j++)
 		{
-
-			if(getObj(fieldname[i]) != null)
+			curr_fieldname = qcfieldname[j];
+			if(window.document.QcEditView[curr_fieldname] != null)
 			{
-				if(fieldname[j] == "date_start")
+				if(qcfieldname[j] == "date_start")
 				{
-					var datelabel = fieldlabel[j]
-						var datefield = fieldname[j]
-						var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+					var datelabel = qcfieldlabel[j]
+						var datefield = qcfieldname[j]
+						var startdatevalue = window.document.QcEditView[datefield].value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 				}
-				if(fieldname[j] == "time_start")
+				if(qcfieldname[j] == "time_start")
 				{
-					var timelabel = fieldlabel[j]
-						var timefield = fieldname[j]
-						var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+					var timelabel = qcfieldlabel[j]
+						var timefield = qcfieldname[j]
+						var timeval=window.document.QcEditView[timefield].value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 				}
-				if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
+				if(qcfieldname[j] == "eventstatus" || qcfieldname[j] == "taskstatus")
 				{
-					var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-						var statuslabel = fieldlabel[j++]
+					var statusvalue = window.document.QcEditView[curr_fieldname].options[window.document.QcEditView[curr_fieldname].selectedIndex].value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+					var statuslabel = qcfieldlabel[j++]
 				}
 			}
 		}
-		if(statusvalue == "Planned")
+	if(statusvalue == "Planned")
         {
                 var dateelements=splitDateVal(startdatevalue)
 
-                var hourval=parseInt(timeval.substring(0,timeval.indexOf(":")))
-                var minval=parseInt(timeval.substring(timeval.indexOf(":")+1,timeval.length))
-
-
-               dd=dateelements[0]
-               mm=dateelements[1]
-               yyyy=dateelements[2]
+               var dd=dateelements[0]
+               var mm=dateelements[1]
+               var yyyy=dateelements[2]
 
                var currdate=new Date()
                var chkdate=new Date()
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-
-               chktime = new Date()
+		
+       	       chktime = new Date()
 
                chktime.setYear(yyyy)
                chktime.setMonth(mm-1)
                chktime.setDate(dd)
-               chktime.setHours(hourval)
-               chktime.setMinutes(minval)
                 if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
-                        getObj(datefield).focus()
+                        window.document.QcEditView[datefield].focus()
                         return false
                 }
                 else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
                 {
-                        getObj(timefield).focus()
+                        window.document.QcEditView[timefield].focus()
                         return false
                 }
                 else return true

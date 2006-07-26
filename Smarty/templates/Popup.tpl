@@ -53,6 +53,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
 					<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
 					<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
+					<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
 
 				</td>
 				<td width="20%" class="dvtCellLabel">
