@@ -75,16 +75,7 @@ function DeleteTag(id)
 					<td>&nbsp;</td>
 				   </tr>
 				   <tr height=20>
-					<td>{$UPDATEINFO}</td>	
-					<td align="right" width="400" nowrap>
-						<div id="addtagdiv">
-							<a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a>
-						</div>
-						<div id="tagdiv" style="display:none;">
-							<input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;
-							<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="fnhide('tagdiv'),show('addtagdiv')">
-						</div>
-					</td>
+					<td>{$UPDATEINFO}</td>
 				   </tr>
 				</table>
 
@@ -263,12 +254,19 @@ function DeleteTag(id)
 </td></tr></table>
 <!-- Button displayed - finished-->
 									<!-- Inventory Actions - ends -->	
-									<td width=20% valign=top style="padding:10px;">
+									<td width=22% valign=top style="padding:10px;">
 										<!-- right side InventoryActions -->
 										{include file="Inventory/InventoryActions.tpl"}
 
-										<br><br>
-
+										<br>
+										<!-- Add Tag link added just above the tag cloud image -->
+										<table border=0 cellspacing=0 cellpadding=5 width=100% >
+										<tr>
+											<td align="left" class="genHeaderSmall" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
+										</tr>
+										</table>
+										<!-- Eng Add Tag Link -->
+										<br>
 										<!-- To display the Tag Clouds -->
 										<div>
 										      {include file="TagCloudDisplay.tpl"}
