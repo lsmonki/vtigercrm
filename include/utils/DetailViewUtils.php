@@ -912,23 +912,48 @@ function getDetailAssociatedProducts($module,$focus)
 	$rate = $rate_symbol['rate'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$log->debug("in getDetailAssociatedProducts. Module is  ".$module);
 
-	$output = '';
-	$output .= '<table class="prdTab" border="0" cellspacing="0" cellpadding="2" id="proTab">';
-	$output .= '<tr><td colspan="6" class="detailedViewHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td></tr>';
-	$output .=  '<tr><th width="20%">'.$app_strings['LBL_PRODUCT'].'</th>';
-
-	if($module == 'Quotes' || $module == 'SalesOrder' || $module == 'Invoice')
+	if($module != 'PurchaseOrder')
 	{
-		$output .= '<th width="12%">'.$app_strings['LBL_QTY_IN_STOCK'].'</th>';
+		$colspan = '4';
+	}
+	else
+	{
+		$colspan = '3';
 	}
 
-	$output .= '<th width="10%">'.$app_strings['LBL_QTY'].'</th>';
-	$output .= '<th width="10%">'.$app_strings['LBL_UNIT_PRICE'].'</th>';
-	$output .= '<th width="19%">'.$app_strings['LBL_LIST_PRICE'].'</th>';
-	$output .= '<th width="10%">'.$app_strings['LBL_TOTAL'].'</th>';
-	$output .= '</tr>';
+	//Get the taxtype of this entity
+	$taxtype = getInventoryTaxType($module,$focus->id);
+
+	$output = '';
+	//Header Rows
+	$output .= '
+	
+	<table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
+	   <tr>
+	   	<td colspan="'.$colspan.'class="detailedViewHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
+		<td class="detailedViewHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].'</b></td>
+		<td class="detailedViewHeader">'.$taxtype.'</td>
+	   </tr>
+	   <tr>
+		<td width=40% class="small crmTableColHeading"><font color="red">*</font>
+			<b>'.$app_strings['LBL_PRODUCT_NAME'].'</b>
+		</td>';
+
+	//Add Quantity in Stock column for SO, Quotes and Invoice
+	if($module == 'Quotes' || $module == 'SalesOrder' || $module == 'Invoice')
+		$output .= '<td width=10% class="small crmTableColHeading"><b>'.$app_strings['LBL_QTY_IN_STOCK'].'</b></td>';
+
+	$output .= '
+	
+		<td width=10% class="small crmTableColHeading"><b>'.$app_strings['LBL_QTY'].'</b></td>
+		<td width=10% class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_LIST_PRICE'].'</b></td>
+		<td width=12% nowrap class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_TOTAL'].'</b></td>
+		<td width=13% valign="top" class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_NET_PRICE'].'</b></td>
+	   </tr>
+	   	';
+
+
 
 	if($module == 'Quotes')
 	{
@@ -951,40 +976,73 @@ function getDetailAssociatedProducts($module,$focus)
 	$num_rows=$adb->num_rows($result);
 	for($i=1;$i<=$num_rows;$i++)
 	{
-		$productname=$adb->query_result($result,$i-1,'productname');
-		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$productid=$adb->query_result($result,$i-1,'productid');
+		$productname=$adb->query_result($result,$i-1,'productname');
+		$comment=$adb->query_result($result,$i-1,'comment');
 		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
 		$qty=$adb->query_result($result,$i-1,'quantity');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
-		$vat=$adb->query_result($result,$i-1,'vattax');
-		$sales=$adb->query_result($result,$i-1,'salestax');
-		$service=$adb->query_result($result,$i-1,'servicetax');
 		$total = $qty*$listprice;
-		$total_with_tax = $total+($vat*$total/100)+($sales*$total/100)+($service*$total/100);
 
-		if($i%2 == 0)
-		{
-			$row_class = "dvtCellLable";
-		}
-		else
-		{
-			$row_class = "dvtCellInfo";
-		}
-
-		$output .= '<tr class="'.$row_class.'">';
-		$output .= '<td nowrap>'.$productname.'</td>';
-		if($module != 'PurchaseOrder')
-		{	
-			$output .= '<td>'.$qtyinstock.'</td>';
-		}
 		$unitprice = convertFromDollar($unitprice,$rate);
 		$listprice = convertFromDollar($listprice,$rate);
-		$total_with_tax = convertFromDollar($total_with_tax,$rate);
-		$output .= '<td style="padding:3px;">'.$qty.'</td>';
-		$output .= '<td style="padding:3px;">'.$unitprice.'</td>';
-		$output .= '<td style="padding:3px;">'.$listprice.'</td>';
-		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total_with_tax.'</div></td>';
+
+		//we should calculate the discount
+		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
+		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
+		$totalAfterDiscount = $total;
+
+		if($discount_percent != 'NULL' && $discount_percent != '')
+		{
+			$productDiscount = $total*$discount_percent/100;
+			$totalAfterDiscount = $total-$productDiscount;
+			//echo " && totalAfter Discount(percent) $i ($total - $productDiscount) = $totalAfterDiscount";
+		}
+		elseif($discount_amount != 'NULL' && $discount_amount != '')
+		{
+			$totalAfterDiscount = $total-$discount_amount;
+			//echo " && totalAfter Discount(amount) $i ($total - $discount_amount) = $totalAfterDiscount";
+		}
+
+		$netprice = $totalAfterDiscount;
+		//we should calculate the tax if taxtype is individual
+		if($taxtype == 'individual')
+		{
+			$taxtotal = '0.00';
+			$tax_details = getTaxDetailsForProduct($productid,'all');
+			for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+			{
+				$tax_name = $tax_details[$tax_count]['taxname'];
+				$tax_value = getInventoryProductTaxValue($focus->id, $productid, $tax_name);
+
+				$individual_taxamount = $totalAfterDiscount*$tax_value/100;
+				$taxtotal = $taxtotal + $individual_taxamount;
+				//echo '<br>>>>>>>'.$tax_name.' = '.$tax_value.' && '.$totalAfterDiscount.'...'.$taxtotal;
+				//echo '<br>>>>>>>'.$netprice.'.......'.$taxtotal;
+			}
+			$netprice = $netprice + $taxtotal;
+		}
+
+
+		//For Product Name
+		$output .= '
+			   <tr valign="top">
+				<td class="crmTableRow small lineOnTop">
+					'.$productname.'
+					<br>'.$comment.'
+				</td>';
+
+
+		//Upto this added to display the Product name and comment
+		if($module != 'PurchaseOrder')
+		{	
+			$output .= '<td class="crmTableRow small lineOnTop">'.$qtyinstock.'</td>';
+		}
+		$output .= '<td class="crmTableRow small lineOnTop">'.$qty.'</td>';
+		$output .= '<td class="crmTableRow small lineOnTop">'.$listprice.'</td>';
+		$output .= '<td class="crmTableRow small lineOnTop" align="right">'.$total.'</td>';
+		$output .= '<td class="crmTableRow small lineOnTop" valign="bottom" align="right">'.$netprice.'</td>';
 		$output .= '</tr>';
 
 
