@@ -101,11 +101,11 @@ class DateTime
 	function getTodayDatetimebyIndex($index,$day='', $month='', $year='')
 	{
 		if($day == '')
-		{
 			$day = $this->day;
+		if($month == '')
 			$month = $this->month;
+		if($year == '')
 			$year = $this->year;
-		}
 		$day_array = array();
 		if($index < 0 || $index > 23)
                 {
@@ -151,11 +151,11 @@ class DateTime
 	function getThismonthDaysbyIndex($index,$day='', $month='', $year='')
         {
 		if($day == '')
-                {
                         $day = $index+1;
+		if($month == '')
                         $month = $this->month;
+		if($year == '')
                         $year = $this->year;
-                }
                 $month_array = array();
                 $month_array['day'] = $day;
                 $month_array['month'] = $month;
