@@ -930,12 +930,12 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '
 	
 	<table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
-	   <tr>
-	   	<td colspan="'.$colspan.'class="detailedViewHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
-		<td class="detailedViewHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].'</b></td>
+	   <tr class="detailedViewHeader">
+	   	<td colspan="'.$colspan.'" class="detailedViewHeader" ><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
+		<td class="detailedViewHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].' : </b></td>
 		<td class="detailedViewHeader">'.$taxtype.'</td>
 	   </tr>
-	   <tr>
+	   <tr valign="top">
 		<td width=40% class="small crmTableColHeading"><font color="red">*</font>
 			<b>'.$app_strings['LBL_PRODUCT_NAME'].'</b>
 		</td>';
@@ -974,6 +974,7 @@ function getDetailAssociatedProducts($module,$focus)
 
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
+	$netTotal = '0.00';
 	for($i=1;$i<=$num_rows;$i++)
 	{
 		$productid=$adb->query_result($result,$i-1,'productid');
@@ -988,7 +989,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$unitprice = convertFromDollar($unitprice,$rate);
 		$listprice = convertFromDollar($listprice,$rate);
 
-		//we should calculate the discount
+		//Product wise Discount calculation - starts
 		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
 		$totalAfterDiscount = $total;
@@ -997,19 +998,23 @@ function getDetailAssociatedProducts($module,$focus)
 		{
 			$productDiscount = $total*$discount_percent/100;
 			$totalAfterDiscount = $total-$productDiscount;
-			//echo " && totalAfter Discount(percent) $i ($total - $productDiscount) = $totalAfterDiscount";
+			//if discount is percent then show the percentage
+			$discount_info_message = "$discount_percent % of $total";
 		}
 		elseif($discount_amount != 'NULL' && $discount_amount != '')
 		{
-			$totalAfterDiscount = $total-$discount_amount;
-			//echo " && totalAfter Discount(amount) $i ($total - $discount_amount) = $totalAfterDiscount";
+			$productDiscount = $discount_amount;
+			$totalAfterDiscount = $total-$productDiscount;
+			$discount_info_message = "Amount Discount = $productDiscount";
 		}
+		//Product wise Discount calculation - ends 
 
 		$netprice = $totalAfterDiscount;
-		//we should calculate the tax if taxtype is individual
+		//Calculate the individual tax if taxtype is individual
 		if($taxtype == 'individual')
 		{
 			$taxtotal = '0.00';
+			$tax_info_message = '';
 			$tax_details = getTaxDetailsForProduct($productid,'all');
 			for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 			{
@@ -1018,9 +1023,9 @@ function getDetailAssociatedProducts($module,$focus)
 
 				$individual_taxamount = $totalAfterDiscount*$tax_value/100;
 				$taxtotal = $taxtotal + $individual_taxamount;
-				//echo '<br>>>>>>>'.$tax_name.' = '.$tax_value.' && '.$totalAfterDiscount.'...'.$taxtotal;
-				//echo '<br>>>>>>>'.$netprice.'.......'.$taxtotal;
+				$tax_info_message .= "$tax_value of $tax_name = $individual_taxamount \\n";
 			}
+			$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
 			$netprice = $netprice + $taxtotal;
 		}
 
@@ -1032,44 +1037,147 @@ function getDetailAssociatedProducts($module,$focus)
 					'.$productname.'
 					<br>'.$comment.'
 				</td>';
-
-
 		//Upto this added to display the Product name and comment
+
+
 		if($module != 'PurchaseOrder')
 		{	
 			$output .= '<td class="crmTableRow small lineOnTop">'.$qtyinstock.'</td>';
 		}
 		$output .= '<td class="crmTableRow small lineOnTop">'.$qty.'</td>';
-		$output .= '<td class="crmTableRow small lineOnTop">'.$listprice.'</td>';
-		$output .= '<td class="crmTableRow small lineOnTop" align="right">'.$total.'</td>';
+		$output .= '
+			<td class="crmTableRow small lineOnTop" align="right">
+				<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				   <tr>
+				   	<td align="right">'.$listprice.'</td>
+				   </tr>
+				   <tr>
+					   <td align="right">(-)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$discount_info_message.'\'); ">Discount</a></b></td>
+				   </tr>
+				   <tr>
+				   	<td align="right" nowrap>Total After Discount :</td>
+				   </tr>';
+		if($taxtype == 'individual')
+		{
+			$output .= '
+				   <tr>
+					   <td align="right" nowrap>(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">Tax :</a></b></td>
+				   </tr>';
+		}
+		$output .= '
+				</table>
+			</td>';
+
+		$output .= '
+			<td class="crmTableRow small lineOnTop" align="right">
+				<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				   <tr><td align="right">'.$total.'</td></tr>
+				   <tr><td align="right">'.$productDiscount.'</td></tr>
+				   <tr><td align="right" nowrap>'.$totalAfterDiscount.'</td></tr>';
+
+		if($taxtype == 'individual')
+		{
+			$output .= '<tr><td align="right" nowrap>'.$taxtotal.'</td></tr>';
+		}
+
+		$output .= '		   
+				</table>
+			</td>';
 		$output .= '<td class="crmTableRow small lineOnTop" valign="bottom" align="right">'.$netprice.'</td>';
 		$output .= '</tr>';
 
-
+		$netTotal = $netTotal + $netprice;
 	}
-	$output .= '<tr id="tableheadline">';
-	$output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+
 	$output .= '</table>';
-	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
+
+	//$netTotal should be equal to $focus->column_fields['hdnSubTotal']
+	//Display the total, adjustment, S&H details
+	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="5" class="crmTable">';
 	$output .= '<tr>'; 
-	$output .= '<td width="150"></td>';
-	$output .= '<td><div align="right"><b>'.$app_strings['LBL_SUB_TOTAL'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['hdnSubTotal'],$rate).'</div></td>';
+	$output .= '<td width="88%" class="crmTableRow small" align="right"><b>'.$app_strings['LBL_NET_TOTAL'].'</td>';
+	$output .= '<td width="12%" class="crmTableRow small" align="right"><b>'.$focus->column_fields['hdnSubTotal'].'</b></td>';
 	$output .= '</tr>';
+
+	//Decide discount
+	$finalDiscount = '0.00';
+	if($focus->column_fields['hdnDiscountPercent'] != '')
+	{
+		$finalDiscount = ($focus->column_fields['hdnSubTotal']*$focus->column_fields['hdnDiscountPercent']/100);
+		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of total ".$focus->column_fields['hdnSubTotal'];
+	}
+	elseif($focus->column_fields['hdnDiscountAmount'] != '')
+	{
+		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
+		$final_discount_info = "Final Discount Amount = $finalDiscount";
+	}
+	if($final_discount_info != '')
+		$final_discount_info = 'onclick="alert(\''.$final_discount_info.'\');"';
+
 	$output .= '<tr>'; 
-	$output .=  '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>'.$app_strings['LBL_TAX'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['txtTax'],$rate).'</div></td>';
+	$output .= '<td align="right" class="crmTableRow small lineOnTop">(-)&nbsp;<b><a href="javascript:;" '.$final_discount_info.'>'.$app_strings['LBL_DISCOUNT'].'</a></b></td>';
+	$output .= '<td align="right" class="crmTableRow small lineOnTop">'.$finalDiscount.'</td>';
 	$output .= '</tr>';
+
+	if($taxtype == 'group')
+	{
+		
+		$taxtotal = '0.00';
+		//First we should get all available taxes and then retrieve the corresponding tax values
+		$tax_details = getAllTaxes('available');
+		//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
+		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+		{
+			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_value = $adb->query_result($result,0,$tax_name);
+			$taxamount = ($focus->column_fields['hdnSubTotal']-$finalDiscount)*$tax_value/100;
+			$taxtotal = $taxtotal + $taxamount;
+			$tax_info_message .= "$tax_value % of $tax_name = $taxamount \\n";
+		}
+		$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
+
+		$output .= '<tr>';
+		$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">'.$app_strings['LBL_TAX'].'</a></b></td>';
+		$output .= '<td align="right" class="crmTableRow small">'.$taxtotal.'</td>';
+		$output .= '</tr>';
+	}
+
+	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
 	$output .= '<tr>'; 
-	$output .= '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>'.$app_strings['LBL_ADJUSTMENT'].':</b></div></td>';
-	$output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['txtAdjustment'],$rate).'</div></td>';
+	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b>'.$app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].'</b></td>';
+	$output .= '<td align="right" class="crmTableRow small">'.$shAmount.'</td>';
 	$output .= '</tr>';
+
+	//calculate S&H tax
+	$shtaxtotal = '0.00';
+	//First we should get all available taxes and then retrieve the corresponding tax values
+	$shtax_details = getAllTaxes('available','sh');
+	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
+	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
+	{
+		$shtax_name = $shtax_details[$shtax_count]['taxname'];
+		$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
+		$shtaxamount = $shAmount*$shtax_percent/100;
+		$shtaxtotal = $shtaxtotal + $shtaxamount;
+		$shtax_info_message .= "$shtax_percent % of $shtax_name = $shtaxamount \\n";
+	}
+	$shtax_info_message .= "\\n Total Tax Amount = $shtaxtotal";
+	
 	$output .= '<tr>'; 
-	$output .= '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>'.$app_strings['LBL_GRAND_TOTAL'].':</b></div></td>';
-	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate).'</div></td>';
+	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$shtax_info_message.'\')">'.$app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].'</a></b></td>';
+	$output .= '<td align="right" class="crmTableRow small">'.$shtaxtotal.'</td>';
+	$output .= '</tr>';
+
+	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
+	$output .= '<tr>'; 
+	$output .= '<td align="right" class="crmTableRow small">&nbsp;<b>'.$app_strings['LBL_ADJUSTMENT'].'</b></td>';
+	$output .= '<td align="right" class="crmTableRow small">'.$adjustment.'</td>';
+	$output .= '</tr>';
+
+	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
+	$output .= '<tr>'; 
+	$output .= '<td align="right" class="crmTableRow small lineOnTop"><b>'.$app_strings['LBL_GRAND_TOTAL'].'</b></td>';
+	$output .= '<td align="right" class="crmTableRow small lineOnTop">'.$grandTotal.'</td>';
 	$output .= '</tr>';
 	$output .= '</table>';
 

@@ -561,7 +561,11 @@ function saveInventoryProductDetails($focus, $module)
 
 	$updatequery .= " s_h_amount='".$_REQUEST['shipping_handling_charge']."',";
 
-	$updatequery .= " adjustment='".$_REQUEST['adjustmentType'].$_REQUEST['adjustment']."',";
+	//if the user gave (-) minus sign in adjustment then add with the value
+	$adjustmentType = '';
+	if($_REQUEST['adjustmentType'] == '-')
+		$adjustmentType = $_REQUEST['adjustmentType'];
+	$updatequery .= " adjustment='".$adjustmentType.$_REQUEST['adjustment']."',";
 
 	$updatequery .= " total='".$_REQUEST['total']."'";
 
@@ -626,14 +630,39 @@ function getInventoryTaxType($module, $id)
 function getInventoryProductTaxValue($id, $productid, $taxname)
 {
 	global $log, $adb;
-
+	$log->debug("Entering into function getInventoryProductTaxValue($id, $productid, $taxname).");
+	
 	$res = $adb->query("select $taxname from vtiger_inventoryproductrel where id = $id and productid = $productid");
 	$taxvalue = $adb->query_result($res,0,$taxname);
 
 	if($taxvalue == '')
 		$taxvalue = '0.00';
 
+	$log->debug("Exit from function getInventoryProductTaxValue($id, $productid, $taxname).");
+
 	return $taxvalue;
 }
+
+/**	function used to get the shipping & handling tax percentage for the given inventory id and taxname
+ *	@param int $id - entity id which will be PO/SO/Quotes or Invoice id
+ *	@param string $taxname - shipping and handling taxname
+ *	@return float $taxpercentage - shipping and handling taxpercentage which is associated with the given entity
+ */
+function getInventorySHTaxPercent($id, $taxname)
+{
+	global $log, $adb;
+	$log->debug("Entering into function getInventorySHTaxPercent($id, $taxname)");
+	
+	$res = $adb->query("select $taxname from vtiger_inventoryshippingrel where id= $id");
+	$taxpercentage = $adb->query_result($res,0,$taxname);
+
+	if($taxpercentage == '')
+		$taxpercentage = '0.00';
+
+	$log->debug("Exit from function getInventorySHTaxPercent($id, $taxname)");
+
+	return $taxpercentage;
+}
+
 
 ?>

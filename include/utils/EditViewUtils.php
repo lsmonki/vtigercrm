@@ -1445,9 +1445,91 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
 		$product_Detail[$i]['netPrice'.$i] = $netPrice;
 	}
-	$log->debug("Exiting getAssociatedProducts method ...");
 
-	//echo '<pre>';print_r($product_Detail);echo '</pre>';
+	//set the taxtype
+	$product_Detail[1]['final_details']['taxtype'] = $taxtype;
+
+	//Get the Final Discount, S&H charge, Tax for S&H and Adjustment values
+	//To set the Final Discount details
+	$finalDiscount = '0.00';
+	$product_Detail[1]['final_details']['discount_type_final'] = 'zero';
+
+	$subTotal = ($focus->column_fields['hdnSubTotal'] != '')?$focus->column_fields['hdnSubTotal']:'0.00';
+	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
+	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
+
+	if($focus->column_fields['hdnDiscountPercent'] != '')
+	{
+		$finalDiscount = ($subTotal*$discountPercent/100);
+		$product_Detail[1]['final_details']['discount_type_final'] = 'percentage';
+		$product_Detail[1]['final_details']['discount_percentage_final'] = $discountPercent;
+		$product_Detail[1]['final_details']['checked_discount_percentage_final'] = ' checked';
+		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:visible"';
+		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:hidden"';
+	}
+	elseif($focus->column_fields['hdnDiscountAmount'] != '')
+	{
+		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
+		$product_Detail[1]['final_details']['discount_type_final'] = 'amount';
+		$product_Detail[1]['final_details']['discount_amount_final'] = $discountAmount;
+		$product_Detail[1]['final_details']['checked_discount_amount_final'] = ' checked';
+		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:visible"';
+		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:hidden"';
+	}
+	$product_Detail[1]['final_details']['discountTotal_final'] = $finalDiscount;
+
+	//To set the Final Tax values
+	if($taxtype == 'group')
+	{
+		
+		$taxtotal = '0.00';
+		//First we should get all available taxes and then retrieve the corresponding tax values
+		$tax_details = getAllTaxes('available');
+		//if taxtype is group then the tax will be same for all products in vtiger_inventoryproductrel table
+		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+		{
+			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_percent = $adb->query_result($result,0,$tax_name);
+			$taxamount = ($focus->column_fields['hdnSubTotal']-$finalDiscount)*$tax_percent/100;
+			$taxtotal = $taxtotal + $taxamount;
+			$product_Detail[1]['final_details']['taxes'][$tax_count]['taxname'] = $tax_name;
+			$product_Detail[1]['final_details']['taxes'][$tax_count]['percentage'] = $tax_percent;
+			$product_Detail[1]['final_details']['taxes'][$tax_count]['amount'] = $taxamount;
+		}
+		$product_Detail[1]['final_details']['tax_totalamount'] = $taxtotal;
+	}
+
+	//To set the Shipping & Handling charge
+	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
+	$product_Detail[1]['final_details']['shipping_handling_charge'] = $shCharge;
+
+	//To set the Shipping & Handling tax values
+	//calculate S&H tax
+	$shtaxtotal = '0.00';
+	//First we should get all available taxes and then retrieve the corresponding tax values
+	$shtax_details = getAllTaxes('available','sh');
+	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
+	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
+	{
+		$shtax_name = $shtax_details[$shtax_count]['taxname'];
+		$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
+		$shtaxamount = $shCharge*$shtax_percent/100;
+		$shtaxtotal = $shtaxtotal + $shtaxamount;
+		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxname'] = $shtax_name;
+		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['percentage'] = $shtax_percent;
+		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['amount'] = $shtaxamount;
+	}
+	$product_Detail[1]['final_details']['shtax_totalamount'] = $shtaxtotal;
+
+	//To set the Adjustment value
+	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
+	$product_Detail[1]['final_details']['adjustment'] = $adjustment;
+
+	//To set the grand total
+	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
+	$product_Detail[1]['final_details']['grandTotal'] = $grandTotal;
+
+	$log->debug("Exiting getAssociatedProducts method ...");
 
 	return $product_Detail;
 
