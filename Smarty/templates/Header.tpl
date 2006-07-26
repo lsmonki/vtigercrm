@@ -435,7 +435,7 @@ function openwin()
 </script>
 
 
-<div id="tracker" style="display:none;position:absolute;z-index:100000001;" onmouseout="fninvsh('tracker');" onMouseOver="fnvshNrm('tracker');">
+<div id="tracker" style="display:none;position:absolute;z-index:100000001;">
 
 	<table class="trackerBorder" border="0" cellpadding="5" cellspacing="0" width="200">
 	<tbody><tr style="cursor:move;"><td colspan="2" class="trackerHeading small" id="Track_Handle"><strong>Last Viewed</strong></td><td align="right" style="padding:5px;" class="trackerHeading small">
