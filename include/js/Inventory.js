@@ -167,7 +167,7 @@ function calcGrandTotal() {
 
 	//get the final tax based on the group or individual tax selection
 	var taxtype = document.getElementById("taxtype").value;
-	if(taxtype = 'group')
+	if(taxtype == 'group')
 		finalTax = document.getElementById("tax_final").innerHTML
 
 	sh_amount = getObj("shipping_handling_charge").value
@@ -208,6 +208,9 @@ function roundValue(val) {
 //This function is used to validate the Inventory modules 
 function validateInventory(module) 
 {
+	var max_row_count = document.getElementById('proTab').rows.length;
+	max_row_count = eval(max_row_count)-2;//As the table has two header rows, we will reduce two from table row length
+
 	if(!formValidate())
 		return false
 
@@ -221,14 +224,18 @@ function validateInventory(module)
 	if(!FindDuplicate())
 		return false;
 
-	if(rowCnt == 0)
+	if(max_row_count == 0)
 	{
 		alert('No product is selected. Select at least one Product');
 		return false;
 	}
 
-	for (var i=1;i<=rowCnt;i++) 
+	for (var i=1;i<=max_row_count;i++) 
 	{
+		//if the row is deleted then avoid validate that row values
+		if(document.getElementById("deleted"+i).value == 1)
+			continue;
+
 		if (!emptyCheck("productName"+i,"Product","text")) return false
 		if (!emptyCheck("qty"+i,"Qty","text")) return false
 		if (!numValidate("qty"+i,"Qty","any")) return false
@@ -236,10 +243,49 @@ function validateInventory(module)
 		if (!emptyCheck("listPrice"+i,"List Price","text")) return false
 		if (!numValidate("listPrice"+i,"List Price","any")) return false           
 	}
-	if (getObj("txtTax").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-	if (!numValidate("txtTax","Tax","any")) return false
-	if (getObj("txtAdjustment").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-	if (!numValidate("txtAdjustment","Adjustment","any")) return false
+
+	//Product - Discount validation - not allow negative values
+	if(!validateProductDiscounts())
+		return false;
+
+	//Final Discount validation - not allow negative values
+	discount_checks = document.getElementsByName("discount_final");
+
+	//Percentage selected, so validate the percentage
+	if(discount_checks[1].checked == true)
+	{
+		temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_percentage_final").value);
+		if(!temp)
+		{
+			alert("Enter valid Final Discount Percentage");
+			return false;
+		}
+	}
+	if(discount_checks[2].checked == true)
+	{
+		temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_amount_final").value);
+		if(!temp)
+		{
+			alert("Enter valid Final Discount Amount");
+			return false;
+		}
+	}
+
+	//Shipping & Handling validation - not allow negative values
+	temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("shipping_handling_charge").value);
+	if(!temp)
+	{
+		alert("Enter a valid Shipping & Handling charge");
+		return false;
+	}
+
+	//Adjustment validation - allow negative values
+	temp = /^-?(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("adjustment").value)
+	if(!temp)
+	{
+		alert("Enter a valid Adjustment");
+		return false;
+	}
 
 	return true    
 }
@@ -395,11 +441,11 @@ function fnAddProductRow(module,image_path){
 	
 	//Delete link
 	colone.className = "crmTableRow small";
-	colone.innerHTML='<img src="themes/blue/images/delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
+	colone.innerHTML='<img src="'+image_path+'delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
 
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
-	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="'+image_path+'search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'">[<a href="javascript:;" onclick="">Add Comment</a>]</td></tr></tbody></table>';	
+	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="'+image_path+'search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment1" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><br>[<a href="javascript:;" onclick="getObj(\'comment'+count+'\').value=\'\'";>Clear Comment</a>]</td></tr></tbody></table>';	
 	
 	//Quantity In Stock - only for SO, Quotes and Invoice
 	if(module != "PurchaseOrder"){
@@ -572,19 +618,39 @@ function calcSHTax()
 	calcTotal();
 }
 
-/*
-function calculateInventoryTotal(currObj)
+function validateProductDiscounts()
 {
-	//First check for duplication
-	if(!FindDuplicate())
-		return false;
+	var max_row_count = document.getElementById('proTab').rows.length;
+	max_row_count = eval(max_row_count)-2;//As the table has two header rows, we will reduce two from table row length
 
-	//loadTaxes_Ajax(currObj);
+	for(var i=1;i<=max_row_count;i++)
+	{
+		//if the row is deleted then avoid validate that row values
+		if(document.getElementById("deleted"+i).value == 1)
+			continue;
 
+		discount_checks = document.getElementsByName("discount"+i);
 
-	calcTotal();
-
+		//Percentage selected, so validate the percentage
+		if(discount_checks[1].checked == true)
+		{
+			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_percentage"+i).value);
+			if(!temp)
+			{
+				alert("Enter a valid Discount percentage");
+				return false;
+			}
+		}
+		if(discount_checks[2].checked == true)
+		{
+			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_amount"+i).value);
+			if(!temp)
+			{
+				alert("Enter a valid Discount Amount");
+				return false;
+			}
+		}
+	}
+	return true;
 }
-*/
-
 
