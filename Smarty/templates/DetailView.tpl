@@ -111,7 +111,7 @@ function DeleteTag(id)
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
-		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">{$APP.LBL_ADD_TAG}</a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td></tr>
+		 <tr height=20><td>{$UPDATEINFO}</td></tr>
 		 </table>			 
 		 <hr noshade size=1>
 		
@@ -347,9 +347,17 @@ function DeleteTag(id)
 </td></tr>
 		</table>
 		</td>
-		<td width=20% valign=top style="border-left:2px dashed #cccccc;padding:13px">
+		<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
 
+		<!-- Add Tag link added just above the tag cloud image -->
+		<table border=0 cellspacing=0 cellpadding=5 width=100% >
+		<tr>
+			<td align="left" class="genHeaderSmall" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
+		</tr>
+		</table>
+		<br>
+		<!-- Eng Add Tag Link -->
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>

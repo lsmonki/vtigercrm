@@ -31,7 +31,7 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	</select>
 	</td>
 	<td style="padding: 5px;" align="center" width="10%">
-	<input name="add" value=" Add &gt " class="classBtn" type="button" onClick="addColumn()">
+	<input name="add" value=" {$APP.LBL_ADD_ITEM} &gt " class="classBtn" type="button" onClick="addColumn()">
 	</td>
 	<input type="hidden" name="selectedColumnsString"/>
 	<td style="padding-left: 5px;" align="left" width="40%">
