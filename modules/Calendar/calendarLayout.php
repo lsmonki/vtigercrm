@@ -125,10 +125,11 @@ function get_mini_calendar(& $cal)
 			<a href='javascript:ghide(\"miniCal\");'><img src='".$cal['IMAGE_PATH']."close.gif' align='right' border='0'></a></td>
 			</tr>
                         <tr>
-				<td colspan='7' class='cal_Hdr'>
-                                <!--td>".get_previous_cal($cal)."
-                                </td-->";
-        $minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."&".$cal['calendar']->date_time->get_date_str()."'>".display_date($cal['view'],$cal['calendar']->date_time)."</a></td></tr>";
+				<td class='cal_Hdr'>".get_previous_cal($cal)."</td>
+				<td colspan='5' class='cal_Hdr'>";
+        $minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."&".$cal['calendar']->date_time->get_date_str()."'>".display_date($cal['view'],$cal['calendar']->date_time)."</a></td>";
+	$minical .= "<td class='cal_Hdr'>".get_next_cal($cal)."
+	                     </td></tr>";
 	$minical .= "<tr>";
 	//To display days in week 
 	for ($i = 0; $i < 7; $i ++)
@@ -174,9 +175,7 @@ function get_mini_calendar(& $cal)
                 $minical .= '</tr>';
 	}
 	
-        $minical .= "<!--td>".get_next_cal($cal)."
-                     </td></tr-->
-                </table>";
+        $minical .= "</table>";
 	echo $minical;
 	$cal_log->debug("Exiting get_mini_calendar() method...");
 }
@@ -268,7 +267,7 @@ function get_cal_header_data(& $cal_arr,$viewBox)
 			<tr><td colspan='3'>&nbsp;</td></tr>
 			<tr>
 				<td class='tabSelected' style='border: 1px solid #666666;cursor:pointer;' align='center' width='10%' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\");'>
-					".$mod_strings['LBL_ADD_EVENT']."
+					".$mod_strings['LBL_ADD']."
 					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
 				</td>
 				<td align='center' width='65%'>";
@@ -335,7 +334,14 @@ function get_previous_cal(& $cal,$viewBox='',$subtab='')
 {
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering get_previous_cal() method...");
-	$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
+	if(isset($cal['size']) && $cal['size'] == 'small')
+        {
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."\")'><img src='".$cal['IMAGE_PATH']."small_left.gif' border='0' align='absmiddle' /></a>";
+	}
+	else
+	{
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
+	}
 	$cal_log->debug("Exiting get_previous_cal() method...");
 	return $link;
 }
@@ -349,9 +355,17 @@ function get_previous_cal(& $cal,$viewBox='',$subtab='')
  */
 function get_next_cal(& $cal,$viewBox='',$subtab='')
 {
+	//onClick='fnvshobj(this,\"miniCal\");getMiniCal();'
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering get_next_cal() method...");
-        $link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
+	if(isset($cal['size']) && $cal['size'] == 'small')
+	{
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."\")' ><img src='".$cal['IMAGE_PATH']."small_right.gif' border='0' align='absmiddle' /></a>";
+	}
+	else
+	{
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
+	}
 	$cal_log->debug("Exiting get_next_cal() method...");
 	return $link;
 
@@ -586,7 +600,7 @@ function getDayViewLayout(& $cal)
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
 	$dayview_layout = '';
-	$dayview_layout .= '<table border="0" cellpadding="10" cellspacing="0" width="900">';
+	$dayview_layout .= '<table border="0" cellpadding="10" cellspacing="0" width="100%">';
 	$dayview_layout .= '<tr>
 				<td id="mainContent" style="border-top: 1px solid rgb(204, 204, 204);">
 					<table border="0" cellpadding="5" cellspacing="0" width="100%">';
@@ -829,7 +843,6 @@ function getYearViewLayout(& $cal)
 {
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering getYearViewLayout() method...");
-	$class = '';
 	$yearview_layout = '';
 	$yearview_layout .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">';
 	$count = 0;
@@ -882,18 +895,20 @@ function getYearViewLayout(& $cal)
 					else
 						$event_class = '';
 					if($_1stmonth == $_2ndmonth)
-						$class = dateCheck($cal['calendar']->month_day_slices[$count][$cnt]);
-					if($class != '')
+						$curclass = dateCheck($cal['calendar']->month_day_slices[$count][$cnt]);
+					if($curclass != '')
 					{
-						$class = 'class="'.$class.'"';
+						$class = 'class="'.$curclass.'"';
+						$curclass = '';
 					}
 					else
 					{
 						$class = $event_class;
+						$event_class = '';
 					}
 					$date = $_1stdate + 0;
 					$month = $_1stmonth + 0;
-					$yearview_layout .= '<td '.$class.''.$event_class.'>';
+					$yearview_layout .= '<td '.$class.'>';
 					if($rows == 6 && $k==0)
 					{
 						list($tempyear,$tempmonth,$tempdate) = explode("-",$cal['calendar']->month_day_slices[$count][35+$mr]);
@@ -964,19 +979,30 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$start_hour = $st_end_time['starttime'];
 			$end_hour = $st_end_time['endtime'];
 			$account_name = $act[$i]->accountname;
+			$eventstatus = $act[$i]->eventstatus;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$height = $rowspan * 75;
+			if($eventstatus != 'Held')
+			{
+				$javacript_str = 'onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
+			}
+			else
+			{
+				$javacript_str = '';
+				$eventlayer .= '&nbsp;';
+			}
 			$eventlayer .= '<td class="dvtCellInfo" rowspan="'.$rowspan.'" colspan="1" width="'.$width.'%" >';
-			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');">
+			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td><img src="'.$image.'" align="middle" border="0" height="19" width="19"></td>
 					<td width="95%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
-				</tr>
-				<tr>
-					<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
-					<td><a href="#"><span class="orgTab">'.$subject.'</span></a></td>
+				</tr>';
+			$eventlayer .= '<tr><td>'.$action_str;
+			$eventlayer .= '</td>
+				<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 			</table>
 			
@@ -1024,6 +1050,7 @@ function getweekEventLayer(& $cal,$slice)
 			$start_hour = $st_end_time['starttime'];
                         $end_hour = $st_end_time['endtime'];
                         $account_name = $act[$i]->accountname;
+			$eventstatus = $act[$i]->eventstatus;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
                         $color = $act[$i]->color;
 			$eventlayer .='<div class ="event" id="event_'.$cal['calendar']->week_slice[$slice]->start_time->hour.'_'.$i.'">
@@ -1151,6 +1178,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')
 			AND vtiger_crmentity.smownerid = ".$current_user->id." 
+		group by vtiger_activity.activityid 
 		ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
@@ -1158,7 +1186,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	if(!is_admin($current_user))
 		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.") ";
 		
-	$query .= "ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$query .= "group by vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
 	if($info != '')
@@ -1191,6 +1219,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
+		$eventstatus = $adb->query_result($result,$i,"eventstatus");
                 if(strlen($subject)>25)
 	                $subject = substr($subject,0,25)."...";
 		if($contact_id != '')
@@ -1206,7 +1235,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
-		$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		if($eventstatus != 'Held')
+			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		else
+			$element['action'] ="&nbsp;";
         	$element['status'] = $adb->query_result($result,$i,"eventstatus");
 		$element['assignedto'] = $adb->query_result($result,$i,"user_name");
 		if(empty($element['assignedto']))
@@ -1279,10 +1311,14 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $element['starttime'] = $st_end_time['starttime'];
                 $id = $adb->query_result($result,$i,"activityid");
                 $subject = $adb->query_result($result,$i,"subject");
+		$status = $adb->query_result($result,$i,"status");
 		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Task' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		$element['status'] = $adb->query_result($result,$i,"status");
-		$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		if($status != 'Completed')
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		else
+			$element['action'] ="&nbsp;";
 		$element['assignedto'] = $adb->query_result($result,$i,"user_name");
 		if(empty($element['assignedto']))
 			$element['groupname'] = $adb->query_result($result,$i,"groupname");
@@ -1426,7 +1462,7 @@ function constructTodoListView($todo_list,$cal)
 			<tr><td colspan='3'>&nbsp;</td></tr>
 			<tr>
 				<td class='tabSelected' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\");'style='border: 1px solid #666666;cursor:pointer;' align='center' width='10%'>
-                                        ".$mod_strings['LBL_ADD_EVENT']."
+                                        ".$mod_strings['LBL_ADD']."
                                         <img src='".$cal['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>                                                                                                                         </td>
 				<td align='center' width='65%'>&nbsp;</td>
 				<td align='right' width='25%'>&nbsp;</td>
@@ -1460,7 +1496,7 @@ function constructTodoListView($todo_list,$cal)
                         $list_view .="<td colspan='".$header_rows."'><i>".$mod_strings['LBL_NONE_SCHEDULED']."</i></td>";
                 $list_view .="</tr>";
         }
-        $list_view .="</table>";
+	$list_view .="</table><br>";
 	$cal_log->debug("Exiting constructTodoListView() method...");
         return $list_view;
 }
