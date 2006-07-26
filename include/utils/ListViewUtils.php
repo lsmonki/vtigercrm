@@ -2677,6 +2677,11 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 		$lv_array['start']=1;
 		$start = 1;
 	}
+	elseif($related!='' && $noofrows == 0)
+	{
+	        $lv_array['start']=1;
+	        $start = 1;
+	}
 	else
 	{
 		$lv_array['start']=0;
