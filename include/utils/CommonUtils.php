@@ -23,6 +23,7 @@
   require_once('include/database/PearDatabase.php');
   require_once('include/ComboUtil.php'); //new
   require_once('include/utils/utils.php'); //new
+  require_once('include/utils/RecurringType.php');
 
 /**
  * Check if user id belongs to a system admin.
@@ -2475,4 +2476,88 @@ function get_announcements()
 	 $conv_price = convertToDollar($price,$rate_symbol['rate']);
 	 return $conv_price;
  }
+
+/**
+ *  Function to get recurring info depending on the recurring type
+ *  return  $recurObj       - Object of class RecurringType
+ */
+ 
+function getrecurringObjValue()
+{
+	$recurring_data = array();
+	if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype'] != null &&  $_REQUEST['recurringtype'] != '--None--' )
+	{
+		if(isset($_REQUEST['date_start']) && $_REQUEST['date_start'] != null)
+		{
+			$recurring_data['startdate'] = $_REQUEST['date_start'];
+		}
+		if(isset($_REQUEST['due_date']) && $_REQUEST['due_date'] != null)
+		{
+			$recurring_data['enddate'] = $_REQUEST['due_date'];
+		}
+		$recurring_data['type'] = $_REQUEST['recurringtype'];
+		if($_REQUEST['recurringtype'] == 'Weekly')
+		{
+			if(isset($_REQUEST['sun_flag']) && $_REQUEST['sun_flag'] != null)
+				$recurring_data['sun_flag'] = true;
+			if(isset($_REQUEST['mon_flag']) && $_REQUEST['mon_flag'] != null)
+				$recurring_data['mon_flag'] = true;
+			if(isset($_REQUEST['tue_flag']) && $_REQUEST['tue_flag'] != null)
+				$recurring_data['tue_flag'] = true;
+			if(isset($_REQUEST['wed_flag']) && $_REQUEST['wed_flag'] != null)
+				$recurring_data['wed_flag'] = true;
+			if(isset($_REQUEST['thu_flag']) && $_REQUEST['thu_flag'] != null)
+				$recurring_data['thu_flag'] = true;
+			if(isset($_REQUEST['fri_flag']) && $_REQUEST['fri_flag'] != null)
+				$recurring_data['fri_flag'] = true;
+			if(isset($_REQUEST['sat_flag']) && $_REQUEST['sat_flag'] != null)
+				$recurring_data['sat_flag'] = true;
+		}
+		elseif($_REQUEST['recurringtype'] == 'Monthly')
+		{
+			if(isset($_REQUEST['repeatMonth']) && $_REQUEST['repeatMonth'] != null)
+				$recurring_data['repeatmonth_type'] = $_REQUEST['repeatMonth'];
+			if($recurring_data['repeatmonth_type'] == 'date')
+			{
+				if(isset($_REQUEST['repeatMonth_date']) && $_REQUEST['repeatMonth_date'] != null)
+				$recurring_data['repeatmonth_date'] = $_REQUEST['repeatMonth_date'];
+			}
+			elseif($recurring_data['repeatmonth_type'] == 'day')
+			{
+				$recurring_data['repeatmonth_daytype'] = $_REQUEST['repeatMonth_daytype'];
+				switch($_REQUEST['repeatMonth_day'])
+				{
+					case 'sunday'    :
+						$recurring_data['sun_flag'] = true;
+						break;
+					case 'monday'    :
+						$recurring_data['mon_flag'] = true;
+						break;
+					case 'tuesday'   :
+						$recurring_data['tue_flag'] = true;
+						break;
+					case 'wednesday' :
+						$recurring_data['wed_flag'] = true;
+						break;
+					case 'thursday'  :
+						$recurring_data['thu_flag'] = true;
+						break;
+					case 'friday'    :
+						$recurring_data['fri_flag'] = true;
+						break;
+					case 'saturday'  :
+						$recurring_data['sat_flag'] = true;
+						break;
+				}
+			}
+		}
+		if(isset($_REQUEST['repeat_frequency']) && $_REQUEST['repeat_frequency'] != null)
+			$recurring_data['repeat_frequency'] = $_REQUEST['repeat_frequency'];
+		//echo '<pre>';print_r($recurring_data);echo '</pre>';die;
+		$recurObj = new RecurringType($recurring_data);
+		//echo '<pre>';print_r($recurObj);echo '</pre>';die;
+		return $recurObj;
+	}
+	
+}
 ?>
