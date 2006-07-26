@@ -171,7 +171,9 @@ class CRMEntity
 			$recur_type = trim($_REQUEST['recurringtype']);
 			if($recur_type != "--None--"  && $recur_type != '')
 		      	{		   
-	      			$this->insertIntoRecurringTable($table_name,$module);
+				//Modified by Minnie
+				$recur_data = getrecurringObjValue();
+	      			$this->insertIntoRecurringTable($recur_data);
 			}		
 		}// Code included by Jaguar - Ends
 		// Code included by Minnie  -  starts	
@@ -1114,26 +1116,20 @@ function insertIntoInviteeTable($table_name,$module,$invitees_array)
 }
 // Code included by Minnie - Ends
 
-// Code included by Jaguar - starts 
+// Code included by Jaguar - starts
 	/** Function to insert values in vtiger_recurringevents table for the specified tablename,module
-  	  * @param $table_name -- table name:: Type varchar
-  	  * @param $module -- module:: Type varchar
+  	  * @param $recurObj -- Recurring Object:: Type varchar
  	 */	
-function insertIntoRecurringTable($table_name,$module)
+function insertIntoRecurringTable(& $recurObj)
 {
-	global $log;
-$log->info("in insertIntoRecurringTable  ".$table_name."    module is  ".$module);
-        global $adb;
-        $st_date = getDBInsertDateValue($_REQUEST["date_start"]);
-$log->debug("st_date ".$st_date);
-        $end_date = getDBInsertDateValue($_REQUEST["due_date"]);
-$log->debug("end_date is set ".$end_date);
-        $st=explode("-",$st_date);
-$log->debug("exploding string is ".$st);
-        $end=explode("-",$end_date);
-$log->debug("exploding string again is ".$end);
-        $type = trim($_REQUEST['recurringtype']);
-$log->debug("type is ".$type);
+	global $log,$adb;
+	$log->info("in insertIntoRecurringTable  ");
+	$st_date = $recurObj->startdate->get_formatted_date();
+	$log->debug("st_date ".$st_date);
+	$end_date = $recurObj->enddate->get_formatted_date();
+	$log->debug("end_date is set ".$end_date);
+	$type = $recurObj->recur_type;
+	$log->debug("type is ".$type);
         $flag="true";
 
 	if($_REQUEST['mode'] == 'edit')
@@ -1177,52 +1173,27 @@ $log->debug("type is ".$type);
 			$adb->query($sql);
 		}
 	}
+	$date_array = $recurObj->recurringdates;
 	if($flag=="true")
 	{
-		$date_val=$st_date;
-		$date_array[]=$st_date;
-		if($type !=  "--None--")
+		for($k=0; $k< count($date_array); $k++)
 		{
-			while($date_val <= $end_date)
+			$tdate=$date_array[$k];
+			if($tdate <= $end_date)
 			{
-				if($type == 'Daily')
+				$max_recurid_qry = 'select max(recurringid) AS recurid from vtiger_recurringevents;';
+				$result = $adb->query($max_recurid_qry);
+				$noofrows = $adb->num_rows($result);
+				for($i=0; $i<$noofrows; $i++)
 				{
-					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),(date("$st[2]")+(1)),date("$st[0]")));
+					$recur_id = $adb->query_result($result,$i,"recurid");
 				}
-				elseif($type == 'Weekly')
+				$current_id =$recur_id+1;
+				$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
+				$adb->query($recurring_insert);
+				if($_REQUEST['set_reminder'] == 'Yes')
 				{
-					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),(date("$st[2]")+(7)),date("$st[0]")));
-				}
-				elseif($type == 'Monthly' )
-				{
-					$date_val = date("Y-m-d",mktime(0,0,0,(date("$st[1]")+1),date("$st[2]"),date("$st[0]")));
-				}
-				elseif($type == 'Yearly')
-				{
-					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),date("$st[2]"),(date("$st[0]")+1)));
-				}
-				$date_array[]=$date_val;
-				$st=explode("-",$date_val);
-			}
-			for($k=0; $k< count($date_array); $k++)
-			{
-				$tdate=$date_array[$k];
-				if($tdate <= $end_date)
-				{
-					$max_recurid_qry = 'select max(recurringid) AS recurid from vtiger_recurringevents;';
-					$result = $adb->query($max_recurid_qry);
-					$noofrows = $adb->num_rows($result);
-					for($i=0; $i<$noofrows; $i++)
-					{
-						$recur_id = $adb->query_result($result,$i,"recurid");
-					}
-					$current_id =$recur_id+1;
-					$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
-					$adb->query($recurring_insert);
-					if($_REQUEST['set_reminder'] == 'Yes')
-					{
-						$this->insertIntoReminderTable("activity_reminder",$module,$current_id,'');
-					}
+					$this->insertIntoReminderTable("activity_reminder",$module,$current_id,'');
 				}
 			}
 		}
