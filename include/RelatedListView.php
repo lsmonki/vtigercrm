@@ -297,7 +297,11 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		{
 			$entries[] = "";
 		}
-
+		
+		if(strlen($row['description']) > 40)
+		{
+			$row['description'] = substr($row['description'],0,40).'...';
+		}
 		$entries[] = nl2br($row['description']); 
 		$attachmentname = ltrim($row['filename'],$row['attachmentsid'].'_');//explode('_',$row['filename'],2);
 
