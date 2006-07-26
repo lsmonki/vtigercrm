@@ -177,9 +177,10 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
 	<input type="hidden" name="eventstatus" value="Planned">
-	<input type="hidden" name="recurringtype" value="">
 	<input type="hidden" name="set_reminder" value="">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
+	<input type="hidden" name="viewOption" value="">
+	<input type="hidden" name="subtab" value="">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
 			<td class="lvtHeaderText"><? echo $mod_strings['LBL_ADD_EVENT']?></b></td>
@@ -194,8 +195,8 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			<td width=80%>
 				<table>
 					<tr>
-					<td><input type="radio" name='activitytype' value='Call' onclick='document.appSave.module.value="Activities";' style='vertical-align: middle;' checked></td><td><?echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onclick='document.appSave.module.value="Activities";'></td><td><?echo $mod_strings['LBL_MEET']?></td><td style="width:20px">
+					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked></td><td><?echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
+					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;'></td><td><?echo $mod_strings['LBL_MEET']?></td><td style="width:20px">
 					</tr>
 				</table>
 			</td>
@@ -404,30 +405,32 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 							<div id="repeatOptions" style="display:none">
 								<table border=0 cellspacing=0 cellpadding=2>
 								<tr>
-								<!--td><?echo $mod_strings['LBL_REPEATEVENT']?></td>
-								<td><select class=small name="repeat_option">
-									<option value="Daily">Daily</option>
-									<option value="Weekly">Weekly</option>
-									<option value="Monthly">Monthly</option>
-									<option value="Yearly">Yearly</option>
-								</select></td-->
-								<td>Repeat once in every</td>
-								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
-								<td><select ><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
+								<td>
+									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
+								</td>
+								<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
+								<td>
+									<select name="recurringtype">
+										<option value="Daily" onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
+										<option value="Weekly" onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
+										<option value="Monthly" onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
+										<option value="Yearly" onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
+									</select>
+								</td>
 								</tr>
 								</table>
 
 								<div id="repeatWeekUI" style="display:none;">
 								<table border=0 cellspacing=0 cellpadding=2>
 									<tr>
-										<td><input type="checkbox"></td><td>Sun</td>
-										<td><input type="checkbox"></td><td>Mon</td>
-										<td><input type="checkbox"></td><td>Tue</td>
-										<td><input type="checkbox"></td><td>Wed</td>
-										<td><input type="checkbox"></td><td>Thu</td>
-										<td><input type="checkbox"></td><td>Fri</td>
-										<td><input type="checkbox"></td><td>Sat</td>
-								</tr>
+								<td><input name="sun_flag" value="sunday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SUN']; ?></td>
+								<td><input name="mon_flag" value="monday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_MON']; ?></td>
+								<td><input name="tue_flag" value="tuesday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_TUE']; ?></td>
+								<td><input name="wed_flag" value="wednesday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_WED']; ?></td>
+								<td><input name="thu_flag" value="thursday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_THU']; ?></td>
+								<td><input name="fri_flag" value="friday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_FRI']; ?></td>
+								<td><input name="sat_flag" value="saturday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SAT']; ?></td>
+									</tr>
 								</table>
 								</div>
 
@@ -437,7 +440,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 										<td>
 											<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
-													<td><input type="radio" checked name="repeatMonth"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2"></td><td>day of the month</td>
+													<td><input type="radio" checked name="repeatMonth" value="date"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2" name="repeatMonth_date" ></td><td>day of the month</td>
 												</tr>
 											</table>
 										</td>
@@ -446,7 +449,25 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 										<td>
 											<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
-													<td><input type="radio" name="repeatMonth"></td><td>on</td><td><select class=small><option>First</option><option>Last</option></td><td><select class=small><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></td>
+													<td>
+														<input type="radio" name="repeatMonth" value="day"></td>
+													<td>on</td>
+													<td>
+														<select name="repeatMonth_daytype">
+															<option value="first">First</option>
+															<option value="last">Last</option>
+														</select>
+													</td>
+													<td>
+														<select name="repeatMonth_day">
+															<option value="monday"><?php echo $mod_strings['LBL_DAY1']; ?></option>
+															<option value="tuesday"><?php echo $mod_strings['LBL_DAY2']; ?></option>
+															<option value="wednesday"><?php echo $mod_strings['LBL_DAY3']; ?></option>
+															<option value="thursday"><?php echo $mod_strings['LBL_DAY4']; ?></option>
+															<option value="friday"><?php echo $mod_strings['LBL_DAY5']; ?></option>
+															<option value="saturday"><?php echo $mod_strings['LBL_DAY6']; ?></option>
+														</select>
+													</td>
 												</tr>
 											</table>
 										</td>
@@ -527,8 +548,10 @@ setObjects();
   <input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
   <input type="hidden" name="assigntype" value="U">
   <input type="hidden" name="task_time_start" id="task_time_start">
-  <input type="hidden" name="takstatus" value="Planned">
+  <input type="hidden" name="taskstatus" value="Planned">
   <input type="hidden" name="set_reminder" value="">
+  <input type="hidden" name="viewOption" value="">
+  <input type="hidden" name="subtab" value="">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
                 	<td class="lvtHeaderText"><? echo $mod_strings['LBL_ADD_TODO']?></b></td>
@@ -655,9 +678,9 @@ setObjects();
                 </table>
 </form>
 <script>
-	var vtiger_fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
-        var vtiger_fieldlabel = new Array('Subject','Date','Time','Status');
-        var vtiger_fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
+        var fieldlabel = new Array('Subject','Date','Time','Status');
+        var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
 </script>	
 
 </div>
@@ -674,7 +697,6 @@ setObjects();
 	<input type="hidden" value="" name="view">
 	<input type="hidden" value="" name="module">
 	<input type="hidden" value="" name="subtab">
-	<input type="hidden" value="" name="user_id">
 	<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
 			<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
@@ -721,3 +743,47 @@ setObjects();
         </table>
 </div>
 
+<div id="act_postpone" class="statechange" style="left:250px;top:200px;z-index:5000">
+	<form name="activity_postpone">
+		<input type="hidden" value="" name="action">
+		<input type="hidden" value="" name="hour">
+		<input type="hidden" value="" name="day">
+		<input type="hidden" value="" name="month">
+		<input type="hidden" value="" name="year">
+		<input type="hidden" value="" name="view">
+		<input type="hidden" value="" name="module">
+		<input type="hidden" value="" name="subtab">
+		<input type="hidden" value="" name="record">
+		<input type="hidden" value="" name="activity_mode">
+		<table width="100%" border="0" cellpadding="3" cellspacing="0">
+			<tr>
+				<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="45%">Postpone Activity</td>
+				<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
+				<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_postpone')">Close</a></td>
+			</tr>
+			<tr><td colspan="3">&nbsp;</td></tr>
+			<tr>
+				<td width="45%"><b> Postpone To </b></td>
+				<td width="2%"><b>:</b></td>
+				<td width="53%"><input name="postpnoe_date_start" id="jscal_field_postpnoe_date_start" style="border: 1px solid rgb(186, 186, 186);" size="11" value="" type="text">
+				<img src="themes/blue/images/calendar.gif" id="jscal_trigger_postpnoe_date_start">
+			<input name="postpnoe_time_start" style="border: 1px solid rgb(186, 186, 186);" size="5" maxlength="5" value="" type="text"><br><font size="1"><em old="(yyyy-mm-dd)">(<?php echo $current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']; ?>)</em></font>
+				<script type="text/javascript">
+				Calendar.setup ({
+				inputField : "jscal_field_postpnoe_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_postpnoe_date_start", singleClick : true, step : 1
+					})
+					</script>
+
+				</td>
+			</tr>
+			<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+			<tr>
+                       		<td colspan="3" align="center"> 
+				&nbsp;&nbsp;      
+					<input type="button" name="button" class="small" value="Update" onClick="calendarPostpone();fninvsh('act_postpone');">   
+					<input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_postpone')">
+				</td>      
+			</tr>
+		</table>
+	</form>    
+</div>          
