@@ -236,7 +236,7 @@ $app_strings = Array(
 
 'LBL_ADDRESS'=>'Address',
 
-'LBL_ADD_TAG'=>'+addtag',
+'LBL_ADD_TAG'=>'Add Tag',
 
 'LBL_TAG_IT'=>'Tag it',
 
