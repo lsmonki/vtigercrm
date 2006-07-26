@@ -513,7 +513,9 @@ function setDiscount(currObj,curr_row)
 
 function calcCurrentTax(tax_name, curr_row, tax_row)
 {
-	var product_total = document.getElementById("productTotal"+curr_row).innerHTML
+	//we should calculate the tax amount only for the total After Discount
+	var product_total = getObj("totalAfterDiscount"+curr_row).innerHTML
+	//var product_total = document.getElementById("productTotal"+curr_row).innerHTML
 	var new_tax_percent = document.getElementById(tax_name).value;
 
 	var new_amount_lbl = document.getElementsByName("popup_tax_row"+curr_row);
