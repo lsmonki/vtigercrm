@@ -438,7 +438,7 @@ function openwin()
 <div id="tracker" style="display:none;position:absolute;z-index:100000001;">
 
 	<table class="trackerBorder" border="0" cellpadding="5" cellspacing="0" width="200">
-	<tbody><tr style="cursor:move;"><td colspan="2" class="trackerHeading small" id="Track_Handle"><strong>Last Viewed</strong></td><td align="right" style="padding:5px;" class="trackerHeading small">
+	<tbody><tr style="cursor:move;"><td colspan="2" class="trackerHeading small" id="Track_Handle"><strong>{$APP.LBL_LAST_VIEWED}</strong></td><td align="right" style="padding:5px;" class="trackerHeading small">
 		<a href="javascript:;"><img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('tracker')" hspace="5" align="absmiddle"></a>
 		</td></tr>
 	{foreach name=trackinfo item=trackelements from=$TRACINFO}
