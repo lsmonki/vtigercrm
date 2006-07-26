@@ -190,10 +190,6 @@ function check_form()
 		{
 			document.appSave.recurringtype.value = '--None--';
 		}
-		else
-		{
-			document.appSave.recurringtype.value = document.appSave.repeat_option.value;
-		}
 		starthour = document.appSave.starthr.value;
 		startmin  = document.appSave.startmin.value;
 		startformat = document.appSave.startfmt.value;
@@ -426,12 +422,16 @@ function fnShowEvent(){
 		var tagName = document.getElementById('addEventDropDown').style.display= 'block';
 }
 
-function getMiniCal(){
+function getMiniCal(url){
+	if(url == undefined)
+		url = 'module=Calendar&action=CalendarAjax&type=minical&ajax=true';
+	else
+		 url = 'module=Calendar&action=CalendarAjax&'+url+'&type=minical&ajax=true';
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Calendar&action=CalendarAjax&type=minical&parenttab=My Home Page&ajax=true',
+                        postBody: url,
                         onComplete: function(response) {
                                 $("miniCal").innerHTML=response.responseText;
                         }
@@ -534,9 +534,17 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
     document.change_owner.month.value = month;
     document.change_owner.year.value = year;
     document.change_owner.subtab.value = type;
+    document.activity_postpone.record.value = id;
+    document.activity_postpone.hour.value = hour;
+    document.activity_postpone.day.value = day;
+    document.activity_postpone.view.value = view;
+    document.activity_postpone.month.value = month;
+    document.activity_postpone.year.value = year;
+    document.activity_postpone.subtab.value = type;
+    document.activity_postpone.activity_mode.value = type;
     complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
     pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    postpone.href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode="+activity_mode;
+    postpone.href="javascript:dispLayer('act_postpone');";
     actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
     changeowner.href="javascript:dispLayer('act_changeowner');";
 
@@ -627,4 +635,46 @@ function delActivity(id,view,hour,day,month,year,subtab)
 
 }
 
+function calendarPostpone()
+{        
+        var view   = document.activity_postpone.view.value;
+        var day    = document.activity_postpone.day.value;
+        var month  = document.activity_postpone.month.value;
+        var year   = document.activity_postpone.year.value;
+        var hour   = document.activity_postpone.hour.value;
+        var subtab = document.activity_postpone.subtab.value;
+	var record = document.activity_postpone.record.value;
+	var activity_mode = document.activity_postpone.activity_mode.value;
+        if(subtab == 'event')
+        {
+                var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module=Activities&action=Save&return_module=Calendar&return_action=CalendarAjax&record='+record+'&activity_mode='+activity_mode+'&&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_postpone&viewOption='+OptionData+'&subtab=event&ajax=true',
+				onComplete: function(response) {
+					if(OptionData == 'listview')
+						$("listView").innerHTML=response.responseText;
+					if(OptionData == 'hourview')
+						$("hrView").innerHTML=response.responseText;
+				}
+			}
+		);
+	}
+	if(subtab == 'todo')
+	{
+		new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module=Activities&action=Save&return_module=Calendar&return_action=CalendarAjax&record='+record+'&activity_mode='+activity_mode+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_postpone&subtab=todo&ajax=true',
+				onComplete: function(response) {
+					$("mnuTab2").innerHTML=response.responseText;
+				}
+                        }
+                );
+        }
+
+}
 
