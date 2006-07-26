@@ -780,7 +780,7 @@ setObjects();
 			<tr>
                        		<td colspan="3" align="center"> 
 				&nbsp;&nbsp;      
-					<input type="button" name="button" class="small" value="Update" onClick="calendarPostpone();fninvsh('act_postpone');">   
+					<input type="button" name="button" class="small" value="Update" onClick="fninvsh('act_postpone');">   
 					<input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_postpone')">
 				</td>      
 			</tr>
