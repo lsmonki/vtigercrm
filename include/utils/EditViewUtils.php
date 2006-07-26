@@ -1397,6 +1397,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		//Based on the discount percent or amount we will show the discount details
 		if($discount_percent != 'NULL' && $discount_percent != '')
 		{
+			$product_Detail[$i]['discount_type'.$i] = "percentage";
 			$product_Detail[$i]['discount_percent'.$i] = $discount_percent;
 			$product_Detail[$i]['checked_discount_percent'.$i] = ' checked';
 			$product_Detail[$i]['style_discount_percent'.$i] = ' style="visibility:visible"';
@@ -1405,6 +1406,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
 		elseif($discount_amount != 'NULL' && $discount_amount != '')
 		{
+			$product_Detail[$i]['discount_type'.$i] = "amount";
 			$product_Detail[$i]['discount_amount'.$i] = $discount_amount;
 			$product_Detail[$i]['checked_discount_amount'.$i] = ' checked';
 			$product_Detail[$i]['style_discount_amount'.$i] = ' style="visibility:visible"';
