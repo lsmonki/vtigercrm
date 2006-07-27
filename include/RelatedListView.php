@@ -309,7 +309,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 		$entries[] = $row['activitytype'];	
 
-		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&return_id='.$_REQUEST["record"];
+		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"];
 
 		if($module == 'Notes')
 		{
