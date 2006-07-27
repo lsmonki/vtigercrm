@@ -35,5 +35,5 @@ if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 	$smod ="smodule=VENDOR&";
 }
-header("Location: index.php?".$smod."module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
+header("Location: index.php?".$smod."module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&relmodule=".$_REQUEST['module']);
 ?>

@@ -36,5 +36,5 @@ if(isset($_REQUEST['activity_mode']))
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id'].$activitymode."&parenttab=".$parenttab);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id'].$activitymode."&parenttab=".$parenttab."&relmodule=".$_REQUEST['module']);
 ?>

@@ -32,5 +32,5 @@ DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['re
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&parenttab=$parenttab&activity_mode=".$_REQUEST['activity_mode']."&record=".$_REQUEST['return_id']);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&parenttab=$parenttab&activity_mode=".$_REQUEST['activity_mode']."&record=".$_REQUEST['return_id']."&relmodule=".$_REQUEST['module']);
 ?>
