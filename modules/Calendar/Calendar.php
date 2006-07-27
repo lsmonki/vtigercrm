@@ -64,11 +64,20 @@ class Calendar
 		switch($this->view)
 		{
 			case 'day':
-				for($i=0;$i<=23;$i++)
+				for($i=-1;$i<=23;$i++)
 				{
-					$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($i));
-					$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->z_hour] = $layout;
-					array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->z_hour);
+					if($i == -1)
+					{
+						$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex(0));
+						$this->day_slice[$layout->start_time->get_formatted_date().':notime'] = $layout;
+						array_push($this->slices,  $layout->start_time->get_formatted_date().":notime");
+					}
+					else
+					{
+						$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($i));
+						$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->z_hour] = $layout;
+						array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->z_hour);
+					}
 				}
 				break;
 			case 'week':
@@ -77,11 +86,20 @@ class Calendar
 				{
 					$layout = new Layout('day',$this->date_time->getThisweekDaysbyIndex($i));
 					$this->week_array[$layout->start_time->get_formatted_date()] = $layout;
-					for($h=0;$h<=23;$h++)
+					for($h=-1;$h<=23;$h++)
 					{
-                                        	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
-						$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->z_hour] = $hour_list;
-						array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->z_hour);
+						if($h == -1)
+						{
+							$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex(0,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
+							$this->week_slice[$layout->start_time->get_formatted_date().':notime'] = $hour_list;
+							array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":notime");
+						}
+						else
+						{
+						      	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
+							$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->z_hour] = $hour_list;
+							array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->z_hour);
+						}
 					}
 					array_push($this->slices,  $layout->start_time->get_formatted_date());
 					
