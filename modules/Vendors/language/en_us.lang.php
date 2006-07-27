@@ -33,7 +33,7 @@ $mod_strings = array(
 'Country'=>'Country',
 'Description'=>'Description',
 'Po Box'=>'Po Box',
-
+'Vendor'=>'Vendor',
 
 
 );
