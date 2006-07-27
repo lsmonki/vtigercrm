@@ -169,6 +169,7 @@ $mod_strings = Array(
 'Order Id'=>'Order Id',
 'LBL_MY_TOP_SO'=>'My Top Open Sales Orders',
 'Status'=>'Status',
+'SalesOrder'=>'Sales Order',
 
 );
 
