@@ -169,7 +169,7 @@ $mod_strings = Array(
 'LBL_QUOTE_NAME_TITLE'=>'Quote Name',
 'Order Id'=>'Order Id',
 'Status'=>'Status',
-
+'PurchaseOrder'=>'Purchase Order',
 );
 
 ?>
