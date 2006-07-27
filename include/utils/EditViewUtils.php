@@ -1437,11 +1437,15 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		//Calculate netprice
 		$netPrice = $totalAfterDiscount+$taxTotal;
-		$taxtype = getInventoryTaxType($module,$focus->id);
-		if($taxtype == 'individual')
+		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
+		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
 		{
-			//Add the tax with product total and assign to netprice
-			$netPrice = $netPrice+$taxTotal;
+			$taxtype = getInventoryTaxType($module,$focus->id);
+			if($taxtype == 'individual')
+			{
+				//Add the tax with product total and assign to netprice
+				$netPrice = $netPrice+$taxTotal;
+			}
 		}
 		$product_Detail[$i]['netPrice'.$i] = $netPrice;
 	}
@@ -1508,11 +1512,17 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$shtaxtotal = '0.00';
 	//First we should get all available taxes and then retrieve the corresponding tax values
 	$shtax_details = getAllTaxes('available','sh');
+	
 	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
 	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
 	{
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
-		$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
+		$shtax_percent = '0.00';
+		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
+		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
+		{
+			$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
+		}
 		$shtaxamount = $shCharge*$shtax_percent/100;
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxname'] = $shtax_name;
