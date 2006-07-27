@@ -907,9 +907,6 @@ function getDetailAssociatedProducts($module,$focus)
 	global $theme;
 	global $log;
 	global $app_strings,$current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol=getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
@@ -986,12 +983,16 @@ function getDetailAssociatedProducts($module,$focus)
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$total = $qty*$listprice;
 
-		$unitprice = convertFromDollar($unitprice,$rate);
-		$listprice = convertFromDollar($listprice,$rate);
+		$unitprice = getConvertedPriceFromDollar($unitprice);
+		$listprice = getConvertedPriceFromDollar($listprice);
 
 		//Product wise Discount calculation - starts
 		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
+		//we should convert the amount and not convert the percentage
+		$discount_amount = getConvertedPriceFromDollar($discount_amount);
+
+		$total = getConvertedPriceFromDollar($total);
 		$totalAfterDiscount = $total;
 
 		if($discount_percent != 'NULL' && $discount_percent != '')
@@ -1092,23 +1093,27 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '</table>';
 
 	//$netTotal should be equal to $focus->column_fields['hdnSubTotal']
+	$netTotal = $focus->column_fields['hdnSubTotal'];
+	$netTotal = getConvertedPriceFromDollar($netTotal);
+
 	//Display the total, adjustment, S&H details
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="5" class="crmTable">';
 	$output .= '<tr>'; 
 	$output .= '<td width="88%" class="crmTableRow small" align="right"><b>'.$app_strings['LBL_NET_TOTAL'].'</td>';
-	$output .= '<td width="12%" class="crmTableRow small" align="right"><b>'.$focus->column_fields['hdnSubTotal'].'</b></td>';
+	$output .= '<td width="12%" class="crmTableRow small" align="right"><b>'.$netTotal.'</b></td>';
 	$output .= '</tr>';
 
 	//Decide discount
 	$finalDiscount = '0.00';
 	if($focus->column_fields['hdnDiscountPercent'] != '')
 	{
-		$finalDiscount = ($focus->column_fields['hdnSubTotal']*$focus->column_fields['hdnDiscountPercent']/100);
-		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of total ".$focus->column_fields['hdnSubTotal'];
+		$finalDiscount = ($netTotal*$focus->column_fields['hdnDiscountPercent']/100);
+		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of total ".$netTotal;
 	}
 	elseif($focus->column_fields['hdnDiscountAmount'] != '')
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
+		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
 		$final_discount_info = "Final Discount Amount = $finalDiscount";
 	}
 	if($final_discount_info != '')
@@ -1121,7 +1126,6 @@ function getDetailAssociatedProducts($module,$focus)
 
 	if($taxtype == 'group')
 	{
-		
 		$taxtotal = '0.00';
 		//First we should get all available taxes and then retrieve the corresponding tax values
 		$tax_details = getAllTaxes('available');
@@ -1130,7 +1134,7 @@ function getDetailAssociatedProducts($module,$focus)
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
 			$tax_value = $adb->query_result($result,0,$tax_name);
-			$taxamount = ($focus->column_fields['hdnSubTotal']-$finalDiscount)*$tax_value/100;
+			$taxamount = ($netTotal-$finalDiscount)*$tax_value/100;
 			$taxtotal = $taxtotal + $taxamount;
 			$tax_info_message .= "$tax_value % of $tax_name = $taxamount \\n";
 		}
@@ -1143,6 +1147,7 @@ function getDetailAssociatedProducts($module,$focus)
 	}
 
 	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
+	$shAmount = getConvertedPriceFromDollar($shAmount);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b>'.$app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">'.$shAmount.'</td>';
@@ -1169,12 +1174,14 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '</tr>';
 
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
+	$adjustment = getConvertedPriceFromDollar($adjustment);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small">&nbsp;<b>'.$app_strings['LBL_ADJUSTMENT'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">'.$adjustment.'</td>';
 	$output .= '</tr>';
 
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
+	$grandTotal = getConvertedPriceFromDollar($grandTotal);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small lineOnTop"><b>'.$app_strings['LBL_GRAND_TOTAL'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop">'.$grandTotal.'</td>';

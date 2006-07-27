@@ -465,12 +465,6 @@ function saveInventoryProductDetails($focus, $module)
 	global $log, $adb;
 	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
 
-	//To get the currency rate for the current user
-	global $current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol = getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
-
 	$ext_prod_arr = Array();
 	if($focus->mode == 'edit')
 	{
@@ -491,7 +485,8 @@ function saveInventoryProductDetails($focus, $module)
 	        $prod_id = $_REQUEST['hdnProductId'.$i];
 	        $qty = $_REQUEST['qty'.$i];
 	        $listprice = $_REQUEST['listPrice'.$i];
-		$listprice = convertToDollar($listprice,$rate);
+		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
+
 		$comment = addslashes($_REQUEST['comment'.$i]);
 
 		//if the product is deleted then we should avoid saving the deleted products
@@ -514,9 +509,14 @@ function saveInventoryProductDetails($focus, $module)
 
 		//set the discount percentage or discount amount in update query, then set the tax values
 		if($_REQUEST['discount_type'.$i] == 'percentage')
+		{
 			$updatequery .= " discount_percent='".$_REQUEST['discount_percentage'.$i]."',";
+		}
 		elseif($_REQUEST['discount_type'.$i] == 'amount')
-			$updatequery .= " discount_amount='".$_REQUEST['discount_amount'.$i]."',";
+		{
+			$discount_amount = getConvertedPrice($_REQUEST['discount_amount'.$i]);//convert the amount to $
+			$updatequery .= " discount_amount='".$discount_amount."',";
+		}
 
 
 		if($_REQUEST['taxtype'] == 'group')
@@ -549,25 +549,36 @@ function saveInventoryProductDetails($focus, $module)
 
 	$updatequery  = " update $focus->table_name set ";
 
-	$updatequery .= " subtotal='".$_REQUEST['subtotal']."',";
+	$subtotal = getConvertedPrice($_REQUEST['subtotal']);//get the subtotal to $
+	$updatequery .= " subtotal='".$subtotal."',";
 
 	$updatequery .= " taxtype='".$_REQUEST['taxtype']."',";
 
 	//for discount percentage or discount amount
 	if($_REQUEST['discount_type_final'] == 'percentage')
+	{
 		$updatequery .= " discount_percent='".$_REQUEST['discount_percentage_final']."',";
+	}
 	elseif($_REQUEST['discount_type_final'] == 'amount')
-		$updatequery .= " discount_amount='".$_REQUEST['discount_amount_final']."',";
+	{
+		$discount_amount_final = getConvertedPrice($_REQUEST['discount_amount_final']);//convert final discount amount to $
+		$updatequery .= " discount_amount='".$discount_amount_final."',";
+	}
+	
+	$shipping_handling_charge = getConvertedPrice($_REQUEST['shipping_handling_charge']);//convert the S&H amount to $
+	$updatequery .= " s_h_amount='".$shipping_handling_charge."',";
 
-	$updatequery .= " s_h_amount='".$_REQUEST['shipping_handling_charge']."',";
-
-	//if the user gave (-) minus sign in adjustment then add with the value
+	//if the user gave - sign in adjustment then add with the value
 	$adjustmentType = '';
 	if($_REQUEST['adjustmentType'] == '-')
 		$adjustmentType = $_REQUEST['adjustmentType'];
-	$updatequery .= " adjustment='".$adjustmentType.$_REQUEST['adjustment']."',";
 
-	$updatequery .= " total='".$_REQUEST['total']."'";
+	$adjustment = $_REQUEST['adjustment'];
+	$adjustment = getConvertedPrice($adjustment);//convert the adjustment to $
+	$updatequery .= " adjustment='".$adjustmentType.$adjustment."',";
+
+	$total = getConvertedPrice($_REQUEST['total']);//convert total to $
+	$updatequery .= " total='".$total."'";
 
 	$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
 	//Added where condition to which entity we want to update these values

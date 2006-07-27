@@ -2477,6 +2477,21 @@ function get_announcements()
 	 return $conv_price;
  }
 
+
+/**	Function used to get the converted amount from dollar which will be showed to the user
+ *	@param float $price - amount in dollor which we want to convert to the user configured amount
+ *	@return float $conv_price  - amount in user configured currency
+ */
+function getConvertedPriceFromDollar($price) 
+{
+	global $current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$conv_price = convertFromDollar($price,$rate_symbol['rate']);
+	return $conv_price;
+}
+
+
 /**
  *  Function to get recurring info depending on the recurring type
  *  return  $recurObj       - Object of class RecurringType
