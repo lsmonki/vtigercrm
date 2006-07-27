@@ -171,8 +171,8 @@ $mod_strings = Array(
 'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
 'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
 'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
-
 'LBL_EMAIL'=>'Email',
+'Product'=>'Product',
 );
 
 ?>
