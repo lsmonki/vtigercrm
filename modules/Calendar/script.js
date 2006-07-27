@@ -445,7 +445,7 @@ function getCalSettings(){
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Calendar&action=CalendarAjax&type=settings&parenttab=My Home Page&ajax=true',
+                        postBody: 'module=Calendar&action=CalendarAjax&type=settings&ajax=true',
                         onComplete: function(response) {
                                 $("calSettings").innerHTML=response.responseText;
                         }
