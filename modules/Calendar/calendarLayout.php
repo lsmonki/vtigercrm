@@ -24,6 +24,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 function calendar_layout(& $param_arr,$viewBox='',$subtab='')
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering calendar_layout() method");
 	$cal_header = array ();
 	if (isset($param_arr['size']) && $param_arr['size'] == 'small')
@@ -47,14 +48,14 @@ function calendar_layout(& $param_arr,$viewBox='',$subtab='')
 			$eventtab_class = 'dvtSelectedCell';
 			$todotab_class = 'dvtUnSelectedCell';
 		        $event_anchor = $eventlabel;
-			$todo_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=todo'>".$todolabel."</a>";
+			$todo_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=todo&parenttab=".$category."'>".$todolabel."</a>";
 					
 		}
 		elseif($subtab == 'todo')
 		{
 			$eventtab_class = 'dvtUnSelectedCell';
 			$todotab_class = 'dvtSelectedCell';
-			$event_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=event'>".$eventlabel."</a>";
+			$event_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=event&parenttab=".$category."'>".$eventlabel."</a>";
 			$todo_anchor = $todolabel;
 		}
 		//Ends
@@ -111,6 +112,7 @@ EOQ;
 function get_mini_calendar(& $cal)
 {
 	global $current_user,$adb,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
 	//To decide number of rows(weeks) in a month
@@ -127,7 +129,7 @@ function get_mini_calendar(& $cal)
                         <tr>
 				<td class='cal_Hdr'>".get_previous_cal($cal)."</td>
 				<td colspan='5' class='cal_Hdr'>";
-        $minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."&".$cal['calendar']->date_time->get_date_str()."'>".display_date($cal['view'],$cal['calendar']->date_time)."</a></td>";
+        $minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."&".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'>".display_date($cal['view'],$cal['calendar']->date_time)."</a></td>";
 	$minical .= "<td class='cal_Hdr'>".get_next_cal($cal)."
 	                     </td></tr>";
 	$minical .= "<tr>";
@@ -163,7 +165,7 @@ function get_mini_calendar(& $cal)
 			else
 				$class = $event_class;
                         $minical .= "<td ".$class.">";
-                        $minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."&".$cal['slice']->start_time->get_date_str()."'>";
+                        $minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."&".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>";
 			//To display month dates
                         if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
                         {
@@ -189,6 +191,7 @@ function get_mini_calendar(& $cal)
 function get_cal_header_tab(& $header,$viewBox,$subtab)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering get_cal_header_tab() method...");
 	$tabhtml = "";
 	$count = 1;
@@ -213,7 +216,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
 		else
 		{
 			$class = 'calUnSel';
-			$anchor = "<a href='index.php?module=Calendar&action=index&view=".$link."".$header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=".$subtab."'>".$mod_strings["LBL_".$header['calendar']->getCalendarView($link)]."</a>";
+			$anchor = "<a href='index.php?module=Calendar&action=index&view=".$link."".$header['calendar']->date_time->get_date_str()."&viewBox=".$viewBox."&subtab=".$subtab."&parenttab=".$category."'>".$mod_strings["LBL_".$header['calendar']->getCalendarView($link)]."</a>";
 		}
 	
 		if($count == 1)
@@ -292,6 +295,7 @@ function get_cal_header_data(& $cal_arr,$viewBox)
 function getEventViewOption(& $cal,$viewBox)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	if($viewBox == 'listview')
 	{
 		$list_sel = 'selected';
@@ -309,6 +313,7 @@ function getEventViewOption(& $cal,$viewBox)
 			<input type='hidden' name='week' value='".$cal['calendar']->date_time->week."'>
 			<input type='hidden' name='month' value='".$cal['calendar']->date_time->month."'>
 			<input type='hidden' name='year' value='".$cal['calendar']->date_time->year."'>
+			<input type='hidden' name='parenttab' value='".$category."'>
 			<input type='hidden' name='module' value='Calendar'>
 			<input type='hidden' name='return_module' value='Calendar'>
 			<input type='hidden' name='action' value=''>
@@ -333,14 +338,15 @@ function getEventViewOption(& $cal,$viewBox)
 function get_previous_cal(& $cal,$viewBox='',$subtab='')
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering get_previous_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
         {
-		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."\")'><img src='".$cal['IMAGE_PATH']."small_left.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&parenttab=".$category."\")'><img src='".$cal['IMAGE_PATH']."small_left.gif' border='0' align='absmiddle' /></a>";
 	}
 	else
 	{
-		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewBox=".$viewBox."&subtab=".$subtab."&parenttab=".$category."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
 	}
 	$cal_log->debug("Exiting get_previous_cal() method...");
 	return $link;
@@ -357,14 +363,15 @@ function get_next_cal(& $cal,$viewBox='',$subtab='')
 {
 	//onClick='fnvshobj(this,\"miniCal\");getMiniCal();'
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering get_next_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
 	{
-		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."\")' ><img src='".$cal['IMAGE_PATH']."small_right.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&parenttab=".$category."\")' ><img src='".$cal['IMAGE_PATH']."small_right.gif' border='0' align='absmiddle' /></a>";
 	}
 	else
 	{
-		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewBox=".$viewBox."&subtab=".$subtab."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewBox=".$viewBox."&subtab=".$subtab."&parenttab=".$category."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
 	}
 	$cal_log->debug("Exiting get_next_cal() method...");
 	return $link;
@@ -669,6 +676,7 @@ function getDayViewLayout(& $cal)
 function getWeekViewLayout(& $cal)
 {
 	global $current_user,$app_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getWeekViewLayout() method...");
         $date_format = $current_user->date_format;
 	$day_start_hour = $cal['calendar']->day_start_hour;
@@ -690,7 +698,7 @@ function getWeekViewLayout(& $cal)
 			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
 			$day = $date->getdayofWeek_inshort();
 			$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>';
-			$weekview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
+			$weekview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 			$weekview_layout .= $date->get_Date().' - '.$day;
 			$weekview_layout .= "</a>";
 			$weekview_layout .= '</td>';
@@ -769,6 +777,7 @@ function getWeekViewLayout(& $cal)
 function getMonthViewLayout(& $cal)
 {
 	global $current_user,$app_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getMonthViewLayout() method...");
 	$date_format = $current_user->date_format;
 	$count = 0;
@@ -801,7 +810,7 @@ function getMonthViewLayout(& $cal)
                 {
 			$monthview_layout .= '<td class="dvtCellLabel" width="14%">';
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
-			$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
+			$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 			//to display dates in month
 			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
 			{
@@ -842,6 +851,7 @@ function getMonthViewLayout(& $cal)
 function getYearViewLayout(& $cal)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getYearViewLayout() method...");
 	$yearview_layout = '';
 	$yearview_layout .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">';
@@ -857,7 +867,7 @@ function getYearViewLayout(& $cal)
 						<table class="month_table" border="0" cellpadding="0" cellspacing="3" width="98%">
 							<tr>
 								<td colspan="7" class="cal_Hdr">
-									<a style="text-decoration: none;" href="index.php?module=Calendar&action=index&view=month&hour=0&day=1&month='.($count+1).'&year='.$cal['calendar']->date_time->year.'">
+									<a style="text-decoration: none;" href="index.php?module=Calendar&action=index&view=month&hour=0&day=1&month='.($count+1).'&year='.$cal['calendar']->date_time->year.'&parenttab='.$category.'">
 									'.$cal['slice']->start_time->month_inlong.'
 									</a>
 								</td>
@@ -913,11 +923,11 @@ function getYearViewLayout(& $cal)
 					{
 						list($tempyear,$tempmonth,$tempdate) = explode("-",$cal['calendar']->month_day_slices[$count][35+$mr]);
 						if($tempmonth == $_2ndmonth)
-							$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$tempdate.'&month='.$tempmonth.'&year='.$tempyear.'">'.$tempdate;
+							$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$tempdate.'&month='.$tempmonth.'&year='.$tempyear.'&parenttab='.$category.'">'.$tempdate;
 					}
 					if($_1stmonth == $_2ndmonth)
 					{
-						$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$date.'&month='.$month.'&year='.$_1styear.'">'.$date;
+						$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$date.'&month='.$month.'&year='.$_1styear.'&parenttab='.$category.'">'.$date;
 					}
 					$yearview_layout .= '</a></td>';
 				$cnt++;
@@ -949,6 +959,7 @@ function getYearViewLayout(& $cal)
 function getdayEventLayer(& $cal,$slice,$rows)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getdayEventLayer() method...");
 	$eventlayer = '';
 	$arrow_img_name = '';
@@ -1002,7 +1013,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				</tr>';
 			$eventlayer .= '<tr><td>'.$action_str;
 			$eventlayer .= '</td>
-				<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events"><span class="orgTab">'.$subject.'</span></a></td>
+				<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 			</table>
 			
@@ -1029,6 +1040,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 function getweekEventLayer(& $cal,$slice)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getweekEventLayer() method...");
         $eventlayer = '';
         $arrow_img_name = '';
@@ -1061,7 +1073,7 @@ function getweekEventLayer(& $cal,$slice)
 				</tr>
 				<tr>
 					<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
-					<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events"><span class="orgTab">'.$subject.'</span></a></td>
+					<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 			</table>
 		        </div><br>';
@@ -1081,6 +1093,7 @@ function getweekEventLayer(& $cal,$slice)
 function getmonthEventLayer(& $cal,$slice)
 {
 	global $mod_strings,$cal_log;
+	$category = getParentTab();
 	$cal_log->debug("Entering getmonthEventLayer() method...");
 	$eventlayer = '';
 	$arrow_img_name = '';
@@ -1123,7 +1136,7 @@ function getmonthEventLayer(& $cal,$slice)
 						</tr>
 						<tr>
 							<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
-							<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events"><span class="orgTab">'.$subject.'</span></a></td>
+							<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 						</tr>
 					</table>
                                 </div><br>';
@@ -1131,7 +1144,7 @@ function getmonthEventLayer(& $cal,$slice)
 		if($remin_list != null)
 		{
 			$eventlayer .='<div valign=bottom align=right width=10%>
-					<a href="index.php?module=Calendar&action=index&view='.$cal['calendar']->month_array[$slice]->getView().'&'.$cal['calendar']->month_array[$slice]->start_time->get_date_str().'" class="webMnu">
+					<a href="index.php?module=Calendar&action=index&view='.$cal['calendar']->month_array[$slice]->getView().'&'.$cal['calendar']->month_array[$slice]->start_time->get_date_str().'&parenttab='.$category.'" class="webMnu">
 					+'.$remin_list.'&nbsp;'.$mod_strings['LBL_MORE'].'</a></div>';
 		}
 		$cal_log->debug("Exiting getmonthEventLayer() method...");
@@ -1151,6 +1164,7 @@ function getmonthEventLayer(& $cal,$slice)
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
+	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log;
 	$cal_log->debug("Entering getEventList() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
@@ -1227,7 +1241,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$contactname = getContactName($contact_id);
 			$contact_data = "<b>".$contactname."</b>,";
 		}
-		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Events' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
+		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Events&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
@@ -1260,6 +1274,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
         $Entries = Array();
+	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log;
 	$cal_log->debug("Entering getTodoList() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
@@ -1312,7 +1327,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $id = $adb->query_result($result,$i,"activityid");
                 $subject = $adb->query_result($result,$i,"subject");
 		$status = $adb->query_result($result,$i,"status");
-		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Task' class='webMnu'>".$subject."</a>";
+		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Task&parenttab=".$category."' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		$element['status'] = $adb->query_result($result,$i,"status");
 		if($status != 'Completed')
