@@ -1531,7 +1531,7 @@ function InternalMailer(record_id,type) {
 }
 
 function fnHide_Event(obj){
-        document.getElementById(obj).style.display = 'none';
+        document.getElementById(obj).style.visibility = 'hidden';
 }
 
 function OpenCompose(id,mode) 
