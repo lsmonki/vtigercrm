@@ -173,6 +173,7 @@ $mod_strings = Array(
 'Purchase Order'=>'Purchase Order',
 'Status'=>'Status',
 'Id'=>'Invoice Id',
+'Invoice'=>'Invoice',
 );
 
 ?>
