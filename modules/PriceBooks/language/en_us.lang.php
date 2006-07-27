@@ -27,6 +27,7 @@ $mod_strings = array(
 'LBL_PRODUCT_UNIT_PRICE'=>'Unit Price',
 'LBL_PB_LIST_PRICE'=>'List Price',
 'LBL_ACTION'=>'Action',
+'PriceBook'=>'Price Book',
 );
 
 
