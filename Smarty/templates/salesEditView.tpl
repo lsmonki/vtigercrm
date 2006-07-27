@@ -54,11 +54,11 @@ function sensex_info()
 		<div class="small" style="padding:20px">
 		
 			{if $OP_MODE eq 'edit_view'}   
-				<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span> <br>
+				<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span> <br>
 				{$UPDATEINFO}	 
 			{/if}
 			{if $OP_MODE eq 'create_view'}
-				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD}</span> <br>
+				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP[$SINGLE_MOD]}</span> <br>
 			{/if}
 
 			<hr noshade size=1>
@@ -75,10 +75,10 @@ function sensex_info()
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 
                                         	{if $MODULE eq 'Notes' || $MODULE eq 'Faq'}
-                                        	<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>
+                                        	<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
 	                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
         	                                {else}
-						<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>
+						<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
 						<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 
 	               	                        {if $OP_MODE neq 'create_view'}
