@@ -2203,12 +2203,12 @@ a.calMnu:Hover{
 	background-color:#D3EAF0;
 	border:1px solid #999999;
 	text-align:left;
-	width:90%;
+	width:100%;
 	position:relative;
 	left:0px;
 	top:0px;
 	vertical-align:middle;
-	padding:5px;
+	padding:1px;
 }
 
 #hrView{
@@ -2308,6 +2308,13 @@ a.calMnu:Hover{
 	font-weight:bold;
 	text-decoration:underline;
 }
+
+.currDay a{
+	color:#FFFFFF;
+	font-weight:bold;
+	text-decoration:underline;
+}
+
 
 /* End of Cal Year View */
 
