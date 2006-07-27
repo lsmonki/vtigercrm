@@ -148,6 +148,9 @@ function displayCoords(event,obj,mode,curr_row)
 
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">
+		{if $row_no neq 1}
+			<img src="{$IMAGE_PATH}delete.gif" border="0" onclick="deleteRow('{$MODULE}',{$row_no})">
+		{/if}
 		<input type="hidden" id="{$deleted}" name="{$deleted}" value="0">
 	</td>
 
