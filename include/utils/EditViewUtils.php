@@ -72,7 +72,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$log->info("uitype is ".$uitype);
 		if($value=='')
 		{
-			if($fieldname != 'birthday')// && $fieldname != 'due_date')//due date is today's date by default
+			//modified to fix the issue in trac(http://vtiger.fosslabs.com/cgi-bin/trac.cgi/ticket/1469)
+			if($fieldname != 'birthday' && $generatedtype != 2)// && $fieldname != 'due_date')//due date is today's date by default
 				$disp_value=getNewDisplayDate();
 
 			//Added to display the Contact - Support End Date as one year future instead of today's date -- 30-11-2005
