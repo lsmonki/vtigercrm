@@ -121,6 +121,17 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		}
 		y.display="block";
 	}
+	else
+	{
+		 document.appSave.date_start.value = startdate;
+                 document.appSave.due_date.value = enddate;
+                 document.appSave.starthr.value = starthr;
+                 document.appSave.startmin.value = startmin;
+                 document.appSave.startfmt.value = startfmt;
+                 document.appSave.endhr.value = endhr;
+                 document.appSave.endmin.value = endmin;
+                 document.appSave.endfmt.value = endfmt;
+	}
 }
 
 function ghide(argg2)
@@ -677,4 +688,20 @@ function calendarPostpone()
         }
 
 }
+
+
+/*
+* javascript function to display the div tag
+* @param divId :: div tag ID
+*/
+function cal_show(divId)
+
+{
+
+    var id = document.getElementById(divId);
+
+    id.style.visibility = 'visible';
+
+}
+
 
