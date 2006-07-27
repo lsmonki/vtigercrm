@@ -157,7 +157,7 @@ $mod_strings = Array(
 'LBL_QUOTE_STAGE'=>'Quote Stage:',
 'LBL_MY_TOP_QUOTE'=>'My Top Open Quotes',
 'Quote ID'=>'Quote Id',
-
+'Quote'=>'Quote',
 );
 
 ?>
