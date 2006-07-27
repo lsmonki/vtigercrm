@@ -84,7 +84,10 @@ $result = $adb->query($query);
 $num_rows=$adb->num_rows($result);
 $mask_roleid=Array();
 $del_roleid=$_REQUEST['maskid'];
-$mask_roleid= getRoleAndSubordinatesRoleIds($del_roleid);
+if($del_roleid != '' && strlen($del_roleid) >0)
+{
+	$mask_roleid= getRoleAndSubordinatesRoleIds($del_roleid);
+}	
 $roleout ='';
 $roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
 
@@ -121,7 +124,7 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		else
 		{
 			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="Root" title="Root" align="absmiddle">';
-		}	
+		}
 		if($roledepth == 0 || in_array($roleid,$mask_roleid))
 		{
 			$roleout .= '&nbsp;<b class="genHeaderGray">'.$rolename.'</b>';
