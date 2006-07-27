@@ -782,7 +782,7 @@ class CRMEntity
 			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
 			  if($oldvalue != $this->column_fields["$history_field_array[$inventory_module]"])
 			  {
-				  addInventoryHistory($inventory_module, $this->id,$relatedname,$_REQUEST['grandTotal'],$this->column_fields["$history_field_array[$inventory_module]"]);
+				  addInventoryHistory($inventory_module, $this->id,$relatedname,$_REQUEST['total'],$this->column_fields["$history_field_array[$inventory_module]"]);
 			  }
 		  }
 
