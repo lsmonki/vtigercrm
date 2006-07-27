@@ -129,10 +129,17 @@ $list_query .= ' group by vtiger_activity.activityid';
 
 if(isset($order_by) && $order_by != '')
 {
-	$tablename = getTableNameForField('Activities',$order_by);
-	$tablename = (($tablename != '')?($tablename."."):'');
+	if($order_by == 'smownerid')
+        {
+                $list_query .= ' ORDER BY user_name '.$sorder;
+        }
+        else
+        {
+		$tablename = getTableNameForField('Activities',$order_by);
+		$tablename = (($tablename != '')?($tablename."."):'');
 
-        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+        	$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+	}
 }
 
 //Constructing the list view

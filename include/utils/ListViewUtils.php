@@ -691,10 +691,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$potential_name = getPotentialName($potential_id);
 						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.$potential_name.'</a>';
 					}
+					/* Commented of proper sorting for 'assigned to' in listview
 					elseif($owner_id == 0 && $name == 'Assigned To')
 					{
 						$value=$adb->query_result($list_result,$i-1,"groupname");
 					}
+					*/
 					elseif($module =='Emails' && $relatedlist != '' && $name=='Subject')
 					{
 						$list_result_count = $i-1;

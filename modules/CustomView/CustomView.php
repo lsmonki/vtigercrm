@@ -323,7 +323,6 @@ class CustomView extends CRMEntity{
 		{
 			$columnlist[$columnrow['columnindex']] = $columnrow['columnname'];
 		} 
-	
 		return $columnlist;
 	}
 
@@ -770,6 +769,13 @@ class CustomView extends CRMEntity{
 							$sqllist_column = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as activitystatus";
 						}
 					}
+
+					//Added for for assigned to sorting
+					if($list[1] == "smownerid")
+					{
+						$sqllist_column = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name";
+					}
+					
 					$sqllist[] = $sqllist_column;
 					//Ends
 					
@@ -782,6 +788,7 @@ class CustomView extends CRMEntity{
 			$returnsql = implode(",",$sqllist);
 		}
 		return $returnsql;
+
 	}
 
 	/** to get the customview stdFilter Query for the given customview Id  
@@ -1408,7 +1415,7 @@ class CustomView extends CRMEntity{
 			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 			if($module == "Activities" || $module == "Emails")
 			{
-				$query = "select vtiger_groups.groupname ,vtiger_users.user_name,".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_activity.* ".$listviewquery;
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_activity.* ".$listviewquery;
 			}else if($module == "Notes")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_notes.* ".$listviewquery;
@@ -1431,7 +1438,7 @@ class CustomView extends CRMEntity{
 			}		
 			else
 			{
-				$query = "select vtiger_groups.groupname ,vtiger_users.user_name,".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;
 			}
 			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
 			$advfiltersql = $this->getCVAdvFilterSQL($viewid);
