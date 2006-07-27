@@ -208,9 +208,6 @@ function roundValue(val) {
 //This function is used to validate the Inventory modules 
 function validateInventory(module) 
 {
-	var max_row_count = document.getElementById('proTab').rows.length;
-	max_row_count = eval(max_row_count)-2;//As the table has two header rows, we will reduce two from table row length
-
 	if(!formValidate())
 		return false
 
@@ -220,6 +217,8 @@ function validateInventory(module)
 		return true;
 	}
 
+	var max_row_count = document.getElementById('proTab').rows.length;
+	max_row_count = eval(max_row_count)-2;//As the table has two header rows, we will reduce two from table row length
 
 	if(!FindDuplicate())
 		return false;
