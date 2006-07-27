@@ -15,6 +15,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
+global $current_language, $currentModule;
 
 if(isset($_REQUEST['fld_module']) && $_REQUEST['fld_module'] != '')
 	$fld_module = $_REQUEST['fld_module'];
@@ -30,6 +31,13 @@ if((sizeof($picklists_entries) %3) != 0)
 else
 	$value = sizeof($picklists_entries);
 
+if($fld_module == 'Events')
+
+	$temp_module_strings = return_module_language($current_language, 'Activities');
+else
+	$temp_module_strings = return_module_language($current_language, $fld_module);
+
+$smarty->assign("TEMP_MOD", $temp_module_strings);
 $picklist_fields = array_chunk(array_pad($picklists_entries,$value,''),3);
 $smarty->assign("MODULE",$fld_module);
 $smarty->assign("PICKLIST_VALUES",$picklist_fields);
@@ -91,7 +99,7 @@ function getUserFldArray($fld_module)
 			}
 			else
 			{
-				if($fld_name != 'invoicestatus' && $fld_name != 'quotestage' && $fld_name != 'postatus' && $fld_name != 'sostatus')
+				if($fld_name != 'invoicestatus' && $fld_name != 'quotestage' && $fld_name != 'postatus' && $fld_name != 'sostatus' && $fld_name != 'eventstatus')
 				{
 					$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");	
 					$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	
