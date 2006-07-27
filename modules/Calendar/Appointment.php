@@ -128,101 +128,107 @@ class Appointment
 		global $adb;
 		$format_sthour='';
                 $format_stmin='';
-                list($st_hour,$st_min,$st_sec) = split(":",$act_array["time_start"]);
-                if($st_hour <= 9 && strlen(trim($st_hour)) < 2)
-                {
-                        $format_sthour= '0'.$st_hour;
-                }
-                else
-                {
-                        $format_sthour= $st_hour;
-                }
-                if($st_min <= 9 && strlen(trim($st_min)) < 2)
-                {
-                        $format_stmin= '0'.$st_min;
-                }
-                else
-                {
-                        $format_stmin = $st_min;
-                }
-		list($styear,$stmonth,$stday) = explode("-",$act_array["date_start"]);
-                $startdate = $act_array["date_start"] .' ' . $format_sthour .":" . $format_stmin .":00";
-		$start_date_arr = Array(
-					'min'   => $format_stmin,
-					'hour'  => $format_sthour,
-					'day'   => $stday,
-					'month' => $stmonth,
-					'year'  => $styear
-				       );
-                //end time calculation
-                $end_hour = 0;
-                $end_min = $st_min + $act_array["duration_minutes"];
-                if($end_min <= 9) $end_min= '0'.$end_min;
-		if($end_min >= 60)
-                {
-                        $end_min = $end_min%60;
-                        if($end_min <= 9) $end_min= '0'.$end_min;
-                        $end_hour++;
-                }
-                $end_hour = $end_hour + $st_hour + $act_array["duration_hours"];
-                if($end_hour <= 9) $end_hour= '0'.$end_hour;
-                if ($end_hour > 23) $end_hour = 23;
-		list($eyear,$emonth,$eday) = explode("-",$act_array["due_date"]);
-		$enddate = $act_array["date_start"] .' ' . $end_hour .":" . $end_min .":00";
-		$end_date_arr = Array(
-                                        'min'   => $end_min,
-                                        'hour'  => $end_hour,
-                                        'day'   => $eday,
-                                        'month' => $emonth,
-                                        'year'  => $eyear
-                                       );
-
-                $this->description       = $act_array["description"];
-                $this->start_time        = new DateTime($start_date_arr,true);
-                $this->account_name      = $act_array["accountname"];    
-                $this->account_id        = $act_array["accountid"];      
-                $this->eventstatus       = $act_array["eventstatus"];    
-                $this->end_time          = new DateTime($end_date_arr,true);
-                $this->subject           = $act_array["subject"];
-                $this->activity_type     = $act_array["activitytype"];
+		$this->description       = $act_array["description"];
+		$this->account_name      = $act_array["accountname"];
+		$this->account_id        = $act_array["accountid"];
+		$this->eventstatus       = $act_array["eventstatus"];
+		$this->subject           = $act_array["subject"];
+		$this->activity_type     = $act_array["activitytype"];
 		$this->duration_hour     = $act_array["duration_hours"];
 		$this->duration_minute   = $act_array["duration_minutes"];
-		$this->creatorid 	 = $act_array["smcreatorid"];
+		$this->creatorid         = $act_array["smcreatorid"];
 		$this->creator           = getUserName($act_array["smcreatorid"]);
 		if($act_array["smownerid"]==0)
-                {
-                        $this->assignedto ="group";
-                        $this->owner = $act_array["groupname"];
-                }
+		{
+			$this->assignedto ="group";
+			$this->owner = $act_array["groupname"];
+		}
 		else
 		{
 			$this->assignedto ="user";
 			$this->ownerid = $act_array["smownerid"];
 			$this->owner   = getUserName($act_array["smownerid"]);
-                        $query="SELECT cal_color FROM vtiger_users where id = ".$this->ownerid;
-                        $result=$adb->query($query);
-                        if($adb->getRowCount($result)!=0)
+			$query="SELECT cal_color FROM vtiger_users where id = ".$this->ownerid;
+			$result=$adb->query($query);
+			if($adb->getRowCount($result)!=0)
 			{
-                        	$res = $adb->fetchByAssoc($result, -1, false);
-                                $this->color = $res['cal_color'];
-                        }
+				$res = $adb->fetchByAssoc($result, -1, false);
+				$this->color = $res['cal_color'];
+			}
 		}
-		
 		if($act_array["activitytype"] == 'Call')
 		{
-			$this->image_name = 'Calls.gif';
+			$this->image_name = 'Call.gif';
 		}
 		if($act_array["activitytype"] == 'Meeting')
 		{
-			$this->image_name = 'Meetings.gif';
+			$this->image_name = 'Meeting.gif';
 		}
-                $this->record            = $act_array["activityid"];
+		$this->record            = $act_array["activityid"];
+		list($styear,$stmonth,$stday) = explode("-",$act_array["date_start"]);
+		if($act_array["time_start"] != null)
+		{
+			list($st_hour,$st_min,$st_sec) = split(":",$act_array["time_start"]);
+	                if($st_hour <= 9 && strlen(trim($st_hour)) < 2)
+        	        {
+                	        $format_sthour= '0'.$st_hour;
+                	}
+               		else
+                	{
+                        	$format_sthour= $st_hour;
+                	}
+              		if($st_min <= 9 && strlen(trim($st_min)) < 2)
+                	{
+                        	$format_stmin= '0'.$st_min;
+                	}
+               		else
+                	{
+                        	$format_stmin = $st_min;
+                	}
+                	$startdate = $act_array["date_start"] .' ' . $format_sthour .":" . $format_stmin .":00";
+        	        //end time calculation
+                	$end_hour = 0;
+	                $end_min = $st_min + $act_array["duration_minutes"];
+        	        if($end_min <= 9) $end_min= '0'.$end_min;
+			if($end_min >= 60)
+                	{
+                        	$end_min = $end_min%60;
+	                        if($end_min <= 9) $end_min= '0'.$end_min;
+        	                $end_hour++;
+                	}
+	                $end_hour = $end_hour + $st_hour + $act_array["duration_hours"];
+        	        if($end_hour <= 9) $end_hour= '0'.$end_hour;
+                	if ($end_hour > 23) $end_hour = 23;
+			list($eyear,$emonth,$eday) = explode("-",$act_array["due_date"]);
+			$enddate = $act_array["date_start"] .' ' . $end_hour .":" . $end_min .":00";
+			$st_hour= $format_sthour;
+		}
+		else
+		{
+			$st_hour = 'notime';
+			$format_stmin = '00';
+			$format_sthour= '00';
+			$end_min = '50';
+			$end_hour= '23';
+		}
+		$start_date_arr = Array(
+			'min'   => $format_stmin,
+			'hour'  => $format_sthour,
+			'day'   => $stday,
+			'month' => $stmonth,
+			'year'  => $styear
+		);
+		$end_date_arr = Array(
+			'min'   => $end_min,
+			'hour'  => $end_hour,
+			'day'   => $eday,
+			'month' => $emonth,
+			'year'  => $eyear
+		);
+                $this->start_time        = new DateTime($start_date_arr,true);
+                $this->end_time          = new DateTime($end_date_arr,true);
 		if($view == 'day' || $view == 'week')
 		{
-			if($st_hour <= 9 && strlen(trim($st_hour)) < 2)
-                	{
-	                        $st_hour= '0'.$st_hour;
-        	        }
 			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
 		}
 		elseif($view == 'year')
