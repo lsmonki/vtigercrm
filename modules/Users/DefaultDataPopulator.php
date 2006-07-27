@@ -180,7 +180,7 @@ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'email2','vtiger_account',1,'13','email2','Other Email',1,0,0,100,10,9,1,'E~O',1,null,'ADV')");
 
  $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ownership','vtiger_account',1,'1','ownership','Ownership',1,0,0,100,11,9,1,'V~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'rating','vtiger_account',1,'1','rating','Rating',1,0,0,100,12,9,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'rating','vtiger_account',1,'15','rating','Rating',1,0,0,100,12,9,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'industry','vtiger_account',1,'15','industry','industry',1,0,0,100,13,9,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'siccode','vtiger_account',1,'1','siccode','SIC Code',1,0,0,100,14,9,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'account_type','vtiger_account',1,'15','accounttype','Type',1,0,0,100,15,9,1,'V~O',1,null,'ADV')");
