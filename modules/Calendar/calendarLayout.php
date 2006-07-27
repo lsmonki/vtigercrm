@@ -752,9 +752,9 @@ function getWeekViewLayout(& $cal)
 			$temp_ts = $cal['calendar']->week_array[$cal['calendar']->slices[$column]]->start_time->ts;
 			$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 
-			$weekview_layout .= '<td class="cellNormal" onMouseOver="show(\'create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right vlign=top>';
-			$weekview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'" style="display: none;">
-						<img onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0">
+			$weekview_layout .= '<td class="cellNormal" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right vlign=top>';
+			$weekview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'" style="visibility: hidden;">
+						<img onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" src="'.$cal['IMAGE_PATH'].'cal_add.gif" border="0">
                                                 </div>';
 			//To display events in WeekView
 			$weekview_layout .=getweekEventLayer($cal,$cal['calendar']->week_hour_slices[$count]);
@@ -808,32 +808,34 @@ function getMonthViewLayout(& $cal)
 	        $monthview_layout .= '<tr>';
 		for ($j = 0; $j < 7; $j ++)
                 {
-			$monthview_layout .= '<td class="dvtCellLabel" width="14%">';
+			$temp_ts = $cal['calendar']->month_array[$cal['calendar']->slices[$count]]->start_time->ts;
+	                $temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
-			$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 			//to display dates in month
 			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
 			{
+				$monthview_layout .= '<td class="dvtCellLabel" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
+				$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 				$monthview_layout .= $cal['slice']->start_time->get_Date();
+				$monthview_layout .= '</a>';
+				$monthview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].'" style="visibility:hidden;">
+				<a onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.gif" border="0"></a>
+				</div></td>';
 			}
-			$monthview_layout .= '</a></td>';
+			else
+			{
+				$monthview_layout .= '<td class="dvtCellLabel" width="14%"></td>';
+			}
 			$count++;
 		}
 		$monthview_layout .= '</tr>';
 		$monthview_layout .= '<tr>';
 		for ($j = 0; $j < 7; $j ++)
 		{
-			$temp_ts = $cal['calendar']->month_array[$cal['calendar']->slices[$cnt]]->start_time->ts;
-			$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
-			$monthview_layout .= '<td onMouseOver="show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" bgcolor="white" height="90" valign="top" width="200" align=right>';
-			$monthview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].'" style="display: none;">
-                                                <a onClick="gshow(\'addEvent\',\'call\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
-                                                </div>';
-			//To display events in Month view
+			$monthview_layout .= '<td bgcolor="white" height="90" valign="top" width="200" align=right>';
 			$monthview_layout .= getmonthEventLayer($cal,$cal['calendar']->slices[$cnt]);
 			$monthview_layout .= '</td>';
 			$cnt++;
-
 		}
 		$monthview_layout .= '</tr>';
 	}
@@ -980,7 +982,8 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
-			$duration_min = $act[$i]->duration_minute;
+			$duration_min =$act[$i]->duration_minute;
+			$user = $act[$i]->owner;
 			if($duration_min != '00')
 				$rowspan = $duration_hour+$rowspan;
 			else
@@ -996,8 +999,8 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$height = $rowspan * 75;
 			if($eventstatus != 'Held')
 			{
-				$javacript_str = 'onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
+				$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
 			}
 			else
 			{
@@ -1006,15 +1009,16 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			}
 			$eventlayer .= '<td class="dvtCellInfo" rowspan="'.$rowspan.'" colspan="1" width="'.$width.'%" >';
 			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0" height="19" width="19"></td>
-					<td width="95%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
+					<td><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>';
-			$eventlayer .= '<tr><td>'.$action_str;
+			$eventlayer .= '<tr><td>';
 			$eventlayer .= '</td>
 				<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
+				<tr><td>'.$action_str.'</td><td>('.$user.')</td>
 			</table>
 			
 			</div>';
@@ -1066,10 +1070,10 @@ function getweekEventLayer(& $cal,$slice)
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
                         $color = $act[$i]->color;
 			$eventlayer .='<div class ="event" id="event_'.$cal['calendar']->week_slice[$slice]->start_time->hour.'_'.$i.'">
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0" height="19" width="19"></td>
-					<td width="95%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
+					<td><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>
 				<tr>
 					<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
@@ -1129,14 +1133,10 @@ function getmonthEventLayer(& $cal,$slice)
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$color = $act[$i]->color;
 			$eventlayer .='<div class ="event" id="event_'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i.'">
-					<table border="0" cellpadding="5" cellspacing="0" width="100%">
+					<table border="0" cellpadding="1" cellspacing="0" width="100%">
 						<tr>
-							<td><img src="'.$image.'" align="middle" border="0" height="19" width="19"></td>
-	     						<td width="95%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
-						</tr>
-						<tr>
-							<td><img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="display: none;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0"></td>
-							<td><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
+							<td><img src="'.$image.'" align="middle" border="0"></td>
+							<td width="100%"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></td>
 						</tr>
 					</table>
                                 </div><br>';
