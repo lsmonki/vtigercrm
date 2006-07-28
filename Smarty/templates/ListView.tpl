@@ -460,7 +460,7 @@ function ajaxChangeStatus(statusname)
 {
 	$("status").style.display="inline";
 	var viewid = document.massdelete.viewname.value;
-	var idstring = document.massdelete.idlist.value;
+	var idstring = document.getElementById('idlist').value;
 	if(statusname == 'status')
 	{
 		fninvsh('changestatus');
