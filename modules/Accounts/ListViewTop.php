@@ -40,7 +40,7 @@ function getTopAccounts()
 	$list_query = "select vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol, sum(vtiger_potential.amount) as amount from vtiger_potential inner join vtiger_crmentity on (vtiger_potential.potentialid=vtiger_crmentity.crmid) inner join vtiger_account on (vtiger_potential.accountid=vtiger_account.accountid) where vtiger_crmentity.deleted=0 AND vtiger_crmentity.smownerid='".$current_user->id."' and vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' and vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' group by vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol order by amount desc;";
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
-	$noofrows = min($adb->num_rows($list_result),7);
+	$noofrows = min($adb->num_rows($list_result),5);
 	if (count($list_result)>0)
 		for($i=0;$i<$noofrows;$i++) 
 		{
