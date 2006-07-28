@@ -770,6 +770,7 @@ $app_strings = Array(
 'Purchase Order'=>'Purchase Order',
 'Sales Stage History'=>'Sales Stage History',
 'Users'=>'Users',
+'Admin'=>'Admin',
 'PurchaseOrder Status History'=>'PurchaseOrder Status History',
 'SalesOrder Status History'=>'SalesOrder Status History',
 'Quote Stage History'=>'Quote Stage History',

@@ -162,15 +162,23 @@ class User {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
+		'First Name'=>Array('vtiger_users'=>'first_name'),
 		'Last Name'=>Array('vtiger_users'=>'last_name'),
+		'Role Name'=>Array('vtiger_user2role'=>'roleid'),
 		'User Name'=>Array('vtiger_users'=>'user_name'),
+		'Status'=>Array('vtiger_users'=>'status'), 
 		'Email'=>Array('vtiger_users'=>'email1'),
+		'Admin'=>Array('vtiger_users'=>'is_admin'),
 		'Phone'=>Array('vtiger_users'=>'phone_work')
 	);
 	var $list_fields_name = Array(
 		'Last Name'=>'last_name',
+		'First Name'=>'first_name',
+		'Role Name'=>'roleid', 
 		'User Name'=>'user_name',
-		'Email'=>'email1',	
+		 'Status'=>'status',
+		'Email'=>'email1',
+		'Admin'=>'is_admin',	
 		'Phone'=>'phone_work'	
 	);
 

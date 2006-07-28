@@ -63,7 +63,7 @@ class Activity extends CRMEntity {
        'Start Date'=>Array('activity'=>'date_start'),
        'End Date'=>Array('activity'=>'due_date'),
        'Recurring Type'=>Array('recurringevents'=>'recurringtype'),
-       'Assigned To'=>Array('crmentity','smownerid')
+       'Assigned To'=>Array('crmentity'=>'smownerid')
        );
 
        var $range_fields = Array(
@@ -185,7 +185,7 @@ class Activity extends CRMEntity {
 
 		$returnset = '&return_module=Activities&return_action=CallRelatedList&return_id='.$id;
 
-		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax,vtiger_activity.date_start,vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id  inner join vtiger_activity on vtiger_activity.activityid=vtiger_salesmanactivityrel.activityid where vtiger_activity.activityid='.$id;
+		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.status, vtiger_users.is_admin, vtiger_user2role.roleid, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax,vtiger_activity.date_start,vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id  inner join vtiger_activity on vtiger_activity.activityid=vtiger_salesmanactivityrel.activityid inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where vtiger_activity.activityid='.$id;
 		$log->debug("Exiting get_users method ...");
 		return GetRelatedList('Activities','Users',$focus,$query,$button,$returnset);
 
@@ -203,7 +203,6 @@ class Activity extends CRMEntity {
          $log->debug("Entering get_full_list(".$criteria.") method ...");
     $query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 ".$criteria;
     $result =& $this->db->query($query);
-	echo $query;
         
     if($this->db->getRowCount($result) > 0){
 		
