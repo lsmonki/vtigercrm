@@ -25,7 +25,7 @@ function change(obj,divid)
 	}
 	if (xx != 0)
 	{
-		document.massdelete.idlist.value=idstring;
+		document.getElementById('idlist').value=idstring;
 	}
 	else
 	{
@@ -65,7 +65,7 @@ function massDelete(module)
         }
         if (xx != 0)
         {
-            document.massdelete.idlist.value=idstring;
+            document.getElementById('idlist').value=idstring;
         }
         else
         {
