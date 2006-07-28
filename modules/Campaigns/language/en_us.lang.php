@@ -25,6 +25,7 @@ $mod_strings = Array(
 'LBL_CAMPAIGN_INFORMATION'=>'Campaign Information',
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
+'LBL_EXPECTATIONS_AND_ACTUALS'=>'Expectations & Actuals',
 
 'Campaign Name'=>'Campaign Name',
 'Campaign Type'=>'Campaign Type',
