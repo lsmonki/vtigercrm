@@ -28,6 +28,7 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj = new Potential();
 		$modObj->retrieve_entity_info($crmid,"Potentials");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
+		$_REQUEST[$fieldname] = $fieldvalue;
 		if($fieldname == 'amount')//amount converted to dollar value while saving
 		{
 			$modObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);

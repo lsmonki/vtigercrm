@@ -755,11 +755,11 @@ class CRMEntity
 		  {
 			  $dbquery = 'select sales_stage from vtiger_potential where potentialid = '.$this->id;
 			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
-			  if($sales_stage != $_REQUEST['sales_stage'])
+			  if($sales_stage != $_REQUEST['sales_stage'] && $_REQUEST['sales_stage'] != '')
 			  {
 				  $date_var = date('YmdHis');
-				  $closingdate = getDBInsertDateValue($_REQUEST['closingdate']);
-				  $sql = "insert into vtiger_potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("vtiger_potstagehistory","closedate",$closingdate).",".$adb->formatString("vtiger_potstagehistory","lastmodified",$date_var).")";
+				  $closingdate = getDBInsertDateValue($this->column_fields['closingdate']);
+				  $sql = "insert into vtiger_potstagehistory values('',".$this->id.",'".$this->column_fields['amount']."','".$sales_stage."','".$this->column_fields['probability']."',0,".$adb->formatString("vtiger_potstagehistory","closedate",$closingdate).",".$adb->formatString("vtiger_potstagehistory","lastmodified",$date_var).")";
 				  $adb->query($sql);
 			  }
 		  }
