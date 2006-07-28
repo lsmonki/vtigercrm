@@ -230,6 +230,7 @@ function set_focus() {
 												</td>
 										</tr>
 								</table>
+								<br>
 							</td>
 					</tr>
 				</table>
