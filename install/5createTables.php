@@ -95,7 +95,7 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
-/*
+
 //@rename("install.php", $renamefile."install.php.txt");
 if(!rename("install.php", $renamefile."install.php.txt"))
 {
@@ -115,7 +115,7 @@ if(!rename("install/", $renamefile."install/"))
 }
 //populate Calendar data
 
-*/
+
 ?>
 		<table borde=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
