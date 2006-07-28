@@ -46,7 +46,7 @@ function getLatestlyCreatedFaqList()
 		$record_exist = true;
 		$list .= '
 			   <tr>
-				<td width="15"><img src="images/faq.gif" valign="absmiddle">&nbsp;
+				<td><img src="images/faq.gif" valign="absmiddle">&nbsp;
 					<a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$i]['id'].'>'.$faq_array[$i]['question'].'</a></td>
 			   </tr>
 			   <tr>
@@ -79,7 +79,7 @@ function ListFaqsPerCategory($category_index)
 			$flag = true;
 			$list .= '
 				   <tr>
-					<td width="15"><img src="images/faq.gif" valign="absmiddle">&nbsp;
+					<td><img src="images/faq.gif" valign="absmiddle">&nbsp;
 						<a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$i]['id'].'>'.$faq_array[$i]['question'].'</a></td>
 				   </tr>
 				   <tr>
@@ -108,7 +108,7 @@ function ListFaqsPerProduct($productid)
 			$flag = true;
 			$list .= '
 				   <tr>
-					<td width="15"><img src="images/faq.gif" valign="absmiddle">&nbsp;
+					<td><img src="images/faq.gif" valign="absmiddle">&nbsp;
 						<a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$i]['id'].'>'.$faq_array[$i]['question'].'</a></td>
 				   </tr>
 				   <tr>
@@ -242,7 +242,7 @@ function getSearchResult($search_text,$search_value,$search_by)
                         {
 				$record_exist = true;
                                 $list .= ' <tr>
-						<td width="15"><img src="images/faq.gif" valign="absmiddle">&nbsp;
+						<td><img src="images/faq.gif" valign="absmiddle">&nbsp;
 			                                <a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$i]['id'].'>'.$faq_array[$i]['question'].'</a></td>
 					   </tr>
 					   <tr>
@@ -272,7 +272,7 @@ function getSearchResult($search_text,$search_value,$search_by)
 				$record_exist = true;
                                 $list .= '
 					   <tr>
-						<td width="15"><img src="images/faq.gif" valign="absmiddle">&nbsp;
+						<td><img src="images/faq.gif" valign="absmiddle">&nbsp;
 							<a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$i]['id'].'>'.$faq_array[$i]['question'].'</a></td>
 					   </tr>
 					   <tr>
@@ -302,7 +302,7 @@ function getSearchResult($search_text,$search_value,$search_by)
                         			$record_exist = true;
 			                        $list .= '
 							   <tr>
-								<td width="15"><img src="images/faq.gif" valign="absmiddle">
+								<td><img src="images/faq.gif" valign="absmiddle">
 									<a class="faqQues" href=index.php?module=Faq&action=index&fun=faq_detail&faqid='.$faq_array[$j]['id'].'>'.$faq_array[$j]['question'].'</a></td>
 							   </tr>
 							   <tr>
