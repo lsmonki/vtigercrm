@@ -42,6 +42,7 @@ require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('modules/Invoice/Invoice.php');
 require_once('modules/Emails/Email.php');
+require_once('include/utils/InventoryUtils.php'); //Included to save inventory related products in demo data
 
 global $first_name_array;
 global $first_name_count;
@@ -574,9 +575,7 @@ for($i=0;$i<12;$i++)
 
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
-$total_array = array ("29990.000", "29990.000", "29990.000", "29990.000", "29990.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$invmgr_array = array ("admin", "user");
 
 for($i=0;$i<5;$i++)
 {
@@ -592,9 +591,7 @@ for($i=0;$i<5;$i++)
 	$rand = array_rand($num_array);
 	$quote->column_fields["subject"] = $sub_array[$i];
 	$quote->column_fields["quotestage"] = $stage_array[$i];	
-	$quote->column_fields["hdnGrandTotal"] = $total_array[$i];
 	$quote->column_fields["carrier"] = $carrier_array[$i];
-	$quote->column_fields["inventorymanager"] = $invmgr_array[$i];
 
 	$quote->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$quote->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
@@ -614,15 +611,41 @@ for($i=0;$i<5;$i++)
 	$quote_ids[] = $quote->id;
 
 	$product_key = array_rand($product_ids); 
-	$query = "insert into vtiger_quotesproductrel ( quoteid, productid, quantity, listprice ) values (".$quote->id.",".$product_ids[$product_key].",10,2999.000 )";
-	$db->query($query);
+	$productid = $product_ids[$product_key];
+
+	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	$_REQUEST['totalProductCount']	 = 1;
+
+	$_REQUEST['hdnProductId1'] = $productid;
+	$_REQUEST['qty1'] = $qty = 1;
+	$_REQUEST['listPrice1'] = $listprice = 130;
+	$_REQUEST['comment1'] = "This is test comment for product of Quotes";
+	
+	$_REQUEST['deleted1'] = 0;
+	$_REQUEST['discount_type1'] = 'amount';
+	$_REQUEST['discount_amount1'] = $discount_amount = '20';
+
+	$_REQUEST['taxtype'] = $taxtype = 'individual';
+	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
+	$_REQUEST['discount_type_final'] = 'amount';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '10';
+	
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['adjustmenttype'] = '+';
+	$_REQUEST['adjustment'] = $adjustment = '10';
+
+	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
+
+	//Upto this added to set the request values which will be used to save the inventory product details
+
+	//Now call the saveInventoryProductDetails function
+	saveInventoryProductDetails(&$quote, 'Quotes');
 }
 
 //Populate SalesOrder Data
 
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
-$sototal_array = array ("5988.000", "5988.000", "5988.000", "5988.000", "5988.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 
 for($i=0;$i<5;$i++)
@@ -658,10 +681,38 @@ for($i=0;$i<5;$i++)
 	$so->save("SalesOrder");
 
 	$salesorder_ids[] = $so->id;
+
+	$product_key = array_rand($product_ids); 
+	$productid = $product_ids[$product_key];
+
+	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	$_REQUEST['totalProductCount']	 = 1;
+
+	$_REQUEST['hdnProductId1'] = $productid;
+	$_REQUEST['qty1'] = $qty = 1;
+	$_REQUEST['listPrice1'] = $listprice = 1230;
+	$_REQUEST['comment1'] = "This is test comment for product of SalesOrder";
 	
-	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_soproductrel ( salesorderid, productid, quantity, listprice ) values (".$so->id.",".$product_ids[$product_key].",12,499.000 )";
-        $db->query($query);
+	$_REQUEST['deleted1'] = 0;
+	$_REQUEST['discount_type1'] = 'amount';
+	$_REQUEST['discount_amount1'] = $discount_amount = '200';
+
+	$_REQUEST['taxtype'] = $taxtype = 'individual';
+	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
+	$_REQUEST['discount_type_final'] = 'amount';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['adjustmenttype'] = '+';
+	$_REQUEST['adjustment'] = $adjustment = '100';
+
+	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
+
+	//Upto this added to set the request values which will be used to save the inventory product details
+
+	//Now call the saveInventoryProductDetails function
+	saveInventoryProductDetails(&$so, 'SalesOrder');
+
 
 }
 
@@ -670,7 +721,6 @@ for($i=0;$i<5;$i++)
 
 $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk", "PO_vendtl");
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
-$pototal_array = array ("19485.000", "19485.000", "19485.000", "19485.000", "19485.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
 
@@ -686,7 +736,6 @@ for($i=0;$i<5;$i++)
 	$rand = array_rand($num_array);
 	$po->column_fields["subject"] = $psubj_array[$i];
 	$po->column_fields["postatus"] = $pstatus_array[$i];	
-	$po->column_fields["hdnGrandTotal"] = $pototal_array[$i];
 	$po->column_fields["carrier"] = $carrier_array[$i];
 	$po->column_fields["tracking_no"] = $trkno_array[$i];
 
@@ -707,9 +756,37 @@ for($i=0;$i<5;$i++)
 
 	$purchaseorder_ids[] = $po->id;
 
-	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,1299.000 )";
-        $db->query($query);
+	$product_key = array_rand($product_ids); 
+	$productid = $product_ids[$product_key];
+
+	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	$_REQUEST['totalProductCount']	 = 1;
+
+	$_REQUEST['hdnProductId1'] = $productid;
+	$_REQUEST['qty1'] = $qty = 1;
+	$_REQUEST['listPrice1'] = $listprice = 2200;
+	$_REQUEST['comment1'] = "This is test comment for product of PurchaseOrder";
+	
+	$_REQUEST['deleted1'] = 0;
+	$_REQUEST['discount_type1'] = 'amount';
+	$_REQUEST['discount_amount1'] = $discount_amount = '200';
+
+	$_REQUEST['taxtype'] = $taxtype = 'individual';
+	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
+	$_REQUEST['discount_type_final'] = 'amount';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['adjustmenttype'] = '+';
+	$_REQUEST['adjustment'] = $adjustment = '100';
+
+	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
+
+	//Upto this added to set the request values which will be used to save the inventory product details
+
+	//Now call the saveInventoryProductDetails function
+	saveInventoryProductDetails(&$po, 'PurchaseOrder');
+
 
 }
 
@@ -762,10 +839,37 @@ for($i=0;$i<5;$i++)
 		$result_inv = $adb->query($query_tag);
 	}
 
-	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_invoiceproductrel ( invoiceid, productid, quantity, listprice ) values (".$invoice->id.",".$product_ids[$product_key].",18,269.000 )";
-        $db->query($query);
+	$product_key = array_rand($product_ids); 
+	$productid = $product_ids[$product_key];
+
+	//set the inventory product details in request then just call the saveInventoryProductDetails function 
+	$_REQUEST['totalProductCount']	 = 1;
+
+	$_REQUEST['hdnProductId1'] = $productid;
+	$_REQUEST['qty1'] = $qty = 1;
+	$_REQUEST['listPrice1'] = $listprice = 4300;
+	$_REQUEST['comment1'] = "This is test comment for product of Invoice";
 	
+	$_REQUEST['deleted1'] = 0;
+	$_REQUEST['discount_type1'] = 'amount';
+	$_REQUEST['discount_amount1'] = $discount_amount = '300';
+
+	$_REQUEST['taxtype'] = $taxtype = 'individual';
+	$_REQUEST['subtotal'] = $subtotal = $qty*$listprice-$discount_amount;
+	$_REQUEST['discount_type_final'] = 'amount';
+	$_REQUEST['discount_amount_final'] = $discount_amount_final = '100';
+	
+	$_REQUEST['shipping_handling_charge'] = $shipping_handling_charge = '50';
+	$_REQUEST['adjustmenttype'] = '+';
+	$_REQUEST['adjustment'] = $adjustment = '100';
+
+	$_REQUEST['total'] = $subtotal-$discount_amount_final+$shipping_handling_charge+$adjustment;
+
+	//Upto this added to set the request values which will be used to save the inventory product details
+
+	//Now call the saveInventoryProductDetails function
+	saveInventoryProductDetails(&$invoice, 'Invoice');
+
 }
 
 //Populate RSS Data
