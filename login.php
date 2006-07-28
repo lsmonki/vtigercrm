@@ -86,7 +86,7 @@ if($_REQUEST['close_window'] == 'true')
 							   </tr>
 							   <tr>
 								<td>&nbsp;</td>
-								<td align="right"><a href='javascript:;' onclick='window.open("supportpage.php?param=forgot_password","Forgot Password","width=400,height=250");'><?php  echo $mod_strings['LBL_FORGOT_LOGIN']?></a></td>
+								<td align="right"><a href='javascript:;' onclick='window.open("supportpage.php?param=forgot_password","ForgotPassword","width=400,height=250");'><?php  echo $mod_strings['LBL_FORGOT_LOGIN']?></a></td>
 							   </tr>
 							   <tr>
 								<td colspan="2" align="center"><input type="image" src="images/loginBtnSignin.gif"></td>
