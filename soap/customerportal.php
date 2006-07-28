@@ -413,8 +413,11 @@ function save_faq_comment($faqid,$comment)
 {
 	global $adb;
 	$createdtime = date('Y-m-d H:i:s');
-	$faq_query = "insert into vtiger_faqcomments values('',".$faqid.",'".$comment."','".$createdtime."')";
-	$adb->query($faq_query);
+	if(trim($comment) != '')
+	{
+		$faq_query = "insert into vtiger_faqcomments values('',".$faqid.",'".$comment."','".$createdtime."')";
+		$adb->query($faq_query);
+	}
 	$result = get_KBase_details('');
 	return $result;
 }
@@ -559,11 +562,14 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
 {
 	global $adb;
 	$servercreatedtime = date("Y-m-d H:i:s");
-	$sql = "insert into vtiger_ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer','".$servercreatedtime."')";
-	$adb->query($sql);
+	if(trim($comments) != '')
+	{
+		$sql = "insert into vtiger_ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer','".$servercreatedtime."')";
+		$adb->query($sql);
 
-	$updatequery = "update vtiger_crmentity set modifiedtime = '".$servercreatedtime."' where crmid=".$ticketid;
-	$adb->query($updatequery);
+		$updatequery = "update vtiger_crmentity set modifiedtime='".$servercreatedtime."' where crmid=".$ticketid;
+		$adb->query($updatequery);
+	}
 }
 
 /**	function used to close the ticket
