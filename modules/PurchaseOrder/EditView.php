@@ -64,18 +64,20 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Vendors/Vendor.php');
 	$vend_focus = new Vendor();
-	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendor");
+	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
+
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
 	$focus->column_fields['ship_city']=$vend_focus->column_fields['city'];
-	$focus->column_fields['bill_street']=$vend_focus->column_fields['treet'];
-	$focus->column_fields['ship_street']=$vend_focus->column_fields['treet'];
+	$focus->column_fields['bill_street']=$vend_focus->column_fields['street'];
+	$focus->column_fields['ship_street']=$vend_focus->column_fields['street'];
 	$focus->column_fields['bill_state']=$vend_focus->column_fields['state'];
 	$focus->column_fields['ship_state']=$vend_focus->column_fields['state'];
 	$focus->column_fields['bill_code']=$vend_focus->column_fields['postalcode'];
 	$focus->column_fields['ship_code']=$vend_focus->column_fields['postalcode'];
 	$focus->column_fields['bill_country']=$vend_focus->column_fields['country'];
 	$focus->column_fields['ship_country']=$vend_focus->column_fields['country'];
-
+	$focus->column_fields['bill_pobox']=$vend_focus->column_fields['pobox'];
+	$focus->column_fields['ship_pobox']=$vend_focus->column_fields['pobox'];
 }
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
