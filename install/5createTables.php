@@ -27,86 +27,62 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0.0 Beta Configuration Wizard: Step 5</title>
-<link rel="stylesheet" href="include/install/install.css" type="text/css" />
-<style type="text/css"><!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>vtiger CRM 5 - Configuration Wizard</title>
 
 
-.percents {
- background: #eeeeee;
- border: 1px solid #dddddd;
- margin-left: 260px;
- height: 20px;
- position:absolute;
- width:575px;
- z-index:10;
- left: 10px;
- top: 203px;
- text-align: center;
-}
-
-.blocks {
- background: #aaaaaa;
- border: 1px solid #a1a1a1;
- margin-left: 260px;
- height: 20px;
- width: 10px;
- position: absolute;
- z-index:11;
- left: 12px;
- top: 203px;
- filter: alpha(opacity=50);
- -moz-opacity: 0.5;
- opacity: 0.5;
- -khtml-opacity: .5
-}
-
--->
-</style>
+<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
-<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
+<body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-	<br><br>
-	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
+	<br><br><br>
+	<!-- Table for cfgwiz starts -->
+
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
+		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 	</tr>
 	</table>
-	
-	
-	
-	<!-- 5 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
-	<tr>	
-		<td valign=top><img src="include/install/images/cwIcoDB.gif" alt="Create Database Tables" title="Create Database Tables"></td>
-		<td width=98% valign=top>
-			<table border=0 cellspacing=0 cellpadding=0 width=100%>
-			<tr>
-				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="include/install/images/cwStep5of5.gif" alt="Step 5 of 5" title="Step 5 of 5"></td>
-			</tr>
-			<tr>
-				<td colspan=2><img src="include/install/images/cwHdrCrDbTables.gif" alt="Create Database Tables" title="Create Database Tables"></td>
-			</tr>
-			</table>
-			<hr noshade size=1>
-		</td>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
 	<tr>
-		<td></td>
-		<td>
-		<!--- code -->
+		<td class="small" bgcolor="#4572BE" align=center>
+			<!-- Master display -->
+			<table border=0 cellspacing=0 cellpadding=0 width=97%>
+			<tr>
+				<td width=20% valign=top>
+
+				<!-- Left side tabs -->
+					<table border=0 cellspacing=0 cellpadding=10 width=100%>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
+					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>Finish</b></div></td></tr>
+					</table>
+					
+				</td>
+				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<!-- Right side tabs -->
+					<table border=0 cellspacing=0 cellpadding=10 width=100%>
+					<tr><td class=small align=left><img src="include/install/images/confWizFinish.gif" alt="Configuration Completed" title="Configuration Completed"><br>
+					  <hr noshade size=1></td></tr>
+
+					<tr>
+					<td align=center class="small" style="height:250px;"> 
+
 <?php
 
 	// Output html instead of plain text for the web
@@ -119,6 +95,7 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
+/*
 //@rename("install.php", $renamefile."install.php.txt");
 if(!rename("install.php", $renamefile."install.php.txt"))
 {
@@ -138,11 +115,9 @@ if(!rename("install/", $renamefile."install/"))
 }
 //populate Calendar data
 
-
+*/
 ?>
-		<br><br>
-		
-		<table borde=0 cellspacing=0 cellpadding=5 width=100% style="background-color:#EEFFEE; border:1px dashed #ccddcc;">
+		<table borde=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
 			<b>vtigercrm-5.0.0 is all set to go!</b>
@@ -150,7 +125,7 @@ if(!rename("install/", $renamefile."install/"))
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
 			<li>Your install.php file has been renamed to <?echo $renamefile;?>install.php.txt.
-		<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
+			<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
 			</ul>
 			</div>
@@ -158,42 +133,44 @@ if(!rename("install/", $renamefile."install/"))
 			</td>
 		</tr>
 		</table>
-		
-		</td></tr>
+		<br>	
+		<table border=0 cellspacing=0 cellpadding=10 width=100%>
 		<tr><td colspan=2 align="center">
 				 <form action="index.php" method="post" name="form" id="form">
 				 <input type="hidden" name="default_user_name" value="admin">
-			 <input  type="image" src="include/install/images/cwBtnFinish.gif" name="next" value="Finish" />
+			 	 <input  type="image" src="include/install/images/cwBtnFinish.gif" name="next" title="Finish" value="Finish" />
 				 </form>
 		</td></tr>
 		</table>		
-							<br><br>
-						<!-- Horizontal Shade -->
-					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
-					<tr>
-				<td><img src="include/install/images/cwShadeLeft.gif"></td>
-					<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
-					</tr>
-					</table><br><br>
-
-		<!-- code -->
-		
 		</td>
+
+		</tr>
+		</table>
+		<!-- Master display stops -->
+		
+	</td>
 	</tr>
 	</table>
-	
+	</td>
+	</tr>
+	</table>
 
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
 
+		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
+	</tr>
+	</table>
+    <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
-
-
-
-
-
-</td>
-</tr>
-</table>
-<!-- master vtiger_table closes -->
-
-
-</body></html>
+      <tr>
+        <td class=small align=center> <a href="#">www.vtiger.com</a></td>
+      </tr>
+    </table>
+</body>
+</html>	

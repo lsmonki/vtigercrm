@@ -13,7 +13,7 @@
  lpha2* Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
+ * $Header: /advent/projects/wesat'vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -144,7 +144,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
 		!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
 		}
-
+		!isset($_REQUEST['check_createdb']) ? $check_createdb = "" : $check_createdb = $_REQUEST['check_createdb'];
+		!isset($_REQUEST['root_user']) ? $root_user = "" : $root_user = $_REQUEST['root_user'];
+		!isset($_REQUEST['root_password']) ? $root_password = "" : $root_password = $_REQUEST['root_password'];
 		// determine database options
 		$db_options = array();
 		if(function_exists('mysql_connect')) {
@@ -155,29 +157,34 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		}
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 2</title>
-<link rel="stylesheet" href="include/install/install.css" type="text/css" />
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>vtiger CRM 5 - Configuration Wizard</title>
+	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
-<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
+
+<body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+<style>
+	.hide_tab{display:none;}
+	.show_tab{display:inline-table;}
+</style>
 
 <script type="text/javascript" language="Javascript">
-<!--  to hide script contents from old browsers
-function showhide()
-{
-	if(document.getElementById('check_createdb').checked != true)
-	{
-		document.getElementById('root_info').style.display = 'none';
+
+	function fnShow_Hide(){
+		var sourceTag = document.getElementById('check_createdb').checked;
+		if(sourceTag){
+			document.getElementById('root_user').className = 'show_tab';
+			document.getElementById('root_pass').className = 'show_tab';
+		}
+		else{
+			document.getElementById('root_user').className = 'hide_tab';
+			document.getElementById('root_pass').className = 'hide_tab';
+		}
 	}
-	else
-	{
-		document.getElementById('root_info').style.display = 'block';
-	}
-}
+
 function trim(s) {
         while (s.substring(0,1) == " ") {
                 s = s.substring(1, s.length);
@@ -223,6 +230,11 @@ function verify_data(form) {
 		errorMessage += "\n admin password";
 		form.admin_password.focus();
 	}
+	if (trim(form.admin_email.value) =='') {
+		isError = true;
+		errorMessage += "\n user email";
+		form.admin_email.focus();
+	}
 	if (trim(form.cache_dir.value) =='') {
                 isError = true;
                 errorMessage += "\n temp directory path";
@@ -242,71 +254,80 @@ function verify_data(form) {
 		alert("Missing required fields: " + errorMessage);
 		return false;
 	}
+	if (trim(form.admin_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.admin_email.value)) {
+		alert("The email id '"+form.admin_email.value+"' in the email field is invalid");
+		form.admin_email.focus();
+		exit();
+	}
 
-	return true;
+	form.submit();
 }
 // end hiding contents from old browsers  -->
 </script>
 
+	<br><br><br>
+	<!-- Table for cfgwiz starts -->
 
-<!-- Master vtiger_table -->
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-	<br><br>
-	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
+		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 	</tr>
 	</table>
-	
-	
-	
-	<!-- 1 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
-	<tr>	
-		<td valign=top><img src="include/install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
-		<td width=98% valign=top>
-			<table border=0 cellspacing=0 cellpadding=0 width=100%>
-			<tr>
-				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="include/install/images/cwStep2of5.gif" alt="Step 2 of 5" title="Step 2 of 5"></td>
-			</tr>
-			<tr>
-				<td colspan=2><img src="include/install/images/cwHdrSysConf.gif" alt="System Check" title="System Check"></td>
-			</tr>
-			</table>
-			<hr noshade size=1>
-		</td>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
 	<tr>
-		<td></td>
-		<td valign="top" align=center>
-		<!-- System Configuration-->
-
-			<form action="install.php" method="post" name="form" id="form" name="setConfig" id="form">
-
-			<table width="100%" cellpadding="5"  cellspacing="1" border="0" class=small><tbody>
+		<td class="small" bgcolor="#4572BE" align=center>
+			<!-- Master display -->
+			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td >
-		          <b>Please enter your database configuration information below...</b><br>
+				<td width=20% valign=top>
+
+				<!-- Left side tabs -->
+					<table border=0 cellspacing=0 cellpadding=10 width=100%>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
+					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>System Configuration</b></div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
+					</table>
+					
+				</td>
+				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<!-- Right side tabs -->
+				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">
+				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
+				    <tr><td class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
+					  <hr noshade size=1></td></tr>
+				    <tr>
+					<td align=left class="small" style="padding-left:20px">
+
+	
+				<table width="100%" cellpadding="5"  cellspacing="1" border="0" class=small><tbody>
+				<tr>
+					<td >
+		          		<b>Please enter your database configuration information below...</b><br>
 
 					  If you do not have root access to your database (for example you are installing in a virtual
 					  hosting environment), you will need to have your database created for you before you proceed.
-					  However, this installer will still be able to create the necessary database vtiger_tables. <br><br>
+					  However, this installer will still be able to create the necessary database tables. <br><br>
 			
-					  If you unsure of your database host, username or password, we suggest that you use the default
+					  If you are unsure of your database host, username or password, we suggest that you use the default
 					  values below. <br><br>
 					  
 					  *- required information
 					  
 
-				</td>
-			</tr>
-			</table>
+					</td>
+				</tr>
+				</table>
 			
 			<br>
 			
@@ -343,24 +364,23 @@ function verify_data(form) {
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;<input name="check_createdb" type="checkbox" id="check_createdb" onClick="showhide()"/>&nbsp;Create Database(will drop the database if exists)</td>
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
+		       <?php if($check_createdb == 'on')
+			       {?>
+			       <input name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/>
+			       <?php }else{?>
+				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/>
+			       <?php } ?>
+			       &nbsp;Create Database(will drop the database if exists)</td>
               </tr>
-			  <tr><td colspan=2>
-              
-			  <div id="root_info" style="display:none;width:100%;border:0px;padding:0px">
-			  <table cellpadding=5 cellspacing=1 border=0 width="100%" class=small style="background-color:#cccccc">
-			  <tr>
-               <td width="25%" nowrap bgcolor="#F5F5F5"><strong>Root Username</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="root_user" value="" /></td>
-              </tr>
-              <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>Root Password</strong></td>
-               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="root_password" value="" /></td>
-              </tr>
-			  </table>
-			  </div>
-			  
-			  </td></tr>
+	      <tr id="root_user" class="hide_tab">
+			   <td bgcolor="#f5f5f5" nowrap="nowrap" width="25%"><strong>Root Username</strong> <sup><font color="red">*</font></sup></td>
+			   <td align="left" bgcolor="white"><input class="dataInput" name="root_user" value="<?php echo $root_user;?>" type="text"></td>
+ 	      </tr>
+	      <tr id="root_pass" class="hide_tab">
+			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>Root Password</strong></td>
+			   <td align="left" bgcolor="white"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
+	      </tr>
               </table>
 			
 			<br><br>
@@ -401,47 +421,53 @@ function verify_data(form) {
 				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
 			</tr>
 			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; else echo "admin@your-domain.com"; ?>"></td>
+			</tr>	
+			<tr>
 				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
 			</tr>
 			</table>
 
 		<!-- System Configuration -->
-			
 		</td>
+		</tr>
+		<tr>
+				<td align=center>
+					<input type="hidden" name="file" value="3confirmConfig.php" />
+					<input type="image" src="include/install/images/cwBtnNext.gif" id="starttbn" alt="Next" border="0" title="Next" onClick="return verify_data(window.document.installform);">
+					<br>
+				    <br></td>
+			</tr>
+		</table>
+		</form>
+	</td>
+		</tr>
+	</table>
+	<!-- Master display stops -->
+	<br>
+	</td>
 	</tr>
 	</table>
-	
-	<br><br>
-
-	
-<!-- -->
-	<table border=0 cellspacing=0 cellpadding=0 width=70% class=small>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwURL.gif"></td>
-		<td align=right>
-			<input type="hidden" name="file" value="3confirmConfig.php" />
 
-			<input type="image" src="include/install/images/cwBtnNext.gif" border="0" onclick="return verify_data(this.form); window.location=('install.php')">
-		</td>
+		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
 	</tr>
 	</table>
-	<br><br>
-	<!-- Horizontal Shade -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwShadeLeft.gif"></td>
-		<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
+		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
 	</tr>
-	</table>
+	</table>	
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
-
-</td>
-</tr>
-</table>
-<!-- Master vtiger_table closes -->
-
-<br><br><br>
-
-</form>
+      	<tr>
+        	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
+      	</tr>
+    	</table>
+	<script>
+	fnShow_Hide();
+	</script>
 </body>
 </html>

@@ -147,259 +147,222 @@ $array = Array(
 }';
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 1</title>
-<link rel="stylesheet" href="include/install/install.css" type="text/css" />
-</head>
-<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
-<!-- Master vtiger_table -->
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-	<br><br>
-	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>vtiger CRM 5 - Configuration Wizard</title>
+	<link href="include/install/install.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+
+	<br><br><br>
+	<!-- Table for cfgwiz starts -->
+
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha5" title="v5alpha5"></td>
+		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 	</tr>
 	</table>
-	
-	
-	
-	<!-- 1 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%"> 
-	<tr>	
-		<td valign=top><img src="include/install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
-		<td width=98% valign=top>
-			<table border=0 cellspacing=0 cellpadding=0 width=100%>
-			<tr>
-				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="include/install/images/cwStep1of5.gif" alt="Step 1 of 5" title="Step 1 of 5"></td>
-			</tr>
-			<tr>
-				<td colspan=2><img src="include/install/images/cwHdrSysCheck.gif" alt="System Check" title="System Check"></td>
-			</tr>
-			</table>
-			<hr noshade size=1>
-		</td>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
 	<tr>
-		<td></td>
-		<td valign="top" align=center>
-		<!-- System Check -->
-	    <table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
-		<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Core Components</strong></span></td></tr>
-		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>PHP version 5.0.x</strong><BR></td>
-			<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
-    	</tr>
-	<tr bgcolor="#fafafa">
-			<td valign=top ><strong>IMAP Support Availability</strong></td>
-        	<td valign=top bgcolor=white><?php echo function_exists('imap_open')?"<strong><font color=\"#0066CC\">Passed</strong><br>IMAP library available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
-	    </tr>
-		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>GD graphics library</strong><br> version 2.0 or later</td>
-			<td valign=top bgcolor="white"><?php
-								if (!extension_loaded('gd')) {
-									echo "<strong><font size=-1 color=\"#FF0000\">GD Graphics Library not configured. </strong>.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
+		<td class="small" bgcolor="#4572BE" align=center>
+			<!-- Master display -->
+			<table border=0 cellspacing=0 cellpadding=0 width=97%>
+			<tr>
+				<td width=20% valign=top>
+
+				<!-- Left side tabs -->
+					<table border=0 cellspacing=0 cellpadding=10 width=100%>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
+					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>Installation Check</b></div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
+					</table>
+					
+				</td>
+				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<!-- Right side tabs -->
+				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
+				    <tr><td class=small align=left><img src="include/install/images/confWizInstallCheck.gif" alt="Pre Installation Check" title="Pre Installation Check"><br>
+					  <hr noshade size=1></td></tr>
+				    <tr>
+					<td align=left class="small" style="padding-left:20px">
+	    				<table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
+					<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Core Components</strong></span></td></tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>PHP version 5.0.x</strong><BR></td>
+						<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
+    					</tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>IMAP Support Availability</strong></td>
+				        	<td valign=top bgcolor=white><?php echo function_exists('imap_open')?"<strong><font color=\"#0066CC\">Passed</strong><br>IMAP library available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>GD graphics library</strong><br> version 2.0 or later</td>
+						<td valign=top bgcolor="white"><?php
+						if (!extension_loaded('gd')) {
+							echo "<strong><font size=-1 color=\"#FF0000\">GD Graphics Library not configured. </strong>.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
+						}
+						else {
+							if (!function_exists('gd_info'))
+							{
+								eval($gd_info_alternate);
+							}
+							$gd_info = gd_info();
+
+							if (isset($gd_info['GD Version'])) {
+								$gd_version = $gd_info['GD Version'];
+								$gd_version=preg_replace('%[^0-9.]%', '', $gd_version);
+
+								if ($gd_version > "2.0") {
+									echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed</font>";
 								}
 								else {
-									if (!function_exists('gd_info'))
-									{
-										eval($gd_info_alternate);
-									}
-
-									$gd_info = gd_info();
-
-									if (isset($gd_info['GD Version'])) {
-										$gd_version = $gd_info['GD Version'];
-										$gd_version=preg_replace('%[^0-9.]%', '', $gd_version);
-
-										if ($gd_version > "2.0") {
-											echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed</font>";
-										}
-										else {
-											echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed.</font>";
-										}
-									}
-									else {
-										echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation</strong>.<br>You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
-									}
+									echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed.</font>";
 								}
-								?>
+							}
+							else {
+								echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation</strong>.<br>You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
+							}
+						}
+						?>
+						</td>
+					</tr>
+					<tr bgcolor="#efefef"><td colspan=2><strong><span style="color:#003399">Read/Write Access</span></strong></td></tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>PHP Configuration</strong><br>(config.inc.php)</strong></td>
+						<td valign=top bgcolor="white" ><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
+					</tr>
+		 			<tr bgcolor="#fafafa">
+						<td valign=top ><strong>Cache Directory </strong> <br>(cache/)</td>
+            					<td valign=top bgcolor="white" ><?php echo (is_writable('./cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
+        				</tr>
+		 			<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Mail Merge Template Directory </strong><br>(test/wordtemplatedownload/)</td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Install Directory</strong><br> (install/)</td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./install/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Installation file</strong><br> (install.php)</td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>User Image Directory</strong><br> (test/user/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>Contact Image Directory</strong><br> (test/contact/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+					</tr>	
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
+					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+           					<td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
+           					<td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
+        				</tr>
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
+        				</tr>
+	
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				        </tr>
+
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				        </tr>
+
+					<tr bgcolor="#fafafa">
+                				<td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
+                				<td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
+        				</tr>
+
+       				</table>
+				<br><br>
+	   	   		<!-- Recommended Settings -->
+				<table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
+				<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Recommended Settings: We strongly suggest that you check for the following values in your php.ini file </strong></span></td></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Safe Mode Off</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Display Errors On</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>File Uploads On</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Register Globals Off</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Max Execution Time 300</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>output_buffering= On</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 16M</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>error_reporting = E_WARNING & ~E_NOTICE</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_reference = On</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>short_open_tag= On</strong></tr>
+				<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf" target="_blank">Linux installation pre-requisites</a></tr>
+				</table>
 			</td>
-		</tr>
-		<tr bgcolor="#efefef"><td colspan=2><strong><span style="color:#003399">Read/Write Access</span></strong></td></tr>
-		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>PHP Configuration</strong><br>(config.inc.php)</strong></td>
-			<td valign=top bgcolor="white" ><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
-		</tr>
-		 <tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Cache Directory </strong> <br>(cache/)</td>
-            <td valign=top bgcolor="white" ><?php echo (is_writable('./cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
-        </tr>
-		 <tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Mail Merge Template Directory </strong><br>(test/wordtemplatedownload/)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
-        </tr>
-		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-        </tr>
-		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Install Directory</strong><br> (install/)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./install/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
-        </tr>
-		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Installation file</strong><br> (install.php)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
-        </tr>
-	<tr bgcolor="#fafafa">
-		<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
-		<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-	</tr>
-	<tr bgcolor="#fafafa">
-		<td valign=top ><strong>User Image Directory</strong><br> (test/user/)</td>
-		<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-	</tr>
-	<tr bgcolor="#fafafa">
-		<td valign=top ><strong>Contact Image Directory</strong><br> (test/contact/)</td>
-		<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-	</tr>
-		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-        </tr>
-
-		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
-			<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
-		</tr>
-		<tr bgcolor="#fafafa">
-           <td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
-           <td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
-        </tr>
-	
-	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
-                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
-        </tr>
-	
-	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
-                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
-        </tr>
-
-	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
-                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
-        </tr>
-
-	
-	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
-                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
-        </tr>
-
-       </tbody>
-	   </table>
-
-<br><br>
-	   
-	   <!-- Recommended Settings -->
-		<table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
-		<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Recommended Settings: We strongly suggest that you check for the following values in your php.ini file </strong></span></td></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>Safe Mode Off</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>Display Errors On</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>File Uploads On</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>Register Globals Off</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>Max Execution Time 300</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>output_buffering= On</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 16M</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>error_reporting = E_WARNING & ~E_NOTICE</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_reference = On</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
-		<tr bgcolor="#ffffff"> <td valign=top ><strong>short_open_tag= On</strong></tr>
-		<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf">Linux installation pre-requisites</a></tr>
+			</tr>
+			<tr>
+				<td align=center>
+					<form action="install.php" method="post" name="installform" id="form">
+			                <input type="hidden" name="file" value="2setconfig.php" />	
+					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="window.document.installform.submit();">
+					</form><br>
+				    <br></td>
+			</tr>
 		</table>
-
-	</td>
-</tr>
-</table>
-
-	<br><br>
-
-	
-	<table border=0 cellspacing=0 cellpadding=0 width=70% class=small>
-	<tr>
-		<td><img src="include/install/images/cwURL.gif"></td>
-		<td align=right>
-			<form action="install.php" method="post" name="form" id="form">
-			<input type="hidden" name="file" value="2setConfig.php" />
-			<input type="image" src="include/install/images/cwBtnNext.gif" border="0" onClick="window.location=('install.php')">
-		</td>
-	</tr>
-	</table>
-	<br><br>
-	<!-- Horizontal Shade -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
-	<tr>
-		<td><img src="include/install/images/cwShadeLeft.gif"></td>
-		<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
-	</tr>
-	</table>
-
-
-</td>
-</tr>
-</table>
-<!-- Master vtiger_table closes -->
-
-<br><br><br>
-<!--
-<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
-  <tr>
-      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
-      <td align="right"><h2>Step 1 of 5</h2></td>
-      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
-    </tr>
-</tbody></table>
-<table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
-    <tr>
-      <td width="100%" colspan="3">
-		<table width=100% cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"width="100%" ><tbody><tr>
-
-				<td><h3>System Check</h3></td>
-				</tr>
-		    	</tbody></table>
-			  </td>
-			  <td width="85%" align="right"><hr width="100%"></td>
-			  </tr>
-		</tbody></table>
-	  </td>
-    </tr>
-    <tr><td colspan="3" align="center"><br>
 	</td>
 		</tr>
-       </tbody></table>
-	    <table cellpadding="5" cellspacing="1" width="75%" border="0" align="center"><tbody>
-
+	</table>
+	<!-- Master display stops -->
+	<br>
+	</td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-       <td colspan="3" align="right">
-	    <form action="install.php" method="post" name="form" id="form">
-		<input type="hidden" name="file" value="2setConfig.php" />
-		<input class="button" type="submit" name="next" value="Next >" /></td>
-    </tr>
-	</tbody>
--->
-</form>
+
+		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
+	</tr>
+	</table>	
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+
+      	<tr>
+        	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
+      	</tr>
+    	</table>
 </body>
-</html>
+</html>	

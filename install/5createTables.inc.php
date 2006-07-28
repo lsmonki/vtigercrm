@@ -156,7 +156,7 @@ function create_default_users() {
 $modules = array("DefaultDataPopulator");
 $focus=0;				
 // tables creation
-eecho("Creating Core tables: ");
+//eecho("Creating Core tables: ");
 //$adb->setDebug(true);
 $success = $adb->createTables("schema/DatabaseSchema.xml");
 
@@ -165,8 +165,7 @@ if($success==0)
 	die("Error: Tables not created.  Table creation failed.\n");
 elseif ($success==1)
 	die("Error: Tables partially created.  Table creation failed.\n");
-else
-	eecho("Tables Successfully created.\n");
+	//eecho("Tables Successfully created.\n");
 
 foreach ($modules as $module ) 
 {
@@ -201,9 +200,9 @@ $db->getUniqueID("vtiger_freetags");
 
 // populate the db with seed data
 if ($db_populate) {
-        eecho ("Populate seed data into $db_name");
+        //eecho ("Populate seed data into $db_name");
         include("install/populateSeedData.php");
-        eecho ("...<font color=\"00CC00\">done</font><BR><P>\n");
+        //eecho ("...<font color=\"00CC00\">done</font><BR><P>\n");
 }
 
 // populate forums data

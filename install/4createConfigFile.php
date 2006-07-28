@@ -49,39 +49,49 @@ $vtiger_version = "5.0 Beta";
 $release_date = "31 March 2006";
 
 
-if (isset($_REQUEST['db_hostname'])) 	list($db_hostname,$db_port) = 	split(":",$_REQUEST['db_hostname']);
+if (isset($_REQUEST['db_hostname']))
+{
+	if(strpos($_REQUEST['db_hostname'], ":"))
+	{
+		list($db_hostname,$db_port) = split(":",$_REQUEST['db_hostname']);
+	}	
+	else
+	{
+		$db_hostname = $_REQUEST['db_hostname'];
+		$db_port = '3306';
+	}	
+}
+if (isset($_REQUEST['db_username']))$db_username = $_REQUEST['db_username'];
 
-if (isset($_REQUEST['db_username'])) 	$db_username = 	$_REQUEST['db_username'];
+if (isset($_REQUEST['db_password']))$db_password = $_REQUEST['db_password'];
 
-if (isset($_REQUEST['db_password'])) 	$db_password = 		$_REQUEST['db_password'];
+if (isset($_REQUEST['db_name']))$db_name = $_REQUEST['db_name'];
 
-if (isset($_REQUEST['db_name'])) 		$db_name  	= 		$_REQUEST['db_name'];
+if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 
-if (isset($_REQUEST['db_type'])) 		$db_type  	= 		$_REQUEST['db_type'];
+if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tables'];
 
-if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = 	$_REQUEST['db_drop_tables'];
+if (isset($_REQUEST['db_create'])) $db_create = $_REQUEST['db_create'];
 
-if (isset($_REQUEST['db_create'])) 		$db_create = 		$_REQUEST['db_create'];
+if (isset($_REQUEST['db_populate'])) $db_populate = $_REQUEST['db_populate'];
 
-if (isset($_REQUEST['db_populate']))	$db_populate = 		$_REQUEST['db_populate'];
-
-if (isset($_REQUEST['site_URL'])) 		$site_URL = 		$_REQUEST['site_URL'];
+if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
  
-if (isset($_REQUEST['admin_email'])) 	$admin_email = 		$_REQUEST['admin_email'];
+if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 
-if (isset($_REQUEST['admin_password'])) $admin_password = 	$_REQUEST['admin_password'];
+if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 
-if (isset($_REQUEST['mail_server'])) $mail_server = 	$_REQUEST['mail_server'];
+if (isset($_REQUEST['mail_server'])) $mail_server = $_REQUEST['mail_server'];
 
-if (isset($_REQUEST['mail_server_username'])) $mail_server_username = 	$_REQUEST['mail_server_username'];
+if (isset($_REQUEST['mail_server_username'])) $mail_server_username = $_REQUEST['mail_server_username'];
 
-if (isset($_REQUEST['mail_server_password'])) $mail_server_password = 	$_REQUEST['mail_server_password'];
+if (isset($_REQUEST['mail_server_password'])) $mail_server_password = $_REQUEST['mail_server_password'];
 
-if (isset($_REQUEST['ftpserver'])) $ftpserver = 	$_REQUEST['ftpserver'];
+if (isset($_REQUEST['ftpserver'])) $ftpserver = $_REQUEST['ftpserver'];
 
-if (isset($_REQUEST['ftpuser'])) $ftpuser = 	$_REQUEST['ftpuser'];
+if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
 
-if (isset($_REQUEST['ftppassword'])) $ftppassword = 	$_REQUEST['ftppassword'];
+if (isset($_REQUEST['ftppassword'])) $ftppassword = $_REQUEST['ftppassword'];
 
 // update default port
 if ($db_port == '')
@@ -104,138 +114,318 @@ $cache_dir = 'cache/';
 
 
 ?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<HTML>
-
-<HEAD>
-
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
-<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 4</title>
-
-<link rel="stylesheet" href="include/install/install.css" type="text/css" />
-
+	
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>vtiger CRM 5 - Configuration Wizard</title>
+	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
 
-<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
+<body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-<!-- Master vtiger_table -->
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-	<br><br>
-	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
+<br><br>
+	<!-- Table for cfgwiz starts -->
+
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5Beta" title="v5Beta"></td>
+		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 	</tr>
 	</table>
-	
-	
-	
-	<!-- 4 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
-	<tr>	
-		<td valign=top><img src="include/install/images/cwIcoConfFile.gif" alt="System Check" title="System Check"></td>
-		<td width=98% valign=top>
-			<table border=0 cellspacing=0 cellpadding=0 width=100%>
-			<tr>
-				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="include/install/images/cwStep4of5.gif" alt="Step 4 of 5" title="Step 4 of 5"></td>
-			</tr>
-			<tr>
-				<td colspan=2><img src="include/install/images/cwHdrCrConfFile.gif" alt="Create Configuration File" title="Create Configuration File"></td>
-			</tr>
-			</table>
-			<hr noshade size=1>
-		</td>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
 	<tr>
-		<td></td>
-		<td valign="top" align=center>
-		<!--Create Configuration File-->
-<?php
-	if (isset($_REQUEST['root_directory']))
-	  $root_directory = $_REQUEST['root_directory'];
-
-	  if (is_file('config.inc.php'))
-	    $is_writable = is_writable('config.inc.php');
-	    else
-	      $is_writable = is_writable('.');
-
-	      /* open template configuration file read only */
-	      $templateFilename = 'config.template.php';
-	      $templateHandle = fopen($templateFilename, "r");
-	      if($templateHandle) {
-		      /* open include configuration file write only */
-		      $includeFilename = 'config.inc.php';
-		      $includeHandle = fopen($includeFilename, "w");
-		      if($includeHandle) {
-			      while (!feof($templateHandle)) {
-				      $buffer = fgets($templateHandle);
-
-				      /* replace _DBC_ variable */
-				      $buffer = str_replace( "_DBC_SERVER_", $db_hostname, $buffer);
-				      $buffer = str_replace( "_DBC_PORT_", $db_port, $buffer);
-				      $buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
-				      $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
-				      $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
-				      $buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
-
-				      $buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
-
-				      /* replace dir variable */
-				      $buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
-				      $buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
-				      $buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
-				      $buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
-				      /* replace mail variable */
-				      $buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
-				      $buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
-				      $buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
-				      $buffer = str_replace( "_DB_STAT_", "true", $buffer);
-				
-				      /* replace the application unique key variable */
-				      $buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
-
-				      fwrite($includeHandle, $buffer);
-				      }
-
-				      fclose($includeHandle);
-				      }
-
-				      fclose($templateHandle);
-				      }
-  
-if ($templateHandle && $includeHandle) {
-	echo "<br><table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"><tbody><tr><td align=\"left\">";
-	echo "<h4>Successfully created configuration file (<b>config.inc.php</b>) in :</h4></td>";
-	echo "<td align=\"left\"><font color=\"00CC00\">".$root_directory."</font>\n";
-	echo "</td></tr>";
-	echo "<tr><td> The installation will take at least 4 minutes. Grab a coffee,sit back and relax .....</table>";
-	}
-	else {
-		echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tbody><tr><td align=\"left\">";
-		echo "Cannot write configuration file (config.inc.php ) in the directory <font color=red>".$root_directory."</font>.\n";
-		echo "<P>You can continue this installation by manually creating the config.inc.php file and pasting the configuration information below inside.However, you <strong>must</strong> create the configuration file before you continue to the next step.<P>\n";
-		echo  "<TEXTAREA class=\"dataInput\" rows=\"15\" cols=\"80\">".$config."</TEXTAREA>";
-		echo "<P>Did you remember to create the config.inc.php file ?</td></tr>";
-		}
-				  
-?>
-
-
-	<tr>
-		<td colspan=2 >
-		<br><br>
-		<table border=0 cellspacing=0 cellpadding=0 width=100% class=small>
+		<td class="small" bgcolor="#4572BE" align=center>
+			<!-- Master display -->
+			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td><img src="include/install/images/cwURL.gif"></td>
-				<td align=right>
+				<td width=20% valign=top>
+
+				<!-- Left side tabs -->
+					<table border=0 cellspacing=0 cellpadding=10 width=100%>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
+					<tr><td class="small cwSelectedTab" id="configfile_tab" align=right><div align="left"><b>Config File Creation</b></div></td></tr>
+					<tr><td class="small cwUnSelectedTab" id="dbcreate_tab" align=right><div align="left">Database Generation</div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
+					</table>
+					
+				</td>
+				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<table border=0 cellspacing=0 cellpadding=10 width=100%>
+				<tr><td class=small align=left><img id="title_img" src="include/install/images/confWizConfFile.gif" alt="Config File Creation" title="Config File Creation"><img id="title_img1" src="include/install/images/confWizDbGeneration.gif" style="display:none;" alt="Database Generation" title="Database Generation"><br>
+					  <hr noshade size=1></td></tr>
+				<tr>
+					<td align=left class="small" style="padding-left:20px">
+					<?php
+					if (isset($_REQUEST['root_directory']))
+						$root_directory = $_REQUEST['root_directory'];
+		
+					if (is_file('config.inc.php'))
+					    	$is_writable = is_writable('config.inc.php');
+					else
+	      					$is_writable = is_writable('.');
+
+	      				/* open template configuration file read only */
+	      				$templateFilename = 'config.template.php';
+	      				$templateHandle = fopen($templateFilename, "r");
+	      				if($templateHandle) {
+		      				/* open include configuration file write only */
+		      				$includeFilename = 'config.inc.php';
+					      	$includeHandle = fopen($includeFilename, "w");
+		      				if($includeHandle) {
+			      			   while (!feof($templateHandle)) {
+				      			$buffer = fgets($templateHandle);
+
+				     			/* replace _DBC_ variable */
+				      			$buffer = str_replace( "_DBC_SERVER_", $db_hostname, $buffer);
+				      			$buffer = str_replace( "_DBC_PORT_", $db_port, $buffer);
+				      			$buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
+				      			$buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
+				      			$buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
+				      			$buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
+
+				      			$buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
+
+				      			/* replace dir variable */
+				      			$buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
+				      			$buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
+				      			$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
+				      			$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
+				      			/* replace mail variable */
+				      			$buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
+				      			$buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
+						      	$buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
+						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
+				
+						      	/* replace the application unique key variable */
+					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
+	
+					      		fwrite($includeHandle, $buffer);
+					      		}
+
+				      		fclose($includeHandle);
+				      		}
+
+				      	fclose($templateHandle);
+				      	}
+  
+	if ($templateHandle && $includeHandle) {?>
+			<div id="config_info">
+			<p><strong class="big">Successfully created configuration file (config.inc.php) in :</strong><br><br>
+			<font color="green"><b><?php echo $root_directory; ?></b></font><br><br>
+			The installation will take at least 4 minutes. Grab a coffee,sit back and relax...<br>
+			</p>
+			</div>
+			<br>		
+	<?php } 
+	else {?>
+			<div id="config_info"><p><strong class="big"><font color="red">Cannot write configuration file (config.inc.php ) in : </font></strong><br><br>
+			<font color="green"><b><?php echo $root_directory; ?></b></font><br><br>
+			<P>You can continue this installation by manually creating the config.inc.php file and pasting the configuration information below inside.However, you <strong>must</strong> create the configuration file before you continue to the next step.<P><br><br>
+	<?php			
+	$config = "<?php \n";
+ 	$config .= "/*********************************************************************************\n";
+ 	$config .= " * The contents of this file are subject to the SugarCRM Public License Version 1.1.2\n";
+ 	$config .= " * (\"License\"); You may not use this file except in compliance with the \n";
+ 	$config .= " * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL\n";
+ 	$config .= " * Software distributed under the License is distributed on an  \"AS IS\"  basis,\n";
+ 	$config .= " * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for\n";
+ 	$config .= " * the specific language governing rights and limitations under the License.\n";
+ 	$config .= " * The Original Code is:  SugarCRM Open Source\n";
+ 	$config .= " * The Initial Developer of the Original Code is SugarCRM, Inc.\n";
+ 	$config .= " * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;\n";
+ 	$config .= " * All Rights Reserved.\n";
+ 	$config .= " * Contributor(s): ______________________________________.\n";
+ 	$config .= "********************************************************************************/\n\n";
+ 	$config .= "include('vtigerversion.php');\n\n";
+ 	$config .= "// more than 8MB memory needed for graphics\n\n";
+ 	$config .= "// memory limit default value = 16M\n\n";
+ 	$config .= "ini_set('memory_limit','16M');\n\n";
+ 	$config .= "// show or hide world clock, calculator and FCKEditor\n\n";
+ 	$config .= "// world_clock_display default value = true\n";
+ 	$config .= "// calculator_display default value = true\n";
+ 	$config .= "// fckeditor_display default value = true\n\n";
+ 	$config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
+ 	$config .= "\$CALCULATOR_DISPLAY = 'true';\n";
+ 	$config .= "\$FCKEDITOR_DISPLAY = 'true';\n\n";
+ 	
+ 	$config .= "//This is the URL for customer portal. (Ex. http://vtiger.com/portal)\n";
+ 	$config .= "\$PORTAL_URL = 'http://yourdomain.com/customerportal';\n\n";
+ 	$config .= "//These two are the HelpDesk support email id and the support name. ";
+ 	$config .= "(Ex. 'support@vtiger.com' and 'vtiger Support')\n";
+ 	$config .= "\$HELPDESK_SUPPORT_EMAIL_ID = 'support@yourdomain.com';\n";
+ 	$config .= "\$HELPDESK_SUPPORT_NAME = 'yourdomain Name';\n\n";
+ 	
+ 	$config .= "/* Database configuration\n";
+ 	$config .= "      db_host_name:     MySQL Database Hostname\n";
+ 	$config .= "      db_user_name:        MySQL Username\n";
+ 	$config .= "      db_password:         MySQL Password\n";
+ 	$config .= "      db_name:             MySQL Database Name\n*/\n";
+ 	$config .= "\$dbconfig['db_server'] =     '".$db_hostname."';\n";
+ 	$config .= "\$dbconfig['db_port'] =     '".$db_port."';\n";
+ 	$config .= "\$dbconfig['db_username'] =     '".$db_username."';\n";
+ 	$config .= "\$dbconfig['db_password'] =         '".$db_password."';\n";
+ 	$config .= "\$dbconfig['db_name'] =             '".$db_name."';\n";
+ 	$config .= "\$dbconfig['db_type'] = '".$db_type."';\n";
+	$config .= "\$dbconfig['db_status'] = 'true';\n";
+
+	$config .= "// TODO: test if port is empty\n";
+	$config .= "// TODO: set db_hostname dependending on db_type\n";
+ 	$config .= "\$dbconfig['db_hostname'] = \$dbconfig['db_server'].\$dbconfig['db_port'];\n\n";
+
+	
+	$config .= "// log_sql default value = false\n";
+	$config .= "\$dbconfig['log_sql'] = false;\n\n";
+	
+	$config .= "// persistent default value = true\n";
+	$config .= "\$dbconfigoption['persistent'] = true;\n\n";
+
+	$config .= "// autofree default value = false\n";
+	$config .= "\$dbconfigoption['autofree'] = false;\n\n";
+	
+	$config .= "// debug default value = 0\n";
+	$config .= "\$dbconfigoption['debug'] = 0;\n\n";
+
+	$config .= "// seqname_format default value = '%s_seq'\n";
+	$config .= "\$dbconfigoption['seqname_format'] = '%s_seq';\n\n";
+
+	$config .= "// portability default value = 0\n";
+	$config .= "\$dbconfigoption['portability'] = 0;\n\n";
+
+	$config .= "// ssl default value = false\n";
+	$config .= "\$dbconfigoption['ssl'] = false;\n\n";
+
+	$config .= "\$host_name = \$dbconfig['db_hostname'];\n\n";
+	
+	$config .= "\$site_URL ='$site_URL';\n\n";
+
+	$config .= "// root directory path\n";
+	$config .= "\$root_directory = '$root_directory';\n\n";
+
+	$config .= "// cache direcory path\n";
+	$config .= "\$cache_dir = '$cache_dir';\n\n";
+
+	$config .= "// tmp_dir default value prepended by cache_dir = images/\n";
+	$config .= "\$tmp_dir = '$cache_dir"."images/';\n\n";
+
+	$config .= "// import_dir default value prepended by cache_dir = import/\n";
+	$config .= "\$tmp_dir = '$cache_dir"."import/';\n\n";
+
+	$config .= "// upload_dir default value prepended by cache_dir = upload/\n";
+	$config .= "\$tmp_dir = '$cache_dir"."upload/';\n\n";
+
+	$config .= "// mail server parameters\n";
+	$config .= "\$mail_server = '$mail_server';\n";
+	$config .= "\$mail_server_username = '$mail_server_username';\n";
+	$config .= "\$mail_server_password = '$mail_server_password';\n\n";
+	
+	$config .= "// maximum file size for uploaded files in bytes also used when uploading import files\n";
+	$config .= "// upload_maxsize default value = 3000000\n";
+	$config .= "\$upload_maxsize = 3000000;\n\n";
+
+	$config .= "// flag to allow export functionality\n";
+	$config .= "// 'all' to allow anyone to use exports \n";
+	$config .= "// 'admin' to only allow admins to export\n";
+	$config .= "// 'none' to block exports completely\n";
+	$config .= "// allow_exports default value = all\n";
+	$config .= "\$allow_exports = 'all';\n\n";
+
+ 	$config .= "// Files with one of these extensions will have '.txt' appended to their filename on upload\n";
+	$config .= "// upload_badext default value = php, php3, php4, php5, pl, cgi, py, asp, cfm, js, vbs, html, htm\n";
+ 	$config .= "\$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm');\n\n";
+
+ 	$config .= "// This is the full path to the include directory including the trailing slash\n";
+	$config .= "// includeDirectory default value = $root_directory..'include/\n";
+ 	$config .= "\$includeDirectory = \$root_directory.'include/';\n\n";
+	
+	$config .= "// list_max_entries_per_page default value = 20\n";
+	$config .= "\$list_max_entries_per_page = '20';\n\n";
+
+ 	$config .= "// change this number to whatever you want. This is the number of pages that will appear in the pagination. by Raju \n";
+ 	$config .= "\$limitpage_navigation = '9';\n\n";
+	
+	$config .= "// history_max_viewed default value = 5\n";
+ 	$config .= "\$history_max_viewed = '5';\n\n";
+ 	
+ 	$config .= "// Map Sugar language codes to jscalendar language codes\n";
+ 	$config .= "// Unimplemented until jscalendar language files are fixed\n";
+ 	$config .= "// \$cal_codes = array('en_us'=>'en', 'ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');\n\n";
+
+	$config .= "//set default module and action\n";
+ 	$config .= "\$default_module = 'Home';\n";
+ 	$config .= "\$default_action = 'index';\n\n";
+
+ 	$config .= "//set default theme\n";
+ 	$config .= "\$default_theme = 'blue';\n\n";
+
+ 	$config .= "// If true, the time to compose each page is placed in the browser.\n";
+ 	$config .= "\$calculate_response_time = true;\n";
+
+ 	$config .= "// Default Username - The default text that is placed initially in the login form for user name.\n";
+ 	$config .= "\$default_user_name = '';\n";
+	
+ 	$config .= "// Default Password - The default text that is placed initially in the login form for password.\n";
+ 	$config .= "\$default_password = '';\n";
+
+ 	$config .= "// Create default user - If true, a user with the default username and password is created.\n";
+ 	$config .= "\$create_default_user = false;\n";
+ 	$config .= "\$default_user_is_admin = false;\n";
+
+ 	$config .= "// disable persistent connections - If your MySQL/PHP configuration does not support persistent connections set this to true to avoid a large performance slowdown\n";
+ 	$config .= "\$disable_persistent_connections = false;\n";
+ 	$config .= "// Defined languages available.  The key must be the language file prefix.  E.g. 'en_us' is the prefix for every 'en_us.lang.php' file. \n";
+ 	
+ 	$language_value = "Array('en_us'=>'US English',)";
+ 	if(isset($_SESSION['language_keys']) && isset($_SESSION['language_values']))
+ 	{
+ 	    $language_value = 'Array(';
+ 	    $language_keys = explode(',', urldecode($_SESSION['language_keys']));
+ 	    $language_values = explode(',', urldecode($_SESSION['language_values']));
+ 	    $size = count($language_keys);
+ 	    for($i = 0; $i < $size; $i+=1)
+ 	    {
+ 	        $language_value .= "'$language_keys[$i]'=>'$language_values[$i]',";
+ 	    }
+ 	    $language_value .= ')';
+ 	}
+ 	$config .= "\$languages = $language_value;\n";
+ 	$config .= "// Default charset if the language specific character set is not found.\n";
+ 	$config .= "\$default_charset = 'ISO-8859-1';\n";
+ 	$config .= "// Default language in case all or part of the user's language pack is not available.\n";
+ 	$config .= "\$default_language = 'en_us';\n";
+ 	$config .= "// Translation String Prefix - This will add the language pack name to every translation string in the display.\n";
+ 	$config .= "\$translation_string_prefix = false;\n";
+ 	
+ 	$config .= "//Option to cache tabs permissions for speed.\n";
+ 	$config .= "\$cache_tab_perms = true;\n\n";
+ 	
+ 	$config .= "//Option to hide empty home blocks if no entries.\n";
+ 	$config .= "\$display_empty_home_blocks = false;\n\n";
+
+ 	$config .= "// Generating Unique Application Key\n";
+ 	$config .= "\$application_unique_key = '".md5($root_directory)."';\n\n";
+ 	$config .= "?>";
+		
+			echo "<TEXTAREA class=\"dataInput\" rows=\"15\" cols=\"80\">".$config."</TEXTAREA><br><br>";
+			echo "<P>Did you remember to create the config.inc.php file ?</p>";
+	
+				  
+		}	?>
+				</div></td>
+				</tr>
+				<tr><td align="center"><img id="populating_info" src="include/install/images/loading.gif" style="visibility:hidden;"></td></tr>
+				<tr>
+				<td align=right style="height:60px;">
 				 <form action="install.php" method="post" name="form" id="form">
 				 <!--<form action="install.php" method="post" name="form" id="form"> -->
 				 <input type="hidden" name="file" value="5createTables.php">
@@ -248,51 +438,49 @@ if ($templateHandle && $includeHandle) {
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-				 <input  type="image" name="next" value="Next" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php')" />
+				 <input  type="image" name="next" value="Next" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
 				 </form>
 					
 				</td>
 			</tr>
-		</table>
-		<br><br>
-		<!-- Horizontal Shade -->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
-			<tr>
-				<td><img src="include/install/images/cwShadeLeft.gif"></td>
-				<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
-			</tr>
-		</table>
-				
 
-	
+			</table>
+		</td>
+	</tr>
+	</table>
+	<!-- Master display stops -->
+	<br>
 	</td>
 	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
 
- </tbody>
-</table>
+		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<tr>
+		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
-<!-- Create Configuration File -->
-</td>
-</tr>
-</table>
-		
-<br><br>
-	
-			
-
-
-
-
-
-
-
-
-</td>
-</tr>
-</table>
-<!-- Master vtiger_table closes -->
-
+      	<tr>
+        	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
+      	</tr>
+    	</table>	
+	<script>
+	function createtablejs()
+	{
+		document.getElementById('dbcreate_tab').innerHTML = '<div align="left"><b>Database Generation</b></div>';
+		document.getElementById('configfile_tab').className = 'cwUnSelectedTab';
+		document.getElementById('configfile_tab').innerHTML = '<div align="left">Config File Creation</div>';
+		document.getElementById('dbcreate_tab').className = 'cwSelectedTab';
+		oImg = document.getElementById('title_img').style.display = 'none';
+		oImg = document.getElementById('title_img1').style.display = 'block';
+		document.getElementById('populating_info').style.visibility='visible';
+	}
+	</script>
 </body>
-
 </html>
-
