@@ -28,6 +28,11 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
+	$old_id = $_REQUEST['record'];
+	if (! empty($focus->filename) )
+	{	
+		$old_id = $focus->id;
+	}
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
@@ -67,6 +72,7 @@ if(isset($cust_fld))
         $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
 $smarty->assign("ID", $focus->id);
+$smarty->assign("OLD_ID", $old_id );
 if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
