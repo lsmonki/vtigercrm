@@ -69,6 +69,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         $so_focus->retrieve_entity_info($soid,"SalesOrder");
         $focus = getConvertSoToInvoice($focus,$so_focus,$soid);
 
+	//added to set the PO number and terms and conditions
+	$focus->column_fields['vtiger_purchaseorder'] = $so_focus->column_fields['vtiger_purchaseorder'];
+	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
+	
 	//Added to display the SalesOrder's associated vtiger_products -- when we create vtiger_invoice from SO DetailView
 	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
 	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
