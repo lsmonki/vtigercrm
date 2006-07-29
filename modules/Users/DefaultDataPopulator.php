@@ -375,7 +375,6 @@ $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'product_id','vtiger_campaign',1,59,'product_id','Product',1,0,0,100,4,76,1,'I~O',0,5,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'campaignstatus','vtiger_campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,2,76,1,'V~O',0,6,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'closingdate','vtiger_campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,6,76,1,'D~M',0,2,'BAS')");
- $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'expectedresponse','vtiger_campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,3,76,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'numsent','vtiger_campaign',1,'9','numsent','Num Sent',1,0,0,100,10,76,1,'N~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'sponsor','vtiger_campaign',1,'1','sponsor','Sponsor',1,0,0,100,9,76,1,'V~O',1,null,'BAS')");
@@ -384,15 +383,16 @@ $this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("v
 $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,11,76,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,12,76,2,'T~O',1,null,'BAS')");
 
- $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'expectedrevenue','vtiger_campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,9,78,1,'I~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'expectedresponse','vtiger_campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,3,78,1,'V~O',0,4,'BAS')");
+ $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'expectedrevenue','vtiger_campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,4,78,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'budgetcost','vtiger_campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,1,78,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'actualcost','vtiger_campaign',1,'1','actualcost','Actual Cost',1,0,0,100,2,78,1,'I~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedresponsecount','vtiger_campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,5,78,1,'N~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedsalescount','vtiger_campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,3,78,1,'N~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedroi','vtiger_campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,7,78,1,'N~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualresponsecount','vtiger_campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,6,78,1,'N~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualsalescount','vtiger_campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,4,78,1,'N~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualroi','vtiger_campaign',1,'1','actualroi','Actual ROI',1,0,0,100,8,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedresponsecount','vtiger_campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,7,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedsalescount','vtiger_campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,5,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'expectedroi','vtiger_campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,9,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualresponsecount','vtiger_campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,8,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualsalescount','vtiger_campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,6,78,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(26,".$this->db->getUniqueID("vtiger_field").",'actualroi','vtiger_campaign',1,'1','actualroi','Actual ROI',1,0,0,100,10,78,1,'N~O',1,null,'BAS')");
 
 $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')");
 //Campaign entries end
