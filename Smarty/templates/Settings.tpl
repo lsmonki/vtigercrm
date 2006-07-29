@@ -130,19 +130,6 @@
 						</table>
 					</td>
 					<td width=25% valign=top>
-					<!-- icon 7-->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}assign.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" width="48" height="48" border=0 title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td>
-
-						</tr>
-						<tr>
-							<td class="small" valign=top>{$MOD.LBL_MODULE_OWNERS_DESCRIPTION}</td>
-						</tr>
-						</table>
-					</td>
-					<td width=25% valign=top>
 					<!-- icon 8-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
@@ -427,6 +414,23 @@
 
 					</td>
 					<td width=25% valign=top>
+					<!-- icon 7-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}assign.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" width="48" height="48" border=0 title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td>
+
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_MODULE_OWNERS_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+				<!-- Row 2 -->
+				<tr>
+
+					<td width=25% valign=top>
 					<!-- icon 19-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
@@ -439,9 +443,6 @@
 						</tr>
 						</table>
 					</td>
-				</tr>
-				<!-- Row 2 -->
-				<tr>
 
 					<td width=25% valign=top>
 					<!-- icon 20-->
@@ -460,8 +461,8 @@
 					<!-- empty -->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
-							<td class=big valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
+							<td class=big valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
 
 						</tr>
 						<tr>
@@ -483,6 +484,9 @@
 
 						</table>
 					</td>
+				</tr>
+				<tr>
+
 					<td width=25% valign=top>
 					<!-- empty-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
@@ -496,8 +500,6 @@
 
 						</table>
 					</td>
-				</tr>
-				<tr>
 				  <td valign=top><table border=0 cellspacing=0 cellpadding=5 width=100%>
                     <tr>
                       <td rowspan=2 valign=top><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}migrate.gif" alt="{$MOD.LBL_MIGRATION}" title="{$MOD.LBL_MIGRATION}"></a></td>
