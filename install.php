@@ -52,25 +52,4 @@ else $the_file = "0welcome.php";
 
 include("install/".$the_file);
 
-echo "<style>
-		.bggray
-		{
-			background-color: #dfdfdf;
-		}
-	.bgwhite
-	{
-		background-color: #FFFFFF;
-	}
-	.copy
-	{
-		font-size:9px;
-		font-family: Verdana, Arial, Helvetica, Sans-serif;
-	}
-	</style>
-	<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>
-	<table width=20% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n
-	<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n
-	&copy; Click <a href ='javascript:mypopup()'>here</a> for Copyright details.<br>
-	</td></tr></table></td></tr></table>\n";
-
 ?>
