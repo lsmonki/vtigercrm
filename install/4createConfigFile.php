@@ -474,9 +474,9 @@ $cache_dir = 'cache/';
 	function createtablejs()
 	{
 		document.getElementById('dbcreate_tab').innerHTML = '<div align="left"><b>Database Generation</b></div>';
-		document.getElementById('configfile_tab').className = 'cwUnSelectedTab';
+		document.getElementById('configfile_tab').className = 'small cwUnSelectedTab';
 		document.getElementById('configfile_tab').innerHTML = '<div align="left">Config File Creation</div>';
-		document.getElementById('dbcreate_tab').className = 'cwSelectedTab';
+		document.getElementById('dbcreate_tab').className = 'small cwSelectedTab';
 		oImg = document.getElementById('title_img').style.display = 'none';
 		oImg = document.getElementById('title_img1').style.display = 'block';
 		document.getElementById('populating_info').style.visibility='visible';
