@@ -400,6 +400,7 @@ function getAdvSearchfields($module)
         $log->debug("Entering getAdvSearchfields(".$module.") method ...");
 	global $adb;
 	global $current_user;	
+	global $mod_strings;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	$tabid = getTabid($module);
@@ -433,16 +434,6 @@ function getAdvSearchfields($module)
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-		//Added on 14-10-2005 -- added ticket id in list
-		if($module == 'HelpDesk' && $block == 25)
-		{
-			$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
-		}
-		//Added to include vtiger_activity type in vtiger_activity vtiger_customview list
-		if($module == 'Activities' && $block == 19)
-		{
-			$module_columnlist['vtiger_activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
-		}
 		if($fieldlabel == "Related To")
 		{
 			$fieldlabel = "Related to";
@@ -462,6 +453,16 @@ function getAdvSearchfields($module)
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
 		}
+	}
+	//Added to include Ticket ID in HelpDesk advance search
+	if($module == 'HelpDesk')
+	{
+		$OPTION_SET .= "<option value=\'vtiger_crmentity.crmid\'>".$mod_strings['Ticket ID']."</option>";
+	}
+	//Added to include activity type in activity advance search
+	if($module == 'Activities')
+	{
+		$OPTION_SET .= "<option value=\'vtiger_activity.activitytype\'>".$mod_strings['Activity Type']."</option>";
 	}
 	$log->debug("Exiting getAdvSearchfields method ...");
 	return $OPTION_SET;
