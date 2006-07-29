@@ -78,6 +78,8 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 	foreach($object_array as $module => $object_name)
 	{
+		if(isPermitted($module,"index") == "yes")
+		{
 		$focus = new $object_name();
 
 		$smarty = new vtigerCRM_Smarty;
@@ -155,6 +157,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 		$smarty->display("GlobalListView.tpl");
 		unset($_SESSION['lvs'][$module]);
+		}
 	}
 
 	//Added to display the Total record count
