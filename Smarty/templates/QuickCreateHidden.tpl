@@ -11,7 +11,12 @@
  ********************************************************************************/
 
 -->*}
-<form name="QcEditView" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php">
+{if $MODULE eq 'HelpDesk'}
+	<form name="QcEditView" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php"  ENCTYPE="multipart/form-data">
+{else}
+	<form name="QcEditView" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php">
+{/if}
+
 {if $MODULE eq 'Accounts'}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="record" value="">
