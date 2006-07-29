@@ -185,7 +185,7 @@ function export_all($type)
 
 $content = export_all($_REQUEST['module']);
 
-header("Content-Disposition: inline; filename={$_REQUEST['module']}.csv");
+header("Content-Disposition: attachment; filename={$_REQUEST['module']}.csv");
 header("Content-Type: text/csv; charset=UTF-8");
 header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
 header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
