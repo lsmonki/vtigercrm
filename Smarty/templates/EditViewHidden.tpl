@@ -54,6 +54,7 @@
 	<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 	<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
+        <input type="hidden" name="old_id" value="{$OLD_ID}">
 
 {elseif $MODULE eq 'Leads'}
         <form name="EditView" method="POST" action="index.php">
