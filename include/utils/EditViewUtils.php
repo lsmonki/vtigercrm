@@ -179,7 +179,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($fieldname == 'terms_conditions')//for default Terms & Conditions
 		{
-			$value=getTermsandConditions();
+			//Assign the value from focus->column_fields (if we create Invoice from SO the SO's terms and conditions will be loaded to Invoice's terms and conditions, etc.,)
+			$value = $col_fields['terms_conditions'];
+
+			//if the value is empty then only we should get the default Terms and Conditions
+			if($value == '')
+				$value=getTermsandConditions();
 		}
 
 		$editview_label[]=$mod_strings[$fieldlabel];
