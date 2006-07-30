@@ -32,6 +32,92 @@
   */
 
   require_once('include/database/PearDatabase.php');
+
+  
+// returns time in format hh:mm where 2004-05-01 18:23:09 would produce 18
+function getHours($dateIn)
+{
+	return substr($dateIn, strpos($dateIn, ':') - 2, 2);
+}
+
+// returns a list of hour options, with the value of $match selected
+function getHourSelectOptions($start, $end, $selectedHour)
+{
+	$output = "";
+	$minsec = "";
+	
+	for($hour = $start -1; $hour < $end; $hour++)
+	{
+		if ($hour == 0)
+		{
+			$value = $hour . $minsec;
+			$label = "12 am";
+		}		
+		elseif($hour < 10)
+		{
+			$value = "0" . $hour . $minsec;
+			$label = $hour . " am";
+		}		
+		elseif ($hour < 12)
+		{
+			$value = $hour . $minsec;
+			$label = $hour . " am";
+		}
+		elseif ($hour == 12)
+		{
+			$value = $hour . $minsec;
+			$label = "12 pm";
+		}
+		else
+		{
+			$value = $hour . $minsec;
+			$label = $hour - 12 . " pm";
+		}		
+			
+		$output .= "<option value=\"" . $value . "\"";
+		
+		if($hour == $selectedHour)
+			$output .= " selected";
+			
+		$output .= ">" . $label . "</option>\n\r";		
+	}
+	
+	return $output;
+}
+
+
+function getMinuteSelectOptions($selectedMinute)
+{
+	$output = "";
+	
+	$output .= "<option value=\"00\"";
+	if($selectedMinute == 0)
+		$output .= " selected";
+	$output .= ">:00</option>\n\r";
+
+	$output .= "<option value=\"15\"";
+	if($selectedMinute == 15)
+		$output .= " selected";
+	$output .= ">:15</option>\n\r";
+
+	$output .= "<option value=\"30\"";
+	if($selectedMinute == 30)
+		$output .= " selected";
+	$output .= ">:30</option>\n\r";
+
+	$output .= "<option value=\"45\"";
+	if($selectedMinute == 45)
+		$output .= " selected";
+	$output .= ">:45</option>\n\r";
+
+	return $output;
+}
+
+// returns minutes in format hh:mm where 2004-05-01 18:23:09 would return 23
+function getTimeMinutes($dateIn)
+{
+	return substr($dateIn, strpos($dateIn, ':') +1, 2);
+}  
   
 function return_name(&$row, $first_column, $last_column)
 {
@@ -937,46 +1023,69 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 	if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{	
-          $vtlog->logthis("uitype is ".$uitype,'info');  
+		$vtlog->logthis("uitype is ".$uitype,'info');  
 
 		if($value=='')
-                {
+		{
 			if($fieldname != 'birthday' && $fieldname != 'due_date')
-                        	$disp_value=getNewDisplayDate();
-                }
-                else
-                {
-                        $disp_value = getDisplayDate($value);
-                }
+			{
+				$disp_value=getNewDisplayDate();
+			}
+		}
+		else
+		{
+			$disp_value = getDisplayDate($value);
+		}
 
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 6 || $uitype == 23)
+		{
 			$custfld .= '<font color="red">*</font>';
 
+		}
+		
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
+		
+		//$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"'; 
+
+		global $module; 
+		if($module=='Activities' && $fieldname=='date_start') 
+		{ 
+			$custfld .= ' onChange="this.form.due_date.value = this.form.date_start.value;"'; 
+		}
+		 
+		$custfld .= '><img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">'; 
+		$custfld .= '<input type="hidden" name="prev_date_start" value="'.$disp_value.'">';
+		
 		if($uitype == 6)
-                {
+		{
+           	$curr_time = '07:00';
 			if($col_fields['time_start']!='')
-                        {
-                                $curr_time = $col_fields['time_start'];
-                        }
-                        else
-                        {
-                                $curr_time = date('H:i');
-                        }
-                        $custfld .= '&nbsp; <input name="time_start" size="5" maxlength="5" type="text" value="'.$curr_time.'">';
-                }
+            {
+				$curr_time = $col_fields['time_start'];
+            }
+
+            $custfld .= '<input type="hidden" name="time_start" value="'.$curr_time.'">';
+            $custfld .= '<select name="hour_start" onChange=\'this.form.time_start.value = this.form.hour_start.options[this.form.hour_start.selectedIndex].value + ":" + this.form.min_start.options[this.form.min_start.selectedIndex].value;\'>';
+			$custfld .= getHourSelectOptions(1, 24, getHours($disp_value.' '.$curr_time.':00'));
+          	$custfld .= '</select>';
+          	$custfld .= '<select name="min_start" onchange=\'this.form.time_start.value = this.form.hour_start.options[this.form.hour_start.selectedIndex].value + ":" + this.form.min_start.options[this.form.min_start.selectedIndex].value;\'>';
+          	$custfld .= getMinuteSelectOptions(getTimeMinutes($disp_value.' '.$curr_time.':00'));
+          	$custfld .= '</select>';
+		}
+		
 		if($uitype == 5 || $uitype == 23)
 			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font></td>';
 		else
 			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">('.$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE'].')</em></font></td>';
+			
 		$custfld .= '<script type="text/javascript">';
 		$custfld .= 'Calendar.setup ({';
-				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
-				$custfld .= '});';
+		$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
+		$custfld .= '});';
 		$custfld .= '</script>';
 	}
 	elseif($uitype == 15 || $uitype == 16)
