@@ -151,7 +151,7 @@ class User {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
-	var $homeorder_array = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','HDB');
+	var $homeorder_array = array('ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
