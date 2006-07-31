@@ -33,6 +33,6 @@
 	if(gselectedrowid != 0)
 	{ldelim}
 		var rowid = 'row_'+gselectedrowid;
-	    getObj(rowid).className = 'prvPrfHoverOn';
+	    getObj(rowid).className = 'emailSelected';
 	{rdelim}
 </SCRIPT>
