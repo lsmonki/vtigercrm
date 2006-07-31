@@ -204,11 +204,11 @@ $array = Array(
 					<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Core Components</strong></span></td></tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>PHP version 5.0.x</strong><BR></td>
-						<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
+						<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#00CC00\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
     					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>IMAP Support Availability</strong></td>
-				        	<td valign=top bgcolor=white><?php echo function_exists('imap_open')?"<strong><font color=\"#0066CC\">Passed</strong><br>IMAP library available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
+				        	<td valign=top bgcolor=white><?php echo function_exists('imap_open')?"<strong><font color=\"#00CC00\">Passed</strong><br>IMAP library available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>GD graphics library</strong><br> version 2.0 or later</td>
@@ -228,10 +228,10 @@ $array = Array(
 								$gd_version=preg_replace('%[^0-9.]%', '', $gd_version);
 
 								if ($gd_version > "2.0") {
-									echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed</font>";
+									echo "<strong><font color=\"#00CC00\">Passed</strong><br>Version $gd_version Installed</font>";
 								}
 								else {
-									echo "<strong><font color=\"#0066CC\">Passed</strong><br>Version $gd_version Installed.</font>";
+									echo "<strong><font color=\"#00CC00\">Passed</strong><br>Version $gd_version Installed.</font>";
 								}
 							}
 							else {
@@ -244,70 +244,70 @@ $array = Array(
 					<tr bgcolor="#efefef"><td colspan=2><strong><span style="color:#003399">Read/Write Access</span></strong></td></tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>PHP Configuration</strong><br>(config.inc.php)</strong></td>
-						<td valign=top bgcolor="white" ><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
+						<td valign=top bgcolor="white" ><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#00CC00\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
 					</tr>
 		 			<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Cache Directory </strong> <br>(cache/)</td>
-            					<td valign=top bgcolor="white" ><?php echo (is_writable('./cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
+            					<td valign=top bgcolor="white" ><?php echo (is_writable('./cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
         				</tr>
 		 			<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Mail Merge Template Directory </strong><br>(test/wordtemplatedownload/)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Install Directory</strong><br> (install/)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./install/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./install/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Installation file</strong><br> (install.php)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>User Image Directory</strong><br> (test/user/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Contact Image Directory</strong><br> (test/contact/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>	
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
-					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
            					<td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
-           					<td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
+           					<td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 				                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
         				</tr>
 	
 					<tr bgcolor="#fafafa">
 				                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
 				        </tr>
 
 					<tr bgcolor="#fafafa">
 				                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
 				        </tr>
 
 					<tr bgcolor="#fafafa">
                 				<td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
-                				<td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
+                				<td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
         				</tr>
 
        				</table>
