@@ -564,14 +564,10 @@ setObjects();
 
 <!-- Dropdown for Add Event -->
 <div id='addEventDropDown' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr>
-        <td align=center nowrap>
-		<a href='' id="addcall" class='submenu'><?php echo $mod_strings['LBL_ADDCALL']?></a>
-        	<a href='' id="addmeeting" class='submenu'><?php echo $mod_strings['LBL_ADDMEETING']?></a>
-	        <a href='' id="addtodo" class='submenu'><?php echo $mod_strings['LBL_ADDTODO']?></a>
-	</td>
-</tr>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr><td><a href='' id="addcall" class='submenu'><?php echo $mod_strings['LBL_ADDCALL']?></a></td></tr>
+	<tr><td><a href='' id="addmeeting" class='submenu'><?php echo $mod_strings['LBL_ADDMEETING']?></a></td></tr>
+	<tr><td><a href='' id="addtodo" class='submenu'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
 
