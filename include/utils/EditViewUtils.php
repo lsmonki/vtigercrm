@@ -1434,9 +1434,13 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
 			$tax_value = 0.00;
-			//condition to avoid call this function when we create new PO/SO/Quotes/Invoice from Product module
+
+			//condition to avoid this function call when create new PO/SO/Quotes/Invoice from Product module
 			if($focus->id != '')
 				$tax_value = getInventoryProductTaxValue($focus->id, $hdnProductId, $tax_name);
+			else//if the above function not called then assign the default associated value of the product
+				$tax_value = $tax_details[$tax_count]['percentage'];
+
 			$product_Detail[$i]['taxes'][$tax_count]['taxname'] = $tax_name;
 			$product_Detail[$i]['taxes'][$tax_count]['percentage'] = $tax_value;
 		}
