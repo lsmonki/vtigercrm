@@ -152,10 +152,8 @@ $mod_strings = Array(
 'Quotes that are Open'=>'Quotes that are Open',
 'PurchaseOrder by Contacts'=>'PurchaseOrder by Contacts',
 'PurchaseOrder Detailed Report'=>'PurchaseOrder Detailed Report',
-'PurchaseOrder detailed report'=>'PurchaseOrder detailed report',
 'PurchaseOrder related to Contacts'=>'PurchaseOrder related to Contacts',
 'Invoice Detailed Report'=>'Invoice Detailed Report',
-'Invoice detailed report'=>'Invoice detailed report',
 'Last Month Activities'=>'Last Month Activities',
 'This Month Activities'=>'This Month Activities',
 
