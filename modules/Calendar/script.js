@@ -90,7 +90,7 @@ function showhideRepeat(argg1,argg2)
 
 
 
-function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt)
+function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt,viewOption,subtab)
 {
 	var y=document.getElementById(argg1).style;
 	
@@ -99,38 +99,48 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		if(type == 'call' || type == 'meeting')
 		{
 			if(type == 'call')
-	                        document.appSave.activitytype[0].checked = true;
+	                        document.EditView.activitytype[0].checked = true;
 	                if(type == 'meeting')
-        	                document.appSave.activitytype[1].checked = true;
+        	                document.EditView.activitytype[1].checked = true;
 
-			document.appSave.date_start.value = startdate;
-			document.appSave.due_date.value = enddate;
-			document.appSave.starthr.value = starthr;
-			document.appSave.startmin.value = startmin;
-			document.appSave.startfmt.value = startfmt;
-			document.appSave.endhr.value = endhr;
-			document.appSave.endmin.value = endmin;
-			document.appSave.endfmt.value = endfmt;
+			enableFields('Events');
+			document.EditView.subject.value = '';
+			document.EditView.date_start.value = startdate;
+			document.EditView.due_date.value = enddate;
+			document.EditView.starthr.value = starthr;
+			document.EditView.startmin.value = startmin;
+			document.EditView.startfmt.value = startfmt;
+			document.EditView.endhr.value = endhr;
+			document.EditView.endmin.value = endmin;
+			document.EditView.endfmt.value = endfmt;
+			document.EditView.viewOption.value = viewOption;
+                        document.EditView.subtab.value = subtab;
 		}
 		if(type == 'todo')
 		{
+			enableFields('Task');
+			document.createTodo.task_subject.value = '';
 			document.createTodo.task_date_start.value = startdate;
 			document.createTodo.starthr.value = starthr;
                         document.createTodo.startmin.value = startmin;
                         document.createTodo.startfmt.value = startfmt;
+			document.createTodo.viewOption.value = viewOption;
+                        document.createTodo.subtab.value = subtab;
 		}
 		y.display="block";
 	}
 	else
 	{
-		 document.appSave.date_start.value = startdate;
-                 document.appSave.due_date.value = enddate;
-                 document.appSave.starthr.value = starthr;
-                 document.appSave.startmin.value = startmin;
-                 document.appSave.startfmt.value = startfmt;
-                 document.appSave.endhr.value = endhr;
-                 document.appSave.endmin.value = endmin;
-                 document.appSave.endfmt.value = endfmt;
+		 document.EditView.date_start.value = startdate;
+                 document.EditView.due_date.value = enddate;
+                 document.EditView.starthr.value = starthr;
+                 document.EditView.startmin.value = startmin;
+                 document.EditView.startfmt.value = startfmt;
+                 document.EditView.endhr.value = endhr;
+                 document.EditView.endmin.value = endmin;
+                 document.EditView.endfmt.value = endfmt;
+		 document.EditView.viewOption.value = viewOption;
+                 document.EditView.subtab.value = subtab;
 	}
 }
 
@@ -185,28 +195,28 @@ function enableCalstarttime()
 function check_form()
 {
 	formSelectColumnString('inviteesid');
-        if(document.appSave.subject.value == "")
+        if(document.EditView.subject.value == "")
         {
                 alert("Missing Event Name");
-                document.appSave.subject.focus()
+                document.EditView.subject.focus()
                 return false;
         }
         else
         {
-		if(document.appSave.remindercheck.checked == true)
-			document.appSave.set_reminder.value = 'Yes';
+		if(document.EditView.remindercheck.checked == true)
+			document.EditView.set_reminder.value = 'Yes';
 		else
-			document.appSave.set_reminder.value = 'No';
-		if(document.appSave.recurringcheck.checked == false)
+			document.EditView.set_reminder.value = 'No';
+		if(document.EditView.recurringcheck.checked == false)
 		{
-			document.appSave.recurringtype.value = '--None--';
+			document.EditView.recurringtype.value = '--None--';
 		}
-		starthour = document.appSave.starthr.value;
-		startmin  = document.appSave.startmin.value;
-		startformat = document.appSave.startfmt.value;
-		endhour = document.appSave.endhr.value;
-                endmin  = document.appSave.endmin.value;
-                endformat = document.appSave.endfmt.value;
+		starthour = document.EditView.starthr.value;
+		startmin  = document.EditView.startmin.value;
+		startformat = document.EditView.startfmt.value;
+		endhour = document.EditView.endhr.value;
+                endmin  = document.EditView.endmin.value;
+                endformat = document.EditView.endfmt.value;
 		if(startformat != '')
 		{
 			if(startformat == 'pm')
@@ -244,7 +254,7 @@ function check_form()
 			if((eval(endhour)*60+eval(endmin)) < (eval(starthour)*60+eval(startmin)))
 			{
 				alert("End Time should be greater than Start Time ");
-	                	document.appSave.endhr.focus();
+	                	document.EditView.endhr.focus();
 	        	        return false;
 			}
 		}	
@@ -261,9 +271,9 @@ function check_form()
 			hour = 0;
 			minute = durationinmin;
 		}
-		document.appSave.duration_hours.value = hour;
-		document.appSave.duration_minutes.value = minute;
-		document.appSave.time_start.value = starthour+':'+startmin;
+		document.EditView.duration_hours.value = hour;
+		document.EditView.duration_minutes.value = minute;
+		document.EditView.time_start.value = starthour+':'+startmin;
                 return true;
         }
 }
@@ -399,7 +409,7 @@ function formSelectColumnString(usr)
 }
 
 function fnRedirect() {
-        var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+        var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
 	if(OptionData == 'listview')
 	{
 		document.EventViewOption.action.value = "index";
@@ -412,16 +422,16 @@ function fnRedirect() {
 	}
 }
 
-function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt){
+function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt,viewOption,subtab){
 	var tagName = document.getElementById(CurrObj);
 	var left_Side = findPosX(obj);
 	var top_Side = findPosY(obj);
 	tagName.style.left= left_Side  + 'px';
 	tagName.style.top= top_Side + 22+ 'px';
 	tagName.style.display = 'block';
-	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
-	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
-	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
+	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
 	
 }
 	
@@ -468,7 +478,7 @@ function getCalSettings(){
 function updateStatus(record,status,view,hour,day,month,year,type){
 	if(type == 'event')
 	{
-		var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
 		
 		new Ajax.Request(
                 	'index.php',
@@ -525,6 +535,7 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
 	var postpone = document.getElementById("postpone");
 	var actdelete =	document.getElementById("actdelete");
 	var changeowner = document.getElementById("changeowner");
+	var OptionData = document.getElementById('viewOption').options[document.getElementById('viewOption').selectedIndex].value;
 	
     }
     if(type == 'todo')
@@ -537,6 +548,7 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
         var postpone = document.getElementById("taskpostpone");
         var actdelete = document.getElementById("taskactdelete");
         var changeowner = document.getElementById("taskchangeowner");
+	var OptionData = '';
     }
     document.getElementById("idlist").value = id;
     document.change_owner.hour.value = hour;
@@ -545,17 +557,9 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
     document.change_owner.month.value = month;
     document.change_owner.year.value = year;
     document.change_owner.subtab.value = type;
-    document.activity_postpone.record.value = id;
-    document.activity_postpone.hour.value = hour;
-    document.activity_postpone.day.value = day;
-    document.activity_postpone.view.value = view;
-    document.activity_postpone.month.value = month;
-    document.activity_postpone.year.value = year;
-    document.activity_postpone.subtab.value = type;
-    document.activity_postpone.activity_mode.value = type;
     complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
     pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    postpone.href="javascript:dispLayer('act_postpone');";
+    postpone.href="javascript:getValidationarr("+id+",'"+activity_mode+"','edit_view','"+type+"','"+OptionData+"');";
     actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
     changeowner.href="javascript:dispLayer('act_changeowner');";
 
@@ -580,7 +584,7 @@ function calendarChangeOwner()
 	var subtab = document.change_owner.subtab.value;
 	if(subtab == 'event')
 	{
-		var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
 	 	new Ajax.Request(
                 	'index.php',
                 	{queue: {position: 'end', scope: 'command'},
@@ -615,7 +619,7 @@ function delActivity(id,view,hour,day,month,year,subtab)
 {
 	if(subtab == 'event')
 	{
-		var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
+		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
          	new Ajax.Request(
                 	'index.php',
                 	{queue: {position: 'end', scope: 'command'},
@@ -646,49 +650,6 @@ function delActivity(id,view,hour,day,month,year,subtab)
 
 }
 
-function calendarPostpone()
-{        
-        var view   = document.activity_postpone.view.value;
-        var day    = document.activity_postpone.day.value;
-        var month  = document.activity_postpone.month.value;
-        var year   = document.activity_postpone.year.value;
-        var hour   = document.activity_postpone.hour.value;
-        var subtab = document.activity_postpone.subtab.value;
-	var record = document.activity_postpone.record.value;
-	var activity_mode = document.activity_postpone.activity_mode.value;
-        if(subtab == 'event')
-        {
-                var OptionData = $('viewBox').options[$('viewBox').selectedIndex].value;
-                new Ajax.Request(
-                        'index.php',
-                        {queue: {position: 'end', scope: 'command'},
-				method: 'post',
-				postBody: 'module=Activities&action=Save&return_module=Calendar&return_action=CalendarAjax&record='+record+'&activity_mode='+activity_mode+'&&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_postpone&viewOption='+OptionData+'&subtab=event&ajax=true',
-				onComplete: function(response) {
-					if(OptionData == 'listview')
-						$("listView").innerHTML=response.responseText;
-					if(OptionData == 'hourview')
-						$("hrView").innerHTML=response.responseText;
-				}
-			}
-		);
-	}
-	if(subtab == 'todo')
-	{
-		new Ajax.Request(
-			'index.php',
-			{queue: {position: 'end', scope: 'command'},
-				method: 'post',
-				postBody: 'module=Activities&action=Save&return_module=Calendar&return_action=CalendarAjax&record='+record+'&activity_mode='+activity_mode+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_postpone&subtab=todo&ajax=true',
-				onComplete: function(response) {
-					$("mnuTab2").innerHTML=response.responseText;
-				}
-                        }
-                );
-        }
-
-}
-
 
 /*
 * javascript function to display the div tag
@@ -702,6 +663,193 @@ function cal_show(divId)
 
     id.style.visibility = 'visible';
 
+}
+
+function fnAssignTo(){
+		var option_Box = document.getElementById('parent_type');
+		var option_select = option_Box.options[option_Box.selectedIndex].text;
+		if(option_select == "Leads")
+		{
+			document.getElementById('leadLay').style.visibility = 'visible';
+		}
+		else if(option_select == "Accounts")
+		{
+			document.getElementById('leadLay').style.visibility = 'visible';
+		}
+		else if(option_select == "Potentials")
+		{
+			document.getElementById('leadLay').style.visibility = 'visible';
+		}
+		else{
+			document.getElementById('leadLay').style.visibility = 'hidden';
+		}
+	}
+	
+function fnShowPopup(){
+	document.getElementById('popupLay').style.display = 'block';
+}
+	
+function fnHidePopup(){
+	document.getElementById('popupLay').style.display = 'none';
+}
+
+function getValidationarr(id,activity_mode,opmode,subtab,viewOption)
+{
+	 new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Calendar&action=CalendarAjax&record='+id+'&activity_mode='+activity_mode+'&ajax=true&type=view&file=DetailView',
+                                onComplete: function(response) {
+                                        $("dataArray").innerHTML=response.responseText;
+					execJS($('dataArray'));
+					setFieldvalues(opmode,subtab,viewOption);
+                                }
+                        }
+                );
+
+}
+
+function setFieldvalues(opmode,subtab,viewOption)
+{
+	var st = document.getElementById('activity_cont');
+	eval(st.innerHTML);
+	if(activity_type == 'Events')
+	{
+		document.EditView.viewOption.value = viewOption;
+                document.EditView.subtab.value = subtab;
+		for(x=0;x<key.length;x++)
+		{	
+			if(document.EditView[key[x]] != undefined)
+			{
+				if(key[x] == 'visibility' && data[x] == 'Public')
+					document.EditView.visibility.checked = true;
+				if(key[x] == 'visibility' && data[x] == 'Private')
+					document.EditView.visibility.checked = false;
+				if(key[x] == 'activitytype' && data[x] == 'Call')
+				{
+					document.EditView.activitytype[0].checked = true;
+				}
+				else
+				{
+					document.EditView.activitytype[1].checked = true;
+				}
+				if(key[x] == 'set_reminder' && data[x] == 'Yes')
+				{
+					document.EditView.remindercheck.checked = true;
+					document.getElementById('reminderOptions').style.display = 'block';
+				}
+				document.EditView[key[x]].value = data[x];	
+			}
+		}
+		if(opmode == 'detail_view')
+		{
+			disableFields(activity_type);
+		}
+		else
+		{
+			enableFields(activity_type);
+		}
+		document.getElementById('addEvent').style.display = 'block';
+	}
+	else
+	{
+		document.createTodo.viewOption.value = viewOption;
+                document.createTodo.subtab.value = subtab;
+		for(x=0;x<key.length;x++)
+                {
+			if(document.createTodo[key[x]] != undefined)
+			{
+                                document.createTodo[key[x]].value = data[x];
+			}
+		}
+		if(opmode == 'detail_view')
+		{
+			disableFields(activity_type);
+		}
+		else
+		{
+			enableFields(activity_type);
+		}
+		document.getElementById('createTodo').style.display = 'block';
+	}
+}
+
+function disableFields(type)
+{	
+	if(type == 'Events')
+	{
+		document.EditView.subject.readOnly = true;
+                document.EditView.date_start.readOnly = true;
+                document.EditView.due_date.readOnly = true;
+                document.EditView.activitytype[0].disabled = true;
+                document.EditView.activitytype[1].disabled = true;
+                document.EditView.visibility.disabled = true;
+                document.EditView.starthr.disabled = true;
+                document.EditView.startmin.disabled = true;
+                document.EditView.startfmt.disabled = true;
+                document.EditView.endhr.disabled = true;
+                document.EditView.endmin.disabled = true;
+                document.EditView.endfmt.disabled = true;
+                document.EditView.eventsave.disabled = true;
+                document.EditView.eventcancel.disabled = true;
+		document.EditView.remindercheck.disabled = true;
+		document.EditView.remdays.disabled = true;
+                document.EditView.remhrs.disabled = true;
+                document.EditView.remmin.disabled = true;
+		document.EditView.availableusers.disabled = true;
+		document.EditView.selectedusers.disabled = true;
+		
+	}
+	else
+	{
+		document.createTodo.task_subject.readOnly = true;
+                document.createTodo.task_date_start.readOnly = true;
+                document.createTodo.starthr.disabled = true;
+                document.createTodo.startmin.disabled = true;
+                document.createTodo.startfmt.disabled = true;
+                document.createTodo.todosave.disabled = true;
+                document.createTodo.todocancel.disabled = true;
+	}
+}
+
+function enableFields(type)
+{
+        if(type == 'Events')
+        {
+                document.EditView.subject.readOnly = false;
+                document.EditView.date_start.readOnly = false;
+                document.EditView.due_date.readOnly = false;
+                document.EditView.activitytype[0].disabled = false;
+                document.EditView.activitytype[1].disabled = false;
+                document.EditView.visibility.disabled = false;
+                document.EditView.starthr.disabled = false;
+                document.EditView.startmin.disabled = false;
+                document.EditView.startfmt.disabled = false;
+                document.EditView.endhr.disabled = false;
+                document.EditView.endmin.disabled = false;
+                document.EditView.endfmt.disabled = false;
+                document.EditView.eventsave.disabled = false;
+                document.EditView.eventcancel.disabled = false;
+		document.EditView.remindercheck.checked = false;
+		document.EditView.remindercheck.disabled = false;
+                document.EditView.remdays.disabled = false;
+                document.EditView.remhrs.disabled = false;
+                document.EditView.remmin.disabled = false;
+		document.EditView.visibility.checked = false;
+		document.EditView.availableusers.disabled = false;
+                document.EditView.selectedusers.disabled = false;
+        }
+        else
+        {
+                document.createTodo.task_subject.readOnly = false;
+                document.createTodo.task_date_start.readOnly = false;
+                document.createTodo.starthr.disabled = false;
+                document.createTodo.startmin.disabled = false;
+                document.createTodo.startfmt.disabled = false;
+                document.createTodo.todosave.disabled = false;
+                document.createTodo.todocancel.disabled = false;
+        }
 }
 
 
