@@ -168,8 +168,12 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 				$cal_log->debug("going to get calendar Todo ListView");
 				//To get Todos List
 				$todo_list = getTodoList($calendar_arr, $start_date, $end_date);
-				echo constructTodoListView($todo_list,$calendar_arr);
+				echo constructTodoListView($todo_list,$calendar_arr,$subtab);
 			}
+		}
+		elseif($type == 'view')
+		{
+			require_once('modules/Calendar/'.$_REQUEST['file'].'.php');
 		}
 		else
 		{
