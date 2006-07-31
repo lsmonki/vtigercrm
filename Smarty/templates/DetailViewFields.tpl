@@ -41,7 +41,7 @@
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq 82} <!--Email Body-->
-                                                  <td colspan="3" width=100% class="dvtCellInfo" align="left">&nbsp;{$keyval}</div>
+                                                  <td colspan="3" width=100% class="dvtCellInfo" align="left">&nbsp;{$keyval}
                                                   </td>
 					{elseif $keyid eq '53'} <!--Assigned To-->
                     <td width=25% class="dvtCellInfo" align="left">&nbsp;
