@@ -402,7 +402,7 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* Quick Access Functionality *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:500px">
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:650px">
 	<table border=0 cellpadding="5" cellspacing="0" class="allMnuTable" >
 	<tr>
 		<td valign="top">
