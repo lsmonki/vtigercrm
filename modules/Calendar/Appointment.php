@@ -99,7 +99,7 @@ class Appointment
                 }
 
                 $q .= " AND vtiger_crmentity.deleted = 0 )" ;
-                $q .= " group by vtiger_activity.activityid ORDER by recurringid";
+                $q .= " ORDER by recurringid";
                 $r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
