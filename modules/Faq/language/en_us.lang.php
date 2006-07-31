@@ -124,6 +124,7 @@ $mod_strings = Array(
 //Added on 10-12-2005
 'LBL_QUESTION'=>'Question',
 'LBL_CATEGORY'=>'Category',
+'LBL_MY_FAQ'=>'My Recent FAQs',
 );
 
 ?>
