@@ -1008,6 +1008,10 @@ function getDetailAssociatedProducts($module,$focus)
 			$totalAfterDiscount = $total-$productDiscount;
 			$discount_info_message = "Amount Discount = $productDiscount";
 		}
+		else
+		{
+			$discount_info_message = 'No Discount for this Product.';
+		}
 		//Product wise Discount calculation - ends 
 
 		$netprice = $totalAfterDiscount;
