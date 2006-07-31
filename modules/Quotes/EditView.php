@@ -47,7 +47,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$num_of_products = getNoOfAssocProducts($module,$focus);
         $QUOTE_associated_prod = getAssociatedProducts("Quotes",$focus);
 	$log->debug("Mode is Duplicate. Quoteid to be duplicated is ".$focus->id);
 	$focus->id = "";
@@ -58,14 +57,12 @@ if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
 	$_REQUEST['account_id'] = get_account_info($focus->column_fields['potential_id']);
 	 $log->debug("Quotes EditView: Potential Id from the request is ".$_REQUEST['potential_id']);
-	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
         $log->debug("Productid Id from the request is ".$_REQUEST['product_id']);
-	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -140,38 +137,20 @@ if(isset($cust_fld))
 if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-	$num_of_products = getNoOfAssocProducts($module,$focus);
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$focus);//getProductDetailsBlockInfo('edit','Quotes',$focus); 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-        $smarty->assign("ROWCOUNT", $num_of_products);
         $smarty->assign("ASSOCIATEDPRODUCTS", $QUOTE_associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
         $smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 
 }
 elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
-        $smarty->assign("ROWCOUNT", $num_of_products);
         $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
-	$InvTotal = convertFromDollar($InvTotal,$rate);
         $smarty->assign("MODE", $focus->mode);
-        $smarty->assign("TAXVALUE", "0.000");
-        $smarty->assign("ADJUSTMENTVALUE", "0.000");
-        $smarty->assign("SUBTOTAL", $InvTotal.".00");
-        $smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
@@ -188,8 +167,6 @@ elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || 
 else
 {
 	$smarty->assign("ROWCOUNT", '1');
-	$smarty->assign("TAXVALUE", '0');
-	$smarty->assign("ADJUSTMENTVALUE", '0');
 }
 
 

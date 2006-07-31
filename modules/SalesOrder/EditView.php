@@ -55,10 +55,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$smarty->assign("QUOTE_ID", $quoteid);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($quote_focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($quote_focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($quote_focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($quote_focus->column_fields['hdnGrandTotal'],$rate));
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 
     }
@@ -136,16 +132,11 @@ else
 		$smarty->assign("QUOTE_ID", $focus->column_fields['quote_id']);
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("MODE", $quote_focus->mode);
-		$smarty->assign("TAXVALUE", convertFromDollar($quote_focus->column_fields['txtTax'],$rate));
-		$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($quote_focus->column_fields['txtAdjustment'],$rate));
-		$smarty->assign("SUBTOTAL", convertFromDollar($quote_focus->column_fields['hdnSubTotal'],$rate));
-		$smarty->assign("GRANDTOTAL", convertFromDollar($quote_focus->column_fields['hdnGrandTotal'],$rate));
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	}
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
 	$SO_associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -156,7 +147,6 @@ if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
 	$_REQUEST['account_id'] = get_account_info($_REQUEST['potential_id']);
 	$log->debug("Sales Order EditView: Potential Id from the request is ".$_REQUEST['potential_id']);
-	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
 
 }
@@ -164,7 +154,6 @@ if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-        $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -232,53 +221,31 @@ else $smarty->assign("NAME", "");
 
 if(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'quotetoso' || $_REQUEST['convertmode'] == 'update_quote_val'))
 {
-	$num_of_products = getNoOfAssocProducts("Quotes",$quote_focus);
 	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
 		
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($txtTax,$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($txtAdj,$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($quote_focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($quote_focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $SO_associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
-        $smarty->assign("ROWCOUNT", $num_of_products);
         $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
 	$InvTotal = convertFromDollar($InvTotal,$rate);
         $smarty->assign("MODE", $focus->mode);
-        $smarty->assign("TAXVALUE", "0.000");
-        $smarty->assign("ADJUSTMENTVALUE", "0.000");
-        $smarty->assign("SUBTOTAL", $InvTotal.".00");
-        $smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
@@ -292,12 +259,7 @@ elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || 
 		$smarty->assign("SERVICE_TAX",getProductTaxPercentage("Service",$_REQUEST['product_id']));
 	}
 }
-else
-{
-	$smarty->assign("ROWCOUNT", '1');
-	$smarty->assign("TAXVALUE", '0');
-	$smarty->assign("ADJUSTMENTVALUE", '0');
-}
+
 
 if(isset($cust_fld))
 {

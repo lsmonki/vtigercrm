@@ -45,7 +45,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$num_of_products = getNoOfAssocProducts("PurchaseOrder",$focus);
 	$PO_associated_prod = getAssociatedProducts("PurchaseOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -54,7 +53,6 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
 	$log->debug("Purchase Order EditView: Product Id from the request is ".$_REQUEST['product_id']);
-        $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -64,8 +62,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Vendors/Vendor.php');
 	$vend_focus = new Vendor();
-	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
 
+	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
 	$focus->column_fields['ship_city']=$vend_focus->column_fields['city'];
 	$focus->column_fields['bill_street']=$vend_focus->column_fields['street'];
@@ -123,38 +121,22 @@ else $smarty->assign("NAME", "");
 if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-	$num_of_products = getNoOfAssocProducts("PurchaseOrder",$focus);
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("PurchaseOrder",$focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $PO_associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 
 }
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
-        $smarty->assign("ROWCOUNT", $num_of_products);
         $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
 	$InvTotal = convertFromDollar($InvTotal,$rate);
         $smarty->assign("MODE", $focus->mode);
-        $smarty->assign("TAXVALUE", "0.000");
-        $smarty->assign("ADJUSTMENTVALUE", "0.000");
-        $smarty->assign("SUBTOTAL", $InvTotal.".00");
-        $smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
@@ -168,13 +150,7 @@ elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
 		$smarty->assign("SERVICE_TAX",getProductTaxPercentage("Service",$_REQUEST['product_id']));
 	}
 }
-else
-{
-	$smarty->assign("ROWCOUNT", '1');
-	$smarty->assign("TAXVALUE", '0');
-	$smarty->assign("ADJUSTMENTVALUE", '0');
 
-}
 
 if(isset($cust_fld))
 {

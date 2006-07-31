@@ -55,10 +55,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($txtTax,$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($txtAdj,$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($quote_focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($quote_focus->column_fields['hdnGrandTotal'],$rate));
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
@@ -72,7 +68,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	//added to set the PO number and terms and conditions
 	$focus->column_fields['vtiger_purchaseorder'] = $so_focus->column_fields['vtiger_purchaseorder'];
 	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
-	
+
 	//Added to display the SalesOrder's associated vtiger_products -- when we create vtiger_invoice from SO DetailView
 	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
 	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
@@ -80,10 +76,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($txtTax,$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($txtAdj,$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($so_focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($so_focus->column_fields['hdnGrandTotal'],$rate));
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 
     }
@@ -158,7 +150,6 @@ else
 	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$num_of_products = getNoOfAssocProducts("Invoice",$focus);
 	$INVOICE_associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -167,14 +158,12 @@ if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 {
 	$potfocus = new Potential();
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
-	$num_of_products = getNoOfAssocProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
 	
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
 	$log->debug("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id']);
-	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
 	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -254,38 +243,21 @@ elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinv
 elseif($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-	$num_of_products = getNoOfAssocProducts("Invoice",$focus);
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Invoice",$focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
-	//$se_array=getProductDetailsBlockInfo($focus->mode,"",$focus,$num_of_products,$associated_prod);
-        $smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = $INVOICE_associated_prod;
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
         $smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", convertFromDollar($focus->column_fields['txtTax'],$rate));
-	$smarty->assign("ADJUSTMENTVALUE", convertFromDollar($focus->column_fields['txtAdjustment'],$rate));
-	$smarty->assign("SUBTOTAL", convertFromDollar($focus->column_fields['hdnSubTotal'],$rate));
-	$smarty->assign("GRANDTOTAL", convertFromDollar($focus->column_fields['hdnGrandTotal'],$rate));
 }
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] != '')) {
-	$smarty->assign("ROWCOUNT", $num_of_products);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
 	$InvTotal = convertFromDollar($InvTotal,$rate);
         $smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", "0.000");
-	$smarty->assign("ADJUSTMENTVALUE", "0.000");
-	$smarty->assign("SUBTOTAL", $InvTotal.".00");
-	$smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
@@ -299,12 +271,7 @@ elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (iss
 		$smarty->assign("SERVICE_TAX",getProductTaxPercentage("Service",$_REQUEST['product_id']));
 	}
 }
-else
-{
-	$smarty->assign("ROWCOUNT", '1');
-	$smarty->assign("TAXVALUE", '0');
-	$smarty->assign("ADJUSTMENTVALUE", '0');
-}
+
 
 if(isset($cust_fld))
 {
