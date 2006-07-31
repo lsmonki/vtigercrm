@@ -70,7 +70,7 @@ class Calendar
 					{
 						$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex(0));
 						$this->day_slice[$layout->start_time->get_formatted_date().':notime'] = $layout;
-						array_push($this->slices,  $layout->start_time->get_formatted_date().":notime");
+						$this->slices['notime'] = $layout->start_time->get_formatted_date().":notime";
 					}
 					else
 					{
@@ -92,7 +92,7 @@ class Calendar
 						{
 							$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex(0,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
 							$this->week_slice[$layout->start_time->get_formatted_date().':notime'] = $hour_list;
-							array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":notime");
+							$this->week_hour_slices['notime'] = $layout->start_time->get_formatted_date().":notime"; 
 						}
 						else
 						{
