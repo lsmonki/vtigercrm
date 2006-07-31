@@ -170,6 +170,8 @@ $mod_strings = Array(
 'Order Id'=>'Order Id',
 'Status'=>'Status',
 'PurchaseOrder'=>'Purchase Order',
+'LBL_MY_TOP_PO'=>'My Top Open Purchase Orders',
+
 );
 
 ?>
