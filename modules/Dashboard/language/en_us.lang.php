@@ -89,6 +89,10 @@ $mod_strings = Array(
 'LBL_VERT_BAR_CHART'=>'Vertical Bar Chart',
 'LBL_PIE_CHART'=>'Pie Chart',
 'LBL_NO_DATA'=>'No data available',
+'DashboardHome'=>'DashBoardHome',
+'GRIDVIEW'=>'Grid view',
+'NORMALVIEW'=>'Normal view',
+'VIEWCHART'=>'View Chart',
 );
 
 ?>
