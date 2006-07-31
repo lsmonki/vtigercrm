@@ -104,7 +104,15 @@ $log->debug("cache file name is: $cache_file_name");
 if(isPermitted('Potentials','index')=="yes")
 {
 $draw_this = new jpgraph();
-echo $draw_this->lead_source_by_outcome($datax, $ids, $tmp_dir.$cache_file_name, $refresh);
+$width = 850;
+$height = 500;
+if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+{
+	$width = 350;
+	$height = 250;
+}
+
+echo $draw_this->lead_source_by_outcome($datax, $ids, $tmp_dir.$cache_file_name, $refresh,$width,$height);
 echo "<P><font size='1'><em>".$current_module_strings['LBL_LEAD_SOURCE_BY_OUTCOME_DESC']."</em></font></P>";
 if (isset($_REQUEST['lsbo_edit']) && $_REQUEST['lsbo_edit'] == 'true') {
 ?>
@@ -134,7 +142,7 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="javascript:;" onClick="loadDashBoard('DashboardHome');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+</em>[<a href="javascript:;" onClick="changeView('DashboardHome','NORMAL');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
 [<a href="index.php?module=<?php echo $currentModule;?>&action=index&lsbo_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 

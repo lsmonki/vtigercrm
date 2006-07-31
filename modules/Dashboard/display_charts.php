@@ -1,5 +1,4 @@
 <?php
-
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -9,10 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-
 require_once("modules/Dashboard/Entity_charts.php");
-	
 global $tmp_dir;
 global $mod_strings,$app_strings;
 global $current_user;
@@ -95,14 +91,10 @@ function dashboard_check($module)
 	}
 	return $sec_parameter;
 }
-/**  This function returns  the values for the graph, for any type of graph needed	 
-        * Portions created by vtiger are Copyright (C) vtiger.
-        * All Rights Reserved.
-        * Contributor(s): ______________________________________..
- */
 
 $graph_array = Array(
-	  "leadsource" => $mod_strings['leadsource'],
+	  "DashboardHome" => $mod_strings['DashboardHome'],
+          "leadsource" => $mod_strings['leadsource'],
           "leadstatus" => $mod_strings['leadstatus'],
           "leadindustry" => $mod_strings['leadindustry'],
           "salesbyleadsource" => $mod_strings['salesbyleadsource'],
@@ -124,7 +116,7 @@ $graph_array = Array(
           "invoicebystatus" => $mod_strings['invoicebystatus'],
           "ticketsbystatus" => $mod_strings['ticketsbystatus'],
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
-	  "ticketsbycategory" => $mod_strings['ticketsbycategory'],
+	  "ticketsbycategory" => $mod_strings['ticketsbycategory'], 
 	  "ticketsbyuser" => $mod_strings['ticketsbyuser'],
 	  "ticketsbyteam" => $mod_strings['ticketsbyteam'],
 	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
@@ -132,7 +124,6 @@ $graph_array = Array(
 	  "ticketsbyaccount"=> $mod_strings['ticketsbyaccount'],
 	  "ticketsbycontact"=> $mod_strings['ticketsbycontact'],
           );
-
 
 ?>
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -432,9 +423,15 @@ $graph_array = Array(
 				    }
 		    else
                     {
-                        echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+                        //echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+			echo 'ssssssssssssssssss';
+			sleep(1);
+                        echo '<h3>'.$mod_strings['LBL_NO_PERMISSION_FIELD'].'</h3>';
                     }
 
 	?>
 
-			</table>
+	</table>
+	<script id="dash_script">
+		var gdash_display_type = '<?php echo $_REQUEST['display_view'];?>';
+	</script>

@@ -1,6 +1,4 @@
 <?php
-
-
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -10,7 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
 require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
@@ -383,7 +380,7 @@ function save_image_map($filename,$image_map)
 	return true;
 }
 
-function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
+function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=500)
 {
 	global $user_id,$date_start,$end_date,$type,$mod_strings;
 
@@ -403,11 +400,18 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 		$urlstring=$graph_details[5];
 		$cnt_table=$graph_details[6];
 		$test_target_val=$graph_details[7];
+		
+		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+		{
+			$width = 350;
+			$height = 250;
+		}else
+		{
+			$width = 850;
+			$height = 500;	
+		}		
 
-
-		$width=600;
-		$height=400;
-		$top=30;
+		$top=20;
 		$left=140;
 		$bottom=120;
 		$title=$graph_title;
@@ -416,7 +420,9 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 	}
 	else
 	{
-                 echo $mod_strings['LBL_NO_DATA'];
+                 //echo $mod_strings['LBL_NO_DATA'];
+		 sleep(1);
+                 echo '<h3>'.$mod_strings['LBL_NO_DATA'].'</h3>';
 	}
 	
 }
@@ -435,14 +441,22 @@ function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$h
 
 	global $tmp_dir;
 	global $graph_title, $mod_strings;
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
 	$val=explode(":",$title);
 	$display_title=$val[0];
 
+	if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+	{
+		$sHTML .="<tr><td width=50%><table width=100%  border=0 cellspacing=0 cellpadding=0 align=left>"; 
+	}
 
 $sHTML .= "<tr>
-	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	   <td><a name='1'></a><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
 	         <tr>
-	    	   <td rowspan=2 valign=top><span class=dashSerial>1</span></td>
+	    	   <td rowspan=2 valign=top><span class=\"dash_count\">1</span></td>
 	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
 		 </tr>
 		 <tr>
@@ -450,9 +464,27 @@ $sHTML .= "<tr>
 		 </tr>
 		</table>
 	   </td>
+	   <td align='right'>";
+	 if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+	 {  
+		$sHTML .= "&nbsp;";
+		 
+	 }else
+	 {		 
+		$sHTML .= "<table cellpadding='0' cellspacing='0' border='0' class='small'>
+		<tr>
+			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
+			<td class='dash_row_sel'>1</td>
+			<td class='dash_row_unsel'><a class='dash_href' href='#2'>2</a></td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='".$image_path."dash_scroll_up.jpg' border='0'></a></td>
+		</tr>
+		</table>";
+	 }	
+	$sHTML .="</td>
 	</tr>
 	<tr>
-           <td height=200>";
+           <td colspan='2'>";
+   
 
 	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
 //Commented by Minnie -- same content displayed in to graphs
@@ -480,15 +512,20 @@ $sHTML .= "<tr>
 	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");*/
 
 $sHTML .= "</td>
-	</tr>
-	<tr>
-	   <td><hr noshade='noshade' size='1' /></td>
 	</tr>";
 
+	if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+	{
+		$sHTML .="</table></td><td width=50%><table width=100%  border=0 cellspacing=0 cellpadding=0 align=left>"; 
+	}else
+	{
+		$sHTML .= "<tr><td colspan='2' class='dash_chart_btm'>&nbsp;</td></tr>";
+	}
+
 $sHTML .= "<tr>
-	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	   <td><a name='2'></a><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
            	 <tr>
-	           <td rowspan=2 valign=top><span class=dashSerial>2</span></td>
+	           <td rowspan=2 valign=top><span class=\"dash_count\">2</span></td>
 	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
 	         </tr>
 	         <tr>
@@ -496,19 +533,40 @@ $sHTML .= "<tr>
 	         </tr>
 	        </table>
 	   </td>
+	     <td align='right'>";
+	 if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+	 {  
+		$sHTML .= "&nbsp;";
+		 
+	 }else
+	 {		 
+		$sHTML .= "<table cellpadding='0' cellspacing='0' border='0' class='small'>
+		<tr>
+			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
+			<td class='dash_row_unsel'><a class='dash_href' href='#1'>1</a></td>
+			<td class='dash_row_sel'>2</td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='".$image_path."dash_scroll_up.jpg' border='0'></a></td>
+		</tr>
+		</table>";
+	 }	
+	$sHTML .="</td>
 	</tr>
 	<tr>
-	   <td height=200>";
+	   <td colspan='2'>";
 
-	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,40,$right,$top,$bottom,$title,$target_val,"pie");
+	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"pie");
 
 $sHTML .= "</td>
-	</tr>
-	<tr>
-	   <td><hr noshade='noshade' size='1' /></td>
 	</tr>";
 
-	return $sHTML;
+if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+{
+	$sHTML .="</table></td></tr>"; 
+}
+$sHTML .= "<tr><td colspan='2' class='dash_chart_btm'>&nbsp;</td></tr>";
+
+
+return $sHTML;
 }
 
 /** Returns graph, if the cached image is present it'll display that image,
@@ -552,7 +610,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 	{
 		//Getting the cached image
 		$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-		$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
+		$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 		fclose($imgMap_fp);
 		$base_name_cache_file=basename($cache_file_name);
 		$ccc="cache/images/".$base_name_cache_file;
@@ -561,6 +619,4 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		return $return;
 	}
 }
-
-
 ?>

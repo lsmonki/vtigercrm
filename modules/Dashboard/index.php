@@ -24,14 +24,15 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 
-global $theme;
 global $currentModule;
+global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('include/logging.php');
 
 $graph_array = Array(
+	  "DashboardHome" => $mod_strings['DashboardHome'],
           "leadsource" => $mod_strings['leadsource'],
           "leadstatus" => $mod_strings['leadstatus'],
           "leadindustry" => $mod_strings['leadindustry'],
@@ -64,6 +65,13 @@ $graph_array = Array(
           );
           
 $log = LoggerManager::getLogger('dashboard');
+if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
+{
+	$dashboard_type = $_REQUEST['type'];
+}else
+{
+	$dashboard_type = 'DashboardHome';
+}
 ?>
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
@@ -123,63 +131,213 @@ $log = LoggerManager::getLogger('dashboard');
 </tr>
 <tr><td style="height:2px"></td></tr>
 </TABLE>
+<br>
 
-<table class="dashMain" cellspacing="0" cellpadding="0" align="center">
-   <tr>
-    <th colspan="3"><img src="themes/blue/images/topBnr.gif" width="840" height="67" /></th>
-  </tr>
-  <tr><td colspan="3">&nbsp;</td></tr>
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
+<a name="top"></a>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="5%">&nbsp;</td>
 
-  <tr>
-    <td width="140" nowrap valign="top">
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF" style="cursor:pointer;">
-			<tr><td class="dashMnuSel" id="DashboardHome_mnu" onClick="loadDashBoard('DashboardHome');"><?php echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
-               </td></tr>
-               <?php 
-                 $mnuHTML = "";
-                 foreach($graph_array as $key=>$value)   
-                 {
-                    if($type == $key)
-                    {
-                         $mnuHTML .= '<tr><td id="'.$key.'_mnu" class="dashMnuSel" onClick="loadDashBoard(\''.$key.'\');">'.$value.'</a>
-                                      </td></tr>';
-                    }else
-                    {
-                         $mnuHTML .= '<tr><td id="'.$key.'_mnu" class="dashMnuUnSel" onClick="loadDashBoard(\''.$key.'\');">'.$value.'</a>
-                                      </td></tr>';
-                    }
-                 }
-                 echo $mnuHTML;
-               ?>
-		</table>
-	</td>
+		<td width="90%">
+			<!-- DASHBOARD DEGINS HERE -->
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
+			<tr>
+				<td class="dash_top" colspan="3">
+				<!-- TOP SELECT OPTION -->
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="3%">&nbsp;</td>
+						<td align="left">
+							<table border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
+								<td class="dash_sel_top" colspan="2">&nbsp;</td>
+								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
+							</tr>
+							<tr>
+								<td colspan="2">
 
-    <td width="695" bgcolor="#CBCBCB" valign="top" style="padding-right:10px;" align="left">
-		<table class="dashInner"  cellpadding="0" cellspacing="0">
-		<tr><td class="lvtHeaderText" align="left" height="10"></td></tr>
-		<tr><td><div id="dashChart">
-			<? require_once('modules/Dashboard/DashboardHome.php'); ?>	
-		</div></td></tr>
-		</table>
-	  <br />
-</td>
+								<select name="dashordlists" id="dashboard_combo" onChange="loadDashBoard(this);">
+								 <?php 									 
+						                foreach($graph_array as $key=>$value)   
+                 						{
+									if($dashboard_type == $key)
+									{
+										$dash_board_title = $value;
+											?><option selected value="<?php echo $key;?>"><?php echo $value;?></option><?php
+									}else
+									{
+										?><option value="<?php echo $key;?>"><?php echo $value;?></option>
+                 						<?php   }
+								} ?>
+								</select>
+								</td>
+							</tr>
+							<tr>
+							  	<td class="dash_sel_btm" colspan="2">&nbsp;</td>
+							</tr>
+							</table>
+						
+						</td>
+						<td align="right"><img src="<?php echo $image_path;?>dash_name.jpg"></td>
+						<td width="3%">&nbsp;</td>
 
- <td width="5"></td>
-  </tr>
-  <tr><td colspan="3" height="30">&nbsp;</td></tr>
+									</tr>
+								</table>
+							<!-- END OF TOP SELECTION -->
+						</td>
+					</tr>
+					<tr>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+						<td class="dash_shadow" width="98%">&nbsp;</td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+
+					</tr>
+					<tr>
+						<td class="dash_border">&nbsp;</td>
+						<td class="dash_white genHeaderBig dash_bdr_btm">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="90%" nowrap>
+							<?php echo $app_strings['Dashboard']; ?> &gt; <?php echo $app_strings['Home'];?> &gt; <span id="dashTitle_div"><?php echo $dash_board_title; ?></span>
+							</td>
+							<td align="right" width="10%"><img alt="<?php echo $mod_strings['NORMALVIEW'];?>" title="<?php echo $mod_strings['NORMALVIEW'];?>" style="cursor:pointer;" onClick="changeView('NORMAL');" src="<?php echo $image_path;?>dboardNormalView.gif" align="absmiddle" border="0">&nbsp;|&nbsp;<img alt="<?php echo $mod_strings['GRIDVIEW'];?>" title="<?php echo $mod_strings['GRIDVIEW'];?>" style="cursor:pointer;" onClick="changeView('MATRIX');" src="<?php echo $image_path;?>dboardMatrixView.gif" align="absmiddle" border="0"></td>
+						</tr>
+						</table>
+						</td>
+						<td class="dash_border">&nbsp;</td>
+					</tr>
+
+					<tr>
+						<td class="dash_border">&nbsp;</td>
+						<td class="dash_white"  style="height:500px;"><div id="dashChart">
+							<!-- NAVIGATION TABLE -->
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+
+									<td width="45%" align="right">&nbsp;
+									</td>
+								</tr>
+
+							</table>
+							<!-- END OF NAVIGATION -->
+							<!-- CHART ONE TABLE -->
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td height="300">
+								
+								<?php 
+									if(!isset($_REQUEST['type']))
+									{
+										if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
+										{
+											require_once('modules/Dashboard/DashboardHome_matrix.php'); 
+										}else
+										{
+											require_once('modules/Dashboard/DashboardHome.php'); 
+										}
+									}else
+									{
+										require_once('modules/Dashboard/display_charts.php'); 
+									}
+								?>	
+								&nbsp;</td>
+							</tr>
+							</table>
+							<!-- End of CHART 1 -->
+							
+						</div></td>
+						<td class="dash_border">&nbsp;</td>
+					</tr>
+
+					<tr>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+						<td class="dash_white" width="98%">&nbsp;</td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+					</tr>
+					<tr>
+						<td colspan="3" class="dash_bottom">
+						<!-- BOTTOM NAVICATION -->
+							<table width="100%" cellpadding="0" cellspacing="0" border="0">
+
+									<tr>
+										<td width="3%">&nbsp;</td>
+										<td align="left">
+											<table border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
+								<td class="dash_sel_top" colspan="2">&nbsp;</td>
+								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+								<select name="dashordlists1" id="dashboard_combo1" onChange="loadDashBoard(this);">
+								 <?php 
+						                foreach($graph_array as $key=>$value)   
+                 						{
+									
+									if($dashboard_type == $key)
+									{
+											?><option selected value="<?php echo $key;?>"><?php echo $value;?></option><?php
+									}else
+									{
+										?><option value="<?php echo $key;?>"><?php echo $value;?></option>
+                 						<?php   }
+								} ?>
+								</select>
+								</td>
+							</tr>
+							<tr>
+							  	<td class="dash_sel_btm" colspan="2">&nbsp;</td>
+							</tr>
+							</table>
+										</td>
+										<td align="right">&nbsp;</td>
+										<td width="3%">&nbsp;</td>
+									</tr>
+								</table>
+						<!-- END OF BOTTOM NAVIGATION -->
+						</td>
+					</tr>
+					<tr>
+
+						<td colspan="3">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td width="112"><img src="<?php echo $image_path;?>dash_btm_left.jpg" border="0" align="absmiddle"></td>
+									<td width="100%" class="dash_btm">&nbsp;</td>
+									<td width="129"><img src="<?php echo $image_path;?>dash_btm_right.jpg" border="0" align="absmiddle"></td>
+								</tr>
+							</table>
+						</td>
+
+					</tr>
+				</table>
+			<!-- END -->
+		</td>
+		<td width="5%">&nbsp;</td>
+	</tr>
 </table>
+</body>
+</html>
+
+
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script>
-var gMnuSel = 'DashboardHome_mnu';
-function loadDashBoard(type)
+function loadDashBoard(oSelect)
 {
-	show('status');
 	Effect.Fade("dashChart");
+	var oCombo = $('dashboard_combo');
+	var oCombo1 = $('dashboard_combo1');
+	oCombo.selectedIndex = oSelect.selectedIndex;
+	oCombo1.selectedIndex = oSelect.selectedIndex;
+	var type = oSelect.options[oSelect.selectedIndex].value; 
 	if(type != 'DashboardHome')
-		url = 'module=Dashboard&action=DashboardAjax&file=display_charts&type='+type;
+		url = 'module=Dashboard&action=DashboardAjax&display_view='+gdash_display_type+'&file=display_charts&type='+type;
 	else	
-		url = 'module=Dashboard&action=DashboardAjax&file=DashboardHome';
+		url = 'module=Dashboard&action=DashboardAjax&file=DashboardHome&display_view='+gdash_display_type;
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
@@ -187,15 +345,36 @@ function loadDashBoard(type)
 			postBody: url,
 			onComplete: function(response)
 			{
-				
 				$("dashChart").innerHTML=response.responseText;
-				hide('status');
-				$(gMnuSel).className = 'dashMnuUnSel';
-				gMnuSel = type+'_mnu';
-				$(gMnuSel).className = 'dashMnuSel';	
 				Effect.Appear("dashChart");
+				var dashst = document.getElementById('dash_script');
+				eval(dashst.innerHTML);
+				$("dashTitle_div").innerHTML = oCombo.options[oCombo.selectedIndex].text;
 			}
 		}
 	);	
+}
+
+function changeView(displaytype)
+{
+	gdash_displaytype = displaytype;
+	var oCombo = $('dashboard_combo');
+	var type = oCombo.options[oCombo.selectedIndex].value; 
+	if(type == 'DashboardHome')
+	{
+		if(displaytype == 'MATRIX')
+			url = 'index.php?module=Dashboard&action=index&display_view=MATRIX';
+		else	
+			url = 'index.php?module=Dashboard&action=index&display_view=NORMAL';
+	}	
+	else	
+	{
+		if(displaytype == 'MATRIX')
+			url = 'index.php?module=Dashboard&action=index&display_view=MATRIX&type='+type;
+		else
+			url = 'index.php?module=Dashboard&action=index&display_view=NORMAL&type='+type;
+	}
+	window.document.location.href = url;
+
 }
 </script>
