@@ -56,14 +56,8 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if(isset($focus->column_fields[question]))
 	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+
+$category = getParenttab();
 $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("THEME", $theme);
