@@ -141,7 +141,7 @@
            </tr>
 	{foreach item=elements from=$tabledetail.Entries}
 	    <tr style="height:25px;" align="left">
-		{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics'}
+		{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics' &&  $tabledetail.Title.2 neq 'home_mytoppo' &&  $tabledetail.Title.2 neq 'home_myfaq'  }
 		<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
 		{elseif $tabledetail.Title.2 eq 'home_metrics'}
 		<td><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
