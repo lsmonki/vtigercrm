@@ -461,8 +461,8 @@
 					<!-- empty -->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
-							<td class=big valign=top><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_INFO}" title="{$MOD.LBL_SYSTEM_INFO}"></a></td>
+							<td class=big valign=top><a href="index.php?module=System&action=listsysconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td>
 
 						</tr>
 						<tr>
@@ -509,6 +509,19 @@
                       <td class="small" valign=top>{$MOD.LBL_MIGRATION_INFO}</td>
                     </tr>
                   </table></td>
+		  <td width=25% valign=top>
+		  <!-- Login History Details -->
+		  <table border=0 cellspacing=0 cellpadding=5 width=100%>
+		  <tr>
+		  	<td rowspan=2 valign=top><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoLoginHistory.gif" alt="{$MOD.LBL_LOGIN_HISTORY_DETAILS}" width="48" height="48" border=0 title="{$MOD.LBL_LOGIN_HISTORY_DETAILS}"></a></td>
+		  <td class=big valign=top><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td>
+		  </tr>
+		  <tr>
+		  	<td class="small" valign=top>{$MOD.LBL_LOGIN_HISTORY_DESCRIPTION}</td>
+		  </tr>
+
+		  </table>
+		  </td>
 				  <td valign=top>&nbsp;</td>
 				  <td valign=top>&nbsp;</td>
 				  <td valign=top>&nbsp;</td>
