@@ -51,8 +51,8 @@ $mod_strings = Array(
 'LBL_DATE_START'=>'Begin Date:',
 'LBL_DATE_END'=>'End Date:',
 //Added for 5.0 
-'LBL_NO_PERMISSION'=>'Your vtiger_profile doesn\'t allow you view the Graph for this module',
-'LBL_NO_PERMISSION_FIELD'=>'Your vtiger_profile doesn\'t allow you view the Graph for this module or for the Field',
+'LBL_NO_PERMISSION'=>'Sorry, you don\'t have access to view the Graph for this module',
+'LBL_NO_PERMISSION_FIELD'=>'Sorry, you don\'t have access to view the Graph for this module or for the Field',
 
 "leadsource" => "Leads By Source",
 "leadstatus" => "Leads By Status",
