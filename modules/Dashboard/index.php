@@ -135,11 +135,15 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <a name="top"></a>
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+     <tr>
+        <td valign=top><img src="<?php echo $image_path;?>showPanelTopLeft.gif"></td>
+
+	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td width="5%">&nbsp;</td>
-
-		<td width="90%">
+		<td width="100%">
 			<!-- DASHBOARD DEGINS HERE -->
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 			<tr>
@@ -316,9 +320,13 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 				</table>
 			<!-- END -->
 		</td>
-		<td width="5%">&nbsp;</td>
 	</tr>
 </table>
+</td>
+<td valign=top><img src="<?php echo $image_path;?>showPanelTopRight.gif"></td>
+   </tr>
+</table>
+
 </body>
 </html>
 
