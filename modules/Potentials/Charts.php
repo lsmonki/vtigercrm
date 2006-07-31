@@ -35,17 +35,13 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false,$width=900,$height=500){
 		global $log;
 		$log->debug("Entering outcome_by_month(".$date_start.",". $date_end.",". $user_id.") method ...");
 		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings,$current_user, $log, $charset, $tmp_dir;
 		global $theme;
 		include_once ('Image/Graph.php');
 		include_once ('Image/Canvas.php');
-
-		// Size of graph
-		$width=600;
-		$height=400;
 
 		$log =& LoggerManager::getLogger('outcome_by_month chart');
 		// Set the basic parameters of the graph
@@ -366,7 +362,7 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false,$width=900,$height=500){
 		global $log;
 		$log->debug("Entering lead_source_by_outcome(".$datay.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings,$charset, $tmp_dir;
@@ -374,10 +370,6 @@ class jpgraph {
 
 		include_once ('Image/Graph.php');
 		include_once ('Image/Canvas.php');
-
-		// Size of graph
-		$width=600;
-		$height=400;
 
 		$log =& LoggerManager::getLogger('lead_source_by_outcome chart');
 		// Set the basic parameters of the graph
@@ -697,17 +689,13 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false,$width=900,$height=500){
 		global $log;
 		$log->debug("Entering pipeline_by_sales_stage(".$datax.",".$date_start.",".$date_end.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings, $charset, $tmp_dir;
 		global $theme;
 		include_once ('Image/Graph.php');
 		include_once ('Image/Canvas.php');
-
-		// Size of graph
-		$width=600;
-		$height=400;
 
 		$log =& LoggerManager::getLogger('opportunity charts');
 		// Set the basic parameters of the graph
@@ -1020,7 +1008,7 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true){
+	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true,$width=900,$height=500){
 		global $log;
 		$log->debug("Entering pipeline_by_lead_source(".$legends.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
@@ -1131,9 +1119,6 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 				$font_color = "#000000";
 			}
 
-			// Create the Pie Graph.
-			$width = 600;
-			$height = 400;
 	
 			$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
 			$imagemap = $canvas->getImageMap();
