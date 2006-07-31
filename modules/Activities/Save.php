@@ -84,6 +84,8 @@ else
 				$focus->column_fields['duration_hours'] = '';
 				$focus->column_fields['duration_minutes'] = '';
 			}	
+			if(($fieldname == 'recurringtype') && ! isset($_REQUEST['recurringcheck']))
+				$focus->column_fields['recurringtype'] = '--None--';
 		}
 		
 	}
