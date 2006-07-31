@@ -1433,7 +1433,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
-			$tax_value = getInventoryProductTaxValue($focus->id, $hdnProductId, $tax_name);
+			$tax_value = 0.00;
+			//condition to avoid call this function when we create new PO/SO/Quotes/Invoice from Product module
+			if($focus->id != '')
+				$tax_value = getInventoryProductTaxValue($focus->id, $hdnProductId, $tax_name);
 			$product_Detail[$i]['taxes'][$tax_count]['taxname'] = $tax_name;
 			$product_Detail[$i]['taxes'][$tax_count]['percentage'] = $tax_value;
 		}
