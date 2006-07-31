@@ -17,7 +17,7 @@ require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
 $mysel= $_REQUEST['view'];
 $subtab = $_REQUEST['subtab'];
-$viewBox = $_REQUEST['viewBox'];
+$viewBox = $_REQUEST['viewOption'];
 if(empty($viewBox))
 {
 	$viewBox = 'hourview';
