@@ -54,7 +54,7 @@ if($row != null)
 }
 if( count($home_section_order) < 1 )
 {
-	$home_section_order = array("ALVT","HDB","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI");
+	$home_section_order = array("ALVT","HDB","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","MNL","OLTPO","LTFAQ");
 }
 
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -142,7 +142,22 @@ foreach ( explode(",",$home_section_order) as $section )
 		$smarty->assign('IS_HOMEDASH','true');
 		$home_values['Dashboard']="true";
 	}
-	        break;
+		break;
+	case 'OLTPO':
+        if(isPermitted('PurchaseOrder','index') == "yes")
+        {
+		require_once('modules/PurchaseOrder/ListTopPurchaseOrder.php');
+		$home_values['PurchaseOrder']=getTopPurchaseOrder();
+	}
+		break;
+	case 'LTFAQ':
+        if(isPermitted('Faq','index') == "yes")
+        {
+		require_once('modules/Faq/ListFaq.php');
+		$home_values['Faq']=getMyFaq();
+	}
+        	break;
+
     }
 }
 
