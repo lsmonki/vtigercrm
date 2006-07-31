@@ -984,6 +984,10 @@ $app_strings = Array(
 'LBL_DIRECT_PRICE_REDUCTION'=>'Direct Price Reduction',
 'LBL_INDIVIDUAL'=>'Individual',
 
+//Added the address strings for Contacts Module
+'LBL_CPY_MAILING_ADDRESS'=>'Copy Mailing Address',
+'LBL_CPY_OTHER_ADDRESS'=>'Copy Other Address',
+
 );
 
 
