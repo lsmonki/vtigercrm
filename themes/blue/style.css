@@ -2954,4 +2954,8 @@ border-width:1px;
 .TaxHide{
 	display:none;
 }
-
+.emailSelected{
+	background-color:#0000EE;
+	color:#FFFFFF;
+	font-size:bold;
+}
