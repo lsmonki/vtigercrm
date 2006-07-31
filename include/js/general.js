@@ -1375,7 +1375,7 @@ function fnvshobj(obj,Lay){
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
     var getVal = eval(leftSide) + eval(widthM);
-    if(getVal  > window.innerWidth ){
+    if(getVal  > document.body.clientWidth ){
         leftSide = eval(leftSide) - eval(widthM);
         tagName.style.left = leftSide + 34 + 'px';
     }
