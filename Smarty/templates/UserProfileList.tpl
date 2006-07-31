@@ -68,7 +68,7 @@
 					 {foreach name=profilelist item=listvalues from=$LIST_ENTRIES}
 					<tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.profilelist.iteration}</td>
-						<td class="listTableRow small" valign=top >
+						<td class="listTableRow small" valign=top nowrap>
 							<a href="index.php?module=Users&action=profilePrivileges&return_action=ListProfiles&parenttab=Settings&mode=edit&profileid={$listvalues.profileid}"><img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0" align="absmiddle"></a>
 	                                                {if $listvalues.del_permission eq 'yes'}
         	                                                &nbsp;|&nbsp;
