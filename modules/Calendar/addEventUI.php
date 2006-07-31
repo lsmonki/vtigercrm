@@ -159,7 +159,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
 	<div class="calAddEvent" style="display:none" id="addEvent" align=center> 
-	<form name="appSave" onSubmit="return check_form();" method="POST" action="index.php">
+	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
 	<input type="hidden" name="activity_mode" value="Events">
 	<input type="hidden" name="action" value="Save">
@@ -205,8 +205,12 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 		</tr>
 		<tr>
 			<td nowrap ><b><?php echo $mod_strings['LBL_EVENTNAME']?> :</b></td>
-			<td><input name="subject" type="text" class="textbox" style="width:90%"></td>
+			<td><input name="subject" type="text" class="textbox" value="" style="width:90%"></td>
 		</tr>
+		<tr>
+			<td colspan="2"><input name="visibility" value="Public" type="checkbox"><?php echo $mod_strings['LBL_PUBLIC']; ?></td>
+		</tr>
+
 		</table>
 		<br>
 		<table border=0 cellspacing=0 cellpadding=5 width=90% align=center style="border-top:1px dotted silver">
@@ -261,11 +265,13 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
+					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI','',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
+					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
+					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
+					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+					<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>
@@ -276,7 +282,6 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			<!-- Invite UI -->
 				
 				<DIV id="addEventInviteUI" style="display:block;width:100%">
-				<table border>
 				<table border=0 cellspacing=0 cellpadding=2 width=100%>
 				<tr>
 					<td valign=top> 
@@ -308,8 +313,8 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 								
 							</td>
 							<td width=20% align=center valign=top>
-								<input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class=small style="width:100%" onClick="addColumn()"><br>
-								<input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class=small style="width:100%" onClick="delColumn()">
+								<input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
+								<input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="delColumn()">
 							</td>
 							<td width=40% align=center valign=top>
 								<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -486,6 +491,36 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 				</tr>
 				</table>
 				</div>
+				<div id="addEventRelatedtoUI" style="display:none;width:100%">
+					<table width="100%" cellpadding="5" cellspacing="0" border="0">
+						<tr>
+							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
+							<td>
+								<input name="parent_id" value="" type="hidden">
+								<select name="parent_type" class="small" id="parent_type" onChange="fnAssignTo()">
+									<option selected>None</option>
+
+									<option>Leads</option>
+									<option>Accounts</option>
+									<option>Potentials</option>
+								</select>
+							</td>
+							<td>
+								<div id="leadLay" align="left">
+								<input type="text" readonly="readonly" class="calTxt small" value="None Selected" name="parent_name">&nbsp;
+								<input type="button" class="crmButton small edit" value="Change..." onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><b>Contacts :</b></td>
+							<td colspan="2">
+								<textarea rows="5" name="contact" class="calTxt"></textarea>&nbsp;
+								<input type="button" class="crmButton small edit" value="Select Contacts">
+							</td>
+						</tr>
+					</table>
+				</div>
 					
 	
 			</td>
@@ -499,8 +534,8 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 		<tr>
 			<td valign=top></td>
 			<td  align=right>
-				<input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
-				<input type="button" class=small style="width:90px" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
+				<input title='Save [Alt+S]' accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
+				<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
 			</td>
 		</tr>
 		</table>
@@ -571,7 +606,7 @@ setObjects();
 	<table border=0 cellspacing=0 cellpadding=5 width=90% >
 		<tr>
                         <td width=20%><b><?php echo $mod_strings['LBL_TODONAME'] ?> :</b></td>
-                        <td width=80%><input name="task_subject" type="text" class="textbox" style="width:90%"></td>
+                        <td width=80%><input name="task_subject" type="text" value="" class="textbox" style="width:90%"></td>
                 </tr>
 		<tr>
 			<td><b><?php echo $mod_strings['LBL_TODODATETIME'] ?> :</b></td>
@@ -680,8 +715,8 @@ setObjects();
                 <tr>
                         <td valign=top></td>
                         <td  align=right>
-                                <input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
-                                <input type="button" class=small style="width:90px" value="<?php echo $mod_strings['LBL_RESET'] ?>" onClick="ghide('createTodo')">
+                                <input title='Save [Alt+S]' accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
+                                <input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET'] ?>" onClick="ghide('createTodo')">
                         </td>
                 </tr>
                 </table>
@@ -728,8 +763,8 @@ setObjects();
 	<tr>
         	<td colspan="3" align="center">
 	        &nbsp;&nbsp;
-        		<input type="button" name="button" class="small" value="Update Owner" onClick="calendarChangeOwner();fninvsh('act_changeowner');">
-		        <input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_changeowner')">	
+        		<input type="button" name="button" class="crm button small save" value="Update Owner" onClick="calendarChangeOwner();fninvsh('act_changeowner');">
+		        <input type="button" name="button" class="crm button small cancel" value="Cancel" onClick="fninvsh('act_changeowner')">	
 		</td>
 	</tr>
 	</table>
@@ -752,47 +787,3 @@ setObjects();
         </table>
 </div>
 
-<div id="act_postpone" class="statechange" style="left:250px;top:200px;z-index:5000">
-	<form name="activity_postpone">
-		<input type="hidden" value="" name="action">
-		<input type="hidden" value="" name="hour">
-		<input type="hidden" value="" name="day">
-		<input type="hidden" value="" name="month">
-		<input type="hidden" value="" name="year">
-		<input type="hidden" value="" name="view">
-		<input type="hidden" value="" name="module">
-		<input type="hidden" value="" name="subtab">
-		<input type="hidden" value="" name="record">
-		<input type="hidden" value="" name="activity_mode">
-		<table width="100%" border="0" cellpadding="3" cellspacing="0">
-			<tr>
-				<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="45%">Postpone Activity</td>
-				<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-				<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_postpone')">Close</a></td>
-			</tr>
-			<tr><td colspan="3">&nbsp;</td></tr>
-			<tr>
-				<td width="45%"><b> Postpone To </b></td>
-				<td width="2%"><b>:</b></td>
-				<td width="53%"><input name="postpnoe_date_start" id="jscal_field_postpnoe_date_start" style="border: 1px solid rgb(186, 186, 186);" size="11" value="" type="text">
-				<img src="themes/blue/images/calendar.gif" id="jscal_trigger_postpnoe_date_start">
-			<input name="postpnoe_time_start" style="border: 1px solid rgb(186, 186, 186);" size="5" maxlength="5" value="" type="text"><br><font size="1"><em old="(yyyy-mm-dd)">(<?php echo $current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']; ?>)</em></font>
-				<script type="text/javascript">
-				Calendar.setup ({
-				inputField : "jscal_field_postpnoe_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_postpnoe_date_start", singleClick : true, step : 1
-					})
-					</script>
-
-				</td>
-			</tr>
-			<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-			<tr>
-                       		<td colspan="3" align="center"> 
-				&nbsp;&nbsp;      
-					<input type="button" name="button" class="small" value="Update" onClick="fninvsh('act_postpone');">   
-					<input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_postpone')">
-				</td>      
-			</tr>
-		</table>
-	</form>    
-</div>          
