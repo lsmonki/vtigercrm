@@ -37,7 +37,7 @@ function getEmailContents(id)
 {
 	$("status").style.display="inline";
 	var rowid = 'row_'+id;
-	getObj(rowid).className = 'prvPrfHoverOn';
+	getObj(rowid).className = 'emailSelected';
 	if(gselectedrowid != 0 && gselectedrowid != id)
 	{
 		var prev_selected_rowid = 'row_'+gselectedrowid;
