@@ -23,7 +23,6 @@ global $app_strings;
 global $mod_strings;
 global $app_list_strings;
 global $current_language, $current_user, $adb;
-$current_module_strings = return_module_language($current_language, 'Users');
 
 global $list_max_entries_per_page;
 global $urlPrefix;
@@ -66,7 +65,8 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Users","ShowHistory",'');
 
-$smarty->assign("MOD", $current_module_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->assign("MOD", return_module_language($current_language, "Settings"));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("LIST_HEADER",$focus->getHistoryListViewHeader());

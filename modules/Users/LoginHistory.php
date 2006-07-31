@@ -114,6 +114,8 @@ class LoginHistory {
 		$result = $adb->query($list_query);
 		$entries_list = array();
 		
+	if($navigation_array['end_val'] != 0)
+	{
 		for($i = $navigation_array['start']; $i <= $navigation_array['end_val']; $i++)
 		{
 			$entries = array();
@@ -129,7 +131,7 @@ class LoginHistory {
 		}	
 		$log->debug("Exiting getHistoryListViewEntries() method ...");
 		return $entries_list;
-		
+	}	
 	}
 	
 	/** Function that Records the Login info of the User 
