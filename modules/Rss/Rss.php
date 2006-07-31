@@ -376,7 +376,7 @@ class vtigerRSS extends CRMEntity
 		while($allrssrow = $adb->fetch_array($result))
 		{
 			$shtml .= "<tr id='feed_".$allrssrow[rssid]."'>";
-			$shtml .= "<td width=\"15\">";
+			$shtml .= "<td align='left' width=\"15\">";
 			if($allrssrow["starred"] == 1)
 			{
 				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
