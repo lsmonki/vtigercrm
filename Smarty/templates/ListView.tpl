@@ -153,10 +153,10 @@ function alphabetic(module,url,dataid)
 			<input type="hidden" name="search_cnt">
 		</td>
 		<td width="35%" class="dvtCellLabel">
-			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
+			  <input name="submit" type="button" class="crmbutton small create" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
 			   <span class="hiliteBtn4Search"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
 		</td>
-		<td valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
+		<td class="dvtCellLabel" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 	</tr>
 	<tr>
 		<td colspan="5" align="center" class="dvtCellLabel">
@@ -201,15 +201,15 @@ function alphabetic(module,url,dataid)
 			</td>
 		</tr>
 		<tr>
-			<td class="dvtCellLabel"><input type="button" name="more" value=" {$APP.LBL_MORE} " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="classBtn">&nbsp;&nbsp;
-				<input name="button" type="button" value=" {$APP.LBL_FEWER_BUTTON} " onclick="delRow()" class="classBtn"></td>
+			<td class="dvtCellLabel"><input type="button" name="more" value=" {$APP.LBL_MORE} " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="crmbuttom small edit">&nbsp;&nbsp;
+				<input name="button" type="button" value=" {$APP.LBL_FEWER_BUTTON} " onclick="delRow()" class="crmbuttom small edit"></td>
 			<td class="dvtCellLabel">&nbsp;</td>
 			<td class="dvtCellLabel">&nbsp;</td>
 			</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=80% style="border-bottom:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" align="center">
 		<tr>
-			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Advanced');">
+			<td align=center class="dvtCellLabel"><input type="button" class="crmbutton small create" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Advanced');">
 			</td>
 		</tr>
 	</table>
@@ -233,16 +233,16 @@ function alphabetic(module,url,dataid)
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+                                             <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
+                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
 						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-						     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+						     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 
@@ -345,16 +345,16 @@ function alphabetic(module,url,dataid)
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                            <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+                                            <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
+                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
 				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                                     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+                                                     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 

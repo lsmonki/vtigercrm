@@ -25,16 +25,16 @@
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+                                             <input class="crmbuttom small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
+                                             <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massMail()"/>
+                                             <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+                                             <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
                                                 {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                                     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+                                                     <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 
@@ -139,16 +139,16 @@
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+                                             <input class="crmbuttom small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
+                                             <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                             <input class="crmbuttom small edit" type="submit" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+                                             <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
                                                 {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                                     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+                                                     <input class="crmbuttom small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 
