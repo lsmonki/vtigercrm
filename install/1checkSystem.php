@@ -333,7 +333,7 @@ $array = Array(
 			<tr>
 				<td align=center>
 					<form action="install.php" method="post" name="installform" id="form">
-			                <input type="hidden" name="file" value="2setconfig.php" />	
+			                <input type="hidden" name="file" value="2setConfig.php" />	
 					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="window.document.installform.submit();">
 					</form><br>
 				    <br></td>
