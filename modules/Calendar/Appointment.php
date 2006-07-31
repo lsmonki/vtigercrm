@@ -70,7 +70,7 @@ class Appointment
                         $q .= "  ) AND ((vtiger_crmentity.smownerid ='".$current_user->id."' and vtiger_salesmanactivityrel.smid = '".$current_user->id."') or (vtiger_crmentity.smownerid in (".$shared_ids.") and vtiger_salesmanactivityrel.smid in (".$shared_ids.")))";
                 }
                 $q .= " AND vtiger_crmentity.deleted = 0) AND vtiger_recurringevents.activityid is NULL ";
-                $q .= " ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+                $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
 		$r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
@@ -99,7 +99,7 @@ class Appointment
                 }
 
                 $q .= " AND vtiger_crmentity.deleted = 0 )" ;
-                $q .= " ORDER by recurringid";
+                $q .= " group by vtiger_activity.activityid ORDER by recurringid";
                 $r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
