@@ -286,13 +286,13 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'PurchaseOrder Detailed Report',
                        'reportfolder'=>'PurchaseOrder Reports',
-                       'description'=>'PurchaseOrder detailed report',
+                       'description'=>'PurchaseOrder Detailed Report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
 		 Array('reportname'=>'Invoice Detailed Report',
                        'reportfolder'=>'Invoice Reports',
-                       'description'=>'Invoice detailed report',
+                       'description'=>'Invoice Detailed Report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>'')
 
