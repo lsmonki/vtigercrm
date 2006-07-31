@@ -117,7 +117,7 @@ function SaveRssFeeds()
 			<img src='{$IMAGE_PATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');$('rssurl').focus();" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
 			</td>
 			<td width="2%">&nbsp;</td>
-			<td width="60%"><img src="{$IMAGE_PATH}rssimage.gif" width="176" height="44"  align="right"/></td>
+			<td width="60%"><img src="{$IMAGE_PATH}rssimage.gif" align="right"/></td>
 			</tr>
 			<tr><td colspan="3">
 				
@@ -131,7 +131,7 @@ function SaveRssFeeds()
 					</div>
 				</td>
 				</tr>
-				<tr><td valign="top" bgcolor="#FFFFFF" align="left"><div id="rssfolders">{$RSSFEEDS}</div></td></tr>
+				<tr><td valign="top" bgcolor="#FFFFFF" align="left"><div id="rssfolders" style="height:180px;overflow:auto;">{$RSSFEEDS}</div></td></tr>
 				</table>
 				
 			</td></tr>
