@@ -1887,7 +1887,13 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_faq.id
 			LEFT JOIN vtiger_products
 				ON vtiger_faq.product_id = vtiger_products.productid
-			WHERE vtiger_crmentity.deleted = 0";
+			WHERE vtiger_crmentity.deleted = 0".$where;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;	
+		}
+
 	}
 	
 	if($module == "Vendors")
@@ -1966,7 +1972,7 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
