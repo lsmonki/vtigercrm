@@ -693,6 +693,9 @@ $mod_strings = Array(
 'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
 'LBL_ROLE_HIERARCHY_TREE'=>'Roles & Hierarchy Tree',
 'LBL_EDIT_FIELD_MAPPING'=>'Editing Field Mapping',
+'LBL_LOGIN_HISTORY_DETAILS'=>'Login History Details',
+'LBL_LOGIN_HISTORY_DESCRIPTION'=>'Displays Login History of all Users',
+
 );
 
 
