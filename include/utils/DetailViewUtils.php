@@ -416,7 +416,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 					$sides=8;
 
 				$image_lists = '<div id="Carousel" style="position:relative;vertical-align: middle;">
-					<img src="modules/Products/placeholder.gif" width="371" height="227" style="position:relative;">
+					<img src="modules/Products/placeholder.gif" width="571" height="117" style="position:relative;">
 					</div><script>var Car_NoOfSides='.$sides.'; Car_Image_Sources=new Array(';
 
 				for($image_iter=0;$image_iter < count($image_array);$image_iter++)
