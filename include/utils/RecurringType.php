@@ -108,7 +108,6 @@ class RecurringType
 			}
 			elseif($this->recur_type == 'Weekly')
 			{
-				echo '<pre>';print_r($this);echo '</pre>';die;
 				$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
 				$date_arr = Array(
