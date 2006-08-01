@@ -1174,6 +1174,30 @@ function insertIntoRecurringTable(& $recurObj)
 		}
 	}
 	$date_array = $recurObj->recurringdates;
+	if(isset($recurObj->recur_freq) && $recurObj->recur_freq != null)
+		$recur_freq = $recurObj->recur_freq;
+	else
+		$recur_freq = 1;
+	if($recurObj->recur_type == 'Daily' || $recurObj->recur_type == 'Yearly')
+		$recurringinfo = $recurObj->recur_type;
+	elseif($recurObj->recur_type == 'Weekly')
+	{
+		$recurringinfo = $recurObj->recur_type;
+		if($recurObj->dayofweek_to_rpt != null)
+			$recurringinfo = $recurringinfo.'::'.implode('::',$recurObj->dayofweek_to_rpt);
+	}
+	elseif($recurObj->recur_type == 'Monthly')
+	{
+		$recurringinfo =  $recurObj->recur_type.'::'.$recurObj->repeat_monthby;
+		if($recurObj->repeat_monthby == 'date')
+			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_datevalue;
+		else
+			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_daytype.'::'.$recurObj->dayofweek_to_rpt[0];
+	}
+	else
+	{
+		$recurringinfo = '';
+	}
 	if($flag=="true")
 	{
 		for($k=0; $k< count($date_array); $k++)
@@ -1189,7 +1213,7 @@ function insertIntoRecurringTable(& $recurObj)
 					$recur_id = $adb->query_result($result,$i,"recurid");
 				}
 				$current_id =$recur_id+1;
-				$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
+				$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."','".$recur_freq."','".$recurringinfo."')";
 				$adb->query($recurring_insert);
 				if($_REQUEST['set_reminder'] == 'Yes')
 				{
