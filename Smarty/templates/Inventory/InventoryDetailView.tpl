@@ -262,7 +262,7 @@ function DeleteTag(id)
 										<!-- Add Tag link added just above the tag cloud image -->
 										<table border=0 cellspacing=0 cellpadding=5 width=100% >
 										<tr>
-											<td align="left" class="genHeaderSmall" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
+											<td align="left" class="genHeaderSmall" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="crmbutton small cancel" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
 										</tr>
 										</table>
 										<!-- Eng Add Tag Link -->
