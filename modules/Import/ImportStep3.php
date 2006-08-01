@@ -336,23 +336,8 @@ else
 //	exit;
 }
 
-
-
-
-
-
-if ($error != "")
-{
-	show_error_import( $mod_strings['LBL_ERROR']." ". $error);
-	exit;
-}
-else 
-{
-	$message= urlencode($mod_strings['LBL_SUCCESS']."<BR>$count ". $mod_strings['LBL_MODULE_NAME']." ".$mod_strings['LBL_SUCCESSFULLY']."<br>".($broken_ids+$id_exists_count) ." ". $mod_strings['LBL_IDS_EXISTED_OR_LONGER']. "<br>$skip_required_count " .  $mod_strings['LBL_RECORDS_SKIPPED'] );
-
-	header("Location: index.php?module={$_REQUEST['module']}&action=Import&step=last&return_module={$_REQUEST['return_module']}&return_action={$_REQUEST['return_action']}&message=$message");
-exit;
-}
+//Display the imported records message
+echo "<b>".$_SESSION['import_display_message']."</b>";
 
 
 ?>

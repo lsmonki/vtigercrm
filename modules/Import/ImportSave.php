@@ -230,7 +230,8 @@ function b()
 </script>
 
 <?php
-return '<br>'.$start.' to '.$end.' of '.$totalnoofrows.' are imported successfully';
+$_SESSION['import_display_message'] = '<br>'.$start.' to '.$end.' of '.$totalnoofrows.' are imported successfully';
+//return $_SESSION['import_display_message'];
 }
 ?>
 
