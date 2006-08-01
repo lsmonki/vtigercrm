@@ -81,6 +81,8 @@ foreach ($rows1 as $row)
 			//MWC
 			elseif ( $field == "assignedto" || $field == "assigned_user_id" )
 			{
+				//Here we are assigning the user id in column fields, so in function assign_user (ImportLead.php and ImportProduct.php files) we should use the id instead of user name when query the user
+				//or we can use $focus->column_fields['smownerid'] = $my_users[$row[$field_count]];
 				$focus->column_fields[$field] = $my_users[$row[$field_count]];	
 				p("setting my_userid=$my_userid for user=".$row[$field_count]);
 			}
@@ -127,7 +129,8 @@ foreach ($rows1 as $row)
 			$focus->column_fields["assigned_user_id"] = $my_userid;
 		}	
 
-		// now do any special processing
+		// now do any special processing for ex., map account with contact and potential
+		$focus->process_special_fields();
 	
 		$focus->save($module);
 		//$focus->saveentity($module);
