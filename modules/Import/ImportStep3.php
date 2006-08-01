@@ -337,7 +337,7 @@ else
 }
 
 //Display the imported records message
-echo "<b>".$_SESSION['import_display_message']."</b>";
+echo "<div align='center' width='100%'><font color='green'><b>".$_SESSION['import_display_message']."</b></font></div>";
 
 
 ?>
