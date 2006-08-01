@@ -137,7 +137,7 @@ class ImportOpportunity extends Potential {
 
 		// if user is defining the vtiger_account id to be associated with this contact..
 		$acc_name = trim(addslashes($acc_name));
-		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account,crmentity WHERE vtiger_accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
 
                 $this->log->info($query);
 
