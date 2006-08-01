@@ -319,9 +319,9 @@ $array = Array(
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>Display Errors On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>File Uploads On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>Register Globals Off</strong></tr>
-				<tr bgcolor="#ffffff"> <td valign=top ><strong>Max Execution Time 300</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Max Execution Time 600</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>output_buffering= On</strong></tr>
-				<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 16M</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 32M</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>error_reporting = E_WARNING & ~E_NOTICE</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_reference = On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
