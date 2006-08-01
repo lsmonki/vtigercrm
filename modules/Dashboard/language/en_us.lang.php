@@ -22,13 +22,13 @@
  
 $mod_strings = Array(
 'LBL_SALES_STAGE_FORM_TITLE'=>'Pipeline By Sales Stage',
-'LBL_SALES_STAGE_FORM_DESC'=>'Shows cumulative opportunity amounts by selected sales stages for selected vtiger_users where the expected closed date is within the specificed date range.',
+'LBL_SALES_STAGE_FORM_DESC'=>'Shows cumulative opportunity amounts by selected sales stages for selected users where the expected closed date is within the specificed date range.',
 'LBL_MONTH_BY_OUTCOME'=>'Pipeline By Month By Outcome',
-'LBL_MONTH_BY_OUTCOME_DESC'=>'Shows cumulative opportunity amounts by month by outcome for selected vtiger_users where the expected closed date is within the specificed date range.  Outcome is based on whether the sales stage is Closed Won, Closed Lost or any other value.',
+'LBL_MONTH_BY_OUTCOME_DESC'=>'Shows cumulative opportunity amounts by month by outcome for selected users where the expected closed date is within the specificed date range.  Outcome is based on whether the sales stage is Closed Won, Closed Lost or any other value.',
 'LBL_LEAD_SOURCE_FORM_TITLE'=>'All Opportunities By Lead Source',
-'LBL_LEAD_SOURCE_FORM_DESC'=>'Shows cumulative opportunity amounts by selected lead source for selected vtiger_users.',
+'LBL_LEAD_SOURCE_FORM_DESC'=>'Shows cumulative opportunity amounts by selected lead source for selected users.',
 'LBL_LEAD_SOURCE_BY_OUTCOME'=>'All Opportunities By Lead Source By Outcome',
-'LBL_LEAD_SOURCE_BY_OUTCOME_DESC'=>'Shows cumulative opportunity amounts by selected lead source by outcome for selected vtiger_users where the expected closed date is within the specificed date range.  Outcome is based on whether the sales stage is Closed Won, Closed Lost or any other value.',
+'LBL_LEAD_SOURCE_BY_OUTCOME_DESC'=>'Shows cumulative opportunity amounts by selected lead source by outcome for selected users where the expected closed date is within the specificed date range.  Outcome is based on whether the sales stage is Closed Won, Closed Lost or any other value.',
 'LBL_PIPELINE_FORM_TITLE_DESC'=>'Shows cumulative amounts by selected sales stages for your opportunities where the expected closed date is within the specificed date range.',
 'LBL_DATE_RANGE'=>'Date range is',
 'LBL_DATE_RANGE_TO'=>'to',
