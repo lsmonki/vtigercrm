@@ -4735,6 +4735,8 @@
 		</field>
 		<field name="recurringdate" type="D" />
 		<field name="recurringtype" type="C" size="30" />
+		<field name="recurringfreq" type="I" size="19" />
+		<field name="recurringinfo" type="C" size="50" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
