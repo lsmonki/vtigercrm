@@ -928,6 +928,7 @@ for($i=0;$i<12;$i++)
 	$pricebook_ids[] = $pricebook ->id;
 }
 
+
 //Populate Notes Data
 
 $notes_array = array ("Cont_Notes", "Prod_Notes", "Vendor_Notes", "Invoice_Notes", "Task_Notes", "Event_Notes", "Email_Notes");
@@ -1129,5 +1130,18 @@ for($i=0;$i<count($campaign_name_array);$i++)
 	
 	$campaign->save("Campaigns");
 }
+
+//Populate My Sites Data 
+
+$portalname = array ("Vtiger", "Vtiger Blogs", "Vtiger Forums", "VtigerForge", "Vtiger Docs");
+$portalurl = array ("http://vtiger.com", "http://blogs.vtiger.com", "http://forums.vtiger.com", "http://vtigerforge.com", "http://wiki.vtiger.com");
+
+for($i=0;$i<5;$i++)
+{
+	$portalid = $adb->getUniqueId('vtiger_portal');
+	$portal_qry = "insert into vtiger_portal values (".$portalid.", '".$portalname[$i]."','".$portalurl[$i]."',0)";
+	$result_qry = $adb->query($portal_qry);
+}
+
 
 ?>
