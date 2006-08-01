@@ -97,8 +97,8 @@
 	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
-	<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="AddFolder();" type="button">&nbsp;&nbsp;
-	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" onclick="closeEditReport();" type="button">
+	<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="AddFolder();" type="button">&nbsp;&nbsp;
+	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="closeEditReport();" type="button">
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>

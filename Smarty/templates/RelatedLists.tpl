@@ -52,10 +52,10 @@ function gotoUpdateListPrice(id,pbid,proid)
 
 function loadCvList(type,id) {ldelim}
 	if(type === 'Leads')
-		$("lead_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="small" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value+'\'">';
+		$("lead_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value+'\'">';
 
 	if(type === 'Contacts')
-		$("contact_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="small" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value+'\'">';
+		$("contact_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value+'\'">';
 {rdelim}
 </script>
 	{include file='Buttons_List1.tpl'}

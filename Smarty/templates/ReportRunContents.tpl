@@ -11,9 +11,9 @@
 -->*}
 <table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
 	<tbody><tr>
-	<td align="left" width="10%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
-	<td align="left" width="20%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
-	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" onClick="goToPrintReport({$REPORTID});" class="classBtn" type="button"></td>
+	<td align="left" width="10%"><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
+	<td align="left" width="20%"><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
+	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" onClick="goToPrintReport({$REPORTID});" class="crmbutton small create" type="button"></td>
 	</tr>
 	</tbody>
 </table>
@@ -60,9 +60,9 @@
 <br>
 <table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
 	<tbody><tr>
-	<td align="left" width="10%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
-	<td align="left" width="20%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
-	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" class="classBtn" onClick="goToPrintReport({$REPORTID});" type="button"></td>
+	<td align="left" width="10%"><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
+	<td align="left" width="20%"><input class="crmbutton small create" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
+	<td align="left" width="70%"><input name="PrintReport" value="{$MOD.LBL_PRINT_REPORT}" class="crmbutton small create" onClick="goToPrintReport({$REPORTID});" type="button"></td>
 	</tr>
 	</tbody>
 </table>

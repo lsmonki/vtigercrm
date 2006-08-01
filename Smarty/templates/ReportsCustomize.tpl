@@ -17,9 +17,9 @@
 		<tr>
 		<td class="dvtCellLabel" style="padding:5px;" width="5%" align="right">
 		<td class="dvtCellLabel" style="padding:5px;" width="75%" align="right">
-		<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="classBtn" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
+		<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
 		<td class="dvtCellLabel" style="padding:5px;" align="right">
-		<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="classBtn" onClick="DeleteFolder('{$reportfolder.id}');">
+		<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
 		</td>
 		</tr>
 		<tr>

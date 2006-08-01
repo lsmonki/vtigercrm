@@ -110,7 +110,7 @@
 	</td>
 	</tr>
 	<tr>
-	<td align="center" colspan="4"><input name="generatenw" value=" {$MOD.LBL_GENERATE_NOW} " class="classBtn" type="button" onClick="generateReport({$REPORTID});"></td>
+	<td align="center" colspan="4"><input name="generatenw" value=" {$MOD.LBL_GENERATE_NOW} " class="crmbutton small create" type="button" onClick="generateReport({$REPORTID});"></td>
 	</tr>
 	</tbody>
 </table>
