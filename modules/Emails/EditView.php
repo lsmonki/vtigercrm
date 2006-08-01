@@ -228,6 +228,8 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("ENTITY_ID", $_REQUEST["record"]);
 $smarty->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
 $smarty->assign("OLD_ID", $old_id );
+//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
+$smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
 if(empty($focus->filename))
 {
