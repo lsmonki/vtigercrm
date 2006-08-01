@@ -260,7 +260,7 @@ function displayCoords(event,obj,mode,curr_row)
    <!-- Add Product Button -->
    <tr>
 	<td colspan="3">
-			<input type="button" name="Button" class="small" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
