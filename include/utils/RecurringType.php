@@ -108,6 +108,7 @@ class RecurringType
 			}
 			elseif($this->recur_type == 'Weekly')
 			{
+				//echo '<pre>';print_r($this);echo '</pre>';die;
 				$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
 				$date_arr = Array(
@@ -118,6 +119,20 @@ class RecurringType
 				$tempdateObj = new DateTime($date_arr,true);
 				/*$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
+				$date_arr = Array(
+					'day'   => $st_date[2],
+					'month' => $st_date[1],
+					'year'  => $st_date[0]
+				);
+				$tempdateObj = new DateTime($date_arr,true);
+				$firstdayofweekObj = $tempdateObj->getThisweekDaysbyIndex(0);
+				$date_arr = Array(
+					'day'   => $firstdayofweekObj->day+$this->dayofweek_to_rpt[0],
+					'month' => $st_date[1],
+					'year'  => $st_date[0]
+				);
+				$firstrptObj = new DateTime($date_arr,true);
+				
 				if(isset($this->recur_freq) && $this->recur_freq != null)
 					$index = $st_date[2] + ($this->recur_freq -1) ;
 				else
@@ -131,7 +146,7 @@ class RecurringType
 				else
 				{
 				}
-				echo '<pre>';print_r($this);echo '</pre>';die;*/
+				//echo '<pre>';print_r($this);echo '</pre>';die;*/
 				$tempdate = $tempdateObj->get_formatted_date();
 			}
 			elseif($this->recur_type == 'Monthly')
