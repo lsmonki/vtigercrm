@@ -57,7 +57,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 
 				</td>
 				<td width="20%" class="dvtCellLabel">
-					<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="classBtn">
+					<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
 				</td>
 			</tr>
 			 <tr>

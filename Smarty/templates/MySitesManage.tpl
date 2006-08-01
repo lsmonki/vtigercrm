@@ -17,7 +17,7 @@
 
 </tr>
 <tr>
-<td colspan="3"><input name="bookmark" value=" {$MOD.LBL_NEW_BOOKMARK} " class="classBtn" onclick="fnvshobj(this,'editportal_cont');fetchAddSite('');" type="button"></td>
+<td colspan="3"><input name="bookmark" value=" {$MOD.LBL_NEW_BOOKMARK} " class="crmbutton small create" onclick="fnvshobj(this,'editportal_cont');fetchAddSite('');" type="button"></td>
 </tr>
 <tr>
 <td class="detailedViewHeader" width="5%"><b>{$MOD.LBL_SNO}</b></td>

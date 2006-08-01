@@ -14,7 +14,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
 	<tr>
 	{if $SELECT eq 'enable'}
-		<td style="padding-left:10px;" align="left"><input class="small" type="button" value="Add {$MODULE}" onclick="if(SelectAll('{$MODULE}')) window.close();"/></td>
+		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="Add {$MODULE}" onclick="if(SelectAll('{$MODULE}')) window.close();"/></td>
 	{else}		
 		<td>&nbsp;</td>	
 	{/if}

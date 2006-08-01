@@ -67,8 +67,8 @@
                                         </tr>
                                         <tr>
                                                 <td colspan="2" style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;" align="center">
-							<input title="{$APP.LBL_EDIT_BUTTON_LABEL}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" type="submit" name="button" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
-							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" type="button" onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads&parenttab=Settings')" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+							<input title="{$APP.LBL_EDIT_BUTTON_LABEL}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" type="submit" name="button" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
+							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" type="button" onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads&parenttab=Settings')" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
                                                 </td>
                                         </tr>
                                         <tr>
