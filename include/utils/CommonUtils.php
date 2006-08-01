@@ -2542,25 +2542,25 @@ function getrecurringObjValue()
 				$recurring_data['repeatmonth_daytype'] = $_REQUEST['repeatMonth_daytype'];
 				switch($_REQUEST['repeatMonth_day'])
 				{
-					case 'sunday'    :
+					case 0 :
 						$recurring_data['sun_flag'] = true;
 						break;
-					case 'monday'    :
+					case 1 :
 						$recurring_data['mon_flag'] = true;
 						break;
-					case 'tuesday'   :
+					case 2 :
 						$recurring_data['tue_flag'] = true;
 						break;
-					case 'wednesday' :
+					case 3 :
 						$recurring_data['wed_flag'] = true;
 						break;
-					case 'thursday'  :
+					case 4 :
 						$recurring_data['thu_flag'] = true;
 						break;
-					case 'friday'    :
+					case 5 :
 						$recurring_data['fri_flag'] = true;
 						break;
-					case 'saturday'  :
+					case 6 :
 						$recurring_data['sat_flag'] = true;
 						break;
 				}
