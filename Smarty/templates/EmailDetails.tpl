@@ -16,21 +16,21 @@
 		<tr>
 		{if $BLOCKS neq ''}
 			<td align="left">
-			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
+			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','forward')>&nbsp;
 				{if $EMAIL_FLAG neq 'WEBMAIL'}
-			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="crmbutton small save" onClick=OpenCompose('{$ID}','edit')>&nbsp;
 				{else}
-			  	<input type="button" name="Send" value=" {$MOD.LBL_REPLY_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+			  	<input type="button" name="Send" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','edit')>&nbsp;
 				{/if}
 				{foreach item=row from=$BLOCKS}	
 				{foreach item=elements key=title from=$row}	
 					{if $elements.fldname eq 'filename' && $elements.value != ''}
-						<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay')"/>
+						<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="crmbutton small save" onclick="fnvshobj(this,'reportLay')"/>
 					{/if}
 				{/foreach}
 				{/foreach}
 			</td>
-						<td width="25%" align="right"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
+						<td width="25%" align="right"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="crmbutton small delete" onClick="DeleteEmail('{$ID}')"/></td>
 						{else}
 						<td colspan="2">&nbsp;</td>
 						{/if}

@@ -152,7 +152,7 @@ function ShowFolders(folderid)
 									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 									<input name="idlist" type="hidden">
 										<tr>
-											<td width="25%" align="left"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;</td>
+											<td width="25%" align="left"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="crmbutton small delete" onClick="return massDelete();"/> &nbsp;</td>
 											<td width="50%" align="right" class="small">
 												<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" onkeyUp="Searchfn();">&nbsp;
 											</td>
