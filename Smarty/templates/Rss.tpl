@@ -181,7 +181,7 @@ function SaveRssFeeds()
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	<tr>
 	<td	colspan="2" align="center">
-	<input type="button" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="SaveRssFeeds();"/>&nbsp;&nbsp;
+	<input type="button" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="SaveRssFeeds();"/>&nbsp;&nbsp;
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>

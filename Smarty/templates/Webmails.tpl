@@ -100,14 +100,14 @@
                     <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td width="45%">
-			<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="classWebBtn" onclick="mass_delete();"/>
-			<input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn" onclick="move_messages();"/> {$FOLDER_SELECT}
+			<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
+			<input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="crmbutton small edit" onclick="move_messages();"/> {$FOLDER_SELECT}
                         </td>
 			{if $DEGRADED_SERVICE eq 'false'}
                         <td width="75%" align="right">
 							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" id="search_input"/>&nbsp;
 							<select name="optionSel" class="importBox" id="search_type"><option selected value="SUBJECT">in Subject</option><option value="BODY">in Body</option><option value="TO">in To:</option><option value="CC">in CC:</option><option value="BCC">in BCC:</option><option value="FROM">in From:</option></select>&nbsp;
-							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" onclick="search_emails();" />
+							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="crmbutton small create" onclick="search_emails();" />
 			</td>
 			{/if}
                       </tr>
@@ -146,13 +146,13 @@
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					  <tr>
 						<td width="75%">
-						  <span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="classWebBtn" /></span>&nbsp;
-						  <span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="classWebBtn" /></span>&nbsp;
-						  <span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="classWebBtn" /></span>&nbsp;
-						  <span id="forward_button"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" /></span>&nbsp;
-						  <span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" /></span>
+						  <span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="crmbutton small create" /></span>&nbsp;
+						  <span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="crmbutton small edit" /></span>&nbsp;
+						  <span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="crmbutton small edit" /></span>&nbsp;
+						  <span id="forward_button"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" /></span>&nbsp;
+						  <span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="crmbutton small save" /></span>
 						</td>
-						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" /></span></td>
+						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="crmbutton small delete" /></span></td>
 					  </tr>
 					</table>
 				</td>
