@@ -112,7 +112,7 @@ foreach($pieces as $val)
 					</tr>
 					<tr>
 						<td align=center>
-						<IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="500" height=230 scrolling='no' frameborder="0">
+						<IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="500" height=250 scrolling='no' frameborder="0">
 						  [Your user agent does not support frames or is currently configured
 						  not to display frames. However, you may visit
 						  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 

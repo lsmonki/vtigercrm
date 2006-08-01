@@ -480,6 +480,7 @@ $cache_dir = 'cache/';
 		oImg = document.getElementById('title_img').style.display = 'none';
 		oImg = document.getElementById('title_img1').style.display = 'block';
 		document.getElementById('populating_info').style.visibility='visible';
+		window.document.title = 'vtiger CRM 5 - Configuration Wizard - Database Generation ...';
 	}
 	</script>
 </body>
