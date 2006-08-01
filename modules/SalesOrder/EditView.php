@@ -202,7 +202,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['SalesOrder']);
+$smarty->assign("SINGLE_MOD",'SalesOrder');
 
 
 $smarty->assign("MOD", $mod_strings);
