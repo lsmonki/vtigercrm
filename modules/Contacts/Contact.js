@@ -64,6 +64,22 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
 }
+
+function add_data_to_relatedlist_incal(id,name)
+{
+	var idval = window.opener.document.EditView.contactidlist.value;
+	var nameval = window.opener.document.EditView.contactlist.value;
+	if(idval != '')
+	{
+		window.opener.document.EditView.contactidlist.value = idval+','+id;
+		window.opener.document.EditView.contactlist.value = nameval+'\n'+name;
+	}
+	else
+	{
+		window.opener.document.EditView.contactidlist.value = id;
+		window.opener.document.EditView.contactlist.value = name;
+	}
+}
 function set_return_specific(product_id, product_name) {
         //Used for DetailView, Removed 'EditView' formname hardcoding
         var fldName = getOpenerObj("contact_name");
