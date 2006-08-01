@@ -293,6 +293,7 @@ a:hover {
 .dvtCellLabel {
 	background-color:#f6f6f6;
 	padding-right:10px;
+	padding-left:10px;
 	border-bottom:1px solid #eaeaea;
 	color:#737373;
 	white-space:nowrap;
@@ -300,6 +301,7 @@ a:hover {
 
 .dvtCellInfo {
 	padding-left:10px;
+	padding-right:10px;
 	border-bottom:1px solid #eaeaea;
 	white-space:nowrap;
 }
