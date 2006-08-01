@@ -253,6 +253,12 @@ function sensex_info()
 
        </script>
 {/if}
+{if $MODULE eq 'Accounts'}
+<script>
+	ScrollEffect.limit = 201;
+	ScrollEffect.closelimit= 200;
+</script>
+{/if}
 <script>
 
 
