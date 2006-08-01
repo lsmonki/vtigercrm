@@ -211,6 +211,14 @@ function check_form()
 		{
 			document.EditView.recurringtype.value = '--None--';
 		}
+		if(document.EditView.record.value != '')
+                {
+                        document.EditView.mode.value = 'edit';
+                }
+		else
+		{
+			document.EditView.mode.value = 'create';
+		}
 		starthour = document.EditView.starthr.value;
 		startmin  = document.EditView.startmin.value;
 		startformat = document.EditView.startfmt.value;
@@ -297,6 +305,15 @@ function task_check_form()
                 }
         }
 	document.createTodo.task_time_start.value = starthour+':'+startmin;
+	if(document.createTodo.record.value != '')
+        {
+        	document.createTodo.mode.value = 'edit';
+        }
+        else
+        {
+        	document.createTodo.mode.value = 'create';
+        }
+
 }
 
 
@@ -667,7 +684,7 @@ function cal_show(divId)
 
 function fnAssignTo(){
 		var option_Box = document.getElementById('parent_type');
-		var option_select = option_Box.options[option_Box.selectedIndex].text;
+		var option_select = option_Box.options[option_Box.selectedIndex].value;
 		if(option_select == "Leads")
 		{
 			document.getElementById('leadLay').style.visibility = 'visible';
@@ -702,7 +719,6 @@ function getValidationarr(id,activity_mode,opmode,subtab,viewOption)
                                 postBody: 'module=Calendar&action=CalendarAjax&record='+id+'&activity_mode='+activity_mode+'&ajax=true&type=view&file=DetailView',
                                 onComplete: function(response) {
                                         $("dataArray").innerHTML=response.responseText;
-					execJS($('dataArray'));
 					setFieldvalues(opmode,subtab,viewOption);
                                 }
                         }
@@ -716,12 +732,22 @@ function setFieldvalues(opmode,subtab,viewOption)
 	eval(st.innerHTML);
 	if(activity_type == 'Events')
 	{
+		if(opmode == 'detail_view')
+                {
+			enableFields(activity_type);
+                        disableFields(activity_type);
+                }
+                else
+                {
+                        enableFields(activity_type);
+                }
 		document.EditView.viewOption.value = viewOption;
                 document.EditView.subtab.value = subtab;
 		for(x=0;x<key.length;x++)
 		{	
 			if(document.EditView[key[x]] != undefined)
 			{
+
 				if(key[x] == 'visibility' && data[x] == 'Public')
 					document.EditView.visibility.checked = true;
 				if(key[x] == 'visibility' && data[x] == 'Private')
@@ -739,16 +765,32 @@ function setFieldvalues(opmode,subtab,viewOption)
 					document.EditView.remindercheck.checked = true;
 					document.getElementById('reminderOptions').style.display = 'block';
 				}
-				document.EditView[key[x]].value = data[x];	
+				if(key[x] == 'recurringcheck' && data[x] == 'on')
+				{
+					document.EditView.recurringcheck.checked = true;
+					document.getElementById('repeatOptions').style.display = 'block';
+				}
+				if(key[x] == 'recurringtype')
+				{	
+					if(data[x] == 'Weekly')
+						document.getElementById('repeatWeekUI').style.display = 'block';
+					else
+						document.getElementById('repeatWeekUI').style.display = 'none';
+					if(data[x] == 'Monthly')
+						document.getElementById('repeatMonthUI').style.display = 'block';
+					else
+						document.getElementById('repeatMonthUI').style.display = 'none';
+				}
+				if(key[x] == 'parent_name')
+				{
+					if(data[x] != '')
+						document.getElementById('leadLay').style.visibility = 'visible';
+					else
+						document.getElementById('leadLay').style.display = 'hidden';
+				}
+				document.EditView[key[x]].value = data[x];
+			//}	
 			}
-		}
-		if(opmode == 'detail_view')
-		{
-			disableFields(activity_type);
-		}
-		else
-		{
-			enableFields(activity_type);
 		}
 		document.getElementById('addEvent').style.display = 'block';
 	}
@@ -779,27 +821,47 @@ function disableFields(type)
 {	
 	if(type == 'Events')
 	{
-		document.EditView.subject.readOnly = true;
-                document.EditView.date_start.readOnly = true;
-                document.EditView.due_date.readOnly = true;
-                document.EditView.activitytype[0].disabled = true;
+		document.EditView.activitytype[0].disabled = true;
                 document.EditView.activitytype[1].disabled = true;
-                document.EditView.visibility.disabled = true;
-                document.EditView.starthr.disabled = true;
+		document.EditView.subject.readOnly = true;
+		document.EditView.visibility.disabled = true;
+		document.EditView.date_start.readOnly = true;
+                document.EditView.due_date.readOnly = true;
+		document.EditView.starthr.disabled = true;
                 document.EditView.startmin.disabled = true;
                 document.EditView.startfmt.disabled = true;
                 document.EditView.endhr.disabled = true;
                 document.EditView.endmin.disabled = true;
                 document.EditView.endfmt.disabled = true;
-                document.EditView.eventsave.disabled = true;
-                document.EditView.eventcancel.disabled = true;
+		document.EditView.taskpriority.disabled = true;
+		document.EditView.availableusers.disabled = true;
+                document.EditView.selectedusers.disabled = true;
 		document.EditView.remindercheck.disabled = true;
 		document.EditView.remdays.disabled = true;
                 document.EditView.remhrs.disabled = true;
                 document.EditView.remmin.disabled = true;
-		document.EditView.availableusers.disabled = true;
-		document.EditView.selectedusers.disabled = true;
-		
+		document.EditView.toemail.readOnly = true;
+		document.EditView.recurringcheck.disabled = true;
+		document.EditView.repeat_frequency.readOnly = true;
+                document.EditView.recurringtype.disabled = true;
+                document.EditView.sun_flag.disabled = true;
+                document.EditView.mon_flag.disabled = true;
+                document.EditView.tue_flag.disabled = true;
+                document.EditView.wed_flag.disabled = true;
+                document.EditView.thu_flag.disabled = true;
+                document.EditView.fri_flag.disabled = true;
+                document.EditView.sat_flag.disabled = true;
+		document.EditView.repeatMonth[0].disabled = true;
+                document.EditView.repeatMonth[1].disabled = true;
+                document.EditView.repeatMonth_date.readOnly = true;
+                document.EditView.repeatMonth_daytype.disabled = true;
+                document.EditView.repeatMonth_day.disabled = true;
+		document.EditView.parent_type.disabled = true;
+		document.EditView.selectcnt.style.display = "none";
+		document.EditView.selectparent.style.display = "none";
+
+                document.EditView.eventsave.disabled = true;
+                document.EditView.eventcancel.disabled = true;
 	}
 	else
 	{
@@ -808,8 +870,10 @@ function disableFields(type)
                 document.createTodo.starthr.disabled = true;
                 document.createTodo.startmin.disabled = true;
                 document.createTodo.startfmt.disabled = true;
+		document.createTodo.taskpriority.disabled = true;
                 document.createTodo.todosave.disabled = true;
                 document.createTodo.todocancel.disabled = true;
+		document.createTodo.task_toemail.readOnly = true;
 	}
 }
 
@@ -817,28 +881,92 @@ function enableFields(type)
 {
         if(type == 'Events')
         {
+		/*Enabling fields
+		*/
+		document.EditView.activitytype[0].disabled = false;
+                document.EditView.activitytype[1].disabled = false;
                 document.EditView.subject.readOnly = false;
+		document.EditView.visibility.disabled = false;
                 document.EditView.date_start.readOnly = false;
                 document.EditView.due_date.readOnly = false;
-                document.EditView.activitytype[0].disabled = false;
-                document.EditView.activitytype[1].disabled = false;
-                document.EditView.visibility.disabled = false;
                 document.EditView.starthr.disabled = false;
                 document.EditView.startmin.disabled = false;
                 document.EditView.startfmt.disabled = false;
                 document.EditView.endhr.disabled = false;
                 document.EditView.endmin.disabled = false;
                 document.EditView.endfmt.disabled = false;
-                document.EditView.eventsave.disabled = false;
-                document.EditView.eventcancel.disabled = false;
-		document.EditView.remindercheck.checked = false;
-		document.EditView.remindercheck.disabled = false;
-                document.EditView.remdays.disabled = false;
-                document.EditView.remhrs.disabled = false;
-                document.EditView.remmin.disabled = false;
-		document.EditView.visibility.checked = false;
+		document.EditView.taskpriority.disabled = false;
 		document.EditView.availableusers.disabled = false;
                 document.EditView.selectedusers.disabled = false;
+		document.EditView.remindercheck.disabled = false;
+		document.EditView.remdays.disabled = false;
+                document.EditView.remhrs.disabled = false;
+                document.EditView.remmin.disabled = false;
+		document.EditView.toemail.readOnly = false;
+		document.EditView.recurringcheck.disabled = false;
+		document.EditView.repeat_frequency.readOnly = false;
+		document.EditView.recurringtype.disabled = false;
+		document.EditView.sun_flag.disabled = false;
+                document.EditView.mon_flag.disabled = false;
+                document.EditView.tue_flag.disabled = false;
+                document.EditView.wed_flag.disabled = false;
+                document.EditView.thu_flag.disabled = false;
+                document.EditView.fri_flag.disabled = false;
+                document.EditView.sat_flag.disabled = false;
+		document.EditView.repeatMonth[0].disabled = false;
+                document.EditView.repeatMonth[1].disabled = false;
+                document.EditView.repeatMonth_date.readOnly = false;
+                document.EditView.repeatMonth_daytype.disabled = false;
+                document.EditView.repeatMonth_day.disabled = false;
+		document.EditView.parent_type.disabled = false;
+		document.EditView.selectcnt.style.display = "block";
+                document.EditView.selectparent.style.display = "block";
+
+		document.EditView.eventsave.disabled = false;
+                document.EditView.eventcancel.disabled = false;
+		/*Setting to default value
+		*/
+		document.EditView.subject.value = '';
+		document.EditView.visibility.checked = false;
+		document.EditView.date_start.value = '';
+                document.EditView.due_date.value = '';
+                document.EditView.starthr.value = '';
+                document.EditView.startmin.value = '';
+                document.EditView.startfmt.value = '';
+                document.EditView.endhr.value = '';
+                document.EditView.endmin.value = '';
+                document.EditView.endfmt.value = '';
+		document.EditView.taskpriority.value = 'High';
+		document.EditView.selectedusers.value = '';
+		document.EditView.remindercheck.checked = false;
+		document.getElementById('reminderOptions').style.display = 'none';
+		document.EditView.remdays.value = 0;
+                document.EditView.remhrs.value = 0;
+                document.EditView.remmin.value = 1;
+		document.EditView.recurringcheck.checked = false;
+		document.getElementById('repeatOptions').style.display = 'none';
+		document.EditView.repeat_frequency.value = '';
+                document.EditView.recurringtype.value = 'Daily';
+		document.getElementById('repeatWeekUI').style.display = 'none';
+		document.EditView.sun_flag.checked = false;
+                document.EditView.mon_flag.checked = false;
+                document.EditView.tue_flag.checked = false;
+                document.EditView.wed_flag.checked = false;
+                document.EditView.thu_flag.checked = false;
+                document.EditView.fri_flag.checked = false;
+                document.EditView.sat_flag.checked = false;
+		document.getElementById('repeatMonthUI').style.display = 'none';
+		document.EditView.repeatMonth[0].checked = true;
+		document.EditView.repeatMonth_date.value = '';
+		document.EditView.repeatMonth_daytype.value = 'first';
+		document.EditView.repeatMonth_day.value = 1;
+		document.EditView.parent_id.value = '';
+		document.EditView.parent_type.value = 'None';
+		document.getElementById('leadLay').style.visibility = 'hidden';
+		document.EditView.contactlist.value = '';
+		document.EditView.contactidlist.value = '';
+		
+		
         }
         else
         {
@@ -847,8 +975,10 @@ function enableFields(type)
                 document.createTodo.starthr.disabled = false;
                 document.createTodo.startmin.disabled = false;
                 document.createTodo.startfmt.disabled = false;
+		document.createTodo.taskpriority.disabled = false;
                 document.createTodo.todosave.disabled = false;
                 document.createTodo.todocancel.disabled = false;
+		document.createTodo.task_toemail.readOnly = false;
         }
 }
 
