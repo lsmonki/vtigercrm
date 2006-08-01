@@ -149,6 +149,25 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 		
  }
 
+ function getPriorityCombo()
+ {
+	 global $adb;
+	 $combo = '';
+	 $combo .= '<select name="taskpriority" id="taskpriority" class=small>';
+	 $q = "select * from vtiger_taskpriority";
+	 $Res = $adb->query($q);
+	 $noofrows = $adb->num_rows($Res);
+
+	 for($i = 0; $i < $noofrows; $i++)
+	 {
+		 $value = $adb->query_result($Res,$i,'taskpriority');
+		 $combo .= '<option value="'.$value.'">'.$value.'</option>';
+	 }
+
+	 $combo .= '</select>';
+	 return $combo;
+ }
+
 ?>
        
 	<!-- Add Event DIV starts-->
@@ -162,6 +181,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
 	<input type="hidden" name="activity_mode" value="Events">
+	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
@@ -252,6 +272,11 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 				</td>
 				</tr>
 				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Priority&nbsp;:&nbsp;<?php echo getPriorityCombo(); ?>
 			</td>
 		</tr>
 		</table>
@@ -388,7 +413,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 					<?php echo $mod_strings['LBL_SDRMD'] ?> :
 					</td>
 					<td >
-					<input type=text class=textbox style="width:90%" value="<?php echo $to_email ?>">
+					<input type=text name="toemail" class=textbox style="width:90%" value="<?php echo $to_email ?>">
 					</td>
 				</tr>
 				</table>
@@ -467,12 +492,12 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 													</td>
 													<td>
 														<select name="repeatMonth_day">
-															<option value="monday"><?php echo $mod_strings['LBL_DAY1']; ?></option>
-															<option value="tuesday"><?php echo $mod_strings['LBL_DAY2']; ?></option>
-															<option value="wednesday"><?php echo $mod_strings['LBL_DAY3']; ?></option>
-															<option value="thursday"><?php echo $mod_strings['LBL_DAY4']; ?></option>
-															<option value="friday"><?php echo $mod_strings['LBL_DAY5']; ?></option>
-															<option value="saturday"><?php echo $mod_strings['LBL_DAY6']; ?></option>
+															<option value=1><?php echo $mod_strings['LBL_DAY1']; ?></option>
+															<option value=2><?php echo $mod_strings['LBL_DAY2']; ?></option>
+															<option value=3><?php echo $mod_strings['LBL_DAY3']; ?></option>
+															<option value=4><?php echo $mod_strings['LBL_DAY4']; ?></option>
+															<option value=5><?php echo $mod_strings['LBL_DAY5']; ?></option>
+															<option value=6><?php echo $mod_strings['LBL_DAY6']; ?></option>
 														</select>
 													</td>
 												</tr>
@@ -497,26 +522,27 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
-								<select name="parent_type" class="small" id="parent_type" onChange="fnAssignTo()">
-									<option selected>None</option>
+								<select name="parent_type" class="small" id="parent_type" onChange="fnAssignTo();document.EditView.parent_name.value='None Selected';">
+									<option value="None">None</option>
 
-									<option>Leads</option>
-									<option>Accounts</option>
-									<option>Potentials</option>
+									<option value="Leads">Leads</option>
+									<option value="Accounts">Accounts</option>
+									<option value="Potentials">Potentials</option>
 								</select>
 							</td>
 							<td>
 								<div id="leadLay" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="None Selected" name="parent_name">&nbsp;
-								<input type="button" class="crmButton small edit" value="Change..." onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+								<input type="button" name="selectparent" class="crmButton small edit" value="Change..." onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td><b>Contacts :</b></td>
 							<td colspan="2">
-								<textarea rows="5" name="contact" class="calTxt"></textarea>&nbsp;
-								<input type="button" class="crmButton small edit" value="Select Contacts">
+								<input name="contactidlist" id="contactidlist" value="" type="hidden">
+								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
+								<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
 							</td>
 						</tr>
 					</table>
@@ -576,6 +602,7 @@ setObjects();
   <input type="hidden" name="module" value="Calendar">
   <input type="hidden" name="activity_mode" value="Task">
   <input type="hidden" name="action" value="TodoSave">
+  <input type="hidden" name="mode" value="">
   <input type="hidden" name="return_action" value="index">
   <input type="hidden" name="return_module" value="Calendar">
   <input type="hidden" name="view" value="<?php echo $calendar_arr['view'] ?>">
@@ -621,6 +648,10 @@ setObjects();
 				</script>
 			</td>
 			
+		</tr>
+		<tr>
+			<td><b>Priority&nbsp;:&nbsp;</b></td>
+			<td><?php echo getPriorityCombo(); ?></td>
 		</tr>
 
 			
@@ -696,7 +727,7 @@ setObjects();
                                         <?php echo $mod_strings['LBL_SDRMD'] ?> :
                                         </td>
                                         <td >
-                                        <input type=text class=textbox style="width:90%" value="<?php echo $to_email ?>">
+                                        <input name="task_toemail" type=text class=textbox style="width:90%" value="<?php echo $to_email ?>">
                                         </td>
                                 </tr>
                                 </table>
