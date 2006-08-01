@@ -78,7 +78,7 @@ $price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_
 $price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
 
 //getting the Product Data
-$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.product_description,vtiger_quotesproductrel.* from vtiger_quotesproductrel inner join vtiger_products on vtiger_products.productid=vtiger_quotesproductrel.productid where quoteid=".$quote_id;
+$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$quote_id;
 
 global $result;
 $result = $adb->query($query);
