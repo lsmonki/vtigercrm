@@ -155,7 +155,7 @@ if(isset($_REQUEST['module']))
 	}
 	if(!$is_module)
 	{
-		die("Hacking Attempt");
+		die("Module name is missing. Please check the module name.");
 	}
 }
 if($action == 'Export')
