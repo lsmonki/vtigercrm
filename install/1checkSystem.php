@@ -152,7 +152,7 @@ $array = Array(
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>vtiger CRM 5 - Configuration Wizard</title>
+	<title>vtiger CRM 5 - Configuration Wizard - Installation Check</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
 
