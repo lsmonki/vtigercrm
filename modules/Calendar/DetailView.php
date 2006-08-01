@@ -12,7 +12,8 @@
  require_once('include/utils/utils.php'); 
  require_once('include/CustomFieldUtil.php');
  require_once('modules/Calendar/calendarLayout.php');
- global $current_user;
+ require_once('include/database/PearDatabase.php');
+ global $current_user,$adb;
  $activity_mode = $_REQUEST['activity_mode'];
  if($activity_mode == 'Task')
  {
@@ -29,6 +30,39 @@
 	 $focus->id = $_REQUEST['record'];
 	 $focus->name=$focus->column_fields['subject'];
  }
+
+ //To set recurring details
+ $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
+ $res = $adb->query($query);
+ $rows = $adb->num_rows($res);
+ if($rows != 0)
+ {
+	 $data['recurringcheck'] = 'on';
+	 $data['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
+	 $recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
+	 $data['recurringtype'] = $recurringinfo[0];
+	 if($recurringinfo[0] == 'Weekly')
+	 {
+		 
+	 }
+	 elseif($recurringinfo[0] == 'Monthly')
+	 {
+		 $data['repeatMonth'] = $recurringinfo[1];
+		 if($recurringinfo[1] == 'date')
+		 {
+			 $data['repeatMonth_date'] = $recurringinfo[2];
+		 }
+		 else
+		 {
+			 $data['repeatMonth_daytype'] = $recurringinfo[2];
+			 $data['repeatMonth_day'] = $recurringinfo[3];
+		 }
+	 }
+	 
+ }
+
+
+ //To set user selected hour format
  if($current_user->hour_format == '')
  	$format = 'am/pm';
  else
@@ -61,7 +95,7 @@ else
 	 $data['task_date_start'] = $focus->column_fields['date_start'];
 	 $data['assigned_user_id'] = $focus->column_fields['assigned_user_id'];
 	 $data['taskstatus'] = $focus->column_fields['taskstatus'];
-	 $data['taskpriority'] = $focus->column_fields['taskpriority'];
+	 $data['priority'] = $focus->column_fields['taskpriority'];
 	 $data['sendnotification'] = $focus->column_fields['sendnotification'];
  }
  elseif($activity_mode == 'Events')
@@ -72,13 +106,55 @@ else
 	 $data['visibility'] = $focus->column_fields['visibility'];
 	 $data['assigned_user_id'] = $focus->column_fields['assigned_user_id'];
 	 $data['eventstatus'] = $focus->column_fields['eventstatus'];
-	 $data['taskpriority'] = $focus->column_fields['taskpriority'];
+	 $data['priority'] = $focus->column_fields['taskpriority'];
 	 $data['sendnotification'] = $focus->column_fields['sendnotification'];
 	 $data['activitytype'] = $focus->column_fields['activitytype'];
 	 //$time_arr = getaddEventPopupTime($format);
 	 
  }
+ //To get value for Related To field
+ if(isset($focus->column_fields['parent_id']) && $focus->column_fields['parent_id'] != null)
+ {
+	 $value = $focus->column_fields['parent_id'];
+	 $data['parent_id'] = $value;
+	 $parent_module = getSalesEntityType($value);
+	 if($parent_module == "Leads")
+	 {
+		 $sql = "select * from vtiger_leaddetails where leadid=".$value;
+		 $result = $adb->query($sql);
+		 $first_name = $adb->query_result($result,0,"firstname");
+		 $last_name = $adb->query_result($result,0,"lastname");
+		 $parent_name = $last_name.' '.$first_name;
+	 }
+	 elseif($parent_module == "Accounts")
+	 {
+		 $sql = "select * from  vtiger_account where accountid=".$value;
+		 $result = $adb->query($sql);
+		 $parent_name = $adb->query_result($result,0,"accountname");
+	 }
+	 elseif($parent_module == "Potentials")
+	 {
+		 $sql = "select * from  vtiger_potential where potentialid=".$value;
+		 $result = $adb->query($sql);
+		 $parent_name = $adb->query_result($result,0,"potentialname");
+	 }
+	 $data['parent_type'] = $parent_module;
+	 $data['parent_name'] = $parent_name;
+	 
+ 
+ }
 
+ //To get Contact info
+ $conquery = 'select vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_cntactivityrel.activityid='.$focus->id.' and vtiger_crmentity.deleted=0';
+ $con_res = $adb->query($conquery);
+ $cntslist ='';
+
+ while($row = $adb->fetch_array($con_res))
+ {
+	 $cntslist .= $row['lastname'].' '.$row['firstname'];
+	 $cntslist .= '\n';
+ }
+ $data['contactlist'] = $cntslist;
  $js_arr = "<SCRIPT id='activity_cont'> var data = new Array(\"".join($data,'","')."\");
  var key = new Array(\"".join(array_keys($data),'","')."\");
  var activity_type = '".$activity_mode."';
