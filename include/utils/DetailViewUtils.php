@@ -423,7 +423,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				{
 					$images[]='"'.$imagepath_array[$image_iter].$image_id_array[$image_iter]."_".$image_array[$image_iter].'","'.$imagepath_array[$image_iter].$image_id_array[$image_iter]."_".$image_array[$image_iter].'"';
 				}	
-				$image_lists .=implode(',',$images).');</script>';
+				$image_lists .=implode(',',$images).');</script><script language="JavaScript" type="text/javascript" src="modules/Products/Productsslide.js"></script><script language="JavaScript" type="text/javascript">Carousel();</script>';
 				$label_fld[] =$image_lists;
 			}elseif(count($image_array)==1)
 			{
