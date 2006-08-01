@@ -111,7 +111,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Quote']);
+$smarty->assign("SINGLE_MOD",'Quote');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
