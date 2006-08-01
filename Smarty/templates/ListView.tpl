@@ -412,8 +412,8 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td colspan="3" align="center">
 	&nbsp;&nbsp;
-	<input type="button" name="button" class="small" value="{$APP.LBL_UPDATE_OWNER}" onClick="ajaxChangeStatus('owner')">
-	<input type="button" name="button" class="small" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="fninvsh('changeowner')">
+	<input type="button" name="button" class="crmbutton small edit" value="{$APP.LBL_UPDATE_OWNER}" onClick="ajaxChangeStatus('owner')">
+	<input type="button" name="button" class="crmbutton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="fninvsh('changeowner')">
 </td>
 </tr>
 </table>
@@ -444,7 +444,7 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td colspan="3" align="center">
 	&nbsp;&nbsp;
-	<input type="button" name="button" class="small" value="{$APP.LBL_UPDATE_STATUS}" onClick="ajaxChangeStatus('status')">
+	<input type="button" name="button" class="crmbutton small edit" value="{$APP.LBL_UPDATE_STATUS}" onClick="ajaxChangeStatus('status')">
 </td>
 </tr>
 </table>
