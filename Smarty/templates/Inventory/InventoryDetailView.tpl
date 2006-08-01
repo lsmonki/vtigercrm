@@ -290,11 +290,6 @@ function DeleteTag(id)
 		</table>
 		<!-- Contents - end -->
 
-{if $MODULE eq 'Products'}
-	<script language="JavaScript" type="text/javascript" src="modules/Products/Productsslide.js"></script>
-	<script language="JavaScript" type="text/javascript">Carousel();</script>
-{/if}
-
 <script>
 function getTagCloud()
 {ldelim}
