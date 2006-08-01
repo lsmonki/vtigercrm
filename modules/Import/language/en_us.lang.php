@@ -143,7 +143,7 @@ $mod_strings = Array(
 'LBL_UNDO_LAST_IMPORT'=>'Undo Last Import',
 
 'LBL_SUCCESS_1' => 'No. of Records Successfully Imported : ',
-'LBL_SKIPPED_1' => 'No. of Records Skipped as they were missing one or more required vtiger_fields : ',
+'LBL_SKIPPED_1' => 'No. of Records Skipped as they were missing one or more required fields : ',
 
 //Added for patch2 - Products Import Notes
 'LBL_PRODUCTS_NOTE_1'=>'Product Name must be mapped',

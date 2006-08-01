@@ -395,7 +395,7 @@ function validate_import_map()
 	{
 		if(seq_string.indexOf(required_fields[inner_loop]) == -1)
 		{
-			alert('Please map the mandatory vtiger_field "'+required_fields_name[inner_loop]+'"');
+			alert('Please map the mandatory field "'+required_fields_name[inner_loop]+'"');
 			return false;
 		}
 	}
