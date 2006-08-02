@@ -37,24 +37,25 @@
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>
 				{/if}
 
+			
 				{if $smarty.request.action eq 'DefaultFieldPermissions' || $smarty.request.action eq 'UpdateDefaultFieldLevelAccess' || $smarty.request.action eq 'EditDefOrgFieldLevelAccess' }
 				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
 				{/if}
+			
+				{if $smarty.request.action eq 'AuditTrailList'}
+                        	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
+                                {else}
+                                <tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
+                                {/if}
 
-				{if $smarty.request.action eq 'ListModuleOwners' || $smarty.request.action eq 'SettingsAjax'}
-				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td></tr>
+				{if $smarty.request.action eq 'ListLoginHistory'}
+				        	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
 				{else}
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td></tr>
+						<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
 				{/if}
 
-				{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'UsersAjax' }
-				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
-				{else}
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
-				{/if}
-	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_STUDIO}</td></tr>
 				{if  $smarty.request.action eq 'CustomFieldList' || $smarty.request.action eq 'LeadCustomFieldMapping'}
 				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
@@ -120,6 +121,12 @@
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings">{$MOD.LBL_BACKUP_SERVER_SETTINGS}</a></td></tr>
 				{/if}
 				
+				{if $smarty.request.action eq 'ListModuleOwners' || $smarty.request.action eq 'SettingsAjax'}
+				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td></tr>
+				{else}
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td></tr>
+				{/if}
+				
 				{if $smarty.request.action eq 'CurrencyListView' ||  $smarty.request.action eq 'CurrencyEditView' ||  $smarty.request.action eq 'SaveCurrencyInfo'}
 				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a></td></tr>
 				{else}
@@ -141,17 +148,14 @@
                                 {else}
                                 <tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td></tr>
                                 {/if}
-				{if $smarty.request.action eq 'AuditTrailList'}
-                                <tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
-                                {else}
-                                <tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
-                                {/if}
-				{if $smarty.request.action eq 'ListLoginHistory'}
-				        	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+
+				{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'UsersAjax' }
+				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
 				{else}
-						<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
 				{/if}
-						<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
+	
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
                 
 				</table>
 			</td>
