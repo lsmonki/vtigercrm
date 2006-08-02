@@ -97,7 +97,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
 	}
-	elseif($uitype == 15 || $uitype == 16 || $uitype == 115)
+	elseif($uitype == 15 || $uitype == 16 || $uitype == 115 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
 	     $label_fld[] = $mod_strings[$fieldlabel];
 	     $label_fld[] = $col_fields[$fieldname];
