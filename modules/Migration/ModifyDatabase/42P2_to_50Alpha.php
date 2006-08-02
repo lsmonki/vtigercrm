@@ -429,7 +429,7 @@ $query1 = "ALTER TABLE vtiger_leadaddress change lane lane varchar(250)";
 Execute($query1);
 
 $rename_table_array1 = Array(
-		"update vtiger_field set tablename='customerdetails' where tabid=4 and fieldname in ('portal','support_start_date','support_end_date')",
+		"update vtiger_field set tablename='vtiger_customerdetails' where tabid=4 and fieldname in ('portal','support_start_date','support_end_date')",
 		"alter table vtiger_PortalInfo drop foreign key fk_PortalInfo",
 		"rename table vtiger_PortalInfo to vtiger_portalinfo",
 		"alter table vtiger_portalinfo add CONSTRAINT `fk_portalinfo` FOREIGN KEY (`id`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
@@ -1906,14 +1906,6 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_accountgrouprelation` DROP INDEX `fk_accountgrouprelation2`",
 //"ALTER TABLE `vtiger_activity` DROP INDEX `status`",
 "ALTER TABLE `vtiger_carrier` DROP INDEX `carrier_UK0`",
-"ALTER TABLE `vtiger_chat_msg` DROP INDEX `chat_to`",
-"ALTER TABLE `vtiger_chat_msg` DROP INDEX `chat_from`",
-"ALTER TABLE `vtiger_chat_msg` DROP INDEX `born`",
-"ALTER TABLE `vtiger_chat_pchat` DROP INDEX `msg`",
-"ALTER TABLE `vtiger_chat_pvchat` DROP INDEX `msg`",
-"ALTER TABLE `vtiger_chat_users` DROP INDEX `session`",
-"ALTER TABLE `vtiger_chat_users` DROP INDEX `nick`",
-"ALTER TABLE `vtiger_chat_users` DROP INDEX `ping`",
 //"ALTER TABLE `vtiger_contactgrouprelation` DROP INDEX `fk_contactgrouprelation2`",
 //"ALTER TABLE `vtiger_customview` DROP INDEX `customview`",
 //"ALTER TABLE `vtiger_def_org_field` DROP INDEX `tabid`",
@@ -1944,13 +1936,13 @@ $query_array = Array(
 "ALTER TABLE `vtiger_activsubtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_contactgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
 //"DROP TABLE `crmentity_seq`",
-"ALTER TABLE `vtiger_customerdetails` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+//"ALTER TABLE `vtiger_customerdetails` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 //"DROP TABLE `customfield_sequence_seq`",
 "ALTER TABLE `vtiger_customview_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `vtiger_def_org_field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `vtiger_def_org_share` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `vtiger_def_org_share_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_defaultcv` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+//"ALTER TABLE `vtiger_defaultcv` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_durationhrs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_durationmins` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_emailtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
@@ -1975,7 +1967,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_parenttabrel` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
 "ALTER TABLE `vtiger_pogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
 "ALTER TABLE `vtiger_portal` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_portalinfo` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+//"ALTER TABLE `vtiger_portalinfo` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_potentialgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
 "ALTER TABLE `vtiger_profile2field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `vtiger_profile2globalpermissions` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
@@ -2357,24 +2349,10 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `recurringid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_activitygrouprelation` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_announcement` MODIFY COLUMN `creatorid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_attachments` MODIFY COLUMN `attachmentsid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `blockid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_blocks` MODIFY COLUMN `sequence` INTEGER(10) DEFAULT NULL",
 "ALTER TABLE `vtiger_blocks` MODIFY COLUMN `show_title` INTEGER(2) DEFAULT NULL",
-//"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `chat_from` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
-"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `chat_to` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
-"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `born` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
-//"ALTER TABLE `vtiger_chat_pchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `vtiger_chat_pchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
-//"ALTER TABLE `vtiger_chat_pvchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `vtiger_chat_pvchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
-//"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `nick` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `session` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `ping` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
-//"ALTER TABLE `vtiger_competitor` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `donotcall` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
 "ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) COLLATE latin1_swedish_ci DEFAULT NULL",
@@ -2417,10 +2395,6 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_field` MODIFY COLUMN `displaytype` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_field` MODIFY COLUMN `quickcreate` INTEGER(10) NOT NULL DEFAULT '1'",
 "ALTER TABLE `vtiger_field_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `tag_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `tagger_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `object_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-//"ALTER TABLE `vtiger_freetags` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_group2grouprel` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_group2grouprel` MODIFY COLUMN `containsgroupid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_group2role` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2480,9 +2454,9 @@ $query_array = Array(
 "ALTER TABLE `vtiger_potential` MODIFY COLUMN `amount` DECIMAL(10,2) DEFAULT '0.00'",
 "ALTER TABLE `vtiger_potential` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
 //"ALTER TABLE `vtiger_potentialgrouprelation` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT NULL",
-"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `lastmodified` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL",
+"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `probability` DECIMAL(7,3) DEFAULT NULL",
+"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `lastmodified` DATETIME default NULL",
 "ALTER TABLE `vtiger_pricebook` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
 //"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `pricebookid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2573,14 +2547,6 @@ $query_array = Array(
 "ALTER TABLE `vtiger_attachments` ADD KEY `attachmentsid1` (`attachmentsid`)",
 "ALTER TABLE `vtiger_blocks` ADD KEY `block_tabid` (`tabid`)",
 "ALTER TABLE `vtiger_carrier` ADD UNIQUE KEY `carrier_UK01` (`carrier`)",
-"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX0` (`chat_from`)",
-"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX1` (`chat_to`)",
-"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX2` (`born`)",
-"ALTER TABLE `vtiger_chat_pchat` ADD UNIQUE KEY `chat_pchat_UK0` (`msg`)",
-"ALTER TABLE `vtiger_chat_pvchat` ADD UNIQUE KEY `chat_pvchat_UK0` (`msg`)",
-"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX0` (`nick`)",
-"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX1` (`session`)",
-"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX2` (`ping`)",
 "ALTER TABLE `vtiger_contactgrouprelation` ADD KEY `contactgrouprelation_IDX1` (`groupname`)",
 "ALTER TABLE `vtiger_def_org_field` ADD KEY `tabid4` (`tabid`)",
 "ALTER TABLE `vtiger_def_org_share` ADD KEY `fk_def_org_share23` (`permission`)",
@@ -2761,7 +2727,7 @@ $query_array2 = Array(
 				"update vtiger_cvcolumnlist set columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
 				"update vtiger_field set sequence = 2 where columnname='filename' and tablename = 'vtiger_attachments'",
 				"delete from vtiger_cvcolumnlist where columnname = 'vtiger_seactivityrel:crmid:parent_id:Emails_Related_To:I'",
-				"update vtiger_cvcolumnlist set columnindex = 1 where cvid=3 and columnindex=3",
+				"update vtiger_cvcolumnlist set columnindex = 1 where cvid=20 and columnindex=3",
 				"update vtiger_field set info_type='ADV' where tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
 				"update vtiger_field set info_type='ADV' where tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
 
@@ -2771,7 +2737,7 @@ $query_array2 = Array(
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'VAT','4.5')",
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Sales','10')",
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Service','12.5')",
-				"update vtiger_field set uitype=83, tablename='producttaxrel' where tabid=14 and fieldname='taxclass'",
+				"update vtiger_field set uitype=83, tablename='vtiger_producttaxrel' where tabid=14 and fieldname='taxclass'",
 				"insert into vtiger_moduleowners values(".$this->localGetTabID('Campaigns').",1)",
 
 				"alter table vtiger_attachments add column path varchar(255) default NULL"
@@ -3228,6 +3194,215 @@ $conn->query("insert into vtiger_parenttabrel values (2,17,7)");
 $conn->query("insert into vtiger_parenttabrel values (4,17,9)");
 
 
+
+//Added on 02-08-2006 ie., 2nd August 2006
+
+//column added for proxy server settings
+Execute("alter table vtiger_systems add column server_port int(19) default NULL after server");
+
+//type changed to support decimal places
+Execute("alter table vtiger_campaign change expectedrevenue expectedrevenue decimal(11,3)");
+Execute("alter table vtiger_campaign change budgetcost exbudgetcost decimal(11,3)");
+Execute("alter table vtiger_campaign change actualcost actualcost decimal(11,3)");
+Execute("alter table vtiger_campaign change expectedroi expectedroi decimal(11,3)");
+Execute("alter table vtiger_campaign change actualroi actualroi decimal(11,3)");
+
+//homeorder value modified to get graph in homepage
+Execute("update vtiger_users set homeorder='ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL,HDB'");
+
+//Removed activities from product related list
+Execute("delete from vtiger_relatedlists where tabid = 14 and related_tabid=9");
+Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("HelpDesk").",".getTabid("Activities").",'get_history',4,'Activity History',0)");
+
+//Assigned to field for Events made Optional
+Execute("update vtiger_field set typeofdata='V~M' where columnname='smownerid' and tabid=16 and fieldname='assigned_user_id'");
+
+//Query added to have Notes under Marketing and Support --Jeri -- 04-06-06
+Execute("insert into vtiger_parenttabrel values (2,8,8)");
+
+
+//Update Query for quickcreate sequence of Campaign & Ticket -- Added by Ahmed -- 11-07-2006
+Execute("update vtiger_field set quickcreatesequence='3' where fieldname='filename' and tabid=13");
+Execute("update vtiger_field set quickcreatesequence='4' where fieldname='ticketpriorities' and tabid=13");
+Execute("update vtiger_field set quickcreatesequence='3' where fieldname='campaigntype' and tabid=26");
+Execute("update vtiger_field set quickcreatesequence='6' where fieldname='campaignstatus' and tabid=26");
+Execute("update vtiger_field set quickcreatesequence='2' where fieldname='closingdate' and tabid=26");
+
+
+//Added for Tax and Inventory - Product details handling
+Execute("drop table vtiger_poproductrel");
+Execute("drop table vtiger_soproductrel");
+Execute("drop table vtiger_quotesproductrel");
+Execute("drop table vtiger_invoiceproductrel");
+
+Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, vattax decimal(7,3) default NULL, salestax decimal(7,3) default NULL, servicetax decimal(7,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
+
+Execute("alter table vtiger_inventorytaxinfo add column deleted int(1) default 0");
+
+Execute("CREATE TABLE vtiger_shippingtaxinfo ( taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL, deleted int(1) default '0', PRIMARY KEY (taxid), KEY shippingtaxinfo_taxname_idx (taxname) ) ENGINE=InnoDB");
+
+Execute("CREATE TABLE vtiger_inventoryshippingrel (id int(19) NOT NULL, vattax decimal(7,3) default NULL, salestax decimal(7,3) default NULL, servicetax decimal(7,3) default NULL, KEY inventoryishippingrel_id_idx (id) ) ENGINE=InnoDB");
+
+Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_purchaseorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,57,3,'V~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_purchaseorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_purchaseorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_purchaseorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+
+Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_salesorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,15,63,3,'V~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_salesorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_salesorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_salesorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+
+Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_quotes',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,51,3,'V~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_quotes',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_quotes',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_quotes',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+
+Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_invoice',1,'15','hdnTaxType','Tax Type',1,0,0,100,13,69,3,'V~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_invoice',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_invoice',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_invoice',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+
+Execute("alter table vtiger_purchaseorder add column taxtype varchar(25) default NULL after subtotal");
+Execute("alter table vtiger_purchaseorder add column discount_percent decimal(11,3) default NULL after taxtype");
+Execute("alter table vtiger_purchaseorder add column discount_amount decimal(11,3) default NULL after discount_percent");
+Execute("alter table vtiger_purchaseorder add column s_h_amount decimal(11,3) default NULL after discount_amount");
+
+Execute("alter table vtiger_salesorder add column taxtype varchar(25) default NULL after subtotal");
+Execute("alter table vtiger_salesorder add column discount_percent decimal(11,3) default NULL after taxtype");
+Execute("alter table vtiger_salesorder add column discount_amount decimal(11,3) default NULL after discount_percent");
+Execute("alter table vtiger_salesorder add column s_h_amount decimal(11,3) default NULL after discount_amount");
+
+Execute("alter table vtiger_quotes add column taxtype varchar(25) default NULL after total");
+Execute("alter table vtiger_quotes add column discount_percent decimal(11,3) default NULL after taxtype");
+Execute("alter table vtiger_quotes add column discount_amount decimal(11,3) default NULL after discount_percent");
+Execute("alter table vtiger_quotes add column s_h_amount decimal(11,3) default NULL after discount_amount");
+
+Execute("alter table vtiger_invoice add column taxtype varchar(25) default NULL after total");
+Execute("alter table vtiger_invoice add column discount_percent decimal(11,3) default NULL after taxtype");
+Execute("alter table vtiger_invoice add column discount_amount decimal(11,3) default NULL after discount_percent");
+Execute("alter table vtiger_invoice add column s_h_amount decimal(11,3) default NULL after discount_amount");
+
+
+//Update Query to Match Notes List View Header Fieldnames with Custom View combo values
+Execute("update vtiger_field set fieldlabel='Title' where fieldlabel='Subject' and tabid=8");
+Execute("update vtiger_field set fieldlabel='File' where fieldlabel='Attachment' and tabid=8");
+
+
+//Update Query to change the UI type of Rating Field in Accounts Module from 1 to 15 to display combo list
+Execute("update vtiger_field set uitype=15 where tabid=6 and fieldname='rating'");
+
+
+//Insert and Update Query for new block addition for Campaigns Module
+Execute("update vtiger_blocks set blocklabel='LBL_EXPECTATIONS_AND_ACTUALS' where tabid=26 and blockid=78");
+Execute("insert into vtiger_blocks values (82,26,'LBL_DESCRIPTION_INFORMATION',4,0,0,0,0,0)");
+
+
+//Update Query for rearrangements of fields in Campaigns Module's Detail/Edit/Create View
+Execute("update vtiger_field set sequence=1 where tabid=26 and columnname='campaignname' and fieldname='campaignname'");
+Execute("update vtiger_field set sequence=2 where tabid=26 and columnname='campaignstatus' and fieldname='campaignstatus'");
+Execute("update vtiger_field set sequence=3 where tabid=26 and columnname='smownerid' and fieldname='assigned_user_id'");
+Execute("update vtiger_field set sequence=4 where tabid=26 and columnname='product_id' and fieldname='product_id'");
+Execute("update vtiger_field set sequence=5 where tabid=26 and columnname='campaigntype' and fieldname='campaigntype'");
+Execute("update vtiger_field set sequence=6 where tabid=26 and columnname='closingdate' and fieldname='closingdate'");
+Execute("update vtiger_field set sequence=7 where tabid=26 and columnname='targetaudience' and fieldname='targetaudience'");
+Execute("update vtiger_field set sequence=8 where tabid=26 and columnname='targetsize' and fieldname='targetsize'");
+Execute("update vtiger_field set sequence=9 where tabid=26 and columnname='sponsor' and fieldname='sponsor'");
+Execute("update vtiger_field set sequence=10 where tabid=26 and columnname='numsent' and fieldname='numsent'");
+Execute("update vtiger_field set sequence=11 where tabid=26 and columnname='createdtime' and fieldname='createdtime'");
+Execute("update vtiger_field set sequence=12 where tabid=26 and columnname='modifiedtime' and fieldname='modifiedtime'");
+
+Execute("update vtiger_field set sequence=1, block=78 where tabid=26 and columnname='budgetcost' and fieldname='budgetcost'");
+Execute("update vtiger_field set sequence=2, block=78 where tabid=26 and columnname='actualcost' and fieldname='actualcost'");
+Execute("update vtiger_field set sequence=3, block=78 where tabid=26 and columnname='expectedresponse' and fieldname='expectedresponse'");
+Execute("update vtiger_field set sequence=4, block=78 where tabid=26 and columnname='expectedrevenue' and fieldname='expectedrevenue'");
+Execute("update vtiger_field set sequence=5, block=78 where tabid=26 and columnname='expectedsalescount' and fieldname='expectedsalescount'");
+Execute("update vtiger_field set sequence=6, block=78 where tabid=26 and columnname='actualsalescount' and fieldname='actualsalescount'");
+Execute("update vtiger_field set sequence=7, block=78 where tabid=26 and columnname='expectedresponsecount' and fieldname='expectedresponsecount'");
+Execute("update vtiger_field set sequence=8, block=78 where tabid=26 and columnname='actualresponsecount' and fieldname='actualresponsecount'");
+Execute("update vtiger_field set sequence=9, block=78 where tabid=26 and columnname='expectedroi' and fieldname='expectedroi'");
+Execute("update vtiger_field set sequence=10, block=78 where tabid=26 and columnname='actualroi' and fieldname='actualroi'");
+
+Execute("insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')");
+
+
+//Update query to set the fieldname in user detail/edit/create view
+Execute("update vtiger_field set sequence=1 where tabid=29 and columnname='user_name' and fieldname='user_name' and block=79");
+Execute("update vtiger_field set sequence=2 where tabid=29 and columnname='is_admin' and fieldname='is_admin' and block=79");
+Execute("update vtiger_field set sequence=3 where tabid=29 and columnname='user_password' and fieldname='user_password' and block=79");
+Execute("update vtiger_field set sequence=4 where tabid=29 and columnname='email1' and fieldname='email1' and block=79");
+Execute("update vtiger_field set sequence=5 where tabid=29 and columnname='confirm_password' and fieldname='confirm_password' and block=79");
+Execute("update vtiger_field set sequence=6 where tabid=29 and columnname='status' and fieldname='status' and block=79");
+Execute("update vtiger_field set sequence=7 where tabid=29 and columnname='first_name' and fieldname='first_name' and block=79");
+Execute("update vtiger_field set sequence=8 where tabid=29 and columnname='currency_id' and fieldname='currency_id' and block=79");
+Execute("update vtiger_field set sequence=9 where tabid=29 and columnname='last_name' and fieldname='last_name' and block=79");
+Execute("update vtiger_field set sequence=10 where tabid=29 and columnname='lead_view' and fieldname='lead_view' and block=79");
+Execute("update vtiger_field set sequence=11 where tabid=29 and columnname='roleid' and fieldname='roleid' and block=79");
+Execute("update vtiger_field set sequence=12 where tabid=29 and columnname='activity_view' and fieldname='activity_view' and block=79");
+Execute("update vtiger_field set sequence=13 where tabid=29 and columnname='hour_format' and fieldname='hour_format' and block=79");
+Execute("update vtiger_field set sequence=14 where tabid=29 and columnname='start_hour' and fieldname='start_hour' and block=79");
+Execute("update vtiger_field set sequence=15 where tabid=29 and columnname='end_hour' and fieldname='end_hour' and block=79");
+
+Execute("update vtiger_field set sequence=1 where tabid=29 and columnname='title' and fieldname='title' and block=80");
+Execute("update vtiger_field set sequence=2 where tabid=29 and columnname='phone_fax' and fieldname='phone_fax' and block=80");
+Execute("update vtiger_field set sequence=3 where tabid=29 and columnname='department' and fieldname='department' and block=80");
+Execute("update vtiger_field set sequence=4 where tabid=29 and columnname='email2' and fieldname='email2' and block=80");
+Execute("update vtiger_field set sequence=5 where tabid=29 and columnname='phone_work' and fieldname='phone_work' and block=80");
+Execute("update vtiger_field set sequence=6 where tabid=29 and columnname='yahoo_id' and fieldname='yahoo_id' and block=80");
+Execute("update vtiger_field set sequence=7 where tabid=29 and columnname='phone_mobile' and fieldname='phone_mobile' and block=80");
+Execute("update vtiger_field set sequence=8 where tabid=29 and columnname='reports_to_id' and fieldname='reports_to_id' and block=80");
+Execute("update vtiger_field set sequence=9 where tabid=29 and columnname='phone_home' and fieldname='phone_home' and block=80");
+Execute("update vtiger_field set sequence=10 where tabid=29 and columnname='imagename' and fieldname='imagename' and block=80");
+Execute("update vtiger_field set sequence=11 where tabid=29 and columnname='phone_other' and fieldname='phone_other' and block=80");
+Execute("update vtiger_field set sequence=12 where tabid=29 and columnname='date_format' and fieldname='date_format' and block=80");
+Execute("update vtiger_field set sequence=13 where tabid=29 and columnname='signature' and fieldname='signature' and block=80");
+Execute("update vtiger_field set sequence=14 where tabid=29 and columnname='description' and fieldname='description' and block=80");
+Execute("update vtiger_field set sequence=15 where tabid=29 and columnname='tagcloud' and fieldname='tagcloud' and block=80");
+
+Execute("update vtiger_field set sequence=1 where tabid=29 and columnname='address_street' and fieldname='address_street' and block=81");
+Execute("update vtiger_field set sequence=2 where tabid=29 and columnname='address_country' and fieldname='address_country' and block=81");
+Execute("update vtiger_field set sequence=3 where tabid=29 and columnname='address_city' and fieldname='address_city' and block=81");
+Execute("update vtiger_field set sequence=4 where tabid=29 and columnname='address_postalcode' and fieldname='address_postalcode' and block=81");
+Execute("update vtiger_field set sequence=5 where tabid=29 and columnname='address_state' and fieldname='address_state' and block=81");
+
+//Added for Recurring events
+Execute("alter table vtiger_recurringevents add column recurringfreq int(19) default NULL");
+Execute("alter table vtiger_recurringevents add column recurringinfo varchar(50) default NULL");
+
+
+//Update Query for changing the uitype for existing picklist entries making it non-editable
+Execute("update vtiger_field set uitype=111 where fieldname in ('sales_stage','ticketstatus','taskstatus','eventstatus','faqstatus','quotestage','postatus','sostatus','invoicestatus')");
+
+
+
+
+//HANDLE HERE -- Handle the Inventory Tax handlings here
+
+
+
+
+
+
+
+
+
+//Finally add vtiger_ prefix for all the entries in 'tablename' column in field table - 2nd August 2006
+$field_res = $conn->query("select fieldid, tablename from vtiger_field");
+for($field_count=0;$field_count<$conn->num_rows($field_res);$field_count++)
+{
+	//get the tablename
+	$tablename = $conn->query_result($field_res,$field_count,'tablename');
+
+	//check whether the table name has the prefix vtiger_
+	if(substr($tablename, 0, 7) != 'vtiger_')
+	{
+		$tablename = "vtiger_$tablename";
+
+		//Now update the tablename
+		$fieldid = $conn->query_result($field_res,$field_count,'fieldid');
+		Execute("update vtiger_field set tablename=\"$tablename\" where fieldid=$fieldid");
+	}
+}
 
 
 			     
