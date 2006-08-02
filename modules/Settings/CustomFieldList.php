@@ -78,6 +78,11 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
+
+if($_REQUEST['mode'] !='')
+	$mode = $_REQUEST['mode'];
+$smarty->assign("MODE", $mode);
+
 if($_REQUEST['ajax'] != 'true')
 	$smarty->display('CustomFieldList.tpl');	
 else

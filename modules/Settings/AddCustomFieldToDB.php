@@ -14,6 +14,7 @@ $fldmodule=$_REQUEST['fld_module'];
  $fldlabel=$_REQUEST['fldLabel'];
  $fldType= $_REQUEST['fieldType'];
  $parenttab=$_REQUEST['parenttab'];
+ $mode=$_REQUEST['mode'];
 
 $tabid = getTabid($fldmodule);
 
@@ -24,9 +25,13 @@ if(get_magic_quotes_gpc() == 1)
 
 
 //checking if the user is trying to create a custom vtiger_field which already exists  
-
-$checkquery="select * from vtiger_field where tabid='".$tabid."'and fieldlabel='".$fldlabel."'";
-$checkresult=$adb->query($checkquery);
+if($mode != 'edit')
+{
+	$checkquery="select * from vtiger_field where tabid='".$tabid."'and fieldlabel='".$fldlabel."'";
+	$checkresult=$adb->query($checkquery);
+}
+else
+	$checkresult=0;
 
 if($adb->num_rows($checkresult) != 0)
 {
@@ -305,7 +310,7 @@ else
 			}
 		}
 		//Inserting into LeadMapping vtiger_table - Jaguar
-		if($fldmodule == 'Leads')
+		if($fldmodule == 'Leads' && $_REQUEST['fieldid'] == '')
 		{
 
 			$sql_def = "insert into vtiger_convertleadmapping (leadfid) values(".$custfld_fieldid.")";

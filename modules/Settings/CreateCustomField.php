@@ -52,7 +52,18 @@ $cftextcombo = Array($mod_strings['Text'],
                         $mod_strings['LBL_CHECK_BOX'],
                         $mod_strings['LBL_TEXT_AREA'],
                         $mod_strings['LBL_MULTISELECT_COMBO']
-                        );
+				);	
+$typeVal = Array(
+	'0'=>'Text',
+	'1'=>'Number',
+	'2'=>'Percent',
+	'3'=>'Currency',
+	'4'=>'Date',
+	'5'=>'Email',
+	'6'=>'Phone',
+	'7'=>'Picklist',
+	'8'=>'URL',
+	'11'=>'MultiSelectCombo');
 if(isset($fieldid) && $fieldid!='')
 {
 	$mode='edit';
@@ -75,7 +86,7 @@ if(isset($fieldid) && $fieldid!='')
 		}
 		$smarty->assign("PICKLISTVALUE",$fldVal);
 	}
-	$selectedvalue = $fieldtype;
+	$selectedvalue = $typeVal[$fieldtype];
 }
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -88,24 +99,20 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	$fieldlength=$_REQUEST["fldlength"];
 	$decimalvalue=$_REQUEST["flddecimal"];
 	$fldVal = $_REQUEST["fldPickList"];
-	$typeVal = Array(
-	'Text'=>'0',
-	'Number'=>'1',
-	'Percent'=>'2',
-	'Currency'=>'3',
-	'Date'=>'4',
-	'Email'=>'5',
-	'Phone'=>'6',
-	'Picklist'=>'7',
-	'URL'=>'8',
-	'MultiSelectCombo'=>'11');
 	$selectedvalue = $typeVal[$_REQUEST["fldType"]];
 }
 elseif($fieldid == '')
 {
 	$selectedvalue = "0";
 }
+
+if($mode == 'edit')
+	$disable_str = 'disabled' ;
+else
+	$disable_str = '' ;
+
 $output = '';
+
 $combo_output = '';
 for($i=0;$i<count($cftextcombo);$i++)
 {
@@ -123,6 +130,7 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
           <input type="hidden" name="action" value="AddCustomFieldToDB">
 	  <input type="hidden" name="fieldid" value="'.$fieldid.'">
 	  <input type="hidden" name="column" value="'.$customfield_columnname.'">
+	  <input type="hidden" name="mode" value="'.$mode.'">
 
 	  <div id="orgLay" style="display:block;">
 		<table width="100%" border="0" cellpadding="5" cellspacing="0">
@@ -136,7 +144,7 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 					<table>
 						<tr><td>'.$mod_strings['LBL_SELECT_FIELD_TYPE'].'</td></tr>
 						<tr><td>
-							<select name="cfcombo" id="cfcombo" class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
+							<select name="cfcombo" id="cfcombo" '.$disable_str.' class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
 						</td></tr>
 					</table>
 				</td>
