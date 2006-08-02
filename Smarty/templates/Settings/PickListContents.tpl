@@ -16,7 +16,7 @@
 					<td class="listTableTopButtons small" valign="top" align="left"><b>{$picklistfields.fieldlabel}</b></td>
 				{/if}
 					<td class="listTableTopButtons" valign="top" align="right">
-					<input type="button" value="{$APP.LBL_EDIT_BUTTON}" class="crmButton small edit" onclick="fetchEditPickList('{$MODULE}','{$picklistfields.fieldname}');posLay(this,'editdiv');" > 
+					<input type="button" value="{$APP.LBL_EDIT_BUTTON}" class="crmButton small edit" onclick="fetchEditPickList('{$MODULE}','{$picklistfields.fieldname}', {$picklistfields.uitype});posLay(this,'editdiv');" > 
 					</td>
 				{else}
 					<td class="listTableTopButtons small" colspan="2">&nbsp;</td>

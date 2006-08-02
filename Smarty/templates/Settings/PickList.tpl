@@ -166,14 +166,14 @@ function validate() {
 <div id="editdiv" style="display:block;position:absolute;width:510px;"></div>
 {literal}
 <script>
-function SavePickList(fieldname,module)
+function SavePickList(fieldname,module,uitype)
 {
 	$("status").style.display="inline";
 	Effect.Puff($('editdiv'),{duration:2});
 	var body = escape($("picklist_values").value);
 
 	new Ajax.Request(
-        	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body,
+        	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body+'&uitype='+uitype,
 	        {queue: {position: 'end', scope: 'command'},
         		method: 'get',
 		        postBody: null,
@@ -201,14 +201,14 @@ function changeModule(pickmodule)
                 }
         );
 }
-function fetchEditPickList(module,fieldname)
+function fetchEditPickList(module,fieldname,uitype)
 {
 	$("status").style.display="inline";
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname,
+                        postBody: 'action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname+'&uitype='+uitype,
 			onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("editdiv").innerHTML=response.responseText;
