@@ -12,10 +12,21 @@ require_once('include/database/PearDatabase.php');
 $fld_module=$_REQUEST["fld_module"];
 $tableName=$_REQUEST["table_name"];
 $fldPickList =  $_REQUEST['listarea'];
+$uitype = $_REQUEST['uitype'];
+
+global $adb;
 
 //Deleting the already existing values
-$delquery="delete from vtiger_".$tableName;
-$adb->query($delquery);
+if($uitype == 111)
+{
+	$delquery="delete from vtiger_".$tableName." where presence=0";
+	$adb->query($delquery);
+}
+else
+{
+	$delquery="delete from vtiger_".$tableName;
+	$adb->query($delquery);
+}
 
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
@@ -30,7 +41,11 @@ for($i = 0; $i < $count; $i++)
 	$pickArray[$i] = trim($pickArray[$i]);
 	if($pickArray[$i] != '')
 	{
-		$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+		if($uitype == 111)
+			$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",0)";
+		else
+			$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+
 	        $adb->query($query);
 	}
 }
