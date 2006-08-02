@@ -70,7 +70,9 @@ function CustomFieldMapping()
 	<div align=center>
 			{include file='SetMenu.tpl'}
 			<!-- DISPLAY -->
+			{if $MODE neq 'edit'}
 			<b><font color=red>{$DUPLICATE_ERROR} </font></b>
+			{/if}
 			
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tbody><tr>
