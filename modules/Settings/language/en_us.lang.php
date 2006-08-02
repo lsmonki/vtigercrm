@@ -695,6 +695,7 @@ $mod_strings = Array(
 'LBL_EDIT_FIELD_MAPPING'=>'Editing Field Mapping',
 'LBL_LOGIN_HISTORY_DETAILS'=>'Login History Details',
 'LBL_LOGIN_HISTORY_DESCRIPTION'=>'Displays Login History of all Users',
+'LBL_NON_EDITABLE_PICKLIST_ENTRIES'=>'Non Editable Picklist Entries',
 
 );
 
