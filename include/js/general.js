@@ -1640,3 +1640,26 @@ function execJS(node) {
     }
 }
 
+//Function added for getting the Tab Selected Values (Standard/Advanced Filters) for Custom View - Ahmed
+function fnLoadCvValues(obj1,obj2,SelTab,unSelTab){
+
+   var tabName1 = document.getElementById(obj1);
+
+   var tabName2 = document.getElementById(obj2);
+
+   var tagName1 = document.getElementById(SelTab);
+
+   var tagName2 = document.getElementById(unSelTab);
+
+   if(tabName1.className == "dvtUnSelectedCell")
+
+       tabName1.className = "dvtSelectedCell";
+
+   if(tabName2.className == "dvtSelectedCell")
+
+       tabName2.className = "dvtUnSelectedCell";   
+   tagName1.style.display='block';
+
+   tagName2.style.display='none';
+
+}
