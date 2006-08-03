@@ -59,7 +59,7 @@
 							     {$fldlabel}
 							  </td>
                                                           <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2>{$fldvalue}</textarea></td>
-							{elseif $uitype eq 15 || $uitype eq 16}
+							{elseif $uitype eq 15 || $uitype eq 16 || $uitype eq 111}
 							<td width="20%" class="dvtCellLabel" align=right>
 								{if $uitype eq 16}
 							           <font color="red">*</font>
