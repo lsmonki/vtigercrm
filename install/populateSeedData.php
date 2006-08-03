@@ -576,7 +576,7 @@ for($i=0;$i<12;$i++)
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-
+$validtill_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quote();
@@ -592,6 +592,7 @@ for($i=0;$i<5;$i++)
 	$quote->column_fields["subject"] = $sub_array[$i];
 	$quote->column_fields["quotestage"] = $stage_array[$i];	
 	$quote->column_fields["carrier"] = $carrier_array[$i];
+	$quote->column_fields["validtill"] = $validtill_array[$i];
 
 	$quote->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$quote->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
@@ -647,6 +648,7 @@ for($i=0;$i<5;$i++)
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
+$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -664,6 +666,7 @@ for($i=0;$i<5;$i++)
 	$so->column_fields["sostatus"] = $status_array[$i];	
 	$so->column_fields["hdnGrandTotal"] = $sototal_array[$i];
 	$so->column_fields["carrier"] = $carrier_array[$i];
+	$so->column_fields["duedate"] = $duedate_array[$i];
 
 	$so->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$so->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
@@ -723,6 +726,7 @@ $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk",
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
+$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -738,6 +742,7 @@ for($i=0;$i<5;$i++)
 	$po->column_fields["postatus"] = $pstatus_array[$i];	
 	$po->column_fields["carrier"] = $carrier_array[$i];
 	$po->column_fields["tracking_no"] = $trkno_array[$i];
+	$po->column_fields["duedate"] = $duedate_array[$i];
 
 	$po->column_fields["bill_street"] = $street_address_array[rand(0,$street_address_count-1)];
 	$po->column_fields["bill_city"] = $city_array[rand(0,$city_array_count-1)];
