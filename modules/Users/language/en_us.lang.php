@@ -581,6 +581,9 @@ $mod_strings = Array(
 'LBL_HOME_PAGE_COMP'=>'Home Page Components',
 'LBL_LOGIN_HISTORY'=>'Login History',
 'LBL_USERDETAIL_INFO'=>'Viewing details about the user',
+'LBL_DELETE_GROUP'=>'Delete Group',
+'LBL_DELETE_GROUPNAME'=>'Group to be Deleted',
+'LBL_TRANSFER_GROUP'=>'Transfer Ownership to: '
 );
 
 ?>
