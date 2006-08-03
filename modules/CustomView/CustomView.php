@@ -41,18 +41,18 @@ class CustomView extends CRMEntity{
 				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
 				 "Activities"=>Array("Information"=>19,"Description"=>20),
- 		                 "Campaigns"=>Array("Information"=>76,"Description"=>77),
-				 "Products"=>Array("Information"=>31,"Description"=>36,"Custom Information"=>34),
+ 		                 "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
+				 "Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
 				 "Vendors"=>Array("Information"=>44,"Address"=>46,"Description"=>47,"Custom Information"=>45),
 				 "PriceBooks"=>Array("Information"=>48,"Description"=>50,"Custom Information"=>49),
 				 "Notes"=>Array("Information"=>17,"Description"=>18),
 				 "Emails"=>Array("Information"=>'21,22,23',"Description"=>24),
-				 "HelpDesk"=>Array("Information"=>'25,26',"Description"=>28,"Custom Information"=>27),
-				 "Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Custom Information"=>52),
-				 "PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Custom Information"=>58),
-				 "SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Custom Information"=>64),
+				 "HelpDesk"=>Array("Information"=>'25,26',"Description"=>28,"Custom Information"=>27,"Solution"=>29),
+				 "Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Terms and Conditions"=>55,"Custom Information"=>52),
+				 "PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Terms and Conditions"=>61,"Custom Information"=>58),
+				 "SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Terms and Conditions"=>67,"Custom Information"=>64),
 				 "Faq"=>Array("Information"=>'37,38,39'),
-				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Custom Information"=>70)
+				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Terms and Conditions"=>73,"Custom Information"=>70)
 				);
 
 
