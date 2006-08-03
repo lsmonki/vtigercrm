@@ -715,7 +715,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	{
 	?>
 		<script>
-			var userDateFormat = "<? echo $current_user->date_format ?>";
+			var userDateFormat = "<?php echo $current_user->date_format ?>";
 		</script>
 <?php
 	}
