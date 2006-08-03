@@ -33,58 +33,66 @@
 
   require_once('include/database/PearDatabase.php');
 
-  
-// returns time in format hh:mm where 2004-05-01 18:23:09 would produce 18
+
+// returns the hour of a specified datetime or time where 2004-05-01 18:23:09 would produce 18
 function getHours($dateIn)
 {
 	return substr($dateIn, strpos($dateIn, ':') - 2, 2);
 }
 
-// returns a list of hour options, with the value of $match selected
+// returns an option list of hour options, with the value of $match selected
 function getHourSelectOptions($start, $end, $selectedHour)
 {
 	$output = "";
 	$minsec = "";
+	global $default_time_format;
 	
 	for($hour = $start -1; $hour < $end; $hour++)
 	{
-		if ($hour == 0)
+		// 12 hour time display
+		if($default_time_format == '12')
 		{
-			$value = $hour . $minsec;
-			$label = "12 am";
-		}		
-		elseif($hour < 10)
-		{
-			$value = "0" . $hour . $minsec;
-			$label = $hour . " am";
-		}		
-		elseif ($hour < 12)
-		{
-			$value = $hour . $minsec;
-			$label = $hour . " am";
+			if ($hour == 0)
+			{
+				$value = $hour . $minsec;
+				$label = "12 am";
+			}		
+			elseif ($hour < 12)
+			{
+				$value = (($hour < 10)? '0' : '') . $hour . $minsec;
+				$label = $hour . " am";
+			}
+			elseif ($hour == 12)
+			{
+				$value = $hour . $minsec;
+				$label = "12 pm";
+			}
+			else
+			{
+				$value = (($hour < 10)? '0' : '') . $hour . $minsec;
+				$label = $hour - 12 . " pm";
+			}
 		}
-		elseif ($hour == 12)
-		{
-			$value = $hour . $minsec;
-			$label = "12 pm";
-		}
+		
+		// 24 hour time display (default)
 		else
 		{
-			$value = $hour . $minsec;
-			$label = $hour - 12 . " pm";
-		}		
+			$value = (($hour < 10)? '0' : '') . $hour . $minsec;
+			$label = (($hour < 10)? '0' : '') . $hour . '00 hrs';
+		}
 			
 		$output .= "<option value=\"" . $value . "\"";
 		
 		if($hour == $selectedHour)
+		{
 			$output .= " selected";
+		}
 			
 		$output .= ">" . $label . "</option>\n\r";		
 	}
 	
 	return $output;
 }
-
 
 function getMinuteSelectOptions($selectedMinute)
 {
@@ -2306,7 +2314,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$displ_date = getDisplayDate($col_fields[$fieldname]);
 		}
 	
-          	$custfld .= '<td width="30%" valign="top" class="dataField">'.$displ_date.'&nbsp;'.$start_time.'</td>';
+          	$custfld .= '<td width="30%" valign="top" class="dataField">'.$displ_date.'&nbsp;'.getDisplayTime($start_time).'</td>';
 	}
 	elseif($uitype == 5 || $uitype == 23 || $uitype == 70)
 	{
@@ -4372,6 +4380,25 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	return $list;
 }
 
+function getDisplayTime($cur_time_val)
+{
+	global $default_time_format;
+	$display_time = '';
+	
+	// 12-hour display
+	if($default_time_format == '12')
+	{
+		$display_time = date("g:i A",strtotime($cur_time_val));
+	}
+	
+	// 24-hour display (default)
+	else
+	{
+		$display_time = $cur_time_val;
+	}
+	return $display_time;
+}
+
 function getDisplayDate($cur_date_val)
 {
 	global $current_user;
@@ -4404,7 +4431,7 @@ function getDisplayDate($cur_date_val)
 
 		if(isset($date_value[1]) && $date_value[1] != '')
 		{
-			$display_date = $display_date.' '.$date_value[1];
+			$display_date = $display_date.' '.getDisplayTime($date_value[1]);
 		}
 	}
 	return $display_date;

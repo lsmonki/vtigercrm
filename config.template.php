@@ -172,6 +172,10 @@ $default_charset = 'ISO-8859-1';
 // default_language default value = en_us
 $default_language = 'en_us';
 
+// default time format
+// default_time_format default value = 24 (options are 12, 24)
+$default_time_format = '24';
+
 // add the language pack name to every translation string in the display.
 // translation_string_prefix default value = false
 $translation_string_prefix = false;
