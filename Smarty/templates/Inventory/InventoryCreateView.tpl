@@ -172,7 +172,10 @@ function sensex_info()
 							</td>
 						   </tr>
 						</table>
-				
+					</td>
+				   </tr>
+				</table>
+							
 			    </div>
 			    {/foreach}
 			</td>
