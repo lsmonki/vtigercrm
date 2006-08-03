@@ -57,6 +57,7 @@ function sensex_info()
 
 	<td class="showPanelBg" valign=top width=100%>
 	     {*<!-- PUBLIC CONTENTS STARTS-->*}
+		{include file='EditViewHidden.tpl'}
 	     <div class="small" style="padding:20px">
 		
 		 {if $OP_MODE eq 'edit_view'}   
@@ -70,7 +71,7 @@ function sensex_info()
 		 <hr noshade size=1>
 		 <br> 
 		
-		{include file='EditViewHidden.tpl'}
+		
 
 		{*<!-- Account details tabs -->*}
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
@@ -81,12 +82,12 @@ function sensex_info()
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 
 					{if $BLOCKS_COUNT eq 2}	
-						<td width=75 style="width:15%" align="center" nowrap="nowrap" class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab','inventory','{$MODULE}')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
-                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab','inventory','{$MODULE}')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
-                   				<td class="dvtTabCache" style="width:100%" nowrap="nowrap">&nbsp;</td>
+						<td width=75 style="width:15%" align="center" nowrap class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab','inventory','{$MODULE}')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
+                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab','inventory','{$MODULE}')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
+                   				<td class="dvtTabCache" style="width:65%" nowrap>&nbsp;</td>
 					{else}
 						<td class="dvtSelectedCell" align=center nowrap>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</td>
-	                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
+	                                        <td class="dvtTabCache" style="width:65%">&nbsp;</td>
 					{/if}
 				   <tr>
 				</table>
@@ -171,10 +172,7 @@ function sensex_info()
 							</td>
 						   </tr>
 						</table>
-					</td>
-				   </tr>
-				</table>
-					
+				
 			    </div>
 			    {/foreach}
 			</td>
