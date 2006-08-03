@@ -47,7 +47,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<input type="hidden" name="action" value="Popup">
 		    	                <input type="hidden" name="query" value="true">
 					<input type="hidden" name="select_enable" id="select_enable" value="{$SELECT}">
-					<input type="hidden" name="curr_row" value="{$CURR_ROW}">
+					<input type="hidden" name="curr_row" id="curr_row" value="{$CURR_ROW}">
 					<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
 					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
 					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
@@ -139,8 +139,8 @@ function gethiddenelements()
 	var urlstring=''	
 	if(getObj('select_enable').value != '')
 		urlstring +='&select=enable';	
-	if(getObj('curr_row').value != '')
-		urlstring +='&curr_row='+getObj('curr_row').value;	
+	if(document.getElementById('curr_row').value != '')
+		urlstring +='&curr_row='+document.getElementById('curr_row').value;	
 	if(getObj('fldname_pb').value != '')
 		urlstring +='&fldname='+getObj('fldname_pb').value;	
 	if(getObj('productid_pb').value != '')
