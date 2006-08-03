@@ -34,7 +34,7 @@ function editProductListPrice(id,pbid,price)
 function gotoUpdateListPrice(id,pbid,proid)
 {
         $("status").style.display="inline";
-        $("EditListPriceLay").style.display = "none";
+        $("roleLay").style.display = "none";
         var listprice=$("list_price").value;
                 new Ajax.Request(
                         'index.php',
@@ -60,7 +60,7 @@ function loadCvList(type,id) {ldelim}
 </script>
 	{include file='Buttons_List1.tpl'}
 <!-- Contents -->
-<div id="editlistprice" style="display:block;position:absolute;left:350px;top:200px;"></div>
+<div id="editlistprice" style="position:absolute;width:300px;"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
 	<td valign=top><img src="themes/blue/images/showPanelTopLeft.gif"></td>
