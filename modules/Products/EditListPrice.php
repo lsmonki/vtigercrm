@@ -33,7 +33,7 @@ else
 	$return_id = $_REQUEST['pricebook_id'];
 }
 $output='';
-$output ='<div id="EditListPriceLay">
+$output ='<div id="roleLay" style="display:block;">
 	<form action="index.php" name="index">
 	<input type="hidden" name="module" value="Products">
 	<input type="hidden" name="action" value="UpdateListPrice">
@@ -44,7 +44,7 @@ $output ='<div id="EditListPriceLay">
 	<tr>
 		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">EditListPrice</td>
 		<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'EditListPriceLay\').style.display=\'none\';">Close</a></td>
+		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';"><img alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" border=0 src="'.$image_path.'close.gif"></a></td>
 	</tr>
 	<tr>
 		<td colspan="3">&nbsp;</td>
@@ -58,7 +58,7 @@ $output ='<div id="EditListPriceLay">
 	<tr>
 		<td colspan="3" align="center">
 			<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.');return verify_data(EditView)" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
-			<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="small" onClick="document.getElementById(\'EditListPriceLay\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
+			<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="small" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
 		</td>
 		
 	</tr>
