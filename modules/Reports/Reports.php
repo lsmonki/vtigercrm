@@ -104,20 +104,22 @@ class Reports extends CRMEntity{
 	var $advft_option;
 	var $advft_value;
 
-	var $module_list = Array("Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
-							"Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
-							"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
-							"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
-							"Activities"=>Array("Information"=>19,"Description"=>20),
-							"Products"=>Array("Information"=>31,"Description"=>36,"Custom Information"=>34),
-							"Notes"=>Array("Information"=>17,"Description"=>18),
-							"Emails"=>Array("Information"=>21,"Description"=>24),
-							"HelpDesk"=>Array("Information"=>'25,26',"Custom Information"=>27,"Description"=>28,"Solution"=>29),//patch2
-							"Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Custom Information"=>52),
-							"PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>61,"Custom Information"=>58),
-							"SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Custom Information"=>64),
-							"Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Custom Information"=>70)
-					);
+	var $module_list = Array(
+				"Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
+				"Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
+				"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
+				"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
+				"Activities"=>Array("Information"=>19,"Description"=>20),
+ 		                "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
+				"Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
+				"Notes"=>Array("Information"=>17,"Description"=>18),
+				"Emails"=>Array("Information"=>21,"Description"=>24),
+				"HelpDesk"=>Array("Information"=>'25,26',"Custom Information"=>27,"Description"=>28,"Solution"=>29),//patch2
+				"Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Terms and Conditions"=>55,"Custom Information"=>52),
+				"PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Terms and Conditions"=>61,"Custom Information"=>58),
+				"SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Terms and Conditions"=>67,"Custom Information"=>64),
+				"Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Terms and Conditions"=>73,"Custom Information"=>70)
+				);
 
 	/** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given vtiger_reportid
 	 *  This function accepts the vtiger_reportid as argument
