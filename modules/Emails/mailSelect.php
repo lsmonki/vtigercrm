@@ -20,7 +20,11 @@ $image_path = 'themes/'.$theme.'/images/';
 $idlist = $_REQUEST['idlist'];
 $pmodule=$_REQUEST['return_module'];
 $ids=explode(';',$idlist);
-
+$single_record = false;
+if(!strpos($idlist,':'))
+{
+	$single_record = true;
+}
 $smarty = new vtigerCRM_Smarty;
 if ($pmodule=='Accounts')
 {
@@ -41,11 +45,50 @@ for ($i=0;$i<$numrows;$i++)
 {
 	$value = Array();
 	$temp=$adb->query_result($result,$i,'columnname');
+	$columnlists [] = $temp;
 	$fieldid=$adb->query_result($result,$i,'fieldid');
 	$value[] =$adb->query_result($result,$i,'fieldlabel');
-	$value[]= br2nl($myfocus->column_fields[$temp]); 
 	$returnvalue [$fieldid]= $value;
+	
 }
+
+if($single_record)
+{
+	$count = 1;	
+	switch($pmodule)
+	{
+		case 'Accounts':
+			$query = 'select accountname,'.implode(",",$columnlists).' from vtiger_account left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_account.accountid = '.$idlist;
+			$result=$adb->query($query);
+		        foreach($columnlists as $columnname)	
+			{
+				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+			}
+			$entity_name = $adb->query_result($result,0,'accountname');
+			break;
+		case 'Leads':
+			$query = 'select concat(firstname," ",lastname) as leadname,'.implode(",",$columnlists).' from vtiger_leaddetails left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_leaddetails.leadid = '.$idlist;
+			$result=$adb->query($query);
+		        foreach($columnlists as $columnname)	
+			{
+				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+			}
+			$entity_name = $adb->query_result($result,0,'leadname');
+			break;
+		case 'Contacts':
+			$query = 'select concat(firstname," ",lastname) as contactname,'.implode(",",$columnlists).' from vtiger_contactdetails left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_contactdetails.contactid = '.$idlist;
+			$result=$adb->query($query);
+		        foreach($columnlists as $columnname)	
+			{
+				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+			}	
+			$entity_name = $adb->query_result($result,0,'contactname');
+			break;	
+	}	
+}
+$smarty->assign('ENTITY_NAME',$entity_name);
+$smarty->assign('ONE_RECORD',$single_record);
+$smarty->assign('MAILDATA',$field_value);
 $smarty->assign('MAILINFO',$returnvalue);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("IDLIST", $idlist);
