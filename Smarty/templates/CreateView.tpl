@@ -78,12 +78,12 @@ function sensex_info()
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 
 					{if $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Products'}	
-						<td width=75 style="width:15%" align="center" nowrap="nowrap" class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab','normal','{$MODULE}')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
-                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab','normal','{$MODULE}')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
-                   				<td class="dvtTabCache" style="width:100%" nowrap="nowrap">&nbsp;</td>
+						<td width=75 style="width:15%" align="center" nowrap class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab','normal','{$MODULE}')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
+                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab','normal','{$MODULE}')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
+                   				<td class="dvtTabCache" style="width:65%" nowrap>&nbsp;</td>
 					{else}
 						<td class="dvtSelectedCell" align=center nowrap>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</td>
-	                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
+	                                        <td class="dvtTabCache" style="width:65%">&nbsp;</td>
 					{/if}
 				   <tr>
 				</table>
