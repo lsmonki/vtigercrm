@@ -140,9 +140,13 @@ $mod_strings = Array(
 'LBL_IN_SUBJECT'=>'in Subject',
 'LBL_IN_SENDER'=>'in Sender',
 'LBL_IN_SUBJECT_OR_SENDER'=>'in Subject or Sender',
-'CHOSE_EMAIL'=>'Choose Email ID',
+'SELECT_EMAIL'=>'Select Email IDs',
 'Sender'=>'Sender',
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'Your Incoming Mail Server is not configured',
+'LBL_MAILSELECT_INFO'=>'has the follwoing Email IDs associated.Please Select the Email IDs to which,the mail should be sent',
+'LBL_MAILSELECT_INFO1'=>'The following Email ID types are associated to the selected',
+'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
+'LBL_MULTIPLE'=>'Multiple',
 );
 
 ?>
