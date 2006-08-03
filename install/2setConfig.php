@@ -178,6 +178,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		if(sourceTag){
 			document.getElementById('root_user').className = 'show_tab';
 			document.getElementById('root_pass').className = 'show_tab';
+			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
 			document.getElementById('root_user').className = 'hide_tab';
@@ -375,7 +376,7 @@ function verify_data(form) {
               </tr>
 	      <tr id="root_user" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap" width="25%"><strong>Root Username</strong> <sup><font color="red">*</font></sup></td>
-			   <td align="left" bgcolor="white"><input class="dataInput" name="root_user" value="<?php echo $root_user;?>" type="text"></td>
+			   <td align="left" bgcolor="white"><input class="dataInput" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
  	      </tr>
 	      <tr id="root_pass" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>Root Password</strong></td>
