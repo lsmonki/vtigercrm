@@ -80,7 +80,7 @@ function Chat(conf)
       debug("debug",e.filename+":"+e.lineNumber);
       return;
     }
-    me.ajax = new VtigerAjax(me.callback);
+    me.ajax = new Ajax(me.callback);
     debug("debug",response.responseText);
     window.status=Date();
   };
@@ -94,7 +94,7 @@ function Chat(conf)
     me.refreshChats();
   };
 
-  this.ajax = new VtigerAjax(me.callback);
+  this.ajax = new Ajax(me.callback);
 
   // start the ajax request for the chat data
   this.refresh = function()
@@ -252,7 +252,7 @@ function chatInput(to)
   this.input = td1.appendChild(this.input);
   td2.onclick = function()
   {
-    var ajax = new VtigerAjax(me.callback);
+    var ajax = new Ajax(me.callback);
     ajax.process("index.php?mode=chat&module=Contacts&action=chat","submode=submit&msg="+escape(me.input.value,1)+(me.to?"&to="+me.to:""));
     me.input.value = "";
     me.input.focus();
@@ -265,7 +265,7 @@ function chatInput(to)
   this.form.appendChild(table);
   this.form.onsubmit = function()
   {
-    var ajax = new VtigerAjax(me.callback);
+    var ajax = new Ajax(me.callback);
     ajax.process("index.php?mode=chat&module=Contacts&action=chat","submode=submit&msg="+escape(me.input.value,1)+(me.to?"&to="+me.to:""));
     me.input.value = "";
     me.input.focus();
@@ -323,7 +323,7 @@ function PrivChat(dt,to,w,h)
 
   this.win.cb = function()
   {
-    me.ajax = new VtigerAjax(me.callback);
+    me.ajax = new Ajax(me.callback);
     me.ajax.process("index.php?mode=chat&module=Contacts&action=chat","submode=pvclose&to="+me.to);
     chats[me.to]=null;
   };
