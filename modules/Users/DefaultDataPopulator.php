@@ -2190,6 +2190,31 @@ title';
 	$this->db->query("insert into vtiger_parenttabrel values (3,9,11)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,17,12)");
 		
+	//Added to populate the default inventory tax informations
+	$vatid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
+	$salesid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
+	$serviceid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
+	$this->db->query("insert into vtiger_inventorytaxinfo values($vatid,'tax".$vatid."','VAT','4.50','0')");
+	$this->db->query("insert into vtiger_inventorytaxinfo values($salesid,'tax".$salesid."','Sales','10.00','0')");
+	$this->db->query("insert into vtiger_inventorytaxinfo values($serviceid,'tax".$serviceid."','Service','12.50','0')");
+	//After added these taxes we should add these taxes as columns in vtiger_inventoryproductrel table
+	$this->db->query("alter table vtiger_inventoryproductrel add column tax$vatid decimal(7,3) default NULL");
+	$this->db->query("alter table vtiger_inventoryproductrel add column tax$salesid decimal(7,3) default NULL");
+	$this->db->query("alter table vtiger_inventoryproductrel add column tax$serviceid decimal(7,3) default NULL");
+
+
+	//Added to populate the default Shipping & Hanlding tax informations
+	$shvatid = $this->db->getUniqueID("vtiger_shippingtaxinfo");
+	$shsalesid = $this->db->getUniqueID("vtiger_shippingtaxinfo");
+	$shserviceid = $this->db->getUniqueID("vtiger_shippingtaxinfo");
+	$this->db->query("insert into vtiger_shippingtaxinfo values($shvatid,'shtax".$shvatid."','VAT','4.50','0')");
+	$this->db->query("insert into vtiger_shippingtaxinfo values($shsalesid,'shtax".$shsalesid."','Sales','10.00','0')");
+	$this->db->query("insert into vtiger_shippingtaxinfo values($shserviceid,'shtax".$shserviceid."','Service','12.50','0')");
+	//After added these taxes we should add these taxes as columns in vtiger_inventoryshippingrel table
+	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shvatid decimal(7,3) default NULL");
+	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shsalesid decimal(7,3) default NULL");
+	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shserviceid decimal(7,3) default NULL");
+
 
 	}
 }

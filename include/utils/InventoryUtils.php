@@ -368,6 +368,7 @@ function getAllTaxes($available='all', $sh='')
 	{
 		$taxtypes[$i]['taxid'] = $adb->query_result($res,$i,'taxid');
 		$taxtypes[$i]['taxname'] = $adb->query_result($res,$i,'taxname');
+		$taxtypes[$i]['taxlabel'] = $adb->query_result($res,$i,'taxlabel');
 		$taxtypes[$i]['percentage'] = $adb->query_result($res,$i,'percentage');
 		$taxtypes[$i]['deleted'] = $adb->query_result($res,$i,'deleted');
 	}
@@ -407,6 +408,7 @@ function getTaxDetailsForProduct($productid, $available='all')
 			$tax_details[$i]['productid'] = $adb->query_result($res,$i,'productid');
 			$tax_details[$i]['taxid'] = $adb->query_result($res,$i,'taxid');
 			$tax_details[$i]['taxname'] = $adb->query_result($res,$i,'taxname');
+			$tax_details[$i]['taxlabel'] = $adb->query_result($res,$i,'taxlabel');
 			$tax_details[$i]['percentage'] = $adb->query_result($res,$i,'taxpercentage');
 			$tax_details[$i]['deleted'] = $adb->query_result($res,$i,'deleted');
 		}

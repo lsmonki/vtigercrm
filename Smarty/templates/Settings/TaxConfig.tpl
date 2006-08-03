@@ -80,7 +80,10 @@
 		<!-- Table to display the Product Tax Add and Edit Buttons - Starts -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 		   <tr>
-			<td class="big" width="75%"><strong>{$MOD.LBL_PRODUCT_TAX_SETTINGS} </strong></td>
+			<td class="big" colspan="3"><strong>{$MOD.LBL_PRODUCT_TAX_SETTINGS} </strong></td>
+		   </tr>
+		   <tr>
+			<td>&nbsp;</td>
 			<td id="td_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $EDIT_MODE neq 'true'}
 					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="  Add Tax  " class="crmButton small edit">
@@ -90,7 +93,7 @@
 			{if $EDIT_MODE eq 'true'}	
 				<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.save_tax.value='true'; this.form.parenttab.value='Settings'; return formValidate()" type="submit" name="button2" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  ">&nbsp;
 				<input class="crmButton small cancel" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" onclick="window.history.back();" type="button" name="button22" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  ">
-			{else}	
+			{elseif $TAX_COUNT > 0}
 				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='TaxConfig'; this.form.edit_tax.value='true'; this.form.parenttab.value='Settings';" type="submit" name="button" value="  {$APP.LBL_EDIT_BUTTON_LABEL}  " class="crmButton small edit">
 			{/if}
 			</td>
@@ -112,8 +115,8 @@
 				   <tr><!-- set color to taxes which are disabled now-->
 				{/if}
 
-				<td width=20% class="cellLabel small">{$tax.taxname} </td>
-				<td width=70% class="cellText small">
+				<td width=35% class="cellLabel small">{$tax.taxlabel} </td>
+				<td width=55% class="cellText small">
 					{if $EDIT_MODE eq 'true'}
 						<input name="{$tax.taxname}" id="{$tax.taxname}" type="text" value="{$tax.percentage}" class="detailedViewTextBox small">&nbsp;%
 					{else}
@@ -148,7 +151,10 @@
 		<!-- Table to display the S&H Tax Add and Edit Buttons - Starts -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 		   <tr>
-        		<td class="big" width="75%"><strong>{$MOD.LBL_SHIPPING_HANDLING_TAX_SETTINGS}</strong></td>
+        		<td class="big" colspan="3"><strong>{$MOD.LBL_SHIPPING_HANDLING_TAX_SETTINGS}</strong></td>
+		   </tr>
+		   <tr>
+			<td>&nbsp;</td>
         		<td id="td_sh_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $SH_EDIT_MODE neq 'true'}
 					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('sh');" type="button" name="button" value="  Add Tax  " class="crmButton small edit">
@@ -159,7 +165,7 @@
 					<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.sh_save_tax.value='true'; this.form.parenttab.value='Settings'; return formValidate()" type="submit" name="button2" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  ">
 					&nbsp;
 					<input class="crmButton small cancel" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" onclick="window.history.back();" type="button" name="button22" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  ">
-				{else}
+				{elseif $SH_TAX_COUNT > 0}
 					<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='TaxConfig'; this.form.sh_edit_tax.value='true'; this.form.parenttab.value='Settings';" type="submit" name="button" value="  {$APP.LBL_EDIT_BUTTON_LABEL}  " class="crmButton small edit">
 				{/if}
 			</td>
@@ -181,8 +187,8 @@
 			   <tr><!-- set color to taxes which are disabled now-->
 			{/if}
 
-			<td width=20% class="cellLabel small">{$tax.taxname} </td>
-			<td width=70% class="cellText small">
+			<td width=35% class="cellLabel small">{$tax.taxlabel} </td>
+			<td width=55% class="cellText small">
 				{if $SH_EDIT_MODE eq 'true'}
 					<input name="{$tax.taxname}" id="{$tax.taxname}" type="text" value="{$tax.percentage}" class="detailedViewTextBox small">
 					&nbsp;% 

@@ -58,12 +58,12 @@ elseif($_REQUEST['sh_edit_tax'] == 'true')
 if($_REQUEST['add_tax_type'] == 'true')
 {
 	//Add the given tax name and value as a new tax type
-	addTaxType($_REQUEST['addTaxLabel'],$_REQUEST['addTaxValue']);
+	echo addTaxType($_REQUEST['addTaxLabel'],$_REQUEST['addTaxValue']);
 	$getlist = true;
 }
 elseif($_REQUEST['sh_add_tax_type'] == 'true')
 {
-	addTaxType($_REQUEST['sh_addTaxLabel'],$_REQUEST['sh_addTaxValue'],'sh');
+	echo addTaxType($_REQUEST['sh_addTaxLabel'],$_REQUEST['sh_addTaxValue'],'sh');
 	$getlist = true;
 }
 
@@ -148,22 +148,44 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 	global $adb, $log;
 	$log->debug("Entering into function addTaxType($taxlabel, $taxvalue, $sh)");
 
+	//First we will check whether the tax is already available or not
 	if($sh != '' && $sh == 'sh')
-		$query = "alter table vtiger_inventoryshippingrel add column $taxlabel decimal(7,3) default NULL";
+		$check_query = "select taxlabel from vtiger_shippingtaxinfo where taxlabel='".addslashes($taxlabel)."'";
 	else
-		$query = "alter table vtiger_inventoryproductrel add column $taxlabel decimal(7,3) default NULL";
+		$check_query = "select taxlabel from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'";
+	$check_res = $adb->query($check_query);
 
+	if($adb->num_rows($check_res) > 0)
+		return "<font color='red'>This tax is already available</font>";
+
+	//if the tax is not available then add this tax.
+	//Add this tax as a column in related table	
+	if($sh != '' && $sh == 'sh')
+	{
+		$taxid = $adb->getUniqueID("vtiger_shippingtaxinfo");
+		$taxname = "shtax".$taxid;
+		
+		$query = "alter table vtiger_inventoryshippingrel add column $taxname decimal(7,3) default NULL";
+	}
+	else
+	{
+		$taxid = $adb->getUniqueID("vtiger_inventorytaxinfo");
+		$taxname = "tax".$taxid;
+		$query = "alter table vtiger_inventoryproductrel add column $taxname decimal(7,3) default NULL";
+	}
 	$res = $adb->query($query);
+
+	//if the tax is added as a column then we should add this tax in the list of taxes
 	if($res)
 	{
 		if($sh != '' && $sh == 'sh')
-			$query1 = "insert into vtiger_shippingtaxinfo values('','".$taxlabel."','".$taxvalue."',0)";
+			$query1 = "insert into vtiger_shippingtaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
 		else
-			$query1 = "insert into vtiger_inventorytaxinfo values('','".$taxlabel."','".$taxvalue."',0)";
+			$query1 = "insert into vtiger_inventorytaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
 
 		$res1 = $adb->query($query1);
 	}
-	
+
 	$log->debug("Exit from function addTaxType($taxlabel, $taxvalue)");
 	if($res1)
 		return '';

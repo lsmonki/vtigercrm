@@ -5755,9 +5755,10 @@
 		<field name="taxid" type="I" size="3">
 			<KEY/>
 			<notnull />
-			<autoincrement />
 		</field>
 		<field name="taxname" type="C" size="50">
+		</field>
+		<field name="taxlabel" type="C" size="50">
 		</field>
 		<field name="percentage" type="N" size="7.3">
 		</field>
@@ -6031,9 +6032,10 @@
 		<field name="taxid" type="I" size="3">
 			<KEY/>
 			<notnull />
-			<autoincrement />
 		</field>
 		<field name="taxname" type="C" size="50">
+		</field>
+		<field name="taxlabel" type="C" size="50">
 		</field>
 		<field name="percentage" type="N" size="7.3">
 		</field>

@@ -697,6 +697,10 @@ $mod_strings = Array(
 'LBL_LOGIN_HISTORY_DESCRIPTION'=>'Displays Login History of all Users',
 'LBL_NON_EDITABLE_PICKLIST_ENTRIES'=>'Non Editable Picklist Entries',
 
+//Added for Tax settings
+'LBL_PRODUCT_TAX_SETTINGS'=>'Product Taxes',
+'LBL_SHIPPING_HANDLING_TAX_SETTINGS'=>'Shipping and Handling Taxes',
+
 );
 
 
