@@ -2722,12 +2722,10 @@ $query_array2 = Array(
 				"update vtiger_field set info_type='ADV' where tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
 				"update vtiger_field set info_type='ADV' where tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
 
-				"create table vtiger_inventorytaxinfo (taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL,  PRIMARY KEY  (taxid), KEY vtiger_inventorytaxinfo_taxname_idx (taxname))",
+				"create table vtiger_inventorytaxinfo (taxid int(3) NOT NULL, taxname varchar(50) default NULL, taxlabel varchar(50) default NULL, percentage decimal(7,3) default NULL, deleted int(1) default 0, PRIMARY KEY  (taxid), KEY vtiger_inventorytaxinfo_taxname_idx (taxname))",
 				"create table vtiger_producttaxrel ( productid int(11) NOT NULL, taxid int(3) NOT NULL, taxpercentage decimal(7,3) default NULL, KEY vtiger_producttaxrel_productid_idx (productid), KEY vtiger_producttaxrel_taxid_idx (taxid))",
+				"alter table vtiger_producttaxrel ADD CONSTRAINT fk_1_vtiger_producttaxrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE",
 
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'VAT','4.5')",
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Sales','10')",
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Service','12.5')",
 				"update vtiger_field set uitype=83, tablename='vtiger_producttaxrel' where tabid=14 and fieldname='taxclass'",
 				"insert into vtiger_moduleowners values(".$this->localGetTabID('Campaigns').",1)",
 
@@ -3199,18 +3197,14 @@ Execute("update vtiger_field set quickcreatesequence='2' where fieldname='closin
 
 
 //Added for Tax and Inventory - Product details handling
-Execute("drop table vtiger_poproductrel");
-Execute("drop table vtiger_soproductrel");
-Execute("drop table vtiger_quotesproductrel");
-Execute("drop table vtiger_invoiceproductrel");
 
-Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, vattax decimal(7,3) default NULL, salestax decimal(7,3) default NULL, servicetax decimal(7,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
 
-Execute("alter table vtiger_inventorytaxinfo add column deleted int(1) default 0");
+//Execute("alter table vtiger_inventorytaxinfo add column deleted int(1) default 0");
 
-Execute("CREATE TABLE vtiger_shippingtaxinfo ( taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL, deleted int(1) default '0', PRIMARY KEY (taxid), KEY shippingtaxinfo_taxname_idx (taxname) ) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_shippingtaxinfo ( taxid int(3) NOT NULL, taxname varchar(50) default NULL, taxlabel varchar(50) default NULL, percentage decimal(7,3) default NULL, deleted int(1) default '0', PRIMARY KEY (taxid), KEY shippingtaxinfo_taxname_idx (taxname) ) ENGINE=InnoDB");
 
-Execute("CREATE TABLE vtiger_inventoryshippingrel (id int(19) NOT NULL, vattax decimal(7,3) default NULL, salestax decimal(7,3) default NULL, servicetax decimal(7,3) default NULL, KEY inventoryishippingrel_id_idx (id) ) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_inventoryshippingrel (id int(19) NOT NULL, KEY inventoryishippingrel_id_idx (id) ) ENGINE=InnoDB");
 
 Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_purchaseorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,57,3,'V~O',1,null,'BAS')");
 Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_purchaseorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
@@ -3345,12 +3339,145 @@ Execute("update vtiger_field set uitype=111 where fieldname in ('sales_stage','t
 
 
 
-//HANDLE HERE -- Handle the Inventory Tax handlings here
 
 
 
 
 
+
+//Inventory Tax handlings -- Starts
+
+//Added to populate the default Shipping & Hanlding tax informations
+$shvatid = $conn->getUniqueID("vtiger_shippingtaxinfo");
+$shsalesid = $conn->getUniqueID("vtiger_shippingtaxinfo");
+$shserviceid = $conn->getUniqueID("vtiger_shippingtaxinfo");
+
+$conn->query("insert into vtiger_shippingtaxinfo values($shvatid,'shtax".$shvatid."','VAT','4.50','0')");
+$conn->query("insert into vtiger_shippingtaxinfo values($shsalesid,'shtax".$shsalesid."','Sales','10.00','0')");
+$conn->query("insert into vtiger_shippingtaxinfo values($shserviceid,'shtax".$shserviceid."','Service','12.50','0')");
+
+//After added these taxes we should add these taxes as columns in vtiger_inventoryshippingrel table
+$conn->query("alter table vtiger_inventoryshippingrel add column shtax$shvatid decimal(7,3) default NULL");
+$conn->query("alter table vtiger_inventoryshippingrel add column shtax$shsalesid decimal(7,3) default NULL");
+$conn->query("alter table vtiger_inventoryshippingrel add column shtax$shserviceid decimal(7,3) default NULL");
+
+
+//Added to populate the Common tax which will be used to save the existing tax (percentage will be calculated based on the total tax amount retrieved from the entity tables of PO, SO, Quotes and Invoice)
+$migratedtaxid = 1;
+$migratedtaxid = $conn->getUniqueID("vtiger_inventorytaxinfo");
+$migrated_taxname = "tax$migratedtaxid";
+$conn->query("insert into vtiger_inventorytaxinfo values($migratedtaxid,'".$migrated_taxname."','Tax','0.00','0')");
+
+//After added these taxes we should add these taxes as columns in vtiger_inventoryproductrel table
+$conn->query("alter table vtiger_inventoryproductrel add column $migrated_taxname decimal(7,3) default NULL");
+
+//Now we should create tax for each and every value given in picklist taxclass
+$taxres = $conn->query("select * from taxclass");
+$taxcount = $conn->num_rows($taxres);
+for($i=0;$i<$taxcount;$i++)
+{
+	$taxlabel = $conn->query_result($taxres,$i,'taxclass');
+
+	$newtaxid = $conn->getUniqueID("vtiger_inventorytaxinfo");
+	$addtaxres = $conn->query("alter table vtiger_inventoryproductrel add column tax$newtaxid decimal(7,3) default NULL");
+	if($addtaxres)
+		$conn->query("insert into vtiger_inventorytaxinfo values($newtaxid,'tax".$newtaxid."','".$taxlabel."','0.00','0')");
+}
+//Finished the add tax process based on the available tax classes
+
+//To save Product - Tax relationship
+//get Product - taxclass and add entry in vtiger_producttaxrel for this product - tax relationship
+$productres = $conn->query("select productid, taxclass from vtiger_products");
+$productcount = $conn->num_rows($productres);
+for($i=0;$i<$productcount;$i++)
+{
+	$productid = $conn->query_result($productres,$i,'productid');
+	$taxlabel = $conn->query_result($productres,$i,'taxclass');
+
+	$taxres = $conn->query("select taxid from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'");
+	$taxid = $conn->query_result($taxres,0,'taxid');
+
+	$taxquery = "insert into vtiger_producttaxrel ($productid, \"$taxid\", '0.00')";
+	//Execute($taxquery);
+	$conn->query($taxquery);
+}
+
+
+
+
+
+//Retrieve values from poproductrel, soproductrel, quotesproductrel, invoiceproductrel and store in vtiger_inventoryproductrel
+
+$inventory_tables = Array(
+				'vtiger_poproductrel'=>'purchaseorderid',
+				'vtiger_soproductrel'=>'salesorderid',
+				'vtiger_quotesproductrel'=>'quotesid',
+				'vtiger_invoiceproductrel'=>'invoiceid'
+			 );
+
+foreach($inventory_tables as $tablename => $idname)
+{
+	$res = $conn->query("select * from $tablename order by $idname");
+	$count = $conn->num_rows($res);
+	for($i=0;$i<$count;$i++)
+	{
+		$id = $conn->query_result($res,$i,$idname);
+		$productid = $conn->query_result($res,$i,'productid');
+		$quantity = $conn->query_result($res,$i,'quantity');
+		$listprice = $conn->query_result($res,$i,'listprice');
+		$query1 = "insert into vtiger_inventoryproductrel(id,productid,quantity,listprice) values($id, $productid, $quantity, $listprice)";
+		Execute($query1);
+	}
+}
+
+
+//Now for each and every PO, SO, Quotes and Invoice we should get the total, discount, tax
+$inventory_tables = Array(
+				'vtiger_purchaseorder'=>'purchaseorderid',
+				'vtiger_salesorder'=>'salesorderid',
+				'vtiger_quotes'=>'quoteid',
+				'vtiger_invoice'=>'invoiceid'
+			 );
+
+foreach($inventory_tables as $tablename => $idname)
+{
+	$res2 = $conn->query("select * from $tablename order by $idname");
+	$entitycount = $conn->num_rows($res2);
+
+	for($i=0;$i<$entitycount;$i++)
+	{
+		$idval = $conn->query_result($res2,$i,$idname);
+		
+		//$res3 = $conn->query("select * from $tablename where $idname=$idval");
+		$subtotal = $conn->query_result($res2,$i,'subtotal');
+		$taxamount = $conn->query_result($res2,$i,'salestax');
+
+		//Now based on the inventory tax total - calculate the percentage
+		$taxpercent = '0.00';
+		if($taxamount > 0 && $subtotal >0)
+		{
+			$taxpercent = $taxamount*100/$subtotal;
+		}
+
+		//update the taxtype as group
+		$query2 = "update $tablename set taxtype='group'";
+		Execute($query2);
+		
+		//update the calculated percentage for the entity ie., PO/SO/Quotes/Invoice
+		$query3 = "update vtiger_inventoryproductrel set  $migrated_taxname='".$taxpercent."' where id=$idval";
+		Execute($query3);
+	}
+}
+
+
+//we have retrieve and saved all the values, so we can delete the unwanted tables
+Execute("drop table vtiger_poproductrel");
+Execute("drop table vtiger_soproductrel");
+Execute("drop table vtiger_quotesproductrel");
+Execute("drop table vtiger_invoiceproductrel");
+
+
+//Inventory Tax handlings -- Ends
 
 
 
