@@ -3027,3 +3027,18 @@ border-width:1px;
 	color:#FFFFFF;
 	font-size:bold;
 }
+#sendMail{
+	width:80%;
+	border:1px solid #CCCCCC;
+	position:relative;
+	text-align:left;
+	height:100px;
+	overflow:auto;
+	left:25px;
+}
+	
+.top_btm_bdr{
+	 border-bottom:1px dotted #CCCCCC;
+	 border-top:1px dotted #CCCCCC;
+}
+
