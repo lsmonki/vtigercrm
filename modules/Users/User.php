@@ -176,7 +176,6 @@ class User extends SugarBean {
 			if(isset($value) && !empty($value)){
 				$this->log->debug("LOADING :PREFERENCES SIZE ". strlen($value));
 				$this->user_preferences = unserialize(base64_decode($value));
-				$_SESSION = array_merge($this->user_preferences, $_SESSION);
 				$this->log->debug("Finished Loading");
 				$_SESSION["USER_PREFERENCES"] = $this->user_preferences;
 		
