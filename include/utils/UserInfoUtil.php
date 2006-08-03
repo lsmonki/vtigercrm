@@ -3161,14 +3161,19 @@ function updateGroup($groupId,$groupName,$groupMemberArray,$description)
 }
 
 /** Function to delete the specified group  
-  * @param $groupId -- Group Id :: Type integer 
+  * @param $groupId -- Group Id :: Type integer
+  * @param $transferId --  Id of the group/user to which record ownership is to be transferred:: Type integer 
+  * @param $transferType -- It can have only two values namely 'Groups' or 'Users'. This determines whether the owneship is to be transferred to a group or user :: Type varchar
  */
-function deleteGroup($groupId)
+function deleteGroup($groupId,$transferId,$transferType)
 {
 	global $log;
 	$log->debug("Entering deleteGroup(".$groupId.") method ...");	
 	global $adb;
-	deleteGroupRelatedSharingRules($groupId);		
+	
+	tranferGroupOwnership($groupId,$transferId,$transferType);		
+	deleteGroupRelatedSharingRules($groupId);
+		
 	$query="delete from vtiger_groups where groupid=".$groupId;
 	$adb->query($query);
 
@@ -3177,7 +3182,65 @@ function deleteGroup($groupId)
 	deleteGroupRelatedRolesAndSubordinates($groupId);
 	deleteGroupRelatedUsers($groupId);
 	$log->debug("Exiting deleteGroup method ...");
+}
 
+
+/** Function to transfer the ownership of records owned by a particular group to the specified group
+  * @param $groupId -- Group Id of the group which's record ownership has to be transferred:: Type integer 
+  * @param $transferId --  Id of the group/user to which record ownership is to be transferred:: Type integer 
+  * @param $transferType -- It can have only two values namely 'Groups' or 'Users'. This determines whether the owneship is to be transferred to a group or user :: Type varchar 
+ */
+function tranferGroupOwnership($groupId,$transferId,$transferType)
+{
+	global $log;
+	$log->debug("Entering deleteGroup(".$groupId.") method ...");	
+	global $adb;
+	$table_array =	Array ('vtiger_leadgrouprelation'=>'leadid',
+			'vtiger_accountgrouprelation'=>'accountid',
+			'vtiger_contactgrouprelation'=>'contactid',
+			'vtiger_potentialgrouprelation'=>'potentialid',
+			'vtiger_campaigngrouprelation'=>'campaignid',
+			'vtiger_activitygrouprelation'=>'activityid',
+			'vtiger_ticketgrouprelation'=>'ticketid',
+			'vtiger_sogrouprelation'=>'salesorderid',
+			'vtiger_quotegrouprelation'=>'quoteid',
+			'vtiger_pogrouprelation'=>'purchaseorderid',
+			'vtiger_invoicegrouprelation'=>'invoiceid');
+
+	
+	$toBeTransferredGroupName=fetchGroupName($groupId);
+			
+	if($transferType == 'Groups')
+	{
+
+			
+		$transferGroupName=fetchGroupName($transferId);
+		foreach($table_array as $tableName=>$colName)
+		{
+			$query = "update ".$tableName." set groupname='".$transferGroupName."' where groupname ='".$toBeTransferredGroupName."'";
+			$adb->query($query);			
+		}		
+	}
+	elseif($transferType == 'Users')
+	{
+		foreach($table_array as $tableName=>$colName)
+		{
+			//Updating in the Crm Entity Table	
+			$query = "update vtiger_crmentity set smownerid=".$transferId." where crmid in(select ".$colName." from ".$tableName." where groupname='".$toBeTransferredGroupName."')";
+			//echo '<BR>';
+			//echo $query;
+			//echo '<BR>';
+			$adb->query($query);
+
+			//Deleting from the group table
+			$query1 = "delete from ".$tableName." where groupname='".$toBeTransferredGroupName."'";
+			//echo '<BR>';
+			//echo $query1;
+			//echo '<BR>';
+			$adb->query($query1);			
+		}	
+	}		
+		$log->debug("Exiting deleteGroup method ...");
 }
 
 /** Function to delete group to group relation of the  specified group  
