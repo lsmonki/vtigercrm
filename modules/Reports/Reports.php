@@ -34,7 +34,7 @@ $adv_filter_options = array("e"=>"equals",
 			   );
 
 $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products',
-			'HelpDesk','Quotes','PurchaseOrder','Invoice','Activities','SalesOrder'
+			'HelpDesk','Quotes','PurchaseOrder','Invoice','Activities','SalesOrder','Campaigns'
 		       );
 
 $related_modules = Array('Leads'=>Array(),
@@ -47,7 +47,8 @@ $related_modules = Array('Leads'=>Array(),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
 			 'PurchaseOrder'=>Array('Contacts'),
 			 'SalesOrder'=>Array(),
-			 'Invoice'=>Array('Accounts')
+			 'Invoice'=>Array('Accounts'),
+			 'Campaigns'=>Array('Products')
 			);
 
 foreach($report_modules as $values)

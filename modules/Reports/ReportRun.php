@@ -937,7 +937,7 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_crmentityRel.crmid
+				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_crmentityRelProducts.crmid
 					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
@@ -1028,6 +1028,23 @@ class ReportRun extends CRMEntity
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
+			}
+		}
+		if($module == 'Campaigns')
+		{
+			if($secmodule == 'Products')
+			{
+				$query = "left join vtiger_products on vtiger_products.productid = vtiger_campaign.product_id  
+					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
+					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
+					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
+					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid 
+					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
+					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
+					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
+					left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_seproductsrel.crmid
+					left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_seproductsrel.crmid
+					left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid ";
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getRelatedModulesQuery".$secmodule);
@@ -1199,6 +1216,13 @@ class ReportRun extends CRMEntity
 
 
 		}	
+		if($module == "Campaigns")// added for 5.0
+		{
+			$query = "from vtiger_campaign 
+				inner join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid 				             left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid 
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				where vtiger_crmentityCampaigns.deleted=0";
+		}
 		$log->info("ReportRun :: Successfully returned getReportsQuery".$module);
 		return $query;
 	}
@@ -1221,7 +1245,6 @@ class ReportRun extends CRMEntity
 		$columnstotallist = $this->getColumnsTotal($reportid);
 		$advfilterlist = $this->getAdvFilterList($reportid);
 		$this->totallist = $columnstotallist;
-
 		if($this->reporttype == "summary")
 		{
 			if(isset($this->groupbylist))
@@ -1741,19 +1764,19 @@ class ReportRun extends CRMEntity
 				$fieldlist = explode(":",$fieldcolname);
 				if($fieldlist[4] == 2)
 				{
-					$stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					$stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
 				}
 				if($fieldlist[4] == 3)
 				{
-					$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
 				}
 				if($fieldlist[4] == 4)
 				{
-					$stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					$stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
 				}
 				if($fieldlist[4] == 5)
 				{
-					$stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					$stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
 				}
 			}
 		}
