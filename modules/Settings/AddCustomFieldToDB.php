@@ -105,11 +105,11 @@ else
 	{
 		$tableName='vtiger_productcf';
 	}
-	elseif($fldmodule == 'Vendor')
+	elseif($fldmodule == 'Vendors')
 	{
 		$tableName='vtiger_vendorcf';
 	}
-	elseif($fldmodule == 'PriceBook')
+	elseif($fldmodule == 'PriceBooks')
 	{
 		$tableName='vtiger_pricebookcf';
 	}
