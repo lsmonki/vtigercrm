@@ -163,6 +163,7 @@ $this->db->query("insert into vtiger_blocks values (80,29,'LBL_MORE_INFORMATION'
 $this->db->query("insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
 //Added an extra block for new UI Settings in Campaigns module 
 $this->db->query("insert into vtiger_blocks values (82,26,'LBL_DESCRIPTION_INFORMATION',4,0,0,0,0,0)");
+$this->db->query("insert into vtiger_blocks values (83,29,'LBL_USER_IMAGE_INFORMATION',4,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
 
 //
 
@@ -896,7 +897,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,2,80,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,6,80,1,'E~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,9,80,1,'V~O',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,10,80,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,12,80,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,15,80,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,13,80,1,'V~O',1,null,'BAS')");
@@ -907,6 +907,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,2,81,1,'V~O',1,null,'BAS')");
 
+//User Image Information
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,10,83,1,'V~O',1,null,'BAS')");
  //user Details End
 
 
