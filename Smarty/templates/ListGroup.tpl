@@ -68,7 +68,7 @@
 						<td class="listTableRow small" valign=top>{$smarty.foreach.grouplist.iteration}</td>
 						<td class="listTableRow small" valign=top>
 							  	<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
-								<a href="#" onClick="deletegroup('{$groupvalues.groupid}','{$groupvalues.groupname}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
+								<a href="#" onClick="deletegroup('{$groupvalues.groupid}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
 						</td>
 						<td class="listTableRow small" valign=top><strong>
                               				<a href="index.php?module=Users&action=GroupDetailView&parenttab=Settings&groupId={$groupvalues.groupid}">{$groupvalues.groupname}</a></strong>
@@ -103,12 +103,22 @@
 </tbody>
 </table>
 
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
-function deletegroup(id,groupname)
+function deletegroup(groupid)
 {ldelim}
-		if(confirm("Are you sure you want to delete the group "+groupname+" ?"))
-			document.location.href="index.php?module=Users&action=DeleteGroup&groupId="+id;	
-		else
-			return false;
+	$("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody:'module=Users&action=UsersAjax&file=GroupDeleteStep1&groupid='+groupid,
+                        onComplete: function(response) {ldelim}
+                                $("status").style.display="none";
+                                $("tempdiv").innerHTML=response.responseText;
+                        {rdelim}
+                {rdelim}
+        );
 {rdelim}
+
 </script>
