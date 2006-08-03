@@ -539,6 +539,7 @@ $mod_strings = Array(
 'LBL_DELETE_ROLE'=>'Delete Role',
 'LBL_MORE_INFORMATION'=>'More Information',
 'LBL_USERLOGIN_ROLE'=>'User Login & Role',
+'LBL_USER_IMAGE_INFORMATION'=>'User Image Information',
 
 //Added for 5.0 for all fields
 'Role'=>'Role',
