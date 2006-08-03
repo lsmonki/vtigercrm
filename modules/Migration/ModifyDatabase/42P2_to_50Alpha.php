@@ -1928,7 +1928,6 @@ $query_array = Array(
 "ALTER TABLE `vtiger_reportsummary` DROP INDEX `reportsummary_IDX0`",
 //"ALTER TABLE `vtiger_seattachmentsrel` DROP INDEX `attachmentsid`",
 //"ALTER TABLE `vtiger_sogrouprelation` DROP INDEX `fk_sogrouprelation2`",
-//"ALTER TABLE `vtiger_soproductrel` DROP COLUMN `shortdescription`",
 //"ALTER TABLE `vtiger_tab` DROP INDEX `tabid`",
 //"ALTER TABLE `vtiger_troubletickets` DROP INDEX `status`",
 "ALTER TABLE `vtiger_accountgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
@@ -2410,8 +2409,6 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `salesorderid` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_invoice` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
 //"ALTER TABLE `vtiger_invoicegrouprelation` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_lar` MODIFY COLUMN `createdon` DATE NOT NULL",
 //"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
@@ -2440,8 +2437,6 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `tabid` INTEGER(3) NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
 //"ALTER TABLE `vtiger_pogrouprelation` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_poproductrel` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_poproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalname` VARCHAR(200) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_portal` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
@@ -2485,8 +2480,6 @@ $query_array = Array(
 "ALTER TABLE `vtiger_quotes` MODIFY COLUMN `quotestage` VARCHAR(200) COLLATE latin1_swedish_ci DEFAULT NULL",
 //"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_quotes` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
-//"ALTER TABLE `vtiger_quotesproductrel` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_quotesproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_recurringevents` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL",
 //"ALTER TABLE `vtiger_relatedlists` MODIFY COLUMN `relation_id` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_relatedlists_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
@@ -2514,8 +2507,6 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_sharedcalendar` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_sharedcalendar` MODIFY COLUMN `sharedid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_sogrouprelation` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_soproductrel` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_soproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_systems` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_systems` MODIFY COLUMN `server` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_username` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
@@ -2914,28 +2905,6 @@ for($i=0;$i<$numofrows;$i++)
 
 $update_query5 = "update vtiger_field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";
 Execute($update_query5);
-
-$alter_query_array18 = Array(
-				"alter table vtiger_soproductrel add column vattax decimal(7,3) default NULL",
-				"alter table vtiger_soproductrel add column salestax decimal(7,3) default NULL",
-				"alter table vtiger_soproductrel add column servicetax decimal(7,3) default NULL",
-				
-				"alter table vtiger_poproductrel add column vattax decimal(7,3) default NULL",
-				"alter table vtiger_poproductrel add column salestax decimal(7,3) default NULL",
-				"alter table vtiger_poproductrel add column servicetax decimal(7,3) default NULL",
-				
-				"alter table vtiger_quotesproductrel add column vattax decimal(7,3) default NULL",
-				"alter table vtiger_quotesproductrel add column salestax decimal(7,3) default NULL",
-				"alter table vtiger_quotesproductrel add column servicetax decimal(7,3) default NULL",
-				
-				"alter table vtiger_invoiceproductrel add column vattax decimal(7,3) default NULL",
-				"alter table vtiger_invoiceproductrel add column salestax decimal(7,3) default NULL",
-				"alter table vtiger_invoiceproductrel add column servicetax decimal(7,3) default NULL",
-			    );
-foreach($alter_query_array18 as $query)
-{
-	Execute($query);
-}
 
 
 
