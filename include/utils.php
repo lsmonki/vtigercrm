@@ -1056,14 +1056,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		
-		//$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
-		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"'; 
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'" oldvalue="'.$disp_value.'"'; 
 
-		global $module; 
-		if($module=='Activities' && $fieldname=='date_start') 
-		{ 
-			$custfld .= ' onChange="this.form.due_date.value = this.form.date_start.value;"'; 
-		}
+		$custfld .= ' onChange="if(this.form.due_date && (this.form.due_date.value == \'\' || this.form.due_date.value == this.getAttribute(\'oldvalue\'))) this.form.due_date.value = this.value; this.setAttribute(\'oldvalue\', this.value);"'; 
 		 
 		$custfld .= '><img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">'; 
 		$custfld .= '<input type="hidden" name="prev_date_start" value="'.$disp_value.'">';
