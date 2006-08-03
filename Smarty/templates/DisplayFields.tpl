@@ -633,7 +633,7 @@
 					{assign var=show_value value="hidden"}
 				{/if}
 				<td align="right" class="dvtCellLabel" style="border:0px solid red;">
-					{$tax.taxname} {$APP.COVERED_PERCENTAGE}
+					{$tax.taxlabel} {$APP.COVERED_PERCENTAGE}
 					<input type="checkbox" name="{$tax.check_name}" id="{$tax.check_name}" class="small" onclick="fnshowHide(this,'{$tax.taxname}')" {$check_value}>
 				</td>
 				<td class="dvtCellInfo" align="left" style="border:0px solid red;">

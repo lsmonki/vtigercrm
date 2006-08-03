@@ -1433,7 +1433,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
-			$tax_value = 0.00;
+			$tax_label = $tax_details[$tax_count]['taxlabel'];
+			$tax_value = '0.00';
 
 			//condition to avoid this function call when create new PO/SO/Quotes/Invoice from Product module
 			if($focus->id != '')
@@ -1442,6 +1443,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 				$tax_value = $tax_details[$tax_count]['percentage'];
 
 			$product_Detail[$i]['taxes'][$tax_count]['taxname'] = $tax_name;
+			$product_Detail[$i]['taxes'][$tax_count]['taxlabel'] = $tax_label;
 			$product_Detail[$i]['taxes'][$tax_count]['percentage'] = $tax_value;
 		}
 
@@ -1510,10 +1512,14 @@ function getAssociatedProducts($module,$focus,$seid='')
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_label = $tax_details[$tax_count]['taxlabel'];
 			$tax_percent = $adb->query_result($result,0,$tax_name);
+			if($tax_percent == '' || $tax_percent == 'NULL')
+				$tax_percent = '0.00';
 			$taxamount = ($subTotal-$finalDiscount)*$tax_percent/100;
 			$taxtotal = $taxtotal + $taxamount;
 			$product_Detail[1]['final_details']['taxes'][$tax_count]['taxname'] = $tax_name;
+			$product_Detail[1]['final_details']['taxes'][$tax_count]['taxlabel'] = $tax_label;
 			$product_Detail[1]['final_details']['taxes'][$tax_count]['percentage'] = $tax_percent;
 			$product_Detail[1]['final_details']['taxes'][$tax_count]['amount'] = $taxamount;
 		}
@@ -1535,6 +1541,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
 	{
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
+		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = '0.00';
 		//if condition is added to call this function when we create PO/SO/Quotes/Invoice from Product module
 		if($module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Quotes' || $module == 'Invoice')
@@ -1544,6 +1551,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$shtaxamount = $shCharge*$shtax_percent/100;
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxname'] = $shtax_name;
+		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['taxlabel'] = $shtax_label;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['percentage'] = $shtax_percent;
 		$product_Detail[1]['final_details']['sh_taxes'][$shtax_count]['amount'] = $shtaxamount;
 	}

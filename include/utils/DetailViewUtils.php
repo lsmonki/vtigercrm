@@ -1000,13 +1000,13 @@ function getDetailAssociatedProducts($module,$focus)
 			$productDiscount = $total*$discount_percent/100;
 			$totalAfterDiscount = $total-$productDiscount;
 			//if discount is percent then show the percentage
-			$discount_info_message = "$discount_percent % of $total";
+			$discount_info_message = "$discount_percent % of $total = $productDiscount";
 		}
 		elseif($discount_amount != 'NULL' && $discount_amount != '')
 		{
 			$productDiscount = $discount_amount;
 			$totalAfterDiscount = $total-$productDiscount;
-			$discount_info_message = "Amount Discount = $productDiscount";
+			$discount_info_message = "Direct Amount Discount = $productDiscount";
 		}
 		else
 		{
@@ -1019,16 +1019,17 @@ function getDetailAssociatedProducts($module,$focus)
 		if($taxtype == 'individual')
 		{
 			$taxtotal = '0.00';
-			$tax_info_message = '';
+			$tax_info_message = "Total After Discount = $totalAfterDiscount \\n";
 			$tax_details = getTaxDetailsForProduct($productid,'all');
 			for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 			{
 				$tax_name = $tax_details[$tax_count]['taxname'];
+				$tax_label = $tax_details[$tax_count]['taxlabel'];
 				$tax_value = getInventoryProductTaxValue($focus->id, $productid, $tax_name);
 
 				$individual_taxamount = $totalAfterDiscount*$tax_value/100;
 				$taxtotal = $taxtotal + $individual_taxamount;
-				$tax_info_message .= "$tax_value of $tax_name = $individual_taxamount \\n";
+				$tax_info_message .= "$tax_label : $tax_value % = $individual_taxamount \\n";
 			}
 			$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
 			$netprice = $netprice + $taxtotal;
@@ -1112,7 +1113,7 @@ function getDetailAssociatedProducts($module,$focus)
 	if($focus->column_fields['hdnDiscountPercent'] != '')
 	{
 		$finalDiscount = ($netTotal*$focus->column_fields['hdnDiscountPercent']/100);
-		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of total ".$netTotal;
+		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of $netTotal = $finalDiscount";
 	}
 	elseif($focus->column_fields['hdnDiscountAmount'] != '')
 	{
@@ -1131,16 +1132,22 @@ function getDetailAssociatedProducts($module,$focus)
 	if($taxtype == 'group')
 	{
 		$taxtotal = '0.00';
+		$final_totalAfterDiscount = $netTotal - $finalDiscount;
+		$tax_info_message = "Total After Discount = $final_totalAfterDiscount \\n";
 		//First we should get all available taxes and then retrieve the corresponding tax values
 		$tax_details = getAllTaxes('available');
 		//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
 		for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 		{
 			$tax_name = $tax_details[$tax_count]['taxname'];
+			$tax_label = $tax_details[$tax_count]['taxlabel'];
 			$tax_value = $adb->query_result($result,0,$tax_name);
+			if($tax_value == '' || $tax_value == 'NULL')
+				$tax_value = '0.00';
+			
 			$taxamount = ($netTotal-$finalDiscount)*$tax_value/100;
 			$taxtotal = $taxtotal + $taxamount;
-			$tax_info_message .= "$tax_value % of $tax_name = $taxamount \\n";
+			$tax_info_message .= "$tax_label : $tax_value % = $taxamount \\n";
 		}
 		$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
 
@@ -1162,13 +1169,15 @@ function getDetailAssociatedProducts($module,$focus)
 	//First we should get all available taxes and then retrieve the corresponding tax values
 	$shtax_details = getAllTaxes('available','sh');
 	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
+	$shtax_info_message = "Shipping & Handling Charge = $shAmount \\n";
 	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
 	{
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
+		$shtax_label = $shtax_details[$shtax_count]['taxlabel'];
 		$shtax_percent = getInventorySHTaxPercent($focus->id,$shtax_name);
 		$shtaxamount = $shAmount*$shtax_percent/100;
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
-		$shtax_info_message .= "$shtax_percent % of $shtax_name = $shtaxamount \\n";
+		$shtax_info_message .= "$shtax_label : $shtax_percent % = $shtaxamount \\n";
 	}
 	$shtax_info_message .= "\\n Total Tax Amount = $shtaxtotal";
 	

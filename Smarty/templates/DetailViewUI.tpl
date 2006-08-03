@@ -235,7 +235,7 @@
 						{elseif $keyid eq 83}<!-- Handle the Tax in Inventory -->
 							{foreach item=tax key=count from=$TAX_DETAILS}
 								<td align="right" class="dvtCellLabel">
-									{$tax.taxname} {$APP.COVERED_PERCENTAGE}
+									{$tax.taxlabel} {$APP.COVERED_PERCENTAGE}
 							
 								</td>
 								<td class="dvtCellInfo" align="left">

@@ -241,12 +241,13 @@ function displayCoords(event,obj,mode,curr_row)
 
 					{foreach key=tax_row_no item=tax_data from=$data.taxes}
 					   {assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
+					   {assign var="taxlabel" value=$tax_data.taxlabel|cat:"_percentage"|cat:$row_no}
 					   {assign var="popup_tax_rowname" value="popup_tax_row"|cat:$row_no}
 					   <tr>
 						<td align="left" class="lineOnTop">
 							<input type="text" class="small" size="5" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" onBlur="calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no})">&nbsp;%
 						</td>
-						<td align="center" class="lineOnTop">{$tax_data.taxname}</td>
+						<td align="center" class="lineOnTop">{$tax_data.taxlabel}</td>
 						<td align="right" class="lineOnTop">
 							<input type="text" class="small" size="6" name="{$popup_tax_rowname}" id="{$popup_tax_rowname}" style="cursor:pointer;" value="0.0" readonly>
 						</td>
@@ -372,7 +373,7 @@ so we will get that array, parse that array and fill the details
 						<td align="left" class="lineOnTop">
 							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
 						</td>
-						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
+						<td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
 						<td align="right" class="lineOnTop">
 							<input type="text" class="small" size="6" name="{$tax_detail.taxname}_group_amount" id="group_tax_amount{$smarty.foreach.group_tax_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
 						</td>
@@ -422,7 +423,7 @@ so we will get that array, parse that array and fill the details
 						<td align="left" class="lineOnTop">
 							<input type="text" class="small" size="3" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcSHTax()">&nbsp;%
 						</td>
-						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
+						<td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
 						<td align="right" class="lineOnTop">
 							<input type="text" class="small" size="4" name="{$tax_detail.taxname}_sh_amount" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
 						</td>
