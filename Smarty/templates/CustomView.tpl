@@ -264,14 +264,14 @@ function mandatoryCheck()
 		 <td>
 		  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 		   <tbody><tr>
-		    <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-		    <td width="75" align="center" nowrap="nowrap" class="dvtSelectedCell" id="pi" onclick="fnLoadCvValues('pi','mi','mnuTab','mnuTab2')">
+		    <td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+		    <td style="width: 100px;" nowrap class="dvtSelectedCell" id="pi" onclick="fnLoadCvValues('pi','mi','mnuTab','mnuTab2')">
 		     <b>{$MOD.LBL_STEP_3_TITLE}</b>
 		    </td>
-		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadCvValues('mi','pi','mnuTab2','mnuTab')">
+		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onclick="fnLoadCvValues('mi','pi','mnuTab2','mnuTab')">
 		     <b>{$MOD.LBL_STEP_4_TITLE}</b>
 		    </td>
-		    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
+		    <td class="dvtTabCache" nowrap style="width:55%;">&nbsp;</td>
 		   </tr>
 		   </tbody>
 	          </table>
