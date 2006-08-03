@@ -36,20 +36,20 @@ function displayCoords(event,obj,mode,curr_row)
 	//Set the Header value for Discount
 	if(mode == 'discount')
 	{ldelim}
-		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML;
+		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
-		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML;
+		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'sh_tax_div_title')
 	{ldelim}
-		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value;
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value+'</b>';
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
 		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount;
+		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
 	{rdelim}
 
 	var move_Element = document.getElementById(obj).style;

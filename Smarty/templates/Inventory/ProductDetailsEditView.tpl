@@ -37,20 +37,20 @@ function displayCoords(event,obj,mode,curr_row)
 	//Set the Header value for Discount
 	if(mode == 'discount')
 	{ldelim}
-		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML;
+		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
-		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML;
+		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'sh_tax_div_title')
 	{ldelim}
-		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value;
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value+'</b>';
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
 		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount;
+		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
 	{rdelim}
 
 	var move_Element = document.getElementById(obj).style;
@@ -77,7 +77,7 @@ function displayCoords(event,obj,mode,curr_row)
 </script>
 
 
-
+<tr><td colspan="4" align="left">
 
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
@@ -464,7 +464,7 @@ so we will get that array, parse that array and fill the details
 		<input type="hidden" name="totalProductCount" id="totalProductCount" value="{$row_no}">
 		<input type="hidden" name="subtotal" id="subtotal" value="">
 		<input type="hidden" name="total" id="total" value="">
-
+</td></tr>
 <!-- Upto this Added to display the Product Details -->
 
 {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
