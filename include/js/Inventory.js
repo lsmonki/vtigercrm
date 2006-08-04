@@ -381,24 +381,24 @@ function fnAddTaxConfigRow(sh){
 	colone.innerHTML="<input type='text' id='"+label_name+"' name='"+label_name+"' value='Tax Name' class='txtBox' onclick=\"this.form."+label_name+".value=''\";/>";
 	coltwo.innerHTML="<input type='text' id='"+label_val+"' name='"+label_val+"' value='Tax Value' class='txtBox' onclick=\"this.form."+label_val+".value=''\";/>";
 
-	document.getElementById(td_id).innerHTML="<input type='submit' name='Save' value='Save' class='crmButton small save' onclick=\"this.form.action.value='TaxConfig'; this.form."+add_tax_flag+".value='true'; this.form.parenttab.value='Settings'; return validateNewTaxType();\">&nbsp;<input type='submit' name='Cancel' value='Cancel' class='crmButton small cancel' onclick=\"this.form.action.value='TaxConfig'; window.history.back();\">";
+	document.getElementById(td_id).innerHTML="<input type='submit' name='Save' value='Save' class='crmButton small save' onclick=\"this.form.action.value='TaxConfig'; this.form."+add_tax_flag+".value='true'; this.form.parenttab.value='Settings'; return validateNewTaxType('"+label_name+"','"+label_val+"');\">&nbsp;<input type='submit' name='Cancel' value='Cancel' class='crmButton small cancel' onclick=\"this.form.action.value='TaxConfig'; this.form.module.value='Settings'; this.form.parenttab.value='Settings';\">";
 }
 
-function validateNewTaxType()
+function validateNewTaxType(fieldname, fieldvalue)
 {
-	if(trim(document.getElementById("addTaxLabel").value)== '')
+	if(trim(document.getElementById(fieldname).value)== '')
 	{
 		alert("Enter valid Tax Name");
 		return false;
 	}
-	if(trim(document.getElementById("addTaxValue").value)== '')
+	if(trim(document.getElementById(fieldvalue).value)== '')
 	{
 		alert("Enter Correct Tax Value");
 		return false;
 	}
 	else
 	{
-		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("addTaxValue").value);
+		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById(fieldvalue).value);
 		if(!temp)
 		{
 			alert("Please enter positive value");
