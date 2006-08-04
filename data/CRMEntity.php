@@ -774,15 +774,30 @@ class CRMEntity
 						      );
 
 			  $inventory_module = $_REQUEST['module'];
-			  if($inventory_module == "PurchaseOrder")
-			  	$relatedname = $_REQUEST["vendor_name"];
-			  else
-			  	$relatedname = $_REQUEST["account_name"];
+
+			  if($_REQUEST['ajxaction'] == 'DETAILVIEW')//if we use ajax edit
+			  {
+				  if($inventory_module == "PurchaseOrder")
+					  $relatedname = getVendorName($this->column_fields['vendor_id']);
+				  else
+				  	$relatedname = getAccountName($this->column_fields['account_id']);
+
+				  $total = $this->column_fields['hdnGrandTotal'];
+			  }
+			  else//using edit button and save
+			  {
+			  	if($inventory_module == "PurchaseOrder")
+			  		$relatedname = $_REQUEST["vendor_name"];
+			  	else
+			  		$relatedname = $_REQUEST["account_name"];
+
+				$total = $_REQUEST['total'];
+			  }
 
 			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
 			  if($oldvalue != $this->column_fields["$history_field_array[$inventory_module]"])
 			  {
-				  addInventoryHistory($inventory_module, $this->id,$relatedname,$_REQUEST['total'],$this->column_fields["$history_field_array[$inventory_module]"]);
+				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$this->column_fields["$history_field_array[$inventory_module]"]);
 			  }
 		  }
 
