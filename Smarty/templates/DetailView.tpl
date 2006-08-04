@@ -110,7 +110,13 @@ function DeleteTag(id)
 		<div class="small" style="padding:20px" >
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>
+			{if $MODULE eq 'HelpDesk'}
+				{$NAME} -  {$APP.LBL_TROUBLE_TICKET} {$APP.LBL_INFORMATION}
+			{else}
+				{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}
+			{/if}
+		</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
 		 <tr height=20><td>{$UPDATEINFO}</td></tr>
 		 </table>			 
 		 <hr noshade size=1>
@@ -126,7 +132,12 @@ function DeleteTag(id)
 					<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{else}
-					<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
+					<td class="dvtSelectedCell" align=center nowrap>
+					   {if $MODULE eq 'HelpDesk'}		
+						{$APP.Ticket} {$APP.LBL_INFORMATION}</td>	
+					   {else}
+						{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
+					   {/if}		
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
 
