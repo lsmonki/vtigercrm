@@ -369,7 +369,7 @@ function displayCoords(event,obj,mode,curr_row)
 						<td align="left" class="lineOnTop">
 							<input type="text" class="small" size="3" name="{$tax_detail.taxname}_sh_percent" id="sh_tax_percentage{$smarty.foreach.sh_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcSHTax()">&nbsp;%
 						</td>
-						<td align="center" class="lineOnTop">{$tax_detail.taxname}</td>
+						<td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
 						<td align="right" class="lineOnTop">
 							<input type="text" class="small" size="4" name="{$tax_detail.taxname}_sh_amount" id="sh_tax_amount{$smarty.foreach.sh_loop.iteration}" style="cursor:pointer;" value="0.00" readonly>
 						</td>
