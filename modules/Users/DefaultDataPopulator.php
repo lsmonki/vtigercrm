@@ -287,12 +287,12 @@ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_contactdetails',1,'51','account_id','Account Name',1,0,0,100,6,4,1,'I~O',0,3,'BAS')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'homephone','vtiger_contactsubdetails',1,'11','homephone','Home Phone',1,0,0,100,7,4,1,'V~O',1,null,'ADV')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'leadsource','vtiger_contactsubdetails',1,'15','leadsource','Lead Source',1,0,0,100,8,4,1,'V~O',1,null,'BAS')");	
- $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'otherphone','vtiger_contactsubdetails',1,'11','otherphone','Phone',1,0,0,100,9,4,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'otherphone','vtiger_contactsubdetails',1,'11','otherphone','Phone',1,0,0,100,9,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_contactdetails',1,'1','title','Title',1,0,0,100,10,4,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'fax','vtiger_contactdetails',1,'1','fax','Fax',1,0,0,100,11,4,1,'V~O',1,null,'BAS')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'department','vtiger_contactdetails',1,'1','department','Department',1,0,0,100,12,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'birthday','vtiger_contactsubdetails',1,'5','birthday','Birthdate',1,0,0,100,14,4,1,'V~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'email','vtiger_contactdetails',1,'13','email','Email',1,0,0,100,15,4,1,'E~O',0,5,'ADV')");
+ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'email','vtiger_contactdetails',1,'13','email','Email',1,0,0,100,15,4,1,'E~O',0,5,'BAS')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'reportsto','vtiger_contactdetails',1,'57','contact_id','Reports To',1,0,0,100,16,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'assistant','vtiger_contactsubdetails',1,'1','assistant','Assistant',1,0,0,100,17,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_contactdetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,4,1,'V~O',1,null,'ADV')");
