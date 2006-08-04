@@ -37,7 +37,7 @@ if (isset($_REQUEST['ftppassword'])) $ftppassword= $_REQUEST['ftppassword'];
 if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 if (isset($_REQUEST['check_createdb'])) $check_createdb = $_REQUEST['check_createdb'];
 if (isset($_REQUEST['root_user'])) $root_user = $_REQUEST['root_user'];
-if (isset($_REQUEST['root_password'])) $root_user = $_REQUEST['root_password'];
+if (isset($_REQUEST['root_password'])) $root_password = $_REQUEST['root_password'];
 
 $db_type_status = false; // is there a db type?
 $db_server_status = false; // does the db server connection exist?
