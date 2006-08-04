@@ -43,7 +43,7 @@ if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
 	if(!$mysql_path_found)
 	{
 		//header("Location: index.php?module=Migration&action=MigrationStep1&parenttab=Settings");
-		echo '<br>MySQL dump file is not exist in the specified MySQL Server Path';
+		echo '<br><font color="red"><b>MySQL dump file is not exist in the specified MySQL Server Path</b></font>';
 		include("modules/Migration/MigrationStep1.php");
 		exit;
 	}
@@ -69,12 +69,12 @@ if($_REQUEST['migration_option'] == 'db_details')
 
 	if(!$oldconn)
 	{
-		echo '<br>  Source Database Server cannot be connected';
+		echo '<br><font color="red"><b>  Source Database Server cannot be connected</b></font>';
 		$continue1 = 0;
 	}
 	elseif(!$newconn)
 	{
-		echo '<br>  Current working Database Server cannot be connected';
+		echo '<br><font color="red"><b>  Current working Database Server cannot be connected</b></font>';
 		$continue1 = 0;
 	}
 	else
@@ -90,7 +90,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 		//$newdb_exist = @mysql_select_db($new_dbname,$oldconn);
 		if(!$olddb_exist)
 		{
-			echo '<br> Source Database does not exist';
+			echo '<br><font color="red"><b> Source Database does not exist</b></font>';
 			$continue2 = 0;
 		}
 		//elseif(!$newdb_exist)
@@ -113,7 +113,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 
 		if(!$old_tables)
 		{
-			echo '<br> Tables do not exist in the Source Database';
+			echo '<br><font color="red"><b> Tables do not exist in the Source Database</b></font>';
 			$continue3 = 0;
 		}
 		/*	if(!$new_tables)
@@ -172,13 +172,13 @@ if($_REQUEST['migration_option'] == 'db_details')
 		}
 		else
 		{
-			echo '<br> Cannot make a connection with the current database setup';
+			echo '<br><font color="red"><b> Cannot make a connection with the current database setup.</b></font>';
 			include("modules/Migration/MigrationStep1.php");
 		}
 	}
 	else
 	{
-		echo '<br>ERROR!!!!!!Please check the input values, unable to proceed.';
+		echo '<br><font color="red"><b>ERROR!!!!!!Please check the input values, unable to proceed.</b></font>';
 		include("modules/Migration/MigrationStep1.php");
 	}
 
@@ -209,7 +209,7 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 	{
 		if($invalid_dump == 1)
 		{
-			echo '<br> Please Enter a valid Dump file.';
+			echo '<br><font color="red"><b> Please Enter a valid Dump file.</b></font>';
 		}
 		include("modules/Migration/MigrationStep1.php");
 	}
@@ -261,7 +261,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 
 	if(!$oldconn)
 	{
-		echo '<br>  Source Database Server cannot be connected';
+		echo '<br><font color="red"><b>  Source Database Server cannot be connected</b></font>';
 		$continue1 = 0;
 	}
 	else
@@ -277,7 +277,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 
 		if(!$olddb_exist)
 		{
-			echo '<br> Source Database does not exist';
+			echo '<br><font color="red"><b> Source Database does not exist</b></font>';
 			$continue2 = 0;
 		}
 		else
@@ -294,7 +294,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 
 		if(!$old_tables)
 		{
-			echo '<br> Tables do not exist in the Source Database';
+			echo '<br><font color="red"><b> Tables do not exist in the Source Database</b></font>';
 			$continue3 = 0;
 		}
 		else
@@ -327,13 +327,13 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 		}
 		else
 		{
-			echo '<br> Cannot make a connection with the current database setup';
+			echo '<br><font color="red"><b> Cannot make a connection with the current database setup</b></font>';
 			include("modules/Migration/MigrationStep1.php");
 		}
 	}
 	else
 	{
-		echo '<br>ERROR!!!!!!Please check the input values, unable to proceed.';
+		echo '<br><font color="red"><b>ERROR!!!!!!Please check the input values, unable to proceed.</b></font>';
 		include("modules/Migration/MigrationStep1.php");
 	}
 }
