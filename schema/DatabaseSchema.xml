@@ -114,11 +114,11 @@
 		<index name="crmentity_modifiedby_idx">
 			<col>modifiedby</col>
 		</index>
-		<index name="crmentity_deleted_smownerid_idx">
+		<index name="crm_deleted_smownerid_idx">
 			<col>deleted</col>
 			<col>smownerid</col>
 		</index>
-		<index name="crmentity_smownerid_deleted_idx">
+		<index name="crm_smownerid_deleted_idx">
 			<col>smownerid</col>
 			<col>deleted</col>
 		</index>
@@ -152,20 +152,17 @@
 		<index name="tab_modifiedby_idx">
 			<col>modifiedby</col>
 		</index>
-		<index name="tab_tabid_idx">
-			<col>tabid</col>
-		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="field">
 		<field name="tabid" type="I" size="19">
 			<notnull />
+			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="fieldid" type="I" size="19">
 			<key />
 			<autoincrement />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="30">
 			<notnull />
@@ -208,7 +205,7 @@
 		<index name="field_fieldname_idx">
 			<col>fieldname</col>
 		</index>
-		<index name="field_tabid_block_displaytype_idx">
+		<index name="field_tabid_block_dtype_idx">
 			<col>tabid</col>
 			<col>block</col>
 			<col>displaytype</col>
@@ -469,7 +466,7 @@
 			<default value="0" />
 		</field>
 
-		<index name="leaddetails_converted_leadstatus_idx">
+		<index name="leadconverted_leadstatus_idx">
 			<col>converted</col>
 			<col>leadstatus</col>
 		</index>
@@ -548,9 +545,6 @@
 		<index name="notes_title_idx">
 			<col>title</col>
 		</index>
-		<index name="notes_notesid_idx">
-			<col>notesid</col>
-		</index>
 		<index name="notes_crmid_idx">
 			<col>crmid</col>
 		</index>
@@ -605,9 +599,6 @@
 		<index name="potential_accountid_idx">
 			<col>accountid</col>
 		</index>
-		<index name="potential_potentialid_idx">
-			<col>potentialid</col>
-		</index>
 		<index name="potentail_sales_stage_idx">
 			<col>sales_stage</col>
 		</index>
@@ -632,7 +623,7 @@
 			<notnull />
 		</field>
 
-		<index name="potstagehistory_potentialid_idx">
+		<index name="history_potentialid_idx">
 			<col>potentialid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -678,26 +669,26 @@
 		<field name="priority" type="C" size="150" />
 		<field name="location" type="C" size="150" />
 
-		<index name="activity_activityid_subject_idx">
+		<index name="activityid_subject_idx">
 			<col>activityid</col>
 			<col>subject</col>
 		</index>
-		<index name="activity_activitytype_date_start_idx">
+		<index name="activitytype_date_start_idx">
 			<col>activitytype</col>
 			<col>date_start</col>
 		</index>
-		<index name="activity_date_start_due_date_idx">
+		<index name="act_date_start_due_date_idx">
 			<col>date_start</col>
 			<col>due_date</col>
 		</index>
-		<index name="activity_date_start_time_start_idx">
+		<index name="act_date_start_time_start_idx">
 			<col>date_start</col>
 			<col>time_start</col>
 		</index>
 		<index name="activity_eventstatus_idx">
 			<col>eventstatus</col>
 		</index>
-		<index name="activity_status_eventstatus_idx">
+		<index name="act_status_eventstatus_idx">
 			<col>status</col>
 			<col>eventstatus</col>
 		</index>
@@ -721,10 +712,7 @@
 			<notnull />
 		</field>
 
-		<index name="attachments_attachmentsid_idx">
-			<col>attachmentsid</col>
-		</index>
-		<index name="attachments_description_name_type_attachmentsid_idx">
+		<index name="att_desc_name_type_attid_idx">
 			<col>description</col>
 			<col>name</col>
 			<col>type</col>
@@ -744,14 +732,14 @@
 			<constraint>REFERENCES attachments(attachmentsid) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="seattachmentsrel_attachmentsid_idx">
+		<index name="seattachmentsrel_attid_idx">
 			<col>attachmentsid</col>
 		</index>
 		<index name="seattachmentsrel_crmid_idx">
 			<col>crmid</col>
 			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		</index>
-		<index name="seattachmentsrel_attachmentsid_crmid_idx">
+		<index name="seattsrel_attid_crmid_idx">
 			<col>attachmentsid</col>
 			<col>crmid</col>
 		</index>
@@ -794,10 +782,10 @@
 			<constraint>REFERENCES competitor(competitorid) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="potcompetitorrel_potentialid_idx">
+		<index name="potcompetitorrel_potid_idx">
 			<col>potentialid</col>
 		</index>
-		<index name="potcompetitorrel_competitorid_idx">
+		<index name="potcompetitorrel_compid_idx">
 			<col>competitorid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -918,7 +906,7 @@
 			<notnull />
 		</field>
 
-		<index name="productcollaterals_productid_filename_idx">
+		<index name="productcoll_prodid_file_idx">
 			<col>productid</col>
 			<col>filename</col>
 		</index>
@@ -967,7 +955,7 @@
 		</field>
 		<field name="userid" type="C" size="50" />
 
-		<index name="users2group_groupname_uerid_idx">
+		<index name="users2group_gname_uid_idx">
 			<col>groupname</col>
 			<col>userid</col>
 		</index>
@@ -1041,7 +1029,7 @@
 			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="contpotentialrel_potentialid_idx">
+		<index name="contpotentialrel_potid_idx">
 			<col>potentialid</col>
 		</index>
 		<index name="contpotentialrel_contactid_idx">
@@ -1179,9 +1167,6 @@
 		<field name="update_log" type="X" />
 		<field name="version_id" type="I" size="11" />
 
-		<index name="troubletickets_ticketid_idx">
-			<col>ticketid</col>
-		</index>
 		<index name="troubletickets_status_idx">
 			<col>status</col>
 		</index>
@@ -1225,7 +1210,7 @@
 			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="salesmanactivityrel_activityid_idx">
+		<index name="salesmanactivityrel_actid_idx">
 			<col>activityid</col>
 		</index>
 		<index name="salesmanactivityrel_smid_idx">
@@ -1359,7 +1344,7 @@
 			<default value="no" />
 		</field>
 
-		<index name="import_maps_assigned_user_id_module_name_deleted_idx">
+		<index name="imp_auid_modname_del_idx">
 			<col>assigned_user_id</col>
 			<col>module</col>
 			<col>name</col>
@@ -1378,7 +1363,7 @@
 		<index name="leadgrouprelation_leadid_idx">
 			<col>leadid</col>
 		</index>
-		<index name="leadgrouprelation_groupname_idx">
+		<index name="leadgrouprelation_gname_idx">
 			<col>groupname</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -1392,10 +1377,10 @@
 			<constraint>REFERENCES groups(name) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="activitygrouprelation_activityid_idx">
+		<index name="actgrouprelation_actid_idx">
 			<col>activityid</col>
 		</index>
-		<index name="activitygrouprelation_groupname_idx">
+		<index name="actgrouprelation_gname_idx">
 			<col>groupname</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -1409,10 +1394,10 @@
 			<constraint>REFERENCES groups(name) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="ticketgrouprelation_ticketid_idx">
+		<index name="ticketgrouprelation_tid_idx">
 			<col>ticketid</col>
 		</index>
-		<index name="ticketgrouprelation_groupname_idx">
+		<index name="ticketgrouprelation_gname_idx">
 			<col>groupname</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -1471,7 +1456,7 @@
 			<autoincrement />
 		</field>
 
-		<index name="emailtemplates_foldernamd_templatename_subject_idx">
+		<index name="etemp_folder_tname_sub_idx">
 			<col>foldername</col>
 			<col>templatename</col>
 			<col>subject</col>
@@ -1496,9 +1481,6 @@
 			<notnull />
 		</field>
 
-		<index name="faq_id_idx">
-			<col>id</col>
-		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
@@ -1538,7 +1520,7 @@
 		</field>
 		<field name="assigned_user_id" type="C" size="36" />
 
-		<index name="files_assigned_user_id_name_deleted_idx">
+		<index name="files_auid_name_del_idx">
 			<col>assigned_user_id</col>
 			<col>name</col>
 			<col>deleted</col>
@@ -1598,7 +1580,7 @@
 		</field>
 		<field name="description" type="C" size="100" />
 
-		<index name="role2action_rolename_tabid_actionname_idx">
+		<index name="r2a_rname_tabid_aname_idx">
 			<col>rolename</col>
 			<col>tabid</col>
 			<col>actionname</col>
@@ -1733,7 +1715,7 @@
 			<default value="1" />
 		</field>
 
-		<index name="accountdepstatus_deploymentstatus_idx">
+		<index name="accountdepstatus_dstatus_idx">
 			<col>deploymentstatus</col>
 			<unique />
 		</index>
@@ -1901,7 +1883,7 @@
 			<default value="1" />
 		</field>
 
-		<index name="opportunity_type_opportunity_type_idx">
+		<index name="opp_type_opp_type_idx">
 			<col>opportunity_type</col>
 			<unique />
 		</index>
@@ -2492,7 +2474,7 @@
 			<default value="0" />
 		</field>
 
-		<index name="profile2tab_profileid_tabid_idx">
+		<index name="profile2tab_pid_tabid_idx">
 			<col>profileid</col>
 			<col>tabid</col>
 		</index>
@@ -2504,7 +2486,7 @@
 		<field name="Operation" type="I" size="10" />
 		<field name="permissions" type="I" size="1" />
 
-		<index name="profile2standardpermissions_profileid_tabid_Operation_idx">
+		<index name="p2sp_pid_tabid_oper_idx">
 			<col>profileid</col>
 			<col>tabid</col>
 			<col>Operation</col>
@@ -2518,16 +2500,16 @@
 		<field name="visible" type="I" size="19" />
 		<field name="readonly" type="I" size="19" />
 
-		<index name="profile2field_profileid_tabid_fieldname_idx">
+		<index name="p2f_pid_tabid_fieldname_idx">
 			<col>profileid</col>
 			<col>tabid</col>
 			<col>fieldname</col>
 		</index>
-		<index name="profile2field_tabid_profileid_idx">
+		<index name="p2f_tabid_profileid_idx">
 			<col>tabid</col>
 			<col>profileid</col>
 		</index>
-		<index name="profile2field_visible_profileid_idx">
+		<index name="p2f_vis_profileid_idx">
 			<col>visible</col>
 			<col>profileid</col>
 		</index>
@@ -2557,14 +2539,14 @@
 		<field name="visible" type="I" size="19" />
 		<field name="readonly" type="I" size="19" />
 
-		<index name="def_org_field_tabid_fieldid_idx">
+		<index name="def_org_field_tabid_fid_idx">
 			<col>tabid</col>
 			<col>fieldid</col>
 		</index>
 		<index name="def_org_field_tabid_idx">
 			<col>tabid</col>
 		</index>
-		<index name="def_org_field_visible_fieldid_idx">
+		<index name="def_org_field_vis_fid_idx">
 			<col>visible</col>
 			<col>fieldid</col>
 		</index>
@@ -2576,7 +2558,7 @@
 		<field name="activityid" type="I" size="11" />
 		<field name="permission" type="I" size="1" />
 
-		<index name="profile2utility_profileid_tabid_activityid_idx">
+		<index name="p2u_pid_tabid_actid_idx">
 			<col>profileid</col>
 			<col>tabid</col>
 			<col>activityid</col>
@@ -2600,7 +2582,7 @@
 			<default value="1" />
 		</field>
 
-		<index name="productcategory_productcategory_idx">
+		<index name="prodcat_prodcat_idx">
 			<col>productcategory</col>
 			<unique />
 		</index>
@@ -2618,7 +2600,7 @@
 		<field name="notificationbody" type="X" />
 		<field name="label" type="C" size="50" />
 
-		<index name="notificationscheduler_schedulednotificationname_idx">
+		<index name="notsched_schednotname_idx">
 			<col>schedulednotificationname</col>
 			<unique />
 		</index>
@@ -2637,10 +2619,10 @@
 			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
-		<index name="activityproductrel_activityid_idx">
+		<index name="activityproductrel_actid_idx">
 			<col>activityid</col>
 		</index>
-		<index name="activityproductrel_productid_idx">
+		<index name="activityproductrel_pid_idx">
 			<col>productid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -2659,10 +2641,6 @@
 			<notnull />
 			<default value="0" />
 		</field>
-
-		<index name="relatedlists_relation_id_idx">
-			<col>relation_id</col>
-		</index>
 	</table>
 
 	<table name="rss">
@@ -2799,10 +2777,10 @@
 		</field>
 		<field name="listprice" type="N" size="11.3" />
 
-		<index name="pricebookproductrel_pricebookid_idx">
+		<index name="pricebookprodrel_pbid_idx">
 			<col>pricebookid</col>
 		</index>
-		<index name="pricebookproductrel_productid_idx">
+		<index name="pricebookprodrel_pid_idx">
 			<col>productid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -3225,7 +3203,7 @@
 		<index name="invoiceproductrel_invoice_idx">
 			<col>invoice</col>
 		</index>
-		<index name="invoiceproductrel_productid_idx">
+		<index name="invoiceproductrel_pid_idx">
 			<col>productid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -3371,9 +3349,6 @@
 			<default value="0" />
 		</field>
 
-		<index name="selectquery_queryid_idx">
-			<col>queryid</col>
-		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
@@ -3558,7 +3533,7 @@
 			<default value="" />
 		</field>
 
-		<index name="reportsummary_reportsummaryid_idx">
+		<index name="reportsummary_rsid_idx">
 			<col>reportsummaryid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
