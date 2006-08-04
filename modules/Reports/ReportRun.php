@@ -686,42 +686,42 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
 			{
 				$query = "left join account on account.accountid = contactdetails.accountid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Potentials")
 			{
 				$query = "left join  potential on potential.accountid = contactdetails.accountid
-				left join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid
-				left join account as accountPotentials on potential.accountid = accountPotentials.accountid
+				left join crmentity crmentityPotentials on crmentityPotentials.crmid=potential.potentialid
+				left join account accountPotentials on potential.accountid = accountPotentials.accountid
 				left join potentialscf on potentialscf.potentialid = potential.potentialid
-				left join users as usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
+				left join users usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
 			}
 			if($secmodule == "Quotes")
                         {
                                 $query = "left join quotes on quotes.contactid = contactdetails.contactid
-                                left join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
+                                left join crmentity crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
                                 left join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid
                                 left join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid
-                                left join users as usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
-                                left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
-                                left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
-                                left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
-                                left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
+                                left join users usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
+                                left join users usersRel1 on usersRel1.id = quotes.inventorymanager
+                                left join potential potentialRel on potentialRel.potentialid = quotes.potentialid
+                                left join contactdetails contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
+                                left join account accountQuotes on accountQuotes.accountid = quotes.accountid ";
                         }
                         if($secmodule == "Orders")
                         {
                                 $query = "left join purchaseorder on purchaseorder.contactid = contactdetails.contactid
-                                left join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
+                                left join crmentity crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
                                 left join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
-                                left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
-                                left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
+                                left join users usersOrders on usersOrders.id = crmentityOrders.smownerid
+                                left join vendor vendorRel on vendorRel.vendorid = purchaseorder.vendorid
+                                left join contactdetails contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
                         }
 
 		}
@@ -731,66 +731,66 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Potentials")
 			{
 				$query = "left join potential on potential.accountid = account.accountid
-				left join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid
+				left join crmentity crmentityPotentials on crmentityPotentials.crmid=potential.potentialid
                                 left join potentialscf on potentialscf.potentialid = potential.potentialid
-                                left join users as usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
+                                left join users usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
 
 			}
 			if($secmodule == "Contacts")
 			{
 				$query = "left join contactdetails on contactdetails.accountid = account.accountid
-				left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+				left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
                                 left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
                                 left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
+				left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+				left join account accountContacts on accountContacts.accountid = contactdetails.accountid 
                                 left join contactscf on contactdetails.contactid = contactscf.contactid
-                                left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+                                left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 			}
 			if($secmodule == "Quotes")
 			{
 				$query = "left join quotes on quotes.accountid = account.accountid
-                                left join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
+                                left join crmentity crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
                                 left join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid
                                 left join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid
-                                left join users as usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
-                                left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
-                                left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
-                                left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
-                                left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
+                                left join users usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
+                                left join users usersRel1 on usersRel1.id = quotes.inventorymanager
+                                left join potential potentialRel on potentialRel.potentialid = quotes.potentialid
+                                left join contactdetails contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
+                                left join account accountQuotes on accountQuotes.accountid = quotes.accountid ";
 			}
 			if($secmodule == "Orders")
 			{
 				$query = "left join purchaseorder on purchaseorder.accountid = account.accountid
-                                left join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
+                                left join crmentity crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
                                 left join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
-                                left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
-                                left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
+                                left join users usersOrders on usersOrders.id = crmentityOrders.smownerid
+                                left join vendor vendorRel on vendorRel.vendorid = purchaseorder.vendorid
+                                left join contactdetails contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
 			}
 			if($secmodule == "Invoice")
 			{
 				$query = "left join invoice on invoice.accountid = account.accountid
-                                left join crmentity as crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid
+                                left join crmentity crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid
                                 left join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid
                                 left join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid
-                                left join users as usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
-                                left join account as accountInvoice on accountInvoice.accountid = invoice.accountid ";
+                                left join users usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
+                                left join account accountInvoice on accountInvoice.accountid = invoice.accountid ";
 			}
 			if($secmodule == "Products")
 			{
 				$query = "left join seproductsrel on seproductsrel.crmid = account.accountid
 				left join products on products.productid = seproductsrel.productid
-                                left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
+                                left join crmentity crmentityProducts on crmentityProducts.crmid=products.productid
                                 left join productcf on products.productid = productcf.productid
-                                left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
-                                left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
-                                left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
-                                left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid
-                                left join account as accountRel on accountRel.accountid=crmentityRel.crmid
-                                left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
-                                left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid ";
+                                left join users usersProducts on usersProducts.id = crmentityProducts.smownerid
+                                left join contactdetails contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
+                                left join vendor vendorRel on vendorRel.vendorid = products.vendor_id
+                                left join crmentity crmentityRel on crmentityRel.crmid = seproductsrel.crmid
+                                left join account accountRel on accountRel.accountid=crmentityRel.crmid
+                                left join leaddetails leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
+                                left join potential potentialRel on potentialRel.potentialid = crmentityRel.crmid ";
 			}
 		}
 		if($module == "Quotes")
@@ -798,32 +798,32 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
                         {
                                 $query = "left join account on account.accountid = quotes.accountid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
                         }
 			if($secmodule == "Potentials")
                         {
                                 $query = "left join potential on potential.potentialid = quotes.potentialid
-                                left join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid 
+                                left join crmentity crmentityPotentials on crmentityPotentials.crmid=potential.potentialid 
 				left join potentialscf on potentialscf.potentialid = potential.potentialid
-                                left join users as usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
+                                left join users usersPotentials on usersPotentials.id = crmentityPotentials.smownerid ";
 
                         }
 			if($secmodule == "Contacts")
                         {
                                 $query = "left join contactdetails on contactdetails.contactid = quotes.contactid
-                                left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+                                left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
                                 left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
                                 left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-                                left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-                                left join account as accountContacts on accountContacts.accountid = contactdetails.accountid
+                                left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+                                left join account accountContacts on accountContacts.accountid = contactdetails.accountid
 
                                 left join contactscf on contactdetails.contactid = contactscf.contactid
-                                left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+                                left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
                         }
 
 		}
@@ -832,24 +832,24 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
                         {
                                 $query = "left join account on account.accountid = purchaseorder.accountid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
                         }
 			if($secmodule == "Contacts")
 			{
 				$query = "left join contactdetails on contactdetails.contactid = purchaseorder.contactid
-                                left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+                                left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
                                 left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
                                 left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-                                left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-                                left join account as accountContacts on accountContacts.accountid = contactdetails.accountid
+                                left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+                                left join account accountContacts on accountContacts.accountid = contactdetails.accountid
 
                                 left join contactscf on contactdetails.contactid = contactscf.contactid
-                                left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+                                left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 			}
 		}
 		if($module == "Invoice")
@@ -857,12 +857,12 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
 			{
 				$query = "left join account on account.accountid = invoice.accountid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
 			}
 		}
 		if($module == "Products")
@@ -870,23 +870,23 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
                         {
                                 $query = "left join account on account.accountid = crmentityRel.crmid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
                         }
 			if($secmodule == "Contacts")
                         {
                                 $query = "left join contactdetails on contactdetails.contactid = products.contactid
-                                left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+                                left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
                                 left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
                                 left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-                                left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-                                left join account as accountContacts on accountContacts.accountid = contactdetails.accountid
+                                left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+                                left join account accountContacts on accountContacts.accountid = contactdetails.accountid
                                 left join contactscf on contactdetails.contactid = contactscf.contactid
-                                left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+                                left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 
                         }
 
@@ -896,36 +896,36 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
                         {
                                 $query = "left join account on account.accountid = potential.accountid
-                                left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+                                left join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid
                                 left join accountbillads on account.accountid=accountbillads.accountaddressid
                                 left join accountshipads on account.accountid=accountshipads.accountaddressid
                                 left join accountscf on account.accountid = accountscf.accountid
-                                left join account as accountAccounts on accountAccounts.accountid = account.parentid
-                                left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
+                                left join account accountAccounts on accountAccounts.accountid = account.parentid
+                                left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid ";
                         }
 			if($secmodule == "Contacts")
 			{
 				$query = "left join contactdetails on contactdetails.accountid = potential.accountid
-				left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+				left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
 				left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
 				left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid
+				left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+				left join account accountContacts on accountContacts.accountid = contactdetails.accountid
 				left join contactscf on contactdetails.contactid = contactscf.contactid
-				left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+				left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 
 			}
 			if($secmodule == "Quotes")
 			{
 				$query = "left join quotes on quotes.potentialid = potential.potentialid
-                                left join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
+                                left join crmentity crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid
                                 left join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid
                                 left join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid
-                                left join users as usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
-                                left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
-                                left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
-                                left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
-                                left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
+                                left join users usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
+                                left join users usersRel1 on usersRel1.id = quotes.inventorymanager
+                                left join potential potentialRel on potentialRel.potentialid = quotes.potentialid
+                                left join contactdetails contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
+                                left join account accountQuotes on accountQuotes.accountid = quotes.accountid ";
 			}
 		}
 		if($module == "HelpDesk")
@@ -933,16 +933,16 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Products")
 			{
 				$query = "left join products on products.productid = troubletickets.product_id
-                                left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
+                                left join crmentity crmentityProducts on crmentityProducts.crmid=products.productid
                                 left join productcf on products.productid = productcf.productid
-                                left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
-																left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
-                                left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
+                                left join users usersProducts on usersProducts.id = crmentityProducts.smownerid
+																left join contactdetails contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
+                                left join vendor vendorRel on vendorRel.vendorid = products.vendor_id
                                 left join seproductsrel on seproductsrel.productid = products.productid
-                                left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid
-                                left join account as accountRelProducts on accountRelProducts.accountid=seproductsrel.crmid
-                                left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = seproductsrel.crmid
-                                left join potential as potentialRelProducts on potentialRelProducts.potentialid = seproductsrel.crmid ";
+                                left join crmentity crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid
+                                left join account accountRelProducts on accountRelProducts.accountid=seproductsrel.crmid
+                                left join leaddetails leaddetailsRelProducts on leaddetailsRelProducts.leadid = seproductsrel.crmid
+                                left join potential potentialRelProducts on potentialRelProducts.potentialid = seproductsrel.crmid ";
 			}
 		}
 		if($module == "Activities")
@@ -950,13 +950,13 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Contacts")
 			{
                                 $query = "left join contactdetails on contactdetails.contactid = cntactivityrel.contactid 
-                                left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
+                                left join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid
                                 left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid
                                 left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid
-                                left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-                                left join account as accountContacts on accountContacts.accountid = contactdetails.accountid
+                                left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+                                left join account accountContacts on accountContacts.accountid = contactdetails.accountid
                                 left join contactscf on contactdetails.contactid = contactscf.contactid
-                                left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
+                                left join users usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 			}
 		}
 		$vtlog->logthis("ReportRun :: Successfully returned getRelatedModulesQuery".$secmodule,"info");
@@ -969,23 +969,23 @@ class ReportRun extends CRMEntity
 		if($module == "Leads")
 		{
 			$query = "from leaddetails 
-				inner join crmentity as crmentityLeads on crmentityLeads.crmid=leaddetails.leadid 
+				inner join crmentity crmentityLeads on crmentityLeads.crmid=leaddetails.leadid 
 				inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid 
 				inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid 
 				inner join leadscf on leaddetails.leadid = leadscf.leadid 
-				left join users as usersLeads on usersLeads.id = crmentityLeads.smownerid
+				left join users usersLeads on usersLeads.id = crmentityLeads.smownerid
 				where crmentityLeads.deleted=0 and leaddetails.converted=0";
 		}
 
 		if($module == "Accounts")
                 {
 			$query = "from account 
-				inner join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid 
+				inner join crmentity crmentityAccounts on crmentityAccounts.crmid=account.accountid 
 				inner join accountbillads on account.accountid=accountbillads.accountaddressid 
 				inner join accountshipads on account.accountid=accountshipads.accountaddressid 
 				inner join accountscf on account.accountid = accountscf.accountid 
-				left join account as accountAccounts on accountAccounts.accountid = account.parentid
-				left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid
+				left join account accountAccounts on accountAccounts.accountid = account.parentid
+				left join users usersAccounts on usersAccounts.id = crmentityAccounts.smownerid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityAccounts.deleted=0 ";
 		}
@@ -993,13 +993,13 @@ class ReportRun extends CRMEntity
 		if($module == "Contacts")
                 {
 			$query = "from contactdetails
-				inner join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
+				inner join crmentity crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
 				inner join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
 				inner join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
 				inner join contactscf on contactdetails.contactid = contactscf.contactid 
-				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
-				left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid
+				left join contactdetails contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+				left join account accountContacts on accountContacts.accountid = contactdetails.accountid 
+				left join users usersContacts on usersContacts.id = crmentityContacts.smownerid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)." 
 				where crmentityContacts.deleted=0";
 		}
@@ -1007,10 +1007,10 @@ class ReportRun extends CRMEntity
 		if($module == "Potentials")
 		{
 			$query = "from potential 
-				inner join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid 
-				inner join account as accountPotentials on potential.accountid = accountPotentials.accountid 
+				inner join crmentity crmentityPotentials on crmentityPotentials.crmid=potential.potentialid 
+				inner join account accountPotentials on potential.accountid = accountPotentials.accountid 
 				inner join potentialscf on potentialscf.potentialid = potential.potentialid
-				left join users as usersPotentials on usersPotentials.id = crmentityPotentials.smownerid  
+				left join users usersPotentials on usersPotentials.id = crmentityPotentials.smownerid  
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityPotentials.deleted=0 ";
 		}
@@ -1018,16 +1018,16 @@ class ReportRun extends CRMEntity
 		if($module == "Products")
 		{
 			$query = "from products 
-				inner join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid 
+				inner join crmentity crmentityProducts on crmentityProducts.crmid=products.productid 
 				left join productcf on products.productid = productcf.productid 
-				left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid 
-				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
-				left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id  
+				left join users usersProducts on usersProducts.id = crmentityProducts.smownerid 
+				left join contactdetails contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
+				left join vendor vendorRel on vendorRel.vendorid = products.vendor_id  
 				left join seproductsrel on seproductsrel.productid = products.productid 
-				left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid 
-				left join account as accountRelProducts on accountRelProducts.accountid=crmentityRelProducts.crmid 
-				left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = crmentityRelProducts.crmid 
-				left join potential as potentialRelProducts on potentialRelProducts.potentialid = crmentityRelProducts.crmid 
+				left join crmentity crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid 
+				left join account accountRelProducts on accountRelProducts.accountid=crmentityRelProducts.crmid 
+				left join leaddetails leaddetailsRelProducts on leaddetailsRelProducts.leadid = crmentityRelProducts.crmid 
+				left join potential potentialRelProducts on potentialRelProducts.potentialid = crmentityRelProducts.crmid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityProducts.deleted=0 ";
 		}
@@ -1035,14 +1035,14 @@ class ReportRun extends CRMEntity
 		if($module == "HelpDesk")
 		{
 			$query = "from troubletickets 
-				inner join crmentity as crmentityHelpDesk 
+				inner join crmentity crmentityHelpDesk 
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-        left join crmentity as crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = troubletickets.parent_id
-				left join account as accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid 
-				left join contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
-				left join products as productsRel on productsRel.productid = crmentityRelHelpDesk.crmid
-				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
+        left join crmentity crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = troubletickets.parent_id
+				left join account accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid 
+				left join contactdetails contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
+				left join products productsRel on productsRel.productid = crmentityRelHelpDesk.crmid
+				left join users usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityHelpDesk.deleted=0 ";
 		}
@@ -1050,18 +1050,18 @@ class ReportRun extends CRMEntity
 		if($module == "Activities")
 		{
 			$query = "from activity 
-				inner join crmentity as crmentityActivities on crmentityActivities.crmid=activity.activityid 
+				inner join crmentity crmentityActivities on crmentityActivities.crmid=activity.activityid 
 				left join cntactivityrel on cntactivityrel.activityid= activity.activityid 
-				left join contactdetails as contactdetailsActivities on contactdetailsActivities.contactid= cntactivityrel.contactid
-				left join users as usersActivities on usersActivities.id = crmentityActivities.smownerid
+				left join contactdetails contactdetailsActivities on contactdetailsActivities.contactid= cntactivityrel.contactid
+				left join users usersActivities on usersActivities.id = crmentityActivities.smownerid
 				left join seactivityrel on seactivityrel.activityid = activity.activityid
-				left join crmentity as crmentityRelActivities on crmentityRelActivities.crmid = seactivityrel.crmid
-				left join account as accountRelActivities on accountRelActivities.accountid=crmentityRelActivities.crmid
-				left join leaddetails as leaddetailsRelActivities on leaddetailsRelActivities.leadid = crmentityRelActivities.crmid
-				left join potential as potentialRelActivities on potentialRelActivities.potentialid = crmentityRelActivities.crmid
-				left join quotes as quotesRelActivities on quotesRelActivities.quoteid = crmentityRelActivities.crmid
-				left join purchaseorder as purchaseorderRelActivities on purchaseorderRelActivities.purchaseorderid = crmentityRelActivities.crmid
-				left join invoice as invoiceRelActivities on invoiceRelActivities.invoiceid = crmentityRelActivities.crmid
+				left join crmentity crmentityRelActivities on crmentityRelActivities.crmid = seactivityrel.crmid
+				left join account accountRelActivities on accountRelActivities.accountid=crmentityRelActivities.crmid
+				left join leaddetails leaddetailsRelActivities on leaddetailsRelActivities.leadid = crmentityRelActivities.crmid
+				left join potential potentialRelActivities on potentialRelActivities.potentialid = crmentityRelActivities.crmid
+				left join quotes quotesRelActivities on quotesRelActivities.quoteid = crmentityRelActivities.crmid
+				left join purchaseorder purchaseorderRelActivities on purchaseorderRelActivities.purchaseorderid = crmentityRelActivities.crmid
+				left join invoice invoiceRelActivities on invoiceRelActivities.invoiceid = crmentityRelActivities.crmid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				WHERE crmentityActivities.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')";
 		}
@@ -1069,14 +1069,14 @@ class ReportRun extends CRMEntity
 		if($module == "Quotes")
 		{
 			$query = "from quotes 
-				inner join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid 
+				inner join crmentity crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid 
 				inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid 
 				inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid 
-				left join users as usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
-				left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
-				left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
-				left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
-				left join account as accountQuotes on accountQuotes.accountid = quotes.accountid
+				left join users usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
+				left join users usersRel1 on usersRel1.id = quotes.inventorymanager
+				left join potential potentialRel on potentialRel.potentialid = quotes.potentialid
+				left join contactdetails contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
+				left join account accountQuotes on accountQuotes.accountid = quotes.accountid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityQuotes.deleted=0";
 		}
@@ -1084,12 +1084,12 @@ class ReportRun extends CRMEntity
 		if($module == "Orders")
 		{
 			$query = "from purchaseorder 
-				inner join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid 
+				inner join crmentity crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid 
 				inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid 
 				inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid 
-				left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid 
-				left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
-				left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid 
+				left join users usersOrders on usersOrders.id = crmentityOrders.smownerid 
+				left join vendor vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
+				left join contactdetails contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityOrders.deleted=0";
 		}
@@ -1097,11 +1097,11 @@ class ReportRun extends CRMEntity
 		if($module == "Invoice")
 		{
 			$query = "from invoice 
-				inner join crmentity as crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid 
+				inner join crmentity crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid 
 				inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid 
 				inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid 
-				left join users as usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
-				left join account as accountInvoice on accountInvoice.accountid = invoice.accountid
+				left join users usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
+				left join account accountInvoice on accountInvoice.accountid = invoice.accountid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityInvoice.deleted=0";
 		}
