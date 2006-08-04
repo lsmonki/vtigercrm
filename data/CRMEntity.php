@@ -187,7 +187,9 @@ class CRMEntity
 		// Code included by Minnie  -  Ends
 		elseif($table_name == 'vtiger_producttaxrel')
 		{
-			$this->insertTaxInformation($table_name, $module);
+			//avoid call this function when we use ajax edit -> save
+			if($_REQUEST['ajxaction'] != 'DETAILVIEW')
+				$this->insertTaxInformation($table_name, $module);
 		}
 		elseif($table_name == 'vtiger_attachments')
 		{
