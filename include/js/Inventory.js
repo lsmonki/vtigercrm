@@ -409,6 +409,28 @@ function validateNewTaxType(fieldname, fieldvalue)
 	return true;
 }
 
+function validateTaxes(countname)
+{
+	taxcount = eval(document.getElementById(countname).value)+1;
+
+	if(countname == 'tax_count')
+		taxprefix = 'tax';
+	else
+		taxprefix = 'shtax';
+
+	for(var i=1;i<=taxcount;i++)
+	{
+		taxval = document.getElementById(taxprefix+i).value;
+		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(taxval);
+		if(!temp)
+		{
+			alert("'"+taxval+"' is not a valid entry. Please enter correct value");
+			return false;
+		}
+	}
+	return true;
+}
+
 
 //Function used to add a new product row in PO, SO, Quotes and Invoice
 function fnAddProductRow(module,image_path){
