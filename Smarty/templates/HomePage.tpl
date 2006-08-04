@@ -191,7 +191,13 @@
 	<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
-	<td width="75%" colspan="2"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$ACTIVITIES.0.Title.0}</td>
+	<td width="75%" colspan="2"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />
+		<!-- Check for Single/Multiple Event(s) -->
+		{if $ACTIVITIES.0.Entries.noofactivities eq 1}
+			{$ACTIVITIES.0.Entries.noofactivities} {$APP.Event} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}</td>
+		{else}	
+			{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}</td>
+		{/if}	
 	<td width="25%" valign="top" align="right"><img src="{$IMAGE_PATH}up.gif" align="absmiddle" /></td>
 	</tr>
 	{foreach item=entries from=$ACTIVITIES.0.Entries}
@@ -212,7 +218,13 @@
 	<td width="14" height="70" background="{$IMAGE_PATH}pending_left.gif" ></td>
 	<td width="90%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
 	<b class="fontBold">{$MOD.LBL_PENDING_EVENTS}</b><br />
-	{$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_TODAYEVENT}</td>
+		<!-- Check for Single/Multiple Event(s) -->
+		{if $ACTIVITIES.1.Entries.noofactivities eq 1}	
+			{$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_SINGLE_PENDING_EVENT}
+		{else}
+			{$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_MULTIPLE_PENDING_EVENT}
+		{/if}	
+	</td>
 	<td width="15" height="70" background="{$IMAGE_PATH}pending_right.gif" valign="bottom">
 	<img src="{$IMAGE_PATH}up.gif" align="top" />&nbsp;</td>
 	</tr>		
