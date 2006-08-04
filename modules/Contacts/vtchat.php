@@ -51,12 +51,56 @@ function showPopup()
 
 <!-- THIS IS NEEDED FOR THE USERS LIST TO APPEAR, -->
 <!-- THE id CAN BE CHANGED, BUT HAS TO BE PASSED TO UList() -->
-<ul id="uli"></ul>
+<!-- <table>
+<tr>	
+	<td rowspan="2">
+		
+		<div id="chat"></div>
+	</td>
+	<td class="chatuserlist">User List</td>
 
-<!-- THIS IS NEEDED FOR THE POPUPS TO APPEAR -->
-<div id="chat"></div>
-
+</tr>
+<tr>
+	<td valign="top">
+		<ul id="uli"></ul>
+	</td>	
+</tr>
+</table> -->
 <!-- THIS IS NEEDED FOR DEBUG MSG'S TO APPEAR -->
+
+<table width="550" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td valign="top">
+			<table width="150" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="pchathead"></td>
+					<td class="pchathead1"><b>User List</b></td>
+					<td class="pchathead2"></td>
+				</tr>
+				<tr>
+					<td class="pchatbody"></td>
+					<td class="pchatbody1" style="height: 300px;text-align:left;vertical-align:top;">
+						<div class="chatbox" style="overflow-y:auto;overflow-x:hidden; width: 100%; height: 100%;">
+							<span id="uli"></span>
+						</div>
+					</td>
+					<td class="pchatbody2"></td>
+				</tr>
+				<tr>
+					<td class="pchatfoot"></td>
+					<td class="pchatfoot1"></td>
+					<td class="pchatfoot2"></td>
+				</tr>
+			</table>
+		</td>
+		<td width="400" valign="top">
+			<div id="chat"></div>
+		</td>
+	</tr>
+</table>
+
+
+
 <div id="debug"></div>
 
 </body>
