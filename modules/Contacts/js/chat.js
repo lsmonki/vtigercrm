@@ -180,8 +180,8 @@ function UList(dt,ulid,w,h)
       for(var i in users)
       {
         user = users[i];
-        li = document.createElement("li");
-        a = document.createElement("a");
+        li = document.createElement("span");
+		a = document.createElement("a");
         a.appendChild(document.createTextNode(user.nick));
         a.setAttribute("href","#");
         a.className = "chat";
@@ -344,7 +344,7 @@ function PrivChat(dt,to,w,h)
     var td = tr.appendChild(document.createElement("td"));
     td.className = "chaticon";
     td = tr.appendChild(document.createElement("td"));
-    td.className = "chattopic";
+    td.className = "chattopic1";
     td.innerHTML = me.win.topic;
     var hide = tr.appendChild(document.createElement("td"));
     hide.className = "chathide";
