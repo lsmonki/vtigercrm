@@ -3476,8 +3476,25 @@ Execute("drop table vtiger_soproductrel");
 Execute("drop table vtiger_quotesproductrel");
 Execute("drop table vtiger_invoiceproductrel");
 
-
 //Inventory Tax handlings -- Ends
+
+
+//Add Inventory History tracking tables ie.,PO Status, SO Status, Quote Stage and Invoice Status tables
+//PO Status
+Execute("CREATE TABLE vtiger_postatushistory ( historyid int(19) NOT NULL auto_increment, purchaseorderid int(19) NOT NULL, vendorname varchar(100) default NULL, total decimal(10,0) default NULL, postatus varchar(200) default NULL, lastmodified datetime default NULL, PRIMARY KEY  (historyid), KEY postatushistory_purchaseorderid_idx (purchaseorderid), CONSTRAINT fk_1_vtiger_postatushistory FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder (purchaseorderid) ON DELETE CASCADE ) ENGINE=InnoDB");
+
+//SO Status
+Execute("CREATE TABLE vtiger_sostatushistory (historyid int(19) NOT NULL auto_increment, salesorderid int(19) NOT NULL, accountname varchar(100) default NULL, total decimal(10,0) default NULL, sostatus varchar(200) default NULL, lastmodified datetime default NULL, PRIMARY KEY  (historyid), KEY sostatushistory_salesorderid_idx (salesorderid), CONSTRAINT fk_1_vtiger_sostatushistory FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder (salesorderid) ON DELETE CASCADE ) ENGINE=InnoDB");
+
+//Quote Stage
+Execute("CREATE TABLE vtiger_quotestagehistory ( historyid int(19) NOT NULL auto_increment, quoteid int(19) NOT NULL, accountname varchar(100) default NULL, total decimal(10,0) default NULL, quotestage varchar(200) default NULL, lastmodified datetime default NULL, PRIMARY KEY  (historyid), KEY quotestagehistory_quoteid_idx (quoteid), CONSTRAINT fk_1_vtiger_quotestagehistory FOREIGN KEY (quoteid) REFERENCES vtiger_quotes (quoteid) ON DELETE CASCADE) ENGINE=InnoDB");
+
+//Invoice Status
+Execute("CREATE TABLE vtiger_invoicestatushistory ( historyid int(19) NOT NULL auto_increment, invoiceid int(19) NOT NULL, accountname varchar(100) default NULL, total decimal(10,0) default NULL, invoicestatus varchar(200) default NULL, lastmodified datetime default NULL, PRIMARY KEY  (historyid), KEY invoicestatushistory_invoiceid_idx (invoiceid), CONSTRAINT fk_1_vtiger_invoicestatushistory FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice (invoiceid) ON DELETE CASCADE) ENGINE=InnoDB");
+
+
+
+
 
 
 
