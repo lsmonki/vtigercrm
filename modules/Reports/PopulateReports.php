@@ -20,7 +20,9 @@ $rptfolder = Array(Array('Account and Contact Reports'=>'Account and Contact Rep
 		   Array('Product Reports'=>'Product Reports'),
 		   Array('Quote Reports' =>'Quote Reports'),
 		   Array('PurchaseOrder Reports'=>'PurchaseOrder Reports'),
-		   Array('Invoice Reports'=>'Invoice Reports')
+		   Array('Invoice Reports'=>'Invoice Reports'),
+		   Array('SalesOrder Reports'=>'SalesOrder Reports'),
+		   Array('Campaign Reports'=>'Campaign Reports')
                   );
 
 $reportmodules = Array(Array('primarymodule'=>'Contacts','secondarymodule'=>'Accounts'),
@@ -41,7 +43,9 @@ $reportmodules = Array(Array('primarymodule'=>'Contacts','secondarymodule'=>'Acc
 		       Array('primarymodule'=>'Quotes','secondarymodule'=>''),
 		       Array('primarymodule'=>'PurchaseOrder','secondarymodule'=>'Contacts'),
 		       Array('primarymodule'=>'PurchaseOrder','secondarymodule'=>''),
-		       Array('primarymodule'=>'Invoice','secondarymodule'=>'')
+		       Array('primarymodule'=>'Invoice','secondarymodule'=>''),
+		       Array('primarymodule'=>'SalesOrder','secondarymodule'=>''),
+		       Array('primarymodule'=>'Campaigns','secondarymodule'=>'')
 		      );
 
 $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
@@ -179,7 +183,28 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_invoice:invoiceterms:Invoice_Invoice_Terms:invoiceterms:V',
 			     'vtiger_invoice:exciseduty:Invoice_Excise_Duty:exciseduty:N',
 			     'vtiger_invoice:salescommission:Invoice_Sales_Commission:salescommission:N',
-			     'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:I')
+			     'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:I'),
+
+		       Array('vtiger_salesorder:subject:SalesOrder_Subject:subject:V',
+			     'vtiger_quotesSalesOrder:subject:SalesOrder_Quote_Name:quote_id:I',
+			     'vtiger_contactdetailsSalesOrder:lastname:SalesOrder_Contact_Name:contact_id:I',
+			     'vtiger_salesorder:duedate:SalesOrder_Due_Date:duedate:D',
+			     'vtiger_salesorder:carrier:SalesOrder_Carrier:carrier:V',                  
+			     'vtiger_salesorder:sostatus:SalesOrder_Status:sostatus:V',
+			     'vtiger_accountSalesOrder:accountname:SalesOrder_Account_Name:account_id:I',
+			     'vtiger_salesorder:salescommission:SalesOrder_Sales_Commission:salescommission:N',
+			     'vtiger_salesorder:exciseduty:SalesOrder_Excise_Duty:exciseduty:N',
+			     'vtiger_usersSalesOrder:user_name:SalesOrder_Assigned_To:assigned_user_id:V'),
+
+		       Array('vtiger_campaign:campaignname:Campaigns_Campaign_Name:campaignname:V',
+			     'vtiger_campaign:campaigntype:Campaigns_Campaign_Type:campaigntype:V',
+			     'vtiger_campaign:targetaudience:Campaigns_Target_Audience:targetaudience:V',
+			     'vtiger_campaign:budgetcost:Campaigns_Budget_Cost:budgetcost:I',
+			     'vtiger_campaign:actualcost:Campaigns_Actual_Cost:actualcost:I',
+			     'vtiger_campaign:expectedrevenue:Campaigns_Expected_Revenue:expectedrevenue:I',
+			     'vtiger_campaign:expectedsalescount:Campaigns_Expected_Sales_Count:expectedsalescount:N',
+			     'vtiger_campaign:actualsalescount:Campaigns_Actual_Sales_Count:actualsalescount:N',
+			     'vtiger_usersCampaigns:user_name:Campaigns_Assigned_To:assigned_user_id:V')
 			);
 
 $reports = Array(Array('reportname'=>'Contacts by Accounts',
@@ -294,7 +319,19 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
                        'reportfolder'=>'Invoice Reports',
                        'description'=>'Invoice Detailed Report',
                        'reporttype'=>'tabular',
-                       'sortid'=>'','stdfilterid'=>'','advfilterid'=>'')
+		       'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
+		 
+		 Array('reportname'=>'SalesOrder Detailed Report',
+                       'reportfolder'=>'SalesOrder Reports',
+                       'description'=>'SalesOrder Detailed Report',
+                       'reporttype'=>'tabular',
+                       'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
+
+	         Array('reportname'=>'Campaign Expectations and Actuals',
+		       'reportfolder'=>'Campaign Reports',
+		       'description'=>'Campaign Expectations and Actuals',
+		       'reporttype'=>'tabular',
+		       'sortid'=>'','stdfilterid'=>'','advfilterid'=>'')
 
 		);
 
