@@ -22,7 +22,7 @@
 
 $mod_strings = Array(
 // Added in release 4.0
-'LBL_MODULE_NAME'=>'HelpDesk',
+'LBL_MODULE_NAME'=>'Trouble Tickets',
 'LBL_GROUP'=>'Group',
 'LBL_ACCOUNT_NAME'=>'Account Name',
 'LBL_CONTACT_NAME'=>'Contact Name',
