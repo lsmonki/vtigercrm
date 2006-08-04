@@ -647,7 +647,7 @@ $app_strings = Array(
 
 'COMBO_PRODUCTS'=>'Products',
 
-'COMBO_HELPDESK'=>'HelpDesk',
+'COMBO_HELPDESK'=>'Trouble Tickets',
 
 'COMBO_USERS'=>'Users',
 
@@ -743,7 +743,7 @@ $app_strings = Array(
 'Potentials'=>'Potentials',
 'Products'=>'Products',
 'Emails'=>'Emails',
-'HelpDesk'=>'HelpDesk',
+'HelpDesk'=>'Trouble Tickets',
 'Activities'=>'Activities',
 'Events'=>'Events',
 'Tasks'=>'Tasks',
@@ -775,7 +775,7 @@ $app_strings = Array(
 'SalesOrder Status History'=>'SalesOrder Status History',
 'Quote Stage History'=>'Quote Stage History',
 'Invoice Status History'=>'Invoice Status History',
-
+'LBL_TROUBLE_TICKET'=>'Trouble Ticket',
 
 //Added language for Parent Tab
 
@@ -1022,7 +1022,7 @@ $app_list_strings = Array(
 
 				, 'Products'=>'Products'
 
-				, 'HelpDesk'=>'HelpDesk'
+				, 'HelpDesk'=>'Trouble Tickets'
 
 				, 'Faq'=>'FAQ'
 
