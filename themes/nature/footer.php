@@ -29,27 +29,23 @@ global $app_strings;
 <tr>
 <td align="center" class="contentBorder" height="20">
 	<table CELLSPACING=3 border=0><tr>
-      <td align=center nowrap> 
-	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> |
-	  <A href="index.php?module=Dashboard&action=index"><?php echo $app_list_strings['moduleList']['Dashboard']; ?></A> |
-	  <A href="index.php?module=Leads&action=index"><?php echo $app_list_strings['moduleList']['Leads']; ?></A> |
-	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> |
-	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> |
-	  <A href="index.php?module=Potentials&action=index"><?php echo $app_list_strings['moduleList']['Potentials']; ?></A> |
-	  <A href="index.php?module=Notes&action=index"><?php echo $app_list_strings['moduleList']['Notes']; ?></A> |
-	  <A href="index.php?module=Emails&action=index"><?php echo $app_list_strings['moduleList']['Emails']; ?></A> |
-	  <A href="index.php?module=Activities&action=index"><?php echo $app_list_strings['moduleList']['Activities']; ?></A> |
-          <A href="index.php?module=HelpDesk&action=index"><?php echo $app_list_strings['moduleList']['HelpDesk']; ?></A> |
-          <A href="index.php?module=Products&action=index"><?php echo $app_list_strings['moduleList']['Products']; ?></A> |
-          <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A>
-	  <br>
-	  <A href="index.php?module=Quotes&action=index"><?php echo $app_list_strings['moduleList']['Quotes']; ?></A> |
-          <A href="index.php?module=Orders&action=index"><?php echo $app_list_strings['moduleList']['Orders']; ?></A> |
-          <A href="index.php?module=Invoice&action=index"><?php echo $app_list_strings['moduleList']['Invoice']; ?></A> |
+      <td align=center nowrap>
+      <?php
+	      $counter = 1;
+	      $sep = '';
+	      foreach($moduleList as $module_name)
+	      {
+		      echo $sep.'<a href="index.php?module='.$module_name.'&action=index">'.$app_list_strings['moduleList'][$module_name].'</a>';
+		      $sep = ' | ';
+		      if($counter == 11) {
+			      echo "<br />";
+			      $counter = 0;
+			      $sep = '';
+		      }
+		      $counter++;
+	      }
 
-          <A href="index.php?module=Rss&action=index"><?php echo $app_list_strings['moduleList']['Rss']; ?></A> |
-          <A href="index.php?module=Reports&action=index"><?php echo $app_list_strings['moduleList']['Reports']; ?></A>
-
+      ?>
 	  </td>
     </tr></table>
 </td></tr></table>
