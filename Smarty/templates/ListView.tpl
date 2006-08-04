@@ -326,7 +326,7 @@ function alphabetic(module,url,dataid)
 							{else}
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
-								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}denied.gif"></td>
 								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
