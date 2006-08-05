@@ -65,11 +65,11 @@
 		<tr>
 			{foreach key=maintabs item=detail from=$HEADERS}
 				{if $maintabs ne $CATEGORY}
-				  <td class=tabUnSelected align=center nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class=tabSeperator><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
+				  <td class="tabUnSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
+				  <td class="tabSeperator"><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
 				{else}
-				  <td class=tabSelected align=center nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class=tabSeperator><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
+				  <td class="tabSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
+				  <td class="tabSeperator"><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
 				{/if}
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
@@ -424,6 +424,16 @@ function getFormValidate(divValidate)
 </table>
 </div>
 
+<!-- Drop Down Menu in the Main Tab -->
+{foreach name=parenttablist key=parenttab item=details from=$QUICKACCESS}
+<div class="drop_mnu" id="{$parenttab}_sub" onmouseout="fnHideDrop('{$parenttab}_sub')" onmouseover="fnShowDrop('{$parenttab}_sub')">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		{foreach name=modulelist item=modules from=$details}
+		<tr><td><a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="drop_down">{$APP[$modules.1]}</a></td></tr>
+		{/foreach}
+	</table>
+</div>
+{/foreach}
 
 <div id="status" style="position:absolute;display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
 <script>
