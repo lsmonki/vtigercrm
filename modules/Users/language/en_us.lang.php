@@ -583,7 +583,9 @@ $mod_strings = Array(
 'LBL_USERDETAIL_INFO'=>'Viewing details about the user',
 'LBL_DELETE_GROUP'=>'Delete Group',
 'LBL_DELETE_GROUPNAME'=>'Group to be Deleted',
-'LBL_TRANSFER_GROUP'=>'Transfer Ownership to: '
+'LBL_TRANSFER_GROUP'=>'Transfer Ownership to: ',
+'LBL_DELETE_USER'=>'User to be Deleted',
+'LBL_TRANSFER_USER'=>'Transfer Ownership to User'
 );
 
 ?>
