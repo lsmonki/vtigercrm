@@ -14,6 +14,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
+global $mod_strings, $app_strings;
 $delete_user_id = $_REQUEST['record'];
 $delete_user_name = getUserName($delete_user_id);
 
@@ -26,20 +27,20 @@ $output ='<div id="DeleteLay">
 <input type="hidden" name="delete_user_id" value="'.$delete_user_id.'">	
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">Delete User</td>
+	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">'.$mod_strings['LBL_DELETE'].' '.$mod_strings['LBL_USER'].'</td>
 	<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";>Close</a></td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";>'.$mod_strings['LBL_CLOSE'].'</a></td>
 </tr>
 <tr>
 	<td colspan="3">&nbsp;</td>
 </tr>
 <tr>
-	<td width="50%"><b>User to be Deleted</b></td>
+	<td width="50%"><b>'.$mod_strings['LBL_DELETE_USER'].'</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%"><b>'.$delete_user_name.'</b></td>
 </tr>
 <tr>
-	<td style="text-align:left;"><b>Transfer Ownership to User</b></td>
+	<td style="text-align:left;" nowrap><b>'.$mod_strings['LBL_TRANSFER_USER'].'</b></td>
 	<td ><b>:</b></td>
 	<td align="left">';
            
