@@ -529,6 +529,21 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 
 	}
+	elseif($uitype == 105)//Added for user image
+	{
+		$label_fld[] =$mod_strings[$fieldlabel];
+		//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
+		$sql = "select vtiger_attachments.* from vtiger_attachments left join vtiger_salesmanattachmentsrel on vtiger_salesmanattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_salesmanattachmentsrel.smid=".$col_fields['record_id'];
+		$image_res = $adb->query($sql);
+		$image_id = $adb->query_result($image_res,0,'attachmentsid');
+		$image_path = $adb->query_result($image_res,0,'path');
+		$image_name = $adb->query_result($image_res,0,'name');
+		$imgpath = $image_path.$image_id."_".$image_name;
+		if($image_name != '')
+		$label_fld[] ='<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="450" height="300" alt="'.$col_fields['user_name'].'" title="'.$col_fields['user_name'].'" border="0"></a>';
+		else
+			$label_fld[] = '';
+	}
 	elseif($uitype == 66)
 	{
 		$value = $col_fields[$fieldname];

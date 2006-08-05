@@ -81,18 +81,14 @@ if (isset($_POST['new_password'])) {
 //save user Image
 if(! $_REQUEST['changepassword'] == 'true')
 {
-	$image_upload_array=SaveImage($_FILES,'user',$focus->id,$focus->mode);
-	$focus->imagename = $image_upload_array['imagename'];
-	$image_error = $image_upload_array['imageerror'];
-	$errormessage = $image_upload_array['errormessage'];
-	$saveimage = $image_upload_array['saveimage'];
-	
-if(strtolower($current_user->is_admin) == 'off'  && $current_user->id != $focus->id){
+	if(strtolower($current_user->is_admin) == 'off'  && $current_user->id != $focus->id)
+	{
 		$log->fatal("SECURITY:Non-Admin ". $current_user->id . " attempted to change settings for user:". $focus->id);
 		header("Location: index.php?module=Users&action=Logout");
 		exit;
 	}
-if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) && strtolower($_POST['is_admin']) == 'on'){
+	if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) && strtolower($_POST['is_admin']) == 'on')
+	{
 		$log->fatal("SECURITY:Non-Admin ". $current_user->id . " attempted to change is_admin settings for user:". $focus->id);
 		header("Location: index.php?module=Users&action=Logout");
 		exit;
@@ -102,9 +98,10 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	//Code contributed by mike crowe for rearrange the home page and tab
 	if (!isset($_POST['deleted'])) $_REQUEST["deleted"] = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $_REQUEST["homeorder"] = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
-	
+
 	setObjectValuesFromRequest(&$focus);
 	$focus->saveentity("Users");
+	//$focus->imagename = $image_upload_array['imagename'];
 	$focus->saveHomeOrder($focus->id);
 	$return_id = $focus->id;
 

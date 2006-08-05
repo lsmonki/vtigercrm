@@ -925,10 +925,12 @@ class User {
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
 		
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
+		
 		//get the file path inwhich folder we want to upload the file
 		$upload_file_path = decideFilePath();
 		//upload the file in server
-		$upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$binFile);
+		$upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$current_id."_".$binFile);
 
 		$save_file = 'true';
 		//only images are allowed for these modules
@@ -938,7 +940,6 @@ class User {
 		}
 		if($save_file == 'true')
 		{
-			$current_id = $adb->getUniqueID("vtiger_crmentity");
 
 			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
 			$adb->query($sql1);
@@ -946,16 +947,17 @@ class User {
 			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
 			$result=$adb->query($sql2);
 
-			if($_REQUEST['mode'] == 'edit')
+			if($id != '')
 			{
-				if($id != '' && $_REQUEST['fileid'] != '')
-				{
-					$delquery = 'delete from vtiger_seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
-					$adb->query($delquery);
-				}
+				$delquery = 'delete from vtiger_salesmanattachmentsrel where smid = '.$id;
+				$adb->query($delquery);
 			}
-			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+
+			$sql3='insert into vtiger_salesmanattachmentsrel values('.$id.','.$current_id.')';
 			$adb->query($sql3);
+
+			//we should update the imagename in the users table
+			$adb->query("update vtiger_users set imagename=\"$filename\" where id=$id");
 		}
 		else
 		{
