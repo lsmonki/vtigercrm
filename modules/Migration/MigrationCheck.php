@@ -199,9 +199,15 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 	else
 	{
 		$gotostep1 = 1;
-		if($old_dump_details['size'] == 0 || !is_file($old_dump_details['tmp_name']))
+		if($old_dump_details['error'] == 2 || $old_dump_details['error'] == 1)
 		{
 			$invalid_dump = 1;
+			$errormessage = "Sorry, the uploaded file exceeds the maximum filesize limit. Try other option.";
+		}
+		elseif($old_dump_details['error'] == 4 || $old_dump_details['size'] == 0 || !is_file($old_dump_details['tmp_name']))
+		{
+			$invalid_dump = 1;
+			$errormessage = "Please enter a valid Dump file.";
 		}
 	}
 
@@ -209,10 +215,12 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 	{
 		if($invalid_dump == 1)
 		{
-			echo '<br><font color="red"><b> Please Enter a valid Dump file.</b></font>';
+			echo "<br><font color='red'><b> $errormessage</b></font>";
 		}
 		include("modules/Migration/MigrationStep1.php");
+		exit;
 	}
+
 	if($checkDumpFileAndApply == 1)
 	{
 		//TODO - Check whether the given file is Dump file and then apply to the new database
