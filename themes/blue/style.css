@@ -3041,4 +3041,48 @@ border-width:1px;
 	 border-bottom:1px dotted #CCCCCC;
 	 border-top:1px dotted #CCCCCC;
 }
+/* Drop Down Menu */
 
+.drop_mnu{
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:1000000001;
+/*	border-top:2px solid #EEEEEE;
+	border-bottom:2px solid #AAAAAA;
+	border-left:2px solid #EEEEEE;
+	border-right:2px solid #AAAAAA;;*/
+	border:1px solid #AAAAAA;
+	width:150px;
+	display:none;
+	padding:0px;
+	text-align:left;
+	overflow-x:hidden;
+	background-color:#DADADA;
+	opacity:.9;
+}
+
+a.drop_down{
+	width:150px;
+	text-align:left;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	font-weight:normal;
+	color:#000000;
+	background-color:#e3e3e3;
+	padding:2px 5px 2px 5px;
+	border-top:1px solid #eaeaea;
+	border-bottom:1px solid #d3d3d3;
+	display:block;
+}
+
+a.drop_down:Hover{
+	padding:2px 5px 2px 5px;
+	width:150px;
+	text-align:left;
+	color:#FFFFFF;
+	font-weight:normal;
+	text-decoration:none;
+	background-color:#bbbbbb;
+}
