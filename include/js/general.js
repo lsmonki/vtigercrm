@@ -1663,3 +1663,32 @@ function fnLoadCvValues(obj1,obj2,SelTab,unSelTab){
    tagName2.style.display='none';
 
 }
+
+
+// Drop Dwon Menu
+
+
+function fnDropDown(obj,Lay){
+    var tagName = document.getElementById(Lay);
+    var leftSide = findPosX(obj);
+    var topSide = findPosY(obj);
+    var maxW = tagName.style.width;
+    var widthM = maxW.substring(0,maxW.length-2);
+    var getVal = eval(leftSide) + eval(widthM);
+    if(getVal  > document.body.clientWidth ){
+        leftSide = eval(leftSide) - eval(widthM);
+        tagName.style.left = leftSide + 34 + 'px';
+    }
+    else
+        tagName.style.left= leftSide + 'px';
+    tagName.style.top= topSide + 28 +'px';
+    tagName.style.display = 'block';
+ }
+
+function fnShowDrop(obj){
+	document.getElementById(obj).style.display = 'block';
+}
+
+function fnHideDrop(obj){
+	document.getElementById(obj).style.display = 'none';
+}
