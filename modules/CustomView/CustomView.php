@@ -222,7 +222,7 @@ class CustomView extends CRMEntity{
                 $sql = "select * from field inner join tab on tab.tabid = field.tabid
                         inner join profile2field on profile2field.fieldid=field.fieldid
                         where field.tabid=".$tabid." and field.block in (".$blockids.") 
-			and (field.uitype =5 or field.displaytype=2) 
+			and (field.uitype in (5,6) or field.displaytype=2) 
 			and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
 
                 $result = $adb->query($sql);

@@ -1285,10 +1285,12 @@ $vtlog->logthis("type is ".$type,'debug');
 		builds a generic search based on the query string using or
 		do not include any $this-> because this is called on without having the class instantiated
 	*/
-	function build_generic_where_clause($value){
-			$where_clause = "WHERE "; 
+	function build_generic_where_clause($value)
+	{
 		global $adb;
+		$where_clause = "WHERE "; 
 		$first = 1; 
+
 		foreach ($fields_array as $name=>$value) 
 		{ 
 			if ($first) 

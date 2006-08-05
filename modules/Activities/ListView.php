@@ -94,9 +94,6 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 }
 
 
-$where = "";
-
-
 $focus = new Activity();
 
 $url_string = ''; // assigning http url string

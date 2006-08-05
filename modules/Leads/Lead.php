@@ -92,7 +92,7 @@ class Lead extends CRMEntity {
 	//construct this from database;	
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('lastname','email','phone','fax','company','leadstatus','modifiedtime','createdtime');
+        var $sortby_fields = Array('lastname','email','phone');		  
        
 	var $combofieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'salutation'=>'salutation_dom'
@@ -155,6 +155,37 @@ class Lead extends CRMEntity {
 	function get_summary_text()
 	{
 		return "$this->firstname $this->lastname";
+	}
+
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause ($the_query_string) {
+
+		global $adb;
+
+		$where_clauses = Array();
+		$the_query_string = addslashes($the_query_string);
+		array_push($where_clauses, "leaddetails.firstname ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "leaddetails.lastname ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "leaddetails.company ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "leadaddress.city ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "leadaddress.lane ".$adb->getLike()." '%$the_query_string%'");
+		if (is_numeric($the_query_string)) {
+			array_push($where_clauses, "leadaddress.phone ".$adb->getLike()." '%$the_query_string%'");
+			array_push($where_clauses, "leadaddress.mobile ".$adb->getLike()." '%$the_query_string%'");
+			array_push($where_clauses, "leadaddress.fax ".$adb->getLike()." '%$the_query_string%'");
+		}
+		
+		$the_where = "";
+		foreach($where_clauses as $clause)
+		{
+			if($the_where != "") $the_where .= " or ";
+			$the_where .= $clause;
+		}
+		
+		return $the_where;
 	}
 	
 //method added to construct the query to fetch the custom fields 

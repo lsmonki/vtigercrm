@@ -206,6 +206,33 @@ class Activity extends CRMEntity {
 
 	}
 */
+ 
+ 	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause ($the_query_string)
+	{
+		global $adb;
+
+		$where_clauses = Array();
+		$the_query_string = addslashes($the_query_string);
+		array_push($where_clauses, "activity.subject ".$adb->getLike()." '%".$the_query_string."%'");
+
+		$the_where = "";
+
+		foreach($where_clauses as $clause)
+		{
+			if($the_where != "")
+			{
+				$the_where .= " or ";
+			}
+			$the_where .= $clause;
+		}
+		
+		return $the_where;
+	}
+
         function create_export_query(&$order_by, &$where)
         {
                 $contact_required = ereg("contacts", $where);
