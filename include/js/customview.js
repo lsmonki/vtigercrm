@@ -38,13 +38,13 @@ function splitValues() {
 
 function validate() {
 	var nummaxlength = 255;
-        var fieldtype = document.addtodb.cfcombo.value;
-        if(fieldtype == "")
-        {
-                alert("Field Type is not selected");
-                document.addtodb.cfcombo.focus()
-                return false;
-        }
+        var fieldtype = document.getElementById('selectedfieldtype').value;
+	var mode = document.getElementById('cfedit_mode').value;
+        if(fieldtype == "" && mode != 'edit')
+	{
+		alert("Field Type is not selected");
+		return false;
+	}
 	lengthLayer=getObj("lengthdetails")
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
