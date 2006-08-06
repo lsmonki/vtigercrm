@@ -50,7 +50,7 @@
 					{foreach item=entries key=id from=$CFENTRIES}
 					<tr>
 						{foreach item=value from=$entries}
-							<td class="listTableRow small" valign="top" nowrap>{$value}</td>
+							<td class="listTableRow small" valign="top" nowrap>{$value}&nbsp;</td>
 						{/foreach}
 					</tr>
 					{/foreach}

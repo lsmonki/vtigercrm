@@ -46,17 +46,29 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
 			postBody: 'module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module='+customField+'&parenttab=Settings&ajax=true&fieldid='+id+'&tabid='+tabid+'&uitype='+ui,
 			onComplete: function(response) {
 				$("createcf").innerHTML=response.responseText;
+				gselected_fieldtype = '';
 			}
 		}
 	);
 
 }
-
+function makeFieldSelected(oField,fieldid)
+{
+	if(gselected_fieldtype != '')
+	{
+		$(gselected_fieldtype).className = 'customMnu';
+	}
+	oField.className = 'customMnuSelected';	
+	gselected_fieldtype = oField.id;	
+	selFieldType(fieldid)
+	document.getElementById('selectedfieldtype').value = fieldid;
+}
 function CustomFieldMapping()
 {
         document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
         document.form.submit();
 }
+var gselected_fieldtype = '';
 {/literal}
 </script>
 <div id="createcf" style="display:block;position:absolute;top:175px;left:275px;"></div>
