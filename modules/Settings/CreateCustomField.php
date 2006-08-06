@@ -12,6 +12,7 @@
 require_once('include/CustomFieldUtil.php');
 require_once('Smarty_setup.php');
 
+
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 
 $theme_path="themes/".$theme."/";
@@ -120,39 +121,49 @@ for($i=0;$i<count($cftextcombo);$i++)
                 $sel_val = 'selected';
         else
                 $sel_val = '';
-        $combo_output.= '<option style="background:url('.$cfimagecombo[$i].');background-repeat:no-repeat;background-position:left;padding-left:30px;padding-top:5px;padding-bottom:5px;" '.$sel_val.' onClick="selFieldType('.$i.')" >'.$cftextcombo[$i].'</option>';
+       if($disable_str == 'disabled')
+	    $combo_output.= '<a href="#" onClick="makeFieldSelected(this,'.$i.');" id="field'.$i.'" style="text-decoration:none;background-image:url('.$cfimagecombo[$i].');" class="customMnu" '.$disable_str.'>'.$cftextcombo[$i].'</a>';
+	   else		
+    	$combo_output.= '<a href="javascript:;" onClick="makeFieldSelected(this,'.$i.');" id="field'.$i.'" style="text-decoration:none;background-image:url('.$cfimagecombo[$i].');" class="customMnu" '.$disable_str.'>'.$cftextcombo[$i].'</a>';
 
 }
-$output .= '<form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
+$output .= '<div id="orgLay" style="display:block;"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
+	<form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
 	  <input type="hidden" name="module" value="Settings">
 	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
 	  <input type="hidden" name="parenttab" value="Settings">
           <input type="hidden" name="action" value="AddCustomFieldToDB">
 	  <input type="hidden" name="fieldid" value="'.$fieldid.'">
 	  <input type="hidden" name="column" value="'.$customfield_columnname.'">
-	  <input type="hidden" name="mode" value="'.$mode.'">
+	  <input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">
+	  <input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
 
-	  <div id="orgLay" style="display:block;">
+	  
 		<table width="100%" border="0" cellpadding="5" cellspacing="0">
-			<tr>
-				<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_ADD_FIELD'].'</td>
-				<td width="60%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			<tr>';
+			if($mode == 'edit')
+				$output .= '<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$mod_strings[$customfield_typename].'</td>';
+			else
+				$output .= '<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
+				
+			$output .= '<td width="60%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
 			</tr>
 			<tr><td colspan="2"><hr /></td></tr>
-			<tr>
-				<td>
-					<table>
+			<tr>';
+			if($mode != 'edit')
+			{	
+				$output .= '<td><table>
 						<tr><td>'.$mod_strings['LBL_SELECT_FIELD_TYPE'].'</td></tr>
 						<tr><td>
-							<select name="cfcombo" id="cfcombo" '.$disable_str.' class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
+							<div name="cfcombo" id="cfcombo" class=small  style="width:200px;height:150px;overflow-y:auto;overflow-x:hidden;border:1px solid #CCCCCC;">'.$combo_output.'</div>
 						</td></tr>
-					</table>
-				</td>
-				<td>
-					<table>
+						</table></td>';
+			}
+			$output .='<td>
+					<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
-							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
-							<td align="left"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
+							<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
+							<td align="left" width="70%"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
 						</tr>';
 					if($mode == 'edit')
 					{
@@ -217,7 +228,6 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 			<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
 		</table>
 		<input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
-	</div>
-	</form>';
+	</form></div>';
 echo $output;
 ?>
