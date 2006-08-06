@@ -197,7 +197,7 @@ $mod_strings = Array(
 
 'Edit'=>'Edit',
 
-
+'LBL_EDIT_FIELD_TYPE'=>'Edit Field Type',
 
 //Settings/CustomField.html
 
