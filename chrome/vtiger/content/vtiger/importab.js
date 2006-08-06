@@ -137,13 +137,7 @@ function create_vtigerABURL()
 		}
 		var disbleImpButton = document.getElementById("impbutton");
 		disbleImpButton.setAttribute("disabled","true");
-		//get the contacts count from vtigerCRM	
-		get_vtigercontcounts();
-		if(gvtContactCount != 0)
-		{
-			//create the card in tbAB
-			create_cardinvtigerAB();
-		}
+		create_cardinvtigerAB();
 		disbleImpButton.setAttribute("disabled","false");
 		window.close();
 	}else
@@ -170,7 +164,7 @@ function get_vtigercontcounts()
 	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter(gvtpassword,"password"));
 	var call = new SOAPCall();
 	const objects = "uri:get_contacts_countRequest";
-	call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
+	call.transportURI =  gvturl + "/contactserialize.php";
 	call.actionURI = objects + "/" + "get_contacts_count";
 	call.encode(0,"get_contacts_count",objects,headers.length,headers,params.length,params);
 	try
@@ -208,18 +202,18 @@ function create_cardinvtigerAB()
 	var directory = GetDirectoryFromURI(gvtABURL);
 
 	var headers = new Array();
-	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter("0","from_index"),new SOAPParameter(gvtContactCount,"offset"));
+	var params = new Array(new SOAPParameter(gvtusername,"username"));
 	var call = new SOAPCall();
-	const objects = "uri:contact_by_rangeRequest";
+	const objects = "uri:GetContactsRequest";
 	call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
-	call.actionURI = objects + "/" + "contact_by_range";
-	call.encode(0,"contact_by_range",objects,headers.length,headers,params.length,params);
+	call.actionURI = objects + "/" + "GetContacts";
+	call.encode(0,"GetContacts",objects,headers.length,headers,params.length,params);
 	try
 	{
 		var oResponse = call.invoke();
    }catch(errorObject)
 	{
-		alert_message("Can not connect to the vtiger CRM server");
+		alert_message("Cannot connect to the vtiger CRM server");
 	}
 	
 	if(oResponse.fault){
@@ -244,7 +238,7 @@ function create_cardinvtigerAB()
 						//alert(itemsNode.item(j).childNodes.item(0).nodeValue);
 						if(itemsNode.item(j).childNodes.item(0))
 						{
-							switch(j)
+              switch(j)
 							{
 								//modified for 4.2 Release
 								case 1:
@@ -253,65 +247,66 @@ function create_cardinvtigerAB()
 								case 2:
 										ObjAbcard.lastName = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 0:
+								case 3:
 										ObjAbcard.primaryEmail = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 3:
+								case 19:
 										ObjAbcard.workCity = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 								case 4:
 										ObjAbcard.company = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 8:
+								case 7:
 										ObjAbcard.jobTitle = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 9:
+								case 14:
 										ObjAbcard.cellularNumber = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 11:
+								case 18:
 										ObjAbcard.workAddress = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;										
-								case 12:
+								case 20:
 										ObjAbcard.workState = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 13:
+								case 21:
 										ObjAbcard.workZipCode = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 14:
+								case 22:
 										ObjAbcard.workCountry = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 15:
+								case 24:
 										ObjAbcard.homeCity = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 16:
+								case 23:
 										ObjAbcard.homeAddress = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;										
-								case 17:
+								case 25:
 										ObjAbcard.homeState = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 18:
+								case 26:
 										ObjAbcard.homeZipCode = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 19:
+								case 27:
 										ObjAbcard.homeCountry = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 								//added for 4.2 Release
-								case 20:
+								case 10:
 										ObjAbcard.workPhone = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 21:
+								case 11:
 										ObjAbcard.homePhone = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 23:
+								case 13:
 										ObjAbcard.faxNumber = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 24:
+								case 8:
 										ObjAbcard.department = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 
 							}
 						}
 					}
+					ObjAbcard.displayName = ObjAbcard.firstName + " " + ObjAbcard.lastName;
 					//create card in ABook
 					var addedCard = directory.addCard(ObjAbcard);	
 				}

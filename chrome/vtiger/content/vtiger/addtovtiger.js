@@ -54,9 +54,102 @@ function load_vtigercrm(cntid)
   setTimeout("launch_contact()",5000);
 }
 
+function getVersion()
+{
+  var headers = new Array();
+	var params = new Array(new SOAPParameter(gvtusername,"username"),new SOAPParameter(document.getElementById('txtemailid').value,"emailaddress"));
+	var call = new SOAPCall();
+	const objects = "uri:SearchContactsByEmailRequest";
+	call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
+	call.actionURI = objects + "/" + "SearchContactsByEmail";
+	call.encode(0,"SearchContactsByEmail",objects,headers.length,headers,params.length,params);
+	try
+	{
+		alert("calling server");
+    var oResponse = call.invoke();
+   }catch(errorObject)
+	{
+		alert_message("Cannot connect to the vtiger CRM server");
+	}
+	alert("got response");
+	
+	if(oResponse.fault){
+		alert_message("Error while receiving response from the vtiger CRM server");
+	}else
+	{
+	  var response = new Array();
+    response = oResponse.getParameters(false, {});
+    //alert(response.length);
+    //alert(response);
+    //alert("Return value: " + response[0].value);
+    //alert("Return value: "+ response[0].name);
+    
+    /*for (var i=1;i<response[0].length;i++)
+    {
+      var URL = matches[i].getElementsByTagName("URL").item(0).firstChild;
+      var title = matches[i].getElementsByTagName("title").item(0).firstChild;
+      var cache = matches[i].getElementsByTagName("cachedSize").item(0).firstChild;
+
+      str += "<a href=\"" + URL.nodeValue + "\">" + title.nodeValue + 
+          "</a> (" + cache.nodeValue + ")<br/>";
+    }*/
+    
+    //var matches = response[0].element.getElementsByTagName("return");
+    //alert(matches.length);
+    
+    if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+		{ 
+				var itemLength = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes.length;
+				var itemNode = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes;
+				
+				for(var i=0;i<itemLength;i++)
+				{
+					var itemsLength = itemNode.item(i).childNodes.length;
+					var itemsNode = itemNode.item(i).childNodes;
+					
+					alert(itemsLength);
+					
+					for(var j=0;j<itemsLength;j++)
+					{
+						if(itemsNode.item(j).childNodes.item(0))
+						{
+              alert(j);
+              alert(itemsNode.item(j).childNodes.item(0).nodeValue);
+              switch(j)
+							{
+								case 0:
+										var cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
+										//alert(cntid);
+										break;
+                case 1:
+										var frstname = itemsNode.item(j).childNodes.item(0).nodeValue;
+										//alert(frstname);
+										break;
+								case 2:
+										var lstname = itemsNode.item(j).childNodes.item(0).nodeValue;
+										//alert(lstname);
+										break;
+								case 3:
+										var cntemail = itemsNode.item(j).childNodes.item(0).nodeValue;
+										//alert(cntemail);
+										break;
+								case 4:
+										var acntname = itemsNode.item(j).childNodes.item(0).nodeValue;
+										//alert(acntname);
+										break;
+							}
+						}
+					}
+			}
+	  }
+    
+  }   
+}
 function bget_CntBySearch()
 {
-	//method to search, any available contacts in vtigercrm server
+	//getVersion();
+	//return;
+  //method to search, any available contacts in vtigercrm server
 	var frstname ="";
 	var lstname = "";
 	var cntid = "";
@@ -72,12 +165,12 @@ function bget_CntBySearch()
 	}
 	
 	var headers = new Array();
-	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter(document.getElementById('txtemailid').value,"email_address"));
+  var params = new Array(new SOAPParameter(gvtusername,"username"),new SOAPParameter(document.getElementById('txtemailid').value,"emailaddress"));
 	var call = new SOAPCall();
-	const objects = "uri:contact_by_emailRequest";
+	const objects = "uri:SearchContactsByEmailRequest";
 	call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
-	call.actionURI = objects + "/" + "contact_by_email";
-	call.encode(0,"contact_by_email",objects,headers.length,headers,params.length,params);
+	call.actionURI = objects + "/" + "SearchContactsByEmail";
+	call.encode(0,"SearchContactsByEmail",objects,headers.length,headers,params.length,params);
 	try
 	{
 		var oResponse = call.invoke();
@@ -107,17 +200,17 @@ function bget_CntBySearch()
 						{
 							switch(j)
 							{
-								case 1:
+								case 0:
+										cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
+										break;
+                case 1:
 										frstname = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 								case 2:
 										lstname = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-								case 0:
+								case 3:
 										cntemail = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-								case 6:
-										cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 								case 4:
 										acntname = itemsNode.item(j).childNodes.item(0).nodeValue;

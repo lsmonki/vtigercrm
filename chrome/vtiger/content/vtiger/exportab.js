@@ -195,7 +195,6 @@ function get_vtigercrmcards(expAburl)
 					p[16] = new SOAPParameter(card.homeState,"alt_address_state");
 					p[17] = new SOAPParameter(card.homeZipCode,"alt_address_postalcode");
 					p[18] = new SOAPParameter(card.homeCountry,"alt_address_country");
-
 					p[19] = new SOAPParameter(card.workPhone,"office_phone");
 					p[20] = new SOAPParameter(card.homePhone,"home_phone");
 					p[21] = new SOAPParameter(card.faxNumber,"fax");
@@ -203,20 +202,21 @@ function get_vtigercrmcards(expAburl)
 					
 					var headers = new Array();
 					var call = new SOAPCall();
-					const objects = "uri:create_contactRequest";
+					const objects = "uri:AddContactRequest";
 					call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
-					call.actionURI = objects + "/" + "create_contact";
-					call.encode(0,"create_contact",objects,headers.length,headers,p.length,p);
+					call.actionURI = objects + "/" + "AddContact";
+					call.encode(0,"AddContact",objects,headers.length,headers,p.length,p);
 					
 					try
 					{
 						var oResponse = call.invoke();
 					}catch(errorObject)
 					{
-						gErrMsg = "Can not connect to the vtiger CRM server";
+						gErrMsg = "Cannot connect to the vtiger CRM server";
 					}
 					
 					if(oResponse.fault){
+					    //alert(oResponse.fault.faultString);
 							gErrMsg = "Error while receiving response from the vtiger CRM server";
 					}else
 					{
