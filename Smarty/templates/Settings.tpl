@@ -526,8 +526,6 @@
 			&nbsp;
 		  </td>
 				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
 				  </tr>
 				</table>
 				
