@@ -185,11 +185,11 @@ class Contact extends CRMEntity {
 	* @param varchar $email_address - Email Addr of each contact record.
 	* Returns the query.
 	*/
-        function get_contacts1($user_name,$email_address)
+  function get_contacts1($user_name,$email_address)
 	{   
 		global $log;
 		$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
-		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as vtiger_account_name,vtiger_account.accountid as vtiger_account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%" .$email_address ."%' limit 50";
+		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,vtiger_account.accountid as account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%" .$email_address ."%' limit 50";
 
 		$log->debug("Exiting get_contacts1 method ...");
 		return $this->process_list_query1($query);
@@ -634,7 +634,7 @@ function get_searchbyemailid($username,$emailaddress)
 	$query = "select vtiger_contactdetails.lastname as last_name,vtiger_contactdetails.firstname as first_name,
 					vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, 
 					vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,
-					vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as vtiger_account_name,
+					vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,
 					vtiger_account.accountid as vtiger_account_id  from vtiger_contactdetails 
 						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
 						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  
@@ -662,7 +662,7 @@ function get_contactsforol($user_name)
 					vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, 
 					vtiger_contactdetails.salutation, vtiger_contactdetails.email,
 					vtiger_contactdetails.title,vtiger_contactdetails.mobile,
-					vtiger_account.accountname as vtiger_account_name,vtiger_account.accountid as vtiger_account_id, 
+					vtiger_account.accountname as account_name,vtiger_account.accountid as account_id, 
 					vtiger_contactaddress.mailingcity, vtiger_contactaddress.mailingstreet, 
 					vtiger_contactaddress.mailingcountry, vtiger_contactaddress.mailingstate, 
 					vtiger_contactaddress.mailingzip, vtiger_contactaddress.othercity,
