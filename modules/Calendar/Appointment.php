@@ -11,7 +11,7 @@
 require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 class Appointment
 {
 	var $start_time;
@@ -85,7 +85,7 @@ class Appointment
                         unset($obj);
                 }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start, vtiger_activity.duration_hours, vtiger_activity.duration_minutes, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_account.accountname,vtiger_account.accountid,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_activity.activityid = vtiger_cntactivityrel.activityid left join vtiger_contactdetails on vtiger_cntactivityrel.contactid = vtiger_contactdetails.contactid left join vtiger_account  on vtiger_contactdetails.accountid = vtiger_account.accountid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid";
+		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_account.accountname,vtiger_account.accountid,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_activity.activityid = vtiger_cntactivityrel.activityid left join vtiger_contactdetails on vtiger_cntactivityrel.contactid = vtiger_contactdetails.contactid left join vtiger_account  on vtiger_contactdetails.accountid = vtiger_account.accountid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid";
 
                 $q.=" where ( vtiger_activity.activitytype in ('Call','Meeting') AND ";
                 if(!is_admin($current_user))
@@ -185,22 +185,6 @@ class Appointment
                 	{
                         	$format_stmin = $st_min;
                 	}
-                	$startdate = $act_array["date_start"] .' ' . $format_sthour .":" . $format_stmin .":00";
-        	        //end time calculation
-                	$end_hour = 0;
-	                $end_min = $st_min + $act_array["duration_minutes"];
-        	        if($end_min <= 9) $end_min= '0'.$end_min;
-			if($end_min >= 60)
-                	{
-                        	$end_min = $end_min%60;
-	                        if($end_min <= 9) $end_min= '0'.$end_min;
-        	                $end_hour++;
-                	}
-	                $end_hour = $end_hour + $st_hour + $act_array["duration_hours"];
-        	        if($end_hour <= 9) $end_hour= '0'.$end_hour;
-                	if ($end_hour > 23) $end_hour = 23;
-			list($eyear,$emonth,$eday) = explode("-",$act_array["due_date"]);
-			$enddate = $act_array["date_start"] .' ' . $end_hour .":" . $end_min .":00";
 			$st_hour= $format_sthour;
 		}
 		else
@@ -208,9 +192,35 @@ class Appointment
 			$st_hour = 'notime';
 			$format_stmin = '00';
 			$format_sthour= '00';
+		}
+		list($eyear,$emonth,$eday) = explode("-",$act_array["due_date"]);
+		if($act_array["time_end"] != '')
+		{
+			list($end_hour,$end_min,$end_sec) = split(":",$act_array["time_end"]);
+			if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+			{
+				$format_endhour= '0'.$end_hour;
+			}
+			else
+			{
+				$format_endhour= $end_hour;
+			}
+			if($end_min <= 9 && strlen(trim($end_min)) < 2)
+			{
+				$format_endmin= '0'.$end_min;
+			}
+			else
+			{
+				$format_endmin = $end_min;
+			}
+			$end_hour= $format_endhour;
+		}
+		else
+		{
 			$end_min = '50';
 			$end_hour= '23';
 		}
+
 		$start_date_arr = Array(
 			'min'   => $format_stmin,
 			'hour'  => $format_sthour,
