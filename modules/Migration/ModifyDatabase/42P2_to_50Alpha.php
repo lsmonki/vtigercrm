@@ -3503,7 +3503,7 @@ Execute("update vtiger_field set info_type='BAS' where tabid=4 and fieldname='em
 
 Execute("update vtiger_field set info_type='ADV' where tabid=4 and fieldname='otherphone' and columnname='otherphone'");
 
-Execute("CREATE TABLE vtiger_salesmanattachmentsrel ( smid int(19) NOT NULL default '0', attachmentsid int(19) NOT NULL default '0', PRIMARY KEY (smid), KEY (attachmentsid), KEY salesmanattachmentsrel_smid_idx (smid), KEY salesmanattachmentsrel_attachmentsid_idx (attachmentsid), CONSTRAINT fk_1_vtiger_salesmanattachmentsrel FOREIGN KEY (smid) REFERENCES vtiger_users (id), CONSTRAINT fk_2_vtiger_salesmanattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments (attachmentsid) ON DELETE CASCADE) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_salesmanattachmentsrel ( smid int(19) NOT NULL default '0', attachmentsid int(19) NOT NULL default '0', PRIMARY KEY (smid, attachmentsid), KEY salesmanattachmentsrel_smid_idx (smid), KEY salesmanattachmentsrel_attachmentsid_idx (attachmentsid), CONSTRAINT fk_1_vtiger_salesmanattachmentsrel FOREIGN KEY (smid) REFERENCES vtiger_users (id), CONSTRAINT fk_2_vtiger_salesmanattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments (attachmentsid) ON DELETE CASCADE) ENGINE=InnoDB");
 
 
 
