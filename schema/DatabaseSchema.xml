@@ -6057,6 +6057,32 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="vtiger_salesmanattachmentsrel">
+		<field name="smid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="attachmentsid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+
+		<index name="salesmanattachmentsrel_smid_idx">
+			<col>smid</col>
+		</index>
+		<index name="salesmanattachmentsrel_attachmentsid_idx">
+			<col>attachmentsid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_salesmanattachmentsrel" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_salesmanattachmentsrel FOREIGN KEY (smid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_2_vtiger_salesmanattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments(attachmentsid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 	
 </schema>
