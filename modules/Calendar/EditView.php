@@ -1,0 +1,179 @@
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/EditView.php,v 1.11 2005/03/24 16:18:38 samk Exp $
+ * Description: TODO:  To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ ********************************************************************************/
+
+require_once('Smarty_setup.php');
+require_once('data/Tracker.php');
+require_once('modules/Calendar/Activity.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/CustomFieldUtil.php');
+require_once('include/ComboUtil.php');
+require_once('include/utils/utils.php');
+require_once('include/FormValidationUtil.php');
+require_once('modules/Calendar/calendarLayout.php'); 
+include_once 'modules/Calendar/header.php';
+global $app_strings;
+global $mod_strings,$current_user;
+// Unimplemented until jscalendar language vtiger_files are fixed
+$focus = new Activity();
+$smarty =  new vtigerCRM_Smarty();
+$activity_mode = $_REQUEST['activity_mode'];
+if(isset($_REQUEST['activitytype']) && $_REQUEST['activitytype'] != '')
+	$activitytype = $_REQUEST['activitytype'];
+if($activity_mode == 'Task')
+{
+	$tab_type = 'Calendar';
+	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_TODO']);
+}
+elseif($activity_mode == 'Events')
+{
+	$tab_type = 'Events';
+	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_EVENT']);
+}
+
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
+    $focus->id = $_REQUEST['record'];
+    $focus->mode = 'edit';
+    $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
+    $focus->name=$focus->column_fields['subject'];		
+    $smarty->assign("UPDATEINFO",updateInfo($focus->id));
+}
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$focus->id = "";
+    	$focus->mode = ''; 	
+}
+
+
+$disp_view = getView($focus->mode);
+if($disp_view == 'edit_view')
+{
+	$act_data = getBlocks($tab_type,$disp_view,$mode,$focus->column_fields);
+}
+else	
+{
+	$act_data = getBlocks($tab_type,$disp_view,$mode,$focus->column_fields,'BAS');
+}
+$smarty->assign("BLOCKS",$act_data);
+foreach($act_data as $header=>$blockitem)
+{
+	foreach($blockitem as $row=>$data)
+	{
+		foreach($data as $key=>$maindata)
+		{
+			$uitype[$maindata[2][0]] = $maindata[0][0];
+			$fldlabel[$maindata[2][0]] = $maindata[1][0];
+			$fldlabel_sel[$maindata[2][0]] = $maindata[1][1];
+			$fldlabel_combo[$maindata[2][0]] = $maindata[1][2];
+			$value[$maindata[2][0]] = $maindata[3][0];
+			$secondvalue[$maindata[2][0]] = $maindata[3][1];
+			$thirdvalue[$maindata[2][0]] = $maindata[3][2];
+		}
+	}
+}
+if($current_user->hour_format == '')
+	$format = 'am/pm';
+else
+	$format = $current_user->hour_format;
+$stdate = key($value['date_start']);
+$enddate = key($value['due_date']);
+$sttime = $value['date_start'][$stdate];
+$endtime = $value['due_date'][$enddate];
+$time_arr = getaddEventPopupTime($sttime,$endtime,$format);
+$value['starthr'] = $time_arr['starthour'];
+$value['startmin'] = $time_arr['startmin'];
+$value['startfmt'] = $time_arr['startfmt'];
+$value['endhr'] = $time_arr['endhour'];
+$value['endmin'] = $time_arr['endmin'];
+$value['endfmt'] = $time_arr['endfmt'];
+//echo '<pre>';print_r($_REQUEST);echo '</pre>';
+$smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt']));
+$smarty->assign("ENDHOUR",getTimeCombo($format,'end',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
+$smarty->assign("ACTIVITYDATA",$value);
+$smarty->assign("LABEL",$fldlabel);
+$smarty->assign("secondvalue",$secondvalue);
+$smarty->assign("thirdvalue",$thirdvalue);
+$smarty->assign("fldlabel_combo",$fldlabel_combo);
+$smarty->assign("fldlabel_sel",$fldlabel_sel);
+$smarty->assign("OP_MODE",$disp_view);
+$smarty->assign("ACTIVITY_MODE",$activity_mode);
+$smarty->assign("ACTIVITY_TYPE",$activitytype);
+$smarty->assign("HOURFORMAT",$format);
+
+$smarty->assign("MODULE",$currentModule);
+
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+
+$log->info("Activity detail view");
+
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+
+if (isset($focus->name))
+$smarty->assign("NAME", $focus->name);
+else
+$smarty->assign("NAME", "");
+
+if($focus->mode == 'edit')
+{
+        $smarty->assign("MODE", $focus->mode);
+}
+
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
+// Unimplemented until jscalendar language vtiger_files are fixed
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+if (isset($_REQUEST['return_module']))
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_action']))
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_id']))
+$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['ticket_id']))
+$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
+if (isset($_REQUEST['product_id']))
+$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+if (isset($_REQUEST['return_viewname']))
+$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("ID", $focus->id);
+
+ $tabid = getTabid($tab_type);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
+ $data = split_validationdataArray($validationData);
+ //echo '<pre>';print_r($data);echo '</pre>';
+ //$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ //$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ //$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
+$smarty->display("ActivityEditView.tpl");
+
+?>
