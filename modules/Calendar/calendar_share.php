@@ -31,6 +31,14 @@ require_once('modules/Calendar/CalendarCommon.php');
 <form name="SharingForm" method="post" action="index.php">
 <input type="hidden" name="module" value="Calendar">
 <input type="hidden" name="action" value="updateCalendarSharing">
+<input type="hidden" name="view" value="<?php echo $_REQUEST['view'] ?>">
+<input type="hidden" name="hour" value="<?php echo $_REQUEST['hour'] ?>">
+<input type="hidden" name="day" value="<?php echo $_REQUEST['day'] ?>">
+<input type="hidden" name="month" value="<?php echo $_REQUEST['month'] ?>">
+<input type="hidden" name="year" value="<?php echo $_REQUEST['year'] ?>">
+<input type="hidden" name="viewOption" value="<?php echo $_REQUEST['viewOption'] ?>">
+<input type="hidden" name="subtab" value="<?php echo $_REQUEST['subtab'] ?>">
+<input type="hidden" name="parenttab" value="<?php echo $_REQUEST['parenttab'] ?>">
 <input type="hidden" name="current_userid" value="<? echo $current_user->id ?>" >
 <table border=0 cellspacing=0 cellpadding=5 width=100%>
 	<tr>
