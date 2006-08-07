@@ -10,8 +10,9 @@
  ********************************************************************************/
 
 require_once('include/utils/CommonUtils.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('modules/Calendar/Calendar.php');
+require_once('modules/Calendar/CalendarCommon.php');
 require_once("modules/Emails/mail.php");
 
  global $theme,$mod_strings,$app_strings,$current_user;
@@ -74,81 +75,6 @@ $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
 $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 
-/**
-  *To construct time select combo box
-  *@param $format -- the format :: Type string
-  *@param $bimode -- The mode :: Type string
-  *constructs html select combo box for time selection 
-  *and returns it in string format.
- */
-
- function getTimeCombo($format,$bimode)
- {
-	$combo = '';
-	if($format == 'am/pm')
-	{
-		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
-		for($i=1;$i<=12;$i++)
-		{
-			if($i <= 9 && strlen(trim($i)) < 2)
-                        {
-                                $hrvalue= '0'.$i;
-                        }
-			//elseif($i == 12) $hrvalue = '00';
-			else $hrvalue= $i;
-			$combo .= '<option value="'.$hrvalue.'">'.$i.'</option>';
-		}
-		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
-		for($i=0;$i<12;$i++)
-                {
-			$minvalue = 5;
-			$value = $i*5;
-			if($value <= 9 && strlen(trim($value)) < 2)
-                        {
-                                $value= '0'.$value;
-                        }
-			else $value= $value;
-			$combo .= '<option value="'.$value.'">'.$value.'</option>';
-		}
-		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
-		$combo .= '<option value="am" '.$amselected.'>AM</option>';
-		$combo .= '<option value="pm" '.$pmselected.'>PM</option>';
-		$combo .= '</select>';
-		
-	}
-	else
-	{
-		$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small>';
-		for($i=0;$i<=23;$i++)
-		{
-                        if($i <= 9 && strlen(trim($i)) < 2)
-                        {
-                                $hrvalue= '0'.$i;
-                        }
-			else $hrvalue = $i;
-			$combo .= '<option value="'.$hrvalue.'">'.$i.'</option>';
-		}
-		$combo .= '</select>Hr&nbsp;';
-		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
-                for($i=0;$i<12;$i++)
-                {
-                        $minvalue = 5;
-                        $value = $i*5;
-                        if($value <= 9 && strlen(trim($value)) < 2)
-                        {
-                                $value= '0'.$value;
-                        }
-			else $value=$value;
-                        $combo .= '<option value="'.$value.'">'.$value.'</option>';
-                }
-                $combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
-	}
-	return $combo;
-		
- }
-
  function getPriorityCombo()
  {
 	 global $adb;
@@ -176,38 +102,56 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-
-	<div class="calAddEvent" style="display:none" id="addEvent" align=center> 
+<?php
+	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Events')
+	{
+		include_once 'modules/Calendar/header.php';
+		$closelink = '';
+?>
+	<div class="small" style="padding:20px">
+	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">	
+	<input type="hidden" name="return_module" value="<?php $_REQUEST['return_module'] ?>">
+	<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action'] ?>">
+<?php
+}
+else
+{
+	$closelink = '<td align=right>
+			<a href="javascript:ghide(\'addEvent\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
+?>
+	<div class="calAddEvent" style="display:none" id="addEvent" align=center>
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
-	<input type="hidden" name="module" value="Activities">
-	<input type="hidden" name="activity_mode" value="Events">
-	<input type="hidden" name="mode" value="">
-	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
+<?php
+}
+?>
+	<input type="hidden" name="module" value="Calendar">
+	<input type="hidden" name="activity_mode" value="Events">
+	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="view" value="<?php echo $calendar_arr['view'] ?>">
 	<input type="hidden" name="hour" value="<?php echo $calendar_arr['calendar']->date_time->hour ?>">
 	<input type="hidden" name="day" value="<?php echo $calendar_arr['calendar']->date_time->day ?>">
 	<input type="hidden" name="month" value="<?php echo $calendar_arr['calendar']->date_time->month ?>">
 	<input type="hidden" name="year" value="<?php echo $calendar_arr['calendar']->date_time->year ?>">
 	<input type="hidden" name="record" value="">
-	<input type="hidden" name="duration_hours" value="0">
 	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
 	<input type="hidden" name="assigntype" value="U">
-	<input type="hidden" name="duration_minutes" value="0">
+	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
 	<input type="hidden" name="eventstatus" value="Planned">
 	<input type="hidden" name="set_reminder" value="">
+	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 	<input type="hidden" name="parenttab" value="<?php echo $category ?>">
 	<input type="hidden" name="viewOption" value="">
 	<input type="hidden" name="subtab" value="">
+	<input type="hidden" name="maintab" value="Calendar">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
 			<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
-			<td align=right>
-				<a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path?>close.gif" border="0"  align="absmiddle" /></a></td>
+			<?php echo $closelink; ?>
 		</tr>
 		</table>
 		
@@ -245,7 +189,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
                                         <tr><td>
-						<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
 								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -261,7 +205,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
 					</td></tr>
 				        <tr><td>
-						<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>"></td><td width=100%><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
 					<script type="text/javascript">
                                                         Calendar.setup ({
                                                                 inputField : "jscal_field_due_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
@@ -360,7 +304,11 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			<!-- Reminder UI -->
 				<DIV id="addEventAlarmUI" style="display:none;width:100%">
 				<table>
-					<tr><td><?php echo $mod_strings['LBL_SENDREMINDER']?></td><td><input name="remindercheck" type="checkbox" onClick="showhide('reminderOptions')">
+					<tr><td><?php echo $mod_strings['LBL_SENDREMINDER']?></td>
+						<td>
+					<input type="radio" name="set_reminder"value="Yes" onClick="showBlock('reminderOptions')">&nbsp;<?php echo $mod_strings['LBL_YES'] ?>&nbsp;
+					<input type="radio" name="set_reminder" value="No" onClick="fnhide('reminderOptions')">&nbsp;<?php echo $mod_strings['LBL_NO'] ?>&nbsp;
+							
 					</td></tr>
 				</table>
 				<DIV id="reminderOptions" style="display:none;width:100%">
@@ -443,16 +391,16 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 								<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
 								<td>
 									<select name="recurringtype">
-										<option value="Daily" onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
-										<option value="Weekly" onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
-										<option value="Monthly" onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
-										<option value="Yearly" onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
+										<option value="Daily" onClick="ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
+										<option value="Weekly" onClick="ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
+										<option value="Monthly" onClick="gshow('repeatMonthUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
+										<option value="Yearly" onClick="ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
 								</td>
 								</tr>
 								</table>
 
-								<div id="repeatWeekUI" style="display:none;">
+								<!--div id="repeatWeekUI" style="display:none;">
 								<table border=0 cellspacing=0 cellpadding=2>
 									<tr>
 								<td><input name="sun_flag" value="sunday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SUN']; ?></td>
@@ -464,7 +412,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 								<td><input name="sat_flag" value="saturday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SAT']; ?></td>
 									</tr>
 								</table>
-								</div>
+								</div-->
 
 								<div id="repeatMonthUI" style="display:none;">
 								<table border=0 cellspacing=0 cellpadding=2>
@@ -522,17 +470,15 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
-								<select name="parent_type" class="small" id="parent_type" onChange="fnAssignTo();document.EditView.parent_name.value='None Selected';">
-									<option value="None">None</option>
-
+								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';">
 									<option value="Leads">Leads</option>
 									<option value="Accounts">Accounts</option>
 									<option value="Potentials">Potentials</option>
 								</select>
 							</td>
 							<td>
-								<div id="leadLay" align="left">
-								<input type="text" readonly="readonly" class="calTxt small" value="None Selected" name="parent_name">&nbsp;
+								<div id="eventrelatedto" align="left">
+								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
 								<input type="button" name="selectparent" class="crmButton small edit" value="Change..." onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 								</div>
 							</td>
@@ -559,14 +505,42 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
 		<tr>
 			<td valign=top></td>
-			<td  align=right>
+			<td  align=center>
 				<input title='Save [Alt+S]' accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
-				<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
-			</td>
-		</tr>
-		</table>
-</form>
+<?php
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Events')
+{
+?>
+	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="window.history.back()">
+	</td>
+	</tr>
+	</table>
+	</form>
 	</div>
+</td></tr></table>
+</td></tr></table>
+</td></tr></table>
+</div>
+</td>
+<td valign=top><img src="<?php echo $image_path ?>showPanelTopRight.gif"></td>
+	</tr>
+	</table>
+
+<?php } 
+else
+{
+?>
+	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
+	  </td>
+	  </tr>
+	</table>
+  </form>
+  </div>
+<?php
+}
+?>
+						  
+							 
 	<script language="JavaScript" type="text/JavaScript">
 setObjects();
 	</script>
@@ -596,15 +570,32 @@ setObjects();
 	<tr><td><a href='' id="addtodo" class='submenu'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-
+<?php
+	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Task')
+{
+	include_once 'modules/Calendar/header.php';
+	$closelink = '';
+?>
+	<div class="small" style="padding:20px">
+	<form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
+	<input type="hidden" name="return_module" value="<?php $_REQUEST['return_module'] ?>">
+	<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action'] ?>"> 
+<?php
+}
+else
+{
+	$closelink = '<td align=right><a href="javascript:ghide(\'createTodo\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
+?>
 <div class="calAddEvent" style="display:none" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
+<input type="hidden" name="return_action" value="index">
+<input type="hidden" name="return_module" value="Calendar">
+<?php
+}
+?>
   <input type="hidden" name="module" value="Calendar">
   <input type="hidden" name="activity_mode" value="Task">
   <input type="hidden" name="action" value="TodoSave">
-  <input type="hidden" name="mode" value="">
-  <input type="hidden" name="return_action" value="index">
-  <input type="hidden" name="return_module" value="Calendar">
   <input type="hidden" name="view" value="<?php echo $calendar_arr['view'] ?>">
   <input type="hidden" name="hour" value="<?php echo $calendar_arr['calendar']->date_time->hour ?>">
   <input type="hidden" name="day" value="<?php echo $calendar_arr['calendar']->date_time->day ?>">
@@ -614,16 +605,16 @@ setObjects();
   <input type="hidden" name="assigned_user_id" value="<?php echo $current_user->id ?>">
   <input type="hidden" name="parenttab" value="<?php echo $category ?>">
   <input type="hidden" name="assigntype" value="U">
+  <input type="hidden" name="mode" value="">
   <input type="hidden" name="task_time_start" id="task_time_start">
   <input type="hidden" name="taskstatus" value="Planned">
-  <input type="hidden" name="set_reminder" value="">
   <input type="hidden" name="viewOption" value="">
   <input type="hidden" name="subtab" value="">
+  <input type="hidden" name="maintab" value="Calendar">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
                 	<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
-                        <td align=right>
-                                <a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
+			<?php echo $closelink; ?>
 		</tr>
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=90% >
@@ -640,7 +631,7 @@ setObjects();
 		<tr>
 			<td>&nbsp;</td>
 			<td>
-				<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px">&nbsp;<img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="absmiddle">
+			<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>" >&nbsp;<img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="absmiddle">
 				<script type="text/javascript">
 					Calendar.setup ({
 	                                        inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -663,7 +654,9 @@ setObjects();
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 					<tr>
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-						<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><?php echo $mod_strings['LBL_REMINDER']?></td>
+						<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');gshow('addTaskAlarmUI','todo',document.createTodo.task_date_start.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value);ghide('addTaskRelatedtoUI');"><?php echo $mod_strings['LBL_NOTIFICATION']?></a></td>
+						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
+						<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');gshow('addTaskRelatedtoUI','todo',document.createTodo.task_date_start.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value);ghide('addTaskAlarmUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>					
 						<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 					</tr>
 				</table>
@@ -674,65 +667,44 @@ setObjects();
 		<!-- Reminder UI -->
 		<DIV id="addTaskAlarmUI" style="display:block;width:100%">
                 <table>
-			<tr><td><?php echo $mod_strings['LBL_SENDREMINDER'] ?></td><td><input name="remindercheck" type="checkbox" onClick="showhide('taskreminderOptions')">
+			<tr><td><?php echo $mod_strings['LBL_SENDNOTIFICATION'] ?></td><td>
+				<input name="sendnotification" type="checkbox">
 			</td></tr>
                 </table>
-		<DIV id="taskreminderOptions" style="display:none;width:100%">
-                	<table border=0 cellspacing=0 cellpadding=2  width=100%>
-                        	<tr>
-                                	<td nowrap align=right width=20% valign=top>
-                                        	<b><?php echo $mod_strings['LBL_RMD_ON'] ?> : </b>
-                                        </td>
-                                        <td width=80%>
-                                                <table border=0>
-                                                <tr>
-                                                <td colspan=2>
-                                                        <select class=small name="remdays">
-                                                        <?php
-                                                                for($m=0;$m<=31;$m++)
-                                                                {
-                                                        ?>
-                                                                        <option value="<?php echo $m ?>"><?php echo $m ?></option>
-							<?
-                                                                }
-                                                        ?>
-                                                        </select>days
-                                                        <select class=small name="remhrs">
-                                                        <?php
-                                                                for($h=0;$h<=23;$h++)
-                                                                {
-                                                        ?>
-                                                        	<option value="<?php echo $h ?>"><?php echo $h ?></option>
-							<?
-                                                                }
-                                                        ?>
-                                                        </select>hours
-                                                        <select class=small name="remmin">
-                                                        <?php
-                                                                for($min=1;$min<=59;$min++)
-                                                                {
-                                                        ?>
-                                                                        <option value="<?php echo $min ?>"><?php echo $min ?></option>
-							<?
-                                                                }
-                                                        ?>
-                                                        </select><?php echo $mod_strings['LBL_BEFORETASK'] ?>
-                                                </td>
-                                                </tr>
-                                                </table>
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <td nowrap align=right>
-                                        <?php echo $mod_strings['LBL_SDRMD'] ?> :
-                                        </td>
-                                        <td >
-                                        <input name="task_toemail" type=text class=textbox style="width:90%" value="<?php echo $to_email ?>">
-                                        </td>
-                                </tr>
-                                </table>
-			</DIV>
-			</DIV>
+		</DIV>
+		<div id="addTaskRelatedtoUI" style="display:none;width:100%">
+			<table width="100%" cellpadding="5" cellspacing="0" border="0">
+			<tr>
+				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
+				<td>
+					<input name="parent_id" type="hidden" value="">
+						<select name="parent_type" class="small" id="parent_type" onChange="document.createTodo.parent_name.value='';document.createTodo.parent_id.value=''">
+						<option value="Leads">Leads</option>
+						<option value="Accounts">Accounts</option>
+						<option value="Potentials">Potentials</option>
+						<option value="Quotes">Quotes</option>
+						<option value="PurchaseOrder">Purchase Order</option>
+						<option value="SalesOrder">Sales Order</option>
+						<option value="Invoice">Invoice</option>
+						<option value="Campaigns">Campaigns</option></select>
+						</select>
+				</td>
+				<td>
+					<div id="taskrelatedto" align="left">
+					<input name="parent_name" readonly type="text" class="calTxt small" value="">
+					<input type="button" name="selectparent" class="crmButton small edit" value="Select" onclick="return window.open('index.php?module='+document.createTodo.parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+					</div>
+				</td>
+			</tr>
+			<tr>
+			<td><b><?php echo $mod_strings['LBL_CONTACT'] ?> :</b></td>
+			<td colspan="2">
+				<input name="contact_name" readonly type="text" class="calTxt" value=""><input name="contact_id" type="hidden" value="">&nbsp;
+				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">
+			</td>
+			  </tr>
+			                  </table>
+					                  </div>
 		</td></tr>
                 <!-- Repeat UI -->
 	</table>
@@ -741,22 +713,42 @@ setObjects();
                 <table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
                 <tr>
                         <td valign=top></td>
-                        <td  align=right>
+                        <td  align=center>
                                 <input title='Save [Alt+S]' accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
-                                <input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET'] ?>" onClick="ghide('createTodo')">
-                        </td>
-                </tr>
-                </table>
-</form>
-<script>
-	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
-        var fieldlabel = new Array('Subject','Date','Time','Status');
-        var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
-</script>	
-
-</div>
-
-
+<?php
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Task')
+{
+?>
+				<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="window.history.back()">
+			</td></tr></table>
+		</form>
+	<script>                                                                                                                         var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');                                var fieldlabel = new Array('Subject','Date','Time','Status');                                                              var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');                                                   </script>
+	</div>
+	</td></tr></table>
+	</td></tr></table>
+	</td></tr></table>
+	</div>
+	</td>
+	<td valign=top><img src="<?php echo $image_path ?>showPanelTopRight.gif"></td>
+	</tr>
+	</table>
+<?php }
+else
+{
+?>
+		<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
+	</td></tr></table>
+  </form>
+  <script>
+  	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
+	var fieldlabel = new Array('Subject','Date','Time','Status');
+	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+  </script>
+  </div>
+<?php
+}
+?>
+				    
 <div id="act_changeowner" class="statechange" style="left:250px;top:200px;z-index:5000">
 	<form name="change_owner">
 	<input type="hidden" value="" name="idlist" id="idlist">
