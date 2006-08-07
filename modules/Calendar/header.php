@@ -19,7 +19,7 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td width="10%" style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>'.$app_strings["My Home Page"].' > <a class="hdrLink" href="index.php?action=index&module=Calendar&parenttab=My Home Page">'.$app_strings["Calendar"].'</a></td>
+	<td width="10%" style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>'.$app_strings[$category].' > <a class="hdrLink" href="index.php?action=index&module=Calendar&parenttab=My Home Page">'.$app_strings["Calendar"].'</a></td>
 
 	<td  nowrap width="8%">
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -64,7 +64,7 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
                 <td class="small" align="left">	
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh(\'allMenu\');" onclick="fnvshobj(this,\'allMenu\')"><img src="'.$image_path.'btnL3AllMenu.gif" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0"></a></td>
+				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh(\'allMenu\');" onclick="fnvshobj(this,\'allMenu\')"><img src="'.$image_path.'btnL3AllMenu.gif" alt="'.$app_strings['LBL_ALL_MENU_ALT'].'" title="'.$app_strings['LBL_ALL_MENU_TITLE'].'" border="0"></a></td>
 				</tr>
 				</table>
 	</td>			
@@ -72,6 +72,36 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 	</table></td>
 	</tr>
 	<tr><td style="height:2px"></td></tr>
-	</TABLE>';
+	</TABLE>
+	<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+	     <tr>
+	             <td valign=top><img src="'.$image_path.'showPanelTopLeft.gif"></td>
+
+		     	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
+		      <div class="small" style="padding: 20px;">
+			<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+				<tr>
+					<td>
+						<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
+								<td class="dvtSelectedCell" align="center" nowrap="nowrap">Calendar</td>	
+								<td class="dvtTabCache" style="width: 10px;">&nbsp;</td>
+								<td class="dvtUnSelectedCell" align="center" nowrap="nowrap"><a href="index.php?action=ListView&module=Calendar&parenttab='.$category.'">All Events & Todos</a></td>
+								<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" valign="top">
+						<table class="dvtContentSpace" border="0" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td align="left">
+								<!-- content cache -->
+									<table border="0" cellpadding="0" cellspacing="0" width="100%">
+									<tr>
+										<td style="padding: 10px;">
+	';
 	echo $html_string;
 ?>	
