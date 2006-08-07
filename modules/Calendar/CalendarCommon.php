@@ -144,5 +144,103 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 	}
 }
 
+/**
+ *To construct time select combo box
+ *@param $format -- the format :: Type string
+ *@param $bimode -- The mode :: Type string
+ *constructs html select combo box for time selection
+ *and returns it in string format.
+ */
+function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
+{
+	$combo = '';
+	if($format == 'am/pm')
+	{
+		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
+		for($i=1;$i<=12;$i++)
+		{
+			if($i <= 9 && strlen(trim($i)) < 2)
+			{
+				$hrvalue= '0'.$i;
+			}
+			//elseif($i == 12) $hrvalue = '00';
+			else $hrvalue= $i;
+			if($hour == $hrvalue)
+				$hrsel = 'selected';
+			else
+				$hrsel = '';
+			$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$i.'</option>';
+		}
+		$combo .= '</select>&nbsp;';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
+		for($i=0;$i<12;$i++)
+		{
+			$minvalue = 5;
+			$value = $i*5;
+			if($value <= 9 && strlen(trim($value)) < 2)
+			{
+				$value= '0'.$value;
+			}
+			else $value= $value;
+			if($min == $value)
+				$minsel = 'selected';
+			else
+				$minsel = '';
+				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
+		}
+		$combo .= '</select>&nbsp;';
+		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" value="'.$fmt.'" class=small>';
+		if($fmt == 'am')
+		{
+			$amselected = 'selected';
+			$pmselected = '';
+		}
+		elseif($fmt == 'pm')
+		{
+			$amselected = '';
+			$pmselected = 'selected';
+		}
+		$combo .= '<option value="am" '.$amselected.'>AM</option>';
+		$combo .= '<option value="pm" '.$pmselected.'>PM</option>';
+		$combo .= '</select>';
+		}
+		else
+		{
+			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small value="'.$hour.'">';
+			for($i=0;$i<=23;$i++)
+			{
+				if($i <= 9 && strlen(trim($i)) < 2)
+				{
+					$hrvalue= '0'.$i;
+				}
+				else $hrvalue = $i;
+				if($hour == $hrvalue)
+					$hrsel = 'selected';
+				else
+					$hrsel = '';
+				$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$i.'</option>';
+			}
+			$combo .= '</select>Hr&nbsp;';
+			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
+			for($i=0;$i<12;$i++)
+			{
+				$minvalue = 5;
+				$value = $i*5;
+				if($value <= 9 && strlen(trim($value)) < 2)
+				{
+					$value= '0'.$value;
+				}
+				else $value=$value;
+				if($min == $value)
+					$minsel = 'selected';
+				else
+					$minsel = '';
+				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
+			}
+			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt" value="'.$fmt.'">';
+		}
+		return $combo;
+}
+
 //Code Added by Minnie -Ends
 ?>
