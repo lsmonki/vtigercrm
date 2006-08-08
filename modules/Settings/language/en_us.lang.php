@@ -110,29 +110,29 @@ $mod_strings = Array(
 'QUOTESCUSTOMFIELDS'=>'Quotes Custom Fields',
 'INVOICECUSTOMFIELDS'=>'Invoice Custom Fields',
 
-'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList ',
+'EDITLEADPICKLISTVALUES'=>'Edit Lead Picklist ',
 
-'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList ',
+'EDITACCOUNTPICKLISTVALUES'=>'Edit Account Picklist ',
 
-'EDITCONTACTPICKLISTVALUES'=>'Edit Contact PickList ',
+'EDITCONTACTPICKLISTVALUES'=>'Edit Contact Picklist ',
 
-'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Potential PickList ',
+'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Potential Picklist ',
 
-'EDITHELPDESKPICKLISTVALUES'=>'Edit HeldDesk PickList ',
+'EDITHELPDESKPICKLISTVALUES'=>'Edit HelpDesk Picklist ',
 
-'EDITPRODUCTPICKLISTVALUES'=>'Edit Product PickList ',
+'EDITPRODUCTPICKLISTVALUES'=>'Edit Product Picklist ',
 
-'EDITEVENTPICKLISTVALUES'=>'Edit Event PickList ',
+'EDITEVENTPICKLISTVALUES'=>'Edit Event Picklist ',
 
-'EDITTASKPICKLISTVALUES'=>'Edit Task PickList ',
+'EDITTASKPICKLISTVALUES'=>'Edit Task Picklist ',
 
-'EDITRSSPICKLISTVALUES'=>'Edit Rss PickList',
-'EDITVENDORPICKLISTVALUES'=>'Edit Vendor PickList',
-'EDITPBPICKLISTVALUES'=>'Edit PriceBook PickList',
-'EDITPOPICKLISTVALUES'=>'Edit Purchase Order PickList',
-'EDITSOPICKLISTVALUES'=>'Edit Sales Order PickList',
-'EDITQUOTEPICKLISTVALUES'=>'Edit Quote PickList',
-'EDITINVOICEPICKLISTVALUES'=>'Edit Invoice PickList',
+'EDITRSSPICKLISTVALUES'=>'Edit Rss Picklist',
+'EDITVENDORPICKLISTVALUES'=>'Edit Vendor Picklist',
+'EDITPBPICKLISTVALUES'=>'Edit PriceBook Picklist',
+'EDITPOPICKLISTVALUES'=>'Edit Purchase Order Picklist',
+'EDITSOPICKLISTVALUES'=>'Edit Sales Order Picklist',
+'EDITQUOTEPICKLISTVALUES'=>'Edit Quote Picklist',
+'EDITINVOICEPICKLISTVALUES'=>'Edit Invoice Picklist',
 
 
 // Added for Release vtigerCRM 3.2 PATCH 1.0
@@ -187,7 +187,7 @@ $mod_strings = Array(
 
 'LBL_CUSTOM_FIELDS'=>'Custom Fields',
 
-'LBL_ADD_FIELD'=>'Add Field',
+'LBL_ADD_FIELD'=>'Create Custom Field',
 
 'LBL_CUSTM_MSG'=>'allows you to ....',
 
@@ -213,13 +213,13 @@ $mod_strings = Array(
 
 'LBL_DECIMAL_PLACES'=>'Decimal Places: ',
 
-'LBL_PICK_LIST_VALUES'=>'Pick List Values: ',
+'LBL_PICK_LIST_VALUES'=>'Pick list Values: ',
 
 
 
 //Settings/EditComboField.php
 
-'EditPickListValues'=>'Pick List Edit ',
+'EditPickListValues'=>'Picklist Edit ',
 
 
 
@@ -259,7 +259,7 @@ $mod_strings = Array(
 
 'USERGROUPLIST'=>'Groups',
 
-'EMAILTEMPLATES'=>'E-Mail Templates',
+'EMAILTEMPLATES'=>'E-mail Templates',
 
 'WORDINTEGRATION'=>'Mail Merge Templates',
 
@@ -296,13 +296,13 @@ $mod_strings = Array(
 
 //Added fields after RC1 - Release
 
-'LBL_MAIL_SERVER_INFO'=>'Mail Server Information',
+'LBL_MAIL_SERVER_INFO'=>'Outgoing Mail Server Information',
 
-'LBL_OUTGOING_MAIL_SERVER'=>'OutGoing Mail Server',
+'LBL_OUTGOING_MAIL_SERVER'=>'Server Name',
 
-'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'OutGoing Mail Server Login User Name',
+'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'Outgoing Mail Server Login User Name',
 
-'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'OutGoing Mail Server Password',
+'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'Outgoing Mail Server Password',
 
 'LBL_MAIL_SERVER_SMTP'=>'Mail Server Settings (SMTP)',
 
@@ -310,18 +310,18 @@ $mod_strings = Array(
 
 'LBL_SERVER_ADDRESS'=>'Server Address',
 
-'LBL_FTP_SERVER_NAME'=>'ftp Server Name',
+'LBL_FTP_SERVER_NAME'=>'FTP Server Name',
 
-'LBL_FTP_USER_NAME'=>'ftp User Name',
+'LBL_FTP_USER_NAME'=>'FTP User Name',
 
-'LBL_FTP_PASSWORD'=>'ftp Password',
+'LBL_FTP_PASSWORD'=>'FTP Password',
 
 'LBL_FTP'=>'FTP',
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
-'LBL_SYSTEM_INFO'=>'System Information',
-'LBL_PROXY_SETTINGS'=>'Proxy Server Settings',
-'LBL_AUDIT_TRAIL'=>'Audit Trail Information',
+'LBL_SYSTEM_INFO'=>'System Details',
+'LBL_PROXY_SETTINGS'=>'Proxy Server',
+'LBL_AUDIT_TRAIL'=>'Audit Trails',
 'LBL_ENABLE_AUDIT_TRAIL'=>'Enable Audit Trail',
 'LBL_USER_AUDIT'=>'Select User',
 'LBL_VIEW_AUDIT_TRAIL'=>'View Audit Trail',
@@ -336,12 +336,12 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_TITLE'=>'Currency',
 
-'LBL_CURRENCY_SETTINGS'=>'Currency Settings',
+'LBL_CURRENCY_SETTINGS'=>'Currencies',
 
 'LBL_YES'=>'yes',
 'LBL_NO'=>'no',
 
-'LBL_USERNAME'=>'Username',
+'LBL_USERNAME'=>'User Name',
 'LBL_PASWRD'=>'Password',
 'LBL_REQUIRES_AUTHENT'=>'Requires Authentication?',
 
@@ -416,11 +416,11 @@ $mod_strings = Array(
 
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings',
 
-'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Manage user defined fields...',
+'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Manage your company-wide custom fields.',
 
 'LBL_SELECT_MODULE'=>'Select Module',
 
-'LBL_SELECT_CF_TEXT'=>'Select the CRM module:',
+'LBL_SELECT_CF_TEXT'=>'<b>Select Module:</b>',
 
 
 
@@ -448,7 +448,7 @@ $mod_strings = Array(
 
 'LBL_BACKUP_SERVER_INFO'=>'Backup Server Information',
 
-'LBL_BACKUP_SERVER_SETTINGS'=>'Backup Server Settings',
+'LBL_BACKUP_SERVER_SETTINGS'=>'Backup Server',
 
 'LBL_CONFIGURE_BACKUP_SERVER'=>' - Configure Backup Server',
 
@@ -458,7 +458,7 @@ $mod_strings = Array(
 
 'LBL_PROXY_SERVER_INFO'=>'Proxy Server Information',
 
-'LBL_PROXY_SERVER_SETTINGS'=>'Proxy Server Settings',
+'LBL_PROXY_SERVER_SETTINGS'=>'Proxy Server',
 
 'LBL_CONFIGURE_PROXY_SERVER'=>' - Configure Proxy Server',
 
@@ -519,7 +519,7 @@ $mod_strings = Array(
 'LBL_MAIL_PROTOCOL'=>'Mail Protocol',
 'LBL_LIST_PASSWORD'=>'Password',
 'LBL_MAIL_SERVER_NAME'=>'Mail Server Name or IP',
-'LBL_MAIL_SERVER_SETTINGS'=>'Mail Server Settings',
+'LBL_MAIL_SERVER_SETTINGS'=>'Outgoing Server',
 'LBL_TEST_SETTINGS'=>'Test my account setting immediately',
 'LBL_TEST_BUTTON_TITLE'=>'Test my account now! [Alt+T]',
 'LBL_TEST_BUTTON_KEY'=>'T',
@@ -565,11 +565,11 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_ADDRESS'=>'Address',
 'LBL_ORGANIZATION_CITY'=>'City',
 'LBL_ORGANIZATION_STATE'=>'State',
-'LBL_ORGANIZATION_CODE'=>'Pin / Zip',
+'LBL_ORGANIZATION_CODE'=>'Postal Code',
 'LBL_ORGANIZATION_COUNTRY'=>'Country',
 'LBL_ORGANIZATION_PHONE'=>'Phone',
 'LBL_ORGANIZATION_FAX'=>'Fax',
-'LBL_ORGANIZATION_WEBSITE'=>'Web URL',
+'LBL_ORGANIZATION_WEBSITE'=>'Website',
 'LBL_ORGANIZATION_DETAILS'=>'Company Information',
 'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',
 'LBL_ORGANIZATION_LOGO'=>'Company Logo',
@@ -589,9 +589,9 @@ $mod_strings = Array(
 'INVENTORYNOTIFICATION'=>'Inventory Notifications',
 'LBL_INVENTORY_NOTIFICATIONS'=>' - Edit Inventory Email Notifications',
 'INVENTORYTERMSANDCONDITIONS'=>'Inventory : Terms & Conditions',//newly added for Inventory terms and conditions
-'LBL_INVENTORY_TERMSANDCONDITIONS'=>' - Edit Inventory Terms & Conditions',//newly added
+'LBL_INVENTORY_TERMSANDCONDITIONS'=>' - Edit Terms & Conditions',//newly added
 'LBL_TANDC_TEXT'=>'Terms & Conditions Text',
-'LBL_INVENTORY_TANDC'=>'Inventory Terms & Conditions',
+'LBL_INVENTORY_TANDC'=>'Terms & Conditions',
 
 'LBL_OTHER_SETTINGS'=>'Other Settings',
 'LBL_SCROLL'=>'[Scroll to Top]',
@@ -629,42 +629,42 @@ $mod_strings = Array(
 'LBL_ASSIGN_MODULE_OWNERS_INFO'=>' - Assign Owners for each modules',
 'LBL_MODULE'=>'CRM Module',
 'LBL_OWNER'=>'Assigned Owner',
-'LBL_MIGRATION'=>'Migrate from Previous Version',
-'LBL_MIGRATION_INFO'=>'Migration from previous Version of vTiger',
+'LBL_MIGRATION'=>'Migration Wizard',
+'LBL_MIGRATION_INFO'=>'Migrate vtiger CRM data from Version 4.2.3 to 5.0.0',
 
 //Added for 5 GA - Description of Settings UI
 
-'LBL_USER_DESCRIPTION'=>'Manage Users list who access CRM',
-'LBL_ROLE_DESCRIPTION'=>'Define hierarchy of Roles and assign to Users',
-'LBL_PROFILE_DESCRIPTION'=>'Define Profiles to provide access rights to each Role',
-'LBL_GROUP_DESCRIPTION'=>'Define Groups based on roles, users, profiles etc',
-'LBL_SHARING_ACCESS_DESCRIPTION'=>'Define Organization level sharing rules and custom sharing rules',
-'LBL_SHARING_FIELDS_DESCRIPTION'=>'Show or hide fields in each CRM Module',
-'LBL_MODULE_OWNERS_DESCRIPTION'=>'Assign Owners to each CRM module',
-'LBL_ANNOUNCEMENT_DESCRIPTION'=>'Edit the contents of Announcements display',
-'LBL_CUSTOM_FIELDS_DESCRIPTION'=>'Create and Manage user-defined fields',
-'LBL_PICKLIST_DESCRIPTION'=>'Manage contents of Picklists in all CRM Modules',
+'LBL_USER_DESCRIPTION'=>'Manage users who can access vtiger CRM',
+'LBL_ROLE_DESCRIPTION'=>'Set up hierarchy of roles and assign to the users',
+'LBL_PROFILE_DESCRIPTION'=>'Manage user-specific modules access to different Roles',
+'LBL_GROUP_DESCRIPTION'=>'Manage different types of teams based on roles, users, and profiles',
+'LBL_SHARING_ACCESS_DESCRIPTION'=>'Manage module sharing rules & custom sharing rules',
+'LBL_SHARING_FIELDS_DESCRIPTION'=>'Define global field-level access in each module',
+'LBL_MODULE_OWNERS_DESCRIPTION'=>'Assign Customer Support owners to CRM module',
+'LBL_ANNOUNCEMENT_DESCRIPTION'=>'Manage company wide announcements',
+'LBL_CUSTOM_FIELDS_DESCRIPTION'=>'Manage different types of user-defined fields',
+'LBL_PICKLIST_DESCRIPTION'=>'Customize Picklist values in each module',
 'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
 'LBL_MAIL_MERGE_DESCRIPTION'=>'Manage templates for Mail Merging',
 'LBL_NOTIF_SCHED_DESCRIPTION'=>'Manage Notifications that will alert in case of important actions',
 'LBL_INV_NOTIF_DESCRIPTION'=>'Change Settings of Inventory related Notifications',
-'LBL_INV_TANDC_DESCRIPTION'=>'Manage the text contents of Terms and Conditions',
-'LBL_COMPANY_DESCRIPTION'=>'Manage details about your company',
-'LBL_MAIL_SERVER_DESCRIPTION'=>'Edit Outgoing E-Mail Server settings',
-'LBL_BACKUP_SERVER_DESCRIPTION'=>'Edit Backup Server settings',
-'LBL_CURRENCY_DESCRIPTION'=>'Manage Currencies and Exchange Rates',
-'LBL_TAX_DESCRIPTION'=>'Manage values for Sales tax, VAT etc',
-'LBL_SYSTEM_DESCRIPTION'=>'Display System Settings',
-'LBL_PROXY_DESCRIPTION'=>'Edit Settings to connect Internet',
-'LBL_AUDIT_DESCRIPTION'=>'Display Audit-Trail Settings',
-'LBL_TAX_DESC'=>'Manage VAT and other tax settings',
-'LBL_COMPANY_DESC'=>'Information & Contact details of your company',
-'LBL_SELECT_LOGO'=>'Select new logo :',
-'LBL_INVEN_TANDC_DESC'=>'Change the text that appears in the Terms & Conditions section in Inventory module',
-'LBL_MAIL_SERVER_DESC'=>'Manage your Email Server Settings',
-'LBL_BACKUP_SERVER_DESC'=>'Manage your Backup Server Settings',
+'LBL_INV_TANDC_DESCRIPTION'=>'Specify Terms and Conditions for quotes, orders, and invoices',
+'LBL_COMPANY_DESCRIPTION'=>'Specify business address of company',
+'LBL_MAIL_SERVER_DESCRIPTION'=>'Configure Outgoing Mail Server details',
+'LBL_BACKUP_SERVER_DESCRIPTION'=>'Specify database backup server details',
+'LBL_CURRENCY_DESCRIPTION'=>'Manage international currencies and exchange rates',
+'LBL_TAX_DESCRIPTION'=>'Manage taxes and the corresponding tax rates',
+'LBL_SYSTEM_DESCRIPTION'=>'View vtiger CRM Server details',
+'LBL_PROXY_DESCRIPTION'=>'Configure proxies to access RSS feeds through Internet',
+'LBL_AUDIT_DESCRIPTION'=>'Display data opertions performed by users',
+'LBL_TAX_DESC'=>'Manage different types of tax rates for taxes, such as Sales Tax, VAT etc.,',
+'LBL_COMPANY_DESC'=>'Specify business address of your company',
+'LBL_SELECT_LOGO'=>'Select new logo:',
+'LBL_INVEN_TANDC_DESC'=>'Specify text for the Terms & Conditions section of Quotes, Orders, and Invoices modules',
+'LBL_MAIL_SERVER_DESC'=>'Configure your Outgoing Mail Server details',
+'LBL_BACKUP_SERVER_DESC'=>'Manage your Backup Server',
 'LBL_MODULES_AND_OWNERS'=>'Modules & Owners',
-'LBL_GROUP_DESC'=>'Manage User groups',
+'LBL_GROUP_DESC'=>'Manage different types of user groups within your organization',
 'LBL_MAIL_MERGE_DESC'=>'Manage Mail Merge templates used in CRM modules',
 
 
@@ -686,21 +686,24 @@ $mod_strings = Array(
 'LBL_EDIT_PICKLIST'=>'Edit Pick List',
 'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
 'LBL_SELECT_CRM_MODULE'=>'Select CRM Module',
-'LBL_TAX_SETTINGS'=>'Tax Settings',
+'LBL_TAX_SETTINGS'=>'Tax Calculations',
 'LBL_INVENTORY_TAX_CONFIG'=>'Inventory Tax Configuration',
-'LBL_CUSTOM_MAPP_INFO'=>'Only Leads module support mapping of fields with other modules.',
+'LBL_CUSTOM_MAPP_INFO'=>'Only in Leads module you can map the fields with Accounts, Contacts, and Potentials.',
 'LBL_MAPPING_OTHER_MODULES'=>'Mapping with other Modules',
 'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
 'LBL_ROLE_HIERARCHY_TREE'=>'Roles & Hierarchy Tree',
 'LBL_EDIT_FIELD_MAPPING'=>'Editing Field Mapping',
-'LBL_LOGIN_HISTORY_DETAILS'=>'Login History Details',
-'LBL_LOGIN_HISTORY_DESCRIPTION'=>'Displays Login History of all Users',
+'LBL_LOGIN_HISTORY_DETAILS'=>'User Login History',
+'LBL_LOGIN_HISTORY_DESCRIPTION'=>'Display login history of users',
 'LBL_NON_EDITABLE_PICKLIST_ENTRIES'=>'Non Editable Picklist Entries',
 
 //Added for Tax settings
-'LBL_PRODUCT_TAX_SETTINGS'=>'Product Taxes',
-'LBL_SHIPPING_HANDLING_TAX_SETTINGS'=>'Shipping and Handling Taxes',
+'LBL_PRODUCT_TAX_SETTINGS'=>'Product & Service Taxes',
+'LBL_SHIPPING_HANDLING_TAX_SETTINGS'=>'Shipping & Handling Taxes',
+'LBL_PROXY_SERVER_DESC'=>'Configure proxies to access RSS feeds through Internet',
 
+'LBL_NEW_CURRENCTY'=>'New Currency',
+'LBL_BASE_CURRENCY'=>'Base Currency - US Dollar'
 );
 
 
