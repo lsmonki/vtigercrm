@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('include/logging.php');
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
@@ -19,7 +19,7 @@ $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
-        $tab_type = 'Activities';
+        $tab_type = 'Calendar';
         $focus->column_fields["activitytype"] = 'Task';
 }
 
@@ -40,5 +40,5 @@ if(isset($_REQUEST['mode']))
 
  //echo '<pre>';print_r($focus->column_fields);echo '</pre>';	die;	
  $focus->save($tab_type);
- header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewBox']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
+ header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
 ?>
