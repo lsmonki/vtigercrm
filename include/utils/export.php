@@ -25,7 +25,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Leads/Lead.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Emails/Email.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
