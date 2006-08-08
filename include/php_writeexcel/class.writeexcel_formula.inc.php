@@ -100,7 +100,9 @@ function writeexcel_formula($byte_order) {
     $this->_byte_order     = $byte_order;
     $this->_volatile       = 0;
     $this->_workbook       = "";
-    $this->_ext_sheets     = array();
+    //$this->_ext_sheets     = array();
+    //Changes made to accomodate PHP5
+    $this->_ext_sheets ;
     $this->_current_token  = '';
     $this->_lookahead	   = '';
     $this->_current_char   = 0;    
