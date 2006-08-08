@@ -25,7 +25,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%" class="small">
    <tr>
 	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-		<span class="lvtHeaderText"> Settings &gt; Migrate from Previous Version </span>
+		<span class="lvtHeaderText"> {$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_UPGRADE_VTIGER}</span>
 		<hr noshade="noshade" size="1" />
 	</td>
 	<td width="5%" class="showPanelBg">&nbsp;</td>
@@ -46,16 +46,15 @@
 				   <tr>
 					<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
 					<td width="90%">
-						<span class="genHeaderBig">Migrate From Previous Version</span><br />
-						Update your new vtiger CRM 5 database with the data from previous installation<br />
-						To Start, follow the instructions below
+						<span class="genHeaderBig">{$MOD.LBL_UPGRADE_VTIGER}</span><br />
+						({$MOD.LBL_UPGRADE_FROM_VTIGER_423})
 					</td>
 				   </tr>
 				   <tr bgcolor="#FFFFFF">
 					<td colspan="2">
-						<span class="genHeaderGray">Step 1 : </span>
-				  		<span class="genHeaderSmall">Select Source</span><br />
-						To Start Migration, you must specify the format in which the old data is Available<br /><br />
+						<span class="genHeaderGray">{$MOD.LBL_STEP} 1 : </span>
+				  		<span class="genHeaderSmall">{$MOD.LBL_SELECT_SOURCE}</span><br />
+						{$MOD.LBL_STEP1_DESC}<br /><br />
 					</td>
 				   </tr>
 				   <tr bgcolor="#FFFFFF">
@@ -63,9 +62,8 @@
 						<input type="radio" name="radio" id="db_details" value="db_details" onclick="fnChangeMigrate()" "{$DB_DETAILS_CHECKED}" />
 					</td>
 					<td>
-						<b>I Have the Data Base Format</b> ( Live Data )<br />
-						This option requires you to have the host machine's ( where the DB is stored ) address and DB access  details.
-						Both local and remote systems are supported in this method. Refer documentation for Help.
+						<b>{$MOD.LBL_RADIO_BUTTON1_TEXT}</b><br /><br />
+						<b>{$MOD.LBL_NOTE_TITLE}</b> {$MOD.LBL_RADIO_BUTTON1_DESC}
 					</td>
 				   </tr>
 				   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
@@ -74,9 +72,8 @@
 						<input type="radio" name="radio" id="dump_details" value="dump_details" onclick="fnChangeMigrate()" "{$DUMP_DETAILS_CHECKED}"/>
 					</td>
 					<td>
-						<b>I Have a Data Base as a Database Dump</b> ( Usually archived )<br />
-						This option requires you to have the dump file, in this local system.
-						You cannot specify a remote machine. Refer documentation for Help.
+						<b>{$MOD.LBL_RADIO_BUTTON2_TEXT}</b><br /><br />
+						<b>{$MOD.LBL_NOTE_TITLE}</b> {$MOD.LBL_RADIO_BUTTON2_DESC}
 					</td>
 				   </tr>
 				   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
@@ -85,9 +82,7 @@
 						<input type="radio" name="radio" id="alter_db_details" value="alter_db_details" onclick="fnChangeMigrate()" "{$ALTER_DB_DETAILS_CHECKED}"/>
 					</td>
 					<td>
-						<b>I Have a New Data Base with 4.2.3 Data.</b> ( Usually archived )<br />
-						This option requires you to have the 4.2.3 host machine's ( where the DB is stored ) address and DB access  details.
-						You cannot specify a remote machine.
+						<b>{$MOD.LBL_RADIO_BUTTON3_TEXT}</b><br /><br /><b>{$MOD.LBL_NOTE_TITLE}</b> {$MOD.LBL_RADIO_BUTTON3_DESC}
 					</td>
 				   </tr>
 				   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
@@ -102,28 +97,28 @@
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 							   <tr bgcolor="#FFFFFF">
 								<td colspan="2">
-									<span class="genHeaderGray">Step 2 : </span>
-									<span class="genHeaderSmall">Host Database Access Details</span><br /><br />
+									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
+									<span class="genHeaderSmall">{$MOD.LBL_HOST_DB_ACCESS_DETAILS}</span><br /><br />
 								</td>
 							   </tr>
 							   <tr>
-								<td width="30%" align="right">Source MySQL Host Name or IP Address : </td>
+								<td width="30%" align="right">{$MOD.LBL_SOURCE_HOST_NAME}</td>
 								<td width="70%"><input type="text" name="old_host_name" class="importBox" value="{$OLD_HOST_NAME}" /></td>
 							   </tr>
 							   <tr>
-								<td align="right">Source MySQL Port Number : </td>
+								<td align="right">{$MOD.LBL_SOURCE_MYSQL_PORT_NO}</td>
 								<td><input type="text" name="old_port_no" class="importBox" value="{$OLD_PORT_NO}" /></td>
 							   </tr>
 							   <tr>
-								<td align="right">Source MySql User Name : </td>
+								<td align="right">{$MOD.LBL_SOURCE_MYSQL_USER_NAME}</td>
 								<td><input type="text" name="old_mysql_username" class="importBox" value="{$OLD_MYSQL_USERNAME}" /></td>
 							   </tr>
 							   <tr>
-								<td align="right">Source MySql Password : </td>
+								<td align="right">{$MOD.LBL_SOURCE_MYSQL_PASSWORD}</td>
 								<td><input type="text" name="old_mysql_password" class="importBox" value="{$OLD_MYSQL_PASSWORD}" /></td>
 							   </tr>
 							   <tr>
-								<td align="right">Source Database Name : </td>
+								<td align="right">{$MOD.LBL_SOURCE_DB_NAME}</td>
 								<td><input type="text" name="old_dbname" class="importBox" value="{$OLD_DBNAME}" /></td>
 							   </tr>
 							</table>
@@ -134,20 +129,20 @@
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 							   <tr bgcolor="#FFFFFF">
 								<td colspan="2">
-									<span class="genHeaderGray">Step 2 : </span>
-									<span class="genHeaderSmall">Locate Database Dump File</span><br /><br />
+									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
+									<span class="genHeaderSmall">{$MOD.LBL_LOCATE_DB_DUMP_FILE}</span><br /><br />
 								</td>
 							   </tr>
 							   <tr>
 								<td width="10%">&nbsp;</td>
 								<td width="90%">
-									Dump File Location : 
+									{$MOD.LBL_DUMP_FILE_LOCATION}
 									<input type="file" name="old_dump_filename" class="txtBox" />
 								</td>
 							   </tr>
 							   <tr><td colspan="2" height="10"></td></tr>
 							   <tr bgcolor="#FFFFFF">
-								<td align="right" valign="top"><b>Note: </b></td>
+								<td align="right" valign="top"><b>{$MOD.LBL_NOTE_TITLE}</b></td>
 								<td>{$MOD.LBL_NOTES_DUMP_PROCESS}</td>
 							   </tr>
 							</table>
@@ -159,48 +154,41 @@
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 							   <tr bgcolor="#FFFFFF">
 								<td colspan="3">
-									<span class="genHeaderGray">Step 2 : </span>
-									<span class="genHeaderSmall">Host Database Access Details</span><br /><br />
+									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
+									<span class="genHeaderSmall">{$MOD.LBL_HOST_DB_ACCESS_DETAILS}</span><br /><br />
 								</td>
 							   </tr>
 							   <tr>
 								<td width="5%">&nbsp;</td>
-								<td width="20%" align="right">MySQL Host Name or IP Address : </td>
+								<td width="20%" align="right">{$MOD.LBL_MYSQL_HOST_NAME_IP}</td>
 								<td width="75%"><input type="text" name="alter_old_host_name" class="importBox" value="{$ALTER_OLD_HOST_NAME}" /></td>
 							   </tr>
 							   <tr>
 								<td>&nbsp;</td>
-								<td align="right">MySQL Port Number : </td>
+								<td align="right">{$MOD.LBL_MYSQL_PORT}</td>
 								<td><input type="text" name="alter_old_port_no" class="importBox" value="{$ALTER_OLD_PORT_NO}" /></td>
 							   </tr>
 							   <tr>
 								<td>&nbsp;</td>
-								<td align="right">MySql User Name : </td>
+								<td align="right">{$MOD.LBL_MYSQL_USER_NAME}</td>
 								<td><input type="text" name="alter_old_mysql_username" class="importBox" value="{$ALTER_OLD_MYSQL_USERNAME}" /></td>
 							   </tr>
 							   <tr>
 								<td>&nbsp;</td>
-								<td align="right">MySql Password : </td>
+								<td align="right">{$MOD.LBL_MYSQL_PASSWORD}</td>
 								<td><input type="text" name="alter_old_mysql_password" class="importBox" value="{$ALTER_OLD_MYSQL_PASSWORD}" /></td>
 							   </tr>
 							   <tr>
 								<td>&nbsp;</td>
-								<td align="right">Database Name : </td>
+								<td align="right">{$MOD.LBL_DB_NAME}</td>
 								<td><input type="text" name="alter_old_dbname" class="importBox" value="{$ALTER_OLD_DBNAME}" /></td>
 							   </tr>
 							   <tr><td colspan="3" height="10"></td></tr>
 							   <tr bgcolor="#FFFFFF">
-								<td align="right" valign="top"><b>Note: </b></td>
+								<td align="right" valign="top"><b>{$MOD.LBL_NOTE_TITLE}</b></td>
 								<td width="90%" colspan="2">
 
-<font color="red">Please do not give the 4.2.3 Database details. This option will alter the given database directly.</font>
-<br>It is strongly recommended that to do the following.
-<br>1. Take a dump of your 4.2.3 database
-<br>2. Create new database (Better is to create a database in the server where your vtiger 5.0 Database is running.)
-<br>3. Apply this 4.2.3 dump to this new database.
-<br>Now give this new database access details. This migration will modify this Database to fit with the 5.0 Schema.
-Then you can give this Database name in config.inc.php file to use this Database ie., $dbconfig['db_name'] = 'new db name';
-
+									{$MOD.LBL_RADIO_BUTTON3_PROCESS}
 								</td>
 							   </tr>
 
@@ -221,12 +209,12 @@ Then you can give this Database name in config.inc.php file to use this Database
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 							   <tr bgcolor="#FFFFFF">
 								<td colspan="2">
-									<span class="genHeaderGray">Step 3 : </span>
-									<span class="genHeaderSmall">Enter MySQL Server Path</span><br>MySQL path in the server like <b>/home/5beta/vtigerCRM5_beta/mysql/bin</b> or <b>c:\Program Files\mysql\bin</b><br /><br />
+									<span class="genHeaderGray">{$MOD.LBL_STEP} 3 : </span>
+									<span class="genHeaderSmall">{$MOD.LBL_ENTER_MYSQL_SERVER_PATH}</span><br>{$MOD.LBL_SERVER_PATH_DESC}<br /><br />
 								</td>
 							   </tr>
 							   <tr>
-								<td align="right" width="30%">MySQL Server Path : </td>
+								<td align="right" width="30%">{$MOD.LBL_MYSQL_SERVER_PATH}</td>
 								<td width="70%">
 									<input type="text" name="server_mysql_path" class="txtBox" value="{$SERVER_MYSQL_PATH}" />
 								</td>
@@ -240,8 +228,8 @@ Then you can give this Database name in config.inc.php file to use this Database
 				   {/if}
 				   <tr>
 					<td colspan="2" style="padding:10px;" align="center">
-						<input type="submit" name="migrate" value="  Migrate  "  class="classBtn" onclick="return validate_migration(Migration);"/>
-						&nbsp;<input type="submit" name="cancel" value=" &nbsp;Cancel&nbsp; "  class="classBtn" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
+						<input type="submit" name="migrate" value="  {$MOD.LBL_MIGRATE_BUTTON}  "  class="classBtn" onclick="return validate_migration(Migration);"/>
+						&nbsp;<input type="submit" name="cancel" value=" &nbsp;{$MOD.LBL_CANCEL_BUTTON}&nbsp; "  class="classBtn" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
  					</td>
 				   </tr>
 				</table>

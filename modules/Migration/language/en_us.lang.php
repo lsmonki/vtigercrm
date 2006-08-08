@@ -38,6 +38,44 @@ $mod_strings = Array(
 'LBL_SOURCE_MYSQL_PASSWORD'=>'Source MySql Password :',
 'LBL_SOURCE_DB_NAME'=>'Source Database Name :',
 'LBL_MIGRATE'=>'Migrate to Current Version',
+//Added after 5 Beta 
+'LBL_UPGRADE_VTIGER'=>'Upgrade vtiger CRM Database',
+'LBL_UPGRADE_FROM_VTIGER_423'=>'Upgrade database from vtiger CRM 4.2.3 to 5.0.0',
+'LBL_SETTINGS'=>'Settings',
+'LBL_STEP'=>'Step',
+'LBL_SELECT_SOURCE'=>'Select Source',
+'LBL_STEP1_DESC'=>'To Start database migration, you must specify the format in which the old data is available',
+'LBL_RADIO_BUTTON1_TEXT'=>'I have access to vtiger CRM live database system',
+'LBL_RADIO_BUTTON1_DESC'=>'This option requires you to have the host machine\'s ( where the DB is stored ) address and DB access  details. Both local and remote systems are supported in this method. Refer documentation for Help.',
+'LBL_RADIO_BUTTON2_TEXT'=>'I have access to vtiger CRM archived database dump',
+'LBL_RADIO_BUTTON2_DESC'=>'This option requires database dump available locally in the same machine in which you are upgrading. You cannot access data dump from a different machine (remote database server). Refer documentation for Help.',
+'LBL_RADIO_BUTTON3_TEXT'=>'I have a new database with 4.2.3 Data',
+'LBL_RADIO_BUTTON3_DESC'=>'This option requires vtiger CRM 4.2.3 database system details, including database server ID, user name, and password. You cannot access data dump from a different machine (remote database server).',
+
+'LBL_HOST_DB_ACCESS_DETAILS'=>'Host Database Access Details',
+'LBL_MYSQL_HOST_NAME_IP'=>'MySQL Host Name or IP Address : ',
+'LBL_MYSQL_PORT'=>'MySQL Port Number : ',
+'LBL_MYSQL_USER_NAME'=>'MySql User Name : ',
+'LBL_MYSQL_PASSWORD'=>'MySql Password : ',
+'LBL_DB_NAME'=>'Database Name : ',
+
+'LBL_LOCATE_DB_DUMP_FILE'=>'Locate Database Dump File',
+'LBL_DUMP_FILE_LOCATION'=>'Dump File Location : ',
+
+'LBL_RADIO_BUTTON3_PROCESS'=>'<font color="red">Please do not specify the 4.2.3 database details. This option will alter the given database directly.</font>
+<br>It is strongly recommended that to do the following.
+<br>1. Take a dump of your 4.2.3 database
+<br>2. Create new database (Better is to create a database in the server where your vtiger 5.0 Database is running.)
+<br>3. Apply this 4.2.3 dump to this new database.
+<br>Now give this new database access details. This migration will modify this Database to fit with the 5.0 Schema.
+Then you can give this Database name in config.inc.php file to use this Database ie., $dbconfig[\'db_name\'] = \'new db name\';',
+
+'LBL_ENTER_MYSQL_SERVER_PATH'=>'Enter MySQL Server Path',
+'LBL_SERVER_PATH_DESC'=>'MySQL path in the server like <b>/home/5beta/vtigerCRM5_beta/mysql/bin</b> or <b>c:\Program Files\mysql\bin</b>',
+'LBL_MYSQL_SERVER_PATH'=>'MySQL Server Path : ',
+'LBL_MIGRATE_BUTTON'=>'Migrate',
+'LBL_CANCEL_BUTTON'=>'Cancel',
+
 
 );
 
