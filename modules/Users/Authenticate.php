@@ -23,10 +23,9 @@
 require_once('modules/Users/User.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
-
+require_once('user_privileges/audit_trail.php');
 
 global $mod_strings;
-
 
 $focus = new User();
 
@@ -40,13 +39,8 @@ if($focus->is_authenticated())
 {
 
 	//Inserting entries for audit trail during login
-
-	$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
-
-	$result = $adb->query($qry);
-	$server = $adb->query_result($result,0,'server');
 	
-	if($server == 'enabled')
+	if($audit_trail == 'true')
 	{
 		if($record == '')
 			$auditrecord = '';						

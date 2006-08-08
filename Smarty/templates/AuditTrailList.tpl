@@ -46,8 +46,10 @@
 				
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 				<tr>
-				<td class="big" height="30px;"><strong>{$MOD.LBL_AUDIT_TRAIL}</strong></td>
-				<td class="small" align="left">&nbsp;<span id="audit_info" class="crmButton small cancel" style="display:none;"></span></td>
+				<td class="big" height="40px;" width="70%"><strong>{$MOD.LBL_AUDIT_TRAIL}</strong></td>
+				<td class="small" align="center" width="30%">&nbsp;
+					<span id="audit_info" class="crmButton small cancel" style="display:none;"></span>
+				</td>
 				</tr>
 				</table>
 			
@@ -147,7 +149,7 @@ function showAuditTrail()
 {
 	
 	var userid = $('user_list').options[$('user_list').selectedIndex].value;
-	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=650,height=800,resizable=0,scrollbars=1,left=100");
+	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=645,height=750,resizable=0,scrollbars=1,left=100");
 	
 
 }

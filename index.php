@@ -372,12 +372,9 @@ if($use_current_login)
 
 	//auditing
 
-	$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
-
-	$result = $adb->query($qry);
-	$server = $adb->query_result($result,0,'server');
+	require_once('user_privileges/audit_trail.php');
 	
-	if($server == 'enabled')
+	if($audit_trail == 'true')
 	{
 		if($record == '')
 			$auditrecord = '';						
@@ -391,7 +388,7 @@ if($use_current_login)
 			$adb->query($query);
 		}	
 	}	
-	
+
 	$log->debug('Current user is: '.$current_user->user_name);
 }
 

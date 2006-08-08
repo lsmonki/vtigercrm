@@ -9,23 +9,36 @@
   *
  ********************************************************************************/
 
-global $adb;
-if(isset($_REQUEST['audit_trail']) && $_REQUEST['audit_trail'] != '')
+global $root_directory;
+$filename = $root_directory.'user_privileges/audit_trail.php';
+
+$readhandle = @fopen($filename, "r+");
+
+if($readhandle)
 {
-	$qry ="select * from vtiger_systems where server_type = 'audit_trail'";
-	$result = $adb->query($qry);
-	$noofrows = $adb->num_rows($result);
-	
-	if ($noofrows == 0)	
+	$buffer = '';
+	$new_buffer = '';
+	while(!feof($readhandle))
 	{
-		$qry1 = "Insert into vtiger_systems values (".$adb->getUniqueID('vtiger_systems')." , '".$_REQUEST[audit_trail]."', '', '', '', 'audit_trail', '')";
-		$qry1_result = $adb->query($qry1);
+		$buffer = fgets($readhandle, 5200);
+		list($starter, $tmp) = explode(" = ", $buffer);
+
+		if($starter == '$audit_trail' && stristr($tmp,'false'))
+		{
+			$new_buffer .= "\$audit_trail = 'true';\n";
+		}
+		elseif($starter == '$audit_trail' && stristr($tmp,'true'))
+		{
+			$new_buffer .= "\$audit_trail = 'false';\n";
+		}
+		else
+			$new_buffer .= $buffer;
 	}
-	else
-	{
-		$qry2 = "Update vtiger_systems set server = '".$_REQUEST[audit_trail]."' where server_type = 'audit_trail'";
-		$qry2_result = $adb->query($qry2);
-	}	
- 
+	fclose($readhandle);
 }
- ?>
+
+$handle = fopen($filename, "w");
+fputs($handle, $new_buffer);
+fclose($handle);
+
+?>

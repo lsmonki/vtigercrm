@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require_once('include/utils/utils.php');
+require_once('user_privileges/audit_trail.php');
 require_once('Smarty_setup.php');
 global $app_strings;
 global $mod_strings;
@@ -26,9 +27,11 @@ $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("USERLIST",getUserslist());
-$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
-$result = $adb->query($qry);
-$server = $adb->query_result($result,0,'server');
+
+if($audit_trail == 'true')
+	$server = 'enabled';
+else
+	$server = 'disabled';
 
 $smarty->assign("AuditStatus", $server);
 
