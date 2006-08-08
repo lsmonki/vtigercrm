@@ -3085,6 +3085,7 @@ a.customMnuSelected{
 	padding:0px;
 	text-align:left;
 	overflow-x:hidden;
+	overflow-y:hidden;
 	background-color:#DADADA;
 	opacity:.9;
 }
