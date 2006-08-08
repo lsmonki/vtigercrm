@@ -23,7 +23,7 @@
 	<td class="listTableRow small">{$smarty.foreach.notifyfor.iteration}</td>
 	<td class="listTableRow small">{$elements.notificationname}</td>
 	<td class="listTableRow small">{$elements.label}</td>
-	<td class="listTableRow small" align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
+	<td class="listTableRow small" align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif" title="{$APP.LBL_EDIT}"></td>
 	</tr>
 	{/foreach}
 	</tbody>

@@ -27,7 +27,7 @@
 	{else}
 	<td class="listTableRow small inactive">{$elements.active}</td>
 	{/if}
-	<td class="listTableRow small" onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif" title="edit"></td>
+	<td class="listTableRow small" onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif" title="{$APP.LBL_EDIT}"></td>
 	</tr>
 	{/foreach}
 	</table>
