@@ -121,7 +121,7 @@ function massDelete()
 						<td class="listTableRow small" valign=top>
 							<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" ><b>{$template.templatename}</b></a>
 						</td>
-						<td class="listTableRow small" valign=top>{$template.description}</td>
+						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
 					        <td class="listTableRow small" valign=top>
 							<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">{$UMOD.LNK_SAMPLE_EMAIL}</a>
 						</td>
