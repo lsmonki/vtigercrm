@@ -137,37 +137,24 @@ class ImportOpportunity extends Potential {
 
 		// if user is defining the vtiger_account id to be associated with this contact..
 		$acc_name = trim(addslashes($acc_name));
-		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
+
+		//Modified the query to get the available account only ie., which is not deleted
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
 
                 $this->log->info($query);
 
-                $result = $adb->query($query)	or die("Error selecting sugarbean: ".mysql_error());
+                $result = $adb->query($query);
 
                 $row = $this->db->fetchByAssoc($result, -1, false);
 
-		$adb->println("fetched vtiger_account");
+		$adb->println("fetched account");
 		$adb->println($row);
 
 		// we found a row with that id
                 if (isset($row['accountid']) && $row['accountid'] != -1)
                 {
-                        // if it exists but was deleted, just remove it entirely
-                        if ( isset($row['deleted']) && $row['deleted'] == 1)
-                        {
-				$adb->println("row exists - deleting");
-                                $query2 = "delete from vtiger_crmentity WHERE crmid='". $row['accountid']."'";
-
-                                $this->log->info($query2);
-
-                                $result2 = $adb->query($query2)	or die("Error deleting existing sugarbean: ".mysql_error());
-
-                        }
-			// else just use this id to link the contact to the vtiger_account
-                        else
-                        {				
-                                $focus->id = $row['accountid'];
-				$adb->println("row exists - using same id=".$focus->id);
-                        }
+			$focus->id = $row['accountid'];
+			$adb->println("Account row exists - using same id=".$focus->id);
                 }
 
 		// if we didnt find the vtiger_account, so create it
