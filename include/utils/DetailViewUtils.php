@@ -774,6 +774,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] =$mod_strings[$fieldlabel];
 		$cur_date_val = $col_fields[$fieldname];
+		if($col_fields['time_end']!='' && ($tabid == 9 || $tabid == 16) && $uitype == 23)
+		{
+			$end_time = $col_fields['time_end'];
+		}
 		if($cur_date_val == '0000-00-00')
 		{
 			$display_val = '';	
@@ -782,7 +786,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$display_val = getDisplayDate($cur_date_val);
 		}
-		$label_fld[] = $display_val;
+		$label_fld[] = $display_val.'&nbsp;'.$end_time;
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{

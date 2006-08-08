@@ -130,7 +130,7 @@ function getListViewEntries_js(module,url)
         	'index.php',
                 {queue: {position: 'end', scope: 'command'},
                 	method: 'post',
-                        postBody:"module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url+urlstring,
+                        postBody:"module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url+urlstring,
 			onComplete: function(response) {
                         	$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');

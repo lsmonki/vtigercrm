@@ -16,6 +16,7 @@ global $log;
 $cvid = (int) $_REQUEST["record"];
 $cvmodule = $_REQUEST["cvmodule"];
 $parenttab = $_REQUEST["parenttab"];
+$return_action = $_REQUEST["return_action"];
 if($cvmodule != "")
 {
 	$viewname = $_REQUEST["viewName"];
@@ -230,5 +231,5 @@ if($cvmodule != "")
 	}
 }
 
-header("Location: index.php?action=index&parenttab=$parenttab&module=$cvmodule&viewname=$cvid");
+header("Location: index.php?action=$return_action&parenttab=$parenttab&module=$cvmodule&viewname=$cvid");
 ?>

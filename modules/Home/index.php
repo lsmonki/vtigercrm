@@ -63,10 +63,10 @@ foreach ( explode(",",$home_section_order) as $section )
 	switch( $section )
 	{
 		case 'OLV':
-	if(isPermitted('Activities','index') == "yes")
+	if(isPermitted('Calendar','index') == "yes")
 	{
 		$activities = Array();
-                include("modules/Activities/OpenListView.php") ;
+                include("modules/Calendar/OpenListView.php") ;
                 $activities[] = getPendingActivities(0);
                 $activities[] = getPendingActivities(1);
 	}
@@ -99,7 +99,7 @@ foreach ( explode(",",$home_section_order) as $section )
             break;
 
 	case 'GRT':
-	if(isPermitted('Activities','index') == "yes")
+	if(isPermitted('Calendar','index') == "yes")
 	{
 		$home_values['Activities']=getGroupTaskLists();	   
 	}
@@ -245,7 +245,7 @@ function getGroupTaskLists()
 			//Get the leads assigned to group
 			$query = "select vtiger_leaddetails.leadid as id,vtiger_leaddetails.lastname as name,vtiger_leadgrouprelation.groupname as groupname, 'Leads     ' as Type from vtiger_leaddetails inner join vtiger_leadgrouprelation on vtiger_leaddetails.leadid=vtiger_leadgrouprelation.leadid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid inner join vtiger_groups on vtiger_leadgrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0  and vtiger_leadgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 		}
-		if(isPermitted('Activities','index') == "yes")
+		if(isPermitted('Calendar','index') == "yes")
         	{
 			if($query !='')
 			$query .= " union all ";
@@ -286,7 +286,7 @@ function getGroupTaskLists()
 					$list = '<a href=index.php?module=HelpDesk';
 					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["name"].'</a>';
 				}
-				elseif($row["type"] == "Activities")
+				elseif($row["type"] == "Calendar")
 				{
 					$acti_type = getActivityType($row["id"]);
 					$list = '<a href=index.php?module='.$row["type"];

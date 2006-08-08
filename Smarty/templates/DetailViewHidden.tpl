@@ -174,8 +174,8 @@
 	{if $MODULE eq 'SalesOrder'}
         	<input type="hidden" name="convertmode">
 	{/if}
-{elseif $MODULE eq 'Activities'}
-	<input type="hidden" name="module" value="Activities">
+{elseif $MODULE eq 'Calendar'}
+	<input type="hidden" name="module" value="Calendar">
         <input type="hidden" name="record" value="{$ID}">
         <input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
         <input type="hidden" name="isDuplicate" value=false>

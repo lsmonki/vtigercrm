@@ -183,7 +183,7 @@ class Campaign extends CRMEntity {
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 
-		require_once('modules/Activities/Activity.php');
+		require_once('modules/Calendar/Activity.php');
 
 		$focus = new Activity();
 
@@ -222,7 +222,7 @@ class Campaign extends CRMEntity {
 				OR activitytype = 'Call'
 				OR activitytype = 'Meeting')";
 		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Campaigns','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('Campaigns','Calendar',$focus,$query,$button,$returnset);
 	}
 
 }

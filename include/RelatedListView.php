@@ -355,15 +355,15 @@ function getHistory($parentmodule,$query,$id)
 
 	//Appending the security parameter
 	global $current_user;
-	$rel_tab_id = getTabid("Activities");
+	$rel_tab_id = getTabid("Calendar");
 
 	global $current_user;
         require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-        $tab_id=getTabid('Activities');
+        $tab_id=getTabid('Calendar');
        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
        {
-       		$sec_parameter=getListViewSecurityParameter('Activities');
+       		$sec_parameter=getListViewSecurityParameter('Calendar');
                 $query .= ' '.$sec_parameter;
 
         }
@@ -468,7 +468,7 @@ function getHistory($parentmodule,$query,$id)
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td valign="top" colspan="3" width="30%" height="21" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 30%, inserted colspan="3" valign="top" class="visibleDescriptionLink"
-			$activity = '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
+			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
 			$list .= '</td>';
 	
@@ -486,9 +486,9 @@ function getHistory($parentmodule,$query,$id)
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td valign="top" width="80" height="21" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 80, inserted valign="top" noWrap
 			// Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: This if-statement replaces the line above
-			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
+			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
 			{
-				$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
+				$list .= '<a href="index.php?module=Calendar&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
 			
 			}
 			$list .= '</td>';
@@ -498,7 +498,7 @@ function getHistory($parentmodule,$query,$id)
 			$list .= '</tr><tr class="'.$trowclass.'">';
 			// end: Armando Lüscher 26.09.2005 -> §visibleDescription 
 
-			$parentname = getRelatedTo('Activities',$result,$i-1);
+			$parentname = getRelatedTo('Calendar',$result,$i-1);
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			
@@ -547,9 +547,9 @@ function getHistory($parentmodule,$query,$id)
 			
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td valign="top" width="80" style="padding:0px 3px 0px 3px;">';
-			if(isPermitted("Activities",2,$row["activityid"]) == 'yes')
+			if(isPermitted("Calendar",2,$row["activityid"]) == 'yes')
 			{
-				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+				$list .= '<a href="index.php?module=Calendar&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
 			}
 			$list .= '</td>';
 			

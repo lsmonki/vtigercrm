@@ -15,10 +15,10 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
-
 $idlist = $_REQUEST['idlist'];
 $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
+$return_action = $_REQUEST['return_action'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
 array_filter($storearray);
@@ -63,10 +63,10 @@ if($returnmodule == 'Emails')
 	}
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete&file=ListView&errormsg=".$errormsg);
 }
-elseif($returnmodule == 'Calendar')
+elseif($return_action == 'ActivityAjax')
 {
 	$subtab = $_REQUEST['subtab'];
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab);
+	header("Location: index.php?module=".$returnmodule."&action=".$return_action."&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab);
 }
 			
 elseif($returnmodule!='Faq')

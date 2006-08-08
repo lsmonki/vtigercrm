@@ -18,6 +18,7 @@ $leadstatusval = $_REQUEST['leadval'];
 $idval=$_REQUEST['user_id'];
 $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['return_module'];
+$return_action = $_REQUEST['return_action'];
 global $current_user;
 global $adb;
 $storearray = explode(";",trim($idlist,';'));
@@ -72,7 +73,7 @@ if(count($ids_list) > 0)
         $errormsg = '';
 }
 
-if($return_module == 'Calendar')
+if($return_action == 'ActivityAjax')
 {
 	$view       = $_REQUEST['view'];
 	$day        = $_REQUEST['day'];
@@ -81,7 +82,7 @@ if($return_module == 'Calendar')
 	$type       = $_REQUEST['type'];
 	$viewOption = $_REQUEST['viewOption'];
 	$subtab     = $_REQUEST['subtab'];
-	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
+	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
 }
 else
 {

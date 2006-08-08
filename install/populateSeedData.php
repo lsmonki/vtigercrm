@@ -25,7 +25,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('include/language/en_us.lang.php');
@@ -1028,11 +1028,17 @@ for($i=0;$i<6;$i++)
 
 	$start_time_hr=rand(00,23);
 	$start_time_min=rand(00,59);
+	$end_time_hr=rand(00,23);
+	$end_time_min=rand(00,59);
 	if($start_time_hr<10)
 		$start_time_hr="0".$start_time_hr;
 	if($start_time_min<10)
 		$start_time_min="0".$start_time_min;
-
+	if($end_time_hr<10)
+		$end_time_hr="0".$end_time_hr;
+	if($end_time_min<10)
+		$end_time_min="0".$end_time_min;
+	$end_time=$end_time_hr.":".$end_time_min;
 	$start_time=$start_time_hr.":".$start_time_min;
 	if($i<2)
 	{
@@ -1055,6 +1061,7 @@ for($i=0;$i<6;$i++)
 		$event->column_fields["duration_hours"]	= rand(0,3);	
 		$event->column_fields["duration_minutes"]= rand(0,59);	
 		$event->column_fields["eventstatus"]	= "Planned";	
+		$event->column_fields["time_end"]     = $end_time;
 	}
 	$event->column_fields["date_start"]	= $rand_date;	
 	$event->column_fields["time_start"]	= $start_time;	
@@ -1079,7 +1086,7 @@ for($i=0;$i<6;$i++)
 		$event->column_fields["activitytype"]	= "Call";	
 	}
 	$event->column_fields["assigned_user_id"] = $assigned_user_id;
-	$event->save("Activities");
+	$event->save("Calendar");
         $event_ids[] = $event->id;
 
 }

@@ -164,7 +164,7 @@ class Quote extends CRMEntity {
 		global $log;
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Activities/Activity.php');
+		require_once('modules/Calendar/Activity.php');
 	        $focus = new Activity();
 
 		$button = '';
@@ -173,7 +173,7 @@ class Quote extends CRMEntity {
 
 		$query = "SELECT vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus !='' && vtiger_activity.eventstatus = 'Planned')";
 		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Quotes','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('Quotes','Calendar',$focus,$query,$button,$returnset);
 	}
 
 	/**	function used to get the the activity history related to the quote

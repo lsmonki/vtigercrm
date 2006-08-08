@@ -36,7 +36,7 @@ else
 
 if($fld_module == 'Events')
 
-	$temp_module_strings = return_module_language($current_language, 'Activities');
+	$temp_module_strings = return_module_language($current_language, 'Calendar');
 else
 	$temp_module_strings = return_module_language($current_language, $fld_module);
 

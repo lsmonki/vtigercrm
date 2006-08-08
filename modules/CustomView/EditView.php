@@ -140,7 +140,12 @@ else
 }
 
 $smarty->assign("RETURN_MODULE", $cv_module);
-$smarty->assign("RETURN_ACTION", "index");
+if($cv_module == "Calendar")
+        $return_action = "ListView";
+else
+        $return_action = "index";
+	
+$smarty->assign("RETURN_ACTION", $return_action);
 
 $smarty->display("CustomView.tpl");
 

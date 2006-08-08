@@ -420,7 +420,7 @@ class CRMEntity
 	}
 	if($module == 'Events')
 	{
-		$module = 'Activities';
+		$module = 'Calendar';
 	}
 	if($this->mode == 'edit')
 	{
@@ -857,7 +857,7 @@ class CRMEntity
 				  {
 					  updateCampaignGroupRelation($this->id,$groupname);
 				  }
-				  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
+				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
 				  {
 					  if($table_name == 'vtiger_activity')
 					  {
@@ -910,7 +910,7 @@ class CRMEntity
 				  {
 					  updateCampaignGroupRelation($this->id,$groupname);
 				  }
-				  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
+				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
 				  {
 					  if($table_name == 'vtiger_activity')
 					  {

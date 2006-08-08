@@ -27,7 +27,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 
-$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Emails','Activities','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns');
+$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Emails','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns');
 $allfields=Array();
 foreach($field_module as $fld_module)
 {

@@ -26,7 +26,7 @@ require_once('modules/Users/User.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Users/Forms.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Activities/OpenListView.php');
+require_once('modules/Calendar/OpenListView.php');
 require_once('modules/Leads/ListViewTop.php');
 
 global $app_strings;
