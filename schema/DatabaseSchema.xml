@@ -874,6 +874,7 @@
 		</field>
 		<field name="due_date" type="D" />
 		<field name="time_start" type="C" size="50" />
+		<field name="time_end" type="C" size="50" />
 		<field name="sendnotification" type="C" size="3">
 			<notnull />
 			<default value="0"/>
