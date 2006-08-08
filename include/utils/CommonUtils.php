@@ -123,7 +123,7 @@ function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key
 		// The vtiger_reported bug was only happening with one of the vtiger_users in the drop down.  It was being replaced by none.
 		if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (in_array($option_key, $selected_key)))
 		{
-			$selected_string = 'selected ';
+			$selected_string = 'selected';
 		}
 
 		$html_value = $option_key;
@@ -586,7 +586,7 @@ function getGroupName($id, $module)
 	{
 	       $sql = "select vtiger_campaigngrouprelation.groupname,vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname where vtiger_campaigngrouprelation.campaignid=".$id;
         }
-        elseif($module == 'Activities' || $module == 'Emails' || $module == 'Events')
+        elseif($module == 'Calendar' || $module == 'Emails' || $module == 'Events')
         {
                $sql = "select vtiger_activitygrouprelation.groupname,vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_activitygrouprelation.activityid=".$id;
 	}
@@ -1728,7 +1728,7 @@ function getQuickCreateModules()
 
 	$new_label=Array('Leads'=>'LNK_NEW_LEAD',
 			 'Accounts'=>'LNK_NEW_ACCOUNT',
-			 'Activities'=>'LNK_NEW_TASK',
+			 'Calendar'=>'LNK_NEW_TASK',
 			 'Campaigns'=>'LNK_NEW_CAMPAIGN',
 			 'Emails'=>'LNK_NEW_EMAIL',
 			 'Events'=>'LNK_NEW_EVENT',
@@ -2098,7 +2098,7 @@ function getEntityName($module, $ids_list)
 					return $notes_title;
 					break;
 		
-	  case "Activities"  :  $query = "select subject from vtiger_activity where activityid in (".$list.")";
+	  case "Calendar"  :  $query = "select subject from vtiger_activity where activityid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $activity_subject = array();		    	

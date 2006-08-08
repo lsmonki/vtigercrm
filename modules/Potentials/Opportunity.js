@@ -44,3 +44,8 @@ function set_return_address(potential_id, potential_name, account_id, account_na
         window.opener.document.EditView.ship_pobox.value = ship_pobox;
 }
 
+function set_return_todo(product_id, product_name) {
+        window.opener.document.createTodo.parent_name.value = product_name;
+        window.opener.document.createTodo.parent_id.value = product_id;
+}
+

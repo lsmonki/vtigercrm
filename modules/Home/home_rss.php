@@ -104,7 +104,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$tempresult=$adb->query($tempquery);
 			$HelpDesk_title=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$HelpDesk_title['title'];
-		}else if($mod_notify[$i]['setype']=='Activities')
+		}else if($mod_notify[$i]['setype']=='Calendar')
 		{
 			$tempquery='select subject from vtiger_activity where vtiger_activityid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);

@@ -28,7 +28,7 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/utils/utils.php');
@@ -230,11 +230,11 @@ class Account extends CRMEntity {
 
 		$focus = new Activity();
 		$button = '';
-		if(isPermitted("Activities",1,"") == 'yes')
+		if(isPermitted("Calendar",1,"") == 'yes')
 		{
 
-			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
-			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
+			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
 		}
 		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
@@ -275,7 +275,7 @@ class Account extends CRMEntity {
 				OR (vtiger_activity.eventstatus !=''
 					AND  vtiger_activity.eventstatus != 'Held'))";
 		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('Accounts','Calendar',$focus,$query,$button,$returnset);
 
 	}
 	/**

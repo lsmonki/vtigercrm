@@ -584,7 +584,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				else
 				{
 
-					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
+					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
 						if($status == '')
@@ -633,10 +633,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									$evt_status='&status=Completed';
 								else
 									$evt_status='&eventstatus=Held';
-								if(isPermitted("Activities",'EditView',$activityid) == 'yes')
+								if(isPermitted("Calendar",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?return_module=Calendar&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
@@ -733,7 +733,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$varreturnset = $returnset;
 
 
-		if($module == 'Activities')
+		if($module == 'Calendar')
 		{
 			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 			if($actvity_type == 'Task')
@@ -990,7 +990,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$colname = $value;
         }
 	//added for getting event status in Custom view - Jaguar
-	if($module == 'Activities' && $colname == "status")
+	if($module == 'Calendar' && $colname == "status")
 	{
 		$colname="activitystatus";
 	}
@@ -1474,7 +1474,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val = str_replace("'",'\"',$temp_val);
 
 					$log->debug("Exiting getValue method ...");
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+					if($_REQUEST['maintab'] == 'Calendar')
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_todo("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+					else
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 			}
 			else
@@ -1498,7 +1501,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$value = $contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 					}
 				}
-				elseif($module == "Activities")
+				elseif($module == "Calendar")
 				{
 					$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 					if($actvity_type == "Task")
@@ -1807,7 +1810,7 @@ function getListQuery($module,$where='')
 			$query .= $sec_parameter;
 		}
         }
-	if($module == "Activities")
+	if($module == "Calendar")
         {
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype,
 			vtiger_activity.*,
@@ -2616,7 +2619,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
-	elseif($currentmodule=="Contacts" && $returnmodule == "Activities")
+	elseif($currentmodule=="Contacts" && $returnmodule == "Calendar")
 	{
 		$reltable = 'vtiger_cntactivityrel';
 		$condition = 'WHERE activityid = '.$recordid;
@@ -2630,7 +2633,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = $selectfield = 'leadid';
 		$table = 'vtiger_leaddetails';
 	}
-	elseif($currentmodule=="Users" && $returnmodule == "Activities")
+	elseif($currentmodule=="Users" && $returnmodule == "Calendar")
 	{
 		$reltable = 'vtiger_salesmanactivityrel';
 		$condition = 'WHERE activityid = '.$recordid;;
@@ -2787,6 +2790,7 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,$count)
 {
 	global $adb;
+	$return_action = "index";
 	$edit_link = "index.php?module=$module&action=EditView&record=$entity_id";
 
 	//This is relatedlist listview
@@ -2796,15 +2800,16 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 	}
 	else
 	{
-		if($module == 'Activities')
+		if($module == 'Calendar')
 		{
+			$return_action = "ListView";
 			$actvity_type = $adb->query_result($result,$count,'activitytype');
 			if($actvity_type == 'Task')
 				$edit_link .= '&activity_mode=Task';
 			else
 				$edit_link .= '&activity_mode=Events';
 		}
-		$edit_link .= "&return_module=$module&return_action=index";
+		$edit_link .= "&return_module=$module&return_action=$return_action";
 	}
 
 	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
@@ -2827,6 +2832,11 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	$current_module = $_REQUEST['module'];
 	$viewname = $_SESSION['lvs'][$current_module]['viewname'];
 
+	if($module == "Calendar")
+		$return_action = "ListView";
+	else
+		$return_action = "index";
+
 	//This is added to avoid the del link in Product related list for the following modules
 	$avoid_del_links = Array("PurchaseOrder","SalesOrder","Quotes","Invoice");
 
@@ -2844,7 +2854,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	}
 	else
 	{
-		$del_link .= "&return_module=$module&return_action=index";
+		$del_link .= "&return_module=$module&return_action=$return_action";
 	}
 
 	$del_link .= "&parenttab=".$_REQUEST["parenttab"]."&return_viewname=".$viewname;

@@ -34,14 +34,14 @@ $adv_filter_options = array("e"=>"equals",
 			   );
 
 $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products',
-			'HelpDesk','Quotes','PurchaseOrder','Invoice','Activities','SalesOrder','Campaigns'
+			'HelpDesk','Quotes','PurchaseOrder','Invoice','Calendar','SalesOrder','Campaigns'
 		       );
 
 $related_modules = Array('Leads'=>Array(),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','PurchaseOrder'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
-			 'Activities'=>Array('Contacts'),
+			 'Calendar'=>Array('Contacts'),
 			 'Products'=>Array('Accounts','Contacts'),
 			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
@@ -110,7 +110,7 @@ class Reports extends CRMEntity{
 				"Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
 				"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
-				"Activities"=>Array("Information"=>19,"Description"=>20),
+				"Calendar"=>Array("Information"=>19,"Description"=>20),
  		                "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
 				"Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
 				"Notes"=>Array("Information"=>17,"Description"=>18),

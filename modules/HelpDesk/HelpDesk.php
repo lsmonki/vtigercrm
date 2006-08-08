@@ -123,7 +123,7 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 		global $app_strings;
-		require_once('modules/Activities/Activity.php');
+		require_once('modules/Calendar/Activity.php');
 		$focus = new Activity();
 
 		$button = '';
@@ -133,7 +133,7 @@ class HelpDesk extends CRMEntity {
 		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held')";
 		$log->debug("Exiting get_activities method ...");
 		
-		return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('HelpDesk','Calendar',$focus,$query,$button,$returnset);
 	}
 
 	/**     Function to get the Ticket History information as in array format

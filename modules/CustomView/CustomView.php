@@ -40,7 +40,7 @@ class CustomView extends CRMEntity{
 				 "Contacts"=>Array("Information"=>4,"Address"=>7,"Description"=>8,"Custom Information"=>5),
 				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
-				 "Activities"=>Array("Information"=>19,"Description"=>20),
+				 "Calendar"=>Array("Information"=>19,"Description"=>20),
  		                 "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
 				 "Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
 				 "Vendors"=>Array("Information"=>44,"Address"=>46,"Description"=>47,"Custom Information"=>45),
@@ -231,9 +231,9 @@ class CustomView extends CRMEntity{
 			$module_columnlist['vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I'] = 'Ticket ID';
 		}
 		//Added to include vtiger_activity type in vtiger_activity vtiger_customview list
-		if($module == 'Activities' && $block == 19)
+		if($module == 'Calendar' && $block == 19)
 		{
-			$module_columnlist['vtiger_activity:activitytype:activitytype:Activities_Activity_Type:C'] = 'Activity Type';
+			$module_columnlist['vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C'] = 'Activity Type';
 		}
 
 		for($i=0; $i<$noofrows; $i++)
@@ -252,8 +252,8 @@ class CustomView extends CRMEntity{
 			if($fieldlabel == "Start Date & Time")
 			{
 				$fieldlabel = "Start Date";
-				if($module == 'Activities' && $block == 19)
-					$module_columnlist['vtiger_activity:time_start::Activities_Start_Time:I'] = 'Start Time';
+				if($module == 'Calendar' && $block == 19)
+					$module_columnlist['vtiger_activity:time_start::Calendar_Start_Time:I'] = 'Start Time';
 
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
@@ -762,7 +762,7 @@ class CustomView extends CRMEntity{
 					
 					//Added For getting status for Activities -Jaguar
 					$sqllist_column = $list[0].".".$list[1];
-					if($this->customviewmodule == "Activities")
+					if($this->customviewmodule == "Calendar")
 					{
 						if($list[1] == "status")
 						{
@@ -865,7 +865,7 @@ class CustomView extends CRMEntity{
 						}else
 						{
 							//Added for getting vtiger_activity Status -Jaguar
-							if($this->customviewmodule == "Activities" && $columns[1] == "status")
+							if($this->customviewmodule == "Calendar" && $columns[1] == "status")
 							{
 								$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]));
 							}
@@ -1413,7 +1413,7 @@ class CustomView extends CRMEntity{
 		if($viewid != "" && $listquery != "")
 		{
 			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
-			if($module == "Activities" || $module == "Emails")
+			if($module == "Calendar" || $module == "Emails")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_activity.* ".$listviewquery;
 			}else if($module == "Notes")

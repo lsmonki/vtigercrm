@@ -32,4 +32,8 @@ function set_return_formname_specific(formname, product_id, product_name) {
         window.opener.document.EditView1.purchaseorder_name.value = product_name;
         window.opener.document.EditView1.purchaseorder_id.value = product_id;
 }
+function set_return_todo(product_id, product_name) {
+        window.opener.document.createTodo.parent_name.value = product_name;
+        window.opener.document.createTodo.parent_id.value = product_id;
+}
 

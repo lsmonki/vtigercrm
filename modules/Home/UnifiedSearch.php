@@ -51,7 +51,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 				'Contacts'=>'Contact',
 				'Leads'=>'Lead',
 				'Notes'=>'Note',
-				'Activities'=>'Activity',
+				'Calendar'=>'Activity',
 				'Emails'=>'Email',
 				'HelpDesk'=>'HelpDesk',
 				'Products'=>'Product',

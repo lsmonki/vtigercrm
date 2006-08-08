@@ -1365,7 +1365,7 @@ function isPermitted($module,$actionname,$record_id='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$permission = "no";
-	if($module == 'Users' || $module == 'Home' || $module == 'uploads' || $module == 'Calendar')
+	if($module == 'Users' || $module == 'Home' || $module == 'uploads')
 	{
 		//These modules dont have security right now
 		$permission = "yes";
@@ -4365,7 +4365,7 @@ function getListViewSecurityParameter($module)
 		$sec_query .= "and vtiger_crmentity.smownerid=".$current_user->id." "; 
 	
 	}
-	elseif($module == 'Activities')
+	elseif($module == 'Calendar')
 	{
 		$sec_query .= "and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%')";
 
@@ -4483,7 +4483,7 @@ function getListViewSecurityParameter($module)
 
 
 		//Current User Groups
-		if($module == 'Leads' or $module=='HelpDesk' or $module=='Activities')
+		if($module == 'Leads' or $module=='HelpDesk' or $module=='Calendar')
 		{
 			$userGroupsList=getCurrentUserGroupList();
 			if($userGroupsList != '')
@@ -4604,7 +4604,7 @@ function getFieldModuleAccessArray()
                 'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
                 'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
                 'Notes'=>'LBL_NOTE_FIELD_ACCESS',
-                'Activities'=>'LBL_TASK_FIELD_ACCESS',
+                'Calendar'=>'LBL_TASK_FIELD_ACCESS',
                 'Events'=>'LBL_EVENT_FIELD_ACCESS',
                 'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
                 'PriceBooks'=>'LBL_PB_FIELD_ACCESS',

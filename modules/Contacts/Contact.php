@@ -26,7 +26,7 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Activities/Activity.php');
+require_once('modules/Calendar/Activity.php');
 require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
@@ -306,10 +306,10 @@ class Contact extends CRMEntity {
 
 		$button = '';
 
-        if(isPermitted("Activities",1,"") == 'yes')
+        if(isPermitted("Calendar",1,"") == 'yes')
         {
-		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
-		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Contacts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
+		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Contacts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
 		}
 		$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 
@@ -317,7 +317,7 @@ class Contact extends CRMEntity {
 
 		$query = "SELECT vtiger_users.user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,  vtiger_activity.activityid , vtiger_activity.subject, vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date, vtiger_cntactivityrel.contactid, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_recurringevents.recurringtype  from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid = vtiger_contactdetails.contactid inner join vtiger_activity on vtiger_cntactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_cntactivityrel.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname  where vtiger_contactdetails.contactid=".$id." and vtiger_crmentity.deleted = 0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held') ";  //recurring type is added in Query -Jaguar
 		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('Contacts','Calendar',$focus,$query,$button,$returnset);
 
 	}
 	/**

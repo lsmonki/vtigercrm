@@ -241,7 +241,7 @@ class Product extends CRMEntity {
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 	
-		require_once('modules/Activities/Activity.php');
+		require_once('modules/Calendar/Activity.php');
 
         	//if($this->column_fields['contact_id']!=0 && $this->column_fields['contact_id']!='')
         	$focus = new Activity();
@@ -282,7 +282,7 @@ class Product extends CRMEntity {
 				OR vtiger_activitytype = 'Call'
 				OR vtiger_activitytype = 'Meeting')";
 		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
+		return GetRelatedList('Products','Calendar',$focus,$query,$button,$returnset);
 	}
 
 	/**	function used to get the list of quotes which are related to the product
