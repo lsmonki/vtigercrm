@@ -122,7 +122,7 @@ function massDelete()
 						<td class="listTableRow small" valign=top>{$smarty.foreach.mailmerge.iteration}</td>
 						<td class="listTableRow small" valign=top><input type="checkbox" class=small name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall")></td>
 						<td class="listTableRow small" valign=top><b>{$template.filename}</b></a></td>
-						<td class="listTableRow small" valign=top>{$template.description}</td>
+						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
 				        <td class="listTableRow small" valign=top>{$template.module}</td>
 				        <td class="listTableRow small" valign=top><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD}</a></td>
 			          </tr>
