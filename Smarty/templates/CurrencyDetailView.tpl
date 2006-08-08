@@ -66,7 +66,7 @@
                             <td class="small cellText">{$CURRENCY_SYMBOL}</td>
                           </tr>
                           <tr valign="top">
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong></td>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY})</td>
 
                             <td class="small cellText">{$CONVERSION_RATE}</td>
                           </tr>
