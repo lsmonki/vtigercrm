@@ -49,6 +49,12 @@
                                 <tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
                                 {/if}
 
+				{if $smarty.request.action eq 'ListLoginHistory'}
+			       	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+				{else}
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+				{/if}
+
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_STUDIO}</td></tr>
 				{if  $smarty.request.action eq 'CustomFieldList' || $smarty.request.action eq 'LeadCustomFieldMapping'}
 				<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
@@ -150,11 +156,7 @@
 
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
        
- 				{if $smarty.request.action eq 'ListLoginHistory'}
-				        	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
-				{else}
-						<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
-				{/if}
+ 			
 
 				</table>
 			</td>
