@@ -71,8 +71,16 @@ function add_data_to_relatedlist_incal(id,name)
 	var nameval = window.opener.document.EditView.contactlist.value;
 	if(idval != '')
 	{
-		window.opener.document.EditView.contactidlist.value = idval+','+id;
-		window.opener.document.EditView.contactlist.value = nameval+'\n'+name;
+		if(idval.indexOf(id) != -1)
+                {
+                        window.opener.document.EditView.contactidlist.value = idval;
+                        window.opener.document.EditView.contactlist.value = nameval;
+                }
+                else
+                {
+                        window.opener.document.EditView.contactidlist.value = idval+';'+id;
+                        window.opener.document.EditView.contactlist.value = nameval+'\n'+name;
+                }
 	}
 	else
 	{
