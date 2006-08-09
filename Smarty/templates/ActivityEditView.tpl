@@ -197,13 +197,13 @@
 								<table border=0 cellspacing=0 cellpadding=3 width=100%>
 									<tr>
 										<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Invite</a></td>
+										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Invite</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Reminder</a></td>
+										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Reminder</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">Repeat</a></td>
+										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">Repeat</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">Related To</a></td>
+										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">Related To</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 									</tr>
 								</table>
@@ -230,7 +230,11 @@
 													<tr>
 														<td width=40% align=center valign=top>
 														<select name="availableusers" id="availableusers" class=small size=5 multiple style="height:70px;width:100%">
-														<option value=2>standarduser</option>
+														{foreach item=username key=userid from=$USERSLIST}
+														{if $userid != ''}
+														<option value="{$userid}">{$username}</option>
+														{/if}
+														{/foreach}
 														</select>
 														</td>
 														<td width=20% align=center valign=top>
@@ -239,6 +243,11 @@
 														</td>
 														<td width=40% align=center valign=top>
 														<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
+														{foreach item=username key=userid from=$INVITEDUSERS}
+														{if $userid != ''}
+														<option value="{$userid}">{$username}</option>
+                                                                                                                {/if}
+                                                                                                                {/foreach}
 														</select>
 														<div align=left> Selected users will receive an email about the Event.
 														</div>
@@ -299,7 +308,7 @@
 													Send Reminder to :
 												</td>
 												<td >
-													<input type=text name="toemail" class=textbox style="width:90%" value="">
+													<input type=text name="toemail" class=textbox style="width:90%" value="{$USEREMAILID}">
 												</td>
 											</tr>
 										</table>
@@ -420,8 +429,10 @@
 							<tr>
 								<td><b>Contacts :</b></td>
 								<td colspan="2">
-									<input name="contactidlist" id="contactidlist" value="" type="hidden">
-									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
+									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
+									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
+									{$CONTACTSNAME}
+									</textarea>&nbsp;
 									<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
 								</td>
 							</tr>
@@ -432,7 +443,7 @@
 		</table>
 		<!-- Alarm, Repeat, Invite stops-->
 		{else}
-		<input type="hidden" name="status" id="status" value="Planned">
+		<input type="hidden" name="taskstatus" id="taskstatus" value="Planned">
 		<table border="0" cellpadding="5" cellspacing="0" width="90%">
 			<tr>
                         	<td width="20%"><b>{$MOD.LBL_TODO} :</b></td>
@@ -479,9 +490,9 @@
 					<table border="0" cellpadding="3" cellspacing="0" width="100%">
 						<tr>
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-							<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
+							<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
-                                                        <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+                                                        <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
                                                         <td class="dvtTabCache" style="width:100%">
 						</tr>
 
