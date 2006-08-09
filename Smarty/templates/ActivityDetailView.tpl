@@ -159,13 +159,13 @@ function DeleteTag(id)
                          				        	<table border=0 cellspacing=0 cellpadding=3 width=100%>
                              						<tr>
                                         					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					                                        <td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');dispLayer('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
+					                                        <td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');dispLayer('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');dispLayer('addEventAlarmUI');ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
+										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');dispLayer('addEventAlarmUI');ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
+										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRelatedtoUI');ghide('addEventRepeatUI');">{$MOD.LBL_LIST_RELATED_TO}</a></td>
+										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRelatedtoUI');ghide('addEventRepeatUI');">{$MOD.LBL_LIST_RELATED_TO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 									</tr>
 									</table>
@@ -179,7 +179,11 @@ function DeleteTag(id)
 									<table width="100%" cellpadding="5" cellspacing="0" border="0">
 										<tr>
                                                                                         <td width="30%" align=right><b>{$MOD.LBL_USERS} :</b></td>
-                                                                                        <td width="70%" align=left>{$ACTIVITYDATA.assigned_user_id}</td>
+                                                                                        <td width="70%" align=left>
+												{foreach item=username key=userid from=$INVITEDUSERS}
+                                                                                        	        {$username.3}<br>
+                                                                                                {/foreach}
+											</td>
                                                                                 </tr>
 									</table>
 									</DIV>
@@ -225,8 +229,11 @@ function DeleteTag(id)
 											<td width="70%" align=left>{$ACTIVITYDATA.parent_name}</td>
 										</tr>
 										<tr>
-											<td align=right><b>{$MOD.LBL_CONTACT_NAME} :</b></td>	
-											<td align=left>{$ACTIVITYDATA.contactlist}</td>
+											<td width="30%" align=right><b>{$MOD.LBL_CONTACT_NAME} :</b></td>	
+											<td width="70%" align=left>
+											{foreach item=contactname key=cntid from=$CONTACTS}
+	                                                                                {$contactname.0}&nbsp;{$contactname.1}<br>
+                                                                                        {/foreach}
 										</tr>
 									</table>
 									</div>
@@ -267,9 +274,9 @@ function DeleteTag(id)
 									<table border="0" cellpadding="3" cellspacing="0" width="100%">
 									<tr>
 										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-										<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a>
+										<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a>
 										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
-										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
 
 										<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 									</tr>
