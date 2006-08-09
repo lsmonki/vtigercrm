@@ -53,7 +53,7 @@ $tab_id=getTabid($tab_type);
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);
     $focus->id = $_REQUEST['record'];	
-    $focus->name=$focus->column_fields['subject'];		
+    $focus->name=$focus->column_fields['subject'];
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
@@ -121,6 +121,7 @@ if($activity_mode == 'Task')
 	$data['modifiedtime'] = $finaldata['modifiedtime'];
 	$data['createdtime'] = $finaldata['createdtime'];
 	$data['parent_name'] = $finaldata['parent_id'];
+	$data['contact_id'] = $finaldata['contact_id'];
 	if(isset($finaldata['sendnotification']) && $finaldata['sendnotification']!=0)
 		$data['sendnotification'] = 'Yes';
 	else
@@ -208,13 +209,13 @@ elseif($activity_mode == 'Events')
 	{   
 		$data['recurringcheck'] = 'No';
 		$data['repeat_month_str'] = '';
-	}                                              
+	}
+	$related_array = getRelatedLists("Calendar", $focus);
+	$smarty->assign("INVITEDUSERS",$related_array['Users']['entries']);
+	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
+
 
 }
-
-//To get Contact info
-$related_array = getRelatedLists("Calendar", $focus);
-//End
 
 global $theme;
 $theme_path="themes/".$theme."/";
