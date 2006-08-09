@@ -269,6 +269,7 @@ if(isset($action) && isset($module))
 		ereg("^ConvertAsFAQ",$action) ||
 		ereg("^Tickerdetail",$action) ||
 		ereg("^".$module."Ajax",$action) ||
+		ereg("^ActivityAjax",$action) ||
 		ereg("^chat",$action) ||
 		ereg("^vtchat",$action) ||
 		ereg("^updateCalendarSharing",$action) ||
@@ -315,7 +316,7 @@ if(isset($action) && isset($module))
  	         header( "Pragma: no-cache" );        
  	}
 
-        if($module == 'Users' || $module == 'Home' || $module == 'uploads' || $module == 'Calendar')
+        if($module == 'Users' || $module == 'Home' || $module == 'uploads')
         {
           $skipSecurityCheck=true;
         }
@@ -450,7 +451,7 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/Opportunity.php");
 			$focus = new Potential();
 			break;
-		case 'Activities':
+		case 'Calendar':
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
 			break;
@@ -654,8 +655,8 @@ else
 }
 $Ajx_module= $module;
 if($module == 'Events')
-	$Ajx_module = 'Activities';
-if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $Ajx_module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax")
+	$Ajx_module = 'Calendar';
+if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $Ajx_module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax" && $action != "ActivityAjax")
 {
 	// Under the SPL you do not have the right to remove this copyright statement.	
 	$copyrightstatement="<style>
@@ -699,7 +700,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3')
+	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax')
 	
 	{
 		echo $copyrightstatement;
@@ -722,7 +723,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	//	}
 	//	echo "</td></tr></table>\n";
 	}
-	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body"))
+	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body") && ($action != 'ActivityAjax'))
 	{
 	?>
 		<script>
@@ -730,7 +731,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		</script>
 <?php
 	}
-	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") )
+	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") && ($action != "ActivityAjax"))
 		include('themes/'.$theme.'/footer.php');
 }
 ?>
