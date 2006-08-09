@@ -103,7 +103,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 	                if(type == 'meeting')
         	                document.EditView.activitytype[1].checked = true;
 
-			document.EditView.subject.value = '';
 			document.EditView.date_start.value = startdate;
 			document.EditView.due_date.value = enddate;
 			document.EditView.starthr.value = starthr;
@@ -117,7 +116,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		}
 		if(type == 'todo')
 		{
-			document.createTodo.task_subject.value = '';
 			document.createTodo.task_date_start.value = startdate;
 			document.createTodo.starthr.value = starthr;
                         document.createTodo.startmin.value = startmin;
@@ -142,7 +140,7 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 	}
 }
 
-function Taskshow(argg1,type,startdate,starthr,startmin,startfmt,viewOption,subtab)
+function Taskshow(argg1,type,startdate,starthr,startmin,startfmt)
 {
 	var y=document.getElementById(argg1).style;
 	if (y.display=="none")
@@ -319,9 +317,7 @@ function check_form()
         {
 		if(document.EditView.recurringcheck.checked == false)
 		{
-			alert(document.EditView.recurringcheck.checked);
 			document.EditView.recurringtype.value = '--None--';
-			alert(document.EditView.recurringtype.value);
 		}
 		if(document.EditView.record.value != '')
                 {
@@ -989,4 +985,6 @@ function setFieldvalues(opmode,subtab,viewOption)
 	}
 }
 
-
+function doNothing()
+{
+}
