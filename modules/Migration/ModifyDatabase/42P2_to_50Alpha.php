@@ -1479,7 +1479,7 @@ foreach($update_query_array3 as $query)
 }
 
 //Added on 26-06-06 - we cannot add foreign key in type MyISAM, so we have to change the type to InnoDB
-$alter_tables_array = Array("vtiger_groups","vtiger_potential","vtiger_quotes","vtiger_salesorder","vtiger_invoice","vtiger_purchaseorder");
+$alter_tables_array = Array("vtiger_groups","vtiger_potential","vtiger_quotes","vtiger_salesorder","vtiger_invoice","vtiger_purchaseorder","vtiger_products","vtiger_account","vtiger_contactdetails","vtiger_vendor","vtiger_users","vtiger_attachments","vtiger_profile");
 foreach($alter_tables_array as $tablename)
 {
 	Execute("alter table $tablename type=InnoDB");
@@ -1896,6 +1896,14 @@ foreach($alter_query_array18 as $query)
 	Execute($query);
 }
 
+
+//Added on 09-08-2006
+//In the next array we have add constraint for tables purchaseorder, salesorder, quotes and invoice where as the corresponding entity ids should not be 0 they should be NULL. so that this change has been done
+Execute("update vtiger_purchaseorder set contactid=NULL where contactid=0");
+Execute("update vtiger_salesorder set contactid=NULL where contactid=0");
+Execute("update vtiger_quotes set contactid=NULL where contactid=0");
+Execute("update vtiger_quotes set potentialid=NULL where potentialid=0");
+Execute("update vtiger_invoice set salesorderid=NULL where salesorderid=0");
 
 
 //echo "<br><br><b>Database Modifications for Indexing and some missded tables starts here.....</b><br>";
@@ -2593,8 +2601,8 @@ $query_array = Array(
 "ALTER TABLE `vtiger_users2group` ADD KEY `idx_users2group` (`groupid`, `userid`)",
 "ALTER TABLE `vtiger_users2group` ADD KEY `fk_users2group2` (`userid`)",
 "ALTER TABLE `vtiger_customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `vtiger_profile` (`profileid`) ON DELETE CASCADE",
 "ALTER TABLE `vtiger_invoice` ADD CONSTRAINT `fk_Invoice2` FOREIGN KEY (`salesorderid`) REFERENCES `vtiger_salesorder` (`salesorderid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `vtiger_profile` (`profileid`) ON DELETE CASCADE",
 "ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO3` FOREIGN KEY (`contactid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
 "ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2` FOREIGN KEY (`vendorid`) REFERENCES `vtiger_vendor` (`vendorid`) ON DELETE CASCADE",
 "ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2345` FOREIGN KEY (`quoteid`) REFERENCES `vtiger_quotes` (`quoteid`) ON DELETE CASCADE",
@@ -3179,7 +3187,7 @@ Execute("update vtiger_users set homeorder='ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLT
 
 //Removed activities from product related list
 Execute("delete from vtiger_relatedlists where tabid = 14 and related_tabid=9");
-Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("HelpDesk").",".getTabid("Activities").",'get_history',4,'Activity History',0)");
+Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("HelpDesk").",9,'get_history',4,'Activity History',0)");
 
 //Assigned to field for Events made Optional
 Execute("update vtiger_field set typeofdata='V~M' where columnname='smownerid' and tabid=16 and fieldname='assigned_user_id'");
@@ -3506,6 +3514,23 @@ Execute("update vtiger_field set info_type='ADV' where tabid=4 and fieldname='ot
 Execute("CREATE TABLE vtiger_salesmanattachmentsrel ( smid int(19) NOT NULL default '0', attachmentsid int(19) NOT NULL default '0', PRIMARY KEY (smid, attachmentsid), KEY salesmanattachmentsrel_smid_idx (smid), KEY salesmanattachmentsrel_attachmentsid_idx (attachmentsid), CONSTRAINT fk_1_vtiger_salesmanattachmentsrel FOREIGN KEY (smid) REFERENCES vtiger_users (id), CONSTRAINT fk_2_vtiger_salesmanattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments (attachmentsid) ON DELETE CASCADE) ENGINE=InnoDB");
 
 
+Execute("alter table vtiger_activity add column time_end varchar(50) default NULL after time_start");
+
+Execute("delete from vtiger_tab where tabid=17");
+
+Execute("update vtiger_tab set name='Calendar',tablabel='Calendar' where tabid=9");
+
+Execute("insert into vtiger_field values (9,".$conn->getUniqueID("vtiger_field").",'time_end','vtiger_activity', 1,'2','time_end','End  Time',1,0,0,100,6,19,3,'T~O',1,null,'BAS')");
+
+Execute("insert into vtiger_field values (16,".$conn->getUniqueID("vtiger_field").",'time_end','vtiger_activity', 1,'2','time_end','End Time',1,0,0,100,6,41,3,'T~M',1,null,'BAS')");
+
+Execute("delete from vtiger_profile2tab where tabid=17");
+
+Execute("delete from vtiger_org_share_action2tab where tabid=17");
+
+Execute("delete from vtiger_def_org_share where tabid=17");
+
+Execute("delete from vtiger_parenttabrel where tabid=17");
 
 
 
