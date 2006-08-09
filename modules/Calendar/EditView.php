@@ -29,6 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 require_once('modules/Calendar/calendarLayout.php'); 
+require_once("modules/Emails/mail.php");
 include_once 'modules/Calendar/header.php';
 global $app_strings;
 global $mod_strings,$current_user;
@@ -53,14 +54,27 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
-    $focus->name=$focus->column_fields['subject'];		
+    $focus->name=$focus->column_fields['subject'];
+    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
+    $result = $adb->query($sql);
+    $num_rows=$adb->num_rows($result);
+    $invited_users=Array();
+    for($i=0;$i<$num_rows;$i++)
+    {
+	    $userid=$adb->query_result($result,$i,'inviteeid');
+	    $username=$adb->query_result($result,$i,'user_name');
+	    $invited_users[$userid]=$username;
+    }
+    $smarty->assign("INVITEDUSERS",$invited_users);
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-
+$userDetails=getOtherUserName($current_user->id);
+//echo '<pre>';print_r($userDetails);echo '</pre>';
+$to_email = getUserEmailId('id',$current_user->id);
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
@@ -103,7 +117,27 @@ $value['startfmt'] = $time_arr['startfmt'];
 $value['endhr'] = $time_arr['endhour'];
 $value['endmin'] = $time_arr['endmin'];
 $value['endfmt'] = $time_arr['endfmt'];
-//echo '<pre>';print_r($_REQUEST);echo '</pre>';
+$related_array = getRelatedLists("Calendar", $focus);
+$cntlist = $related_array['Contacts']['entries'];
+$cnt_idlist = '';
+$cnt_namelist = '';
+if($cntlist != '')
+{
+	$i = 0;
+	foreach($cntlist as $key=>$value)
+	{
+		if($i != 0)
+		{
+			$cnt_idlist .= ';';
+			$cnt_namelist .= "\n";
+		}
+		$cnt_idlist .= $key;
+		$cnt_namelist .= eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $value[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $value[1]);
+		$i++;
+	}
+}
+$smarty->assign("CONTACTSID",$cnt_idlist);
+$smarty->assign("CONTACTSNAME",$cnt_namelist);
 $smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt']));
 $smarty->assign("ENDHOUR",getTimeCombo($format,'end',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
 $smarty->assign("ACTIVITYDATA",$value);
@@ -116,7 +150,8 @@ $smarty->assign("OP_MODE",$disp_view);
 $smarty->assign("ACTIVITY_MODE",$activity_mode);
 $smarty->assign("ACTIVITY_TYPE",$activitytype);
 $smarty->assign("HOURFORMAT",$format);
-
+$smarty->assign("USERSLIST",$userDetails);
+$smarty->assign("USEREMAILID",$to_email);
 $smarty->assign("MODULE",$currentModule);
 
 global $theme;
@@ -166,10 +201,6 @@ $smarty->assign("ID", $focus->id);
  $tabid = getTabid($tab_type);
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
- //echo '<pre>';print_r($data);echo '</pre>';
- //$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
- //$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
- //$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
