@@ -103,11 +103,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$curr_time = date('H:i');
 			}
 		}
-		if($col_fields['time_end']!='' && $module_name == 'Events' && $uitype == 23)
+		if($module_name == 'Events' && $uitype == 23)
 		{
-			$curr_time = $col_fields['time_end'];
+			if($col_fields['time_end']!='')
+			{
+				$curr_time = $col_fields['time_end'];
+			}
+			else
+			{
+				$curr_time = date('H:i');
+			}
 		}
-
 		$fieldvalue[] = array($disp_value => $curr_time) ;
 		if($uitype == 5 || $uitype == 23)
 		{
