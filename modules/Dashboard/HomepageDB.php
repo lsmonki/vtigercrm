@@ -19,7 +19,7 @@ require_once("modules/Dashboard/Entity_charts.php");
 	//if($is_admin)
 	//	$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
 	//else	
-		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0 and vtiger_crmentity.smownerid=".$current_user->id;
+		$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Calendar','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0 and vtiger_crmentity.smownerid=".$current_user->id;
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
