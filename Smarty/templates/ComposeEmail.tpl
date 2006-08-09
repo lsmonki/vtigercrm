@@ -37,9 +37,9 @@
 <input type="hidden" name="action">
 <input type="hidden" name="popupaction" value="create">
 <input type="hidden" name="hidden_toid">
-<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
+<table class="small mailClient" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
-   <tr>
+   <!-- <tr>
 	<td colspan="3">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		   <tr>
@@ -49,58 +49,71 @@
 		   </tr>
 		</table>	
 	</td>
-   </tr> 
+   </tr> -->
+   
+   <tr>
+	<td colspan=3 >
+	<!-- Email Header -->
+	<table border=0 cellspacing=0 cellpadding=0 width=100% class="mailClientWriteEmailHeader">
+	<tr>
+		<td >Compose E-Mail</td>
+	</tr>
+	</table>
+	
+	
+	</td>
+</tr>
 	{foreach item=row from=$BLOCKS}
 	{foreach item=elements from=$row}
 	{if $elements.2.0 eq 'parent_id'}
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right"><b>{$MOD.LBL_TO}</b></td>
-	<td class="dvtCellLabel" style="padding: 5px;">
+	<td class="mailSubHeader" align="right"><b>{$MOD.LBL_TO}</b></td>
+	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<textarea id="parent_name" readonly cols="70">{$TO_MAIL}</textarea>
+		<input type="text" class="small txtBox"  style="width:98%"  id="parent_name" multiline="true">{$TO_MAIL}</textarea>
 	</td>
-	<td class="dvtCellLabel" style="padding: 5px;" align="left">
+	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
 			{foreach key=labelval item=selectval from=$elements.1.0}
-				<option value="{$labelval}" {$selectval}>{$APP[$labelval]}</option>
+				<option value="{$labelval}" {$selectval}>{$labelval}</option>
 			{/foreach}
 		</select>
 		&nbsp;
-		<span class="lvtCol" style="padding: 3px;">
+		<span  class="mailClientCSSButton">
 		<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-		</span><span class="lvtCol" style="padding: 3px;"><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.hidden_toid.value='';this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+		</span><span class="mailClientCSSButton" ><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.hidden_toid.value='';this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>
    </tr>
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
-	<td class="dvtCellLabel" style="padding: 5px;">
+	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
+	<td class="cellText" style="padding: 5px;">
 		<input name="ccmail" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
 	</td>	
-	<td valign="top" class="dvtCellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
+	<td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
    </tr>
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
-	<td class="dvtCellLabel" style="padding: 5px;">
+	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
+	<td class="cellText" style="padding: 5px;">
 		<input name="bccmail" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
    </tr>
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
+	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
         {if $WEBMAIL eq 'true'}
-                <td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$SUBJECT}" id="{$elements.2.0}" style="width:99%"></td>
+                <td class="cellText" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$SUBJECT}" id="{$elements.2.0}" style="width:99%"></td>
         {else}
-                <td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
+                <td class="cellText" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
         {/if}
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
 
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
-	<td class="dvtCellLabel" style="padding: 5px;">
-		<input name="{$elements.2.0}"  type="file" class="small" value="" size="78"/>
+	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
+	<td class="cellText" style="padding: 5px;">
+		<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>
 		<div id="attach_temp_cont" style="display:none;">
 		<table class="small" width="100% ">
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
@@ -112,7 +125,7 @@
 	</td>
    </tr>
    <tr>
-	<td colspan="3" class="lvtCol" style="padding: 5px;" align="center">
+	<td colspan="3" class="mailSubHeader" style="padding: 5px;" align="center">
 		 <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="crmbutton small edit" onclick="window.open('index.php?module=Users&action=lookupemailtemplates','emailtemplate','top=100,left=200,height=400,width=500,menubar=no,addressbar=no,status=yes')" type="button" name="button" value=" {$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}  ">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="return email_validate(this.form,'save');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL} " >&nbsp;
 		<input name="{$MOD.LBL_SEND}" value=" {$APP.LBL_SEND} " class="crmbutton small save" type="button" onclick="return email_validate(this.form,'send');">&nbsp;
@@ -133,7 +146,7 @@
 	{/foreach}
 
    <tr>
-	<td colspan="3" class="lvtCol" style="padding: 5px;" align="center">
+	<td colspan="3" class="mailSubHeader" style="padding: 5px;" align="center">
 		 <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="crmbutton small edit" onclick="window.open('index.php?module=Users&action=lookupemailtemplates','emailtemplate','top=100,left=200,height=400,width=500,menubar=no,addressbar=no,status=yes')" type="button" name="button" value=" {$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}  ">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="return email_validate(this.form,'save');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL} " >&nbsp;
 		<input name="{$MOD.LBL_SEND}" value=" {$APP.LBL_SEND} " class="crmbutton small save" type="button" onclick="return email_validate(this.form,'send');">&nbsp;

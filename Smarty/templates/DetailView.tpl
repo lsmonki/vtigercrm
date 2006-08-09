@@ -93,7 +93,7 @@ function DeleteTag(id)
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
-<tr><td>&nbsp;</td>
+<tr>
 	<td>
                 <table cellpadding="0" cellspacing="5" border="0">
 			{include file='DetailViewHidden.tpl'}
@@ -107,19 +107,13 @@ function DeleteTag(id)
 	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" valign=top width=100%>
 		<!-- PUBLIC CONTENTS STARTS-->
-		<div class="small" style="padding:20px" >
+		<div class="small" style="padding:10px" >
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>
-			{if $MODULE eq 'HelpDesk'}
-				{$NAME} -  {$APP.LBL_TROUBLE_TICKET} {$APP.LBL_INFORMATION}
-			{else}
-				{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}
-			{/if}
-		</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
+		 <span class="dvHeaderText">[ {$ID} ]{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
 		 <tr height=20><td>{$UPDATEINFO}</td></tr>
 		 </table>			 
-		 <hr noshade size=1>
+		<br>
 		
 		<!-- Account details tabs -->
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
@@ -132,15 +126,9 @@ function DeleteTag(id)
 					<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{else}
-					<td class="dvtSelectedCell" align=center nowrap>
-					   {if $MODULE eq 'HelpDesk'}		
-						{$APP.Ticket} {$APP.LBL_INFORMATION}</td>	
-					   {else}
-						{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
-					   {/if}		
+					<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
-
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{/if}
 				</tr>
@@ -149,91 +137,102 @@ function DeleteTag(id)
 		</tr>
 		<tr>
 			<td valign=top align=left >
-                           <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
+                <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
 				<tr>
 
 					<td align=left>
 					<!-- content cache -->
 					
-					<table border=0 cellspacing=0 cellpadding=0 width=100%>
-			                  <tr>
-					     <td style="padding:10px">
-						     <!-- General details -->
-				                     <table border=0 cellspacing=0 cellpadding=0 width=100%>
-						     {strip}<tr nowrap>
-							<td  colspan=4 style="padding:5px">
+				<table border=0 cellspacing=0 cellpadding=0 width=100%>
+                <tr>
+					<td style="padding:5px">
+					<!-- Command Buttons -->
+				    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+					{strip}<tr>
+					<td  colspan=4 style="padding:5px">
+					
+					
+						<table border=0 cellspacing=0 cellpadding=0 width=100%>
+						<tr>
+						<td>
+					
+						{if $EDIT_DUPLICATE eq 'permitted'}
+						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+						{/if}
+						{if $MODULE eq 'Webmails'}
+								<input title="Add to CRM" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
+								<input title="Reply to Sender" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=single&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to Sender">&nbsp;
+								<input title="Reply to All" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=all&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to All">&nbsp;
+						{/if}
+						{if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
+								{if $SENDMAILBUTTON eq 'permitted'}
+								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+								{if $CREATEPDF eq 'permitted'}
+								<input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Quotes'}
+								{if $CONVERTSALESORDER eq 'permitted'}
+								<input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'HelpDesk'}
+								{if $CONVERTASFAQ eq 'permitted'}
+								<input title="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_TITLE}" accessKey="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ';" type="submit" name="ConvertAsFAQ" value="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+
+						{if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
+								{if $CONVERTINVOICE eq 'permitted'}
+								<input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Leads'}
+								{if $CONVERTLEAD eq 'permitted'}
+								<input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="crmbutton small create" onclick="callConvertLeadDiv('{$ID}');" type="button" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						</td>
+						<td align=right>
 								{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
-                                                                <input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
+								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+								{/if}
 								{if $DELETE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
+								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+								{/if}
 
-                                                        {if $MODULE eq 'Webmails'}
-                                                                <input title="Add to CRM" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
-                                                                <input title="Reply to Sender" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=single&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to Sender">&nbsp;
-                                                                <input title="Reply to All" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=all&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to All">&nbsp;
-                                                        {/if}
-                                                        {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
-                                                                {if $SENDMAILBUTTON eq 'permitted'}
-                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-                                                                {if $CREATEPDF eq 'permitted'}
-                                                                <input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Quotes'}
-                                                                {if $CONVERTSALESORDER eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-							{if $MODULE eq 'HelpDesk'}
-                                                                {if $CONVERTASFAQ eq 'permitted'}
-                                                                <input title="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_TITLE}" accessKey="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ';" type="submit" name="ConvertAsFAQ" value="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
+						</td>
+						</tr>
+						</table>
 
-                                                        {if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
-                                                                {if $CONVERTINVOICE eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Leads'}
-                                                                {if $CONVERTLEAD eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="crmbutton small create" onclick="callConvertLeadDiv('{$ID}');" type="button" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
 							</td>
-
-
 						     </tr>{/strip}	
 							{foreach key=header item=detail from=$BLOCKS}
+
+							<!-- Detailed View Code starts here-->
 							<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 							<tr>
-                                                        <td>&nbsp;</td>
-                                                        <td>&nbsp;</td>
-                                                        <td>&nbsp;</td>
-                                                        <td align=right>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                             <td align=right>
 							{if $header eq 'Address Information' && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
-                                                        {if $MODULE eq 'Leads'}
-                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="crmbutton small create" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
-                                                        {else}
-                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="crmbutton small create" type="button" onClick="fnvshobj(this,'locateMap');" onMouseOut="fninvsh('locateMap');" title="{$APP.LBL_LOCATE_MAP}">
+                             {if $MODULE eq 'Leads'}
+                             <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="crmbutton small create" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
+                             {else}
+                             <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="crmbutton small create" type="button" onClick="fnvshobj(this,'locateMap');" onMouseOut="fninvsh('locateMap');" title="{$APP.LBL_LOCATE_MAP}">
 							{/if}
-                                                        {/if}
-                                                        </td>
-                                                        </tr>
-
-
-
+                             {/if}
+                             </td>
+                             </tr>
 
 							<!-- This is added to display the existing comments -->
 							{if $header eq $MOD.LBL_COMMENTS || $header eq $MOD.LBL_COMMENT_INFORMATION}
 							   <tr>
-								<td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+								<td colspan=4 class="dvInnerHeader">
 						        	<b>{$MOD.LBL_COMMENT_INFORMATION}</b>
 								</td>
 							   </tr>
@@ -248,7 +247,7 @@ function DeleteTag(id)
 
 
 						     <tr>{strip}
-						     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+						     <td colspan=4 class="dvInnerHeader">
 							<b>
 						        	{$header}
 	  			     			</b>
@@ -273,7 +272,7 @@ function DeleteTag(id)
 							   
                            {if $label ne ''}
 	                        {if $keycntimage ne ''}
-					<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$keycntimage}</td>
+				<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$keycntimage}</td>
 				{elseif $keyid eq '71' || $keyid eq '72'}<!-- Currency symbol -->
 					<td class="dvtCellLabel" align=right width=25%>{$label}<input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input> ({$keycursymb})</td>
 				{else}
@@ -306,50 +305,62 @@ function DeleteTag(id)
 		           <table border=0 cellspacing=0 cellpadding=0 width=100%>
 				     {strip}<tr nowrap>
 							<td  colspan=4 style="padding:5px">
+						<table border=0 cellspacing=0 cellpadding=0 width=100%>
+						<tr>
+						<td>
+					
+						{if $EDIT_DUPLICATE eq 'permitted'}
+						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+						{/if}
+						{if $MODULE eq 'Webmails'}
+								<input title="Add to CRM" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
+								<input title="Reply to Sender" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=single&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to Sender">&nbsp;
+								<input title="Reply to All" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=all&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to All">&nbsp;
+						{/if}
+						{if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
+								{if $SENDMAILBUTTON eq 'permitted'}
+								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+								{if $CREATEPDF eq 'permitted'}
+								<input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Quotes'}
+								{if $CONVERTSALESORDER eq 'permitted'}
+								<input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'HelpDesk'}
+								{if $CONVERTASFAQ eq 'permitted'}
+								<input title="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_TITLE}" accessKey="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ';" type="submit" name="ConvertAsFAQ" value="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+
+						{if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
+								{if $CONVERTINVOICE eq 'permitted'}
+								<input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						{if $MODULE eq 'Leads'}
+								{if $CONVERTLEAD eq 'permitted'}
+								<input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="crmbutton small create" onclick="callConvertLeadDiv('{$ID}');" type="button" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
+								{/if}
+						{/if}
+						</td>
+						<td align=right>
 								{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
-                                                                <input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
+								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+								{/if}
 								{if $DELETE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
+								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+								{/if}
 
-                                                        {if $MODULE eq 'Webmails'}
-                                                                <input title="Add to CRM" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
-                                                                <input title="Reply to Sender" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=single&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to Sender">&nbsp;
-                                                                <input title="Reply to All" class="crmbutton small create" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=all&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to All">&nbsp;
-                                                        {/if}
-                                                        {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
-                                                                {if $SENDMAILBUTTON eq 'permitted'}
-                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-                                                                {if $CREATEPDF eq 'permitted'}
-                                                                <input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Quotes'}
-                                                                {if $CONVERTSALESORDER eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-							{if $MODULE eq 'HelpDesk'}
-                                                                {if $CONVERTASFAQ eq 'permitted'}
-                                                                <input title="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_TITLE}" accessKey="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ';" type="submit" name="ConvertAsFAQ" value="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
+						</td>
+						</tr>
+						</table>
 
-                                                        {if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
-                                                                {if $CONVERTINVOICE eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
-                                                        {if $MODULE eq 'Leads'}
-                                                                {if $CONVERTLEAD eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="crmbutton small create" onclick="callConvertLeadDiv('{$ID}');" type="button" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-                                                        {/if}
 							</td>
 
 

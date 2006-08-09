@@ -11,7 +11,7 @@
 	 ********************************************************************************/
 
 -->*}
-<br><br>
+<br>
 <script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
@@ -20,7 +20,15 @@
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 {$BLOCKJS}
 
-<table class="small" align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+    <td valign="top"><img src="themes/blue/images/showPanelTopLeft.gif"></td>
+	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+	
+	
+	
+<table class="small reportGenHdr mailClient mailClientBg" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 	<form name="NewReport" action="index.php" method="POST">
     <input type="hidden" name="booleanoperator" value="5"/>
     <input type="hidden" name="record" value="{$REPORTID}"/>
@@ -35,92 +43,110 @@
 
 	<tbody>
 	<tr>
-	<td style="font-size: 1px;" height="4" width="4"><img src="{$IMAGE_PATH}top_left.gif" align="top" height="4" width="4"></td>
-	<td style="border-top: 1px solid rgb(109, 109, 109);" colspan="2"></td>
-	<td style="font-size: 1px;" height="4" width="4"><img src="{$IMAGE_PATH}top_right.gif" align="top" height="4" width="4"></td>
-	</tr>
-	<tr>
-	<td style="border-left: 1px solid rgb(109, 109, 109);"></td>
 	<td style="padding: 10px; text-align: left;" width="70%">
-	<span class="genHeaderGrayBig">
-	{if $MOD.$REPORTNAME neq ''}
-		{$MOD.$REPORTNAME}
-	{else}
-		{$REPORTNAME}
-	{/if}
-	</span>&nbsp;&nbsp;
-	( <a href="javascript:;" onClick="editReport('{$REPORTID}');">{$MOD.LBL_CUSTOMIZE_REPORT}</a> )<br>
-	<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
-	</td>
-	<td style="border-left: 1px solid rgb(109, 109, 109); padding: 10px;" width="30%">
-	<b>{$MOD.LBL_SELECT_ANOTHER_REPORT} : </b><br>
-	<select name="another_report" class="detailedViewTextBox" onChange="selectReport()">
-	{foreach key=report_in_fld_id item=report_in_fld_name from=$REPINFOLDER}
-	{if $MOD.$report_in_fld_name neq ''} 
-		{if $report_in_fld_id neq $REPORTID}
-			<option value={$report_in_fld_id}>{$MOD.$report_in_fld_name}</option>
-		{else}	
-			<option value={$report_in_fld_id} "selected">{$MOD.$report_in_fld_name}</option>
+		<span class="moduleName">
+		{if $MOD.$REPORTNAME neq ''}
+			{$MOD.$REPORTNAME}
+		{else}
+			{$REPORTNAME}
 		{/if}
-	{else}
-		{if $report_in_fld_id neq $REPORTID}
-			<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
-		{else}	
-			<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
-		{/if}
-	{/if}
-	{/foreach}
-	</select>&nbsp;&nbsp;
+		</span>&nbsp;&nbsp;
+		
+		<input type="button" name="custReport" value="{$MOD.LBL_CUSTOMIZE_REPORT}" class="crmButton small edit" onClick="editReport('{$REPORTID}');">
+		<br>
+		<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
 	</td>
-	<td style="border-right: 1px solid rgb(109, 109, 109);"></td>
-	</tr>
-	<tr>
-	<td style="font-size: 1px;" height="4" width="4"><img src="{$IMAGE_PATH}bottom_left.gif" align="absbottom" height="4" width="4"></td>
-	<td style="border-bottom: 1px solid rgb(109, 109, 109);" colspan="2"></td>
-	<td style="font-size: 1px;" height="4" width="4"><img src="{$IMAGE_PATH}bottom_right.gif" align="absbottom" height="4" width="4"></td>
+	<td style="border-left: 2px dotted rgb(109, 109, 109); padding: 10px;" width="30%">
+		<b>{$MOD.LBL_SELECT_ANOTHER_REPORT} : </b><br>
+		<select name="another_report" class="detailedViewTextBox" onChange="selectReport()">
+		{foreach key=report_in_fld_id item=report_in_fld_name from=$REPINFOLDER}
+		{if $MOD.$report_in_fld_name neq ''} 
+			{if $report_in_fld_id neq $REPORTID}
+				<option value={$report_in_fld_id}>{$MOD.$report_in_fld_name}</option>
+			{else}	
+				<option value={$report_in_fld_id} "selected">{$MOD.$report_in_fld_name}</option>
+			{/if}
+		{else}
+			{if $report_in_fld_id neq $REPORTID}
+				<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
+			{else}	
+				<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
+			{/if}
+		{/if}
+		{/foreach}
+		</select>&nbsp;&nbsp;
+	</td>
 	</tr>
 	</tbody>
 </table>
-<table class="reportGenarateTable" align="center" cellpadding="0" cellspacing="0" width="90%">
-	<tbody><tr><td colspan="4">&nbsp;</td></tr>
-	<tr>
-	<td>{$MOD.LBL_SELECT_COLUMN} :&nbsp;</td>
-	<td>{$MOD.LBL_SELECT_TIME} :&nbsp;</td>
-	<td>{$MOD.LBL_SF_STARTDATE} :&nbsp;</td>
-	<td>{$MOD.LBL_SF_ENDDATE} :&nbsp;</td>
-	</tr>
-	<tr>
-	<td align="left" width="25%">
-	<select name="stdDateFilterField" class="detailedViewTextBox">
-    {$BLOCK1}
-    </select>
+
+<!-- Generate Report UI Filter -->
+<table class="small reportGenerateTable" align="center" cellpadding="5" cellspacing="0" width="95%" border=0>
+<tr>
+	<td align=center class=small>
+	
+	<table border=0 cellspacing=0 cellpadding=0 width=80%>
+		<tr>
+			<td align=left class=small><b>{$MOD.LBL_SELECT_COLUMN} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SELECT_TIME} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SF_STARTDATE} </b></td><td class=small>&nbsp;</td>
+			<td align=left class=small><b>{$MOD.LBL_SF_ENDDATE} </b>
+		</tr>
+		<tr>
+			<td align="left" width="30%">
+			<select name="stdDateFilterField" class="small" style="width:98%">
+			{$BLOCK1}
+			</select>
+			</td>
+			<td class=small>&nbsp;</td>			
+			<td align=left width="30%">
+			<select name="stdDateFilter" class="small" onchange='showDateRange( this.options[ this.selectedIndex ].value )' style="width:98%">
+			{$BLOCKCRITERIA}
+			</select>
+			</td>
+			<td class=small>&nbsp;</td>
+			<td align=left width="20%">
+				<table border=0 cellspacing=0 cellpadding=2>
+				<tr>
+					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"></td>
+				</tr>
+				</table>
+			</td>
+			<td align=left class=small>&nbsp;</td>
+			<td align=left width=20%>
+				<table border=0 cellspacing=0 cellpadding=2>
+				<tr>
+					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"></td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" colspan="8" style="padding:5px"><input name="generatenw" value=" {$MOD.LBL_GENERATE_NOW} " class="crmbutton small create" type="button" onClick="generateReport({$REPORTID});"></td>
+		</tr>
+	</table>
+	
 	</td>
-	<td width="20%">
-	<select name="stdDateFilter" class="importBox" onchange='showDateRange( this.options[ this.selectedIndex ].value )'>
-	{$BLOCKCRITERIA}
-	</select>
-	</td>
-	<td width="15%">
-		<input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start">
-	</td>
-	<td>
-		<input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end">
-	</td>
-	</tr>
-	<tr>
-	<td align="center" colspan="4"><input name="generatenw" value=" {$MOD.LBL_GENERATE_NOW} " class="crmbutton small create" type="button" onClick="generateReport({$REPORTID});"></td>
-	</tr>
-	</tbody>
+</tr>
 </table>
-<br><br>
+
 
 <div style="display: block;" id="Generate" align="center">
 	{include file="ReportRunContents.tpl"}
 </div>
 <br>
 {literal}
+
+</td>
+<td valign="top"><img src="themes/blue/images/showPanelTopRight.gif"></td>
+</tr>
+</table>
+
+
+
+
 <SCRIPT LANGUAGE=JavaScript>
 function CrearEnlace(tipo,id){
 	return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;

@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 <div id="rssScroll">
-	<table class="rssTable" cellspacing="0" cellpadding="0">
+	<table class="rssTable" cellspacing="0" cellpadding="0" width=100%>
         <tr>
 			<th width="5%"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></th>
             <th width="65%">{$LISTHEADER.0}</th>
@@ -23,8 +23,8 @@
 			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
 </span></td>
 			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.0}</b></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.1}</b></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.2}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.1}</td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.2}</td>
         </tr>
 		{/foreach}
     </table>

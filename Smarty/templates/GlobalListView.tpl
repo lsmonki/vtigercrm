@@ -30,6 +30,7 @@ displayModuleList(document.getElementById('global_search_module'));
 {/if}
 
 {*<!-- Contents -->*}
+
 {if $MODULE eq $SEARCH_MODULE && $SEARCH_MODULE neq ''}
 	<div id="global_list_{$SEARCH_MODULE}" style="display:block">
 {elseif $MODULE eq 'Contacts' && $SEARCH_MODULE eq ''}
@@ -45,17 +46,16 @@ displayModuleList(document.getElementById('global_search_module'));
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
      <tr>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
-
-	<td class="showPanelBg" valign=top width=100%>
+		<td>
 	   <!-- PUBLIC CONTENTS STARTS-->
-	   <div class="small" style="padding:20px">
+	   <br>
+	   <div class="small" style="padding:2px">
         	<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
-	           <tr style="background-color:#efefef">
+	           <tr >
 			<td>
 				<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 				   <tr>
-					<td style="padding-right:20px" nowrap><b>{$APP.$MODULE}</b>{$SEARCH_CRITERIA}</td>
+					<td style="padding-right:20px" nowrap ><b class=big>{$APP.$MODULE}</b>{$SEARCH_CRITERIA}</td>
 					<!-- Not used, may be used in future when we do the pagination and customeviews
 						<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 						<td nowrap >
@@ -71,15 +71,15 @@ displayModuleList(document.getElementById('global_search_module'));
 					-->
 				   </tr>
 				</table>
-                         	<div  style="width:100%; border-top:1px solid #999999;border-bottom:1px solid #999999">
-			 	<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
+                 <div  class="searchResults">
+			 	<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 				   <tr>
 					{if $DISPLAYHEADER eq 1}
 						{foreach item=header from=$LISTHEADER}
-							<td class="lvtCol">{$header}</td>
+							<td class="mailSubHeader">{$header}</td>
 			         		{/foreach}
 					{else}
-						<td colspan=$HEADERCOUNT> {$APP.LBL_NO_DATA} </td>
+						<td class="searchResultsRow" colspan=$HEADERCOUNT> {$APP.LBL_NO_DATA} </td>
 					{/if}
 				   </tr>
 				   {foreach item=entity key=entity_id from=$LISTENTITY}
@@ -108,10 +108,12 @@ displayModuleList(document.getElementById('global_search_module'));
 		   </tr>
 		</table>
 	   </div>
+	   
 	</td>
 	</form>	
    </tr>
 </table>
+
 </div>
 {$SELECT_SCRIPT}
 

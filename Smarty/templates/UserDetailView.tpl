@@ -20,205 +20,227 @@
 </span>
 
 <br>
+<!-- Shadow table -->
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tr>
     <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
     <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
     <br>
-
     <div align=center>
-    {if $CATEGORY eq 'Settings'}
-        {include file='SetMenu.tpl'}
-    {/if}
-	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr>
-	    <td class="padTab" align="left">
-		<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form">
-		<input type="hidden" name="module" value="Users">
-		<input type="hidden" name="record" id="userid" value="{$ID}">
-		<input type="hidden" name="isDuplicate" value=false>
-		<input type="hidden" name="action">
-		<input type="hidden" name="changepassword">
-		{if $CATEGORY neq 'Settings'}
-			<input type="hidden" name="modechk" value="prefview">
-		{/if}
-		<input type="hidden" name="old_password">
-		<input type="hidden" name="new_password">
-		<input type="hidden" name="return_module" value="Users">
-		<input type="hidden" name="return_action" value="ListView">
-		<input type="hidden" name="return_id">
-		<input type="hidden" name="forumDisplay">
 		{if $CATEGORY eq 'Settings'}
-		<input type="hidden" name="parenttab" value="{$PARENTTAB}">
-		{/if}	
-	        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="settingsSelUITopLine">
-		<tr>
-		    <td style="border-bottom:1px dashed #CCCCCC;">
-			<table width="100%" cellpadding="5" cellspacing="0" border="0">
-			<tr>
-			    <td rowspan="2"><img src="{$IMAGE_PATH}ico-users.gif" align="absmiddle"></td>	
-			    <td>
-			    {if $CATEGORY eq 'Settings'}
-				<span class="heading2">
-				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> &gt; <a href="index.php?module=Administration&action=index&parenttab=Settings"> {$MOD.LBL_USERS} </a>&gt;"{$USERNAME}" </b></span>
-			    {else}
-				<span class="heading2">	
-				<b>{$APP.LBL_MY_PREFERENCES}</b>
-			   	</span>
-			    {/if}
-			    <span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>					
-			    </td>
-			    <td rowspan="2" nowrap>&nbsp;					
-			    </td>	
-			</tr>
-			<tr>
-			    <td>{$UMOD.LBL_USERDETAIL_INFO} "{$USERNAME}"</td>
-			</tr>
-		    </table>
-		</td>
-	    </tr>
-	    <tr><td colspan="2">&nbsp;</td></tr>
-	    <tr>
-		<td rowspan="2" nowrap align="right">
-		{if $IS_ADMIN eq 'true'}
-			<input type="button" onclick="showAuditTrail();" value="{$MOD.LBL_VIEW_AUDIT_TRAIL}" class="crmButton small save"></input>
+			{include file='SetMenu.tpl'}
 		{/if}
-			{if $CATEGORY eq 'Settings'}
-                               	{$DUPLICATE_BUTTON}
-                       	{/if}
-			{$EDIT_BUTTON}
-		{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq 2 & $ID neq $CURRENT_USERID}
-			<input type="button" onclick="deleteUser({$ID});" class="crmButton small cancel" value="{$UMOD.LBL_DELETE}"></input>
-		{/if}
-		</td>&nbsp;</tr>
-	    <tr><td colspan="2">&nbsp;</td></tr>
-	    <tr>
-		<td colspan="2">
-		    <table align="center" border="0" cellpadding="0" cellspacing="0" width="99%">
-		    <tr>
-		  	<td align="left" valign="top">
-			    {foreach key=header name=blockforeach item=detail from=$BLOCKS}
-				<br>
-				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 				<tr>
-				    {strip}
-				     <td class="big">	
-					<strong>{$smarty.foreach.blockforeach.iteration}. {$header}</strong>
-				     </td>
-				     <td class="small" align="right">&nbsp;</td>	
-				    {/strip}
-			        </tr>
-				</table>
-				<table border="0" cellpadding="5" cellspacing="0" width="100%">
-				{foreach item=detail from=$detail}
-				<tr style="height:25px">
-					{foreach key=label item=data from=$detail}
-					   {assign var=keyid value=$data.ui}
-					   {assign var=keyval value=$data.value}
-					   {assign var=keytblname value=$data.tablename}
-					   {assign var=keyfldname value=$data.fldname}
-					   {assign var=keyoptions value=$data.options}
-					   {assign var=keysecid value=$data.secid}
-					   {assign var=keyseclink value=$data.link}
-					   {assign var=keycursymb value=$data.cursymb}
-					   {assign var=keysalut value=$data.salut}
-					   {assign var=keycntimage value=$data.cntimage}
-					   {assign var=keyadmin value=$data.isadmin}
-					   
-					   {if $label ne ''}
-					   <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
-						{include file="DetailViewUI.tpl"}
-					   {else}
-                                    	   <td class="dvtCellLabel" align=right>&nbsp;</td>
-                                    	   <td class="dvtCellInfo" align=left >&nbsp;</td>
-					   {/if}	
-					{/foreach}
-			 	</tr>
-				{/foreach}
-			    </table>
-			    {/foreach}
-			    <br>
-			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-			    	<tr>
-				     <td class="big">	
-					<strong>5. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
-				     </td>
-				     <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
-			        </tr>
-			    </table>
-			<div style="float: none; display: none;" id="home_comp">	
-			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-				{foreach item=homeitems key=values from=$HOMEORDER}
-					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
-					    {if $homeitems neq ''}
-					    	<td class="dvtCellInfo" align="center" width="5%">
-					   	<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
-					    {else}	
-						<td class="dvtCellInfo" align="center" width="5%">
-					   	<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
-					    {/if}	
-					</tr>			
-				{/foreach}
-			    </table>	
-			</div>
-			<br>
-			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-			    	<tr>
-				     <td class="big">	
-					<strong>6. {$UMOD.LBL_MY_GROUPS}</strong>
-				     </td>
-				     <td class="small" align="right">
-					{if $GROUP_COUNT > 0}
-					<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchGroups_js({$ID});">
-					{else}
-						&nbsp;
-					{/if}
-					</td>	
-			        </tr>
-			    </table>
-			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr><td align="left"><div id="user_group_cont" style="display:none;"></div></td></tr>	
-			    </table>	
+					<td class="padTab" align="left">
+						<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form" style="margin:0px">
+							<input type="hidden" name="module" value="Users" style="margin:0px">
+							<input type="hidden" name="record" id="userid" value="{$ID}" style="margin:0px">
+							<input type="hidden" name="isDuplicate" value=false style="margin:0px">
+							<input type="hidden" name="action" style="margin:0px">
+							<input type="hidden" name="changepassword" style="margin:0px">
+							{if $CATEGORY neq 'Settings'}
+								<input type="hidden" name="modechk" value="prefview" style="margin:0px">
+							{/if}
+							<input type="hidden" name="old_password" style="margin:0px">
+							<input type="hidden" name="new_password" style="margin:0px">
+							<input type="hidden" name="return_module" value="Users" style="margin:0px">
+							<input type="hidden" name="return_action" value="ListView"  style="margin:0px">
+							<input type="hidden" name="return_id" style="margin:0px">
+							<input type="hidden" name="forumDisplay" style="margin:0px">
+							{if $CATEGORY eq 'Settings'}
+							<input type="hidden" name="parenttab" value="{$PARENTTAB}" style="margin:0px">
+							{/if}	
+							<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td colspan=2>
+									<!-- Heading and Icons -->
+									<table width="100%" cellpadding="5" cellspacing="0" border="0" class="settingsSelUITopLine">
+									<tr>
+										<td width=50 rowspan="2"><img src="{$IMAGE_PATH}ico-users.gif" align="absmiddle"></td>	
+										<td>
+											{if $CATEGORY eq 'Settings'}
+											<span class="heading2">
+											<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> &gt; <a href="index.php?module=Administration&action=index&parenttab=Settings"> {$MOD.LBL_USERS} </a>&gt;"{$USERNAME}" </b></span>
+											{else}
+											<span class="heading2">	
+											<b>{$APP.LBL_MY_PREFERENCES}</b>
+											</span>
+											{/if}
+											<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>					
+										</td>
+										
+									</tr>
+									<tr>
+										<td>{$UMOD.LBL_USERDETAIL_INFO} "{$USERNAME}"</td>
+									</tr>
+									</table>
+								</td>
+							</tr>
+							<tr><td colspan="2">&nbsp;</td></tr>
+							<tr>
+								<td colspan="2" nowrap align="right">
+									{if $IS_ADMIN eq 'true'}
+									<input type="button" onclick="showAuditTrail();" value="{$MOD.LBL_VIEW_AUDIT_TRAIL}" class="crmButton small save"></input>
+									{/if}
+									{if $CATEGORY eq 'Settings'}
+														{$DUPLICATE_BUTTON}
+												{/if}
+									{$EDIT_BUTTON}
+									{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq 2 & $ID neq $CURRENT_USERID}
+									<input type="button" onclick="deleteUser({$ID});" class="crmButton small cancel" value="{$UMOD.LBL_DELETE}"></input>
+									{/if}
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" align=left>
+								<!-- User detail blocks -->
+								<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tr>
+								<td align="left" valign="top">
+									{foreach key=header name=blockforeach item=detail from=$BLOCKS}
+									<br>
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr>
+										{strip}
+										 <td class="big">	
+										<strong>{$smarty.foreach.blockforeach.iteration}. {$header}</strong>
+										 </td>
+										 <td class="small" align="right">&nbsp;</td>	
+										{/strip}
+									</tr>
+									</table>
+									
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+									{foreach item=detail from=$detail}
+									<tr >
+										{foreach key=label item=data from=$detail}
+										   {assign var=keyid value=$data.ui}
+										   {assign var=keyval value=$data.value}
+										   {assign var=keytblname value=$data.tablename}
+										   {assign var=keyfldname value=$data.fldname}
+										   {assign var=keyoptions value=$data.options}
+										   {assign var=keysecid value=$data.secid}
+										   {assign var=keyseclink value=$data.link}
+										   {assign var=keycursymb value=$data.cursymb}
+										   {assign var=keysalut value=$data.salut}
+										   {assign var=keycntimage value=$data.cntimage}
+										   {assign var=keyadmin value=$data.isadmin}
+										   
+										   {if $label ne ''}
+										   <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
+											{include file="DetailViewUI.tpl"}
+										   {else}
+										   <td class="dvtCellLabel" align=right>&nbsp;</td>
+										   <td class="dvtCellInfo" align=left >&nbsp;</td>
+										   {/if}	
+										{/foreach}
+									</tr>
+									{/foreach}
+									</table>
+									{/foreach}
+									
+									<br>
+									<!-- Home page components -->
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr>
+										 <td class="big">	
+										<strong>5. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
+										 </td>
+										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
+									</tr>
+									</table>
+									
+									<div style="float: none; display: none;" id="home_comp">	
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+									{foreach item=homeitems key=values from=$HOMEORDER}
+										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+											{if $homeitems neq ''}
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
+												{else}	
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
+											{/if}	
+										</tr>			
+									{/foreach}
+									</table>	
+									</div>
+								
+									<br>
+									<!-- My Groups -->
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr>
+										<td class="big">	
+										<strong>6. {$UMOD.LBL_MY_GROUPS}</strong>
+										 </td>
+										 <td class="small" align="right">
+										{if $GROUP_COUNT > 0}
+										<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchGroups_js({$ID});">
+										{else}
+											&nbsp;
+										{/if}
+										</td>	
+									</tr>
+									</table>
+									
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr><td align="left"><div id="user_group_cont" style="display:none;"></div></td></tr>	
+									</table>	
+									<br>
+									<!-- Login History -->
+									{if $IS_ADMIN eq 'true'}
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+										<tr>
+										 <td class="big">	
+										<strong>7. {$UMOD.LBL_LOGIN_HISTORY}</strong>
+										 </td>
+										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
+										</tr>
+									</table>
 
-			<br>
-			{if $IS_ADMIN eq 'true'}
-			    <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-			    	<tr>
-				     <td class="big">	
-					<strong>7. {$UMOD.LBL_LOGIN_HISTORY}</strong>
-				     </td>
-				     <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
-			        </tr>
-			    </table>
-			    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr><td align="left"><div id="login_history_cont" style="display:none;"></div></td><td></td></tr>	
-			    </table>	
-			    <br>	
-			{/if}	
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr><td align="left"><div id="login_history_cont" style="display:none;"></div></td></tr>	
+									</table>	
+									<br>	
+									{/if}	
+								</td>
+								</tr>
+								</table>
+								<!-- User detail blocks ends -->
+								
+								</td>
+							</tr>
+							<tr>
+								<td colspan=2 class="small"><div align="right"><a href="#top">{$MOD.LBL_SCROLL}</a></div></td>
+							</tr>
+							</table>
+							
+						</form>
+			
+					</td>
+				</tr>
+				</table>
+
+		
+	</div>
+	</td>
+	
+</tr>
+</table>
+			
 			</td>
 			</tr>
+			</table>
 			
-		        <tr><td>&nbsp;</td></tr>
+			</td>
+			<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>			
+			</tr>
+			</table>
 			
-	  	</table>
 
 
 
-</td></tr>
-<tr><td class="small"><div align="right"><a href="#top">{$MOD.LBL_SCROLL}</a></div></td></tr>
-</table>
-</form>
-</td></tr>
-</table>
-</td></tr>
-</table>
-</td>
-</tr>
-</table>
-</div>
-<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
-</tr>
-</table>
 <br>
 {$JAVASCRIPT}
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>

@@ -15,20 +15,21 @@
 	<td valign="top" width="50%" style="padding: 10px;border-right:1px dashed #CCCCCC">
 	<!-- Reports Table Starts Here  -->
 	{foreach item=reportfolder from=$REPT_FLDR}
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="reportsListTable">
 		<tr>
-		<td class="reportHdr">
-		<img src="{$IMAGE_PATH}Reports_arrow.gif" width="20" height="20" align="absmiddle" />&nbsp;
+		<td class="mailSubHeader"><b>
+		
 		{if $MOD[$reportfolder.name] neq ''}
 			{$MOD[$reportfolder.name]}
 		{else}
 			{$reportfolder.name}
 		{/if}
+		</b>
 		</td>
 		</tr>
 		<tr>
 		<td>
-		<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
+		<table  class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
 			<tbody>
 			<tr>
 			<td class="lvtCol" width="5%">#</td>

@@ -75,46 +75,53 @@ function ShowFolders(folderid)
 		<td class="showPanelBg" valign="top" width="95%" align=center >
 		<!-- Email Client starts here -->
 			<br>
-			<table width="95%"  border="0" cellspacing="0" cellpadding="0">
+			<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="mailClient">
 				<tr>
-					<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
-					<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
-					<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
-				</tr>
-				<tr>
-					<td bgcolor="#EBEBEB" width="7"></td>
-					<td bgcolor="#ECECEC" style="vertical-align:middle;">
+					<td class="mailClientBg" width="7">&nbsp;</td>
+					<td class="mailClientBg">
 					<form name="massdelete" method="POST">
-					
-						
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 							<!-- Compose, Settings and Name image -->
 							<tr>
 								<td colspan="3" style="vertical-align:middle;">
-									<table width="100%" cellpadding="0" cellspacing="0" border="0">
-										<tr>
-											<td nowrap style="padding-left:20px;padding-right:20px">
-											<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-						&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
-											</td>
-											<td nowrap style="padding-left:20px;padding-right:20px">
-											<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-						&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
-											</td>
-											<td width=90%><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
-										</tr>
+									<table border=0 cellspacing=0 cellpadding=0 width=100%>
+									<tr>
+									<td align=left>
+									
+										<table cellpadding="5" cellspacing="0" border="0">
+											<tr>
+												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
+												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
+							&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" >{$MOD.LBL_COMPOSE}</a>
+												</td>
+												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
+												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+							&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" >{$MOD.LBL_SETTINGS}</a>
+												</td>
+											</tr>
+											</table>
+										</td>
+										<td align=right>
+											<table >
+											<tr>
+												<td class="componentName" align=right>vtiger Email Client <!-- <img src="{$IMAGE_PATH}titleMailClient.gif" align="right"/> --></td>
+											</tr>
+											</table>
+									</td>
+									</tr>
 									</table>
+									
 								</td>
 							</tr>
 							<!-- Columns -->
 							<tr>
-							<td width="25%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
+							<td width="25%" class="big mailSubHeader" ><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
 							<td width="2%">&nbsp;</td>
-							<td width="65%" class="subHdr" align="center"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
+							<td width="73%" class="big mailSubHeader" align="left"><b>{$MOD.LBL_ALLMAILS}</b></td>
 							</tr>
 							
 							<tr>
-								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left">
+								<td rowspan="6" class="hdrNameBg" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left" >
 								<!-- Mailbox Tree -->
 								<!-- Inbox -->
 								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
@@ -146,10 +153,10 @@ function ShowFolders(folderid)
 								</ul>
 								</td>
 								<td>&nbsp;</td>
-								
-								<td class="delBg">
-									<!-- All mails pane -->
-									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+								<!-- All mails pane -->
+								<td class="hdrNameBg">
+									<!-- Command Buttons and Search Email -->
+									<table width="100%"  border="0" cellspacing="0" cellpadding="2">
 									<input name="idlist" type="hidden">
 										<tr>
 											<td width="25%" align="left"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="crmbutton small delete" onClick="return massDelete();"/> &nbsp;</td>
@@ -165,13 +172,13 @@ function ShowFolders(folderid)
 											</td>
 										</tr>
 									</table>
+									
 								</td>
 							</tr>
-							
-							
+							<!-- Mail Subject Headers list -->
 							<tr>
 								<td>&nbsp;</td>
-								<td style="padding:1px;" align="left">
+								<td align="left">
 									<div id="email_con">
 									{include file="EmailContents.tpl"}
 									</div>
@@ -185,27 +192,28 @@ function ShowFolders(folderid)
 							
 							<tr>
 								<td>&nbsp;</td>
-								<td class="mailHdr" id="subjectsetter">&nbsp;</td>
+								<td class="mailSubHeader" id="subjectsetter" align=left><b>&nbsp;</b></td>
 							</tr>
 							
 							<tr>
 								<td>&nbsp;</td>	
 								<td valign="top">
-									<div id="EmailDetails">
+									<div id="EmailDetails" > 
 									{include file="EmailDetails.tpl"}
 									</div>
 								</td>
 							</tr>
 						</table>
 						</form>
+						<br>
 					</td>
-					<td bgcolor="#EBEBEB" width="8"></td>
+					<td class="mailClientBg" width="7">&nbsp;</td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
 					<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
 					<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
-				</tr>
+				</tr>-->
 			</table><br/>
 		</td>
 		<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
