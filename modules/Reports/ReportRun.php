@@ -106,7 +106,7 @@ class ReportRun extends CRMEntity
 			{
 				$querycolumn = "case vtiger_crmentityRelProducts.setype when 'Accounts' then vtiger_accountRelProducts.accountname when 'Leads' then vtiger_leaddetailsRelProducts.lastname when 'Potentials' then vtiger_potentialRelProducts.potentialname End"." '".$selectedfields[2]."', vtiger_crmentityRelProducts.setype 'Entity_type'";
 			}
-			if($this->primarymodule == "Activities" || $this->secondarymodule == "Activities")
+			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
 			{
 				$querycolumn = "case vtiger_crmentityRelActivities.setype when 'Accounts' then vtiger_accountRelActivities.accountname when 'Leads' then vtiger_leaddetailsRelActivities.lastname when 'Potentials' then vtiger_potentialRelActivities.potentialname when 'Quotes' then vtiger_quotesRelActivities.subject when 'PurchaseOrder' then vtiger_purchaseorderRelActivities.subject when 'Invoice' then vtiger_invoiceRelActivities.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelActivities.setype 'Entity_type'";
 			}
@@ -1015,7 +1015,7 @@ class ReportRun extends CRMEntity
 					left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid ";
 			}
 		}
-		if($module == "Activities")
+		if($module == "Calendar")
 		{
 			if($secmodule == "Contacts")
 			{
@@ -1139,7 +1139,7 @@ class ReportRun extends CRMEntity
 				where vtiger_crmentityHelpDesk.deleted=0 ";
 		}
 
-		if($module == "Activities")
+		if($module == "Calendar")
 		{
 			$query = "from vtiger_activity 
 				inner join vtiger_crmentity as vtiger_crmentityActivities on vtiger_crmentityActivities.crmid=vtiger_activity.activityid 
