@@ -1014,6 +1014,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$total = getConvertedPriceFromDollar($total);
 		$totalAfterDiscount = $total;
 
+		$productDiscount = '0.00';
 		if($discount_percent != 'NULL' && $discount_percent != '')
 		{
 			$productDiscount = $total*$discount_percent/100;
