@@ -331,7 +331,7 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$contact = new Contact();
 	$contact->column_fields[firstname]=$first_name;
