@@ -20,4 +20,8 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 
+function set_return_todo(product_id, product_name) {
+        window.opener.document.createTodo.parent_name.value = product_name;
+        window.opener.document.createTodo.parent_id.value = product_id;
+}
 
