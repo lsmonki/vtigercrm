@@ -82,7 +82,7 @@ function sensex_info()
 						<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 
 	               	                        {if $OP_MODE neq 'create_view'}
-                				<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}&mode={$OP_MODE}" onclick="getRelatedLink()">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
+                				<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}&mode={$OP_MODE}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
 						{/if}
 
 						<td class="dvtTabCache" style="width:100%">&nbsp;</td>
