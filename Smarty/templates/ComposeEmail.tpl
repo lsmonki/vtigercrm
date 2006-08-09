@@ -63,7 +63,7 @@
 	<td class="dvtCellLabel" style="padding: 5px;" align="left">
 		<select name="parent_type">
 			{foreach key=labelval item=selectval from=$elements.1.0}
-				<option value="{$labelval}" {$selectval}>{$labelval}</option>
+				<option value="{$labelval}" {$selectval}>{$APP[$labelval]}</option>
 			{/foreach}
 		</select>
 		&nbsp;

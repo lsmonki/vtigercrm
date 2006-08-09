@@ -927,10 +927,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
 		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'$log->debug("Exiting getOutputHtml method ..."); return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_$log->debug("Exiting getOutputHtml method ..."); return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';$log->debug("Exiting getOutputHtml method ..."); return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		$editview_label[] = array(	 
-				$app_strings['COMBO_CONTACTS']=>$contact_selected,
-				$app_strings['COMBO_ACCOUNTS']=>$account_selected,
-				$app_strings['COMBO_LEADS']=>$lead_selected,
-				$app_strings['COMBO_USERS']=>$user_selected
+				'Contacts'=>$contact_selected,
+				'Accounts'=>$account_selected,
+				'Leads'=>$lead_selected,
+				'Users'=>$user_selected
 				);
 		$fieldvalue[] =$parent_name;
 		$fieldvalue[] = $parent_id;
