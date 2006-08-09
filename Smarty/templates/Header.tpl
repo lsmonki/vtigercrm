@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
@@ -28,33 +28,29 @@
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
-	
+
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
-		<td><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
+		<td valign=top><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
 		<td width=100% align=center>
-		<table border=0 cellspacing=0 cellpadding=2 width=90% class="rssDisplay">
-		 <tr>
-		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee></td>
-		 {*<td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>*}
-		 </tr>
-		</table>
+		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee>		
 		</td>
 		<td class=small nowrap>
-		<table border=0 cellspacing=0 cellpadding=0>
-		 <tr>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=34&Itemid=60" target="_blank">{$APP.LNK_HELP}</a></td>
-	         <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td>
-	  	 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
-		 </tr>
-		</table>
+			<table border=0 cellspacing=0 cellpadding=0>
+			 <tr>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=34&Itemid=60" target="_blank">{$APP.LNK_HELP}</a></td>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
+			 </tr>
+			</table>
 		</td>
 	</tr>
 	</TABLE>
 
 <div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000'>
 </div>
+
 <!-- header - master tabs -->
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrTabBg">
 <tr>
@@ -63,13 +59,14 @@
 		<table border=0 cellspacing=0 cellpadding=0>
 
 		<tr>
+			<td class=tabSeperator><img src="{$IMAGEPATH}/spacer.gif" width=2px height=28px></td>		
 			{foreach key=maintabs item=detail from=$HEADERS}
 				{if $maintabs ne $CATEGORY}
 				  <td class="tabUnSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class="tabSeperator"><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
+				  <td class="tabSeperator"><img src="{$IMAGEPATH}/spacer.gif"></td>
 				{else}
 				  <td class="tabSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class="tabSeperator"><img src="{$IMAGEPATH}/tabSeperatorBg.gif"></td>
+				  <td class="tabSeperator"><img src="{$IMAGEPATH}/spacer.gif"></td>
 				{/if}
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
@@ -98,10 +95,10 @@
 	<td align=right style="padding-right:10px" >
 		<table border=0 cellspacing=0 cellpadding=0 id="search" style="border:1px solid #999999;background-color:white">
 		   <tr>
-			<form name="UnifiedSearch" method="post" action="index.php">
+			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px">
 			<td style="height:19px;background-color:#ffffef" >
-				<input type="hidden" name="action" value="UnifiedSearch">
-				<input type="hidden" name="module" value="Home">
+				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
+				<input type="hidden" name="module" value="Home" style="margin:0px">
 				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
 			</td>
 			<td style="background-color:#cccccc">
@@ -114,22 +111,19 @@
 </td>
 </tr>
 </TABLE>
-<!-- header - level 2 tabs -->
-<TABLE border=0 cellspacing=0 cellpadding=2 width=100% class="level2Bg" style="border-bottom:1px solid #999999">
+<!-- - level 2 tabs starts-->
+<TABLE border=0 cellspacing=0 cellpadding=2 width=100% class="level2Bg" >
 <tr>
-	<!-- Left side gap -->
-	
 	<td >
-
 		<table border=0 cellspacing=0 cellpadding=0>
 		<tr>
 			{foreach  key=maintabs item=detail from=$HEADERS}
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=module from=$detail}
 						{if $module eq $MODULE_NAME}
-							<td class="level2textSel" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a></td>
+							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a></td>
 						{else}
-							<td class="level2text" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a> </td>
+							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a> </td>
 						{/if}	
 					{/foreach}
 				{/if}
@@ -139,7 +133,7 @@
 	</td>
 </tr>
 </TABLE>		
-
+<!-- Level 2 tabs ends -->
 <div id="calculator_cont" style="position:absolute; z-index:10000" ></div>
 	{include file="Clock.tpl"}
 
@@ -434,6 +428,7 @@ function getFormValidate(divValidate)
 	</table>
 </div>
 {/foreach}
+
 
 <div id="status" style="position:absolute;display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
 <script>
