@@ -3501,7 +3501,7 @@ Execute("CREATE TABLE vtiger_quotestagehistory ( historyid int(19) NOT NULL auto
 Execute("CREATE TABLE vtiger_invoicestatushistory ( historyid int(19) NOT NULL auto_increment, invoiceid int(19) NOT NULL, accountname varchar(100) default NULL, total decimal(10,0) default NULL, invoicestatus varchar(200) default NULL, lastmodified datetime default NULL, PRIMARY KEY  (historyid), KEY invoicestatushistory_invoiceid_idx (invoiceid), CONSTRAINT fk_1_vtiger_invoicestatushistory FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice (invoiceid) ON DELETE CASCADE) ENGINE=InnoDB");
 
 
-
+//User image handling
 Execute("insert into vtiger_blocks values (83,29,'LBL_USER_IMAGE_INFORMATION',4,0,0,0,0,0)");
 Execute("update vtiger_field set block=83 where tabid=29 and fieldname='imagename' and columnname='imagename'");
 
@@ -3514,6 +3514,7 @@ Execute("update vtiger_field set info_type='ADV' where tabid=4 and fieldname='ot
 Execute("CREATE TABLE vtiger_salesmanattachmentsrel ( smid int(19) NOT NULL default '0', attachmentsid int(19) NOT NULL default '0', PRIMARY KEY (smid, attachmentsid), KEY salesmanattachmentsrel_smid_idx (smid), KEY salesmanattachmentsrel_attachmentsid_idx (attachmentsid), CONSTRAINT fk_1_vtiger_salesmanattachmentsrel FOREIGN KEY (smid) REFERENCES vtiger_users (id), CONSTRAINT fk_2_vtiger_salesmanattachmentsrel FOREIGN KEY (attachmentsid) REFERENCES vtiger_attachments (attachmentsid) ON DELETE CASCADE) ENGINE=InnoDB");
 
 
+//Changes made for Activity merge with Calendar - Starts
 Execute("alter table vtiger_activity add column time_end varchar(50) default NULL after time_start");
 
 Execute("delete from vtiger_tab where tabid=17");
@@ -3531,6 +3532,14 @@ Execute("delete from vtiger_org_share_action2tab where tabid=17");
 Execute("delete from vtiger_def_org_share where tabid=17");
 
 Execute("delete from vtiger_parenttabrel where tabid=17");
+//Changes made for Activity merge with Calendar - Ends
+
+//audit trial table
+Execute("create table vtiger_audit_trial(auditid int(19) NOT NULL, userid int(19) default NULL, module varchar(255) default NULL, action varchar(255) default NULL, recordid varchar(20) default NULL, actiondate datetime default NULL, PRIMARY KEY (auditid)) ENGINE=InnoDB");
+
+
+
+
 
 
 
