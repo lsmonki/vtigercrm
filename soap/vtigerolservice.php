@@ -493,7 +493,7 @@ function AddContacts($username,$cntdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$contact = new Contact();
 	
@@ -554,7 +554,7 @@ function UpdateContacts($username,$cntdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$contact = new Contact();
 	
@@ -615,7 +615,7 @@ function DeleteContacts($username,$crmid)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 
 	$contact = new Contact();
 	$contact->id = $crmid;
@@ -744,7 +744,7 @@ function AddTasks($username,$taskdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$task = new Activity();
 	
@@ -807,7 +807,7 @@ function UpdateTasks($username,$taskdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$task = new Activity();
 	
@@ -875,7 +875,7 @@ function DeleteTasks($username,$crmid)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 
 	$task = new Activity();
 	$task->id = $crmid;
@@ -943,7 +943,7 @@ function AddClndr($username,$clndrdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$clndr = new Activity();
 	
@@ -992,7 +992,7 @@ function UpdateClndr($username,$clndrdtls)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$clndr = new Activity();
 	
@@ -1043,7 +1043,7 @@ function DeleteClndr($username,$crmid)
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
-	$current_user->retrieve_entity_info($user_id);
+	$current_user->retrieve_entity_info($user_id,"Users");
 
 	$clndr = new Activity();
 	$clndr->id = $crmid;
