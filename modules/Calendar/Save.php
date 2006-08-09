@@ -28,7 +28,7 @@ require_once("config.php");
 require_once('include/database/PearDatabase.php');
 global $adb;
 $local_log =& LoggerManager::getLogger('index');
-
+//echo '<pre>';print_r($_REQUEST);echo '</pre>';
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -152,9 +152,29 @@ if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 		{
 			$to_email = getUserEmailId('id',$inviteeid);
 			$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+			$record = $focus->id;
+			$sql = "insert into vtiger_salesmanactivityrel values (".$inviteeid.",".$record.")";
+			$adb->query($sql);
 		}
 	}
 }
+
+if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
+{
+	//split the string and store in an array
+	$storearray = explode (";",$_REQUEST['contactidlist']);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$record = $focus->id;
+			$sql = "insert into vtiger_cntactivityrel values (".$id.",".$record.")";
+			$adb->query($sql);
+		}
+	}
+}
+
+
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='') $view=$_REQUEST['view'];
 if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='') $hour=$_REQUEST['hour'];
 if(isset($_REQUEST['day']) && $_REQUEST['day']!='') $day=$_REQUEST['day'];
