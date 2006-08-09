@@ -10,23 +10,40 @@
  ********************************************************************************/
 -->*}
 <!-- BEGIN: main -->
-<table class="small" border="0" cellpadding="5" cellspacing="0" width="100%">
-<tbody><tr>
-<td style="padding: 5px;" bgcolor="#333333"><span style="color: rgb(255, 255, 255);">{$MOD.LBL_BOOKMARK_LIST} : </span>
-{$PORTAL_COUNT}
-<select id="urllist" name="urllist" style="border: 0px solid rgb(204, 204, 204); width: 90%;" onChange="setSite(this);">
-{foreach item=portaldetails key=sno from=$PORTALS}
-<option value="{$portaldetails.portalurl}">{$portaldetails.portalname}</option>
-{/foreach}
-</select>
-
-</td>
-</tr>
-<tr><td><hr></td></tr>
+<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-<td bgcolor="#ffffff">
-	<iframe id="locatesite" src="{$DEFAULT_URL}" frameborder="0" height="350" scrolling="auto" width="100%"></iframe>
+	<td colwidth=90% align=left class=small>
+		<table border=0 cellspacing=0 cellpadding=5>
+		<tr>
+			<td align=left><a href="#"><img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" border=0 /></a></td>
+			<td class=small align=left><a href="#" onclick="fetchContents('manage');">Manage Sites</a></td>
+		</tr>
+		</table>
+			
+	</td>
+	<td align=right width=10%>
+		<table border=0 cellspacing=0 cellpadding=0>
+		<tr><td nowrap class="componentName">My Sites</td></tr>
+		</table>
+	</td>
+</tr>
+</table>
+
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="mailSubHeader">
+<tr>
+<td nowrap align=left>{$MOD.LBL_BOOKMARK_LIST} : </span></td>
+<td align=left width=90% >
+	<select id="urllist" name="urllist" style="width: 99%;" class="small" onChange="setSite(this);">
+	{foreach item=portaldetails key=sno from=$PORTALS}
+	<option value="{$portaldetails.portalurl}">{$portaldetails.portalname}</option>
+	{/foreach}
+	</select>
 </td>
 </tr>
-</tbody></table>
+<tr>
+	<td bgcolor="#ffffff" colspan=2>
+		<iframe id="locatesite" src="{$DEFAULT_URL}" frameborder="0" height="350" scrolling="auto" width="100%"></iframe>
+	</td>
+</tr>
+</table>
 

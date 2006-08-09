@@ -25,34 +25,31 @@
 		<!-- IMPORT ERROR STARTS HERE  -->
 		<br /><br /><br />
 
-		<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable">
+		<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 		   <tr>
-			<td colspan="2" bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+			<td colspan="2"  height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
 		   </tr>
-		   <tr bgcolor="#ECECEC">
+		   <tr>
 			<td colspan="2" align="left" valign="top">&nbsp;</td>
 		   </tr>
-		   <tr bgcolor="#ECECEC">
+		   <tr>
 			<td colspan="2" align="left" valign="top" style="padding-left:40px;">
 				<span class="genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MOD.LBL_ERROR}</span> 
 			</td>
 		   </tr>
 	
-		   <tr bgcolor="#ECECEC"><td align="left" valign="top" colspan="2">&nbsp;</td></tr>
-		   <tr bgcolor="#ECECEC">
+		   <tr><td align="left" valign="top" colspan="2">&nbsp;</td></tr>
+		   <tr>
 			<td align="left" valign="top" colspan="2" style="padding-left:80px;"><font color="red" size="2px">{$MESSAGE}</font></td>
 		   </tr>
 
-		   <tr bgcolor="#ECECEC"><td colspan="2" height="50">&nbsp;</td></tr>
-		   <tr bgcolor="#ECECEC"><td colspan="2"><hr /></td></tr>
-		   <tr bgcolor="#ECECEC">
-			<td colspan="2" align="right" style="padding-right:40px;">
+		   <tr><td colspan="2" height="50">&nbsp;</td></tr>
+		   <tr>
+			<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom" >
 				<input title="{$MOD.LBL_TRY_AGAIN}" accessKey="" class="classBtn" type="submit" name="button" value=" {$MOD.LBL_TRY_AGAIN} "  >
 			</td>
 		   </tr>
-		   <tr bgcolor="#ECECEC"><td colspan="2" align="right" valign="top">&nbsp;</td>
-		   </tr>
-		</table>
+		  </table>
 		<br />
 		</form>
 	</td>

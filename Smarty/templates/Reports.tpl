@@ -15,39 +15,32 @@
 {*<!-- module header -->*}
 <script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
 
+<!-- Toolbar -->
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr><td style="height:2px"></td></tr>
 	<tr>
 	<td class=small width="60%">
-	<table border=0 cellspacing=0 cellpadding=0>
 
-		<tr>
+	<table border=0 cellspacing=0 cellpadding=0>
+	<tr>
 	<td>{include file="Buttons_List1.tpl"}</td>		
-<td>
-		<table border=0 cellspacing=0 cellpadding=5>
+	<td style="width:20px">&nbsp;</td>
+	<td>
+		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
-				<td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+				<td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
 			</tr>
 		</table>
-		</td>
-		<td nowrap width=50>&nbsp;</td>
-		<td>
-		&nbsp;
-		</td>
-		<td>
-		<table border=0 cellspacing=0 cellpadding=5>
-			<tr>
-			</tr>
-		</table>
-		</td>
-		</tr>
+	</td>
+	</tr>
 	</table>
+
 	</td>
 	</tr>
 	<tr><td style="height:2px"></td></tr>
@@ -76,6 +69,7 @@
 </div>
 <!-- END OF POPUP LAYER -->
 
+<!-- Add new Folder UI starts -->
 <div id="orgLay" style="display:none;width:350px;">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody>
@@ -105,6 +99,10 @@
 	</tbody>
 	</table>
 </div>
+<!-- Add new folder UI ends -->
+
+
+
 
 {*<!-- Contents -->*}
 {literal}

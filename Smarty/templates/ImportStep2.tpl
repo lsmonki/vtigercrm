@@ -57,35 +57,35 @@ function getImportSavedMap(impoptions)
 
 				<!-- IMPORT LEADS STARTS HERE  -->
 				<br />
-				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable small">
+				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 				   <tr>
-					<td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td>&nbsp;</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td align="left"  style="padding-left:40px;">
 						<span class="genHeaderGray">{$MOD.LBL_STEP_2_3} </span>&nbsp; 
 						<span class="genHeaderSmall">{$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td align="left" style="padding-left:40px;"> 
 					   {$MOD.LBL_STEP_2_MSG} {$MODULE} {$MOD.LBL_STEP_2_MSG1} 
 					   {$MOD.LBL_STEP_2_TXT} {$MODULE}. 
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td>&nbsp;</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td align="left" style="padding-left:40px;" >
 						<input type="checkbox" name="use_saved_mapping" id="saved_map_checkbox" onclick="ActivateCheckBox()" />&nbsp;&nbsp;
 						{$MOD.LBL_USE_SAVED_MAPPING}&nbsp;&nbsp;&nbsp;{$SAVED_MAP_LISTS}
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td  align="left"style="padding-left:40px;padding-right:40px;">
 						<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%" >
 						   <tr bgcolor="white">
@@ -134,23 +134,21 @@ function getImportSavedMap(impoptions)
 						</table>	
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr>
 					<td align="left" style="padding-left:40px;" >
 						<input type="checkbox" name="save_map" id="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
 						{$MOD.LBL_SAVE_AS_CUSTOM} &nbsp;&nbsp;&nbsp;
 						<input type="text" readonly name="save_map_as" id="save_map_as" value="" class="importBox" >
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC"><td><hr /></td></tr>
-				   <tr bgcolor="#ECECEC">
-					<td align="right" style="padding-right:40px;" >
-						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
+				   <tr >
+					<td align="right" style="padding-right:40px;" class="reportCreateBottom" >
+						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="crmbutton small cancel" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='3'; return validate_import_map();" />
+						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="crmbutton small save" onclick="this.form.action.value='Import';this.form.step.value='3'; return validate_import_map();" />
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC"><td align="right" >&nbsp;</td></tr>
-				</table>
+				  </table>
 				</form>
 				<!-- IMPORT LEADS ENDS HERE -->	
 			</td>

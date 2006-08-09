@@ -17,27 +17,40 @@
 <script language="JavaScript" type="text/javascript" src="modules/Portal/Portal.js"></script>
 
 {include file="Buttons_List1.tpl"}
-<br>
-<table border="0" cellpadding="0" cellspacing="0" width="98%" align="center">
-<tbody><tr>
-<td class="SiteSel" id="datatab" onClick="fetchContents('data');">{$MOD.LBL_BOOKMARKED_URL}</td>
-<td width="10">&nbsp;</td>
-<td class="SiteUnSel" id="managetab" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_BOOKMARKS}</td>
-<td class="SiteHdr">&nbsp;</td>
-</tr>
 
-<tr bgcolor="#e5e5e5">
-<td colspan="4" style="padding: 10px;">
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+<tr>
+	<td valign=top align=right width=8><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td class="showPanelBg" valign="top" width="100%" align=center >	
 
-
-<!-- BOOKMARK PAGE -->
-<div id="portalcont" style="padding: 10px; overflow: hidden; width: 98%;">
-	{include file="MySitesContents.tpl"}
-</div>
-
-
-</td>
-</tr>
-</tbody></table>
-<br><br>
-<div id="editportal_cont" style="z-index:100001;position:absolute;width:510px;"></div>
+	<!-- MySites UI Starts -->
+	<br>
+	<table border="0" cellpadding="0" cellspacing="0" width="98%" align="center" class="mailClient mailClientBg">
+	<tbody>
+	<!-- <tr>
+	<td class="SiteSel" id="datatab" onClick="fetchContents('data');">{$MOD.LBL_BOOKMARKED_URL}</td>
+	<td width="10">&nbsp;</td>
+	<td class="SiteUnSel" id="managetab" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_BOOKMARKS}</td>
+	<td class="SiteHdr">&nbsp;</td>
+	</tr> -->
+	
+	<tr>
+	<td colspan="4">
+	
+	
+	<!-- BOOKMARK PAGE -->
+	<div id="portalcont" style="padding:0px 10px 10px 10px; overflow: hidden; width: 98%;">
+		{include file="MySitesContents.tpl"}
+	</div>
+	
+	
+	</td>
+	</tr>
+	</tbody></table>
+	<br><br>
+	<div id="editportal_cont" style="z-index:100001;position:absolute;width:510px;"></div>
+	
+	</td>
+	<td valign=top align=right width=8><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>			
+	</tr>
+	</table>

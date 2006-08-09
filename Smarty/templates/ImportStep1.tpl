@@ -17,12 +17,12 @@
 {include file='Buttons_List1.tpl'}	
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
-   <tbody>
    <tr>
 	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
 	<td class="showPanelBg" valign="top" width="100%">
 
-		<table  cellpadding="0" cellspacing="0" width="100%">
+		<!-- Import UI Starts -->
+		<table  cellpadding="0" cellspacing="0" width="100%" border=0>
 		   <tr>
 			<td width="75%" valign=top>
 				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
@@ -38,73 +38,66 @@
 
 				<!-- IMPORT LEADS STARTS HERE  -->
 				<br />
-				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable small">
+				<table align="center" cellpadding="5" cellspacing="0" width="80%" class="mailClient importLeadUI small" border="0">
 				   <tr>
-					<td colspan="2" bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
-					<td colspan="2" align="left" valign="top">&nbsp;</td>
-				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">
+					<br>
 						<span class="genHeaderGray">{$MOD.LBL_STEP_1}</span>&nbsp; 
 						<span class="genHeaderSmall">{$MOD.LBL_STEP_1_TITLE}</span> 
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC">
+				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">
 						{$MOD.LBL_STEP_1_TEXT}
 					</td>
 				   </tr>
-				   <tr bgcolor="#ECECEC"><td align="left" valign="top" colspan="2">&nbsp;</td></tr>
-				   <tr bgcolor="#ECECEC">
-					<td align="right" valign="top" width="25%"><b>{$MOD.LBL_FILE_LOCATION} </b></td>
+				   <tr ><td align="left" valign="top" colspan="2">&nbsp;</td></tr>
+				   <tr >
+					<td align="right" valign="top" width="25%" class=small><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
-						<input type="file" name="userfile"  size="40"   />&nbsp;
-                			        <input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
+						<input type="file" name="userfile"  size="40"   class=small/>&nbsp;
+                		<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
 					</td>
 				   </tr>
-				   {*<tr bgcolor="#ECECEC">
-		
-					<td align="right" valign="top" width="25%"><b>Delimeter : </b></td>
-				        <td align="left" valign="top" width="75%">
-						<input type="text"  class="importBox"  />&nbsp;
-					</td>
-				   </tr>
-			
-				   <tr bgcolor="#ECECEC">
-					<td align="right" valign="top">	
-						<b>Use Data Source :</b>
-					</td>
-	        			<td align="left" valign="top">
-						<input name="custom" type="radio" value="" />&nbsp;Custom
-					</td>
-				   </tr>
-				   <tr bgcolor="#ECECEC">
-					<td align="right" valign="top">&nbsp;</td>
-					<td align="left" valign="top"><input name="custom" type="radio" value="" /> 
-						Pre - Defined 
-					</td>
+				   {*<tr >
+							<td align="right" valign="top" width="25%"><b>De-Limiter : </b></td>
+								<td align="left" valign="top" width="75%">
+								<input type="text"  class="importBox"  />&nbsp;
+							</td>
+						   </tr>
+					
+						   <tr >
+							<td align="right" valign="top" class="small" >	
+								<b>Use Data Source :</b>
+							</td>
+								<td align="left" valign="top" class="small" >
+								<input name="custom" type="radio" value="" class="small" />&nbsp;Custom
+							</td>
+						   </tr>
+						   <tr >
+							<td align="right" valign="top">&nbsp;</td>
+							<td align="left" valign="top"><input name="custom" type="radio" value="" class="small" /> 
+								Pre - Defined 
+							</td>
 				   </tr>*}
-				   <tr bgcolor="#ECECEC"><td colspan="2" height="50">&nbsp;</td></tr>
-
-				   <tr bgcolor="#ECECEC"><td colspan="2"><hr /></td></tr>
-				   <tr bgcolor="#ECECEC">
-					<td colspan="2" align="right" style="padding-right:40px;">
-						<input title="{$MOD.LBL_NEXT}" accessKey="" class="classBtn" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return verify_data(this.form);">
-					</td>
-				   </tr>
-				   <tr bgcolor="#ECECEC">
-					<td colspan="2" align="right" valign="top">&nbsp;</td>
-				   </tr>
-				</table>
-				</form>
-				<br />
+				   <tr ><td colspan="2" height="50">&nbsp;</td></tr>
+				    <tr >
+						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
+							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return verify_data(this.form);">
+						</td>
+				   </tr>				</form>
+				 </table>
+				<br>
 				<!-- IMPORT LEADS ENDS HERE -->
 			</td>
 		   </tr>
 		</table>
+
 	</td>
+	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif" /></td>
    </tr>
 </table>
-
+<br>

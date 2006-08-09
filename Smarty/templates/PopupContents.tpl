@@ -55,16 +55,7 @@
 			<div>
 	    </td>
 	</tr>
-	<tr>
-	    <td align="center" colspan=2 style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
-		<table width="100%" align="center">
-		<tr>
-			{$NAVIGATION}	
-		<td width="35%">&nbsp;</td>
-		</tr>
-		</table>
-	    </td>
-	</tr>
+	
 </table>
 </form>
 

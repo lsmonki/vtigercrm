@@ -23,61 +23,76 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 
 </script>
 <body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
-		<td background="{$IMAGE_PATH}popupHdr.jpg" height="70" style="padding-left:20px;">
-		<span style="color:#FFFFFF;font:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;">
-		{$MODULE}
-		</span> 
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="moduleName" width="80%">{$MODULE}</td>
+					<td  width=30% nowrap class="componentName" align=right>vtiger</td>
+				</tr>
+			</table>
+			<table width="100%" cellpadding="5" cellspacing="0" border="0"  class="homePageMatrixHdr">
+				<tr>
+					<td style="padding:10px;" >
+						<form name="basicSearch" action="index.php">
+						<table width="100%" cellpadding="5" cellspacing="0">
+						<tr>
+							<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
+							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
+							<td width="30%" class="dvtCellLabel"><b>In</b>&nbsp;
+								<select name ="search_field" class="txtBox">
+											 {html_options  options=$SEARCHLISTHEADER }
+											</select>
+								<input type="hidden" name="searchtype" value="BasicSearch">
+										<input type="hidden" name="module" value="{$MODULE}">
+								<input type="hidden" name="action" value="Popup">
+											<input type="hidden" name="query" value="true">
+								<input type="hidden" name="select_enable" id="select_enable" value="{$SELECT}">
+								<input type="hidden" name="curr_row" id="curr_row" value="{$CURR_ROW}">
+								<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
+								<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
+								<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
+								<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
+								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
+								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
+			
+							</td>
+							<td width="20%" class="dvtCellLabel">
+								<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
+							</td>
+						</tr>
+						 <tr>
+							<td colspan="4" align="center">
+								<table width="100%" class="small">
+								<tr>	
+									{$ALPHABETICAL}
+								</tr>
+								</table>
+							</td>
+						</tr>
+						</table>
+						</form>
+					</td>
+				</tr>
+			</table>
+
+			<div id="ListViewContents">
+				{include file="PopupContents.tpl"}
+			</div>
 		</td>
 	</tr>
 	<tr>
-	  	<td style="padding:10px;" >
-			<form name="basicSearch" action="index.php">
-			<table width="100%" cellpadding="5" cellspacing="0" style="border-top:1px dashed #CCCCCC;border-bottom:1px dashed #CCCCCC;">
-			<tr>
-				<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
-				<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
-				<td width="30%" class="dvtCellLabel"><b>In</b>&nbsp;
-					<select name ="search_field" class="txtBox">
-		                         {html_options  options=$SEARCHLISTHEADER }
-                		        </select>
-					<input type="hidden" name="searchtype" value="BasicSearch">
-		       		        <input type="hidden" name="module" value="{$MODULE}">
-					<input type="hidden" name="action" value="Popup">
-		    	                <input type="hidden" name="query" value="true">
-					<input type="hidden" name="select_enable" id="select_enable" value="{$SELECT}">
-					<input type="hidden" name="curr_row" id="curr_row" value="{$CURR_ROW}">
-					<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
-					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
-					<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
-					<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
-					<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
-					<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
-
-				</td>
-				<td width="20%" class="dvtCellLabel">
-					<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
-				</td>
-			</tr>
-			 <tr>
-				<td colspan="4" align="center">
-					<table width="100%" class="small">
-					<tr>	
-						{$ALPHABETICAL}
-					</tr>
-					</table>
-				</td>
-			</tr>
-			</table>
-			</form>
-  		</td>
-  	</tr>
+	    <td align="center">
+		<table width="100%" align="center" class="reportCreateBottom">
+		<tr>
+			{$NAVIGATION}	
+		<td width="35%">&nbsp;</td>
+		</tr>
+		</table>
+	    </td>
+	</tr>
 </table>
-
-<div id="ListViewContents">
-	{include file="PopupContents.tpl"}
-</div>
 </body>
 <script>
 var gPopupAlphaSearchUrl = '';
