@@ -328,9 +328,29 @@ function getEventViewOption(& $cal,$viewBox)
 			<input type='hidden' name='return_action' value=''>
 							 
 		        <select name='viewOption' class='importBox' id='viewOption' onChange='fnRedirect();'>";
-	$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_HRVIEW']."</option>
-		<option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>
-			</select>
+	if($cal['view'] == 'day')
+	{
+		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_HRVIEW']."</option>
+			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";	
+	}
+	elseif($cal['view'] == 'week')
+	{
+		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_WEEKVIEW']."</option>
+		         <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+	}
+	elseif($cal['view'] == 'month')
+	{
+		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_MONTHVIEW']."</option>
+			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+	}
+	elseif($cal['view'] == 'year')
+	{
+		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_YEARVIEW']."</option>
+			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+	}
+	else
+		die("view is not defined");
+	$view .="</select>
 		</form>";
 	$cal_log->debug("Exiting getEventViewOption() method...");
 	return $view;
