@@ -36,7 +36,7 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("ACTIVITY_MODE", $_REQUEST['activity_mode']);
-if($module == 'Activities')
+if($module == 'Calendar')
 	$smarty->assign("QCMODULE", $app_strings['Task']);
 elseif($module == "HelpDesk")
 	$smarty->assign("QCMODULE", $app_strings['Ticket']);
