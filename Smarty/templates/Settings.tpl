@@ -10,8 +10,7 @@
  ********************************************************************************/
 -->*}
 
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<body class=small>
+
 	{include file="Buttons_List1.tpl"}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
@@ -522,9 +521,11 @@
                       <td class="small" valign=top>{$MOD.LBL_MIGRATION_INFO}</td>
                     </tr>
                   </table></td>
-		  <td width=25% valign=top>
-			&nbsp;
+		  <td width=25% valign=top>&nbsp;
+			
 		  </td>
+				  <td valign=top>&nbsp;</td>
+				  <td valign=top>&nbsp;</td>
 				  <td valign=top>&nbsp;</td>
 				  </tr>
 				</table>
@@ -547,4 +548,4 @@
 </tbody></table>
 
 
-</body>
+
