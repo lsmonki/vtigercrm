@@ -87,11 +87,18 @@ function add_to_vtiger(mid) {
 }
 function select_all() {
         var els = document.getElementsByClassName("msg_check");
+	var id='';
         for(var i=0;i<els.length;i++) {
-                if(els[i].checked)
+                id = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+		var tels = $("row_"+id);
+		if(tels.className == "deletedRow") {
                         els[i].checked = false;
-                else
-                        els[i].checked = true;
+		} else {
+                	if(els[i].checked)
+                        	els[i].checked = false;
+                	else 
+                        	els[i].checked = true;
+		}
         }
 }
 function check_in_all_boxes(mymbox) {
@@ -304,16 +311,22 @@ function mass_delete() {
         	$("status").style.display="block";
         	var els = document.getElementsByTagName("INPUT");
         	var cnt = (els.length-1);
+		var nids='';
+		var j=0;
         	for(var i=cnt;i>0;i--) {
                 	if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
                         	if(els[i].checked) {
                                 	var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
-					runEmailCommand("delete_msg",nid);
+					if(typeof nid == 'undefined' || nid == "checkbox")
+						nids += '';
+					else
+						nids += nid+":";
 				}
 			}
+			j++;
 		}
+		runEmailCommand("delete_multi_msg",nids);
 	}
-       	$("status").style.display="none";
 }
 function move_messages() {
         $("status").style.display="block";
@@ -354,7 +367,7 @@ function runEmailCommand(com,id) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=body&command='+command+'&mailid='+id+'&mailbox='+mailbox,
+                        postBody: 'module=Webmails&action=WebmailsAjax&command='+command+'&mailid='+id+'&mailbox='+mailbox,
                         onComplete: function(t) {
                                 resp = t.responseText;
                                 if(resp.match(/ajax failed/)) {return;}
@@ -364,23 +377,63 @@ function runEmailCommand(com,id) {
                                         // are deleted and moved or we introduce a bug from invalid mail ids
                                         window.location = window.location;
                                     break;
+                                    case 'delete_multi_msg':
+					var ids=resp;
+					var rows = ids.split(":");
+					for(i=0;i<rows.length;i++)  {
+						var id = rows[i];
+                                        	var row = $("row_"+id);
+						if(row.className == "unread_email") {
+							var unread  = parseInt($(mailbox+"_unread").innerHTML);
+							$(mailbox+"_unread").innerHTML = (unread-1);
+						}
+                                        	row.className = "deletedRow";
+
+                                        	Try.these (
+							function() {
+                                                		$("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
+                                                		$("ndeleted_date_"+id).innerHTML = "<s>"+$("ndeleted_date_"+id).innerHTML+"</s>";
+                                                		$("ndeleted_from_"+id).innerHTML = "<s>"+$("ndeleted_from_"+id).innerHTML+"</s>";
+							},
+							function() {
+                                                		$("deleted_subject_"+id).innerHTML = "<s>"+$("deleted_subject_"+id).innerHTML+"</s>";
+                                                		$("deleted_date_"+id).innerHTML = "<s>"+$("deleted_date_"+id).innerHTML+"</s>";
+                                                		$("deleted_from_"+id).innerHTML = "<s>"+$("deleted_from_"+id).innerHTML+"</s>";
+							}
+                                        	);
+
+					try {
+                                        	$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
+
+                                        	new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
+                                        	tmp = document.getElementsByClassName("previewWindow");
+                                                tmp[0].style.visibility="hidden";
+					}catch(g){}
+
+                                	$("status").style.display="none";
+					}
+                                    break;
                                     case 'delete_msg':
+					id=resp;
                                         var row = $("row_"+id);
 					if(row.className == "unread_email") {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
                                         row.className = "deletedRow";
-					// TODO: change to try.these() from prototype.
-                                        try {
-                                                $("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
-                                                $("ndeleted_date_"+id).innerHTML = "<s>"+$("ndeleted_date_"+id).innerHTML+"</s>";
-                                                $("ndeleted_from_"+id).innerHTML = "<s>"+$("ndeleted_from_"+id).innerHTML+"</s>";
-                                        }catch(e){
-                                                $("deleted_subject_"+id).innerHTML = "<s>"+$("deleted_subject_"+id).innerHTML+"</s>";
-                                                $("deleted_date_"+id).innerHTML = "<s>"+$("deleted_date_"+id).innerHTML+"</s>";
-                                                $("deleted_from_"+id).innerHTML = "<s>"+$("deleted_from_"+id).innerHTML+"</s>";
-                                        }
+
+                                        Try.these (
+						function() {
+                                                	$("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
+                                                	$("ndeleted_date_"+id).innerHTML = "<s>"+$("ndeleted_date_"+id).innerHTML+"</s>";
+                                                	$("ndeleted_from_"+id).innerHTML = "<s>"+$("ndeleted_from_"+id).innerHTML+"</s>";
+						},
+						function() {
+                                                	$("deleted_subject_"+id).innerHTML = "<s>"+$("deleted_subject_"+id).innerHTML+"</s>";
+                                                	$("deleted_date_"+id).innerHTML = "<s>"+$("deleted_date_"+id).innerHTML+"</s>";
+                                                	$("deleted_from_"+id).innerHTML = "<s>"+$("deleted_from_"+id).innerHTML+"</s>";
+						}
+                                        );
 
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
 
@@ -393,12 +446,14 @@ function runEmailCommand(com,id) {
                                         }
                                     break;
                                     case 'undelete_msg':
+					id=resp;
                                         var node = $("row_"+id);
                                         node.className='';
                                         node.style.display = '';
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
+                                	$("status").style.display="none";
                                     break;
                                     case 'clear_flag':
                                         var nm = "clear_td_"+id;

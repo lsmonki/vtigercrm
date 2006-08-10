@@ -39,14 +39,18 @@ class Webmail extends CRMEntity {
 	var $mbox;
 	var $email;
 	var $relationship = array();
+	var $has_attachments = false;
 
 
  	function Webmail($mbox,$mailid) {
+
 		$this->db = new PearDatabase();
+		$this->db->println("Entering Webmail($mbox,$mailid)");
+		$this->log = &LoggerManager::getLogger('WEBMAILS');
 		$this->mbox=$mbox;
 		$this->mailid=$mailid;
 
-		$headers = load_headers($this->mailid,$this->mbox);
+		$headers = $this->load_headers();
 		$this->to = $headers["header"]["to"];
 		$this->to_name = $headers["header"]["to_name"];
 
@@ -63,7 +67,8 @@ class Webmail extends CRMEntity {
 		$this->subject = $headers["header"]["subject"];
 		$this->date = $headers["header"]["date"];
 
-		$this->relationship = find_relationships($this->db,ltrim(rtrim($this->from)));
+		$this->has_attachments = $this->get_attachments();
+		$this->db->println("Exiting Webmail($mbox,$mailid)");
         }
 
 	function delete() {
@@ -71,10 +76,11 @@ class Webmail extends CRMEntity {
 	}
 
 	function loadMail() {
-		$this->email = load_mail($this->mailid,$this->mbox);
+		$this->email = $this->load_mail();
 		$this->inline = $this->email["inline"];
 		$this->attachments = $this->email["attachments"];
 		$this->body = $this->email["content"]["body"];
+		$this->relationship = $this->find_relationships();
 	}
 
 	function replyBody() {
@@ -100,68 +106,115 @@ class Webmail extends CRMEntity {
 	}
 
 	function downloadInlineAttachments() {
-		return dl_inline($this->mailid,$this->mbox);
+		return $this->dl_inline();
 	}
 
 	function downloadAttachments() {
-		return dl_attachments($this->mailid,$this->mbox);
+		return $this->dl_attachments($this->mailid,$this->mbox);
 	}
-}
-function load_headers($mailid,$mbox) {
+
+    private function load_headers() {
 	// get the header info
 	$mailHeader=Array();
-	$header = @imap_headerinfo($mbox, $mailid);
-	$tmp = imap_mime_header_decode($header->fromaddress);
+	$theader = @imap_headerinfo($this->mbox, $this->mailid);
+	$tmp = imap_mime_header_decode($theader->fromaddress);
 
-	for($p=0;$p<count($header->to);$p++) {
-		$mailHeader['to'][] = $header->to[$p]->mailbox.'@'.$header->to[$p]->host;
-		$mailHeader['to_name'][] = $header->to[$p]->personal;
+	for($p=0;$p<count($theader->to);$p++) {
+		$mailHeader['to'][] = $theader->to[$p]->mailbox.'@'.$theader->to[$p]->host;
+		$mailHeader['to_name'][] = $theader->to[$p]->personal;
 	}
-	$mailHeader['from'] = $header->from[0]->mailbox.'@'.$header->from[0]->host;	
-	$mailHeader['from_name'] = $header->from[0]->personal;
-	$mailHeader['fromaddr'] = $header->fromaddress;
+	$mailHeader['from'] = $theader->from[0]->mailbox.'@'.$theader->from[0]->host;	
+	$mailHeader['from_name'] = $theader->from[0]->personal;
+	$mailHeader['fromaddr'] = $theader->fromaddress;
 
-	$mailHeader['subject'] = strip_tags($header->subject);
-	$mailHeader['date'] = $header->date;
+	$mailHeader['subject'] = strip_tags($theader->subject);
+	$mailHeader['date'] = $theader->date;
 
-	for($p=0;$p<count($header->reply_to);$p++) {
-		$mailHeader['reply_to'][] = $header->reply_to[$p]->mailbox.'@'.$header->reply_to[$p]->host;
-		$mailHeader['reply_to_name'][] = $header->reply_to[$p]->personal;
+	for($p=0;$p<count($theader->reply_to);$p++) {
+		$mailHeader['reply_to'][] = $theader->reply_to[$p]->mailbox.'@'.$theader->reply_to[$p]->host;
+		$mailHeader['reply_to_name'][] = $theader->reply_to[$p]->personal;
 	}
-	for($p=0;$p<count($header->cc);$p++) {
-		$mailHeader['cc_list'][] = $header->cc[$p]->mailbox.'@'.$header->cc[$p]->host;
-		$mailHeader['cc_list_name'][] = $header->cc[$p]->personal;
+	for($p=0;$p<count($theader->cc);$p++) {
+		$mailHeader['cc_list'][] = $theader->cc[$p]->mailbox.'@'.$theader->cc[$p]->host;
+		$mailHeader['cc_list_name'][] = $theader->cc[$p]->personal;
 	}
-    	return $ret = Array("header"=>$mailHeader);
-}
-function find_relationships($db,$from) {
+    	return $ret = Array("theader"=>$mailHeader);
+    }
 
+    private function get_attachments() {
+       $struct = imap_fetchstructure($this->mbox, $this->mailid);
+       $parts = $struct->parts;
+
+        $done="false";
+        $i = 0;
+        if (!$parts)
+                return false; // simple message
+        else  {
+        $stack = array();
+        $inline = array();
+
+        $endwhile = false;
+
+        while (!$endwhile) {
+           if (!$parts[$i]) {
+             if (count($stack) > 0) {
+               $parts = $stack[count($stack)-1]["p"];
+               $i    = $stack[count($stack)-1]["i"] + 1;
+               array_pop($stack);
+             } else {
+               $endwhile = true;
+             }
+        }
+           if (!$endwhile) {
+
+             $partstring = "";
+             foreach ($stack as $s) {
+               $partstring .= ($s["i"]+1) . ".";
+             }
+             $partstring .= ($i+1);
+
+             if (strtoupper($parts[$i]->disposition) == "INLINE" || strtoupper($parts[$i]->disposition) == "ATTACHMENT")
+                        return true;
+             }
+           if ($parts[$i]->parts) {
+             $stack[] = array("p" => $parts, "i" => $i);
+             $parts = $parts[$i]->parts;
+             $i = 0;
+           } else {
+             $i++;
+           }
+         }
+       }
+        return false;
+    }
+
+    private function find_relationships() {
 	// leads search
-	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".$from."' AND vtiger_crmentity.deleted='0'";
-	$res = $db->query($sql,true,"Error: "."<BR>$query");
-	$numRows = $db->num_rows($res);
+	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".trim($this->from)."' AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
-		return array('type'=>"Leads",'id'=>$db->query_result($res,0,"leadid"),'name'=>$db->query_result($res,0,"firstname")." ".$db->query_result($res,0,"lastname"));
+		return array('type'=>"Leads",'id'=>$this->db->query_result($res,0,"leadid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// contacts search
-	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = '".$from."'  AND vtiger_crmentity.deleted='0'";
-	$res = $db->query($sql,true,"Error: "."<BR>$query");
-	$numRows = $db->num_rows($res);
+	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = '".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
-		return array('type'=>"Contacts",'id'=>$db->query_result($res,0,"contactid"),'name'=>$db->query_result($res,0,"firstname")." ".$db->query_result($res,0,"lastname"));
+		return array('type'=>"Contacts",'id'=>$this->db->query_result($res,0,"contactid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// vtiger_accounts search
-	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = '".$from."' OR vtiger_account.email1='".$from."'  AND vtiger_crmentity.deleted='0'";
-	$res = $db->query($sql,true,"Error: "."<BR>$query");
-	$numRows = $db->num_rows($res);
+	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = '".trim($this->from)."' OR vtiger_account.email1='".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
-		return array('type'=>"Accounts",'id'=>$db->query_result($res,0,"accountid"),'name'=>$db->query_result($res,0,"accountname"));
+		return array('type'=>"Accounts",'id'=>$this->db->query_result($res,0,"accountid"),'name'=>$this->db->query_result($res,0,"accountname"));
 
 	return 0;
-}
+    }
 
-function dl_inline($mailid,$mbox) {
-        $struct = imap_fetchstructure($mbox, $mailid);
+    private function dl_inline() {
+        $struct = imap_fetchstructure($this->mbox, $this->mailid);
         $parts = $struct->parts;
 
         $i = 0;
@@ -193,7 +246,7 @@ function dl_inline($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "INLINE")
-                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($this->mbox, $this->mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
@@ -205,9 +258,10 @@ function dl_inline($mailid,$mbox) {
          }
        }
 	return $inline;
-}
-function dl_attachments($mailid,$mbox) {
-        $struct = imap_fetchstructure($mbox, $mailid);
+    }
+
+    private function dl_attachments() {
+        $struct = imap_fetchstructure($this->mbox, $this->mailid);
         $parts = $struct->parts;
 
         $content = array();
@@ -240,7 +294,7 @@ function dl_attachments($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($this->mbox, $this->mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
@@ -252,18 +306,17 @@ function dl_attachments($mailid,$mbox) {
          }
        }
 	return $attachment;
-}
-function load_mail($mailid,$mbox) {
-
+    }
+    private function load_mail() {
 	// parse the message
-	$struct = imap_fetchstructure($mbox, $mailid);
+	$struct = imap_fetchstructure($this->mbox, $this->mailid);
        	$parts = $struct->parts;
 
         $content = array();
         $i = 0;
         if (!$parts) { /* Simple message, only 1 piece */
          $attachment = array(); /* No vtiger_attachments */
-         $bod=imap_body($mbox, $mailid);
+         $bod=imap_body($this->mbox, $this->mailid);
          if(preg_match("/\<br\>/",$bod))
                 	$content['body'] = $bod;
          else 
@@ -302,16 +355,16 @@ function load_mail($mailid,$mbox) {
                         $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 
              } elseif (strtoupper($parts[$i]->subtype) == "HTML") {
-                        $content['body'] = preg_replace($search,$replace,imap_fetchbody($mbox, $mailid, $partstring));
+                        $content['body'] = preg_replace($search,$replace,imap_fetchbody($this->mbox, $this->mailid, $partstring));
 			$stat="done";
              } elseif (strtoupper($parts[$i]->subtype) == "TEXT" && !$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($mbox, $mailid, $partstring));
+                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
 			$stat="done";
              } elseif (strtoupper($parts[$i]->subtype) == "PLAIN" && !$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($mbox, $mailid, $partstring));
+                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
 			$stat="done";
              } elseif (!$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($mbox, $mailid, $partstring));
+                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
              }
            }
 
@@ -324,12 +377,13 @@ function load_mail($mailid,$mbox) {
            }
          } 
        } 
-    if($struct->encoding==3)
-	$content['body'] = base64_decode($content['body']);
-    if($struct->encoding==4)
-	$content['body'] = quoted_printable_decode($content['body']);
+    	if($struct->encoding==3)
+		$content['body'] = base64_decode($content['body']);
+    	if($struct->encoding==4)
+		$content['body'] = quoted_printable_decode($content['body']);
 
     	$ret = Array("content" => $content,"attachments"=>$attachment,"inline"=>$inline);
-    return $ret;
+    	return $ret;
+    }
 }
 ?>

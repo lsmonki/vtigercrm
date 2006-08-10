@@ -16,7 +16,7 @@ function gotoWebmail()
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
                 	method: 'post',
-			postBody: "module=Webmails&action=WebmailsAjax&file=ListView&config_chk=true",
+			postBody: "module=Webmails&action=WebmailsAjax&config_chk=true",
 			onComplete: function(response) {
 				if(response.responseText != 'SUCESS')
 					$('mailconfchk').style.display = 'block';

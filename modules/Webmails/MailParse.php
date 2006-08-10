@@ -9,143 +9,90 @@
   *
   ********************************************************************************/
 
-function fullMailList($mbox) {
-	$mailHeaders = @imap_headers($mbox);
-	$numEmails = sizeof($mailHeaders);
-	$mailOverviews = @imap_fetch_overview($mbox, "1:$numEmails", 0);
-	$out = array("headers"=>$mailHeaders,"overview"=>$mailOverviews,"count"=>$numEmails);
-	return $out;
-}
-function isBase64($iVal){
-	$_tmp=preg_replace("/[^A-Z0-9\+\/\=]/i","",$iVal);
-	return (strlen($_tmp) % 4 == 0 ) ? "y" : "n";
-}
-function getImapMbox($mailbox,$temprow,$readonly='') {
-	global $mbox;
-	$login_username= $temprow["mail_username"]; 
-	$secretkey=$temprow["mail_password"]; 
-	$imapServerAddress=$temprow["mail_servername"]; 
-	$mail_protocol=$temprow["mail_protocol"]; 
-	$ssltype=$temprow["ssltype"]; 
-	$sslmeth=$temprow["sslmeth"]; 
-	 
-	$mods = parsePHPModules();
-	 	 
-	// first we will try a regular old IMAP connection: 
-	if($ssltype == "") {$ssltype = "notls";} 
-	if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
 
-	if($readonly == "true") {
-	    if($mods["imap"]["SSL Support"] == "enabled")
-		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."/readonly}".$mailbox, $login_username, $secretkey); 
-	    else
-		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/readonly}".$mailbox, $login_username, $secretkey); 
-	} else {
-	    if($mods["imap"]["SSL Support"] == "enabled")
-		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
-	    else
-		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."}".$mailbox, $login_username, $secretkey); 
-	}
+// draw a row for the listview entry
+function show_msg($mails,$start_message) {
+        global $MailBox,$displayed_msgs,$show_hidden,$new_msgs;
 
-	// next we'll try to make a port specific connection to see if that helps.
-	// this may need to be updated to remove SSL/TLS since the c-client libs
-	// are not linked correctly to SSL in most windows installs.
-	if(!$mbox) {
-	 	if($mail_protocol == 'pop3') {
-			if($readonly == "true")
-	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/readonly}".$mailbox;
-			else
-	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/}".$mailbox;
-	 	} else { 
-			if($readonly == "true") { 
-	    		    if($mods["imap"]["SSL Support"] == "enabled")
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/".$sslmeth."/readonly}".$mailbox; 
-			    else
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/}".$mailbox; 
-			} else {
-	    		    if($mods["imap"]["SSL Support"] == "enabled")
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox;
-			    else
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."}".$mailbox;
-			}
-	 	} 
-	 	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
-	} 
-	return $mbox; 
-}
-function getAttachments($mailid,$mbox) {
-       $struct = imap_fetchstructure($mbox, $mailid);
-       $parts = $struct->parts;
 
-        $done="false";
-        $i = 0;
-        if (!$parts)
-		return false; // simple message
-	else  {
-        $stack = array();
-        $inline = array();
+        $num = $mails[$start_message]->msgno;
+        $msg_ob = new Webmail($MailBox->mbox,$num);
 
-        $endwhile = false;
+        // TODO: scan the current db vtiger_tables to find a
+        // matching email address that will make a good
+        // candidate for record_id
+        // this module will also need to be able to associate to any entity type
+        $record_id='';
 
-        while (!$endwhile) {
-           if (!$parts[$i]) {
-             if (count($stack) > 0) {
-               $parts = $stack[count($stack)-1]["p"];
-               $i    = $stack[count($stack)-1]["i"] + 1;
-               array_pop($stack);
-             } else {
-               $endwhile = true;
-             }
+        if($mails[$start_message]->subject=="")
+                $mails[$start_message]->subject="(No Subject)";
+
+        // Let's pre-build our URL parameters since it's too much of a pain not to
+        $detailParams = 'record='.$num.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
+
+        $displayed_msgs++;
+        if ($mails[$start_message]->deleted && !$show_hidden) {
+                $flags = "<tr id='row_".$num."' class='deletedRow' style='display:none'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+        $displayed_msgs--;
+        } elseif ($mails[$start_message]->deleted && $show_hidden)
+                $flags = "<tr id='row_".$num."' class='deletedRow'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+        elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent) {
+                $flags = "<tr class='unread_email' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+                $new_msgs++;
+        } else
+                $flags = "<tr id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+
+        // Attachment Icons
+        if($msg_ob->has_attachments)
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
+        else
+                $flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
+
+        // read/unread/forwarded/replied
+        if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
+        {
+                $flags.='<span id="unread_img_'.$num.'"><a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
         }
-           if (!$endwhile) {
+        elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
+                $flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
+        elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
+                $flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13"></a>&nbsp;';
+        else
+                $flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
-             $partstring = "";
-             foreach ($stack as $s) {
-               $partstring .= ($s["i"]+1) . ".";
-             }
-             $partstring .= ($i+1);
+        // Set IMAP flag
+        if($mails[$start_message]->flagged)
+                $flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"></a></span>';
+        else
+                $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"></a></span>';
 
-             if (strtoupper($parts[$i]->disposition) == "INLINE" || strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-			return true;
-             }
-           if ($parts[$i]->parts) {
-             $stack[] = array("p" => $parts, "i" => $i);
-             $parts = $parts[$i]->parts;
-             $i = 0;
-           } else {
-             $i++;
-           }
-         }
-       }
-        return false;
+
+        $tmp=imap_mime_header_decode($mails[$start_message]->from);
+        $from = $tmp[0]->text;
+        $listview_entries[$num] = array();
+
+        $listview_entries[$num][] = $flags."</td>";
+
+        if ($mails[$start_message]->deleted) {
+                $listview_entries[$num][] = '<td width="20%" nowrap align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+                $listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="deleted_date_'.$num.'"><s>'.substr($mails[$start_message]->date,0,30).'</s></td>';
+                $listview_entries[$num][] = '<td width="10%" nowrap align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,20).'</s></td>';
+        } elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
+                $listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+                $listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="ndeleted_date_'.$num.'" >'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
+                $listview_entries[$num][] = '<td  width="10%" nowrap align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,20).'</td>';
+        } else {
+                $listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+                $listview_entries[$num][] = '<td width="10%" npwrap align="left" nowrap id="ndeleted_date_'.$num.'">'.substr($mails[$start_message]->date,0,30).'</td>';
+                $listview_entries[$num][] = '<td width="10%" nowrap align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,20).'</td>';
+        }
+
+        if($mails[$start_message]->deleted)
+                $listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a></span></td></tr>';
+        else
+                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a></span></td></tr>';
+
+        return $listview_entries[$num];
 }
-function parsePHPModules() {
- ob_start();
- phpinfo(INFO_MODULES);
- $s = ob_get_contents();
- ob_end_clean();
 
- $s = strip_tags($s,'<h2><th><td>');
- $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/',"<info>\\1</info>",$s);
- $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/',"<info>\\1</info>",$s);
- $vTmp = preg_split('/(<h2>[^<]+<\/h2>)/',$s,-1,PREG_SPLIT_DELIM_CAPTURE);
- $vModules = array();
- for ($i=1;$i<count($vTmp);$i++) {
-  if (preg_match('/<h2>([^<]+)<\/h2>/',$vTmp[$i],$vMat)) {
-   $vName = trim($vMat[1]);
-   $vTmp2 = explode("\n",$vTmp[$i+1]);
-   foreach ($vTmp2 AS $vOne) {
-   $vPat = '<info>([^<]+)<\/info>';
-   $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
-   $vPat2 = "/$vPat\s*$vPat/";
-   if (preg_match($vPat3,$vOne,$vMat)) { // 3cols
-     $vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]),trim($vMat[3]));
-   } elseif (preg_match($vPat2,$vOne,$vMat)) { // 2cols
-     $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
-   }
-   }
-  }
- }
- return $vModules;
-}
 ?>

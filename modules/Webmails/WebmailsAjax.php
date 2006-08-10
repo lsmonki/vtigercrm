@@ -12,39 +12,95 @@ require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
-require_once('modules/Webmails/MailParse.php');
+require_once('modules/Webmails/MailBox.php');
+require_once('modules/Webmails/Webmail.php');
 
-global $adb,$mbox,$current_user;
-$mailInfo = getMailServerInfo($current_user);
-if($_REQUEST['config_chk'] == 'true')
+global $adb,$MailBox,$current_user;
+if(!$MailBox->mbox)
+	$MailBox = new MailBox();
+
+if($_POST['config_chk'] == 'true')
 {
-	if($adb->num_rows($mailInfo) < 1) {
+	if($MailBox->enabled == 'false') {
 		echo 'FAILED';
 		exit();
-	}else
-	{
+	} else {
 		echo 'SUCESS';
 		exit();
 	}
+	exit();
 }
-if($adb->num_rows($mailInfo) < 1) {
-        echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
-        exit();
-}
-
-$temprow = $adb->fetch_array($mailInfo);
-
-$imapServerAddress=$temprow["mail_servername"];
 
 $mailbox = $_REQUEST["mailbox"];
+$mailid=$_REQUEST["mailid"];
+if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
-if($_REQUEST["command"] == "check_mbox") {
-	$mbox = getImapMbox($mailbox,$temprow);
+global $MailBox;
+if(isset($_REQUEST["command"])) {
+    if(!$MailBox->mbox && $mailbox != "") {
+        $MailBox->mailbox = $mailbox;
+	$MailBox->getImapMbox(); 
+	$MailBox->fullMailList();
+    }
+    $command = $_REQUEST["command"];
+    if($command == "expunge") {
+    	imap_expunge($MailBox->mbox);
+	imap_close($MailBox->mbox);
+	flush();
+	exit();
+    }
+    if($command == "delete_msg") {
+	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
+	$email = new Webmail($MailBox->mbox,$mailid);
+       	$email->delete();
+	imap_close($MailBox->mbox);
+	echo $mailid;
+	flush();
+	exit();
+    }
+    if($command == "delete_multi_msg") {
+	$tlist = explode(":",$mailid);
+	foreach($tlist as $id) {
+		$adb->println("DELETE MULTI MESSAGE $id");
+		$email = new Webmail($MailBox->mbox,$id);
+       	 	$email->delete();
+	}
+	imap_close($MailBox->mbox);
+	echo $mailid;
+	flush();
+	exit();
+    } 
+    if($command == "undelete_msg") {
+	$email = new Webmail($MailBox->mbox,$mailid);
+        $email->unDeleteMsg();
+	imap_close($MailBox->mbox);
+	echo $mailid;
+	flush();
+	exit();
+    }
+    if($command == "set_flag") {
+	$email = new Webmail($MailBox->mbox,$mailid);
+        $email->setFlag();
+	imap_close($MailBox->mbox);
+	flush();
+	exit();
+    }
+    if($command == "clear_flag") {
+	$email = new Webmail($MailBox->mbox,$mailid);
+        $email->delFlag();
+	imap_close($MailBox->mbox);
+	flush();
+	exit();
+    }
 
-	$search = imap_search($mbox, "NEW");
+    if($_POST["command"] == "check_mbox") {
+	$MailBox->mailbox=$mailbox;
+	$MailBox->getImapMbox;
+
+	$search = imap_search($MailBox->mbox, "NEW");
 	if($search === false) {echo "failed";flush();exit();}
 
-	$data = imap_fetch_overview($mbox,implode(',',$search));
+	$data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
 	$num=sizeof($data);
 
 	$ret = '';
@@ -72,16 +128,18 @@ if($_REQUEST["command"] == "check_mbox") {
 
 	echo $ret;
 	flush();
-	imap_close($mbox);
-}
-if($_REQUEST["command"] == "check_mbox_all") {
+	imap_close($MailBox->mbox);
+    }
+
+    if($_REQUEST["command"] == "check_mbox_all") {
 	$boxes = array();
 	$i=0;
         foreach ($_SESSION["mailboxes"] as $key => $val) {
 		$mailbox=$key;
-		$mbox = getImapMbox($mailbox,$temprow,"true");
+		$MailBox->mailbox=$mailbox;
+		$MailBox->getImapMbox();
 
-		$box = imap_status($mbox, "{".$imapServerAddress."}".$mailbox, SA_ALL);
+		$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$mailbox, SA_ALL);
 
 		$boxes[$i]["name"] = $mailbox;
 		if($val == $box->unseen)
@@ -94,7 +152,7 @@ if($_REQUEST["command"] == "check_mbox_all") {
 			$_SESSION["mailboxes"][$mailbox] = $box->unseen;
 		}
 		$i++;
-		imap_close($mbox);
+		imap_close($MailBox->mbox);
 	}
 
 	$ret = '';
@@ -117,5 +175,6 @@ if($_REQUEST["command"] == "check_mbox_all") {
 	echo $ret;
 	flush();
 	exit();
+    }
 }
 ?>

@@ -13,29 +13,24 @@ global $current_user;
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Webmails/Webmail.php');
-require_once('modules/Webmails/MailParse.php');
+require_once('modules/Webmails/MailBox.php');
 
 if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] != $current_user->id) {echo "ajax failed";flush();exit();}
 
-$mailInfo = getMailServerInfo($current_user);
-$temprow = $adb->fetch_array($mailInfo);
-$imapServerAddress=$temprow["mail_servername"];
-$box_refresh=$temprow["box_refresh"];
-$mails_per_page=$temprow["mails_per_page"];
-
 $mailid=$_REQUEST["mailid"];
+
 if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
-global $mbox;
-$mbox = getImapMbox($mailbox,$temprow);
+global $MailBox;
+if(!$MailBox->mbox)
+	$MailBox = new MailBox($mailbox);
 
-$email = new Webmail($mbox,$mailid);
-$email->loadMail();
+$email = new Webmail($MailBox->mbox,$mailid);
 
 if(isset($_POST["command"])) {
 	$command = $_POST["command"];
 	if($command == "expunge")
-		imap_expunge($mbox);
+		imap_expunge($MailBox->mbox);
 	if($command == "delete_msg")
 		 $email->delete();
 	if($command == "undelete_msg")
@@ -56,6 +51,7 @@ function show_inline(num) {
 }
 </script>
 <?
+	$email->loadMail();
 	echo $email->body;
 	echo "<br><br>";
 	if(is_array($email->inline)) {
@@ -90,5 +86,5 @@ function show_inline(num) {
 		}
 	}
 } 
-imap_close($mbox);
+imap_close($MailBox->mbox);
 ?>
