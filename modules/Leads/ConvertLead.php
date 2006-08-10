@@ -80,26 +80,31 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 	<input type="hidden" name="action">
 	<input type="hidden" name="current_user_id" value="'.$modified_user_id.'">
 	
-	<div id="orgLay" style="display: block;">
-	<table width="100%" border="0" cellpadding="5" cellspacing="0">
+	<div id="orgLay" style="display: block;" class="layerPopup" >
+	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
 			<td class="genHeaderSmall" align="left"><IMG src="'.$image_path.'Leads.gif">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
 			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" align="absmiddle" border="0"></a></td>
 		</tr>
-		<tr><td colspan="2"><hr></td></tr>
-		<tr>
-			<td colspan="2" class="detailedViewHeader"><b>'.$mod_strings['LBL_CONVERT_LEAD_INFORMATION'].'</b></td>
-		</tr>
+		</table>
+	
+	<table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
+	<tr>
+		<td class=small >
+			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+				<tr>
+						<td colspan="2" class="detailedViewHeader"><b>'.$mod_strings['LBL_CONVERT_LEAD_INFORMATION'].'</b></td>
+				</tr>
                 <tr>
-			<td align="right" class="dvtCellLabel" width="50%">'.$app_strings['LBL_ASSIGNED_TO'].'</td>
-                        <td class="dvtCellInfo" width="50%">
-                        	<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(), $userid).'</select>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
-			<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'"></td>
-		</tr>';
+						<td align="right" class="dvtCellLabel" width="50%">'.$app_strings['LBL_ASSIGNED_TO'].'</td>
+                       	<td class="dvtCellInfo" width="50%">
+                        		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(), $userid).'</select>
+						</td>
+				</tr>
+				<tr>
+					<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
+					<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'"></td>
+			</tr>';
 
 if(isPermitted("Potentials",'EditView') == 'yes')
 {
@@ -108,12 +113,12 @@ $convertlead .='<tr>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="fnSlide2(\'ch\',\'cc\')"></td>
 		</tr>
 		<tr>
-			<td colspan="2" id="ch" height="100" >
+			<td colspan="2" id="ch" height="100" style="padding:0px;" >
 				<div style="display:block;" id="cc"  >
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" >
 						<tr>
-							<td align="right" class="dvtCellLabel" width="50%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
-							<td class="dvtCellInfo" width="50%">
+							<td align="right" class="dvtCellLabel" width="53%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
+							<td class="dvtCellInfo" width="47%">
 							<input name="potential_name" value="'.$potentialname.'" tabindex="3">
                                                         </td>
 						</tr>
@@ -137,13 +142,15 @@ $convertlead .='<tr>
 			</td>
 		</tr>';
 }
-$convertlead .='<tr>
-			<td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td>
+$convertlead .='</table>
+			</td>
 		</tr>
-		<tr>
-			<td colspan="2" align="center">
-				<input name="Save" value=" '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verify_data(ConvertLead)" type="submit"  class="classBtn">&nbsp;&nbsp;
-				<input type="button" name=" Cancel " value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " onClick="hide(\'orgLay\')" class="classBtn">
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+	<tr>
+			<td align="center">
+				<input name="Save" value=" '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verify_data(ConvertLead)" type="submit"  class="crmbutton save small">&nbsp;&nbsp;
+				<input type="button" name=" Cancel " value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " onClick="hide(\'orgLay\')" class="crmbutton cancel small">
 			</td>
 		</tr>
 	</table>
