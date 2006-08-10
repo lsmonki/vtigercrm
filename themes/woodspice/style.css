@@ -3268,6 +3268,32 @@ border-width:1px;
 	background:#fffff5 url(images/layerPopupBg.gif) ;
 }
 
+a.customMnu{
+	padding-left:30px;
+	padding-top:5px;
+	padding-bottom:5px;
+	display:block;
+	background-repeat:no-repeat;
+	background-position:left;
+	width:155px;
+	color:#000000;
+	text-decoration:none;
+}
+
+a.customMnuSelected{
+	padding-left:30px;
+	padding-top:5px;
+	padding-bottom:5px;
+	display:block;
+	background-repeat:no-repeat;
+	background-position:left;
+	width:155px;
+	background-color:#0099FF;
+	color:#FFFFFF;
+	text-decoration:none;
+}
+
+
 /* Drop Down Menu */
 .drop_mnu{
     position:absolute;
