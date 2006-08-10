@@ -28,7 +28,6 @@ require_once("config.php");
 require_once('include/database/PearDatabase.php');
 global $adb;
 $local_log =& LoggerManager::getLogger('index');
-//echo '<pre>';print_r($_REQUEST);echo '</pre>';
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -87,8 +86,11 @@ else
 			if(($fieldname == 'recurringtype') && ! isset($_REQUEST['recurringcheck']))
 				$focus->column_fields['recurringtype'] = '--None--';
 		}
-		
 	}
+	if(isset($_REQUEST['visibility']) && $_REQUEST['visibility']!= '')
+	        $focus->column_fields['visibility'] = $_REQUEST['visibility'];
+	else
+	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
 	$return_id = $focus->id;
 }
