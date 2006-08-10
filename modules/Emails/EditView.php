@@ -131,17 +131,26 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('CC_MAIL',implode(",",$webmail->cc_list).",".implode(",",$webmail->to));
 		else
 			$smarty->assign('CC_MAIL',implode(",",$webmail->to));
-		$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
+		if(preg_match("/RE:/i", $webmail->subject))
+			$smarty->assign('SUBJECT',$webmail->subject);
+		else
+			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["reply"] == "single") {
 		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
 		$smarty->assign('BCC_MAIL',$webmail->to[0]);
-		$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
+		if(preg_match("/RE:/i", $webmail->subject))
+			$smarty->assign('SUBJECT',$webmail->subject);
+		else
+			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["forward"] == "true") {
 		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
 		$smarty->assign('BCC_MAIL',$webmail->to[0]);
-		$smarty->assign('SUBJECT',"FW: ".$webmail->subject);
+		if(preg_match("/FW:/i", $webmail->subject))
+			$smarty->assign('SUBJECT',$webmail->subject);
+		else
+			$smarty->assign('SUBJECT',"FW: ".$webmail->subject);
 	}
 	$smarty->assign('DESCRIPTION',$webmail->replyBody());
 	$focus->mode='';
