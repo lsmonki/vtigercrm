@@ -106,6 +106,7 @@ if($current_user->hour_format == '')
 	$format = 'am/pm';
 else
 	$format = $current_user->hour_format;
+//echo '<pre>';print_r($value);echo '</pre>';
 $stdate = key($value['date_start']);
 $enddate = key($value['due_date']);
 $sttime = $value['date_start'][$stdate];
@@ -117,6 +118,35 @@ $value['startfmt'] = $time_arr['startfmt'];
 $value['endhr'] = $time_arr['endhour'];
 $value['endmin'] = $time_arr['endmin'];
 $value['endfmt'] = $time_arr['endfmt'];
+$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
+$res = $adb->query($query);
+$rows = $adb->num_rows($res);
+if($rows != 0)
+{
+	$value['recurringcheck'] = 'Yes';
+	$value['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
+	$recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
+	$value['recurringtype'] = $recurringinfo[0];
+	if($recurringinfo[0] == 'Monthly')
+	{
+		$monthrpt_str = '';
+		$value['repeatMonth'] = $recurringinfo[1];
+		if($recurringinfo[1] == 'date')
+		{
+			$value['repeatMonth_date'] = $recurringinfo[2];
+		}
+		else
+		{
+			$value['repeatMonth_daytype'] = $recurringinfo[2];
+			$value['repeatMonth_day'] = $recurringinfo[3];
+		}
+	}
+}
+else
+{
+	$value['recurringcheck'] = 'No';
+}
+
 $related_array = getRelatedLists("Calendar", $focus);
 $cntlist = $related_array['Contacts']['entries'];
 $cnt_idlist = '';
@@ -124,7 +154,7 @@ $cnt_namelist = '';
 if($cntlist != '')
 {
 	$i = 0;
-	foreach($cntlist as $key=>$value)
+	foreach($cntlist as $key=>$cntvalue)
 	{
 		if($i != 0)
 		{
@@ -132,7 +162,7 @@ if($cntlist != '')
 			$cnt_namelist .= "\n";
 		}
 		$cnt_idlist .= $key;
-		$cnt_namelist .= eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $value[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $value[1]);
+		$cnt_namelist .= eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
 		$i++;
 	}
 }
@@ -140,6 +170,7 @@ $smarty->assign("CONTACTSID",$cnt_idlist);
 $smarty->assign("CONTACTSNAME",$cnt_namelist);
 $smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt']));
 $smarty->assign("ENDHOUR",getTimeCombo($format,'end',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
+//echo '<pre>';print_r($value);echo '</pre>';
 $smarty->assign("ACTIVITYDATA",$value);
 $smarty->assign("LABEL",$fldlabel);
 $smarty->assign("secondvalue",$secondvalue);
