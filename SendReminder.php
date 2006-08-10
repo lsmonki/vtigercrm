@@ -97,7 +97,7 @@ if($adb->num_rows($result) >= 1)
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Subject : ".$activity_sub."\n ". $parent_content ." Date & Time : ".$date_start." ".$time_start."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Subject : ".$activity_sub."\n ". $parent_content ." Date & Time : ".$date_start." ".$time_start."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
 
 			if(count($to_addr) >=1)
 			{
