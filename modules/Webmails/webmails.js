@@ -60,7 +60,7 @@ function load_webmail(mid) {
 
 }
 function displayAttachments(mid) {
-        var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid;
+        var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
         window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
 function showRelationships(mid) {

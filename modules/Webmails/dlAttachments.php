@@ -28,14 +28,18 @@ $inline=$email->downloadInlineAttachments();
 
 if($num == "" || !isset($num) && count($attachments) >0 ) {
 	echo "<table width='100%' cellspacing='1' cellpadding='0' border='0'><tr><td align='center'>There are ".count($attachments)." attachment(s) to choose from:</td></tr>";
+
 	for($i=0;$i<count($attachments);$i++) {
-		echo "<tr><td align='center'>".count($attachments).") &nbsp; <a href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."'>".$attachments[$i]["filename"]."</td></tr>";
+		echo "<tr><td align='center'>".count($attachments).") &nbsp; <a href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."&mailbox=".$_REQUEST["mailbox"]."'>".$attachments[$i]["filename"]."</td></tr>";
 	}
+
 	echo "</table><br>";
 	echo "<table width='100%' cellspacing='1' cellpadding='0' border='0'><tr><td align='center'>There are ".count($inline)." <b>inline</b> attachment(s) to choose from:</td></tr>";
+
 	for($i=0;$i<count($inline);$i++) {
-		echo "<tr><td align='center'>".count($inline).") &nbsp; <a href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."&inline=true'>".$inline[$i]["filename"]."</td></tr>";
+		echo "<tr><td align='center'>".count($inline).") &nbsp; <a href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."&inline=true&mailbox=".$_REQUEST["mailbox"]."'>".$inline[$i]["filename"]."</td></tr>";
 	}
+
 	echo "</table><br><br>";
 
 } elseif (count(attachments) == 0 && count($inline) == 0) {
