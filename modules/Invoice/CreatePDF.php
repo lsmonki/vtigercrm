@@ -41,6 +41,12 @@ else
 	$so_name = '';
 $po_name = $focus->column_fields["purchaseorder"];
 
+if($focus->column_fields["hdnTaxType"] == "individual") {
+	$product_taxes = 'true';
+} else {
+	$product_taxes = 'false';
+}
+
 $valid_till = $focus->column_fields["duedate"];
 $valid_till = getDisplayDate($valid_till);
 $bill_street = $focus->column_fields["bill_street"];
@@ -85,29 +91,42 @@ $price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_
 $price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
 
 //getting the Product Data
-$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$id;
+$query="select vtiger_products.productname, vtiger_products.productid, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$id;
 
 global $result;
 $result = $adb->query($query);
 $num_products=$adb->num_rows($result);
 for($i=0;$i<$num_products;$i++) {
-		$product_name[$i]=$adb->query_result($result,$i,'productname');
-		$prod_description[$i]=$adb->query_result($result,$i,'product_description');
-		$product_id[$i]=$adb->query_result($result,$i,'productid');
-		$qty[$i]=$adb->query_result($result,$i,'quantity');
+	$product_name[$i]=$adb->query_result($result,$i,'productname');
+	$prod_description[$i]=$adb->query_result($result,$i,'product_description');
+	$product_id[$i]=$adb->query_result($result,$i,'productid');
+	$qty[$i]=$adb->query_result($result,$i,'quantity');
 
-		$unit_price[$i]= $currency_symbol.number_format($adb->query_result($result,$i,'unit_price'),2,'.',',');
-		$list_price[$i]= $currency_symbol.number_format(StripLastZero($adb->query_result($result,$i,'listprice')),2,'.',',');
-		$list_pricet[$i]= $adb->query_result($result,$i,'listprice');
-		$prod_total[$i]= $qty[$i]*$list_pricet[$i];
+	$unit_price[$i]= $currency_symbol.number_format($adb->query_result($result,$i,'unit_price'),2,'.',',');
+	$list_price[$i]= $currency_symbol.number_format(StripLastZero($adb->query_result($result,$i,'listprice')),2,'.',',');
+	$list_pricet[$i]= $adb->query_result($result,$i,'listprice');
+	$prod_total[$i]= $qty[$i]*$list_pricet[$i];
 
+	$total_taxes = '0.00';
+	if($product_taxes == "true") {
+		$q = "SELECT * FROM vtiger_inventoryproductrel WHERE id='".$focus->column_fields["record_id"]."' AND productid='".$product_id[$i]."' AND tax2 IS NOT NULL";
+		$trs = $adb->query($q);
+		$tax = $adb->query_result($trs,'0','tax2'); 
+		$taxable_total = ($adb->query_result($trs,'0','listprice') * $adb->query_result($trs,'0','quantity')); 
+		if($tax != "") {
+			$total_taxes = ($taxable_total/$tax);
+			$prod_total[$i] = ($prod_total[$i]+$total_taxes);
+		}
+	}
 
-		$product_line[] = array( "Product Name"    => $product_name[$i],
-				"Description"  => $prod_description[$i],
-				"Qty"     => $qty[$i],
-				"List Price"      => $list_price[$i],
-				"Unit Price" => $unit_price[$i],
-				"Total" => $currency_symbol.number_format($prod_total[$i]),2,'.',',');
+	$product_line[] = array( "Product Name"    => $product_name[$i],
+		"Description"  => $prod_description[$i],
+		"Qty"     => $qty[$i],
+		"List Price"      => $list_price[$i],
+		"Unit Price" => $unit_price[$i],
+		"Tax" => $currency_symbol.$total_taxes,
+		"Total" => $currency_symbol.$prod_total[$i]
+	);
 }
 
 	$total[]=array("Unit Price" => $app_strings['LBL_SUB_TOTAL'],

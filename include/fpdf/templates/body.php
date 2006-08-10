@@ -22,15 +22,17 @@ $colsAlign=array( "Product Name"    => "L",
              "Description"  => "L",
              "Qty"     => "C",
              "List Price"      => "R",
+             "Tax" => "R",
              "Unit Price" => "R",
              "Total"          => "R" );
 $prodTable=array("10","60");
 $cols=array( "Product Name" => 25,
-             "Description" => 80,
+             "Description" => 75,
              "Qty" => 10,
-             "List Price" => 25,
+             "List Price" => 20,
+             "Tax" => 15,
              "Unit Price" => 25,
-             "Total" => 25
+             "Total" => 20
             );
 $pdf->addCols( $cols,$prodTable,$bottom );
 $pdf->addLineFormat( $colsAlign);
@@ -62,13 +64,14 @@ for($i=0;$i<count($total);$i++) {
 
 // These are the lines in-between the totals, remove if you want
 // $x,$y,$length
-$lineData=array("150",$bottom+73,"49");
+$lineData=array("155",$bottom+73,"44");
 $pdf->drawLine($lineData);
-$lineData=array("150",$lineData[1]-$pad,"49");
+
+$lineData=array("155",$lineData[1]-$pad,"44");
 $pdf->drawLine($lineData);
-$lineData=array("150",$lineData[1]-$pad,"49");
+$lineData=array("155",$lineData[1]-$pad,"44");
 $pdf->drawLine($lineData);
-$lineData=array("150",$lineData[1]-$pad,"49");
+$lineData=array("155",$lineData[1]-$pad,"44");
 $pdf->drawLine($lineData);
 
 /* ************* End Totals *************************** */
