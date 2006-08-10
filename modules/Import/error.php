@@ -21,6 +21,7 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
+require_once('include/utils/utils.php');
 
 /**	function used to show the error message occured during import process
  *	@param	string	$message - Error message to display in the screen, where the passed error message will be displayed in screen using Importerror.tpl file
@@ -43,8 +44,6 @@ function show_error_import($message)
 
 	$log->info("Upload Error");
 
-//	$xtpl=new XTemplate ('modules/Import/error.html');
-
 	$smarty =  new vtigerCRM_Smarty;
 	$smarty->assign("MOD", $mod_strings);
 	$smarty->assign("APP", $app_strings);
@@ -55,6 +54,9 @@ function show_error_import($message)
 	if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 
 	$smarty->assign("THEME", $theme);
+
+	$category = getParenttab();
+	$smarty->assign("CATEGORY", $category); 
 
 	$smarty->assign("IMAGE_PATH", $image_path);
 	$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
