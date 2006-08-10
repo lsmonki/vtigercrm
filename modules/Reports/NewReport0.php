@@ -53,6 +53,7 @@ if($_REQUEST['reportName'] !='')
 $repObj = new Reports ();
 $list_report_form->assign("REP_FOLDERS",$repObj->sgetRptFldr());
 $list_report_form->assign("IMAGE_PATH", $image_path);
+$list_report_form->assign("THEME_PATH", $theme_path);
 $list_report_form->assign("ERROR_MSG", $mod_strings['LBL_NO_PERMISSION']);
 $list_report_form->display("ReportsStep0.tpl");
 ?>

@@ -67,5 +67,6 @@ $list_report_form->assign('REPORT_NAME',$reportname);
 $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);
+$list_report_form->assign("THEME_PATH", $theme_path);
 $list_report_form->display("ReportsStep1.tpl");
 ?>
