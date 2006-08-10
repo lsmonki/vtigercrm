@@ -82,59 +82,52 @@ if ( isset($_REQUEST['message']))
 	?>
 	<br>
 
-	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable small">
+	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 	   <tr>
-		<td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall" colspan="2">
+		<td height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall">
 			 Import <?php echo $_REQUEST['modulename']; ?> 
 		</td>
 	   </tr>
-	   <tr bgcolor="#ECECEC"><td colspan="2">&nbsp;</td></tr>
-	   <tr bgcolor="#ECECEC">
+	   <tr><td>&nbsp;</td></tr>
+	   <tr>
 		<td align="left"  style="padding-left:40px;width:75%;" >
 			<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp; 
 			<span class="genHeaderSmall">Mapping Results </span>
 		</td>
-		<td rowspan="2" width="25%" valign="top">
-			<table width="100%" border="0" cellpadding="5" cellspacing="0" >
-			   <tr>
-				<td align="center" valign="top">
-				   <form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
-					<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-					<input type="hidden" name="action" value="Import">
-					<input type="hidden" name="step" value="1">
-					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-					<input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
-					<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
-					<br><br>
-					<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
-				   </form>
-				</td>
-			   </tr>
-			   <tr>
-				<td align="center" valign="top">
-				   <form name="Import" method="POST" action="index.php">
-					<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-					<input type="hidden" name="action" value="Import">
-					<input type="hidden" name="step" value="undo">
-					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-					<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
-					<input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  ">
-				   </form>
-				</td>
-			   </tr>
-			</table>
-		</td>
 	   </tr>	
-	   <tr bgcolor="#ECECEC">
+	   <tr>
 		<td style="padding-left:140px;">
 			<?php 
 				echo $_REQUEST['message']; 
 			?>
-			<br><br><br>
-		</td>
-	   </tr>
+		 <br><br><br> 		 </td>
+       </tr>
+	   <tr>
+	     <td class="reportCreateBottom" >
+		 <table width="100%" border="0" cellpadding="5" cellspacing="0" >
+           <tr>
+             <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php" style="float:right; ">
+                 <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+                 <input type="hidden" name="action" value="Import">
+                 <input type="hidden" name="step" value="1">
+                 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
+                 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
+                 <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
+                 <input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
+                 <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
+             </form>
+			 <form name="Import" method="POST" action="index.php" style="float:right; ">
+                 <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+                 <input type="hidden" name="action" value="Import">
+                 <input type="hidden" name="step" value="undo">
+                 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
+                 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
+                 <input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
+                 <input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="crmbutton small cancel" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  ">
+             </form></td>
+           </tr>
+         </table></td>
+      </tr>
 	</table>
 	<?php 
 }
