@@ -1322,7 +1322,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$focus->record_id = $_REQUEST['recordid'];
 					if($_REQUEST['return_module'] == "Calendar")
 					{
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="a" id="calendarCont'.$entity_id.'" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 					}
 					else
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'"); window.close()\'>'.$temp_val.'</a>';
