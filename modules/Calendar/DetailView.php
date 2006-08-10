@@ -93,7 +93,6 @@ foreach($act_data as $block=>$entry)
 	}
 }
 
-//echo '<pre>';print_r($finaldata);echo '</pre>';
 //Start
 //To set user selected hour format
 if($current_user->hour_format == '')
@@ -122,7 +121,7 @@ if($activity_mode == 'Task')
 	$data['createdtime'] = $finaldata['createdtime'];
 	$data['parent_name'] = $finaldata['parent_id'];
 	$data['contact_id'] = $finaldata['contact_id'];
-	if(isset($finaldata['sendnotification']) && $finaldata['sendnotification']!=0)
+	if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
 		$data['sendnotification'] = 'Yes';
 	else
 		$data['sendnotification'] = 'No'; 
@@ -223,7 +222,6 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Calendar-Activities detail view");
-//echo '<pre>';print_r($finaldata);echo '</pre>';
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
@@ -247,7 +245,6 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'].'&activity_mode='.$activity_mode);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("NAME", $focus->name);
-//echo '<pre>';print_r( $act_data);echo '</pre>';
 $smarty->assign("BLOCKS", $act_data);
 $smarty->assign("LABEL", $fldlabel);
 
