@@ -25,9 +25,11 @@ require_once("modules/Webmails/MailBox.php");
 require_once("modules/Webmails/Webmail.php");
 require_once("modules/Webmails/MailParse.php");
 
-$MailBox = new MailBox($_REQUEST["mailbox"]);
+$MailBox = new MailBox($mailbox);
+
 // Check for a valid mailbox and also make sure the needed php_imap module is installed
 $mods = parsePHPModules();
+
 if(!$MailBox->mbox || !isset($mods["imap"]) || $mods["imap"] == "") {
 	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
 	exit();
