@@ -34,13 +34,14 @@ if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUES
 
 $adb->println("Inside WebmailsAjax.php");
 
+if(isset($_POST["file"]) && $_POST["ajax"] == "true") {
+	require_once("modules/".$_REQUEST["module"]."/".$_POST["file"].".php");
+}
 
 if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
-    $MailBox = new MailBox($mailbox);
-
     $command = $_REQUEST["command"];
-    $adb->println("Running Command $command");
     if($command == "expunge") {
+    	$MailBox = new MailBox($mailbox);
     	imap_expunge($MailBox->mbox);
 	imap_close($MailBox->mbox);
 	flush();
@@ -48,6 +49,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     }
     if($command == "delete_msg") {
 	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
+    	$MailBox = new MailBox($mailbox);
 	$email = new Webmail($MailBox->mbox,$mailid);
        	$email->delete();
 	imap_close($MailBox->mbox);
@@ -56,6 +58,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	exit();
     }
     if($command == "delete_multi_msg") {
+    	$MailBox = new MailBox($mailbox);
 	$tlist = explode(":",$mailid);
 	foreach($tlist as $id) {
 		$adb->println("DELETE MULTI MESSAGE $id");
@@ -68,6 +71,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	exit();
     } 
     if($command == "undelete_msg") {
+    	$MailBox = new MailBox($mailbox);
 	$email = new Webmail($MailBox->mbox,$mailid);
         $email->unDeleteMsg();
 	imap_close($MailBox->mbox);
@@ -76,6 +80,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	exit();
     }
     if($command == "set_flag") {
+    	$MailBox = new MailBox($mailbox);
 	$email = new Webmail($MailBox->mbox,$mailid);
         $email->setFlag();
 	imap_close($MailBox->mbox);
@@ -83,6 +88,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	exit();
     }
     if($command == "clear_flag") {
+    	$MailBox = new MailBox($mailbox);
 	$email = new Webmail($MailBox->mbox,$mailid);
         $email->delFlag();
 	imap_close($MailBox->mbox);
