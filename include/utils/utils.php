@@ -664,11 +664,11 @@ function get_themes() {
 	$log->debug("Entering get_themes() method ...");
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree" && $file != "Aqua" && $file != "nature" && $file != "orange") {
+           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree" && $file != "Aqua" && $file != "nature" && $file != "orange" && $file != "blue") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename
-				   	$name = $file;
+				   	$name = $file; 
 
 				   	// if there is a configuration class, load that.
 				   	if(is_file("./themes/$file/config.php"))
