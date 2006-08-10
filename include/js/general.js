@@ -1557,10 +1557,11 @@ function SelectAll(mod)
 
         x = document.selectall.selected_id.length;
 	var y=0;
-        var entity_id = window.opener.document.getElementById('parent_id').value
         var module = window.opener.document.getElementById('return_module').value
-        document.selectall.action.value='updateRelations'
+	if(module != 'Calendar')
+                var entity_id = window.opener.document.getElementById('parent_id').value
         idstring = "";
+	namestr = "";
 
         if ( x == undefined)
         {
@@ -1568,6 +1569,8 @@ function SelectAll(mod)
                 if (document.selectall.selected_id.checked)
                 {
 			idstring = document.selectall.selected_id.value;
+			if(module == 'Calendar')
+                                namestr = document.getElementById('calendarCont'+idstring).innerHTML;
                         y=1;
                 }
                 else
@@ -1584,6 +1587,11 @@ function SelectAll(mod)
                         if(document.selectall.selected_id[i].checked)
                         {
                                 idstring = document.selectall.selected_id[i].value +";"+idstring;
+				if(module == 'Calendar')
+                                {
+                                        idval = document.selectall.selected_id[i].value;
+                                        namestr = document.getElementById('calendarCont'+idval).innerHTML+"\n"+namestr;
+                                }
                   		y=y+1;
                         }
                 }
@@ -1599,7 +1607,15 @@ function SelectAll(mod)
         }
         if(confirm("Are you sure you want to add the selected "+y+" records ?"))
         {
-                opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
+		if(module == 'Calendar')
+                {
+                        window.opener.document.EditView.contactidlist.value = idstring;
+                        window.opener.document.EditView.contactlist.value = namestr;
+                }
+                else
+                {
+			opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
+		}
                 self.close();
         }
 	else
