@@ -29,7 +29,8 @@ $server->register(
 
 $server->register(
 	'create_lead_from_webform',
-	array('lastname'=>'xsd:string',
+	array('username'=>'xsd:string', 
+		'lastname'=>'xsd:string',
 		'email'=>'xsd:string', 
 		'phone'=>'xsd:string', 
 		'company'=>'xsd:string', 
@@ -43,7 +44,8 @@ $server->register(
 
 $server->register(
 	'create_site_from_webform',
-	array('portalname'=>'xsd:string',
+	array('username'=>'xsd:string', 
+		'portalname'=>'xsd:string',
 		'portalurl'=>'xsd:string'), 
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
@@ -52,7 +54,8 @@ $server->register(
 
 $server->register(
 	'create_rss_from_webform',
-	array('rssurl'=>'xsd:string'),
+	array('username'=>'xsd:string', 
+		'rssurl'=>'xsd:string'),
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
@@ -77,14 +80,14 @@ $server->register(
     
     $server->register(
 	'create_ticket_from_toolbar',
-	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
+	array('username'=>'xsd:string', 'title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
  
 
 $server->register(
 	'create_vendor_from_webform',
-	array('vendorname'=>'xsd:string',
+	array('username'=>'xsd:string', 'vendorname'=>'xsd:string',
 		'email'=>'xsd:string', 
 		'phone'=>'xsd:string', 
 		'website'=>'xsd:string'), 
@@ -94,7 +97,7 @@ $server->register(
 
 $server->register(
 	'create_product_from_webform',
-	array('productname'=>'xsd:string',
+	array('username'=>'xsd:string', 'productname'=>'xsd:string',
 		'productcode'=>'xsd:string', 
 		'website'=>'xsd:string'), 
 	array('return'=>'xsd:string'),
@@ -103,7 +106,7 @@ $server->register(
 
 $server->register(
 	'create_note_from_webform',
-	array('title'=>'xsd:string',
+	array('username'=>'xsd:string', 'title'=>'xsd:string',
 		'notecontent'=>'xsd:string'), 
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
@@ -347,7 +350,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 
 function get_version($user_name, $password)
 {
-    return "4.2";
+    return "5.0.0";
 }
 
 
