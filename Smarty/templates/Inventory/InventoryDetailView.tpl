@@ -158,7 +158,7 @@ function DeleteTag(id)
 	   </tr>
 	   <tr>
 		{strip}
-		<td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+		<td colspan=4 class="dvInnerHeader" >
 			<b>
 			       	{$header}
 			</b>
