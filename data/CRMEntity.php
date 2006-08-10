@@ -168,7 +168,7 @@ class CRMEntity
 		}
 		elseif($table_name == "vtiger_recurringevents") // Code included by Jaguar -  starts
 		{
-			$recur_type = trim($_REQUEST['recurringtype']);
+			$recur_type = trim($this->column_fields['recurringtype']);
 			if($recur_type != "--None--"  && $recur_type != '')
 		      	{		   
 				//Modified by Minnie
