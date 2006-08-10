@@ -113,12 +113,13 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	require_once('include/utils/UserInfoUtil.php');
 	require_once("modules/Webmails/Webmail.php");
 	require_once("modules/Webmails/MailParse.php");
+	require_once('modules/Webmails/MailBox.php');
 
 	$mailInfo = getMailServerInfo($current_user);
 	$temprow = $adb->fetch_array($mailInfo);
 
-	global $mbox;
-	$mbox = getImapMbox($mailbox,$temprow);
+	$MailBox = new MailBox($mailbox);
+	$mbox = $MailBox->mbox;
 
 	$webmail = new Webmail($mbox,$mailid);
 	$webmail->loadMail();
