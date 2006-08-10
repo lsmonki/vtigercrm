@@ -345,7 +345,7 @@
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')" checked>
 													{else}
 														{assign var=rptstyle value='style="display:none"'}
-													<input type="checkox" name="recurringcheck" onClick="showhide('repeatOptions')">
+													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
 													<td colspan=2>Enable Repeat</td>
@@ -450,7 +450,6 @@
 							<tr>
 								<td><b>Contacts :</b></td>
 								<td colspan="2">
-									<input name="return_module" id="return_module" value="Calendar" type="hidden">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
 									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
 									{$CONTACTSNAME}
