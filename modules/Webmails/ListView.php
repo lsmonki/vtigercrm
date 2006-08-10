@@ -55,12 +55,10 @@ var command;
 var id;
 
 
-/*
 addOnloadEvent(function() {
 		window.setTimeout("periodic_event()",box_refresh);
 	}
 );
-*/
 </script>
 <script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
 <?
@@ -74,6 +72,89 @@ if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
 	flush();
 	exit();
 }
+
+if($_POST["command"] == "check_mbox_all") {
+        $boxes = array();
+        $i=0;
+        foreach ($_SESSION["mailboxes"] as $key => $val) {
+                $mailbox=$key;
+                $MailBox->mailbox=$mailbox;
+                $MailBox->getImapMbox();
+
+                $box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$mailbox, SA_ALL);
+
+                $boxes[$i]["name"] = $mailbox;
+                if($val == $box->unseen)
+                        $boxes[$i]["newmsgs"] = 0;
+                elseif($val < $box->unseen) {
+                        $boxes[$i]["newmsgs"] = ($box->unseen-$val);
+                        $_SESSION["mailboxes"][$mailbox] = $box->unseen;
+                } else {
+                        $boxes[$i]["newmsgs"] = 0;
+                        $_SESSION["mailboxes"][$mailbox] = $box->unseen;
+                }
+                $i++;
+                imap_close($MailBox->mbox);
+        }
+
+        $ret = '';
+        if(count($boxes) > 0) {
+                $ret = '{"msgs":[';
+                for($i=0,$num=count($boxes);$i<$num;$i++) {
+                        $ret .= '{"msg":';
+                        $ret .= '{';
+                        $ret .= '"box":"'.$boxes[$i]["name"].'",';
+                        $ret .= '"newmsgs":"'.$boxes[$i]["newmsgs"].'"}';
+
+                        if(($i+1) == $num)
+                                $ret .= '}';
+                        else
+                                $ret .= '},';
+                }
+                $ret .= ']}';
+        }
+        echo $ret;
+        flush();
+        exit();
+}
+
+if($_POST["command"] == "check_mbox") {
+        $adb->println("Inside check_mbox AJAX command");
+        $search = imap_search($MailBox->mbox, "NEW");
+        if($search === false) {echo "failed";flush();exit();}
+
+        $data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
+        $num=sizeof($data);
+
+        $ret = '';
+        if($num > 0) {
+                $ret = '{"mails":[';
+                for($i=0;$i<$num;$i++) {
+                        $ret .= '{"mail":';
+                        $ret .= '{';
+                        $ret .= '"mailid":"'.$data[$i]->msgno.'",';
+                        $ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
+                        $ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
+                        $ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
+                        $ret .= '"to":"'.$data[$i]->to.'",';
+                        $email = new Webmail($MailBox->mbox,$data[$i]->msgno);
+                        if($email->has_attachments)
+                                $ret .= '"attachments":"1"}';
+                        else
+                                $ret .= '"attachments":"0"}';
+                        if(($i+1) == $num)
+                                $ret .= '}';
+                        else
+                                $ret .= '},';
+                }
+                $ret .= ']}';
+        }
+
+        echo $ret;
+        flush();
+        imap_close($MailBox->mbox);
+}
+
 
 // Function to remove directories used for tmp attachment storage
 function SureRemoveDir($dir) {
@@ -114,7 +195,6 @@ if(!isset($_REQUEST["search"])) {
 }
 
 $overview=$elist["overview"];
-
 ?>
 <!-- MAIN MSG LIST TABLE -->
 <script type="text/javascript">

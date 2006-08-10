@@ -14,9 +14,8 @@
 function show_msg($mails,$start_message) {
         global $MailBox,$displayed_msgs,$show_hidden,$new_msgs;
 
-
         $num = $mails[$start_message]->msgno;
-        $msg_ob = new Webmail($MailBox->mbox,$num);
+        $msg_ob = new Webmail($MailBox->mbox,$mails[$start_message]->msgno);
 
         // TODO: scan the current db vtiger_tables to find a
         // matching email address that will make a good

@@ -108,9 +108,9 @@ function check_in_all_boxes(mymbox) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&command=check_mbox_all&ajax=true',
+                        postBody: 'module=Webmails&action=WebmailsAjax&command=check_mbox_all&mailbox='+mymbox+'&ajax=true&file=ListView',
                         onComplete: function(t) {
-				//alert(t.responseText);
+				alert(t.responseText);
 				if(t.responseText != "") {
                                 	var data = eval('(' + t.responseText + ')');
                                 	for (var i=0;i<data.msgs.length;i++) {
@@ -140,7 +140,7 @@ function check_for_new_mail(mbox) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true',
+                        postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true&file=ListView',
                         onComplete: function(t) {
 			//alert(t.responseText);
                             try {
