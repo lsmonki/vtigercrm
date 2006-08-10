@@ -11,8 +11,8 @@
 -->*}
 <table width="100%" border="0" cellpadding="0" cellspacing="0" valign="top">
 <tr>
-    <td class="forwardBg">
-  		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <td class="hdrNameBg">
+  		<table width="100%"  border="0" cellspacing="5" cellpadding="0">
 		<tr>
 		{if $BLOCKS neq ''}
 			<td align="left">
