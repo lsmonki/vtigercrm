@@ -456,7 +456,11 @@
 			<tr>
 				<td>&nbsp;</td>
 				<td>
-					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="2006-08-05" type="text">&nbsp;<img src="themes/blue/images/btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+					{foreach key=date_value item=time_value from=$ACTIVITYDATA.date_start}
+	                                        {assign var=date_val value="$date_value"}
+						{assign var=time_val value="$time_value"}
+                                        {/foreach}
+					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text">&nbsp;<img src="themes/blue/images/btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
 					<script type="text/javascript">
 						Calendar.setup ({ldelim}
 	        	                                inputField : "date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
