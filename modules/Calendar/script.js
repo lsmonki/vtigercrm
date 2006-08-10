@@ -205,10 +205,6 @@ function enableCalstarttime()
 function maincheck_form()
 {
 	formSelectColumnString('inviteesid');
-	if(document.EditView.recurringcheck.checked == false)
-        {
-        	document.EditView.recurringtype.value = '--None--';
-      	}
 	starthour = document.EditView.starthr.value;
         startmin  = document.EditView.startmin.value;
         startformat = document.EditView.startfmt.value;
