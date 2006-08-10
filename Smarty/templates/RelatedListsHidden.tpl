@@ -21,7 +21,7 @@
 <input type="hidden" name="parent_id" id="parent_id" value="{$id}">
 <input type="hidden" name="parenttab" id="parenttab" value="{$CATEGORY}">
 <input type="hidden" name="action">
-{if $MODULE eq 'Activities'}
+{if $MODULE eq 'Calendar'}
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="user_id" value="{$USER_ID}">
 	<input type="hidden" name="record" value="{$ID}">
