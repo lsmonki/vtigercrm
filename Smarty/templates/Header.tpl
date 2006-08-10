@@ -185,12 +185,12 @@ function QCreate(qcoptions)
 	$("status").style.display="inline";
 	if(module == 'Events')
 	{ldelim}
-		module = 'Activities';
+		module = 'Calendar';
 		var urlstr = '&activity_mode=Events';
 	{rdelim}
-	else if(module == 'Activities')
+	else if(module == 'Calendar')
 	{ldelim}
-		module = 'Activities';
+		module = 'Calendar';
 		var urlstr = '&activity_mode=Task';
 	{rdelim}
 	else
