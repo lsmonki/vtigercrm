@@ -271,8 +271,12 @@
 											<input type="radio" name="set_reminder" value="No" onClick="fnhide('reminderOptions')">&nbsp;{$no_val}&nbsp;
 											</td></tr>
 										</table>
-
-									<DIV id="reminderOptions" style="display:none;width:100%">
+									{if $check eq 'CHECKED'}
+										{assign var=reminstyle value='style="display:block;width:100%"'}
+									{else}
+										{assign var=reminstyle value='style="display:none;width:100%"'}
+									{/if}
+									<DIV id="reminderOptions" {$reminstyle}>
 										<table border=0 cellspacing=0 cellpadding=2  width=100%>
 											<tr>
 												<td nowrap align=right width=20% valign=top><b>Remind on : </b></td>
@@ -326,21 +330,38 @@
 												<table border=0 cellspacing=0 cellpadding=0>
 												<tr>
 							
-													<td width=20><input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')"></td>
+													<td width=20>
+													{if $ACTIVITYDATA.recurringcheck eq 'Yes'}
+														{assign var=rptstyle value='style="display:block"'}
+														{if $ACTIVITYDATA.recurringtype eq 'Daily'}
+															{assign var=rptmonthstyle value='style="display:none"'}
+														{elseif $ACTIVITYDATA.recurringtype eq 'Weekly'}
+															{assign var=rptmonthstyle value='style="display:none"'}
+														{elseif $ACTIVITYDATA.recurringtype eq 'Monthly'}
+															{assign var=rptmonthstyle value='style="display:block"'}
+														{elseif $ACTIVITYDATA.recurringtype eq 'Yearly'}
+															{assign var=rptmonthstyle value='style="display:none"'}
+														{/if}
+													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')" checked>
+													{else}
+														{assign var=rptstyle value='style="display:none"'}
+													<input type="checkox" name="recurringcheck" onClick="showhide('repeatOptions')">
+													{/if}
+													</td>
 													<td colspan=2>Enable Repeat</td>
 												</tr>
 												<tr>
 													<td colspan=2>
-													<div id="repeatOptions" style="display:none">
+													<div id="repeatOptions" {$rptstyle}>
 													<table border=0 cellspacing=0 cellpadding=2>
 													<tr>
 													<td>Repeat once in every</td>
-													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
+													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="{$ACTIVITYDATA.repeat_frequency}" ></td>
 													<td><select name="recurringtype">
-													<option value="Daily" onClick="ghide('repeatMonthUI');">{$MOD.LBL_DAYS}</option>
-													<option value="Weekly" onClick="ghide('repeatMonthUI');">{$MOD.LBL_WEEKS}</option>
-													<option value="Monthly" onClick="gshow('repeatMonthUI');">{$MOD.LBL_MONTHS}</option>
-													<option value="Yearly" onClick="ghide('repeatMonthUI');";>{$MOD.LBL_YEAR}</option>
+													<option value="Daily" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
+													<option value="Weekly" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
+												<option value="Monthly" onClick="gshow('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
+													<option value="Yearly" onClick="ghide('repeatMonthUI');"; {if $ACTIVITYDATA.recurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
 													</td>
 												</tr>
@@ -359,13 +380,13 @@
 												</table>
 												</div-->
 	
-												<div id="repeatMonthUI" style="display:none;">
+												<div id="repeatMonthUI" {$rptmonthstyle}>
 												<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
 													<td>
 														<table border=0 cellspacing=0 cellpadding=2>
 														<tr>
-														<td><input type="radio" checked name="repeatMonth" value="date"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2" name="repeatMonth_date" ></td><td>day of the month</td>
+														<td><input type="radio" checked name="repeatMonth" {if $ACTIVITYDATA.repeatMonth eq 'date'} checked {/if} value="date"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="{$ACTIVITYDATA.repeatMonth_date}" name="repeatMonth_date" ></td><td>day of the month</td>
 														</tr>
 														</table>
 													</td>
@@ -374,22 +395,22 @@
 													<td>
 														<table border=0 cellspacing=0 cellpadding=2>
 														<tr><td>
-														<input type="radio" name="repeatMonth" value="day"></td>
+														<input type="radio" name="repeatMonth" {if $ACTIVITYDATA.repeatMonth eq 'day'} checked {/if} value="day"></td>
 														<td>on</td>
 														<td>
 														<select name="repeatMonth_daytype">
-															<option value="first">First</option>
-															<option value="last">Last</option>
+															<option value="first" {if $ACTIVITYDATA.repeatMonth_daytype eq 'first'} selected {/if}>First</option>
+															<option value="last" {if $ACTIVITYDATA.repeatMonth_daytype eq 'last'} selected {/if}>Last</option>
 														</select>
 														</td>
 														<td>
 														<select name="repeatMonth_day">
-															<option value=1>{$MOD.LBL_DAY1}</option>
-															<option value=2>{$MOD.LBL_DAY2}</option>
-															<option value=3>{$MOD.LBL_DAY3}</option>
-															<option value=4>{$MOD.LBL_DAY4}</option>
-															<option value=5>{$MOD.LBL_DAY5}</option>
-															<option value=6>{$MOD.LBL_DAY6}</option>
+															<option value=1 {if $ACTIVITYDATA.repeatMonth_day eq 1} selected {/if}>{$MOD.LBL_DAY1}</option>
+															<option value=2 {if $ACTIVITYDATA.repeatMonth_day eq 2} selected {/if}>{$MOD.LBL_DAY2}</option>
+															<option value=3 {if $ACTIVITYDATA.repeatMonth_day eq 3} selected {/if}>{$MOD.LBL_DAY3}</option>
+															<option value=4 {if $ACTIVITYDATA.repeatMonth_day eq 4} selected {/if}>{$MOD.LBL_DAY4}</option>
+															<option value=5 {if $ACTIVITYDATA.repeatMonth_day eq 5} selected {/if}>{$MOD.LBL_DAY5}</option>
+															<option value=6 {if $ACTIVITYDATA.repeatMonth_day eq 6} selected {/if}>{$MOD.LBL_DAY6}</option>
 														</select>
 														</td>
 														</tr>
@@ -429,6 +450,7 @@
 							<tr>
 								<td><b>Contacts :</b></td>
 								<td colspan="2">
+									<input name="return_module" id="return_module" value="Calendar" type="hidden">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
 									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
 									{$CONTACTSNAME}
@@ -508,7 +530,17 @@
 			<!-- Reminder UI -->
 			<div id="addTaskAlarmUI" style="display: block; width: 100%;">
                 	<table>
-				<tr><td>{$LABEL.sendnotification}</td><td><input name="sendnotification" type="checkbox"></td></tr>
+				<tr><td>{$LABEL.sendnotification}</td>
+					{if $ACTIVITYDATA.sendnotification eq 1}
+                                        <td>
+                                                <input name="sendnotification" type="checkbox" checked>
+                                        </td>
+                                	{else}
+                                        <td>
+                                                <input name="sendnotification" type="checkbox">
+                                        </td>
+                                	{/if}
+				</tr>
 			</table>
 			</div>
 			<div id="addTaskRelatedtoUI" style="display:none;width:100%">
