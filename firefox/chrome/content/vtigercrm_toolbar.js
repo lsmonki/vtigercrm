@@ -258,7 +258,7 @@ function add_lead_to_vtigercrm()
 			//SOAP method to save information in vtigerCRM
 			var description=document.getElementById("txtdescription").value;
 			var headers = new Array();
-			var params = new Array(new SOAPParameter(save_lead_name,"lastname"),new SOAPParameter(save_lead_email,"email"),new SOAPParameter(save_lead_phone,"phone"),new SOAPParameter(save_lead_company,"company"),new SOAPParameter("","country"),new SOAPParameter(document.getElementById("txtdescription").value,"description"));
+			var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_lead_name,"lastname"),new SOAPParameter(save_lead_email,"email"),new SOAPParameter(save_lead_phone,"phone"),new SOAPParameter(save_lead_company,"company"),new SOAPParameter("","country"),new SOAPParameter(document.getElementById("txtdescription").value,"description"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -510,7 +510,7 @@ function add_ticket_to_vtigercrm()
 		{
 		//saving information using SOAP method	
                 var headers = new Array();
-		var params = new Array(new SOAPParameter(save_ticket_title,"title"),new SOAPParameter(document.getElementById("txtticket_description").value,"description"),new SOAPParameter(save_ticket_priority,"priority"),new SOAPParameter(save_ticket_severity,"severity"),new SOAPParameter(save_ticket_category,"category"),new SOAPParameter(get_username,"user_name"),new SOAPParameter("","parent_id"),new SOAPParameter("","product_id"));
+		var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_ticket_title,"title"),new SOAPParameter(document.getElementById("txtticket_description").value,"description"),new SOAPParameter(save_ticket_priority,"priority"),new SOAPParameter(save_ticket_severity,"severity"),new SOAPParameter(save_ticket_category,"category"),new SOAPParameter(get_username,"user_name"),new SOAPParameter("","parent_id"),new SOAPParameter("","product_id"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 		call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -623,7 +623,7 @@ function add_vendor_to_vtigercrm()
 		{
 			//SOAP method to save information in vtigerCRM
 						var headers = new Array();
-			var params = new Array(new SOAPParameter(save_vendor_name,"vendorname"),new SOAPParameter(save_vendor_email,"email"),new SOAPParameter(save_vendor_phone,"phone"),new SOAPParameter(save_vendor_website,"company"));
+			var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_vendor_name,"vendorname"),new SOAPParameter(save_vendor_email,"email"),new SOAPParameter(save_vendor_phone,"phone"),new SOAPParameter(save_vendor_website,"company"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -693,7 +693,7 @@ function add_product_to_vtigercrm()
 		{
 			//SOAP method to save information in vtigerCRM
 			var headers = new Array();
-			var params = new Array(new SOAPParameter(save_product_name,"productname"),new SOAPParameter(save_product_code,"productcode"),new SOAPParameter(save_product_website,"website"));
+			var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_product_name,"productname"),new SOAPParameter(save_product_code,"productcode"),new SOAPParameter(save_product_website,"website"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -758,7 +758,7 @@ function add_note_to_vtigercrm()
 		{
 			//SOAP method to save information in vtigerCRM
 						var headers = new Array();
-			var params = new Array(new SOAPParameter(save_note_subject,"title"),new SOAPParameter(save_note_description,"notecontent"));
+			var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_note_subject,"title"),new SOAPParameter(save_note_description,"notecontent"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -827,7 +827,7 @@ function add_site_to_vtigercrm()
 		{
 			//SOAP method to save information in vtigerCRM
 						var headers = new Array();
-			var params = new Array(new SOAPParameter(save_portal_name,"portalname"),new SOAPParameter(save_portal_url,"portalurl"));
+			var params = new Array(new SOAPParameter(new SOAPParameter(get_username,"username"),save_portal_name,"portalname"),new SOAPParameter(save_portal_url,"portalurl"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
@@ -891,7 +891,7 @@ function add_rss_to_vtigercrm()
 		{
 			//SOAP method to save information in vtigerCRM
 						var headers = new Array();
-			var params = new Array(new SOAPParameter(save_rss_url,"rssurl"));
+			var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_rss_url,"rssurl"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
 			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
