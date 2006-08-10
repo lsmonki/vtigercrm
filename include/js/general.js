@@ -1552,14 +1552,16 @@ function OpenCompose(id,mode)
 }
 
 //Function added for Mass select in Popup - Philip
-function SelectAll(mod)
+function SelectAll(mod,parmod)
 {
 
         x = document.selectall.selected_id.length;
 	var y=0;
-        var module = window.opener.document.getElementById('return_module').value
-	if(module != 'Calendar')
+	if(parmod != 'Calendar')
+        {
+                var module = window.opener.document.getElementById('return_module').value
                 var entity_id = window.opener.document.getElementById('parent_id').value
+        }
         idstring = "";
 	namestr = "";
 
@@ -1569,7 +1571,7 @@ function SelectAll(mod)
                 if (document.selectall.selected_id.checked)
                 {
 			idstring = document.selectall.selected_id.value;
-			if(module == 'Calendar')
+			if(parmod == 'Calendar')
                                 namestr = document.getElementById('calendarCont'+idstring).innerHTML;
                         y=1;
                 }
@@ -1587,7 +1589,7 @@ function SelectAll(mod)
                         if(document.selectall.selected_id[i].checked)
                         {
                                 idstring = document.selectall.selected_id[i].value +";"+idstring;
-				if(module == 'Calendar')
+				if(parmod == 'Calendar')
                                 {
                                         idval = document.selectall.selected_id[i].value;
                                         namestr = document.getElementById('calendarCont'+idval).innerHTML+"\n"+namestr;
@@ -1607,7 +1609,7 @@ function SelectAll(mod)
         }
         if(confirm("Are you sure you want to add the selected "+y+" records ?"))
         {
-		if(module == 'Calendar')
+		if(parmod == 'Calendar')
                 {
                         window.opener.document.EditView.contactidlist.value = idstring;
                         window.opener.document.EditView.contactlist.value = namestr;
