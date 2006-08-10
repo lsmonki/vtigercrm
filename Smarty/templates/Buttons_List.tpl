@@ -11,7 +11,7 @@
 -->*}
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <!-- Activity createlink layer start  -->
-{if $MODULE eq 'Activities'}
+{if $MODULE eq 'Calendar'}
 <div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
         <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>

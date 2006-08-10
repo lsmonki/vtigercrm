@@ -180,7 +180,7 @@
 						<table class="small" border="0" cellpadding="2" cellspacing="0" width="100%">
 			        	    	<tbody>
 						<tr>
-							{if $modulename eq 'Activities'}
+							{if $modulename eq 'Calendar'}
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
 							{else}
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
@@ -194,7 +194,7 @@
 						      {/foreach}
 				                </tr>
 						{/foreach}
-						{if $modulename eq 'Activities'}
+						{if $modulename eq 'Calendar'}
 						<tr>
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}  ({$APP.Events})</td>
 					        </tr>

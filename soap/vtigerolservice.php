@@ -669,7 +669,7 @@ function retrieve_account_id($account_name,$user_id)
 function GetTasks($username)
 {
 	global $adb;
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 		
 	$seed_task = new Activity();
 	$output_list = Array();
@@ -739,7 +739,7 @@ function AddTasks($username,$taskdtls)
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -792,7 +792,7 @@ function AddTasks($username,$taskdtls)
 			$task->column_fields[activitytype]="Task";
 			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 			$task->column_fields[assigned_user_id]=$user_id;
-			$task->save("Activities");
+			$task->save("Calendar");
 		}
 	}
 	return $task->id;
@@ -802,7 +802,7 @@ function UpdateTasks($username,$taskdtls)
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -846,7 +846,7 @@ function UpdateTasks($username,$taskdtls)
            		 	$taskrow["priority"] = "Medium";
            		}
 					
-			$task->retrieve_entity_info($taskrow["id"],"Activities");
+			$task->retrieve_entity_info($taskrow["id"],"Calendar");
 			$task->column_fields[subject] = $taskrow["subject"];
 			$task->column_fields[date_start] = getDisplayDate($taskrow["startdate"]);
 			$task->column_fields[due_date] = getDisplayDate($taskrow["duedate"]);         
@@ -860,7 +860,7 @@ function UpdateTasks($username,$taskdtls)
 			$task->id = $taskrow["id"];
 			$task->mode="edit";
 
-			$task->save("Activities");
+			$task->save("Calendar");
 		}
 	}
 	return $task->id;
@@ -870,7 +870,7 @@ function DeleteTasks($username,$crmid)
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	   
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -886,7 +886,7 @@ function DeleteTasks($username,$crmid)
 function GetClndr($username)
 {
 	global $adb;
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 
 	$seed_clndr = new Activity();
 	$output_list = Array();
@@ -938,7 +938,7 @@ function AddClndr($username,$clndrdtls)
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -976,7 +976,7 @@ function AddClndr($username,$clndrdtls)
 			$clndr->column_fields[description]=$clndrow["description"];
 			$clndr->column_fields[activitytype]="Meeting";
 			$clndr->column_fields[assigned_user_id]=$user_id;
-			$clndr->save("Activities");
+			$clndr->save("Calendar");
 		}
 	}
 	return $clndr->id;
@@ -987,7 +987,7 @@ function UpdateClndr($username,$clndrdtls)
 	global $current_user;
 	global $adb;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -1015,7 +1015,7 @@ function UpdateClndr($username,$clndrdtls)
 				$stimeduemin = sprintf('%02d',$diff['minutes']);
 			}
 
-			$clndr->retrieve_entity_info($clndrow["id"],"Activities");
+			$clndr->retrieve_entity_info($clndrow["id"],"Calendar");
 			$clndr->column_fields[subject] = $clndrow["subject"];
 			$clndr->column_fields[date_start]=getDisplayDate(trim($astartdtm[0]));
 			$clndr->column_fields[due_date]=getDisplayDate(trim($aduedtm[0])); 
@@ -1028,7 +1028,7 @@ function UpdateClndr($username,$clndrdtls)
 			$clndr->column_fields[assigned_user_id]=$user_id;
 			$clndr->id = $clndrow["id"];
 			$clndr->mode="edit";
-			$clndr->save("Activities");
+			$clndr->save("Calendar");
 		}
 	}
 	return $clndr->id;
@@ -1038,7 +1038,7 @@ function DeleteClndr($username,$crmid)
 {
 	global $current_user;
 	require_once('modules/Users/User.php');
-	require_once('modules/Activities/Activity.php');
+	require_once('modules/Calendar/Activity.php');
 	   
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);

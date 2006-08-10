@@ -74,7 +74,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "delete from vtiger_vendorcontactrel where vendorid=$return_id and contactid=$record";
 			$adb->query($sql);
 		}
-		if($return_module == 'Activities')
+		if($return_module == 'Calendar')
 		{
 			$sql = "delete from vtiger_cntactivityrel where activityid=$return_id and contactid=$record";
 			$adb->query($sql);
@@ -90,7 +90,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 		$adb->query($sql);
 	break;
-	case Activities:
+	case Calendar:
 		if($return_module == 'Contacts')
 		{
 			$sql = 'delete from vtiger_cntactivityrel where contactid = '.$return_id.' and activityid = '.$record;
@@ -144,7 +144,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case Products:
 		if($record != '' && $return_id != '')
 		{
-			if($return_module == 'Activities')
+			if($return_module == 'Calendar')
 				$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 
 			if($return_module == 'Potentials' || $return_module == 'Accounts' || $return_module == 'Leads')

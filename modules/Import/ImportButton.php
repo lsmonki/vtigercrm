@@ -51,7 +51,7 @@ if ($_REQUEST['module'] == 'Products' ||
 if  ( $allow_exports=='all' || 
 	(  $allow_exports=='admin' &&  is_admin($current_user))  ) 
 	{
-		if($_REQUEST['module'] != 'Activities')
+		if($_REQUEST['module'] != 'Calendar')
 		{
 			if(isPermitted($_REQUEST['module'],'Export') == 'yes')
 			{

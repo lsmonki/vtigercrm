@@ -1093,7 +1093,7 @@ function getRecordOwnerId($record)
 		{
 			$query1="select vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname where leadid=".$record;
 		}
-		elseif($module == 'Activities' || $module == 'Emails')
+		elseif($module == 'Calendar' || $module == 'Emails')
 		{
 
 			$query1="select vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where activityid=".$record;

@@ -26,7 +26,7 @@
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=14&fld_module=Products&parenttab=Settings">{$MOD.LBL_PRODUCT_FIELD_ACCESS}</a></td></tr><tr><td>
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=8&fld_module=Notes&parenttab=Settings">{$MOD.LBL_NOTE_FIELD_ACCESS}</a></td><td>
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=10&fld_module=Emails&parenttab=Settings">{$MOD.LBL_EMAIL_FIELD_ACCESS}</a></td></tr><tr><td>
-<a href="index.php?module=Settings&action=EditFieldBlock&tabid=9&fld_module=Activities&parenttab=Settings">{$MOD.LBL_TASK_FIELD_ACCESS}</a></td><td>
+<a href="index.php?module=Settings&action=EditFieldBlock&tabid=9&fld_module=Calendar&parenttab=Settings">{$MOD.LBL_TASK_FIELD_ACCESS}</a></td><td>
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=16&fld_module=Events&parenttab=Settings">{$MOD.LBL_EVENT_FIELD_ACCESS}</a></td>
 </tr>
 </table>

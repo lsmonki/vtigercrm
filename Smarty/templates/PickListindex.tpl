@@ -25,7 +25,7 @@
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk">{$MOD.EDITHELPDESKPICKLISTVALUES}</a></td><td>
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products">{$MOD.EDITPRODUCTPICKLISTVALUES}</a></td></tr><tr><td>
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=Events">{$MOD.EDITEVENTPICKLISTVALUES}</a></td><td>
-<a href="index.php?module=Settings&action=ComboFieldList&fld_module=Activities">{$MOD.EDITTASKPICKLISTVALUES}</a></td></tr><tr><td>
+<a href="index.php?module=Settings&action=ComboFieldList&fld_module=Calendar">{$MOD.EDITTASKPICKLISTVALUES}</a></td></tr><tr><td>
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=Vendor">{$MOD.EDITVENDORPICKLISTVALUES}</a></td><td>
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=PriceBook">{$MOD.EDITPBPICKLISTVALUES}</a></td></tr><tr><td>
 <a href="index.php?module=Settings&action=ComboFieldList&fld_module=Orders">{$MOD.EDITPOPICKLISTVALUES}</a></td><td>
