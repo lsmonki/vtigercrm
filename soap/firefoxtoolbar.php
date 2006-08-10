@@ -120,10 +120,16 @@ $server->register(
 
 
 
-function create_site_from_webform($name,$url)
+function create_site_from_webform($username,$name,$url)
 {
+	global $log;
 	global $adb;
-	$adb->println("Create New Site from Web Form - Starts");
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once("modules/Portal/Portal.php");
 	$adb->println("name url  >>>>>>>>>>".$name .' >>>>>>>>>>> ' .$url);
 	if(isPermitted("Portals","EditView") == "yes")
@@ -144,10 +150,17 @@ function create_site_from_webform($name,$url)
 }
 
 
-function create_rss_from_webform($url)
+function create_rss_from_webform($username,$url)
 {
+
+	global $log;
 	global $adb;
-	$adb->println("Create New RSS from Web Form - Starts");
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once("modules/Rss/Rss.php");
 
 	$oRss = new vtigerRSS();
@@ -174,9 +187,16 @@ function create_rss_from_webform($url)
 }
 
 
-function create_note_from_webform($subject,$desc)
+function create_note_from_webform($username,$subject,$desc)
 {
+	global $log;
 	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Note from Web Form - Starts");
 	require_once("modules/Notes/Note.php");
 
@@ -206,10 +226,16 @@ function create_note_from_webform($subject,$desc)
 
 
 
-function create_product_from_webform($productname,$code,$website)
+function create_product_from_webform($username,$productname,$code,$website)
 {
+	global $log;
 	global $adb;
-	$adb->println("called >>>>>>>>>>>>>>>>>>>>>>>");
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Product from Web Form - Starts");
 	require_once("modules/Products/Product.php");
 	if(isPermitted("Products","EditView") == "yes")
@@ -242,9 +268,16 @@ function create_product_from_webform($productname,$code,$website)
 
 
 
-function create_vendor_from_webform($vendorname,$email,$phone,$website)
+function create_vendor_from_webform($username,$vendorname,$email,$phone,$website)
 {
+	global $log;
 	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Vendor from Web Form - Starts");
 	require_once("modules/Vendors/Vendor.php");
 	if(isPermitted("Vendors","EditView" ) == "yes")
@@ -276,11 +309,16 @@ function create_vendor_from_webform($vendorname,$email,$phone,$website)
 
 
 
-function create_ticket_from_toolbar($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
+function create_ticket_from_toolbar($username,$title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
 {
-	require_once('modules/Users/User.php');
-	$seed_user = new User();
-	$user_id = $seed_user->retrieve_user_id($user_name);
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 
 	if(isPermitted("HelpDesk","EditView") == "yes")
 	{
@@ -355,9 +393,17 @@ function get_version($user_name, $password)
 
 
 
-function create_lead_from_webform($lastname,$email,$phone,$company,$country,$description)
+function create_lead_from_webform($username,$lastname,$email,$phone,$company,$country,$description)
 {
+
+	global $log;
 	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Lead from Web Form - Starts");
 	require_once("modules/Leads/Lead.php");
 
