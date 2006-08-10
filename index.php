@@ -269,6 +269,7 @@ if(isset($action) && isset($module))
 		ereg("^ConvertAsFAQ",$action) ||
 		ereg("^Tickerdetail",$action) ||
 		ereg("^".$module."Ajax",$action) ||
+		ereg("^ActivityAjax",$action) ||
 		ereg("^chat",$action) ||
 		ereg("^vtchat",$action) ||
 		ereg("^updateCalendarSharing",$action) ||
@@ -315,7 +316,7 @@ if(isset($action) && isset($module))
  	         header( "Pragma: no-cache" );        
  	}
 
-        if($module == 'Users' || $module == 'Home' || $module == 'uploads' || $module == 'Calendar')
+        if($module == 'Users' || $module == 'Home' || $module == 'uploads')
         {
           $skipSecurityCheck=true;
         }
@@ -372,12 +373,9 @@ if($use_current_login)
 
 	//auditing
 
-	$qry = "select server from vtiger_systems where server_type = 'audit_trail'";
-
-	$result = $adb->query($qry);
-	$server = $adb->query_result($result,0,'server');
+	require_once('user_privileges/audit_trail.php');
 	
-	if($server == 'enabled')
+	if($audit_trail == 'true')
 	{
 		if($record == '')
 			$auditrecord = '';						
@@ -391,7 +389,7 @@ if($use_current_login)
 			$adb->query($query);
 		}	
 	}	
-	
+
 	$log->debug('Current user is: '.$current_user->user_name);
 }
 
@@ -453,7 +451,7 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/Opportunity.php");
 			$focus = new Potential();
 			break;
-		case 'Activities':
+		case 'Calendar':
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
 			break;
@@ -620,7 +618,21 @@ else
 
 if($display == "no")
 {
-        echo "You are not permitted to execute this Operation";
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.history.back();'>Go Back</a><br>								   						     </td>
+		</tr>
+		</tbody></table> 
+		</div>";
+	echo "</td></tr></table>";
 }
 else
 {
@@ -643,8 +655,8 @@ else
 }
 $Ajx_module= $module;
 if($module == 'Events')
-	$Ajx_module = 'Activities';
-if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $Ajx_module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax")
+	$Ajx_module = 'Calendar';
+if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail' && $action != $Ajx_module."Ajax" && $action != "chat" && $action != "HeadLines" && $action != 'massdelete'  &&  $action != "DashboardAjax" && $action != "ActivityAjax")
 {
 	// Under the SPL you do not have the right to remove this copyright statement.	
 	$copyrightstatement="<style>
@@ -688,18 +700,15 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3')
+	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax')
 	
 	{
-
-echo "<br><br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-echo "<tr>";
-	echo "<td class=small align=left>vtiger CRM 5.0.0 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
-	echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td>";
-echo "</tr>";
-echo "</table>";
-	
-	
+		echo $copyrightstatement;
+		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
+		echo "<br><br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
+		echo "<tr><td class=small align=left>vtiger CRM 5.0.0 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
+		echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td></tr></table>";
+			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
 		// in both the code and end-user application.
@@ -712,7 +721,7 @@ echo "</table>";
 	//	}
 	//	echo "</td></tr></table>\n";
 	}
-	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body"))
+	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body") && ($action != 'ActivityAjax'))
 	{
 	?>
 		<script>
@@ -720,7 +729,7 @@ echo "</table>";
 		</script>
 <?php
 	}
-	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") )
+	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") && ($action != "ActivityAjax"))
 		include('themes/'.$theme.'/footer.php');
 }
 ?>
