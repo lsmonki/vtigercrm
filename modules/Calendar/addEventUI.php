@@ -487,6 +487,7 @@ else
 						<tr>
 							<td><b>Contacts :</b></td>
 							<td colspan="2">
+								<input name="return_module" id="return_module" value="Calendar" type="hidden">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
 								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
 								<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
