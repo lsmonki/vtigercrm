@@ -115,6 +115,10 @@ function DeleteTag(id)
                         					<td nowrap align="right"><b>{$MOD.LBL_EVENTNAME} :</b></td>
 					                        <td>{$ACTIVITYDATA.subject}</td>
              						 </tr>
+							 <tr>
+                                                                <td nowrap align="right"><b>{$LABEL.visibility} :</b></td>
+                                                                <td>{$ACTIVITYDATA.visibility}</td>
+                                                         </tr>
 						     </table>
 						     <table border=0 cellspacing=0 cellpadding=5 width=90% >
                                                          <tr>
