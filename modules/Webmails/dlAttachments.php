@@ -14,20 +14,15 @@ include('config.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/Webmails/Webmail.php');
-require_once('modules/Webmails/MailParse.php');
+require_once('modules/Webmails/MailBox.php');
 
-$mailInfo = getMailServerInfo($current_user);
-$temprow = $adb->fetch_array($mailInfo);
-$imapServerAddress=$temprow["mail_servername"];
-$box_refresh=$temprow["box_refresh"];
-$mails_per_page=$temprow["mails_per_page"];
-
-$mbox = getImapMbox($mailbox,$temprow);
+global $MailBox;
+$MailBox = new MailBox($_REQUEST["mailbox"]);
 
 $mailid=$_REQUEST["mailid"];
 $num=$_REQUEST["num"];
 
-$email = new Webmail($mbox,$mailid);
+$email = new Webmail($MailBox->mbox,$mailid);
 $attachments=$email->downloadAttachments();
 $inline=$email->downloadInlineAttachments();
 
@@ -66,7 +61,7 @@ if(isset($_REQUEST["inline"]) && $_REQUEST["inline"] == "true") {
 	$filename = 'modules/Webmails/tmp/'.$_SESSION['authenticated_user_id'].'/'.$attachments[$num]['filename'];
 }
 fclose($fp);
-imap_close($mbox);
+imap_close($MailBox->mbox);
 
 ?>
 <center><h2>File Download</h2></center>

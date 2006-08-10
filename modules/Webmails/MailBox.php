@@ -117,7 +117,7 @@ class MailBox {
 		}
 		$this->db->println("Done Building Connection String.. Connecting to box");
 		//$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey); 
-		$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey,"OP_HALFOPEN"); 
+		$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey); 
 		$this->db->println("Done connecting to box");
 
 		// next we'll try to make a port specific connection to see if that helps.

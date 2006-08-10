@@ -51,8 +51,10 @@ class Webmail extends CRMEntity {
 		$this->mailid=$mailid;
 
 		$headers = $this->load_headers();
-		$this->to = $headers["header"]["to"];
+
+		$this->to = $headers["header"]["to"][0];
 		$this->to_name = $headers["header"]["to_name"];
+		$this->db->println("Webmail TO: $this->to");
 
 		$this->from = $headers["header"]["from"];
 		$this->fromname = $headers["header"]["from_name"];
@@ -113,7 +115,7 @@ class Webmail extends CRMEntity {
 		return $this->dl_attachments($this->mailid,$this->mbox);
 	}
 
-    private function load_headers() {
+    function load_headers() {
 	// get the header info
 	$mailHeader=Array();
 	$theader = @imap_headerinfo($this->mbox, $this->mailid);
