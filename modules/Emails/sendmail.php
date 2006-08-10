@@ -54,7 +54,9 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	$DESCRIPTION .= '<br><br>';
 	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from vtiger_users where user_name=".$adb->quote($from)),0,"signature")).'</font>';
 
+	$mail->IsHTML(true);
         $mail->Body    = nl2br($DESCRIPTION);
+	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$DESCRIPTION));
 	$initialfrom = $from;
 	$mail->IsSMTP();
 
@@ -112,8 +114,6 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		$log->info("File '".$filename."' is attached with the mail.");
 	}
 
-	$mail->IsHTML(true);
-	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 	echo '<table>';
 
 	$count = 1;

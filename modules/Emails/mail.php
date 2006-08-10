@@ -139,6 +139,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->Subject = $subject;
 	$mail->Body = nl2br($contents);
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
+	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
 	$mail->IsSMTP();		//set mailer to use SMTP
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
@@ -183,8 +184,6 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	}
 
 	$mail->IsHTML(true);		// set email format to HTML
-
-	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
 	return;
 }
