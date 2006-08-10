@@ -80,7 +80,7 @@ function add_to_vtiger(mid) {
                         method: 'post',
                         postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
                         onComplete: function(t) {
-                                $("status").style.display="none";
+                                $("status").style.display="block";
                         }
                 }
         );
@@ -110,7 +110,7 @@ function check_in_all_boxes(mymbox) {
                         method: 'post',
                         postBody: 'module=Webmails&action=WebmailsAjax&command=check_mbox_all&mailbox='+mymbox+'&ajax=true&file=ListView',
                         onComplete: function(t) {
-				alert(t.responseText);
+				//alert(t.responseText);
 				if(t.responseText != "") {
                                 	var data = eval('(' + t.responseText + ')');
                                 	for (var i=0;i<data.msgs.length;i++) {

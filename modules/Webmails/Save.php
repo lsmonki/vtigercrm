@@ -16,8 +16,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
 require_once('modules/Webmails/MailParse.php');
+require_once('modules/Webmails/MailBox.php');
 global $current_user;
-
 
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Email();
@@ -26,41 +26,16 @@ $to_address = explode(";",$_REQUEST['to_list']);
 $cc_address = explode(";",$_REQUEST['cc_list']);
 $bcc_address = explode(";",$_REQUEST['bcc_list']);
 
-$date = $_REQUEST["date_start"];
-$subject = $_REQUEST['subject'];
-
 $start_message=$_REQUEST["start_message"];
-
-$mailInfo = getMailServerInfo($current_user);
-if($adb->num_rows($mailInfo) < 1) {
-	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
-	exit();
-}
-
-$temprow = $adb->fetch_array($mailInfo);
-$imapServerAddress=$temprow["mail_servername"];
-$box_refresh=$temprow["box_refresh"];
-$mails_per_page=$temprow["mails_per_page"];
-$mail_protocol=$temprow["mail_protocol"];
-$account_name=$temprow["account_name"];
-
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
-global $mbox;
-$mbox = getImapMbox($mailbox,$temprow);
+$MailBox = new MailBox($mailbox);
+$email = new Webmail($MailBox->mbox, $_REQUEST["mailid"]);
+$subject = $email->subject;
+$date = $email->date;
 
-
-
-$email = new Webmail($mbox, $_REQUEST["mailid"]);
-
-if(isset($_REQUEST["email_body"]))
-	$msgData = $_REQUEST["email_body"];
-else {
-	$email->loadMail();
-	$msgData = $email->body;
-	$subject = $email->subject;
-	$imported=true;
-}
+$email->loadMail();
+$msgData = $email->body;
 
 $focus->column_fields['subject']=$subject;
 $focus->column_fields["activitytype"]="Emails";

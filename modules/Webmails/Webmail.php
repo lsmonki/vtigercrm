@@ -20,6 +20,7 @@ class Webmail extends CRMEntity {
         var $log;
         var $db;
 
+	var $headers;
   	var $mailid;
         var $to = array();
         var $to_name = array();
@@ -50,24 +51,24 @@ class Webmail extends CRMEntity {
 		$this->mbox=$mbox;
 		$this->mailid=$mailid;
 
-		$headers = $this->load_headers();
+		$this->headers = $this->load_headers();
 
-		$this->to = $headers["header"]["to"][0];
-		$this->to_name = $headers["header"]["to_name"];
+		$this->to = $this->headers["theader"]["to"][0];
+		$this->to_name = $this->headers["theader"]["to_name"][0];
 		$this->db->println("Webmail TO: $this->to");
 
-		$this->from = $headers["header"]["from"];
-		$this->fromname = $headers["header"]["from_name"];
-		$this->fromaddr = $headers["header"]["fromaddr"];
+		$this->from = $this->headers["theader"]["from"];
+		$this->fromname = $this->headers["theader"]["from_name"];
+		$this->fromaddr = $this->headers["theader"]["fromaddr"];
 
-		$this->reply_to = $headers["header"]["reply_to"];
-		$this->reply_to_name = $headers["header"]["reply_to_name"];
+		$this->reply_to = $this->headers["theader"]["reply_to"][0];
+		$this->reply_to_name = $this->headers["theader"]["reply_to_name"][0];
 
-		$this->cc_list = $headers["header"]["cc_list"];
-		$this->cc_list_name = $headers["header"]["cc_list_name"];
+		$this->cc_list = $this->headers["cc_list"];
+		$this->cc_list_name = $this->headers["cc_list_name"];
 
-		$this->subject = $headers["header"]["subject"];
-		$this->date = $headers["header"]["date"];
+		$this->subject = $this->headers["theader"]["subject"];
+		$this->date = $this->headers["theader"]["date"];
 
 		$this->has_attachments = $this->get_attachments();
 		$this->db->println("Exiting Webmail($mbox,$mailid)");
