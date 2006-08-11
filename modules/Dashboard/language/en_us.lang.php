@@ -93,6 +93,7 @@ $mod_strings = Array(
 'GRIDVIEW'=>'Grid view',
 'NORMALVIEW'=>'Normal view',
 'VIEWCHART'=>'View Chart',
+'LBL_DASHBOARD'=>'Dashboard',
 );
 
 ?>
