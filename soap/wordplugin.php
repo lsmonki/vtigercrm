@@ -83,6 +83,7 @@ function get_tickets_columns($user_name, $password)
 	require_once('modules/HelpDesk/HelpDesk.php');
 	if(isPermitted("HelpDesk","index") == "yes")
 	{ 
+		$log->debug("inside if case of get_tickets_columns");
 		$helpdesk = new HelpDesk();
 		return $helpdesk->getColumnNames_Hd();
 	}
@@ -103,6 +104,7 @@ function get_contacts_columns($user_name, $password)
 	require_once('modules/Contacts/Contact.php');
 	if(isPermitted("Contacts","index") == "yes")
 	{
+		$log->debug("inside if case of get_contacts_columns");
 		$contact = new Contact();
 		return $contact->getColumnNames();	   
 	}
@@ -125,6 +127,7 @@ function get_accounts_columns($user_name, $password)
 	require_once('modules/Accounts/Account.php');
 	if(isPermitted("Accounts","index") == "yes")
 	{
+		$log->debug("inside if case of get_accounts_columns");
 		$account = new Account();
 		return $account->getColumnNames_Acnt();
 	}
@@ -148,6 +151,7 @@ function get_leads_columns($user_name, $password)
 	require_once('modules/Leads/Lead.php');
 	if(isPermitted("Leads","index") == "yes")
 	{
+		$log->debug("inside if case of get_leads_columns");
 		$lead = new Lead();
 		return $lead->getColumnNames_Lead();
 	}
@@ -167,6 +171,7 @@ function get_user_columns($user_name, $password)
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Users","index") == "yes")
 	{
+		$log->debug("inside if case of get_user_columns");
 		$user = new User();
 		return $user->getColumnNames_User();
 	}
