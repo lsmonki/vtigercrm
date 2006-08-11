@@ -152,9 +152,12 @@
                                                                                                         {assign var=time_val value="$time_value"}
 	                                                                                        {/foreach}
                                                                                                 <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+													{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
+													{assign var=date_vl value="$date_fmt"}
+													{/foreach}
 													<script type="text/javascript">
 														Calendar.setup ({ldelim}
-														inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+														inputField : "jscal_field_date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 														{rdelim})
 													</script>
 											</td></tr>
@@ -170,9 +173,12 @@
 													{assign var=time_val value="$time_value"}
 													{/foreach}
 													<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+													{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
+													{assign var=date_vl value="$date_fmt"}
+                                                                                                        {/foreach}
 													<script type="text/javascript">
 														Calendar.setup ({ldelim}
-														inputField : "jscal_field_due_date", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+														inputField : "jscal_field_due_date", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
 														{rdelim})
 													</script>
 												</td></tr>
@@ -503,9 +509,12 @@
 						{assign var=time_val value="$time_value"}
                                         {/foreach}
 					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text">&nbsp;<img src="themes/blue/images/btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+					{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
+						{assign var=date_vl value="$date_fmt"}
+					{/foreach}				
 					<script type="text/javascript">
 						Calendar.setup ({ldelim}
-	        	                                inputField : "date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+	        	                                inputField : "date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 						{rdelim})
 					</script>
 				</td>
