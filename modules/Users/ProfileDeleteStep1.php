@@ -14,34 +14,38 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
+global $mod_strings;
+global $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
 $delete_prof_id = $_REQUEST['profileid'];
 $delete_prof_name = getProfileName($delete_prof_id);
 
 
 $output='';
-$output ='<div id="DeleteLay">
+$output ='<div id="DeleteLay" class="layerPopup">
 <form name="newProfileForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteProfile">
 <input type="hidden" name="delete_prof_id" value="'.$delete_prof_id.'">	
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">Delete Profile</td>
-	<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";>Close</a></td>
+	<td class=layerPopupHeading " align="left">'.$mod_strings["LBL_DELETE_PROFILE"].'</td>
+	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
+</tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<tr>
+	<td class="small">
+	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+	<tr>
+		<td width="50%" class="cellLabel small"><b>Profile to be Deteted</b></td>
+		<td width="50%" class="cellText small"><b>'.$delete_prof_name.'</b></td>
 </tr>
 <tr>
-	<td colspan="3">&nbsp;</td>
-</tr>
-<tr>
-	<td width="50%"><b>Profile to be Deteted</b></td>
-	<td width="2%"><b>:</b></td>
-	<td width="48%"><b>'.$delete_prof_name.'</b></td>
-</tr>
-<tr>
-	<td style="text-align:left;"><b>Transfer Roles to Profile</b></td>
-	<td ><b>:</b></td>
-	<td align="left">';
+	<td align="left" class="cellLabel small" nowrap><b>Transfer Roles to Profile</b></td>
+	<td align="left" class="cellText small">';
 	$output.='<select class="select" name="transfer_prof_id">';
 	global $adb;	
 	$sql = "select * from vtiger_profile";
@@ -60,9 +64,11 @@ $output ='<div id="DeleteLay">
 
 	$output.='</td>
 </tr>
-<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 <tr>
-	<td colspan="3" align="center"><input type="submit" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
+	<td align=center class="small">
+	<input type="submit" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="crmButton small">
 	</td>
 </tr>
 </table>
