@@ -10,9 +10,6 @@
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-
-
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 
