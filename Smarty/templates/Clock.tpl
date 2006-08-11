@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 	<td nowrap="nowrap" colspan="2">
-	<div style="background-image: url(themes/blue/images/clock_bg.gif); background-repeat: no-repeat; background-position: 4px 38px;" id="theClockLayer">
+	<div style="background-image: url({$IMAGEPATH}clock_bg.gif); background-repeat: no-repeat; background-position: 4px 38px;" id="theClockLayer">
 <div id="theCities" class="citystyle">
 <form action="" name="frmtimezone">
 <input name="PHPSESSID" value="162c0ab587f6c555aaaa30d681b61f7c" type="hidden">

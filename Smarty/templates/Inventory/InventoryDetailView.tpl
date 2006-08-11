@@ -280,7 +280,7 @@ function DeleteTag(id)
 					<!-- PUBLIC CONTENTS STOPS-->
 					</td>
 					<td align=right valign=top>
-						<img src="themes/blue/images/showPanelTopRight.gif">
+						<img src="{$IMAGE_PATH}showPanelTopRight.gif">
 					</td>
 				   </tr>
 				</table>

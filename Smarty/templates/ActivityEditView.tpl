@@ -508,7 +508,7 @@
 	                                        {assign var=date_val value="$date_value"}
 						{assign var=time_val value="$time_value"}
                                         {/foreach}
-					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text">&nbsp;<img src="themes/blue/images/btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text">&nbsp;<img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
 					{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 						{assign var=date_vl value="$date_fmt"}
 					{/foreach}				

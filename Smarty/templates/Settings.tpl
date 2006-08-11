@@ -14,7 +14,7 @@
 	{include file="Buttons_List1.tpl"}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="themes/blue/images/showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
@@ -543,7 +543,7 @@
 	</div>
 
 	</td>
-        <td valign="top"><img src="themes/blue/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </tbody></table>
 

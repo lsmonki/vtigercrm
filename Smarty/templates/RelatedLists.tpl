@@ -63,7 +63,7 @@ function loadCvList(type,id) {ldelim}
 <div id="editlistprice" style="position:absolute;width:300px;"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
-	<td valign=top><img src="themes/blue/images/showPanelTopLeft.gif"></td>
+	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" valign=top width=100%>
 		<!-- PUBLIC CONTENTS STARTS-->
 		<div class="small" style="padding:20px">
@@ -126,7 +126,7 @@ function loadCvList(type,id) {ldelim}
 		</div>
 	<!-- PUBLIC CONTENTS STOPS-->
 	</td>
-	<td align=right valign=top><img src="themes/blue/images/showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 </tr>
 </table>
 
