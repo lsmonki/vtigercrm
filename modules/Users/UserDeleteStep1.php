@@ -15,56 +15,65 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings, $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
 $delete_user_id = $_REQUEST['record'];
 $delete_user_name = getUserName($delete_user_id);
 
 
 $output='';
-$output ='<div id="DeleteLay">
+$output ='<div id="DeleteLay" class="layerPopup">
 <form name="newProfileForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteUser">
 <input type="hidden" name="delete_user_id" value="'.$delete_user_id.'">	
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">'.$mod_strings['LBL_DELETE'].' '.$mod_strings['LBL_USER'].'</td>
-	<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";>'.$mod_strings['LBL_CLOSE'].'</a></td>
+	<td class=layerPopupHeading " align="left">'.$mod_strings['LBL_DELETE'].' '.$mod_strings['LBL_USER'].'</td>
+	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
 </tr>
-<tr>
-	<td colspan="3">&nbsp;</td>
-</tr>
-<tr>
-	<td width="50%"><b>'.$mod_strings['LBL_DELETE_USER'].'</b></td>
-	<td width="2%"><b>:</b></td>
-	<td width="48%"><b>'.$delete_user_name.'</b></td>
-</tr>
-<tr>
-	<td style="text-align:left;" nowrap><b>'.$mod_strings['LBL_TRANSFER_USER'].'</b></td>
-	<td ><b>:</b></td>
-	<td align="left">';
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<tr>	
+	<td class="small">
+	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+	<tr>
+	
+		<td width="50%" class="cellLabel small"><b>'.$mod_strings['LBL_DELETE_USER'].'</b></td>
+		<td width="50%" class="cellText small"><b>'.$delete_user_name.'</b></td>
+	</tr>
+	<tr>
+		<td align="left" class="cellLabel small" nowrap><b>'.$mod_strings['LBL_TRANSFER_USER'].'</b></td>
+		<td align="left" class="cellText small">';
            
-$output.='<select class="select" name="transfer_user_id" id="transfer_user_id">';
+		$output.='<select class="select" name="transfer_user_id" id="transfer_user_id">';
 	     
-		 global $adb;	
-         $sql = "select * from vtiger_users";
-         $result = $adb->query($sql);
-         $temprow = $adb->fetch_array($result);
-         do
-         {
-         	$user_name=$temprow["user_name"];
-		    $user_id=$temprow["id"];
-		    if($delete_user_id 	!= $user_id)
-		    {	 
-            	$output.='<option value="'.$user_id.'">'.$user_name.'</option>';
-		    }	
-         }while($temprow = $adb->fetch_array($result));
+		global $adb;	
+         	$sql = "select * from vtiger_users";
+	        $result = $adb->query($sql);
+         	$temprow = $adb->fetch_array($result);
+         	do
+         	{
+         		$user_name=$temprow["user_name"];
+			$user_id=$temprow["id"];
+		    	if($delete_user_id 	!= $user_id)
+		    	{	 
+            			$output.='<option value="'.$user_id.'">'.$user_name.'</option>';
+		    	}	
+         	}while($temprow = $adb->fetch_array($result));
 
-$output.='</td>
+		$output.='</td>
+	</tr>
+	
+	</table>
+	</td>
 </tr>
-<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 <tr>
-	<td colspan="3" align="center"><input type="button" onclick="transferUser('.$delete_user_id.')" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
+	<td align=center class="small"><input type="button" onclick="transferUser('.$delete_user_id.')" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
 	</td>
 </tr>
 </table>

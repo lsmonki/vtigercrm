@@ -64,6 +64,9 @@ $output ='<div id="DeleteLay" class="layerPopup">
 
 		$output.='</td>
 	</tr>
+	</table>
+	</td>
+</tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 <tr>
