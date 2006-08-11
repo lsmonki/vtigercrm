@@ -277,7 +277,7 @@
 											{assign var=no_val value=$secondval[2]}
 											
 											<tr><td>{$LABEL.reminder_time}</td><td>
-											<input type="radio" name="set_reminder"value="Yes" {$check} onClick="showBlock('reminderOptions')">&nbsp;{$yes_val}&nbsp;
+											<input type="radio" name="set_reminder" value="Yes" {$check} onClick="showBlock('reminderOptions')">&nbsp;{$yes_val}&nbsp;
 											<input type="radio" name="set_reminder" value="No" onClick="fnhide('reminderOptions')">&nbsp;{$no_val}&nbsp;
 											</td></tr>
 										</table>
@@ -355,6 +355,7 @@
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')" checked>
 													{else}
 														{assign var=rptstyle value='style="display:none"'}
+														{assign var=rptmonthstyle value='style="display:none"'}
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
