@@ -87,7 +87,7 @@ function getListViewEntries_js(module,url)
         );
 }
 
-function deleteUser(userid)
+function deleteUser(obj,userid)
 {
         $("status").style.display="inline";
         new Ajax.Request(
@@ -98,6 +98,7 @@ function deleteUser(userid)
                         onComplete: function(response) {
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML= response.responseText;
+				fnvshobj(obj,"tempdiv");
                         }
                 }
         );
