@@ -122,7 +122,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-$userDetails=getOtherUserName($current_user->id);
+$userDetails=getOtherUserName($current_user->id,true);
 //echo '<pre>';print_r($userDetails);echo '</pre>';
 $to_email = getUserEmailId('id',$current_user->id);
 
