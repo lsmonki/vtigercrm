@@ -173,7 +173,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 		}
 		if($module == 'Invoice')
 		{
-			$notificationname = 'InvoiceNotification';
+			$notification_table = 'InvoiceNotification';
 		}
 		$query = "select * from vtiger_inventorynotification where notificationname='".$notification_table."'";
 		$result = $adb->query($query);
