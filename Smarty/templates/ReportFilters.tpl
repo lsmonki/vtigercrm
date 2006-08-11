@@ -159,7 +159,7 @@
 		</tbody>
 	</table>
 	</td></tr>
-	<tr><td colspan="2" height="36">&nbsp;</td></tr>
+	<tr><td colspan="2" height="50">&nbsp;</td></tr>
 	</tbody>
 </table>
 {literal}

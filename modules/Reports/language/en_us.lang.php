@@ -200,7 +200,7 @@ $mod_strings = Array(
 'AVG'=>'AVG',
 'MAX'=>'MAX',
 'MIN'=>'MIN',
-
+'LBL_CUSTOM_REPORTS'=>'Custom Reports',
 )
 
 ?>

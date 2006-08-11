@@ -13,7 +13,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<title>vtiger CRM - Create Report</title>
-	<link href="themes/blue/style.css" rel="stylesheet" type="text/css">
+	<link href="{$THEME_PATH}style.css" rel="stylesheet" type="text/css">
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
 </head>
@@ -37,8 +37,8 @@
 		<!-- Heading -->
 		<table width="100%" border="0" cellspacing="0" cellpadding="5" >
 			<tr>
-				<td  class="moduleName" width="80%">Create Report </td>
-				<td  width=30% nowrap class="componentName" align=right>Custom Reports</td>
+				<td  class="moduleName" width="80%">{$MOD.LBL_CREATE_REPORT} </td>
+				<td  width=30% nowrap class="componentName" align=right>{$MOD.LBL_CUSTOM_REPORTS}</td>
 			</tr>
 		</table>
 

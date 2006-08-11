@@ -29,8 +29,8 @@
 
 		<table width="100%" border="0" cellspacing="0" cellpadding="5" >
 			<tr>
-				<td  class="moduleName" width="80%">Create Report </td>
-				<td  width=30% nowrap class="componentName" align=right>Custom Reports</td>
+				<td  class="moduleName" width="80%">{$MOD.LBL_CREATE_REPORT} </td>
+				<td  width=30% nowrap class="componentName" align=right>{$MOD.LBL_CUSTOM_REPORTS}</td>
 			</tr>
 		</table>
 	
@@ -84,6 +84,10 @@
 											<td align="right" style="padding-right:5px;" valign="top"><b>{$MOD.LBL_DESCRIPTION}: </b></td>
 											<td align="left" style="padding-left:5px;"><textarea name="reportdes" class="txtBox" rows="5">{$REPORTDESC}</textarea></td>
 										</tr>
+										<tr> 
+							 	                        <td colspan="2" height="285">&nbsp;</td> 
+										</tr>
+										
 									</table>
 								</div>
 								<!-- STEP 2 -->
@@ -110,6 +114,7 @@
 												</select>
 											</td>
 										</tr>
+										<tr><td colspan="2" height="438">&nbsp;</td></tr> 
 									</table>
 							</div>
 						</td>

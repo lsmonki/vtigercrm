@@ -992,7 +992,7 @@ $app_strings = Array(
 'LBL_CPY_OTHER_ADDRESS'=>'Copy Other Address',
 
 'LBL_PERMISSION'=>'Permission assigned to you, does\'nt allow you to execute this Operation',
-
+'VTIGER'=>'vtiger',
 );
 
 

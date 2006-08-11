@@ -391,8 +391,8 @@ function changeSteps1()
 				show(divarray[i+1]);
 				tableid = divarray[i]+'label';
 				newtableid = divarray[i+1]+'label';
-				getObj(tableid).className = 'lvtCol'; 
-				getObj(newtableid).className = 'lvtSel';
+				getObj(tableid).className = 'settingsTabList'; 
+				getObj(newtableid).className = 'settingsTabSelected';
 				document.getElementById('back_rep').disabled = false;
 				break;
 			}
@@ -422,8 +422,8 @@ function changeStepsback1()
 				show(divarray[i-1]);
 				tableid = divarray[i]+'label';
 				newtableid = divarray[i-1]+'label';
-				getObj(tableid).className = 'lvtCol'; 
-				getObj(newtableid).className = 'lvtSel';
+				getObj(tableid).className = 'settingsTabList'; 
+				getObj(newtableid).className = 'settingsTabSelected';
 				break;
 			}
 
@@ -442,8 +442,8 @@ function changeSteps()
 			hide('step1');
 			show('step2');
 			document.getElementById('back_rep').disabled = false;
-			getObj('step1label').className = 'lvtCol'; 
-			getObj('step2label').className = 'lvtSel';
+			getObj('step1label').className = 'settingsTabList'; 
+			getObj('step2label').className = 'settingsTabSelected';
 		}
 	}
 	else
@@ -456,8 +456,8 @@ function changeStepsback()
 	hide('step2');
 	show('step1');
 	document.getElementById('back_rep').disabled = true;
-	getObj('step1label').className = 'lvtSel'; 
-	getObj('step2label').className = 'lvtCol';
+	getObj('step1label').className = 'settingsTabSelected'; 
+	getObj('step2label').className = 'settingsTabList';
 }
 function editReport(id)
 {

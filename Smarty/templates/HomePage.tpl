@@ -192,23 +192,24 @@
 						<td><img src="{$IMAGE_PATH}upcoming_right.gif" align="top"  /></td>
 					</tr>		
 					<tr>
+						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;padding-left:10px;"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />
+						<!-- Check for Single/Multiple Event(s) -->
+						{if $ACTIVITIES.0.Entries.noofactivities eq 1}
+						{$ACTIVITIES.0.Entries.noofactivities} {$APP.Event} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
+						{else}	
+							{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
+						{/if}
+						</td>
+					</tr>
+					<tr>
 						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
-								<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-bottom:1px dashed #aaaaaa;">
-								<tr>
-									<td colspan="2"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />
-											<!-- Check for Single/Multiple Event(s) -->
-											{if $ACTIVITIES.0.Entries.noofactivities eq 1}
-												{$ACTIVITIES.0.Entries.noofactivities} {$APP.Event} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-											{else}	
-												{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-											{/if}
-									</td>
-								</tr>
+							<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-bottom:1px dashed #aaaaaa;">
+								
 						
 						{foreach item=entries from=$ACTIVITIES.0.Entries}
-					<tr bgcolor="#FFFFCF">
+						<tr bgcolor="#FFFFCF">
 						<td style="border-bottom:1px dotted #dddddd;" align="right" width="20" valign=top>{$entries.IMAGE}</td>
-						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" ><b>{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
+						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b>{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
 					</tr>
 						{/foreach}
 						</table>
@@ -222,10 +223,16 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 	<tr>
 		<td><img src="{$IMAGE_PATH}pending_left.gif"></td>
-		<td width="90%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
+		<td width="100%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
 			<b class="fontBold">{$MOD.LBL_PENDING_EVENTS}</b><br />
-			{$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_TODAYEVENT}
-		</td>
+				<!-- Check for Single/Multiple Event(s) --> 
+	 	                {if $ACTIVITIES.1.Entries.noofactivities eq 1}   
+	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_SINGLE_PENDING_EVENT} 
+	 	                {else} 
+	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_MULTIPLE_PENDING_EVENTS} 
+	 	                {/if}    
+	 	        </td> 
+		
 		<td><img src="{$IMAGE_PATH}pending_right.gif"></td>
 	</tr>		
 	<tr>

@@ -28,16 +28,6 @@ function fetchAddSite(id)
 function fetchContents(mode)
 {
 	$("status").style.display="inline";
-	if(mode == 'data')
-	{
-		getObj('datatab').className = 'SiteSel';
-		getObj('managetab').className = 'SiteUnSel';
-	}
-	else
-	{
-		getObj('datatab').className = 'SiteUnSel';
-		getObj('managetab').className = 'SiteSel';
-	}
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},

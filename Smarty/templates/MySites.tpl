@@ -27,12 +27,6 @@
 	<br>
 	<table border="0" cellpadding="0" cellspacing="0" width="98%" align="center" class="mailClient mailClientBg">
 	<tbody>
-	<!-- <tr>
-	<td class="SiteSel" id="datatab" onClick="fetchContents('data');">{$MOD.LBL_BOOKMARKED_URL}</td>
-	<td width="10">&nbsp;</td>
-	<td class="SiteUnSel" id="managetab" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_BOOKMARKS}</td>
-	<td class="SiteHdr">&nbsp;</td>
-	</tr> -->
 	
 	<tr>
 	<td colspan="4">

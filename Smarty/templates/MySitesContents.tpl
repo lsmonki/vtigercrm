@@ -16,14 +16,14 @@
 		<table border=0 cellspacing=0 cellpadding=5>
 		<tr>
 			<td align=left><a href="#"><img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" border=0 /></a></td>
-			<td class=small align=left><a href="#" onclick="fetchContents('manage');">Manage Sites</a></td>
+			<td class=small align=left><a href="#" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_SITES}</a></td>
 		</tr>
 		</table>
 			
 	</td>
 	<td align=right width=10%>
 		<table border=0 cellspacing=0 cellpadding=0>
-		<tr><td nowrap class="componentName">My Sites</td></tr>
+		<tr><td nowrap class="componentName">{$MOD.LBL_MY_SITES}</td></tr>
 		</table>
 	</td>
 </tr>

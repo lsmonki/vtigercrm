@@ -28,8 +28,8 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 		<td>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="moduleName" width="80%">{$MODULE}</td>
-					<td  width=30% nowrap class="componentName" align=right>vtiger</td>
+					<td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
 			<table width="100%" cellpadding="5" cellspacing="0" border="0"  class="homePageMatrixHdr">
@@ -82,16 +82,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 			</div>
 		</td>
 	</tr>
-	<tr>
-	    <td align="center">
-		<table width="100%" align="center" class="reportCreateBottom">
-		<tr>
-			{$NAVIGATION}	
-		<td width="35%">&nbsp;</td>
-		</tr>
-		</table>
-	    </td>
-	</tr>
+	
 </table>
 </body>
 <script>
