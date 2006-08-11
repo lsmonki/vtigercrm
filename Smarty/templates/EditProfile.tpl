@@ -473,6 +473,6 @@ function initialiseprofile()
 		hideTab(module_array[i]);
 	}	
 }
-initialiseprofile();
+//initialiseprofile();
 {/literal}
 </script>
