@@ -101,7 +101,7 @@ function validate() {
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_PICKLIST_EDITOR}</b></td>
 				</tr>
 				<tr>
-					<td valign=top class="small">{$MOD.LBL_PICKLIST_DESC}</td>
+					<td valign=top class="small">{$MOD.LBL_PICKLIST_DESCRIPTION}</td>
 				</tr>
 				</table>
 				
