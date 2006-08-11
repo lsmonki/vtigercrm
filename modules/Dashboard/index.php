@@ -153,15 +153,9 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 					<tr>
 						<td width="3%">&nbsp;</td>
 						<td align="left">
-							<table border="0" cellpadding="0" cellspacing="0">
+							<table border="0" cellpadding="0" cellspacing="5" class="dashSelectBg">
 							<tr>
-								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
-								<td class="dash_sel_top" colspan="2">&nbsp;</td>
-								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-
+								<td>
 								<select name="dashordlists" id="dashboard_combo" onChange="loadDashBoard(this);">
 								 <?php 									 
 						                foreach($graph_array as $key=>$value)   
@@ -178,13 +172,10 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 								</select>
 								</td>
 							</tr>
-							<tr>
-							  	<td class="dash_sel_btm" colspan="2">&nbsp;</td>
-							</tr>
 							</table>
 						
 						</td>
-						<td align="right"><img src="<?php echo $image_path;?>dash_name.jpg"></td>
+						<td align="right" class="dashHeading"><?php echo $mod_strings['LBL_DASHBOARD'] ?></td>
 						<td width="3%">&nbsp;</td>
 
 									</tr>
@@ -193,9 +184,9 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 						</td>
 					</tr>
 					<tr>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
-						<td class="dash_shadow" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="hdrNameBg small" style="height: 12px;" width="98%">&nbsp;</td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
 
 					</tr>
 					<tr>
@@ -256,9 +247,9 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 					</tr>
 
 					<tr>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
 						<td class="dash_white" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.jpg" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
 					</tr>
 					<tr>
 						<td colspan="3" class="dash_bottom">
@@ -267,36 +258,28 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 
 									<tr>
 										<td width="3%">&nbsp;</td>
-										<td align="left">
-											<table border="0" cellpadding="0" cellspacing="0">
-							<tr>
-								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
-								<td class="dash_sel_top" colspan="2">&nbsp;</td>
-								<td rowspan="3" height="31" width="7"><img src="<?php echo $image_path;?>dash_sel_left.jpg" border="0"></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-								<select name="dashordlists1" id="dashboard_combo1" onChange="loadDashBoard(this);">
-								 <?php 
+										<td align="left">									  <table border="0" cellpadding="0" cellspacing="5" class="dashSelectBg">
+                                          <tr>
+                                            <td><select name="dashordlists" id="dashboard_combo1" onChange="loadDashBoard(this);">
+                                                <?php 									 
 						                foreach($graph_array as $key=>$value)   
                  						{
-									
 									if($dashboard_type == $key)
 									{
-											?><option selected value="<?php echo $key;?>"><?php echo $value;?></option><?php
+										$dash_board_title = $value;
+											?>
+                                                <option selected value="<?php echo $key;?>"><?php echo $value;?></option>
+                                                <?php
 									}else
 									{
-										?><option value="<?php echo $key;?>"><?php echo $value;?></option>
-                 						<?php   }
+										?>
+                                                <option value="<?php echo $key;?>"><?php echo $value;?></option>
+                                                <?php   }
 								} ?>
-								</select>
-								</td>
-							</tr>
-							<tr>
-							  	<td class="dash_sel_btm" colspan="2">&nbsp;</td>
-							</tr>
-							</table>
-										</td>
+                                              </select>
+                                            </td>
+                                          </tr>
+                                        </table></td>
 										<td align="right">&nbsp;</td>
 										<td width="3%">&nbsp;</td>
 									</tr>
