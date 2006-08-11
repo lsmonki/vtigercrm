@@ -117,7 +117,7 @@ function ShowFolders(folderid)
 							<tr>
 							<td width="25%" class="big mailSubHeader" ><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
 							<td width="2%">&nbsp;</td>
-							<td width="73%" class="big mailSubHeader" align="left"><b>{$MOD.LBL_ALLMAILS}</b></td>
+							<td width="73%" class="big mailSubHeader" align="left"><span id="mail_fldrname"><b>{$MOD.LBL_ALLMAILS}</b></span></td>
 							</tr>
 							
 							<tr>
