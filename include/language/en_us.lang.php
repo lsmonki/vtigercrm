@@ -365,7 +365,7 @@ $app_strings = Array(
 
 'LBL_EXPORT_ALL'=>'Export All',
 
-'LBL_QUICK_CREATE'=>'Quick Create...',
+'LBL_QUICK_CREATE'=>'Quick Create',
 
 'Export'=>'Export',
 'Import'=>'Import',
