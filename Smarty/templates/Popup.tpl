@@ -35,7 +35,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 			<table width="100%" cellpadding="5" cellspacing="0" border="0"  class="homePageMatrixHdr">
 				<tr>
 					<td style="padding:10px;" >
-						<form name="basicSearch" action="index.php">
+						<form name="basicSearch" action="index.php" onsubmit="return false;">
 						<table width="100%" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
