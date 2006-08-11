@@ -75,10 +75,10 @@ td.chathead2,td.pchathead2{
 }
 
 td.chaticon{
-  background-image:url(imgs/private.gif);
+  background-image:url(imgs/2tbarPrivateChat.gif);
 }
 td.chattopic{ 
-  background-image:url(imgs/public.gif);
+  background-image:url(imgs/2tbarPublicChat.gif);
   background-repeat:no-repeat;
   background-position:center left;
   padding:0px 10px 0px 30px;
