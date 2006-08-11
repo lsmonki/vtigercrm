@@ -29,10 +29,12 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
+$theme_path="themes/".$theme."/";
 $report_column=new vtigerCRM_Smarty;
 $report_column->assign("MOD", $mod_strings);
 $report_column->assign("APP", $app_strings);
 $report_column->assign("IMAGE_PATH",$image_path);
+$report_column->assign("THEME_PATH",$theme_path);
 if(isset($_REQUEST["record"]))
 {
 	$recordid = $_REQUEST["record"];
