@@ -583,7 +583,7 @@ function formSelectColumnString(usr)
 }
 
 function fnRedirect() {
-        var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
+        var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
 	if(OptionData == 'listview')
 	{
 		document.EventViewOption.action.value = "index";
@@ -652,7 +652,7 @@ function getCalSettings(url){
 function updateStatus(record,status,view,hour,day,month,year,type){
 	if(type == 'event')
 	{
-		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
 		
 		new Ajax.Request(
                 	'index.php',
@@ -709,7 +709,7 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
 	var postpone = document.getElementById("postpone");
 	var actdelete =	document.getElementById("actdelete");
 	var changeowner = document.getElementById("changeowner");
-	var OptionData = document.getElementById('viewOption').options[document.getElementById('viewOption').selectedIndex].value;
+	var OptionData = document.getElementById('view_Option').options[document.getElementById('view_Option').selectedIndex].value;
 	
     }
     if(type == 'todo')
@@ -758,7 +758,7 @@ function calendarChangeOwner()
 	var subtab = document.change_owner.subtab.value;
 	if(subtab == 'event')
 	{
-		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
 	 	new Ajax.Request(
                 	'index.php',
                 	{queue: {position: 'end', scope: 'command'},
@@ -793,7 +793,7 @@ function delActivity(id,view,hour,day,month,year,subtab)
 {
 	if(subtab == 'event')
 	{
-		var OptionData = $('viewOption').options[$('viewOption').selectedIndex].value;
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
          	new Ajax.Request(
                 	'index.php',
                 	{queue: {position: 'end', scope: 'command'},

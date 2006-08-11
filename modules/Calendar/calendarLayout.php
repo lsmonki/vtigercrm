@@ -327,7 +327,7 @@ function getEventViewOption(& $cal,$viewBox)
 			<input type='hidden' name='action' value=''>
 			<input type='hidden' name='return_action' value=''>
 							 
-		        <select name='viewOption' class='importBox' id='viewOption' onChange='fnRedirect();'>";
+		        <select name='viewOption' class='importBox' id='view_Option' onChange='fnRedirect();'>";
 	if($cal['view'] == 'day')
 	{
 		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_HRVIEW']."</option>
