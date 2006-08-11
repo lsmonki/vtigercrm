@@ -135,8 +135,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
                  document.EditView.endhr.value = endhr;
                  document.EditView.endmin.value = endmin;
                  document.EditView.endfmt.value = endfmt;
-		 document.EditView.viewOption.value = viewOption;
-                 document.EditView.subtab.value = subtab;
 	}
 }
 
@@ -150,8 +148,6 @@ function Taskshow(argg1,type,startdate,starthr,startmin,startfmt)
                 document.EditView.startmin.value = startmin;
                 document.EditView.startfmt.value = startfmt;
 		y.display="block";
-                /*document.EditView.viewOption.value = viewOption;
-                document.EditView.subtab.value = subtab;*/
 	}
 }
 
