@@ -85,7 +85,17 @@
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">
-							<input type="hidden" name="eventstatus" id="eventstatus" value="Planned">
+							{if $OP_MODE eq 'edit_view'}
+                 					  {foreach item=arr from=$ACTIVITYDATA.eventstatus}
+                 				           {foreach key=sel_value item=value from=$arr}
+                                				{if $value eq 'selected'}
+                                        				<input type="hidden" name="eventstatus" id="eventstatus" value="{$sel_value}">
+                                				{/if}
+                        				   {/foreach}
+                 					  {/foreach}
+                 					{else}
+                        					<input type="hidden" name="eventstatus" id="eventstatus" value="Planned">
+                 					{/if}
 							<input type="hidden" name="duration_hours" value="0">
 							<input type="hidden" name="duration_minutes" value="0">
 						     <table border=0 cellspacing=0 cellpadding=5 width=90% >
@@ -464,7 +474,17 @@
 		</table>
 		<!-- Alarm, Repeat, Invite stops-->
 		{else}
-		<input type="hidden" name="taskstatus" id="taskstatus" value="Planned">
+		 {if $OP_MODE eq 'edit_view'}
+		 {foreach item=arr from=$ACTIVITYDATA.taskstatus}
+         	        {foreach key=sel_value item=value from=$arr}
+				{if $value eq 'selected'}
+					<input type="hidden" name="taskstatus" id="taskstatus" value="{$sel_value}">
+				{/if}
+                        {/foreach}
+                 {/foreach}
+		 {else}
+			<input type="hidden" name="taskstatus" id="taskstatus" value="Planned">
+		 {/if}
 		<table border="0" cellpadding="5" cellspacing="0" width="90%">
 			<tr>
                         	<td width="20%"><b>{$MOD.LBL_TODO} :</b></td>
