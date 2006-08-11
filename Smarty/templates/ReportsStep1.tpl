@@ -122,9 +122,9 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td align="right" style="padding:10px;" >
-						<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="classBtn" onClick="changeStepsback1();">&nbsp;
-						<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="classBtn" onClick="changeSteps1()";>
-						&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
+						<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="crmbutton small cancel" onClick="changeStepsback1();">&nbsp;
+						<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="crmbutton small save" onClick="changeSteps1()";>
+						&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="self.close();">
 						</td>
 					</tr>
 					</table>

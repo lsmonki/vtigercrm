@@ -13,7 +13,6 @@
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
 
 <form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
 <input type="hidden" name="module" value="Migration">

@@ -72,14 +72,14 @@
 			<td style="padding-left:10px" nowrap>
 			{if $CNT eq 1}
                                 <select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
-					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
+					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
                         {/foreach}
                                 </select>
                         {else}
                                 <select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
-					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
+					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
                         {/foreach}

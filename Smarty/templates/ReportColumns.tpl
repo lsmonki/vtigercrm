@@ -48,7 +48,7 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 		</tr>
 		<tr> 
 		<td> 
-		<img src="{$IMAGE_PATH}movecol_down.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_down_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_down.gif'" onclick="moveDown()" onmousedown="this.src='themes/blue/images/movecol_down_down.gif'" align="absmiddle" border="0"> 
+		<img src="{$IMAGE_PATH}movecol_down.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_down_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_down.gif'" onclick="moveDown()" onmousedown="this.src='{$IMAGE_PATH}movecol_down_down.gif'" align="absmiddle" border="0"> 
 		</td>
 		</tr>
 		<tr> 
@@ -60,6 +60,6 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	</table> 
 	</td>
 	</tr> 
-	<tr><td colspan="4" height="193"></td></tr>
+	<tr><td colspan="4" height="163"></td></tr>
 	</tbody>
 </table>

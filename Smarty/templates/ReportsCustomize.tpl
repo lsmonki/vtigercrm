@@ -13,56 +13,56 @@
 	<form>
 	<input id="folder_ids" name="folderId" type="hidden" value='{$FOLDE_IDS}'>
 	{foreach item=reportfolder from=$REPT_CUSFLDR}
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="reportsListTable">
+		<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 		<tr>
-			<td colspan=3 class="mailSubHeader" align="left" colspan="2" id='folder{$reportfolder.id}'><b>{$reportfolder.name}</b></td>
+		<td class="mailSubHeader" align="left" colspan="3" id='folder{$reportfolder.id}'><b>&nbsp;{$reportfolder.name}</b></td>
 		</tr>
 		<tr>
-			<td class="hdrNameBg" colspan=3 style="padding:5px;" width="5%" align="right">
+			<td  class="hdrNameBg" colspan="3" style="padding: 5px;" align="right" >
 				<!-- Custom Report Group's Buttons -->
-				<table border=0 cellspacing=0 cellpadding=0 width=100%>
-				<tr>
-					<td align=left class=small><input type="button" name="newReportInThisModule" value="Create Report..." class="crmButton small create" onclick="fnvshobj(this,'reportLay')"></td>
-					<td align=right class=small>
-						<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">
-						<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
-					</td>
-				</tr>
-				</table>
-			</td>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+		<td  width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="fnvshobj(this,'reportLay')" type="button"></td>
+		<td  width="75%" align="right">
+			<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">&nbsp;
+		</td>
+		<td align="right">
+			<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
+		</td>
 		</tr>
-		<tr>
-			<td colspan="3">
-				<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
-				<tbody>
-				<tr>
-				<td class="lvtCol" width="5%"><input type="checkbox" name="selectall" onclick='toggleSelect(this.checked,"selected_id{$reportfolder.id}")' value="checkbox" style="margin:0px"/></td>
-				<td class="lvtCol" align="left" width="35%">{$MOD.LBL_REPORT_NAME}</td>
-				<td class="lvtCol" align="left" width="50%">{$MOD.LBL_DESCRIPTION}</td>
-				<td class="lvtCol" width="10%">{$MOD.LBL_TOOLS}</td>
-				</tr>
-				{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
-				<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-				<td><input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
-				<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
-				<td align="left">{$reportdetails.description}</td>
-				<td align="center" nowrap>
-				{if $reportdetails.customizable eq '1'}
-				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="Customize..." border="0"></a>
-				{/if}
-				{if $reportdetails.state neq 'SAVED'}
-				&nbsp;| &nbsp;<a href="javascript:;" onClick="DeleteReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" title="Delete..." border="0"></a>
-				{/if}
-				</td>
-				</tr>
-				{/foreach}
-				</tbody>
-				</table>
+		</table>
 			</td>
+			</tr>
+		<tr>
+		<td colspan="3">
+		<table  border="0" cellpadding="3" cellspacing="1" width="100%">
+			<tbody>
+			<tr>
+			<td class="lvtCol" width="5%"><input type="checkbox" name="selectall" onclick='toggleSelect(this.checked,"selected_id{$reportfolder.id}")' value="checkbox" /></td>
+			<td class="lvtCol" align="left" width="35%">{$MOD.LBL_REPORT_NAME}</td>
+			<td class="lvtCol" align="left" width="50%">{$MOD.LBL_DESCRIPTION}</td>
+			<td class="lvtCol" width="10%">{$MOD.LBL_TOOLS}</td>
+			</tr>
+			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
+			<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
+			<td><input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
+			<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
+			<td align="left">{$reportdetails.description}</td>
+			<td align="center" nowrap>
+			{if $reportdetails.customizable eq '1'}
+			<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="Customize..." border="0"></a>
+			{/if}
+			{if $reportdetails.state neq 'SAVED'}
+			&nbsp;| &nbsp;<a href="javascript:;" onClick="DeleteReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" title="Delete..." border="0"></a>
+			{/if}
+			</td>
+			</tr>
+			{/foreach}
+			</tbody>
+		</table>
+		</td>
 		</tr>
 	</table>
 	<br />
-
 	{foreachelse}
 	<div align="center"	style="position:relative;width:50%;height:30px;border:1px dashed #CCCCCC;background-color:#FFFFCC;padding:10px;">
 	<a href="javascript:;" onclick="fnvshobj(this,'orgLay');">{$MOD.LBL_CLICK_HERE}</a>&nbsp;{$MOD.LBL_TO_ADD_NEW_GROUP}
