@@ -68,7 +68,7 @@
 						<td class="listTableRow small" valign=top>{$smarty.foreach.grouplist.iteration}</td>
 						<td class="listTableRow small" valign=top nowrap>
 							  	<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
-								<a href="#" onClick="deletegroup('{$groupvalues.groupid}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
+								<a href="#" onClick="deletegroup(this,'{$groupvalues.groupid}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
 						</td>
 						<td class="listTableRow small" valign=top><strong>
                               				<a href="index.php?module=Users&action=GroupDetailView&parenttab=Settings&groupId={$groupvalues.groupid}">{$groupvalues.groupname}</a></strong>
@@ -105,7 +105,7 @@
 
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
-function deletegroup(groupid)
+function deletegroup(obj,groupid)
 {ldelim}
 	$("status").style.display="inline";
         new Ajax.Request(
@@ -116,6 +116,7 @@ function deletegroup(groupid)
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
+								fnvshobj(obj,"tempdiv");
                         {rdelim}
                 {rdelim}
         );
