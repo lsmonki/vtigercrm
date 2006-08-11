@@ -49,8 +49,8 @@ class CRMEntity
 	$this->db->startTransaction();
 	
 	// Code included by Jaguar - starts    
-	if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype']!='')
-		$recur_type = trim($_REQUEST['recurringtype']);
+	if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='')
+		$recur_type = trim($this->column_fields['recurringtype']);
 	else
     		$recur_type='';	
 	// Code included by Jaguar - Ends
