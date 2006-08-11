@@ -32,13 +32,13 @@ goto StopMySQL
 cd /d %apache_dir%
 rem shut down apache
 echo ""
-echo "stopping vtigercrm5_beta apache service"
+echo "stopping vtigercrm5_rc apache service"
 echo ""
-bin\apache -n vtigercrm5_beta -k stop
+bin\apache -n vtigercrm5_rc -k stop
 echo ""
-echo "uninstalling vtigercrm5_beta apache service"
+echo "uninstalling vtigercrm5_rc apache service"
 echo ""
-bin\apache -k uninstall -n vtigercrm5_beta
+bin\apache -k uninstall -n vtigercrm5_rc
 rem .\bin\ShutdownApache.exe logs\httpd.pid
 goto StopMySQL
 

@@ -43,23 +43,23 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm5_beta
-bin\apache -k uninstall -n vtigercrm5_beta
+bin\apache -k stop -n vtigercrm5_rc
+bin\apache -k uninstall -n vtigercrm5_rc
 echo "Uninstalling apache service again for confirmation after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k stop -n vtigercrm5_beta
-bin\apache -k uninstall -n vtigercrm5_beta 
+bin\apache -k stop -n vtigercrm5_rc
+bin\apache -k uninstall -n vtigercrm5_rc 
 echo ""
 echo ""
-echo "Installing  vtigercrm5_beta apache service after sleeping for 10 seconds"
+echo "Installing  vtigercrm5_rc apache service after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k install -n vtigercrm5_beta -f conf\httpd.conf
+bin\apache -k install -n vtigercrm5_rc -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm5_beta apache service"
+echo "Starting  vtigercrm5_rc apache service"
 echo ""
-bin\apache -n vtigercrm5_beta -k start
+bin\apache -n vtigercrm5_rc -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -117,27 +117,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm5_beta database already exists"
+echo "check to see if vtigercrm5_rc database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm5_beta'" | "%WINDIR%\system32\find.exe" "vtigercrm5_beta" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm5_rc'" | "%WINDIR%\system32\find.exe" "vtigercrm5_rc" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm5_beta database exists"
+ECHO  "vtigercrm5_rc database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm5_beta database does not exist"
+ECHO "vtigercrm5_rc database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm5_beta and populate the same"
+echo "Proceeding to create database vtigercrm5_rc and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm5_beta"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm5_rc"
 echo ""
-echo "vtigercrm5_beta database created"
+echo "vtigercrm5_rc database created"
 echo ""
 goto end
 
