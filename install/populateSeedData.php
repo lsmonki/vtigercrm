@@ -1064,20 +1064,23 @@ for($i=0;$i<6;$i++)
 		$event->column_fields["time_end"]     = $end_time;
 	}
 	$event->column_fields["date_start"]	= $rand_date;	
+	$_REQUEST["date_start"] = $rand_date;
 	$event->column_fields["time_start"]	= $start_time;	
 	$event->column_fields["due_date"]	= $rand_date;	
-	
+	$_REQUEST["due_date"] = $rand_date;
 	$contact_key = array_rand($contact_ids);
         $event->column_fields["contact_id"]	= 	$contact_ids[$contact_key];
 	if($i==4)
 	{
         	$event->column_fields["recurringtype"] 	= "Daily";
+		$_REQUEST["recurringtype"]  = "Daily";
 		$event->column_fields["activitytype"]	= "Meeting";	
 		$event->column_fields["due_date"]	= $recur_daily_date;	
 	}
 	elseif($i==5)
 	{	
         	$event->column_fields["recurringtype"] 	= "Weekly";
+		$_REQUEST["recurringtype"]  = "Weekly";
 		$event->column_fields["activitytype"]	= "Meeting";	
 		$event->column_fields["due_date"]	= $recur_week_date;	
 	}
