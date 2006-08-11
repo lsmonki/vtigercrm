@@ -71,6 +71,15 @@ $server->register(
 	        
 function get_tickets_columns($user_name, $password)
 {
+
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once('modules/HelpDesk/HelpDesk.php');
 	if(isPermitted("HelpDesk","index") == "yes")
 	{ 
@@ -83,6 +92,14 @@ function get_tickets_columns($user_name, $password)
 
 function get_contacts_columns($user_name, $password)
 {
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once('modules/Contacts/Contact.php');
 	if(isPermitted("Contacts","index") == "yes")
 	{
@@ -97,6 +114,14 @@ function get_contacts_columns($user_name, $password)
 
 function get_accounts_columns($user_name, $password)
 {
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once('modules/Accounts/Account.php');
 	if(isPermitted("Accounts","index") == "yes")
 	{
@@ -111,6 +136,15 @@ function get_accounts_columns($user_name, $password)
 
 function get_leads_columns($user_name, $password)
 {
+
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once('modules/Leads/Lead.php');
 	if(isPermitted("Leads","index") == "yes")
 	{
@@ -123,7 +157,14 @@ function get_leads_columns($user_name, $password)
 
 function get_user_columns($user_name, $password)
 {
-	require_once('modules/Users/User.php');
+	global $log;
+	global $adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Users","index") == "yes")
 	{
 		$user = new User();
