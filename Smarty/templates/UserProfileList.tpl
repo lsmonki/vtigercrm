@@ -72,7 +72,7 @@
 							<a href="index.php?module=Users&action=profilePrivileges&return_action=ListProfiles&parenttab=Settings&mode=edit&profileid={$listvalues.profileid}"><img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0" align="absmiddle"></a>
 	                                                {if $listvalues.del_permission eq 'yes'}
         	                                                &nbsp;|&nbsp;
-                	                                <a href="#"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile('{$listvalues.profileid}')" align="absmiddle"></a>
+                	                                <a href="#"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile(this,'{$listvalues.profileid}')" align="absmiddle"></a>
                                                 	{else}
                                                 	{/if}
 
@@ -115,7 +115,7 @@
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
-function DeleteProfile(profileid)
+function DeleteProfile(obj,profileid)
 {ldelim}
         $("status").style.display="inline";
         new Ajax.Request(
@@ -126,6 +126,7 @@ function DeleteProfile(profileid)
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
+				fnvshobj(obj,"tempdiv");
                         {rdelim}
                 {rdelim}
         );
