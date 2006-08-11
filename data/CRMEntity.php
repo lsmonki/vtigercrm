@@ -173,7 +173,8 @@ class CRMEntity
 		      	{		   
 				//Modified by Minnie
 				$recur_data = getrecurringObjValue();
-	      			$this->insertIntoRecurringTable($recur_data);
+				if(is_object($recur_data))
+	      				$this->insertIntoRecurringTable($recur_data);
 			}		
 		}// Code included by Jaguar - Ends
 		// Code included by Minnie  -  starts	
