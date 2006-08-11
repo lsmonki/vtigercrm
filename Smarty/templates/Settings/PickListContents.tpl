@@ -1,3 +1,17 @@
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
+
 	<table  class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><strong>2. {$MOD.LBL_PICKLIST_AVAIL} {$APP.$MODULE} </strong></td>
 		<td class="small" align=right>&nbsp;</td>
 		</tr>
