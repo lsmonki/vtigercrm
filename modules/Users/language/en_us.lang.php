@@ -587,6 +587,8 @@ $mod_strings = Array(
 'LBL_DELETE_USER'=>'User to be Deleted',
 'LBL_TRANSFER_USER'=>'Transfer Ownership to User',
 'LBL_DELETE_PROFILE'=>'Delete Profile',
+'LBL_TRANSFER_ROLES_TO_PROFILE'=>'Transfer Roles to Profile',
+'LBL_PROFILE_TO_BE_DELETED'=>'Profile to be Deteted',
 );
 
 ?>
