@@ -205,6 +205,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 function GetContacts($username)
 {
 	global $adb;
+	global $log;
 	require_once('modules/Contacts/Contact.php');
 
 	$seed_contact = new Contact();
@@ -274,6 +275,8 @@ function GetContacts($username)
 				"category" => "",        
 			  	);
 	}
+	$log->debug("*******************");
+	$log->fatal($output_list);
 
 	//to remove an erroneous compiler warning
 	$seed_contact = $seed_contact;
