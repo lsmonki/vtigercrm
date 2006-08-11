@@ -58,7 +58,7 @@
 				{else}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
 				{/if}
-			{elseif $header eq 'Calendar'}
+			{elseif $header eq 'Activities'}
 				{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'Invoice' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Campaigns'}
 				<input type="hidden" name="activity_mode">
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Todo}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Calendar'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Todo}"></td>
