@@ -57,13 +57,17 @@ function getSharedCalendarId($sharedid)
 /**
  * To get userid and username of all vtiger_users except the current user
  * @param $id -- The user id :: Type integer
+ * @param $check -- true/false :: Type boolean
  * @returns $user_details -- Array in the following format:
  * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
  */
-function getOtherUserName($id)
+function getOtherUserName($id,$check)
 {
 	global $adb;
-	$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
+	if($check)
+		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
+	else
+		$query="select * from vtiger_users where deleted=0 and status='Active' and is_admin='off' and id!=".$id;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	$user_details=Array();
