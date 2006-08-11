@@ -147,6 +147,7 @@ $mod_strings = Array(
 'LBL_MAILSELECT_INFO1'=>'The following Email ID types are associated to the selected',
 'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
 'LBL_MULTIPLE'=>'Multiple',
+'LBL_COMPOSE_EMAIL'=>'Compose E-Mail',
 );
 
 ?>

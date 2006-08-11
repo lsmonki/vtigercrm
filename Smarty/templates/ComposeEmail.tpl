@@ -39,24 +39,13 @@
 <input type="hidden" name="hidden_toid">
 <table class="small mailClient" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
-   <!-- <tr>
-	<td colspan="3">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		   <tr>
-			<td width="143"><img src="{$IMAGE_PATH}composeMail.jpg"></td>
-			<td background="{$IMAGE_PATH}mailHdr.jpg" style="background-repeat:repeat-x;" width="100%">&nbsp;</td>
-			<td width="86"><img src="{$IMAGE_PATH}mailTitle.jpg"></td>
-		   </tr>
-		</table>	
-	</td>
-   </tr> -->
    
    <tr>
 	<td colspan=3 >
 	<!-- Email Header -->
 	<table border=0 cellspacing=0 cellpadding=0 width=100% class="mailClientWriteEmailHeader">
 	<tr>
-		<td >Compose E-Mail</td>
+		<td >{$MOD.LBL_COMPOSE_EMAIL}</td>
 	</tr>
 	</table>
 	
@@ -71,12 +60,12 @@
 	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<input type="text" class="small txtBox"  style="width:98%"  id="parent_name" multiline="true">{$TO_MAIL}</textarea>
+		<textarea id="parent_name" readonly cols="70">{$TO_MAIL}</textarea>
 	</td>
 	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
 			{foreach key=labelval item=selectval from=$elements.1.0}
-				<option value="{$labelval}" {$selectval}>{$labelval}</option>
+				<option value="{$labelval}" {$selectval}>{$APP[$labelval]}</option>
 			{/foreach}
 		</select>
 		&nbsp;
