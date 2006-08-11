@@ -20,7 +20,7 @@ require_once("modules/Emails/mail.php");
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
- $userDetails=getOtherUserName($current_user->id);
+ $userDetails=getOtherUserName($current_user->id,true);
  //echo '<pre>';print_r($userDetails);echo '</pre>';
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
@@ -74,7 +74,6 @@ if(empty($date_data))
 }
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
-$calendar_arr['calendar']->hour_format = $current_user->hour_format;
 
  function getPriorityCombo()
  {
@@ -142,7 +141,6 @@ else
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
 	<input type="hidden" name="eventstatus" value="Planned">
-	<input type="hidden" name="set_reminder" value="">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 	<input type="hidden" name="parenttab" value="<?php echo $category ?>">
