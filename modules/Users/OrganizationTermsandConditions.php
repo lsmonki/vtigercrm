@@ -30,6 +30,9 @@ $inventory_id = $adb->query_result($result,0,'id');
 $inventory_type = $adb->query_result($result,0,'type');
 $inventory_tandc = $adb->query_result($result,0,'tandc');
 
+if(!isset($_REQUEST['inv_terms_mode']))
+	$inventory_tandc = nl2br($inventory_tandc);
+	
 if (isset($inventory_tandc))
         $smarty->assign("INV_TERMSANDCONDITIONS",$inventory_tandc);
 if(isset($_REQUEST['inv_terms_mode']) && $_REQUEST['inv_terms_mode'] != '')

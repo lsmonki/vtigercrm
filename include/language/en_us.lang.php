@@ -993,6 +993,13 @@ $app_strings = Array(
 
 'LBL_PERMISSION'=>'Permission assigned to you, does\'nt allow you to execute this Operation',
 'VTIGER'=>'vtiger',
+
+//Added for Inventory Tax details
+'LBL_DIRECT_AMOUNT_DISCOUNT'=>'Direct Amount Discount',
+'LBL_NO_DISCOUNT_FOR_THIS_PRODUCT'=>'No Discount for this Product',
+'LBL_TOTAL_TAX_AMOUNT'=>'Total Tax Amount',
+'LBL_FINAL_DISCOUNT_AMOUNT'=>'Final Discount Amount',
+'LBL_SHIPPING_AND_HANDLING_CHARGE'=>'Shipping & Handling Charge',
 );
 
 

@@ -944,28 +944,28 @@ function getDetailAssociatedProducts($module,$focus)
 	$output = '';
 	//Header Rows
 	$output .= '
-	
+
 	<table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
-	   <tr class="detailedViewHeader">
-	   	<td colspan="'.$colspan.'" class="detailedViewHeader" ><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
-		<td class="detailedViewHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].' : </b></td>
-		<td class="detailedViewHeader">'.$taxtype.'</td>
+	   <tr valign="top">
+	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
+		<td class="dvInnerHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].' : </b></td>
+		<td class="dvInnerHeader">'.$taxtype.'</td>
 	   </tr>
 	   <tr valign="top">
-		<td width=40% class="small crmTableColHeading"><font color="red">*</font>
+		<td width=40% class="lvtCol"><font color="red">*</font>
 			<b>'.$app_strings['LBL_PRODUCT_NAME'].'</b>
 		</td>';
 
 	//Add Quantity in Stock column for SO, Quotes and Invoice
 	if($module == 'Quotes' || $module == 'SalesOrder' || $module == 'Invoice')
-		$output .= '<td width=10% class="small crmTableColHeading"><b>'.$app_strings['LBL_QTY_IN_STOCK'].'</b></td>';
+		$output .= '<td width=10% class="lvtCol"><b>'.$app_strings['LBL_QTY_IN_STOCK'].'</b></td>';
 
 	$output .= '
 	
-		<td width=10% class="small crmTableColHeading"><b>'.$app_strings['LBL_QTY'].'</b></td>
-		<td width=10% class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_LIST_PRICE'].'</b></td>
-		<td width=12% nowrap class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_TOTAL'].'</b></td>
-		<td width=13% valign="top" class="small crmTableColHeading" align="right"><b>'.$app_strings['LBL_NET_PRICE'].'</b></td>
+		<td width=10% class="lvtCol"><b>'.$app_strings['LBL_QTY'].'</b></td>
+		<td width=10% class="lvtCol" align="right"><b>'.$app_strings['LBL_LIST_PRICE'].'</b></td>
+		<td width=12% nowrap class="lvtCol" align="right"><b>'.$app_strings['LBL_TOTAL'].'</b></td>
+		<td width=13% valign="top" class="lvtCol" align="right"><b>'.$app_strings['LBL_NET_PRICE'].'</b></td>
 	   </tr>
 	   	';
 
@@ -1026,11 +1026,11 @@ function getDetailAssociatedProducts($module,$focus)
 		{
 			$productDiscount = $discount_amount;
 			$totalAfterDiscount = $total-$productDiscount;
-			$discount_info_message = "Direct Amount Discount = $productDiscount";
+			$discount_info_message = $app_strings['LBL_DIRECT_AMOUNT_DISCOUNT']." = $productDiscount";
 		}
 		else
 		{
-			$discount_info_message = 'No Discount for this Product.';
+			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_PRODUCT'];
 		}
 		//Product wise Discount calculation - ends 
 
@@ -1039,7 +1039,7 @@ function getDetailAssociatedProducts($module,$focus)
 		if($taxtype == 'individual')
 		{
 			$taxtotal = '0.00';
-			$tax_info_message = "Total After Discount = $totalAfterDiscount \\n";
+			$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT']." = $totalAfterDiscount \\n";
 			$tax_details = getTaxDetailsForProduct($productid,'all');
 			for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 			{
@@ -1051,7 +1051,7 @@ function getDetailAssociatedProducts($module,$focus)
 				$taxtotal = $taxtotal + $individual_taxamount;
 				$tax_info_message .= "$tax_label : $tax_value % = $individual_taxamount \\n";
 			}
-			$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
+			$tax_info_message .= "\\n ".$app_strings['LBL_TOTAL_TAX_AMOUNT']." = $taxtotal";
 			$netprice = $netprice + $taxtotal;
 		}
 
@@ -1078,16 +1078,16 @@ function getDetailAssociatedProducts($module,$focus)
 				   	<td align="right">'.$listprice.'</td>
 				   </tr>
 				   <tr>
-					   <td align="right">(-)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$discount_info_message.'\'); ">Discount</a></b></td>
+					   <td align="right">(-)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$discount_info_message.'\'); ">'.$app_strings['LBL_DISCOUNT'].' : </a></b></td>
 				   </tr>
 				   <tr>
-				   	<td align="right" nowrap>Total After Discount :</td>
+				   	<td align="right" nowrap>'.$app_strings['LBL_TOTAL_AFTER_DISCOUNT'].' : </td>
 				   </tr>';
 		if($taxtype == 'individual')
 		{
 			$output .= '
 				   <tr>
-					   <td align="right" nowrap>(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">Tax :</a></b></td>
+					   <td align="right" nowrap>(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">'.$app_strings['LBL_TAX'].' : </a></b></td>
 				   </tr>';
 		}
 		$output .= '
@@ -1139,7 +1139,7 @@ function getDetailAssociatedProducts($module,$focus)
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
 		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
-		$final_discount_info = "Final Discount Amount = $finalDiscount";
+		$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT']." = $finalDiscount";
 	}
 	if($final_discount_info != '')
 		$final_discount_info = 'onclick="alert(\''.$final_discount_info.'\');"';
@@ -1153,7 +1153,7 @@ function getDetailAssociatedProducts($module,$focus)
 	{
 		$taxtotal = '0.00';
 		$final_totalAfterDiscount = $netTotal - $finalDiscount;
-		$tax_info_message = "Total After Discount = $final_totalAfterDiscount \\n";
+		$tax_info_message = $app_strings['LBL_TOTAL_AFTER_DISCOUNT']." = $final_totalAfterDiscount \\n";
 		//First we should get all available taxes and then retrieve the corresponding tax values
 		$tax_details = getAllTaxes('available');
 		//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
@@ -1169,7 +1169,7 @@ function getDetailAssociatedProducts($module,$focus)
 			$taxtotal = $taxtotal + $taxamount;
 			$tax_info_message .= "$tax_label : $tax_value % = $taxamount \\n";
 		}
-		$tax_info_message .= "\\n Total Tax Amount = $taxtotal";
+		$tax_info_message .= "\\n ".$app_strings['LBL_TOTAL_TAX_AMOUNT']." = $taxtotal";
 
 		$output .= '<tr>';
 		$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$tax_info_message.'\');">'.$app_strings['LBL_TAX'].'</a></b></td>';
@@ -1189,7 +1189,7 @@ function getDetailAssociatedProducts($module,$focus)
 	//First we should get all available taxes and then retrieve the corresponding tax values
 	$shtax_details = getAllTaxes('available','sh');
 	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
-	$shtax_info_message = "Shipping & Handling Charge = $shAmount \\n";
+	$shtax_info_message = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGE']." = $shAmount \\n";
 	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)
 	{
 		$shtax_name = $shtax_details[$shtax_count]['taxname'];
@@ -1199,7 +1199,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$shtaxtotal = $shtaxtotal + $shtaxamount;
 		$shtax_info_message .= "$shtax_label : $shtax_percent % = $shtaxamount \\n";
 	}
-	$shtax_info_message .= "\\n Total Tax Amount = $shtaxtotal";
+	$shtax_info_message .= "\\n ".$app_strings['LBL_TOTAL_TAX_AMOUNT']." = $shtaxtotal";
 	
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b><a href="javascript:;" onclick="alert(\''.$shtax_info_message.'\')">'.$app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].'</a></b></td>';

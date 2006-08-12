@@ -82,13 +82,13 @@ function displayCoords(event,obj,mode,curr_row)
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
    	{if $MODULE neq 'PurchaseOrder'}
-			<td colspan="5" class="detailedViewHeader">
+			<td colspan="5" class="dvInnerHeader">
 	{else}
-			<td colspan="4" class="detailedViewHeader">
+			<td colspan="4" class="dvInnerHeader">
 	{/if}
 		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
 	</td>
-	<td class="detailedViewHeader" align="right">
+	<td class="dvInnerHeader" align="right">
 		<b>{$APP.LBL_TAX_MODE}</b>
 	</td>
 
@@ -98,7 +98,7 @@ function displayCoords(event,obj,mode,curr_row)
 		{assign var="individual_selected" value="selected"}
 	{/if}
 
-	<td class="detailedViewHeader">
+	<td class="dvInnerHeader">
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv();">
 			<OPTION value="individual" {$individual_selected}>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group" {$group_selected}>{$APP.LBL_GROUP}</OPTION>
@@ -107,16 +107,16 @@ function displayCoords(event,obj,mode,curr_row)
    </tr>
 
    <!-- Header for the Product Details -->
-   <tr>
-	<td width=5% valign="top" class="small crmTableColHeading" align="right"><b>{$APP.LBL_TOOLS}</b></td>
-	<td width=40% class="small crmTableColHeading"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
+   <tr valign="top">
+	<td width=5% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_TOOLS}</b></td>
+	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
 	{if $MODULE neq 'PurchaseOrder'}
-		<td width=10% class="small crmTableColHeading"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
+		<td width=10% class="lvtCol"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
 	{/if}
-	<td width=10% class="small crmTableColHeading"><b>{$APP.LBL_QTY}</b></td>
-	<td width=10% class="small crmTableColHeading" align="right"><b>{$APP.LBL_LIST_PRICE}</b></td>
-	<td width=12% nowrap class="small crmTableColHeading" align="right"><b>{$APP.LBL_TOTAL}</b></td>
-	<td width=13% valign="top" class="small crmTableColHeading" align="right"><b>{$APP.LBL_NET_PRICE}</b></td>
+	<td width=10% class="lvtCol"><b>{$APP.LBL_QTY}</b></td>
+	<td width=10% class="lvtCol" align="right"><b>{$APP.LBL_LIST_PRICE}</b></td>
+	<td width=12% nowrap class="lvtCol" align="right"><b>{$APP.LBL_TOTAL}</b></td>
+	<td width=13% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_NET_PRICE}</b></td>
    </tr>
 
    {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}

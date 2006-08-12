@@ -12,7 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 $inv_type='Inventory';
-$inv_tandc=$_REQUEST['inventory_tandc'];
+$inv_tandc=addslashes($_REQUEST['inventory_tandc']);
 
 $sql="select * from vtiger_inventory_tandc where type='".$inv_type."'";
 $result = $adb->query($sql);
