@@ -25,6 +25,9 @@ $combovalues='';
 
 global $mod_strings;
 global $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
 global $adb;
 
 $mode = $_REQUEST['mode'];
@@ -241,7 +244,7 @@ elseif($mode == 'edit')
 }
 
 	
-$output.='<form name="newGroupForm" action="index.php" method="post">
+$output.='<div class="layerPopup" id="sharingRule"><form name="newGroupForm" action="index.php" method="post">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="parenttab" value="Settings">	
 <input type="hidden" name="action" value="SaveSharingRule">
@@ -249,8 +252,7 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <input type="hidden" name="shareId" value="'.$shareid.'">
 <input type="hidden" name="mode" value="'.$mode.'">
 <input type="hidden" id="rel_module_lists" name="rel_module_lists" value="'.$relatedmodule.'">
-<div id="sharingRule" class="fixedLay">
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>';
 
 if($sharing_module == 'Accounts')
@@ -261,87 +263,93 @@ else
 {
 	$display_module = $app_strings[$sharing_module];	
 }
-$output .= '<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$display_module.' - ';
+$output .= '<td class=layerPopupHeading " align="left">'.$display_module.' - ';
 if($mode == 'edit')
     	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
 else
 	$output .=$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>';
-$output .= '<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>'.$mod_strings[LBL_CLOSE].'</a></td>
+$output .= '<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
 
-</tr>
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-<td><b>'.$mod_strings[LBL_STEP].' 1 : '.$display_module.' '.$app_strings[LBL_LIST_OF].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
-<td>&nbsp;</td>
-
-</tr>
-<tr>
-<td style="padding-left:20px;text-align:left;">';
-//combovalues
-
-$output.='<select id="'.$app_strings[$sharing_module].'_share" name="'.$sharing_module.'_share" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>'.$fromComboValues.'</select>';	
-$output.='</td>
-
-<td>&nbsp;</td>
-</tr>
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-
-<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 2 : '.$mod_strings[LBL_CAN_BE_ACCESSED_BY].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
-<td align="left"><b>'.$mod_strings[LBL_PERMISSIONS].'</b></td>
-</tr>
-<tr>
-<td style="padding-left:20px;text-align:left;">
-
-<select id="'.$app_strings[$sharing_module].'_access" name="'.$sharing_module.'_access" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
-
-$output.=$toComboValues.'</select>
-
-</td><td>
-
-<select	id="share_memberType" name="share_memberType" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
-$output .= $sharPerCombo;
-$output .= '</select>
-
-</td>
-</tr>
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 3 : '.$mod_strings[LBL_ACCESS_RIGHTS_FOR_MODULES].' </b></td>
-<td>&nbsp;</td>
-
-</tr>
-<tr>
-<td style="padding-left:20px;text-align:left;">
-<table width="75%"  border="0" cellspacing="0" cellpadding="0">';
-
-
-
-$output .=$relatedlistscombo.'</table>
-</td>
-<td>&nbsp;</td>
-</tr>
-<tr><td colspan="2" align="left">&nbsp;</td></tr>
-<tr>
-<td colspan="2" class="detailedViewHeader"><b>'.$mod_strings[LBL_RULE_CONSTRUCTION].'</b></td>
-
-</tr>
-<tr>
-<td  style="white-space:normal;" colspan="2" class="dvtCellLabel" id="rules">&nbsp;
-</td>
-</tr>
-<tr>
-<td  style="white-space:normal;" colspan="2" class="dvtCellLabel" id="relrules">&nbsp;
-</td>
-</tr>
-<tr>
-<td colspan="2" align="center">
-<input type="submit" class="crmButton small save" name="add" value="'.$mod_strings[LBL_ADD_RULE].'" onClick="return validate()">&nbsp;&nbsp;
-</td>
 </tr>
 </table>
-</div>';
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<tr>
+	<td class="small">
+	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+	<tr>
+		<td><b>'.$mod_strings[LBL_STEP].' 1 : '.$display_module.' '.$app_strings[LBL_LIST_OF].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td style="padding-left:20px;text-align:left;">';
+//combovalues
 
-$output.='</form>';
+		$output.='<select id="'.$app_strings[$sharing_module].'_share" name="'.$sharing_module.'_share" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>'.$fromComboValues.'</select>';	
+		$output.='</td>
+
+		<td>&nbsp;</td>
+	</tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr>
+
+		<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 2 : '.$mod_strings[LBL_CAN_BE_ACCESSED_BY].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
+		<td align="left"><b>'.$mod_strings[LBL_PERMISSIONS].'</b></td>
+	</tr>
+	<tr>
+		<td style="padding-left:20px;text-align:left;">
+
+		<select id="'.$app_strings[$sharing_module].'_access" name="'.$sharing_module.'_access" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
+
+		$output.=$toComboValues.'</select>
+
+		</td>
+		<td>
+
+		<select	id="share_memberType" name="share_memberType" onChange="fnwriteRules(\''.$app_strings[$sharing_module].'\',\''.$relatedmodule.'\')";>';
+		$output .= $sharPerCombo;
+		$output .= '</select>
+
+		</td>
+	</tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr>
+		<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 3 : '.$mod_strings[LBL_ACCESS_RIGHTS_FOR_MODULES].' </b></td>
+		<td>&nbsp;</td>
+
+	</tr>
+	<tr>
+		<td style="padding-left:20px;text-align:left;">
+		<table width="75%"  border="0" cellspacing="0" cellpadding="0">';
+
+		$output .=$relatedlistscombo.'</table>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr><td colspan="2" align="left">&nbsp;</td></tr>
+	<tr>
+		<td colspan="2" class="dvInnerHeader"><b>'.$mod_strings[LBL_RULE_CONSTRUCTION].'</b></td>
+
+	</tr>
+	<tr>
+		<td  style="white-space:normal;" colspan="2" id="rules">&nbsp;
+	</td>
+	</tr>
+	<tr>
+		<td style="white-space:normal;" colspan="2" id="relrules">&nbsp;
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+	<tr>
+		<td colspan="2" align="center">
+		<input type="submit" class="crmButton small save" name="add" value="'.$mod_strings[LBL_ADD_RULE].'">&nbsp;&nbsp;
+	</td>
+	</tr>
+</table>';
+
+$output.='</form></div>';
 echo $output;
 ?>
