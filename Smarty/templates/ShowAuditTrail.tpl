@@ -17,21 +17,27 @@
 <input type='hidden' name='module' value='Users'>
 <input type='hidden' id='userid' name='userid' value='{$USERID}'>
 
-<table  width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
+<table  width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
-		<td background="{$IMAGE_PATH}popupHdr.jpg" height="70" style="padding-left:20px;">
-		<span style="color:#FFFFFF;font:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;">
-		{$MOD.LBL_AUDIT_TRAIL}
-		</span> 
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="moduleName" width="80%" style="padding-left:10px;">{$MOD.LBL_AUDIT_TRAIL}</td>
+					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td class="hdrNameBg small">
 			<div id="AuditTrailContents">
 				{include file="ShowAuditTrailContents.tpl"}
 			</div>
 		</td>
 	</tr>
+	<tr>
+    <td align="center" style="padding:10px;" class="reportCreateBottom" >&nbsp;</td>
+  </tr>
 </table>
 </form>
 </body>
