@@ -111,7 +111,7 @@ DIV.fixedLay {
                   		<tr>
 		                    <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                 		    <td align="right">
-					<input class="crmButton small save" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv('{$modulename}','create','')">
+					<input class="crmButton small save" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv(this,'{$modulename}','create','')">
 				    </td>
                   		</tr>
 			  	</table>
@@ -130,7 +130,7 @@ DIV.fixedLay {
                           <td class="listTableRow small">{$elements.2}</td>
                           <td class="listTableRow small">{$elements.3}</td>
                           <td align="center" class="listTableRow small">
-				<a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" border=0></a>|<a href="javascript:;" onclick='confirmdelete("index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}")'><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" border=0></a></td>
+				<a href="javascript:void(0);" onClick="callEditDiv(this,'{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" border=0 style="padding-top:3px;"></a>&nbsp;|<a href='javascript:confirmdelete("index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}")'><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" border=0></a></td>
                         </tr>
 
                      {/foreach} 
@@ -147,14 +147,14 @@ DIV.fixedLay {
                       <tr>
                         <td  style="padding-left:5px;" class="big"><img src="{$IMAGE_PATH}arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                         <td align="right">
-				<input class="crmButton small save" type="button" name="Create" value="{$APP.LBL_ADD_ITEM} {$CMOD.LBL_PRIVILEGES}" onClick="callEditDiv('{$modulename}','create','')">
+				<input class="crmButton small save" type="button" name="Create" value="{$APP.LBL_ADD_ITEM} {$CMOD.LBL_PRIVILEGES}" onClick="callEditDiv(this,'{$modulename}','create','')">
 			</td>
                       </tr>
 			<table width="100%" cellpadding="5" cellspacing="0">
 			<tr>
 			<td colspan="2"  style="padding:20px ;" align="center" class="small">
 			   {$CMOD.LBL_CUSTOM_ACCESS_MESG} 
-			   <a href="javascript:onClick=callEditDiv('{$modulename}','create','')">{$CMOD.LNK_CLICK_HERE}</a>
+			   <a href="javascript:void(0);" onClick="callEditDiv(this,'{$modulename}','create','')">{$CMOD.LNK_CLICK_HERE}</a>
 			   {$CMOD.LBL_CREATE_RULE_MESG}
 			</td>
 			</tr>
@@ -191,9 +191,9 @@ DIV.fixedLay {
    </tr>
 </tbody>
 </table>
-<div id="tempdiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
+<div id="tempdiv" style="display:block;position:absolute;width:400px;"></div>
 <script>
-function callEditDiv(modulename,mode,id)
+function callEditDiv(obj,modulename,mode,id)
 {ldelim}
         $("status").style.display="inline";
         new Ajax.Request(
@@ -204,6 +204,7 @@ function callEditDiv(modulename,mode,id)
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
+				fnvshobj(obj,"tempdiv");
                                 if(mode == 'edit')
                                 {ldelim}
                                         setTimeout("",10000);
