@@ -45,16 +45,20 @@
 <script type="text/javascript" src="include/js/general.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-<table width="640" border="0" cellspacing="0" cellpadding="0" class="small">
+<table width="640" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
-			<td background="{$IMAGE_PATH}popupHdr.jpg" height="70" style="padding-left:20px;">
-					<span style="color:#FFFFFF;font:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;">
-							Create User &rsaquo; Role Selection </span> 
+			<td>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="moduleName" width="80%" style="padding-left:10px;">Delete User</td>
+					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
+				</tr>
+			</table>
 			</td>
   </tr>
     </tr>
    <tr>
-	    <td style="padding:10px;" valign="top" bgcolor="#CCCCCC">
+	    <td style="padding:10px;" valign="top" class="hdrNameBg small">
 			<table cellspacing="0" cellpadding="0" style="width:100%;" class="small">
           <tr>
             <td valign="top" align="center">
@@ -67,7 +71,7 @@
         </table></td>
   </tr>
   <tr>
-    <td align="center" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">&nbsp;</td>
+    <td align="center" style="padding:10px;" class="reportCreateBottom" >&nbsp;</td>
   </tr>
 </table>
 <script>
