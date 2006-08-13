@@ -33,15 +33,10 @@ require_once($theme_path.'layout_utils.php');
    <tr>
 	<td width="98%" style="padding-left:20px;" valign="top">
 		<!-- module Select Table -->
-		<table width="95%"  border="0" cellspacing="0" cellpadding="0" align="center">
+		<table width="95%"  border="0" cellspacing="0" cellpadding="0" align="center" class="mailClient">
 		   <tr>
-			   <td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="<?php echo $image_path; ?>top_left.jpg" align="top"  /></td>
-			<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
-			<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="<?php echo $image_path; ?>top_right.jpg" width="8" height="6" align="top" /></td>
-		   </tr>
-		   <tr>
-			<td bgcolor="#EBEBEB" width="7"></td>
-			<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
+			<td class="mailClientBg" width="7"></td>
+			<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 				   <tr>
 					   <td width="10%"><img src="<?php echo $image_path; ?>migrate.gif" align="absmiddle"/></td>
@@ -52,7 +47,7 @@ require_once($theme_path.'layout_utils.php');
 					</td>
 				   </tr>
 				   <tr>
-					<td colspan="2" bgcolor="#FFFFFF">
+					<td colspan="2" bgcolor="#FFFFFF" class="hdrNameBg">
 						<span class="genHeaderSmall">Migration Results</span>
 				    		<hr /><br /><br />
 						<div id="Mig_result" style="position:relative;border:2px solid #8BB73C;width:50%;left:25%;">
@@ -283,20 +278,15 @@ require_once($theme_path.'layout_utils.php');
 					   <form name="close_migration" method="post" action="index.php">
 					   <input type="hidden" name="module" value="Settings">
 					   <input type="hidden" name="action" value="index">
-						<input type="submit" name="close" value=" &nbsp;Close&nbsp; " class="classBtn" />
+						<input type="submit" name="close" value=" &nbsp;Close&nbsp; " class="crmbutton small cancel" />
 					   </form>
 					</td>
 				   </tr>
 				</table>
 			</td>
-			<td bgcolor="#EBEBEB" width="8"></td>
+			<td class="mailClientBg" width="8"></td>
 		   </tr>
-		   <tr>
-			<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="<?php echo $image_path; ?>bottom_left.jpg" align="bottom"  /></td>
-			<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-			<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="<?php echo $image_path; ?>bottom_right.jpg" align="bottom" /></td>
-		   </tr>
-		</table>
+		  </table>
 		<br />
 
 	</td>
