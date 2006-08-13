@@ -365,6 +365,18 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
 			}
+			elseif($table_name == "vtiger_pricebook" && $column_name == "active")
+			{
+				if(stristr($search_string,'yes'))
+					$where="$table_name.$column_name = 1";
+				if(stristr($search_string,'no'))
+					$where="$table_name.$column_name is NULL";
+			}
+			elseif($table_name == "vtiger_activity" && $column_name == "status")
+			{
+				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
+			}
+
 			else if(in_array($column_name,$column_array))
 			{
 				$where = getValuesforColumns($column_name,$search_string);
@@ -498,26 +510,38 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	{
 		case 'cts':
 			$where_string = $searchfield." like '%".$searchstring."%' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is NULL";
 			break;
 		
 		case 'dcts':
 			$where_string = $searchfield." not like '%".$searchstring."%' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is not NULL";
 			break;
 			
 		case 'is':
 			$where_string = $searchfield." = '".$searchstring."' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is NULL";
 			break;
 			
 		case 'isn':
 			$where_string = $searchfield." <> '".$searchstring."' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is not NULL";
 			break;
 			
 		case 'bwt':
 			$where_string = $searchfield." like '".$searchstring."%' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is NULL";
 			break;
 
 		case 'ewt':
 			$where_string = $searchfield." like '%".$searchstring."' ";
+			if($searchstring == NULL)
+			$where_string = $searchfield." is NULL";
 			break;
 
 		case 'grt':
@@ -593,6 +617,14 @@ function getWhereCondition($currentModule)
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.firstname')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.lastname')." )".$matchtype;	
 			}
+			elseif($tab_col == "vtiger_pricebook.active")
+			{
+				if(stristr($srch_val,'yes'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,"1",'vtiger_pricebook.active')." ".$matchtype;	
+				if(stristr($srch_val,'no'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,NULL,'vtiger_pricebook.active')." ".$matchtype;	
+			}
+
 			elseif(in_array($column_name,$column_array))
                         {
                                 $adv_string .= getValuesforColumns($column_name,$srch_val)." ".$matchtype;

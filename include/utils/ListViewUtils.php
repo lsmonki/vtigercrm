@@ -1051,7 +1051,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		else
 		{
-			$value = '';
+			$value = 'no';
 		}
 	}	
 	elseif($uitype == 57)
