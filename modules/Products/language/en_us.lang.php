@@ -173,6 +173,7 @@ $mod_strings = Array(
 'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
 'LBL_EMAIL'=>'Email',
 'Product'=>'Product',
+'LBL_EDITLISTPRICE'=>'EditListPrice',
 );
 
 ?>
