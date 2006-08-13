@@ -99,10 +99,7 @@ foreach ( explode(",",$home_section_order) as $section )
             break;
 
 	case 'GRT':
-	if(isPermitted('Calendar','index') == "yes")
-	{
-		$home_values['Activities']=getGroupTaskLists();	   
-	}
+		$home_values['GroupAllocation']=getGroupTaskLists();	   
    		break;
         case 'HLT':
         if(isPermitted('HelpDesk','index') == "yes")
