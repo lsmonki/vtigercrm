@@ -57,7 +57,7 @@ class Appointment
 		$shared_ids = getSharedCalendarId($current_user->id);		
 		if(empty($shared_ids))
 			$shared_ids = $current_user->id;
-                $q= "select vtiger_activity.*, vtiger_crmentity.*, vtiger_account.accountname,vtiger_account.accountid,vtiger_activitygrouprelation.groupname FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_activity.activityid = vtiger_cntactivityrel.activityid left join vtiger_contactdetails on vtiger_cntactivityrel.contactid = vtiger_contactdetails.contactid left join vtiger_account  on vtiger_contactdetails.accountid = vtiger_account.accountid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_activity.activitytype in ('Call','Meeting') AND ";
+                $q= "select vtiger_activity.*, vtiger_crmentity.*, vtiger_activitygrouprelation.groupname FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_activity.activitytype in ('Call','Meeting') AND ";
 
                 if(!is_admin($current_user))
                 {
@@ -67,10 +67,11 @@ class Appointment
                 $q.=" ((vtiger_activity.date_start < '". $to_datetime->get_formatted_date() ."' AND vtiger_activity.date_start >= '". $from_datetime->get_formatted_date()."')";
                 if(!is_admin($current_user))
                 {
-                        $q .= "  ) AND ((vtiger_crmentity.smownerid ='".$current_user->id."' and vtiger_salesmanactivityrel.smid = '".$current_user->id."') or (vtiger_crmentity.smownerid in (".$shared_ids.") and vtiger_salesmanactivityrel.smid in (".$shared_ids.")))";
+                        $q .= "  ) AND ((vtiger_crmentity.smownerid ='".$current_user->id."' or vtiger_salesmanactivityrel.smid = '".$current_user->id."') or (vtiger_crmentity.smownerid in (".$shared_ids.") or vtiger_salesmanactivityrel.smid in (".$shared_ids.")))";
                 }
                 $q .= " AND vtiger_crmentity.deleted = 0) AND vtiger_recurringevents.activityid is NULL ";
                 $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+		//echo $q;
 		$r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
@@ -85,7 +86,7 @@ class Appointment
                         unset($obj);
                 }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_account.accountname,vtiger_account.accountid,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_activity.activityid = vtiger_cntactivityrel.activityid left join vtiger_contactdetails on vtiger_cntactivityrel.contactid = vtiger_contactdetails.contactid left join vtiger_account  on vtiger_contactdetails.accountid = vtiger_account.accountid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid";
+		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid";
 
                 $q.=" where ( vtiger_activity.activitytype in ('Call','Meeting') AND ";
                 if(!is_admin($current_user))
@@ -95,7 +96,7 @@ class Appointment
                 $q .= "  (recurringdate < '".$to_datetime->get_formatted_date()."' AND recurringdate >= '".$from_datetime->get_formatted_date(). "') ";
                 if(!is_admin($current_user))
                 {
-			$q .= " ) AND ((vtiger_crmentity.smownerid ='".$current_user->id."' and vtiger_salesmanactivityrel.smid = '".$current_user->id."' ) or (vtiger_crmentity.smownerid in (".$shared_ids.") and vtiger_salesmanactivityrel.smid in (".$shared_ids.")))";
+			$q .= " ) AND ((vtiger_crmentity.smownerid ='".$current_user->id."' or vtiger_salesmanactivityrel.smid = '".$current_user->id."' ) or (vtiger_crmentity.smownerid in (".$shared_ids.") or vtiger_salesmanactivityrel.smid in (".$shared_ids.")))";
                 }
 
                 $q .= " AND vtiger_crmentity.deleted = 0 )" ;
@@ -129,8 +130,8 @@ class Appointment
 		$format_sthour='';
                 $format_stmin='';
 		$this->description       = $act_array["description"];
-		$this->account_name      = $act_array["accountname"];
-		$this->account_id        = $act_array["accountid"];
+		//$this->account_name      = $act_array["accountname"];
+		//$this->account_id        = $act_array["accountid"];
 		$this->eventstatus       = $act_array["eventstatus"];
 		$this->subject           = $act_array["subject"];
 		$this->activity_type     = $act_array["activitytype"];
