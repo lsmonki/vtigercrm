@@ -33,36 +33,39 @@ else
 	$return_id = $_REQUEST['pricebook_id'];
 }
 $output='';
-$output ='<div id="roleLay" style="display:block;">
+$output ='<div id="roleLay" style="display:block;" class="layerPopup">
 	<form action="index.php" name="index">
 	<input type="hidden" name="module" value="Products">
 	<input type="hidden" name="action" value="UpdateListPrice">
 	<input type="hidden" name="record" value="'.$return_id.'">
 	<input type="hidden" name="pricebook_id" value="'.$pricebook_id.'">
 	<input type="hidden" name="product_id" value="'.$product_id.'">
-	<table width="100%" border="0" cellpadding="3" cellspacing="0">
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 	<tr>
-		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">EditListPrice</td>
-		<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';"><img alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" border=0 src="'.$image_path.'close.gif"></a></td>
-	</tr>
-	<tr>
-		<td colspan="3">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="50%"><b>EditListPrice</b></td>
-		<td width="2%"><b>:</b></td>
-		<td width="48%" align="left" ><input class="dataInput" type="text" id="list_price" name="list_price" value="'.$listprice.'" /></td>
-	</tr>
-	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-	<tr>
-		<td colspan="3" align="center">
-			<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.');return verify_data(EditView)" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
-			<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="small" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
-		</td>
-		
+		<td class=layerPopupHeading " align="left">'.$mod_strings["LBL_EDITLISTPRICE"].'</td>
+		<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';"></td>
 	</tr>
 	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<tr>
+	<td class="small">
+	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+	<tr>
+		<td width="50%" class="cellLabel small"><b>'.$mod_strings["LBL_EDITLISTPRICE"].'</b></td>
+		<td width="50%" class="cellText small"><input class="dataInput" type="text" id="list_price" name="list_price" value="'.$listprice.'" /></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+<tr>
+	<td colspan="3" align="center" class="small">
+	<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.');return verify_data(EditView)" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="crmbutton small save">
+	<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="crmbutton small cancel" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
+	</td>
+</tr>
+</table>
 </form>
 </div>';
 

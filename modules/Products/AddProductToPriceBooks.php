@@ -38,8 +38,8 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" ali
 	<input name="product_id" type="hidden" value="'.$productid.'">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden">';
-        $other_text .='<td align="center"><input class="classBtn" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>&nbsp;';
-	$other_text .='<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="classBtn" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
+        $other_text .='<td align="center"><input class="crmbutton small save" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>&nbsp;';
+	$other_text .='<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
 	$other_text .='</tr></table>';
 
 //Retreive the list from Database
