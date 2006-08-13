@@ -127,7 +127,7 @@ for($i=0;$i<count($cftextcombo);$i++)
     	$combo_output.= '<a href="javascript:;" onClick="makeFieldSelected(this,'.$i.');" id="field'.$i.'" style="text-decoration:none;background-image:url('.$cfimagecombo[$i].');" class="customMnu" '.$disable_str.'>'.$cftextcombo[$i].'</a>';
 
 }
-$output .= '<div id="orgLay" style="display:block;"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
+$output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 	<form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
 	  <input type="hidden" name="module" value="Settings">
 	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
@@ -139,27 +139,30 @@ $output .= '<div id="orgLay" style="display:block;"><script language="JavaScript
 	  <input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
 
 	  
-		<table width="100%" border="0" cellpadding="5" cellspacing="0">
+		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>';
 			if($mode == 'edit')
-				$output .= '<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$mod_strings[$customfield_typename].'</td>';
+				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$mod_strings[$customfield_typename].'</td>';
 			else
-				$output .= '<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
+				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
 				
-			$output .= '<td width="60%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
-			</tr>
-			<tr><td colspan="2"><hr /></td></tr>
-			<tr>';
+			$output .= '<td width="40%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			</tr>';
+			$output .='</table><table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+							<tr>
+								<td class=small >
+									<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+										<tr>';
 			if($mode != 'edit')
 			{	
 				$output .= '<td><table>
 						<tr><td>'.$mod_strings['LBL_SELECT_FIELD_TYPE'].'</td></tr>
 						<tr><td>
-							<div name="cfcombo" id="cfcombo" class=small  style="width:200px;height:150px;overflow-y:auto;overflow-x:hidden;border:1px solid #CCCCCC;">'.$combo_output.'</div>
+							<div name="cfcombo" id="cfcombo" class=small  style="width:205px;height:150px;overflow-y:auto;overflow-x:hidden;overflow:auto;border:1px solid #CCCCCC;">'.$combo_output.'</div>
 						</td></tr>
 						</table></td>';
 			}
-			$output .='<td>
+			$output .='<td width="50%">
 					<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
@@ -218,15 +221,18 @@ $output .= '<div id="orgLay" style="display:block;"><script language="JavaScript
 					</table>
 				</td>
 			</tr>
-			<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
+			</table>
+		</td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 			<tr>
-				<td colspan="2" align="center">
+				<td align="center">
 					<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' &nbsp; " class="crmButton small save" />&nbsp;
 					<input type="button" name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmButton small cancel" onclick="fninvsh(\'orgLay\');" />
 				</td>
 			</tr>
-			<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
-		</table>
+	</table>
 		<input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
 	</form></div>';
 echo $output;
