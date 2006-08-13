@@ -99,21 +99,21 @@ class UsersLastImport extends SugarBean
 			vtiger_contactdetails.email,
 			vtiger_users.id as assigned_user_id,
 				smownerid,
-                                vtiger_users.user_name as assigned_user_name
+                                vtiger_users.user_name as user_name
 				FROM vtiger_contactdetails
 				left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
-				LEFT JOIN vtiger_users ON vtiger_contactdetails.contactid=vtiger_users.id 
-				LEFT JOIN vtiger_account  ON vtiger_account.accountid=vtiger_contactdetails.accountid 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid  
+				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id 
+				LEFT JOIN vtiger_account  ON vtiger_account.accountid=vtiger_contactdetails.accountid 
 				WHERE vtiger_users_last_import.assigned_user_id= '{$current_user->id}'  
 				AND vtiger_users_last_import.bean_type='Contacts' 
 				AND vtiger_users_last_import.deleted=0  AND vtiger_crmentity.deleted=0";
-			
+
 		} 
 		else if ($this->bean_type == 'Accounts')
 		{
 				$query = "SELECT distinct vtiger_account.*, vtiger_accountbillads.city,
-                                vtiger_users.user_name assigned_user_name,
+                                vtiger_users.user_name user_name,
 				crmid, smownerid 
 				FROM vtiger_account
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid
@@ -134,7 +134,7 @@ class UsersLastImport extends SugarBean
 			$query = "SELECT distinct
                                 vtiger_account.accountid vtiger_account_id,
                                 vtiger_account.accountname vtiger_account_name,
-                                vtiger_users.user_name assigned_user_name,
+                                vtiger_users.user_name user_name,
 			vtiger_crmentity.crmid, smownerid,
 			vtiger_potential.*
                                FROM vtiger_potential 
@@ -153,7 +153,7 @@ class UsersLastImport extends SugarBean
 		else if($this->bean_type == 'Leads')
 		{
 			$query = "SELECT distinct vtiger_leaddetails.*, vtiger_crmentity.crmid, vtiger_leadaddress.phone,vtiger_leadsubdetails.website,
-                                vtiger_users.user_name assigned_user_name,
+                                vtiger_users.user_name user_name,
 				smownerid 
 				FROM vtiger_leaddetails 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
