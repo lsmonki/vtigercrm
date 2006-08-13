@@ -555,6 +555,15 @@ a:hover {
 	background:url(images/calBg.gif) repeat-x;
 }
 
+.calListTable td{
+	border-bottom:1px solid #efefef;
+	border-left:1px solid #efefef;
+}
+.calDIV {
+	width:100%;
+	border:1px solid #999999;
+	
+}
 .calDisplay {
 	border-left:1px solid #d0d0d0;
 	border-right:1px solid #d0d0d0;
@@ -2199,14 +2208,11 @@ a.allMnu:Hover{
 	background-repeat:repeat-x;
 	background-position:left top;
 	
-	height:45px;
 }
 
 .calSel{
 	background-image:url(images/dashSelectBg.gif);
-	
 	background-repeat:repeat-x;
-	
 	text-align:center;
 	color:#FFFFFF;
 	font-weight:bold;
@@ -2217,6 +2223,7 @@ a.allMnu:Hover{
 	border: 1px solid #666666;
 	background:#D6D2AB url(images/calAddButtonBg.gif) repeat-x;
 	cursor:pointer;
+	height:20px;
 	
 
 }
@@ -2227,6 +2234,11 @@ a.allMnu:Hover{
 
 }
 
+.calInnerBorder {
+	border-left:1px solid #d6d2ab;
+	border-right:1px solid #d6d2ab;
+	border-bottom:1px solid #d6d2ab;
+}
 
 .calBorder {
 	border-left: 1px solid #939271; 
