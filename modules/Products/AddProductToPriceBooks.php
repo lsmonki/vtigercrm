@@ -32,30 +32,17 @@ $smarty->assign("IMAGE_PATH",$image_path);
 
 $focus = new PriceBook();
 
-$other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" align="center">
-	<form name="addToPB" method="POST">
-	<tr>
-	<input name="product_id" type="hidden" value="'.$productid.'">
-	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
-        $other_text .='<td align="center"><input class="crmbutton small save" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>&nbsp;';
-	$other_text .='<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
-	$other_text .='</tr></table>';
-
-//Retreive the list from Database
-
+//Retreive the list of PriceBooks
 $list_query = getListQuery("PriceBooks");
-$smarty->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
 $list_query .= ' ORDER BY pricebookid DESC ';
 
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
 
-$record_string= "Total No of Rows: ".$num_rows;
+$record_string= "Total No of PriceBooks : ".$num_rows;
 
-//Retreiving the array of already releated products;
-
+//Retreiving the array of already releated products
 $sql1="select vtiger_crmentity.crmid, vtiger_pricebookproductrel.pricebookid,vtiger_products.unit_price from vtiger_pricebookproductrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebookproductrel.productid inner join vtiger_products on vtiger_products.productid=vtiger_pricebookproductrel.productid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=".$productid;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
@@ -66,6 +53,7 @@ for($i=0; $i<$num_prod_rows; $i++)
 	$pbkid=$adb->query_result($res1,$i,"pricebookid"); 
 	$pbk_array[$pbkid] = $pbkid;
 }
+
 
 $field_name_array=array();
 for($i=0; $i<$num_rows; $i++)
@@ -79,12 +67,32 @@ for($i=0; $i<$num_rows; $i++)
 	}
 }
 
+
+$other_text = '
+	<table border="0" cellpadding="1" cellspacing="0" width="90%" align="center">
+	<form name="addToPB" method="POST">
+	   <tr>
+		<td align="center">&nbsp;
+			<input name="product_id" type="hidden" value="'.$productid.'">
+			<input name="idlist" type="hidden">
+			<input name="viewname" type="hidden">';
+
+	//we should not display the Add to PriceBook button if there is no pricebooks to associate
+	if($num_rows != $num_prod_rows)
+        	$other_text .='<input class="crmbutton small save" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>&nbsp;';
+
+$other_text .='<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
+$other_text .='
+	   </tr>
+	</table>';
+
+$smarty->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
+
 $smarty->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
 
-//Retreive the List View Table Header
 
-
+//List View Table Header
 $list_header = '';
 $list_header .= '<tr>';
 $list_header .='<td class="lvtCol" width="9%"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice("'.$unit_price.'") \'></td>';
@@ -117,9 +125,9 @@ for($i=0; $i<$num_rows; $i++)
 
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+	$url_string .="&order_by=".$order_by;
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+	$url_string .="&sorder=".$sorder;
 
 $smarty->assign("LISTENTITY", $list_body);
 $smarty->assign("RETURN_ID", $productid);
