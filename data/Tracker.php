@@ -120,7 +120,7 @@ $log->info("in  track view method ".$current_module);
             $title = $adb->query_result($result,0,'title');
             $item_summary = $title;
           }
-          elseif($current_module =='Activities')
+          elseif($current_module =='Calendar')
           {
             //$query = 'select name from calls where callid=' .$item_id;
 	    $query = 'select subject from vtiger_activity where activityid=' .$item_id;
@@ -278,7 +278,6 @@ $log->info("in  track view method ".$current_module);
 		}
             }
         }
-
         return $list;
     }
 
