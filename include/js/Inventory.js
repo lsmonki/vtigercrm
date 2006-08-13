@@ -381,7 +381,7 @@ function fnAddTaxConfigRow(sh){
 	colone.innerHTML="<input type='text' id='"+label_name+"' name='"+label_name+"' value='Tax Name' class='txtBox' onclick=\"this.form."+label_name+".value=''\";/>";
 	coltwo.innerHTML="<input type='text' id='"+label_val+"' name='"+label_val+"' value='Tax Value' class='txtBox' onclick=\"this.form."+label_val+".value=''\";/>";
 
-	document.getElementById(td_id).innerHTML="<input type='submit' name='Save' value='Save' class='crmButton small save' onclick=\"this.form.action.value='TaxConfig'; this.form."+add_tax_flag+".value='true'; this.form.parenttab.value='Settings'; return validateNewTaxType('"+label_name+"','"+label_val+"');\">&nbsp;<input type='submit' name='Cancel' value='Cancel' class='crmButton small cancel' onclick=\"this.form.action.value='TaxConfig'; this.form.module.value='Settings'; this.form.parenttab.value='Settings';\">";
+	document.getElementById(td_id).innerHTML="<input type='submit' name='Save' value='Save' class='crmButton small save' onclick=\"this.form.action.value='TaxConfig'; this.form."+add_tax_flag+".value='true'; this.form.parenttab.value='Settings'; return validateNewTaxType('"+label_name+"','"+label_val+"');\">&nbsp;<input type='submit' name='Cancel' value='Cancel' class='crmButton small cancel' onclick=\"this.form.action.value='TaxConfig'; this.form.module.value='Settings'; this.form."+add_tax_flag+".value='false'; this.form.parenttab.value='Settings';\">";
 }
 
 function validateNewTaxType(fieldname, fieldvalue)
