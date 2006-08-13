@@ -37,11 +37,11 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 		
 		if($tab_id != 6)
 		{
-			$output = '<select class="detailedViewTextBox"  name="'.$tab_id.'_per">';
+			$output = '<select class="detailedViewTextBox" id="'.$tab_id.'_perm_combo" name="'.$tab_id.'_per">';
 		}
 		else
 		{
-			$output = '<select class="detailedViewTextBox"  name="'.$tab_id.'_per" onchange="checkAccessPermission(this.value)">';
+			$output = '<select class="detailedViewTextBox" id="'.$tab_id.'_perm_combo" name="'.$tab_id.'_per" onchange="checkAccessPermission(this.value)">';
 		}
 		$entries[] = $tab_id;
 		
