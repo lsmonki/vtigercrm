@@ -61,33 +61,73 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-		global $log;
+		global $log,$current_user;
 
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
 		$ssql .= " where vtiger_report.reportid =".$reportid;
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
-
 		$result = $adb->query($ssql);
+		
+		$permitted_fields = Array();
 
 		while($columnslistrow = $adb->fetch_array($result))
 		{
+			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
+			list($tablename,$fieldname,$module_field,$colname,$single) = split(":",$fieldcolname);
+			require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			if(sizeof($permitted_fields) == 0 && $is_admin != true && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+			{
+				list($module,$field) = split("_",$module_field);
+				$permitted_fields = $this->getaccesfield($module);	
+			}
 			$selectedfields = explode(":",$fieldcolname);
 
 			$querycolumns = $this->getEscapedColumns($selectedfields);
-			if($querycolumns == "")
+					
+			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields))
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
-			}else
+				continue;
+			}
+			else
 			{
-				$columnslist[$fieldcolname] = $querycolumns;
+				if($querycolumns == "")
+				{
+					$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
+				}
+				else
+				{
+					$columnslist[$fieldcolname] = $querycolumns;
+				}
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $columnslist;		
 	}
-
+	
+	/** Function to get field columns based on profile  
+	 *  @ param $module : Type string 
+	 *  returns permitted fields in array format	
+	 */
+	function getaccesfield($module)
+	{
+		global $current_user;
+		global $adb;
+		$access_fields = Array();
+		
+		$profileList = getCurrentUserProfileList();
+		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=(select tabid from vtiger_tab where vtiger_tab.name='".$module."') and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		
+		$result = $adb->query($query);
+		
+		while($collistrow = $adb->fetch_array($result))
+		{
+			$access_fields[] = $collistrow["fieldname"];
+		}
+		return $access_fields;
+	}
+	
 	/** Function to get Escapedcolumns for the field in case of multiple parents 
 	 *  @ param $selectedfields : Type Array 
 	 *  returns the case query for the escaped columns	
