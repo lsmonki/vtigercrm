@@ -156,7 +156,7 @@
 												{/foreach}
 													<tr>
 														<td colspan="2" align="right" valign="bottom">
-															{if $modulename neq 'CustomView'}
+															{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
 																<a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a>
 															{else}
 																&nbsp;	
