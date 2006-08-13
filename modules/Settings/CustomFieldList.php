@@ -121,7 +121,7 @@ function getCFListEntries($module)
 				$cf_element[]= $mapping_details['contactlabel'];
 				$cf_element[]= $mapping_details['potentiallabel'];
 			}
-			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" onClick="getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="Edit" title="Edit"/>&nbsp;|&nbsp;<a href="javascript:deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')"><img src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="Edit" title="Edit"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
 
 			$cflist[] = $cf_element;
 			$count++;

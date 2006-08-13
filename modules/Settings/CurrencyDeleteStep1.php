@@ -14,6 +14,12 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
+global $mod_strings;
+global $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
 $delete_currency_id = $_REQUEST['id'];
 $sql = "select * from vtiger_currency_info where id=".$delete_currency_id;
 $result = $adb->query($sql);
@@ -21,53 +27,56 @@ $delete_currencyname = $adb->query_result($result,0,"currency_name");
 
 
 $output='';
-$output ='<div id="CurrencyDeleteLay">
-<form name="newCurrencyForm" action="index.php">
+$output ='<div id="CurrencyDeleteLay"  class="layerPopup">
+<form name="newCurrencyForm" action="index.php" style="margin="0">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action" value="CurrencyDelete">
 <input type="hidden" name="delete_currency_id" value="'.$delete_currency_id.'">	
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
 <tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">Delete Currency</td>
-	<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'CurrencyDeleteLay\').style.display=\'none\'";>Close</a></td>
+	<td class="layerPopupHeading"  align="left" width="60%">'.$mod_strings["LBL_DELETE_CURRENCY"].'</td>
+	<td align="right" width="40%"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer;" onClick="document.getElementById(\'CurrencyDeleteLay\').style.display=\'none\'";></td>
 </tr>
-<tr>
-	<td colspan="3">&nbsp;</td>
-</tr>
-<tr>
-	<td width="50%"><b>'.$mod_strings['LBL_CURRDEL'].'</b></td>
-	<td width="2%"><b>:</b></td>
-	<td width="48%"><b>'.$delete_currencyname.'</b></td>
-</tr>
-<tr>
-	<td style="text-align:left;"><b>'.$mod_strings['LBL_TRANSCURR'].'</b></td>
-	<td ><b>:</b></td>
-	<td align="left">';
-           
-$output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
-	     
-		 global $adb;	
-         $sql = "select * from vtiger_currency_info";
-         $result = $adb->query($sql);
-         $temprow = $adb->fetch_array($result);
-         do
-         {
-         	$currencyname=$temprow["currency_name"];
-		    $currencyid=$temprow["id"];
-		    if($delete_currency_id 	!= $currencyid)
-		    {	 
-            	$output.='<option value="'.$currencyid.'">'.$currencyname.'</option>';
-		    }	
-         }while($temprow = $adb->fetch_array($result));
-
-$output.='</td>
-</tr>
-<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-<tr>
-	<td colspan="3" align="center"><input type="button" onclick="transferCurrency('.$delete_currency_id.')" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
-	</td>
-</tr>
+<table>
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+	<tr>
+		<td class=small >
+			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+				<tr>
+					<td width="50%" class="cellLabel small"><b>'.$mod_strings['LBL_CURRDEL'].'</b></td>
+					<td width="50%" class="cellText small"><b>'.$delete_currencyname.'</b></td>
+				</tr>
+				<tr>
+					<td class="cellLabel small"><b>'.$mod_strings['LBL_TRANSCURR'].'</b></td>
+					<td class="cellText small">';
+						   
+				$output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
+						 
+						 global $adb;	
+						 $sql = "select * from vtiger_currency_info";
+						 $result = $adb->query($sql);
+						 $temprow = $adb->fetch_array($result);
+						 do
+						 {
+							$currencyname=$temprow["currency_name"];
+							$currencyid=$temprow["id"];
+							if($delete_currency_id 	!= $currencyid)
+							{	 
+								$output.='<option value="'.$currencyid.'">'.$currencyname.'</option>';
+							}	
+						 }while($temprow = $adb->fetch_array($result));
+				
+				$output.='</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+	<tr>
+		<td align="center"><input type="button" onclick="transferCurrency('.$delete_currency_id.')" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="crmbutton small save">
+		</td>
+	</tr>
 </table>
 </form></div>';
 
