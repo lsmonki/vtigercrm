@@ -703,7 +703,8 @@ $mod_strings = Array(
 'LBL_PROXY_SERVER_DESC'=>'Configure proxies to access RSS feeds through Internet',
 
 'LBL_NEW_CURRENCTY'=>'New Currency',
-'LBL_BASE_CURRENCY'=>'Base Currency - US Dollar'
+'LBL_BASE_CURRENCY'=>'Base Currency - US Dollar',
+'LBL_DELETE_CURRENCY'=>'Delete Currency',
 );
 
 
