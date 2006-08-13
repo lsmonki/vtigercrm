@@ -548,7 +548,7 @@ class jpgraph {
 				        array(
 				            'url' => $aTargets[$stage][$i],
 				            'alt' => $aAlts[$stage][$i],
-				            'target' => '_blank'
+				            'target' => ''
 				        )
 				    );
 				}
