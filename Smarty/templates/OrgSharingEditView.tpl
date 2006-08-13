@@ -88,11 +88,11 @@ function checkAccessPermission(share_value)
 	if (share_value == "3")
 	{ldelim}
 		alert("Potentials, HelpDesk, Quotes, SalesOrder & Invoice Access must be set to Private when the Account Access is set to Private");
-		getObj('2_per').options[3].selected=true
-			getObj('13_per').options[3].selected=true
-			getObj('20_per').options[3].selected=true
-			getObj('22_per').options[3].selected=true
-			getObj('23_per').options[3].selected=true
+		document.getElementById('2_perm_combo').options[3].selected=true
+		document.getElementById('13_perm_combo').options[3].selected=true
+		document.getElementById('20_perm_combo').options[3].selected=true
+		document.getElementById('22_perm_combo').options[3].selected=true
+		document.getElementById('23_perm_combo').options[3].selected=true
 
 	{rdelim}
 {rdelim}
