@@ -1000,6 +1000,7 @@ $app_strings = Array(
 'LBL_TOTAL_TAX_AMOUNT'=>'Total Tax Amount',
 'LBL_FINAL_DISCOUNT_AMOUNT'=>'Final Discount Amount',
 'LBL_SHIPPING_AND_HANDLING_CHARGE'=>'Shipping & Handling Charge',
+'LBL_GO_BACK'=>'Go Back',
 );
 
 
