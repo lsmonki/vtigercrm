@@ -86,7 +86,7 @@ class vtigerRSS extends CRMEntity
 
 		}else
 		{
-			$shtml = "Sorry: It's not possible to reach RSS URL";
+			$shtml = "<strong>".$mod_strings['LBL_REGRET_MSG']."</strong>";
 		}
 	}
 

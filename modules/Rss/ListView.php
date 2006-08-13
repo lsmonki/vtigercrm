@@ -62,7 +62,7 @@ if(isset($_REQUEST[record]))
         	$rss_html = $oRss->getSelectedRssHTML($recordid);
 	}else
 	{
-        	$rss_html = "<strong>No RSS Feeds are selected</strong>";
+        	$rss_html = "<strong>".$mod_strings['LBL_ERROR_MSG']."</strong>";
 	}
 	$rss_form->assign("TITLE",gerRssTitle($recordid));
 	$rss_form->assign("ID",$recordid);
