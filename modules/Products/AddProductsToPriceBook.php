@@ -29,10 +29,6 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
-                      ,'productcategory'=>'productcategory_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 $focus = new Product();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
@@ -42,132 +38,9 @@ $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
-{
-	$url_string .="&query=true";
-	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
-        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
-	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
-        if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
-        if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
-        if (isset($_REQUEST['productcategory'])) $productcategory = $_REQUEST['productcategory'];
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];
-        if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
-        if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
 
-	$where_clauses = Array();
-	//Added for Custom Field Search
-	$sql="select * from vtiger_field where tablename='productcf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-                                $str=" vtiger_productcf.".$column[$i]." = 1";
-                        else
-			        $str=" vtiger_productcf.".$column[$i]." like '$customfield[$i]%'";
-		        array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-	if (isset($productname) && $productname !='')
-	{
-		array_push($where_clauses, "productname like ".$adb->quote($productname.'%'));
-		$url_string .= "&productname=".$productname;
-	}
-	
-	if (isset($productcode) && $productcode !='')
-	{
-		array_push($where_clauses, "productcode like ".$adb->quote($productcode.'%'));
-		$url_string .= "&productcode=".$productcode;
-	}
-
-	if (isset($commissionrate) && $commissionrate !='')
-	{
-		array_push($where_clauses, "commissionrate like ".$adb->quote($commissionrate.'%'));
-		 $url_string .= "&commissionrate=".$commissionrate;
-	}
-	
-	if (isset($qtyperunit) && $qtyperunit !='')
-	{
-		array_push($where_clauses, "qty_per_unit like ".$adb->quote($qtyperunit.'%'));
-		$url_string .= "&qtyperunit=".$qtyperunit;
-	}
-	
-	if (isset($unitprice) && $unitprice !='')
-	{
-		array_push($where_clauses, "unit_price like ".$adb->quote($unitprice.'%'));
-		$url_string .= "&unitprice=".$unitprice;
-	}
-	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
-        {
-		array_push($where_clauses, "manufacturer like ".$adb->quote($manufacturer.'%'));
-                $url_string .= "&manufacturer=".$manufacturer;
-	}
-	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
-        {
-		array_push($where_clauses, "productcategory like ".$adb->quote($productcategory.'%'));
-                $url_string .= "&productcategory=".$productcategory;
-	}
-	if (isset($start_date) && $start_date !='')
-        {
-		array_push($where_clauses, "start_date like ".$adb->quote($start_date.'%'));
-                $url_string .= "&start_date=".$start_date;
-        } 
-	if (isset($expiry_date) && $expiry_date !='')
-        {
-		array_push($where_clauses, "expiry_date like ".$adb->quote($expiry_date.'%'));
-                $url_string .= "&expiry_date=".$expiry_date;
-        } 
-	if (isset($purchase_date) && $purchase_date !='')
-        {
-		array_push($where_clauses, "purchase_date like ".$adb->quote($purchase_date.'%'));
-                $url_string .= "&purchase_date=".$purchase_date;
-        }
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
-	$log->info("Here is the where clause for the list view: $where");
- 
-
-}
-
-$other_text = '<table width="95%" border="0" cellpadding="1" cellspacing="0" align="center">
-	<form name="addToPB" method="POST">
-	<tr>
-	<input name="pricebook_id" type="hidden" value="'.$pricebook_id.'">
-	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
-        $other_text .='<td align="center"><input class="classBtn" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>';
-	$other_text .='&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="classBtn" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
-
-	$other_text .='</tr></table>';
-
-//Retreive the list from Database
-
+//Retreive the list of Products 
 $list_query = getListQuery("Products");
-
-if(isset($where) && $where != '')
-{
-        $list_query .= ' and '.$where;
-}
-
-$smarty->assign("PRODUCTLISTHEADER", get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'], $other_text, false ));
 
 if(isset($order_by) && $order_by != '')
 {
@@ -176,10 +49,9 @@ if(isset($order_by) && $order_by != '')
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
 
-$record_string= "Total No of Rows: ".$num_rows;
+$record_string= "Total No of Product Available : ".$num_rows;
 
-//Retreiving the array of already releated vtiger_products;
-
+//Retreiving the array of already releated products
 $sql1 = "select productid from vtiger_pricebookproductrel where pricebookid=".$pricebook_id;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
@@ -190,6 +62,32 @@ for($i=0; $i<$num_prod_rows; $i++)
 	$prod_array[$prodid] = $prodid;
 }
 
+
+//Buttons Add To PriceBook and Cancel
+$other_text = '
+	<table width="95%" border="0" cellpadding="1" cellspacing="0" align="center">
+	<form name="addToPB" method="POST">
+	   <tr>
+		<td align="center">&nbsp;
+			<input name="pricebook_id" type="hidden" value="'.$pricebook_id.'">
+			<input name="idlist" type="hidden">
+			<input name="viewname" type="hidden">
+	';
+
+	//we should not display the Add to PriceBook button if there is no products to associate
+	if($num_rows != $num_prod_rows)
+	        $other_text .='<input class="crmbutton small save" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>';
+
+$other_text .='&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
+
+$other_text .='
+	   </tr>
+	</table>';
+
+$smarty->assign("PRODUCTLISTHEADER", get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'], $other_text, false ));
+
+
+//if the product is not associated already then we should display that products
 $unit_price_array=array();
 $field_name_array=array();
 for($i=0; $i<$num_rows; $i++)
@@ -204,8 +102,9 @@ for($i=0; $i<$num_rows; $i++)
 		$field_name_array[]="'".$field_name."'";
 	}
 }
-//Retreive the List View Table Header
 
+
+//Retreive the List View Table Header
 $smarty->assign("UNIT_PRICE_ARRAY",implode(",",$unit_price_array));
 $smarty->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
@@ -223,8 +122,7 @@ $smarty->assign("LISTHEADER", $list_header);
 $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
-	
-	 $log->info("Products :: Showing the List of products to be added in price book");
+	$log->info("Products :: Showing the List of products to be added in price book");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{
@@ -238,13 +136,12 @@ for($i=0; $i<$num_rows; $i++)
 		$list_body .= '<td>'.$unit_price.'</td>';
 		$list_body .= '<td><input type="text" name="'.$field_name.'"></td></tr>';
 	}
-	
 }
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+	$url_string .="&order_by=".$order_by;
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+	$url_string .="&sorder=".$sorder;
 
 $smarty->assign("LISTENTITY", $list_body);
 
