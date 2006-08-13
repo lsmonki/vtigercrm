@@ -27,9 +27,9 @@ require_once("modules/Dashboard/Entity_charts.php");
 	$query=$homepagedb_query;
 
 	//Giving the Cached image name	
-	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).".png";
+	$cache_file_name=abs(crc32($current_user->id))."_".$type."_".crc32($date_start.$end_date).".png";
         $html_imagename=$graph_by; //Html image name for the graph
-	$graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
+	$graph_details=module_Chart($current_user->id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
 	if($graph_details!=0)
         {
                 $name_val=$graph_details[0];
