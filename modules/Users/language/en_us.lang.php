@@ -62,7 +62,7 @@ $mod_strings = Array(
 'LBL_DATE_FORMAT'=>'Date Format',
 
 'LBL_ERROR'=>'Error:',
-'LBL_PASSWORD'=>'Password:',
+'LBL_PASSWORD'=>'Password',
 'LBL_USER_NAME'=>'User Name',
 'LBL_CRM_ID'=>'CRM ID',
 'LBL_FIRST_NAME'=>'First Name',
