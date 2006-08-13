@@ -71,7 +71,7 @@ function CustomFieldMapping()
 var gselected_fieldtype = '';
 {/literal}
 </script>
-<div id="createcf" style="display:block;position:absolute;top:175px;left:275px;"></div>
+<div id="createcf" style="display:block;position:absolute;width:500px;"></div>
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>

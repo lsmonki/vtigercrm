@@ -52,7 +52,7 @@
 				   <tr><td colspan="2" height="50">&nbsp;</td></tr>
 				   <tr>
 					<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom" >
-						<input title="{$MOD.LBL_TRY_AGAIN}" accessKey="" class="classBtn" type="submit" name="button" value=" {$MOD.LBL_TRY_AGAIN} "  >
+						<input title="{$MOD.LBL_TRY_AGAIN}" accessKey="" class="crmbutton small save" type="submit" name="button" value=" {$MOD.LBL_TRY_AGAIN} "  >
 					</td>
 				   </tr>
 				</table>

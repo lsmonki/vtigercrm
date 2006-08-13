@@ -21,7 +21,7 @@
 			<td  class="hdrNameBg" colspan="3" style="padding: 5px;" align="right" >
 				<!-- Custom Report Group's Buttons -->
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
-		<td  width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="fnvshobj(this,'reportLay')" type="button"></td>
+		<td  width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="gcurrepfolderid={$reportfolder.id};fnvshobj(this,'reportLay')" type="button"></td>
 		<td  width="75%" align="right">
 			<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name}','{$reportfolder.description}'),fnvshobj(this,'orgLay');">&nbsp;
 		</td>

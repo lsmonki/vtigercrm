@@ -81,7 +81,7 @@
 </tbody>
 </table>
 
-<div id="currencydiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
+<div id="currencydiv" style="display:block;position:absolute;width:250px;"></div>
 
 {literal}
 <script>

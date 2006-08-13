@@ -20,7 +20,7 @@
 					{if $MODULE eq 'Leads'}
 					&nbsp;&nbsp;<input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="crmButton edit small" onclick="CustomFieldMapping();" type="button" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}">
 					{/if}
-					<input type="button" value=" {$MOD.NewCustomField} " onClick="getCreateCustomFieldForm('{$MODULE}','','','')" class="crmButton create small"/>
+					<input type="button" value=" {$MOD.NewCustomField} " onClick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','','','')" class="crmButton create small"/>
 				</tr>
 				</table>
 
@@ -57,4 +57,6 @@
 		</table>
 		</form>
 		<br>
-		<strong>{$APP.LBL_NOTE}: </strong> {$MOD.LBL_CUSTOM_MAPP_INFO}
+		{if $MODULE eq 'Leads'}
+			<strong>{$APP.LBL_NOTE}: </strong> {$MOD.LBL_CUSTOM_MAPP_INFO}
+		{/if}

@@ -24,6 +24,12 @@
 
 function callSearch(searchtype)
 {ldelim}
+	for(i=1;i<=26;i++)
+    	{ldelim}
+        	var data_td_id = 'alpha_'+ eval(i);
+        	getObj(data_td_id).className = 'searchAlph';
+    	{rdelim}
+    	gPopupAlphaSearchUrl = '';
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
         var urlstring = '';
@@ -129,7 +135,7 @@ function alphabetic(module,url,dataid)
 </table>
 
 {*<!-- Contents -->*}
-<form name="basicSearch" action="index.php">
+<form name="basicSearch" action="index.php" onsubmit="return false;">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
