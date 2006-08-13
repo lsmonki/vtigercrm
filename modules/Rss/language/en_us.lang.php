@@ -40,8 +40,9 @@ $mod_strings = Array(
 'LBL_ADD_RSS_FEED'=>'Add RSS Feed',
 'LBL_DELETE_BUTTON'=>'Delete',
 'LBL_SET_DEFAULT_BUTTON'=>'Set As Default',
-'LBL_FEEDS_LIST'=>'Feeds list from :'
-
+'LBL_FEEDS_LIST'=>'Feeds list from :',
+'LBL_ERROR_MSG'=>'No RSS Feeds are selected or Your Proxy Settings is not Proper',
+'LBL_REGRET_MSG'=>'Sorry: It\'s not possible to reach RSS URL',
 
 );
 ?>
