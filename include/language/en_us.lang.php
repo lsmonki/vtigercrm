@@ -54,7 +54,7 @@ $app_strings = Array(
 
 'LBL_ADMIN'=>'Admin',
 
-'LBL_LOGOUT'=>'Logout',
+'LBL_LOGOUT'=>'Sign out',
 
 'LBL_SEARCH'=>'Search',
 
