@@ -247,7 +247,7 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td class="layerPopupHeading" align="left" width="60%">{$APP.LBL_CHANGE_OWNER}</td>
 	<td>&nbsp;</td>
-	<td align="right" width="40%"><a href="javascript:fninvsh('changeowner')">{$APP.LBL_CLOSE}</a></td>
+	<td align="right" width="40%"><img onClick="fninvsh('changeowner');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
@@ -287,7 +287,7 @@ function alphabetic(module,url,dataid)
 <tr>
 	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">{$APP.LBL_CHANGE_STATUS}</td>
 	<td>&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changestatus')">{$APP.LBL_CLOSE}</a></td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><img onClick="fninvsh('changestatus');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
