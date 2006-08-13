@@ -31,7 +31,7 @@ $output ='<div id="DeleteLay" class="layerPopup">
 <input type="hidden" name="delete_prof_id" value="'.$delete_prof_id.'">	
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
-	<td class=layerPopupHeading " align="left">'.$mod_strings["LBL_DELETE_PROFILE"].'</td>
+	<td class="layerPopupHeading" align="left">'.$mod_strings["LBL_DELETE_PROFILE"].'</td>
 	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
 </tr>
 </table>
