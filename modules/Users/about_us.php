@@ -130,7 +130,7 @@ global $mod_strings;
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="70%" align="left">
-									<span class="small" style="color:#999999;">Version : 5.0.0 Beta</span>&nbsp;|&nbsp;
+									<span class="small" style="color:#999999;">Version : 5.0.0 rc</span>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt" class="webMnu" target="_blank">Read License</a>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" class="webMnu" target="_blank">Contact Us</a>
 							</td>
