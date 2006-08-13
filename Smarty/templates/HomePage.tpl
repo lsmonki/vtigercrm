@@ -141,6 +141,7 @@
 								</tr>
 								<tr align="left">
 									<td valign=top  colspan=2>
+											<div style="overflow-y:auto;overflow-x:hidden;height:250px;"> 
 											<table border=0 cellspacing=0 cellpadding=5 width=100%>
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
@@ -154,6 +155,9 @@
 														{/if}
 													</tr>
 												{/foreach}
+											</table>	
+											</div>
+											<table border=0 cellspacing=0 cellpadding=5 width=100%>
 													<tr>
 														<td colspan="2" align="right" valign="bottom">
 															{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
