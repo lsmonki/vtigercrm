@@ -30,7 +30,11 @@
 					<td class="listTableTopButtons small" valign="top" align="left"><b>{$picklistfields.fieldlabel}</b></td>
 				{/if}
 					<td class="listTableTopButtons" valign="top" align="right">
+					{if $picklistfields.fieldname neq 'eventstatus' && $picklistfields.fieldname neq 'taskstatus'}
 					<input type="button" value="{$APP.LBL_EDIT_BUTTON}" class="crmButton small edit" onclick="fetchEditPickList('{$MODULE}','{$picklistfields.fieldname}', {$picklistfields.uitype});posLay(this,'editdiv');" > 
+					{else}
+						&nbsp;
+					{/if}
 					</td>
 				{else}
 					<td class="listTableTopButtons small" colspan="2">&nbsp;</td>
