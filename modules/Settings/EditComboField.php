@@ -65,12 +65,14 @@ if($uitype == 111)
 		$nonedit_fldVal .= "<br>";	
 	}
 }
-
+$query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
+$fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
 $smarty->assign("NON_EDITABLE_ENTRIES", $nonedit_fldVal);
 $smarty->assign("COUNT_NON_EDITABLE_ENTRIES", count($nonedit_fldVal));
 $smarty->assign("ENTRIES",$fldVal);
 $smarty->assign("MODULE",$moduleName);
 $smarty->assign("FIELDNAME",$tableName);
+$smarty->assign("FIELDLABEL",$fieldlabel);
 $smarty->assign("UITYPE", $uitype);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
