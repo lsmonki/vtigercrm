@@ -1158,5 +1158,14 @@ for($i=0;$i<5;$i++)
 	$result_qry = $adb->query($portal_qry);
 }
 
+//Populate RSS Data
+$rssname = array("vtiger - Forums","vtiger development - Active Tickets");
+$rssurl = array("http://forums.vtiger.com/rss.php?name=forums&file=rss","http://vtiger.fosslabs.com/cgi-bin/trac.cgi/report/1?format=rss&USER=anonymous");
 
+for($i=0;$i<2;$i++)
+{
+	$rssid = $adb->getUniqueId('vtiger_rss');
+	$rss_qry = "insert into vtiger_rss values (".$rssid.", '".$rssurl[$i]."','".$rsstitle[$i]."',0,0)";
+	$result_qry = $adb->query($rss_qry);
+}
 ?>
