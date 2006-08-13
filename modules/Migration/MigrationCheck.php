@@ -30,14 +30,14 @@ if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
 		$mysql_path_found = true;
 		@session_unregister('set_server_mysql_path');
 		$_SESSION['set_server_mysql_path'] = $server_mysql_path;
-		echo 'MySQL Dump file has found in ==> '.$server_mysql_path;
+		$migration_log .='MySQL Dump file has found in ==> '.$server_mysql_path;
 	}
 	elseif(substr($_ENV["OS"],0,3) == "Win" && is_file($server_mysql_path."\mysqldump.exe"))
 	{
 		$mysql_path_found = true;
 		@session_unregister('set_server_mysql_path');
 		$_SESSION['set_server_mysql_path'] = $server_mysql_path;
-		echo 'MySQL Dump file has found in ==> '.$server_mysql_path;
+		$migration_log .='MySQL Dump file has found in ==> '.$server_mysql_path;
 	}
 
 	if(!$mysql_path_found)
