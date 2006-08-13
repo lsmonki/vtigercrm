@@ -78,8 +78,10 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 	             <td valign=top><img src="'.$image_path.'showPanelTopLeft.gif"></td>
 
 		     	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
-		      <div class="small" style="padding: 20px;">
-			<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+			
+			<!-- Calendar Tabs starts -->
+			<div class="small" style="padding: 10px;">
+			<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr>
 					<td>
 						<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
