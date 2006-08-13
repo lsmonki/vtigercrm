@@ -204,9 +204,9 @@ function alphabetic(module,url,dataid)
 </div>		
 </form>
 {*<!-- Searching UI -->*}
-	 <br>
-<div class="small" style="padding: 20px;">
-	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+
+<div class="small" style="padding: 10px;">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td>
 				<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
@@ -239,7 +239,7 @@ function alphabetic(module,url,dataid)
      <input name="change_status" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
-	            <tr style="background-color:#efefef">
+	            <tr >
 		      <td>
 		         <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 			      <tr>
@@ -291,8 +291,8 @@ function alphabetic(module,url,dataid)
 				 </td>	
        		       </tr>
 			 </table>
-                         <div  style="width:100%;border-top:1px solid #999999;border-bottom:1px solid #999999;height:370px;overflow:auto;">
-			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
+                         <div  class="calDIV" style="overflow:auto;">
+			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="calListTable" class="small">
 			      <tr>
              			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
