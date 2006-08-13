@@ -1947,6 +1947,7 @@ function Button_Check($module)
                  $tempPer=isPermitted($module,$action,'');
                  $permit_arr[$action] = $tempPer;
           }
+	  $permit_arr["Calendar"] = isPermitted("Calendar","index",'');
 
 	$log->debug("Exiting Button_Check method ...");
 	  return $permit_arr;
