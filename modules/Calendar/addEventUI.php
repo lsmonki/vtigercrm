@@ -77,7 +77,7 @@ $calendar_arr['view'] = $mysel;
 
  function getPriorityCombo()
  {
-	 global $adb;
+	 global $adb, $mod_strings;
 	 $combo = '';
 	 $combo .= '<select name="taskpriority" id="taskpriority" class=small>';
 	 $q = "select * from vtiger_taskpriority";
@@ -87,7 +87,7 @@ $calendar_arr['view'] = $mysel;
 	 for($i = 0; $i < $noofrows; $i++)
 	 {
 		 $value = $adb->query_result($Res,$i,'taskpriority');
-		 $combo .= '<option value="'.$value.'">'.$value.'</option>';
+		 $combo .= '<option value="'.$value.'">'.$mod_strings[$value].'</option>';
 	 }
 
 	 $combo .= '</select>';
@@ -219,7 +219,7 @@ else
 		</tr>
 		<tr>
 			<td>
-			Priority&nbsp;:&nbsp;<?php echo getPriorityCombo(); ?>
+			<?php echo $mod_strings['Priority'] ; ?>&nbsp;:&nbsp;<?php echo getPriorityCombo(); ?>
 			</td>
 		</tr>
 		</table>
@@ -470,9 +470,9 @@ else
 							<td>
 								<input name="parent_id" value="" type="hidden">
 								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';">
-									<option value="Leads">Leads</option>
-									<option value="Accounts">Accounts</option>
-									<option value="Potentials">Potentials</option>
+									<option value="Leads"><?php echo $app_strings['Leads']?></option>
+									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
+									<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
 								</select>
 							</td>
 							<td>
@@ -483,11 +483,11 @@ else
 							</td>
 						</tr>
 						<tr>
-							<td><b>Contacts :</b></td>
+						<td><b><?php echo $app_strings['Contacts'] ?>:</b></td>
 							<td colspan="2">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
 								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
-								<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
+								<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
 							</td>
 						</tr>
 					</table>
@@ -640,7 +640,7 @@ else
 			
 		</tr>
 		<tr>
-			<td><b>Priority&nbsp;:&nbsp;</b></td>
+		<td><b><?php echo $mod_strings['Priority']; ?>&nbsp;:&nbsp;</b></td>
 			<td><?php echo getPriorityCombo(); ?></td>
 		</tr>
 
@@ -678,20 +678,20 @@ else
 				<td>
 					<input name="parent_id" type="hidden" value="">
 						<select name="parent_type" class="small" id="parent_type" onChange="document.createTodo.parent_name.value='';document.createTodo.parent_id.value=''">
-						<option value="Leads">Leads</option>
-						<option value="Accounts">Accounts</option>
-						<option value="Potentials">Potentials</option>
-						<option value="Quotes">Quotes</option>
-						<option value="PurchaseOrder">Purchase Order</option>
-						<option value="SalesOrder">Sales Order</option>
-						<option value="Invoice">Invoice</option>
-						<option value="Campaigns">Campaigns</option></select>
+						<option value="Leads"><?php echo $app_strings['Leads']?></option>
+						<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
+						<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
+						<option value="Quotes"><?php echo $app_strings['Quotes']?></option>
+						<option value="PurchaseOrder"><?php echo $app_strings['PurchaseOrder']?></option>
+						<option value="SalesOrder"><?php echo $app_strings['SalesOrder']?></option>
+						<option value="Invoice"><?php echo $app_strings['Invoice']?></option>
+						<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option></select>
 						</select>
 				</td>
 				<td>
 					<div id="taskrelatedto" align="left">
 					<input name="parent_name" readonly type="text" class="calTxt small" value="">
-					<input type="button" name="selectparent" class="crmButton small edit" value="Select" onclick="return window.open('index.php?module='+document.createTodo.parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 					</div>
 				</td>
 			</tr>
@@ -699,7 +699,7 @@ else
 			<td><b><?php echo $mod_strings['LBL_CONTACT'] ?> :</b></td>
 			<td colspan="2">
 				<input name="contact_name" readonly type="text" class="calTxt" value=""><input name="contact_id" type="hidden" value="">&nbsp;
-				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">
+				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
 			</td>
 			  </tr>
 			                  </table>
@@ -747,7 +747,7 @@ else
 <?php
 }
 ?>
-				    
+
 <div id="act_changeowner" class="statechange" style="left:250px;top:200px;z-index:5000">
 	<form name="change_owner">
 	<input type="hidden" value="" name="idlist" id="idlist">
@@ -759,17 +759,17 @@ else
 	<input type="hidden" value="" name="view">
 	<input type="hidden" value="" name="module">
 	<input type="hidden" value="" name="subtab">
-	<table width="100%" border="0" cellpadding="3" cellspacing="0">
+	<table width="100%" border="0" cellpadding="3" cellspacing="0" >
 		<tr>
-			<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
+		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%"><?php echo $app_strings['LBL_CHANGE_OWNER']; ?></td>
 			<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')">Close</a></td>
+			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="<?php echo $image_path; ?>close.gif" align="absmiddle" border="0"></a></td>
 		</tr>
 		<tr>
 		        <td colspan="3">&nbsp;</td>
 	</tr>
 	<tr>
-        	<td width="50%"><b>Transfer Ownership to</b></td>
+	<td width="50%"><b><?php echo $app_strings['LBL_TRANSFER_OWNERSHIP']; ?></b></td>
 	        <td width="2%"><b>:</b></td>
         	<td width="48%">
 	        	<select name="activity_owner" id="activity_owner" class="detailedViewTextBox">
@@ -781,8 +781,8 @@ else
 	<tr>
         	<td colspan="3" align="center">
 	        &nbsp;&nbsp;
-        		<input type="button" name="button" class="crm button small save" value="Update Owner" onClick="calendarChangeOwner();fninvsh('act_changeowner');">
-		        <input type="button" name="button" class="crm button small cancel" value="Cancel" onClick="fninvsh('act_changeowner')">	
+<input type="button" name="button" class="crm button small save" value="<?php echo $app_strings['LBL_UPDATE_OWNER']; ?>" onClick="calendarChangeOwner();fninvsh('act_changeowner');">
+		        <input type="button" name="button" class="crm button small cancel" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL']; ?>" onClick="fninvsh('act_changeowner')">	
 		</td>
 	</tr>
 	</table>
