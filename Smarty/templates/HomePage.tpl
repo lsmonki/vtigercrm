@@ -141,7 +141,7 @@
 								</tr>
 								<tr align="left">
 									<td valign=top  colspan=2>
-											<div style="overflow-y:auto;overflow-x:hidden;height:250px;"> 
+											<div style="overflow-y:auto;overflow-x:hidden;height:250px;width:99%"> 
 											<table border=0 cellspacing=0 cellpadding=5 width=100%>
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
