@@ -37,6 +37,25 @@ session_unregister('mail_send_error');
 $focus = new Activity();
 $smarty =  new vtigerCRM_Smarty();
 $activity_mode = $_REQUEST['activity_mode'];
+//If activity_mode == null
+
+if($activity_mode =='' || strlen($activity_mode) < 1)
+{
+	$query = "select activitytype from vtiger_activity where activityid=".$_REQUEST['record'];
+	$result = $adb->query($query);
+	$actType = $adb->query_result($result,0,'activitytype');
+	if( $actType == 'Task')
+	{
+		$activity_mode = $actType;	
+	}
+	elseif($actType == 'Meeting' || $actType == 'Call')
+	{
+		$activity_mode = 'Events';
+	}		
+}	
+
+
+
 if($activity_mode == 'Task')
 {
         $tab_type = 'Calendar';
