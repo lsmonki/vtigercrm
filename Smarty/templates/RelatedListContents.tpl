@@ -74,7 +74,7 @@
 			{elseif $header eq 'Attachments'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Note}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Note}">&nbsp;
 				<input type="hidden" name="fileid">
-				<input title="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}" accessyKey="F" class="crmbutton small create" onclick="OpenWindow('index.php?module=uploads&action=uploadsAjax&file=upload&return_action=CallRelatedList&return_module={$MODULE}&return_id={$id}');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}"></td>
+				<input title="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}" accessyKey="F" class="crmbutton small create" onclick="window.open('index.php?module=uploads&action=uploadsAjax&file=upload&return_action=CallRelatedList&return_module={$MODULE}&return_id={$id}','Attachments','width=500,height=300');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}"></td>
 			{elseif $header eq 'Quotes'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Quote}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Quote}"></td>
 			{elseif $header eq 'Invoice'}
