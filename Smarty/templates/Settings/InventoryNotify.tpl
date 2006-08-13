@@ -91,7 +91,7 @@ DIV.fixedLay {
    </tr>
 </tbody>
 </table>
-	<div id="editdiv" style="display:none;position:absolute;left:180px;top:30px;"></div>
+	<div id="editdiv" style="display:none;position:absolute;width:450px;"></div>
 {literal}
 <script>
 function fetchSaveNotify(id)
@@ -123,7 +123,6 @@ function fetchEditNotify(id)
                         onComplete: function(response) {
                                 $("status").style.display="none";
 				$("editdiv").innerHTML=response.responseText;
-				$("editdiv").style.display="inline";
                         }
                 }
         );

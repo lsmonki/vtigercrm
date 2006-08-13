@@ -10,8 +10,6 @@
  ********************************************************************************/
 -->*}
 <table width="100%" cellpadding="5" cellspacing="0" class="listTable" >
-	
-	<tbody>
 	<tr>
 	<td class="colHeader small" width="5%">#</td>
 	<td class="colHeader small" width="40%">{$CMOD.LBL_NOTIFICATION}</td>
@@ -23,9 +21,8 @@
 	<td class="listTableRow small">{$smarty.foreach.notifyfor.iteration}</td>
 	<td class="listTableRow small">{$elements.notificationname}</td>
 	<td class="listTableRow small">{$elements.label}</td>
-	<td class="listTableRow small" align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif" title="{$APP.LBL_EDIT}"></td>
+	<td class="listTableRow small" align="center" ><img onClick="fnvshobj(this,'editdiv');fetchEditNotify('{$elements.id}');" style="cursor:pointer;" src="{$IMAGE_PATH}editfield.gif" title="{$APP.LBL_EDIT}"></td>
 	</tr>
 	{/foreach}
-	</tbody>
 	</table>
 
