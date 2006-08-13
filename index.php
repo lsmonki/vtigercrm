@@ -628,7 +628,7 @@ if($display == "no")
 		</tr>
 		<tr>
 		<td class='small' align='right' nowrap='nowrap'>			   	
-		<a href='javascript:window.history.back();'>Go Back</a><br>								   						     </td>
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>								   						     </td>
 		</tr>
 		</tbody></table> 
 		</div>";
