@@ -26,7 +26,7 @@ fLabels['g'] = 'greater than';
 fLabels['m'] = 'less or equal';
 fLabels['h'] = 'greater or equal';
 var noneLabel;
-
+var gcurrepfolderid=0;
 function trimfValues(value)
 {
     var string_array;
@@ -466,7 +466,7 @@ function editReport(id)
 }
 function CreateReport(module)
 {
-	var arg ='index.php?module=Reports&action=ReportsAjax&file=NewReport0&reportmodule='+module;
+	var arg ='index.php?module=Reports&action=ReportsAjax&file=NewReport0&folder='+gcurrepfolderid+'&reportmodule='+module;
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
