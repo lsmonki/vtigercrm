@@ -129,9 +129,9 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="reportCreateBottom">
 		<tr>
 			<td align="right" style="padding:10px;">
-			<input type="button" name="back_rep" id="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
-			&nbsp;<input type="button" name="next" id="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
-			&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="self.close();">
+			<input type="button" name="back_rep" id="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " disabled="disabled" class="crmbutton small cancel" onClick="changeStepsback();">
+			&nbsp;<input type="button" name="next" id="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="crmbutton small save">
+			&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmbutton small cancel" onClick="self.close();">
 			</td>
 		</tr>
 	</table>

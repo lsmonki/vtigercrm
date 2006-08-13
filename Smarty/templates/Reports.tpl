@@ -53,50 +53,56 @@
 <!-- Reports Table Ends Here -->
 
 <!-- POPUP LAYER FOR CREATE NEW REPORT -->
-<div style="display: none; left: 193px; top: 106px;" id="reportLay" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
+<div style="display: none; left: 193px; top: 106px;width:155px;" id="reportLay" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$MOD.LBL_CREATE_NEW} :</b></td></tr>
 	<tr>
 	<td>
 	{foreach item=modules key=modulename from=$REPT_MODULES}
-	<a href="javascript:CreateReport('{$modulename}');" class="reportMnu">- {$modules}</a>
+	<a href="javascript:CreateReport('{$modulename}');" class="drop_down">- {$modules}</a>
 	{/foreach}
 	</td>
 	</tr>
-	<tr><td style="padding: 5px;">&nbsp;</td></tr>
 	</tbody>
 </table>
 </div>
 <!-- END OF POPUP LAYER -->
 
 <!-- Add new Folder UI starts -->
-<div id="orgLay" style="display:none;width:350px;">
-	<table border="0" cellpadding="5" cellspacing="0" width="100%">
-	<tbody>
+<div id="orgLay" style="display:none;width:350px;" class="layerPopup">
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 	<tr>
-	<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_GROUP}</td>
-	<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
+		<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_GROUP}</td>
+		<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
 	</tr>
-	<tr><td colspan="2"><hr></td></tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 	<tr>
-	<td align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_NAME} </b></td>
-	<td align="left"><input id="folder_name" name="folderName" class="txtBox" type="text"></td>
+		<td class="small">
+			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+			<tr>
+				<td align="right" nowrap class="cellLabel small"><b>{$MOD.LBL_REP_FOLDER_NAME} </b></td>
+				<td align="left" class="cellText small">
+				<input id="folder_id" name="folderId" type="hidden" value=''>
+				<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
+				<input id="folder_name" name="folderName" class="txtBox" type="text">
+				</td>
+			</tr>
+			<tr>
+				<td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_DESC} </b></td>
+				<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-	<input id="folder_id" name="folderId" type="hidden" value=''>
-	<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
-	<td align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_DESC} </b></td>
-	<td align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
+		<td class="small" align="center">
+		<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="AddFolder();" type="button">&nbsp;&nbsp;
+		<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="closeEditReport();" type="button">
+		</td>
 	</tr>
-	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
-	<tr>
-	<td colspan="2" align="center">
-	<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="AddFolder();" type="button">&nbsp;&nbsp;
-	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="closeEditReport();" type="button">
-	</td>
-	</tr>
-	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
-	</tbody>
 	</table>
 </div>
 <!-- Add new folder UI ends -->
@@ -129,7 +135,7 @@ function DeleteFolder(id)
 {
 	var title = 'folder'+id;
 	var fldr_name = getObj(title).innerHTML;
-	if(confirm("Are you sure you want to delete the folder  "+fldr_name +" ?"))
+	if(confirm("Are you sure you want to delete the folder  '"+fldr_name +"' ?"))
 	{
 		new Ajax.Request(
 			'index.php',

@@ -15,7 +15,7 @@
 	{foreach item=reportfolder from=$REPT_CUSFLDR}
 		<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 		<tr>
-		<td class="mailSubHeader" align="left" colspan="3" id='folder{$reportfolder.id}'><b>&nbsp;{$reportfolder.name}</b></td>
+		<td class="mailSubHeader" align="left" colspan="3" id='folder{$reportfolder.id}' style="font-weight:bold;">{$reportfolder.name}</td>
 		</tr>
 		<tr>
 			<td  class="hdrNameBg" colspan="3" style="padding: 5px;" align="right" >
@@ -64,24 +64,22 @@
 	</table>
 	<br />
 	{foreachelse}
-	<div align="center"	style="position:relative;width:50%;height:30px;border:1px dashed #CCCCCC;background-color:#FFFFCC;padding:10px;">
+	<div align="center" style="position:relative;width:50%;height:30px;border:1px dashed #CCCCCC;background-color:#FFFFCC;padding:10px;">
 	<a href="javascript:;" onclick="fnvshobj(this,'orgLay');">{$MOD.LBL_CLICK_HERE}</a>&nbsp;{$MOD.LBL_TO_ADD_NEW_GROUP}
 	</div>
 	{/foreach}
 	</form>
 	<!-- Customized Reports Table Ends Here  -->
 
-<div style="display: none; left: 193px; top: 106px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
+<div style="display: none;left:193px;top:106px;width:155px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;" align="left"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
+	<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;" align="left"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
 	<tr>
 	<td align="left">
 	{foreach item=folder from=$REPT_FOLDERS}
-	<a href="javascript:;" onClick="MoveReport('{$folder.id}','{$folder.name}');" class="reportMnu">- {$folder.name}</a>
+	<a href="javascript:;" onClick="MoveReport('{$folder.id}','{$folder.name}');" class="drop_down">- {$folder.name}</a>
 	{/foreach}
 	</td>
 	</tr>
-	<tr><td style="padding: 5px;">&nbsp;</td></tr>
-	</tbody>
 </table>
 </div>
