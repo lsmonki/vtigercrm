@@ -32,15 +32,10 @@
    <tr>
 	<td width="98%" style="padding-left:20px;" valign="top">
 		<!-- module Select Table -->
-		<table width="95%"  border="0" cellspacing="0" cellpadding="0" align="center" class="small">
+		<table width="95%"  border="0" cellspacing="0" cellpadding="0" align="center" class="mailClient">
 		   <tr>
-			<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
-			<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
-			<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
-		   </tr>
-		   <tr>
-			<td bgcolor="#EBEBEB" width="7"></td>
-			<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
+			<td class="mailClientBg" width="7"></td>
+			<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0" class="small">
 				   <tr>
 					<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
@@ -49,8 +44,8 @@
 						({$MOD.LBL_UPGRADE_FROM_VTIGER_423})
 					</td>
 				   </tr>
-				   <tr bgcolor="#FFFFFF">
-					<td colspan="2">
+					   <tr>
+					<td colspan="2" class="hdrNameBg">
 						<span class="genHeaderGray">{$MOD.LBL_STEP} 1 : </span>
 				  		<span class="genHeaderSmall">{$MOD.LBL_SELECT_SOURCE}</span><br />
 						{$MOD.LBL_STEP1_DESC}<br /><br />
@@ -87,14 +82,14 @@
 				   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
 
 				   <tr><td colspan="2" height="10"></td></tr>
-				   <tr bgcolor="#FFFFFF">
-					<td colspan="2">
+				   <tr>
+					<td colspan="2" class="hdrNameBg">
 
 
 						<!-- OPTION 1 -->
 						<div id="mnuTab" style="display:{$SHOW_DB_DETAILS}">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-							   <tr bgcolor="#FFFFFF">
+							   <tr >
 								<td colspan="2">
 									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
 									<span class="genHeaderSmall">{$MOD.LBL_HOST_DB_ACCESS_DETAILS}</span><br /><br />
@@ -126,7 +121,7 @@
 						<!-- OPTION 2 -->
 						<div id="mnuTab1" style="display:{$SHOW_DUMP_DETAILS}">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-							   <tr bgcolor="#FFFFFF">
+							   <tr >
 								<td colspan="2">
 									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
 									<span class="genHeaderSmall">{$MOD.LBL_LOCATE_DB_DUMP_FILE}</span><br /><br />
@@ -151,7 +146,7 @@
 						<!-- OPTION 3 -->
 						<div id="mnuTab2" style="display:{$SHOW_ALTER_DB_DETAILS}">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-							   <tr bgcolor="#FFFFFF">
+							   <tr>
 								<td colspan="3">
 									<span class="genHeaderGray">{$MOD.LBL_STEP} 2 : </span>
 									<span class="genHeaderSmall">{$MOD.LBL_HOST_DB_ACCESS_DETAILS}</span><br /><br />
@@ -202,12 +197,12 @@
 				   {if $GET_MYSQL_PATH eq 1}
 				   <tr><td colspan="2" height="10"></td></tr>
 				   <tr>
-					<td colspan="2" bgcolor="white">
+					<td colspan="2" class="hdrNameBg">
 						<!-- OPTION 3 -->
 						<div id="mnuTab3" style="width:100%; display:{$SHOW_MYSQL_PATH}">
 							<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-							   <tr bgcolor="#FFFFFF">
-								<td colspan="2">
+							   <tr>
+								<td colspan="2" >
 									<span class="genHeaderGray">{$MOD.LBL_STEP} 3 : </span>
 									<span class="genHeaderSmall">{$MOD.LBL_ENTER_MYSQL_SERVER_PATH}</span><br>{$MOD.LBL_SERVER_PATH_DESC}<br /><br />
 								</td>
@@ -227,20 +222,15 @@
 				   {/if}
 				   <tr>
 					<td colspan="2" style="padding:10px;" align="center">
-						<input type="submit" name="migrate" value="  {$MOD.LBL_MIGRATE_BUTTON}  "  class="classBtn" onclick="return validate_migration(Migration);"/>
-						&nbsp;<input type="submit" name="cancel" value=" &nbsp;{$MOD.LBL_CANCEL_BUTTON}&nbsp; "  class="classBtn" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
+						<input type="submit" name="migrate" value="  {$MOD.LBL_MIGRATE_BUTTON}  "  class="crmbutton small save" onclick="return validate_migration(Migration);"/>
+						&nbsp;<input type="submit" name="cancel" value=" &nbsp;{$MOD.LBL_CANCEL_BUTTON}&nbsp; "  class="crmbutton small cancel" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
  					</td>
 				   </tr>
 				</table>
 			</td>
-			<td bgcolor="#EBEBEB" width="8"></td>
+			<td class="mailClientBg" width="8"></td>
 		   </tr>
-		   <tr>
-			<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
-			<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-			<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
-		   </tr>
-		</table>
+		  </table>
 		<br />
 	</td>
 	<td>&nbsp;</td>
