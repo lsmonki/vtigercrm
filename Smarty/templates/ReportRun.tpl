@@ -137,7 +137,6 @@
 	{include file="ReportRunContents.tpl"}
 </div>
 <br>
-{literal}
 
 </td>
 <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
@@ -146,6 +145,7 @@
 
 
 
+{literal}
 
 <SCRIPT LANGUAGE=JavaScript>
 function CrearEnlace(tipo,id){
