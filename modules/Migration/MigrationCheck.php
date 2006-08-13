@@ -226,6 +226,10 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 		//TODO - Check whether the given file is Dump file and then apply to the new database
 		$migration_log .= '<br> Going to apply the Dump file to the new database.';
 
+		//If the dump is valid and going to migrate then we should move the browsed dump file to root directory
+		global $root_directory;
+		move_uploaded_file($old_dump_details['tmp_name'],$root_directory.$old_dump_details['name']);
+
 		include("config.inc.php");
 		global $dbconfig;
 
