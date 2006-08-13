@@ -379,8 +379,11 @@ $mod_strings = Array(
 'modifiedtime'=>'Modified Time',
 'first'=>'First',
 'last'=>'Last',
-
-
+'High'=>'High',
+'Medium'=>'Medium',
+'Low'=>'Low',
+'LBL_SELECT'=>'Select',
+'LBL_SELECT_CONTACT'=>'Select Contact',
 
 	
 );
