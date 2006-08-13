@@ -35,7 +35,7 @@ require_once('include/utils/CommonUtils.php'); //new
   * Return type is an array
   */
 
-function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name)
+function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name,$mode='')
 {
 	global $log;
 	$log->debug("Entering getOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $maxlength.",". $col_fields.",".$generatedtype.",".$module_name.") method ...");
@@ -194,7 +194,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $col_fields['terms_conditions'];
 
 			//if the value is empty then only we should get the default Terms and Conditions
-			if($value == '')
+			if($value == '' && $mode != 'edit')
 				$value=getTermsandConditions();
 		}
 
@@ -1639,7 +1639,7 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 * Return type is an object array
 */
 
-function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
+function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$mode)
 {
 	global $log;
 	$log->debug("Entering getBlockInformation(".$module.",". $result.",". $col_fields.",".$tabid.",".$block_label.") method ...");
@@ -1671,7 +1671,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
-		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode);
 		$editview_arr[$block][]=$custfld;
 		if ($mvAdd_flag == true)
 		$mvAdd_flag = false;
@@ -1686,7 +1686,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 			$block = $adb->query_result($result,$i,"block");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);			
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode);			
 			$editview_arr[$block][]=$custfld;
 		}
 	}

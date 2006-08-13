@@ -998,7 +998,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 			}
 		}
 		$result = $adb->query($sql);
-                $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label);	
+                $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label,$mode);	
 	}
 	$log->debug("Exiting getBlocks method ...");
 	$index_count =1;
