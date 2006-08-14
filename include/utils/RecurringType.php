@@ -111,8 +111,12 @@ class RecurringType
 				//echo '<pre>';print_r($this);echo '</pre>';die;
 				$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
+				if(isset($this->recur_freq))
+					$index = $this->recur_freq * 7;
+				else
+					$index = 7;
 				$date_arr = Array(
-					'day'   => $st_date[2] + 7,
+					'day'   => $st_date[2] + $index,
 					'month' => $st_date[1],
 					'year'  => $st_date[0]
 				);
