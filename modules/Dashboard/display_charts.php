@@ -424,7 +424,6 @@ $graph_array = Array(
 		    else
                     {
                         //echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
-			echo 'ssssssssssssssssss';
 			sleep(1);
                         echo '<h3>'.$mod_strings['LBL_NO_PERMISSION_FIELD'].'</h3>';
                     }
