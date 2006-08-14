@@ -199,7 +199,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
 	$eventlabel = $mod_strings['LBL_EVENTS'];
 	$todolabel = $mod_strings['LBL_TODOS'];
 	$div = "<div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000; background-color:white'></div>
-		<div id='calSettings' class='calSettings' style='display:none;width:500px;' align=center ></div>
+		<div id='calSettings' class='layerPopup calSettings' style='display:none;width:500px;' align=center ></div>
 		<div id='dataArray'></div>
 		";
 	echo $div;

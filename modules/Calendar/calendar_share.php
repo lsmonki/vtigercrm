@@ -19,15 +19,14 @@ require_once('modules/Calendar/CalendarCommon.php');
  $userDetails=getOtherUserName($current_user->id,false);
  $shareduser_ids = getSharedUserId($current_user->id);
 ?>
-<table border=0 cellspacing=0 cellpadding=5 width=100%>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 	<tr>
-		<td class="genHeaderSmall" align="left"><? echo $mod_strings['LBL_CALSETTINGS']?></td>
+		<td class="layerPopupHeading" align="left"><? echo $mod_strings['LBL_CALSETTINGS']?></td>
 		<td align=right>
 			<a href="javascript:fninvsh('calSettings');"><img src="<?echo $image_path?>close.gif" border="0"  align="absmiddle" /></a>
 		</td>
 	</tr>
-	<tr><td colspan="2"><hr /></td></tr>
-</table>
+	</table>
 <form name="SharingForm" method="post" action="index.php">
 <input type="hidden" name="module" value="Calendar">
 <input type="hidden" name="action" value="updateCalendarSharing">
@@ -40,8 +39,11 @@ require_once('modules/Calendar/CalendarCommon.php');
 <input type="hidden" name="subtab" value="<?php echo $_REQUEST['subtab'] ?>">
 <input type="hidden" name="parenttab" value="<?php echo $_REQUEST['parenttab'] ?>">
 <input type="hidden" name="current_userid" value="<? echo $current_user->id ?>" >
-<table border=0 cellspacing=0 cellpadding=5 width=100%>
+<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 	<tr>
+		<td class=small >
+			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+			<tr>
 		<td align="right" width="10%" valign="top"><img src="<?echo $image_path?>cal_clock.jpg" align="absmiddle"></td>
 		<td align="left" width="90%">
 			<b><?echo $mod_strings['LBL_TIMESETTINGS']?></b><br>
@@ -108,14 +110,17 @@ require_once('modules/Calendar/CalendarCommon.php');
 		</div>
 		</td>
 	</tr>
-	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
-		<td colspan="2" align="center">
-			<input type="submit" name="save" value=" &nbsp;<? echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>&nbsp;" class="classBtn" />&nbsp;&nbsp;
-			<input type="button" name="cancel" value=" <? echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?> " class="classBtn" onclick="fninvsh('calSettings');" />
+		<td align="center">
+			<input type="submit" name="save" value=" &nbsp;<? echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>&nbsp;" class="crmbutton small save" />&nbsp;&nbsp;
+			<input type="button" name="cancel" value=" <? echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?> " class="crmbutton small cancel" onclick="fninvsh('calSettings');" />
 		</td>
 	</tr>
-	<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
-</table>
+	</table>
 </form>
 
