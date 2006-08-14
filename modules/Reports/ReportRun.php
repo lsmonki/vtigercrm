@@ -148,7 +148,7 @@ class ReportRun extends CRMEntity
 			}
 			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
 			{
-				$querycolumn = "case vtiger_crmentityRelActivities.setype when 'Accounts' then vtiger_accountRelActivities.accountname when 'Leads' then vtiger_leaddetailsRelActivities.lastname when 'Potentials' then vtiger_potentialRelActivities.potentialname when 'Quotes' then vtiger_quotesRelActivities.subject when 'PurchaseOrder' then vtiger_purchaseorderRelActivities.subject when 'Invoice' then vtiger_invoiceRelActivities.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelActivities.setype 'Entity_type'";
+				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then vtiger_leaddetailsRelCalendar.lastname when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
 			}
 		}
 		return $querycolumn;
@@ -1182,20 +1182,20 @@ class ReportRun extends CRMEntity
 		if($module == "Calendar")
 		{
 			$query = "from vtiger_activity 
-				inner join vtiger_crmentity as vtiger_crmentityActivities on vtiger_crmentityActivities.crmid=vtiger_activity.activityid 
+				inner join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
-				left join vtiger_contactdetails as vtiger_contactdetailsActivities on vtiger_contactdetailsActivities.contactid= vtiger_cntactivityrel.contactid
-				left join vtiger_users as vtiger_usersActivities on vtiger_usersActivities.id = vtiger_crmentityActivities.smownerid
+				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
+				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
-				left join vtiger_crmentity as vtiger_crmentityRelActivities on vtiger_crmentityRelActivities.crmid = vtiger_seactivityrel.crmid
-				left join vtiger_account as vtiger_accountRelActivities on vtiger_accountRelActivities.accountid=vtiger_crmentityRelActivities.crmid
-				left join vtiger_leaddetails as vtiger_leaddetailsRelActivities on vtiger_leaddetailsRelActivities.leadid = vtiger_crmentityRelActivities.crmid
-				left join vtiger_potential as vtiger_potentialRelActivities on vtiger_potentialRelActivities.potentialid = vtiger_crmentityRelActivities.crmid
-				left join vtiger_quotes as vtiger_quotesRelActivities on vtiger_quotesRelActivities.quoteid = vtiger_crmentityRelActivities.crmid
-				left join vtiger_purchaseorder as vtiger_purchaseorderRelActivities on vtiger_purchaseorderRelActivities.purchaseorderid = vtiger_crmentityRelActivities.crmid
-				left join vtiger_invoice as vtiger_invoiceRelActivities on vtiger_invoiceRelActivities.invoiceid = vtiger_crmentityRelActivities.crmid
+				left join vtiger_crmentity as vtiger_crmentityRelCalendar on vtiger_crmentityRelCalendar.crmid = vtiger_seactivityrel.crmid
+				left join vtiger_account as vtiger_accountRelCalendar on vtiger_accountRelCalendar.accountid=vtiger_crmentityRelCalendar.crmid
+				left join vtiger_leaddetails as vtiger_leaddetailsRelCalendar on vtiger_leaddetailsRelCalendar.leadid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_potential as vtiger_potentialRelCalendar on vtiger_potentialRelCalendar.potentialid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_quotes as vtiger_quotesRelCalendar on vtiger_quotesRelCalendar.quoteid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_purchaseorder as vtiger_purchaseorderRelCalendar on vtiger_purchaseorderRelCalendar.purchaseorderid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_invoice as vtiger_invoiceRelCalendar on vtiger_invoiceRelCalendar.invoiceid = vtiger_crmentityRelCalendar.crmid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
-				WHERE vtiger_crmentityActivities.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')";
+				WHERE vtiger_crmentityCalendar.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')";
 		}
 
 		if($module == "Quotes")
