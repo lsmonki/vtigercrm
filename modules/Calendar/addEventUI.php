@@ -108,7 +108,7 @@ $calendar_arr['view'] = $mysel;
 		include_once 'modules/Calendar/header.php';
 		$closelink = '';
 ?>
-	<div class="small" style="padding:20px">
+	<div class="layerPopup small" style="padding:20px">
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">	
 	<input type="hidden" name="return_module" value="<?php $_REQUEST['return_module'] ?>">
 	<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action'] ?>">
@@ -119,7 +119,7 @@ else
 	$closelink = '<td align=right>
 			<a href="javascript:ghide(\'addEvent\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
 ?>
-	<div class="calAddEvent" style="display:none" id="addEvent" align=center>
+	<div class="calAddEvent layerPopup" style="display:none" id="addEvent" align=center>
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
@@ -147,14 +147,17 @@ else
 	<input type="hidden" name="viewOption" value="">
 	<input type="hidden" name="subtab" value="">
 	<input type="hidden" name="maintab" value="Calendar">
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
+		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr>
-			<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
+			<td class="layerPopupHeading"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 			<?php echo $closelink; ?>
 		</tr>
 		</table>
 		
-		<table border=0 cellspacing=0 cellpadding=5 width=90% >
+		<table border=0 cellspacing=0 cellpadding=5 width=95% align=center bgcolor="#FFFFFF"> 
+			<tr>
+		<td class=small >
+			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 		<tr>
 			<td nowrap  width=20%><b><?php echo $mod_strings['LBL_EVENTTYPE']?> :</b></td>
 			<td width=80%>
@@ -176,7 +179,7 @@ else
 
 		</table>
 		<br>
-		<table border=0 cellspacing=0 cellpadding=5 width=90% align=center style="border-top:1px dotted silver">
+		<table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF">
 		<tr>
 			<td >
 				<table border=0 cellspacing=0 cellpadding=2 width=100%>
@@ -227,7 +230,7 @@ else
 
 		<!-- Alarm, Repeat, Invite starts-->
 		<br>
-		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
+		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center bgcolor="#FFFFFF">
 		<tr>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
@@ -250,7 +253,7 @@ else
 			<!-- Invite UI -->
 				
 				<DIV id="addEventInviteUI" style="display:block;width:100%">
-				<table border=0 cellspacing=0 cellpadding=2 width=100%>
+				<table border=0 cellspacing=0 cellpadding=2 width=100% bgcolor="#FFFFFF">
 				<tr>
 					<td valign=top> 
 						<table border=0 cellspacing=0 cellpadding=2 width=100%>
@@ -302,7 +305,7 @@ else
 			
 			<!-- Reminder UI -->
 				<DIV id="addEventAlarmUI" style="display:none;width:100%">
-				<table>
+				<table bgcolor="#FFFFFF">
 					<tr><td><?php echo $mod_strings['LBL_SENDREMINDER']?></td>
 						<td>
 					<input type="radio" name="set_reminder"value="Yes" onClick="showBlock('reminderOptions')">&nbsp;<?php echo $mod_strings['LBL_YES'] ?>&nbsp;
@@ -311,7 +314,7 @@ else
 					</td></tr>
 				</table>
 				<DIV id="reminderOptions" style="display:none;width:100%">
-				<table border=0 cellspacing=0 cellpadding=2  width=100%>
+				<table border=0 cellspacing=0 cellpadding=2  width=100% bgcolor="#FFFFFF">
 				<tr>
 					<td nowrap align=right width=20% valign=top>
 						<b><?php echo $mod_strings['LBL_RMD_ON']?> : </b>
@@ -368,7 +371,7 @@ else
 				</DIV>
 			<!-- Repeat UI -->
 				<div id="addEventRepeatUI" style="display:none;width:100%">
-				<table border=0 cellspacing=0 cellpadding=2  width=100%>
+				<table border=0 cellspacing=0 cellpadding=2  width=100% bgcolor="#FFFFFF">
 				<tr>
 					<td nowrap align=right width=20% valign=top>
 					<strong><?php echo $mod_strings['LBL_REPEAT']?> :</strong>
@@ -382,7 +385,7 @@ else
 						<tr>
 							<td colspan=2>
 							<div id="repeatOptions" style="display:none">
-								<table border=0 cellspacing=0 cellpadding=2>
+								<table border=0 cellspacing=0 cellpadding=2 bgcolor="#FFFFFF">
 								<tr>
 								<td>
 									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
@@ -414,7 +417,7 @@ else
 								</div-->
 
 								<div id="repeatMonthUI" style="display:none;">
-								<table border=0 cellspacing=0 cellpadding=2>
+								<table border=0 cellspacing=0 cellpadding=2 bgcolor="#FFFFFF">
 									<tr>
 										<td>
 											<table border=0 cellspacing=0 cellpadding=2>
@@ -464,7 +467,7 @@ else
 				</table>
 				</div>
 				<div id="addEventRelatedtoUI" style="display:none;width:100%">
-					<table width="100%" cellpadding="5" cellspacing="0" border="0">
+					<table width="100%" cellpadding="5" cellspacing="0" border="0" bgcolor="#FFFFFF">
 						<tr>
 							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
 							<td>
@@ -497,11 +500,15 @@ else
 			</td>
 		</tr>
 		</table>
-		<!-- Alarm, Repeat, Invite stops-->
-
+			<!-- popup specific content fill in ends -->
+		
+		</td>
+	</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<br>
 		
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
+		
 		<tr>
 			<td valign=top></td>
 			<td  align=center>
@@ -585,7 +592,7 @@ else
 {
 	$closelink = '<td align=right><a href="javascript:ghide(\'createTodo\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
 ?>
-<div class="calAddEvent" style="display:none" id="createTodo" align=center>
+<div class="calAddEvent layerPopup" style="display:none" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
@@ -610,13 +617,13 @@ else
   <input type="hidden" name="viewOption" value="">
   <input type="hidden" name="subtab" value="">
   <input type="hidden" name="maintab" value="Calendar">
-	<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr>
                 	<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
 			<?php echo $closelink; ?>
 		</tr>
         </table>
-	<table border=0 cellspacing=0 cellpadding=5 width=90% >
+	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
 		<tr>
                         <td width=20%><b><?php echo $mod_strings['LBL_TODONAME'] ?> :</b></td>
                         <td width=80%><input name="task_subject" type="text" value="" class="textbox" style="width:90%"></td>
@@ -646,15 +653,15 @@ else
 
 			
 	</table>
-        <br>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+       
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 		<tr>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 					<tr>
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 						<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');gshow('addTaskAlarmUI','todo',document.createTodo.task_date_start.value,'',document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskRelatedtoUI');"><?php echo $mod_strings['LBL_NOTIFICATION']?></a></td>
-						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
+						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">
 						<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabRelatedto','on'); switchClass('cellTabInvite','off');gshow('addTaskRelatedtoUI','todo',document.createTodo.task_date_start.value,'',document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskAlarmUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>					
 						<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 					</tr>
@@ -709,7 +716,7 @@ else
 	</table>
 	<br>
 
-                <table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
+                <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
                 <tr>
                         <td valign=top></td>
                         <td  align=center>
