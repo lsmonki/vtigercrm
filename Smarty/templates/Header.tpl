@@ -440,16 +440,22 @@ function openwin()
 </script>
 
 
-<div id="tracker" style="display:none;position:absolute;z-index:100000001;">
+<div id="tracker" style="display:none;position:absolute;z-index:100000001;" class="layerPopup">
 
-	<table class="trackerBorder" border="0" cellpadding="5" cellspacing="0" width="200">
-	<tbody><tr style="cursor:move;"><td colspan="2" class="trackerHeading small" id="Track_Handle"><strong>{$APP.LBL_LAST_VIEWED}</strong></td><td align="right" style="padding:5px;" class="trackerHeading small">
+	<table border="0" cellpadding="5" cellspacing="0" width="200">
+	<tr style="cursor:move;">
+		<td colspan="2" class="mailClientBg small" id="Track_Handle"><strong>{$APP.LBL_LAST_VIEWED}</strong></td>
+		<td align="right" style="padding:5px;" class="mailClientBg small">
 		<a href="javascript:;"><img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('tracker')" hspace="5" align="absmiddle"></a>
 		</td></tr>
+	</table>
+	<table border="0" cellpadding="5" cellspacing="0" width="200" class="hdrNameBg">
 	{foreach name=trackinfo item=trackelements from=$TRACINFO}
-	<tr><td class="trackerListBullet small" align="center" width="12">{$smarty.foreach.trackinfo.iteration}</td><td class="trackerList small"> <a href="index.php?module={$trackelements.module_name}&action=DetailView&record={$trackelements.crmid}">{$trackelements.item_summary}</a> </td><td class="trackerList small">&nbsp;</td></tr>
+	<tr>
+		<td class="trackerListBullet small" align="center" width="12">{$smarty.foreach.trackinfo.iteration}</td>
+		<td class="trackerList small"> <a href="index.php?module={$trackelements.module_name}&action=DetailView&record={$trackelements.crmid}">{$trackelements.item_summary}</a> </td><td class="trackerList small">&nbsp;</td></tr>
 	{/foreach}
-	</tbody></table>
+	</table>
 </div>	
 <script>
 	var THandle = document.getElementById("Track_Handle");
