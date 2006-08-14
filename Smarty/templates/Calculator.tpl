@@ -10,16 +10,18 @@
  ********************************************************************************/
 -->*}
 
-<div id="calc" style="z-index:10000002">
-	<table class="leftFormBorder1" border="0" cellpadding="0" cellspacing="0" width="100%">
-		<tr class="lvtCol" style="cursor:move;" >
-			<td style="text-align:left;padding-left:5px;border-bottom:1px solid #666666;" id="calc_Handle">{$APP.LBL_CALCULATOR}</td>
-			<td align="right" style="padding:5px;border-bottom:1px solid #666666;">
+<div id="calc" style="z-index:10000002" class="layerPopup" >
+	<table  border="0" cellpadding="5" cellspacing="0" width="100%">
+		<tr style="cursor:move;" >
+			<td class="mailClientBg small" id="calc_Handle"><b>{$APP.LBL_CALCULATOR}</b></td>
+			<td align="right"class="mailClientBg small">
 			<a href="javascript:;">
 			<img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('calc')" hspace="5" align="absmiddle">
 			</a>
 			</td>
 		</tr>
+	</table>
+	<table  border="0" cellpadding="0" cellspacing="0" width="100%" class="hdrNameBg">
 	</tr>
 	<tr><td style="padding:10px;" colspan="2">{$CALC}</td></tr>
 	</table>
