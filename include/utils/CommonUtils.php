@@ -2536,7 +2536,9 @@ function getrecurringObjValue()
 			if($recurring_data['repeatmonth_type'] == 'date')
 			{
 				if(isset($_REQUEST['repeatMonth_date']) && $_REQUEST['repeatMonth_date'] != null)
-				$recurring_data['repeatmonth_date'] = $_REQUEST['repeatMonth_date'];
+					$recurring_data['repeatmonth_date'] = $_REQUEST['repeatMonth_date'];
+				else
+					$recurring_data['repeatmonth_date'] = 1;
 			}
 			elseif($recurring_data['repeatmonth_type'] == 'day')
 			{
