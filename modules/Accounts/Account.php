@@ -240,8 +240,6 @@ class Account extends CRMEntity {
 
 		$query = "SELECT vtiger_activity.*,
 			vtiger_seactivityrel.*,
-			vtiger_contactdetails.contactid, vtiger_contactdetails.lastname,
-			vtiger_contactdetails.firstname,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
 			vtiger_users.user_name,
@@ -251,10 +249,6 @@ class Account extends CRMEntity {
 				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
-			LEFT JOIN vtiger_cntactivityrel
-				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
-			LEFT JOIN vtiger_contactdetails
-				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT OUTER JOIN vtiger_recurringevents
@@ -290,8 +284,6 @@ class Account extends CRMEntity {
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.status, vtiger_activity.eventstatus,
 			vtiger_activity.activitytype,
-			vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
-			vtiger_contactdetails.lastname,
 			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
 			vtiger_crmentity.description,
 			vtiger_users.user_name
@@ -300,10 +292,6 @@ class Account extends CRMEntity {
 				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
-			LEFT JOIN vtiger_cntactivityrel
-				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid 
-			LEFT JOIN vtiger_contactdetails
-				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
 			LEFT JOIN vtiger_activitygrouprelation
 				ON vtiger_activitygrouprelation.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_groups
