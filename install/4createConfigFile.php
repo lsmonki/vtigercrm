@@ -438,7 +438,7 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-				 <input  type="image" name="next" value="Next" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
+				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
 				 </form>
 					
 				</td>
@@ -480,6 +480,7 @@ $cache_dir = 'cache/';
 		oImg = document.getElementById('title_img').style.display = 'none';
 		oImg = document.getElementById('title_img1').style.display = 'block';
 		document.getElementById('populating_info').style.visibility='visible';
+		document.getElementById("next_btn").style.display = 'none';
 		window.document.title = 'vtiger CRM 5 - Configuration Wizard - Database Generation ...';
 	}
 	</script>
