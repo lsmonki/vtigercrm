@@ -96,7 +96,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	    $value['recurringcheck'] = 'Yes';
 	    $value['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
 	    $recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
-	    $value['recurringtype'] = $recurringinfo[0];
+	    $value['eventrecurringtype'] = $recurringinfo[0];
 	    if($recurringinfo[0] == 'Monthly')
 	    {
 		    $monthrpt_str = '';
