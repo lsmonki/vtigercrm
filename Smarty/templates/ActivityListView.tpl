@@ -117,7 +117,7 @@ function alphabetic(module,url,dataid)
 </table>
 
 {*<!-- Contents -->*}
-<form name="basicSearch" action="index.php">
+<form name="basicSearch" action="index.php" onsubmit="return false;">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
@@ -125,12 +125,16 @@ function alphabetic(module,url,dataid)
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
-<table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
+<table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>
-		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>{$APP.LBL_SEARCH_FOR}</b></td>
-		<td width="25%" class="dvtCellLabel"><input type="text"  class="txtBox" name="search_text"></td>
-		<td width="25%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
-			<select name ="search_field" class="txtBox">
+		<td class="searchUIName small" nowrap align="left">
+		<span class="moduleName">Search</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
+		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
+		</td>
+		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
+		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
+		<td class="small" nowrap><b>{$APP.LBL_IN}</b>&nbsp;
+			<select name ="search_field" class="txtBox" style="width:150px">
 			 {html_options  options=$SEARCHLISTHEADER }
 			</select>
                         <input type="hidden" name="searchtype" value="BasicSearch">
@@ -140,14 +144,14 @@ function alphabetic(module,url,dataid)
                         <input type="hidden" name="query" value="true">
 			<input type="hidden" name="search_cnt">
 		</td>
-		<td width="35%" class="dvtCellLabel">
+		<td class="small" nowrap width=40% >
 			  <input name="submit" type="button" class="crmbutton small create" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
-			   <span class="hiliteBtn4Search"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
+			  
 		</td>
-		<td class="dvtCellLabel" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
+		<td class="small" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 	</tr>
 	<tr>
-		<td colspan="5" align="center" class="dvtCellLabel">
+		<td colspan="6" align="center" class="small">
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 				<tr>
                                                 {$ALPHABETICAL}
@@ -159,51 +163,56 @@ function alphabetic(module,url,dataid)
 </div>
 <!-- ADVANCED SEARCH -->
 <div id="advSearch" style="display:none;">
-		<table  cellspacing=0 cellpadding=5 width=80% style="border-top:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" class="small" align="center">
+		<table  cellspacing=0 cellpadding=5 width=80% class="searchUIAdv1 small" align="center" border=0>
 			<tr>
-					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="{$APP.LNK_ADVANCED_SEARCH}" title="{$APP.LNK_ADVANCED_SEARCH}" border=0></td>
-					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
-					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
-					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
-					<td valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
+					<td class="searchUIName small" nowrap align="left"><span class="moduleName">Search</span><br><span class="small"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
+					<td nowrap class="small"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
+					<td nowrap width=60% class="small" ><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
+					<td class="small" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 			</tr>
 		</table>
-		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">
+		<table cellpadding="2" cellspacing="0" width="80%" align="center" class="searchUIAdv2 small" border=0>
 			<tr>
-				<td colspan="3"align="center" class="dvtCellLabel">
-				<div id="fixed" style="position:relative;width:90%;height:125px;overflow:auto;border:1px solid #CCCCCC;" class="padTab small">
-					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
-					<tr  class="dvtCellInfo">
-						<td width="31%"><select name="Fields0" class="detailedViewTextBox">
-						{$FIELDNAMES}
-						</select>
-						</td>
-						<td width="32%"><select name="Condition0" class="detailedViewTextBox">
-							{$CRITERIA}
-						</select>
-						</td>
-						<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
+				<td align="center" class="small" width=90%>
+				<div id="fixed" style="position:relative;width:95%;height:80px;padding:0px; overflow:auto;border:1px solid #CCCCCC;background-color:#ffffff" class="small">
+					<table border=0 width=95%>
+					<tr>
+					<td align=left>
+						<table width="100%"  border="0" cellpadding="2" cellspacing="0" id="adSrc" align="left">
+						<tr  >
+							<td width="31%"><select name="Fields0" class="detailedViewTextBox">
+							{$FIELDNAMES}
+							</select>
+							</td>
+							<td width="32%"><select name="Condition0" class="detailedViewTextBox">
+								{$CRITERIA}
+							</select>
+							</td>
+							<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
+						</tr>
+						</table>
+					</td>
 					</tr>
 				</table>
 				</div>	
-			</td>
-		</tr>
-		<tr>
-			<td class="dvtCellLabel"><input type="button" name="more" value=" {$APP.LBL_MORE} " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="crmbuttom small edit">&nbsp;&nbsp;
-				<input name="button" type="button" value=" {$APP.LBL_FEWER_BUTTON} " onclick="delRow()" class="crmbuttom small edit"></td>
-			<td class="dvtCellLabel">&nbsp;</td>
-			<td class="dvtCellLabel">&nbsp;</td>
+				</td>
 			</tr>
-	</table>
-	<table border=0 cellspacing=0 cellpadding=5 width=80% style="border-bottom:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" align="center">
+		</table>
+			
+		<table border=0 cellspacing=0 cellpadding=5 width=80% class="searchUIAdv3 small" align="center">
 		<tr>
-			<td align=center class="dvtCellLabel"><input type="button" class="crmbutton small create" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Advanced');">
+			<td align=left width=40%>
+						<input type="button" name="more" value=" {$APP.LBL_MORE} " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="crmbuttom small edit" >
+						<input name="button" type="button" value=" {$APP.LBL_FEWER_BUTTON} " onclick="delRow()" class="crmbuttom small edit" >
+			</td>
+			<td align=left class="small"><input type="button" class="crmbutton small create" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Advanced');">
 			</td>
 		</tr>
 	</table>
 </div>		
 </form>
 {*<!-- Searching UI -->*}
+
 
 <div class="small" style="padding: 10px;">
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
