@@ -3100,13 +3100,9 @@ border-width:1px;
 	border: 2px solid #999999;
 }
 .trackerBorder {
-	border-width:2px;
-	border-style:solid;
-	border-color:#999999;
 	background-color:#ffffff;
 }
 .trackerHeading {
-	border-bottom:1px solid #cccccc;
 	background-color:#efefef;
 }
 .trackerListBullet {
