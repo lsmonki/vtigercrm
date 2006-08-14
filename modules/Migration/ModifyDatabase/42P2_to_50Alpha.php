@@ -751,6 +751,8 @@ Execute($query11);
 //Drop the column company_name from vtiger_vendor table ---- modified by Mickie on 18-11-2005
 $altersql1 = "alter table vtiger_vendor drop column company_name";
 Execute($altersql1);
+$altersql2 = "alter table vtiger_vendor change column name vendorname varchar(100) default NULL";
+Execute($altersql2);
 //TODO (check): Remove this company_name entry from the vtiger_field table if it already exists
 
 //Migration for Default Organisation Share -- Added by Don on 20-11-2005
