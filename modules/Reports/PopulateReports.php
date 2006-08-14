@@ -93,16 +93,16 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_potential:sales_stage:Potentials_Sales_Stage:sales_stage:V'),
 
 		       Array('vtiger_activity:subject:Calendar_Subject:subject:V',
-			     'vtiger_contactdetailsActivities:lastname:Calendar_Contact_Name:contact_id:I',
+			     'vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:I',
                              'vtiger_activity:status:Calendar_Status:taskstatus:V',
                              'vtiger_activity:priority:Calendar_Priority:taskpriority:V',
-                             'vtiger_usersActivities:user_name:Calendar_Assigned_To:assigned_user_id:V'),
+                             'vtiger_usersCalendar:user_name:Calendar_Assigned_To:assigned_user_id:V'),
 
 		       Array('vtiger_activity:subject:Calendar_Subject:subject:V',
-                             'vtiger_contactdetailsActivities:lastname:Calendar_Contact_Name:contact_id:I',
+                             'vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:I',
                              'vtiger_activity:status:Calendar_Status:taskstatus:V',
                              'vtiger_activity:priority:Calendar_Priority:taskpriority:V',
-                             'vtiger_usersActivities:user_name:Calendar_Assigned_To:assigned_user_id:V'),
+                             'vtiger_usersCalendar:user_name:Calendar_Assigned_To:assigned_user_id:V'),
 
         	       Array('vtiger_troubletickets:title:HelpDesk_Title:ticket_title:V',
                              'vtiger_troubletickets:status:HelpDesk_Status:ticketstatus:V',
@@ -358,12 +358,12 @@ $sortorder = Array(
                         )
                   );
 
-$stdfilters = Array(Array('columnname'=>'vtiger_crmentityActivities:modifiedtime:Calendar_Modified_Time',
+$stdfilters = Array(Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
 			  'datefilter'=>'lastmonth',
 			  'startdate'=>'2005-05-01',
 			  'enddate'=>'2005-05-31'),
 
-		    Array('columnname'=>'vtiger_crmentityActivities:modifiedtime:Calendar_Modified_Time',
+		    Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
                           'datefilter'=>'thismonth',
                           'startdate'=>'2005-06-01',
                           'enddate'=>'2005-06-30')
