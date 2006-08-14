@@ -57,7 +57,7 @@ function openPopup(del_roleid){ldelim}
 </tr>
 <tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 <tr>
-    <td colspan="3" align="center"><input type="submit" name="Delete" value="{$APP.LBL_SAVE_BUTTON_LABEL}" class="small">
+    <td colspan="3" align="center"><input type="submit" name="Delete" value="{$APP.LBL_SAVE_BUTTON_LABEL}" class="crmbutton small save">
 	</td>
 </tr>
 </table>
