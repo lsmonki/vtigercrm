@@ -37,6 +37,7 @@ if(isset($_REQUEST['start_hour']) && $_REQUEST['start_hour'] != '')
 
 $sql = "update vtiger_users set hour_format='".$hour_format."' where id=".$current_user->id;
 $adb->query($sql);
+RecalculateSharingRules();
 header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
 
 ?>
