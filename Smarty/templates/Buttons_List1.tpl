@@ -74,7 +74,7 @@
 						{if $CHECK.Calendar eq 'yes'}
 						<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal("parenttab=My Home Page");'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td>
 						{else}
-                                                <td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}btL3Calendar-Faded.gif"></td>
+                                                <td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}btnL3Calendar-Faded.gif"></td>
                                                 {/if}
 					{else}
 						{if $CHECK.Calendar eq 'yes'}
