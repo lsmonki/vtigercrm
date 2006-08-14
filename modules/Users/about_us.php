@@ -135,7 +135,7 @@ global $mod_strings;
 									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" class="webMnu" target="_blank">Contact Us</a>
 							</td>
 							<td align="right">
-									<input type="button" name="close" value=" &nbsp;Close&nbsp; " onClick="window.close();" class="classBtn">
+									<input type="button" name="close" value=" &nbsp;Close&nbsp; " onClick="window.close();" class="crmbutton small cancel">
 							</td>
 						</tr>
 				</table>
