@@ -1115,27 +1115,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parenttype == "Leads")	
 		{
-			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+			$tablename = "vtiger_leaddetails";	$fieldname = "lastname";	$idname="leadid";	
 		}
 		if($parenttype == "Accounts")	
 		{
-			$tablename = "account";		$fieldname = "accountname";     $idname="accountid";
+			$tablename = "vtiger_account";		$fieldname = "accountname";     $idname="accountid";
 		}
 		if($parenttype == "Products")	
 		{
-			$tablename = "products";	$fieldname = "productname";     $idname="productid";
+			$tablename = "vtiger_products";	$fieldname = "productname";     $idname="productid";
 		}
 		if($parenttype == "HelpDesk")	
 		{
-			$tablename = "troubletickets";	$fieldname = "title";        	$idname="crmid";
+			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="crmid";
 		}
 		if($parenttype == "Products")	
 		{
-			$tablename = "products";	$fieldname = "productname";     $idname="productid";
+			$tablename = "vtiger_products";	$fieldname = "productname";     $idname="productid";
 		}
 		if($parenttype == "Invoice")	
 		{
-			$tablename = "invoice";	$fieldname = "subject";     $idname="invoiceid";
+			$tablename = "vtiger_invoice";	$fieldname = "subject";     $idname="invoiceid";
 		}
 
 
@@ -1158,15 +1158,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parenttype == "Leads")	
 		{
-			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+			$tablename = "vtiger_leaddetails";	$fieldname = "lastname";	$idname="leadid";	
 		}
 		if($parenttype == "Accounts")	
 		{
-			$tablename = "account";		$fieldname = "accountname";     $idname="accountid";
+			$tablename = "vtiger_account";		$fieldname = "accountname";     $idname="accountid";
 		}
 		if($parenttype == "HelpDesk")	
 		{
-			$tablename = "troubletickets";	$fieldname = "title";        	$idname="crmid";
+			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="crmid";
 		}
 		if($parentid != '')
                 {
@@ -1187,11 +1187,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parenttype == "Leads")	
 		{
-			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+			$tablename = "vtiger_leaddetails";	$fieldname = "lastname";	$idname="leadid";	
 		}
 		if($parenttype == "Contacts")	
 		{
-			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+			$tablename = "vtiger_contactdetails";		$fieldname = "contactname";     $idname="contactid";
 		}
 		if($parentid != '')
                 {
@@ -1215,11 +1215,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parenttype == "Contacts")	
 		{
-			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+			$tablename = "vtiger_contactdetails";		$fieldname = "contactname";     $idname="contactid";
 		}
 		if($parenttype == "Accounts")	
 		{
-			$tablename = "account";	$fieldname = "accountname";	$idname="accountid";	
+			$tablename = "vtiger_account";	$fieldname = "accountname";	$idname="accountid";	
 		}
 		if($parentid != '')
                 {
