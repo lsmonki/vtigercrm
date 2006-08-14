@@ -213,13 +213,13 @@
 								<table border=0 cellspacing=0 cellpadding=3 width=100%>
 									<tr>
 										<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Invite</a></td>
+										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">Reminder</a></td>
+										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">Repeat</a></td>
+										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">Related To</a></td>
+										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">{$MOD.LBL_RELATEDTO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 									</tr>
 								</table>
@@ -234,14 +234,14 @@
 												<table border=0 cellspacing=0 cellpadding=2 width=100%>
 													<tr><td colspan=3>
 														<ul style="padding-left:20px">
-														<li>To invite, select the users from the "Available Users" list and click the "Add" button. 
-														<li>To remove, select the users in the "Selected Users" list and the click "Remove" button.
+														<li>{$MOD.LBL_INVITE_INST1}
+														<li>{$MOD.LBL_INVITE_INST2}
 														</ul>
 													</td></tr>
 													<tr>
-														<td><b>Available Users</b></td>
+														<td><b>{$MOD.LBL_AVL_USERS}</b></td>
 														<td>&nbsp;</td>
-														<td><b>Selected Users</b></td>
+														<td><b>{$MOD.LBL_SEL_USERS}</b></td>
 													</tr>
 													<tr>
 														<td width=40% align=center valign=top>
@@ -254,8 +254,8 @@
 														</select>
 														</td>
 														<td width=20% align=center valign=top>
-														<input type=button value="Add >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
-														<input type=button value="<< Remove " class="crm button small cancel" style="width:100%" onClick="delColumn()">
+														<input type=button value="{$MOD.LBL_ADD_BUTTON} >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
+														<input type=button value="<< {$MOD.LBL_RMV_BUTTON} " class="crm button small cancel" style="width:100%" onClick="delColumn()">
 														</td>
 														<td width=40% align=center valign=top>
 														<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -265,7 +265,7 @@
                                                                                                                 {/if}
                                                                                                                 {/foreach}
 														</select>
-														<div align=left> Selected users will receive an email about the Event.
+														<div align=left> {$MOD.LBL_SELUSR_INFO}
 														</div>
 														</td>
 													</tr>
@@ -295,7 +295,7 @@
 									<DIV id="reminderOptions" {$reminstyle}>
 										<table border=0 cellspacing=0 cellpadding=2  width=100%>
 											<tr>
-												<td nowrap align=right width=20% valign=top><b>Remind on : </b></td>
+												<td nowrap align=right width=20% valign=top><b>{$MOD.LBL_RMD_ON} : </b></td>
 												<td width=80%>
 													<table border=0>
 													<tr>
@@ -325,7 +325,7 @@
 											</tr>
 											<tr>
 												<td nowrap align=right>
-													Send Reminder to :
+													{$MOD.LBL_SDRMD} :
 												</td>
 												<td >
 													<input type=text name="toemail" class=textbox style="width:90%" value="{$USEREMAILID}">
@@ -340,7 +340,7 @@
 									<table border=0 cellspacing=0 cellpadding=2  width=100%>
 										<tr>
 											<td nowrap align=right width=20% valign=top>
-												<strong>Repeat :</strong>
+												<strong>{$MOD.LBL_REPEAT} :</strong>
 											</td>
 											<td nowrap width=80% valign=top>
 												<table border=0 cellspacing=0 cellpadding=0>
@@ -349,13 +349,13 @@
 													<td width=20>
 													{if $ACTIVITYDATA.recurringcheck eq 'Yes'}
 														{assign var=rptstyle value='style="display:block"'}
-														{if $ACTIVITYDATA.recurringtype eq 'Daily'}
+														{if $ACTIVITYDATA.eventrecurringtype eq 'Daily'}
 															{assign var=rptmonthstyle value='style="display:none"'}
-														{elseif $ACTIVITYDATA.recurringtype eq 'Weekly'}
+														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Weekly'}
 															{assign var=rptmonthstyle value='style="display:none"'}
-														{elseif $ACTIVITYDATA.recurringtype eq 'Monthly'}
+														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Monthly'}
 															{assign var=rptmonthstyle value='style="display:block"'}
-														{elseif $ACTIVITYDATA.recurringtype eq 'Yearly'}
+														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Yearly'}
 															{assign var=rptmonthstyle value='style="display:none"'}
 														{/if}
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')" checked>
@@ -375,10 +375,10 @@
 													<td>Repeat once in every</td>
 													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="{$ACTIVITYDATA.repeat_frequency}" ></td>
 													<td><select name="recurringtype">
-													<option value="Daily" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
-													<option value="Weekly" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
-												<option value="Monthly" onClick="gshow('repeatMonthUI');" {if $ACTIVITYDATA.recurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
-													<option value="Yearly" onClick="ghide('repeatMonthUI');"; {if $ACTIVITYDATA.recurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
+													<option value="Daily" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
+													<option value="Weekly" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
+												<option value="Monthly" onClick="gshow('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
+													<option value="Yearly" onClick="ghide('repeatMonthUI');"; {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
 													</td>
 												</tr>
@@ -465,7 +465,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td><b>Contacts :</b></td>
+								<td><b>{$APP.Contacts} :</b></td>
 								<td colspan="2">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
 									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
