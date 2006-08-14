@@ -1165,7 +1165,7 @@ $rssurl = array("http://forums.vtiger.com/rss.php?name=forums&file=rss","http://
 for($i=0;$i<2;$i++)
 {
 	$rssid = $adb->getUniqueId('vtiger_rss');
-	$rss_qry = "insert into vtiger_rss values (".$rssid.", '".$rssurl[$i]."','".$rsstitle[$i]."',0,0)";
+	$rss_qry = "insert into vtiger_rss values (".$rssid.", '".$rssurl[$i]."','".$rssname[$i]."',0,0)";
 	$result_qry = $adb->query($rss_qry);
 }
 ?>
