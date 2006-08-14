@@ -181,6 +181,8 @@ global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
 $t=Date("Ymd");
+$buttoncheck['Calendar'] = isPermitted('Calendar','index');
+$smarty->assign("CHECK",$buttoncheck);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("MOD",$mod_strings);
