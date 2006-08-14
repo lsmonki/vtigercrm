@@ -164,6 +164,7 @@ ul {ldelim}color:black;{rdelim}
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </tbody>
+</table>
 	<div id="Drag_content">&nbsp;</div>
 
 <script language="javascript" type="text/javascript">
