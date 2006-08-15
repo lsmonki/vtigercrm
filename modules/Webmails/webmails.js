@@ -267,8 +267,8 @@ function check_for_new_mail(mbox) {
                                         new Effect.Appear("row_"+mailid);
                                 }
                             }catch(e) {}
-			    //check_in_all_boxes(mailbox);
-        		    $("status").style.display="none";
+			    check_in_all_boxes(mailbox);
+        		    //$("status").style.display="none";
                         }
                 }
         );
