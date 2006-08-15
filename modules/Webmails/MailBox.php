@@ -50,21 +50,21 @@ class MailBox {
 
 		$this->boxinfo = $this->db->fetch_array($tmp);
 
-		$this->login_username= $this->boxinfo["mail_username"]; 
-		$this->secretkey=$this->boxinfo["mail_password"]; 
-		$this->imapServerAddress=$this->boxinfo["mail_servername"]; 
+		$this->login_username=trim($this->boxinfo["mail_username"]); 
+		$this->secretkey=trim($this->boxinfo["mail_password"]); 
+		$this->imapServerAddress=gethostbyname(trim($this->boxinfo["mail_servername"])); 
 		$this->mail_protocol=$this->boxinfo["mail_protocol"]; 
 		$this->ssltype=$this->boxinfo["ssltype"]; 
 		$this->sslmeth=$this->boxinfo["sslmeth"]; 
-		$this->box_refresh=$this->boxinfo["box_refresh"];
-		$this->mails_per_page=$this->boxinf["mails_per_page"];
+		$this->box_refresh=trim($this->boxinfo["box_refresh"]);
+		$this->mails_per_page=trim($this->boxinf["mails_per_page"]);
 		if($this->mails_per_page < 1)
         		$this->mails_per_page=20;
 
 		$this->mail_protocol=$this->boxinfo["mail_protocol"];
 		$this->account_name=$this->boxinfo["account_name"];
 		$this->display_name=$this->boxinfo["display_name"];
-		$this->imapServerAddress=$this->boxinfo["mail_servername"];
+		//$this->imapServerAddress=$this->boxinfo["mail_servername"];
 
 		$this->db->println("Setting Mailbox Name");
 		if($this->mailbox != "") 
@@ -103,49 +103,43 @@ class MailBox {
 		if($this->ssltype == "") {$this->ssltype = "notls";} 
 		if($this->sslmeth == "") {$this->sslmeth = "novalidate-cert";} 
 
-		$this->db->println("Building connection string");
-		if($this->readonly == "true") {
-	    		if($mods["imap"]["SSL Support"] == "enabled")
-				$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol."/".$this->ssltype."/".$this->sslmeth."/readonly}".$this->mailbox;
-	    		else
-				$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol."/readonly}".$this->mailbox;
-		} else {
-	    		if($mods["imap"]["SSL Support"] == "enabled")
-				$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol."/".$this->ssltype."/".$this->sslmeth."}".$this->mailbox;
-	    		else
-				$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol."}".$this->mailbox;
+		if($this->mail_protocol == "pop3")
+			$port = "110";
+		else {
+	    		if($mods["imap"]["SSL Support"] == "enabled" && $this->ssltype == "ssl")
+				$port = "993";
+			else
+				$port = "143";
 		}
-		$this->db->println("Done Building Connection String.. Connecting to box");
-		//$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey); 
-		$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey); 
-		$this->db->println("Done connecting to box");
 
-		// next we'll try to make a port specific connection to see if that helps.
-		// this may need to be updated to remove SSL/TLS since the c-client libs
-		// are not linked correctly to SSL in most windows installs.
-		if(!$this->mbox) {
-			$this->db->println("No regular Mailbox, building from port numbers");
-	 		if($this->mail_protocol == 'pop3') {
-				if($this->readonly == "true")
-	 	        		$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":110/readonly}".$this->mailbox;
-				else
-	 	        		$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":110/}".$this->mailbox;
-	 		} else { 
-				if($this->readonly == "true") { 
-	    		    	if($mods["imap"]["SSL Support"] == "enabled")
-	 	        		$connectString = "{".$this->imapServerAddress.":143/".$this->mail_protocol."/".$this->ssltype."/".$this->sslmeth."/readonly}".$this->mailbox; 
-			    	else
-	 	        		$connectString = "{".$this->imapServerAddress.":143/".$this->mail_protocol."/}".$this->mailbox; 
-				} else {
-	    		    		if($mods["imap"]["SSL Support"] == "enabled")
-	 	        			$connectString = "{".$this->imapServerAddress.":143/".$this->mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox;
-			    		else
-	 	        			$connectString = "{".$imapServerAddress.":143/".$mail_protocol."}".$mailbox;
-				}
-	 		} 
-			$this->db->println("Opening MailBox");
-	 		$this->mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
-		} 
+		$this->db->println("Building connection string");
+                if(preg_match("/@/",$this->login_username)) {
+                        $mailparts = split("@",$this->login_username);
+                        $user="".trim($mailparts[0])."";
+                        $domain="".trim($mailparts[1])."";
+
+			// This section added to fix a bug when connecting as user@domain.com
+			if($this->readonly == "true")
+                                $connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}/readonly}".$this->mailbox;
+			else
+                                $connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}}".$this->mailbox;
+                } else {
+			if($this->readonly == "true") {
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/readonly}".$this->mailbox;
+	    			else
+					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/readonly}".$this->mailbox;
+			} else {
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."}".$this->mailbox;
+	    			else
+					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert}".$this->mailbox;
+			}
+		}
+
+		$this->db->println("Done Building Connection String.. Connecting to box");
+		$this->mbox = imap_open($connectString, $this->login_username, $this->secretkey); 
+		$this->db->println("Done connecting to box");
 	}
 } // END CLASS
 
