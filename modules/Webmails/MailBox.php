@@ -119,10 +119,17 @@ class MailBox {
                         $domain="".trim($mailparts[1])."";
 
 			// This section added to fix a bug when connecting as user@domain.com
-			if($this->readonly == "true")
-                                $connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}/readonly}".$this->mailbox;
-			else
-                                $connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}}".$this->mailbox;
+			if($this->readonly == "true") {
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}/readonly}".$this->mailbox;
+				else
+                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/user={$user}@{$domain}/readonly}".$this->mailbox;
+			} else {
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}}".$this->mailbox;
+				else
+                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/user={$user}@{$domain}}".$this->mailbox;
+			}
                 } else {
 			if($this->readonly == "true") {
 	    			if($mods["imap"]["SSL Support"] == "enabled")
@@ -136,7 +143,6 @@ class MailBox {
 					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert}".$this->mailbox;
 			}
 		}
-
 		$this->db->println("Done Building Connection String.. Connecting to box");
 		$this->mbox = imap_open($connectString, $this->login_username, $this->secretkey); 
 		$this->db->println("Done connecting to box");
