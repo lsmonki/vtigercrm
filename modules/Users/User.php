@@ -539,10 +539,11 @@ class User {
 	
 	function retrieve_user_id($user_name)
 	{
+		global $adb;
 		$query = "SELECT id from vtiger_users where user_name='$user_name' AND deleted=0";
-		$result  =& $this->db->query($query, false,"Error retrieving user ID: ");
-		$row = $this->db->fetchByAssoc($result);
-		return $row['id'];
+		$result  =$adb->query($query);
+		$userid = $adb->query_result($result,0,'id');
+		return $userid;
 	}
 
 	/** 
