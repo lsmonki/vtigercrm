@@ -160,6 +160,9 @@ $mod_strings = Array(
 'LBL_MAPPING'=>'Mapping',
 'LBL_HEADERS'=>'Headers :',
 'LBL_ERROR_MULTIPLE'=>'Same fields may be mapped twice. Please check the mapped fields.',
+'LBL_STEP_3_3'=>'Step 3 of 3 : ',
+'LBL_MAPPING_RESULTS'=>'Mapping Results ',
+'LBL_LAST_IMPORTED'=>'Last Imported',
 
 );
 
