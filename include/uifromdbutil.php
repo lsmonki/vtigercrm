@@ -146,8 +146,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 
 	$record = isset($_REQUEST['record']) ? $_REQUEST['record'] : '';
 	
-//	$relmodule = $_REQUEST['module'] == $module ? '' : $module;
-	$relmodule = '';
+	$relmodule = $_REQUEST['module'] == $module ? '' : $module;
 $start = $relmodule.'start';
 	$end_val = $relmodule.'end_val';
 	$first = $relmodule.'first';
