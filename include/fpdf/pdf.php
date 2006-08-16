@@ -262,9 +262,11 @@ function addDescBlock( $data, $title, $position )
 
 	$this->RoundedRect($r1,$y1, ($length + 40), ($lengthdata/140*30), 2.5, 'D');
 	$this->Line( $r1, $mid, $r2, $mid);
+
 	$this->SetXY( $position[0]+2 , $y1 + 1 );
 	$this->SetFont( "Helvetica", "B", 10);
 	$this->Cell(10,4, $title);
+
 	$this->SetXY( $position[0]+2 , $y1 + 6 );
 	$this->SetFont( "Helvetica", "", 10);
 	$this->MultiCell(($length+36),4,$data);
@@ -279,7 +281,7 @@ function drawLine($positions)
 }
 
 // add columns to table
-function addCols( $tab ,$positions ,$bottom)
+function addCols( $tab ,$positions ,$bottom, $taxtype = 'group')
 {
 	global $columns;
 
@@ -298,13 +300,21 @@ function addCols( $tab ,$positions ,$bottom)
 		$this->SetXY( $colX, $y1+3 );
 		$this->Cell( $pos, 1, $lib, 0, 0, "C");
 		$colX += $pos;
-	switch($lib) {
-	  case 'Total':
-	  break;
-	  default:
-			$this->Line( $colX, $y1, $colX, $y1+$y2);
-	  break;
-	}
+		switch($lib) {
+	  		case 'Total':
+			break;
+	  		case 'Qty':
+	  		case 'Price':
+	  		case 'Tax':
+				if($taxtype == "individual")
+					$this->Line( $colX, $y1, $colX, (($y1+$y2)-37));
+				else
+					$this->Line( $colX, $y1, $colX, (($y1+$y2)-43));
+			break;
+	  		default:
+				$this->Line( $colX, $y1, $colX, ($y1+$y2));
+	  		break;
+		}
 	}
 }
 
@@ -319,7 +329,7 @@ function addLineFormat( $tab )
 	}
 }
 
-function addProductLine( $line, $tab )
+function addProductLine( $line, $tab, $totals='' )
 {
 	global $columns, $format;
 
@@ -329,7 +339,7 @@ function addProductLine( $line, $tab )
 	reset( $columns );
 	while ( list( $lib, $pos ) = each ($columns) )
 	{
-		$longCell  = $pos -2;
+		$longCell = $pos -2;
 		$text    = $tab[ $lib ];
 		$length    = $this->GetStringWidth( $text );
 		$formText  = $format[ $lib ];
@@ -398,6 +408,4 @@ function StripLastZero($string)
 	$ret=substr($string,0,($count-1));
 	return $ret;
 }
-
-
 ?>
