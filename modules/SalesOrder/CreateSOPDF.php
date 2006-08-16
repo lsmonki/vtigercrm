@@ -30,13 +30,6 @@ $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
 $account_name = getAccountName($focus->column_fields[account_id]);
 
-if($focus->column_fields["hdnTaxType"] == "individual") {
-        $product_taxes = 'true';
-} else {
-        $product_taxes = 'false';
-}
-
-
 // **************** BEGIN POPULATE DATA ********************
 // populate data
 if($focus->column_fields["quote_id"] != '')
@@ -85,10 +78,41 @@ if($num_rows == 1)
 }
 
 //getting the Total Array
-$price_subtotal = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnSubTotal"]),2,'.',',');
-$price_tax = $currency_symbol.number_format(StripLastZero($focus->column_fields["txtTax"]),2,'.',',');
-$price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_fields["txtAdjustment"]),2,'.',',');
-$price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
+$price_subtotal = $currency_symbol.number_format($focus->column_fields["hdnSubTotal"],2,'.',',');
+$price_salestax = $focus->column_fields["txtTax"]."%";
+if($price_salestax != "")
+        $price_salestax = $currency_symbol."0.00";
+
+$discount_amount = $focus->column_fields["hdnDiscountAmount"];
+$discount_percent = $focus->column_fields["hdnDiscountPercent"];
+
+$price_shipping = $currency_symbol.number_format($focus->column_fields["hdnS_H_Amount"],2,'.',',');
+if($price_shipping > 0 || price_shipping == "")
+        $price_shipping = $currency_symbol."0.00";
+
+$q = "SELECT * FROM vtiger_inventoryshippingrel WHERE id='".$focus->column_fields["record_id"]."'";
+$shrs = $adb->query($q);
+$shtax1 = $adb->query_result($shrs,'0','shtax1');
+$shtax2 = $adb->query_result($shrs,'0','shtax2');
+$shtax3 = $adb->query_result($shrs,'0','shtax3');
+if($shtax1 != "" && $shtax1 != "0.00")
+        $price_shipping_tax = number_format($shtax1,2,'.',',')."%";
+if($shtax2 != "" && $shtax2 != "0.00")
+        $price_shipping_tax = number_format($shtax2,2,'.',',')."%";
+if($shtax3 != "" && $shtax3 != "0.00")
+        $price_shipping_tax = number_format($shtax3,2,'.',',')."%";
+
+
+if($discount_amount != "")
+        $price_discount = $currency_symbol.number_format($discount_amount,2,'.',',');
+else if($discount_percent != "")
+        $price_discount = $discount_percent."%";
+else
+        $price_discount = $currency_symbol."0.00";
+
+
+$price_adjustment = $currency_symbol.number_format($focus->column_fields["txtAdjustment"],2,'.',',');
+$price_total = $currency_symbol.number_format($focus->column_fields["hdnGrandTotal"],2,'.',',');
 
 //getting the Product Data
 $query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$id;
@@ -107,40 +131,36 @@ for($i=0;$i<$num_products;$i++) {
 	$list_pricet[$i]= $adb->query_result($result,$i,'listprice');
 	$prod_total[$i]= $qty[$i]*$list_pricet[$i];
 
-	$total_taxes = '0.00';
-        if($product_taxes == "true") {
-                $q = "SELECT * FROM vtiger_inventoryproductrel WHERE id='".$focus->column_fields["record_id"]."' AND productid='".$product_id[$i]."' AND tax2 IS NOT NULL";
+        $total_taxes = '0.00';
+        if($focus->column_fields["hdnTaxType"] == "individual") {
+                $q = "SELECT * FROM vtiger_inventoryproductrel WHERE id='".$focus->column_fields["record_id"]."' AND productid='".$product_id[$i]."'";
                 $trs = $adb->query($q);
-                $tax = $adb->query_result($trs,'0','tax2');
+                $tax1 = $adb->query_result($trs,'0','tax1');
+                $tax2 = $adb->query_result($trs,'0','tax2');
+                $tax3 = $adb->query_result($trs,'0','tax3');
                 $taxable_total = ($adb->query_result($trs,'0','listprice') * $adb->query_result($trs,'0','quantity'));
-                if($tax != "") {
-                        $total_taxes = ($taxable_total/$tax);
+
+                if($tax1 != "" && $tax1 > 0) {
+                        $total_taxes = (($taxable_total*$tax1)/100);
                         $prod_total[$i] = ($prod_total[$i]+$total_taxes);
                 }
+                if($tax2 != "" && $tax2 > 0) {
+                        $total_taxes = (($taxable_total*$tax2)/100);
+                        $prod_total[$i] = ($prod_total[$i]+$total_taxes);
+                }
+                if($tax3 != "" && $tax3 > 0) {
+                        $total_taxes = (($taxable_total*$tax3)/100);
+                        $prod_total[$i] = ($prod_total[$i]+$total_taxes);
+                }
+                $product_line[$i]["Tax"] = $total_taxes."%";
         }
+        $product_line[$i]["Product Name"] = $product_name[$i];
+        $product_line[$i]["Description"] = $prod_description[$i];
+        $product_line[$i]["Qty"] = $qty[$i];
+        $product_line[$i]["Price"] = $list_price[$i];
+        $product_line[$i]["Total"] = $currency_symbol.number_format($prod_total[$i],"2",".",",");
 
-        $product_line[] = array( "Product Name"    => $product_name[$i],
-                "Description"  => $prod_description[$i],
-                "Qty"     => $qty[$i],
-                "List Price"      => $list_price[$i],
-                "Unit Price" => $unit_price[$i],
-                "Tax" => $currency_symbol.$total_taxes,
-                "Total" => $currency_symbol.$prod_total[$i]
-        );
 }
-
-	$total[]=array("Unit Price" => $app_strings['LBL_SUB_TOTAL'],
-		"Total" => $price_subtotal);
-
-	$total[]=array("Unit Price" => $app_strings['LBL_ADJUSTMENT'],
-		"Total" => $price_adjustment);
-
-	$total[]=array("Unit Price" => $app_strings['LBL_TAX'],
-		"Total" => $price_tax);
-
-	$total[]=array("Unit Price" => $app_strings['LBL_GRAND_TOTAL'],
-		"Total" => $price_total);
-
 
 // ************************ END POPULATE DATA ***************************8
 
@@ -183,4 +203,5 @@ for($l=0;$l<$num_pages;$l++)
 
 $pdf->Output('SalesOrder.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
 
+exit();
 ?>

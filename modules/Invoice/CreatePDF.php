@@ -94,7 +94,7 @@ if($price_shipping > 0 || price_shipping == "")
 $q = "SELECT * FROM vtiger_inventoryshippingrel WHERE id='".$focus->column_fields["record_id"]."'";
 $shrs = $adb->query($q);
 $shtax1 = $adb->query_result($shrs,'0','shtax1'); 
-$shtax2 = $adb->query_result($shrs,'0','shtax3'); 
+$shtax2 = $adb->query_result($shrs,'0','shtax2'); 
 $shtax3 = $adb->query_result($shrs,'0','shtax3'); 
 if($shtax1 != "")
 	$price_shipping_tax = number_format($shtax1,2,'.',',')."%";
@@ -107,7 +107,7 @@ if($shtax3 != "")
 if($discount_amount != "")
 	$price_discount = $currency_symbol.number_format($discount_amount,2,'.',',');
 else if($discount_percent != "")
-	$price_discount = $discount_amount."%";
+	$price_discount = $discount_percent."%";
 else
 	$price_discount = $currency_symbol."0.00";
 
