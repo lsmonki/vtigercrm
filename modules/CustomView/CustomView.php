@@ -1114,11 +1114,7 @@ class CustomView extends CRMEntity{
 	{
 		if($viewid != "" && $listquery != "")
 		{
-			$listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
-			//$listviewquery = substr($listviewquery,strpos($listviewquery,'from'),strpos($listviewquery,'where'));
-
-			//$wherequery = substr($listquery, strpos($listquery,'where'),strlen($listquery));
-
+			$listviewquery = substr($listquery, strpos(strtolower($listquery),'from'),strlen($listquery));
 
 			//echo $listviewquery." ".$wherequery;
 			if($module == "Activities" || $module == "Emails")
@@ -1155,7 +1151,7 @@ class CustomView extends CRMEntity{
 	{
 		if($viewid != "" && $listquery != "")
                 {
-                        $listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
+                        $listviewquery = substr($listquery, strpos(strtolower($listquery),'from'),strlen($listquery));
 
                         $query = "select count(*) as count ".$listviewquery;
                         

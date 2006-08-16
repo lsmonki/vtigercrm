@@ -3971,98 +3971,312 @@ function getListQuery($module,$where='',$distincton='')
 
 	if($module == "HelpDesk")
 	{
-		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid LEFT OUTER JOIN ticketgrouprelation ON ticketgrouprelation.ticketid = troubletickets.ticketid where crmentity.deleted=0";
-		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				troubletickets.title, troubletickets.status,
+				troubletickets.priority, troubletickets.parent_id,
+				contactdetails.contactid, contactdetails.firstname,
+				contactdetails.lastname,
+				account.accountid, account.accountname,
+				ticketcf.*
+			FROM troubletickets
+			INNER JOIN ticketcf
+				ON ticketcf.ticketid = troubletickets.ticketid
+			INNER JOIN crmentity
+				ON crmentity.crmid = troubletickets.ticketid
+			LEFT JOIN contactdetails
+				ON troubletickets.parent_id = contactdetails.contactid
+			LEFT JOIN account
+				ON account.accountid = troubletickets.parent_id
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+				AND troubletickets.ticketid = ticketcf.ticketid
+			LEFT OUTER JOIN ticketgrouprelation
+				ON ticketgrouprelation.ticketid = troubletickets.ticketid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "Accounts")
 	{
-		//$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account, accountbillads, accountshipads, accountscf  inner join crmentity on crmentity.crmid=account.accountid and account.accountid=accountbillads.accountaddressid and account.accountid = accountscf.accountid and account.accountid=accountshipads.accountaddressid where crmentity.deleted=0";
-		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				account.accountname, account.website,
+				account.phone,
+				accountbillads.city,
+				accountscf.*
+			FROM account
+			INNER JOIN crmentity
+				ON crmentity.crmid = account.accountid
+			INNER JOIN accountbillads
+				ON account.accountid = accountbillads.accountaddressid
+			INNER JOIN accountshipads
+				ON account.accountid = accountshipads.accountaddressid
+			INNER JOIN accountscf
+				ON account.accountid = accountscf.accountid
+			WHERE crmentity.deleted = 0";
 	}
 	if ($module == "Potentials")
 	{
-		 //$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
-		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.sales_stage,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
-
+		 $query = "SELECT crmentity.crmid, crmentity.smownerid,
+		 		account.accountname,
+				potential.accountid, potential.potentialname,
+				potential.sales_stage, potential.amount,
+				potential.currency, potential.closingdate,
+				potential.typeofrevenue,
+				potentialscf.*
+			FROM potential
+			INNER JOIN crmentity
+				ON crmentity.crmid = potential.potentialid
+			INNER JOIN account
+				ON potential.accountid = account.accountid
+			INNER JOIN potentialscf
+				ON potentialscf.potentialid = potential.potentialid
+			WHERE crmentity.deleted = 0 ".$where;
 	}
 	if($module == "Leads")
 	{
-		//$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails, leadaddress, leadsubdetails, leadscf  inner join crmentity on crmentity.crmid=leaddetails.leadid and leaddetails.leadid=leadaddressid and leaddetails.leadid = leadscf.leadid and leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid where crmentity.deleted=0 and leaddetails.converted=0";
-		$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid LEFT OUTER JOIN leadgrouprelation ON leadgrouprelation.leadid = leaddetails.leadid where crmentity.deleted=0 and leaddetails.converted=0";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				leaddetails.firstname, leaddetails.lastname,
+				leaddetails.company, leaddetails.email,
+				leadsubdetails.website,
+				leadaddress.phone,
+				leadscf.*
+			FROM leaddetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = leaddetails.leadid
+			INNER JOIN leadsubdetails
+				ON leadsubdetails.leadsubscriptionid = leaddetails.leadid
+			INNER JOIN leadaddress
+				ON leadaddress.leadaddressid = leadsubdetails.leadsubscriptionid
+			INNER JOIN leadscf
+				ON leaddetails.leadid = leadscf.leadid
+			LEFT OUTER JOIN leadgrouprelation
+				ON leadgrouprelation.leadid = leaddetails.leadid
+			WHERE crmentity.deleted = 0
+			AND leaddetails.converted = 0";
 	}
 	if($module == "Products")
 	{
-		$query = "select crmentity.crmid, products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid,
+				products.*,
+				productcf.*
+			FROM products
+			INNER JOIN crmentity
+				ON crmentity.crmid = products.productid
+			LEFT JOIN productcf
+				ON products.productid = productcf.productid
+			LEFT JOIN seproductsrel
+				ON seproductsrel.productid = products.productid
+			WHERE crmentity.deleted = 0";
 	}
         if($module == "Notes")
         {
-		$query="select $distincton crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
-        }
-        if($module == "Calls")
-        {
-		$query = "select crmentity.crmid, crmentity.smownerid, seactivityrel.activityid, calls.* from calls inner join crmentity on crmentity.crmid = calls.callid left join seactivityrel on seactivityrel.activityid = calls.callid where crmentity.deleted=0";
+		$query="SELECT $distincton crmentity.crmid,
+				crmentity.modifiedtime,
+				senotesrel.crmid as relatedto,
+				contactdetails.firstname, contactdetails.lastname,
+				notes.*
+			FROM notes
+			INNER JOIN crmentity
+				ON crmentity.crmid = notes.notesid
+			LEFT JOIN senotesrel
+				ON senotesrel.notesid = notes.notesid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = notes.contact_id
+			WHERE crmentity.deleted = 0";
         }
 	if($module == "Contacts")
         {
                 $query = "SELECT crmentity.crmid, crmentity.smownerid,
-				contactdetails.*, contactaddress.*,
-				contactsubdetails.*, contactscf.*,
+				contactdetails.*,
+				contactaddress.*,
+				contactsubdetails.*,
+				contactscf.*,
 				account.accountname
-			from contactdetails
-				INNER JOIN contactaddress
-					ON contactdetails.contactid=contactaddress.contactaddressid
-				INNER JOIN contactsubdetails
-					ON contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid
-				INNER JOIN contactscf
-					ON contactdetails.contactid = contactscf.contactid
-				INNER JOIN crmentity
-					ON crmentity.crmid=contactdetails.contactid
-				LEFT JOIN account
-					ON account.accountid = contactdetails.accountid
-			WHERE crmentity.deleted=0";
-		//$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
-        }
-	if($module == "Meetings")
-        {
-		$query = "select crmentity.crmid,crmentity.smownerid, meetings.*, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from meetings inner join crmentity on crmentity.crmid=meetings.meetingid inner join activity on activity.activityid= crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
+			FROM contactdetails
+			INNER JOIN contactaddress
+				ON contactdetails.contactid = contactaddress.contactaddressid
+			INNER JOIN contactsubdetails
+				ON contactaddress.contactaddressid = contactsubdetails.contactsubscriptionid
+			INNER JOIN contactscf
+				ON contactdetails.contactid = contactscf.contactid
+			INNER JOIN crmentity
+				ON crmentity.crmid = contactdetails.contactid
+			LEFT JOIN account
+				ON account.accountid = contactdetails.accountid
+			WHERE crmentity.deleted = 0";
         }
 	if($module == "Activities")
         {
-		$query = " select $distincton crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid  LEFT OUTER JOIN activitygrouprelation ON activitygrouprelation.activityid = activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where  ;
-		//included by Jaguar
+		$query = " SELECT $distincton crmentity.crmid, crmentity.smownerid,
+				crmentity.setype,
+				activity.*,
+				contactdetails.lastname,
+				contactdetails.firstname, contactdetails.contactid,
+				account.accountid, account.accountname,
+				recurringevents.recurringtype
+			FROM activity
+			INNER JOIN crmentity
+				ON crmentity.crmid = activity.activityid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = cntactivityrel.contactid
+			LEFT JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			LEFT OUTER JOIN account
+				ON account.accountid = contactdetails.accountid
+			LEFT OUTER JOIN recurringevents
+				ON recurringevents.activityid = activity.activityid
+			LEFT OUTER JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = activity.activityid
+			WHERE crmentity.deleted = 0
+			AND (activity.activitytype = 'Meeting' OR activity.activitytype = 'Call' or activity.activitytype = 'Task') ".$where  ;
         }
 	if($module == "Emails")
         {
-                //$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
-		$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid LEFT OUTER JOIN activitygrouprelation ON activitygrouprelation.activityid = activity.activityid WHERE crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				emails.emailid, emails.filename,
+				activity.subject, activity.activityid,
+				activity.date_start,
+				contactdetails.lastname, contactdetails.firstname,
+				contactdetails.contactid
+			FROM emails
+			INNER JOIN crmentity
+				ON crmentity.crmid = emails.emailid
+			INNER JOIN activity
+				ON activity.activityid = crmentity.crmid
+			LEFT JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = seactivityrel.crmid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid
+				AND cntactivityrel.contactid = cntactivityrel.contactid
+			LEFT OUTER JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = activity.activityid
+			WHERE crmentity.deleted = 0";
         }
 	if($module == "Faq")
 	{
-		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, crmentity.createdtime,
+				crmentity.modifiedtime,
+				faq.*
+			FROM faq
+			INNER JOIN crmentity
+				ON crmentity.crmid = faq.id
+			LEFT JOIN products
+				ON faq.product_id = products.productid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "Vendor")
 	{
-		$query = "select crmentity.crmid, vendor.* from vendor inner join crmentity on crmentity.crmid=vendor.vendorid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, vendor.*, vendorcf.*
+			FROM vendor
+			INNER JOIN crmentity
+				ON crmentity.crmid = vendor.vendorid
+			INNER JOIN vendorcf
+				ON vendorcf.vendorid = vendor.vendorid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "PriceBook")
 	{
-		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid,
+				pricebook.*,
+				pricebookcf.*
+			FROM pricebook
+			INNER JOIN crmentity
+				ON crmentity.crmid = pricebook.pricebookid
+			INNER JOIN pricebookcf
+				ON pricebookcf.pricebookid = pricebook.pricebookid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "Quotes")
 	{
-		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0".$where;
+		$query = "SELECT crmentity.*,
+				quotes.*,
+				quotescf.*,
+				quotesbillads.*,
+				quotesshipads.*,
+				potential.potentialname,
+				account.accountname
+			FROM quotes
+			INNER JOIN crmentity
+				ON crmentity.crmid = quotes.quoteid
+			INNER JOIN quotescf
+				ON quotescf.quoteid = quotes.quoteid
+			INNER JOIN quotesbillads
+				ON quotes.quoteid = quotesbillads.quotebilladdressid
+			INNER JOIN quotesshipads
+				ON quotes.quoteid = quotesshipads.quoteshipaddressid
+			LEFT OUTER JOIN account
+				ON account.accountid = quotes.accountid
+			LEFT OUTER JOIN potential
+				ON potential.potentialid = quotes.potentialid
+			WHERE crmentity.deleted = 0 ".$where;
 	}
 	if($module == "Orders")
 	{
-		$query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
+		$query = "SELECT crmentity.*,
+				purchaseorder.*,
+				purchaseordercf.*,
+				pobillads.*,
+				poshipads.*,
+				vendor.vendorname
+			FROM purchaseorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = purchaseorder.purchaseorderid
+			INNER JOIN purchaseordercf
+				ON purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid
+			LEFT OUTER JOIN vendor
+				ON purchaseorder.vendorid = vendor.vendorid
+			INNER JOIN pobillads
+				ON purchaseorder.purchaseorderid = pobillads.pobilladdressid
+			INNER JOIN poshipads
+				ON purchaseorder.purchaseorderid = poshipads.poshipaddressid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "SalesOrder")
 	{
-		$query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0".$where;
+		$query = "SELECT crmentity.*,
+				salesorder.*,
+				salesordercf.*,
+				sobillads.*,
+				soshipads.*,
+				quotes.subject as quotename,
+				account.accountname
+			FROM salesorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = salesorder.salesorderid
+			INNER JOIN salesordercf
+				ON salesordercf.salesorderid = salesorder.salesorderid
+			INNER JOIN sobillads
+				ON salesorder.salesorderid = sobillads.sobilladdressid
+			INNER JOIN soshipads
+				ON salesorder.salesorderid = soshipads.soshipaddressid
+			LEFT OUTER JOIN quotes
+				ON quotes.quoteid = salesorder.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = salesorder.accountid
+			WHERE crmentity.deleted = 0 ".$where;
 	}
 	if($module == "Invoice")
 	{
-		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.*,salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0".$where;
+		$query = "SELECT crmentity.*,
+				invoice.*,
+				invoicecf.*,
+				invoicebillads.*,
+				invoiceshipads.*,
+				salesorder.subject as salessubject
+			FROM invoice
+			INNER JOIN crmentity
+				ON crmentity.crmid = invoice.invoiceid
+			INNER JOIN invoicecf
+				ON invoicecf.invoiceid = invoice.invoiceid
+			INNER JOIN invoicebillads
+				ON invoice.invoiceid = invoicebillads.invoicebilladdressid
+			INNER JOIN invoiceshipads
+				ON invoice.invoiceid = invoiceshipads.invoiceshipaddressid
+			LEFT OUTER JOIN salesorder
+				ON salesorder.salesorderid = invoice.salesorderid
+			WHERE crmentity.deleted = 0 ".$where;
 	}
 	//Appending the Security parameters by DON
 	global $others_permission_id;
