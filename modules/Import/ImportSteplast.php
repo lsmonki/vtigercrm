@@ -60,6 +60,7 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("Import Step last");
 
+$parenttab = getParenttab();
 //This Buttons_List1.tpl is is called to display the add, search, import and export buttons ie., second level tabs
 $smarty = new vtigerCRM_Smarty;
 
@@ -85,14 +86,14 @@ if ( isset($_REQUEST['message']))
 	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 	   <tr>
 		<td height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall">
-			 Import <?php echo $_REQUEST['modulename']; ?> 
+			 <?php echo $mod_strings['LBL_MODULE_NAME']; ?> <?php echo $app_strings[$_REQUEST['modulename']]; ?> 
 		</td>
 	   </tr>
 	   <tr><td>&nbsp;</td></tr>
 	   <tr>
 		<td align="left"  style="padding-left:40px;width:75%;" >
-			<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp; 
-			<span class="genHeaderSmall">Mapping Results </span>
+			<span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_3_3']; ?></span>&nbsp; 
+			<span class="genHeaderSmall"><?php echo $mod_strings['LBL_MAPPING_RESULTS']; ?></span>
 		</td>
 	   </tr>	
 	   <tr>
@@ -113,6 +114,7 @@ if ( isset($_REQUEST['message']))
                  <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
                  <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
                  <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
+                 <input type="hidden" name="parenttab" value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
                  <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
              </form>
@@ -123,6 +125,7 @@ if ( isset($_REQUEST['message']))
                  <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
                  <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
                  <input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
+                 <input type="hidden" name="parenttab" value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="crmbutton small cancel" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  ">
              </form></td>
            </tr>
@@ -174,14 +177,14 @@ foreach($import_modules_array as $module_name => $object_name)
 		if($module_name == 'Accounts' && $implict_account==true)
 			$display_header_msg = "Newly created Accounts";
 		else
-			$display_header_msg = "Last Imported  $module_name";
+			$display_header_msg = "".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]."";
 		
 		//Display the Header Message	
 		echo "
 			<table width='100%' border='0' cellpadding='5' cellspacing='0'>
 			   <tr>
 				<td class='dvtCellLabel' align='left'>
-					<b>Last Imported  $module_name </b>
+					<b>".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]." </b>
 				</td>
 			   </tr>
 			</table>

@@ -22,6 +22,7 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
+require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -48,6 +49,7 @@ if (! isset( $_REQUEST['return_action']))
         $_REQUEST['return_action'] = '';
 }
 
+$parenttab = getParenttab();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -63,13 +65,13 @@ $ret_value = $last_import->undo($current_user->id);
 
 <table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
         <tr>
-         <td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall"> Import <?php echo $_REQUEST['module']; ?> </td>
+         <td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall"> <?php echo $mod_strings['LBL_MODULE_NAME']; ?> <?php echo $app_strings[$_REQUEST['module']] ; ?> </td>
         </tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 				<td align="left"  style="padding-left:40px;">
-						<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp;
-						<span class="genHeaderSmall">Mapping Results </span>
+					<span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_3_3']; ?></span>&nbsp;
+					<span class="genHeaderSmall"><?php echo $mod_strings['LBL_MAPPING_RESULTS']; ?></span>
 				</td>
 		</tr>
           <tr>
@@ -103,6 +105,7 @@ $ret_value = $last_import->undo($current_user->id);
 					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['RETURN_MODULE'] ?>">
 					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['RETURN_ID'] ?>">
 					<input type="hidden" name="return_action" value="<?php echo $_REQUEST['RETURN_ACTION'] ?>">	
+					<input type="hidden" name="parenttab" value="<?php echo $parenttab ?>">
 					<input title="<?php echo $mod_strings['LBL_TRY_AGAIN'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_TRY_AGAIN'] ?>  ">
 					</form>
 				</td>
