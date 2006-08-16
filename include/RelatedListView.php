@@ -80,7 +80,7 @@ if(isset($where) && $where != '')
 
 //Appending the group by for Jaguar/Don
 // group by won't work this way in postgres
-if($relatedmodule == 'Activities' && !$adb->isPostgres())
+if($relatedmodule == 'Activities' && !$adb->isPostgres() && !$adb->isOracle())
 {
 	$query .= ' group by crmentity.crmid';
 }
