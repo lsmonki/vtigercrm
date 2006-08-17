@@ -396,11 +396,11 @@ if(! isset($createpotential) || ! $createpotential == "on")
 //Deleting from the vtiger_tracker
 $sql_delete_tracker= "DELETE from vtiger_tracker where item_id='" .$id ."'";
 $adb->query($sql_delete_tracker);
-
+$category = getParentTab();
 //Updating the deleted status
 $sql_update_converted = "UPDATE vtiger_leaddetails SET converted = 1 where leadid='" .$id ."'";
 $adb->query($sql_update_converted); 
 
-header("Location: index.php?action=DetailView&module=Accounts&record=$crmid");
+header("Location: index.php?action=DetailView&module=Accounts&record=$crmid&parenttab=$category");
 
 ?>
