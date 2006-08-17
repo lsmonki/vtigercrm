@@ -389,7 +389,18 @@ $mod_strings = Array(
 'Last'=>'Last', 
 'on'=>'on', 
 'day of the month'=>'day of the month',
-	
+
+//Added for existing Picklist entries
+
+'Planned'=>'Planned',
+'Held'=>'Held',
+'Not Held'=>'Not Held',
+'Completed'=>'Completed',
+'Deferred'=>'Deferred',
+'High'=>'High',
+'Medium'=>'Medium',
+'Low'=>'Low',
+
 );
 
 ?>
