@@ -25,7 +25,7 @@ if(isset($_REQUEST['record']))
 	$id = $_REQUEST['record'];
 	$log->debug(" the id is ".$id);
 }
-
+$category = getParentTab();
 //Retreive lead details from database
 $sql = "SELECT firstname, lastname, company, smownerid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.leadid =".$id;
 $result = $adb->query($sql);
@@ -78,6 +78,7 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 	<input type="hidden" name="module" value="Leads">
 	<input type="hidden" name="record" value="'.$id.'">
 	<input type="hidden" name="action">
+	<input type="hidden" name="parenttab" value="'.$category.'">
 	<input type="hidden" name="current_user_id" value="'.$modified_user_id.'">
 	
 	<div id="orgLay" style="display: block;" class="layerPopup" >
@@ -103,7 +104,7 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 				</tr>
 				<tr>
 					<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
-					<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'"></td>
+					<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
 			</tr>';
 
 if(isPermitted("Potentials",'EditView') == 'yes')
