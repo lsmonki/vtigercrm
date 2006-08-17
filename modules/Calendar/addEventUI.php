@@ -74,6 +74,10 @@ if(empty($date_data))
 }
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
+if($current_user->hour_format == '')
+	$calendar_arr['calendar']->hour_format = 'am/pm';
+else
+	$calendar_arr['calendar']->hour_format = $current_user->hour_format;
 
  function getPriorityCombo()
  {
@@ -393,16 +397,16 @@ else
 								<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
 								<td>
 									<select name="recurringtype">
-										<option value="Daily" onClick="ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
-										<option value="Weekly" onClick="ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
-										<option value="Monthly" onClick="gshow('repeatMonthUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
-										<option value="Yearly" onClick="ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
+										<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
+										<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
+										<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
+										<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
 								</td>
 								</tr>
 								</table>
 
-								<!--div id="repeatWeekUI" style="display:none;">
+								<div id="repeatWeekUI" style="display:none;">
 								<table border=0 cellspacing=0 cellpadding=2>
 									<tr>
 								<td><input name="sun_flag" value="sunday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SUN']; ?></td>
@@ -414,7 +418,7 @@ else
 								<td><input name="sat_flag" value="saturday" type="checkbox"></td><td><?php echo $mod_strings['LBL_SM_SAT']; ?></td>
 									</tr>
 								</table>
-								</div-->
+								</div>
 
 								<div id="repeatMonthUI" style="display:none;">
 								<table border=0 cellspacing=0 cellpadding=2 bgcolor="#FFFFFF">
