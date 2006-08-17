@@ -31,7 +31,7 @@
 						<textarea id="picklist_values" class="detailedViewTextBox" rows="10" align="left">{$ENTRIES}</textarea>
 					</td>
 				</tr>
-					{if $COUNT_NON_EDITABLE_ENTRIES neq 0}
+					{if $NON_EDITABLE_ENTRIES neq ''}
 				<tr>
 					<td colspan="2" align="left" width="40%"><b><u>{$MOD.LBL_NON_EDITABLE_PICKLIST_ENTRIES} :</u></b><br> {$NON_EDITABLE_ENTRIES} </td>
 				</tr>
