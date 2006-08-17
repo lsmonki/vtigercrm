@@ -158,6 +158,23 @@ $mod_strings = Array(
 'LBL_MY_TOP_QUOTE'=>'My Top Open Quotes',
 'Quote ID'=>'Quote Id',
 'Quote'=>'Quote',
+
+//Added for existing Picklist Entries
+
+'Created'=>'Created',
+'Delivered'=>'Delivered',
+'Reviewed'=>'Reviewed',
+'Accepted'=>'Accepted',
+'Rejected'=>'Rejected',
+
+'FedEx'=>'FedEx',
+'UPS'=>'UPS',
+'USPS'=>'USPS',
+'DHL'=>'DHL',
+'BlueDart'=>'BlueDart',
+                       
+
+
 );
 
 ?>
