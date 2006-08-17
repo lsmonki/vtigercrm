@@ -47,7 +47,11 @@
 					<td colspan="2" valign="top">
 					<ul style="list-style-type: none;">
 						{foreach item=elements from=$picklistelements.value}
-							<li>{$elements}</li>
+							{if $TEMP_MOD[$elements] neq ''}
+								<li>{$TEMP_MOD[$elements]}</li>
+							{else}
+								<li>{$elements}</li>
+							{/if}
 						{/foreach}
 					</ul>	
 					</td>
