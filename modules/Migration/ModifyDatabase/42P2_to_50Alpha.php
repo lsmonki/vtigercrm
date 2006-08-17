@@ -226,7 +226,7 @@ $update_array1 = Array(
 		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 13 and fieldlabel = 'Priority'",
 
 		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 14 and fieldlabel = 'Product Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 14 and fieldlabel = 'Product Code'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 14 and fieldlabel = 'Part Number'",
 		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 14 and fieldlabel = 'Product Category'",
 
 		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 16 and fieldlabel = 'Subject'",
@@ -3208,7 +3208,7 @@ Execute("update vtiger_field set quickcreatesequence='2' where fieldname='closin
 
 //Added for Tax and Inventory - Product details handling
 
-Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, sequence_no int(4) default NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
 
 //Execute("alter table vtiger_inventorytaxinfo add column deleted int(1) default 0");
 
@@ -3435,7 +3435,10 @@ foreach($inventory_tables as $tablename => $idname)
 		$productid = $conn->query_result($res,$i,'productid');
 		$quantity = $conn->query_result($res,$i,'quantity');
 		$listprice = $conn->query_result($res,$i,'listprice');
-		$query1 = "insert into vtiger_inventoryproductrel(id,productid,quantity,listprice) values($id, $productid, $quantity, $listprice)";
+		// DG 15 Aug 2006
+		// Support sequence_no
+		$seqno = $conn->query_result($res, $i, 'sequence_no');
+		$query1 = "insert into vtiger_inventoryproductrel(id,productid,sequence_no,quantity,listprice) values($id, $productid,$seqno, $quantity, $listprice)";
 		Execute($query1);
 	}
 }

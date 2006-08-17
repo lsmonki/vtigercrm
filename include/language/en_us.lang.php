@@ -718,7 +718,7 @@ $app_strings = Array(
 
 'Product Name'=>'Product Name',
 
-'Product Code'=>'Product Code',
+'Product Code'=>'Part Number',
 
 'Commission Rate'=>'Commission Rate',
 

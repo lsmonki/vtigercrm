@@ -209,7 +209,7 @@ following values "Call","Meeting" or "Task".',
 'Invoice Date'=>'Invoice Date', 
  
 //Strings added for Product module fields 
-'Product Code'=>'Product Code', 
+'Product Code'=>'Part Number', 
 'Product Active'=>'Product Active', 
 'Product Category'=>'Product Category', 
 'Sales Start Date'=>'Sales Start Date', 

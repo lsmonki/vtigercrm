@@ -85,7 +85,12 @@ $price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_
 $price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
 
 //getting the Product Data
-$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$quote_id;
+// DG 15 Aug 2006
+// Add "ORDER BY sequence_no to preserve add order in printed version
+// Seems not to be strictly necessary as the upstream ORDER BY in EditView appears to produce this behaviour by default
+// Having this here makes sure though. 
+$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$quote_id." ORDER BY sequence_no";
+//$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.product_description, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$quote_id;
 
 global $result;
 $result = $adb->query($query);

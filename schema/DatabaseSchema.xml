@@ -6012,6 +6012,7 @@
 	<table name="vtiger_inventoryproductrel">
 		<field name="id" type="I" size="19" />
 		<field name="productid" type="I" size="19" />
+		<field name="sequence_no" type="I" size="4" />
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
 		<field name="discount_percent" type="N" size="7.3" />

@@ -40,14 +40,14 @@ class Product extends CRMEntity {
         // This is the list of vtiger_fields that are in the lists.
         var $list_fields = Array(
                                 'Product Name'=>Array('products'=>'productname'),
-                                'Product Code'=>Array('products'=>'productcode'),
+                                'Part Number'=>Array('products'=>'productcode'),
                                 'Commission Rate'=>Array('products'=>'commissionrate'),
                                 'Qty/Unit'=>Array('products'=>'qty_per_unit'),
                                 'Unit Price'=>Array('products'=>'unit_price')
                                 );
         var $list_fields_name = Array(
                                         'Product Name'=>'productname',
-                                        'Product Code'=>'productcode',
+                                        'Part Number'=>'productcode',
                                         'Commission Rate'=>'commissionrate',
                                         'Qty/Unit'=>'qty_per_unit',
                                         'Unit Price'=>'unit_price'
@@ -56,12 +56,12 @@ class Product extends CRMEntity {
 
 	var $search_fields = Array(
                                 'Product Name'=>Array('products'=>'productname'),
-                                'Product Code'=>Array('products'=>'productcode'),
+                                'Part Number'=>Array('products'=>'productcode'),
                                 'Unit Price'=>Array('products'=>'unit_price')
                                 );
         var $search_fields_name = Array(
                                         'Product Name'=>'productname',
-                                        'Product Code'=>'productcode',
+                                        'Part Number'=>'productcode',
                                         'Unit Price'=>'unit_price'
                                      );
 	

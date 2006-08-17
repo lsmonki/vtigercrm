@@ -41,8 +41,8 @@ $mod_strings = Array(
 'LBL_LIST_PRICEBOOK_FORM_TITLE'=>'Price Book List',
 'LBL_LIST_CATEGORY'=>'Product Category',
 'LBL_CATEGORY'=>'Product Category:',
-'LBL_PRODUCT_CODE'=>'Product Code',
-'LBL_LIST_PRODUCT_CODE'=>'Product Code:',
+'LBL_PRODUCT_CODE'=>'Part Number',
+'LBL_LIST_PRODUCT_CODE'=>'Part Number:',
 'LBL_PRODUCT_ACTIVE'=>'Product Active',
 'LBL_PRODUCT_COMMISSION_RATE'=>'Commission Rate',
 'LBL_PRODUCT_QTY_PER_UNIT'=>'Qty/Unit',
@@ -94,7 +94,7 @@ $mod_strings = Array(
 
 //Added for 4GA
 'Product Name'=>'Product Name',
-'Product Code'=>'Product Code',
+'Product Code'=>'Part Number',
 'Product Active'=>'Product Active',
 'Commission Rate'=>'Commission Rate (%)',
 'Qty/Unit'=>'Qty/Unit',

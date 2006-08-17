@@ -482,6 +482,7 @@ function saveInventoryProductDetails($focus, $module)
 
 	$tot_no_prod = $_REQUEST['totalProductCount'];
 
+	$prod_seq=1;
 	for($i=1; $i<=$tot_no_prod; $i++)
 	{
 	        $prod_id = $_REQUEST['hdnProductId'.$i];
@@ -495,7 +496,14 @@ function saveInventoryProductDetails($focus, $module)
 		if($_REQUEST["deleted".$i] == 1)
 			continue;
 
-		$query ="insert into vtiger_inventoryproductrel(id, productid, quantity, listprice, comment) values($focus->id, $prod_id , $qty, $listprice, \"$comment\")";
+		// DG 15 Aug 2006
+		// We want to retain the sequence that the products were added to the quote (etc)
+		// so that way the printed quote (etc) retains the products in the order they were added
+		// and salepeople can control the order than their quote (etc) items print out
+		// so we create a new field "sequence_no" and stick the value of $i into it
+
+		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, \"$comment\")";
+		$prod_seq++;
 		$adb->query($query);
 
 		if($module != 'PurchaseOrder')
