@@ -204,6 +204,28 @@ $mod_strings = Array(
 //Added after 5Alpha5
 'Notify Owner'=>'Notify Owner',
 
+//Added for Picklist Values
+'--None--'=>'--None--',
+
+'Mr.'=>'Mr.',
+'Ms.'=>'Ms.',
+'Mrs.'=>'Mrs.',
+'Dr.'=>'Dr.',
+'Prof.'=>'Prof.',
+
+'Cold Call'=>'Cold Call',
+'Existing Customer'=>'Existing Customer',
+'Self Generated'=>'Self Generated',
+'Employee'=>'Employee',
+'Partner'=>'Partner',
+'Public Relations'=>'Public Relations',
+'Direct Mail'=>'Direct Mail',
+'Conference'=>'Conference',
+'Trade Show'=>'Trade Show',
+'Web Site'=>'Web Site',
+'Word of mouth'=>'Word of mouth',
+'Other'=>'Other',
+
 );
 
 ?>
