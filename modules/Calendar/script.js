@@ -125,17 +125,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		}
 		y.display="block";
 	}
-	else
-	{
-		 document.EditView.date_start.value = startdate;
-                 document.EditView.due_date.value = enddate;
-                 document.EditView.starthr.value = starthr;
-                 document.EditView.startmin.value = startmin;
-                 document.EditView.startfmt.value = startfmt;
-                 document.EditView.endhr.value = endhr;
-                 document.EditView.endmin.value = endmin;
-                 document.EditView.endfmt.value = endfmt;
-	}
 }
 
 function Taskshow(argg1,type,startdate,starthr,startmin,startfmt)
@@ -299,7 +288,7 @@ function maincheck_form()
 function check_form()
 {
 	formSelectColumnString('inviteesid');
-        if(document.EditView.subject.value == "")
+        if(trim(document.EditView.subject.value) == "")
         {
                 alert("Missing Event Name");
                 document.EditView.subject.focus()
