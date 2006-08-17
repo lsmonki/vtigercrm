@@ -12,7 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
+global $app_list_strings, $current_language;
 
 $tableName=$_REQUEST["fieldname"];
 $moduleName=$_REQUEST["fld_module"];
@@ -26,6 +26,12 @@ require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
+//Added to get the strings from language files if present
+if($moduleName == 'Events')
+	$temp_module_strings = return_module_language($current_language, 'Calendar');
+else
+	$temp_module_strings = return_module_language($current_language, $moduleName);
+
 //To get the Editable Picklist Values 
 if($uitype != 111)
 {
@@ -35,7 +41,10 @@ if($uitype != 111)
 
 	while($row = $adb->fetch_array($result))
 	{
-		$fldVal .= $row[$tableName];
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
 		$fldVal .= "\n";	
 	}
 }
@@ -47,7 +56,10 @@ else
 
 	while($row = $adb->fetch_array($result))
 	{
-		$fldVal .= $row[$tableName];
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
 		$fldVal .= "\n";	
 	}
 }
@@ -61,14 +73,17 @@ if($uitype == 111)
 
 	while($row = $adb->fetch_array($res))
 	{
-		$nonedit_fldVal .= $row[$tableName];
+		if($temp_module_strings[$row[$tableName]] != '')
+			$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$nonedit_fldVal .= $row[$tableName];
 		$nonedit_fldVal .= "<br>";	
 	}
 }
 $query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
 $fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
+
 $smarty->assign("NON_EDITABLE_ENTRIES", $nonedit_fldVal);
-$smarty->assign("COUNT_NON_EDITABLE_ENTRIES", count($nonedit_fldVal));
 $smarty->assign("ENTRIES",$fldVal);
 $smarty->assign("MODULE",$moduleName);
 $smarty->assign("FIELDNAME",$tableName);
@@ -78,6 +93,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
+$smarty->assign("TEMP_MOD", $temp_module_strings);
 
 $smarty->display("Settings/EditPickList.tpl");
 ?>
