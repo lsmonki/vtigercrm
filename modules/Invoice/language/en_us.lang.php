@@ -174,6 +174,15 @@ $mod_strings = Array(
 'Status'=>'Status',
 'Id'=>'Invoice Id',
 'Invoice'=>'Invoice',
+
+//Added for existing Picklist Entries
+
+'Created'=>'Created',
+'Approved'=>'Approved',
+'Sent'=>'Sent',
+'Credit Invoice'=>'Credit Invoice',
+'Paid'=>'Paid',
+
 );
 
 ?>
