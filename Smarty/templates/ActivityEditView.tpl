@@ -375,15 +375,15 @@
 													<td>Repeat once in every</td>
 													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="{$ACTIVITYDATA.repeat_frequency}" ></td>
 													<td><select name="recurringtype">
-													<option value="Daily" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
-													<option value="Weekly" onClick="ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
-												<option value="Monthly" onClick="gshow('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
-													<option value="Yearly" onClick="ghide('repeatMonthUI');"; {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
+													<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
+													<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
+												<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
+													<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"; {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
 													</td>
 												</tr>
 												</table>
-												<!--div id="repeatWeekUI" style="display:none;">
+												<div id="repeatWeekUI" style="display:none;">
 												<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
 													<td><input name="sun_flag" value="sunday" type="checkbox"></td><td>Sun</td>
@@ -395,7 +395,7 @@
 													<td><input name="sat_flag" value="saturday" type="checkbox"></td><td>Sat</td>
 												</tr>
 												</table>
-												</div-->
+												</div>
 	
 												<div id="repeatMonthUI" {$rptmonthstyle}>
 												<table border=0 cellspacing=0 cellpadding=2>
