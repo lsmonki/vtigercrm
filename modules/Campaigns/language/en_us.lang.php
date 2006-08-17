@@ -55,6 +55,34 @@ $mod_strings = Array(
 'Actual ROI'=>'Actual ROI',
 'Select One'=>'Select One',
 'LBL_LOAD_LIST'=>'Load List',
+
+//Added for existing Picklist Entries
+
+'Conference'=>'Conference',
+'Webinar'=>'Webinar',
+'Trade Show'=>'Trade Show',				    
+'Public Relations'=>'Public Relations',
+'Partners'=>'Partners',
+'Referral Program'=>'Referral Program',
+'Advertisement'=>'Advertisement',
+'Banner Ads'=>'Banner Ads',
+'Direct Mail'=>'Direct Mail',
+'Email'=>'Email',
+'Telemarketing'=>'Telemarketing',
+'Others'=>'Others',
+
+'Planning'=>'Planning',						      	    
+'Active'=>'Active',	
+'Inactive'=>'Inactive',
+'Complete'=>'Complete',
+'Cancelled'=>'Cancelled',							      
+
+'Excellent'=>'Excellent',
+'Good'=>'Good',
+'Average'=>'Average',
+'Poor'=>'Poor',
+			      
+
 );
 
 ?>
