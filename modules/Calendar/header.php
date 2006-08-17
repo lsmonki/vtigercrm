@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/utils/CommonUtils.php');
 $category = getParentTab();
-global $theme,$app_strings;
+global $theme,$app_strings,$mod_strings;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -87,9 +87,9 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 						<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 							<tr>
 								<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-								<td class="dvtSelectedCell" align="center" nowrap="nowrap">Calendar</td>	
+								<td class="dvtSelectedCell" align="center" nowrap="nowrap">'.$app_strings["Calendar"].'</td>	
 								<td class="dvtTabCache" style="width: 10px;">&nbsp;</td>
-								<td class="dvtUnSelectedCell" align="center" nowrap="nowrap"><a href="index.php?action=ListView&module=Calendar&parenttab='.$category.'">All Events & Todos</a></td>
+								<td class="dvtUnSelectedCell" align="center" nowrap="nowrap"><a href="index.php?action=ListView&module=Calendar&parenttab='.$category.'">'.$mod_strings["LBL_ALL_EVENTS_TODOS"].'</a></td>
 								<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 							</tr>
 						</table>

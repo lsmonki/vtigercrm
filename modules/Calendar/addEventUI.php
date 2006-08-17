@@ -422,7 +422,7 @@ else
 										<td>
 											<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
-													<td><input type="radio" checked name="repeatMonth" value="date"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2" name="repeatMonth_date" ></td><td>day of the month</td>
+													<td><input type="radio" checked name="repeatMonth" value="date"></td><td><?php echo $mod_strings['on'];?></td><td><input type="text" class=textbox style="width:20px" value="2" name="repeatMonth_date" ></td><td><?php echo $mod_strings['day of the month'];?></td>
 												</tr>
 											</table>
 										</td>
@@ -433,11 +433,11 @@ else
 												<tr>
 													<td>
 														<input type="radio" name="repeatMonth" value="day"></td>
-													<td>on</td>
+													<td><?php echo $mod_strings['on'];?></td>
 													<td>
 														<select name="repeatMonth_daytype">
-															<option value="first">First</option>
-															<option value="last">Last</option>
+															<option value="first"><?php echo $mod_strings['First'];?></option>
+															<option value="last"><?php echo $mod_strings['Last'];?></option>
 														</select>
 													</td>
 													<td>
