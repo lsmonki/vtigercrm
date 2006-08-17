@@ -125,6 +125,16 @@ $mod_strings = Array(
 'LBL_QUESTION'=>'Question',
 'LBL_CATEGORY'=>'Category',
 'LBL_MY_FAQ'=>'My Recent FAQs',
+
+//Added for existing Picklist Entries
+
+'General'=>'General',
+
+'Draft'=>'Draft',
+'Reviewed'=>'Reviewed',
+'Published'=>'Published',
+'Obsolete'=>'Obsolete',
+			
 );
 
 ?>
