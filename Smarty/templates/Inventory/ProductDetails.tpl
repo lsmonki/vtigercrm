@@ -389,8 +389,8 @@ function displayCoords(event,obj,mode,curr_row)
 	<td class="crmTableRow small" align="right">
 		{$APP.LBL_ADJUSTMENT}
 		<select id="adjustmentType" name="adjustmentType" class=small onchange="calcTotal();">
-			<option value="+">Add</option>
-			<option value="-">Deduct</option>
+			<option value="+">{$APP.LBL_ADD_ITEM}</option>
+			<option value="-">{$APP.LBL_DEDUCT}</option>
 		</select>
 	</td>
 	<td class="crmTableRow small" align="right">
