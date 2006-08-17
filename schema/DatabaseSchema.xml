@@ -322,9 +322,7 @@
 		</field>
 		<field name="rating" type="C" size="50" />
 		<field name="ownership" type="C" size="50" />
-		<field name="siccode" type="I" size="10">
-			<default value="0" />
-		</field>
+		<field name="siccode" type="C" size="50">
 		<field name="tickersymbol" type="C" size="30" />
 		<field name="phone" type="C" size="30" />
 		<field name="otherphone" type="C" size="30" />
