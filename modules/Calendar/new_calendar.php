@@ -20,7 +20,7 @@ $subtab = $_REQUEST['subtab'];
 $viewBox = $_REQUEST['viewOption'];
 if(empty($viewBox))
 {
-	$viewBox = 'hourview';
+	$viewBox = 'listview';
 }
 if(empty($subtab))
 {
