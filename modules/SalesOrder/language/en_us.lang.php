@@ -171,6 +171,18 @@ $mod_strings = Array(
 'Status'=>'Status',
 'SalesOrder'=>'Sales Order',
 
+//Added for existing Picklist Entries
+
+'FedEx'=>'FedEx',
+'UPS'=>'UPS',
+'USPS'=>'USPS',
+'DHL'=>'DHL',
+'BlueDart'=>'BlueDart',
+
+'Created'=>'Created',
+'Approved'=>'Approved',
+'Delivered'=>'Delivered',
+'Cancelled'=>'Cancelled',
 );
 
 ?>
