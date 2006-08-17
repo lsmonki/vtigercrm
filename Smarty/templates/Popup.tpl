@@ -40,7 +40,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 						<tr>
 							<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
 							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
-							<td width="30%" class="dvtCellLabel"><b>In</b>&nbsp;
+							<td width="30%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
 								<select name ="search_field" class="txtBox">
 											 {html_options  options=$SEARCHLISTHEADER }
 											</select>
@@ -59,7 +59,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 			
 							</td>
 							<td width="20%" class="dvtCellLabel">
-								<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
+								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
 							</td>
 						</tr>
 						 <tr>
