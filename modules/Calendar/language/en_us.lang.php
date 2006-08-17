@@ -384,7 +384,11 @@ $mod_strings = Array(
 'Low'=>'Low',
 'LBL_SELECT'=>'Select',
 'LBL_SELECT_CONTACT'=>'Select Contact',
-
+'LBL_ALL_EVENTS_TODOS'=>'All Events & Todos',
+'First'=>'First', 
+'Last'=>'Last', 
+'on'=>'on', 
+'day of the month'=>'day of the month',
 	
 );
 
