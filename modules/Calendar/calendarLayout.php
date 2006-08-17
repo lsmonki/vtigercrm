@@ -236,8 +236,8 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
 		     </td></tr>
 		    </table>
 		</td>";
-	$tabhtml .= "<td width='2%'><a href='#' onClick='fnvshobj(this,\"miniCal\");getMiniCal(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");'><img src='".$header['IMAGE_PATH']."btnL3Calendar.gif' alt='".$mod_strings['LBL_OPENCAL']."...' title='".$mod_strings['LBL_OPENCAL']."...' align='absmiddle' border='0'></a></td>";
-	$tabhtml .= "<td width=20% ><a href='#' onClick='fnvshobj(this,\"calSettings\");getCalSettings(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");'><img src='".$header['IMAGE_PATH']."tbarSettings.gif' alt='".$mod_strings['LBL_SETTINGS']."' title='".$mod_strings['LBL_SETTINGS']."' align='absmiddle' border='0'></a></td>";
+		$tabhtml .= "<td width='2%'><img onClick='fnvshobj(this,\"miniCal\"); getMiniCal(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."btnL3Calendar.gif' alt='".$mod_strings['LBL_OPENCAL']."...' title='".$mod_strings['LBL_OPENCAL']."...' align='absmiddle' border='0'></td>";
+		$tabhtml .= "<td width=20% ><img onClick='fnvshobj(this,\"calSettings\"); getCalSettings(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."tbarSettings.gif' alt='".$mod_strings['LBL_SETTINGS']."' title='".$mod_strings['LBL_SETTINGS']."' align='absmiddle' border='0'></td>";
 	$tabhtml .= "<td class='calHdr calTopRight componentName'>Calendar</td>";	
 	$tabhtml .= "</tr>";
 	echo $tabhtml;
@@ -330,23 +330,23 @@ function getEventViewOption(& $cal,$viewBox)
 		        <select name='viewOption' class='importBox' id='view_Option' onChange='fnRedirect();'>";
 	if($cal['view'] == 'day')
 	{
-		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_HRVIEW']."</option>
-			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";	
+		$view .="<option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>
+			 <option value='hourview' ".$hr_sel.">".$mod_strings['LBL_HRVIEW']."</option>";	
 	}
 	elseif($cal['view'] == 'week')
 	{
-		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_WEEKVIEW']."</option>
-		         <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+		$view .="<option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>
+			 <option value='hourview' ".$hr_sel.">".$mod_strings['LBL_WEEKVIEW']."</option>";
 	}
 	elseif($cal['view'] == 'month')
 	{
-		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_MONTHVIEW']."</option>
-			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+		$view .="<option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>
+			 <option value='hourview' ".$hr_sel.">".$mod_strings['LBL_MONTHVIEW']."</option>";
 	}
 	elseif($cal['view'] == 'year')
 	{
-		$view .="<option value='hourview' ".$hr_sel.">".$mod_strings['LBL_YEARVIEW']."</option>
-			 <option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>";
+		$view .="<option value='listview' ".$list_sel.">".$mod_strings['LBL_LISTVIEW']."</option>
+			 <option value='hourview' ".$hr_sel.">".$mod_strings['LBL_YEARVIEW']."</option>";
 	}
 	else
 		die("view is not defined");
