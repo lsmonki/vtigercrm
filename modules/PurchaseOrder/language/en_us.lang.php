@@ -172,6 +172,19 @@ $mod_strings = Array(
 'PurchaseOrder'=>'Purchase Order',
 'LBL_MY_TOP_PO'=>'My Top Open Purchase Orders',
 
+//Added for existing Picklist Entries
+
+'FedEx'=>'FedEx',
+'UPS'=>'UPS',
+'USPS'=>'USPS',
+'DHL'=>'DHL',
+'BlueDart'=>'BlueDart',
+
+'Created'=>'Created',
+'Approved'=>'Approved',
+'Delivered'=>'Delivered',
+'Cancelled'=>'Cancelled',
+'Received Shipment'=>'Received Shipment',
 );
 
 ?>
