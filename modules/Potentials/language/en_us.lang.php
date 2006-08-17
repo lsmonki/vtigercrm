@@ -113,6 +113,39 @@ $mod_strings = Array(
 //Added for 4.2 Release -- CustomView
 'Potential'=>'Potential',
 'Expected Close'=>'Expected Close',
+
+//Added for Existing Picklist Strings
+
+'Prospecting'=>'Prospecting',
+'Qualification'=>'Qualification',
+'Needs Analysis'=>'Needs Analysis',
+'Value Proposition'=>'Value Proposition',
+'Id. Decision Makers'=>'Id. Decision Makers',
+'Perception Analysis'=>'Perception Analysis',
+'Proposal/Price Quote'=>'Proposal/Price Quote',
+'Negotiation/Review'=>'Negotiation/Review',
+'Closed Won'=>'Closed Won',
+'Closed Lost'=>'Closed Lost',
+
+'Cold Call'=>'Cold Call',
+'Existing Customer'=>'Existing Customer',
+'Self Generated'=>'Self Generated',
+'Employee'=>'Employee',
+'Partner'=>'Partner',
+'Public Relations'=>'Public Relations',
+'Direct Mail'=>'Direct Mail',
+'Conference'=>'Conference',
+'Trade Show'=>'Trade Show',
+'Web Site'=>'Web Site',
+'Word of mouth'=>'Word of mouth',
+'Other'=>'Other',
+
+'--None--'=>'--None--',
+'Existing Business'=>'Existing Business',
+'New Business'=>'New Business',
+
+
+
 );
 
 ?>
