@@ -160,6 +160,27 @@ $mod_strings = Array(
 'Attachment'=>'Attachment',
 'LBL_COMMENT_INFORMATION'=>'Comment Information',
 
+//Added for existing picklist entries
+
+'Big Problem'=>'Big Problem',
+'Small Problem'=>'Small Problem',
+'Other Problem'=>'Other Problem',
+
+'Low'=>'Low',
+'Normal'=>'Normal',
+'High'=>'High',
+'Urgent'=>'Urgent',
+
+'Minor'=>'Minor',
+'Major'=>'Major',
+'Feature'=>'Feature',
+'Critical'=>'Critical',
+
+'Open'=>'Open',
+'In Progress'=>'In Progress',
+'Wait For Response'=>'Wait For Response',
+'Closed'=>'Closed',
+
 );
 
 ?>
