@@ -154,6 +154,61 @@ $mod_strings = Array(
 //Added after 5Alpha5
 'Notify Owner'=>'Notify Owner',
 
+//Added for existing picklist entries
+
+'--None--'=>'--None--',
+
+'Acquired'=>'Acquired',
+'Active'=>'Active',
+'Market Failed'=>'Market Failed',
+'Project Cancelled'=>'Project Cancelled',
+'Shutdown'=>'Shutdown',
+
+'Apparel'=>'Apparel',
+'Banking'=>'Banking',
+'Biotechnology'=>'Biotechnology',
+'Chemicals'=>'Chemicals',
+'Communications'=>'Communications',
+'Construction'=>'Construction',
+'Consulting'=>'Consulting',
+'Education'=>'Education',
+'Electronics'=>'Electronics',
+'Energy'=>'Energy',
+'Engineering'=>'Engineering',
+'Entertainment'=>'Entertainment',
+'Environmental'=>'Environmental',
+'Finance'=>'Finance',
+'Food & Beverage'=>'Food & Beverage',
+'Government'=>'Government',
+'Healthcare'=>'Healthcare',
+'Hospitality'=>'Hospitality',
+'Insurance'=>'Insurance',
+'Machinery'=>'Machinery',
+'Manufacturing'=>'Manufacturing',
+'Media'=>'Media',
+'Not For Profit'=>'Not For Profit',
+'Recreation'=>'Recreation',
+'Retail'=>'Retail',
+'Shipping'=>'Shipping',
+'Technology'=>'Technology',
+'Telecommunications'=>'Telecommunications',
+'Transportation'=>'Transportation',
+'Utilities'=>'Utilities',
+'Other'=>'Other',
+
+'Analyst'=>'Analyst',
+'Competitor'=>'Competitor',
+'Customer'=>'Customer',
+'Integrator'=>'Integrator',
+'Investor'=>'Investor',
+'Partner'=>'Partner',
+'Press'=>'Press',
+'Prospect'=>'Prospect',
+'Reseller'=>'Reseller',
+
+
+
+
 );
 
 ?>
