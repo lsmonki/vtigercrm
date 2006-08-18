@@ -16,7 +16,6 @@ $id = $_REQUEST["record"];
 
 
 $module = $_REQUEST["module"];
-$assigned_user_id = $_REQUEST["smowerid"];
 $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
 $close_date = getDBInsertDateValue($_REQUEST["closedate"]);
