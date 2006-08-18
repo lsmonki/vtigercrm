@@ -99,7 +99,7 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
                 <tr>
 						<td align="right" class="dvtCellLabel" width="50%">'.$app_strings['LBL_ASSIGNED_TO'].'</td>
                        	<td class="dvtCellInfo" width="50%">
-                        		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(), $userid).'</select>
+                        		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false), $userid).'</select>
 						</td>
 				</tr>
 				<tr>
