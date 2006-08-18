@@ -1851,7 +1851,7 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 
 The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. Kindly procure required number of units as the stock level is below reorder level {REORDERLEVELVALUE}.
 
-Please treat this information as Urgent as the vtiger_invoice is already sent  to the customer.
+Please treat this information as Urgent as the invoice is already sent  to the customer.
 
 Severity: Critical
 
@@ -1877,7 +1877,7 @@ Thanks,
 
 SalesOrder is generated for {SOQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
 
-Please treat this information  with vtiger_priority as the sales order is already generated.
+Please treat this information  with priority as the sales order is already generated.
 
 Severity: Major
 
@@ -1928,7 +1928,7 @@ state,
  
  Dear
  
- Please check the following vtiger_invoices that are yet to be paid by you:
+ Please check the following invoices that are yet to be paid by you:
  
  No. Date      Amount
  1   1/1/01    $4000
@@ -1938,11 +1938,7 @@ state,
  
  Kindly let us know if there are any issues that you feel are pending to be discussed.
  We will be more than happy to give you a call.
- We would like to continue our business with you.
- 
- Sincerely,
- name
- title';
+ We would like to continue our business with you.';
 
 
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Pending Invoices','Invoices Pending','Payment Due','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
@@ -1966,11 +1962,8 @@ to a game of golf on Wednesday morning 9am at the
 Cuff Links Ground. We will be waiting for you in the
 Executive Lounge.
 
-Looking forward to seeing you there.
+Looking forward to seeing you there.';
 
-Sincerely,
-name
-title';
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Acceptance Proposal','Acceptance Proposal','Acceptance of Proposal','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
@@ -1979,11 +1972,8 @@ $body= ' The undersigned hereby acknowledges receipt and delivery
 of the goods.
 The undersigned will release the payment subject to the goods being discovered not satisfactory.
 
-Signed under seal this <date>
+Signed under seal this <date>';
 
-Sincerely,
-name
-title';
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Goods received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
@@ -1995,10 +1985,8 @@ If there be any exceptions noted, we shall consider them
 only if the objection is received within ten days of receipt of
 this notice.
 
-Thank you for your patronage.
-Sincerely,
-name
-title';
+Thank you for your patronage.';
+
 
 
 	       
@@ -2018,12 +2006,8 @@ Our Manufacturing Division will continue operations
 at 3250 Lovedale Square Avenue, in Frankfurt.
 
 We hope to keep in touch with you all.
-Please update your addressbooks.
+Please update your addressbooks.';
 
-
-Thank You,
-name
-title';
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Address Change','Change of Address','Address Change','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
@@ -2034,7 +2018,7 @@ $body='Dear
 Thank you for extending us the opportunity to meet with
 you and members of your staff.
 
-I know that John Doe serviced your vtiger_account
+I know that John Doe serviced your account
 for many years and made many friends at your firm. He has personally
 discussed with me the deep relationship that he had with your firm.
 While his presence will be missed, I can promise that we will
@@ -2043,11 +2027,7 @@ John to your firm.
 
 I was genuinely touched to receive such fine hospitality.
 
-Thank you once again.
-
-Sincerely,
-name
-title';
+Thank you once again.';
 
 
 	       
@@ -2066,11 +2046,8 @@ whopping 75%!
 
 Let us meet at Smoking Joe for a drink in the evening!
 
-C you all there guys!
+C you all there guys!';
 
-Sincerely,
-name
-title';
 
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Target Crossed!','Target Crossed!','Fantastic Sales Spree!','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
@@ -2082,11 +2059,8 @@ Thank you for your confidence in our ability to serve you.
 We are glad to be given the chance to serve you.I look
 forward to establishing a long term partnership with you.
 Consider me as a friend.
-Should any need arise,please do give us a call.
+Should any need arise,please do give us a call.';
 
-Sincerely,
-name
-title';
 
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Thanks Note','Thanks Note','Note of thanks','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
