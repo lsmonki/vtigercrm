@@ -1224,7 +1224,7 @@ function updateInfo($id)
     $values=explode(' ',$modifiedtime);
     $date_info=explode('-',$values[0]);
     $time_info=explode(':',$values[1]);
-    $date = $date_info[2].' '.date("M", mktime(0, 0, 0, $date_info[1], $date_info[2],$date_info[0])).' '.$date_info[0];
+    $date = $date_info[2].' '.$app_strings[date("M", mktime(0, 0, 0, $date_info[1], $date_info[2],$date_info[0]))].' '.$date_info[0];
     $time_modified = mktime($time_info[0], $time_info[1], $time_info[2], $date_info[1], $date_info[2],$date_info[0]);
     $time_now = time();
     $days_diff = (int)(($time_now - $time_modified) / (60 * 60 * 24));
