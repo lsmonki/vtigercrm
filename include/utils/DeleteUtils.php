@@ -42,6 +42,15 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$adb->query($sql);
 		}
 	break;
+	case Campaigns:
+		if($return_module == "Leads") {
+			$sql = 'delete from vtiger_campaignleadrel where campaignid='.$record.' and leadid='.$return_id;
+			$adb->query($sql);
+		} elseif($return_module == "Contacts") {
+			$sql = 'delete from vtiger_campaigncontrel where campaignid='.$record.' and contactid='.$return_id;
+			$adb->query($sql);
+		}
+	break;
 	case Contacts:
 		if($return_module == 'Accounts')
 		{
