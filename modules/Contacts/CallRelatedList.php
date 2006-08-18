@@ -58,7 +58,7 @@ $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("id",$focus->id);
 $smarty->assign("NAME",$focus->name);
-$related_array = getrelatedlists($currentModule,$focus);
+$related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Contact']);
