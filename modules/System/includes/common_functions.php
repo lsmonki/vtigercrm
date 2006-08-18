@@ -32,17 +32,17 @@ function create_bargraph ($value, $maximum, $b, $type = "")
   
   $textdir = direction();
 
-  $imgpath = getcwd().'/modules/System/templates/' . TEMPLATE_SET . '/images/';
+  $imgpath = '/modules/System/templates/' . TEMPLATE_SET . '/images/';
   $maximum == 0 ? $barwidth = 0 : $barwidth = round((100  / $maximum) * $value) * $b;
   $red = 90 * $b;
   $yellow = 75 * $b;
 
-  if (!file_exists(getcwd()."/modules/System/templates/" . TEMPLATE_SET . "/images/nobar_left.gif")) {
+  if (!file_exists("/modules/System/templates/" . TEMPLATE_SET . "/images/nobar_left.gif")) {
     if ($barwidth == 0) {
       return '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'bar_' . $textdir['left'] . '.gif" alt="">' 
            . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'bar_middle.gif" width="1" alt="">' 
 	   . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'bar_' . $textdir['right'] . '.gif" alt="">';
-    } elseif (file_exists(getcwd() . "/modules/System/templates/" . TEMPLATE_SET . "/images/yellowbar_left.gif") && $barwidth > $yellow && $barwidth < $red) {
+    } elseif (file_exists("/modules/System/templates/" . TEMPLATE_SET . "/images/yellowbar_left.gif") && $barwidth > $yellow && $barwidth < $red) {
       return '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'yellowbar_' . $textdir['left'] . '.gif" alt="">' 
            . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'yellowbar_middle.gif" width="' . $barwidth . '" alt="">' 
 	   . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'yellowbar_' . $textdir['right'] . '.gif" alt="">';
@@ -60,7 +60,7 @@ function create_bargraph ($value, $maximum, $b, $type = "")
       return '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'nobar_' . $textdir['left'] . '.gif" alt="">' 
            . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'nobar_middle.gif" width="' . (100 * $b) . '" alt="">' 
 	   . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'nobar_' . $textdir['right'] . '.gif" alt="">';
-    } elseif (file_exists(getcwd() . "/modules/System/templates/" . TEMPLATE_SET . "/images/yellowbar_left.gif") && $barwidth > $yellow && $barwidth < $red) {
+    } elseif (file_exists("/modules/System/templates/" . TEMPLATE_SET . "/images/yellowbar_left.gif") && $barwidth > $yellow && $barwidth < $red) {
       return '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'yellowbar_' . $textdir['left'] . '.gif" alt="">' 
            . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'yellowbar_middle.gif" width="' . $barwidth . '" alt="">' 
 	   . '<img height="' . BAR_HEIGHT . '" src="' . $imgpath . 'nobar_middle.gif" width="' . ((100 * $b) - $barwidth) . '" alt="">' 
