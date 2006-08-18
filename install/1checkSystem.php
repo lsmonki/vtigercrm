@@ -250,10 +250,7 @@ $array = Array(
 						<td valign=top ><strong>Cache Directory </strong> <br>(cache/)</td>
             					<td valign=top bgcolor="white" ><?php echo (is_writable('./cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
         				</tr>
-		 			<tr bgcolor="#fafafa">
-		    				<td valign=top ><strong>Mail Merge Template Directory </strong><br>(test/wordtemplatedownload/)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
-        				</tr>
+		 			
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
             					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
@@ -265,7 +262,42 @@ $array = Array(
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Installation file</strong><br> (install.php)</td>
             					<td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				        </tr>
+
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+				        </tr>
+
+					<tr bgcolor="#fafafa">
+           					<td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
+           					<td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
         				</tr>
+
+					
+					<tr bgcolor="#fafafa">
+                				<td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
+                				<td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
+					</tr>
+					<tr bgcolor="#fafafa">
+				                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
+				                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
+					</tr>
+
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
+					</tr>
+				
+					<tr bgcolor="#fafafa">
+		    				<td valign=top ><strong>Mail Merge Template Directory </strong><br>(test/wordtemplatedownload/)</td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
+        				</tr>
+				
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
 						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
@@ -281,34 +313,8 @@ $array = Array(
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
 					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
-        				</tr>
-					<tr bgcolor="#fafafa">
-		    				<td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
 					</tr>
-					<tr bgcolor="#fafafa">
-           					<td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
-           					<td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
-        				</tr>
-					<tr bgcolor="#fafafa">
-				                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
-        				</tr>
-	
-					<tr bgcolor="#fafafa">
-				                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
-				        </tr>
-
-					<tr bgcolor="#fafafa">
-				                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
-				                <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
-				        </tr>
-
-					<tr bgcolor="#fafafa">
-                				<td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
-                				<td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
-        				</tr>
+					
 
        				</table>
 				<br><br>
