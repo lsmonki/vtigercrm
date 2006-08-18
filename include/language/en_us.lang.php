@@ -938,6 +938,9 @@ $app_strings = Array(
 //Added after 5.0 Alpha5
 'Campaign Name'=>'Campaign Name',
 'Campaign Type'=>'Campaign Type',
+'Campaign Status'=>'Campaign Status',
+'Expected Revenue'=>'Expected Revenue',
+'Expected Close Date'=>'Expected Close Date',
 'LBL_ACTIONS'=>'Actions',
 'LBL_SEND'=>'Send',
 'LBL_VAT'=>'VAT',
