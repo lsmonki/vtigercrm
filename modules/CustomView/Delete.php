@@ -28,5 +28,5 @@ if(isset($smodule) && $smodule != '')
 	$smodule_url = "&smodule=".$smodule;
 }
 
-header("Location: index.php?action=index&parenttab=$parenttab&module=$module".$smodule_url);
+header("Location: index.php?action=ListView&parenttab=$parenttab&module=$module".$smodule_url);
 ?>
