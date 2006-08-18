@@ -398,5 +398,5 @@ $html='<table border="1">
 
 $pdf->WriteHTML($html);
 $pdf->Output('Reports.pdf','D');
-
+exit();
 ?>
