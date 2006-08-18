@@ -1251,11 +1251,13 @@ function insertIntoRecurringTable(& $recurObj)
  	 */
   function retrieve_entity_info($record, $module)
   {
-    global $adb,$log;
+    global $adb,$log,$app_strings;
     $result = Array();
     foreach($this->tab_name_index as $table_name=>$index)
     {
 	    $result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
+	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1)
+	    die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
     }
     $tabid = getTabid($module);
     $sql1 =  "select * from vtiger_field where tabid=".$tabid;
