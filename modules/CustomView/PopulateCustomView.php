@@ -128,8 +128,35 @@ $customviews = Array(Array('viewname'=>'All',
 
 		    Array('viewname'=>'All',
                           'setdefault'=>'1','setmetrics'=>'0',
-                          'cvmodule'=>'Webmails','stdfilterid'=>'','advfilterid'=>''),
+			  'cvmodule'=>'Webmails','stdfilterid'=>'','advfilterid'=>''),
 
+		    Array('viewname'=>'Drafted FAQ',
+                          'setdefault'=>'0','setmetrics'=>'0',
+                          'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'8'),	
+		    
+		    Array('viewname'=>'Published FAQ',
+                          'setdefault'=>'0','setmetrics'=>'0',
+			  'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>'9'),
+
+	            Array('viewname'=>'Open Purchase Orders',
+                          'setdefault'=>'0','setmetrics'=>'0',
+                          'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'10'),
+				    
+	            Array('viewname'=>'Received Purchase Orders',
+                          'setdefault'=>'0','setmetrics'=>'0',
+                          'cvmodule'=>'PurchaseOrder','stdfilterid'=>'','advfilterid'=>'11'),
+
+		    Array('viewname'=>'Open Invoices',
+                          'setdefault'=>'0','setmetrics'=>'0',
+			  'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'12'),
+
+		    Array('viewname'=>'Paid Invoices',
+                          'setdefault'=>'0','setmetrics'=>'0',
+			  'cvmodule'=>'Invoice','stdfilterid'=>'','advfilterid'=>'13'),
+
+	            Array('viewname'=>'Pending Sales Orders',
+                          'setdefault'=>'0','setmetrics'=>'0',
+                          'cvmodule'=>'SalesOrder','stdfilterid'=>'','advfilterid'=>'14'),
 		    );
 
 
@@ -331,6 +358,54 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		       'from:fromname:fromname:From:N',
 		       'to:tpname:toname:To:N',
 		       'body:body:body:Body:V'),
+
+		 Array ('vtiger_faq:question:question:Faq_Question:V',
+		 	'vtiger_faq:status:faqstatus:Faq_Status:V',
+			'vtiger_faq:product_id:product_id:Faq_Product_Name:I',
+			'vtiger_faq:category:faqcategories:Faq_Category:V',
+			'vtiger_crmentity:createdtime:createdtime:Faq_Created_Time:T'),
+
+		 Array( 'vtiger_faq:question:question:Faq_Question:V',
+			 'vtiger_faq:answer:faq_answer:Faq_Answer:V',
+			 'vtiger_faq:status:faqstatus:Faq_Status:V',
+			 'vtiger_faq:product_id:product_id:Faq_Product_Name:I',
+			 'vtiger_faq:category:faqcategories:Faq_Category:V',
+			 'vtiger_crmentity:createdtime:createdtime:Faq_Created_Time:T'),
+
+		 Array(	 'vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V',
+			 'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
+			 'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I',
+			 'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V',
+			 'vtiger_purchaseorder:duedate:duedate:PurchaseOrder_Due_Date:V'),
+		 
+		 Array ('vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V',
+			 'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I',
+			 'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V',
+			 'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
+			 'vtiger_purchaseorder:carrier:carrier:PurchaseOrder_Carrier:V',
+			 'vtiger_poshipads:ship_street:ship_street:PurchaseOrder_Shipping_Address:V'),
+		
+		 Array(  'vtiger_invoice:subject:subject:Invoice_Subject:V',
+			 'vtiger_invoice:accountid:account_id:Invoice_Account_Name:I',
+			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
+			 'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
+			 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V',
+			 'vtiger_crmentity:createdtime:createdtime:Invoice_Created_Time:T'),
+		 
+		 Array(	 'vtiger_invoice:subject:subject:Invoice_Subject:V',
+			 'vtiger_invoice:accountid:account_id:Invoice_Account_Name:I',
+			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
+			 'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
+			 'vtiger_invoiceshipads:ship_street:ship_street:Invoice_Shipping_Address:V',
+			 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V'),
+
+		 Array(	 'vtiger_salesorder:subject:subject:SalesOrder_Subject:V',
+			 'vtiger_salesorder:accountid:account_id:SalesOrder_Account_Name:I',
+			 'vtiger_salesorder:sostatus:sostatus:SalesOrder_Status:V',
+			 'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V',
+			 'vtiger_soshipads:ship_street:ship_street:SalesOrder_Shipping_Address:V',
+			 'vtiger_salesorder:carrier:carrier:SalesOrder_Carrier:V'),
+
                   );
 
 
@@ -403,7 +478,57 @@ $cvadvfilters = Array(
                                   'comparator'=>'e',
                                   'value'=>'Rejected'
                                  )
-                           )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_faq:status:faqstatus:Faq_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Draft'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_faq:status:faqstatus:Faq_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Published'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Created, Approved, Delivered'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Recieved Shipment'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Created, Approved, Sent'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Paid'
+                                 )
+			 ),
+
+			Array(
+                          Array('columnname'=>'vtiger_salesorder:sostatus:sostatus:SalesOrder_Status:V',
+                                'comparator'=>'e',
+                                 'value'=>'Created, Approved'
+                                 )
+			 )
+
                      );
 
 foreach($customviews as $key=>$customview)
