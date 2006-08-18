@@ -34,7 +34,7 @@
 				<tr>
 				<td>
 			
-					<iframe src="index.php?module=System&action=SystemAjax&file=systemconfig" width=100% height="1316px"></iframe>
+					<iframe src="index.php?module=System&action=SystemAjax&file=systemconfig" width=100% height="1510px"></iframe>
 							
 				</td>
 				  </tr>
