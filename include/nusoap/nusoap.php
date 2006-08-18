@@ -3322,7 +3322,12 @@ class soap_server extends nusoap_base {
 
 		$this->request = '';
 		$this->SOAPAction = '';
-		if(function_exists('getallheaders')){
+
+		//Commented to fix the issue in PHP 5 Windows system ---Jeri
+		//when we use getallheaders function  we are geting an error description invalid gzip crc value when parsing the response in VB
+		// hence the function is commented out and $_SERVER is used to get all the header informations.
+		
+		/*if(function_exists('getallheaders')){
 			$this->debug("In parse_http_headers, use getallheaders");
 			$headers = getallheaders();
 			foreach($headers as $k=>$v){
@@ -3347,7 +3352,7 @@ class soap_server extends nusoap_base {
 				// should be US-ASCII for HTTP 1.0 or ISO-8859-1 for HTTP 1.1
 				$this->xml_encoding = 'ISO-8859-1';
 			}
-		} elseif(isset($_SERVER) && is_array($_SERVER)){
+		} else*/if(isset($_SERVER) && is_array($_SERVER)){
 			$this->debug("In parse_http_headers, use _SERVER");
 			foreach ($_SERVER as $k => $v) {
 				if (substr($k, 0, 5) == 'HTTP_') {
