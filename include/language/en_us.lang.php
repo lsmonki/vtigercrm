@@ -920,6 +920,21 @@ $app_strings = Array(
 'LBL_DAY_AGO'=>'day ago',
 'LBL_DAYS_AGO'=>'days ago',
 
+//Added to convert Month string in update info - ahmed
+
+'Jan'=>'Jan',
+'Feb'=>'Feb',
+'Mar'=>'Mar',
+'Apr'=>'Apr',
+'May'=>'May',
+'Jun'=>'Jun',
+'Jul'=>'Jul',
+'Aug'=>'Aug',
+'Sep'=>'Sep',
+'Oct'=>'Oct',
+'Nov'=>'Nov',
+'Dec'=>'Dec',
+
 //Added after 5.0 Alpha5
 'Campaign Name'=>'Campaign Name',
 'Campaign Type'=>'Campaign Type',
