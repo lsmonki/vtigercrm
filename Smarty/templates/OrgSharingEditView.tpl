@@ -98,5 +98,4 @@ function checkAccessPermission(share_value)
 {rdelim}
 </script>
 
-{include file='SettingsSubMenu.tpl'}
 
