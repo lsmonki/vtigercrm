@@ -162,13 +162,13 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
 							if($relatedlist !='' && $relatedlist != 'global')
-								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&start=".$_SESSION["rlvs"][$relatedmodule][$module]["start"]."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							elseif($module == 'Users' && $name == 'User Name')
 								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."&nbsp;".$arrow."</a>";
 							elseif($relatedlist == "global")
 							        $name = $lbl_name;
 							else
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							$arrow = '';
 					}
 					else
