@@ -37,6 +37,7 @@ function callConvertLeadDiv(id)
                         postBody: 'module=Leads&action=LeadsAjax&file=ConvertLead&record='+id,
                         onComplete: function(response) {
                                 $("convertleaddiv").innerHTML=response.responseText;
+				eval($("conv_leadcal").innerHTML);
                         }
                 }
         );
