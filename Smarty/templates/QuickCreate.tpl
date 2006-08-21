@@ -224,6 +224,7 @@
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
 							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
+							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$fldname}">
 							{if $uitype eq 6}
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
@@ -236,6 +237,9 @@
 							   {else}
 							   <br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
 							{/if}
+							<script id="date_calpopup">
+                                                                getCalendarPopup('jscal_trigger_{$fldname}','jscal_field_{$fldname}','{$dateFormat}')
+                                                        </script>
 							</td>
 
 							{elseif $uitype eq 63}
@@ -243,7 +247,7 @@
 							        {$fldlabel}
 							  </td>
 							  <td width="30%" align=left class="cellText">
-							        <input name="{$fldname}" type="text" size="2" value="{$fldvalue}">&nbsp;
+							        <input name="{$fldname}" type="text" size="2" maxlength="2" value="{$fldvalue}">&nbsp;
 							        <select name="duration_minutes">
 						        	{foreach key=labelval item=selectval from=$secondvalue}
 								<option value="{$labelval}" {$selectval}>{$labelval}</option>
