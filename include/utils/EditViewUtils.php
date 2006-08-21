@@ -1118,7 +1118,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 116)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$pick_query="select * from vtiger_currency_info";
+		$pick_query="select * from vtiger_currency_info where currency_status = 'Active'";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
