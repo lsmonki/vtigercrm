@@ -28,6 +28,10 @@
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+        <script type="text/javascript" src="jscalendar/calendar.js"></script>
+        <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+        <script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
 
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
@@ -205,6 +209,7 @@ function QCreate(qcoptions)
 						$("status").style.display="none";
 						$("qcform").style.display="inline";
 					        $("qcform").innerHTML = response.responseText;
+						eval($("date_calpopup").innerHTML);
 						eval($("qcform"));
                                         {rdelim}
                 {rdelim}
