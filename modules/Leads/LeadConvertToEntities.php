@@ -247,6 +247,27 @@ function saveLeadRelatedProducts($leadid, $relatedid, $relatedmodule = '')
 	$log->debug("Exit from function saveLeadRelatedProducts.");
 }
 
+/**     Function used to save the lead related Campaigns with Contact
+ *      $leadid - leadid
+ *      $relatedid - related entity id (contactid)
+ */
+function saveLeadRelatedCampaigns($leadid, $relatedid)
+{
+	global $adb, $log;
+	$log->debug("Entering into function saveLeadRelatedCampaigns($leadid, $relatedid)");
+
+	$campaign_result = $adb->query("select * from vtiger_campaignleadrel where leadid=$leadid");
+	$noofcampaigns = $adb->num_rows($campaign_result);
+	for($i = 0; $i < $noofcampaigns; $i++)
+	{
+		$campaignid = $adb->query_result($campaign_result,$i,'campaignid');
+
+		$adb->query("insert into vtiger_campaigncontrel (campaignid, contactid) values($campaignid, $relatedid)");
+	}
+	$log->debug("Exit from function saveLeadRelatedCampaigns.");
+}
+
+
 $crmid = $adb->getUniqueID("vtiger_crmentity");
 
 //Saving Account - starts
@@ -336,6 +357,9 @@ getRelatedActivities($account_id,$contact_id); //To convert relates Activites  a
 //Retrieve the lead related products and relate them with this new contact
 saveLeadRelatedProducts($id, $contact_id, "Contacts");
 
+//Retrieve the lead related Campaigns and relate them with this new contact --Minnie
+saveLeadRelatedCampaigns($id, $contact_id);
+
 //Up to this, Contact related data save finshed
 
 
@@ -399,7 +423,9 @@ $category = getParentTab();
 //Updating the deleted status
 $sql_update_converted = "UPDATE vtiger_leaddetails SET converted = 1 where leadid='" .$id ."'";
 $adb->query($sql_update_converted); 
-
+//updating the campaign-lead relation --Minnie
+$sql_update_campleadrel = "delete from vtiger_campaignleadrel where leadid=".$id;
+$adb->query($sql_update_campleadrel);
 header("Location: index.php?action=DetailView&module=Accounts&record=$crmid&parenttab=$category");
 
 ?>
