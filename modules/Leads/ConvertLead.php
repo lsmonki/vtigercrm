@@ -68,13 +68,7 @@ for($j = 0; $j < $noofsalesRows; $j++)
 
         $sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.$sales_stageValue.'</OPTION>';
 }
-$convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-	<script type="text/javascript" src="jscalendar/calendar.js"></script>
-	<script type="text/javascript" src="jscalendar/lang/calendar-'.$app_strings['LBL_JSCALENDAR_LANG'].'.js"></script>
-	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-	<script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
-	<script language="JavaScript" type="text/javascript" src="Lead.js"></script>
-	<form name="ConvertLead" method="POST" action="index.php">
+$convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Leads">
 	<input type="hidden" name="record" value="'.$id.'">
 	<input type="hidden" name="action">
@@ -120,14 +114,18 @@ $convertlead .='<tr>
 						<tr>
 							<td align="right" class="dvtCellLabel" width="53%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="47%">
-							<input name="potential_name" value="'.$potentialname.'" tabindex="3">
+							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
                                                         </td>
 						</tr>
 						<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
-								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
+								<input name="closedate" style="border: 1px solid rgb(186, 186, 186);" id="jscal_field_closedate" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
+								<img src="'.$image_path.'calendar.gif" id="jscal_trigger_closedate" >
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
+							<script id="conv_leadcal">
+								getCalendarPopup(\'jscal_trigger_closedate\',\'jscal_field_closedate\',\''.$date_format.'\')
+							</script>
 							</td>
 						</tr>
 						<tr>
