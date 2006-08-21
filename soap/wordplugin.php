@@ -307,8 +307,25 @@ function get_user_columns($user_name, $password)
 
 
 function create_session($user_name, $password)
-{
-	return "TempSessionID";	
+{ 
+  	global $adb;
+	require_once('modules/Users/User.php');
+	$objuser = new User();
+	if($password != "" && $user_name != '')
+	{
+		$objuser->column_fields['user_name'] = $user_name;
+		$objuser->load_user($password);
+		if($objuser->is_authenticated())
+		{
+		  return "TempSessionID";
+		}else
+		{
+			return "false";
+		}
+	}else
+	{
+			return "false";
+	}
 }
 
 function end_session($user_name)
