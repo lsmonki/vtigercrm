@@ -309,6 +309,7 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 			$email->column_fields[date_start] = $date_sent;
 			$email->column_fields[description]  = htmlentities($email_body);
 			$email->column_fields[activitytype] = 'Emails'; 
+			$email->plugin_save = true;
 			$email->save("Emails");
 
 			$email->set_emails_contact_invitee_relationship($email->id,$contactid);
@@ -320,7 +321,7 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 			if(isset($camodulerow))
 			{
 				$emailid = $camodulerow["email"];
-				$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
+				$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contactid."@77|".'","OUTLOOK")';
 				$adb->query($query);
 			}
 			return $email->id;
