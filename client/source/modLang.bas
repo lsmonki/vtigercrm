@@ -101,6 +101,8 @@ Public gMsg014 As String 'Proxy Port
 Public gMsg015 As String 'Proxy User Name
 Public gMsg016 As String 'Proxy Password
 Public gMsg017 As String 'Create document to insert merge field
+Public gMsg018 As String 'Unable to connect vtigerCRM Server with the given username and password
+
 
 
 Public Function bLoadLang() As Boolean
@@ -249,6 +251,7 @@ gMsg014 = ini_read(sSec_Messages, "Msg014", sLangIniPath)
 gMsg015 = ini_read(sSec_Messages, "Msg015", sLangIniPath)
 gMsg016 = ini_read(sSec_Messages, "Msg016", sLangIniPath)
 gMsg017 = ini_read(sSec_Messages, "Msg017", sLangIniPath)
+gMsg018 = ini_read(sSec_Messages, "Msg018", sLangIniPath)
 
 bvtigerCRM_Messages = True
 GoTo EXIT_ROUTINE

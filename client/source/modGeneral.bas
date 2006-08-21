@@ -190,6 +190,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     If oSoap.Parameters.ItemByName("return").Value = "TempSessionID" Then
         Call sErrorDlg(gMsg003)
     Else
+        sErrStr = gMsg018
         GoTo ERROR_EXIT_ROUTINE
     End If
     
