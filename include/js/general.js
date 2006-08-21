@@ -1710,3 +1710,11 @@ function fnShowDrop(obj){
 function fnHideDrop(obj){
 	document.getElementById(obj).style.display = 'none';
 }
+
+function getCalendarPopup(imageid,fieldid,dateformat)
+{
+        Calendar.setup ({
+                inputField : fieldid, ifFormat : dateformat, showsTime : false, button : imageid, singleClick : true, step : 1
+        });
+}
+
