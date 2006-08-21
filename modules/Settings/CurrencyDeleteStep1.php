@@ -53,7 +53,7 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 				$output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
 						 
 						 global $adb;	
-						 $sql = "select * from vtiger_currency_info";
+						 $sql = "select * from vtiger_currency_info where currency_status = 'Active'";
 						 $result = $adb->query($sql);
 						 $temprow = $adb->fetch_array($result);
 						 do
