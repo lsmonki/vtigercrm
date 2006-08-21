@@ -42,12 +42,19 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 	}
 }elseif($ajaxaction == 'DELETETAG')
 {
-	$tagid = $_REQUEST['tagid']; 
-	global $adb;
-	$query="delete from vtiger_freetagged_objects where tag_id=".$tagid;
-	$result=$adb->query($query);
-	$query="delete from vtiger_freetags where id=".$tagid;
-	$result=$adb->query($query);
-	echo 'SUCESS';
+	if(is_numeric($_REQUEST['tagid']))
+	{
+		$tagid = $_REQUEST['tagid']; 
+		global $adb;
+		$query="delete from vtiger_freetagged_objects where tag_id=".$tagid;
+		$result=$adb->query($query);
+		$query="delete from vtiger_freetags where id=".$tagid;
+		$result=$adb->query($query);
+		echo 'SUCESS';
+	}else
+	{
+		 die("An invalid tagid to delete.");
+	}
+	
 }
 ?>
