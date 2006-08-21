@@ -79,10 +79,9 @@ class CRMEntity
 		//added by raju
 		elseif($table_name=="vtiger_seactivityrel" )
 		{
-			if($module=="Emails" && $_REQUEST['smodule']!='webmails')
-			//modified by Richie as raju's implementation broke the feature for addition of webmail to vtiger_crmentity.need to be more careful in future while integrating code
-			//if($_REQUEST['smodule']!='webmails' && $_REQUEST['smodule'] != '')
-			{
+		  //modified by Richie as raju's implementation broke the feature for addition of webmail to vtiger_crmentity.need to be more careful in future while integrating code
+			if($module=="Emails" && $_REQUEST['smodule']!='webmails' && (!$this->plugin_save))
+		  {
 				if($_REQUEST['currentid']!='')
 				{
 					$actid=$_REQUEST['currentid'];
