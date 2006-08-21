@@ -36,7 +36,9 @@ class Email extends CRMEntity {
 	var $db;
 
 	// Stored vtiger_fields
-  	var $module_id="emailid";
+  var $module_id="emailid";
+  // added to check email save from plugin or not
+  var $plugin_save = false;
 
 	var $rel_users_table = "vtiger_salesmanactivityrel";
 	var $rel_contacts_table = "vtiger_cntactivityrel";
