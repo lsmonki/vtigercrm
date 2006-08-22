@@ -157,10 +157,10 @@
 			        </tr>
 			        <tr id="gva">
 			          <td class="small colHeader"><div align="center"><strong>
-		                Create/Edit
+		                {$CMOD.LBL_CREATE_EDIT}
 			          </strong></div></td>
-			          <td class="small colHeader"> <div align="center"><strong>View </strong></div></td>
-			          <td class="small colHeader"> <div align="center"><strong>Delete</strong></div></td>
+			          <td class="small colHeader"> <div align="center"><strong>{$CMOD.LBL_VIEW}</strong></div></td>
+			          <td class="small colHeader"> <div align="center"><strong>{$CMOD.LBL_DELETE}</strong></div></td>
 			        </tr>
 					
 				<!-- module loops-->
@@ -181,8 +181,8 @@
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
-				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
-				<img src="{$IMAGE_PATH}showDown.gif" id="img_{$tabid}" alt="{$CMOD.LBL_SHOW_FIELDS}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
+				{if $FIELD_PRIVILEGES[$tabid] neq NULL || $modulename eq 'Emails'}
+				<img src="{$IMAGE_PATH}showDown.gif" id="img_{$tabid}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
 				{/if}
 				</div></td>
 				  </tr>
@@ -190,6 +190,7 @@
 				          <td colspan="6" class="small settingsSelectedUI">
 						<table class="small" border="0" cellpadding="2" cellspacing="0" width="100%">
 			        	    	<tbody>
+						{if $FIELD_PRIVILEGES[$tabid] neq ''}
 						<tr>
 							{if $modulename eq 'Calendar'}
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
@@ -197,6 +198,7 @@
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
 							{/if}
 					        </tr>
+						{/if}
 						{foreach item=row_values from=$FIELD_PRIVILEGES[$tabid]}
 				            	<tr>
 						      {foreach item=element from=$row_values}

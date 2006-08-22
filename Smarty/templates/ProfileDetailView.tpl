@@ -170,8 +170,8 @@
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
-				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
-				<img src="{$IMAGE_PATH}showDown.gif" alt="{$CMOD.LBL_SHOW_FIELDS}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
+				{if $FIELD_PRIVILEGES[$tabid] neq NULL || $modulename eq 'Emails'}
+				<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
 				{/if}
 				</div></td>
 				  </tr>
@@ -179,6 +179,7 @@
 				          <td colspan="6" class="small settingsSelectedUI">
 						<table class="small" border="0" cellpadding="2" cellspacing="0" width="100%">
 			        	    	<tbody>
+						{if $FIELD_PRIVILEGES[$tabid] neq ''}
 						<tr>
 							{if $modulename eq 'Calendar'}
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
@@ -186,6 +187,7 @@
 				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
 							{/if}
 					        </tr>
+						{/if}
 						{foreach item=row_values from=$FIELD_PRIVILEGES[$tabid]}
 				            	<tr>
 						      {foreach item=element from=$row_values}
