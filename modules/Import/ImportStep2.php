@@ -375,10 +375,10 @@ function validate_import_map()
 
 		if(optionData != -1)
 		{
-			tmp = seq_string.indexOf(optionData);
+			tmp = seq_string.indexOf("\""+optionData+"\"");
 			if(tmp == -1)
 			{
-				seq_string = seq_string + optionData;
+				seq_string = seq_string + "\""+optionData+"\"";
 			}
 			else
 			{
