@@ -492,11 +492,12 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
 	   $query =  $this->constructCustomQueryAddendum() .",
-                                contactdetails.*, contactaddress.*,
+                                contactdetails.*, contactsubdetails.*, contactaddress.*,
                                 account.accountname AS account_name,
                                 users.user_name AS assigned_user_name
                                 FROM contactdetails
 				inner join crmentity on crmentity.crmid=contactdetails.contactid
+                                inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
 				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
@@ -506,11 +507,12 @@ return $exists;
 		else
 		{
                   	 $query = "SELECT
-                                contactdetails.*, contactaddress.*,
+                                contactdetails.*, contactsubdetails.*, contactaddress.*,
                                 account.accountname AS account_name,
                                 users.user_name AS assigned_user_name
                                 FROM contactdetails
                                 inner join crmentity on crmentity.crmid=contactdetails.contactid
+                                inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
 				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
