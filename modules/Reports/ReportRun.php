@@ -893,7 +893,7 @@ class ReportRun extends CRMEntity
 					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_crmentity as vtiger_crmentityRel on vtiger_crmentityRel.crmid = vtiger_seproductsrel.crmid
-					left join vtiger_account as vtiger_accountRel on vtiger_accountRel.accountid=crmentityRel.crmid
+					left join vtiger_account as vtiger_accountRel on vtiger_accountRel.accountid=vtiger_crmentityRel.crmid
 					left join vtiger_leaddetails as vtiger_leaddetailsRel on vtiger_leaddetailsRel.leadid = vtiger_crmentityRel.crmid
 					left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_crmentityRel.crmid ";
 			}
