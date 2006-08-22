@@ -347,7 +347,7 @@ class sysinfo {
 
     $bufr = execute_program('lsscsi', '-c', false);
     if( is_null( $bufr )) {
-	$bufr = rfts( '/proc/scsi/scsi' );
+	$bufr = rfts( '/proc/scsi/scsi', 0, 4096, false );
     }
     if ( $bufr != "ERROR" ) {
       $bufe = explode("\n", $bufr);
