@@ -1411,6 +1411,11 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,3,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,4,0)");
 
+		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,0,1)");
+		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,1,1)");
+		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,2,1)");
+		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,3,0)");
+		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,4,0)");
 		
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,0,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,1,1)");
@@ -1504,6 +1509,7 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,6,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",8,6,0)");
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",9,6,0)");
+                $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",10,6,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",4,8,0)");

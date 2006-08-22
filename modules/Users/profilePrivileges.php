@@ -304,7 +304,7 @@ if($mode == 'view')
 		$no_of_actions=sizeof($action_array);
 		foreach($action_array as $action_id=>$act_per)
 		{
-			$action_name = getActionName($action_id);
+			$action_name = getActionname($action_id);
 			$tab_util_act_per = $action_array[$action_id];
 			$tab_util_per = getDisplayValue($tab_util_act_per,$tabid,$action_id);
 			$util[]=$action_name;
@@ -325,7 +325,7 @@ elseif($mode == 'edit')
 		$no_of_actions=sizeof($action_array);
 		foreach($action_array as $action_id=>$act_per)
 		{
-			$action_name = getActionName($action_id);
+			$action_name = getActionname($action_id);
 			$tab_util_act_per = $action_array[$action_id];
 			$tab_util_per = getDisplayOutput($tab_util_act_per,$tabid,$action_id);
 			$util[]=$action_name;
@@ -348,7 +348,7 @@ elseif($mode == 'create')
 			$no_of_actions=sizeof($action_array);
 			foreach($action_array as $action_id=>$act_per)
 			{
-				$action_name = getActionName($action_id);
+				$action_name = getActionname($action_id);
 				$tab_util_act_per = $action_array[$action_id];
 				$tab_util_per = getDisplayOutput($tab_util_act_per,$tabid,$action_id);
 				$util[]=$action_name;
@@ -369,7 +369,7 @@ elseif($mode == 'create')
 			$no_of_actions=sizeof($action_array);
 			foreach($action_array as $action_id=>$act_per)
 			{
-				$action_name = getActionName($action_id);
+				$action_name = getActionname($action_id);
 				$tab_util_act_per = $action_array[$action_id];
 				$tab_util_per = getDisplayOutput(0,$tabid,$action_id);
 				$util[]=$action_name;
