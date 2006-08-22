@@ -397,7 +397,7 @@ function get_tasksforol($username)
         $log->debug("Entering get_tasksforol(".$username.") method ...");
 	$query = "select vtiger_activity.subject,vtiger_activity.date_start startdate,
 			 vtiger_activity.activityid as taskid,vtiger_activity.status,
-			 vtiger_crmentity.description,vtiger_activity.priority as vtiger_priority,vtiger_activity.due_date as duedate,
+			 vtiger_crmentity.description,vtiger_activity.priority as priority,vtiger_activity.due_date as duedate,
 			 vtiger_contactdetails.firstname, vtiger_contactdetails.lastname 
 			 from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
 			 inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
