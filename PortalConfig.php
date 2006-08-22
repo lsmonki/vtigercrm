@@ -13,11 +13,13 @@
 global $Server_Path;
 global $Portal_Path;
 
-//This is the vtigerCRM Server Path where contactserialize.php file is located
-$Server_Path = ""; //for eg. http://vtiger-server:90 
+//This is the vtiger server path ie., the url to access the vtiger server in browser
+//Ex. i access my vtiger as http://mickie:90/vtiger/index.php so i will give as http://mickie:90/vtiger
+$Server_Path = "";
 
-//This is the Customer Portal path where CustomerAuthenticate.php file is located 
-$Authenticate_Path = ""; //for eg. http://your-server/vtiger_customerportal 
+//This is the customer portal path ie., url to access the customer portal in browser 
+//Ex. i access my portal as http://mickie:90/customerportal/login.php so i will give as http://mickie:90/customerportal
+$Authenticate_Path = "";
 
 //Give a temporary directory path which is used when we upload attachment
 $upload_dir = '/tmp';
