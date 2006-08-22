@@ -180,7 +180,7 @@ if($result[$i]['ticketid'] == $ticketid)
 			$list .= '
 			   <tr>
 				<td class="dvtCellLabel" align="right">'.$attachments_title.'</td>
-				<td class="dvtCellInfo" colspan="3"><a href="index.php?module=Tickets&action=downloadfile&fileid='.$fileid.'&filename='.$filename.'&filetype='.$filetype.'&filesize='.$filesize.'">'.ltrim($filename,$ticketid.'_').'</a></td>
+				<td class="dvtCellInfo" colspan="3"><a href="index.php?downloadfile=true&fileid='.$fileid.'&filename='.$filename.'&filetype='.$filetype.'&filesize='.$filesize.'">'.ltrim($filename,$ticketid.'_').'</a></td>
 			   </tr>';
 		}
 	}

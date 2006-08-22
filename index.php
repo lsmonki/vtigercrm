@@ -46,6 +46,27 @@ else
 	if($_SESSION['customer_id'] != '')
 	{
 		$is_logged = 1;
+
+		//Added to download attachments
+		if($_REQUEST['downloadfile'] == 'true')
+		{
+			$filename = $_REQUEST['filename'];
+			$fileType = $_REQUEST['filetype'];
+			$fileid = $_REQUEST['fileid'];
+			$filesize = $_REQUEST['filesize'];
+
+			$contentname = $fileid.'_filecontents';
+			$fileContent = $_SESSION[$contentname];
+
+			header("Content-type: $fileType");
+			header("Content-length: $filesize");
+			header("Cache-Control: private");
+			header("Content-Disposition: attachment; filename=$filename");
+			header("Content-Description: PHP Generated Data");
+			echo base64_decode($fileContent);
+
+			exit;
+		}
 		if($_REQUEST['module'] != '' && $_REQUEST['action'] != '')
 		{
 			$module = $_REQUEST['module']."/";
