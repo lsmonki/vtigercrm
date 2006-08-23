@@ -33,7 +33,7 @@ Set oOlItems = oOlFolder.Items
 Set oOlItems = oOlItems.Restrict("[MessageClass] = 'IPM.Task'")
 
 Set oXMLInst = oXMLDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-oXMLDoc.insertBefore oXMLInst, oXMLDoc.firstChild
+oXMLDoc.insertBefore oXMLInst, oXMLDoc.FirstChild
 
 Set oXMLElmnt_Root = oXMLDoc.createElement("outlook")
 Set oXMLDoc.documentElement = oXMLElmnt_Root
@@ -53,7 +53,7 @@ For Each oOlTasks In oOlItems
     sStartDate = Format(oOlTasks.StartDate, "YYYY")
     sDueDate = Format(oOlTasks.DueDate, "YYYY")
     
-    If sStartDate <> "4501" Or sDueDate <> "4501" Then
+    If sStartDate <> "4501" Then
     
         Set oXMLElmnt_First = oXMLDoc.createElement("taskitems")
         Set oXMLNode = oXMLElmnt_Root.appendChild(oXMLElmnt_First)
@@ -232,7 +232,7 @@ Public Function bUpdateOlTasks(ByVal sEntryId As String, ByVal sCrmId As String)
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim oOlTask As Outlook.TaskItem
-Dim oOlNS As Outlook.Namespace
+Dim oOlNS As Outlook.NameSpace
 Dim sXQuery As String
 Dim bOlFlag As Boolean
 Dim bVtFlag As Boolean
@@ -319,7 +319,7 @@ Public Function bDelOlTasks(ByVal sEntryId As String, ByVal sCrmId As String) As
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim oOlTask As Outlook.TaskItem
-Dim oOlNS As Outlook.Namespace
+Dim oOlNS As Outlook.NameSpace
 Dim sXQuery As String
 Dim bOlFlag As Boolean
 Dim bVtFlag As Boolean

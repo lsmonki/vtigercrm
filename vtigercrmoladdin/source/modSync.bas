@@ -147,7 +147,7 @@ Dim oFS As New Scripting.FileSystemObject
         sOlTaskXML = sGetOlTasks()
         sErrMsg = "Error while getting task details from outlook"
         If sOlTaskXML = "" Then GoTo ERROR_EXIT_ROUTINE
-
+        
         sUpdatedOLXML = sCheckOlNewTasks(sOlTaskXML)
         sErrMsg = "Error while preparing outlook task details for sync"
         If sUpdatedOLXML = "" Then GoTo ERROR_EXIT_ROUTINE
@@ -158,11 +158,11 @@ Dim oFS As New Scripting.FileSystemObject
         sVtTaskXml = sGetvTigerTasks()
         sErrMsg = ""
         If sVtTaskXml = "" Then GoTo ERROR_EXIT_ROUTINE
-
+        
         sUpdatedVtXML = sCheckVtUpdateTasks(sVtTaskXml)
         sErrMsg = "Error while preparing vtigerCRM task details for sync"
         If sUpdatedVtXML = "" Then GoTo ERROR_EXIT_ROUTINE
-
+        
         sUpdatedVtXML = sCheckVtDeleteTasks(sUpdatedVtXML, sVtTaskXml)
         sErrMsg = "Error while preparing vtigerCRM task details for sync"
         If sUpdatedVtXML = "" Then GoTo ERROR_EXIT_ROUTINE
@@ -181,7 +181,6 @@ Dim oFS As New Scripting.FileSystemObject
 
 gsLocalOlSyncXML = sUpdatedOLXML
 gsLocalVtSyncXML = sUpdatedVtXML
-
 TaskSyncMain = True
 GoTo EXIT_ROUTINE
 
@@ -210,7 +209,7 @@ Dim oFS As New Scripting.FileSystemObject
         sOlCalendarXML = sGetOlCalendars()
         sErrMsg = "Error while getting appointment details from outlook"
         If sOlCalendarXML = "" Then GoTo ERROR_EXIT_ROUTINE
-
+        
         sUpdatedOLXML = sCheckOlUpdateCalendars(sOlCalendarXML)
         sErrMsg = "Error while preparing outlook appointment details for sync"
         If sUpdatedOLXML = "" Then GoTo ERROR_EXIT_ROUTINE
@@ -218,6 +217,7 @@ Dim oFS As New Scripting.FileSystemObject
         sUpdatedOLXML = sCheckOlDeleteCalendars(sUpdatedOLXML, sOlCalendarXML)
         sErrMsg = "Error while preparing outlook appointment details for sync"
         If sUpdatedOLXML = "" Then GoTo ERROR_EXIT_ROUTINE
+
     Else
         sOlCalendarXML = sGetOlCalendars()
         sErrMsg = "Error while getting appointment details from outlook"
@@ -240,6 +240,7 @@ Dim oFS As New Scripting.FileSystemObject
         sUpdatedVtXML = sCheckVtDeleteCalendars(sUpdatedVtXML, sVtCalendarXml)
         sErrMsg = "Error while preparing vtigerCRM appointment details for sync"
         If sUpdatedVtXML = "" Then GoTo ERROR_EXIT_ROUTINE
+
     Else
         sVtCalendarXml = sGetvTigerCalendars()
         sErrMsg = ""

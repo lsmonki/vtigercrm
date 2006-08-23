@@ -32,7 +32,7 @@ Else
     Set oXMLMapDoc.documentElement = oXMLMapElement
     
     Set oXMLInst = oXMLMapDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-    oXMLMapDoc.insertBefore oXMLInst, oXMLMapDoc.firstChild
+    oXMLMapDoc.insertBefore oXMLInst, oXMLMapDoc.FirstChild
     
     oXMLMapDoc.Save (gsVtUserFolder & MAPPING_VTIGER_OL)
     
@@ -271,20 +271,25 @@ If bMapFlag = True And bLocalOlFlag = True And bLocalVtFlag = True Then
                         Load frmConflict
                         If frmConflict.bPopulateConflict(oXMLLocalOl_First, oXMLLocalVt_First) = False Then GoTo EXIT_ROUTINE
                         frmConflict.Show vbModal
+                        
                         If nConflictOption = 0 Then
                              Call AddAttribute(oXMLMap_First, "olsyncflag", "M")
-                             Call AddAttribute(oXMLMap_First, "vtsyncflag", "NM")
-                        ElseIf nConflictOption = 1 Then
-                             Call AddAttribute(oXMLMap_First, "olsyncflag", "NM")
                              Call AddAttribute(oXMLMap_First, "vtsyncflag", "M")
+                             Call GetMergedDocument(oXMLLocalOl_First, oXMLLocalVt_First, "outlook", gsSyncModule)
+                        ElseIf nConflictOption = 1 Then
+                             Call AddAttribute(oXMLMap_First, "olsyncflag", "M")
+                             Call AddAttribute(oXMLMap_First, "vtsyncflag", "M")
+                             Call GetMergedDocument(oXMLLocalOl_First, oXMLLocalVt_First, "vtiger", gsSyncModule)
                         End If
                     Else
                         If gsNtfyConflict = 1 Then
                              Call AddAttribute(oXMLMap_First, "olsyncflag", "M")
-                             Call AddAttribute(oXMLMap_First, "vtsyncflag", "NM")
+                             Call AddAttribute(oXMLMap_First, "vtsyncflag", "M")
+                             Call GetMergedDocument(oXMLLocalOl_First, oXMLLocalVt_First, "outlook", gsSyncModule)
                         ElseIf gsNtfyConflict = 2 Then
-                            Call AddAttribute(oXMLMap_First, "olsyncflag", "NM")
+                            Call AddAttribute(oXMLMap_First, "olsyncflag", "M")
                             Call AddAttribute(oXMLMap_First, "vtsyncflag", "M")
+                            Call GetMergedDocument(oXMLLocalOl_First, oXMLLocalVt_First, "vtiger", gsSyncModule)
                         End If
                     End If
                 End If
@@ -292,7 +297,10 @@ If bMapFlag = True And bLocalOlFlag = True And bLocalVtFlag = True Then
         Next i
      End If
 End If
+
 sConflictCheck = oXMLMap_Doc.xml
+gsLocalOlSyncXML = oXMLLocalOl_Doc.xml
+gsLocalVtSyncXML = oXMLLocalVt_Doc.xml
 GoTo EXIT_ROUTINE
 ERROR_EXIT_ROUTINE:
 'sMsgDlg ("sConflictCheck" & Err.Description)
@@ -310,3 +318,432 @@ Set oXMLLocalOl_Doc = Nothing
 Set oXMLLocalOl_Root = Nothing
 Set oXMLLocalOl_First = Nothing
 End Function
+
+Public Function GetMergedDocument(ByRef oXMLLocalOl As MSXML.IXMLDOMElement, ByRef oXMLLocalVt As MSXML.IXMLDOMElement, ByVal Winner As String, ByVal SyncModule) As Boolean
+If Winner <> "" Then
+Select Case (SyncModule)
+        Case "CONTACTSYNC"
+            Select Case (Winner)
+                Case "outlook":
+                    If oXMLLocalOl.selectSingleNode("title").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("title").nodeTypedValue = oXMLLocalOl.selectSingleNode("title").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("title").nodeTypedValue = oXMLLocalVt.selectSingleNode("title").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("firstname").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("firstname").nodeTypedValue = oXMLLocalOl.selectSingleNode("firstname").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("firstname").nodeTypedValue = oXMLLocalVt.selectSingleNode("firstname").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("middlename").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("middlename").nodeTypedValue = oXMLLocalOl.selectSingleNode("middlename").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("middlename").nodeTypedValue = oXMLLocalVt.selectSingleNode("middlename").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("lastname").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("lastname").nodeTypedValue = oXMLLocalOl.selectSingleNode("lastname").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("lastname").nodeTypedValue = oXMLLocalVt.selectSingleNode("lastname").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("birthdate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("birthdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("birthdate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("birthdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("birthdate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("emailaddress").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("emailaddress").nodeTypedValue = oXMLLocalOl.selectSingleNode("emailaddress").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("emailaddress").nodeTypedValue = oXMLLocalVt.selectSingleNode("emailaddress").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("jobtitle").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("jobtitle").nodeTypedValue = oXMLLocalOl.selectSingleNode("jobtitle").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("jobtitle").nodeTypedValue = oXMLLocalVt.selectSingleNode("jobtitle").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("department").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("department").nodeTypedValue = oXMLLocalOl.selectSingleNode("department").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("department").nodeTypedValue = oXMLLocalVt.selectSingleNode("department").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("accountname").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("accountname").nodeTypedValue = oXMLLocalOl.selectSingleNode("accountname").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("accountname").nodeTypedValue = oXMLLocalVt.selectSingleNode("accountname").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("officephone").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("officephone").nodeTypedValue = oXMLLocalOl.selectSingleNode("officephone").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("officephone").nodeTypedValue = oXMLLocalVt.selectSingleNode("officephone").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("homephone").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("homephone").nodeTypedValue = oXMLLocalOl.selectSingleNode("homephone").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("homephone").nodeTypedValue = oXMLLocalVt.selectSingleNode("homephone").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("otherphone").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("otherphone").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherphone").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("otherphone").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherphone").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("fax").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("fax").nodeTypedValue = oXMLLocalOl.selectSingleNode("fax").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("fax").nodeTypedValue = oXMLLocalVt.selectSingleNode("fax").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mobile").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mobile").nodeTypedValue = oXMLLocalOl.selectSingleNode("mobile").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mobile").nodeTypedValue = oXMLLocalVt.selectSingleNode("mobile").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("asstname").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("asstname").nodeTypedValue = oXMLLocalOl.selectSingleNode("asstname").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("asstname").nodeTypedValue = oXMLLocalVt.selectSingleNode("asstname").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("reportsto").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("reportsto").nodeTypedValue = oXMLLocalOl.selectSingleNode("reportsto").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("reportsto").nodeTypedValue = oXMLLocalVt.selectSingleNode("reportsto").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mailingstreet").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mailingstreet").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingstreet").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mailingstreet").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingstreet").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mailingcity").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mailingcity").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingcity").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mailingcity").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingcity").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mailingstate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mailingstate").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingstate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mailingstate").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingstate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mailingzip").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mailingzip").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingzip").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mailingzip").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingzip").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("mailingcountry").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("mailingcountry").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingcountry").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("mailingcountry").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingcountry").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("otherstreet").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("otherstreet").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherstreet").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("otherstreet").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherstreet").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("othercity").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("othercity").nodeTypedValue = oXMLLocalOl.selectSingleNode("othercity").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("othercity").nodeTypedValue = oXMLLocalVt.selectSingleNode("othercity").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("otherstate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("otherstate").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherstate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("otherstate").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherstate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("otherzip").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("otherzip").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherzip").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("otherzip").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherzip").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("othercountry").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("othercountry").nodeTypedValue = oXMLLocalOl.selectSingleNode("othercountry").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("othercountry").nodeTypedValue = oXMLLocalVt.selectSingleNode("othercountry").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    End If
+                    
+                Case "vtiger":
+                        If oXMLLocalVt.selectSingleNode("title").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("title").nodeTypedValue = oXMLLocalVt.selectSingleNode("title").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("title").nodeTypedValue = oXMLLocalOl.selectSingleNode("title").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("firstname").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("firstname").nodeTypedValue = oXMLLocalVt.selectSingleNode("firstname").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("firstname").nodeTypedValue = oXMLLocalOl.selectSingleNode("firstname").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("middlename").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("middlename").nodeTypedValue = oXMLLocalVt.selectSingleNode("middlename").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("middlename").nodeTypedValue = oXMLLocalOl.selectSingleNode("middlename").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("lastname").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("lastname").nodeTypedValue = oXMLLocalVt.selectSingleNode("lastname").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("lastname").nodeTypedValue = oXMLLocalOl.selectSingleNode("lastname").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("birthdate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("birthdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("birthdate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("birthdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("birthdate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("emailaddress").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("emailaddress").nodeTypedValue = oXMLLocalVt.selectSingleNode("emailaddress").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("emailaddress").nodeTypedValue = oXMLLocalOl.selectSingleNode("emailaddress").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("jobtitle").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("jobtitle").nodeTypedValue = oXMLLocalVt.selectSingleNode("jobtitle").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("jobtitle").nodeTypedValue = oXMLLocalOl.selectSingleNode("jobtitle").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("department").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("department").nodeTypedValue = oXMLLocalVt.selectSingleNode("department").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("department").nodeTypedValue = oXMLLocalOl.selectSingleNode("department").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("accountname").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("accountname").nodeTypedValue = oXMLLocalVt.selectSingleNode("accountname").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("accountname").nodeTypedValue = oXMLLocalOl.selectSingleNode("accountname").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("officephone").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("officephone").nodeTypedValue = oXMLLocalVt.selectSingleNode("officephone").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("officephone").nodeTypedValue = oXMLLocalOl.selectSingleNode("officephone").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("homephone").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("homephone").nodeTypedValue = oXMLLocalVt.selectSingleNode("homephone").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("homephone").nodeTypedValue = oXMLLocalOl.selectSingleNode("homephone").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("otherphone").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("otherphone").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherphone").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("otherphone").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherphone").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("fax").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("fax").nodeTypedValue = oXMLLocalVt.selectSingleNode("fax").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("fax").nodeTypedValue = oXMLLocalOl.selectSingleNode("fax").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mobile").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mobile").nodeTypedValue = oXMLLocalVt.selectSingleNode("mobile").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mobile").nodeTypedValue = oXMLLocalOl.selectSingleNode("mobile").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("asstname").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("asstname").nodeTypedValue = oXMLLocalVt.selectSingleNode("asstname").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("asstname").nodeTypedValue = oXMLLocalOl.selectSingleNode("asstname").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("reportsto").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("reportsto").nodeTypedValue = oXMLLocalVt.selectSingleNode("reportsto").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("reportsto").nodeTypedValue = oXMLLocalOl.selectSingleNode("reportsto").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mailingstreet").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mailingstreet").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingstreet").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mailingstreet").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingstreet").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mailingcity").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mailingcity").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingcity").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mailingcity").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingcity").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mailingstate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mailingstate").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingstate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mailingstate").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingstate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mailingzip").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mailingzip").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingzip").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mailingzip").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingzip").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("mailingcountry").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("mailingcountry").nodeTypedValue = oXMLLocalVt.selectSingleNode("mailingcountry").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("mailingcountry").nodeTypedValue = oXMLLocalOl.selectSingleNode("mailingcountry").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("otherstreet").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("otherstreet").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherstreet").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("otherstreet").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherstreet").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("othercity").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("othercity").nodeTypedValue = oXMLLocalVt.selectSingleNode("othercity").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("othercity").nodeTypedValue = oXMLLocalOl.selectSingleNode("othercity").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("otherstate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("otherstate").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherstate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("otherstate").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherstate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("otherzip").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("otherzip").nodeTypedValue = oXMLLocalVt.selectSingleNode("otherzip").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("otherzip").nodeTypedValue = oXMLLocalOl.selectSingleNode("otherzip").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("othercountry").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("othercountry").nodeTypedValue = oXMLLocalVt.selectSingleNode("othercountry").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("othercountry").nodeTypedValue = oXMLLocalOl.selectSingleNode("othercountry").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    End If
+        
+            End Select
+        Case "TASKSYNC":
+            Select Case (Winner)
+                Case "outlook":
+                    If oXMLLocalOl.selectSingleNode("subject").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("subject").nodeTypedValue = oXMLLocalOl.selectSingleNode("subject").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("subject").nodeTypedValue = oXMLLocalVt.selectSingleNode("subject").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue = oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue = oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("status").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("status").nodeTypedValue = oXMLLocalOl.selectSingleNode("status").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("status").nodeTypedValue = oXMLLocalVt.selectSingleNode("status").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("priority").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("priority").nodeTypedValue = oXMLLocalOl.selectSingleNode("priority").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("priority").nodeTypedValue = oXMLLocalVt.selectSingleNode("priority").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("contactname").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("contactname").nodeTypedValue = oXMLLocalOl.selectSingleNode("contactname").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("contactname").nodeTypedValue = oXMLLocalVt.selectSingleNode("contactname").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("category").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("category").nodeTypedValue = oXMLLocalOl.selectSingleNode("category").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("category").nodeTypedValue = oXMLLocalVt.selectSingleNode("category").nodeTypedValue
+                    End If
+                
+                Case "vtiger":
+                    If oXMLLocalVt.selectSingleNode("subject").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("subject").nodeTypedValue = oXMLLocalVt.selectSingleNode("subject").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("subject").nodeTypedValue = oXMLLocalOl.selectSingleNode("subject").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue = oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue = oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("status").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("status").nodeTypedValue = oXMLLocalVt.selectSingleNode("status").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("status").nodeTypedValue = oXMLLocalOl.selectSingleNode("status").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("priority").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("priority").nodeTypedValue = oXMLLocalVt.selectSingleNode("priority").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("priority").nodeTypedValue = oXMLLocalOl.selectSingleNode("priority").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("contactname").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("contactname").nodeTypedValue = oXMLLocalVt.selectSingleNode("contactname").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("contactname").nodeTypedValue = oXMLLocalOl.selectSingleNode("contactname").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("category").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("category").nodeTypedValue = oXMLLocalVt.selectSingleNode("category").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("category").nodeTypedValue = oXMLLocalOl.selectSingleNode("category").nodeTypedValue
+                    End If
+            End Select
+        Case "CALENDARSYNC":
+            Select Case (Winner)
+                Case "outlook":
+                    If oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue = oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue = oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("subject").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("subject").nodeTypedValue = oXMLLocalOl.selectSingleNode("subject").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("subject").nodeTypedValue = oXMLLocalVt.selectSingleNode("subject").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    End If
+                    If oXMLLocalOl.selectSingleNode("location").nodeTypedValue <> "" Then
+                        oXMLLocalVt.selectSingleNode("location").nodeTypedValue = oXMLLocalOl.selectSingleNode("location").nodeTypedValue
+                    Else
+                        oXMLLocalOl.selectSingleNode("location").nodeTypedValue = oXMLLocalVt.selectSingleNode("location").nodeTypedValue
+                    End If
+
+                Case "vtiger":
+                    If oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue = oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("duedate").nodeTypedValue = oXMLLocalOl.selectSingleNode("duedate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("subject").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("subject").nodeTypedValue = oXMLLocalVt.selectSingleNode("subject").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("subject").nodeTypedValue = oXMLLocalOl.selectSingleNode("subject").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue = oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("startdate").nodeTypedValue = oXMLLocalOl.selectSingleNode("startdate").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("description").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("description").nodeTypedValue = oXMLLocalVt.selectSingleNode("description").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("description").nodeTypedValue = oXMLLocalOl.selectSingleNode("description").nodeTypedValue
+                    End If
+                    If oXMLLocalVt.selectSingleNode("location").nodeTypedValue <> "" Then
+                        oXMLLocalOl.selectSingleNode("location").nodeTypedValue = oXMLLocalVt.selectSingleNode("location").nodeTypedValue
+                    Else
+                        oXMLLocalVt.selectSingleNode("location").nodeTypedValue = oXMLLocalOl.selectSingleNode("location").nodeTypedValue
+                    End If
+            End Select
+    End Select
+End If
+    
+End Function
+
+

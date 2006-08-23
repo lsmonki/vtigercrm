@@ -20,7 +20,7 @@ If sSyncModule <> "" Then
             If gsMappingSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalOlSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalVtSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
-                        
+            
             If oXMLLocalOl_Doc.loadXML(gsLocalOlSyncXML) = True Then
                 oXMLLocalOl_Doc.Save (gsVtUserFolder & LOCAL_OL_FILE)
             End If
@@ -40,7 +40,7 @@ If sSyncModule <> "" Then
             If gsMappingSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalOlSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalVtSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
-                        
+            
             If oXMLLocalOl_Doc.loadXML(gsLocalOlSyncXML) = True Then
                 oXMLLocalOl_Doc.Save (gsVtUserFolder & LOCAL_OL_FILE)
             End If
@@ -185,6 +185,37 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                 sMEntryId = oXMLMap_First.getAttribute("entryid")
                 If sMCrmId <> "" And sMEntryId <> "" Then
                       If bUpdateOlContacts(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      AddAttribute oXMLMap_First, "vtsyncflag", "S"
+                      AddAttribute oXMLMap_First, "olsyncflag", "S"
+                End If
+            End If
+            frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
+        Next i
+     End If
+     
+     'Modify Vt Contacts in Outlook and Outlook Contact in Vt in Case of Conflict
+     sXQuery = "syncitem[@vtsyncflag='M' and @olsyncflag='M' and @type='CNTS']"
+     Set oXMLMap_NodeList = oXMLMap_Root.selectNodes(sXQuery)
+     
+     If Not oXMLMap_NodeList Is Nothing Then
+        
+        If oXMLMap_NodeList.Length > 0 Then
+            frmSync.PrgBarSync.Min = 0
+            frmSync.PrgBarSync.Max = oXMLMap_NodeList.Length
+            frmSync.PrgBarSync.Value = 0
+            frmSync.lblSynStatus.Caption = "Updating Contacts...."
+            DoEvents
+        End If
+        
+        sErrMsg = "Error while updating contacts in outlook"
+        For i = 0 To oXMLMap_NodeList.Length - 1
+            Set oXMLMap_First = oXMLMap_NodeList.Item(i)
+            If Not oXMLMap_First Is Nothing Then
+                sMCrmId = oXMLMap_First.getAttribute("crmid")
+                sMEntryId = oXMLMap_First.getAttribute("entryid")
+                If sMCrmId <> "" And sMEntryId <> "" Then
+                      If bUpdateOlContacts(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      If bUpdateVtContacts(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
                       AddAttribute oXMLMap_First, "vtsyncflag", "S"
                       AddAttribute oXMLMap_First, "olsyncflag", "S"
                 End If
@@ -511,6 +542,37 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         Next i
      End If
      
+     'Modify Vt Tasks in Outlook and Outlook Tasks in vt in Case of conflict
+     sXQuery = "syncitem[@vtsyncflag='M' and @olsyncflag='M' and @type='TASK']"
+     Set oXMLMap_NodeList = oXMLMap_Root.selectNodes(sXQuery)
+     
+     If Not oXMLMap_NodeList Is Nothing Then
+        
+        If oXMLMap_NodeList.Length > 0 Then
+            frmSync.PrgBarSync.Min = 0
+            frmSync.PrgBarSync.Max = oXMLMap_NodeList.Length
+            frmSync.PrgBarSync.Value = 0
+            frmSync.lblSynStatus.Caption = "Updating Tasks...."
+            DoEvents
+        End If
+        
+        sErrMsg = "Error while updating tasks in outlook"
+        For i = 0 To oXMLMap_NodeList.Length - 1
+            Set oXMLMap_First = oXMLMap_NodeList.Item(i)
+            If Not oXMLMap_First Is Nothing Then
+                sMCrmId = oXMLMap_First.getAttribute("crmid")
+                sMEntryId = oXMLMap_First.getAttribute("entryid")
+                If sMCrmId <> "" And sMEntryId <> "" Then
+                      If bUpdateOlTasks(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      If bUpdateVtTasks(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      AddAttribute oXMLMap_First, "vtsyncflag", "S"
+                      AddAttribute oXMLMap_First, "olsyncflag", "S"
+                End If
+            End If
+            frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
+        Next i
+     End If
+     
      'Delete Vt Contacts in Outlook
      sXQuery = "syncitem[@vtsyncflag='D' and @olsyncflag!='' and @type='TASK']"
      Set oXMLMap_NodeList = oXMLMap_Root.selectNodes(sXQuery)
@@ -791,6 +853,38 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
+                End If
+            End If
+            frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
+        Next i
+     End If
+     
+     
+     'Modify Vt Clndr in Outlook and Outlook Clndr in vt when Conflict
+     sXQuery = "syncitem[@vtsyncflag='M' and @olsyncflag='M' and @type='CLNDR']"
+     Set oXMLMap_NodeList = oXMLMap_Root.selectNodes(sXQuery)
+     
+     If Not oXMLMap_NodeList Is Nothing Then
+        
+        If oXMLMap_NodeList.Length > 0 Then
+            frmSync.PrgBarSync.Min = 0
+            frmSync.PrgBarSync.Max = oXMLMap_NodeList.Length
+            frmSync.PrgBarSync.Value = 0
+            frmSync.lblSynStatus.Caption = "Updating Clndr...."
+            DoEvents
+        End If
+        
+        sErrMsg = "Error while updating appointments in outlook"
+        For i = 0 To oXMLMap_NodeList.Length - 1
+            Set oXMLMap_First = oXMLMap_NodeList.Item(i)
+            If Not oXMLMap_First Is Nothing Then
+                sMCrmId = oXMLMap_First.getAttribute("crmid")
+                sMEntryId = oXMLMap_First.getAttribute("entryid")
+                If sMCrmId <> "" And sMEntryId <> "" Then
+                      If bUpdateOlClndr(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      If bUpdateVtClndr(sMEntryId, sMCrmId) = False Then GoTo ERROR_EXIT_ROUTINE
+                      AddAttribute oXMLMap_First, "vtsyncflag", "S"
+                      AddAttribute oXMLMap_First, "olsyncflag", "S"
                 End If
             End If
             frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1

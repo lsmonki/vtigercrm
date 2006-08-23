@@ -27,7 +27,7 @@ Dim oXMLOl_First As MSXML.IXMLDOMElement
 Dim i As Integer
 
 Set oXMLLocalInst = oXMLLocalDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-oXMLLocalDoc.insertBefore oXMLLocalInst, oXMLLocalDoc.firstChild
+oXMLLocalDoc.insertBefore oXMLLocalInst, oXMLLocalDoc.FirstChild
 
 Set oXMLLocalElmnt_Root = oXMLLocalDoc.createElement("outlook")
 Set oXMLLocalDoc.documentElement = oXMLLocalElmnt_Root
@@ -333,7 +333,7 @@ Dim oXMLVt_First As MSXML.IXMLDOMElement
 Dim i As Integer
 
 Set oXMLLocalInst = oXMLLocalDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-oXMLLocalDoc.insertBefore oXMLLocalInst, oXMLLocalDoc.firstChild
+oXMLLocalDoc.insertBefore oXMLLocalInst, oXMLLocalDoc.FirstChild
 
 Set oXMLLocalElmnt_Root = oXMLLocalDoc.createElement("vtigercrm")
 Set oXMLLocalDoc.documentElement = oXMLLocalElmnt_Root
