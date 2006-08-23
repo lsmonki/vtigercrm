@@ -94,7 +94,7 @@ $mod_strings = Array(
 
 //Added for 4GA
 'Product Name'=>'Product Name',
-'Part Number'=>'Part Number',
+'Product Code'=>'Part Number',
 'Product Active'=>'Product Active',
 'Commission Rate'=>'Commission Rate (%)',
 'Qty/Unit'=>'Qty/Unit',
