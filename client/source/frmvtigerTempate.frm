@@ -122,7 +122,7 @@ Private Sub Form_Load()
 'Language Implmentation
 frmvtigerMerge.Caption = gfrmMerge_FormName
 Label5.Caption = gfrmMerge_Label1
-Label1.Caption = gfrmMerge_Label2
+    Label1.Caption = gfrmMerge_Label2
 cmdInsert.Caption = gfrmMerge_InsertButton
 cmdClose.Caption = gfrmMerge_CloseButton
 
@@ -130,8 +130,7 @@ Me.Top = (Screen.Height - Me.Height) / 2
 
 Me.Left = (Screen.Width - Me.Width) / 2
 
-
-Call sLoadField(lstColumns)
+'Call sLoadField(lstColumns)
 
 End Sub
 
@@ -140,31 +139,31 @@ Dim i As Integer
 If lstColumns.Selected(lstColumns.ListIndex) = True Then
     lstFields.Clear
     Select Case (lstColumns.ListIndex)
-    Case 0:
+    Case contact_index:
         If UBound(a) <> 0 Then
             For i = 0 To UBound(a)
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a(i), i
             Next i
         End If
-    Case 1:
+    Case account_index:
         If UBound(a_acnt) <> 0 Then
             For i = 0 To UBound(a_acnt)
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_acnt(i), i
             Next i
         End If
-    Case 2:
+    Case lead_index:
         If UBound(a_lead) <> 0 Then
             For i = 0 To UBound(a_lead)
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_lead(i), i
             Next i
         End If
-    Case 3:
+    Case ticket_index:
         If UBound(a_tickets) <> 0 Then
             For i = 0 To UBound(a_tickets)
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_tickets(i), i
             Next i
         End If
-    Case 4:
+    Case user_index:
         If UBound(a_user) <> 0 Then
             For i = 0 To UBound(a_user)
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_user(i), i

@@ -53,6 +53,12 @@ Public a_acnt() As String
 Public a_lead() As String
 Public a_tickets() As String
 Public a_user() As String
+Public module_index As Integer
+Public contact_index As Integer
+Public lead_index As Integer
+Public ticket_index As Integer
+Public user_index As Integer
+Public account_index As Integer
 
 ''Public Sub ExecuteInShell(ByRef url As String)
 ''On Error Resume Next
@@ -287,6 +293,13 @@ End Function
 
 Public Function bGetFieldValues() As Boolean
 
+module_index = 0
+contact_index = 50
+user_index = 51
+lead_index = 52
+account_index = 53
+ticket_index = 54
+
 On Error GoTo ERROR_EXIT_ROUTINE
 Dim sErrStr As String
 
@@ -298,6 +311,10 @@ Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
 Dim oSoapNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
 
 oSoap.MethodName = "get_contacts_columns"
 
@@ -315,9 +332,24 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     sErrStr = gMsg005
     oSoapHttp.Send svtigerURL, oSoap.Serialize
     oSoap.Parse oSoapHttp
-    
+
     If oSoap.Serialize <> "" Then
-        Call sParseXML(oSoap.Serialize)
+        If oXMLDoc.loadXML(oSoap.Serialize) Then
+            sErrStr = gMsg005
+    
+            Set oXMLElmt_Root = oXMLDoc.documentElement
+            Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+            Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_contacts_columnsResponse/return")
+            If oXMLReturnElmt.hasChildNodes <> False Then
+                Call sParseXML(oSoap.Serialize)
+                frmvtigerMerge.lstColumns.AddItem "Contact Fields", module_index
+                contact_index = module_index
+                module_index = module_index + 1
+            End If
+         Else
+            GoTo ERROR_EXIT_ROUTINE
+         End If
     Else
         GoTo ERROR_EXIT_ROUTINE
     End If
@@ -363,7 +395,7 @@ If oXMLDoc.loadXML(sXMLString) Then
     Set oXMLBody = oXMLElmt_Root.childNodes(0)
     
     Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_contacts_columnsResponse/return")
-    
+
     ReDim a(oXMLReturnElmt.childNodes.Length - 1) As String
     
     For i = 0 To oXMLReturnElmt.childNodes.Length - 1
@@ -402,6 +434,11 @@ Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
 Dim oSoapNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+
 
 oSoap.MethodName = "get_accounts_columns"
 
@@ -419,9 +456,24 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     sErrStr = gMsg005
     oSoapHttp.Send svtigerURL, oSoap.Serialize
     oSoap.Parse oSoapHttp
-    
     If oSoap.Serialize <> "" Then
-        Call sParseXML_Acnt(oSoap.Serialize)
+        If oXMLDoc.loadXML(oSoap.Serialize) Then
+            sErrStr = gMsg005
+    
+            Set oXMLElmt_Root = oXMLDoc.documentElement
+            Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+            Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_accounts_columnsResponse/return")
+            If oXMLReturnElmt.hasChildNodes <> False Then
+
+                Call sParseXML_Acnt(oSoap.Serialize)
+                frmvtigerMerge.lstColumns.AddItem "Account Fields", module_index
+                account_index = module_index
+                module_index = module_index + 1
+            End If
+         Else
+            GoTo ERROR_EXIT_ROUTINE
+         End If
     Else
         GoTo ERROR_EXIT_ROUTINE
     End If
@@ -504,6 +556,10 @@ Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
 Dim oSoapNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
 
 oSoap.MethodName = "get_user_columns"
 
@@ -523,7 +579,23 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     oSoap.Parse oSoapHttp
 
     If oSoap.Serialize <> "" Then
-        Call sParseXML_User(oSoap.Serialize)
+        If oXMLDoc.loadXML(oSoap.Serialize) Then
+            sErrStr = gMsg005
+    
+            Set oXMLElmt_Root = oXMLDoc.documentElement
+            Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+            Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_user_columnsResponse/return")
+            If oXMLReturnElmt.hasChildNodes <> False Then
+
+                Call sParseXML_User(oSoap.Serialize)
+                frmvtigerMerge.lstColumns.AddItem "User Fields", module_index
+                user_index = module_index
+                module_index = module_index + 1
+            End If
+         Else
+            GoTo ERROR_EXIT_ROUTINE
+         End If
     Else
         GoTo ERROR_EXIT_ROUTINE
     End If
@@ -559,6 +631,10 @@ Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
 Dim oSoapNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
 
 oSoap.MethodName = "get_leads_columns"
 
@@ -578,7 +654,23 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     oSoap.Parse oSoapHttp
     
     If oSoap.Serialize <> "" Then
-        Call sParseXML_Lead(oSoap.Serialize)
+        If oXMLDoc.loadXML(oSoap.Serialize) Then
+            sErrStr = gMsg005
+    
+            Set oXMLElmt_Root = oXMLDoc.documentElement
+            Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+            Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_leads_columnsResponse/return")
+            If oXMLReturnElmt.hasChildNodes <> False Then
+
+                Call sParseXML_Lead(oSoap.Serialize)
+                frmvtigerMerge.lstColumns.AddItem "Lead Fields", module_index
+                lead_index = module_index
+                module_index = module_index + 1
+            End If
+         Else
+            GoTo ERROR_EXIT_ROUTINE
+         End If
     Else
         GoTo ERROR_EXIT_ROUTINE
     End If
@@ -614,6 +706,10 @@ Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
 Dim oSoapNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
 
 oSoap.MethodName = "get_tickets_columns"
 
@@ -633,7 +729,23 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     oSoap.Parse oSoapHttp
     
     If oSoap.Serialize <> "" Then
-        Call sParseXML_Tickets(oSoap.Serialize)
+        If oXMLDoc.loadXML(oSoap.Serialize) Then
+            sErrStr = gMsg005
+    
+            Set oXMLElmt_Root = oXMLDoc.documentElement
+            Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+            Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_tickets_columnsResponse/return")
+            If oXMLReturnElmt.hasChildNodes <> False Then
+
+                Call sParseXML_Tickets(oSoap.Serialize)
+                frmvtigerMerge.lstColumns.AddItem "Ticket Fields", module_index
+                ticket_index = module_index
+                module_index = module_index + 1
+            End If
+         Else
+            GoTo ERROR_EXIT_ROUTINE
+         End If
     Else
         GoTo ERROR_EXIT_ROUTINE
     End If
