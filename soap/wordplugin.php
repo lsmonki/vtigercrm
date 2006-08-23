@@ -213,7 +213,7 @@ $server->register(
 	        
 function get_tickets_columns($user_name, $password)
 {
-	global $current_user;
+	global $current_user,$log;
 	require_once("modules/Users/User.php");
 	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
@@ -223,35 +223,43 @@ function get_tickets_columns($user_name, $password)
 	{ 
 		require_once('modules/HelpDesk/HelpDesk.php');
 		$helpdesk = new HelpDesk();
+		$log->debug($helpdesk->getColumnNames_Hd());
 		return $helpdesk->getColumnNames_Hd();
 	}
 	else
-		return null;
+	{
+	    	$return_array = array();
+    		return $return_array;
+	}
 }
 
 function get_contacts_columns($user_name, $password)
 {
-	global $current_user;
+	global $current_user,$log;
 	require_once("modules/Users/User.php");
 	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
-	$current_user=$seed_user;
+	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Contacts","index") == "yes")
 	{
 		require_once('modules/Contacts/Contact.php');
 		$contact = new Contact();
+		$log->debug($contact->getColumnNames());
 		return $contact->getColumnNames();	   
 	}
 	else
-		return null;
+	{
+    		$return_array = array();
+		return $return_array;
+	}
 
 }
 
 
 function get_accounts_columns($user_name, $password)
 {
-	global $current_user;
+	global $current_user,$log;
 	require_once("modules/Users/User.php");
 	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
@@ -261,17 +269,21 @@ function get_accounts_columns($user_name, $password)
 	{
 		require_once('modules/Accounts/Account.php');
 		$account = new Account();
+		$log->debug($account->getColumnNames_Acnt());
 		return $account->getColumnNames_Acnt();
 	}
 	else
-		return null;
+	{
+	    	$return_array = array();
+	    	return $return_array;
+	}
 
 }
 
 
 function get_leads_columns($user_name, $password)
 {	
-	global $current_user;
+	global $current_user,$log;
 	require_once("modules/Users/User.php");
 	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
@@ -282,10 +294,15 @@ function get_leads_columns($user_name, $password)
 	{
 		require_once('modules/Leads/Lead.php');
 		$lead = new Lead();
+		$log->debug($lead->getColumnNames_Lead());
 		return $lead->getColumnNames_Lead();
 	}
 	else
-		return null;
+	{
+    		$return_array = array();
+    		return $return_array;
+	}
+	
 }
 
 function get_user_columns($user_name, $password)
@@ -296,13 +313,9 @@ function get_user_columns($user_name, $password)
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
-	if(isPermitted("Users","index") == "yes")
-	{
-		$user = new User();
-		return $user->getColumnNames_User();
-	}
-	else
-		return null;
+	$user = new User();
+	return $user->getColumnNames_User();
+	
 }
 
 
