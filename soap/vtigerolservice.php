@@ -161,6 +161,26 @@ $server->register(
     $NAMESPACE);
 
 $server->register(
+    'CheckEmailPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckContactPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckActivityPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+
+
+$server->register(
     'SearchContactsByEmail',
     array('username'=>'xsd:string','emailaddress'=>'xsd:string'),
     array('return'=>'tns:contactdetails'),
@@ -175,8 +195,8 @@ $server->register(
 $server->register(
     'AddEmailAttachment',
     array('emailid'=>'xsd:string','filedata'=>'xsd:string',
-					'filename'=>'xsd:string','filesize'=>'xsd:string','filetype'=>'xsd:string',
-					'username'=>'xsd:string'),
+	  'filename'=>'xsd:string','filesize'=>'xsd:string','filetype'=>'xsd:string',
+	  'username'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -351,7 +371,7 @@ function LoginToVtiger($userid,$password)
 			$return_access = "TRUE";
 		}else
 		{
-				$return_access = "FALSE";
+			$return_access = "FALSE";
 		}
 	}else
 	{
@@ -360,6 +380,60 @@ function LoginToVtiger($userid,$password)
 	}
 	$objuser = $objuser;
 	return $return_access;
+}
+
+function CheckEmailPermission($username)
+{
+	global $current_user,$log;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Emails","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckContactPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Contacts","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckActivityPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Calendar","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
 }
 
 function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username)
@@ -751,6 +825,9 @@ function AddTasks($username,$taskdtls)
 	
 	foreach($taskdtls as $taskrow)
 	{
+	
+	
+	//Currently only 3 status avail Note ************************************************
       		if(isset($taskrow))
       		{
 			if($taskrow["status"] == "0")
