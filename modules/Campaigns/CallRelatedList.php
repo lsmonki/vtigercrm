@@ -60,8 +60,7 @@ $smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
-$smarty->assign("id",$focus->id);
-$smarty->assign("ID",$RECORD );
+$smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Campaign']);
 $smarty->assign("MOD",$mod_strings);

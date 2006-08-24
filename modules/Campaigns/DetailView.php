@@ -12,7 +12,9 @@
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/Campaigns/Campaign.php');
+require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 $focus = new Campaign();
 
@@ -27,7 +29,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-global $app_strings,$mod_strings,$theme,$currentModule;
+global $app_strings,$mod_strings,$theme,$currentModule,$default_module_view;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -68,6 +70,21 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+	$cvObj = new CustomView("Contacts");
+	$cvcombo = $cvObj->getCustomViewCombo();
+	$smarty->assign("CONTCVCOMBO","<select id='cont_cv_list' onchange='loadCvList(\"Contacts\",".$_REQUEST["record"].");'><option>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
+
+	$cvObj = new CustomView("Leads");
+	$cvcombo = $cvObj->getCustomViewCombo();
+	$smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"Leads\",".$_REQUEST["record"].");'> <option>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
