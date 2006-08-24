@@ -20,6 +20,11 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
+if(isset($_REQUEST['opmode']) && $_REQUEST['opmode'] != '')
+{
+	$sql_del = "delete from vtiger_systems where server_type='backup'";
+	$adb->query($sql_del);
+}
 
 $smarty = new vtigerCRM_Smarty;
 if($_REQUEST['error'] != '')
@@ -49,5 +54,9 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
-$smarty->display("Settings/BackupServer.tpl");
+
+if($_REQUEST['ajax'] == 'true')
+	$smarty->display("Settings/BackupServerContents.tpl");
+else
+	$smarty->display("Settings/BackupServer.tpl");
 ?>
