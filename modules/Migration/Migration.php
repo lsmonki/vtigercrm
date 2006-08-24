@@ -91,7 +91,7 @@ class Migration
 	 */
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
-		$this->conn->println("Inside the function takeDatabaseDump. Going to take the old database dump...");
+		$this->conn->println("Inside the function takeDatabaseDump. Going to take the specified database dump...");
 		$dump_filename = 'dump_'.$dbname.'.txt';
 
 		if($mysql_password != '')
@@ -322,6 +322,18 @@ class Migration
 			//Take the dump of the old Database
 			$this->conn->println("Going to take the old Database Dump.");
 			$dump_file = $this->takeDatabaseDump($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
+
+			//check the file size is greater than 10000 bytes (~app) and if yes then continue else goto step1
+			if(is_file($dump_file) && filesize($dump_file) > 10000)
+			{
+				$_SESSION['migration_log'] .= "Source database dump taken successfully.";
+			}
+			else
+			{
+				echo '<br><font color="red"><b>The Source database dump taken may not contain all values. So please use other option.</font></b>';
+				include("modules/Migration/MigrationStep1.php");
+				exit;
+			}
 		}
 		elseif($option == 'dumpsource')
 		{
@@ -334,6 +346,19 @@ class Migration
 			//This is to take dump of the new database for backup purpose
 			$this->conn->println("Going to take the current Database Dump.");
 			$new_dump_file = $this->takeDatabaseDump($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname);
+
+			//check the file size is greater than 10000 bytes (~app) and if yes then continue else goto step1
+			if(is_file($new_dump_file) && filesize($new_dump_file) > 10000)
+			{
+				$_SESSION['migration_log'] .= "Current database dump taken successfully.";
+			}
+			else
+			{
+				$_SESSION['migration_log'] .= '<br><font color="red"><b>The Current database dump taken may not contain all values. So may not be reload the current database if any problem occurs in migration. If the migration not completed please rename the install.php and install folder and run the install.php</font></b>';
+				//include("modules/Migration/MigrationStep1.php");
+				//exit;
+			}
+
 		}
 
 
