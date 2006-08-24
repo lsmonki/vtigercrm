@@ -212,7 +212,7 @@ require_once($theme_path.'layout_utils.php');
 
 					//Now all the queries will be placed inside the above div tag in tr tag
 
-					include("modules/Migration/ModifyDatabase/42P2_to_50Alpha.php");
+					include("modules/Migration/ModifyDatabase/42P2_to_50.php");
 
 
 							   ?>
