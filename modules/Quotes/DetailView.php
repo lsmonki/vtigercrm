@@ -26,7 +26,8 @@ require_once('modules/Quotes/Quote.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings,$app_strings,$currentModule,$theme;
+require_once('user_privileges/default_module_view.php');
+global $mod_strings,$app_strings,$currentModule,$theme,$singlepane_view;
 $focus = new Quote();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -99,6 +100,15 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
+
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>
