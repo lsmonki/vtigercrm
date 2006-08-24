@@ -104,13 +104,17 @@
 								<td width=80%>
 									<table>
 										<tr>
-											{if $ACTIVITY_TYPE eq 'Meeting'}
-												{assign var='meetcheck' value='checked'}
-                                                                                                {assign var='callcheck' value=''}
-											{else}
-												{assign var='meetcheck' value=''}
-												{assign var='callcheck' value='checked'}
-											{/if}
+										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
+                                                                                {foreach key=sel_value item=value from=$typearr}
+                                                                                {if $value eq 'selected' && $sel_value eq 'Meeting'}
+                                                                                        {assign var='meetcheck' value='checked'}
+                                                                                        {assign var='callcheck' value=''}
+                                                                                {else}
+                                                                                        {assign var='meetcheck' value=''}
+                                                                                        {assign var='callcheck' value='checked'}
+                                                                                {/if}
+                                                                                {/foreach}
+                                                                                {/foreach}
 											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck}></td><td>{$APP.Call}</td><td style="width:10px">
 											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck}></td><td>{$APP.Meeting}</td><td style="width:20px">
 										</tr>
