@@ -25,10 +25,11 @@ require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 global $mod_strings;
 global $app_strings;
-global $currentModule;
+global $currentModule, $singlepane_view;
 
 $focus = new Potential();
 $smarty = new vtigerCRM_Smarty;
@@ -92,5 +93,14 @@ $smarty->assign("CHECK", $check_button);
 $smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
+
 $smarty->display("DetailView.tpl");
 ?>
