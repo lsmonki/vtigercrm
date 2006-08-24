@@ -13,6 +13,7 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 $focus = new HelpDesk();
 
@@ -36,7 +37,7 @@ if($_REQUEST['mail_error'] != '')
 
 global $app_strings;
 global $mod_strings;
-global $currentModule;
+global $currentModule, $singlepane_view;
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -47,6 +48,7 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
+$focus->id = $_REQUEST['record'];
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
@@ -102,8 +104,16 @@ $smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record'
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
+
 $smarty->display("DetailView.tpl");
-$focus->id = $_REQUEST['record'];
 
 
 ?>

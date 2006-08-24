@@ -18,7 +18,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
-
+require_once('user_privileges/default_module_view.php');
 
 class HelpDesk extends CRMEntity {
 	var $log;
@@ -119,7 +119,7 @@ class HelpDesk extends CRMEntity {
         **/
 	function get_activities($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 		global $app_strings;
@@ -128,7 +128,10 @@ class HelpDesk extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=HelpDesk&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=HelpDesk&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held')";
 		$log->debug("Exiting get_activities method ...");
@@ -350,14 +353,14 @@ class HelpDesk extends CRMEntity {
 		global $log,$current_user;
 		$log->debug("Entering getColumnNames_Hd() method ...");
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
-	  {
-		  $sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 ";
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 ";
 		}else
 		{
-		  $profileList = getCurrentUserProfileList();
-		  $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
-    }
+			$profileList = getCurrentUserProfileList();
+			$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+		}
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)
