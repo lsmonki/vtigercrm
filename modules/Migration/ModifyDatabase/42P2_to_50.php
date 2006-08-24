@@ -3551,6 +3551,64 @@ Execute("delete from vtiger_parenttabrel where tabid=17");
 //audit trial table
 Execute("create table vtiger_audit_trial(auditid int(19) NOT NULL, userid int(19) default NULL, module varchar(255) default NULL, action varchar(255) default NULL, recordid varchar(20) default NULL, actiondate datetime default NULL, PRIMARY KEY (auditid)) ENGINE=InnoDB");
 
+//Added after 5 rc release
+Execute("alter table vtiger_account modify siccode varchar(50)");
+Execute("update vtiger_field set typeofdata='V~O' where fieldname='siccode' and columnname='siccode' and tabid=6");
+Execute("alter table vtiger_inventoryproductrel add column sequence_no int(4) not null default 1 after productid");
+
+//changes made for CustomView and Reports - Activities changed to Calendar -- Starts
+//Added to change the entitytype from Activities to Calendar for customview
+Execute("update vtiger_customview set entitytype='Calendar' where entitytype='Activities'");
+
+//Added to change the primarymodule from Activities to Calendar for Reports
+Execute("update vtiger_reportmodules set primarymodule='Calendar' where primarymodule='Activities'");
+Execute("update  vtiger_reportmodules set primarymodule='PurchaseOrder' where primarymodule='Orders'");
+Execute("update  vtiger_reportmodules set secondarymodules='PurchaseOrder' where secondarymodules='Orders'");
+
+//we should change the Activities to Calendar in columnname values in customview and report related tables
+$prefix = "vtiger_";
+$change_cols_array = Array(
+				"cvcolumnlist"=>"columnname",
+				"cvstdfilter"=>"columnname",
+				"cvadvfilter"=>"columnname",
+				"selectcolumn"=>"columnname",
+				"relcriteria"=>"columnname",
+				"reportsortcol"=>"columnname",
+				"reportdatefilter"=>"datecolumnname",
+				"reportsummary"=>"columnname",
+			  );
+
+//This is to change Activities to Calendar
+foreach($change_cols_array as $tablename => $columnname)
+{
+	$result = $conn->query("select $columnname from $prefix$tablename where $columnname like \"%Activities%\"");
+
+	while($row = $conn->fetch_row($result))
+	{
+		if($row[$columnname] !='' && $row[$columnname] != 'none')
+		{
+			Execute("update $prefix$tablename set $columnname=\"".str_replace("Activities","Calendar",$row[$columnname])."\" where $columnname=\"$row[$columnname]\"");
+		}
+	}
+}
+
+//This is to change the Orders to PurchaseOrder
+foreach($change_cols_array as $tablename => $columnname)
+{
+	$result1 = $conn->query("select $columnname from $prefix$tablename where $columnname like \"%Orders%\"");
+
+	while($row1 = $conn->fetch_row($result1))
+	{
+		if($row1[$columnname] !='' && $row1[$columnname] != 'none')
+		{
+			Execute("update $prefix$tablename set $columnname=\"".str_replace("Orders","PurchaseOrder",$row1[$columnname])."\" where $columnname=\"$row1[$columnname]\"");
+		}
+	}
+}
+//changes made for CustomView and Reports - Activities changed to Calendar -- Ends
+
+
+
 
 
 

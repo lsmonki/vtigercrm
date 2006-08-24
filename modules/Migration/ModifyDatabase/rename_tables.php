@@ -45,7 +45,15 @@ foreach($change_cols_array as $tablename => $columnname)
 	{
 		if((!strstr($row[$columnname],$prefix)) && $row[$columnname] !='' && $row[$columnname] != 'none')
 		{
-			$queries_list .= "update $prefix$tablename set $columnname=\"$prefix$row[$columnname]\" where $columnname=\"$row[$columnname]\"&&##";
+			//for reportsummary we should add prefix in second value ie., after first :(semicolon)
+			if($tablename == 'reportsummary')
+			{
+				$queries_list .= "update $prefix$tablename set $columnname=\"".str_replace("cb:","cb:$prefix",$row[$columnname])."\" where $columnname=\"$row[$columnname]\"&&##";
+			}
+			else
+			{
+				$queries_list .= "update $prefix$tablename set $columnname=\"$prefix$row[$columnname]\" where $columnname=\"$row[$columnname]\"&&##";
+			}
 		}
 	}
 }
