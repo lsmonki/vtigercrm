@@ -3429,17 +3429,26 @@ foreach($inventory_tables as $tablename => $idname)
 {
 	$res = $conn->query("select * from $tablename order by $idname");
 	$count = $conn->num_rows($res);
+
+	$id = $oldid = 0;
+	$seqno = 0;
+
 	for($i=0;$i<$count;$i++)
 	{
+		$oldid = $id;
 		$id = $conn->query_result($res,$i,$idname);
+
+		//for every new PO/SO/Quotes/Invoice entity we should set the sequence start value as 1
+		if($id != $oldid)
+			$seqno = 1;
+
 		$productid = $conn->query_result($res,$i,'productid');
 		$quantity = $conn->query_result($res,$i,'quantity');
 		$listprice = $conn->query_result($res,$i,'listprice');
-		// DG 15 Aug 2006
-		// Support sequence_no
-		$seqno = $conn->query_result($res, $i, 'sequence_no');
+
 		$query1 = "insert into vtiger_inventoryproductrel(id,productid,sequence_no,quantity,listprice) values($id, $productid,$seqno, $quantity, $listprice)";
 		Execute($query1);
+		$seqno++;
 	}
 }
 
