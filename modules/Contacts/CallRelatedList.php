@@ -56,13 +56,12 @@ $parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 $category = getparenttab();
 $smarty->assign("CATEGORY",$category);
 
-$smarty->assign("id",$focus->id);
+$smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->name);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Contact']);
-$smarty->assign("ID",$record );
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
