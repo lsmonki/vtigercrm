@@ -705,6 +705,14 @@ $mod_strings = Array(
 'LBL_NEW_CURRENCTY'=>'New Currency',
 'LBL_BASE_CURRENCY'=>'Base Currency - US Dollar',
 'LBL_DELETE_CURRENCY'=>'Delete Currency',
+
+//Added for singlepane view in modules 
+
+'LBL_DEFAULT_DETAIL_VIEW'=>'Default Detail View',
+'LBL_DEFAULT_MODULE_VIEW'=>'Default Module View',
+'LBL_DEFAULT_MODULE_VIEW_DESC'=>'Set Default Detail View for All Modules',
+'LBL_ENABLE_SINGLEPANE_VIEW'=>'Enable Singlepane View',
+
 );
 
 
