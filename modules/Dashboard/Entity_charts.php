@@ -278,13 +278,13 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					}
 
 					//added to get valid url in dashbord for tickets by team
-					if($graph_for == "ticketgroupname") $graph_for = "smownerid";
+					if($graph_for == "ticketgroupname" || $graph_for == "groupname") $graph_for = "smownerid";
 
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
-						$link_val="index.php?module=".$name."&action=ListView&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
+						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
 					else
-						$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
+						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
 
 					if($graph_for == "account_id") $graph_for = "accountid";
 
