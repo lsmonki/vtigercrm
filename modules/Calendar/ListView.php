@@ -122,7 +122,10 @@ if($viewid != "0")
 
 if(isset($where) && $where != '')
 {
-	$list_query .= " AND " .$where;
+	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+		$list_query .= " and ((vtiger_activity.status!='Completed' and vtiger_activity.status!='Deferred') or vtiger_activity.status is null) and ((vtiger_activity.eventstatus!='Held' and vtiger_activity.eventstatus!='Not Held') or vtiger_activity.eventstatus is null) AND ".$where;
+	else
+		$list_query .= " AND " .$where;
 }
 
 $list_query .= ' group by vtiger_activity.activityid';
