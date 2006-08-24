@@ -282,7 +282,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
-						$link_val="index.php?module=".$name."&action=index&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
+						$link_val="index.php?module=".$name."&action=ListView&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
 					else
 						$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
 
@@ -487,7 +487,7 @@ $sHTML .= "<tr>
    
 
 	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
-//Commented by Minnie -- same content displayed in to graphs
+//Commented by Minnie -- same content displayed in two graphs
 /*$sHTML .= "</td>
 	</tr>
 	<tr>
