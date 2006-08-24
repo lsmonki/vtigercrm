@@ -131,10 +131,31 @@ Public Sub RefreshToolbar(objFolder As Outlook.MAPIFolder)
         Exit Sub
     Else
         If gsLoginSuccess = True Then
+            Dim oPSoap As New PocketSOAP.CoEnvelope
+            Dim oXMLHttp As New MSXML.XMLHTTPRequest
+            Dim oXMLDoc As New MSXML.DOMDocument
+            Dim oXMLDocElmnt As MSXML.IXMLDOMElement
+                
             If objFolder.DefaultItemType = olMailItem And Trim(sGetPathAsString(objFolder)) <> "Personal Folders" Then
-                objEmailButton.Enabled = True
-                objEmailButton.Enabled = True
-                objEmailMenu.Enabled = True
+                'Added to integrate Security for Emails
+                oPSoap.MethodName = "CheckEmailPermission"
+
+                oPSoap.Parameters.Create "username", gsVtUserId
+
+                oXMLHttp.Open "POST", gsVtUrl, False
+                oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
+                oXMLHttp.setRequestHeader "Content-Type", "text/xml"
+                oXMLHttp.send oPSoap.Serialize
+                oXMLDoc.loadXML (oXMLHttp.responseText)
+                Set oXMLDocElmnt = oXMLDoc.documentElement
+                If oXMLDocElmnt.selectSingleNode("//ns1:CheckEmailPermissionResponse/return").nodeTypedValue <> "denied" Then
+                    objEmailButton.Enabled = True
+                    objEmailMenu.Enabled = True
+                Else
+                    objEmailButton.Enabled = False
+                    objEmailMenu.Enabled = False
+                End If
+
                 objSCButton.Enabled = False
                 objSCMenu.Enabled = False
                 objSyncTaskButton.Enabled = False
@@ -143,34 +164,88 @@ Public Sub RefreshToolbar(objFolder As Outlook.MAPIFolder)
                 objSyncClndrMenu.Enabled = False
             ElseIf Trim(sGetPathAsString(objFolder)) = Trim(gsCntsSyncFolder) Then
                 gsCntsSyncFolderId = objFolder.EntryID
+                
+                'Added to integrate Security for Contacts
+                oPSoap.MethodName = "CheckContactPermission"
+
+                oPSoap.Parameters.Create "username", gsVtUserId
+
+                oXMLHttp.Open "POST", gsVtUrl, False
+                oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
+                oXMLHttp.setRequestHeader "Content-Type", "text/xml"
+                oXMLHttp.send oPSoap.Serialize
+                oXMLDoc.loadXML (oXMLHttp.responseText)
+                Set oXMLDocElmnt = oXMLDoc.documentElement
+                If oXMLDocElmnt.selectSingleNode("//ns1:CheckContactPermissionResponse/return").nodeTypedValue <> "denied" Then
+                    objSCButton.Enabled = True
+                    objSCMenu.Enabled = True
+                Else
+                    objSCButton.Enabled = False
+                    objSCMenu.Enabled = False
+                End If
+                
+                
                 objEmailButton.Enabled = False
                 objEmailMenu.Enabled = False
-                objSCButton.Enabled = True
-                objSCMenu.Enabled = True
                 objSyncTaskButton.Enabled = False
                 objSyncTaskMenu.Enabled = False
                 objSyncClndrButton.Enabled = False
                 objSyncClndrMenu.Enabled = False
             ElseIf Trim(sGetPathAsString(objFolder)) = Trim(gsTaskSyncFolder) Then
                 gsTaskSyncFolderId = objFolder.EntryID
+                
+                'Added to integrate Security for Activity
+                oPSoap.MethodName = "CheckActivityPermission"
+
+                oPSoap.Parameters.Create "username", gsVtUserId
+
+                oXMLHttp.Open "POST", gsVtUrl, False
+                oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
+                oXMLHttp.setRequestHeader "Content-Type", "text/xml"
+                oXMLHttp.send oPSoap.Serialize
+                oXMLDoc.loadXML (oXMLHttp.responseText)
+                Set oXMLDocElmnt = oXMLDoc.documentElement
+                If oXMLDocElmnt.selectSingleNode("//ns1:CheckActivityPermissionResponse/return").nodeTypedValue <> "denied" Then
+                    objSyncTaskButton.Enabled = True
+                    objSyncTaskMenu.Enabled = True
+                Else
+                    objSyncTaskButton.Enabled = False
+                    objSyncTaskMenu.Enabled = False
+                End If
                 objEmailButton.Enabled = False
                 objEmailMenu.Enabled = False
                 objSCButton.Enabled = False
                 objSCMenu.Enabled = False
-                objSyncTaskButton.Enabled = True
-                objSyncTaskMenu.Enabled = True
                 objSyncClndrButton.Enabled = False
                 objSyncClndrMenu.Enabled = False
             ElseIf Trim(sGetPathAsString(objFolder)) = Trim(gsClndrSyncFolder) Then
                 gsClndrSyncFolderId = objFolder.EntryID
+                
+                'Added to integrate Security for Calendar
+                oPSoap.MethodName = "CheckActivityPermission"
+
+                oPSoap.Parameters.Create "username", gsVtUserId
+
+                oXMLHttp.Open "POST", gsVtUrl, False
+                oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
+                oXMLHttp.setRequestHeader "Content-Type", "text/xml"
+                oXMLHttp.send oPSoap.Serialize
+                oXMLDoc.loadXML (oXMLHttp.responseText)
+                Set oXMLDocElmnt = oXMLDoc.documentElement
+                If oXMLDocElmnt.selectSingleNode("//ns1:CheckActivityPermissionResponse/return").nodeTypedValue <> "denied" Then
+                    objSyncClndrButton.Enabled = True
+                    objSyncClndrMenu.Enabled = True
+                Else
+                    objSyncClndrButton.Enabled = False
+                    objSyncClndrMenu.Enabled = False
+                End If
+                
                 objEmailButton.Enabled = False
                 objEmailMenu.Enabled = False
                 objSCButton.Enabled = False
                 objSCMenu.Enabled = False
                 objSyncTaskButton.Enabled = False
                 objSyncTaskMenu.Enabled = False
-                objSyncClndrButton.Enabled = True
-                objSyncClndrMenu.Enabled = True
             Else
                 objEmailButton.Enabled = False
                 objEmailMenu.Enabled = False
