@@ -23,6 +23,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
+require_once('user_privileges/default_module_view.php'); //new
 
 /**This function is used to get the list view header values in a list view
 *Param $focus - module object
@@ -36,7 +37,7 @@ require_once('include/utils/CommonUtils.php'); //new
 */
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='')
 {
-	global $log;
+	global $log, $singlepane_view;
 	$log->debug("Entering getListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
 	global $adb;
 	global $theme;
@@ -161,7 +162,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
 							if($relatedlist !='' && $relatedlist != 'global')
-								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&start=".$_SESSION["rlvs"][$relatedmodule][$module]["start"]."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								if($singlepane_view == 'true')	
+									$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								else
+									$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							elseif($module == 'Users' && $name == 'User Name')
 								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."&nbsp;".$arrow."</a>";
 							elseif($relatedlist == "global")
@@ -2738,14 +2742,18 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 */
 
 //Temp function to be be deleted
-function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='CallRelatedList',$viewid='')
+function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='',$viewid='')
 {
-	global $log;
+	global $log, $singlepane_view;
 	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td align="right" style="padding="5px;">';
+	if($singlepane_view == 'true')
+		$action_val = 'DetailView';
+	else
+		$action_val = 'CallRelatedList';
 	if(($navigation_array['prev']) != 0)
 	{
 		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
