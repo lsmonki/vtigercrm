@@ -50,8 +50,7 @@ $smarty->assign("CATEGORY",$category);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 	$smarty->assign("OP_MODE",$_REQUEST['mode']);
 }
-$smarty->assign("id",$focus->id);
-$smarty->assign("ID",$RECORD );
+$smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);
