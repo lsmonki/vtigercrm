@@ -46,7 +46,8 @@
 						<td class="big"><strong>{$MOD.LBL_BACKUP_SERVER_SETTINGS} ({$MOD.LBL_FTP})<br>{$ERROR_MSG}</strong></td>
 						{if $BKP_SERVER_MODE neq 'edit'}
 						<td class="small" align=right>
-							<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
+							<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
+							<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="clearBackupServer();" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
 						</td>
 						{else}
 						<td class="small" align=right>
@@ -57,61 +58,9 @@
 					</tr>
 					</table>
 				
-			{if $BKP_SERVER_MODE eq 'edit'}	
-			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
-			<tr>
-      			    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
-                        <tr>
-                            <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
-                            <td width="80%" class="small cellText">
-				<input type="text" class="detailedViewTextBox small" value="{$FTPSERVER}" name="server"></strong>
-			    </td>
-                          </tr>
-                          <tr valign="top">
-
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
-                            <td class="small cellText">
-				<input type="text" class="detailedViewTextBox small" value="{$FTPUSER}" name="server_username">
-			    </td>
-                          </tr>
-                          <tr>
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PASWRD}</strong></td>
-                            <td class="small cellText">
-				<input type="password" class="detailedViewTextBox small" value="{$FTPPASSWORD}" name="server_password">
-			    </td>
-                          </tr>
-                        </table>
-			{else}
-			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
-			<tr>
-	         	    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
-                        <tr>
-                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
-                            <td width="80%" class="small cellText"><strong>{$FTPSERVER}&nbsp;</strong></td>
-                        </tr>
-                        <tr valign="top">
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
-                            <td class="small cellText">{$FTPUSER}&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
-                            <td class="small cellText">
-				{if $FTPPASSWORD neq ''}
-				******
-				{/if}&nbsp;
-			    </td>
-                        </tr>
-                        </table>
-					
-			{/if}				
-						</td>
-					  </tr>
-					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
-					<tr>
-					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
-					</tr>
-					</table>
+					<div id="BackupServerContents">
+						{include file="Settings/BackupServerContents.tpl"}
+					</div>
 				</td>
 				</tr>
 				</table>
@@ -140,6 +89,19 @@ function validate() {
 				if (!emptyCheck("server_password","ftp Password","text")) return false
 			return true;
 
+}
+
+function clearBackupServer()
+{
+new Ajax.Request('index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Settings&action=SettingsAjax&ajax=true&file=BackupServerConfig&opmode=del',
+                                onComplete: function(response) {
+                                $("BackupServerContents").innerHTML=response.responseText;
+                                }
+                        }
+                );	
 }
 </script>
 {/literal}
