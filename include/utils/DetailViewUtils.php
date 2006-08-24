@@ -49,10 +49,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	$arr_data =Array();
 	$label_fld = Array();
 	$data_fld = Array();
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol=getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
-	$curr_symbol = $rate_symbol['symbol'];
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
@@ -790,6 +787,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
+		$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+                $rate = $rate_symbol['rate'];
+                $curr_symbol = $rate_symbol['symbol'];
 		$label_fld[] =$mod_strings[$fieldlabel];
 		$display_val = '';
 	        if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
