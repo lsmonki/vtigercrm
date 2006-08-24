@@ -190,8 +190,7 @@ $combo_strings = Array(
 				     
 'usageunit_dom' => Array('Box'=>'Box',
                         'Carton'=>'Carton',
-                        'Caton'=>'Caton',
-                        'Dozen'=>'Dazon',
+                        'Dozen'=>'Dozen',
                         'Each'=>'Each',
                         'Hours'=>'Hours',
                         'Impressions'=>'Impressions',
