@@ -59,11 +59,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$ui_type[]= $uitype;
 	$editview_fldname[] = $fieldname;
 
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol = getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
-	$currency= $rate_symbol['symbol'];
-
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
@@ -983,6 +978,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
+		$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
+		$rate = $rate_symbol['rate'];
+		$currency= $rate_symbol['symbol'];
 		$editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';
 		if($value!='')
 		        $fieldvalue[] = convertFromDollar($value,$rate);
