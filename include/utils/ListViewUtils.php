@@ -156,8 +156,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							//added to display vtiger_currency symbol in listview header
 							if($lbl_name =='Amount')
 							{
-								$currencyid=fetchCurrency($current_user->id);
-								$rate_symbol=getCurrencySymbolandCRate($currencyid);
+								$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 								$curr_symbol = $rate_symbol['symbol'];
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
@@ -187,8 +186,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 																	//added to display vtiger_currency symbol in related listview header
 																	if($name =='Amount' && $relatedlist !='' )
 		{
-			$currencyid=fetchCurrency($current_user->id);
-			$rate_symbol=getCurrencySymbolandCRate($currencyid);
+			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 			$curr_symbol = $rate_symbol['symbol'];
 			$name .=': (in '.$curr_symbol.')';
 		}
@@ -979,9 +977,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	global $log;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol=getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
@@ -1022,6 +1018,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
+		$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+                $rate = $rate_symbol['rate'];
 		if($temp_val != '' && $temp_val != 0)
 		{       //changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
                         $value = convertFromDollar($temp_val,$rate);
@@ -1343,7 +1341,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
 					}
 					$tax_str = trim($tax_str,',');
-
+					$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+					$rate = $rate_symbol['rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
@@ -1362,7 +1361,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
 					}
 					$tax_str = trim($tax_str,',');
-
+					$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+					$rate = $rate_symbol['rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
@@ -1541,6 +1541,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		elseif($fieldname == 'hdnGrandTotal' || $fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
 		{
+			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+			$rate = $rate_symbol['rate'];
 			$value = convertFromDollar($temp_val,$rate);
 		}
 		else
