@@ -199,7 +199,7 @@ require_once($theme_path.'layout_utils.php');
 							<table width="98%" cellpadding="3" cellspacing="0" border="0" class="MigInfo">
 							   <tr>
 							   	<td colspan=3 width="100%">
-									<br>Note : Please note that for each query the "Object" string will be displayed at the	starting of the line if the query executed successfully. If the query fails then "Object" will not be displayed. we can find out the failed queries based on these Object display.
+									<br>These following queries are executed to modify the 4.2.3/4.2 Patch2 database to 5.0 database.
 								</td>
 							   </tr>
 							   <tr width="100%">
