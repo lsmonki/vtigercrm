@@ -713,6 +713,7 @@ $mod_strings = Array(
 'LBL_DEFAULT_MODULE_VIEW_DESC'=>'Set Default Detail View for All Modules',
 'LBL_ENABLE_SINGLEPANE_VIEW'=>'Enable Singlepane View',
 
+'LBL_CLEAR_DATA'=>'Clear Data',
 );
 
 
