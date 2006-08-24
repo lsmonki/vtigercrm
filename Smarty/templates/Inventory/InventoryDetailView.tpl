@@ -49,14 +49,8 @@ function DeleteTag(id)
 </script>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-   <form action="index.php" method="post" name="DetailView" id="form">
    <tr>
-	<td>&nbsp;</td>
 	<td>
-                <table cellpadding="0" cellspacing="5" border="0">
-			{include file='DetailViewHidden.tpl'}
-		</table>	
-
 		{include file='Buttons_List1.tpl'}
 
 		<!-- Contents -->
@@ -90,8 +84,9 @@ function DeleteTag(id)
 							<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 							<td class="dvtSelectedCell" align=center nowrap>{$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
 							<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-							<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
-
+							{if $SinglePane_View eq 'false'}
+								<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
+							{/if}
 							<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 						   </tr>
 						</table>
@@ -112,6 +107,8 @@ function DeleteTag(id)
 
 
 <!-- The following table is used to display the buttons -->
+   <form action="index.php" method="post" name="DetailView" id="form">
+					{include file='DetailViewHidden.tpl'}
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
    {strip}
    <tr nowrap>
@@ -219,6 +216,7 @@ function DeleteTag(id)
 								<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			                			   <tr>
 									<td style="padding:10px;border-right:1px dashed #CCCCCC;" width="80%">
+			{if $SinglePane_View eq 'false'}
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
    {strip}
    <tr nowrap>
@@ -251,6 +249,15 @@ function DeleteTag(id)
    </tr>
    {/strip}
 </table>
+{/if}
+</form>
+		<table border=0 cellspacing=0 cellpadding=0 width=100%>
+		  <tr>
+			<td style="border-right:1px dashed #CCCCCC;" width="100%">
+			{if $SinglePane_View eq 'true'}
+				{include file= 'RelatedListNew.tpl'}
+			{/if}
+		</td></tr></table>
 </td></tr></table>
 <!-- Button displayed - finished-->
 									<!-- Inventory Actions - ends -->	
@@ -310,7 +317,6 @@ getTagCloud();
 
 	</td>
    </tr>
-</form>
 </table>
 <script language="javascript">
   var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
