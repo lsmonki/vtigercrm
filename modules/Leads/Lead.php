@@ -24,6 +24,7 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 class Lead extends CRMEntity {
 	var $log;
@@ -193,7 +194,7 @@ class Lead extends CRMEntity {
 	*/
 function get_activities($id)
 {
-	global $log;
+	global $log, $singlepane_view;
 	$log->debug("Entering get_activities(".$id.") method ...");
 	global $app_strings;
 
@@ -205,7 +206,10 @@ function get_activities($id)
 		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';i;this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
 		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
 	}
-	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	if($singlepane_view == 'true')
+		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	else
+		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 
 	// First, get the list of IDs.
@@ -220,13 +224,17 @@ function get_activities($id)
   */
 function get_campaigns($id)
 {
-	global $log;
+	global $log, $singlepane_view;
 	$log->debug("Entering get_campaigns(".$id.") method ...");
 	global $mod_strings;
 	$focus = new Campaign();
 	$button = '';
 
-	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	if($singlepane_view == 'true')
+		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	else
+		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+
 	$log->info("Campaign Related List for Lead Displayed");
 	$query = "SELECT vtiger_users.user_name, vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus, vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaignleadrel on vtiger_campaignleadrel.campaignid=vtiger_campaign.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_campaignleadrel.leadid=".$id." and vtiger_crmentity.deleted=0";
 
@@ -242,7 +250,7 @@ function get_campaigns($id)
 	*/
 function get_emails($id)
 {
-	global $log;	
+	global $log, $singlepane_view;	
 	$log->debug("Entering get_emails(".$id.") method ...");
 	global $mod_strings;
 	require_once('include/RelatedListView.php');
@@ -256,7 +264,10 @@ function get_emails($id)
 
 		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
 	}
-	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	if($singlepane_view == 'true')
+		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	else
+		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 	$query ="select vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.semodule, vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;
 	$log->debug("Exiting get_emails method ...");
@@ -342,7 +353,7 @@ function get_attachments($id)
 */
 function get_products($id)
 {
-	global $log;
+	global $log, $singlepane_view;
 	$log->debug("Entering get_products(".$id.") method ...");
 	require_once('modules/Products/Product.php');
 	global $mod_strings;
@@ -356,7 +367,10 @@ function get_products($id)
 	{
 		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
 	}
-	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	if($singlepane_view == 'true')
+		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	else
+		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 	$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid from vtiger_products inner join vtiger_seproductsrel on vtiger_products.productid = vtiger_seproductsrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  where vtiger_leaddetails.leadid = '.$id.' and vtiger_crmentity.deleted = 0';
 	$log->debug("Exiting get_products method ...");
@@ -387,12 +401,12 @@ function getColumnNames_Lead()
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-    $sql1 = "select fieldlabel from vtiger_field where tabid=7";
-  }else
-  {
-    $profileList = getCurrentUserProfileList();
-    $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
-  }
+		$sql1 = "select fieldlabel from vtiger_field where tabid=7";
+	}else
+	{
+		$profileList = getCurrentUserProfileList();
+		$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+	}
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)

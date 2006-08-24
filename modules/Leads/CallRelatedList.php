@@ -55,14 +55,13 @@ $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 
-$smarty->assign("id",$focus->id);
+$smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD",$app_strings['Lead']);
 $smarty->assign("REDIR_MOD","leads");
 $smarty->assign("MODULE", $currentmodule);
-$smarty->assign("ID",$RECORD );
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);

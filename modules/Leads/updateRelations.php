@@ -10,7 +10,8 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
+require_once('user_privileges/default_module_view.php');
+global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $update_mod = $_REQUEST['destination_module'];
 $rel_table = 'vtiger_campaignleadrel';
@@ -26,13 +27,20 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	            $adb->query($sql);
 		}
 	}
+	if($singlepane_view == 'true')
+		header("Location: index.php?action=DetailView&module=Leads&record=".$_REQUEST["parentid"]);
+	else
  		header("Location: index.php?action=CallRelatedList&module=Leads&record=".$_REQUEST["parentid"]);
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {	
 		$sql = "insert into ".$rel_table." values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")";
 		$adb->query($sql);
- 		header("Location: index.php?action=CallRelatedList&module=Leads&record=".$_REQUEST["parid"]);
+
+		if($singlepane_view == 'true')
+			header("Location: index.php?action=DetailView&module=Leads&record=".$_REQUEST["parid"]);
+		else
+ 			header("Location: index.php?action=CallRelatedList&module=Leads&record=".$_REQUEST["parid"]);
 }
 
 ?>
