@@ -10,7 +10,9 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
+require_once('user_privileges/default_module_view.php');
+global $adb, $singlepane_view;
+
 $idlist = $_REQUEST['idlist'];
 
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
@@ -27,6 +29,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 			$adb->query($sql);
 		}
 	}
+	if($singlepane_view == 'true')
+		header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parentid"]);
+	else
  		header("Location: index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parentid"]);
 }
 
@@ -37,7 +42,10 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 		$adb->query($sql);
 		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
 		$adb->query($sql);
- 		header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
+		if($singlepane_view == 'true')
+			header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
+		else
+ 			header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
 }
 
 

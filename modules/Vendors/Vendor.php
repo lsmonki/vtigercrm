@@ -16,6 +16,7 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('include/RelatedListView.php');
+require_once('user_privileges/default_module_view.php');
 
 class Vendor extends CRMEntity {
 	var $log;
@@ -71,7 +72,7 @@ class Vendor extends CRMEntity {
 	 */
 	function get_products($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_products(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Products/Product.php');
@@ -79,7 +80,10 @@ class Vendor extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
 
 		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendor.vendorname from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid left outer join vtiger_vendor on vtiger_vendor.vendorid = vtiger_products.vendor_id where vtiger_vendor.vendorid = '.$id.' and vtiger_crmentity.deleted = 0';
 		$log->debug("Exiting get_products method ...");
@@ -92,7 +96,7 @@ class Vendor extends CRMEntity {
 	 */
 	function get_purchase_orders($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
@@ -100,7 +104,10 @@ class Vendor extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "select vtiger_users.user_name,vtiger_groups.groupname,vtiger_crmentity.*, vtiger_purchaseorder.*,vtiger_vendor.vendorname from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid left outer join vtiger_vendor on vtiger_purchaseorder.vendorid=vtiger_vendor.vendorid left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid=vtiger_pogrouprelation.purchaseorderid left join vtiger_groups on vtiger_groups.groupname=vtiger_pogrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_purchaseorder.vendorid=".$id;
 		$log->debug("Exiting get_purchase_orders method ...");
@@ -113,14 +120,17 @@ class Vendor extends CRMEntity {
 	 */
 	function get_contacts($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Contacts/Contact.php');
 		$focus = new Contact();
 
 		$button = '';
-		$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
 
 		$query = 'SELECT vtiger_users.user_name,vtiger_groups.groupname,vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendorcontactrel.vendorid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid  inner join vtiger_vendorcontactrel on vtiger_vendorcontactrel.contactid=vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_vendorcontactrel.vendorid = '.$id;
 		$log->debug("Exiting get_contacts method ...");
