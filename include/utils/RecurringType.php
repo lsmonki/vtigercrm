@@ -155,7 +155,6 @@ class RecurringType
 			}
 			elseif($this->recur_type == 'Monthly')
 			{
-				$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
 				$date_arr = Array(
 					'day'   => $st_date[2],
@@ -248,6 +247,7 @@ class RecurringType
 					$tempdateObj = new DateTime($date_arr,true);
 				}
 				$tempdate = $tempdateObj->get_formatted_date();
+				$recurringDates[] = $tempdate;
 			}
 			elseif($this->recur_type == 'Yearly')
 			{
