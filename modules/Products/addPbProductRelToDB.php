@@ -11,9 +11,10 @@
 *
  ********************************************************************************/
 
-global $adb;	
-global $log;
 require_once('include/database/PearDatabase.php');
+require_once('user_privileges/default_module_view.php');
+global $adb,$singlepane_view;	
+global $log;
 $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
 $pricebook_id=$_REQUEST['pricebook_id'];
@@ -33,7 +34,10 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 			$adb->query($query);
 		}
 	}
-	header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=".$pricebook_id);
+	if($singlepane_view == 'true')
+		header("Location: index.php?module=PriceBooks&action=DetailView&record=".$pricebook_id);
+	else
+		header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=".$pricebook_id);
 }
 elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 {
@@ -50,7 +54,10 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 			$adb->query($query);
 		}
 	}
-	header("Location: index.php?module=Products&action=CallRelatedList&record=".$productid);
+	if($singlepane_view == 'true')
+		header("Location: index.php?module=Products&action=DetailView&record=".$productid);
+	else
+		header("Location: index.php?module=Products&action=CallRelatedList&record=".$productid);
 }
 
 ?>

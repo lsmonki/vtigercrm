@@ -16,6 +16,7 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('include/RelatedListView.php');
+require_once('user_privileges/default_module_view.php');
 
 class Product extends CRMEntity {
 	var $log;
@@ -197,7 +198,7 @@ class Product extends CRMEntity {
 	 */
 	function get_tickets($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
 		$log->debug("Entering get_tickets(".$id.") method ...");
 		global $mod_strings;
 		require_once('modules/HelpDesk/HelpDesk.php');
@@ -205,7 +206,10 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_products.productid, vtiger_products.productname,
@@ -237,7 +241,7 @@ class Product extends CRMEntity {
 	 */
 	function get_activities($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 	
@@ -248,7 +252,10 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_contactdetails.lastname,
@@ -291,14 +298,17 @@ class Product extends CRMEntity {
 	 */
 	function get_quotes($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
 		$log->debug("Entering get_quotes(".$id.") method ...");	
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');	
 		$focus = new Quote();
 	
 		$button = '';
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.*,
@@ -331,7 +341,7 @@ class Product extends CRMEntity {
 	 */
 	function get_purchase_orders($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
@@ -339,7 +349,10 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
@@ -368,7 +381,7 @@ class Product extends CRMEntity {
 	 */
 	function get_salesorder($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_salesorder(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/SalesOrder/SalesOrder.php');
@@ -376,7 +389,10 @@ class Product extends CRMEntity {
 	        $focus = new SalesOrder();
  
 		$button = '';
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
@@ -407,14 +423,17 @@ class Product extends CRMEntity {
 	 */
 	function get_invoices($id)
 	{
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_invoices(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Invoice/Invoice.php');
 		$focus = new Invoice();
 
 		$button = '';
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.*,
@@ -444,13 +463,16 @@ class Product extends CRMEntity {
 	 */
 	function get_product_pricebooks($id)
 	{     
-		global $log;
+		global $log,$singlepane_view;
 		$log->debug("Entering get_product_pricebooks(".$id.") method ...");
 		global $mod_strings;
 		require_once('modules/PriceBooks/PriceBook.php');
 		$focus = new PriceBook();
 		$button = '';
-		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.crmid,

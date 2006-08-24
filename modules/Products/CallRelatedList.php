@@ -46,8 +46,7 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$smarty->assign("id",$focus->id);
-$smarty->assign("ID",$RECORD );
+$smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("SINGLE_MOD",$app_strings['Product']);

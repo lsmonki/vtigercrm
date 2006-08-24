@@ -12,6 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/Products/Product.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 $focus = new Product();
 
@@ -32,7 +33,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
 
-global $app_strings,$currentModule;
+global $app_strings,$currentModule,$singlepane_view;
 global $mod_strings;
 
 global $theme;
@@ -89,6 +90,14 @@ $smarty->assign("CHECK", $check_button);
 //Security check for related list
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>
