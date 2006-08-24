@@ -32,6 +32,7 @@ require_once('modules/Calendar/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 
 // Account is used to store vtiger_account information.
 class Account extends CRMEntity {
@@ -142,7 +143,7 @@ class Account extends CRMEntity {
 	 */
 	function get_contacts($id)
 	{	
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_contacts(".$id.") method ...");
 		global $mod_strings;
 
@@ -153,7 +154,11 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="New Contact" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_CONTACT'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		//SQL
 		$query = "SELECT vtiger_contactdetails.*,
@@ -182,7 +187,7 @@ class Account extends CRMEntity {
 	 */
 	function get_opportunities($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
@@ -193,7 +198,10 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="New Potential" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_POTENTIAL'].'">';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.accountid,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
@@ -224,7 +232,7 @@ class Account extends CRMEntity {
 	 */
 	function get_activities($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 
@@ -236,7 +244,10 @@ class Account extends CRMEntity {
 			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
 			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_activity.*,
 			vtiger_seactivityrel.*,
@@ -374,7 +385,7 @@ class Account extends CRMEntity {
 	*/
 	function get_quotes($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');
@@ -386,7 +397,11 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name,
 			vtiger_groups.groupname,
@@ -419,7 +434,7 @@ class Account extends CRMEntity {
 	*/
 	function get_invoices($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_invoices(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Invoice/Invoice.php');
@@ -431,7 +446,10 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name,
 			vtiger_groups.groupname,
@@ -465,7 +483,7 @@ class Account extends CRMEntity {
 	*/
 	function get_salesorder($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_salesorder(".$id.") method ...");
 		require_once('modules/SalesOrder/SalesOrder.php');
 		global $app_strings;
@@ -478,7 +496,10 @@ class Account extends CRMEntity {
 			$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
 		}
 
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
@@ -511,7 +532,7 @@ class Account extends CRMEntity {
 	*/
 	function get_tickets($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_tickets(".$id.") method ...");
 		global $app_strings;
 
@@ -519,7 +540,10 @@ class Account extends CRMEntity {
 		$button = '';
 
 		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
@@ -601,7 +625,7 @@ class Account extends CRMEntity {
 	*/
 	function get_products($id)
 	{
-		global $log;
+		global $log, $singlepane_view;
                 $log->debug("Entering get_products(".$id.") method ...");
 		require_once('modules/Products/Product.php');
 		global $app_strings;
@@ -616,7 +640,10 @@ class Account extends CRMEntity {
 
 			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Accounts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
 		}
-		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_products.productid, vtiger_products.productname,
 			vtiger_products.productcode, vtiger_products.commissionrate,
@@ -723,15 +750,15 @@ class Account extends CRMEntity {
 	function getColumnNames_Acnt()
 	{
 		global $log,$current_user;
-    $log->debug("Entering getColumnNames_Acnt() method ...");
-    require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
-	  {
-		  $sql1 = "SELECT fieldlabel FROM vtiger_field WHERE tabid = 6";
+		$log->debug("Entering getColumnNames_Acnt() method ...");
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql1 = "SELECT fieldlabel FROM vtiger_field WHERE tabid = 6";
 		}else
 		{
-		  $profileList = getCurrentUserProfileList();
-		  $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+			$profileList = getCurrentUserProfileList();
+			$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
 		} 
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);

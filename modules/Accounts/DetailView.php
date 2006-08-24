@@ -26,10 +26,11 @@ require_once('modules/Accounts/Account.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+require_once('user_privileges/default_module_view.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-global $log, $currentModule;
+global $log, $currentModule, $singlepane_view;
 
 $focus = new Account();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -109,5 +110,13 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if($singlepane_view == 'true')
+{
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+$smarty->assign("SinglePane_View", $singlepane_view);
+
 $smarty->display("DetailView.tpl");
 ?>
