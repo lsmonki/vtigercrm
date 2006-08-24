@@ -37,8 +37,6 @@ global $mod_strings,$current_user;
 $focus = new Activity();
 $smarty =  new vtigerCRM_Smarty();
 $activity_mode = $_REQUEST['activity_mode'];
-if(isset($_REQUEST['activitytype']) && $_REQUEST['activitytype'] != '')
-	$activitytype = $_REQUEST['activitytype'];
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Calendar';
@@ -179,7 +177,6 @@ $smarty->assign("fldlabel_combo",$fldlabel_combo);
 $smarty->assign("fldlabel_sel",$fldlabel_sel);
 $smarty->assign("OP_MODE",$disp_view);
 $smarty->assign("ACTIVITY_MODE",$activity_mode);
-$smarty->assign("ACTIVITY_TYPE",$activitytype);
 $smarty->assign("HOURFORMAT",$format);
 $smarty->assign("USERSLIST",$userDetails);
 $smarty->assign("USEREMAILID",$to_email);
