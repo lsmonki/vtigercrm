@@ -134,7 +134,10 @@ if($viewid != "0")
 
 if(isset($where) && $where != '')
 {
-	$list_query .= " AND ".$where;
+	if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
+		$list_query .= " AND vtiger_potential.sales_stage = 'Closed Won' AND ".$where;
+	else
+		$list_query .= " AND ".$where;
 }
 
 if(isset($order_by) && $order_by != '')
