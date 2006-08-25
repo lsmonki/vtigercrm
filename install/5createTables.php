@@ -24,6 +24,7 @@ if (isset($_REQUEST['db_create'])) $db_create 			= $_REQUEST['db_create'];
 if (isset($_REQUEST['db_populate'])) $db_populate		= $_REQUEST['db_populate'];
 if (isset($_REQUEST['admin_email'])) $admin_email		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_password'];
+if (isset($_REQUEST['currency'])) $sel_currency	= $_REQUEST['currency'];
 
 ?>
 

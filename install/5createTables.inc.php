@@ -198,6 +198,24 @@ $db->getUniqueID("vtiger_crmentity");
 $db->getUniqueID("vtiger_seactivityrel");
 $db->getUniqueID("vtiger_freetags");
 
+//Master currency population
+$currencies = array('Euro'=>array('name'=>'Euro','symbol'=>'&euro','code'=>'EUR'),
+		'United States Dollar'=>array('name'=>'United States Dollar','symbol'=>'&#36','code'=>'USD'),
+		'United Kingdom Pounds'=>array('name'=>'United Kingdom Pounds','symbol'=>'&pound','code'=>'GBP'),
+		'Canada Dollars'=>array('name'=>'Canada Dollars','symbol'=>'&#36','code'=>'CAD'),
+		'Australia Dollars'=>array('name'=>'Australia Dollars','symbol'=>'&#36','code'=>'AUD'),
+		'Japan Yen'=>array('name'=>'Japan Yen','symbol'=>'&yen','code'=>'JPY'),
+		'Indian Rupee'=>array('name'=>'Indian Rupee','symbol'=>'&#8360','code'=>'INR'),
+		'New Zealand Dollars'=>array('name'=>'New Zealand Dollars','symbol'=>'&#36','code'=>''),
+		'South Africa Rand'=>array('name'=>'South Africa Rand','symbol'=>'&#82','code'=>'ZAR'),
+		);		
+	
+$symbol = $currencies[$sel_currency]['symbol'];
+$code = $currencies[$sel_currency]['code'];
+
+//Insert into vtiger_currency vtiger_table
+               $db->query("insert into vtiger_currency_info values(".$db->getUniqueID("vtiger_currency_info").",'$sel_currency','$code','$symbol',1,'Active','-11')");
+
 // populate the db with seed data
 if ($db_populate) {
         //eecho ("Populate seed data into $db_name");

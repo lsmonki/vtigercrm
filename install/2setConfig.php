@@ -130,6 +130,10 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
 	if (isset($_REQUEST['admin_password']))
 	$admin_password = $_REQUEST['admin_password'];
+	
+	if (isset($_REQUEST['currency']))
+	$currency = $_REQUEST['currency'];
+	
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
@@ -424,7 +428,40 @@ function verify_data(form) {
 			<tr>
 				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
 				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; else echo "admin@your-domain.com"; ?>"></td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Master Currency</strong><sup><font color=red>*</font></sup></td>
+								<td bgcolor="white" align="left"><select name="currency" id="master">
+						<option>EURO</option>
+						<option>United States Dollar</option>
+						<option>United Kingdom Pounds</option>
+						<option>Canada Dollars</option>
+						<option>Australia Dollars</option>
+						<option>Japan Yen</option>
+						<option>Indian Rupee</option>
+						<option>New Zealand Dollars</option>
+						<option>South Africa Rand</option>
+				</select></td>
 			</tr>	
+	<?
+				if(isset($currency) && $currency !='')
+				{
+				?>
+					<script language="javascript">
+					var curr_combo = document.getElementById('master');
+					var curr_value = "<?echo $currency;?>";
+					for(i=0;i<curr_combo.length;i++)
+					{
+						if( curr_value == curr_combo.options[i].value)
+						{
+							curr_combo.selectedIndex = i;
+						}       
+					} 
+					</script>	
+				<?
+				}
+				?>
+
 			<tr>
 				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
 			</tr>

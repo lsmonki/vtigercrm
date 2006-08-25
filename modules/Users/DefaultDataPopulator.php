@@ -1893,12 +1893,6 @@ Thanks,
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'SalesOrderNotification','Sales Order generated for {PRODUCTNAME}','".$so_body." ','SalesOrderNotificationDescription')");
 
-		//Insert into vtiger_currency vtiger_table
-		$this->db->query("insert into vtiger_currency_info values(".$this->db->getUniqueID("vtiger_currency_info").",'U.S Dollar','USD','$',1,'Active','-11')");
-                
-
-
-
 //insert into email template vtiger_table
 
 	$body='

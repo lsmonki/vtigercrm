@@ -81,6 +81,8 @@ if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 
+if (isset($_REQUEST['currency'])) $currency = $_REQUEST['currency'];
+
 if (isset($_REQUEST['mail_server'])) $mail_server = $_REQUEST['mail_server'];
 
 if (isset($_REQUEST['mail_server_username'])) $mail_server_username = $_REQUEST['mail_server_username'];
@@ -438,6 +440,7 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+				 <input type="hidden" class="dataInput" name="currency" value="<?php if (isset($currency)) echo "$currency"; ?>" />
 				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
 				 </form>
 					
