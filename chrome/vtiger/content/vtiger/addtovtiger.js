@@ -194,6 +194,11 @@ function bget_CntBySearch()
 				{
 					var itemsLength = itemNode.item(i).childNodes.length;
 					var itemsNode = itemNode.item(i).childNodes;
+					cntid = '';
+					frstname = '';
+					lstname = '';
+					cntemail = '';
+          			acntname = '';
 					for(var j=0;j<itemsLength;j++)
 					{
 						if(itemsNode.item(j).childNodes.item(0))
