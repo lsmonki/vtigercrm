@@ -264,6 +264,18 @@
 			document.getElementById('mnuTab1').style.display = 'none';
 			document.getElementById('mnuTab2').style.display = 'block';
 		{rdelim}
+
+		//show/hide MySQL server path
+		if(document.getElementById('getmysqlpath').value == 1 && document.getElementById('mnuTab2').style.display == 'none')
+		{ldelim}
+			//show MySQL server path
+			document.getElementById('mnuTab3').style.display = 'block';
+		{rdelim}
+		else
+		{ldelim}
+			//hide MySQL server path
+			document.getElementById('mnuTab3').style.display = 'none';
+		{rdelim}
 	{rdelim}
 
 	//function to validate the input values based on the radio option selected
@@ -343,7 +355,7 @@
 		//this is added to check whether the getmysql path is true and the user has entered the path or not
 		if(error != true)
 		{ldelim}
-			if(document.getElementById("getmysqlpath").value == 1 && trim(formname.server_mysql_path.value) == '')
+			if(document.getElementById("getmysqlpath").value == 1 && trim(formname.server_mysql_path.value) == '' && document.getElementById("alter_db_details").checked != true)
 			{ldelim}
 				//alert(document.getElementById("getmysqlpath").value+" Enter the mysql path");
 				error_msg = "Please enter the Correct MySQL Path";

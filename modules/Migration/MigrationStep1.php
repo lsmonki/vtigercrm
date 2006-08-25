@@ -41,6 +41,11 @@ elseif(substr($_ENV["OS"],0,3) == "Win")
 else
 {
 	$getmysqlpath = 1;
+
+	if($_REQUEST['migration_option'] == 'alter_db_details')
+		$showmysqlpath = 'none';
+	else
+		$showmysqlpath = 'block';
 }
 
 
@@ -69,6 +74,7 @@ $smarty->assign("SHOW_DB_DETAILS", 'block');
 
 //Based on this $getmysqlpath variable we should get the mysql path from the user
 $smarty->assign("GET_MYSQL_PATH",$getmysqlpath);
+$smarty->assign("SHOW_MYSQL_PATH",$showmysqlpath);
 
 //this is to set the entered values when we could not proceed the migration and return to step1
 if($_REQUEST['migration_option'] != '')

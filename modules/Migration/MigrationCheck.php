@@ -20,6 +20,14 @@ $new_mysql_username = $dbconfig['db_username'];
 $new_mysql_password = $dbconfig['db_password'];
 $new_dbname = $dbconfig['db_name'];
 
+//this is to check whether the user_privileges folder has write permission
+if(!is_writable($root_directory."user_privileges/"))
+{
+	echo "<br><font color='red'><b>Please give read/write permission to user_privileges folder.</b></font>";
+	include("modules/Migration/MigrationStep1.php");
+	exit;
+}
+
 //this is to check whether the mysql path is needed and has been entered or not
 if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
 {
@@ -40,7 +48,7 @@ if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
 		$migration_log .='MySQL Dump file has found in ==> '.$server_mysql_path;
 	}
 
-	if(!$mysql_path_found)
+	if(!$mysql_path_found && $_REQUEST['migration_option'] != 'alter_db_details')
 	{
 		//header("Location: index.php?module=Migration&action=MigrationStep1&parenttab=Settings");
 		echo '<br><font color="red"><b>MySQL dump file is not exist in the specified MySQL Server Path</b></font>';
