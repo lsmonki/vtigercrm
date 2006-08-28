@@ -73,20 +73,9 @@ function sensex_info()
 					<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 					   <tr>
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-
-                                        	{if $MODULE eq 'Notes' || $MODULE eq 'Faq'}
-                                        	<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
-	                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
-        	                                {else}
 						<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
 						<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-
-	               	                        {if $OP_MODE neq 'create_view'}
-                				<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}&mode={$OP_MODE}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
-						{/if}
-
 						<td class="dvtTabCache" style="width:100%">&nbsp;</td>
-						{/if}
 					   </tr>
 					</table>
 				</td>
