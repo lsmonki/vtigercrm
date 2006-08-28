@@ -984,7 +984,7 @@ class freetag {
 			ON (${prefix}freetags.id = tag_id)
 			WHERE 1=1
 			$tagger_sql
-			GROUP BY tag
+			GROUP BY tag,tag_id
 			ORDER BY quantity DESC";
         //echo $sql;
 		$rs = $adb->limitQuery($sql, 0, $max) or die("Syntax Error: $sql");
