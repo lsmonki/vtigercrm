@@ -398,7 +398,7 @@ function get_tasksforol($username)
 	global $current_user;
 	require_once("modules/Users/User.php");
 	$seed_user=new User();
-	$user_id=$seed_user->retrieve_user_id($user_name);
+	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -406,11 +406,11 @@ function get_tasksforol($username)
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
-    $sql1 = "select tablename,columnname from vtiger_field where tabid=9";
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder'";
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
   }
   $result1 = $adb->query($sql1);
   for($i=0;$i < $adb->num_rows($result1);$i++)
@@ -434,6 +434,7 @@ function get_tasksforol($username)
 			 inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 			 left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
 			 left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid 
+			 left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid 
 			 where vtiger_users.user_name='".$username."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Task'";
 	$log->debug("Exiting get_tasksforol method ...");		 
 	return $query;
@@ -457,11 +458,11 @@ function get_calendarsforol($user_name)
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
-    $sql1 = "select tablename,columnname from vtiger_field where tabid=9";
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder'";
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
   }
   $result1 = $adb->query($sql1);
   for($i=0;$i < $adb->num_rows($result1);$i++)
@@ -486,6 +487,7 @@ function get_calendarsforol($user_name)
 				inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
 				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid 
+				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
 				where vtiger_users.user_name='".$user_name."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Meeting'";
 	$log->debug("Exiting get_calendarsforol method ...");
