@@ -656,7 +656,7 @@ class User {
  	 */
 	function saveentity($module)
 	{
-		global $current_user, $adb;//$adb added by raju for mass mailing
+		global $current_user;//$adb added by raju for mass mailing
 		$insertion_mode = $this->mode;
 
 		$this->db->println("TRANS saveentity starts $module");
@@ -692,9 +692,9 @@ class User {
 		if($insertion_mode == 'edit')
 		{
 			$check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-			$check_result=$adb->query($check_query);
+			$check_result=$this->db->query($check_query);
 
-			$num_rows = $adb->num_rows($check_result);
+			$num_rows = $this->db->num_rows($check_result);
 
 			if($num_rows <= 0)
 			{
@@ -713,7 +713,7 @@ class User {
 			$column = $this->tab_name_index[$table_name];
 			if($column == 'id' && $table_name == 'vtiger_users')
 			{
-				$currentuser_id = $adb->getUniqueID("vtiger_users");
+				$currentuser_id = $this->db->getUniqueID("vtiger_users");
 				$this->id = $currentuser_id;
 			}
 			$value = $this->id;
@@ -721,13 +721,13 @@ class User {
 			$sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3,4)"; 
 		}
 
-		$result = $adb->query($sql);
-		$noofrows = $adb->num_rows($result);
+		$result = $this->db->query($sql);
+		$noofrows = $this->db->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fieldname=$adb->query_result($result,$i,"fieldname");
-			$columname=$adb->query_result($result,$i,"columnname");
-			$uitype=$adb->query_result($result,$i,"uitype");
+			$fieldname=$this->db->query_result($result,$i,"fieldname");
+			$columname=$this->db->query_result($result,$i,"columnname");
+			$uitype=$this->db->query_result($result,$i,"uitype");
 			if(isset($this->column_fields[$fieldname]))
 			{
 				if($uitype == 56)
@@ -769,7 +769,7 @@ class User {
 					$fldvalue = $this->column_fields[$fieldname]; 
 					$fldvalue = stripslashes($fldvalue);
 				}
-				$fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
+				$fldvalue = from_html($this->db->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 
 
 
@@ -809,14 +809,14 @@ class User {
 			{
 				$sql1 = "update ".$table_name." set ".$update." where ".$this->tab_name_index[$table_name]."=".$this->id;
 
-				$adb->query($sql1); 
+				$this->db->query($sql1); 
 			}
 
 		}
 		else
 		{	
 			$sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
-			$adb->query($sql1); 
+			$this->db->query($sql1); 
 		}
 
 	}
@@ -829,7 +829,7 @@ class User {
  	 */
 	function insertIntoAttachment($id,$module)
 	{
-		global $log, $adb;
+		global $log;
 		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
 
 		foreach($_FILES as $fileindex => $files)
@@ -898,7 +898,7 @@ class User {
 		global $log;
 		$log->debug("Entering into uploadAndSaveFile($id,$module,$file_details) method.");
 		
-		global $adb, $current_user;
+		global $current_user;
 		global $upload_badext;
 
 		$date_var = date('YmdHis');
@@ -926,7 +926,7 @@ class User {
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
 		
-		$current_id = $adb->getUniqueID("vtiger_crmentity");
+		$current_id = $this->db->getUniqueID("vtiger_crmentity");
 		
 		//get the file path inwhich folder we want to upload the file
 		$upload_file_path = decideFilePath();
@@ -942,23 +942,23 @@ class User {
 		if($save_file == 'true')
 		{
 
-			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
-			$adb->query($sql1);
+			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$this->db->formatString("vtiger_crmentity","createdtime",$date_var).",".$this->db->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+- 			$this->db->query($sql1);
 
 			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
-			$result=$adb->query($sql2);
+			$result=$this->db->query($sql2);
 
 			if($id != '')
 			{
 				$delquery = 'delete from vtiger_salesmanattachmentsrel where smid = '.$id;
-				$adb->query($delquery);
+				$this->db->query($delquery);
 			}
 
 			$sql3='insert into vtiger_salesmanattachmentsrel values('.$id.','.$current_id.')';
-			$adb->query($sql3);
+			$this->db->query($sql3);
 
 			//we should update the imagename in the users table
-			$adb->query("update vtiger_users set imagename=\"$filename\" where id=$id");
+			$this->db->query("update vtiger_users set imagename=\"$filename\" where id=$id");
 		}
 		else
 		{
