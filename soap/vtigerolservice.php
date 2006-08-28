@@ -292,11 +292,11 @@ function SearchContactsByEmail($username,$emailaddress)
      foreach($contactList as $contact)
      {
           $output_list[] = Array(
-               "id" => $contact[id],
-               "firstname" => $contact[first_name],
-               "lastname" => $contact[last_name],
-               "accountname" => $contact[account_name],
-               "emailaddress" => $contact[email1],
+               "id" => $contact[contactid],
+               "firstname" => $contact[firstname],
+               "lastname" => $contact[lastname],
+               "accountname" => $contact[accountname],
+               "emailaddress" => $contact[email],
           );
      }
      
@@ -316,35 +316,35 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	
 	foreach($msgdtls as $msgdtl)
 	{
-     		if(isset($msgdtl))
-     		{    
-          		$email = new Email();
-			//$log->debug($msgdtls['contactid']);
-			$email_body = str_replace("'", "''", $msgdtl['body']);
-			$email_subject = str_replace("'", "''",$msgdtl['subject']);
-			$date_sent = getDisplayDate($msgdtl['datesent']);
-
-			$email->column_fields[subject] = $email_subject;
-			$email->column_fields[assigned_user_id] = $user_id;
-			$email->column_fields[date_start] = $date_sent;
-			$email->column_fields[description]  = htmlentities($email_body);
-			$email->column_fields[activitytype] = 'Emails'; 
-			$email->plugin_save = true;
-			$email->save("Emails");
-
-			$email->set_emails_contact_invitee_relationship($email->id,$contactid);
-			$email->set_emails_se_invitee_relationship($email->id,$contactid);
-			$email->set_emails_user_invitee_relationship($email->id,$user_id);
-			$sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
-			$result = $adb->query($sql);
-			$camodulerow = $adb->fetch_array($result);
-			if(isset($camodulerow))
-			{
-				$emailid = $camodulerow["email"];
-				$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contactid."@77|".'","OUTLOOK")';
-				$adb->query($query);
-			}
-			return $email->id;
+    if(isset($msgdtl))
+    {    
+        $email = new Email();
+        //$log->debug($msgdtls['contactid']);
+        $email_body = str_replace("'", "''", $msgdtl['body']);
+        $email_subject = str_replace("'", "''",$msgdtl['subject']);
+        $date_sent = getDisplayDate($msgdtl['datesent']);
+        
+        $email->column_fields[subject] = $email_subject;
+        $email->column_fields[assigned_user_id] = $user_id;
+        $email->column_fields[date_start] = $date_sent;
+        $email->column_fields[description]  = htmlentities($email_body);
+        $email->column_fields[activitytype] = 'Emails'; 
+        $email->plugin_save = true; 
+        $email->save("Emails");
+        
+        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
+        $email->set_emails_se_invitee_relationship($email->id,$contactid);
+        $email->set_emails_user_invitee_relationship($email->id,$user_id);
+        $sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
+        $result = $adb->query($sql);
+        $camodulerow = $adb->fetch_array($result);
+        if(isset($camodulerow))
+        {
+            $emailid = $camodulerow["email"];
+            $query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contactid."@77|".'","OUTLOOK")';
+            $adb->query($query);
+        }
+        return $email->id;
 		}
 		else
 		{
@@ -409,7 +409,7 @@ function CheckContactPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Contacts","EditView") == "yes")
+	if(isPermitted("Contacts","Delete") == "yes")
 	{
 		return "allowed";
 	}else
@@ -427,7 +427,7 @@ function CheckActivityPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Calendar","EditView") == "yes")
+	if(isPermitted("Calendar","Delete") == "yes")
 	{
 		return "allowed";
 	}else
@@ -502,12 +502,12 @@ function GetContacts($username)
 			$contact["salutation"] = "";
 		}
 
-		$namelist = explode(" ", $contact["last_name"]);
+		$namelist = explode(" ", $contact["lastname"]);
 		if(isset($namelist))
 		{
 			if(count($namelist) >= 2) 
 			{
-				$contact["last_name"] = $namelist[count($namelist)-1];       	
+				$contact["lastname"] = $namelist[count($namelist)-1];       	
 				for($i=0; $i<count($namelist)-2; $i++)
 				{
 					$middlename[] = $namelist[$i];
@@ -522,20 +522,20 @@ function GetContacts($username)
 		$output_list[] = Array(
 				"id" => $contact["id"],
 				"title" => $contact["salutation"],
-				"firstname" => $contact["first_name"],
+				"firstname" => $contact["firstname"],
 				"middlename" => trim($middlename),
-				"lastname" => trim($contact["last_name"]),
-				"birthdate" => $contact["birthdate"],
+				"lastname" => trim($contact["lastname"]),
+				"birthdate" => $contact["birthday"],
 				"emailaddress" => $contact["email"],
 				"jobtitle" => $contact["title"],
 				"department" => $contact["department"],
-				"accountname" => $contact["account_name"],                         
+				"accountname" => $contact["accountname"],                         
 				"officephone" => $contact["phone"],
 				"homephone" => $contact["homephone"],
 				"otherphone" => $contact["otherphone"],           
 				"fax" => $contact["fax"],
 				"mobile" => $contact["mobile"],
-				"asstname" => $contact["assistant_name"],
+				"asstname" => $contact["assistant"],
 				"asstphone" => $contact["assistantphone"],             
 				"reportsto" => $contact["reports_to_name"],
 				"mailingstreet" => $contact["mailingstreet"],
@@ -550,7 +550,7 @@ function GetContacts($username)
 				"othercountry" => $contact["othercountry"],
 				"description" => "",
 				"category" => "",        
-			  	);
+			  );
 	}
 
 	//to remove an erroneous compiler warning
@@ -572,48 +572,69 @@ function AddContacts($username,$cntdtls)
 	
 	$contact = new Contact();
 	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
+	
 	foreach($cntdtls as $cntrow)
 	{
 		if(isset($cntrow))
 		{
-			$contact->column_fields[salutation]=$cntrow["title"];		
- 			$contact->column_fields[firstname]=$cntrow["firstname"];
-			
-			if($cntrow["middlename"] != "")
-			{
-				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
-			}else
-			{
-				$contact->column_fields[lastname]=$cntrow["lastname"];
-			}
-
-			$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
-			$contact->column_fields[email]=$cntrow["emailaddress"];
-			$contact->column_fields[title]=$cntrow["jobtitle"];
-			$contact->column_fields[department]=$cntrow["department"];
-			$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
-			$contact->column_fields[phone]= $cntrow["officephone"];
-			$contact->column_fields[homephone]= $cntrow["homephone"];
-			$contact->column_fields[otherphone]= $cntrow["otherphone"];
-			$contact->column_fields[fax]= $cntrow["fax"];
-			$contact->column_fields[mobile]=$cntrow["mobile"];
-			$contact->column_fields[assistant]= $cntrow["asstname"];
-			$contact->column_fields[assistantphone]= $cntrow["asstphone"];     
-			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-			$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
-			$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
-			$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
-			$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
-			$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
-			$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
-			$contact->column_fields[othercity]=$cntrow["othercity"];
-			$contact->column_fields[otherstate]=$cntrow["otherstate"];
-			$contact->column_fields[otherzip]=$cntrow["otherzip"];
-			$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
-			$contact->column_fields[assigned_user_id]=$user_id;   
-			$contact->column_fields[description]= $cntrow["description"];
-			$contact->save("Contacts");	
-		}	
+		  		$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+     			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
+    			
+    			if($cntrow["middlename"] != "")
+    			{
+    				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
+    			}elseif($cntrow["middlename"] != "")
+    			{
+    				$contact->column_fields[lastname]=$cntrow["lastname"];
+    			}else
+    			{
+    			   $contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
+          }
+    
+    			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? getDisplayDate($cntrow["birthdate"]) : "";
+    			$contact->column_fields[email]=in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
+    			$contact->column_fields[title]=in_array('title',$permitted_lists) ? $cntrow["jobtitle"] : "";
+    			$contact->column_fields[department]=in_array('department',$permitted_lists) ? $cntrow["department"] : "";
+    			$contact->column_fields[account_id]= in_array('account_id',$permitted_lists) ? retrieve_account_id($cntrow["accountname"],$user_id) : "";
+    			$contact->column_fields[phone]= in_array('phone',$permitted_lists) ? $cntrow["officephone"] : "";
+    			$contact->column_fields[homephone]= in_array('homephone',$permitted_lists) ? $cntrow["homephone"] : "";
+    			$contact->column_fields[otherphone]= in_array('otherphone',$permitted_lists) ? $cntrow["otherphone"] : "";
+    			$contact->column_fields[fax]= in_array('fax',$permitted_lists) ? $cntrow["fax"] : "";
+    			$contact->column_fields[mobile]=in_array('mobile',$permitted_lists) ? $cntrow["mobile"] : "";
+    			$contact->column_fields[assistant]= in_array('assistant',$permitted_lists) ? $cntrow["asstname"] : "";
+    			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";     
+    			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+    			$contact->column_fields[mailingstreet]=in_array('mailingstreet',$permitted_lists) ? $cntrow["mailingstreet"] : "";
+    			$contact->column_fields[mailingcity]=in_array('mailingcity',$permitted_lists) ? $cntrow["mailingcity"] : "";
+    			$contact->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $cntrow["mailingstate"] : "";
+    			$contact->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $cntrow["mailingzip"] : "";
+    			$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";    
+    			$contact->column_fields[otherstreet]=in_array('otherstreet',$permitted_lists) ? $cntrow["otherstreet"] : "";
+    			$contact->column_fields[othercity]=in_array('othercity',$permitted_lists) ? $cntrow["othercity"] : "";
+    			$contact->column_fields[otherstate]=in_array('otherstate',$permitted_lists) ? $cntrow["otherstate"] : "";
+    			$contact->column_fields[otherzip]=in_array('otherzip',$permitted_lists) ? $cntrow["otherzip"] : "";
+    			$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
+    			$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
+    			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
+    			$contact->save("Contacts");	
+		  
+    }	
 	}
 	$contact = $contact;	
 	return $contact->id;
@@ -632,46 +653,66 @@ function UpdateContacts($username,$cntdtls)
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
 	$contact = new Contact();
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
 	
 	foreach($cntdtls as $cntrow)
 	{
 		if(isset($cntrow))
 		{
 			$contact->retrieve_entity_info($cntrow["id"],"Contacts");
-			$contact->column_fields[salutation]=$cntrow["title"];		
-			$contact->column_fields[firstname]=$cntrow["firstname"];
+			$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
 			if($cntrow["middlename"] != "")
 			{
 				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
-			}else
+			}elseif($cntrow["lastname"] != "")
 			{
 				$contact->column_fields[lastname]=$cntrow["lastname"];
-			}
-			$contact->column_fields[birthday]= getDisplayDate($cntrow["birthdate"]);
-			$contact->column_fields[email]=$cntrow["emailaddress"];
-			$contact->column_fields[title]=$cntrow["jobtitle"];
-			$contact->column_fields[department]=$cntrow["department"];
-			$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
-			$contact->column_fields[phone]= $cntrow["officephone"];
-			$contact->column_fields[homephone]= $cntrow["homephone"];
-			$contact->column_fields[otherphone]= $cntrow["otherphone"];
-			$contact->column_fields[fax]= $cntrow["fax"];
-			$contact->column_fields[mobile]=$cntrow["mobile"];
-			$contact->column_fields[assistant]= $cntrow["asstname"];
-			$contact->column_fields[assistantphone]= $cntrow["asstphone"];     
+			}else
+			{
+				$contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
+      }
+      
+			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? getDisplayDate($cntrow["birthdate"]) : "";
+			$contact->column_fields[email]= in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
+			$contact->column_fields[title]= in_array('title',$permitted_lists) ? $cntrow["jobtitle"] : "";
+			$contact->column_fields[department]= in_array('department',$permitted_lists) ? $cntrow["department"] : "";
+			$contact->column_fields[account_id]= in_array('account_id',$permitted_lists) ? retrieve_account_id($cntrow["accountname"],$user_id) : "";
+			$contact->column_fields[phone]= in_array('phone',$permitted_lists) ? $cntrow["officephone"] : "";
+			$contact->column_fields[homephone]= in_array('homephone',$permitted_lists) ? $cntrow["homephone"] : "";
+			$contact->column_fields[otherphone]= in_array('otherphone',$permitted_lists) ? $cntrow["otherphone"] : "";
+			$contact->column_fields[fax]= in_array('fax',$permitted_lists) ? $cntrow["fax"] : "";
+			$contact->column_fields[mobile]= in_array('mobile',$permitted_lists) ? $cntrow["mobile"] : "";
+			$contact->column_fields[assistant]= in_array('assistant',$permitted_lists) ? $cntrow["asstname"] : "";
+			$contact->column_fields[assistantphone]= in_array('assistantphone',$permitted_lists) ? $cntrow["asstphone"] : "";     
 			//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-			$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
-			$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
-			$contact->column_fields[mailingstate]=$cntrow["mailingstate"];
-			$contact->column_fields[mailingzip]=$cntrow["mailingzip"];
-			$contact->column_fields[mailingcountry]=$cntrow["mailingcountry"];    
-			$contact->column_fields[otherstreet]=$cntrow["otherstreet"];
-			$contact->column_fields[othercity]=$cntrow["othercity"];
-			$contact->column_fields[otherstate]=$cntrow["otherstate"];
-			$contact->column_fields[otherzip]=$cntrow["otherzip"];
-			$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
-			$contact->column_fields[assigned_user_id]=$user_id;   
-			$contact->column_fields[description]= $cntrow["description"];
+			$contact->column_fields[mailingstreet]= in_array('mailingstreet',$permitted_lists) ? $cntrow["mailingstreet"] : "";
+			$contact->column_fields[mailingcity]= in_array('mailingcity',$permitted_lists) ? $cntrow["mailingcity"] : "";
+			$contact->column_fields[mailingstate]= in_array('mailingstate',$permitted_lists) ? $cntrow["mailingstate"] : "";
+			$contact->column_fields[mailingzip]= in_array('mailingzip',$permitted_lists) ? $cntrow["mailingzip"] : "";
+			$contact->column_fields[mailingcountry]= in_array('mailingcountry',$permitted_lists) ? $cntrow["mailingcountry"] : "";    
+			$contact->column_fields[otherstreet]= in_array('otherstreet',$permitted_lists) ? $cntrow["otherstreet"] : "";
+			$contact->column_fields[othercity]= in_array('othercity',$permitted_lists) ? $cntrow["othercity"] : "";
+			$contact->column_fields[otherstate]= in_array('otherstate',$permitted_lists) ? $cntrow["otherstate"] : "";
+			$contact->column_fields[otherzip]= in_array('otherzip',$permitted_lists) ? $cntrow["otherzip"] : "";
+			$contact->column_fields[othercountry]= in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
+			$contact->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
+			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
 			$contact->id = $cntrow["id"];
 			$contact->mode = "edit";
 			$contact->save("Contacts");	
@@ -743,7 +784,7 @@ function retrieve_account_id($account_name,$user_id)
 
 function GetTasks($username)
 {
-	global $adb;
+	global $adb,$log;
 	require_once('modules/Calendar/Activity.php');
 		
 	$seed_task = new Activity();
@@ -754,11 +795,11 @@ function GetTasks($username)
     
 	while($task = $adb->fetch_array($result))
 	{
-  		if($task["startdate"] == "0000-00-00" || $task["startdate"] == NULL)
+  		if($task["date_start"] == "0000-00-00" || $task["date_start"] == NULL)
         	{
 		       	$task["startdate"] = "";
         	}
-        	if($task["duedate"] == "0000-00-00" || $task["duedate"] == NULL)
+        	if($task["due_date"] == "0000-00-00" || $task["due_date"] == NULL)
         	{
 		       	$task["duedate"] = "";
         	}
@@ -821,15 +862,30 @@ function AddTasks($username,$taskdtls)
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=9";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
+	
 	$task = new Activity();
 	
 	foreach($taskdtls as $taskrow)
 	{
-	
-	
 	//Currently only 3 status avail Note ************************************************
-      		if(isset($taskrow))
-      		{
+   		if(isset($taskrow))
+   		{
 			if($taskrow["status"] == "0")
 			{
 				$taskrow["status"] = "Not Started";
@@ -861,17 +917,17 @@ function AddTasks($username,$taskdtls)
 				$taskrow["priority"] = "Medium";
 			}
 
-			$task->column_fields[subject] = $taskrow["subject"];
-			$task->column_fields[date_start]=getDisplayDate($taskrow["startdate"]);
-			$task->column_fields[due_date]=getDisplayDate($taskrow["duedate"]);         
-			$task->column_fields[taskstatus]=$taskrow["status"];
-			$task->column_fields[taskpriority]=$taskrow["priority"];
-			$task->column_fields[description]=$taskrow["description"];
+			$task->column_fields[subject] = in_array('subject',$permitted_lists) ? $taskrow["subject"] : "";
+			$task->column_fields[date_start]= in_array('date_start',$permitted_lists) ? getDisplayDate($taskrow["startdate"]) : "";
+			$task->column_fields[due_date]= in_array('due_date',$permitted_lists) ? getDisplayDate($taskrow["duedate"]) : "";         
+			$task->column_fields[taskstatus]= in_array('taskstatus',$permitted_lists) ? $taskrow["status"] : "";
+			$task->column_fields[taskpriority]= in_array('taskpriority',$permitted_lists) ? $taskrow["priority"] : "";
+			$task->column_fields[description]= in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype]="Task";
 			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
-			$task->column_fields[assigned_user_id]=$user_id;
+			$task->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$task->save("Calendar");
-		}
+		  }
 	}
 	return $task->id;
 }
@@ -887,6 +943,23 @@ function UpdateTasks($username,$taskdtls)
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=9";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
+  
 	$task = new Activity();
 	
 	foreach($taskdtls as $taskrow)
@@ -913,24 +986,24 @@ function UpdateTasks($username,$taskdtls)
 				$taskrow["status"] = "Not Started";
 			}
         
-    			if($taskrow["priority"] == "2")
+    	if($taskrow["priority"] == "2")
 			{
-           			$taskrow["priority"] = "High";
-           		}else if($taskrow["priority"] == "0")
-           		{
-           			$taskrow["priority"] = "Low";
-           		}else if($taskrow["priority"] == "1")
-           		{
-           		 	$taskrow["priority"] = "Medium";
-           		}
-					
+      	$taskrow["priority"] = "High";
+   		}else if($taskrow["priority"] == "0")
+   		{
+   			$taskrow["priority"] = "Low";
+   		}else if($taskrow["priority"] == "1")
+   		{
+   		 	$taskrow["priority"] = "Medium";
+   		}
+		
 			$task->retrieve_entity_info($taskrow["id"],"Calendar");
-			$task->column_fields[subject] = $taskrow["subject"];
-			$task->column_fields[date_start] = getDisplayDate($taskrow["startdate"]);
-			$task->column_fields[due_date] = getDisplayDate($taskrow["duedate"]);         
-			$task->column_fields[taskstatus] = $taskrow["status"];
-			$task->column_fields[taskpriority] = $taskrow["priority"];
-			$task->column_fields[description] = $taskrow["description"];
+			$task->column_fields[subject] = in_array('subject',$permitted_lists) ? $taskrow["subject"] : "";
+			$task->column_fields[date_start] = in_array('date_start',$permitted_lists) ? getDisplayDate($taskrow["startdate"]) : "";
+			$task->column_fields[due_date] = in_array('due_date',$permitted_lists) ? getDisplayDate($taskrow["duedate"]) : "";         
+			$task->column_fields[taskstatus] = in_array('taskstatus',$permitted_lists) ? $taskrow["status"] : "";
+			$task->column_fields[taskpriority] = in_array('taskpriority',$permitted_lists) ? $taskrow["priority"] : "";
+			$task->column_fields[description] = in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype] = "Task";
 			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 			$task->column_fields[assigned_user_id] = $user_id;
@@ -963,7 +1036,7 @@ function DeleteTasks($username,$crmid)
 
 function GetClndr($username)
 {
-	global $adb;
+	global $adb,$log;
 	require_once('modules/Calendar/Activity.php');
 
 	$seed_clndr = new Activity();
@@ -974,34 +1047,34 @@ function GetClndr($username)
     
 	while($clndr = $adb->fetch_array($result))
   	{
-  		if($clndr["startdate"] == "0000-00-00" || $clndr["startdate"] == NULL)
+  		if($clndr["date_start"] == "0000-00-00" || $clndr["date_start"] == NULL)
         	{
-	        	$clndr["startdate"] = "";
+	        	$clndr["date_start"] = "";
 		}
-	        if($clndr["duedate"] == "0000-00-00" || $clndr["duedate"] == NULL)
+	        if($clndr["due_date"] == "0000-00-00" || $clndr["due_date"] == NULL)
         	{
-	        	$clndr["duedate"] = "";
+	        	$clndr["due_date"] = "";
         	}
 		
 		//this seperates the $$clndr["startdate"] into an array - YYYY-MM-DD
-		$expldstartdate = explode("-", $clndr["startdate"]);
-		$expldtimestart = explode(":", $clndr["startime"]);	
+		$expldstartdate = explode("-", $clndr["date_start"]);
+		$expldtimestart = explode(":", $clndr["time_start"]);	
 
-		$expldduedate = explode("-", $clndr["duedate"]);
+		$expldduedate = explode("-", $clndr["due_date"]);
 
 		//this makes a timestamp out of the exploded date this number is in seconds
 		$startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
 
-		$duedtm = mktime($expldtimestart[0]+$clndr["duehours"], $expldtimestart[1]+$clndr["dueminutes"], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
+		$duedtm = mktime($expldtimestart[0]+$clndr["duration_hours"], $expldtimestart[1]+$clndr["duration_minutes"], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
 
-		$clndr["startdate"] = date("Y-m-d H:i:s", $startdtm);
-		$clndr["duedate"] = date("Y-m-d H:i:s", $duedtm);
+		$clndr["date_start"] = date("Y-m-d H:i:s", $startdtm);
+		$clndr["due_date"] = date("Y-m-d H:i:s", $duedtm);
 
 		$output_list[] = Array(
 						"id" => $clndr["clndrid"],
 						"subject" => $clndr["subject"],
-						"startdate" => $clndr["startdate"],
-						"duedate" => $clndr["duedate"],
+						"startdate" => $clndr["date_start"],
+						"duedate" => $clndr["due_date"],
 						"location" => $clndr["location"],
 						"description" => $clndr["description"],
 						"contactname" => $clndr["firstname"]." ".$clndr["lastname"],
@@ -1014,7 +1087,7 @@ function GetClndr($username)
 
 function AddClndr($username,$clndrdtls)
 {
-	global $current_user;
+	global $current_user,$adb;
 	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
@@ -1023,6 +1096,23 @@ function AddClndr($username,$clndrdtls)
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=16";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
+  
 	$clndr = new Activity();
 	
 	foreach($clndrdtls as $clndrow)
@@ -1044,16 +1134,16 @@ function AddClndr($username,$clndrdtls)
 				$stimeduemin = sprintf('%02d',$diff['minutes']);
 			}
 
-			$clndr->column_fields[subject] = $clndrow["subject"];
-			$clndr->column_fields[date_start]=getDisplayDate(trim($astartdtm[0]));
-			$clndr->column_fields[due_date]=getDisplayDate(trim($aduedtm[0])); 
-			$clndr->column_fields[time_start]=$stimestart;
-			$clndr->column_fields[duration_hours]=$stimeduehr;        
-			$clndr->column_fields[duration_minutes]=$stimeduemin;          
-			$clndr->column_fields[location]=$clndrow["location"];
-			$clndr->column_fields[description]=$clndrow["description"];
+			$clndr->column_fields[subject] = in_array('subject',$permitted_lists) ? $clndrow["subject"] : "";
+			$clndr->column_fields[date_start]= in_array('date_start',$permitted_lists) ? getDisplayDate(trim($astartdtm[0])) : "";
+			$clndr->column_fields[due_date]= in_array('due_date',$permitted_lists) ? getDisplayDate(trim($aduedtm[0])) : ""; 
+			$clndr->column_fields[time_start]= in_array('time_start',$permitted_lists) ? $stimestart : "";
+			$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";        
+			$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";          
+			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
+			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
-			$clndr->column_fields[assigned_user_id]=$user_id;
+			$clndr->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$clndr->save("Calendar");
 		}
 	}
@@ -1063,7 +1153,7 @@ function AddClndr($username,$clndrdtls)
 function UpdateClndr($username,$clndrdtls)
 {
 	global $current_user;
-	global $adb;
+	global $adb,$log;
 	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
@@ -1071,6 +1161,23 @@ function UpdateClndr($username,$clndrdtls)
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
+	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=16";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
 	
 	$clndr = new Activity();
 	
@@ -1094,16 +1201,16 @@ function UpdateClndr($username,$clndrdtls)
 			}
 
 			$clndr->retrieve_entity_info($clndrow["id"],"Calendar");
-			$clndr->column_fields[subject] = $clndrow["subject"];
-			$clndr->column_fields[date_start]=getDisplayDate(trim($astartdtm[0]));
-			$clndr->column_fields[due_date]=getDisplayDate(trim($aduedtm[0])); 
-			$clndr->column_fields[time_start]=$stimestart;
-			$clndr->column_fields[duration_hours]=$stimeduehr;       
-			$clndr->column_fields[duration_minutes]=$stimeduemin;              
-			$clndr->column_fields[location]=$clndrow["location"];
-			$clndr->column_fields[description]=$clndrow["description"];
+			$clndr->column_fields[subject] = in_array('subject',$permitted_lists) ? $clndrow["subject"] : "";
+			$clndr->column_fields[date_start]= in_array('date_start',$permitted_lists) ? getDisplayDate(trim($astartdtm[0])) : "";
+			$clndr->column_fields[due_date]= in_array('due_date',$permitted_lists) ? getDisplayDate(trim($aduedtm[0])) : ""; 
+			$clndr->column_fields[time_start]= in_array('time_start',$permitted_lists) ? $stimestart : "";
+			$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";       
+			$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";              
+			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
+			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
-			$clndr->column_fields[assigned_user_id]=$user_id;
+			$clndr->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$clndr->id = $clndrow["id"];
 			$clndr->mode="edit";
 			$clndr->save("Calendar");

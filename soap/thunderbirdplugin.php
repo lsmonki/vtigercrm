@@ -151,11 +151,11 @@ function SearchContactsByEmail($username,$emailaddress)
      foreach($contactList as $contact)
      {
           $output_list[] = Array(
-               "id" => $contact[id],
-               "firstname" => $contact[first_name],
-               "lastname" => $contact[last_name],
-               "emailaddress" => $contact[email1],
-               "accountname" => $contact[account_name],
+               "id" => $contact[contactid],
+               "firstname" => $contact[firstname],
+               "lastname" => $contact[lastname],
+               "emailaddress" => $contact[email],
+               "accountname" => $contact[accountname],
           );
      }
      
@@ -225,12 +225,12 @@ function GetContacts($username)
 			$contact["salutation"] = "";
 		}
 
-		$namelist = explode(" ", $contact["last_name"]);
+		$namelist = explode(" ", $contact["lastname"]);
 		if(isset($namelist))
 		{
 			if(count($namelist) >= 2) 
 			{
-				$contact["last_name"] = $namelist[count($namelist)-1];       	
+				$contact["lastname"] = $namelist[count($namelist)-1];       	
 				for($i=0; $i<count($namelist)-2; $i++)
 				{
 					$middlename[] = $namelist[$i];
@@ -245,20 +245,20 @@ function GetContacts($username)
 		$output_list[] = Array(
 				"id" => $contact["id"],
 				"title" => $contact["salutation"],
-				"firstname" => $contact["first_name"],
+				"firstname" => $contact["firstname"],
 				"middlename" => trim($middlename),
-				"lastname" => trim($contact["last_name"]),
-				"birthdate" => $contact["birthdate"],
+				"lastname" => trim($contact["lastname"]),
+				"birthdate" => $contact["birthday"],
 				"emailaddress" => $contact["email"],
 				"jobtitle" => $contact["title"],
 				"department" => $contact["department"],
-				"accountname" => $contact["account_name"],                         
+				"accountname" => $contact["accountname"],                         
 				"officephone" => $contact["phone"],
 				"homephone" => $contact["homephone"],
 				"otherphone" => $contact["otherphone"],           
 				"fax" => $contact["fax"],
 				"mobile" => $contact["mobile"],
-				"asstname" => $contact["assistant_name"],
+				"asstname" => $contact["assistant"],
 				"asstphone" => $contact["assistantphone"],             
 				"reportsto" => $contact["reports_to_name"],
 				"mailingstreet" => $contact["mailingstreet"],
@@ -273,11 +273,8 @@ function GetContacts($username)
 				"othercountry" => $contact["othercountry"],
 				"description" => "",
 				"category" => "",        
-			  	);
+			  );
 	}
-	$log->debug("*******************");
-	$log->fatal($output_list);
-
 	//to remove an erroneous compiler warning
 	$seed_contact = $seed_contact;
 	return $output_list;
@@ -335,30 +332,46 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
 	
 	$contact = new Contact();
-	$contact->column_fields[firstname]=$first_name;
-	$contact->column_fields[lastname]=$last_name;
-	$contact->column_fields[birthday]= getDisplayDate("0000-00-00");
-	$contact->column_fields[email]=$email_address;
-	$contact->column_fields[title]=$title;
-	$contact->column_fields[department]=$department;
-	$contact->column_fields[account_id]= retrieve_account_id($account_name,$user_id);
-	$contact->column_fields[phone]= $office_phone;
-	$contact->column_fields[homephone]= $home_phone;
-	$contact->column_fields[fax]= $fax;
-	$contact->column_fields[mobile]=$phone_mobile;
-	$contact->column_fields[mailingstreet]=$primary_address_street;
-	$contact->column_fields[mailingcity]=$primary_address_city;
-	$contact->column_fields[mailingstate]=$primary_address_state;
-	$contact->column_fields[mailingzip]=$primary_address_postalcode;
-	$contact->column_fields[mailingcountry]=$primary_address_country;    
-	$contact->column_fields[otherstreet]=$alt_address_street;
-	$contact->column_fields[othercity]=$alt_address_city;
-	$contact->column_fields[otherstate]=$alt_address_state;
-	$contact->column_fields[otherzip]=$alt_address_postalcode;
-	$contact->column_fields[othercountry]=$alt_address_country;    	
-	$contact->column_fields[assigned_user_id]=$user_id;   
+	$contact->column_fields[firstname]=in_array('salutation',$permitted_lists) ? $first_name : "";
+	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
+	$contact->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
+	$contact->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
+	$contact->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
+	$contact->column_fields[department]=in_array('department',$permitted_lists) ? $department : "";
+	$contact->column_fields[account_id]=in_array('account_id',$permitted_lists) ? retrieve_account_id($account_name,$user_id) : "";
+	$contact->column_fields[phone]=in_array('phone',$permitted_lists) ? $office_phone : "";
+	$contact->column_fields[homephone]=in_array('homephone',$permitted_lists) ? $home_phone : "";
+	$contact->column_fields[fax]=in_array('fax',$permitted_lists) ? $fax : "";
+	$contact->column_fields[mobile]=in_array('mobile',$permitted_lists) ? $phone_mobile : "";
+	$contact->column_fields[mailingstreet]=in_array('mailingstreet',$permitted_lists) ? $primary_address_street : "";
+	$contact->column_fields[mailingcity]=in_array('mailingcity',$permitted_lists) ? $primary_address_city : "";
+	$contact->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $primary_address_state : "";
+	$contact->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $primary_address_postalcode : "";
+	$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $primary_address_country : "";    
+	$contact->column_fields[otherstreet]=in_array('otherstreet',$permitted_lists) ? $alt_address_street : "";
+	$contact->column_fields[othercity]=in_array('othercity',$permitted_lists) ? $alt_address_city : "";
+	$contact->column_fields[otherstate]=in_array('otherstate',$permitted_lists) ? $alt_address_state : "";
+	$contact->column_fields[otherzip]=in_array('otherzip',$permitted_lists) ? $alt_address_postalcode : "";
+	$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $alt_address_country : "";    	
+	$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
 	$contact->column_fields[description]= "";
 	$contact->save("Contacts");	
 	
