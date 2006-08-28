@@ -13,20 +13,21 @@
 
 
 global $conn;
+global $migrationlog;
 global $query_count, $success_query_count, $failure_query_count;
 global $success_query_array, $failure_query_array;
 
 //Added to put prefix vtiger_ in some of the columns in tables which are used for CV and Reports and field -- 23-06-06
-$conn->println("Going to rename the table names with prefix vtiger_");
+$migrationlog->debug("Going to rename the table names with prefix vtiger_");
 include("modules/Migration/ModifyDatabase/rename_tables.php");
-$conn->println("Renaming the table names with prefix vtiger_ has been finished");
+$migrationlog->debug("Renaming the table names with prefix vtiger_ has been finished");
 
 
 
 
 
 
-$conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
+$migrationlog->debug("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
 
 
 
@@ -841,7 +842,7 @@ foreach($query_array1 as $query)
 
 
 
-$conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha starts here.");
+$migrationlog->debug("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha starts here.");
 //echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha starts here.....</b><br>";
 $alter_query_array6 = Array(
 				"ALTER TABLE vtiger_users ADD column activity_view VARCHAR(25) DEFAULT 'Today' AFTER homeorder",
@@ -2650,11 +2651,11 @@ elseif(!in_array("id",$currency_columns))
 	}
 }
 
-$conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha (5) ends here.");
+$migrationlog->debug("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha (5) ends here.");
 
 
 /************************* The following changes have been made after 5.0 Alpha 5 *************************/
-$conn->println("Database Modifications after 5.0(Alpha 5) starts here.");
+$migrationlog->debug("Database Modifications after 5.0(Alpha 5) starts here.");
 
 
 //Added on 22-04-06 - to add the Notify Owner vtiger_field in Contacts and Accounts
@@ -2783,7 +2784,7 @@ for($attach_count = 0;$attach_count < $noof_attachments ;$attach_count++)
 		mkdir($filepath."$year/$month/$week");
 
 	$filepath = $filepath.$year."/".$month."/".$week."/";
-	$conn->println("File Path = $filepath");
+	$migrationlog->debug("File Path = $filepath");
 	//upto this added to set the file path based on attachment created time
 
 	//In this file name (attachmentid_filename) the file will be stored in the harddisk
@@ -3676,8 +3677,10 @@ for($field_count=0;$field_count<$conn->num_rows($field_res);$field_count++)
 function Execute($query)
 {
 	global $conn, $query_count, $success_query_count, $failure_query_count, $success_query_array, $failure_query_array;
-
+	global $migrationlog;
+	
 	$status = $conn->query($query);
+	
 	$query_count++;
 	if(is_object($status))
 	{
@@ -3688,6 +3691,7 @@ function Execute($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		$success_query_array[$success_query_count++] = $query;
+		$migrationlog->debug("Query Success ==> $query");
 	}
 	else
 	{
@@ -3698,11 +3702,13 @@ function Execute($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		$failure_query_array[$failure_query_count++] = $query;
+		$migrationlog->debug("Query Failed ==> $query");
+		//$migrationlog->debug("Error is ==> ".$conn->ErrorMsg());
 	}
 }
 
 //Added on 23-12-2005 which is used to populate the vtiger_profile2field and vtiger_def_org_field table entries for the field per tab
-//if we enter a vtiger_field in vtiger_field table then we must populate that vtiger_field in these table for security access
+//if we enter a field in vtiger_field table then we must populate that field in these table for security access
 function populateFieldForSecurity($tabid,$fieldid)
 {
 	global $conn;

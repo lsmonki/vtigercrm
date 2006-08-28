@@ -10,9 +10,10 @@
  ********************************************************************************/
 
 global $conn;
+global $migrationlog;
 $prefix = "vtiger_";
 
-$conn->println("Inside the file rename_tables.php to rename the table names with prefix vtiger_");
+$migrationlog->debug("Inside the file rename_tables.php to rename the table names with prefix vtiger_");
 
 //Rename all the tables with prefix vtiger_
 $tables_list = $conn->get_tables();
@@ -66,5 +67,5 @@ foreach($queries_array as $index => $query)
 }
 
 
-$conn->println("End of file rename_tables.php. The table names renamed with prefix vtiger_");
+$migrationlog->debug("End of file rename_tables.php. The table names renamed with prefix vtiger_");
 ?>

@@ -40,9 +40,12 @@ class Migration
 	 */
 	function Migration($old='',$new='')
 	{
+		global $migrationlog;
+		$migrationlog->debug("Inside the constructor Migration.");
+		
 		$this->oldconn = $old;
 		$this->conn = $new;
-		$this->conn->println("Database Object has been created.");
+		$migrationlog->debug("Database Object has been created.");
 	}
 
 	/**	function used to set the Old database parameters in the migration object properties
@@ -55,12 +58,16 @@ class Migration
 	 */
 	function setOldDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
+		global $migrationlog;
+		$migrationlog->debug("Inside the function setOldDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)");
+		
 		$this->old_hostname = $hostname;
 		$this->old_mysql_port = $mysql_port;
 		$this->old_mysql_username = $mysql_username;
 		$this->old_mysql_password = $mysql_password;
 		$this->old_dbname = $dbname;
-		$this->conn->println("Old Database Parameters has been set.");
+		
+		$migrationlog->debug("Old Database Parameters has been set.");
 	}
 
 	/**	function used to set the Current ie., new 5.0 database parameters in the migration object properties
@@ -73,12 +80,16 @@ class Migration
 	 */
 	function setNewDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
+		global $migrationlog;
+		$migrationlog->debug("Inside the function setNewDatabaseParams($hostname,$mysql_port,$mysql_username,$mysql_password,$dbname)");
+		
 		$this->new_hostname = $hostname;
 		$this->new_mysql_port = $mysql_port;
 		$this->new_mysql_username = $mysql_username;
 		$this->new_mysql_password = $mysql_password;
 		$this->new_dbname = $dbname;
-		$this->conn->println("New Database Parameters has been set.");
+		
+		$migrationlog->debug("New Database Parameters has been set.");
 	}
 
 	/**	function used to take the database dump
@@ -91,7 +102,9 @@ class Migration
 	 */
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
-		$this->conn->println("Inside the function takeDatabaseDump. Going to take the specified database dump...");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname). Going to take the specified database dump...");
+
 		$dump_filename = 'dump_'.$dbname.'.txt';
 
 		if($mysql_password != '')
@@ -110,7 +123,8 @@ class Migration
 			$server_mysql_path = $_SESSION['set_server_mysql_path'];
 
 			$dump_str = "mysqldump -u".$mysql_username.$password_str." -h ".$host_name." --port=".$mysql_port." ".$dbname." >> ".$dump_filename;
-
+			$migrationlog->debug("Server path set. Dump string to execute ==> $dump_str");
+			
 			chdir ($server_mysql_path);
 
 			exec("echo 'set FOREIGN_KEY_CHECKS = 0;' > ".$dump_filename);
@@ -122,12 +136,15 @@ class Migration
 		}
 		else
 		{
+			$migrationlog->debug("Dump string to execute ==> mysqldump -u".$mysql_username." -h ".$host_name.$password_str." --port=".$mysql_port." ".$dbname." >> ".$dump_filename);
+
 			exec("echo 'set FOREIGN_KEY_CHECKS = 0;' > ".$dump_filename);
 			exec("mysqldump -u".$mysql_username." -h ".$host_name.$password_str." --port=".$mysql_port." ".$dbname." >> ".$dump_filename);
 			exec("echo 'set FOREIGN_KEY_CHECKS = 1;' >> ".$dump_filename);
 		}
 
 		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database Dump has been taken and the file is ==> '.$dump_filename;
+		$migrationlog->debug("<br> <b> $dbname </b> Database Dump has been taken and the file is ==> $dump_filename");
 
 		return $dump_filename;
 	}
@@ -139,10 +156,12 @@ class Migration
 	 */
 	function dropDatabase($conn,$dbname)
 	{
-		$this->conn->println("Inside the function dropDatabase. Going to drop the new database...");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function dropDatabase($conn,$dbname). Going to drop the database - $dbname");
 		$sql = "drop database ".$dbname;
 		$conn->query($sql);
 
+		$migrationlog->debug("Database ($dbname) has been dropped.");
 		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database has been dropped.';
 	}
 
@@ -153,12 +172,15 @@ class Migration
 	 */
 	function createDatabase($conn,$dbname)
 	{
-		$this->conn->println("Inside the function createDatabase. Going to create the new database...");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function createDatabase($conn, $dbname). Going to create the database - $dbname");
+		
 		$sql = "create database ".$dbname;
 		$conn->query($sql);
 
 		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database has been created.';
-
+		$migrationlog->debug("Database ($dbname) has been dropped.");
+		
 		//Added to avoid the No Database Selected error when execute the queries
 		$conn->connect();
 	}
@@ -174,8 +196,9 @@ class Migration
 	 */
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
 	{
-		$this->conn->println("Inside the function applyDumpData.");
-		$this->conn->println("hostname=$host_name&port=$mysql_port&username=$mysql_username&password=$mysql_password& dump file = $dumpfile");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile).");
+
 		if($mysql_password != '')
 		{
 			$password_str = " --password=".$mysql_password;
@@ -190,8 +213,9 @@ class Migration
 		{
 			$current_working_dir = getcwd();
 			$server_mysql_path = $_SESSION['set_server_mysql_path'];
-			
+
 			$dump_str = "mysql --user=".$mysql_username.$password_str." -h ".$host_name." --force --port=".$mysql_port." ".$dbname." < ".$dumpfile;
+			$migrationlog->debug("MySQL server path set. Dump string to apply ==> $dump_str");
 
 			//exec("path = $server_mysql_path");
 			chdir ($server_mysql_path);
@@ -203,9 +227,11 @@ class Migration
 		else
 		{
 			exec("mysql --user=".$mysql_username." -h ".$host_name." --force --port=".$mysql_port.$password_str." ".$dbname." < ".$dumpfile);
+			$migrationlog->debug("Dump string to apply ==> mysql --user=$mysql_username -h $host_name --force --port=$mysql_port $password_str $dbname < $dumpfile");
 		}
 
 		$_SESSION['migration_log'] .= '<br> Database Dump has been applied to the <b>'.$dbname.'</b> Database from <b>'.$dumpfile.'</b>';
+		$migrationlog->debug("<br> Database Dump has been applied to the <b> $dbname </b> database from <b> $dumpfile </b>");
 	}
 
 
@@ -229,11 +255,12 @@ class Migration
 	 */
 	function getTablesCountInNewDatabase()
 	{
-		$this->conn->println("Inside the function getTablesCountInNewDatabase");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function getTablesCountInNewDatabase()");
 		$newconn = @mysql_connect($this->new_hostname.':'.$this->new_mysql_port,$this->new_mysql_username,$this->new_mysql_password);
 		$tables = @mysql_num_rows(mysql_list_tables($this->new_dbname,$newconn));
 
-		$this->conn->println("Number of Tables in New Database = ".$tables);
+		$migrationlog->debug("Number of Tables in New Database = $tables");
 		return $tables;
 	}
 
@@ -242,11 +269,12 @@ class Migration
 	 */
 	function getTablesCountInOldDatabase()
 	{
-		$this->conn->println("Inside the function getTablesCountInOldDatabase");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function getTablesCountInOldDatabase()");
 		$oldconn = @mysql_connect($this->old_hostname.':'.$this->old_mysql_port,$this->old_mysql_username,$this->old_mysql_password);
 		$tables = @mysql_num_rows(mysql_list_tables($this->old_dbname,$oldconn));
 
-		$this->conn->println("Number of Tables in Old Database = ".$tables);
+		$migrationlog->debug("Number of Tables in Old Database = $tables");
 		return $tables;
 	}
 
@@ -256,8 +284,9 @@ class Migration
 	 */
 	function modifyDatabase($conn)
 	{
-		$this->conn->println("Inside the function modifyDatabase");
-		$conn->println("\n\n\nMickie ---- Starts");
+		global $migrationlog;
+		$migrationlog->debug("Inside the function modifyDatabase($conn)");
+		$migrationlog->debug("\n\n\nMickie ---- Starts");
 
 		$_SESSION['migration_log'] .= "<br>The current database is going to be modified by executing the following queries...<br>";
 		
@@ -273,7 +302,7 @@ class Migration
 		//Handle Here -- Mickie
 		include("modules/Migration/ModifyDatabase/MigrationInfo.php");
 
-		$conn->println("Mickie ---- Ends\n\n\n");
+		$migrationlog->debug("Mickie ---- Ends\n\n\n");
 	}
 
 	/**	function used to run the migration process based on the option selected and values given
@@ -297,10 +326,10 @@ class Migration
 		//Step : 3 => Put the dump into the New Database
 		//Step : 4 => Modify the new database with the new changes
 
-
+		global $migrationlog;
 		global $conn;
-		$this->conn->println("Database Migration from Old Database to the Current Database Starts.");
-		$this->conn->println("Migration Option = $option");
+		$migrationlog->debug("Database Migration from Old Database to the Current Database Starts.");
+		$migrationlog->debug("Migration Option = $option");
 
 		//Set the old database parameters
 		$old_host_name = $this->old_hostname;
@@ -320,7 +349,7 @@ class Migration
 		if($option == 'dbsource')
 		{
 			//Take the dump of the old Database
-			$this->conn->println("Going to take the old Database Dump.");
+			$migrationlog->debug("Going to take the old Database Dump.");
 			$dump_file = $this->takeDatabaseDump($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
 
 			//check the file size is greater than 10000 bytes (~app) and if yes then continue else goto step1
@@ -344,7 +373,7 @@ class Migration
 		if($old_dbname != $new_dbname)
 		{
 			//This is to take dump of the new database for backup purpose
-			$this->conn->println("Going to take the current Database Dump.");
+			$migrationlog->debug("Going to take the current Database Dump.");
 			$new_dump_file = $this->takeDatabaseDump($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname);
 
 			//check the file size is greater than 10000 bytes (~app) and if yes then continue else goto step1
@@ -371,15 +400,15 @@ class Migration
 		{
 			$_SESSION['migration_log'] .= '<br> Databases are different. So drop the Current Database and create. Also apply the dump of Old Database';
 			//Drop the current(latest) Database
-			$this->conn->println("Going to Drop the current Database");
+			$migrationlog->debug("Going to Drop the current Database");
 			$this->dropDatabase($conn,$new_dbname);
 
 			//Create the new current(latest) Database
-			$this->conn->println("Going to Create the current Database");
+			$migrationlog->debug("Going to Create the current Database");
 			$this->createDatabase($conn,$new_dbname);
 
 			//Apply the dump of the old database to the current database
-			$this->conn->println("Going to apply the old database dump to the new database.");
+			$migrationlog->debug("Going to apply the old database dump to the new database.");
 			$this->applyDumpData($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$dump_file);
 
 			//get the number of tables in new database 
@@ -391,7 +420,7 @@ class Migration
 			//if tables are missing after apply the dump, then alert the user and quit
 			if(($new_tables_count != $old_tables_count && $option == 'dbsource') || ($new_tables_count < 180 && $option == 'dumpsource'))
 			{
-				$this->conn->println("New Database tables not equal to Old Database tables count. Reload the current database again and quit.");
+				$migrationlog->debug("New Database tables not equal to Old Database tables count. Reload the current database again and quit.");
 				
 				$continue_process = 0;
 				$msg = "The dump may not be applied correctly. Tables exist in 4.2.3 database : $old_tables_count. Tables exist in current database after apply the dump : $new_tables_count";
@@ -406,25 +435,25 @@ class Migration
 		if($continue_process == 1)
 		{
 			//Modify the database which is now as old database setup
-			$this->conn->println("Going to modify the current database which is now as old database setup");
+			$migrationlog->debug("Going to modify the current database which is now as old database setup");
 			$this->modifyDatabase($conn);
 		
-			$this->conn->println("Database Modifications Ends......");
-			$this->conn->println("Database Migration from Old Database to the Current Database has been Finished.");
+			$migrationlog->debug("Database Modifications Ends......");
+			$migrationlog->debug("Database Migration from Old Database to the Current Database has been Finished.");
 		}
 		else
 		{
 			//Drop the current(latest) Database
-			$this->conn->println("Going to Restore the current Database");
-			$this->conn->println("Going to Drop the current Database");
+			$migrationlog->debug("Problem in migration. so going to Restore the current Database");
+			$migrationlog->debug("Going to Drop the current Database");
 			$this->dropDatabase($conn,$new_dbname);
 
 			//Create the new current(latest) Database
-			$this->conn->println("Going to Create the current Database");
+			$migrationlog->debug("Going to Create the current Database");
 			$this->createDatabase($conn,$new_dbname);
 
 			//Reload the new db dump and quit
-			$this->conn->println("Going to apply the new backup db dump");
+			$migrationlog->debug("Going to apply the new backup db dump");
 			$this->applyDumpData($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$new_dump_file);
 
 			//Return to Step1

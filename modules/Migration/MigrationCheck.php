@@ -13,6 +13,9 @@
 include("config.inc.php");
 $migration_log = '';
 
+//Added for Migration Log
+$migrationlog =& LoggerManager::getLogger('MIGRATION');
+
 //new database values get from the current vtigerCRM's config.php
 global $dbconfig;
 $new_host_name = $dbconfig['db_hostname'];
@@ -56,8 +59,11 @@ if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
 		exit;
 	}
 }
+$migrationlog->debug("$migration_log");
 //echo '<br>Proceed with migration';
 
+
+$migrationlog->debug("Migration Option - ".$_REQUEST['migration_option']);
 include("modules/Migration/Migration.php");
 if($_REQUEST['migration_option'] == 'db_details')
 {
@@ -68,6 +74,12 @@ if($_REQUEST['migration_option'] == 'db_details')
 	$old_mysql_username = $_REQUEST['old_mysql_username'];
 	$old_mysql_password = $_REQUEST['old_mysql_password'];
 	$old_dbname = $_REQUEST['old_dbname'];
+
+	$migrationlog->debug("old host name = ".$old_host_name);
+	$migrationlog->debug("old MySQL port = ".$old_mysql_port);
+	$migrationlog->debug("old MySQL username = ".$old_mysql_username);
+	$migrationlog->debug("old MySQL password = ".$old_mysql_password);
+	$migrationlog->debug("old db name = ".$old_dbname);
 
 	//make a connection with the old database
 	$oldconn = @mysql_connect($old_host_name.":".$old_mysql_port,$old_mysql_username,$old_mysql_password);
@@ -88,6 +100,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 	else
 	{
 		$migration_log .= ' Database Servers can be connected. Can proceed with migration';
+		$migrationlog->debug("Database Servers can be connected. continue1 = 1");
 		$continue1 = 1;
 	}
 
@@ -109,6 +122,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 		else
 		{
 			$migration_log .= '<br> Required databases exist';
+			$migrationlog->debug("Required databases exist. continue2 = 1");
 			$continue2 = 1;
 		}
 	}
@@ -133,6 +147,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 		else
 		{
 			$migration_log .= '<br> Tables exist in both the Databases';
+			$migrationlog->debug("Tables exist in the database. continue3 = 1");
 			$continue3 = 1;
 		}
 	}
@@ -162,17 +177,21 @@ if($_REQUEST['migration_option'] == 'db_details')
 
 	if($continue1 == 1 && $continue2 == 1 && $continue3 == 1 && $continue4 == 1)
 	{
+		$migrationlog->debug("Going to migrate...");
+
 		$new_host = explode(":",$new_host_name);
 
 		$conn = new PearDatabase("mysql",$new_host_name,$new_dbname,$new_mysql_username,$new_mysql_password);
 		$conn->connect();
 
-		$conn->println("MICKIE ==> Option = DB details. From the given DB details we will migrate.");
+		$migrationlog->debug("MICKIE ==> Option = DB details. From the given DB details we will migrate.");
 		
 		@session_unregister('migration_log');
 		$_SESSION['migration_log'] = $migration_log;
 		if($conn)
 		{
+			$migrationlog->debug("Pear Database object created. Going to create migration object.");
+
 			$obj = new Migration('',$conn);
 			$obj->setOldDatabaseParams($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
 			$obj->setNewDatabaseParams($new_host[0],$new_host[1],$new_mysql_username,$new_mysql_password,$new_dbname);
@@ -196,7 +215,8 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 {
 	$old_dump_details = $_FILES['old_dump_filename'];
 	$old_dump_filename = $old_dump_details['name'];
-	
+	$migrationlog->debug("Dump file name ==> $old_dump_filename");
+
 	//MySQL Dump file details has given
 	if($old_dump_details['size'] != 0 && is_file($old_dump_details['tmp_name']))
 	{
@@ -217,6 +237,7 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 			$invalid_dump = 1;
 			$errormessage = "Please enter a valid Dump file.";
 		}
+		$migrationlog->debug("Dump file error no = ".$old_dump_details['error']);
 	}
 
 	if($gotostep1 == 1)
@@ -249,12 +270,14 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 		$conn = new PearDatabase("mysql",$new_host_name,$new_dbname,$new_mysql_username,$new_mysql_password);
 		$conn->connect();
 
-		$conn->println("MICKIE ==> Option = Dump File. Selected Dump File will be applied to the new database");
+		$migrationlog->debug("MICKIE ==> Option = Dump File. Selected Dump File will be applied to the new database");
 		
 		@session_unregister('migration_log');
 		$_SESSION['migration_log'] = $migration_log;
 		if($conn)
 		{
+			$migrationlog->debug("Pear Database object created. Going to create migration object.");
+
 			$obj = new Migration('',$conn);
 
 			$new_host = explode(":",$new_host_name);
@@ -276,6 +299,12 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 	$old_mysql_password = $_REQUEST['alter_old_mysql_password'];
 	$old_dbname = $_REQUEST['alter_old_dbname'];
 
+	$migrationlog->debug("old host name = ".$old_host_name);
+	$migrationlog->debug("old MySQL port = ".$old_mysql_port);
+	$migrationlog->debug("old MySQL username = ".$old_mysql_username);
+	$migrationlog->debug("old MySQL password = ".$old_mysql_password);
+	$migrationlog->debug("old db name = ".$old_dbname);
+
 	//make a connection with the old database
 	$oldconn = @mysql_connect($old_host_name.":".$old_mysql_port,$old_mysql_username,$old_mysql_password);
 
@@ -287,6 +316,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 	else
 	{
 		$migration_log .= ' Database Server can be connected. Can proceed with migration';
+		$migrationlog->debug("Database server connected. continue1 = 1");
 		$continue1 = 1;
 	}
 
@@ -303,6 +333,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 		else
 		{
 			$migration_log .= '<br> Required database exist';
+			$migrationlog->debug("Database exist. continue2 = 1");
 			$continue2 = 1;
 		}
 	}
@@ -320,6 +351,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 		else
 		{
 			$migration_log .= '<br> Tables exist in the Database';
+			$migrationlog->debug("Tables exist. continue3 = 1");
 			$continue3 = 1;
 		}
 	}
@@ -334,12 +366,14 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 		$conn = new PearDatabase("mysql",$old_host_name.":".$old_mysql_port,$old_dbname,$old_mysql_username,$old_mysql_password);
 		$conn->connect();
 
-		$conn->println("MICKIE ==> Option = Alter DB details. From the given DB details we will migrate.");
+		$migrationlog->debug("MICKIE ==> Option = Alter DB details. From the given DB details we will migrate.");
 
 		@session_unregister('migration_log');
 		$_SESSION['migration_log'] = $migration_log;
 		if($conn)
 		{
+			$migrationlog->debug("Database object created. Going to create Migration object");
+
 			$obj = new Migration('',$conn);
 			$obj->setOldDatabaseParams($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
 			//$obj->migrate($same_databases,'dbsource');
