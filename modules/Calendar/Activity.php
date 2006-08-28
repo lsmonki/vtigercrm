@@ -393,13 +393,44 @@ class Activity extends CRMEntity {
  */
 function get_tasksforol($username)
 {
-	global $log;
-        $log->debug("Entering get_tasksforol(".$username.") method ...");
-	$query = "select vtiger_activity.subject,vtiger_activity.date_start startdate,
-			 vtiger_activity.activityid as taskid,vtiger_activity.status,
-			 vtiger_crmentity.description,vtiger_activity.priority as priority,vtiger_activity.due_date as duedate,
-			 vtiger_contactdetails.firstname, vtiger_contactdetails.lastname 
-			 from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
+	global $log,$adb;
+	$log->debug("Entering get_tasksforol(".$username.") method ...");
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=9";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
+      $permitted_lists[] = $adb->query_result($result1,$i,'columnname');
+      /*if($adb->query_result($result1,$i,'columnname') == "parentid")
+      {
+        $permitted_lists[] = 'vtiger_account';
+        $permitted_lists[] = 'accountname';
+      }*/
+  }
+	$permitted_lists = array_chunk($permitted_lists,2);
+	$column_table_lists = array();
+	for($i=0;$i < count($permitted_lists);$i++)
+	{
+	   $column_table_lists[] = implode(".",$permitted_lists[$i]);
+  }
+   
+	$query = "select vtiger_activity.activityid as taskid, ".implode(',',$column_table_lists)." from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
 			 inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 			 left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
 			 left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid 
@@ -413,13 +444,44 @@ function get_tasksforol($username)
  * @param   string    $username     -  User name                                                                            * return   string    $query        -  sql query                                                                            */ 
 function get_calendarsforol($user_name)
 {
-	global $log;
-        $log->debug("Entering get_calendarsforol(".$user_name.") method ...");
-	  $query = "select vtiger_activity.location, vtiger_activity.duration_hours as duehours, 
-			vtiger_activity.duration_minutes as dueminutes,vtiger_activity.time_start as startime, 
-			vtiger_activity.subject,vtiger_activity.date_start as startdate,vtiger_activity.activityid as clndrid,
-			vtiger_crmentity.description,vtiger_activity.due_date as duedate ,
-			vtiger_contactdetails.firstname, vtiger_contactdetails.lastname from vtiger_activity 
+	global $log,$adb;
+	$log->debug("Entering get_calendarsforol(".$user_name.") method ...");
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=9";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
+      $permitted_lists[] = $adb->query_result($result1,$i,'columnname');
+      /*if($adb->query_result($result1,$i,'columnname') == "parentid")
+      {
+        $permitted_lists[] = 'vtiger_account';
+        $permitted_lists[] = 'accountname';
+      }*/
+  }
+	$permitted_lists = array_chunk($permitted_lists,2);
+	$column_table_lists = array();
+	for($i=0;$i < count($permitted_lists);$i++)
+	{
+	   $column_table_lists[] = implode(".",$permitted_lists[$i]);
+  }
+   
+	  $query = "select vtiger_activity.activityid as clndrid, ".implode(',',$column_table_lists)." from vtiger_activity 
 				inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid 
 				inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
