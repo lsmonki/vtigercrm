@@ -1242,6 +1242,7 @@ function getmonthEventLayer(& $cal,$slice)
  */
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
+	global $log;
 	$Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log;
@@ -1269,7 +1270,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')
 			AND vtiger_crmentity.smownerid = ".$current_user->id." 
-		group by vtiger_activity.activityid 
+		GROUP BY vtiger_activity.activityid 
 		ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
@@ -1277,7 +1278,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	if(!is_admin($current_user))
 		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.") ";
 		
-	$query .= "group by vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$query .= "GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+ 	if( $adb->dbType == "pgsql")
+ 	    $query = fixPostgresQuery( $query, $log, 0);
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
 	if($info != '')
@@ -1354,6 +1357,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  */
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
+	global $log;
         $Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log;
@@ -1381,6 +1385,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $pending_query = $query." AND (vtiger_activity.status != 'Completed')
                         AND vtiger_crmentity.smownerid = ".$current_user->id."
                 ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+		if( $adb->dbType == "pgsql")
+ 		    $pending_query = fixPostgresQuery( $pending_query, $log, 0);
                 $res = $adb->query($pending_query);
                 $pending_rows = $adb->num_rows($res);
         }
@@ -1388,6 +1394,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	if(!is_admin($current_user))
                 $query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";
         $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	if( $adb->dbType == "pgsql")
+ 	    $query = fixPostgresQuery( $query, $log, 0);
 
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
