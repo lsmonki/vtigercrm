@@ -22,6 +22,9 @@ require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('include/database/Postgres8.php');
+require_once('include/DatabaseUtil.php');
+
 
 global $app_strings,$list_max_entries_per_page;
 
@@ -144,12 +147,17 @@ if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
         {
+		if( $adb->dbType == "pgsql")
+ 		    $list_query .= ' GROUP BY user_name';
                 $list_query .= ' ORDER BY user_name '.$sorder;
         }
         else
         {
 		$tablename = getTableNameForField('Potentials',$order_by);
 		$tablename = (($tablename != '')?($tablename."."):'');
+
+		if( $adb->dbType == "pgsql")
+ 		    $list_query .= ' GROUP BY '.$tablename.$order_by;
 
                 $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
@@ -170,7 +178,7 @@ $smarty->assign("CATEGORY",$category);
 
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
+$count_result = $adb->query( mkCountQuery( $list_query));
 $noofrows = $adb->query_result($count_result,0,"count");
 
 //Storing Listview session object
@@ -183,6 +191,9 @@ $start = $_SESSION['lvs'][$currentModule]['start'];
 
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+    $list_query = fixPostgresQuery( $list_query, $log, 0);
 
 
 // Setting the record count string
@@ -197,7 +208,10 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+if( $adb->dbType == "pgsql")
+     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+ else
+     $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
