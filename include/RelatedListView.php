@@ -148,7 +148,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	
 	//Retreiving the no of rows
-	$count_query = "select count(*) count ".substr($query, stripos($query,'from'),strlen($query));
+	$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
 	$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
 	$noofrows = $adb->query_result($count_result,0,"count");
 	
@@ -174,7 +174,10 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	else
 		$limit_start_rec = $start_rec -1;
 
-	$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+	if( $adb->dbType == "pgsql")
+ 	    $list_result = $adb->query($query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+ 	else
+ 	    $list_result = $adb->query($query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);	
 
 	//Retreive the List View Table Header
 	if($noofrows == 0)
