@@ -960,14 +960,17 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	if($disp_view == "detail_view")
 	{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users")
-		{
-			$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in $blockid_list and vtiger_field.displaytype in (1,2,4) order by block,sequence";
-		}
-		else
-		{
-			$profileList = getCurrentUserProfileList();
-			$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
-		}
+  		{
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN $blockid_list AND vtiger_field.displaytype IN (1,2,4) ORDER BY block,sequence";
+  		}
+  		else
+  		{
+  			$profileList = getCurrentUserProfileList();
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 			//Postgres 8 fixes
+ 			if( $adb->dbType == "pgsql")
+ 			    $sql = fixPostgresQuery( $sql, $log, 0);
+  		}
 		$result = $adb->query($sql);
 		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
 	}
@@ -976,26 +979,32 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		if ($info_type != '')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0 || $module == 'Users')
-			{
-				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list ." and ".$display_type_check." and info_type = '".$info_type."' order by block,sequence";
-			}
-			else
-			{
-				$profileList = getCurrentUserProfileList();
-				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and ".$display_type_check." and info_type = '".$info_type."' and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
-			}
+  			{
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list ." AND ".$display_type_check." AND info_type = '".$info_type."' ORDER BY block,sequence";
+  			}
+  			else
+  			{
+  				$profileList = getCurrentUserProfileList();
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND ".$display_type_check." AND info_type = '".$info_type."' AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList.=" GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				//Postgres 8 fixes
+ 				if( $adb->dbType == "pgsql")
+ 				    $sql = fixPostgresQuery( $sql, $log, 0);
+  			}
 		}
 		else
 		{
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users')
-			{
-				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and ".$display_type_check." order by block,sequence";
-			}
-			else
-			{
-				$profileList = getCurrentUserProfileList();
-				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and ".$display_type_check." and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
-			}
+		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users')
+  			{
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND ".$display_type_check." ORDER BY block,sequence";
+  			}
+  			else
+  			{
+  				$profileList = getCurrentUserProfileList();
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND ".$display_type_check." AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList.=" GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				//Postgres 8 fixes
+ 				if( $adb->dbType == "pgsql")
+ 				    $sql = fixPostgresQuery( $sql, $log, 0);
+  			}	
 		}
 		$result = $adb->query($sql);
                 $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label,$mode);	
@@ -1790,8 +1799,11 @@ require('user_privileges/user_privileges_'.$current_user->id.'.php');
            }
            else
            {
-                 $profileList = getCurrentUserProfileList();
-                 $quickcreate_query = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and quickcreate=0 and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by quickcreatesequence";
+                $profileList = getCurrentUserProfileList();
+ 		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND quickcreate=0 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN ".$profileList." ORDER BY quickcreatesequence";
+ 		//Postgres 8 fixes
+ 		if( $adb->dbType == "pgsql")
+ 		    $quickcreate_query = fixPostgresQuery( $quickcreate_query, $log, 0); 
            }
 																					     
 $category = getParentTab();
