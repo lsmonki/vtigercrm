@@ -240,8 +240,7 @@ class Contact extends CRMEntity {
                     {   
                             $contact[$columnName] = "";
                     }   
-	     }	
-    
+	     }
 // TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every vtiger_contactdetails and hence 
 // vtiger_account query goes for ecery single vtiger_account row
 
@@ -258,6 +257,69 @@ class Contact extends CRMEntity {
 
 	$log->debug("Exiting process_list_query1 method ...");
         return $response;
+    }
+    
+    
+    /** Function to process list query for Plugin with Security Parameters for a given query
+    *  @param $query
+    *  Returns the results of query in array format 
+    */
+    function plugin_process_list_query($query)
+    {
+          global $log,$adb,$current_user;
+          $log->debug("Entering process_list_query1(".$query.") method ...");
+          $permitted_field_lists = Array();
+          require('user_privileges/user_privileges_'.$current_user->id.'.php');
+          if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+          {
+              $sql1 = "select columnname from vtiger_field where tabid=4 and block <> 75";
+          }else
+          {
+              $profileList = getCurrentUserProfileList();
+              $sql1 = "select columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+          }
+          $result1 = $this->db->query($sql1);
+          for($i=0;$i < $adb->num_rows($result1);$i++)
+          {
+              $permitted_field_lists[] = $adb->query_result($result1,$i,'columnname');
+          }
+          
+          $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
+          $list = Array();
+          $rows_found =  $this->db->getRowCount($result);
+          if($rows_found != 0)
+          {
+              for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
+              {
+                  $contact = Array();
+                  foreach($permitted_field_lists as $columnName)
+                  {
+                      if ($columnName == "lastname" || $columnName == "firstname" || $columnName == "email") 
+                      {
+                          $contact[$columnName] = $row[$columnName];
+                      }   
+                      else     
+                      {   
+                          $contact[$columnName] = "";
+                      }   
+                  }
+                  if(in_array("accountid",$permitted_field_lists))
+                  {
+                      $contact[accountname] = $row[accountname];
+                      $contact[account_id] = $row[accountid];
+                  }
+                  $contact[contactid] =  $row[contactid];
+                  $list[] = $contact;
+              }
+          }   
+          
+          $response = Array();
+          $response['list'] = $list;
+          $response['row_count'] = $rows_found;
+          $response['next_offset'] = $next_offset;
+          $response['previous_offset'] = $previous_offset;
+          $log->debug("Exiting process_list_query1 method ...");
+          return $response;
     }
 
 
@@ -637,12 +699,12 @@ function getColumnNames()
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-		$sql1 = "select fieldlabel from vtiger_field where tabid=4 and block <> 75";
+	 $sql1 = "select fieldlabel from vtiger_field where tabid=4 and block <> 75";
 	}else
 	{
-		$profileList = getCurrentUserProfileList();
-		$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
-	}
+	 $profileList = getCurrentUserProfileList();
+	 $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)
@@ -665,55 +727,96 @@ function getColumnNames()
 function get_searchbyemailid($username,$emailaddress)
 {
 	global $log;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$log->debug("Entering get_searchbyemailid(".$username.",".$emailaddress.") method ...");
-	$query = "select vtiger_contactdetails.lastname as last_name,vtiger_contactdetails.firstname as first_name,
-					vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, 
-					vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,
-					vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,
-					vtiger_account.accountid as vtiger_account_id  from vtiger_contactdetails 
+	$query = "select vtiger_contactdetails.lastname,vtiger_contactdetails.firstname,
+					vtiger_contactdetails.contactid, vtiger_contactdetails.salutation, 
+					vtiger_contactdetails.email,vtiger_contactdetails.title,
+					vtiger_contactdetails.mobile,vtiger_account.accountname,
+					vtiger_account.accountid as accountid  from vtiger_contactdetails 
 						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
 						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  
 						left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid 
-						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
-						where user_name='" .$username ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%".$emailaddress."%'";
-						
+						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid
+            LEFT JOIN vtiger_contactgrouprelation ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			      LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						where vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%".$emailaddress."%'";
+  $tab_id = getTabid("Contacts");
+  if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+	{
+				$sec_parameter=getListViewSecurityParameter("Contacts");
+				$query .= $sec_parameter;
+
+	}
 	$log->debug("Exiting get_searchbyemailid method ...");
-	return $this->process_list_query1($query);
+	return $this->plugin_process_list_query($query);
 }
 
 /** Function to get the Contacts associated with the particular User Name.
 *  @param varchar $user_name - User Name
 *  Returns query
 */
+
 function get_contactsforol($user_name)
 {
-	global $log;
+	global $log,$adb;
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($user_name);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and vtiger_field.block <> 5";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
+      $permitted_lists[] = $adb->query_result($result1,$i,'columnname');
+      if($adb->query_result($result1,$i,'columnname') == "accountid")
+      {
+        $permitted_lists[] = 'vtiger_account';
+        $permitted_lists[] = 'accountname';
+      }
+  }
+	$permitted_lists = array_chunk($permitted_lists,2);
+	$column_table_lists = array();
+	for($i=0;$i < count($permitted_lists);$i++)
+	{
+	   $column_table_lists[] = implode(".",$permitted_lists[$i]);
+  }
+	
 	$log->debug("Entering get_contactsforol(".$user_name.") method ...");
-	$query = "select vtiger_contactdetails.department department, vtiger_contactdetails.phone, 
-					vtiger_contactdetails.fax, vtiger_contactsubdetails.assistant assistant_name,
-					vtiger_contactsubdetails.assistantphone,  
-					vtiger_contactsubdetails.otherphone, vtiger_contactsubdetails.homephone,
-					vtiger_contactsubdetails.birthday birthdate, vtiger_contactdetails.lastname last_name,
-					vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, 
-					vtiger_contactdetails.salutation, vtiger_contactdetails.email,
-					vtiger_contactdetails.title,vtiger_contactdetails.mobile,
-					vtiger_account.accountname as account_name,vtiger_account.accountid as account_id, 
-					vtiger_contactaddress.mailingcity, vtiger_contactaddress.mailingstreet, 
-					vtiger_contactaddress.mailingcountry, vtiger_contactaddress.mailingstate, 
-					vtiger_contactaddress.mailingzip, vtiger_contactaddress.othercity,
-					vtiger_contactaddress.otherstreet, vtiger_contactaddress.othercountry,
-					vtiger_contactaddress.otherstate, vtiger_contactaddress.otherzip   
-						from vtiger_contactdetails 
+	$query = "select vtiger_contactdetails.contactid as id, ".implode(',',$column_table_lists)." from vtiger_contactdetails 
 						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
 						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid 
 						left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid 
 						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
-						left join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid 
-						where vtiger_users.user_name='" .$user_name ."' and vtiger_crmentity.deleted=0";
-						
-	$log->debug("Exiting get_contactsforol method ...");
+						left join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid
+            LEFT JOIN vtiger_contactgrouprelation ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			      LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname 
+						where vtiger_crmentity.deleted=0 and vtiger_users.user_name='".$user_name."'";
+  $log->debug("Exiting get_contactsforol method ...");
 	return $query;
 }
+
+
 //End
 
 }
