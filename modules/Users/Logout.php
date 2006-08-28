@@ -42,7 +42,7 @@ if($num_rows > 0)
 
 
 //Taking the Backup of DB
-	$currenttime=date("Ymd_his");
+	$currenttime=date("Ymd_His");
 	if($ftpserver != '' && $ftpuser != '' && $ftppassword != '')
 	{	$backupFileName="backup_".$currenttime.".sql";
 		save_structure($backupFileName, $root_directory);

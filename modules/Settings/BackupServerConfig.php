@@ -29,7 +29,7 @@ if(isset($_REQUEST['opmode']) && $_REQUEST['opmode'] != '')
 $smarty = new vtigerCRM_Smarty;
 if($_REQUEST['error'] != '')
 {
-		$smarty->assign("ERROR_MSG",'<b><font color="purple">'.$_REQUEST["error"].'</font></b>');
+		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
 $sql="select * from vtiger_systems where server_type = 'backup'";
 $result = $adb->query($sql);
