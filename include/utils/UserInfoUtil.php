@@ -12,6 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
+require_once('include/database/Postgres8.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/GetUserGroups.php');
 include('config.php');
@@ -4580,7 +4581,14 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 		//get tabid
 		$tabid = getTabid($fld_module);
 
-		$query="select vtiger_profile2field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in".$profilelist." and vtiger_field.fieldname='".$fieldname."' group by vtiger_field.fieldid";
+	
+		$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in".$profilelist." AND vtiger_field.fieldname='".$fieldname."' GROUP BY vtiger_field.fieldid";
+ 
+ 		//Postgres 8 fixes
+ 		if( $adb->dbType == "pgsql")
+ 		    $query = fixPostgresQuery( $query, $log, 0);
+
+		
 		$result = $adb->query($query);
 
 		$log->debug("Exiting getFieldVisibilityPermission method ...");
