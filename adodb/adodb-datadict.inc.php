@@ -267,7 +267,7 @@ class ADODB_DataDict {
 		foreach($sql as $line) {
 			
 			if ($this->debug) $conn->debug = true;
-			$log->fatal($line);
+			$log->debug($line);
 			$ok = $conn->Execute($line);
 			$conn->debug = $saved;
 			if (!$ok) {
