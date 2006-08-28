@@ -169,13 +169,25 @@ a different OID if a database must be reloaded. */
    }
    
 	
-		// returns true/false
-	function BeginTrans()
-	{
-		if ($this->transOff) return true;
-		$this->transCnt += 1;
-		return @pg_Exec($this->_connectionID, "begin ".$this->_transmode);
-	}
+	function SetTransactionMode( $transaction_mode ) 
+ 	{
+ 		if (empty($transaction_mode)) {
+ 			$transaction_mode = 'ISOLATION LEVEL SERIALIZABLE';
+ 		}
+ 		if (!stristr($transaction_mode,'isolation')) $transaction_mode = 'ISOLATION LEVEL '.$transaction_mode;
+ 		$this->_transmode  = $transaction_mode;
+ 		return( @pg_Exec($this->_connectionID, "SET SESSION TRANSACTION ".$transaction_mode));
+ 	}
+ 
+  	function BeginTrans()
+  	{
+  		if ($this->transOff) return true;
+  		$this->transCnt += 1;
+ 		if( $this->SetTransactionMode($this->_transmode))
+ 		    return @pg_Exec($this->_connectionID, "begin");
+ 		else
+ 		    return(0);
+  	}
 	
 	function RowLock($tables,$where,$flds='1 as ignore') 
 	{
