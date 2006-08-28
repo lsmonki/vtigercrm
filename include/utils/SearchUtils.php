@@ -12,6 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
+require_once('include/database/Postgres8.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
@@ -82,7 +83,9 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 	{
 		$profileList = getCurrentUserProfileList();
 		//changed to get vtiger_field.fieldname
-		$query  = "select vtiger_profile2field.*,vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." and vtiger_field.fieldname in ".$field_list." group by vtiger_field.fieldid";
+		$query  = "SELECT vtiger_profile2field.*,vtiger_field.fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." AND vtiger_field.fieldname IN ".$field_list." GROUP BY vtiger_field.fieldid";
+ 		if( $adb->dbType == "pgsql")
+ 		    $query = fixPostgresQuery( $query, $log, 0);
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
