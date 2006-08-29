@@ -29,6 +29,7 @@ class RecurringType
 	 */
 	function RecurringType($repeat_arr)
 	{
+		//to get startdate and enddate in yyyy-mm-dd format
 		$st_date = explode("-",getDBInsertDateValue($repeat_arr["startdate"]));
 		$end_date = explode("-",getDBInsertDateValue($repeat_arr["enddate"]));
 		$start_date = Array(
@@ -278,6 +279,11 @@ class RecurringType
 		return $recurringDates;
 	}
 
+	/** Function to get first day of the month(like first Monday or Friday and etc.)
+	 *  @param $dayofweek   -- day of the week to repeat the event :: Type string
+	 *  @param $dateObj     -- date object  :: Type DateTime Object
+	 *  return $dateObj -- the date object on which the event repeats :: Type DateTime Object
+	 */
 	function getFistdayofmonth($dayofweek,& $dateObj)
 	{
 		if($dayofweek < $dateObj->dayofweek)
@@ -299,6 +305,12 @@ class RecurringType
 		return $dateObj;
 	}
 
+	/** Function to get last day of the month(like last Monday or Friday and etc.)
+         *  @param $dayofweek   -- day of the week to repeat the event :: Type string
+	 *  @param $dateObj     -- date object  :: Type DateTime Object
+	 *  return $dateObj -- the date object on which the event repeats :: Type DateTime Object
+         */
+					    
 	function getLastdayofmonth($dayofweek,& $dateObj)
 	{
 		if($dayofweek == $dateObj->dayofweek)
