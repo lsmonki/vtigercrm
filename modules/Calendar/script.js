@@ -969,3 +969,21 @@ function setFieldvalues(opmode,subtab,viewOption)
 function doNothing()
 {
 }
+
+/** This is Javascript Function which is used to toogle between
+  * assigntype user and group/team select options while assigning owner to Task.
+  */
+function toggleTaskAssignType(currType)
+{
+        if (currType=="U")
+        {
+                getObj("task_assign_user").style.display="block"
+                getObj("task_assign_team").style.display="none"
+        }
+        else
+        {
+                getObj("task_assign_user").style.display="none"
+                getObj("task_assign_team").style.display="block"
+        }
+}
+
