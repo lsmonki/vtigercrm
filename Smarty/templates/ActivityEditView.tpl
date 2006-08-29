@@ -85,23 +85,12 @@
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">
-							{if $OP_MODE eq 'edit_view'}
-                 					  {foreach item=arr from=$ACTIVITYDATA.eventstatus}
-                 				           {foreach key=sel_value item=value from=$arr}
-                                				{if $value eq 'selected'}
-                                        				<input type="hidden" name="eventstatus" id="eventstatus" value="{$sel_value}">
-                                				{/if}
-                        				   {/foreach}
-                 					  {/foreach}
-                 					{else}
-                        					<input type="hidden" name="eventstatus" id="eventstatus" value="Planned">
-                 					{/if}
 							<input type="hidden" name="duration_hours" value="0">
 							<input type="hidden" name="duration_minutes" value="0">
-						     <table border=0 cellspacing=0 cellpadding=5 width=90% >
+						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							<tr>
-								<td nowrap  width=20% align="right"><b>{$MOD.LBL_EVENTTYPE} :</b></td>
-								<td width=80%>
+								<td nowrap  width=20% align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
+								<td width=80% align="left">
 									<table>
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
@@ -122,32 +111,125 @@
 								</td>
 							</tr>
 							<tr>
-								<td nowrap align="right"><b>{$MOD.LBL_EVENTNAME} :</b></td>
-								<td><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:90%"></td>
+								<td nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
+								<td align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
+                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                        {if $value eq 'selected' && $sel_value eq 'Public'}
+                                                                                {assign var="visiblecheck" value="checked"}
+                                                                        {else}
+                                                                                {assign var="visiblecheck" value=""}
+                                                                        {/if}
+                                                                        {/foreach}
+                                                                        {/foreach}
+                                                                        <input name="visibility" value="Public" type="checkbox" {$visiblecheck}>{$MOD.LBL_PUBLIC}
+								</td>
 							</tr>
 							<tr>
-								<td align="right">
-									{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
-									{foreach key=sel_value item=value from=$arr}
-									{if $value eq 'selected' && $sel_value eq 'Public'}
-										{assign var="visiblecheck" value="checked"}
-									{else}
-										{assign var="visiblecheck" value=""}
-									{/if}
-                							{/foreach}
-   									{/foreach}
-									<input name="visibility" value="Public" type="checkbox" {$visiblecheck}>
-								</td>
-								<td>{$MOD.LBL_PUBLIC}</td>
-							</tr>
+                        					<td valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
+								<td align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
+                					</tr>
+							<tr>
+								<td colspan=2 width=80% align="center">
+                                				<table border=0 cellspacing=0 cellpadding=3 width=80%>
+                                        				<tr>
+										<td ><b>{$LABEL.eventstatus}</b></td>
+										<td ><b>{$LABEL.assigned_user_id}</b></td>
+									</tr>
+									<tr>
+										<td valign=top>
+                                                                                <select name="eventstatus" id="eventstatus" class=small>
+                                                                                        {foreach item=arr from=$ACTIVITYDATA.eventstatus}
+                                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                        <option value="{$sel_value}" {$value}>
+                                                                                                {if $APP[$sel_value] neq ''}
+                                                                                                {$APP[$sel_value]}
+                                                                                                {else}
+                                                                                                        {$sel_value}
+                                                                                                {/if}
+                                                                                        </option>
+                                                                                        {/foreach}
+                                                                                        {/foreach}
+                                                                                </select>
+                                                                        	</td>
+										<td valign=top rowspan=2>
+											{assign var=check value=1}
+                                        						{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
+                                                					{foreach key=sel_value item=value from=$arr}
+                                                        					{if $value ne ''}
+                                                                					{assign var=check value=$check*0}
+                                                        					{else}
+                                                                					{assign var=check value=$check*1}
+                                                        					{/if}
+                                                					{/foreach}
+                                        						{/foreach}
+
+                                        						{if $check eq 0}
+                                                						{assign var=select_user value='checked'}
+                                                						{assign var=style_user value='display:block'}
+                                                						{assign var=style_group value='display:none'}
+                                        						{else}
+                                                						{assign var=select_group value='checked'}
+                                                						{assign var=style_user value='display:none'}
+                                                						{assign var=style_group value='display:block'}
+                                        						{/if}
+                                        						<input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_USER}
+                                        						{if $secondvalue.assigned_user_id neq ''}
+                                                					<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
+                                        						{/if}
+											<span id="assign_user" style="{$style_user}">
+                                     				           			<select name="assigned_user_id">
+                                                        					{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
+                                                                				{foreach key=sel_value item=value from=$arr}
+                                                                        				<option value="{$key_one}" {$value}>{$sel_value}</option>
+                                                                				{/foreach}
+                                                        					{/foreach}
+                                                			   			</select>
+                                        			       			</span>
+
+                                        						{if $secondvalue.assigned_user_id neq ''}
+                                                					<span id="assign_team" style="{$style_group}">
+                                                        					<select name="assigned_group_name" >';
+                                                                				{foreach key=key_one item=arr from=$secondvalue.assigned_user_id}
+                                                                        			{foreach key=sel_value item=value from=$arr}
+                                                                                			<option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                                                        			{/foreach}
+                                                                				{/foreach}
+                                                        					</select>
+                                                					</span>
+                                        						{/if}
+											<br><input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}
+										</td>
+									</tr>
+									<tr>
+										<td valign=top><b>{$LABEL.taskpriority}</b>
+										<br>
+										<select name="taskpriority" id="taskpriority">
+                                                                                        {foreach item=arr from=$ACTIVITYDATA.taskpriority}
+                                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                        <option value="{$sel_value}" {$value}>
+                                                                                                {if $APP[$sel_value] neq ''}
+                                                                                                {$APP[$sel_value]}
+                                                                                                {else}
+                                                                                                        {$sel_value}
+                                                                                                {/if}
+                                                                                        </option>
+                                                                                        {/foreach}
+                                                                                        {/foreach}
+                                                                                </select>
+										</td> 
+										
+									</tr>
+								</table>
+							</td></tr>
 						     </table>
-						     <br>
-						     <table border=0 cellspacing=0 cellpadding=5 width=90% align=center style="border-top:1px dotted silver">
+						     <hr noshade size=1>
+						     <table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF">
 							<tr>
 								<td >
-									<table border=0 cellspacing=0 cellpadding=2 width=100%>
+									<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 									<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
-										<table border=0 cellspacing=0 cellpadding=2 width=90%>
+										<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
 											<tr><td colspan=3 ><b>{$MOD.LBL_EVENTSTAT}</b></td></tr>
 											<tr><td colspan=3>{$STARTHOUR}</td></tr>
 											<tr><td>
@@ -167,7 +249,7 @@
 											</td></tr>
 										</table></td>
 										<td width=50% valign=top >
-											<table border=0 cellspacing=0 cellpadding=2 width=90%>
+											<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
 												<tr><td colspan=3><b>{$MOD.LBL_EVENTEDAT}</b></td></tr>
 												<tr><td colspan=3>{$ENDHOUR}
 												</td></tr>
@@ -189,30 +271,11 @@
 											</table>
 										</td>
 									</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									{$LABEL.taskpriority}&nbsp;:&nbsp;
-									<select name="taskpriority" id="taskpriority" class=small>
-										{foreach item=arr from=$ACTIVITYDATA.taskpriority}
-										{foreach key=sel_value item=value from=$arr}
-										<option value="{$sel_value}" {$value}>
-                                                					{if $APP[$sel_value] neq ''}
-                                                   					     {$APP[$sel_value]}
-                                           						{else}
-                                                        					{$sel_value}
-                                                					{/if}
-                                                				</option>
-                                        					{/foreach}
-                                						{/foreach}
-                           						</select>
-								</td>
+								</table></td>
 							</tr>
 						     </table>
 						     <br>
-						     <table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
+						     <table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
 							<tr><td>
 								<table border=0 cellspacing=0 cellpadding=3 width=100%>
 									<tr>
@@ -485,65 +548,153 @@
 		</table>
 		<!-- Alarm, Repeat, Invite stops-->
 		{else}
-		 {if $OP_MODE eq 'edit_view'}
-		 {foreach item=arr from=$ACTIVITYDATA.taskstatus}
-         	        {foreach key=sel_value item=value from=$arr}
-				{if $value eq 'selected'}
-					<input type="hidden" name="taskstatus" id="taskstatus" value="{$sel_value}">
-				{/if}
-                        {/foreach}
-                 {/foreach}
-		 {else}
-			<input type="hidden" name="taskstatus" id="taskstatus" value="Planned">
-		 {/if}
-		<table border="0" cellpadding="5" cellspacing="0" width="90%">
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-                        	<td width="20%"><b>{$MOD.LBL_TODO} :</b></td>
-                        	<td width="80%"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 90%;" type="text"></td>
+                        	<td width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
+                        	<td width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			<tr>
-				<td><b>{$MOD.LBL_TODODATETIME} :</b></td>
-				<td>{$STARTHOUR}</td>
+				<td align="right"><b>{$LABEL.description}</b></td>
+				<td align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td>
-					{foreach key=date_value item=time_value from=$ACTIVITYDATA.date_start}
-	                                        {assign var=date_val value="$date_value"}
-						{assign var=time_val value="$time_value"}
-                                        {/foreach}
-					<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text">&nbsp;<img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
-					{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
-						{assign var=date_vl value="$date_fmt"}
-					{/foreach}				
-					<script type="text/javascript">
-						Calendar.setup ({ldelim}
-	        	                                inputField : "date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
-						{rdelim})
-					</script>
+		    		<td colspan="2" align="center" width="80%">
+					<table border="0" cellpadding="3" cellspacing="0" width="80%">
+            					<tr>
+							<td align="left"><b>{$LABEL.taskstatus}</td>
+              						<td align="left"><b>{$LABEL.taskpriority}</b></td>
+              						<td align="left"><b>{$LABEL.assigned_user_id}</b></td>
+						</tr>
+						<tr>
+							<td align="left" valign="top">
+								<select name="taskstatus" id="taskstatus" class=small>
+                                        			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
+                                        			{foreach key=sel_value item=value from=$arr}
+                                                			<option value="{$sel_value}" {$value}>
+                                                        		{if $APP[$sel_value] neq ''}
+                                                                		{$APP[$sel_value]}
+                                                        		{else}
+                                                                		{$sel_value}
+                                                        		{/if}
+                                                			</option>
+                                        			{/foreach}
+                                        			{/foreach}
+                                				</select>
+							</td>
+							<td align="left" valign="top">
+								<select name="taskpriority" id="taskpriority" class=small>
+        			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
+                                			        {foreach key=sel_value item=value from=$arr}
+			                                                <option value="{$sel_value}" {$value}>
+                        		                                {if $APP[$sel_value] neq ''}
+                                        		                        {$APP[$sel_value]}
+                                                       			{else}
+                                                                		{$sel_value}
+                                                        		{/if}
+                                                			</option>
+                                        			{/foreach}
+                                        			{/foreach}
+                                				</select>
+							</td>
+							<td align="left" valign="top">
+								{assign var=check value=1}
+                                        			{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
+			                                        {foreach key=sel_value item=value from=$arr}
+                        		                              	{if $value ne ''}
+                                        		                      	{assign var=check value=$check*0}
+                                                        		{else}
+                                                                		{assign var=check value=$check*1}
+                                                        		{/if}
+                                                		{/foreach}
+                                        			{/foreach}
+								{if $check eq 0}
+                                             				{assign var=select_user value='checked'}
+                                                			{assign var=style_user value='display:block'}
+                                                			{assign var=style_group value='display:none'}
+                                        			{else}
+                                                			{assign var=select_group value='checked'}
+                                                			{assign var=style_user value='display:none'}
+                                                			{assign var=style_group value='display:block'}
+                                        			{/if}
+				                                <input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+				                                {if $secondvalue.assigned_user_id neq ''}
+                                			        <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Group
+                                        			{/if}
+                                        			<span id="assign_user" style="{$style_user}">
+                                                		<select name="assigned_user_id" class=small>
+                                                        	{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
+				                                {foreach key=sel_value item=value from=$arr}
+                                		                	<option value="{$key_one}" {$value}>{$sel_value}</option>
+								{/foreach}
+                                                        	{/foreach}
+                                                		</select>
+								</span>
+								{if $secondvalue.assigned_user_id neq ''}
+                                                		<span id="assign_team" style="{$style_group}">
+                                                        		<select name="assigned_group_name" class=small>';
+                                                                		{foreach key=key_one item=arr from=$secondvalue.assigned_user_id}
+                                                                       		{foreach key=sel_value item=value from=$arr}
+                                                                               		<option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                                                       		{/foreach}
+                                                                		{/foreach}
+                                                        		</select>
+				                                </span>
+                                				{/if}	
+							</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
-			<tr>
-				<td><b>{$LABEL.taskpriority}&nbsp;:&nbsp;</b></td>
-				<td>
-				<select name="taskpriority" id="taskpriority" class=small>
-					{foreach item=arr from=$ACTIVITYDATA.taskpriority}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>
-							{if $APP[$sel_value] neq ''}
-								{$APP[$sel_value]}
-							{else}
-								{$sel_value}
-							{/if}
-						</option>
-					{/foreach}
-					{/foreach}
-				</select>
-				</td>
-			</tr>
-		</table>
-		<br>
-		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+			<tr><td colspan="2">    <hr noshade="noshade" size="1"></td></tr>
+			</table>
+			<table bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="90%" align=center>
+			<tr><td>
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" align=center>
+				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
+					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+						<tr><td colspan=3 ><b>{$MOD.LBL_TODODATETIME}</b></td></tr>
+						<tr><td colspan=3>{$STARTHOUR}</td></tr>
+						<tr><td>
+							{foreach key=date_value item=time_value from=$ACTIVITYDATA.date_start}
+	                                        		{assign var=date_val value="$date_value"}
+								{assign var=time_val value="$time_value"}
+                                        		{/foreach}
+							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+							{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
+								{assign var=date_vl value="$date_fmt"}
+							{/foreach}				
+							<script type="text/javascript">
+								Calendar.setup ({ldelim}
+	        	                                	inputField : "date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+							{rdelim})
+							</script>
+						</td></tr>
+					</table></td>
+					<td width=50% valign="top">
+                                                <table border="0" cellpadding="2" cellspacing="0" width="90%" align=center>
+							<tr><td colspan=3><b>{$LABEL.due_date}</b></td></tr>
+							<tr><td>
+								{foreach key=date_value item=time_value from=$ACTIVITYDATA.due_date}
+									{assign var=date_val value="$date_value"}
+									{assign var=time_val value="$time_value"}
+								{/foreach}
+								<input name="due_date" id="due_date" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date" border="0">
+								{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
+                                                			{assign var=date_vl value="$date_fmt"}
+                                        			{/foreach}
+				      				<script type="text/javascript">
+								Calendar.setup ({ldelim}
+	                                        			inputField : "date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+					   			{rdelim})
+								</script>
+        						</td></tr>
+						</table></td>
+					</tr>
+				</table>
+				</td></tr>
+                	<tr><td>&nbsp;</td></tr>
+        	</table>
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 			<tr>
 				<td>
 					<table border="0" cellpadding="3" cellspacing="0" width="100%">
