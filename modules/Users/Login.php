@@ -100,7 +100,7 @@ function set_focus() {
 			<table border="0" cellspacing="0" cellpadding='0' width='100%' background="themes/images/loginTopHeaderBg.gif">
 			<tr>
 				<td align=left><img src="themes/images/loginTopHeaderName.gif"></td>
-				<td align=right><img src="themes/images/loginTopVersion.gif"></td>
+				<td align=right><!--img src="themes/images/loginTopVersion.gif"--></td>
 			</tr>
 			</table>
 			<table border="0" cellspacing="0" cellpadding='10' width='100%'>
