@@ -128,37 +128,30 @@ $data['endhr'] = $time_arr['endhour'];
 $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
+if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
+        $data['sendnotification'] = 'Yes';
+else
+        $data['sendnotification'] = 'No';
+$data['subject'] = $finaldata['subject'];
+$data['date_start'] = $stdate;
+$data['due_date'] = $enddate;
+$data['assigned_user_id'] = $finaldata['assigned_user_id'];
+$data['taskpriority'] = $finaldata['taskpriority'];
+$data['modifiedtime'] = $finaldata['modifiedtime'];
+$data['createdtime'] = $finaldata['createdtime'];
+$data['parent_name'] = $finaldata['parent_id'];
+$data['description'] = $finaldata['description'];
 if($activity_mode == 'Task')
 {
-	$data['task_subject'] = $finaldata['subject'];
-	$data['task_date_start'] = $stdate;
-	$data['assigned_user_id'] = $finaldata['assigned_user_id'];
 	$data['taskstatus'] = $finaldata['taskstatus'];
-	$data['priority'] = $finaldata['taskpriority'];
 	$data['activitytype'] = $activity_mode;
-	$data['modifiedtime'] = $finaldata['modifiedtime'];
-	$data['createdtime'] = $finaldata['createdtime'];
-	$data['parent_name'] = $finaldata['parent_id'];
 	$data['contact_id'] = $finaldata['contact_id'];
-	if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
-		$data['sendnotification'] = 'Yes';
-	else
-		$data['sendnotification'] = 'No'; 
 }
 elseif($activity_mode == 'Events')
 {
-	$data['subject'] = $finaldata['subject'];
-	$data['date_start'] = $stdate;
-	$data['due_date'] = $enddate;
 	$data['visibility'] = $finaldata['visibility'];
-	$data['assigned_user_id'] = $finaldata['assigned_user_id'];
 	$data['eventstatus'] = $finaldata['eventstatus'];
-	$data['priority'] = $finaldata['taskpriority'];
-	$data['sendnotification'] = $finaldata['sendnotification'];
 	$data['activitytype'] = $finaldata['activitytype'];
-	$data['modifiedtime'] = $finaldata['modifiedtime'];
-	$data['createdtime'] = $finaldata['createdtime'];
-	$data['parent_name'] = $finaldata['parent_id'];
 	//Calculating reminder time
 	$rem_days = 0;
 	$rem_hrs = 0;
