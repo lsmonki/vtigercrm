@@ -11,11 +11,12 @@
 //Code Added by Minnie -Starts
 require_once('include/database/PearDatabase.php');
 
-global $mod_strings;
+global $mod_strings,$current_user;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-
+require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
 /**
  * To get the lists of sharedids 
  * @param $id -- The user id :: Type integer
@@ -244,6 +245,72 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt" value="'.$fmt.'">';
 		}
 		return $combo;
+}
+
+/**
+ *Function to construct HTML select combo box
+ *@param $fieldname -- the field name :: Type string
+ *@param $tablename -- The table name :: Type string
+ *constructs html select combo box for combo field
+ *and returns it in string format.
+ */
+
+function getActFieldCombo($fieldname,$tablename)
+{
+	global $adb, $mod_strings;
+	$combo = '';
+	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small>';
+	$q = "select * from ".$tablename;
+	$Res = $adb->query($q);
+	$noofrows = $adb->num_rows($Res);
+
+	for($i = 0; $i < $noofrows; $i++)
+	{
+		$value = $adb->query_result($Res,$i,$fieldname);
+		$combo .= '<option value="'.$value.'">'.$mod_strings[$value].'</option>';
+	}
+
+	$combo .= '</select>';
+	return $combo;
+}
+
+/*Fuction to get value for Assigned To field
+ *returns values of Assigned To field in array format
+*/
+function getAssignedTo()
+{
+	global $current_user,$noof_group_rows,$adb;
+	$assigned_user_id = $current_user->id;
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
+	{
+		$result=get_current_user_access_groups('Calendar');
+	}
+	else
+	{
+		$result = get_group_options();
+	}
+	$nameArray = $adb->fetch_array($result);
+	global $current_user;
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
+	{
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+	}
+	else
+	{
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+	}
+	if($noof_group_rows!=0)
+	{
+		do
+		{
+			$groupname=$nameArray["groupname"];
+			$group_option[] = array($groupname=>$selected);
+
+		}while($nameArray = $adb->fetch_array($result));
+	}
+	$fieldvalue[]=$users_combo;
+	$fieldvalue[] = $group_option;
+	return $fieldvalue;
 }
 
 //Code Added by Minnie -Ends
