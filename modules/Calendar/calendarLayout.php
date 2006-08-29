@@ -1338,9 +1338,11 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		else
 			$element['action'] ="&nbsp;";
         	$element['status'] = $adb->query_result($result,$i,"eventstatus");
-		$element['assignedto'] = $adb->query_result($result,$i,"user_name");
-		if(empty($element['assignedto']))
-			$element['groupname'] = $adb->query_result($result,$i,"groupname");
+		$assignedto = $adb->query_result($result,$i,"user_name");
+		if(!empty($assignedto))
+			$element['assignedto'] = $assignedto;
+		else
+			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
 	$Entries[] = $element;
 	}
 	$cal_log->debug("Exiting getEventList() method...");
@@ -1423,9 +1425,11 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		else
 			$element['action'] ="&nbsp;";
-		$element['assignedto'] = $adb->query_result($result,$i,"user_name");
-		if(empty($element['assignedto']))
-			$element['groupname'] = $adb->query_result($result,$i,"groupname");
+		$assignedto = $adb->query_result($result,$i,"user_name");
+		if(!empty($assignedto))
+			$element['assignedto'] = $assignedto;
+		else
+			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
 		$Entries[] = $element;
 	}
 	$cal_log->debug("Exiting getTodoList() method...");
@@ -1465,8 +1469,16 @@ function getEventTodoInfo(& $cal, $mode)
  */
 function constructEventListView(& $cal,$entry_list)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$app_strings,$cal_log,$current_user;
 	$cal_log->debug("Entering constructEventListView() method...");
+	$format = $cal['calendar']->hour_format;
+	$date_format = $current_user->date_format;
+	$hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
+	$hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
+	$temp_ts = $cal['calendar']->date_time->ts;
+	//to get date in user selected date format
+	$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 	$list_view = "";
 	if($cal['view'] == 'day')
 	{
@@ -1479,6 +1491,7 @@ function constructEventListView(& $cal,$entry_list)
 		 $end_datetime = $mod_strings['LBL_APP_END_DATE'];
 				 
 	}
+	//Events listview header labels
 	$header = Array('0'=>'#',
                         '1'=>$start_datetime,
                         '2'=>$end_datetime,
@@ -1520,9 +1533,32 @@ function constructEventListView(& $cal,$entry_list)
 	}
 	else
 	{
-		$list_view .="<tr style='height: 25px;' bgcolor='white'>";
-                	$list_view .="<td colspan='".$header_rows."'><i>".$mod_strings['LBL_NONE_SCHEDULED']."</i></td>";
-                $list_view .="</tr>";
+		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='8'>
+				";
+			$list_view .="<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 5000;'>
+					<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+						<tr>
+							<td rowspan='2' width='25%'>
+								<img src='".$cal['IMAGE_PATH']."empty.jpg' height='60' width='61'></td>
+							<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Events']." ".$app_strings['LBL_FOUND']." !</span></td>
+						</tr>
+						<tr>";
+			//checking permission for Create/Edit Operation
+			if(isPermitted("Calendar","EditView") == "yes")
+                        {
+                                $list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_CAN_CREATE']."&nbsp;".$app_strings['LBL_AN']."&nbsp;".$app_strings['Event']."&nbsp;".$app_strings['LBL_NOW'].".&nbsp;".$app_strings['LBL_CLICK_THE_LINK']."&nbsp;:<br>
+					&nbsp;&nbsp;-<a href='javascript:void(0)' onClick='gshow(\"addEvent\",\"meeting\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"event\");'>".$app_strings['LBL_CREATE']." ".$app_strings['LBL_A']." ".$app_strings['Meeting']."</a><br>
+					&nbsp;&nbsp;-<a href='javascript:void(0);' onClick='gshow(\"addEvent\",\"call\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"event\");'>".$app_strings['LBL_CREATE']."&nbsp;".$app_strings['LBL_A']."&nbsp;".$app_strings['Call']."</a><br>
+					</td>";
+			}
+			else
+			{
+				$list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE']."&nbsp;".$app_strings['LBL_AN']."&nbsp;".$app_strings['Event']."<br></td>";
+			}
+			$list_view .="</tr>
+                                        </table>
+				</div>";
+			$list_view .="</td></tr>";			
 	}
 	$list_view .="</table>";
 	$cal_log->debug("Exiting constructEventListView() method...");
@@ -1546,8 +1582,10 @@ function constructTodoListView($todo_list,$cal,$subtab)
         $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
         $time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
         $temp_ts = $cal['calendar']->date_time->ts;
+	//to get date in user selected date format
         $temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
         $list_view = "";
+	//labels of listview header
         $header = Array('0'=>'#',
                         '1'=>$mod_strings['LBL_TIME'],
                         '2'=>$mod_strings['LBL_TODO'],
@@ -1564,6 +1602,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
                              );
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
+			//checking permission for Create/Edit Operation
 			if(isPermitted("Calendar","EditView") == "yes")
 			{
 			$list_view .="<tr>
@@ -1603,9 +1642,31 @@ function constructTodoListView($todo_list,$cal,$subtab)
         }
         else
         {
-                $list_view .="<tr style='height: 25px;' bgcolor='white'>";
-                        $list_view .="<td colspan='".$header_rows."'><i>".$mod_strings['LBL_NONE_SCHEDULED']."</i></td>";
-                $list_view .="</tr>";
+		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='6'>";
+		$list_view .="<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 5000;'>
+			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tr>
+				<td rowspan='2' width='25%'>
+					<img src='".$cal['IMAGE_PATH']."empty.jpg' height='60' width='61'></td>
+				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Todo']."s ".$app_strings['LBL_FOUND']." !</span></td>
+			</tr>
+			<tr>";
+		//checking permission for Create/Edit Operation
+		if(isPermitted("Calendar","EditView") == "yes")
+		{
+			$list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_CAN_CREATE']."&nbsp;".$app_strings['LBL_A']."&nbsp;".$app_strings['Todo']."&nbsp;".$app_strings['LBL_NOW'].".&nbsp;".$app_strings['LBL_CLICK_THE_LINK']."&nbsp;:<br>
+					&nbsp;&nbsp;-<a href='javascript:void(0);' onClick='gshow(\"createTodo\",\"todo\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"todo\");'>".$app_strings['LBL_CREATE']." ".$app_strings['LBL_A']." ".$app_strings['Todo']."</a>
+					</td>";
+		}
+		else
+		{
+			$list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE']."&nbsp;".$app_strings['LBL_A']."&nbsp;".$app_strings['Todo']."<br></td>";
+		}
+										 
+                $list_view .="</tr>
+			</table>
+			</div>";
+		$list_view .="</td></tr>";
         }
 	$list_view .="</table><br>";
 	$cal_log->debug("Exiting constructTodoListView() method...");
