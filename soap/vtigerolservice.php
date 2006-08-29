@@ -853,7 +853,7 @@ function GetTasks($username)
 
 function AddTasks($username,$taskdtls)
 {
-	global $current_user;
+	global $current_user,$adb;
 	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
@@ -934,7 +934,7 @@ function AddTasks($username,$taskdtls)
 
 function UpdateTasks($username,$taskdtls)
 {
-	global $current_user;
+	global $current_user,$adb;
 	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
