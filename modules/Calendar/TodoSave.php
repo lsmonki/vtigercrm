@@ -33,12 +33,16 @@ if(isset($_REQUEST['mode']))
 }
  $focus->column_fields["subject"] = $_REQUEST["task_subject"];
  $focus->column_fields["time_start"] = $_REQUEST["task_time_start"];
- $focus->column_fields["assigned_user_id"] =  $_REQUEST["assigned_user_id"];
+ $focus->column_fields["assigned_user_id"] =  $_REQUEST["task_assigned_user_id"];
+ $_REQUEST["assigned_group_name"]  = $_REQUEST['task_assigned_group_name'];
+ $_REQUEST['assigntype'] = $_REQUEST['task_assigntype'];
  $focus->column_fields["taskstatus"] =  $_REQUEST["taskstatus"];
  $focus->column_fields["date_start"] =  $_REQUEST["task_date_start"];
+ $focus->column_fields["due_date"] =  $_REQUEST["task_due_date"];
  $focus->column_fields["taskpriority"] =  $_REQUEST["taskpriority"];
+ $focus->column_fields["description"] =  $_REQUEST["task_description"];
+ $focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
 
- //echo '<pre>';print_r($focus->column_fields);echo '</pre>';	die;	
  $focus->save($tab_type);
  header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
 ?>
