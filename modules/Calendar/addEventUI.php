@@ -24,6 +24,7 @@ require_once("modules/Emails/mail.php");
  //echo '<pre>';print_r($userDetails);echo '</pre>';
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
+ $assignedto = getAssignedTo();
 $mysel= $_GET['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
@@ -78,25 +79,95 @@ if($current_user->hour_format == '')
 	$calendar_arr['calendar']->hour_format = 'am/pm';
 else
 	$calendar_arr['calendar']->hour_format = $current_user->hour_format;
-
- function getPriorityCombo()
- {
-	 global $adb, $mod_strings;
-	 $combo = '';
-	 $combo .= '<select name="taskpriority" id="taskpriority" class=small>';
-	 $q = "select * from vtiger_taskpriority";
-	 $Res = $adb->query($q);
-	 $noofrows = $adb->num_rows($Res);
-
-	 for($i = 0; $i < $noofrows; $i++)
-	 {
-		 $value = $adb->query_result($Res,$i,'taskpriority');
-		 $combo .= '<option value="'.$value.'">'.$mod_strings[$value].'</option>';
-	 }
-
-	 $combo .= '</select>';
-	 return $combo;
- }
+/** Function to construct HTML code for Assigned To field
+ *  @param $assignedto  -- Assigned To values :: Type array
+ *  @param $toggletype  -- String to different event and task  :: Type string
+ *  return $htmlStr     -- HTML code in string forat  :: Type string
+ */
+function getAssignedToHTML($assignedto,$toggletype)
+{
+	global $app_strings;
+	$userlist = $assignedto[0];
+	if(isset($assignedto[1]) && $assignedto[1] != null)
+		$grouplist = $assignedto[1];
+	$htmlStr = '';
+	$check = 1;
+	foreach($userlist as $key_one=>$arr)
+	{
+		foreach($arr as $sel_value=>$value)
+		{
+			if($value != '')
+				$check=$check*0;
+			else
+				$check=$check*1;
+		}
+	}
+	if($check == 0)
+	{
+		$select_user='checked';
+		$style_user='display:block';
+		$style_group='display:none';
+	}
+	else
+	{
+		$select_group='checked';
+		$style_user='display:none';
+		$style_group='display:block';
+	}
+	if($toggletype == 'task')
+		$htmlStr .= '<input type="radio" name="task_assigntype" '.$select_user.' value="U" onclick="toggleTaskAssignType(this.value)">&nbsp;'.$app_strings['LBL_USER'];
+	else
+		$htmlStr .= '<input type="radio" name="assigntype" '.$select_user.' value="U" onclick="toggleAssignType(this.value)">&nbsp;'.$app_strings['LBL_USER'];
+	if($grouplist != '')
+	{
+		if($toggletype == 'task')
+			$htmlStr .= '<input type="radio" name="task_assigntype" '.$select_group.' value="T" onclick="toggleTaskAssignType(this.value)">&nbsp;'.$app_strings['LBL_GROUP'];
+		else
+			$htmlStr .= '<input type="radio" name="assigntype" '.$select_group.' value="T" onclick="toggleAssignType(this.value)">&nbsp;'.$app_strings['LBL_GROUP'];
+	}
+	if($toggletype == 'task')
+	{
+		$htmlStr .= '<span id="task_assign_user" style="'.$style_user.'">
+				<select name="task_assigned_user_id" class=small>';
+	}
+	else
+	{
+		$htmlStr .= '<span id="assign_user" style="'.$style_user.'">
+				<select name="assigned_user_id" class=small>';
+	}
+	foreach($userlist as $key_one=>$arr)
+	{
+		foreach($arr as $sel_value=>$value)
+		{
+			$htmlStr .= '<option value="'.$key_one.'" '.$value.'>'.$sel_value.'</option>';
+		}
+	}
+	$htmlStr .= '</select>
+			</span>';
+	if($grouplist != '')
+	{
+		if($toggletype == 'task')
+		{
+			$htmlStr .= '<span id="task_assign_team" style="'.$style_group.'">
+					<select name="task_assigned_group_name" class=small>';
+		}
+		else
+		{
+			$htmlStr .= '<span id="assign_team" style="'.$style_group.'">
+					<select name="assigned_group_name" class=small>';
+		}
+		foreach($grouplist as $key_one=>$arr)
+		{
+			foreach($arr as $sel_value=>$value)
+			{
+				$htmlStr .= '<option value="'.$sel_value.'" '.$value.'>'.$sel_value.'</option>';
+			}
+		}
+		$htmlStr .= '</select>
+				</span>';
+	}
+	return $htmlStr;
+}
 
 ?>
        
@@ -139,12 +210,9 @@ else
 	<input type="hidden" name="month" value="<?php echo $calendar_arr['calendar']->date_time->month ?>">
 	<input type="hidden" name="year" value="<?php echo $calendar_arr['calendar']->date_time->year ?>">
 	<input type="hidden" name="record" value="">
-	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
-	<input type="hidden" name="assigntype" value="U">
 	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
-	<input type="hidden" name="eventstatus" value="Planned">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 	<input type="hidden" name="parenttab" value="<?php echo $category ?>">
@@ -161,10 +229,10 @@ else
 		<table border=0 cellspacing=0 cellpadding=5 width=95% align=center bgcolor="#FFFFFF"> 
 			<tr>
 		<td class=small >
-			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
-		<tr>
-			<td nowrap  width=20%><b><?php echo $mod_strings['LBL_EVENTTYPE']?> :</b></td>
-			<td width=80%>
+			<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+			<tr>
+			<td nowrap  width=20% align="right"><b><?php echo $mod_strings['LBL_EVENTTYPE']?></b></td>
+			<td width=80% align="left">
 				<table>
 					<tr>
 					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked></td><td><?php echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
@@ -172,24 +240,46 @@ else
 					</tr>
 				</table>
 			</td>
-		</tr>
-		<tr>
-			<td nowrap ><b><?php echo $mod_strings['LBL_EVENTNAME']?> :</b></td>
-			<td><input name="subject" type="text" class="textbox" value="" style="width:90%"></td>
-		</tr>
-		<tr>
-			<td colspan="2"><input name="visibility" value="Public" type="checkbox"><?php echo $mod_strings['LBL_PUBLIC']; ?></td>
-		</tr>
-
-		</table>
-		<br>
-		<table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF">
-		<tr>
+			</tr>
+			<tr>
+				<td nowrap align="right"><b><?php echo $mod_strings['LBL_EVENTNAME']?></b></td>
+				<td align="left"><input name="subject" type="text" class="textbox" value="" style="width:50%">&nbsp;&nbsp;&nbsp; <input name="visibility" value="Public" type="checkbox"><?php echo $mod_strings['LBL_PUBLIC']; ?></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><b><?php echo $mod_strings['Description']?></b></td>
+				<td align="left"><textarea style = "width:100%; height : 60px;" name="description"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan=2 width=80% align="center">
+					<table border=0 cellspacing=0 cellpadding=3 width=80%>
+					<tr>
+						<td ><b><?php echo $mod_strings['Status'] ; ?></b></td>
+						<td ><b><?php echo $mod_strings['Assigned To']; ?></b></td>
+					</tr>
+					<tr>
+						<td valign=top><?php echo getActFieldCombo('eventstatus','vtiger_eventstatus'); ?></td>
+						<td valign=top rowspan=2>
+							<?php echo getAssignedToHTML($assignedto,'event'); ?>
+							<br><input type="checkbox" name="sendnotification" >&nbsp;<?php echo $mod_strings['LBL_SENDNOTIFICATION'] ?>
+						</td>
+					</tr>
+					<tr>
+						<td valign=top><b><?php echo $mod_strings['Priority'] ; ?></b>
+							<br><?php echo getActFieldCombo('taskpriority','vtiger_taskpriority'); ?>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>		
+			</table>
+			<hr noshade size=1>
+			<table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF" align=center>
+			<tr>
 			<td >
-				<table border=0 cellspacing=0 cellpadding=2 width=100%>
+				<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 				<tr>
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
-					<table border=0 cellspacing=0 cellpadding=2 width=90%>
+					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
 					<tr><td colspan=3 ><b><?php echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
 				        <tr><td colspan=3>
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
@@ -205,7 +295,7 @@ else
 					</table>
 				</td>
 				<td width=50% valign=top >
-					<table border=0 cellspacing=0 cellpadding=2 width=90%>
+					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
 					<tr><td colspan=3><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
 				        <tr><td colspan=3>
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
@@ -221,21 +311,15 @@ else
 					</table>
 				</td>
 				</tr>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<td>
-			<?php echo $mod_strings['Priority'] ; ?>&nbsp;:&nbsp;<?php echo getPriorityCombo(); ?>
-			</td>
-		</tr>
-		</table>
+				</table></td>
+			</tr>
+			</table>
 
 
-		<!-- Alarm, Repeat, Invite starts-->
-		<br>
-		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center bgcolor="#FFFFFF">
-		<tr>
+			<!-- Alarm, Repeat, Invite starts-->
+			<br>
+			<table border=0 cellspacing=0 cellpadding=0 width=100% align=center bgcolor="#FFFFFF">
+			<tr>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
@@ -251,8 +335,8 @@ else
 				</tr>
 				</table>
 			</td>
-		</tr>
-		<tr>
+			</tr>
+			<tr>
 			<td width=100% valign=top align=left class="dvtContentSpace" style="padding:10px;height:120px">
 			<!-- Invite UI -->
 				
@@ -499,15 +583,12 @@ else
 						</tr>
 					</table>
 				</div>
-					
-	
 			</td>
-		</tr>
-		</table>
+			</tr>
+			</table>
 			<!-- popup specific content fill in ends -->
-		
 		</td>
-	</tr>
+		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<br>
@@ -612,12 +693,9 @@ else
   <input type="hidden" name="month" value="<?php echo $calendar_arr['calendar']->date_time->month ?>">
   <input type="hidden" name="year" value="<?php echo $calendar_arr['calendar']->date_time->year ?>">
   <input type="hidden" name="record" value="">
-  <input type="hidden" name="assigned_user_id" value="<?php echo $current_user->id ?>">
   <input type="hidden" name="parenttab" value="<?php echo $category ?>">
-  <input type="hidden" name="assigntype" value="U">
   <input type="hidden" name="mode" value="">
   <input type="hidden" name="task_time_start" id="task_time_start">
-  <input type="hidden" name="taskstatus" value="Planned">
   <input type="hidden" name="viewOption" value="">
   <input type="hidden" name="subtab" value="">
   <input type="hidden" name="maintab" value="Calendar">
@@ -629,35 +707,64 @@ else
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
 		<tr>
-                        <td width=20%><b><?php echo $mod_strings['LBL_TODONAME'] ?> :</b></td>
-                        <td width=80%><input name="task_subject" type="text" value="" class="textbox" style="width:90%"></td>
+                        <td width="20%" align="right"><b><?php echo $mod_strings['LBL_TODONAME'] ?></b></td>
+                        <td width="80%" align="left"><input name="task_subject" type="text" value="" class="textbox" style="width:70%"></td>
                 </tr>
 		<tr>
-			<td><b><?php echo $mod_strings['LBL_TODODATETIME'] ?> :</b></td>
-			<td>
-				<?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?>
-			</td>		
+			<td align="right"><b><?php echo $mod_strings['Description'] ?></b></td>
+			<td align="left"><textarea style="width: 100%; height: 60px;" name="task_description"></textarea></td>
 		</tr>
 		<tr>
-			<td>&nbsp;</td>
-			<td>
-			<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>" >&nbsp;<img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="absmiddle">
-				<script type="text/javascript">
-					Calendar.setup ({
-	                                        inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
-					})
-				</script>
+			<td colspan="2" align="center" width="80%">
+				<table border="0" cellpadding="3" cellspacing="0" width="80%">
+					<tr>
+						<td align="left"><b><?php echo $mod_strings['Status']; ?></b></td>
+						<td align="left"><b><?php echo $mod_strings['Priority']; ?></b></td>
+						<td align="left"><b><?php echo $mod_strings['Assigned To']; ?></b></td>
+					</tr>
+					<tr>
+						<td align="left" valign="top"><?php echo getActFieldCombo('taskpriority','vtiger_taskpriority'); ?></td>
+						<td align="left" valign="top"><?php echo getActFieldCombo('taskstatus','vtiger_taskstatus'); ?></td>
+						<td align="left" valign="top"><?php echo getAssignedToHTML($assignedto,'task'); ?></td>
+					</tr>
+				</table>
 			</td>
-			
 		</tr>
-		<tr>
-		<td><b><?php echo $mod_strings['Priority']; ?>&nbsp;:&nbsp;</b></td>
-			<td><?php echo getPriorityCombo(); ?></td>
-		</tr>
-
-			
+		<tr><td colspan="2">    <hr noshade="noshade" size="1"></td></tr>
 	</table>
-       
+	<table bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="95%" align=center>
+		<tr><td>
+			<table border="0" cellpadding="2" cellspacing="0" width="100%" align=center>
+				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
+					<table border=0 cellspacing=0 cellpadding=2 width=95% align=center>
+						<tr><td colspan=3 ><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
+						<tr><td colspan=3><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?></td></tr>
+						<tr><td>
+							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>" ></td><td width=100%><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+						<script type="text/javascript">
+						Calendar.setup ({
+							inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+						})
+						</script>
+						</td></tr>
+					</table></td>	
+					<td width=50% valign="top">
+						<table border="0" cellpadding="2" cellspacing="0" width="95%" align=center>
+							<tr><td colspan=3><b><?php echo $mod_strings['Due Date'] ?></b></td></tr>
+							<tr><td>
+								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo $calendar_arr['calendar']->date_time->get_formatted_date() ?>" ></td><td width=100%><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+						<script type="text/javascript">
+						Calendar.setup ({
+							inputField : "task_due_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+						})
+						</script>
+						</td></tr>
+					</table></td>
+				</tr>
+			</table>
+		</td></tr>
+		<tr><td>&nbsp;</td></tr>
+	</table>
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 		<tr>
 			<td>
@@ -678,7 +785,7 @@ else
 		<DIV id="addTaskAlarmUI" style="display:block;width:100%">
                 <table>
 			<tr><td><?php echo $mod_strings['LBL_SENDNOTIFICATION'] ?></td><td>
-				<input name="sendnotification" type="checkbox">
+				<input name="task_sendnotification" type="checkbox">
 			</td></tr>
                 </table>
 		</DIV>
