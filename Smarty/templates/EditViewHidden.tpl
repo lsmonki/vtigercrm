@@ -42,14 +42,6 @@
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
-	{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
-                {foreach key=sel_value item=keyvalue from=$arr}
-                        {if $keyvalue eq "selected"}
-                        <input type="hidden" name="assigned_user_id" value="{$key_one}">
-                        <input type="hidden" name="assigntype" value="U">
-                        {/if}
-                {/foreach}
-        {/foreach}
 
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
 	<form name="EditView" method="POST" action="index.php">
