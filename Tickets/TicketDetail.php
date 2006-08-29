@@ -153,7 +153,7 @@ if($result[$i]['ticketid'] == $ticketid)
 
 		   <!--  Added for Attachment -->
 		   <tr><td colspan=4>&nbsp;</td></tr>
-		   <tr><td colspan="4" class="detailedViewHeader"><b>Attachemnts</b></td></tr>';
+		   <tr><td colspan="4" class="detailedViewHeader"><b>Attachments</b></td></tr>';
 
 	//Get the attachments list and form in the tr tag
 	$files_array = getTicketAttachmentsList($ticketid);
