@@ -131,9 +131,15 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	if (isset($_REQUEST['admin_password']))
 	$admin_password = $_REQUEST['admin_password'];
 	
-	if (isset($_REQUEST['currency']))
-	$currency = $_REQUEST['currency'];
+	if (isset($_REQUEST['currency_name']))
+	$currency_name = $_REQUEST['currency_name'];
 	
+	if (isset($_REQUEST['currency_symbol']))
+	$currency_symbol = $_REQUEST['currency_symbol'];
+	
+	if (isset($_REQUEST['currency_code']))
+	$currency_code = $_REQUEST['currency_code'];
+
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
@@ -243,8 +249,25 @@ function verify_data(form) {
 	if (trim(form.cache_dir.value) =='') {
                 isError = true;
                 errorMessage += "\n temp directory path";
-                form.root_directory.focus();
+                form.cache_dir.focus();
         }
+	if (trim(form.currency_name.value) =='') {
+                isError = true;
+                errorMessage += "\n currency name";
+                form.currency_name.focus();
+        }
+	if (trim(form.currency_symbol.value) =='') {
+                isError = true;
+                errorMessage += "\n currency symbol";
+                form.currency_symbol.focus();
+        }	
+	if (trim(form.currency_code.value) =='') {
+                isError = true;
+                errorMessage += "\n currency code";
+                form.currency_code.focus();
+        }
+
+
 	if(document.getElementById('check_createdb').checked == true)
 	{
 		if (trim(form.root_user.value) =='') {
@@ -430,40 +453,27 @@ function verify_data(form) {
 				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; else echo "admin@your-domain.com"; ?>"></td>
 			</tr>
 			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Master Currency</strong><sup><font color=red>*</font></sup></td>
-								<td bgcolor="white" align="left"><select name="currency" id="master">
-						<option>EURO</option>
-						<option>United States Dollar</option>
-						<option>United Kingdom Pounds</option>
-						<option>Canada Dollars</option>
-						<option>Australia Dollars</option>
-						<option>Japan Yen</option>
-						<option>Indian Rupee</option>
-						<option>New Zealand Dollars</option>
-						<option>South Africa Rand</option>
-				</select></td>
-			</tr>	
-	<?
-				if(isset($currency) && $currency !='')
-				{
-				?>
-					<script language="javascript">
-					var curr_combo = document.getElementById('master');
-					var curr_value = "<?echo $currency;?>";
-					for(i=0;i<curr_combo.length;i++)
-					{
-						if( curr_value == curr_combo.options[i].value)
-						{
-							curr_combo.selectedIndex = i;
-						}       
-					} 
-					</script>	
-				<?
-				}
-				?>
-
-			<tr>
 				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
+			</tr>
+			</table>
+	
+				<br><br>
+		<!-- Currency Configuration -->
+            <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+			<tr>
+				<td colspan=2><strong>Currency Configuration</strong></td>
+            </tr>
+			<tr>
+				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>Name</strong><sup><font color=red>*</font></sup></td>
+				<td width=75% bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>"></td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Symbol</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol";?>"></td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Code</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>"></td>
 			</tr>
 			</table>
 

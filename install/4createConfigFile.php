@@ -47,7 +47,7 @@ session_start();
 
 $vtiger_version = "5.0 Beta";
 $release_date = "31 March 2006";
-if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
+
 
 if (isset($_REQUEST['db_hostname']))
 {
@@ -59,10 +59,9 @@ if (isset($_REQUEST['db_hostname']))
 	{
 		$db_hostname = $_REQUEST['db_hostname'];
 		if($db_type == "pgsql")
- 		    $db_port = '5432';
- 		else
- 		    $db_port = '3306';
-
+		     $db_port = '5432';
+		else
+		     $db_port = '3306';
 	}	
 }
 if (isset($_REQUEST['db_username']))$db_username = $_REQUEST['db_username'];
@@ -71,7 +70,7 @@ if (isset($_REQUEST['db_password']))$db_password = $_REQUEST['db_password'];
 
 if (isset($_REQUEST['db_name']))$db_name = $_REQUEST['db_name'];
 
-//if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
+if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tables'];
 
@@ -85,7 +84,11 @@ if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 
-if (isset($_REQUEST['currency'])) $currency = $_REQUEST['currency'];
+if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
+
+if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
+
+if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
 
 if (isset($_REQUEST['mail_server'])) $mail_server = $_REQUEST['mail_server'];
 
@@ -444,7 +447,9 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-				 <input type="hidden" class="dataInput" name="currency" value="<?php if (isset($currency)) echo "$currency"; ?>" />
+				 <input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
+				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
+				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
 				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
 				 </form>
 					

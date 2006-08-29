@@ -25,7 +25,9 @@ if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tab
 if (isset($_REQUEST['site_URL'])) $site_URL= $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
-if (isset($_REQUEST['currency'])) $currency = $_REQUEST['currency'];
+if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
+if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
+if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
 if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
 if (isset($_REQUEST['mail_server'])) $mail_server= $_REQUEST['mail_server'];
 if (isset($_REQUEST['mail_server_username'])) $mail_server_username= $_REQUEST['mail_server_username'];
@@ -226,19 +228,42 @@ else
 						<td bgcolor="#F5F5F5" width="40%">Cache Path</td>
 						<td align="left"> <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
 					</tr>
+					</table>	
+					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					<tr>
+						<td colspan=2 ><strong>Admin Configuration</strong></td>
+					</tr>
 					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Admin Username</td>
+						<td bgcolor="#F5F5F5" width="40%">Username</td>
 						<td align="left"> <font class="dataInput">admin</font></td>
 					</tr>
 					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Admin Password</td>
+						<td bgcolor="#F5F5F5" width="40%">Password</td>
 						<td align="left"> <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
 					</tr>
 					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Master Currency</td>
-						<td align="left"><font class="dataInput"><?php if (isset($currency)) echo $currency;?></font></td>
+						<td bgcolor="#F5F5F5" width="40%">Email</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($admin_email)) echo $admin_email; ?></font></td>
 					</tr>
 					</table>
+					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					<tr>
+						<td colspan=2 ><strong>Currency Configuration</strong></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Name</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($currency_name)) echo $currency_name; ?></font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Symbol</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($currency_symbol)) echo $currency_symbol; ?></font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Code</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($currency_code)) echo $currency_code; ?></font></td>
+					</tr>
+					</table>
+
 
 					<br><br>
 					<table width="90%" cellpadding="5" border="0" class="small" >
@@ -256,7 +281,9 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-						<input type="hidden" class="dataInput" name="currency" value="<?php if (isset($currency)) echo "$currency"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 						<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($maill_server)) echo $mail_server; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($maill_server_username)) echo $mail_server_username; ?>" />
@@ -291,7 +318,9 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-						<input type="hidden" class="dataInput" name="currency" value="<?php if (isset($currency)) echo "$currency"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
 						<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($mail_server)) echo $mail_server; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" />
