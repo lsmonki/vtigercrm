@@ -24,3 +24,4 @@ $mod_strings = Array(
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 );
 
+?>
