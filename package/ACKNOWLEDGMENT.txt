@@ -1,0 +1,19 @@
+ACKNOWLEDGMENTS:
+
+The vtiger Office Plug-in contains software products of other developers. We wish to acknowledge all such third party software that are used in vtiger Office Plug-in.
+
+1. PocketSOAP. Copyright (C) 2000-2004 Simon Fell. All Rights Reserved. The License Agreement can be found at 
+   (<vtiger Office Plug-in Home>/PocketSOAP_LICENSE.txt)
+
+2. MICROSOFT XML CORE SERVICES (MSXML) 3.0. The End User License Agreement can be found at 
+   (<vtiger Office Plug-in Home>/MSXML_3.0_LICENSE.txt)
+
+3. MICROSOFT VISUAL STUDIO 6.0. The End User License Agreement can be found at 
+   (<vtiger Office Plug-in Home>/VISUAL_STUDIO_LICENSE.txt)
+
+4. Registry accessing library downloaded from www.TheVBZone.com
+   Written By Kevin Wilson 
+   Copyright© by Kevin Wilson.  All rights reserved.
+
+---------------------------------------------
+© 2005 www.vtiger.com. All Rights Reserved.
