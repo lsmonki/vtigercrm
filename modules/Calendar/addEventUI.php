@@ -723,8 +723,8 @@ else
 						<td align="left"><b><?php echo $mod_strings['Assigned To']; ?></b></td>
 					</tr>
 					<tr>
-						<td align="left" valign="top"><?php echo getActFieldCombo('taskpriority','vtiger_taskpriority'); ?></td>
 						<td align="left" valign="top"><?php echo getActFieldCombo('taskstatus','vtiger_taskstatus'); ?></td>
+						<td align="left" valign="top"><?php echo getActFieldCombo('taskpriority','vtiger_taskpriority'); ?></td>
 						<td align="left" valign="top"><?php echo getAssignedToHTML($assignedto,'task'); ?></td>
 					</tr>
 				</table>
