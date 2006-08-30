@@ -350,7 +350,7 @@ $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'potentialtype','vtiger_potential',1,'15','opportunity_type','Type',1,0,0,100,6,1,1,'V~O',1,null,'BAS')");	
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'nextstep','vtiger_potential',1,'1','nextstep','Next Step',1,0,0,100,7,1,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'leadsource','vtiger_potential',1,'15','leadsource','Lead Source',1,0,0,100,8,1,1,'V~O',1,null,'BAS')");	
- $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'sales_stage','vtiger_potential',1,'111','sales_stage','Sales Stage',1,0,0,100,9,1,1,'V~O',0,4,'BAS')");
+ $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'sales_stage','vtiger_potential',1,'16','sales_stage','Sales Stage',1,0,0,100,9,1,1,'V~O',0,4,'BAS')");
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,1,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'probability','vtiger_potential',1,'9','probability','Probability',1,0,0,100,11,1,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'campaignid','vtiger_potential',1,'58','campaignid','Campaign Source',1,0,0,100,12,1,1,'N~O',1,null,'BAS')");
