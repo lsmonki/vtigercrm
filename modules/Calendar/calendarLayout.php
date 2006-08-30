@@ -127,17 +127,18 @@ function get_mini_calendar(& $cal)
 	$minical .= "<table class='mailClient ' bgcolor='white' border='0' cellpadding='2' cellspacing='0' width='98%'>
                         <tr>
 				<td class='calHdr'>&nbsp;</td>
-				<td style='padding:5px' colspan='5' class='calHdr' align='center'>".get_previous_cal($cal)."&nbsp;";
-				$minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."&".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'><b>".display_date($cal['view'],$cal['calendar']->date_time)."</b></a>&nbsp;".get_next_cal($cal)."</td>";
+				<td style='padding:5px' colspan='6' class='calHdr' align='center'>".get_previous_cal($cal)."&nbsp;";
+				$minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'><b>".display_date($cal['view'],$cal['calendar']->date_time)."</b></a>&nbsp;".get_next_cal($cal)."</td>";
 				$minical .= "<td class='calHdr' align='right'><a href='javascript:ghide(\"miniCal\");'><img src='".$cal['IMAGE_PATH']."close.gif' align='right' border='0'></a>
 	                     </td></tr>";
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
+	$minical .= '<th width="12%">Week</th>';
 	for ($i = 0; $i < 7; $i ++)
         {
                 $weekdays_row = $cal['calendar']->month_array[$cal['calendar']->slices[$i]];
                 $weekday = $weekdays_row->start_time->getdayofWeek_inshort();
-                $minical .= '<th>'.$weekday.'</th>';
+                $minical .= '<th width="12%">'.$weekday.'</th>';
         }
 	$minical .= "</tr>";	
 	$event_class = '';
@@ -149,6 +150,8 @@ function get_mini_calendar(& $cal)
                 {
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
 			$class = dateCheck($cal['slice']->start_time->get_formatted_date());
+			if($count%7 == 0)
+				$minical .= "<td style='text-align:center' ><a href='index.php?module=Calendar&action=index&view=week".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>".$cal['slice']->start_time->week."</td>";
 			//To differentiate day having events from other days
 			if(count($cal['slice']->activities) != 0 && ($cal['slice']->start_time->get_formatted_date() == $cal['slice']->activities[0]->start_time->get_formatted_date()))
 			{
@@ -163,14 +166,18 @@ function get_mini_calendar(& $cal)
 				$class = 'class="'.$class.'"';
 			else
 				$class = $event_class;
-                        $minical .= "<td ".$class." style='text-align:center' >";
-                        $minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."&".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>";
+			
 			//To display month dates
                         if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
                         {
-                                $minical .= $cal['slice']->start_time->get_Date();
+				$minical .= "<td ".$class." style='text-align:center' >";
+				$minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>";
+				$minical .= $cal['slice']->start_time->get_Date()."</a></td>";
                         }
-                        $monthview_layout .= '</a></td>';
+			else
+			{
+				$minical .= "<td style='text-align:center' ></td>";
+			}
                         $count++;
                 }
                 $minical .= '</tr>';
@@ -876,7 +883,7 @@ function getMonthViewLayout(& $cal)
 			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
 			{
 				$monthview_layout .= '<td class="dvtCellLabel" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
-				$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
+				$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().''.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 				$monthview_layout .= $cal['slice']->start_time->get_Date();
 				$monthview_layout .= '</a>';
 				$monthview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].'" style="visibility:hidden;">';
@@ -938,7 +945,7 @@ function getYearViewLayout(& $cal)
 							</tr><tr class="hdrNameBg">';
 			for($w=0;$w<7;$w++)
 			{
-				$yearview_layout .= '<th>'.$mod_strings['cal_weekdays_short'][$w].'</th>';
+				$yearview_layout .= '<th width="14%">'.$mod_strings['cal_weekdays_short'][$w].'</th>';
 			}
 			$yearview_layout .= '</tr>';
 			list($_3rdyear,$_3rdmonth,$_3rddate) = explode("-",$cal['calendar']->month_day_slices[$count][35]);
