@@ -467,6 +467,89 @@ class HelpDesk extends CRMEntity {
 		return getHistory('HelpDesk',$query,$id);
 	}
 
+	/** Function to get the update ticket history for the specified ticketid
+	  * @param $id -- $ticketid:: Type Integer 
+	 */	
+	function constructUpdateLog($focus, $mode, $assigned_group_name, $assigntype)
+	{
+		global $adb;
+		global $current_user;
+
+		if($mode != 'edit')//this will be updated when we create new ticket
+		{
+			$updatelog = " Ticket created. Assigned to ";
+
+			if($assigned_group_name != '' && $assigntype == 'T')
+			{
+				$updatelog .= " group ".$assigned_group_name;
+			}
+			elseif($focus->column_fields['assigned_user_id'] != '')
+			{
+				$updatelog .= " user ".getUserName($focus->column_fields['assigned_user_id']);
+			}
+			else
+			{
+				$updatelog .= " user ".getUserName($current_user->id);
+			}
+
+			$fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
+			$updatelog .= " -- ".$fldvalue."--//--";
+		}
+		else
+		{
+			$ticketid = $focus->id;
+
+			//First retrieve the existing information
+			$tktresult = $adb->query("select * from vtiger_troubletickets where ticketid='".$ticketid."'");
+			$crmresult = $adb->query("select * from vtiger_crmentity where crmid='".$ticketid."'");
+
+			$updatelog = $adb->query_result($tktresult,0,"update_log");
+
+			$old_user_id = $adb->query_result($crmresult,0,"smownerid");
+			$old_status = $adb->query_result($tktresult,0,"status");
+			$old_priority = $adb->query_result($tktresult,0,"priority");
+			$old_severity = $adb->query_result($tktresult,0,"severity");
+			$old_category = $adb->query_result($tktresult,0,"category");
+
+			//Assigned to change log
+			if($assigned_group_name != '' && $assigntype == 'T')
+			{
+				$group_info = getGroupName($ticketid,'HelpDesk');
+				$group_name = $group_info[0];
+				if($group_name != $assigned_group_name)
+					$updatelog .= ' Transferred to group '.$assigned_group_name.'\.';
+			}
+			elseif($focus->column_fields['assigned_user_id'] != $old_user_id)
+			{
+				$user_name = getUserName($focus->column_fields['assigned_user_id']);
+				$updatelog .= ' Transferred to user '.$user_name.'\.';
+			}
+			//Status change log
+			if($old_status != $focus->column_fields['ticketstatus'])
+			{
+				$updatelog .= ' Status Changed to '.$focus->column_fields['ticketstatus'].'\.';
+			}
+			//Priority change log
+			if($old_priority != $focus->column_fields['ticketpriorities'])
+			{
+				$updatelog .= ' Priority Changed to '.$focus->column_fields['ticketpriorities'].'\.';
+			}
+			//Severity change log
+			if($old_severity != $focus->column_fields['ticketseverities'])
+			{
+				$updatelog .= ' Severity Changed to '.$focus->column_fields['ticketseverities'].'\.';
+			}
+			//Category change log
+			if($old_category != $focus->column_fields['ticketcategories'])
+			{
+				$updatelog .= ' Category Changed to '.$focus->column_fields['ticketcategories'].'\.';
+			}
+
+			$updatelog .= ' -- '.date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
+		}
+		return $updatelog;
+	}
+
 
 
 }

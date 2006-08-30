@@ -29,7 +29,17 @@ $focus = new HelpDesk();
 
 setObjectValuesFromRequest(&$focus);
 
+global $adb;
+//Added to update the ticket history
+//Before save we have to construct the update log. 
+$mode = $_REQUEST['mode'];
+$fldvalue = $focus->constructUpdateLog(&$focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
+$fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($mode == 'edit')?true:false);
+
 $focus->save("HelpDesk");
+
+//After save the record, we should update the log
+$adb->query("update vtiger_troubletickets set update_log=$fldvalue where ticketid=".$focus->id);
 
 //Added to retrieve the existing attachment of the ticket and save it for the new duplicated ticket
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
@@ -213,4 +223,5 @@ function getTicketComments($ticketid)
 	$log->debug("Exiting getTicketComments method ...");
 	return $commentlist;
 }
+
 ?>

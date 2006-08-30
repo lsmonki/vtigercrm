@@ -494,64 +494,7 @@ class CRMEntity
     $adb->query($sql_qry);
 
   }
-  //code added by richie starts
 
-	/** Function to get the update ticket history for the specified ticketid
-  	  * @param $id -- $ticketid:: Type Integer 
- 	 */	
-  function constructUpdateLog($id)
-  {
-    global $adb;
-    global $current_user;
-    $ticketid = $id;
-    //Updating History
-    $tktresult = $adb->query("select * from vtiger_troubletickets where ticketid='".$ticketid."'");
-    $crmresult = $adb->query("select * from vtiger_crmentity where crmid='".$ticketid."'");
-    $updatelog = $adb->query_result($tktresult,0,"update_log");
-    $old_user_id = $adb->query_result($crmresult,0,"smownerid");
-    $old_status = $adb->query_result($tktresult,0,"status");
-    $old_priority = $adb->query_result($tktresult,0,"priority");
-    $old_severity = $adb->query_result($tktresult,0,"severity");
-    $old_category = $adb->query_result($tktresult,0,"category");
-    if($_REQUEST['old_smownerid'] != $old_user_id && $old_user_id != 0)
-    {
-      $user_name = getUserName($this->column_fields['assigned_user_id']);
-      $updatelog .= ' Transferred to '.$user_name.'\.';
-    }
-    elseif($old_user_id == 0)
-    {
-	$group_info = getGroupName($ticketid,'HelpDesk');	
-	$group_name = $group_info[0];	
-	if($group_name != $_REQUEST['assigned_group_name'])
-		$updatelog .= ' Transferred to group '.$_REQUEST['assigned_group_name'].'\.';
-    }
-    if($old_status != $this->column_fields['ticketstatus'])
-    {
-      $updatelog .= ' Status Changed to '.$this->column_fields['ticketstatus'].'\.';
-    }
-    if($old_priority != $this->column_fields['ticketpriorities'])
-    {
-      $updatelog .= ' Priority Changed to '.$this->column_fields['ticketpriorities'].'\.';
-    }
-    if($old_severity != $this->column_fields['ticketseverities'])
-    {
-      $updatelog .= ' Severity Changed to '.$this->column_fields['ticketseverities'].'\.';
-    }
-    if($old_category != $this->column_fields['ticketcategories'])
-    {
-      $updatelog .= ' Category Changed to '.$this->column_fields['ticketcategories'].'\.';
-    }
-    if($_REQUEST['old_smownerid'] != $old_user_id || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'] || $old_userid == 0)
-    {
-      $updatelog .= ' -- '.date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
-    }
-    else
-    {
-        $update_log .= '--//--';
-    }
-
-    return $updatelog;
-  }
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
   	  * @param $module -- module:: Type varchar
@@ -560,7 +503,7 @@ class CRMEntity
   {
 	  global $log;
   	  global $current_user;	  
-	   $log->info("function insertIntoCrmEntity ".$module.' vtiger_table name ' .$table_name);
+	   $log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
 
@@ -667,6 +610,12 @@ class CRMEntity
 					  $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
 				  }
 			  }
+			  elseif($uitype == 7)
+			  {
+				  //strip out the spaces and commas in numbers if given ie., in amounts there may be ,
+				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
+
+			  }
 			  else
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 
@@ -684,14 +633,6 @@ class CRMEntity
 		  if($fldvalue=='') $fldvalue ="NULL";
 		  if($insertion_mode == 'edit')
 		  {
-			  //code by richie starts
-			  if(($table_name == "vtiger_troubletickets") && ($columname == "update_log"))
-			  {
-				  $fldvalue = $this->constructUpdateLog($this->id);
-				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
-			  }
-			  //code by richie ends
-
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
 			  {
 				  $fldvalue = $this->getOldFileName($this->id);
@@ -715,32 +656,6 @@ class CRMEntity
 		  }
 		  else
 		  {
-			  //code by richie starts
-			  if(($table_name == "vtiger_troubletickets") && ($columname == "update_log"))
-			  {
-				  global $current_user;
-				  $fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-				  if($_REQUEST['assigned_group_name'] != '' && $_REQUEST['assigntype'] == 'T')
-                                  {
-                                        $group_name = $_REQUEST['assigned_group_name'];
-                                  }
-				  elseif($this->column_fields['assigned_user_id'] != '')
-				  {
-					  $tkt_ownerid = $this->column_fields['assigned_user_id'];
-				  }
-				  else
-				  {
-					  $tkt_ownerid = $current_user->id;
-				  }
-				  if($group_name != '')
-					  $tkt_ownername = $group_name;
-				  else
-					  $tkt_ownername = getUserName($tkt_ownerid);	
-				  $fldvalue = " Ticket created. Assigned to ".$tkt_ownername." -- ".$fldvalue."--//--";
-				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
-				  //echo ' updatevalue is ............. ' .$fldvalue;
-			  }
-			  //code by richie ends
 			  $column .= ", ".$columname;
 			  $value .= ", ".$fldvalue."";
 		  }
