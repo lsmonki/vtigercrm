@@ -1421,11 +1421,11 @@ function cancelForm(frm)
 
 function trim(s)
 {
-	while (s.substring(0,1) == " ")
+	while (s.substring(0,1) == " " || s.substring(0,1) == "\n")
 	{
 		s = s.substring(1, s.length);
 	}
-	while (s.substring(s.length-1, s.length) == ' ') {
+	while (s.substring(s.length-1, s.length) == " " || s.substring(s.length-1,s.length) == "\n") {
 		s = s.substring(0,s.length-1);
 	}
 	return s;
