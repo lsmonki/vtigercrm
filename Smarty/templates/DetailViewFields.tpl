@@ -25,7 +25,7 @@
                                              {elseif $keyid eq '13'} <!--Email-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="mailto:{$keyval}" target="_blank">{$keyval}</a>
                                                   </td>
-                                             {elseif $keyid eq '15' || $keyid eq '16'} <!--ComboBox-->
+                                             {elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
                							<td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
                							</td>
                                              {elseif $keyid eq '17'} <!--WebSite-->
