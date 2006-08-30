@@ -110,7 +110,7 @@ Begin VB.Form frmLogin
          Width           =   3975
       End
       Begin VB.Label Label4 
-         Caption         =   "E.g., http://www.vtiger.com/products/crm/demo"
+         Caption         =   "E.g., http://en.vtiger.com"
          Height          =   255
          Left            =   1200
          TabIndex        =   12
