@@ -150,9 +150,12 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							{
 								$lbl_name = $app_strings[$name];
 							}
-							else
+							elseif($mod_strings[$name])
 							{
 								$lbl_name = $mod_strings[$name];
+							}else
+							{
+								$lbl_name = $name;
 							}
 							//added to display vtiger_currency symbol in listview header
 							if($lbl_name =='Amount')
