@@ -73,7 +73,7 @@ Begin VB.Form frmConf
          Width           =   2850
       End
       Begin VB.Label Label11 
-         Caption         =   "(E.g., http://localhost/)"
+         Caption         =   "(E.g., http://en.vtiger.com/)"
          Height          =   255
          Left            =   1830
          TabIndex        =   21
