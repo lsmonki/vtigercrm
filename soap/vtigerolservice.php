@@ -503,6 +503,7 @@ function GetContacts($username)
 		}
 
 		$namelist = explode(" ", $contact["lastname"]);
+		$middlename = "";
 		if(isset($namelist))
 		{
 			if(count($namelist) >= 2) 
@@ -510,7 +511,8 @@ function GetContacts($username)
 				$contact["lastname"] = $namelist[count($namelist)-1];       	
 				for($i=0; $i<count($namelist)-2; $i++)
 				{
-					$middlename[] = $namelist[$i];
+				  if($namelist[$i] != '')
+					 $middlename[] = $namelist[$i];
 				}
 				if(isset($middlename))
 				{
@@ -925,7 +927,7 @@ function AddTasks($username,$taskdtls)
 			$task->column_fields[description]= in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype]="Task";
 			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
-			$task->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
+			$task->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 			$task->save("Calendar");
 		  }
 	}
@@ -1006,7 +1008,7 @@ function UpdateTasks($username,$taskdtls)
 			$task->column_fields[description] = in_array('description',$permitted_lists) ? $taskrow["description"] : "";
 			$task->column_fields[activitytype] = "Task";
 			//$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
-			$task->column_fields[assigned_user_id] = $user_id;
+			$task->column_fields[assigned_user_id] = in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 
 			$task->id = $taskrow["id"];
 			$task->mode="edit";
