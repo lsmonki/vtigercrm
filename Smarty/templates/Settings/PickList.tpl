@@ -168,7 +168,7 @@ function validate() {
 <script>
 function SavePickList(fieldname,module,uitype)
 {
-	$("status").style.display="inline";
+	$("status").style.display = "inline";
 	Effect.Puff($('editdiv'),{duration:2});
 	var body = escape($("picklist_values").value);
 
@@ -216,6 +216,19 @@ function fetchEditPickList(module,fieldname,uitype)
                 	}
                 }
         );
+}
+function picklist_validate(mode,fieldname,module,uitype)
+{
+	if(mode == 'edit')
+	{
+		if(trim($("picklist_values").value) == '')
+		{
+			alert("Picklist value cannot be empty");
+			$("picklist_values").focus();	
+			return false;
+		}
+	}
+	SavePickList(fieldname,module,uitype)	
 }
 </script>
 {/literal}

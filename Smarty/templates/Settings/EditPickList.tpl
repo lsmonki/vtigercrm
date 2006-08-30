@@ -43,7 +43,11 @@
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr>
 			<td colspan="2" align="center">
+			{if $NON_EDITABLE_ENTRIES neq ''}
 				<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" onClick="SavePickList('{$FIELDNAME}','{$MODULE}', {$UITYPE});" type="button">
+			{else}
+				<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" onClick="return picklist_validate('{$EDITABLE_MODE}','{$FIELDNAME}','{$MODULE}', {$UITYPE});" type="button">
+			{/if}	
 				<input name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmButton small cancel" onClick="hide('editdiv');" type="button">
 			</td>
 		</tr>
