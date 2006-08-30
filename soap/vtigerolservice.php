@@ -601,13 +601,13 @@ function AddContacts($username,$cntdtls)
     			if($cntrow["middlename"] != "")
     			{
     				$contact->column_fields[lastname]=$cntrow["middlename"]." ".$cntrow["lastname"];
-    			}elseif($cntrow["middlename"] != "")
+    			}elseif($cntrow["lastname"] != "")
     			{
     				$contact->column_fields[lastname]=$cntrow["lastname"];
     			}else
     			{
     			   $contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
-          }
+          		}
     
     			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? getDisplayDate($cntrow["birthdate"]) : "";
     			$contact->column_fields[email]=in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
@@ -688,7 +688,7 @@ function UpdateContacts($username,$cntdtls)
 			}else
 			{
 				$contact->column_fields[lastname]=$cntrow["firstname"]." ".$cntrow["middlename"]." ".$cntrow["lastname"];
-      }
+      			}
       
 			$contact->column_fields[birthday]= in_array('birthday',$permitted_lists) ? getDisplayDate($cntrow["birthdate"]) : "";
 			$contact->column_fields[email]= in_array('email',$permitted_lists) ? $cntrow["emailaddress"] : "";
