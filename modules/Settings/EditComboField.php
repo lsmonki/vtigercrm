@@ -83,6 +83,10 @@ if($uitype == 111)
 $query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
 $fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
 
+if($nonedit_fldVal == '')
+		$smarty->assign("EDITABLE_MODE","edit");
+	else
+		$smarty->assign("EDITABLE_MODE","nonedit");
 $smarty->assign("NON_EDITABLE_ENTRIES", $nonedit_fldVal);
 $smarty->assign("ENTRIES",$fldVal);
 $smarty->assign("MODULE",$moduleName);
