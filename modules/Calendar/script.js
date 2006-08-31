@@ -210,7 +210,10 @@ function maincheck_form()
 			}
 			else
 			{
-				starthour = starthour;
+				if(starthour == '12')
+                                        starthour = 0;
+				else
+					starthour = starthour;
 				startmin  = startmin;
 			}
 		}
@@ -226,7 +229,10 @@ function maincheck_form()
 			}
 			else
 			{
-				endhour = endhour;
+				if(endhour == '12')
+					endhour = 0;
+				else
+					endhour = endhour;
 				endmin = endmin;
 			}
 		}
@@ -326,7 +332,10 @@ function check_form()
 			}
 			else
 			{
-				starthour = starthour;
+				if(starthour == '12')
+                                	starthour = 0;
+				else
+					starthour = starthour;
 				startmin  = startmin;
 			}
 		}
@@ -342,7 +351,10 @@ function check_form()
                         }
 			else
 			{
-				endhour = endhour;
+				if(endhour == '12')
+					endhour == 0;
+				else
+					endhour = endhour;
 				endmin = endmin;
 			}
 		}
@@ -419,12 +431,19 @@ function task_check_form()
 	{
         	if(startformat == 'pm')
                 {
-                	starthour = eval(starthour) + 12;
+			if(starthour == '12')
+				starthour = 12;
+			else
+                		starthour = eval(starthour) + 12;
+			
                         startmin  = startmin;
                 }
                 else
                 {
-                	starthour = starthour;
+			if(starthour == '12')
+				starthour = 0;
+			else
+				starthour = starthour;
                         startmin  = startmin;
                 }
         }
@@ -450,12 +469,18 @@ function maintask_check_form()
         {
                 if(startformat == 'pm')
                 {
-                        starthour = eval(starthour) + 12;
+			if(starthour == '12')
+				starthour = 12;
+			else
+				starthour = eval(starthour) + 12;
                         startmin  = startmin;
                 }
                 else
                 {
-                        starthour = starthour;
+			if(starthour == '12')
+                                starthour = 0;
+                        else
+                                starthour = starthour;
                         startmin  = startmin;
                 }
         }
