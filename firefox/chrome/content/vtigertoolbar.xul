@@ -43,7 +43,7 @@
 						 <menuitem label="Blogs" tooltiptext="vtigerCRM Blogs" oncommand="VTIGER_LoadURL('http://blogs.vtiger.com')" />
 						 						
 						<menuseparator/>		
-						
+					<menuitem label="Logout" tooltiptext="Logout" onclick="logout();" />	
 					</menupopup>
 					
 				</toolbarbutton>

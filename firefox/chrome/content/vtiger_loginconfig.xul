@@ -38,13 +38,13 @@
 			 <textbox id="txtpassword" flex="1" type="password"/>
 		  </hbox>
 		</hbox>
-	        <hbox>
+	  <hbox>
 		  <spacer flex="1"/>
 		  <label style="padding: 0px;margin-top: 3px;" value="vtiger URL:"/>
 		  <hbox style="width: 25em">
 			 <textbox id="txturl" flex="1"/>
 		  </hbox>
-	  	</hbox>
+	  </hbox>
 		<hbox>
 			<spacer flex="1"/>
 			<hbox style="width:25em">
