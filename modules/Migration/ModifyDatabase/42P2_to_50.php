@@ -3608,8 +3608,21 @@ foreach($change_cols_array as $tablename => $columnname)
 }
 //changes made for CustomView and Reports - Activities changed to Calendar -- Ends
 
+Execute("update vtiger_field set uitype = 16 where tabid=2 and uitype=111 and columnname='sales_stage'");
 
+//we have to add id, sortorderid and presence in all existing custom field pick list tables.
+$cf_picklist_res = $conn->query("select fieldname from vtiger_field where uitype=15 and fieldname like 'cf_%'");
+$noofPicklists = $conn->num_rows($cf_picklist_res);
+for($i=0;$i<$noofPicklists;$i++)
+{
+	$fieldname = $conn->query_result($cf_picklist_res,$i,'fieldname');
 
+	$tablename = "vtiger_".$fieldname;
+	$idname = $fieldname."id";
+
+	$alterquery = "alter table $tablename add column $idname int(19) auto_increment PRIMARY KEY FIRST, add column sortorderid int(19) default 0 NOT NULL, add column presence int(1) default 1 NOT NULL";
+	Execute($alterquery);
+}
 
 
 
