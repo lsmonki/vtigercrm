@@ -112,14 +112,15 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') ||
 		$adb->query($sql);
 	}
 }
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts")
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts" && $_REQUEST['activity_mode'] == 'Events')
 {
-	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
-	{
-		$sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-		$adb->query($sql);
-	}
+	        if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
+	        {
+	                $sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
+	                $adb->query($sql);
+	        }
 }
+									
 									
 $activemode = "";
 if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
