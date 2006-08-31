@@ -831,7 +831,7 @@ class jpgraph {
 					array_push($datay[$the_id], 0);
 					array_push($aAlts[$the_id], "");
 				}
-				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&assigned_user_id[]=$the_id&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd");
+				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&assigned_user_id=$the_id&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd");
 			  }
 			  array_push($legend,$stage_translation);
 			}

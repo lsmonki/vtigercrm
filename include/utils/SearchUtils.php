@@ -668,6 +668,7 @@ function getdashboardcondition()
 	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
 	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
 	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
+	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 	
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
@@ -687,7 +688,10 @@ function getdashboardcondition()
 		array_push($where_clauses, "vtiger_potential.leadsource = ".$adb->quote($lead_source));
 		$url_string .= "&leadsource=".$lead_source;
 	}
-	
+	if(isset($assigned_user_id) && $assigned_user_id != "") {
+	        array_push($where_clauses, "vtiger_crmentity.smownerid = ".$assigned_user_id);
+	        $url_string .= "&assigned_user_id=".$assigned_user_id;
+		}
 	if(isset($date_closed) && $date_closed != "") {
 		array_push($where_clauses, $adb->getDBDateString("vtiger_potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
 		$url_string .= "&date_closed=".$date_closed;
