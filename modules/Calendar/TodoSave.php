@@ -40,8 +40,11 @@ if(isset($_REQUEST['mode']))
  $focus->column_fields["date_start"] =  $_REQUEST["task_date_start"];
  $focus->column_fields["due_date"] =  $_REQUEST["task_due_date"];
  $focus->column_fields["taskpriority"] =  $_REQUEST["taskpriority"];
+ $focus->column_fields["parent_id"] = $_REQUEST["task_parent_id"];
+ $focus->column_fields["contact_id"] = $_REQUEST["task_contact_id"];
  $focus->column_fields["description"] =  $_REQUEST["task_description"];
- $focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
+ if(isset($_REQUEST['task_sendnotification']) && $_REQUEST['task_sendnotification'] != null)
+ 	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
 
  $focus->save($tab_type);
  header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
