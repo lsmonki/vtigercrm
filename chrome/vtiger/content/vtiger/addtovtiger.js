@@ -185,7 +185,7 @@ function bget_CntBySearch()
 	{
 		try
 		{
-			if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+		  if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
 			{ 
 				var itemLength = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes.length;
 				var itemNode = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes;
@@ -198,17 +198,17 @@ function bget_CntBySearch()
 					frstname = '';
 					lstname = '';
 					cntemail = '';
-          			acntname = '';
+          acntname = '';						  
 					for(var j=0;j<itemsLength;j++)
 					{
-						if(itemsNode.item(j).childNodes.item(0))
+					  if(itemsNode.item(j).childNodes.item(0))
 						{
-							switch(j)
+						  switch(j)
 							{
 								case 0:
 										cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
-                case 1:
+                				case 1:
 										frstname = itemsNode.item(j).childNodes.item(0).nodeValue;
 										break;
 								case 2:
@@ -223,30 +223,30 @@ function bget_CntBySearch()
 							}
 						}
 					}
-					//code to add the items to the listbox
-						var listboxelmnt = document.getElementById("lstcontactinfo");
-						
-						var listitemdoc = document.createElement('listitem');
-						listitemdoc.setAttribute("value",cntid);
-						
-						var typechild = document.createElement('listcell');
-						typechild.setAttribute('label',"Contact");
-						listitemdoc.appendChild(typechild);
-						
-						var fullnamechild = document.createElement('listcell');
-						fullnamechild.setAttribute('label',frstname+ " " +lstname);
-						listitemdoc.appendChild(fullnamechild);
-						
-						var accountchild = document.createElement('listcell');
-						accountchild.setAttribute('label',acntname);
-						listitemdoc.appendChild(accountchild);
-						
-						var emailchild = document.createElement('listcell');
-						emailchild.setAttribute('label',cntemail);
-						listitemdoc.appendChild(emailchild);
-										
-						listboxelmnt.appendChild(listitemdoc);
-					//end code to add the items to the listbox
+				//code to add the items to the listbox
+					var listboxelmnt = document.getElementById("lstcontactinfo");
+					
+					var listitemdoc = document.createElement('listitem');
+					listitemdoc.setAttribute("value",cntid);
+					
+					var typechild = document.createElement('listcell');
+					typechild.setAttribute('label',"Contact");
+					listitemdoc.appendChild(typechild);
+					
+					var fullnamechild = document.createElement('listcell');
+					fullnamechild.setAttribute('label',frstname+ " " +lstname);
+					listitemdoc.appendChild(fullnamechild);
+					
+					var accountchild = document.createElement('listcell');
+					accountchild.setAttribute('label',acntname);
+					listitemdoc.appendChild(accountchild);
+					
+					var emailchild = document.createElement('listcell');
+					emailchild.setAttribute('label',cntemail);
+					listitemdoc.appendChild(emailchild);
+									
+					listboxelmnt.appendChild(listitemdoc);
+				//end code to add the items to the listbox
 				}
 			}else
 			{
