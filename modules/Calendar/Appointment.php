@@ -28,6 +28,7 @@ class Appointment
 	var $ownerid;
 	var $assignedto;
 	var $eventstatus;
+	var $priority;
 	var $activity_type;
 	var $description;
 	var $record;
@@ -133,6 +134,7 @@ class Appointment
 		//$this->account_name      = $act_array["accountname"];
 		//$this->account_id        = $act_array["accountid"];
 		$this->eventstatus       = $act_array["eventstatus"];
+		$this->priority		 = $act_array["priority"];
 		$this->subject           = $act_array["subject"];
 		$this->activity_type     = $act_array["activitytype"];
 		$this->duration_hour     = $act_array["duration_hours"];
