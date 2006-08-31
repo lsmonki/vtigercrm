@@ -3383,7 +3383,7 @@ $conn->query("insert into vtiger_inventorytaxinfo values($migratedtaxid,'".$migr
 $conn->query("alter table vtiger_inventoryproductrel add column $migrated_taxname decimal(7,3) default NULL");
 
 //Now we should create tax for each and every value given in picklist taxclass
-$taxres = $conn->query("select * from taxclass");
+$taxres = $conn->query("select * from vtiger_taxclass");
 $taxcount = $conn->num_rows($taxres);
 for($i=0;$i<$taxcount;$i++)
 {
