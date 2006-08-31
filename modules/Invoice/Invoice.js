@@ -39,7 +39,7 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,curr_
 	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
 }
 function set_return_todo(product_id, product_name) {
-        window.opener.document.createTodo.parent_name.value = product_name;
-        window.opener.document.createTodo.parent_id.value = product_id;
+        window.opener.document.createTodo.task_parent_name.value = product_name;
+        window.opener.document.createTodo.task_parent_id.value = product_id;
 }
 
