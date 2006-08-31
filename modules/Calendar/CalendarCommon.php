@@ -98,40 +98,51 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 		$hr = $sthr+0;
 		if($hr <= 11)
 		{
+			if($hr == 0)
+				$sthr = 12;
 			$timearr['starthour'] = $sthr;
 			$timearr['startfmt'] = 'am';
 		}
 		else
 		{
-			if($hr == 12)
-				$sthr = $hr;
-			else
-				$sthr = $hr - 12;
+			if($hr == 12) $sthr = $hr;
+			else $sthr = $hr - 12;
+				
 			if($sthr <= 9 && strlen(trim($sthr)) < 2)
-                        {
                                 $hrvalue= '0'.$sthr;
-                        }else $hrvalue=$sthr;
+			else $hrvalue=$sthr;
+			
 			$timearr['starthour'] = $hrvalue;
 			$timearr['startfmt'] = 'pm';
 		}
-		$ehr = $edhr+0;
-                if($ehr <= 11)
+		$edhr = $edhr+0;
+                if($edhr <= 11)
                 {
-                        $timearr['endhour'] = $edhr;
+			if($edhr == 0)
+				$edhr = 12;
+				
+			if($edhr <= 9 && strlen(trim($edhr)) < 2)
+				$edhr = '0'.$edhr;
+			$timearr['endhour'] = $edhr;
                         $timearr['endfmt'] = 'am';
                 }
                 else
                 {
+			$fmt = 'pm';
 			if($edhr == 12)
 				$edhr =	$edhr;
 			else
+			{
 				$edhr = $edhr - 12;
+				if($edhr == 12)
+					$fmt = 'am';
+			}
                         if($edhr <= 9 && strlen(trim($edhr)) < 2)
-                        {
                                 $hrvalue= '0'.$edhr;
-                        }else $hrvalue=$edhr;
+			else $hrvalue=$edhr;
+			
                         $timearr['endhour'] = $hrvalue;
-                        $timearr['endfmt'] = 'pm';
+                        $timearr['endfmt'] = $fmt;
                 }
 		$timearr['startmin']  = $stmin;
 		$timearr['endmin']    = $edmin;
@@ -139,6 +150,10 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 	}
 	if($format == '24')
 	{
+		if($edhr <= 9 && strlen(trim($edhr)) < 2)
+			$edhr = '0'.$edhr;
+		if($sthr <= 9 && strlen(trim($sthr)) < 2)
+			$sthr = '0'.$sthr;
 		$timearr['starthour'] = $sthr;
 		$timearr['startmin']  = $stmin;
 		$timearr['startfmt']  = '';
@@ -162,19 +177,27 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 	if($format == 'am/pm')
 	{
 		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
-		for($i=1;$i<=12;$i++)
+		for($i=0;$i<12;$i++)
 		{
-			if($i <= 9 && strlen(trim($i)) < 2)
+			if($i == 0)
 			{
-				$hrvalue= '0'.$i;
+				$hrtext= 12;
+				$hrvalue = 12;
 			}
-			//elseif($i == 12) $hrvalue = '00';
-			else $hrvalue= $i;
+			else
+			{	
+				if($i <= 9 && strlen(trim($i)) < 2)
+				{
+					$hrtext= '0'.$i;
+				}
+				else $hrtext= $i;
+				$hrvalue =  $hrtext;
+			}
 			if($hour == $hrvalue)
 				$hrsel = 'selected';
 			else
 				$hrsel = '';
-			$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$i.'</option>';
+			$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrtext.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
 		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
@@ -223,7 +246,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 					$hrsel = 'selected';
 				else
 					$hrsel = '';
-				$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$i.'</option>';
+				$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrvalue.'</option>';
 			}
 			$combo .= '</select>Hr&nbsp;';
 			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
