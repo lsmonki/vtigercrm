@@ -177,30 +177,10 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<?php
-	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Events')
-	{
-		include_once 'modules/Calendar/header.php';
-		$closelink = '';
-?>
-	<div class="layerPopup small" style="padding:20px">
-	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">	
-	<input type="hidden" name="return_module" value="<?php $_REQUEST['return_module'] ?>">
-	<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action'] ?>">
-<?php
-}
-else
-{
-	$closelink = '<td align=right>
-			<a href="javascript:ghide(\'addEvent\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
-?>
 	<div class="calAddEvent layerPopup" style="display:none" id="addEvent" align=center>
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
-<?php
-}
-?>
 	<input type="hidden" name="module" value="Calendar">
 	<input type="hidden" name="activity_mode" value="Events">
 	<input type="hidden" name="action" value="Save">
@@ -222,7 +202,7 @@ else
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
-			<?php echo $closelink; ?>
+				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
 		
@@ -598,39 +578,12 @@ else
 			<td valign=top></td>
 			<td  align=center>
 				<input title='Save [Alt+S]' accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
-<?php
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Events')
-{
-?>
-	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="window.history.back()">
-	</td>
-	</tr>
-	</table>
-	</form>
-	</div>
-</td></tr></table>
-</td></tr></table>
-</td></tr></table>
-</div>
-</td>
-<td valign=top><img src="<?php echo $image_path ?>showPanelTopRight.gif"></td>
-	</tr>
-	</table>
-
-<?php } 
-else
-{
-?>
 	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
 	  </td>
 	  </tr>
 	</table>
   </form>
   </div>
-<?php
-}
-?>
-						  
 							 
 	<script language="JavaScript" type="text/JavaScript">
 setObjects();
@@ -661,29 +614,10 @@ setObjects();
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<?php
-	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Task')
-{
-	include_once 'modules/Calendar/header.php';
-	$closelink = '';
-?>
-	<div class="small" style="padding:20px">
-	<form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
-	<input type="hidden" name="return_module" value="<?php $_REQUEST['return_module'] ?>">
-	<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action'] ?>"> 
-<?php
-}
-else
-{
-	$closelink = '<td align=right><a href="javascript:ghide(\'createTodo\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>';
-?>
 <div class="calAddEvent layerPopup" style="display:none" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
-<?php
-}
-?>
   <input type="hidden" name="module" value="Calendar">
   <input type="hidden" name="activity_mode" value="Task">
   <input type="hidden" name="action" value="TodoSave">
@@ -702,7 +636,7 @@ else
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr>
                 	<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
-			<?php echo $closelink; ?>
+			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
@@ -794,8 +728,8 @@ else
 			<tr>
 				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
 				<td>
-					<input name="parent_id" type="hidden" value="">
-						<select name="parent_type" class="small" id="parent_type" onChange="document.createTodo.parent_name.value='';document.createTodo.parent_id.value=''">
+					<input name="task_parent_id" type="hidden" value="">
+						<select name="task_parent_type" class="small" id="task_parent_type" onChange="document.createTodo.task_parent_name.value='';document.createTodo.task_parent_id.value=''">
 						<option value="Leads"><?php echo $app_strings['Leads']?></option>
 						<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
 						<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
@@ -808,15 +742,15 @@ else
 				</td>
 				<td>
 					<div id="taskrelatedto" align="left">
-					<input name="parent_name" readonly type="text" class="calTxt small" value="">
-					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+					<input name="task_parent_name" readonly type="text" class="calTxt small" value="">
+					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.task_parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 					</div>
 				</td>
 			</tr>
 			<tr>
 			<td><b><?php echo $mod_strings['LBL_CONTACT'] ?> :</b></td>
 			<td colspan="2">
-				<input name="contact_name" readonly type="text" class="calTxt" value=""><input name="contact_id" type="hidden" value="">&nbsp;
+				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
 				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
 			</td>
 			  </tr>
@@ -832,27 +766,6 @@ else
                         <td valign=top></td>
                         <td  align=center>
                                 <input title='Save [Alt+S]' accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
-<?php
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'CallRelatedList' && $_REQUEST['activity_mode'] == 'Task')
-{
-?>
-				<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="window.history.back()">
-			</td></tr></table>
-		</form>
-	<script>                                                                                                                         var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');                                var fieldlabel = new Array('Subject','Date','Time','Status');                                                              var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');                                                   </script>
-	</div>
-	</td></tr></table>
-	</td></tr></table>
-	</td></tr></table>
-	</div>
-	</td>
-	<td valign=top><img src="<?php echo $image_path ?>showPanelTopRight.gif"></td>
-	</tr>
-	</table>
-<?php }
-else
-{
-?>
 		<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
 	</td></tr></table>
   </form>
@@ -862,9 +775,6 @@ else
 	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
   </script>
   </div>
-<?php
-}
-?>
 
 <div id="act_changeowner" class="statechange" style="left:250px;top:200px;z-index:5000">
 	<form name="change_owner">
