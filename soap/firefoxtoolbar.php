@@ -65,8 +65,8 @@ $server->register(
 	
 $server->register(
    'create_contacts',
-    array('user_name'=>'xsd:string','contacts'=>'tns:contact_detail_array'),
-    array('return'=>'tns:contact_detail_array'),
+    array('user_name'=>'xsd:string','lastname'=>'xsd:string','phone'=>'xsd:string','mobile'=>'xsd:string','email'=>'xsd:string','street'=>'xsd:string','city'=>'xsd:string','state'=>'xsd:string','country'=>'xsd:string','zipcode'=>'xsd:string'),
+    array('return'=>'xsd:string'),
     $NAMESPACE);
 
 
@@ -111,16 +111,231 @@ $server->register(
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
+$server->register(
+    'LogintoVtigerCRM',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+    
+$server->register(
+    'CheckLeadPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckContactPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+    
+$server->register(
+    'CheckAccountPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckTicketPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckVendorPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckProductPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE); 
+
+$server->register(
+    'CheckNotePermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckSitePermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'CheckRssPermission',
+    array('username'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
 
 
+function CheckLeadPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 
+	if(isPermitted("Leads","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
 
+function CheckContactPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 
+	if(isPermitted("Contacts","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
 
+function CheckAccountPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 
+	if(isPermitted("Accounts","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
 
+function CheckTicketPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
 
-function create_site_from_webform($username,$name,$url)
+	if(isPermitted("HelpDesk","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckVendorPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Vendors","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckProductPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Products","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckNotePermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Notes","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckSitePermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Portal","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckRssPermission($username)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+
+	if(isPermitted("Rss","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+    
+function create_site_from_webform($username,$portalname,$portalurl)
 {
 	global $log;
 	global $adb;
@@ -131,24 +346,50 @@ function create_site_from_webform($username,$name,$url)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	require_once("modules/Portal/Portal.php");
-	$adb->println("name url  >>>>>>>>>>".$name .' >>>>>>>>>>> ' .$url);
 	if(isPermitted("Portals","EditView") == "yes")
 	{
-		$result = SavePortal($name,$url);
+		$result = SavePortal($portalname,$portalurl);
 
 		$adb->println("Create New Portal from Web Form - Ends");
 
 		if($result != '')
-		return 'Thank you for your interest. Information has been successfully added as Portal';
+		  return 'Portal added sucessfully';
 		else
-		return "Portal creation failed. Try again";
+		  return "Portal creation failed. Try again";
 	}
 	else
 	{
 		return $accessDenied;
 	}
 }
-
+function LogintoVtigerCRM($user_name,$password)
+{
+	global $log;
+	require_once('modules/Users/User.php');
+	
+	$return_access = "FALSE";
+	
+	$objuser = new User();
+	
+	if($password != "")
+	{
+		$objuser->column_fields['user_name'] = $user_name;
+		$objuser->load_user($password);
+		if($objuser->is_authenticated())
+		{
+			$return_access = "TRUE";
+		}else
+		{
+			$return_access = "FALSE";
+		}
+	}else
+	{
+			//$server->setError("Invalid username and/or password");
+			$return_access = "FALSE";
+	}
+	$objuser = $objuser;
+	return $return_access;
+}
 
 function create_rss_from_webform($username,$url)
 {
@@ -170,14 +411,17 @@ function create_rss_from_webform($username,$url)
 		{
 			if($oRss->saveRSSUrl($url) == false)
 			{
-				return "RSS creation failed. Try again";
+				return "RSS feed addition failed. Try again";
 			}
 			else
 			{
-					return 'Thank you for your interest. Information has been successfully added as RSS.';
+					return 'RSS feed added sucessfully.';
 			}
 
-	       }
+	  }else
+	  {
+	     return "Not a valid RSS Feed or your Proxy Settings is not correct. Try again";
+    }
 	}
 	else
 	{
@@ -213,7 +457,7 @@ function create_note_from_webform($username,$subject,$desc)
 		$adb->println("Create New Note from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Thank you for your interest. Information has been successfully added as Note.';
+		return 'Note added sucessfully.';
 		else
 		return "Note creation failed. Try again";
 	}
@@ -223,8 +467,6 @@ function create_note_from_webform($username,$subject,$desc)
 	}
 
 }
-
-
 
 function create_product_from_webform($username,$productname,$code,$website)
 {
@@ -237,25 +479,21 @@ function create_product_from_webform($username,$productname,$code,$website)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Product from Web Form - Starts");
-	require_once("modules/Products/Product.php");
+	
+  require_once("modules/Products/Product.php");
 	if(isPermitted("Products","EditView") == "yes")
 	{
 		$focus = new Product();
 		$focus->column_fields['productname'] = $productname;
 		$focus->column_fields['productcode'] = $code;
 		$focus->column_fields['website'] = $website;
-
-		$adb->println("Values are  --------------->".$productname .'       '.$code .'           '.$website);
 		$focus->save("Products");
-
-		$focus->retrieve_entity_info($focus->id,"Products");
-
 		$adb->println("Create New Product from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Thank you for your interest. Information has been successfully added as Product.';
+		  return 'Product added sucessfully.';
 		else
-		return "Product creation failed. Try again";
+		  return "Product creation failed. Try again";
 	}
 	else
 	{
@@ -264,9 +502,6 @@ function create_product_from_webform($username,$productname,$code,$website)
 
 	
 }
-
-
-
 
 function create_vendor_from_webform($username,$vendorname,$email,$phone,$website)
 {
@@ -295,19 +530,17 @@ function create_vendor_from_webform($username,$vendorname,$email,$phone,$website
 		$adb->println("Create New Vendor from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Thank you for your interest. Information has been successfully added as Vendor.';
+		return 'Vendor added sucessfully';
 		else
 		return "Vendor creation failed. Try again";
-       }		
-       else
+  }		
+  else
 	{
 		return $accessDenied;
 	}
 
 	
 }
-
-
 
 function create_ticket_from_toolbar($username,$title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
 {
@@ -342,7 +575,10 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 		//$ticket->saveentity("HelpDesk");
 		$ticket->save("HelpDesk");
 
-		return $ticket->id;
+		if($ticket->id != '')
+      return "Ticket Created Sucessfully";
+    else
+      return "Error while creating Ticket.Try again";  
 	}
 	else
 	{
@@ -359,7 +595,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
-	$current_user->retrieve($user_id);
+	$current_user->retrieve_entity_info($user_id,'Users');
 	require_once("modules/Accounts/Account.php");
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
@@ -372,15 +608,22 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 		$account->column_fields['bill_state']=$primary_address_state;
 		$account->column_fields['bill_code']=$primary_address_postalcode;
 		$account->column_fields['bill_country']=$primary_address_country;
+		$account->column_fields['ship_street']=$primary_address_street;
+		$account->column_fields['ship_city']=$primary_address_city;
+		$account->column_fields['ship_state']=$primary_address_state;
+		$account->column_fields['ship_code']=$primary_address_postalcode;
+		$account->column_fields['ship_country']=$primary_address_country;
 		$account->column_fields['assigned_user_id']=$user_id;
 		$account->save('Accounts');
-		return $account->id;
+		if($account->id != '')
+      return "Account added Sucessfully";
+    else
+      return "Error while adding Account.Try again";  
 	}
 	else
 	{
 		return $accessDenied;
 	}
-
 
 }
 
@@ -416,14 +659,14 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 		$focus->column_fields['company'] = $company;
 		$focus->column_fields['country'] = $country;
 		$focus->column_fields['description'] = $description;
+		$focus->column_fields['assigned_user_id'] = $user_id;
 		$focus->save("Leads");
-		$focus->retrieve_entity_info($focus->id,"Leads");
 		$adb->println("Create New Lead from Web Form - Ends");
 		if($focus->id != '')
-		return 'Thank you for your interest. Information has been successfully added as Lead.';
+		  return 'Thank you for your interest. Information has been successfully added as Lead.';
 		else
-		return "Lead creation failed. Try again";
-     }
+		  return "Lead creation failed. Try again";
+  }
 	else
 	{
 		return $accessDenied;
@@ -432,93 +675,72 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 
 }
 
-function create_contacts($user_name,$output_list)
+function create_contacts($user_name,$lastname,$phone,$mobile,$email,$street,$city,$state,$country,$zipcode)
 {
-	$counter=0;
-	foreach($output_list as $contact)
-	{
-
-		if($contact[birthdate]=="4501-01-01")
-		{
-			$contact[birthdate] = "0000-00-00";
-		}
-			$id = create_contact1($user_name, $contact[first_name], $contact[last_name], $contact[email_address ],$contact[account_name ], $contact[salutation ], $contact[title], $contact[phone_mobile], $contact[reports_to],$contact[primary_address_street],$contact[primary_address_city],$contact[primary_address_state],$contact[primary_address_postalcode],$contact[primary_address_country],$contact[alt_address_city],$contact[alt_address_street],$contact[alt_address_state],$contact[alt_address_postalcode],$contact[alt_address_country],$contact[office_phone],$contact[home_phone],$contact[other_phone],$contact[fax],$contact[department],$contact[birthdate],$contact[assistant_name],$contact[assistant_phone]);
-
-			$output_list[$counter] ['id']=$id;
-			$counter++;
-	}
-	return array_reverse($output_list);
+  global $log;
+  $log->debug($user_name);
+  $birthdate = "0000-00-00";
+	
+	return create_contact1($user_name, "", $lastname, $email,"", "","", $mobile, "",$street,$city,$state,$zipcode,$country,$city,$street,$state,$zipcode,$country,$phone,"","","","",$birthdate,"","");
+	
 }
 
 function create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,$other_phone,$fax,$department,$birthdate,$assistant_name,$assistant_phone,$description='')
 {
-	global $adb;
+	global $adb,$log;
 	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
-	$current_user->retrieve($user_id);
-	$adb->println("OUTLOOK: The user id is ".$current_user->id);
-	
+	$current_user->retrieve_entity_info($user_id,'Users');
+
 	require_once('modules/Contacts/Contact.php');
-     if(isPermitted("Contacts","EditView") == "yes")
-     {
-
-	     $contact = new Contact();
-
-	     $contact->column_fields[firstname]=$first_name;
-	     $contact->column_fields[lastname]=$last_name;
-
-	     $contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
-
-	     $contact->column_fields[salutation]=$salutation;
-	     // EMAIL IS NOT ADDED
-	     $contact->column_fields[title]=$title;
-	     $contact->column_fields[email]=$email_address;
-
-
-	     $contact->column_fields[mobile]=$phone_mobile;
-	     $contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-	     $contact->column_fields[mailingstreet]=$primary_address_street;
-	     $contact->column_fields[mailingcity]=$primary_address_city;
-	     $contact->column_fields[mailingcountry]=$primary_address_country;
-	     $contact->column_fields[mailingstate]=$primary_address_state;
-	     $contact->column_fields[mailingzip]=$primary_address_postalcode;
-
-	     $contact->column_fields[otherstreet]=$alt_address_street;
-	     $contact->column_fields[othercity]=$alt_address_city;
-	     $contact->column_fields[othercountry]=$alt_address_country;
-	     $contact->column_fields[otherstate]=$alt_address_state;
-	     $contact->column_fields[otherzip]=$alt_address_postalcode;
-
-	     $contact->column_fields[assigned_user_id]=$user_id;
-
-	     // new Fields
-	     $contact->column_fields[phone]= $office_phone;
-	     $contact->column_fields[homephone]= $home_phone;
-	     $contact->column_fields[otherphone]= $other_phone;
-	     $contact->column_fields[fax]= $fax;
-	     $contact->column_fields[department]=$department;
-	     $contact->column_fields[birthday]= getDisplayDate($birthdate);
-	     $contact->column_fields[assistant]= $assistant_name;
-	     $contact->column_fields[assistantphone]= $assistant_phone;
-	     $contact->column_fields[description]= $description;
-
-	     //$contact->saveentity("Contacts");
-	     $contact->save("Contacts");
-
-	     return $contact->id;
-     }
+  if(isPermitted("Contacts","EditView") == "yes")
+  {
+   $contact = new Contact();
+   $contact->column_fields[firstname]= $first_name;
+   $contact->column_fields[lastname]= $last_name;
+   //$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
+   $contact->column_fields[salutation]=$salutation;
+   // EMAIL IS NOT ADDED
+   $contact->column_fields[title]=$title;
+   $contact->column_fields[email]=$email_address;
+   $contact->column_fields[mobile]=$phone_mobile;
+   //$contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+   $contact->column_fields[mailingstreet]=$primary_address_street;
+   $contact->column_fields[mailingcity]=$primary_address_city;
+   $contact->column_fields[mailingcountry]=$primary_address_country;
+   $contact->column_fields[mailingstate]=$primary_address_state;
+   $contact->column_fields[mailingzip]=$primary_address_postalcode;
+   $contact->column_fields[otherstreet]=$alt_address_street;
+   $contact->column_fields[othercity]=$alt_address_city;
+   $contact->column_fields[othercountry]=$alt_address_country;
+   $contact->column_fields[otherstate]=$alt_address_state;
+   $contact->column_fields[otherzip]=$alt_address_postalcode;
+   $contact->column_fields[assigned_user_id]=$user_id;
+   // new Fields
+   $contact->column_fields[phone]= $office_phone;
+   $contact->column_fields[homephone]= $home_phone;
+   $contact->column_fields[otherphone]= $other_phone;
+   $contact->column_fields[fax]= $fax;
+   $contact->column_fields[department]=$department;
+   $contact->column_fields[birthday]= getDisplayDate($birthdate);
+   $contact->column_fields[assistant]= $assistant_name;
+   $contact->column_fields[assistantphone]= $assistant_phone;
+   $contact->column_fields[description]= $description;
+   $contact->save("Contacts");
+   if($contact->id != '')
+      return 'Contact added Sucessfully';
+   else
+      return "Contact creation failed. Try again";
+  }
 	else
 	{
 		return $accessDenied;
 	}
 
-
 }
-
-
 
 $server->service($HTTP_RAW_POST_DATA); 
 exit(); 
