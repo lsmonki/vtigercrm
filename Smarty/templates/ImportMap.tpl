@@ -12,13 +12,13 @@
 
 
 {assign var="Firstrow" value=$FIRSTROW}
-<table border="0" style="background-color: rgb(204, 204, 204);" class="small" cellpadding="0" cellspacing="1" width="100%">
+<table border="0" class="small cellLabel" cellpadding="0" cellspacing="1" width="100%">
 	{foreach name=iter item=row from=$Firstrow}
 	{assign var="counter" value=$smarty.foreach.iter.iteration}
 	{math assign="num" equation="x - y" x=$counter y=1}
 
-	<tr bgcolor="white">
-		<td class="lvtCol" align="center" height="30">
+	<tr>
+		<td class="small" align="center" height="30">
 			{$SELECTFIELD[$counter]}
 		</td>
 	</tr>

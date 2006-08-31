@@ -118,13 +118,13 @@ function getImportSavedMap(impoptions)
 									{math assign="num" equation="x - y" x=$counter y=1}	
 								   <tr bgcolor="white" >
 									{if $HASHEADER eq 1}
-									<td  bgcolor="#E1E1E1" width="33%" height="30">{$row1}</td>
-									<td  width="34%">{$Secondrow[$num]}</td>
-									<td  >{$Thirdrow[$num]}</td>
+										<td bgcolor="#E1E1E1" width="33%" height="30">&nbsp;{$row1}</td>
+										<td width="34%">&nbsp;{$Secondrow[$num]}</td>
+										<td>&nbsp;{$Thirdrow[$num]}</td>
 									{else}
-									<td  width="31%" height="30" >{$row1}</td>
-									<td width="30%" >{$Secondrow[$num]}</td>
-									<td  >{$Thirdrow[$num]}</td>
+										<td width="31%" height="30">&nbsp;{$row1}</td>
+										<td width="30%">&nbsp;{$Secondrow[$num]}</td>
+										<td>&nbsp;{$Thirdrow[$num]}</td>
 									{/if}	
 								   </tr>
 								   {/foreach}
