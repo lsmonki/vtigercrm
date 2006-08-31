@@ -288,10 +288,10 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 			{
 				$headerdata .="<tr><td>&nbsp;</td>";
 			}
-			$headerdata .="<td align='center' width='55%'>";
+			$headerdata .="<td align='center' width='53%'>";
 	$headerdata .= getEventTodoInfo($cal_arr,'listcnt'); 
 	$headerdata .= "	</td>
-				<td align='right' width='30%'><table border=0 cellspacing=0 cellpadding=2><tr><td class=small><b>".$mod_strings['LBL_VIEW']." : </b></td><td>";
+				<td align='center' width='30%'><table border=0 cellspacing=0 cellpadding=2><tr><td class=small><b>".$mod_strings['LBL_VIEW']." : </b></td><td>";
 	$view_options = getEventViewOption($cal_arr,$viewBox);
 	$headerdata .=$view_options."</td></tr></form></table>
 				</td>
@@ -1356,8 +1356,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		}
 		else
 		{
-			$element['starttime'] = $adb->query_result($result,$i,"date_start");
-			$element['endtime'] = $adb->query_result($result,$i,"due_date");
+			$date_start = $adb->query_result($result,$i,"date_start");
+			$due_date = $adb->query_result($result,$i,"due_date");
+			$element['starttime'] = getDisplayDate($date_start);
+			$element['endtime'] = getDisplayDate($due_date);
 		}
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
@@ -1461,6 +1463,12 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time);
 		$value = getaddEventPopupTime($start_time,$start_time,$format);
                 $element['starttime'] = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+		$date_start = $adb->query_result($result,$i,"date_start");
+		$due_date = $adb->query_result($result,$i,"due_date");
+		if($calendar['view'] != 'day')
+			$element['startdate'] = getDisplayDate($date_start);
+		$element['duedate'] = getDisplayDate($due_date);
+
                 $id = $adb->query_result($result,$i,"activityid");
                 $subject = $adb->query_result($result,$i,"subject");
 		$status = $adb->query_result($result,$i,"status");
@@ -1646,20 +1654,34 @@ function constructTodoListView($todo_list,$cal,$subtab)
 	}
         $list_view = "";
 	//labels of listview header
-        $header = Array('0'=>'#',
+	if($cal['view'] == 'day')
+	{
+		$header = Array('0'=>'#','1'=>$mod_strings['LBL_TIME'],'2'=>$mod_strings['LBL_LIST_DUE_DATE'],
+				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_STATUS'],'5'=>$mod_strings['LBL_ACTION'],'6'=>$mod_strings['LBL_ASSINGEDTO'],);
+		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%','4'=>'10%','5'=>'10%', '6'=>'15%', );
+	}
+	else
+	{
+		
+	        $header = Array('0'=>'#',
                         '1'=>$mod_strings['LBL_TIME'],
-                        '2'=>$mod_strings['LBL_TODO'],
-                        '3'=>$mod_strings['LBL_STATUS'],
-                        '4'=>$mod_strings['LBL_ACTION'],
-			'5'=>$mod_strings['LBL_ASSINGEDTO'],
+			'2'=>$mod_strings['LBL_APP_START_DATE'],
+			'3'=>$mod_strings['LBL_LIST_DUE_DATE'],
+                        '4'=>$mod_strings['LBL_TODO'],
+                        '5'=>$mod_strings['LBL_STATUS'],
+                        '6'=>$mod_strings['LBL_ACTION'],
+			'7'=>$mod_strings['LBL_ASSINGEDTO'],
                        );
-        $header_width = Array('0'=>'5%',
+        	$header_width = Array('0'=>'5%',
                               '1'=>'10%',
-                              '2'=>'48%',
+                              '2'=>'10%',
                               '3'=>'10%',
-                              '4'=>'10%',
-			      '5'=>'15%',
+                              '4'=>'28%',
+			      '5'=>'10%',
+			      '6'=>'10%',
+			      '7'=>'15%',
                              );
+	}
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
 			//checking permission for Create/Edit Operation
@@ -1675,7 +1697,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
 				$list_view .="<tr><td>&nbsp;</td>";
 			}
 			$list_view .="<td align='center' width='60%'>&nbsp;</td>
-				<td align='right' width='30%'>&nbsp;</td>
+				<td align='right' width='28%'>&nbsp;</td>
 			</tr>
 		</table>
 
