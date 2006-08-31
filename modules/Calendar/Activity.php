@@ -57,7 +57,6 @@ class Activity extends CRMEntity {
        'Close'=>Array('activity'=>'status'),
        'Type'=>Array('activity'=>'activitytype'),
        'Subject'=>Array('activity'=>'subject'),
-       'Contact Name'=>Array('contactdetails'=>'lastname'),
        'Related to'=>Array('seactivityrel'=>'activityid'),
        'Start Date'=>Array('activity'=>'date_start'),
        'End Date'=>Array('activity'=>'due_date'),
