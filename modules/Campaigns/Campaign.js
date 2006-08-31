@@ -21,7 +21,7 @@ function set_return(product_id, product_name) {
 }
 
 function set_return_todo(product_id, product_name) {
-        window.opener.document.createTodo.parent_name.value = product_name;
-        window.opener.document.createTodo.parent_id.value = product_id;
+        window.opener.document.createTodo.task_parent_name.value = product_name;
+        window.opener.document.createTodo.task_parent_id.value = product_id;
 }
 
