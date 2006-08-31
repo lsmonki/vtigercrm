@@ -50,9 +50,11 @@ require_once('modules/Calendar/CalendarCommon.php');
 			<input type="checkbox" name="sttime_check" <? if($current_user->start_hour != ''){?> checked <? } ?> onClick="enableCalstarttime();">&nbsp;<?echo $mod_strings['LBL_CALSTART']?> 
 			<select name="start_hour" <? if($current_user->start_hour == ''){?>disabled <? } ?> >
 				<?
-					for($i=6;$i<=16;$i++)
+					for($i=0;$i<=23;$i++)
 					{
-						if($i >= 12)
+						if($i == 0)
+							$hour = "12:00 am";
+						elseif($i >= 12)
 						{
 							if($i == 12)
 								$hour = $i;
