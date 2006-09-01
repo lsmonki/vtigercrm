@@ -799,11 +799,11 @@ function GetTasks($username)
 	{
   		if($task["date_start"] == "0000-00-00" || $task["date_start"] == NULL)
         	{
-		       	$task["startdate"] = "";
+		       	$task["date_start"] = "";
         	}
         	if($task["due_date"] == "0000-00-00" || $task["due_date"] == NULL)
         	{
-		       	$task["duedate"] = "";
+		       	$task["due_date"] = "";
         	}
         
         	if($task["status"] == "Not Started")
@@ -840,8 +840,8 @@ function GetTasks($username)
 		$output_list[] = Array(
 						"id" => $task["taskid"],
 						"subject" => $task["subject"],
-						"startdate" => $task["startdate"],
-						"duedate" => $task["duedate"],
+						"startdate" => $task["date_start"],
+						"duedate" => $task["due_date"],
 						"status" => $task["status"],
 						"priority" => $task["priority"],
 						"description" => $task["description"],
