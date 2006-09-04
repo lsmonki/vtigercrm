@@ -259,7 +259,7 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("NAME", $focus->name);
 $smarty->assign("BLOCKS", $act_data);
 $smarty->assign("LABEL", $fldlabel);
-
+$smarty->assign("VIEWTYPE", $_REQUEST['viewtype']);
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ACTIVITYDATA", $data);
 $smarty->assign("ID", $_REQUEST['record']);
