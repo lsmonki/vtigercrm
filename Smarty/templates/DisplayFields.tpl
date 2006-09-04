@@ -100,7 +100,7 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select MULTIPLE name="{$fldname}[]" size="2" tabindex="{$vt_tab}" >
+			   <select MULTIPLE name="{$fldname}[]" size="5" tabindex="{$vt_tab}" >
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>{$sel_value}</option>
