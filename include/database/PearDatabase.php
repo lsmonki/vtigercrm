@@ -441,7 +441,9 @@ class PearDatabase{
 	$result->Move($row);
 	$rowdata = $this->change_key_case($result->FetchRow());
 	//$this->println($rowdata);
-	$coldata = strip_selected_tags($rowdata[$col],'script');
+	//Commented strip_selected_tags and added to_html function for HTML tags vulnerability
+	//$coldata = strip_selected_tags($rowdata[$col],'script');
+	$coldata = to_html($rowdata[$col]);
 	//$this->println("ADODB query_result ". $coldata);
 	return $coldata;
     }
