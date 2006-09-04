@@ -72,7 +72,7 @@ class Email extends CRMEntity {
 	var $sortby_fields = Array('subject','date_start','smownerid');
 
 	//Added these variables which are used as default order by and sortorder in ListView
-	var $default_order_by = 'subject';
+	var $default_order_by = 'date_start';
 	var $default_sort_order = 'ASC';
 
 	/** This function will set the columnfields for Email module 
