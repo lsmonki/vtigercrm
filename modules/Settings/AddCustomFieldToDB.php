@@ -286,15 +286,24 @@ else
 		if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
 		{
 			// Creating the PickList Table and Populating Values
-			$qur = "CREATE TABLE vtiger_".$columnName." (
+			if($_REQUEST['fieldid'] == '')
+			{
+				$qur = "CREATE TABLE vtiger_".$columnName." (
 					".$columnName."id int(19) NOT NULL auto_increment,
 					".$columnName." varchar(200) NOT NULL,
 					sortorderid int(19) NOT NULL default '0',
 					presence int(1) NOT NULL default '1',
 				        PRIMARY KEY  (".$columnName."id)
 				)";
-			$adb->query($qur);
+				$adb->query($qur);
+			}
 
+			if($_REQUEST['fieldid'] != '' && $mode == 'edit')
+			{
+				$delquery = "DELETE from vtiger_".$columnName;
+				$adb->query($delquery);
+			}
+			$pickArray = Array();
 			$fldPickList =  $_REQUEST['fldPickList'];
 			$pickArray = explode("\n",$fldPickList);
 			$count = count($pickArray);
@@ -309,7 +318,7 @@ else
 				}
 			}
 		}
-		//Inserting into LeadMapping vtiger_table - Jaguar
+		//Inserting into LeadMapping table - Jaguar
 		if($fldmodule == 'Leads' && $_REQUEST['fieldid'] == '')
 		{
 
