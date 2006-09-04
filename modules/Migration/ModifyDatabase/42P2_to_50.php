@@ -69,7 +69,7 @@ $alter_array1 = Array(
 		"alter table vtiger_def_org_field ADD PRIMARY KEY (fieldid)",
 		"alter table vtiger_leadgrouprelation ADD PRIMARY KEY (leadid)",
 		"alter table vtiger_leadgrouprelation drop key leadgrouprelation_IDX0",
-		"alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationame)",
+		"alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationname)",
 		"alter table vtiger_profile2field ADD PRIMARY KEY (profileid,fieldid)",
 		"alter table vtiger_profile2standardpermissions ADD PRIMARY KEY (profileid,tabid,Operation)",
 		"alter table vtiger_profile2standardpermissions drop index idx_prof2stad",
@@ -3624,6 +3624,7 @@ for($i=0;$i<$noofPicklists;$i++)
 	Execute($alterquery);
 }
 
+Execute("alter table vtiger_organizationdetails change column organizationame  organizationname varchar(60) NOT NULL");
 
 
 
