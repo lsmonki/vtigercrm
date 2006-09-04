@@ -184,6 +184,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email->column_fields[date_start] = $datesent;
 	$email->column_fields[description]  = htmlentities($emailbody);
 	$email->column_fields[activitytype] = 'Emails'; 
+	$email->plugin_save = true;
 	$email->save("Emails");
 
 	$email->set_emails_contact_invitee_relationship($email->id,$contact_ids);
@@ -195,7 +196,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	if(isset($camodulerow))
 	{
 		$emailid = $camodulerow["email"];
-		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contact_ids."@77|".'","OUTLOOK")';
+		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contact_ids."@77|".'","THUNDERBIRD")';
 		$adb->query($query);
 	}
 	return $email->id;
