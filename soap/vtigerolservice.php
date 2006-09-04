@@ -1062,13 +1062,14 @@ function GetClndr($username)
 		$expldstartdate = explode("-", $clndr["date_start"]);
 		$expldtimestart = explode(":", $clndr["time_start"]);	
 
-		$expldduedate = explode("-", $clndr["due_date"]);
-
 		//this makes a timestamp out of the exploded date this number is in seconds
 		$startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
 
-		$duedtm = mktime($expldtimestart[0]+$clndr["duration_hours"], $expldtimestart[1]+$clndr["duration_minutes"], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
-
+    $expldduedate = explode("-", $clndr["due_date"]);
+    $expldtimeend = explode(":", $clndr["time_end"]);
+    //this makes a timestamp out of the exploded date this number is in seconds
+		$duedtm = mktime($expldtimeend[0], $expldtimeend[1], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
+		
 		$clndr["date_start"] = date("Y-m-d H:i:s", $startdtm);
 		$clndr["due_date"] = date("Y-m-d H:i:s", $duedtm);
 
