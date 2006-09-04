@@ -22,9 +22,9 @@ $organization_phone=$_REQUEST['organization_phone'];
 $organization_fax=$_REQUEST['organization_fax'];
 $organization_website=$_REQUEST['organization_website'];
 
-$sql="select * from vtiger_organizationdetails where organizationame = '".$org_name."'";
+$sql="select * from vtiger_organizationdetails where organizationname = '".$org_name."'";
 $result = $adb->query($sql);
-$org_name = $adb->query_result($result,0,'organizationame');
+$org_name = $adb->query_result($result,0,'organizationname');
 
 if($org_name=='')
 {
@@ -32,7 +32,7 @@ if($org_name=='')
 }
 else
 {
-	$sql="update vtiger_organizationdetails set organizationame = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."' where organizationame = '".$org_name."'";
+	$sql="update vtiger_organizationdetails set organizationname = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."' where organizationname = '".$org_name."'";
 }	
 
 
