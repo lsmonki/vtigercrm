@@ -2067,7 +2067,7 @@ Should any need arise,please do give us a call.';
 
 		
 	       //Insert into vtiger_organizationdetails vtiger_table 
-	       $this->db->query("insert into vtiger_organizationdetails(organizationame,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.jpg')");
+	       $this->db->query("insert into vtiger_organizationdetails(organizationname,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.jpg')");
 
   //Insert into vtiger_inventory_tandc vtiger_table
                $this->db->query("insert into vtiger_inventory_tandc values('".$this->db->getUniqueID('vtiger_inventory_tandc')."','Inventory','')");
