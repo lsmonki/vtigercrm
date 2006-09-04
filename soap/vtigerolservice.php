@@ -1144,7 +1144,7 @@ function AddClndr($username,$clndrdtls)
 			$clndr->column_fields[time_end]= in_array('time_end',$permitted_lists) ? $stimeend : "";
 			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";        
 			//$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";
-                
+        
 			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
 			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
@@ -1199,19 +1199,20 @@ function UpdateClndr($username,$clndrdtls)
 			$stimestart = $atimestart[0].":".$atimestart[1];
 			$stimeend = $atimedue[0].":".$atimedue[1];
 		
-			if( $diff=@get_time_difference($stimestart, $stimeend) )
+			/*if( $diff=@get_time_difference($stimestart, $stimeend) )
 			{
 				$stimeduehr = sprintf('%02d',$diff['hours']);
 				$stimeduemin = sprintf('%02d',$diff['minutes']);
-			}
+			}*/
 
 			$clndr->retrieve_entity_info($clndrow["id"],"Calendar");
 			$clndr->column_fields[subject] = in_array('subject',$permitted_lists) ? $clndrow["subject"] : "";
 			$clndr->column_fields[date_start]= in_array('date_start',$permitted_lists) ? getDisplayDate(trim($astartdtm[0])) : "";
 			$clndr->column_fields[due_date]= in_array('due_date',$permitted_lists) ? getDisplayDate(trim($aduedtm[0])) : ""; 
 			$clndr->column_fields[time_start]= in_array('time_start',$permitted_lists) ? $stimestart : "";
-			$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";       
-			$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";              
+			$clndr->column_fields[time_end]= in_array('time_end',$permitted_lists) ? $stimeend : "";
+			//$clndr->column_fields[duration_hours]= in_array('duration_hours',$permitted_lists) ? $stimeduehr : "";       
+			//$clndr->column_fields[duration_minutes]= in_array('duration_minutes',$permitted_lists) ? $stimeduemin : "";              
 			$clndr->column_fields[location]= in_array('location',$permitted_lists) ? $clndrow["location"] : "";
 			$clndr->column_fields[description]= in_array('description',$permitted_lists) ? $clndrow["description"] : "";
 			$clndr->column_fields[activitytype]="Meeting";
