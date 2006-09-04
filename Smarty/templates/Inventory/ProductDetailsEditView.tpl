@@ -22,7 +22,7 @@ if(!e)
 //  window.onmousemove= displayCoords;
 //  window.onclick = fnRevert;
   
-function displayCoords(event,obj,mode,curr_row) 
+function displayCoords(currObj,obj,mode,curr_row) 
 {ldelim}
 	if(mode != 'discount_final' && mode != 'sh_tax_div_title' && mode != 'group_tax_div_title')
 	{ldelim}
@@ -39,6 +39,10 @@ function displayCoords(event,obj,mode,curr_row)
 	{ldelim}
 		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
+	else if(mode == 'tax')
+	{ldelim}
+		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>Set Tax for "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
+	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
 		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
@@ -53,19 +57,23 @@ function displayCoords(event,obj,mode,curr_row)
 		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
 	{rdelim}
 
-	var move_Element = document.getElementById(obj).style;
-	if(!event)
+	fnvshobj(currObj,'tax_container');
+	if(document.all)
 	{ldelim}
-		move_Element.left = e.pageX +'px' ;
-		move_Element.top = e.pageY + 'px';	
-	{rdelim}
-	else
-	{ldelim}
-		move_Element.left = event.clientX +'px' ;
-		move_Element.top = event.clientY + 'px';	
-	{rdelim}
+		var divleft = document.getElementById("tax_container").style.left;
+		var divabsleft = divleft.substring(0,divleft.length-2);
+		document.getElementById(obj).style.left = eval(divabsleft) - 120;
 
-	move_Element.display = 'block';
+		var divtop = document.getElementById("tax_container").style.top;
+		var divabstop =  divtop.substring(0,divtop.length-2);
+		document.getElementById(obj).style.top = eval(divabstop);
+	{rdelim}else
+	{ldelim}
+		document.getElementById(obj).style.left =  document.getElementById("tax_container").left;
+		document.getElementById(obj).style.top = document.getElementById("tax_container").top;
+	{rdelim}
+	document.getElementById(obj).style.display = "block";
+
 {rdelim}
   
 	function doNothing(){ldelim}
@@ -198,7 +206,7 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		   <tr>
 			<td align="right" style="padding:5px;" nowrap>
-				(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'discount_div{$row_no}','discount','{$row_no}')" >{$APP.LBL_DISCOUNT}</a> : </b>
+				(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'discount_div{$row_no}','discount','{$row_no}')" >{$APP.LBL_DISCOUNT}</a> : </b>
 				<div class="discountUI" id="discount_div{$row_no}">
 					<input type="hidden" id="discount_type{$row_no}" name="discount_type{$row_no}" value="{$data.$discount_type}">
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
@@ -229,12 +237,12 @@ function displayCoords(event,obj,mode,curr_row)
 		   </tr>
 		   <tr id="individual_tax_row{$row_no}" class="TaxShow">
 			<td align="right" style="padding:5px;" nowrap>
-				(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'tax_div{$row_no}','tax','{$row_no}')" >{$APP.LBL_TAX} </a> : </b>
+				(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'tax_div{$row_no}','tax','{$row_no}')" >{$APP.LBL_TAX} </a> : </b>
 				<div class="discountUI" id="tax_div{$row_no}">
 					<!-- we will form the table with all taxes -->
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
-						<td nowrap align="left" >Set Tax for : {$data.$totalAfterDiscount}</td>
+						<td id="tax_div_title{$row_no}" nowrap align="left" ><b>Set Tax for : {$data.$totalAfterDiscount}</b></td>
 						<td>&nbsp;</td>
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
@@ -317,13 +325,14 @@ so we will get that array, parse that array and fill the details
 
    <!-- Product Details Final Total Discount, Tax and Shipping&Hanling  - Starts -->
    <tr valign="top">
-	<td width="88%" class="crmTableRow small lineOnTop" align="right"><b>{$APP.LBL_NET_TOTAL}</b></td>
+	<td width="88%" colspan="2" class="crmTableRow small lineOnTop" align="right"><b>{$APP.LBL_NET_TOTAL}</b></td>
 	<td width="12%" id="netTotal" class="crmTableRow small lineOnTop" align="right">0.00</td>
    </tr>
 
    <tr valign="top">
+	<td class="crmTableRow small lineOnTop" width="60%" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow small lineOnTop" align="right">
-		(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'discount_div_final','discount_final','1')">{$APP.LBL_DISCOUNT}</a>
+		(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'discount_div_final','discount_final','1')">{$APP.LBL_DISCOUNT}</a>
 
 		<!-- Popup Discount DIV -->
 		<div class="discountUI" id="discount_div_final">
@@ -356,8 +365,9 @@ so we will get that array, parse that array and fill the details
 
    <!-- Group Tax - starts -->
    <tr id="group_tax_row" valign="top" class="TaxHide">
+	<td class="crmTableRow small lineOnTop" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow small lineOnTop" align="right">
-		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'group_tax_div','group_tax_div_title',''); calcGroupTax();" >{$APP.LBL_TAX}</a></b>
+		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'group_tax_div','group_tax_div_title',''); calcGroupTax();" >{$APP.LBL_TAX}</a></b>
 
 				<!-- Pop Div For Group TAX -->
 				<div class="discountUI" id="group_tax_div">
@@ -396,6 +406,7 @@ so we will get that array, parse that array and fill the details
 
 
    <tr valign="top">
+	<td class="crmTableRow small" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow small" align="right">
 		(+)&nbsp;<b>{$APP.LBL_SHIPPING_AND_HANDLING_CHARGES} </b>
 	</td>
@@ -406,8 +417,9 @@ so we will get that array, parse that array and fill the details
 
 
    <tr valign="top">
+	<td class="crmTableRow small" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow small" align="right">
-		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,'shipping_handling_div','sh_tax_div_title',''); calcSHTax();" >{$APP.LBL_TAX_FOR_SHIPPING_AND_HANDLING} </a></b>
+		(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'shipping_handling_div','sh_tax_div_title',''); calcSHTax();" >{$APP.LBL_TAX_FOR_SHIPPING_AND_HANDLING} </a></b>
 
 				<!-- Pop Div For Shipping and Handlin TAX -->
 				<div class="discountUI" id="shipping_handling_div">
@@ -442,6 +454,7 @@ so we will get that array, parse that array and fill the details
 
 
    <tr valign="top">
+	<td class="crmTableRow small" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow small" align="right">
 		{$APP.LBL_ADJUSTMENT}
 		<select id="adjustmentType" name="adjustmentType" class=small onchange="calcTotal();">
@@ -456,6 +469,7 @@ so we will get that array, parse that array and fill the details
 
 
    <tr valign="top">
+	<td class="crmTableRow big lineOnTop" style="border-right:1px #dadada;">&nbsp;</td>
 	<td class="crmTableRow big lineOnTop" align="right"><b>{$APP.LBL_GRAND_TOTAL}</b></td>
 	<td id="grandTotal" name="grandTotal" class="crmTableRow big lineOnTop" align="right">{$FINAL.grandTotal}</td>
    </tr>

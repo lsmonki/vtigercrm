@@ -188,6 +188,9 @@ function sensex_info()
 </table>
 </form>
 
+<!-- This div is added to get the left and top values to show the tax details-->
+<div id="tax_container" style="display:none; position:absolute; z-index:1px;"></div>
+
 <script>
 
 

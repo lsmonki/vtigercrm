@@ -24,7 +24,7 @@ $associated_tax_count = count($tax_details);
 $tax_div = '
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 		   <tr>
-			<td nowrap align="left" >Set Tax for : '.$product_total.'</td>
+			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>Set Tax for : '.$product_total.'</b></td>
 			<td>&nbsp;</td>
 			<td align="right"><img src="'.$image_path.'close.gif" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
 		   </tr>
