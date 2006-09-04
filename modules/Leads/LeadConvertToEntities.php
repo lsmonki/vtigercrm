@@ -25,9 +25,15 @@ $accountname = $_REQUEST['account_name'];
 $potential_amount = $_REQUEST['potential_amount'];
 $potential_sales_stage = $_REQUEST['potential_sales_stage'];
 
-global $log;
+global $log,$current_user;
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
 $log->debug("id = $id \n assigned_user_id = $assigned_user_id \n createpotential = $createpotential \n close date = $close_date \n current user id = $current_user_id \n accountname = $accountname \n module = $module");
 
+$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+$rate = $rate_symbol['rate'];
+if($potential_amount != '')
+        $potential_amount = convertToDollar($potential_amount,$rate);
+	
 $check_unit = explode("-",$potential_name);
 if($check_unit[1] == "")
         $potential_name = $check_unit[0];
