@@ -64,7 +64,7 @@ $num_rows = $adb->num_rows($result);
 
 if($num_rows == 1)
 {
-		$org_name = $adb->query_result($result,0,"organizationame");
+		$org_name = $adb->query_result($result,0,"organizationname");
 		$org_address = $adb->query_result($result,0,"address");
 		$org_city = $adb->query_result($result,0,"city");
 		$org_state = $adb->query_result($result,0,"state");
