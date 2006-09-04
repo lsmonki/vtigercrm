@@ -159,7 +159,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$noofoptions = $adb->num_rows($multiselect_result);
 		$options = array();
 		$found = false;
-		$valur_arr = explode(' , ',$value);
+		$valur_arr = explode(' |##| ',$value);
 		for($j = 0; $j < $noofoptions; $j++)
 		{
 			$multiselect_combo = $adb->query_result($multiselect_result,$j,strtolower($fieldname));

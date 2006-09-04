@@ -123,6 +123,34 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		$label_fld ["options"] = $options;
 	}
+	elseif($uitype == 33) //uitype 33 added for multiselector picklist - Jeri
+	{
+	     $label_fld[] = $mod_strings[$fieldlabel];
+	     $label_fld[] = str_ireplace(' |##| ',' , ',$col_fields[$fieldname]);
+	     
+		$pick_query="select * from vtiger_".$fieldname;
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		$options = array();
+		$selected_entries = Array();
+		$selected_entries = explode(' |##| ',$col_fields[$fieldname]);
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue = $adb->query_result($pickListResult,$j,strtolower($fieldname));
+      $chk_val = '';
+      foreach($selected_entries as $selected_entries_value)
+      {
+        if(trim($selected_entries_value) == trim($pickListValue))
+        {
+          $chk_val = 'selected';
+          break;
+        }
+      }
+			$options[] = array($pickListValue=>$chk_val);	
+		}
+		$label_fld ["options"] = $options;
+	}
 	elseif($uitype == 17)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
