@@ -113,6 +113,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	var dtlView = "dtlview_"+ fieldLabel;
 	var editArea = "editarea_"+ fieldLabel;
 	var groupurl = "";
+	
 	if(globaluitype == 53)
 	{
 		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
@@ -134,10 +135,22 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 
-	}else
+	}if(globaluitype == 33)
+	{
+	  var txtBox= "txtbox_"+ fieldLabel;
+	  var oMulSelect = $(txtBox);
+	  var r = new Array();
+	  for (iter=0;iter < oMulSelect.options.length ; iter++)
+	  {
+      if (oMulSelect.options[iter].selected)
+        r[r.length] = oMulSelect.options[iter].value;
+      }
+	}
+  else
 	{
 		var txtBox= "txtbox_"+ fieldLabel;
 	}
+	
 	var popupTxt= "popuptxt_"+ fieldLabel;      
 	var hdTxt = "hdtxt_"+ fieldLabel;
 
@@ -162,8 +175,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			tagValue = "0";
 		}
-	}
-	if(uitype == '156')
+	}else	if(uitype == '156')
 	{
 		if(document.getElementById(txtBox).checked == true)
 		{
@@ -172,7 +184,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			tagValue = "off";
 		}
-	}
+	}else if(uitype == '33')
+	{
+			tagValue = r.join(" |##| ");
+  	}
 
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
@@ -183,17 +198,17 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         method: 'post',
                         postBody: data,
                         onComplete: function(response) {
-				if(response.responseText.indexOf(":#:FAILURE")>-1)
-				{
-					alert("Error while Editing");
-				}
-				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-     				{
-					$("vtbusy_info").style.display="none";
-     				}
-                       	}
+                  				if(response.responseText.indexOf(":#:FAILURE")>-1)
+                  				{
+                  					alert("Error while Editing");
+                  				}
+                  				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
+                       		{
+                  					$("vtbusy_info").style.display="none";
+                       		}
+                        }
                 }
-        );
+            );
 	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
@@ -296,7 +311,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = popObj.value;
 		}
-	}else
+	}else if(uitype == '33')
+  {
+       getObj(dtlView).innerHTML = r.join(" , ");
+  }else
 	{
 		getObj(dtlView).innerHTML = tagValue;
 	}
