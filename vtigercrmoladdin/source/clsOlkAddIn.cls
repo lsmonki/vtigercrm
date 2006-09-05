@@ -45,6 +45,8 @@ Private WithEvents oVtForums As Office.CommandBarButton
 Attribute oVtForums.VB_VarHelpID = -1
 Private WithEvents oPref As Office.CommandBarButton
 Attribute oPref.VB_VarHelpID = -1
+Private WithEvents oLogout As Office.CommandBarButton
+Attribute oLogout.VB_VarHelpID = -1
 Private WithEvents oAddEmailsButton As Office.CommandBarButton
 Attribute oAddEmailsButton.VB_VarHelpID = -1
 
@@ -91,6 +93,7 @@ Friend Sub UnInitHandler()
     Set oVtHelp = Nothing
     Set oVtForums = Nothing
     Set oPref = Nothing
+    Set oLogout = Nothing
     Set oAddEmailsButton = Nothing
     Set oSContactsMenu = Nothing
     Set oSyncContacts = Nothing
@@ -175,6 +178,11 @@ Friend Sub CBOutlookItems(ByVal objFolder As Outlook.MAPIFolder)
         "&Preferences", "Pref", "Preferences for vtigerCRM Add-In", 0, True, msoButtonCaption)
         oPref.Enabled = False
                     
+        Set oLogout = CreateAddInPopupButton(gstrProgID, cmbControl, _
+        "&Logout", "Logout", "Logout", 0, True, msoButtonCaption)
+        oLogout.Enabled = True
+        
+        
         If oHelpCmdBar Is Nothing Then
             Set oHelpCmdBar = cmbControl.Controls.Add(Type:=msoControlPopup, Parameter:=7)
             With oHelpCmdBar
@@ -247,6 +255,19 @@ End Sub
 '*******************************************************************
 Private Sub oLogin_Click(ByVal Ctrl As Office.CommandBarButton, CancelDefault As Boolean)
     frmLogin.Show vbModal
+End Sub
+
+Private Sub oLogout_Click(ByVal Ctrl As Office.CommandBarButton, CancelDefault As Boolean)
+    oLogin.Enabled = True
+    oPref.Enabled = False
+    oSCalendarMenu.Enabled = False
+    oSTaskMenu.Enabled = False
+    oSContactsMenu.Enabled = False
+    oSyncCalendar.Enabled = False
+    oSyncContacts.Enabled = False
+    oSyncTask.Enabled = False
+    oAddEmailsButton.Enabled = False
+    oAddEmailsMenu.Enabled = False
 End Sub
 
 Private Sub oPref_Click(ByVal Ctrl As Office.CommandBarButton, CancelDefault As Boolean)

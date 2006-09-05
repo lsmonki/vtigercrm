@@ -228,7 +228,7 @@ Set oXMLAppend_Doc = Nothing
 Set oXMLAppend_Root = Nothing
 End Function
 
-Public Function bUpdateOlTasks(ByVal sEntryId As String, ByVal sCrmId As String) As Boolean
+Public Function bUpdateOlTasks(ByVal sEntryid As String, ByVal sCrmId As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim oOlTask As Outlook.TaskItem
@@ -247,7 +247,7 @@ Dim oXMLAppend_Root As MSXML.IXMLDOMElement
 Dim oXMLAppend_Node As MSXML.IXMLDOMNode
 Dim sBirthDate As String
 
-If sEntryId <> "" And sCrmId <> "" Then
+If sEntryid <> "" And sCrmId <> "" Then
     bOlFlag = oXMLLocalOl_Doc.Load(gsVtUserFolder & LOCAL_OL_FILE)
     bVtFlag = oXMLLocalVt_Doc.Load(gsVtUserFolder & LOCAL_VTIGER_FILE)
     
@@ -256,13 +256,13 @@ If sEntryId <> "" And sCrmId <> "" Then
         Set oXMLLocalVt_Root = oXMLLocalVt_Doc.documentElement
         
         Set oOlNS = oOlApp.GetNamespace("MAPI")
-        Set oOlTask = oOlNS.GetItemFromID(sEntryId)
+        Set oOlTask = oOlNS.GetItemFromID(sEntryid)
                 
         sXQuery = "taskitems[@crmid='" & sCrmId & "']"
         Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
         If oXMLLocalVt_First Is Nothing Then GoTo ERROR_EXIT_ROUTINE
                 
-        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
         Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
         If oXMLLocalOl_First Is Nothing Then GoTo ERROR_EXIT_ROUTINE
         
@@ -287,7 +287,7 @@ If sEntryId <> "" And sCrmId <> "" Then
         oXMLAppend_Root.removeAttribute ("crmid")
         oXMLAppend_Root.removeAttribute ("syncflag")
         
-        Call AddAttribute(oXMLAppend_Root, "entryid", sEntryId)
+        Call AddAttribute(oXMLAppend_Root, "entryid", sEntryid)
         Call AddAttribute(oXMLAppend_Root, "syncflag", "NM")
         Set oXMLAppend_Node = oXMLLocalOl_Root.replaceChild(oXMLAppend_Root, oXMLLocalOl_First)
                 
@@ -315,7 +315,7 @@ Set oXMLAppend_Root = Nothing
 Set oXMLAppend_Node = Nothing
 End Function
 
-Public Function bDelOlTasks(ByVal sEntryId As String, ByVal sCrmId As String) As Boolean
+Public Function bDelOlTasks(ByVal sEntryid As String, ByVal sCrmId As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim oOlTask As Outlook.TaskItem
@@ -332,7 +332,7 @@ Dim oXMLLocalVt_Node As MSXML.IXMLDOMNode
 Dim oXMLDel_Node As MSXML.IXMLDOMNode
 
 
-If sEntryId <> "" And sCrmId <> "" Then
+If sEntryid <> "" And sCrmId <> "" Then
     bOlFlag = oXMLLocalOl_Doc.Load(gsVtUserFolder & LOCAL_OL_FILE)
     bVtFlag = oXMLLocalVt_Doc.Load(gsVtUserFolder & LOCAL_VTIGER_FILE)
     
@@ -341,12 +341,12 @@ If sEntryId <> "" And sCrmId <> "" Then
         Set oXMLLocalVt_Root = oXMLLocalVt_Doc.documentElement
         
         Set oOlNS = oOlApp.GetNamespace("MAPI")
-        Set oOlTask = oOlNS.GetItemFromID(sEntryId)
+        Set oOlTask = oOlNS.GetItemFromID(sEntryid)
         If Not oOlTask Is Nothing Then
             oOlTask.Delete
         End If
         
-        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
         Set oXMLLocalOl_Node = oXMLLocalOl_Root.selectSingleNode(sXQuery)
         If oXMLLocalOl_Node Is Nothing Then GoTo ERROR_EXIT_ROUTINE
         Set oXMLDel_Node = oXMLLocalOl_Root.removeChild(oXMLLocalOl_Node)
@@ -384,7 +384,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim sCrmId As String
 Dim bOlFlag As Boolean
 Dim bVtFlag As Boolean
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sXQuery As String
 
 Dim oXMLLocalVt_Doc As New MSXML.DOMDocument
@@ -409,7 +409,7 @@ If Not oXMLOlElement Is Nothing Then
         Set oXMLLocalOl_Root = oXMLLocalOl_Doc.documentElement
         
         sCrmId = sVtSoNewTasks(gsVtUserId, oXMLOlElement)
-        sEntryId = oXMLOlElement.getAttribute("entryid")
+        sEntryid = oXMLOlElement.getAttribute("entryid")
                 
         If Not oXMLAppend_Doc.loadXML(oXMLOlElement.xml) Then GoTo ERROR_EXIT_ROUTINE
                
@@ -422,7 +422,7 @@ If Not oXMLOlElement Is Nothing Then
         Call AddAttribute(oXMLAppend_Root, "syncflag", "NM")
         Set oXMLLocalVt_Node = oXMLLocalVt_Root.appendChild(oXMLAppend_Root)
         
-        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
         Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
         If oXMLLocalOl_First Is Nothing Then GoTo ERROR_EXIT_ROUTINE
         
@@ -449,7 +449,7 @@ Set oXMLAppend_Doc = Nothing
 Set oXMLAppend_Root = Nothing
 End Function
 
-Public Function bUpdateVtTasks(ByVal sEntryId As String, ByVal sCrmId As String) As Boolean
+Public Function bUpdateVtTasks(ByVal sEntryid As String, ByVal sCrmId As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim sXQuery As String
@@ -469,7 +469,7 @@ Dim oXMLAppend_Root As MSXML.IXMLDOMElement
 Dim oXMLAppend_Node As MSXML.IXMLDOMNode
 
 
-If sEntryId <> "" And sCrmId <> "" Then
+If sEntryid <> "" And sCrmId <> "" Then
     bOlFlag = oXMLLocalOl_Doc.Load(gsVtUserFolder & LOCAL_OL_FILE)
     bVtFlag = oXMLLocalVt_Doc.Load(gsVtUserFolder & LOCAL_VTIGER_FILE)
     
@@ -481,7 +481,7 @@ If sEntryId <> "" And sCrmId <> "" Then
         Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
         If oXMLLocalVt_First Is Nothing Then GoTo ERROR_EXIT_ROUTINE
                 
-        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
         Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
         If oXMLLocalOl_First Is Nothing Then GoTo ERROR_EXIT_ROUTINE
         
@@ -521,7 +521,7 @@ Set oXMLAppend_Root = Nothing
 Set oXMLAppend_Node = Nothing
 End Function
 
-Public Function bDelVtTasks(ByVal sEntryId As String, ByVal sCrmId As String) As Boolean
+Public Function bDelVtTasks(ByVal sEntryid As String, ByVal sCrmId As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim sXQuery As String
@@ -536,7 +536,7 @@ Dim oXMLLocalVt_Node As MSXML.IXMLDOMNode
 Dim oXMLDel_Node As MSXML.IXMLDOMNode
 
 
-If sEntryId <> "" And sCrmId <> "" Then
+If sEntryid <> "" And sCrmId <> "" Then
     bOlFlag = oXMLLocalOl_Doc.Load(gsVtUserFolder & LOCAL_OL_FILE)
     bVtFlag = oXMLLocalVt_Doc.Load(gsVtUserFolder & LOCAL_VTIGER_FILE)
     
@@ -546,7 +546,7 @@ If sEntryId <> "" And sCrmId <> "" Then
         
         'Call Soap Method to Delete
         If bVtSoDeleteTasks(gsVtUserId, sCrmId) = True Then
-            sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+            sXQuery = "taskitems[@entryid='" & sEntryid & "']"
             Set oXMLLocalOl_Node = oXMLLocalOl_Root.selectSingleNode(sXQuery)
             If oXMLLocalOl_Node Is Nothing Then GoTo ERROR_EXIT_ROUTINE
             Set oXMLDel_Node = oXMLLocalOl_Root.removeChild(oXMLLocalOl_Node)

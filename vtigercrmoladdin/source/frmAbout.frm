@@ -2,10 +2,10 @@ VERSION 5.00
 Begin VB.Form frmAbout 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "About vtigerCRM"
-   ClientHeight    =   3645
+   ClientHeight    =   3600
    ClientLeft      =   2175
    ClientTop       =   1935
-   ClientWidth     =   5175
+   ClientWidth     =   5190
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -19,8 +19,8 @@ Begin VB.Form frmAbout
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3645
-   ScaleWidth      =   5175
+   ScaleHeight     =   3600
+   ScaleWidth      =   5190
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.PictureBox Picture1 
@@ -135,10 +135,6 @@ Attribute VB_Exposed = False
 '* © 2003-2005 vtiger.com. All rights reserved.
 ' ********************************************************************************/
 Option Explicit
-Private Sub Label4_Click()
-
-End Sub
-
 Private Sub OKButton_Click()
     Unload frmAbout
 End Sub

@@ -21,6 +21,11 @@ If sSyncModule <> "" Then
             If gsLocalOlSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalVtSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             
+            If RemoveContacts(gsLocalOlSyncXML, gsMappingSyncXML) Then
+                
+            End If
+            
+            
             If oXMLLocalOl_Doc.loadXML(gsLocalOlSyncXML) = True Then
                 oXMLLocalOl_Doc.Save (gsVtUserFolder & LOCAL_OL_FILE)
             End If
@@ -92,7 +97,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -149,10 +154,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "contactitems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryId = sCreateOlContacts(oXMLLocalVt_First)
-                           If sEntryId <> "" Then
+                           sEntryid = sCreateOlContacts(oXMLLocalVt_First)
+                           If sEntryid <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryId
+                                AddAttribute oXMLMap_First, "entryid", sEntryid
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -281,7 +286,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -338,9 +343,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryId = oXMLMap_First.getAttribute("entryid")
-                If sEntryId <> "" Then
-                    sXQuery = "contactitems[@entryid='" & sEntryId & "']"
+                sEntryid = oXMLMap_First.getAttribute("entryid")
+                If sEntryid <> "" Then
+                    sXQuery = "contactitems[@entryid='" & sEntryid & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtContacts(oXMLLocalOl_First)
@@ -443,7 +448,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -499,10 +504,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "taskitems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryId = sCreateOlTasks(oXMLLocalVt_First)
-                           If sEntryId <> "" Then
+                           sEntryid = sCreateOlTasks(oXMLLocalVt_First)
+                           If sEntryid <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryId
+                                AddAttribute oXMLMap_First, "entryid", sEntryid
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -628,7 +633,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -685,9 +690,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryId = oXMLMap_First.getAttribute("entryid")
-                If sEntryId <> "" Then
-                    sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+                sEntryid = oXMLMap_First.getAttribute("entryid")
+                If sEntryid <> "" Then
+                    sXQuery = "taskitems[@entryid='" & sEntryid & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtTasks(oXMLLocalOl_First)
@@ -790,7 +795,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -846,10 +851,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "calendaritems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryId = sCreateOlClndr(oXMLLocalVt_First)
-                           If sEntryId <> "" Then
+                           sEntryid = sCreateOlClndr(oXMLLocalVt_First)
+                           If sEntryid <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryId
+                                AddAttribute oXMLMap_First, "entryid", sEntryid
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -977,7 +982,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -1034,9 +1039,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryId = oXMLMap_First.getAttribute("entryid")
-                If sEntryId <> "" Then
-                    sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
+                sEntryid = oXMLMap_First.getAttribute("entryid")
+                If sEntryid <> "" Then
+                    sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtClndr(oXMLLocalOl_First)
@@ -1132,3 +1137,70 @@ Set oXMLLocalVt_Doc = Nothing
 Set oXMLLocalVt_Root = Nothing
 Set oXMLLocalVt_First = Nothing
 End Function
+Public Function RemoveContacts(ByRef LocalOlSyncXML As String, ByRef LocalMapSyncXML As String) As Boolean
+On Error GoTo ERROR_EXIT_ROUTINE
+
+Dim oXMLLocalOl_Doc As New MSXML.DOMDocument
+Dim oXMLLocalMap_Doc As New MSXML.DOMDocument
+
+Dim oXMLParent_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentMap_Doc As MSXML.IXMLDOMElement
+
+Dim oXMLTemp_Node As MSXML.IXMLDOMNode
+Dim oXMLTempMap_Node As MSXML.IXMLDOMNode
+Dim oXMLDel_Node As MSXML.IXMLDOMNode
+Dim oXMLDelMap_Node As MSXML.IXMLDOMNode
+Dim oXMLTemp_Elmt As MSXML.IXMLDOMElement
+
+
+Dim i As Integer
+Dim sEntryid As String
+Dim sXQuery As String
+Dim sErrMsg As String
+
+sErrMsg = "Error while Loading Outlook and MappingXML"
+If oXMLLocalOl_Doc.loadXML(LocalOlSyncXML) = True And oXMLLocalMap_Doc.loadXML(LocalMapSyncXML) = True Then
+    
+    sErrMsg = "Error while Loading Outlook and Mapping DocumentElement"
+    Set oXMLParent_Doc = oXMLLocalOl_Doc.documentElement
+    Set oXMLParentMap_Doc = oXMLLocalMap_Doc.documentElement
+    
+    For i = 0 To oXMLParent_Doc.childNodes.Length - 1
+        If oXMLParent_Doc.childNodes.Item(i).selectSingleNode("lastname").Text = "" Then
+            Set oXMLTemp_Node = oXMLParent_Doc.childNodes.Item(i)
+            Set oXMLTemp_Elmt = oXMLParent_Doc.childNodes.Item(i)
+            sEntryid = oXMLTemp_Elmt.getAttribute("entryid")
+            sXQuery = "syncitem[@entryid='" & sEntryid & "']"
+            Set oXMLTempMap_Node = oXMLParentMap_Doc.selectSingleNode(sXQuery)
+            Set oXMLDelMap_Node = oXMLParentMap_Doc.removeChild(oXMLTempMap_Node)
+            Set oXMLDel_Node = oXMLParent_Doc.removeChild(oXMLTemp_Node)
+        End If
+    Next i
+End If
+
+LocalOlSyncXML = oXMLParent_Doc.xml
+LocalMapSyncXML = oXMLParentMap_Doc.xml
+
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+If sErrMsg <> "" Then
+    sMsgDlg (sErrMsg)
+End If
+
+EXIT_ROUTINE:
+
+Set oXMLLocalOl_Doc = Nothing
+Set oXMLLocalMap_Doc = Nothing
+
+Set oXMLParent_Doc = Nothing
+Set oXMLParentMap_Doc = Nothing
+
+Set oXMLTemp_Node = Nothing
+Set oXMLTempMap_Node = Nothing
+Set oXMLDel_Node = Nothing
+Set oXMLDelMap_Node = Nothing
+Set oXMLTemp_Elmt = Nothing
+
+End Function
+

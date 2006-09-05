@@ -77,7 +77,7 @@ Begin VB.Form frmAddMsg
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   " Contacts"
-      TabPicture(0)   =   "frmAddMsg.frx":093C
+      TabPicture(0)   =   "frmAddMsg.frx":1239
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "txtAddress"
       Tab(0).Control(0).Enabled=   0   'False
@@ -91,22 +91,17 @@ Begin VB.Form frmAddMsg
       Tab(0).Control(4).Enabled=   0   'False
       Tab(0).ControlCount=   5
       TabCaption(1)   =   " Edit Message"
-      TabPicture(1)   =   "frmAddMsg.frx":0A02
+      TabPicture(1)   =   "frmAddMsg.frx":12FF
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "txtMsg"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "Label3"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Attachments"
-      TabPicture(2)   =   "frmAddMsg.frx":0ACE
+      TabPicture(2)   =   "frmAddMsg.frx":13CB
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "FlxGrdDtls2"
-      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "lblNote"
-      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "Label4"
-      Tab(2).Control(2).Enabled=   0   'False
       Tab(2).ControlCount=   3
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdDtls2 
          Height          =   3855
@@ -311,7 +306,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
     If gsContactId <> "" Then
       
         Set oXMLInst = oXMLDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-        oXMLDoc.insertBefore oXMLInst, oXMLDoc.firstChild
+        oXMLDoc.insertBefore oXMLInst, oXMLDoc.FirstChild
         
         Set oXMLElmnt_Root = oXMLDoc.createElement("msgdetails")
         Set oXMLDoc.documentElement = oXMLElmnt_Root

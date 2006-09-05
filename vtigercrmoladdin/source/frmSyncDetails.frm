@@ -3,10 +3,10 @@ Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
 Begin VB.Form frmSyncDetails 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sync Changes"
-   ClientHeight    =   6420
+   ClientHeight    =   6960
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   6975
+   ClientWidth     =   6960
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -20,13 +20,13 @@ Begin VB.Form frmSyncDetails
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   6420
-   ScaleWidth      =   6975
+   ScaleHeight     =   6960
+   ScaleWidth      =   6960
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin VB.PictureBox Picture1 
       Appearance      =   0  'Flat
-      BackColor       =   &H80000005&
+      BackColor       =   &H00FFFFFF&
       BorderStyle     =   0  'None
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -52,7 +52,7 @@ Begin VB.Form frmSyncDetails
       Height          =   375
       Left            =   5640
       TabIndex        =   0
-      Top             =   5960
+      Top             =   6480
       Width           =   1215
    End
    Begin VB.Frame Frame1 
@@ -65,10 +65,10 @@ Begin VB.Form frmSyncDetails
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   5295
+      Height          =   5655
       Left            =   -120
       TabIndex        =   2
-      Top             =   540
+      Top             =   600
       Width           =   7215
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdOl 
          Height          =   2055
@@ -110,6 +110,15 @@ Begin VB.Form frmSyncDetails
          _NumberOfBands  =   1
          _Band(0).Cols   =   4
       End
+      Begin VB.Label Label1 
+         Caption         =   "Note:Records in red color will not be synchronised as some of the mandatory fields are missing"
+         ForeColor       =   &H000000FF&
+         Height          =   495
+         Left            =   240
+         TabIndex        =   7
+         Top             =   5040
+         Width           =   6735
+      End
       Begin VB.Label lblVtiger 
          Caption         =   "The following changes will be applied to your vtigerCRM Contacts"
          Height          =   255
@@ -146,6 +155,7 @@ Option Explicit
 Private Type OlContactDtls
     sStatus As String
     sFullName As String
+    sLastName As String
     sCompanyName As String
     sEmailId As String
 End Type
@@ -194,6 +204,7 @@ Dim aVtClndr() As VtClndrDtls
 Private Sub Command1_Click()
     Unload Me
 End Sub
+
 Private Sub Form_Load()
 Dim i As Integer
 Dim sFlag As Boolean
@@ -206,14 +217,39 @@ If bPopOlListView = True Then
         FlxGrdVt.GridLines = flexGridFlat
         For i = 0 To UBound(aOlContacts) - 1
             FlxGrdVt.Row = i + 1
-            FlxGrdVt.Col = 0
-            FlxGrdVt.Text = aOlContacts(i).sStatus
-            FlxGrdVt.Col = 1
-            FlxGrdVt.Text = aOlContacts(i).sFullName
-            FlxGrdVt.Col = 2
-            FlxGrdVt.Text = aOlContacts(i).sCompanyName
-            FlxGrdVt.Col = 3
-            FlxGrdVt.Text = aOlContacts(i).sEmailId
+            If aOlContacts(i).sLastName = "" Then
+                FlxGrdVt.Col = 0
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = "Ignore"
+                FlxGrdVt.Col = 1
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sFullName
+                FlxGrdVt.Col = 2
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sCompanyName
+                FlxGrdVt.Col = 3
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sEmailId
+            Else
+                FlxGrdVt.Col = 0
+                FlxGrdVt.CellBackColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sStatus
+                FlxGrdVt.Col = 1
+                FlxGrdVt.CellBackColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sFullName
+                FlxGrdVt.Col = 2
+                FlxGrdVt.CellBackColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sCompanyName
+                FlxGrdVt.Col = 3
+                FlxGrdVt.CellBackColor = &HFFFFFF
+                FlxGrdVt.Text = aOlContacts(i).sEmailId
+                FlxGrdVt.BackColor = &HFFFFFF
+            End If
+            
         Next i
     ElseIf gsSyncModule = "TASKSYNC" Then
         FlxGrdVt.Rows = UBound(aOlTasks) + 1
@@ -418,7 +454,7 @@ Dim bMapFlag As Boolean
 Dim i As Integer
 Dim sOlSyncFlag As String
 Dim sXQuery As String
-Dim sEntryId As String
+Dim sEntryid As String
 Dim oXMLLocalOl_Doc As New MSXML.DOMDocument
 Dim oXMLLocalOl_Root As MSXML.IXMLDOMElement
 Dim oXMLLocalOl_FirstElmnt As MSXML.IXMLDOMElement
@@ -452,14 +488,14 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
            
                 Set oXMLMap_FirstElmnt = oXMLMap_Root.childNodes.Item(i)
                 
-                sEntryId = oXMLMap_FirstElmnt.getAttribute("entryid") & vbNullString
+                sEntryid = oXMLMap_FirstElmnt.getAttribute("entryid") & vbNullString
                 sOlSyncFlag = oXMLMap_FirstElmnt.getAttribute("olsyncflag") & vbNullString
                 
-                If Trim(sOlSyncFlag) = "N" And Trim(sEntryId) <> "" Then
+                If Trim(sOlSyncFlag) = "N" And Trim(sEntryid) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -473,6 +509,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                             sEmailId = oXMLLocalOl_FirstElmnt.selectSingleNode("emailaddress").nodeTypedValue
                             
                             aOlContacts(Index).sStatus = "Addition"
+                            aOlContacts(Index).sLastName = DecodeUTF8(sLastName)
                             aOlContacts(Index).sFullName = DecodeUTF8(sFirstName) & " " & DecodeUTF8(sMiddleName) & " " & DecodeUTF8(sLastName)
                             aOlContacts(Index).sEmailId = DecodeUTF8(sEmailId)
                             aOlContacts(Index).sCompanyName = DecodeUTF8(sCompanyName)
@@ -482,7 +519,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "TASKSYNC" Then
                     
-                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -503,7 +540,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -527,11 +564,11 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                     
                 End If
                 
-                If Trim(sOlSyncFlag) = "M" And Trim(sEntryId) <> "" Then
+                If Trim(sOlSyncFlag) = "M" And Trim(sEntryid) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -545,6 +582,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                             sEmailId = oXMLLocalOl_FirstElmnt.selectSingleNode("emailaddress").nodeTypedValue
                             
                             aOlContacts(Index).sStatus = "Update"
+                            aOlContacts(Index).sLastName = DecodeUTF8(sLastName)
                             aOlContacts(Index).sFullName = DecodeUTF8(sFirstName) & " " & DecodeUTF8(sMiddleName) & " " & DecodeUTF8(sLastName)
                             aOlContacts(Index).sEmailId = DecodeUTF8(sEmailId)
                             aOlContacts(Index).sCompanyName = DecodeUTF8(sCompanyName)
@@ -555,7 +593,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         
                     ElseIf gsSyncModule = "TASKSYNC" Then
                         
-                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -576,7 +614,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -599,11 +637,11 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                     End If
                 End If
                 
-                If Trim(sOlSyncFlag) = "D" And Trim(sEntryId) <> "" Then
+                If Trim(sOlSyncFlag) = "D" And Trim(sEntryid) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -626,7 +664,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "TASKSYNC" Then
                     
-                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -647,7 +685,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -966,3 +1004,4 @@ Set oXMLLocalVt_Doc = Nothing
 Set oXMLLocalVt_Root = Nothing
 Set oXMLLocalVt_FirstElmnt = Nothing
 End Function
+
