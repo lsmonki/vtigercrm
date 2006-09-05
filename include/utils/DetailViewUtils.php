@@ -639,6 +639,26 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a>';
                         }
+			elseif($parent_module == "Campaigns")
+			{
+				$label_fld[] = $app_strings['LBL_CAMPAIGN_NAME'];
+				$sql = "select * from  vtiger_campaign where campaignid=".$value;
+				$result = $adb->query($sql);
+				$campaignname = $adb->query_result($result,0,"campaignname");
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$campaignname.'</a>';
+			}
+			elseif($parent_module == "HelpDesk")
+			{
+				$label_fld[] = $app_strings['LBL_HELPDESK_NAME'];
+				$sql = "select * from  vtiger_troubletickets where ticketid=".$value;
+				$result = $adb->query($sql);
+				$tickettitle = $adb->query_result($result,0,"title");
+				if(strlen($tickettitle) > 25)
+				{
+					$tickettitle = substr($tickettitle,0,25).'...';
+				}
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$tickettitle.'</a>';
+			}
 
 		}
 		else
