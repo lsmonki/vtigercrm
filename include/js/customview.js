@@ -321,3 +321,72 @@ function gotourl(url)
                 document.location.href=url;
 }
 
+function validateTypeforCFMapping(leadtype,leadtypeofdata,field_name,cf_form)
+{
+	var combo_val = cf_form.options[cf_form.selectedIndex].value;
+	if(combo_val != 'None')
+	{
+		var type = document.getElementById(combo_val+"_type").value;
+		var typeofdata = document.getElementById(combo_val+"_typeofdata").value;
+		if(leadtype == type)
+		{
+			if(leadtypeofdata == typeofdata)
+			{
+				return true;
+			}
+			else
+			{
+				var lead_tod = leadtypeofdata.split("~");
+				var tod = typeofdata.split("~");
+				switch (lead_tod[0]) {
+                	                case "V"  :
+						if(lead_tod[3] <= tod[3])
+							return true;
+						else
+						{
+							alert(alertmessage[3]);
+							document.getElementById(field_name).value = 'None';
+							return false;
+						}
+						break;
+					case "N"  :
+						if(lead_tod[2].indexOf(",")>0)
+						{
+							var lead_dec = lead_tod[2].split(",");
+							var dec = tod[2].split(",");
+						
+						}
+						else
+						{
+							var lead_dec = lead_tod[2].split("~");
+                	                                var dec = tod[2].split("~");
+						}
+						if(lead_dec[0] <= dec[0])
+						{
+							if(lead_dec[1] <= dec[1])
+								return true;
+							else
+							{
+								alert(alertmessage[4]);
+								document.getElementById(field_name).value = 'None';
+								return false;
+							}
+						}
+						else
+						{
+							alert(alertmessage[3]);
+							document.getElementById(field_name).value = 'None';
+							return false;
+						}
+						break;
+				}	
+			}
+		}
+		else
+		{
+			alert(alertmessage[0]+" "+leadtype+" "+alertmessage[1]+" "+type+" "+alertmessage[2]);
+			document.getElementById(field_name).value = 'None';
+			return false;
+		}
+	}
+}
