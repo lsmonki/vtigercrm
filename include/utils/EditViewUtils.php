@@ -758,6 +758,23 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$parent_name = $adb->query_result($result,0,"campaignname");
 					$campaign_selected = "selected";
 				}
+				if($parent_module == "HelpDesk")
+				{
+					$sql = "select title from vtiger_troubletickets where ticketid=".$value;
+					$result = $adb->query($sql);
+					$parent_name = $adb->query_result($result,0,"title");
+					$ticket_selected = "selected";
+				}
+			}
+			elseif($act_mode == "Events")
+			{
+				if($parent_module == "HelpDesk")
+				{
+					$sql = "select title from vtiger_troubletickets where ticketid=".$value;
+					$result = $adb->query($sql);
+					$parent_name = $adb->query_result($result,0,"title");
+					$ticket_selected = "selected";
+				}
 			}
 
 		}
@@ -770,7 +787,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $app_strings['COMBO_PORDER'],
                                 $app_strings['COMBO_SORDER'],
                                 $app_strings['COMBO_INVOICES'],
-				$app_strings['COMBO_CAMPAIGNS']
+				$app_strings['COMBO_CAMPAIGNS'],
+				$app_strings['COMBO_HELPDESK']
                                         );
 			$editview_label[] = array($lead_selected,
                                 $account_selected,
@@ -779,10 +797,25 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $purchase_selected,
                                 $sales_selected,
                                 $invoice_selected,
-				$campaign_selected
+				$campaign_selected,
+				$ticket_selected
                                         );
-                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup","Campaigns&action=Popup");
+                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup","Campaigns&action=Popup","HelpDesk&action=Popup");
                 }
+		elseif($act_mode == "Events")
+		{
+			$editview_label[] = array($app_strings['COMBO_LEADS'],
+				$app_strings['COMBO_ACCOUNTS'],
+				$app_strings['COMBO_POTENTIALS'],
+				$app_strings['COMBO_HELPDESK']
+			);
+			$editview_label[] = array($lead_selected,
+				$account_selected,
+				$potential_selected,
+				$ticket_selected
+			);
+			$editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","HelpDesk&action=Popup");
+		}
                 else
                 {
                         $editview_label[] = array($app_strings['COMBO_LEADS'],
