@@ -31,7 +31,7 @@ function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
 	$accountcf=Array();
-	$sql="select fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	
@@ -39,7 +39,8 @@ function getAccountCustomValues($leadid,$accountid)
 	{
         	$account_field['fieldid']=$adb->query_result($result,$i,"fieldid");
 	        $account_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
-
+		$account_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
+		$account_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 		if($account_field['fieldid']==$accountid)
 			$account_field['selected'] = "selected";
 		else
@@ -60,13 +61,15 @@ function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
 	$contactcf=Array();
-	$sql="select fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$contact_field['fieldid']=$adb->query_result($result,$i,"fieldid");
 		$contact_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+		$contact_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
+		$contact_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 	
                 if($contact_field['fieldid']==$contactid)
                         $contact_field['selected']="selected";
@@ -88,13 +91,15 @@ function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
 	$potentialcf=Array();
-	$sql="select fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$potential_field['fieldid']=$adb->query_result($result,$i,"fieldid");
 		$potential_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+		$potential_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
+		$potential_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 
 		if($potential_field['fieldid']==$potentialid)
 			 $potential_field['selected']="selected";
@@ -115,7 +120,7 @@ function customFieldMappings()
 {
 	global $adb;
 
-	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid";
+	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel,typeofdata from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid";
 	$convert_result = $adb->query($convert_sql);
 
 	$no_rows = $adb->num_rows($convert_result);
@@ -127,13 +132,13 @@ function customFieldMappings()
 		$potentialid=$adb->query_result($convert_result,$j,"potentialfid");
 		$lead_field['sno'] = $j+1;
 		$lead_field['leadid'] = $adb->query_result($convert_result,$j,"fieldlabel"); 
+		$lead_field['typeofdata']=$adb->query_result($convert_result,$j,"typeofdata");
 		$lead_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($convert_result,$j,"uitype"));; 
 		$lead_field['account'] = getAccountCustomValues($leadid,$accountid);
 		$lead_field['contact'] = getContactCustomValues($leadid,$contactid);
 		$lead_field['potential'] = getPotentialCustomValues($leadid,$potentialid);
 		$leadcf[]= $lead_field;
 	}
-
 	return $leadcf;
 }
 
