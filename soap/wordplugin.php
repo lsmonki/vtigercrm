@@ -16,6 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 $log = &LoggerManager::getLogger('wordplugin');
 
+error_reporting(0);
 $NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
 $accessDenied = "You are not permitted to perform this action";
@@ -321,24 +322,31 @@ function get_user_columns($user_name, $password)
 
 function create_session($user_name, $password)
 { 
-  	global $adb;
+  	global $adb,$log;
 	require_once('modules/Users/User.php');
 	$objuser = new User();
 	if($password != "" && $user_name != '')
 	{
 		$objuser->column_fields['user_name'] = $user_name;
-		$objuser->load_user($password);
-		if($objuser->is_authenticated())
+		$encrypted_password = $objuser->encrypt_password($password);
+		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
+		$result = $adb->query($query);
+		if($adb->num_rows($result) > 0)
 		{
-		  return "TempSessionID";
+			$return_access = "TempSessionID";
+			$log->debug("Logged in sucessfully from wordplugin");
 		}else
 		{
-			return "false";
+			$return_access = "false";
+			$log->debug("Logged in failure from wordplugin");
 		}
 	}else
 	{
-			return "false";
-	}
+		$return_access = "false";
+		$log->debug("Logged in failure from wordplugin");
+     }
+   return $return_access;
+		
 }
 
 function end_session($user_name)
@@ -349,6 +357,6 @@ function end_session($user_name)
 
 
 
-$server->service($HTTP_RAW_POST_DATA); 
+$server->service(utf8_encode($HTTP_RAW_POST_DATA)); 
 exit(); 
 ?>
