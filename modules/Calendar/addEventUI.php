@@ -537,24 +537,25 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<div id="addEventRelatedtoUI" style="display:none;width:100%">
 					<table width="100%" cellpadding="5" cellspacing="0" border="0" bgcolor="#FFFFFF">
 						<tr>
-							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
+							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
 								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';">
 									<option value="Leads"><?php echo $app_strings['Leads']?></option>
 									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
 									<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
+									<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option>
 								</select>
 							</td>
 							<td>
 								<div id="eventrelatedto" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
-								<input type="button" name="selectparent" class="crmButton small edit" value="Change..." onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+							<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 								</div>
 							</td>
 						</tr>
 						<tr>
-						<td><b><?php echo $app_strings['Contacts'] ?>:</b></td>
+						<td><b><?php echo $app_strings['Contacts'] ?></b></td>
 							<td colspan="2">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
 								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
@@ -726,7 +727,7 @@ setObjects();
 		<div id="addTaskRelatedtoUI" style="display:none;width:100%">
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
 			<tr>
-				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?> :</b></td>
+				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 				<td>
 					<input name="task_parent_id" type="hidden" value="">
 						<select name="task_parent_type" class="small" id="task_parent_type" onChange="document.createTodo.task_parent_name.value='';document.createTodo.task_parent_id.value=''">
@@ -737,7 +738,8 @@ setObjects();
 						<option value="PurchaseOrder"><?php echo $app_strings['PurchaseOrder']?></option>
 						<option value="SalesOrder"><?php echo $app_strings['SalesOrder']?></option>
 						<option value="Invoice"><?php echo $app_strings['Invoice']?></option>
-						<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option></select>
+						<option value="Campaigns"><?php echo $app_strings['Campaigns']?></option>
+						<option value="HelpDesk"><?php echo $app_strings['HelpDesk']?></option></select>
 						</select>
 				</td>
 				<td>
@@ -748,7 +750,7 @@ setObjects();
 				</td>
 			</tr>
 			<tr>
-			<td><b><?php echo $mod_strings['LBL_CONTACT'] ?> :</b></td>
+			<td><b><?php echo $mod_strings['LBL_CONTACT_NAME'] ?></b></td>
 			<td colspan="2">
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
 				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
