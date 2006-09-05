@@ -69,20 +69,10 @@ if($focus->is_authenticated())
         $loghistory=new LoginHistory();
         $Signin = $loghistory->user_login($focus->column_fields["user_name"],$usip,$intime);
 
-	// save the user information into the session
-	// go to the home screen
 	//Security related entries start
 	require_once('include/utils/UserInfoUtil.php');
-	$profileid = fetchUserProfileId($focus->id);	
 
 	createUserPrivilegesfile($focus->id);
-		
-	$_SESSION['authenticated_user_profileid'] = $profileid;
-	setGlobalProfilePermission2Session($profileid);
-        setPermittedTabs2Session($profileid);
-	setPermittedActions2Session($profileid);
-	setPermittedDefaultSharingAction2Session($profileid);
-	
 	
 	//Security related entries end
 	header("Location: index.php?action=index&module=Home");
