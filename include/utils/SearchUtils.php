@@ -205,7 +205,7 @@ function Search($module)
         }
         if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
         {
-                $search_string=ltrim(rtrim($_REQUEST['search_text']));
+                $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
         {
