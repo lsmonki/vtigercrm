@@ -100,10 +100,8 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') || ($_REQUEST['return_module']== 'Products')  ))
+if($_REQUEST['mode'] != 'edit' && $_REQUEST['return_module'] == 'Products')
 {
-	if($_REQUEST['ticket_id'] != '')
-		$crmid = $_REQUEST['ticket_id'];
 	if($_REQUEST['product_id'] != '')
 		$crmid = $_REQUEST['product_id'];
 	if($crmid != $_REQUEST['parent_id'])
