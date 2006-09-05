@@ -909,10 +909,15 @@ function getMonthViewLayout(& $cal)
 				$endtemp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$endtemp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$endtemp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $endtemp_ts)):(''))));
 			}
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
+			$monthclass = dateCheck($cal['slice']->start_time->get_formatted_date());
+			if($monthclass != '')
+				$monthclass = 'calSel';
+			else
+				$monthclass = 'dvtCellLabel';
 			//to display dates in month
 			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
 			{
-				$monthview_layout .= '<td class="dvtCellLabel" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
+				$monthview_layout .= '<td class="'.$monthclass.'" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
 				$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().''.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 				$monthview_layout .= $cal['slice']->start_time->get_Date();
 				$monthview_layout .= '</a>';
@@ -1125,7 +1130,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				</tr>';
 			$eventlayer .= '<tr><td>';
 			$eventlayer .= '</td>
-				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
+				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
 			</table>
@@ -1196,7 +1201,7 @@ function getweekEventLayer(& $cal,$slice)
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
+					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
 			</table>
@@ -1260,7 +1265,7 @@ function getmonthEventLayer(& $cal,$slice)
 					<table border="0" cellpadding="1" cellspacing="0" width="100%">
 						<tr>
 							<td><img src="'.$image.'" align="middle" border="0"></td>
-							<td width="100%"><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&parenttab='.$category.'"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></td>
+							<td width="100%"><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></td>
 						</tr>
 					</table>
                                 </div><br>';
@@ -1372,7 +1377,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$contactname = getContactName($contact_id);
 			$contact_data = "<b>".$contactname."</b>,";
 		}
-		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
+		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&viewtype=calendar&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
@@ -1472,7 +1477,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $id = $adb->query_result($result,$i,"activityid");
                 $subject = $adb->query_result($result,$i,"subject");
 		$status = $adb->query_result($result,$i,"status");
-		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Task&parenttab=".$category."' class='webMnu'>".$subject."</a>";
+		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Task&viewtype=calendar&parenttab=".$category."' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		$element['status'] = $adb->query_result($result,$i,"status");
 		if(isPermitted("Calendar","EditView") == "yes")
@@ -1656,13 +1661,14 @@ function constructTodoListView($todo_list,$cal,$subtab)
 	//labels of listview header
 	if($cal['view'] == 'day')
 	{
+		$colspan = 7;
 		$header = Array('0'=>'#','1'=>$mod_strings['LBL_TIME'],'2'=>$mod_strings['LBL_LIST_DUE_DATE'],
 				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_STATUS'],'5'=>$mod_strings['LBL_ACTION'],'6'=>$mod_strings['LBL_ASSINGEDTO'],);
 		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%','4'=>'10%','5'=>'10%', '6'=>'15%', );
 	}
 	else
 	{
-		
+		$colspan = 8;
 	        $header = Array('0'=>'#',
                         '1'=>$mod_strings['LBL_TIME'],
 			'2'=>$mod_strings['LBL_APP_START_DATE'],
@@ -1724,7 +1730,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
         }
         else
         {
-		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='6'>";
+		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='".$colspan."'>";
 		$list_view .="<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 5000;'>
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr>
