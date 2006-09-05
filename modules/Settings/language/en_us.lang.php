@@ -714,6 +714,11 @@ $mod_strings = Array(
 'LBL_ENABLE_SINGLEPANE_VIEW'=>'Enable Singlepane View',
 
 'LBL_CLEAR_DATA'=>'Clear Data',
+'LBL_LENGTHALERT'=>'Sorry, you can cannot map fields with different character size. Kindly map the data with same or more character size.',
+'LBL_DECIMALALERT'=>'Sorry, you can cannot map fields with different decimal places. Kindly map the data with same or more decimal places.',
+'LBL_TYPEALERT_1'=>'Sorry, you cannot map the',
+'LBL_WITH'=>'with',
+'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 );
 
 
