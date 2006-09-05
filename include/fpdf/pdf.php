@@ -305,14 +305,16 @@ function addCols( $tab ,$positions ,$bottom, $taxtype = 'group')
 			break;
 	  		case 'Qty':
 	  		case 'Price':
-	  		case 'Tax':
 				if($taxtype == "individual")
 					$this->Line( $colX, $y1, $colX, (($y1+$y2)-37));
 				else
 					$this->Line( $colX, $y1, $colX, (($y1+$y2)-43));
 			break;
 	  		default:
-				$this->Line( $colX, $y1, $colX, ($y1+$y2));
+				if($taxtype == "individual" && $lib == 'Discount')
+					$this->Line( $colX, $y1, $colX, (($y1+$y2)-37));
+				else
+					$this->Line( $colX, $y1, $colX, ($y1+$y2));
 	  		break;
 		}
 	}
