@@ -21,10 +21,9 @@ If sSyncModule <> "" Then
             If gsLocalOlSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalVtSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             
-            If RemoveContacts(gsLocalOlSyncXML, gsMappingSyncXML) Then
-                
+            If Not RemoveContacts(gsLocalOlSyncXML, gsMappingSyncXML) Then
+                GoTo ERROR_EXIT_ROUTINE
             End If
-            
             
             If oXMLLocalOl_Doc.loadXML(gsLocalOlSyncXML) = True Then
                 oXMLLocalOl_Doc.Save (gsVtUserFolder & LOCAL_OL_FILE)
@@ -62,9 +61,13 @@ If sSyncModule <> "" Then
             
             If Not bNewOlTasksInVt() Then GoTo ERROR_EXIT_ROUTINE
         Case "CALENDARSYNC":
-                        If gsMappingSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
+            If gsMappingSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalOlSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
             If gsLocalVtSyncXML = "" Then GoTo ERROR_EXIT_ROUTINE
+            
+            If Not RemoveCalendar(gsLocalOlSyncXML, gsMappingSyncXML) Then
+                GoTo ERROR_EXIT_ROUTINE
+            End If
                         
             If oXMLLocalOl_Doc.loadXML(gsLocalOlSyncXML) = True Then
                 oXMLLocalOl_Doc.Save (gsVtUserFolder & LOCAL_OL_FILE)
@@ -97,7 +100,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -154,10 +157,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "contactitems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryid = sCreateOlContacts(oXMLLocalVt_First)
-                           If sEntryid <> "" Then
+                           sEntryId = sCreateOlContacts(oXMLLocalVt_First)
+                           If sEntryId <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryid
+                                AddAttribute oXMLMap_First, "entryid", sEntryId
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -286,7 +289,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -343,9 +346,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryid = oXMLMap_First.getAttribute("entryid")
-                If sEntryid <> "" Then
-                    sXQuery = "contactitems[@entryid='" & sEntryid & "']"
+                sEntryId = oXMLMap_First.getAttribute("entryid")
+                If sEntryId <> "" Then
+                    sXQuery = "contactitems[@entryid='" & sEntryId & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtContacts(oXMLLocalOl_First)
@@ -448,7 +451,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -504,10 +507,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "taskitems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryid = sCreateOlTasks(oXMLLocalVt_First)
-                           If sEntryid <> "" Then
+                           sEntryId = sCreateOlTasks(oXMLLocalVt_First)
+                           If sEntryId <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryid
+                                AddAttribute oXMLMap_First, "entryid", sEntryId
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -633,7 +636,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -690,9 +693,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryid = oXMLMap_First.getAttribute("entryid")
-                If sEntryid <> "" Then
-                    sXQuery = "taskitems[@entryid='" & sEntryid & "']"
+                sEntryId = oXMLMap_First.getAttribute("entryid")
+                If sEntryId <> "" Then
+                    sXQuery = "taskitems[@entryid='" & sEntryId & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtTasks(oXMLLocalOl_First)
@@ -795,7 +798,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -851,10 +854,10 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
                     sXQuery = "calendaritems[@crmid='" & sCrmId & "']"
                     Set oXMLLocalVt_First = oXMLLocalVt_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalVt_First Is Nothing Then
-                           sEntryid = sCreateOlClndr(oXMLLocalVt_First)
-                           If sEntryid <> "" Then
+                           sEntryId = sCreateOlClndr(oXMLLocalVt_First)
+                           If sEntryId <> "" Then
                                 AddAttribute oXMLMap_First, "vtsyncflag", "S"
-                                AddAttribute oXMLMap_First, "entryid", sEntryid
+                                AddAttribute oXMLMap_First, "entryid", sEntryId
                                 AddAttribute oXMLMap_First, "olsyncflag", "S"
                            End If
                     End If
@@ -982,7 +985,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim i As Integer
 
 Dim sCrmId As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sMCrmId As String
 Dim sMEntryId As String
 Dim sXQuery As String
@@ -1039,9 +1042,9 @@ If bMapFlag = True And bLocalVtFlag = True And bLocalOlFlag = True Then
         For i = 0 To oXMLMap_NodeList.Length - 1
             Set oXMLMap_First = oXMLMap_NodeList.Item(i)
             If Not oXMLMap_First Is Nothing Then
-                sEntryid = oXMLMap_First.getAttribute("entryid")
-                If sEntryid <> "" Then
-                    sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
+                sEntryId = oXMLMap_First.getAttribute("entryid")
+                If sEntryId <> "" Then
+                    sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
                     Set oXMLLocalOl_First = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                     If Not oXMLLocalOl_First Is Nothing Then
                            sCrmId = sCreateVtClndr(oXMLLocalOl_First)
@@ -1137,14 +1140,19 @@ Set oXMLLocalVt_Doc = Nothing
 Set oXMLLocalVt_Root = Nothing
 Set oXMLLocalVt_First = Nothing
 End Function
+
 Public Function RemoveContacts(ByRef LocalOlSyncXML As String, ByRef LocalMapSyncXML As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
 
 Dim oXMLLocalOl_Doc As New MSXML.DOMDocument
+Dim oXMLLocalOlEdit_Doc As New MSXML.DOMDocument
 Dim oXMLLocalMap_Doc As New MSXML.DOMDocument
+Dim oXMLLocalMapEdit_Doc As New MSXML.DOMDocument
 
 Dim oXMLParent_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentEdit_Doc As MSXML.IXMLDOMElement
 Dim oXMLParentMap_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentMapEdit_Doc As MSXML.IXMLDOMElement
 
 Dim oXMLTemp_Node As MSXML.IXMLDOMNode
 Dim oXMLTempMap_Node As MSXML.IXMLDOMNode
@@ -1154,41 +1162,66 @@ Dim oXMLTemp_Elmt As MSXML.IXMLDOMElement
 
 
 Dim i As Integer
-Dim sEntryid As String
+Dim sEntryId As String
 Dim sXQuery As String
+Dim sOlQuery As String
 Dim sErrMsg As String
 
+Dim LocalOlXML As String
+Dim LocalMapXml As String
+
+LocalOlXML = LocalOlSyncXML
+LocalMapXml = LocalMapSyncXML
+
 sErrMsg = "Error while Loading Outlook and MappingXML"
-If oXMLLocalOl_Doc.loadXML(LocalOlSyncXML) = True And oXMLLocalMap_Doc.loadXML(LocalMapSyncXML) = True Then
+
+'Local_Doc for iteration and LocalEdit_Doc for removing Child
+
+If oXMLLocalOl_Doc.loadXML(LocalOlXML) = True And oXMLLocalOlEdit_Doc.loadXML(LocalOlXML) = True And oXMLLocalMap_Doc.loadXML(LocalMapXml) = True And oXMLLocalMapEdit_Doc.loadXML(LocalMapXml) = True Then
     
     sErrMsg = "Error while Loading Outlook and Mapping DocumentElement"
+    
+    'Parent_Doc for iteration and ParentEdit_Doc for removing Child
+    
     Set oXMLParent_Doc = oXMLLocalOl_Doc.documentElement
+    Set oXMLParentEdit_Doc = oXMLLocalOlEdit_Doc.documentElement
     Set oXMLParentMap_Doc = oXMLLocalMap_Doc.documentElement
+    Set oXMLParentMapEdit_Doc = oXMLLocalMapEdit_Doc.documentElement
     
     For i = 0 To oXMLParent_Doc.childNodes.Length - 1
-        If oXMLParent_Doc.childNodes.Item(i).selectSingleNode("lastname").Text = "" Then
-            Set oXMLTemp_Node = oXMLParent_Doc.childNodes.Item(i)
-            Set oXMLTemp_Elmt = oXMLParent_Doc.childNodes.Item(i)
-            sEntryid = oXMLTemp_Elmt.getAttribute("entryid")
-            sXQuery = "syncitem[@entryid='" & sEntryid & "']"
-            Set oXMLTempMap_Node = oXMLParentMap_Doc.selectSingleNode(sXQuery)
-            Set oXMLDelMap_Node = oXMLParentMap_Doc.removeChild(oXMLTempMap_Node)
-            Set oXMLDel_Node = oXMLParent_Doc.removeChild(oXMLTemp_Node)
+        If oXMLParent_Doc.childNodes.Item(i).baseName = "contactitems" Then
+            If oXMLParent_Doc.childNodes.Item(i).selectSingleNode("lastname").Text = "" Then
+                Set oXMLTemp_Node = oXMLParent_Doc.childNodes.Item(i)
+                Set oXMLTemp_Elmt = oXMLParent_Doc.childNodes.Item(i)
+                sEntryId = oXMLTemp_Elmt.getAttribute("entryid")
+                sXQuery = "syncitem[@entryid='" & sEntryId & "']"
+                sOlQuery = "contactitems[@entryid='" & sEntryId & "']"
+                Set oXMLTempMap_Node = oXMLParentMapEdit_Doc.selectSingleNode(sXQuery)
+                Set oXMLDelMap_Node = oXMLParentMapEdit_Doc.removeChild(oXMLTempMap_Node)
+                Set oXMLTemp_Node = oXMLParentEdit_Doc.selectSingleNode(sOlQuery)
+                Set oXMLDel_Node = oXMLParentEdit_Doc.removeChild(oXMLTemp_Node)
+            End If
         End If
     Next i
 End If
 
-LocalOlSyncXML = oXMLParent_Doc.xml
-LocalMapSyncXML = oXMLParentMap_Doc.xml
-
+LocalOlSyncXML = oXMLParentEdit_Doc.xml
+LocalMapSyncXML = oXMLParentMapEdit_Doc.xml
+RemoveContacts = True
 GoTo EXIT_ROUTINE
 
 ERROR_EXIT_ROUTINE:
+RemoveContacts = False
 If sErrMsg <> "" Then
     sMsgDlg (sErrMsg)
 End If
 
 EXIT_ROUTINE:
+
+Set oXMLLocalOlEdit_Doc = Nothing
+Set oXMLLocalMapEdit_Doc = Nothing
+Set oXMLParentEdit_Doc = Nothing
+Set oXMLParentMapEdit_Doc = Nothing
 
 Set oXMLLocalOl_Doc = Nothing
 Set oXMLLocalMap_Doc = Nothing
@@ -1203,4 +1236,101 @@ Set oXMLDelMap_Node = Nothing
 Set oXMLTemp_Elmt = Nothing
 
 End Function
+
+Public Function RemoveCalendar(ByRef LocalOlSyncXML As String, ByRef LocalMapSyncXML As String) As Boolean
+On Error GoTo ERROR_EXIT_ROUTINE
+
+Dim oXMLLocalOl_Doc As New MSXML.DOMDocument
+Dim oXMLLocalOlEdit_Doc As New MSXML.DOMDocument
+Dim oXMLLocalMap_Doc As New MSXML.DOMDocument
+Dim oXMLLocalMapEdit_Doc As New MSXML.DOMDocument
+
+Dim oXMLParent_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentEdit_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentMap_Doc As MSXML.IXMLDOMElement
+Dim oXMLParentMapEdit_Doc As MSXML.IXMLDOMElement
+
+Dim oXMLTemp_Node As MSXML.IXMLDOMNode
+Dim oXMLTempMap_Node As MSXML.IXMLDOMNode
+Dim oXMLDel_Node As MSXML.IXMLDOMNode
+Dim oXMLDelMap_Node As MSXML.IXMLDOMNode
+Dim oXMLTemp_Elmt As MSXML.IXMLDOMElement
+
+
+Dim i As Integer
+Dim sEntryId As String
+Dim sXQuery As String
+Dim sOlQuery As String
+Dim sErrMsg As String
+
+Dim LocalOlXML As String
+Dim LocalMapXml As String
+
+LocalOlXML = LocalOlSyncXML
+LocalMapXml = LocalMapSyncXML
+
+sErrMsg = "Error while Loading Outlook and MappingXML"
+
+'Local_Doc for iteration and LocalEdit_Doc for removing Child
+
+If oXMLLocalOl_Doc.loadXML(LocalOlXML) = True And oXMLLocalOlEdit_Doc.loadXML(LocalOlXML) = True And oXMLLocalMap_Doc.loadXML(LocalMapXml) = True And oXMLLocalMapEdit_Doc.loadXML(LocalMapXml) = True Then
+    
+    sErrMsg = "Error while Loading Outlook and Mapping DocumentElement"
+    
+    'Parent_Doc for iteration and ParentEdit_Doc for removing Child
+    
+    Set oXMLParent_Doc = oXMLLocalOl_Doc.documentElement
+    Set oXMLParentEdit_Doc = oXMLLocalOlEdit_Doc.documentElement
+    Set oXMLParentMap_Doc = oXMLLocalMap_Doc.documentElement
+    Set oXMLParentMapEdit_Doc = oXMLLocalMapEdit_Doc.documentElement
+    
+    For i = 0 To oXMLParent_Doc.childNodes.Length - 1
+        If oXMLParent_Doc.childNodes.Item(i).baseName = "calendaritems" Then
+            If oXMLParent_Doc.childNodes.Item(i).selectSingleNode("subject").Text = "" Then
+                Set oXMLTemp_Node = oXMLParent_Doc.childNodes.Item(i)
+                Set oXMLTemp_Elmt = oXMLParent_Doc.childNodes.Item(i)
+                sEntryId = oXMLTemp_Elmt.getAttribute("entryid")
+                sXQuery = "syncitem[@entryid='" & sEntryId & "']"
+                sOlQuery = "calendaritems[@entryid='" & sEntryId & "']"
+                Set oXMLTempMap_Node = oXMLParentMapEdit_Doc.selectSingleNode(sXQuery)
+                Set oXMLDelMap_Node = oXMLParentMapEdit_Doc.removeChild(oXMLTempMap_Node)
+                Set oXMLTemp_Node = oXMLParentEdit_Doc.selectSingleNode(sOlQuery)
+                Set oXMLDel_Node = oXMLParentEdit_Doc.removeChild(oXMLTemp_Node)
+            End If
+        End If
+    Next i
+End If
+
+LocalOlSyncXML = oXMLParentEdit_Doc.xml
+LocalMapSyncXML = oXMLParentMapEdit_Doc.xml
+RemoveCalendar = True
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+RemoveCalendar = False
+If sErrMsg <> "" Then
+    sMsgDlg (sErrMsg)
+End If
+
+EXIT_ROUTINE:
+
+Set oXMLLocalOlEdit_Doc = Nothing
+Set oXMLLocalMapEdit_Doc = Nothing
+Set oXMLParentEdit_Doc = Nothing
+Set oXMLParentMapEdit_Doc = Nothing
+
+Set oXMLLocalOl_Doc = Nothing
+Set oXMLLocalMap_Doc = Nothing
+
+Set oXMLParent_Doc = Nothing
+Set oXMLParentMap_Doc = Nothing
+
+Set oXMLTemp_Node = Nothing
+Set oXMLTempMap_Node = Nothing
+Set oXMLDel_Node = Nothing
+Set oXMLDelMap_Node = Nothing
+Set oXMLTemp_Elmt = Nothing
+
+End Function
+
 

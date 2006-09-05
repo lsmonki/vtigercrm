@@ -270,14 +270,33 @@ If bPopOlListView = True Then
         FlxGrdVt.GridLines = flexGridFlat
         For i = 0 To UBound(aOlClndr) - 1
             FlxGrdVt.Row = i + 1
-            FlxGrdVt.Col = 0
-            FlxGrdVt.Text = aOlClndr(i).sStatus
-            FlxGrdVt.Col = 1
-            FlxGrdVt.Text = aOlClndr(i).sSubject
-            FlxGrdVt.Col = 2
-            FlxGrdVt.Text = aOlClndr(i).sStartDate
-            FlxGrdVt.Col = 3
-            FlxGrdVt.Text = aOlClndr(i).sEndDate
+            If aOlClndr(i).sSubject <> "" Then
+                FlxGrdVt.Col = 0
+                FlxGrdVt.Text = aOlClndr(i).sStatus
+                FlxGrdVt.Col = 1
+                FlxGrdVt.Text = aOlClndr(i).sSubject
+                FlxGrdVt.Col = 2
+                FlxGrdVt.Text = aOlClndr(i).sStartDate
+                FlxGrdVt.Col = 3
+                FlxGrdVt.Text = aOlClndr(i).sEndDate
+            Else
+                FlxGrdVt.Col = 0
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = "Ignore"
+                FlxGrdVt.Col = 1
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlClndr(i).sSubject
+                FlxGrdVt.Col = 2
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlClndr(i).sStartDate
+                FlxGrdVt.Col = 3
+                FlxGrdVt.CellBackColor = &HFF
+                FlxGrdVt.CellForeColor = &HFFFFFF
+                FlxGrdVt.Text = aOlClndr(i).sEndDate
+            End If
         Next i
     End If
 End If
@@ -454,7 +473,7 @@ Dim bMapFlag As Boolean
 Dim i As Integer
 Dim sOlSyncFlag As String
 Dim sXQuery As String
-Dim sEntryid As String
+Dim sEntryId As String
 Dim oXMLLocalOl_Doc As New MSXML.DOMDocument
 Dim oXMLLocalOl_Root As MSXML.IXMLDOMElement
 Dim oXMLLocalOl_FirstElmnt As MSXML.IXMLDOMElement
@@ -488,14 +507,14 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
            
                 Set oXMLMap_FirstElmnt = oXMLMap_Root.childNodes.Item(i)
                 
-                sEntryid = oXMLMap_FirstElmnt.getAttribute("entryid") & vbNullString
+                sEntryId = oXMLMap_FirstElmnt.getAttribute("entryid") & vbNullString
                 sOlSyncFlag = oXMLMap_FirstElmnt.getAttribute("olsyncflag") & vbNullString
                 
-                If Trim(sOlSyncFlag) = "N" And Trim(sEntryid) <> "" Then
+                If Trim(sOlSyncFlag) = "N" And Trim(sEntryId) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -519,7 +538,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "TASKSYNC" Then
                     
-                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -540,7 +559,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -564,11 +583,11 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                     
                 End If
                 
-                If Trim(sOlSyncFlag) = "M" And Trim(sEntryid) <> "" Then
+                If Trim(sOlSyncFlag) = "M" And Trim(sEntryId) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -593,7 +612,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         
                     ElseIf gsSyncModule = "TASKSYNC" Then
                         
-                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -614,7 +633,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -637,11 +656,11 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                     End If
                 End If
                 
-                If Trim(sOlSyncFlag) = "D" And Trim(sEntryid) <> "" Then
+                If Trim(sOlSyncFlag) = "D" And Trim(sEntryId) <> "" Then
                     
                     If gsSyncModule = "CONTACTSYNC" Then
                     
-                        sXQuery = "contactitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "contactitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -664,7 +683,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "TASKSYNC" Then
                     
-                        sXQuery = "taskitems[@entryid='" & sEntryid & "']"
+                        sXQuery = "taskitems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
@@ -685,7 +704,7 @@ If (bMapFlag = True And bLocalOlFlag = True) Then
                         End If
                     ElseIf gsSyncModule = "CALENDARSYNC" Then
                     
-                        sXQuery = "calendaritems[@entryid='" & sEntryid & "']"
+                        sXQuery = "calendaritems[@entryid='" & sEntryId & "']"
                         Set oXMLLocalOl_FirstElmnt = oXMLLocalOl_Root.selectSingleNode(sXQuery)
                         
                         If Not oXMLLocalOl_FirstElmnt Is Nothing Then
