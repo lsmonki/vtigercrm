@@ -589,6 +589,14 @@ $mod_strings = Array(
 'LBL_DELETE_PROFILE'=>'Delete Profile',
 'LBL_TRANSFER_ROLES_TO_PROFILE'=>'Transfer Roles to Profile',
 'LBL_PROFILE_TO_BE_DELETED'=>'Profile to be Deteted',
+
+//Added for disabling window Recalculate
+
+'LBL_RECALC_MSG'=>'Are you sure, you wish to Recalculate Sharing Access?',
+'LBL_YES'=>'Yes',
+'LBL_NO'=>'No',
+
+
 );
 
 ?>
