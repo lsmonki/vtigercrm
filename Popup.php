@@ -183,6 +183,15 @@ switch($currentModule)
                 $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","","");
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
                 break;	
+	case 'HelpDesk':
+		require_once("modules/$currentModule/HelpDesk.php");
+		$focus = new HelpDesk();
+		$smarty->assign("SINGLE_MOD",'HelpDesk');
+		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+		$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','ticket_title','true','basic',$popuptype,"","","");
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
+		break;
 
 
 }
