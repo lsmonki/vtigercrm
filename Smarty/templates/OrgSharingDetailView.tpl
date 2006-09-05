@@ -58,14 +58,14 @@ DIV.fixedLay {
 			  	<!-- GLOBAL ACCESS MODULE -->
 		  		<div id="globaldiv">
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
-				<form action="index.php" method="post" name="new" id="form">
+				<form action="index.php" method="post" name="new" id="orgSharingform">
 				<input type="hidden" name="module" value="Users">
 				<input type="hidden" name="action" value="OrgSharingEditView">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
 					<td class="big"><strong>1. {$CMOD.LBL_GLOBAL_ACCESS_PRIVILEGES}</strong></td>
 					<td class="small" align=right>
-						<input class="crmButton small cancel" title="{$CMOD.LBL_RECALCULATE_BUTTON}"  type="submit" name="recalculate" value="{$CMOD.LBL_RECALCULATE_BUTTON}" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')">	
+						<input class="crmButton small cancel" title="{$CMOD.LBL_RECALCULATE_BUTTON}"  type="button" name="recalculate" value="{$CMOD.LBL_RECALCULATE_BUTTON}" onclick="return freezeBackground();">	
 	&nbsp;<input class="crmButton small edit" type="submit" name="Edit" value="{$CMOD.LBL_CHANGE} {$CMOD.LBL_PRIVILEGES}" ></td>
 					</td>
 				</tr>
@@ -192,6 +192,34 @@ DIV.fixedLay {
 </tbody>
 </table>
 <div id="tempdiv" style="display:block;position:absolute;width:400px;"></div>
+
+<!-- For Disabling Window -->
+<div id="confId"  class='veil_new' style="display:none;">
+<table class="options" border="0" cellpadding="18" cellspacing="0">
+<tr>
+	<td class="big" align="center">
+		<h2>{$CMOD.LBL_RECALC_MSG}</h2>
+	</td>
+	<br>
+	<tr>
+		<td align="center"><input type="button" value="{$CMOD.LBL_YES}" onclick="return disableStyle('confId');">&nbsp;&nbsp;<input type="button" value="&nbsp;{$CMOD.LBL_NO}&nbsp;" onclick="$('freeze').style.display='none';$('confId').style.display='none'; "></td>
+	</tr>
+</tr>
+</table>
+</div>
+
+<div id="divId" class="veil_new" style="display:none;top:0px;left:0px;">
+<table class="optioncontainer" border="0" cellpadding="18" cellspacing="0">
+<tbody><tr>
+		<td class="big" align="center">
+		    <img src="{$IMAGE_PATH}plsWaitAnimated.gif">
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+
+
 <script>
 function callEditDiv(obj,modulename,mode,id)
 {ldelim}
@@ -258,5 +286,26 @@ function fnwriteRules(module,related)
 			{rdelim}
 		{rdelim}
 	
+	function disableStyle(id)
+	{ldelim}
+			$('orgSharingform').action.value = 'RecalculateSharingRules';
+			$('orgSharingform').submit();
+ 			$(id).style.display = 'none';
+			$('divId').style.display = 'block';
+	{rdelim}
+
+	function freezeBackground()
+	{ldelim}
+	    var oFreezeLayer = document.createElement("DIV");
+	    oFreezeLayer.id = "freeze";
+	    oFreezeLayer.className = "veil";
+
+	     if (browser_ie) oFreezeLayer.style.height = (document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight)) + "px";
+	     else if (browser_nn4 || browser_nn6) oFreezeLayer.style.height = document.body.offsetHeight + "px";
+
+	    oFreezeLayer.style.width = "100%";
+	    document.body.appendChild(oFreezeLayer);
+	    document.getElementById('confId').style.display = 'block';
+	{rdelim}
 
 </script>
