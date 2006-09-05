@@ -40,7 +40,7 @@ class HelpDesk extends CRMEntity {
 				);
 
 	var $list_fields_name = Array(
-					'Ticket ID'=>'',
+					'Ticket ID'=>'crmid',
 					'Subject'=>'ticket_title',	  			
 					'Related to'=>'parent_id',	  			
 					'Status'=>'ticketstatus',
@@ -67,6 +67,14 @@ class HelpDesk extends CRMEntity {
 					'modifiedtime',
 					'createdtime'
 				);
+	var $search_fields = Array(
+		'Ticket ID' => Array('crmentity'=>'crmid'),
+		'Subject' => Array('troubletickets'=>'title')
+		);
+	var $search_fields_name = Array(
+		'Ticket ID' => '',
+		'Subject'=>'ticket_title',
+		);
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'crmid';
