@@ -126,7 +126,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 33) //uitype 33 added for multiselector picklist - Jeri
 	{
 	     $label_fld[] = $mod_strings[$fieldlabel];
-	     $label_fld[] = str_ireplace(' |##| ',' , ',$col_fields[$fieldname]);
+	     $label_fld[] = str_ireplace(' |##| ',', ',$col_fields[$fieldname]);
 	     
 		$pick_query="select * from vtiger_".$fieldname;
 		$pickListResult = $adb->query($pick_query);

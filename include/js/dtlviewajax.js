@@ -312,9 +312,9 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = popObj.value;
 		}
 	}else if(uitype == '33')
-  {
-       getObj(dtlView).innerHTML = r.join(" , ");
-  }else
+  	{
+       		getObj(dtlView).innerHTML = r.join(", ");
+	}else
 	{
 		getObj(dtlView).innerHTML = tagValue;
 	}
