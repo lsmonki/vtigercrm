@@ -877,6 +877,8 @@ $app_strings = Array(
  // Added Invoice in activity parent type selection / Related list
 'COMBO_INVOICES'=>'Invoice',
 'LBL_INVOICE_NAME'=>'Invoice',
+'LBL_HELPDESK_NAME'=>'Trouble Ticket',
+'LBL_CAMPAIGN_NAME'=>'Campaign Name',
 
 'LBL_NEW_INVOICE_BUTTON_TITLE'=>'New Invoice [Alt+I]',
 'LBL_NEW_INVOICE_BUTTON_KEY'=>'I',
