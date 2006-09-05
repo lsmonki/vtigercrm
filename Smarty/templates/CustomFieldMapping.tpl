@@ -143,3 +143,6 @@
         </tr>
 </tbody>
 </table>
+<script>
+	var alertmessage = new Array("{$MOD.LBL_TYPEALERT_1}","{$MOD.LBL_WITH}","{$MOD.LBL_TYPEALERT_2}","{$MOD.LBL_LENGTHALERT}","{$MOD.LBL_DECIMALALERT}");
+</script>
