@@ -45,51 +45,13 @@ class User {
 	var $db;
 	// Stored fields
 	var $id;
-	var $user_name;
-	var $user_password;
-	var $cal_color;
-	var $hour_format;
-	var $start_hour;
-	var $end_hour;
-	var $first_name;
-	var $last_name;
-	var $date_entered;
-	var $date_modified;
-	var $modified_user_id;
-	var $description;
-	var $phone_home;
-	var $phone_mobile;
-	var $phone_work;
-	var $currency_id;
-	var $phone_other;
-	var $phone_fax;
-	var $email1;
-	var $email2;
-	var $yahoo_id;
-	var $address_street;
-	var $address_city;
-	var $address_state;
-	var $address_postalcode;
-	var $address_country;
-	var $tz;
-	var $holidays;
-	var $namedays;
-	var $workdays;
-	var $weekstart;
-	var $status;
-	var $title;
-	var $department;
 	var $authenticated = false;
 	var $error_string;
 	var $is_admin;
-	var $date_format;
 	var $deleted;
 	var $homeorder;
 
-	var $reports_to_name;
-	var $reports_to_id;
 
-	var $module_id='id';
 	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
 	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
 	var $column_fields = Array('user_name'=>'','is_admin' =>'','user_password'=>'','confirm_password'=>'',
@@ -146,10 +108,6 @@ class User {
 
 	var $object_name = "User";
 	var $user_preferences;
-	var $activity_view;
-	var $lead_view;
-	var $tagcloud;
-	var $imagename;
 	var $defhomeview;
 	var $homeorder_array = array('ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
 
