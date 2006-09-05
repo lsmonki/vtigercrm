@@ -118,7 +118,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                 }
 		else
                 {
-                        $fieldname = $focus->list_fields_name[$name];
+			if( $focus->list_fields_name[$name] == '')
+				$fieldname = 'crmid';
+			else
+				$fieldname = $focus->list_fields_name[$name];
                 }
 
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
