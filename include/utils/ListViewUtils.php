@@ -2520,6 +2520,17 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
+	if($parent_module == 'HelpDesk')
+	{
+		$parent_query = "SELECT title FROM vtiger_troubletickets WHERE ticketid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"title");
+		if(strlen($parent_name) > 25)
+		{
+			$parent_name = substr($parent_name,0,25).'...';
+		}
+	}
+
 	//added by rdhital for better emails - Raju
 	if ($parent_module == 'Multiple')
 	{
