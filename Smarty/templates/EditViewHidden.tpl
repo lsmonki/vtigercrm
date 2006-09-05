@@ -40,7 +40,6 @@
 
 {elseif $MODULE eq 'Calendar'}
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
-	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
