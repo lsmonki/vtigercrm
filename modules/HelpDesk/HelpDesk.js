@@ -58,3 +58,13 @@ function toggleAssignType(currType)
                 getObj("assign_team").style.display="block"
         }
 }
+
+function set_return(product_id, product_name) {
+        window.opener.document.EditView.parent_name.value = product_name;
+        window.opener.document.EditView.parent_id.value = product_id;
+}
+
+function set_return_todo(product_id, product_name) {
+        window.opener.document.createTodo.task_parent_name.value = product_name;
+        window.opener.document.createTodo.task_parent_id.value = product_id;
+}
