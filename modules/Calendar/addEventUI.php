@@ -230,6 +230,10 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<td align="left"><textarea style = "width:100%; height : 60px;" name="description"></textarea></td>
 			</tr>
 			<tr>
+				<td nowrap align="right"><b><?php echo $mod_strings['Location']?></b></td>
+				<td align="left"><input name="location" type="text" class="textbox" value="" style="width:50%"></td>
+			</tr>
+			<tr>
 				<td colspan=2 width=80% align="center">
 					<table border=0 cellspacing=0 cellpadding=3 width=80%>
 					<tr>
