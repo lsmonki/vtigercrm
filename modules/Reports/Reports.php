@@ -33,7 +33,7 @@ $adv_filter_options = array("e"=>"equals",
 			    "m"=>"less or equal",
 			    "h"=>"greater or equal");
 
-$report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities');
+$report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities','SalesOrder');
 
 $related_modules = Array('Leads'=>Array(''),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
@@ -44,6 +44,7 @@ $related_modules = Array('Leads'=>Array(''),
 			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
 			 'Orders'=>Array('Contacts'),
+			 'SalesOrder'=>Array(),
 			 'Invoice'=>Array('Accounts')
 			);
 
@@ -102,6 +103,7 @@ class Reports extends CRMEntity{
 				 "HelpDesk"=>Array("Information"=>'1,2',"Custom Information"=>5,"Description"=>3,"Solution"=>4),//patch2
 				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "SalesOrder"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
 				);
 

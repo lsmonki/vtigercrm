@@ -1072,6 +1072,7 @@ class ReportRun extends CRMEntity
 				inner join crmentity crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid 
 				inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid 
 				inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid 
+				inner join quotescf on quotes.quoteid=quotescf.quoteid 
 				left join users usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
 				left join users usersRel1 on usersRel1.id = quotes.inventorymanager
 				left join potential potentialRel on potentialRel.potentialid = quotes.potentialid
@@ -1087,6 +1088,7 @@ class ReportRun extends CRMEntity
 				inner join crmentity crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid 
 				inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid 
 				inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid 
+				inner join purchaseordercf on purchaseorder.purchaseorderid=purchaseordercf.purchaseorderid 
 				left join users usersOrders on usersOrders.id = crmentityOrders.smownerid 
 				left join vendor vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
 				left join contactdetails contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid 
@@ -1100,11 +1102,29 @@ class ReportRun extends CRMEntity
 				inner join crmentity crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid 
 				inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid 
 				inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid 
+				inner join invoicecf on invoice.invoiceid=invoicecf.invoiceid 
 				left join users usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
 				left join account accountInvoice on accountInvoice.accountid = invoice.accountid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityInvoice.deleted=0";
 		}
+
+		if($module == "SalesOrder")
+		{
+			$query = "from salesorder 
+				inner join crmentity as crmentitySalesOrder on crmentitySalesOrder.crmid=salesorder.salesorderid 
+				inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid 
+				inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid 
+				left join salesordercf on salesorder.salesorderid = salesordercf.salesorderid  
+				left join contactdetails as contactdetailsSalesOrder on contactdetailsSalesOrder.contactid = salesorder.contactid 
+				left join quotes as quotesSalesOrder on quotesSalesOrder.quoteid = salesorder.quoteid                           
+				left join account as accountSalesOrder on accountSalesOrder.accountid = salesorder.accountid
+				left join potential as potentialRel on potentialRel.potentialid = salesorder.potentialid 
+				left join users as usersSalesOrder on usersSalesOrder.id = crmentitySalesOrder.smownerid 
+				where crmentitySalesOrder.deleted=0";
+
+		}       
+
 
 		$vtlog->logthis("ReportRun :: Successfully returned getReportsQuery".$module,"info");
 		return $query;
