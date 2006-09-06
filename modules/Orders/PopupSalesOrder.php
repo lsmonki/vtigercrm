@@ -238,10 +238,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
-$listview_header = getSearchListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by);
+$listview_header = getSearchListViewHeader($focus,"Orders",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getSearchListViewEntries($focus,"SalesOrder",$list_result,$navigation_array);
+$listview_entries = getSearchListViewEntries($focus,"Orders",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
