@@ -3606,6 +3606,10 @@ foreach($change_cols_array as $tablename => $columnname)
 		}
 	}
 }
+//we have to change the table name from activity to crmentity for customview activity description 
+Execute('update vtiger_cvcolumnlist set columnname="vtiger_crmentity:description:description:Calendar_Description:V" where columnname="vtiger_activity:description:description:Calendar_Description:V"');
+//we have to change the table name (alias) from activity to crmentiryCalendar for reports activity description
+Execute('update vtiger_selectcolumn set columnname="vtiger_crmentityCalendar:description:Calendar_Description:description:V" where columnname="vtiger_activity:description:Calendar_Description:description:V"');
 //changes made for CustomView and Reports - Activities changed to Calendar -- Ends
 
 Execute("update vtiger_field set uitype = 16 where tabid=2 and uitype=111 and columnname='sales_stage'");
