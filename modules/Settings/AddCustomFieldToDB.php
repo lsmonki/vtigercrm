@@ -212,19 +212,19 @@ else
         {	 
                  $uitype = 56;	 
                  $type = "C(3) default 0"; //adodb type	 
-                 $uichekdata='C~0';	 
+                 $uichekdata='C~O';	 
         }
 	elseif($fldType == 'TextArea')	 
         {	 
                  $uitype = 21;	 
                  $type = "X"; //adodb type	 
-                 $uichekdata='V~0';	 
+                 $uichekdata='V~O';	 
         }
 	elseif($fldType == 'MultiSelectCombo')
 	{
 		 $uitype = 33;
 		 $type = "X"; //adodb type
-		 $uichekdata='V~0';
+		 $uichekdata='V~O';
 	}
 	// No Decimal Pleaces Handling
 
