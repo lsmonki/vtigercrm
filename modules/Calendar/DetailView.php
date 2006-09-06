@@ -152,6 +152,7 @@ elseif($activity_mode == 'Events')
 	$data['visibility'] = $finaldata['visibility'];
 	$data['eventstatus'] = $finaldata['eventstatus'];
 	$data['activitytype'] = $finaldata['activitytype'];
+	$data['location'] = $finaldata['location'];
 	//Calculating reminder time
 	$rem_days = 0;
 	$rem_hrs = 0;
