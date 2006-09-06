@@ -22,7 +22,7 @@ $associated_tax_count = count($tax_details);
 
 
 $tax_div = '
-		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small" id="tax_table'.$rowid.'">
 		   <tr>
 			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>Set Tax for : '.$product_total.'</b></td>
 			<td>&nbsp;</td>
@@ -31,12 +31,13 @@ $tax_div = '
 	   ';
 
 $net_tax_total = 0.00;
-for($i=0;$i<count($tax_details);$i++)
+for($i=0,$j=$i+1;$i<count($tax_details);$i++,$j++)
 {
 	$tax_name = $tax_details[$i]['taxname'];
 	$tax_label = $tax_details[$i]['taxlabel'];
 	$tax_percentage = $tax_details[$i]['percentage'];
 	$tax_name_percentage = $tax_name."_percentage".$rowid;
+	$tax_id_name = "hidden_tax".$j."_percentage".$rowid;//used to store the tax name, used in function callTaxCalc
 	$tax_name_total = "popup_tax_row".$rowid;//$tax_name."_total".$rowid;
 	$tax_total = $product_total*$tax_percentage/100.00;
 
@@ -45,6 +46,7 @@ for($i=0;$i<count($tax_details);$i++)
 		   <tr>
 			<td align="left" class="lineOnTop">
 				<input type="text" class="small" size="5" name="'.$tax_name_percentage.'" id="'.$tax_name_percentage.'" value="'.$tax_percentage.'" onBlur="calcCurrentTax(\''.$tax_name_percentage.'\','.$rowid.','.$i.')">&nbsp;%
+				<input type="hidden" id="'.$tax_id_name.'" value="'.$tax_name_percentage.'">
 			</td>
 			<td align="center" class="lineOnTop">'.$tax_label.'</td>
 			<td align="right" class="lineOnTop">
@@ -54,12 +56,13 @@ for($i=0;$i<count($tax_details);$i++)
 	    ';
 }
 
+$tax_div .= '</table>';
+
 if($associated_tax_count == 0)
 {
-	$tax_div .= '<tr><td colspan="3" align="left" class="lineOnTop">No taxes associated with this product.</td></tr>';
+	$tax_div .= '<div align="left" class="lineOnTop" width="100%">No taxes associated with this product.</div>';
 }
 
-$tax_div .= '</table>';
 $tax_div .= '<input type="hidden" id="hdnTaxTotal'.$rowid.'" name="hdnTaxTotal'.$rowid.'" value="'.$net_tax_total.'">';
 
 echo $tax_div;

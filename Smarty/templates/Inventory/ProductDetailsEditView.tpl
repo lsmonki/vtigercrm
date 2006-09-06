@@ -201,7 +201,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal()"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
+				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc('{$row_no}');"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
 			</td>
 		   </tr>
 		   <tr>
@@ -215,16 +215,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
-						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" {$data.$checked_discount_zero} onclick="setDiscount(this,'{$row_no}')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" {$data.$checked_discount_zero} onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 						<td class="lineOnTop">&nbsp;</td>
 					   </tr>
 					   <tr>
-						<td align="left"><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')" {$data.$checked_discount_percent}>&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" {$data.$style_discount_percent} onBlur="setDiscount(this,'{$row_no}')">&nbsp;%</td>
+						<td align="left"><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');" {$data.$checked_discount_percent}>&nbsp; % {$APP.LBL_OF_PRICE}</td>
+						<td align="right"><input type="text" class="small" size="2" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" {$data.$style_discount_percent} onBlur="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');">&nbsp;%</td>
 					   </tr>
 					   <tr>
-						<td align="left" nowrap><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}')" {$data.$checked_discount_amount}>&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-						<td align="right"><input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" size="5" value="{$data.$discount_amount}" {$data.$style_discount_amount} onBlur="setDiscount(this,{$row_no})"></td>
+						<td align="left" nowrap><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');" {$data.$checked_discount_amount}>&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+						<td align="right"><input type="text" id="discount_amount{$row_no}" name="discount_amount{$row_no}" size="5" value="{$data.$discount_amount}" {$data.$style_discount_amount} onBlur="setDiscount(this,{$row_no}); callTaxCalc('{$row_no}');"></td>
 					   </tr>
 					</table>
 				</div>
@@ -240,7 +240,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 				(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,'tax_div{$row_no}','tax','{$row_no}')" >{$APP.LBL_TAX} </a> : </b>
 				<div class="discountUI" id="tax_div{$row_no}">
 					<!-- we will form the table with all taxes -->
-					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small" id="tax_table{$row_no}">
 					   <tr>
 						<td id="tax_div_title{$row_no}" nowrap align="left" ><b>Set Tax for : {$data.$totalAfterDiscount}</b></td>
 						<td>&nbsp;</td>
@@ -249,11 +249,13 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 					{foreach key=tax_row_no item=tax_data from=$data.taxes}
 					   {assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
+					   {assign var="tax_id_name" value="hidden_tax"|cat:$tax_row_no+1|cat:"_percentage"|cat:$row_no}
 					   {assign var="taxlabel" value=$tax_data.taxlabel|cat:"_percentage"|cat:$row_no}
 					   {assign var="popup_tax_rowname" value="popup_tax_row"|cat:$row_no}
 					   <tr>
 						<td align="left" class="lineOnTop">
 							<input type="text" class="small" size="5" name="{$taxname}" id="{$taxname}" value="{$tax_data.percentage}" onBlur="calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no})">&nbsp;%
+							<input type="hidden" id="{$tax_id_name}" value="{$taxname}">
 						</td>
 						<td align="center" class="lineOnTop">{$tax_data.taxlabel}</td>
 						<td align="right" class="lineOnTop">

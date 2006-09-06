@@ -180,7 +180,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal()"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
+				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc(1);"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
 			</td>
 		   </tr>
 		   <tr>
@@ -194,16 +194,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
-						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1)">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 						<td class="lineOnTop">&nbsp;</td>
 					   </tr>
 					   <tr>
-						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1)">&nbsp;%</td>
+						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp; % {$APP.LBL_OF_PRICE}</td>
+						<td align="right"><input type="text" class="small" size="2" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);">&nbsp;%</td>
 					   </tr>
 					   <tr>
-						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1)">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1)"></td>
+						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);"></td>
 					   </tr>
 					</table>
 				</div>

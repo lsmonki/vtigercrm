@@ -480,7 +480,7 @@ function fnAddProductRow(module,image_path){
 	
 	//List Price with Discount, Total after Discount and Tax labels
 	colfive.className = "crmTableRow small"
-	colfive.innerHTML='<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="right"><input id="listPrice'+count+'" name="listPrice'+count+'" value="0.00" type="text" class="small " style="width:70px" onBlur="calcTotal()"/>&nbsp;<img src="'+image_path+'pricebook.gif" onclick="priceBookPickList(this,'+count+')"></td></tr><tr><td align="right" style="padding:5px;" nowrap>		(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,\'discount_div'+count+'\',\'discount\','+count+')" >Discount</a> : </b><div class=\"discountUI\" id=\"discount_div'+count+'"><input type="hidden" id="discount_type'+count+'" name="discount_type'+count+'" value=""><table width="100%" border="0" cellpadding="5" cellspacing="0" class="small"><tr><td id="discount_div_title'+count+'" nowrap align="left" ></td><td align="right"><img src="'+image_path+'close.gif" border="0" onClick="fnHidePopDiv(\'discount_div'+count+'\')" style="cursor:pointer;"></td></tr><tr><td align="left" class="lineOnTop"><input type="radio" name="discount'+count+'" checked onclick="setDiscount(this,'+count+')">&nbsp; Zero Discount</td><td class="lineOnTop">&nbsp;</td></tr><tr><td align="left"><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+')">&nbsp; % of Price </td><td align="right"><input type="text" class="small" size="2" id="discount_percentage'+count+'" name="discount_percentage'+count+'" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+')">&nbsp;%</td></tr><tr><td align="left" nowrap><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+')">&nbsp; Direct Price Redunction</td><td align="right"><input type="text" id="discount_amount'+count+'" name="discount_amount'+count+'" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+')"></td></tr></table></div></td></tr><tr> <td align="right" style="padding:5px;" nowrap><b>Total After Discount :</b></td></tr><tr id="individual_tax_row'+count+'" class="TaxShow"><td align="right" style="padding:5px;" nowrap>(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,\'tax_div'+count+'\',\'tax\','+count+')" >Tax </a> : </b><div class="discountUI" id="tax_div'+count+'"></div></td></tr></table> ';
+	colfive.innerHTML='<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="right"><input id="listPrice'+count+'" name="listPrice'+count+'" value="0.00" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc('+count+');"/>&nbsp;<img src="'+image_path+'pricebook.gif" onclick="priceBookPickList(this,'+count+')"></td></tr><tr><td align="right" style="padding:5px;" nowrap>		(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,\'discount_div'+count+'\',\'discount\','+count+')" >Discount</a> : </b><div class=\"discountUI\" id=\"discount_div'+count+'"><input type="hidden" id="discount_type'+count+'" name="discount_type'+count+'" value=""><table width="100%" border="0" cellpadding="5" cellspacing="0" class="small"><tr><td id="discount_div_title'+count+'" nowrap align="left" ></td><td align="right"><img src="'+image_path+'close.gif" border="0" onClick="fnHidePopDiv(\'discount_div'+count+'\')" style="cursor:pointer;"></td></tr><tr><td align="left" class="lineOnTop"><input type="radio" name="discount'+count+'" checked onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');">&nbsp; Zero Discount</td><td class="lineOnTop">&nbsp;</td></tr><tr><td align="left"><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');">&nbsp; % of Price </td><td align="right"><input type="text" class="small" size="2" id="discount_percentage'+count+'" name="discount_percentage'+count+'" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+'); callTaxCalc('+count+');">&nbsp;%</td></tr><tr><td align="left" nowrap><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');">&nbsp; Direct Price Redunction</td><td align="right"><input type="text" id="discount_amount'+count+'" name="discount_amount'+count+'" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+'); callTaxCalc('+count+');"></td></tr></table></div></td></tr><tr> <td align="right" style="padding:5px;" nowrap><b>Total After Discount :</b></td></tr><tr id="individual_tax_row'+count+'" class="TaxShow"><td align="right" style="padding:5px;" nowrap>(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(event,\'tax_div'+count+'\',\'tax\','+count+')" >Tax </a> : </b><div class="discountUI" id="tax_div'+count+'"></div></td></tr></table> ';
 
 	//Total and Discount, Total after Discount and Tax details
 	colsix.className = "crmTableRow small"
@@ -576,6 +576,20 @@ function setDiscount(currObj,curr_row)
 	}
 
 	calcTotal();
+}
+
+//This function is added to call the tax calculation function
+function callTaxCalc(curr_row)
+{
+	//when we change discount or list price, we have to calculate the taxes again before calculate the total
+	tax_count = eval(document.getElementById('tax_table'+curr_row).rows.length-1);//subtract the title tr length
+
+	for(var i=0, j=i+1;i<tax_count;i++,j++)
+	{
+		var tax_hidden_name = "hidden_tax"+j+"_percentage"+curr_row;
+		var tax_name = document.getElementById(tax_hidden_name).value;
+		calcCurrentTax(tax_name,curr_row,i);
+	}
 }
 
 function calcCurrentTax(tax_name, curr_row, tax_row)
