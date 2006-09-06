@@ -294,16 +294,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
-				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final')">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 				<td class="lineOnTop">&nbsp;</td>
 			   </tr>
 			   <tr>
-				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final')">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')">&nbsp;%</td>
+				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp; % {$APP.LBL_OF_PRICE}</td>
+				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
 			   </tr>
 			   <tr>
-				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final')">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final')"></td>
+				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();"></td>
 			   </tr>
 			</table>
 		</div>
