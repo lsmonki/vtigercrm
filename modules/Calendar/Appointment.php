@@ -36,6 +36,7 @@ class Appointment
 	var $formatted_datetime;
 	var $duration_min;
 	var $duration_hour;
+	var $shared = false;
 
 	function Appointment()
 	{
@@ -127,7 +128,7 @@ class Appointment
          */
 	function readResult($act_array, $view)
 	{
-		global $adb;
+		global $adb,$current_user;
 		$format_sthour='';
                 $format_stmin='';
 		$this->description       = $act_array["description"];
@@ -150,6 +151,11 @@ class Appointment
 		{
 			$this->assignedto ="user";
 			$this->ownerid = $act_array["smownerid"];
+			if(!is_admin($current_user))
+			{
+				if($act_array["smownerid"] != $current_user->id)
+					$this->shared = true;
+			}
 			$this->owner   = getUserName($act_array["smownerid"]);
 			$query="SELECT cal_color FROM vtiger_users where id = ".$this->ownerid;
 			$result=$adb->query($query);
