@@ -119,7 +119,7 @@ class writeexcel_format {
      */
     function copy($other) {
         $xf = $this->_xf_index;   // Backup XF index
-        $this = $other;           // Copy properties
+        $this[] = clone($other);  // Copy properties
         $this->_xf_index = $xf;   // Restore XF index
     }
 

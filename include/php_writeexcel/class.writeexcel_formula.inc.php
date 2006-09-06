@@ -150,7 +150,7 @@ function parse_formula() {
 
 function set_ext_sheet($key, $value) {
 
-    $this->_ext_sheets->$key = $value;
+    $this->_ext_sheets[$key] = $value;
 }
 
 function isError($data) {
