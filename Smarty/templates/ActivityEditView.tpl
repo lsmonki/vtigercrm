@@ -130,6 +130,10 @@
 								<td align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
 							<tr>
+								<td valign="top" nowrap align="right"><b>{$LABEL.location}</b></td>
+								 <td align="left"><input type="text" class="textbox" name="location" id ="location" value="{$ACTIVITYDATA.location}" style="width:50%"></td>
+							</tr>
+							<tr>
 								<td colspan=2 width=80% align="center">
                                 				<table border=0 cellspacing=0 cellpadding=3 width=80%>
                                         				<tr>
@@ -392,7 +396,7 @@
 											</tr>
 											<tr>
 												<td nowrap align=right>
-													{$MOD.LBL_SDRMD} :
+													{$MOD.LBL_SDRMD}
 												</td>
 												<td >
 													<input type=text name="toemail" class=textbox style="width:90%" value="{$USEREMAILID}">
@@ -407,7 +411,7 @@
 									<table border=0 cellspacing=0 cellpadding=2  width=100%>
 										<tr>
 											<td nowrap align=right width=20% valign=top>
-												<strong>{$MOD.LBL_REPEAT} :</strong>
+												<strong>{$MOD.LBL_REPEAT}</strong>
 											</td>
 											<td nowrap width=80% valign=top>
 												<table border=0 cellspacing=0 cellpadding=0>
@@ -515,7 +519,7 @@
 						<div id="addEventRelatedtoUI" style="display:none;width:100%">
 						<table width="100%" cellpadding="5" cellspacing="0" border="0">
 							<tr>
-								<td><b>{$MOD.LBL_RELATEDTO} :</b></td>
+								<td><b>{$MOD.LBL_RELATEDTO}</b></td>
 								<td>
 									<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
 									<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
@@ -532,7 +536,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td><b>{$APP.Contacts} :</b></td>
+								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
 									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
@@ -730,7 +734,7 @@
 			<div id="addTaskRelatedtoUI" style="display:none;width:100%">
            		     <table width="100%" cellpadding="5" cellspacing="0" border="0">
                 	     <tr>
-                        	     <td><b>{$MOD.LBL_RELATEDTO} :</b></td>
+                        	     <td><b>{$MOD.LBL_RELATEDTO}</b></td>
                                      <td>
 					<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
                                              <select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
@@ -747,7 +751,7 @@
                                      </td>
 			     </tr>
 			     <tr>
-                                     <td><b>{$LABEL.contact_id} :</b></td>
+                                     <td><b>{$LABEL.contact_id}</b></td>
 				     <td colspan="2">
 						<input name="contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id" type="hidden" value="{$secondvalue.contact_id}">&nbsp;
 						<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">

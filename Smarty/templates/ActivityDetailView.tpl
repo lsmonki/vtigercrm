@@ -124,6 +124,10 @@ function DeleteTag(id)
 								<td valign="top" align="left" colspan="3" height="60px">{$ACTIVITYDATA.description}</td>
 							 </tr>
 							 <tr>
+                                                                <td width="20%" align="right"><b>{$LABEL.location}</b></td>
+                                                                <td valign="top" align="left" colspan="3">{$ACTIVITYDATA.location}</td>
+                                                         </tr>
+							 <tr>
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
