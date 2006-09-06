@@ -112,7 +112,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = array($disp_value => $curr_time) ;
 		if($uitype == 5 || $uitype == 23)
 		{
-			$fieldvalue[] = array($date_format=>$current_user->date_format);
+			if($module_name == 'Events' && $uitype == 23)
+			{
+				$fieldvalue[] = array($date_format=>$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']);
+			}
+			else
+				$fieldvalue[] = array($date_format=>$current_user->date_format);
 		}
 		else
 		{
