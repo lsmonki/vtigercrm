@@ -210,6 +210,7 @@ function QCreate(qcoptions)
 						$("qcform").style.display="inline";
 					        $("qcform").innerHTML = response.responseText;
 						eval($("date_calpopup").innerHTML);
+						eval($("date_calpopup23").innerHTML);
 						eval($("qcform"));
                                         {rdelim}
                 {rdelim}

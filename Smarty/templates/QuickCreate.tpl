@@ -217,7 +217,13 @@
                                                                 {/if}
                                                         {/if}
 							{elseif $uitype eq 23 || $uitype eq 5 || $uitype eq 6}
-							<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
+							<td width="20%" class="cellLabel" align=right>
+							{if $uitype eq 23 && $QCMODULE eq 'Event'}
+                                                                {$APP.LBL_EVENT_ENDDATE}
+                                                        {else}
+                                                                {$fldlabel}
+                                                        {/if}
+                                                        </td>
 							<td width="30%" align=left class="cellText">
 							   {foreach key=date_value item=time_value from=$fldvalue}
 								{assign var=date_val value="$date_value"}
@@ -228,6 +234,12 @@
 							{if $uitype eq 6}
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
+							{if $uitype eq 23 && $QCMODULE eq 'Event'}
+                                                           <input name="time_end" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
+                                                            <script id="date_calpopup23">
+                                                                getCalendarPopup('jscal_trigger_{$fldname}','jscal_field_{$fldname}','{$dateFormat}');
+                                                             </script>
+                                                        {/if}
 							{foreach key=date_format item=date_str from=$secondvalue}
                                                                 {assign var=dateFormat value="$date_format"}
 							        {assign var=dateStr value="$date_str"}
@@ -378,10 +390,18 @@
 </td>
 </tr>
 </table>
+{if $QCMODULE eq 'Event'}
+<SCRIPT id="qcvalidate">
+        var qcfieldname = new Array('subject','date_start','eventstatus','activitytype','due_date','time_end');
+        var qcfieldlabel = new Array('Subject','Start Date & Time','Status','Activity Type','End Date & Time','End Date & Time');
+        var qcfielddatatype = new Array('V~M','DT~M~time_start','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M');
+</SCRIPT>
+{else}
 <SCRIPT id="qcvalidate">
         var qcfieldname = new Array({$VALIDATION_DATA_FIELDNAME});
         var qcfieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
         var qcfielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
 </SCRIPT>
+{/if}
 </form>
 </body>

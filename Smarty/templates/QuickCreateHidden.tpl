@@ -42,14 +42,12 @@
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="assigned_user_id" value="{$USERID}">
 	<input type="hidden" name="action" value="Save">
-	<input type="hidden" name="due_date" value="">
 {elseif $MODULE eq 'Events'}
         <input type="hidden" name="module" value="Calendar">
         <input type="hidden" name="record" value="">
         <input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
         <input type="hidden" name="assigned_user_id" value="{$USERID}">
         <input type="hidden" name="action" value="Save">
-        <input type="hidden" name="due_date" value="">
 {elseif $MODULE eq 'HelpDesk'}
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="return_module" value="HelpDesk">
