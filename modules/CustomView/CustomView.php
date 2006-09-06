@@ -849,6 +849,7 @@ class CustomView extends CRMEntity{
 				if(isset($advfltrow))
 				{
 					$columns = explode(":",$advfltrow["columnname"]);
+					$datatype = (isset($columns[4])) ? $columns[4] : "";
 					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "")
 					{
 
@@ -858,7 +859,7 @@ class CustomView extends CRMEntity{
 							$advorsql = "";
 							for($n=0;$n<count($valuearray);$n++)
 							{
-								$advorsql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($valuearray[$n]));
+								$advorsql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($valuearray[$n]),$datatype);
 							}
 							$advorsqls = implode(" or ",$advorsql);
 							$advfiltersql[] = " (".$advorsqls.") ";
@@ -867,11 +868,11 @@ class CustomView extends CRMEntity{
 							//Added for getting vtiger_activity Status -Jaguar
 							if($this->customviewmodule == "Calendar" && $columns[1] == "status")
 							{
-								$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]));
+								$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
 							}
 							else
 							{
-								$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]));
+								$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
 							}
 						}
 					}
@@ -893,44 +894,44 @@ class CustomView extends CRMEntity{
 	  * @returns  $value as a string in the following format
 	  *	  $tablename.$fieldname comparator
 	  */
-	function getRealValues($tablename,$fieldname,$comparator,$value)
+	function getRealValues($tablename,$fieldname,$comparator,$value,$datatype)
 	{
 		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value),$datatype);
 		}else if($fieldname == "parentid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value),$datatype);
 		}else if($fieldname == "accountid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value),$datatype);
 		}else if($fieldname == "contactid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getContactId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getContactId($value),$datatype);
 		}else if($fieldname == "vendor_id" || $fieldname == "vendorid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getVendorId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getVendorId($value),$datatype);
 		}else if($fieldname == "potentialid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getPotentialId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getPotentialId($value),$datatype);
 		}else if($fieldname == "quoteid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getQuoteId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getQuoteId($value),$datatype);
 		}
 		else if($fieldname == "product_id")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getProductId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getProductId($value),$datatype);
 		}
 		else if($fieldname == "salesorderid")
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value));
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value),$datatype);
 		}
 		else if($fieldname == "crmid" || $fieldname == "parent_id")
 		{
 			//Added on 14-10-2005 -- for HelpDesk
 			if($this->customviewmodule == 'HelpDesk' && $fieldname == "crmid")
 			{
-				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value);
+				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
 			}
 			else
 			{
@@ -939,7 +940,7 @@ class CustomView extends CRMEntity{
 		}
 		else
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value);	
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);	
 		}
 		return $value;
 	}
@@ -1112,14 +1113,21 @@ class CustomView extends CRMEntity{
 	  * @returns  $rtvalue in the format $comparator $value
 	  */
 
-	function getAdvComparator($comparator,$value)
+	function getAdvComparator($comparator,$value,$datatype = '')
 	{
+			
 		global $adb;
 		if($comparator == "e")
 		{
-			if(trim($value) != "")
+			if(trim($value) == "NULL")
+			{
+				$rtvalue = " is NULL";
+			}elseif(trim($value) != "")
 			{
 				$rtvalue = " = ".$adb->quote($value);
+			}elseif(trim($value) == "" && $datatype == "V")
+			{
+				$rtvalue = " = ".$adb->quote($value);	
 			}else
 			{
 				$rtvalue = " is NULL";
@@ -1127,9 +1135,15 @@ class CustomView extends CRMEntity{
 		}
 		if($comparator == "n")
 		{
-			if(trim($value) != "")
+			if(trim($value) == "NULL")
+			{
+				$rtvalue = " is NOT NULL";
+			}elseif(trim($value) != "")
 			{
 				$rtvalue = " <> ".$adb->quote($value);
+			}elseif(trim($value) == "" && $datatype == "V")
+			{
+				$rtvalue = " <> ".$adb->quote($value);	
 			}else
 			{
 				$rtvalue = " is NOT NULL";

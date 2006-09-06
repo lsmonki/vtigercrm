@@ -212,14 +212,20 @@ class ReportRun extends CRMEntity
 	 *  @ param $value : Type String  
 	 *  returns the check query for the comparator 	
 	 */
-	function getAdvComparator($comparator,$value)
+	function getAdvComparator($comparator,$value,$datatype="")
 	{
 
 		global $log,$adb;
 
 		if($comparator == "e")
 		{
-			if(trim($value) != "")
+			if(trim($value) == "NULL")
+			{
+				$rtvalue = " is NULL";
+			}elseif(trim($value) != "")
+			{
+				$rtvalue = " = ".$adb->quote($value);
+			}elseif(trim($value) == "" && $datatype == "V")
 			{
 				$rtvalue = " = ".$adb->quote($value);
 			}else
@@ -229,7 +235,13 @@ class ReportRun extends CRMEntity
 		}
 		if($comparator == "n")
 		{
-			if(trim($value) != "")
+			if(trim($value) == "NULL")
+			{
+				$rtvalue = " is NOT NULL";
+			}elseif(trim($value) != "")
+			{
+				$rtvalue = " <> ".$adb->quote($value);
+			}elseif(trim($value) == "" && $datatype == "V")
 			{
 				$rtvalue = " <> ".$adb->quote($value);
 			}else
@@ -304,18 +316,19 @@ class ReportRun extends CRMEntity
 			{
 				$selectedfields = explode(":",$fieldcolname);
 				$valuearray = explode(",",trim($value));
+				$datatype = (isset($selectedfields[4])) ? $selectedfields[4] : "";
 				if(isset($valuearray) && count($valuearray) > 1)
 				{
 					$advorsql = "";
 					for($n=0;$n<count($valuearray);$n++)
 					{
-						$advorsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]));
+						$advorsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 					}
 					$advorsqls = implode(" or ",$advorsql);
 					$fieldvalue = " (".$advorsqls.") ";
 				}else
 				{
-					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value));
+					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
 				$advfilterlist[$fieldcolname] = $fieldvalue;		
 			}
