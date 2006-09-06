@@ -553,11 +553,11 @@ $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'date_start','vtiger_activity',1,'6','date_start','Start Date & Time',1,0,0,100,3,41,1,'DT~M~time_start',0,2,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'time_start','vtiger_activity',1,'2','time_start','Time Start',1,0,0,100,4,41,3,'T~M',1,null,'BAS')");
 
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'due_date','vtiger_activity',1,'23','due_date','End Date',1,0,0,100,5,41,1,'D~M~OTH~GE~date_start~Start Date & Time',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'due_date','vtiger_activity',1,'23','due_date','End Date',1,0,0,100,5,41,1,'D~M~OTH~GE~date_start~Start Date & Time',0,5,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'time_end','vtiger_activity',1,'2','time_end','End Time',1,0,0,100,5,41,3,'T~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'recurringtype','vtiger_recurringevents',1,'15','recurringtype','Recurrence',1,0,0,100,6,41,1,'O~O',1,null,'BAS')");
   
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'duration_hours','vtiger_activity',1,'63','duration_hours','Duration',1,0,0,100,7,41,1,'I~M',0,5,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'duration_hours','vtiger_activity',1,'63','duration_hours','Duration',1,0,0,100,7,41,1,'I~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'duration_minutes','vtiger_activity',1,'15','duration_minutes','Duration Minutes',1,0,0,100,8,41,3,'O~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'crmid','vtiger_seactivityrel',1,'66','parent_id','Related To',1,0,0,100,9,41,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'eventstatus','vtiger_activity',1,'111','eventstatus','Status',1,0,0,100,10,41,1,'V~O',0,3,'BAS')");
