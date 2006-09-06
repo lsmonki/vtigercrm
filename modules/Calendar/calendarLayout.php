@@ -1106,6 +1106,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
 			$account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
+			$shared = $act[$i]->shared;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$height = $rowspan * 75;
@@ -1129,6 +1130,10 @@ function getdayEventLayer(& $cal,$slice,$rows)
 					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>';
 			$eventlayer .= '<tr><td>';
+			if($shared)
+				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+			else
+				$eventlayer .= '&nbsp;';
 			$eventlayer .= '</td>
 				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
@@ -1185,6 +1190,7 @@ function getweekEventLayer(& $cal,$slice)
 			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
                         $account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
+			$shared = $act[$i]->shared;
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
@@ -1200,7 +1206,13 @@ function getweekEventLayer(& $cal,$slice)
 					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
+					<td>';
+			if($shared)
+				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+			else
+				$eventlayer .= '&nbsp;';
+			$eventlayer .= '	
+				</td>
 					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
 				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
