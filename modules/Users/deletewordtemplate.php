@@ -8,7 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
  $idlist = $_REQUEST['idlist'];
  $id_array=explode(';', $idlist);
 
@@ -19,7 +18,7 @@
 	         $adb->query($sql);
 
  }
- header("Location:index.php?module=Users&action=listwordtemplates");
+ header("Location:index.php?module=Users&action=listwordtemplates&parenttab=Settings");
  			 
 
 ?>
