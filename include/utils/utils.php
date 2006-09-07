@@ -1019,13 +1019,21 @@ function getActionid($action)
 	$log->debug("Entering getActionid(".$action.") method ...");
 	global $adb;
 	$log->info("get Actionid ".$action);
-
 	$actionid = '';
-	$query="select * from vtiger_actionmapping where actionname='".$action."'";
-        $result =$adb->query($query);
-        $actionid=$adb->query_result($result,0,'actionid');
+	if(file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
+	{
+		include('tabdata.php');
+		$actionid= $action_id_array[$action];
+	}
+	else
+	{
+		$query="select * from vtiger_actionmapping where actionname='".$action."'";
+        	$result =$adb->query($query);
+        	$actionid=$adb->query_result($result,0,'actionid');
+		
+	}
 	$log->info("action id selected is ".$actionid );
-	$log->debug("Exiting getActionid method ...");
+	$log->debug("Exiting getActionid method ...");	
 	return $actionid;
 }
 
@@ -1042,9 +1050,19 @@ function getActionname($actionid)
 	global $adb;
 
 	$actionname='';
-	$query="select * from vtiger_actionmapping where actionid=".$actionid ." and securitycheck=0";
-	$result =$adb->query($query);
-	$actionname=$adb->query_result($result,0,"actionname");
+	
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
+	{
+		include('tabdata.php');
+		$actionname= $action_name_array[$actionid];
+	}
+	else
+	{
+	
+		$query="select * from vtiger_actionmapping where actionid=".$actionid ." and securitycheck=0";
+		$result =$adb->query($query);
+		$actionname=$adb->query_result($result,0,"actionname");
+	}	
 	$log->debug("Exiting getActionname method ...");
 	return $actionname;
 }
