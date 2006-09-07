@@ -785,6 +785,17 @@ function convertFromDollar($amount,$crate){
         return $amount * $crate;
 }
 
+/** This function returns the amount converted from master currency.
+  * param $amount - amount to be converted.
+    * param $crate - conversion rate.
+      */
+function convertFromMasterCurrency($amount,$crate){
+	global $log;
+	$log->debug("Entering convertFromDollar(".$amount.",".$crate.") method ...");
+	$log->debug("Exiting convertFromDollar method ...");
+        return $amount * $crate;
+}
+
 /** This function returns the conversion rate and vtiger_currency symbol
   * in array format for a given id.
   * param $id - vtiger_currency id.

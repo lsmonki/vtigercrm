@@ -127,7 +127,7 @@ class jpgraph {
 					}
 					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', floor($record->column_fields['amount']));
+						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
 						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;
 						if (isset($count[$month][$sales_stage])) {
 							$count[$month][$sales_stage]++;
@@ -261,8 +261,8 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-				//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+				//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 			
 			$title->setText($titlestr);
 
@@ -298,7 +298,7 @@ class jpgraph {
 			$yaxis->setAxisIntersection('max');
 
 			// Then fix the tick marks
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
 			$yaxis->setFontSize(8);
 			$yaxis->setDataPreprocessor($valueproc);
 			// Arrange Y-Axis tick marks inside
@@ -323,7 +323,7 @@ class jpgraph {
 			$marker->setFontSize(8);
 			$gbplot->setMarker($marker);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -363,7 +363,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false,$width=900,$height=500){
-		global $log;
+		global $log,$current_user;
 		$log->debug("Entering lead_source_by_outcome(".$datay.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings,$charset, $tmp_dir;
 		global $theme;
@@ -471,7 +471,7 @@ class jpgraph {
 					}
 					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', floor($record->column_fields['amount']));
+						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
 						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;
 						if (isset($count[$lead_source][$sales_stage])) {
 							$count[$lead_source][$sales_stage]++;
@@ -602,8 +602,8 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			//$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total;
+			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$current_user->currency_symbol.$total;
 			$title->setText($titlestr);
 
 			// Create the xaxis labels
@@ -635,7 +635,7 @@ class jpgraph {
 			// Then fix the tick marks
 			$yaxis->setFontSize(8);
 			$yaxis->setAxisIntersection('max');
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
 			$yaxis->setDataPreprocessor($valueproc);
 			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
@@ -655,7 +655,7 @@ class jpgraph {
 			$gbplot->setMarker($marker);
 
 			// Finally setup the title
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -690,7 +690,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false,$width=900,$height=500){
-		global $log;
+		global $log,$current_user;
 		$log->debug("Entering pipeline_by_sales_stage(".$datax.",".$date_start.",".$date_end.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings, $charset, $tmp_dir;
 		global $theme;
@@ -793,7 +793,7 @@ class jpgraph {
 					}
 					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', floor($record->column_fields['amount']));
+						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
 						$sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = $sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] + $amount;
 						if (isset($count[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']])) {
 							$count[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']]++;
@@ -915,8 +915,8 @@ class jpgraph {
 			$font->setColor($font_color);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 			$title->setText($titlestr);
 
 			// Create the xaxis labels
@@ -951,7 +951,7 @@ class jpgraph {
 			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// First make the labels look right
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
 			$yaxis->setDataPreprocessor($valueproc);
 			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
@@ -972,7 +972,7 @@ class jpgraph {
 
 			// Finally setup the title
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
@@ -1009,7 +1009,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true,$width=900,$height=500){
-		global $log;
+		global $log,$current_user;
 		$log->debug("Entering pipeline_by_lead_source(".$legends.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
@@ -1069,7 +1069,7 @@ class jpgraph {
 					if (!isset($sum[$record->column_fields['leadsource']])) $sum[$record->column_fields['leadsource']] = 0;
 					if (isset($record->column_fields['amount']) && isset($record->column_fields['leadsource']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', floor($record->column_fields['amount']));
+						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
 						$sum[$record->column_fields['leadsource']] = $sum[$record->column_fields['leadsource']] + ($amount/1000);
 						if (isset($count[$record->column_fields['leadsource']])) $count[$record->column_fields['leadsource']]++;
 						else $count[$record->column_fields['leadsource']] = 1;
@@ -1174,13 +1174,13 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$gbplot->setFillStyle($fills);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$current_user->currency_symbol.$total;
 
 			$title->setText($titlestr);
 
 			// format the data values
-			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $current_user->currency_symbol."%d");
 
 			// set markers
 			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
@@ -1198,7 +1198,7 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$legend_box->setFillColor('#F5F5F5');
 			$legend_box->showShadow();
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$current_user->currency_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$footer->setText($subtitle);
 			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_LEFT);
 

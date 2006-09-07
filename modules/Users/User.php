@@ -63,6 +63,10 @@ class User {
 	'activity_view' =>'',
 	'lead_view' =>'',
 	'currency_id' =>'',
+	'currency_name' =>'',
+	'currency_code' =>'',
+	'currency_symbol' =>'',
+	'conv_rate' =>'',
 	'hour_format' =>'',
 	'end_hour' =>'',
 	'start_hour' =>'',
@@ -838,6 +842,22 @@ class User {
 		}
 		$this->column_fields["record_id"] = $record;
 		$this->column_fields["record_module"] = $module;
+
+		$currency_query = "select * from vtiger_currency_info where id=".$this->column_fields["currency_id"]." and currency_status='Active'";
+		$currency_result = $adb->query($currency_query);
+		if($adb->num_rows($currency_result) == 0)
+		{
+			$currency_query = "select * from vtiger_currency_info where id =1";
+			$currency_result = $adb->query($currency_query);
+		}
+		$currency_array = array("$"=>"&#36;","&dollar;"=>"&#36;","&euro;"=>"&#8364;","&pound;"=>"&#163;","&yen;"=>"&#165;","Rs"=>"&#8360;");
+			$ui_curr = $currency_array[$adb->query_result($currency_result,0,"currency_symbol")];
+		if($ui_curr == "")
+			$ui_curr = $adb->query_result($currency_result,0,"currency_symbol");
+		$this->column_fields["currency_name"]= $this->currency_name = $adb->query_result($currency_result,0,"currency_name");
+		$this->column_fields["currency_code"]= $this->currency_code = $adb->query_result($currency_result,0,"currency_code");
+		$this->column_fields["currency_symbol"]= $this->currency_symbol = $ui_curr;
+		$this->column_fields["conv_rate"]= $this->conv_rate = $adb->query_result($currency_result,0,"conversion_rate");
 
 		$this->id = $record;
 		$log->debug("Exit from retrieve_entity_info($record, $module) method.");
