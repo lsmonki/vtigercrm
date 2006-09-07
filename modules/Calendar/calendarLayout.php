@@ -917,7 +917,7 @@ function getMonthViewLayout(& $cal)
 			//to display dates in month
 			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
 			{
-				$monthview_layout .= '<td class="'.$monthclass.'" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
+				$monthview_layout .= '<td style="text-align:left;" class="'.$monthclass.'" width="14%" onMouseOver="cal_show(\'create_'.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="fnHide_Event(\'create_'.$temp_date.''.$time_arr['starthour'].'\')">';
 				$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().''.$cal['slice']->start_time->get_date_str().'&parenttab='.$category.'">';
 				$monthview_layout .= $cal['slice']->start_time->get_Date();
 				$monthview_layout .= '</a>';
