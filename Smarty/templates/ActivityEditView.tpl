@@ -422,17 +422,22 @@
 														{assign var=rptstyle value='style="display:block"'}
 														{if $ACTIVITYDATA.eventrecurringtype eq 'Daily'}
 															{assign var=rptmonthstyle value='style="display:none"'}
+															{assign var=rptweekstyle value='style="display:none"'}
 														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Weekly'}
 															{assign var=rptmonthstyle value='style="display:none"'}
+															{assign var=rptweekstyle value='style="display:block"'}
 														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Monthly'}
 															{assign var=rptmonthstyle value='style="display:block"'}
+															{assign var=rptweekstyle value='style="display:none"'}
 														{elseif $ACTIVITYDATA.eventrecurringtype eq 'Yearly'}
 															{assign var=rptmonthstyle value='style="display:none"'}
+															{assign var=rptweekstyle value='style="display:none"'}
 														{/if}
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')" checked>
 													{else}
 														{assign var=rptstyle value='style="display:none"'}
 														{assign var=rptmonthstyle value='style="display:none"'}
+														{assign var=rptweekstyle value='style="display:none"'}
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
@@ -454,16 +459,16 @@
 													</td>
 												</tr>
 												</table>
-												<div id="repeatWeekUI" style="display:none;">
+												<div id="repeatWeekUI" {$rptweekstyle}>
 												<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
-													<td><input name="sun_flag" value="sunday" type="checkbox"></td><td>Sun</td>
-													<td><input name="mon_flag" value="monday" type="checkbox"></td><td>Mon</td>
-													<td><input name="tue_flag" value="tuesday" type="checkbox"></td><td>Tue</td>
-													<td><input name="wed_flag" value="wednesday" type="checkbox"></td><td>Wed</td>
-													<td><input name="thu_flag" value="thursday" type="checkbox"></td><td>Thu</td>
-													<td><input name="fri_flag" value="friday" type="checkbox"></td><td>Fri</td>
-													<td><input name="sat_flag" value="saturday" type="checkbox"></td><td>Sat</td>
+													<td><input name="sun_flag" value="sunday" {$ACTIVITYDATA.week0} type="checkbox"></td><td>Sun</td>
+													<td><input name="mon_flag" value="monday" {$ACTIVITYDATA.week1} type="checkbox"></td><td>Mon</td>
+													<td><input name="tue_flag" value="tuesday" {$ACTIVITYDATA.week2} type="checkbox"></td><td>Tue</td>
+													<td><input name="wed_flag" value="wednesday" {$ACTIVITYDATA.week3} type="checkbox"></td><td>Wed</td>
+													<td><input name="thu_flag" value="thursday" {$ACTIVITYDATA.week4} type="checkbox"></td><td>Thu</td>
+													<td><input name="fri_flag" value="friday" {$ACTIVITYDATA.week5} type="checkbox"></td><td>Fri</td>
+													<td><input name="sat_flag" value="saturday" {$ACTIVITYDATA.week6} type="checkbox"></td><td>Sat</td>
 												</tr>
 												</table>
 												</div>
