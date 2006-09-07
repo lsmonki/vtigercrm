@@ -9,10 +9,11 @@
 *
  ********************************************************************************/
 
+require_once('user_privileges/enable_backup.php');
 require_once('Smarty_setup.php');
 
 global $mod_strings;
-global $app_strings;
+global $app_strings, $enable_backup;
 global $app_list_strings;
 global $adb;
 global $theme;
@@ -54,6 +55,13 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
+
+if($enable_backup == 'true')	
+	$backup_status = 'enabled';
+else
+	$backup_status = 'disabled';
+
+$smarty->assign("BACKUP_STATUS", $backup_status);
 
 if($_REQUEST['ajax'] == 'true')
 	$smarty->display("Settings/BackupServerContents.tpl");
