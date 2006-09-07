@@ -1593,6 +1593,34 @@ function create_tab_data_file()
 
         }
 
+	//Constructing the actionname=>actionid array
+	$actionid_array=Array();
+	$sql1="select * from vtiger_actionmapping";
+	$result1=$adb->query($sql1);
+	$num_seq1=$adb->num_rows($result1);
+	for($i=0;$i<$num_seq1;$i++)
+	{
+		$actionname=$adb->query_result($result1,$i,'actionname');
+		$actionid=$adb->query_result($result1,$i,'actionid');
+		$actionid_array[$actionname]=$actionid;
+	}		
+
+	print_r($actionid_array);
+	
+	//Constructing the actionid=>actionname array with securitycheck=0
+	$actionname_array=Array();
+	$sql2="select * from vtiger_actionmapping where securitycheck=0";
+	$result2=$adb->query($sql2);
+	$num_seq2=$adb->num_rows($result2);
+	for($i=0;$i<$num_seq2;$i++)
+	{
+		$actionname=$adb->query_result($result2,$i,'actionname');
+		$actionid=$adb->query_result($result2,$i,'actionid');
+		$actionname_array[$actionid]=$actionname;
+	}
+
+	print_r($actionname_array);	
+	
         $filename = 'tabdata.php';
 	
 	
@@ -1614,6 +1642,10 @@ if (file_exists($filename)) {
                 $newbuf .= "\$tab_info_array=".constructArray($result_array).";\n";
                 $newbuf .= "\n";
                 $newbuf .= "\$tab_seq_array=".constructArray($seq_array).";\n";
+		$newbuf .= "\n";
+                $newbuf .= "\$action_id_array=".constructSingleStringKeyAndValueArray($actionid_array).";\n";
+		$newbuf .= "\n";
+                $newbuf .= "\$action_name_array=".constructSingleStringValueArray($actionname_array).";\n";
                 $newbuf .= "?>";
                 fputs($handle, $newbuf);
                 fclose($handle);
