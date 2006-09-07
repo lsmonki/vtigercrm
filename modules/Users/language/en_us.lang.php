@@ -596,6 +596,8 @@ $mod_strings = Array(
 'LBL_YES'=>'Yes',
 'LBL_NO'=>'No',
 
+'LBL_MANDATORY_MSG'=>'Mandatory Fields',
+'LBL_DISABLE_FIELD_MSG'=>'Fields Disabled from Global Field Access Settings',
 
 );
 
