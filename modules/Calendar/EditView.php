@@ -95,9 +95,16 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	    $value['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
 	    $recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
 	    $value['eventrecurringtype'] = $recurringinfo[0];
-	    if($recurringinfo[0] == 'Monthly')
+	    if($recurringinfo[0] == 'Weekly')
 	    {
-		    $monthrpt_str = '';
+		   for($i=0;$i<6;$i++)
+		   {
+			   $label = 'week'.$recurringinfo[$i+1];
+			   $value[$label] = 'checked';
+		   }
+	    }
+	    elseif($recurringinfo[0] == 'Monthly')
+	    {
 		    $value['repeatMonth'] = $recurringinfo[1];
 		    if($recurringinfo[1] == 'date')
 		    {
