@@ -388,7 +388,7 @@ $smarty->assign("UTILITIES_PRIV",$privilege_util);
 //Field privileges		
 $modArr=getFieldModuleAccessArray();
 
- 
+
 $no_of_mod=sizeof($modArr);
 for($i=0;$i<$no_of_mod; $i++)
 {
@@ -399,6 +399,19 @@ for($i=0;$i<$no_of_mod; $i++)
 }
 $smarty->assign("PRI_FIELD_LIST",$privilege_fld);	
 $smarty->assign("MODE",$mode);
+
+$disable_field_array = Array();
+$sql_disablefield = "select * from vtiger_def_org_field";
+$result = $adb->query($sql_disablefield);
+$noofrows=$adb->num_rows($result);
+for($i=0; $i<$noofrows; $i++)
+{
+	$FieldId = $adb->query_result($result,$i,'fieldid');
+	$Visible = $adb->query_result($result,$i,'visible');
+
+	$disable_field_array[$FieldId] = $Visible;
+}
+
 if($mode=='view')
 {
 	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);
@@ -446,7 +459,11 @@ elseif($mode=='edit')
 			$mandatory = '';
 			$readonly = '';
 			$field=array();
-
+			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+			{
+				$mandatory = '<font color="blue">*</font>';
+				$readonly = 'disabled';
+			}
 			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 			{
 				$mandatory = '<font color="red">*</font>';
@@ -491,6 +508,11 @@ elseif($mode=='create')
 				$readonly = '';
 				$field=array();
 
+				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+				{
+					$mandatory = '<font color="blue">*</font>';
+					$readonly = 'disabled';
+				}
 				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 				{
 					$mandatory = '<font color="red">*</font>';
@@ -532,6 +554,11 @@ elseif($mode=='create')
 				$readonly = '';
 				$field=array();
 
+				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+				{
+					$mandatory = '<font color="blue">*</font>';
+					$readonly = 'disabled';
+				}
 				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 				{
 					$mandatory = '<font color="red">*</font>';
