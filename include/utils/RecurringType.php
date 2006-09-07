@@ -42,12 +42,10 @@ class RecurringType
 			'month' => $end_date[1],
 			'year'  => $end_date[0]
 		);
-		//echo '<pre>';print_r($end_date);echo '</pre>';
 		$this->recur_type = $repeat_arr['type'];
 		$this->recur_freq = $repeat_arr['repeat_frequency'];
 		$this->startdate = new DateTime($start_date,true);
 		$this->enddate = new DateTime($end_date,true);
-		//echo '<pre>';print_r($this->startdate);echo '</pre>';die;
 		if($repeat_arr['sun_flag'])
 		{
 			$this->dayofweek_to_rpt[] = 0;
@@ -81,7 +79,6 @@ class RecurringType
 			$this->rptmonth_datevalue = $repeat_arr['repeatmonth_date'];
 		$this->rptmonth_daytype = $repeat_arr['repeatmonth_daytype'];
 		$this->recurringdates = $this->getRecurringDates();
-		//echo '<pre>';print_r($this);echo '</pre>';die;
 	}
 
 	/**
@@ -109,20 +106,6 @@ class RecurringType
 			}
 			elseif($this->recur_type == 'Weekly')
 			{
-				//echo '<pre>';print_r($this);echo '</pre>';die;
-				$recurringDates[] = $tempdate;
-				$st_date = explode("-",$tempdate);
-				if(isset($this->recur_freq))
-					$index = $this->recur_freq * 7;
-				else
-					$index = 7;
-				$date_arr = Array(
-					'day'   => $st_date[2] + $index,
-					'month' => $st_date[1],
-					'year'  => $st_date[0]
-				);
-				$tempdateObj = new DateTime($date_arr,true);
-				/*$recurringDates[] = $tempdate;
 				$st_date = explode("-",$tempdate);
 				$date_arr = Array(
 					'day'   => $st_date[2],
@@ -130,28 +113,57 @@ class RecurringType
 					'year'  => $st_date[0]
 				);
 				$tempdateObj = new DateTime($date_arr,true);
-				$firstdayofweekObj = $tempdateObj->getThisweekDaysbyIndex(0);
-				$date_arr = Array(
-					'day'   => $firstdayofweekObj->day+$this->dayofweek_to_rpt[0],
-					'month' => $st_date[1],
-					'year'  => $st_date[0]
-				);
-				$firstrptObj = new DateTime($date_arr,true);
-				
-				if(isset($this->recur_freq) && $this->recur_freq != null)
-					$index = $st_date[2] + ($this->recur_freq -1) ;
-				else
-					$index = $st_date[2] - 1 ;
-				$index = $st_date[2] - 1 ;
-				$tempdateObj = $this->startdate->getThismonthDaysbyIndex($index,'',$st_date[1],$st_date[0]);
-				if(in_array($tempdateObj->dayofweek_inshort,$this->repeatdays))
+				if(isset($this->dayofweek_to_rpt) && $this->dayofweek_to_rpt != null)
 				{
-					$tempdate = $tempdateObj->get_formatted_date();
+					$weekstartObj = $tempdateObj->getThisweekDaysbyIndex(0);
+					if($weekstartObj->get_formatted_date() >= $this->startdate->get_formatted_date())
+					{
+						for($i=0;$i<count($this->dayofweek_to_rpt);$i++)
+						{
+							$repeatdateObj = $weekstartObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
+							if($repeatdateObj->get_formatted_date() <= $enddate)
+								$recurringDates[] = $repeatdateObj->get_formatted_date();
+						}
+						if(isset($this->recur_freq))
+							$index = $this->recur_freq * 7;
+						else
+						        $index = 7;
+						$date_arr = Array(
+							'day'   => $st_date[2] + $index,
+							'month' => $st_date[1],
+							'year'  => $st_date[0]
+						);
+						$tempdateObj = new DateTime($date_arr,true);
+					}
+					else
+					{
+						if(isset($this->recur_freq))
+							$index = $this->recur_freq * 7;
+						else
+							$index = 7;
+						$date_arr = Array(
+							'day'   => $st_date[2] + $index,
+							'month' => $st_date[1],
+							'year'  => $st_date[0]
+						);
+						$tempdateObj = new DateTime($date_arr,true);
+						
+					}
 				}
 				else
 				{
+					$recurringDates[] = $tempdateObj->get_formatted_date();
+					if(isset($this->recur_freq))
+						$index = $this->recur_freq * 7;
+					else
+						$index = 7;
+					$date_arr = Array(
+						'day'   => $st_date[2] + $index,
+						'month' => $st_date[1],
+						'year'  => $st_date[0]
+					);
+					$tempdateObj = new DateTime($date_arr,true);
 				}
-				//echo '<pre>';print_r($this);echo '</pre>';die;*/
 				$tempdate = $tempdateObj->get_formatted_date();
 			}
 			elseif($this->recur_type == 'Monthly')
