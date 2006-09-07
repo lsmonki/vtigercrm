@@ -36,49 +36,84 @@
 				</tr>
 				</table>
 				
-				<br>
-				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 				<tr>
-				<td>
+				<td class="big" height="40px;" width="70%"><strong>{$MOD.LBL_BACKUP_SERVER_SETTINGS}</strong></td>
+				<td class="small" align="center" width="30%">&nbsp;
+					<span id="view_info" class="crmButton small cancel" style="display:none;"></span>
+				</td>
+				</tr>
+				</table>
 				
-					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+				<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+				<tr>
+				<td class="small" valign=top >
+					<table width="100%"  border="0" cellspacing="0" cellpadding="5">
 					<tr>
-						<td class="big"><strong>{$MOD.LBL_BACKUP_SERVER_SETTINGS} ({$MOD.LBL_FTP})<br>{$ERROR_MSG}</strong></td>
-						{if $BKP_SERVER_MODE neq 'edit'}
-						<td class="small" align=right>
-							<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-							<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="clearBackupServer();" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
-						</td>
-						{else}
-						<td class="small" align=right>
-							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()">&nbsp;&nbsp;
-						    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
-						</td>
-						{/if}
+					<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_ENABLE} {$MOD.LBL_BACKUP_SERVER_SETTINGS}</strong></td>
+					<td width="80%" class="small cellText">
+					{if $BACKUP_STATUS eq 'enabled'}
+						<input type="checkbox" checked name="enable_backup" onclick="backupenabled(this)"></input>
+					{else}
+						<input type="checkbox" name="enable_backup" onclick="backupenabled(this)"></input>
+					{/if}
+					</td>
 					</tr>
 					</table>
+				</td>
+				</tr>
+				<tr>
+				<td class="small" valign=top >
+				<br>
+				{if $BACKUP_STATUS eq 'enabled'}
+					<div id='bckcontents' style="display:block;">
+				{else}
+					<div id='bckcontents' style="display:none;">
+				{/if}
+					<table border=0 cellspacing=0 cellpadding=10 width=100% >
+					<tr>
+					<td>
 				
-					<div id="BackupServerContents">
-						{include file="Settings/BackupServerContents.tpl"}
+						<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+						<tr>
+							<td class="big"><strong>{$MOD.LBL_BACKUP_SERVER_SETTINGS} ({$MOD.LBL_FTP})<br>{$ERROR_MSG}</strong></td>
+							{if $BKP_SERVER_MODE neq 'edit'}
+							<td class="small" align=right>
+								<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
+								<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="clearBackupServer();" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
+							</td>
+							{else}
+							<td class="small" align=right>
+								<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()">&nbsp;&nbsp;
+							    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+							</td>
+							{/if}
+						</tr>
+						</table>
+					</td>
+					</tr>
+					<tr>
+					<td>
+						<div id="BackupServerContents">
+							{include file="Settings/BackupServerContents.tpl"}
+						</div>
+					</td>
+					</tr>
+					</table>
 					</div>
 				</td>
 				</tr>
 				</table>
-			
-			
-			
-			</td>
-			</tr>
-			</table>
 		</td>
-	</tr>
-	</form>
-	</table>
-		
+		</tr>
+		</form>
+		</table>
+		</td></tr>
+		</table>	
 	</div>
-</td>
+	</td>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
-   </tr>
+</tr>
 </tbody>
 </table>
 {literal}
@@ -103,5 +138,39 @@ new Ajax.Request('index.php',
                         }
                 );	
 }
+
+function backupenabled(ochkbox)
+{
+	if(ochkbox.checked == true)
+	{
+		$('bckcontents').style.display='block';
+		var status='enabled';
+		$('view_info').innerHTML = 'Backup Enabled';
+		$('view_info').style.display = 'block';		
+		
+			
+	}
+	else
+	{
+		$('bckcontents').style.display='none';
+		var status = 'disabled';	
+	     	$('view_info').innerHTML = 'Backup Disabled';
+	     	$('view_info').style.display = 'block';		
+	}
+             $("status").style.display="block";
+	     new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Settings&action=SettingsAjax&file=SaveEnableBackup&ajax=true&enable_backup='+status,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                        }
+                }
+        );
+			
+	setTimeout("hide('view_info')",3000);
+}
+
 </script>
 {/literal}
