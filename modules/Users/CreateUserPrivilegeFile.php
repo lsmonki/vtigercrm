@@ -1317,6 +1317,38 @@ function constructSingleStringValueArray($var)
   * @param $var -- input array:: Type array
   * @returns $code -- contains the whole array in a single string:: Type array 
  */
+function constructSingleStringKeyAndValueArray($var)
+{
+
+        $size = sizeof($var);
+        $i=1;
+        if (is_array($var))
+        {
+                $code = 'array(';
+                foreach ($var as $key => $value)
+                {
+                        if($i<$size)
+                        {
+                                $code .= "'".$key."'=>".$value.",";
+                        }
+                        else
+                        {
+                                $code .= "'".$key."'=>".$value;
+                        }
+                        $i++;
+                }
+                $code .= ')';
+                return $code;
+        }
+}
+
+
+
+/** Converts the input array  to a single string to facilitate the writing of the input array in a flat file 
+
+  * @param $var -- input array:: Type array
+  * @returns $code -- contains the whole array in a single string:: Type array 
+ */
 function constructSingleStringKeyValueArray($var)
 {
 
