@@ -235,6 +235,14 @@
 			</table>
 		</td>
                 </tr>
+		<table border="0" cellpadding="2" cellspacing="0">
+			<tr>
+				<td align="left"><font color="red" size=5>*</font>{$CMOD.LBL_MANDATORY_MSG}</td>
+			</tr>
+			<tr>
+				<td align="left"><font color="blue" size=5>*</font>{$CMOD.LBL_DISABLE_FIELD_MSG}</td>
+			</tr>
+		</table>
 		<tr>
 		<td style="border-top: 2px dotted rgb(204, 204, 204);" align="right">
 		<!-- wizard buttons -->
@@ -244,6 +252,7 @@
 				<td><input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit"></td>
 				<td>&nbsp;</td>
 			</tr>
+			
 		</tbody>
 		</table>
 		</td>
