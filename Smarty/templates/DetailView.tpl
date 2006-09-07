@@ -401,6 +401,11 @@ function DeleteTag(id)
 			<!-- Mail Merge-->
 				<br>
 				{if $MERGEBUTTON eq 'permitted'}
+				<form action="index.php" method="post" name="TemplateMerge" id="form">
+				<input type="hidden" name="module" value="{$MODULE}">
+				<input type="hidden" name="parenttab" value="{$CATEGORY}">
+				<input type="hidden" name="record" value="{$ID}">
+				<input type="hidden" name="action">
   				<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
       				<tr>
       					   <td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
@@ -412,6 +417,7 @@ function DeleteTag(id)
       					  </td>
       				</tr>
   				</table>
+				</form>
 				{/if}
 			</td>
 		</tr>
