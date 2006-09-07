@@ -243,7 +243,7 @@ x solid #dddddd">
 										</tr>
 										<tr>
                                                                                         <td width="30%" align=right>&nbsp;</td>
-                                                                                        <td>{$ACTIVITYDATA.repeat_month_str}</td>
+                                                                                        <td>{$ACTIVITYDATA.repeat_str}</td>
                                                                                 </tr>
 										{/if}
 									</table>
