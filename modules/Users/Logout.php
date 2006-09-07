@@ -25,33 +25,36 @@ require_once('config.php');
 require_once('include/db_backup/backup.php');
 require_once('include/db_backup/ftp.php');
 require_once('include/database/PearDatabase.php');
+require_once('user_privileges/enable_backup.php');
 
-$ftpserver = '';
-$ftpuser = '';
-$ftppassword = '';
-global $adb;
-$query = "select * from vtiger_systems where server_type='backup'";
-$result = $adb->query($query);
-$num_rows = $adb->num_rows($result);
-if($num_rows > 0)
+global $adb, $enable_backup;
+
+if($enable_backup == 'true')
 {
-	$ftpserver = $adb->query_result($result,0,'server');
-	$ftpuser = $adb->query_result($result,0,'server_username');
-	$ftppassword = $adb->query_result($result,0,'server_password');
-}
+	$ftpserver = '';
+	$ftpuser = '';
+	$ftppassword = '';
+	$query = "select * from vtiger_systems where server_type='backup'";
+	$result = $adb->query($query);
+	$num_rows = $adb->num_rows($result);
+	if($num_rows > 0)
+	{
+		$ftpserver = $adb->query_result($result,0,'server');
+		$ftpuser = $adb->query_result($result,0,'server_username');
+		$ftppassword = $adb->query_result($result,0,'server_password');
+	}
 
-
-//Taking the Backup of DB
+	//Taking the Backup of DB
 	$currenttime=date("Ymd_His");
 	if($ftpserver != '' && $ftpuser != '' && $ftppassword != '')
 	{	$backupFileName="backup_".$currenttime.".sql";
-		save_structure($backupFileName, $root_directory);
-		$source_file=$backupFileName;	
-		ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword);
-		if(file_exists($source_file)) unlink($source_file);	
-		
-	}
+	save_structure($backupFileName, $root_directory);
+	$source_file=$backupFileName;	
+	ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword);
+	if(file_exists($source_file)) unlink($source_file);	
 
+	}
+}
 // Recording Logout Info
 	$usip=$_SERVER['REMOTE_ADDR'];
         $outtime=date("Y/m/d H:i:s");
