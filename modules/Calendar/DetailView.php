@@ -174,7 +174,23 @@ elseif($activity_mode == 'Events')
 		$data['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
 		$recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
 		$data['recurringtype'] = $recurringinfo[0];
-		if($recurringinfo[0] == 'Monthly')
+		if($recurringinfo[0] == 'Weekly')
+		{
+			$weekrpt_str = '';
+			if(count($recurringinfo) > 1)
+			{
+				$weekrpt_str .= 'on ';
+				for($i=1;$i<count($recurringinfo);$i++)
+				{
+					$label = 'LBL_DAY'.$recurringinfo[$i];
+					if($i != 1)
+						$weekrpt_str .= ', ';
+					$weekrpt_str .= $mod_strings[$label];
+				}
+			}
+			$data['repeat_str'] = $weekrpt_str;
+		}
+		elseif($recurringinfo[0] == 'Monthly')
 		{   
 			$monthrpt_str = '';
 			$data['repeatMonth'] = $recurringinfo[1];  
@@ -214,7 +230,7 @@ elseif($activity_mode == 'Events')
 
 				$monthrpt_str .= 'on '.$mod_strings[$recurringinfo[2]].' '.$day;
 			}
-			$data['repeat_month_str'] = $monthrpt_str;
+			$data['repeat_str'] = $monthrpt_str;
 		}
 	}
 	else 
