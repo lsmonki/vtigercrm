@@ -1616,8 +1616,6 @@ function create_tab_data_file()
 		$actionid_array[$actionname]=$actionid;
 	}		
 
-	print_r($actionid_array);
-	
 	//Constructing the actionid=>actionname array with securitycheck=0
 	$actionname_array=Array();
 	$sql2="select * from vtiger_actionmapping where securitycheck=0";
@@ -1630,8 +1628,6 @@ function create_tab_data_file()
 		$actionname_array[$actionid]=$actionname;
 	}
 
-	print_r($actionname_array);	
-	
         $filename = 'tabdata.php';
 	
 	
