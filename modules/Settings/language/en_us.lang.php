@@ -719,6 +719,8 @@ $mod_strings = Array(
 'LBL_TYPEALERT_1'=>'Sorry, you cannot map the',
 'LBL_WITH'=>'with',
 'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
+'LBL_ENABLE'=>'Enable',
+
 );
 
 
