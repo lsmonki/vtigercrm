@@ -13,6 +13,8 @@
 <script>
 function massDelete()
 {ldelim}
+	if(typeof(document.massdelete.selected_id) == 'undefined')
+		return false;
         x = document.massdelete.selected_id.length;
         idstring = "";
 
@@ -53,7 +55,7 @@ function massDelete()
        {rdelim}
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{ldelim}
-	        document.massdelete.action="index.php?module=Users&action=deletewordtemplate&return_module=Users&return_action=listwordtemplates";
+	        	document.massdelete.action.value= "deletewordtemplate";
 		{rdelim}
 		else
 		{ldelim}
@@ -78,7 +80,7 @@ function massDelete()
 	    			<input name="idlist" type="hidden">
     				<input name="module" type="hidden" value="Users">
     				<input name="parenttab" type="hidden" value="Settings">
-    				<input name="action" type="hidden" value="deletewordtemplate">
+    				<input name="action" type="hidden">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}mailmarge.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_WORD_TEMPLATES} </b></td>
@@ -120,7 +122,7 @@ function massDelete()
 					{foreach item=template name=mailmerge from=$WORDTEMPLATES}
 					<tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.mailmerge.iteration}</td>
-						<td class="listTableRow small" valign=top><input type="checkbox" class=small name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall")></td>
+						<td class="listTableRow small" valign=top><input type="checkbox" class=small name="selected_id" value="{$template.templateid}"></td>
 						<td class="listTableRow small" valign=top><b>{$template.filename}</b></a></td>
 						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
 				        <td class="listTableRow small" valign=top>{$template.module}</td>
