@@ -25,6 +25,12 @@ define('LOG4PHP_DEFAULT_INIT_OVERRIDE', true);
 require_once(LOG4PHP_DIR.'/LoggerManager.php');
 require_once(LOG4PHP_DIR.'/LoggerPropertyConfigurator.php');
 
+// change the umask so that the log file is created with the proper permissions
+if($log_readable == 1) {
+	$old_umask = umask(0177);
+} else {
+	$old_umask = umask(0577);
+}
 $config = new LoggerPropertyConfigurator();
 $config->configure('log4php.properties');
 
