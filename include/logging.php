@@ -33,5 +33,6 @@ if($log_readable == 1) {
 }
 $config = new LoggerPropertyConfigurator();
 $config->configure('log4php.properties');
+umask($old_umask);
 
 ?>
