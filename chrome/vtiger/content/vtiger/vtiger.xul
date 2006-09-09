@@ -26,11 +26,11 @@
 	 <menuitem insertafter="menu_preferences" id="vtigerMenu"/>
 	 <menuseparator/>
 	 <menuitem label="vtiger CRM Configuration..." accesskey="v" oncommand="window.openDialog('chrome://vtiger/content/vtiger-settings.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
-	 <menuitem label="Add Message to vtiger CRM..." accesskey="d" oncommand="load_addmsgtovtiger();window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>	 
+	 <menuitem label="Add Message to vtiger CRM..." accesskey="d" oncommand="load_addmsgtovtiger();"/>	 
 </menupopup>
 
 <popup id="threadPaneContext">
-    <menuitem id="vtigerpcontext" accesskey="v" label="Add Message to vtiger CRM" oncommand="load_addmsgtovtiger();window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+    <menuitem id="vtigerpcontext" accesskey="v" label="Add Message to vtiger CRM" oncommand="load_addmsgtovtiger();"/>
 </popup>
 
 
