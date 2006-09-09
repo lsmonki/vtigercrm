@@ -382,7 +382,7 @@ if($use_current_login)
 		else
 			$auditrecord = $record;	
 
-		$date_var = date('YmdHis');
+		$date_var = $adb->formatDate(date('YmdHis'));
 		if ($action != 'chat')
 		{	
 			$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."','".$auditrecord."',$date_var)";
