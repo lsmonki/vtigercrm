@@ -47,17 +47,9 @@ if($focus->is_authenticated())
 		else
 			$auditrecord = $record;	
 
-		if( $adb->dbType = "pgsql")
-	       	{
- 			$date_var = date('Y-m-d H:i:s');
- 			$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','','$date_var')";
- 	    	}
-		else
-	       	{
+		$date_var = $adb->formatDate(date('YmdHis'));
+ 	    $query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";	
 			
-			$date_var = date('YmdHis');
-			$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";
-		}	
 		$adb->query($query);
 	}
 
