@@ -83,14 +83,14 @@ function add_attachment_to_contact($cid,$email) {
 	    $upload_filepath = decideFilePath();
 	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = date('YmdHis');
+		$date_var = $adb->formatDate(date('YmdHis'));	
 
 		$filename = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
         	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
 		$filesize = $attachments[$i]["filesize"];
 
                 $query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
-                $query .= $current_id."','".$current_user->id."','".$current_user->id."','Contacts Attachment','Uploaded from webmail during qualification','".$date_var."')";
+                $query .= $current_id."','".$current_user->id."','".$current_user->id."','Contacts Attachment','Uploaded from webmail during qualification',".$date_var.")";
                 $result = $adb->query($query);
 
                 $sql = "insert into vtiger_attachments values(";
