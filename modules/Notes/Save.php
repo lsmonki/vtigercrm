@@ -56,7 +56,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		$filepath = $adb->query_result($result,0,'path');
 
 		$new_attachmentid = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = date('YmdHis');
+		$date_var = $adb->formatDate(date('YmdHis'));	
 
 		$upload_filepath = decideFilePath();
 
