@@ -143,7 +143,7 @@ $default_action = 'index';
 
 // set default theme
 // default_theme default value = blue
-$default_theme = 'blue';
+$default_theme = 'bluelagoon';
 
 // show or hide time to compose each page
 // calculate_response_time default value = true
