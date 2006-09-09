@@ -224,9 +224,11 @@ a:hover {
 	border :0px #cccccc solid;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
+	font-weight:bold;
 	width:30px;
 	height:19px;
-	background-color:#999;
+	background-color:#009;
+	color:white;
 }
 
 
@@ -3231,19 +3233,19 @@ border-width:1px;
 }
 
 .reportGenerateTable{
-	background-image:url(images/searchUIBg.gif);
-	border-left:2px dotted #a3a29a;
-	border-right:2px dotted #a3a29a;
-	border-bottom:2px dotted #a3a29a;
+	background-image:url(images/layerPopupBg.gif);
+	border-left:2px dotted #a5b5ee;
+	border-right:2px dotted #a5b5ee;
+	border-bottom:2px dotted #a5b5ee;
 }
 .reportCreateBottom{
-	background-color:#939271;
+	background-color:#ddf;
 	border-bottom:2px solid #737251;
 
 }
 .importLeadUI{
-	
-	background:#fffff5 url(images/layerPopupBg.gif) ;
+	/*background:#fffff5 url(images/select.gif) ; */
+	background-color:white;
 }
 
 a.customMnu{
