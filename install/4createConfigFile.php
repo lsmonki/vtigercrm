@@ -375,7 +375,7 @@ $cache_dir = 'cache/';
  	$config .= "\$default_action = 'index';\n\n";
 
  	$config .= "//set default theme\n";
- 	$config .= "\$default_theme = 'blue';\n\n";
+ 	$config .= "\$default_theme = 'bluelagoon';\n\n";
 
  	$config .= "// If true, the time to compose each page is placed in the browser.\n";
  	$config .= "\$calculate_response_time = true;\n";
