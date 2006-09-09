@@ -634,7 +634,8 @@ class User {
 				$this->insertIntoEntityTable($table_name, $module);			
 			}
 		}
-
+		require_once('modules/Users/CreateUserPrivilegeFile.php');
+		createUserPrivilegesfile($this->id);
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	}
@@ -850,7 +851,7 @@ class User {
 			$currency_query = "select * from vtiger_currency_info where id =1";
 			$currency_result = $adb->query($currency_query);
 		}
-		$currency_array = array("$"=>"&#36;","&dollar;"=>"&#36;","&euro;"=>"&#8364;","&pound;"=>"&#163;","&yen;"=>"&#165;","Rs"=>"&#8360;");
+		$currency_array = array("$"=>"&#36;","&euro;"=>"&#8364;","&pound;"=>"&#163;","&yen;"=>"&#165;");
 			$ui_curr = $currency_array[$adb->query_result($currency_result,0,"currency_symbol")];
 		if($ui_curr == "")
 			$ui_curr = $adb->query_result($currency_result,0,"currency_symbol");
