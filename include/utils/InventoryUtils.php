@@ -334,8 +334,9 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 					"Invoice"=>"vtiger_invoicestatushistory"
 				    );
 
-	$modifiedtime = date('YmdHis');
-	$query = "insert into $history_table_array[$module] values('',$id,\"$relatedname\",\"$total\",\"$history_fldval\",\"$modifiedtime\")";
+	$histid = $adb->getUniqueID($history_table_array[$module]);
+ 	$modifiedtime = $adb->formatDate(date('YmdHis'));
+ 	$query = "insert into $history_table_array[$module] values($histid,$id,'$relatedname','$total','$history_fldval',$modifiedtime)";	
 	$adb->query($query);
 
 	$log->debug("Exit from function addInventoryHistory");
@@ -396,12 +397,17 @@ function getTaxDetailsForProduct($productid, $available='all')
 		}
 		if($available != 'all' && $available == 'available_associated')
 		{
-			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 group by vtiger_inventorytaxinfo.taxid";
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 GROUP BY vtiger_inventorytaxinfo.taxid";
 		}
 		else
 		{
 			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo INNER JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid $where";
 		}
+
+		//Postgres 8 fixes
+ 		if( $adb->dbType == "pgsql")
+ 		    $query = fixPostgresQuery( $query, $log, 0);
+		
 		$res = $adb->query($query);
 		for($i=0;$i<$adb->num_rows($res);$i++)
 		{
@@ -502,7 +508,7 @@ function saveInventoryProductDetails($focus, $module)
 		// and salepeople can control the order than their quote (etc) items print out
 		// so we create a new field "sequence_no" and stick the value of $i into it
 
-		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, \"$comment\")";
+		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment')";
 		$prod_seq++;
 		$adb->query($query);
 
@@ -551,7 +557,10 @@ function saveInventoryProductDetails($focus, $module)
 			}
 			$updatequery = trim($updatequery,',')." where id=$focus->id and productid=$prod_id";
 		}
-		$adb->query($updatequery);
+		// jens 2006/08/19 - protect against empy update queries
+ 		if( !preg_match( '/set\s+where/i', $updatequery)) {
+ 		    $adb->query($updatequery);
+ 		}
 	}
 
 	//we should update the netprice (subtotal), taxtype, group discount, S&H charge, S&H taxes, adjustment and total
