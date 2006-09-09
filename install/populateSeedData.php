@@ -186,7 +186,7 @@ for($i = 0; $i < $company_name_count; $i++)
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[1]', '$cloudtag[1]')";
 		$res = $adb->query($query);
 
-		$date = date('YmdHis'); 
+		$date = $adb->formatDate(date('YmdHis')); 
 		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$account->id.", $date, 'Accounts')";
 		$result = $adb->query($query_tag);
 	}
@@ -289,7 +289,7 @@ for($i=0; $i<10; $i++)
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[2]', '$cloudtag[2]')";
 		$res1 = $adb->query($query);
 
-		$date = date('YmdHis'); 
+		$date = $adb->formatDate(date('YmdHis')); 
 		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$contact->id.", $date, 'Contacts')";
 		$result1 = $adb->query($query_tag);
 	}
@@ -839,7 +839,7 @@ for($i=0;$i<5;$i++)
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[0]', '$cloudtag[0]')";
 		$res_inv = $adb->query($query);
 
-		$date = date('YmdHis'); 
+		$date = $adb->formatDate(date('YmdHis')); 
 		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$invoice->id.", $date, 'Invoice')";
 		$result_inv = $adb->query($query_tag);
 	}
@@ -996,7 +996,7 @@ for($i=0;$i<5;$i++)
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[3]', '$cloudtag[3]')";
 		$res_tkt = $adb->query($query);
 
-		$date = date('YmdHis'); 
+		$date = $adb->formatDate(date('YmdHis')); 
 		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$helpdesk->id.", $date, 'HelpDesk')";
 		$result_tkt = $adb->query($query_tag);
 	}
