@@ -45,8 +45,8 @@ $focus->retrieve_entity_info($id,"Leads");
 //get all the lead related columns 
 $row = $focus->column_fields;
 
-$date_entered = date('YmdHis');
-$date_modified = date('YmdHis');
+$date_entered = $adb->formatDate(date('YmdHis'));
+$date_modified = $adb->formatDate(date('YmdHis'));
 
 /** Function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields.
  *  @param string $type - Field Type (eg: text, list)
@@ -315,8 +315,8 @@ saveLeadRelatedProducts($id, $crmid);
 
 
 
-$date_entered = date('YmdHis');
-$date_modified = date('YmdHis');
+$date_entered = $adb->formatDate(date('YmdHis'));
+$date_modified = $adb->formatDate(date('YmdHis'));
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
@@ -376,8 +376,9 @@ saveLeadRelatedCampaigns($id, $contact_id);
 if(! isset($createpotential) || ! $createpotential == "on")
 {
 	$log->info("createpotential is not set");
-	$date_entered = date('YmdHis');
-	$date_modified = date('YmdHis');
+
+	$date_entered = $adb->formatDate(date('YmdHis'));
+	$date_modified = $adb->formatDate(date('YmdHis'));
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
