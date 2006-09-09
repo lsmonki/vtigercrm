@@ -2431,7 +2431,7 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["contacts"]))
 			{
 				$columnfields = implode(',',$fields["contacts"]);
-				$query = 'select '.$columnfields.' from contactdetails where contactid='.$id;
+				$query = 'select '.$columnfields.' from vtiger_contactdetails where contactid='.$id;
 				$result = $adb->query($query);
 				foreach($fields["contacts"] as $columnname)
 				{
@@ -2444,7 +2444,7 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["leads"]))
 			{
 				$columnfields = implode(',',$fields["leads"]);
-				$query = 'select '.$columnfields.' from leaddetails where leadid='.$id;
+				$query = 'select '.$columnfields.' from vtiger_leaddetails where leadid='.$id;
 				$result = $adb->query($query);
 				foreach($fields["leads"] as $columnname)
 				{
