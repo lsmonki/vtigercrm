@@ -935,7 +935,7 @@ function insertIntoTicketCommentTable($table_name, $module)
         global $adb;
 	global $current_user;
 
-        $current_time = date('Y-m-d H:i:s');
+        $current_time = $adb->formatDate(date('YmdHis'));
 	if($this->column_fields['assigned_user_id'] != '')
 		$ownertype = 'user';
 	else
@@ -949,7 +949,7 @@ function insertIntoTicketCommentTable($table_name, $module)
 	if($comment != '')
 	{
 		$comment = addslashes($comment);
-		$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+		$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."',".$current_time.")";	
 	        $adb->query($sql);
 	}
 }
@@ -963,7 +963,7 @@ function insertIntoFAQCommentTable($table_name, $module)
 	$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 
-        $current_time = date('Y-m-d H:i:s');
+        $current_time = $adb->formatDate(date('YmdHis'));
 
 	if($this->column_fields['comments'] != '')
 		$comment = $this->column_fields['comments'];
@@ -973,7 +973,7 @@ function insertIntoFAQCommentTable($table_name, $module)
 	if($comment != '')
 	{
 		$comment = addslashes($comment);
-		$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+		$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."',".$current_time.")";	
 		$adb->query($sql);
 	}
 }
