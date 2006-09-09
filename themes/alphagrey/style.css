@@ -3339,3 +3339,68 @@ a.drop_down:Hover{
 }
 
 
+
+/* Recalculate Disabling Window */
+
+.veil{
+   background: url(images/layerPopupBg.gif) ;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    z-index: 10000;
+    Filter: Alpha(opacity = 70);
+    -moz-opacity: 0.7;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+}
+
+.veil_new{
+   background: url(images/layerPopupBg.gif) ;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    z-index: 50000;
+    Filter: Alpha(opacity = 70);
+    -moz-opacity: 0.7;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+}
+
+.optioncontainer{
+    vertical-align: middle;   
+    height: 100%;
+    width: 100%;   
+    position: absolute;
+    z-index: 90000;   
+}
+
+
+.options{
+    	vertical-align: middle;   
+	margin-left: 25%;
+	margin-top: 16%;
+	color: #FFFFFF;
+	width:650px;
+	background-color: Black;
+	border: 2px solid #222;	
+    	position: relative;
+	text-align: left;
+    	z-index: 80000;   
+}
+
+.options h2{
+	color: White;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-bottom: 1px solid #373D4C;
+	margin: 0;
+	font-weight: normal;
+}
+
+/* Recalculate Disable Ends */
+
