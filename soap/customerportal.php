@@ -412,10 +412,10 @@ function get_KBase_details($id='')
 function save_faq_comment($faqid,$comment)
 {
 	global $adb;
-	$createdtime = date('Y-m-d H:i:s');
+	$createdtime = $adb->formatDate(date('YmdHis'));	
 	if(trim($comment) != '')
 	{
-		$faq_query = "insert into vtiger_faqcomments values('',".$faqid.",'".$comment."','".$createdtime."')";
+		$faq_query = "insert into vtiger_faqcomments values('',".$faqid.",'".$comment."',".$createdtime.")";
 		$adb->query($faq_query);
 	}
 	$result = get_KBase_details('');
@@ -561,15 +561,15 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 function update_ticket_comment($ticketid,$ownerid,$comments)
 {
 	global $adb;
-	$servercreatedtime = date("Y-m-d H:i:s");
-	if(trim($comments) != '')
-	{
-		$sql = "insert into vtiger_ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer','".$servercreatedtime."')";
-		$adb->query($sql);
-
-		$updatequery = "update vtiger_crmentity set modifiedtime='".$servercreatedtime."' where crmid=".$ticketid;
-		$adb->query($updatequery);
-	}
+	$servercreatedtime = $adb->formatDate(date('YmdHis'));
+  	if(trim($comments) != '')
+  	{
+ 		$sql = "insert into vtiger_ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer',".$servercreatedtime.")";
+  		$adb->query($sql);
+  
+ 		$updatequery = "update vtiger_crmentity set modifiedtime=".$servercreatedtime." where crmid=".$ticketid;
+  		$adb->query($updatequery);
+  	}	
 }
 
 /**	function used to close the ticket
@@ -633,11 +633,11 @@ function change_password($id,$username,$password)
 function update_login_details($id,$flag)
 {
         global $adb;
-	$current_time = date("Y-m-d H:i:s");
+	$current_time = $adb->formatDate(date('YmdHis'));	
 
 	if($flag == 'login')
 	{
-	        $sql = "update vtiger_portalinfo set login_time='".$current_time."' where id=".$id;
+	       	$sql = "update vtiger_portalinfo set login_time=".$current_time." where id=".$id; 
 	        $result = $adb->query($sql);
 	}
 	elseif($flag == 'logout')
@@ -647,7 +647,7 @@ function update_login_details($id,$flag)
                 if($adb->num_rows($result) != 0)
                         $last_login = $adb->query_result($result,0,'login_time');
 
-		$sql = "update vtiger_portalinfo set logout_time = '".$current_time."', last_login_time='".$last_login."' where id=".$id;
+		$sql = "update vtiger_portalinfo set logout_time=".$current_time.", last_login_time='".$last_login."' where id=".$id;	
 		$result = $adb->query($sql);
 	}
 
@@ -821,10 +821,10 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	fclose($handle);	
 
 	//Now store this file information in db and relate with the ticket
-	$date_var = date('YmdHis');
-	$description = 'CustomerPortal Attachment';
-
-	$crmquery = "insert into vtiger_crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."','".$date_var."')";
+	$date_var = $adb->formatDate(date('YmdHis'));
+  	$description = 'CustomerPortal Attachment';
+  
+ 	$crmquery = "insert into vtiger_crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."',".$date_var.")";
 	$crmresult = $adb->query($crmquery);
 
 	$attachmentquery = "insert into vtiger_attachments values(".$attachmentid.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
