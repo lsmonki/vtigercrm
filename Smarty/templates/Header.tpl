@@ -402,7 +402,7 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* Quick Access Functionality *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:650px">
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:550px">
 	<table border=0 cellpadding="5" cellspacing="0" class="allMnuTable" >
 	<tr>
 		<td valign="top">
@@ -411,7 +411,7 @@ function getFormValidate(divValidate)
 			<span class="allMnuHdr">{$APP[$parenttab]}</span>
 			{foreach name=modulelist item=modules from=$details}
        		{math assign="num" equation="x + y" x=$parentno y=1}
-			{math assign="loopvalue" equation="x % y" x=$num y=14}
+			{math assign="loopvalue" equation="x % y" x=$num y=15}
 			{assign var="parentno" value=$num}
 			{if $loopvalue eq '0'}
 				</td><td valign="top">
