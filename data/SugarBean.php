@@ -58,7 +58,7 @@ class SugarBean
 		}
 
 		//$this->date_modified = $this->db->formatDate(date('YmdHis'));
-		$this->date_modified = date('YmdHis');
+		$this->date_modified = $this->db->formatDate(date('YmdHis'));	
 		if (isset($current_user)) $this->modified_user_id = $current_user->id;
 		
 		if($isUpdate)
@@ -68,12 +68,12 @@ class SugarBean
 		else
 		{
     			//$this->date_entered = $this->db->formatDate(date('YmdHis'));
-			$this->date_entered = date('YmdHis');
+			$this->date_entered = $this->db->formatDate(date('YmdHis'));
 
 			if($this->new_schema && 
 				$this->new_with_id == false)
 			{
-                          $this->id = $adb->getUniqueID("vtiger_users");
+                          $this->id = $this->db->getUniqueID("vtiger_users");
 			}
                         
 			$query = "INSERT into ".$this->table_name;
