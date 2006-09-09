@@ -30,7 +30,7 @@ elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
 	if($adb->num_rows($is_announce) > 0)
 		$query="update vtiger_announcement set announcement=".$adb->formatString("vtiger_announcement","announcement",$announcement).",time=".$adb->formatString("vtiger_announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
 	else
-		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("vtiger_announcement","announcement",$announcement).",'announcement','".$date_var."')";
+		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("vtiger_announcement","announcement",$announcement).",'announcement',".$adb->formatString("vtiger_announcement","time",$date_var).")";
 	$result=$adb->query($query);
 	echo $announcement;
 }
