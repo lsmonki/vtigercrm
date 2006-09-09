@@ -47,10 +47,10 @@ $crmid = $_REQUEST['return_id'];
 		{
 			$desc = $_REQUEST['txtDescription'];
 			$description = addslashes($desc);
-			$date_var = date('YmdHis');
+			$date_var = $adb->formatDate(date('YmdHis'));	
 
 			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
-			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."','".$date_var."')";
+			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."',".$date_var.")";	
 			$result = $adb->query($query);
 
 			$sql = "insert into vtiger_attachments values(";
