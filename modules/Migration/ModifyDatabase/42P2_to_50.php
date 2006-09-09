@@ -69,7 +69,6 @@ $alter_array1 = Array(
 		"alter table vtiger_def_org_field ADD PRIMARY KEY (fieldid)",
 		"alter table vtiger_leadgrouprelation ADD PRIMARY KEY (leadid)",
 		"alter table vtiger_leadgrouprelation drop key leadgrouprelation_IDX0",
-		"alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationname)",
 		"alter table vtiger_profile2field ADD PRIMARY KEY (profileid,fieldid)",
 		"alter table vtiger_profile2standardpermissions ADD PRIMARY KEY (profileid,tabid,Operation)",
 		"alter table vtiger_profile2standardpermissions drop index idx_prof2stad",
@@ -754,6 +753,7 @@ $altersql1 = "alter table vtiger_vendor drop column company_name";
 Execute($altersql1);
 $altersql2 = "alter table vtiger_vendor change column name vendorname varchar(100) default NULL";
 Execute($altersql2);
+Execute("update vtiger_field set fieldname='vendorname', columnname='vendorname' where tabid=18 and fieldname='name'");
 //TODO (check): Remove this company_name entry from the vtiger_field table if it already exists
 
 //Migration for Default Organisation Share -- Added by Don on 20-11-2005
@@ -989,7 +989,7 @@ Execute($create_query4);
 
 $insert_query_array4 = Array(
 				"insert into vtiger_parenttab values(1,'My Home Page',1,0),(2,'Marketing',2,0),(3,'Sales',3,0),(4,'Support',4,0),(5,'Analytics',5,0),(6,'Inventory',6,0), (7,'Tools',7,0),(8,'Settings',8,0)",
-				"insert into vtiger_parenttabrel values(1,9,2),(1,17,3),(1,10,4),(1,3,1),(3,7,1),(3,6,2),(3,4,3),(3,2,4),(3,20,5),(3,22,6),(3,23,7),(3,14,8),(3,19,9),(3,8,10),(4,13,1),(4,15,2),(4,6,3),(4,4,4),(4,14,5),(4,8,6),(5,1,1),(5,25,2),(6,14,1), (6,18,2), (6,19,3), (6,21,4), (6,22,5), (6,20,6), (6,23,7), (7,24,1), (7,27,2), (7,8,3), (2,26,1), (2,6,2), (2,4,3) "
+				"insert into vtiger_parenttabrel values(1,9,2),(1,17,3),(1,10,4),(1,3,1),(3,7,1),(3,6,2),(3,4,3),(3,2,4),(3,20,5),(3,22,6),(3,23,7),(3,14,8),(3,19,9),(3,8,10),(4,13,1),(4,15,2),(4,6,3),(4,4,4),(4,14,5),(4,8,6),(5,1,1),(5,25,2),(6,14,1), (6,18,2), (6,19,3), (6,21,4), (6,22,5), (6,20,6), (6,23,7), (7,24,1), (7,27,2), (7,8,3), (2,6,2), (2,4,3) "
 			    );
 foreach($insert_query_array4 as $query)
 {
@@ -1888,8 +1888,8 @@ $create_table_query1 = "CREATE TABLE vtiger_campaignscf (
 Execute($create_table_query1);
 
 $alter_query_array18 = Array(
-			"alter table vtiger_leaddetails add column campaignid int(19) default NULL after leadid",
-			"alter table vtiger_contactdetails add column  campaignid int(19) default NULL after accountid",
+			"alter table vtiger_potential add column campaignid int(19) default NULL after probability",
+			"alter table vtiger_potential drop column campaignsource",
 			//"alter table vtiger_notes drop PRIMARY KEY contact_id",
 			"alter table vtiger_notes drop PRIMARY KEY , add primary key(notesid)",
 			"update vtiger_field set uitype=99 where fieldname='update_log' and tabid=13"
@@ -1956,7 +1956,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_durationhrs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_durationmins` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_emailtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_emailtemplates_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+//"ALTER TABLE `vtiger_emailtemplates_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `vtiger_faqcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_faqstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 "ALTER TABLE `vtiger_field_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
@@ -2368,7 +2368,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `reference` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
 //"ALTER TABLE `vtiger_contactgrouprelation` MODIFY COLUMN `contactid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_convertleadmapping` MODIFY COLUMN `leadfid` INTEGER(19) NOT NULL",
+//"ALTER TABLE `vtiger_convertleadmapping` MODIFY COLUMN `leadfid` INTEGER(19) NOT NULL",
 //"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
@@ -2393,7 +2393,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `query` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `body` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_emailtemplates_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_emailtemplates_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 "ALTER TABLE `vtiger_faq` MODIFY COLUMN `question` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_faq` MODIFY COLUMN `answer` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
@@ -2724,8 +2724,8 @@ foreach($customview_query_array as $query)
 
 
 $query_array2 = Array(
-				"INSERT INTO vtiger_parenttabrel VALUES(2,4,2)",
-				"INSERT INTO vtiger_parenttabrel VALUES(2,6,3)",
+				//"INSERT INTO vtiger_parenttabrel VALUES(2,4,2)",
+				//"INSERT INTO vtiger_parenttabrel VALUES(2,6,3)",
 				"update vtiger_cvcolumnlist set columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
 				"update vtiger_field set sequence = 2 where columnname='filename' and tablename = 'vtiger_attachments'",
 				"delete from vtiger_cvcolumnlist where columnname = 'vtiger_seactivityrel:crmid:parent_id:Emails_Related_To:I'",
@@ -3146,10 +3146,6 @@ Execute("insert into vtiger_field values (2,".$conn->getUniqueID("vtiger_field")
 Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Leads").",".getTabid("Campaigns").",'get_campaigns',6,'Campaigns',0)");
 Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Contacts").",".getTabid("Campaigns").",'get_campaigns',11,'Campaigns',0)");
 
-//campaignid removed from vtiger_leaddetails and vtiger_contactdetails tables
-Execute("alter table vtiger_leaddetails drop column campaignid");
-Execute("alter table vtiger_contactdetails drop column campaignid");
-
 //Contact Name has been removed from Events Information
 Execute("delete from vtiger_field where tabid=16 and fieldname='contact_id'");
 
@@ -3180,7 +3176,7 @@ Execute("alter table vtiger_systems add column server_port int(19) default NULL 
 
 //type changed to support decimal places
 Execute("alter table vtiger_campaign change expectedrevenue expectedrevenue decimal(11,3)");
-Execute("alter table vtiger_campaign change budgetcost exbudgetcost decimal(11,3)");
+Execute("alter table vtiger_campaign change budgetcost budgetcost decimal(11,3)");
 Execute("alter table vtiger_campaign change actualcost actualcost decimal(11,3)");
 Execute("alter table vtiger_campaign change expectedroi expectedroi decimal(11,3)");
 Execute("alter table vtiger_campaign change actualroi actualroi decimal(11,3)");
@@ -3614,6 +3610,10 @@ Execute('update vtiger_selectcolumn set columnname="vtiger_crmentityCalendar:des
 
 Execute("update vtiger_field set uitype = 16 where tabid=2 and uitype=111 and columnname='sales_stage'");
 
+Execute("update vtiger_field set quickcreate=1,quickcreatesequence=null where fieldname='duration_hours' and tabid=16");
+
+Execute("update vtiger_field set quickcreate=0,quickcreatesequence=5 where fieldname='due_date' and tabid=16");
+
 //we have to add id, sortorderid and presence in all existing custom field pick list tables.
 $cf_picklist_res = $conn->query("select fieldname from vtiger_field where uitype=15 and fieldname like 'cf_%'");
 $noofPicklists = $conn->num_rows($cf_picklist_res);
@@ -3628,7 +3628,34 @@ for($i=0;$i<$noofPicklists;$i++)
 	Execute($alterquery);
 }
 
+Execute("alter table vtiger_organizationdetails drop primary key");
 Execute("alter table vtiger_organizationdetails change column organizationame  organizationname varchar(60) NOT NULL");
+Execute("alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationname)");
+
+//Activity related changes
+Execute('update vtiger_field set typeofdata="D~M~OTH~GE~date_start~Start Date & Time", uitype=23 where fieldname="due_date" and tabid=16');
+Execute('update vtiger_field set uitype=53 where tabid=16 and fieldname="assigned_user_id"');
+
+Execute('update vtiger_field set typeofdata="D~M~OTH~GE~date_start~Start Date & Time", uitype=23 where fieldname="due_date" and tabid=9');
+Execute('update vtiger_field set uitype=53 where tabid=9 and fieldname="assigned_user_id"');
+
+Execute("alter table vtiger_activity change column subject subject varchar(100) NOT NULL");
+Execute("alter table vtiger_activity change column activitytype activitytype varchar(50) NOT NULL");
+Execute("alter table vtiger_activity change column date_start date_start date NOT NULL");
+Execute("alter table vtiger_activity change column time_start time_start varchar(50) default NULL");
+Execute("alter table vtiger_activity change column visibility visibility varchar(50) NOT NULL default 'all'");
+
+Execute("delete from vtiger_field where tabid=14 and fieldname='currency'");
+Execute("insert into vtiger_field values(14, ".$conn->getUniqueID("vtiger_field").", 'imagename', 'vtiger_products', 1, 69, 'imagename', 'Product Image', 1, 0, 0, 100, 1, 35, 1, 'V~O', 1, NULL, 'ADV')");
+
+//Product related changes
+Execute('update vtiger_field set typeofdata="D~O~OTH~GE~sales_start_date~Sales Start Date" where tabid=14 and fieldname="sales_end_date"');
+Execute('update vtiger_field set typeofdata="D~O~OTH~GE~start_date~Start Date" where tabid=14 and fieldname="expiry_date"');
+
+//changes related to Incoming mail server settings
+Execute("alter table vtiger_mail_accounts drop column showbody");
+
+
 
 
 
