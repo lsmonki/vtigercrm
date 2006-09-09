@@ -133,7 +133,7 @@
 															{/if}
 														</td>
 													</tr>
-												</table>										
+											</table>										
 									</td>
 								</tr>
 							</table>
@@ -146,7 +146,22 @@
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 										</tr>
-											<tr ><td id="dashborad_cont" colspan="2" style="height:250px;">&nbsp;</td></tr>
+										<tr>	
+											<td colspan="2">
+											<div style="overflow:hidden;height:255px;width:99%"> 
+												<table border=0 cellspacing=0 cellpadding=5 width=100%>
+													<tr><td id="dashborad_cont" style="height:250px;">&nbsp;</td></tr>
+												</table>
+											</div>
+											<table border=0 cellspacing=0 cellpadding=5 width=100%>
+													<tr>
+														<td colspan="2" align="right" valign="bottom">
+															&nbsp;	
+														</td>
+													</tr>
+											</table>
+											</td>
+										</tr>
 									</table>
 								</div>
 						{/if}
