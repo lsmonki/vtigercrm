@@ -348,7 +348,7 @@ a:hover {
 }
 
 .rightMailMerge {
-	border:2px solid #aae;
+	border:2px solid #aaa;
 }
 
 .rightMailMergeHeader {
@@ -376,10 +376,9 @@ a:hover {
 }
 
 .detailedViewHeader{
-	border-bottom:2px solid #4F94CD;
-	padding:5px; 
-	background-color:#afdbff;
-
+	border-bottom:2px solid #dadada;
+    	padding:5px;
+    	background-color:#aaaaaa;
 }
 
 .detailedViewTextBox {
@@ -2617,7 +2616,7 @@ level2Sel{
 	    font-size: 11px;
 }
 .qcTransport{
-	    background-color:#d5d6ff;
+	    background-color:#dadada;
 
 }
 
