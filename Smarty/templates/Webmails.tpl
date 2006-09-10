@@ -208,7 +208,7 @@ function OpenCompose(id,mode)
                         url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id+'&mailbox={$MAILBOX}';
                         break;
                 case 'full_view':
-                        url = 'index.php?module=Webmails&action=DetailView&&record='+id+'&mailid='+id+'&mailbox={$MAILBOX}';
+                        url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox={$MAILBOX}';
                         break;
                 {rdelim}
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');

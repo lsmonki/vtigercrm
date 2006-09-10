@@ -22,7 +22,7 @@ global $MailBox;
 $MailBox = new MailBox($mailbox);
 
 $webmail = new Webmail($MailBox->mbox,$mailid);
-$elist = $MailBox->mailList["overview"][$mailid];
+$elist = $MailBox->mailList["overview"][($mailid-1)];
 
 echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="previewWindow"><tr>';
 
