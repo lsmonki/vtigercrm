@@ -89,7 +89,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			$module = $_REQUEST['target_module'];
 			$sql = "INSERT INTO vtiger_wordtemplates ";
 			$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
-			$sql .= "VALUES (".$genQueryId.",'".$module."',".$adb->formatString('wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
+			$sql .= "VALUES (".$genQueryId.",'".$module."',".$adb->formatString('vtiger_wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
 			$sql .= "'$filename', '$filesize', '$filetype')";
 
 			$result = $adb->query($sql);
