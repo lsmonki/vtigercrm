@@ -135,7 +135,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 
-	}if(globaluitype == 33)
+	}else if(globaluitype == 33)
 	{
 	  var txtBox= "txtbox_"+ fieldLabel;
 	  var oMulSelect = $(txtBox);
@@ -145,8 +145,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
       if (oMulSelect.options[iter].selected)
         r[r.length] = oMulSelect.options[iter].value;
       }
-	}
-  else
+	}else
 	{
 		var txtBox= "txtbox_"+ fieldLabel;
 	}
@@ -163,7 +162,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	$("vtbusy_info").style.display="inline";
 	var isAdmin = document.getElementById("hdtxt_IsAdmin").value; 
 
-	var tagValue = trim(document.getElementById(txtBox).value);
 
 	//overriden the tagValue based on UI Type for checkbox 
 	if(uitype == '56')
@@ -186,8 +184,11 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		}
 	}else if(uitype == '33')
 	{
-			tagValue = r.join(" |##| ");
-  	}
+		tagValue = r.join(" |##| ");
+  	}else
+	{
+		tagValue = trim(document.getElementById(txtBox).value);
+	}
 
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
@@ -212,12 +213,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
-	}
-	else if(uitype == '17')
+	}else if(uitype == '17')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
-	}
-	else if(uitype == '53')
+	}else if(uitype == '53')
 	{
 		var hdObj = getObj(hdTxt);
 		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
@@ -238,8 +237,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=GroupDetailView&groupId="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
 		}
-	}
-	else if(uitype == '56')
+	}else if(uitype == '56')
 	{
 		if(tagValue == '1')
 		{
