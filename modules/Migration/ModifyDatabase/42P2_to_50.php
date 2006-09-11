@@ -267,7 +267,7 @@ $insert_array1 = Array(
 */
 //commented the above array as that queries are wrong queries -- changed on 23-12-2005
 $insert_array1 = array(
-			"update vtiger_field set uitype='357' where tabid=10 and fieldname='parent_id' and tablename='seactivityrel'",
+			"update vtiger_field set uitype='357' where tabid=10 and fieldname='parent_id' and tablename='vtiger_seactivityrel'",
 			"update vtiger_field set sequence=1 where tabid=10 and fieldname in ('parent_id','subject','filename','description')",
 			"update vtiger_field set block=2 where tabid=10 and fieldname='parent_id'",
 			"update vtiger_field set block=3 where tabid=10 and fieldname='subject'",
@@ -1257,7 +1257,7 @@ $insert_query_array9 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_contactdetails:title:title:Contacts_Title:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:accountname:accountname:Contacts_Account_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_contactdetails:email:email:Contacts_Email:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Phone_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Office_Phone:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
 			    );
 foreach($insert_query_array9 as $query)
@@ -1764,7 +1764,7 @@ $insert_query_array24 = Array(
 	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')",
 	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')",
 	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,78,1,'V~O',1,null,'BAS')"
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array24 as $query)
 {
@@ -3293,7 +3293,6 @@ Execute("update vtiger_field set sequence=8, block=78 where tabid=26 and columnn
 Execute("update vtiger_field set sequence=9, block=78 where tabid=26 and columnname='expectedroi' and fieldname='expectedroi'");
 Execute("update vtiger_field set sequence=10, block=78 where tabid=26 and columnname='actualroi' and fieldname='actualroi'");
 
-Execute("insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')");
 
 
 //Update query to set the fieldname in user detail/edit/create view
@@ -3655,6 +3654,34 @@ Execute('update vtiger_field set typeofdata="D~O~OTH~GE~start_date~Start Date" w
 //changes related to Incoming mail server settings
 Execute("alter table vtiger_mail_accounts drop column showbody");
 
+//change the Account relatedlist Activity label from Acivities to Activities
+Execute("update vtiger_relatedlists set label='Activities' where tabid=6 and relation_id=3");
+
+//change the fieldname from title to notes_title for notes and update in columnlist also
+Execute("update vtiger_field set fieldname='notes_title' where tabid=8 and fieldname='title'");
+Execute('update vtiger_cvcolumnlist set columnname="vtiger_notes:title:notes_title:Notes_Title:V" where columnname="vtiger_notes:title:title:Notes_Title:V"');
+
+//change the sequence of Billing and Shipping address details for Inventory modules
+Execute("update vtiger_field set sequence=5 where tabid in (20,21,22,23) and fieldname='bill_city'");
+Execute("update vtiger_field set sequence=6 where tabid in (20,21,22,23) and fieldname='ship_city'");
+Execute("update vtiger_field set sequence=7 where tabid in (20,21,22,23) and fieldname='bill_state'");
+Execute("update vtiger_field set sequence=8 where tabid in (20,21,22,23) and fieldname='ship_state'");
+Execute("update vtiger_field set sequence=9 where tabid in (20,21,22,23) and fieldname='bill_code'");
+Execute("update vtiger_field set sequence=10 where tabid in (20,21,22,23) and fieldname='ship_code'");
+Execute("update vtiger_field set sequence=11 where tabid in (20,21,22,23) and fieldname='bill_country'");
+Execute("update vtiger_field set sequence=12 where tabid in (20,21,22,23) and fieldname='ship_country'");
+
+//for vtiger_campaignleadrel  table
+Execute("alter table vtiger_campaignleadrel DROP PRIMARY KEY");
+Execute("alter table vtiger_campaignleadrel ADD PRIMARY KEY (campaignid,leadid)");
+
+//for  vtiger_campaigncontrel  table
+Execute("alter table vtiger_campaigncontrel DROP PRIMARY KEY");
+Execute("alter table vtiger_campaigncontrel ADD PRIMARY KEY (campaignid,contactid)");
+
+//for  vtiger_seactivityrel  table
+Execute("alter table vtiger_seactivityrel DROP PRIMARY KEY");
+Execute("alter table vtiger_seactivityrel ADD PRIMARY KEY (crmid,activityid)");
 
 
 
