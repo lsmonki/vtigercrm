@@ -3,8 +3,8 @@ Begin VB.Form frmAbout
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "About vtigerCRM Word Add-In"
    ClientHeight    =   2400
-   ClientLeft      =   45
-   ClientTop       =   330
+   ClientLeft      =   6765
+   ClientTop       =   4695
    ClientWidth     =   4560
    Icon            =   "frmAbout.frx":0000
    LinkTopic       =   "Form1"
@@ -13,7 +13,6 @@ Begin VB.Form frmAbout
    ScaleHeight     =   2400
    ScaleWidth      =   4560
    ShowInTaskbar   =   0   'False
-   StartUpPosition =   3  'Windows Default
    Begin VB.PictureBox Picture1 
       BorderStyle     =   0  'None
       Height          =   735

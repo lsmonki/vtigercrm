@@ -2,24 +2,23 @@ VERSION 5.00
 Begin VB.Form frmvtigerMerge 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "vtigerCRM - Insert Merge Fields"
-   ClientHeight    =   4365
-   ClientLeft      =   150
-   ClientTop       =   435
+   ClientHeight    =   5295
+   ClientLeft      =   5610
+   ClientTop       =   3345
    ClientWidth     =   6990
    Icon            =   "frmvtigerTempate.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4365
+   ScaleHeight     =   5295
    ScaleWidth      =   6990
    ShowInTaskbar   =   0   'False
-   StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton cmdClose 
       Caption         =   "C&lose"
       Height          =   375
       Left            =   5640
       TabIndex        =   3
-      Top             =   3840
+      Top             =   4680
       Width           =   1215
    End
    Begin VB.CommandButton cmdInsert 
@@ -27,7 +26,7 @@ Begin VB.Form frmvtigerMerge
       Height          =   375
       Left            =   4200
       TabIndex        =   2
-      Top             =   3840
+      Top             =   4680
       Width           =   1215
    End
    Begin VB.ListBox lstFields 
@@ -35,22 +34,32 @@ Begin VB.Form frmvtigerMerge
       Left            =   3120
       MultiSelect     =   1  'Simple
       TabIndex        =   1
-      Top             =   480
+      Top             =   1320
       Width           =   3735
    End
    Begin VB.ListBox lstColumns 
       Height          =   3180
       Left            =   120
       TabIndex        =   0
-      Top             =   480
+      Top             =   1320
       Width           =   2895
+   End
+   Begin VB.PictureBox Picture1 
+      Height          =   735
+      Left            =   -120
+      Picture         =   "frmvtigerTempate.frx":038A
+      ScaleHeight     =   675
+      ScaleWidth      =   7035
+      TabIndex        =   6
+      Top             =   0
+      Width           =   7095
    End
    Begin VB.Label Label1 
       Caption         =   "2. Then select the merge field to insert"
       Height          =   420
       Left            =   3120
       TabIndex        =   5
-      Top             =   75
+      Top             =   840
       Width           =   3675
    End
    Begin VB.Label Label5 
@@ -58,7 +67,7 @@ Begin VB.Form frmvtigerMerge
       Height          =   420
       Left            =   135
       TabIndex        =   4
-      Top             =   75
+      Top             =   840
       Width           =   2790
    End
 End
@@ -173,4 +182,5 @@ If lstColumns.Selected(lstColumns.ListIndex) = True Then
     End Select
 End If
 End Sub
+
 
