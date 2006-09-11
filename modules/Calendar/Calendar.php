@@ -198,7 +198,7 @@ class Calendar
 		}
 		else
 		{
-			$this->day_end_hour=24;
+			$this->day_end_hour=23;
 		}
 		if ( $this->view == 'week')
 		{
