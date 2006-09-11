@@ -329,7 +329,7 @@ function alphabetic(module,url,dataid)
 function ajaxChangeStatus(statusname)
 {
 	$("status").style.display="inline";
-	var viewid = document.massdelete.viewname.value;
+	var viewid = document.getElementById('viewname').options[document.getElementById('viewname').options.selectedIndex].value;
 	var idstring = document.getElementById('idlist').value;
 	if(statusname == 'status')
 	{
