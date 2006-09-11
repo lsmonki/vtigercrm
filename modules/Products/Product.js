@@ -45,14 +45,19 @@ function set_return(product_id, product_name) {
 }
 function set_return_specific(product_id, product_name) {
         //getOpenerObj used for DetailView 
+
 	if(document.getElementById('from_link').value != '')
 	{
 		var fldName = window.opener.document.QcEditView.product_name;
 		var fldId = window.opener.document.QcEditView.product_id;
+	}else if(typeof(window.opener.document.DetailView) != 'undefined')
+	{
+	   var fldName = window.opener.document.DetailView.product_name;
+	   var fldId = window.opener.document.DetailView.product_id;
 	}else
-	{	
-		var fldName = window.opener.document.EditView.product_name;
-		var fldId = window.opener.document.EditView.product_id;
+	{
+	   var fldName = window.opener.document.EditView.product_name;
+	   var fldId = window.opener.document.EditView.product_id;
 	}
         fldName.value = product_name;
         fldId.value = product_id;
