@@ -26,21 +26,21 @@
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form name="EditView" method="POST" action="index.php">
 <input type="hidden" name="time_start" id="time_start">
-<tr><td>&nbsp;</td>
+<tr>
         <td>
                 <table cellpadding="0" cellspacing="5" border="0">
 			{include file='EditViewHidden.tpl'}
                 </table>
-<table  border="0" cellpadding="5" cellspacing="0" width="100%" style="border:1px solid #cccccc">
+<table  border="0" cellpadding="5" cellspacing="0" width="100%" >
 <tr>
         <td class="lvtHeaderText" style="border-bottom:1px dotted #cccccc">
 
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr><td>
 		
 				{if $OP_MODE eq 'edit_view'}   
 					<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span> <br>
-					{$UPDATEINFO}	 
+					<span class="small">{$UPDATEINFO}	 </span> 
 				{/if}
 				{if $OP_MODE eq 'create_view'}
 					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD}</span> <br>
@@ -49,6 +49,7 @@
 		</table>
         </td>
 </tr>
+
 <tr><td>
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
         <tr>
@@ -76,7 +77,7 @@
 						     {foreach key=header item=data from=$BLOCKS}
 						     <table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 						     <tr>
-							<td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+							<td colspan=4 class="tableHeading">
 								<b>{$header}</b>
 							</td>
 						     </tr>
@@ -89,8 +90,8 @@
 							<input type="hidden" name="duration_minutes" value="0">
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							<tr>
-								<td nowrap  width=20% align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
-								<td width=80% align="left">
+								<td class="cellLabel" nowrap  width=20% align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
+								<td class="cellInfo" width=80% align="left">
 									<table>
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
@@ -111,8 +112,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
-								<td align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								<td class="cellLabel" nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
+								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
                                                                         {foreach key=sel_value item=value from=$arr}
                                                                         {if $value eq 'selected' && $sel_value eq 'Public'}
@@ -126,19 +127,15 @@
 								</td>
 							</tr>
 							<tr>
-                        					<td valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
-								<td align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
+                        					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
+								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
 							<tr>
-								<td valign="top" nowrap align="right"><b>{$LABEL.location}</b></td>
-								 <td align="left"><input type="text" class="textbox" name="location" id ="location" value="{$ACTIVITYDATA.location}" style="width:50%"></td>
-							</tr>
-							<tr>
 								<td colspan=2 width=80% align="center">
-                                				<table border=0 cellspacing=0 cellpadding=3 width=80%>
-                                        				<tr>
+								<table border=0 cellspacing=0 cellpadding=3 width=80%>
+									<tr>
 										<td ><b>{$LABEL.eventstatus}</b></td>
-										<td ><b>{$LABEL.assigned_user_id}</b></td>
+                                                                                <td ><b>{$LABEL.assigned_user_id}</b></td>
 									</tr>
 									<tr>
 										<td valign=top>
@@ -559,20 +556,20 @@
 		{else}
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-                        	<td width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
-                        	<td width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
+                        	<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
+                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			<tr>
-				<td align="right"><b>{$LABEL.description}</b></td>
-				<td align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
+				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
+				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
 			</tr>
 			<tr>
-		    		<td colspan="2" align="center" width="80%">
-					<table border="0" cellpadding="3" cellspacing="0" width="80%">
+		    		<td colspan="2" align="center" width="100%" style="padding:0px">
+					<table border="0" cellpadding="5" cellspacing="1" width="100%">
             					<tr>
-							<td align="left"><b>{$LABEL.taskstatus}</td>
-              						<td align="left"><b>{$LABEL.taskpriority}</b></td>
-              						<td align="left"><b>{$LABEL.assigned_user_id}</b></td>
+							<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</td>
+              						<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskpriority}</b></td>
+              						<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
 						</tr>
 						<tr>
 							<td align="left" valign="top">
@@ -654,16 +651,13 @@
 					</table>
 				</td>
 			</tr>
-			<tr><td colspan="2">    <hr noshade="noshade" size="1"></td></tr>
 			</table>
-			<table bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="90%" align=center>
-			<tr><td>
-				<table border="0" cellpadding="0" cellspacing="0" width="100%" align=center>
-				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
-					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
-						<tr><td colspan=3 ><b>{$MOD.LBL_TODODATETIME}</b></td></tr>
-						<tr><td colspan=3>{$STARTHOUR}</td></tr>
-						<tr><td>
+			<table border="0" cellpadding="0" cellspacing="1" width="100%" align=center>
+			<tr><td width=50% valign=top>
+				<table border=0 cellspacing=0 cellpadding=2 width=100% align=center >
+					<tr><td colspan=3  class="mailSubHeader"><b>{$MOD.LBL_TODODATETIME}</b></td></tr>
+					<tr><td colspan=3>{$STARTHOUR}</td></tr>
+					<tr><td>
 							{foreach key=date_value item=time_value from=$ACTIVITYDATA.date_start}
 	                                        		{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
@@ -680,8 +674,8 @@
 						</td></tr>
 					</table></td>
 					<td width=50% valign="top">
-                                                <table border="0" cellpadding="2" cellspacing="0" width="90%" align=center>
-							<tr><td colspan=3><b>{$LABEL.due_date}</b></td></tr>
+                                                <table border="0" cellpadding="2" cellspacing="0" width="100%" align=center>
+							<tr><td class="mailSubHeader" colspan=3><b>{$LABEL.due_date}</b></td></tr>
 							<tr><td>
 								{foreach key=date_value item=time_value from=$ACTIVITYDATA.due_date}
 									{assign var=date_val value="$date_value"}
@@ -700,9 +694,7 @@
 						</table></td>
 					</tr>
 				</table>
-				</td></tr>
-                	<tr><td>&nbsp;</td></tr>
-        	</table>
+				<br><br>
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 			<tr>
 				<td>
