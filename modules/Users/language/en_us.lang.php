@@ -599,6 +599,18 @@ $mod_strings = Array(
 'LBL_MANDATORY_MSG'=>'Mandatory Fields',
 'LBL_DISABLE_FIELD_MSG'=>'Fields Disabled from Global Field Access Settings',
 
+//Added for About Us
+
+'LBL_CONTACT_US'=>'Contact Us',
+'LBL_READ_LICENSE'=>'Read License',
+'LBL_VERSION'=>'Version',
+'LBL_TEAM'=>'Team',
+'LBL_CREDITS'=>'Credits',
+'LBL_THIRD_PARTY'=>'Third Party Packages',
+'LBL_COMMUNITY'=>'And vtiger Community',
+
+'LBL_ASSIGN_ROLE'=>'Assign Role',
+
 );
 
 ?>
