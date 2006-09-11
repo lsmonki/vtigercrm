@@ -82,7 +82,7 @@ global $mod_strings;
 				<td width="70%" style="border:3px solid #CCCCCC;" height="100" >
 						<marquee behavior="scroll" direction="up" width="100%" scrollamount="1" scrolldelay="50"  height="100" onMouseOut="javascript:start();" onMouseOver="javascript:stop();">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="rollOver">
-										<tr><th>Team</th></tr>
+								<tr><th><?php echo $mod_strings['LBL_TEAM'];?></th></tr>
 										<tr><td>Ahmed</td></tr>
 										<tr><td>Don</td></tr>
 										<tr><td>Ela</td></tr>
@@ -92,31 +92,74 @@ global $mod_strings;
 										<tr><td>Mickie</td></tr>
 										<tr><td>Minnie</td></tr>
 										<tr><td>Philip</td></tr>
+										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
-										<tr><td>Saint</td></tr>
 										<tr><td>SRaj</td></tr>
 										<tr><td>&nbsp;</td></tr>
-										<tr><th>Credits</th></tr>
-										<tr><td>Matthew Brichacek</td></tr>
-										<tr><td>Michel JACQUEMES </td></tr>
-										<tr><td>Mike Crowe </td></tr>
-										<tr><td>Allan Bush</td></tr>
-										<tr><td>Frank Piepiorra</td></tr>
-										<tr><td>Dino Eberle </td></tr>
-										<tr><td>Jamie Jackson</td></tr>
+										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?></th></tr>
 										<tr><td>Aissa Belaid</td></tr>
-										<tr><td>Sergio A. Kessler</td></tr>
-										<tr><td>Jeff Kowalczyk</td></tr>
+										<tr><td>Allan Bush</td></tr>
 										<tr><td>Brian Devendorf</td></tr>
 										<tr><td>Brian Laughlin</td></tr>
+										<tr><td>Davide Giarolo</td></tr>	
 										<tr><td>Dennis Grant</td></tr>
+										<tr><td>Dhr. R.R. Gerbrands</td></tr>
+										<tr><td>Dino Eberle</td></tr> 
+										<tr><td>Dirk Gorny</td></tr>
 										<tr><td>Fathi Boudra</td></tr>
+										<tr><td>Frank Piepiorra</td></tr>
 										<tr><td>Jamie Jackson</td></tr>
+										<tr><td>Jeff Kowalczyk</td></tr>
+										<tr><td>Jens Gammelgaard</td></tr>
+										<tr><td>Jens Hamisch</td></tr>
+										<tr><td>Joao Oliveira</td></tr>
 										<tr><td>Joel Rydbeck</td></tr>
 										<tr><td>Josh Lee</td></tr>
+										<tr><td>Ken Lyle</td></tr>
+										<tr><td>Kim Haverblad</td></tr>
+										<tr><td>Manilal K M</td></tr>
+										<tr><td>Matjaz Slak</td></tr>
+										<tr><td>Matthew Brichacek</td></tr>
+										<tr><td>Michel Jacquemes</td></tr> 
+										<tr><td>Mike Crowe</td></tr> 
 										<tr><td>Mike Fedyk</td></tr>
+										<tr><td>Neil</td></tr>
+										<tr><td>Tim Smith</td></tr>
+										<tr><td>Sergio A. Kessler</td></tr>
+										<tr><td>Valmir Carlos Trindade</td></tr>
 										<tr><td>&nbsp;</td></tr>
-										<tr><td><b>And vtiger Community</b></td></tr>
+										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?> - <?php echo $mod_strings['LBL_THIRD_PARTY'];?></th></tr>
+										<tr><td><a href="http://adodb.sourceforge.net" target="_blank">ADOdb</a></td></tr>
+										<tr><td><a href="http://www.os-solution.com/demo/ajaxcsspopupchat/index.php" target="_blank">Ajax Popup Chat</a></td></tr>
+										<tr><td><a href="http://httpd.apache.org/" target="_blank">Apache HTTP Server</a></td></tr>
+										<tr><td><a href="http://www.linuxscope.net/articles/mailAttachmentsPHP.html" target="_blank">Attachments in E-mail Client</a></td></tr>
+										<tr><td><a href="http://www.hmhd.com/steve" target="_blank">Calculator</a></td></tr>
+										<tr><td><a href="http://www.dynamicdrive.com/dynamicindex14/carousel2.htm" target="_blank">Carousel Slideshow</a></td></tr>
+										<tr><td><a href="http://www.troywolf.com/articles/php/class_http/" target="_blank">class_http</a></td></tr>
+										<tr><td><a href="http://freshmeat.net/projects/phpexcelreader/" target="_blank">ExcelReader</a></td></tr>
+										<tr><td><a href="http://www.fckeditor.net/download/default.html" target="_blank">FCKeditor</a></td></tr>
+										<tr><td><a href="http://www.fpdf.org" target="_blank">FPDF</a></td></tr>
+										<tr><td><a href="http://www.getluky.net" target="_blank">freetag</a></td></tr>
+										<tr><td><a href="http://www.boutell.com/gd/" target="_blank">gdwin32</a></td></tr>
+										<tr><td><a href="http://pear.php.net/package/Image_Graph" target="_blank">Graph</a></td></tr>
+										<tr><td><a href="http://slayeroffice.com/code/imageCrossFade/xfade2.html" target="_blank">Image Crossfade Redux</a></td></tr>
+										<tr><td><a href="http://pear.php.net/pepr/pepr-proposal-show.php?id=212" target="_blank">Image_Canvas</a></td></tr>
+										<tr><td><a href="http://pear.php.net/package/Image_Color" target="_blank">Image_Color</a></td></tr>
+										<tr><td><a href="http://www.dynarch.com/projects/calendar/" target="_blank">jscalendar</a></td></tr>
+										<tr><td><a href="http://www.vxr.it/log4php/" target="_blank">log4php</a></td></tr>
+										<tr><td><a href="http://magpierss.sourceforge.net/" target="_blank">MagpieRSS</a></td></tr>
+										<tr><td><a href="http://wiki.wonko.com/software/mailfeed/" target="_blank">Mailfeed</a></td></tr>
+										<tr><td><a href="http://www.mysql.com" target="_blank">MySQL</a></td></tr>
+										<tr><td><a href="http://sourceforge.net/projects/nusoap" target="_blank">nusoap</a></td></tr>
+										<tr><td><a href="http://www.php.net" target="_blank">PHP</a></td></tr>
+										<tr><td><a href="http://phpmailer.sourceforge.net/" target="_blank">PHPMailer</a></td></tr>
+										<tr><td><a href="http://phpsysinfo.sourceforge.net/" target="_blank">phpSysinfo</a></td></tr>
+										<tr><td><a href="http://prototype.conio.net" target="_blank">Prototype</a></td></tr>
+										<tr><td><a href="http://script.aculo.us" target="_blank">script.oculo.us</a></td></tr>
+										<tr><td><a href="http://smarty.php.net/" target="_blank">Smarty Template Engine</a></td></tr>
+										<tr><td><a href="http://www.sugarcrm.com" target="_blank">SugarCRM</a> (SPL 1.1.2)</td></tr>
+										<tr><td>&nbsp;</td></tr>
+										<tr><td><b><?php echo $mod_strings['LBL_COMMUNITY'];?></b></td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td>&nbsp;</td></tr>
 								</table>
@@ -129,13 +172,13 @@ global $mod_strings;
 		  <td colspan="3" background="<? echo $image_path;?>about_btm.jpg" height="75">
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
-							<td width="70%" align="left">
-									<span class="small" style="color:#999999;">Version : 5.0.0 rc</span>&nbsp;|&nbsp;
-									<a href="http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt" class="webMnu" target="_blank">Read License</a>&nbsp;|&nbsp;
-									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" class="webMnu" target="_blank">Contact Us</a>
+							<td width="70%" align="left" class="small">
+							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'];?> : 5.0.0 </span>&nbsp;|&nbsp;
+									<a href="http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt" target="_blank"><?php echo $mod_strings['LBL_READ_LICENSE'];?></a>&nbsp;|&nbsp;
+									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" target="_blank"><?php echo $mod_strings['LBL_CONTACT_US'];?></a>
 							</td>
 							<td align="right">
-									<input type="button" name="close" value=" &nbsp;Close&nbsp; " onClick="window.close();" class="crmbutton small cancel">
+									<input type="button" name="close" value=" &nbsp;<?php echo $mod_strings['LBL_CLOSE'];?>&nbsp; " onClick="window.close();" class="crmbutton small cancel">
 							</td>
 						</tr>
 				</table>
