@@ -466,9 +466,10 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
 /**	Function used to save the Inventory product details for the passed entity
  *	@param object reference $focus - object reference to which we want to save the product details from REQUEST values where as the entity will be Purchase Order, Sales Order, Quotes or Invoice
  *	@param string $module - module name
+ *	@param $update_prod_stock - true or false (default), if true we have to update the stock for PO only
  *	@return void
  */
-function saveInventoryProductDetails($focus, $module)
+function saveInventoryProductDetails($focus, $module, $update_prod_stock='false')
 {
 	global $log, $adb;
 	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
@@ -502,11 +503,11 @@ function saveInventoryProductDetails($focus, $module)
 		if($_REQUEST["deleted".$i] == 1)
 			continue;
 
-		// DG 15 Aug 2006
-		// We want to retain the sequence that the products were added to the quote (etc)
-		// so that way the printed quote (etc) retains the products in the order they were added
-		// and salepeople can control the order than their quote (etc) items print out
-		// so we create a new field "sequence_no" and stick the value of $i into it
+		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
+		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
+		{
+			addToProductStock($prod_id,$qty);
+		}
 
 		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment')";
 		$prod_seq++;
