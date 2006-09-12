@@ -11,7 +11,6 @@
  ********************************************************************************/
 
 -->*}
-
 <table border=0 cellspacing=0 cellpadding=20 width=90% class="settingsUI">
 <tr>
 <td valign=top>
@@ -72,12 +71,7 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
 		{/if}
 
-		{if $smarty.request.action eq 'DefModuleView'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
-		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
-		{/if}
-
+		
 		<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_STUDIO}</td></tr>
 		{if  $smarty.request.action eq 'CustomFieldList' || $smarty.request.action eq 'LeadCustomFieldMapping'}
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
@@ -176,6 +170,12 @@
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
 		{else}
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
+		{/if}
+		
+		{if $smarty.request.action eq 'DefModuleView'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
+		{else}
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
 		{/if}
 	
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>

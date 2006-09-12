@@ -10,7 +10,6 @@
  ********************************************************************************/
 -->*}
 
-
 	{include file="Buttons_List1.tpl"}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
@@ -158,19 +157,7 @@
 					</td>
 					<!-- Row 3 -->
 					<tr>
-					<td width=25% valign=top>
-					<!-- icon 9-->	
-					<table border=0 cellspacing=0 cellpadding=5 width=100%>
-					<tr>
-						<td rowspan=2 valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoTwoTabConfig.gif" alt="{$MOD.LBL_DEFAULT_MODULE_VIEW}" width="48" height="48" border=0 title="{$MOD.LBL_DEFAULT_MODULE_VIEW}"></a></td>
-						<td class=big valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td>
-					</tr>
-					<tr>
-						<td class="small" valign=top>{$MOD.LBL_DEFAULT_MODULE_VIEW_DESC}</td>
-					</tr>
-
-					</table>
-					</td>
+					
 				</tr>
 				</table>
 
@@ -526,6 +513,19 @@
 						</tr>
 
 						</table>
+					</td>
+<td width=25% valign=top>
+					<!-- icon 9-->	
+					<table border=0 cellspacing=0 cellpadding=5 width=100%>
+					<tr>
+						<td rowspan=2 valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoTwoTabConfig.gif" alt="{$MOD.LBL_DEFAULT_MODULE_VIEW}" width="48" height="48" border=0 title="{$MOD.LBL_DEFAULT_MODULE_VIEW}"></a></td>
+						<td class=big valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td>
+					</tr>
+					<tr>
+						<td class="small" valign=top>{$MOD.LBL_DEFAULT_MODULE_VIEW_DESC}</td>
+					</tr>
+
+					</table>
 					</td>
 				  <td valign=top><table border=0 cellspacing=0 cellpadding=5 width=100%>
                     <tr>
