@@ -1090,13 +1090,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,3,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,4,0)");
 
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",10,0,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",10,1,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",10,2,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",10,3,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",10,4,0)");
-
-		
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,0,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,1,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,2,0)");
@@ -1204,13 +1197,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,2,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,3,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,4,0)");
-
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",10,0,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",10,1,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",10,2,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",10,3,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",10,4,0)");
-
 		
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,0,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,1,1)");
@@ -1318,13 +1304,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,3,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,4,0)");
 
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",10,0,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",10,1,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",10,2,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",10,3,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",10,4,0)");
-
-		
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,0,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,1,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,2,0)");
@@ -1431,12 +1410,6 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,3,0)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,4,0)");
 
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,0,1)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,1,1)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,2,1)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,3,0)");
-		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",10,4,0)");
-		
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,0,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,1,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,2,1)");
@@ -1913,6 +1886,15 @@ Thanks,
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'SalesOrderNotification','Sales Order generated for {PRODUCTNAME}','".$so_body." ','SalesOrderNotificationDescription')");
 
+//insert into inventory terms and conditions table
+
+	$inv_tandc_text='
+ - Unless otherwise agreed in writing by the supplier all invoices are payable within thirty (30) days of the date of invoice, in the currency of the invoice, drawn on a bank based in India or by such other method as is agreed in advance by the Supplier.
+
+ - All prices are not inclusive of VAT which shall be payable in addition by the Customer at the applicable rate.';
+
+	$this->db->query("insert into vtiger_inventory_tandc(id,type,tandc) values (".$this->db->getUniqueID("vtiger_inventory_tandc").", 'Inventory', '".$inv_tandc_text."')");	
+
 //insert into email template vtiger_table
 
 	$body='
@@ -2089,8 +2071,6 @@ Should any need arise,please do give us a call.';
 	       //Insert into vtiger_organizationdetails vtiger_table 
 	       $this->db->query("insert into vtiger_organizationdetails(organizationname,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.jpg')");
 
-  //Insert into vtiger_inventory_tandc vtiger_table
-               $this->db->query("insert into vtiger_inventory_tandc values('".$this->db->getUniqueID('vtiger_inventory_tandc')."','Inventory','')");
 
 	$this->db->query("insert into vtiger_actionmapping values(0,'Save',0)");
 	$this->db->query("insert into vtiger_actionmapping values(1,'EditView',0)");
