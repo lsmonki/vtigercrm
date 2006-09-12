@@ -46,6 +46,12 @@ $server->register(
     array('username'=>'xsd:string'),
     array('return'=>'tns:contactdetails'),
     $NAMESPACE);
+    
+$server->register(
+    'CheckContactPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
+
+$server->register(
+    'CheckContactViewPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
 
 $server->register(
 	  'AddContact',
@@ -382,7 +388,31 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 
 function create_session($user_name, $password)
 {
-        return "TempSessionID";
+  global $adb,$log;
+  $return_access = 'failure';
+  require_once('modules/Users/User.php');
+	$objuser = new User();
+  if($password != "" && $user_name != '')
+	{
+		$objuser->column_fields['user_name'] = $user_name;
+		$encrypted_password = $objuser->encrypt_password($password);
+		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
+		$result = $adb->query($query);
+		if($adb->num_rows($result) > 0)
+		{
+			$return_access = 'success';
+			$log->debug("Logged in sucessfully from thunderbirdplugin");
+		}else
+		{
+			$return_access = 'failure';
+			$log->debug("Logged in failure from thunderbirdplugin");
+		}
+	}else
+	{
+		$return_access = 'failure';
+		$log->debug("Logged in failure from thunderbirdplugin");
+  }
+	return $return_access;
 }
 
 function end_session($user_name)
@@ -390,6 +420,39 @@ function end_session($user_name)
         return "Success";       
 }
 
+function CheckContactPerm($user_name)
+{
+  global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve_entity_info($user_id,"Users");
+	if(isPermitted("Contacts","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
+
+function CheckContactViewPerm($user_name)
+{
+  global $current_user,$log;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve_entity_info($user_id,"Users");
+	if(isPermitted("Contacts","index") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
 
 $server->service($HTTP_RAW_POST_DATA); 
 exit(); 
