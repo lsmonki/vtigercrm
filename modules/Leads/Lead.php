@@ -185,7 +185,7 @@ class Lead extends CRMEntity {
 			$the_where .= $clause;
 		}
 		
-		return $the_where;
+		return 'leaddetails.converted = 0 AND ('.$the_where.')';
 	}
 	
 //method added to construct the query to fetch the custom fields 
