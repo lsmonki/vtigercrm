@@ -23,32 +23,39 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
         $portalurl = $adb->query_result($result,0,'portalurl');		
 }
 $portal_inputs='';
-$portal_inputs.='<div style="display:block;position:relative;" id="orgLay">
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-		<tbody><tr>
-			<td class="genHeaderSmall" align="left" width="30%">' .$mod_strings['LBL_ADD'] .' '.$mod_strings['LBL_BOOKMARK'].'</td>
-			<td align="right" width="80%"><a href="javascript:fninvsh(\'orgLay\');"><img src="../themes/blue/images/close.gif" align="absmiddle" border="0"></a></td>
+$portal_inputs.='<div style="display:block;position:relative;" id="orgLay" class="layerPopup">
+		<table border="0" cellpadding="3" cellspacing="0" width="100%" class="layerHeadingULine">
+		<tr>
+			<td class="layerPopupHeading" align="left" width="60%">' .$mod_strings['LBL_ADD'] .' '.$mod_strings['LBL_BOOKMARK'].'</td>
+			<td align="right" width="40%"><a href="javascript:fninvsh(\'orgLay\');"><img src="../themes/blue/images/close.gif" align="absmiddle" border="0"></a></td>
 		</tr>
-		<tr><td colspan="2"><hr></td></tr>
+		</table>
+<table border="0" cellspacing="0" cellpadding="5" width="95%" align="center"> 
+	<tr>
+	<td class="small" >
+		<table border="0" celspacing="0" cellpadding="5" width="100%" align="center" bgcolor="white">
+		
 		<tr>
 
-			<td align="right"><b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_URL'] .' </b></td>
-			<td align="left"><input name="portalurl" id="portalurl" class="txtBox" value="'.$portalurl.'" type="text"></td>
+			<td align="right" width="40%" ><b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_URL'] .' </b></td>
+			<td align="left" width="60%"><input name="portalurl" id="portalurl" class="txtBox" value="'.$portalurl.'" type="text"></td>
 		</tr>
 		<tr>
-			<td align="right"><b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_NAME'] .' </b></td>
-			<td align="left"><input name="portalname" id="portalname" value="'.$portalname.'" class="txtBox" type="text"></td>
+			<td align="right" width="40%"> <b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_NAME'] .' </b></td>
+			<td align="left" width="60%"><input name="portalname" id="portalname" value="'.$portalname.'" class="txtBox" type="text"></td>
 		</tr>
-		<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
-
-		<tr>
-			<td colspan="2" align="center">
-					<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
-					<input name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmbutton small cancel" onclick="fninvsh(\'orgLay\');" type="button">
-			</td>
-		</tr>
-		<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
-	</tbody></table>
+		</table>
+	</td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="100%" class="layerPopupTransport">
+	<tr>
+	<td align="center">
+			<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
+			<input name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmbutton small cancel" onclick="fninvsh(\'orgLay\');" type="button">
+	</td>
+	</tr>
+</table>
 </div>';
 	
 echo $portal_inputs;
