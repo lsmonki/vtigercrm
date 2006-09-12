@@ -11,7 +11,15 @@
 
 require_once('Smarty_setup.php');
 require_once('modules/Vendors/Vendor.php');
-
+//Redirecting Header for single page layout
+require_once('user_privileges/default_module_view.php');
+global $singlepane_view;
+if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
+{
+	header("Location:index.php?action=DetailView&module=".$_REQUEST['module']."&record=".$_REQUEST['record']."&parenttab=".$_REQUEST['parenttab']);
+}
+else
+{
 global $currentModule;
 $focus = new Vendor();
 
@@ -63,5 +71,5 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");
-
+}
 ?>

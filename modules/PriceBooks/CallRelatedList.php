@@ -11,7 +11,15 @@
 
 require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBook.php');
-
+//Redirecting Header for single page layout
+require_once('user_privileges/default_module_view.php');
+global $singlepane_view;
+if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
+{
+	header("Location:index.php?action=DetailView&module=".$_REQUEST['module']."&record=".$_REQUEST['record']."&parenttab=".$_REQUEST['parenttab']);
+}
+else
+{
 global $currentModule;
 
 $focus = new PriceBook();
@@ -66,5 +74,5 @@ if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("RelatedListContents.tpl");
 else
 	$smarty->display("RelatedLists.tpl");
-
+}
 ?>
