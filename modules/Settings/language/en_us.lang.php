@@ -720,7 +720,7 @@ $mod_strings = Array(
 'LBL_WITH'=>'with',
 'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 'LBL_ENABLE'=>'Enable',
-
+'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 );
 
 
