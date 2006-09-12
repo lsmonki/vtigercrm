@@ -217,6 +217,9 @@ $cache_dir = 'cache/';
 						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
 				
 						      	/* replace the application unique key variable */
+				      			$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
+
+						      	/* replace the application unique key variable */
 					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
 	
 					      		fwrite($includeHandle, $buffer);
@@ -408,6 +411,8 @@ $cache_dir = 'cache/';
  	    $language_value .= ')';
  	}
  	$config .= "\$languages = $language_value;\n";
+	$config .= "// Master currency name\n";
+ 	$config .= "\$currency_name = '$currency_name';\n";
  	$config .= "// Default charset if the language specific character set is not found.\n";
  	$config .= "\$default_charset = 'ISO-8859-1';\n";
  	$config .= "// Default language in case all or part of the user's language pack is not available.\n";
