@@ -2921,7 +2921,7 @@ Execute($update_query5);
 $sql_sec="select profileid from  vtiger_profile";
 $result_sec=$conn->query($sql_sec);
 $num_rows=$conn->num_rows($result_sec);
-for($i=0;$i<$num_row;$i++)
+for($i=0;$i<$num_rows;$i++)
 {
 	$prof_id=$conn->query_result($result_sec,$i,'profileid');
 	$sql1_sec="insert into vtiger_profile2utility values(".$prof_id.",13,8,0)";
@@ -3205,7 +3205,7 @@ Execute("update vtiger_field set quickcreatesequence='2' where fieldname='closin
 
 //Added for Tax and Inventory - Product details handling
 
-Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, sequence_no int(4) default NULL, quantity int(19) default NULL, listprice decimal(11,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
+Execute("CREATE TABLE vtiger_inventoryproductrel (id int(19) NOT NULL, productid int(19) NOT NULL, sequence_no int(4) NOT NULL default 1, quantity int(19) default NULL, listprice decimal(11,3) default NULL, discount_percent decimal(7,3) default NULL, discount_amount decimal(11,3) default NULL, comment varchar(100) default NULL, KEY inventoryproductrel_id_idx (id), KEY inventoryproductrel_productid_idx (productid) ) ENGINE=InnoDB");
 
 //Execute("alter table vtiger_inventorytaxinfo add column deleted int(1) default 0");
 
@@ -3550,7 +3550,6 @@ Execute("create table vtiger_audit_trial(auditid int(19) NOT NULL, userid int(19
 //Added after 5 rc release
 Execute("alter table vtiger_account modify siccode varchar(50)");
 Execute("update vtiger_field set typeofdata='V~O' where fieldname='siccode' and columnname='siccode' and tabid=6");
-Execute("alter table vtiger_inventoryproductrel add column sequence_no int(4) not null default 1 after productid");
 
 //changes made for CustomView and Reports - Activities changed to Calendar -- Starts
 //Added to change the entitytype from Activities to Calendar for customview
@@ -3627,7 +3626,7 @@ for($i=0;$i<$noofPicklists;$i++)
 	Execute($alterquery);
 }
 
-Execute("alter table vtiger_organizationdetails drop primary key");
+$conn->query("alter table vtiger_organizationdetails drop primary key");
 Execute("alter table vtiger_organizationdetails change column organizationame  organizationname varchar(60) NOT NULL");
 Execute("alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationname)");
 
@@ -3645,7 +3644,6 @@ Execute("alter table vtiger_activity change column time_start time_start varchar
 Execute("alter table vtiger_activity change column visibility visibility varchar(50) NOT NULL default 'all'");
 
 Execute("delete from vtiger_field where tabid=14 and fieldname='currency'");
-Execute("insert into vtiger_field values(14, ".$conn->getUniqueID("vtiger_field").", 'imagename', 'vtiger_products', 1, 69, 'imagename', 'Product Image', 1, 0, 0, 100, 1, 35, 1, 'V~O', 1, NULL, 'ADV')");
 
 //Product related changes
 Execute('update vtiger_field set typeofdata="D~O~OTH~GE~sales_start_date~Sales Start Date" where tabid=14 and fieldname="sales_end_date"');
@@ -3700,6 +3698,8 @@ Execute("delete from vtiger_datashare_relatedmodules where relatedto_tabid=10");
 //change the share_action_name in vtiger_org_share_action_mapping table for entry Public:Read,Create/Edit 
 Execute('update vtiger_org_share_action_mapping set share_action_name="Public: Read, Create/Edit" where share_action_name="Public:Read,Create/Edit"');
 
+//This has been already added (line 2939) where as that loop failed because given num_row instead of num_rows
+/*
 //add entries for Campaign and My Sites in profile2tab and profile2standardpermissions tables
 $res = $conn->query("select * from vtiger_profile");
 $noofprofiles = $conn->num_rows($res);
@@ -3717,25 +3717,22 @@ for($i=0;$i<$noofprofiles;$i++)
 		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,3,0)");
 		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,4,0)");
 }
+*/
 
-//add all field entries to def_org_field table for Campaigns
+//add all field entries to def_org_field and profile2field tables for Campaigns
 $field_res = $conn->query("select fieldid from vtiger_field where tabid=26");
 for($i=0;$i<$conn->num_rows($field_res);$i++)
 {
 	$fieldid = $conn->query_result($field_res,$i,'fieldid');
-	
-	Execute("insert into vtiger_def_org_field values(26,$fieldid,0,1)");
 
-	//Also we have to add in profile2tab for all profiles
-	$profile_res = $conn->query("select * from vtiger_profile");
-	for($j=0;$j<$conn->num_rows($profile_res);$j++)
-	{
-		$profile_id = $conn->query_result($profile_res,$j,'profileid');
-
-		Execute("insert into vtiger_profile2field values($profile_id,26,$fieldid,0,1)");
-	}
-	
+	populateFieldForSecurity('26',$fieldid);
 }
+
+//delete the entries from vtiger_profile2standardpermissions table for Emails
+Execute("delete from vtiger_profile2standardpermissions where tabid=10");
+
+
+
 
 
 
