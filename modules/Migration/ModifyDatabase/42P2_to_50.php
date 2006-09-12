@@ -3731,8 +3731,9 @@ for($i=0;$i<$conn->num_rows($field_res);$i++)
 //delete the entries from vtiger_profile2standardpermissions table for Emails
 Execute("delete from vtiger_profile2standardpermissions where tabid=10");
 
-
-
+//delete the tagcloud entry from users
+Execute("delete from vtiger_field where tabid=29 and fieldname='tagcloud'");
+Execute("alter table vtiger_users drop column tagcloud");
 
 
 
