@@ -19,18 +19,18 @@
 
 <toolbarpalette id="MailToolbarPalette">
 <toolbarbutton id="vtiger-button" class="toolbarbutton-1" label= "Add to vtiger CRM"
- oncommand="load_addmsgtovtiger();"/>
+ oncommand="check_load_addmsg();"/>
 </toolbarpalette>
 
 <menupopup id="taskPopup">
 	 <menuitem insertafter="menu_preferences" id="vtigerMenu"/>
 	 <menuseparator/>
 	 <menuitem label="vtiger CRM Configuration..." accesskey="v" oncommand="window.openDialog('chrome://vtiger/content/vtiger-settings.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
-	 <menuitem label="Add Message to vtiger CRM..." accesskey="d" oncommand="load_addmsgtovtiger();"/>	 
+	 <menuitem label="Add Message to vtiger CRM..." accesskey="d" oncommand="check_load_addmsg();"/>	 
 </menupopup>
 
 <popup id="threadPaneContext">
-    <menuitem id="vtigerpcontext" accesskey="v" label="Add Message to vtiger CRM" oncommand="load_addmsgtovtiger();"/>
+    <menuitem id="vtigerpcontext" accesskey="v" label="Add Message to vtiger CRM" oncommand="check_load_addmsg();"/>
 </popup>
 
 

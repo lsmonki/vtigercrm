@@ -13,28 +13,28 @@ var gvturl;
 
 function vget_mailfrmaddrs()
 {
-	//intial method for adding mails to vtigercrm server
-	var oPrefObj = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("vtiger.");
-
-	if(oPrefObj.prefHasUserValue("Settings.Conf.vtigerUName"))
-	{
-		gvtusername = oPrefObj.getCharPref("Settings.Conf.vtigerUName");
-		gvtpassword = oPrefObj.getCharPref("Settings.Conf.vtigerPword");
-		gvturl = oPrefObj.getCharPref("Settings.Conf.vtigerURL");
-	}
-	
-	var fromaddress = opener.gauthor;
-	
-	if(fromaddress != "")
-	{
-	  if(fromaddress.indexOf("<") > -1)
-	  {
-			fromaddress = fromaddress.substring(fromaddress.indexOf("<")+1,fromaddress.indexOf(">"));
-	  }
-	}
-
-	document.getElementById("txtemailid").value = fromaddress;
-	document.getElementById("TextAreaValue").value = opener.gwinBody;
+   	//intial method for adding mails to vtigercrm server
+  	var oPrefObj = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("vtiger.");
+  
+  	if(oPrefObj.prefHasUserValue("Settings.Conf.vtigerUName"))
+  	{
+  		gvtusername = oPrefObj.getCharPref("Settings.Conf.vtigerUName");
+  		gvtpassword = oPrefObj.getCharPref("Settings.Conf.vtigerPword");
+  		gvturl = oPrefObj.getCharPref("Settings.Conf.vtigerURL");
+  	}
+  	
+  	var fromaddress = opener.gauthor;
+  	
+  	if(fromaddress != "")
+  	{
+  	  if(fromaddress.indexOf("<") > -1)
+  	  {
+  			fromaddress = fromaddress.substring(fromaddress.indexOf("<")+1,fromaddress.indexOf(">"));
+  	  }
+  	}
+  
+  	document.getElementById("txtemailid").value = fromaddress;
+  	document.getElementById("TextAreaValue").value = opener.gwinBody;
 }
 
 function launch_contact()
@@ -65,13 +65,11 @@ function getVersion()
 	call.encode(0,"SearchContactsByEmail",objects,headers.length,headers,params.length,params);
 	try
 	{
-		alert("calling server");
     var oResponse = call.invoke();
    }catch(errorObject)
 	{
 		alert_message("Cannot connect to the vtiger CRM server");
 	}
-	alert("got response");
 	
 	if(oResponse.fault){
 		alert_message("Error while receiving response from the vtiger CRM server");
@@ -107,14 +105,10 @@ function getVersion()
 					var itemsLength = itemNode.item(i).childNodes.length;
 					var itemsNode = itemNode.item(i).childNodes;
 					
-					alert(itemsLength);
-					
 					for(var j=0;j<itemsLength;j++)
 					{
 						if(itemsNode.item(j).childNodes.item(0))
 						{
-              alert(j);
-              alert(itemsNode.item(j).childNodes.item(0).nodeValue);
               switch(j)
 							{
 								case 0:
@@ -147,122 +141,121 @@ function getVersion()
 }
 function bget_CntBySearch()
 {
-	//getVersion();
-	//return;
-  //method to search, any available contacts in vtigercrm server
-	var frstname ="";
-	var lstname = "";
-	var cntid = "";
-	var acntname = "";
-	var cntemail = "";
-   var rcount = 1;
-	
-	var contactlist = document.getElementById('lstcontactinfo');
-
-	while(contactlist.getRowCount() >= 1)
-	{
-		contactlist.removeItemAt(2);
-	}
-	
-	var headers = new Array();
-  var params = new Array(new SOAPParameter(gvtusername,"username"),new SOAPParameter(document.getElementById('txtemailid').value,"emailaddress"));
-	var call = new SOAPCall();
-	const objects = "uri:SearchContactsByEmailRequest";
-	call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
-	call.actionURI = objects + "/" + "SearchContactsByEmail";
-	call.encode(0,"SearchContactsByEmail",objects,headers.length,headers,params.length,params);
-	try
-	{
-		var oResponse = call.invoke();
-   }catch(errorObject)
-	{
-		alert_message("Can not connect to the vtiger CRM server");
-	}
-	
-	if(oResponse.fault){
-		alert_message("Error while receiving response from the vtiger CRM server");
-	}else
-	{
-		try
-		{
-		  if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
-			{ 
-				var itemLength = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes.length;
-				var itemNode = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes;
-
-				for(var i=0;i<itemLength;i++)
-				{
-					var itemsLength = itemNode.item(i).childNodes.length;
-					var itemsNode = itemNode.item(i).childNodes;
-					cntid = '';
-					frstname = '';
-					lstname = '';
-					cntemail = '';
-          acntname = '';						  
-					for(var j=0;j<itemsLength;j++)
-					{
-					  if(itemsNode.item(j).childNodes.item(0))
-						{
-						  switch(j)
-							{
-								case 0:
-										cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-                				case 1:
-										frstname = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-								case 2:
-										lstname = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-								case 3:
-										cntemail = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-								case 4:
-										acntname = itemsNode.item(j).childNodes.item(0).nodeValue;
-										break;
-							}
-						}
-					}
-				//code to add the items to the listbox
-					var listboxelmnt = document.getElementById("lstcontactinfo");
-					
-					var listitemdoc = document.createElement('listitem');
-					listitemdoc.setAttribute("value",cntid);
-					
-					var typechild = document.createElement('listcell');
-					typechild.setAttribute('label',"Contact");
-					listitemdoc.appendChild(typechild);
-					
-					var fullnamechild = document.createElement('listcell');
-					fullnamechild.setAttribute('label',frstname+ " " +lstname);
-					listitemdoc.appendChild(fullnamechild);
-					
-					var accountchild = document.createElement('listcell');
-					accountchild.setAttribute('label',acntname);
-					listitemdoc.appendChild(accountchild);
-					
-					var emailchild = document.createElement('listcell');
-					emailchild.setAttribute('label',cntemail);
-					listitemdoc.appendChild(emailchild);
-									
-					listboxelmnt.appendChild(listitemdoc);
-				//end code to add the items to the listbox
-				}
-			}else
-			{
-				alert_message("Contact is not available in the vtiger CRM");
-			}
-		}catch(errorObject)
-		{
-		alert_message("Error while parsing response from the vtiger CRM server");
-		}	
+  if(check_login())
+  {
+  	var frstname ="";
+  	var lstname = "";
+  	var cntid = "";
+  	var acntname = "";
+  	var cntemail = "";
+    var rcount = 1;
+  	
+  	var contactlist = document.getElementById('lstcontactinfo');
+  
+  	while(contactlist.getRowCount() >= 1)
+  	{
+  		contactlist.removeItemAt(2);
+  	}
+  	
+  	var headers = new Array();
+    var params = new Array(new SOAPParameter(gvtusername,"username"),new SOAPParameter(document.getElementById('txtemailid').value,"emailaddress"));
+  	var call = new SOAPCall();
+  	const objects = "uri:SearchContactsByEmailRequest";
+  	call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
+  	call.actionURI = objects + "/" + "SearchContactsByEmail";
+  	call.encode(0,"SearchContactsByEmail",objects,headers.length,headers,params.length,params);
+  	try
+  	{
+  		var oResponse = call.invoke();
+     }catch(errorObject)
+  	{
+  		alert_message("Can not connect to the vtiger CRM server");
+  	}
+  	
+  	if(oResponse.fault){
+  		alert_message("Error while receiving response from the vtiger CRM server");
+  	}else
+  	{
+  		try
+  		{
+  		  if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+  			{ 
+  				var itemLength = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes.length;
+  				var itemNode = oResponse.body.childNodes.item(0).childNodes.item(0).childNodes;
+  
+  				for(var i=0;i<itemLength;i++)
+  				{
+  					var itemsLength = itemNode.item(i).childNodes.length;
+  					var itemsNode = itemNode.item(i).childNodes;
+  					cntid = '';
+  					frstname = '';
+  					lstname = '';
+  					cntemail = '';
+            acntname = '';						  
+  					for(var j=0;j<itemsLength;j++)
+  					{
+  					  if(itemsNode.item(j).childNodes.item(0))
+  						{
+  						  switch(j)
+  							{
+  								case 0:
+  										cntid = itemsNode.item(j).childNodes.item(0).nodeValue;
+  										break;
+                  				case 1:
+  										frstname = itemsNode.item(j).childNodes.item(0).nodeValue;
+  										break;
+  								case 2:
+  										lstname = itemsNode.item(j).childNodes.item(0).nodeValue;
+  										break;
+  								case 3:
+  										cntemail = itemsNode.item(j).childNodes.item(0).nodeValue;
+  										break;
+  								case 4:
+  										acntname = itemsNode.item(j).childNodes.item(0).nodeValue;
+  										break;
+  							}
+  						}
+  					}
+  				//code to add the items to the listbox
+  					var listboxelmnt = document.getElementById("lstcontactinfo");
+  					
+  					var listitemdoc = document.createElement('listitem');
+  					listitemdoc.setAttribute("value",cntid);
+  					
+  					var typechild = document.createElement('listcell');
+  					typechild.setAttribute('label',"Contact");
+  					listitemdoc.appendChild(typechild);
+  					
+  					var fullnamechild = document.createElement('listcell');
+  					fullnamechild.setAttribute('label',frstname+ " " +lstname);
+  					listitemdoc.appendChild(fullnamechild);
+  					
+  					var accountchild = document.createElement('listcell');
+  					accountchild.setAttribute('label',acntname);
+  					listitemdoc.appendChild(accountchild);
+  					
+  					var emailchild = document.createElement('listcell');
+  					emailchild.setAttribute('label',cntemail);
+  					listitemdoc.appendChild(emailchild);
+  									
+  					listboxelmnt.appendChild(listitemdoc);
+  				//end code to add the items to the listbox
+  				}
+  			}else
+  			{
+  				alert_message("Contact is not available in the vtiger CRM");
+  			}
+  		}catch(errorObject)
+  		{
+  		alert_message("Error while parsing response from the vtiger CRM server");
+  		}	
+  	}
 	}
 }
 
 
 function vaddemailtovtigerCRM()
 {
-
 	//method to add message to vtigerCRM server
 	if(document.getElementById('lstcontactinfo').selectedItem)
 	{
@@ -311,6 +304,71 @@ function vaddemailtovtigerCRM()
 	{
 		alert_message("Select contact to add message to the vtiger CRM"); 
 	}
+}
+
+
+function check_login()
+{
+  var oPrefObj = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("vtiger.");
+  if(oPrefObj.prefHasUserValue("Settings.Conf.vtigerUName"))
+	{
+		gvtusername = oPrefObj.getCharPref("Settings.Conf.vtigerUName");
+		gvtpassword = oPrefObj.getCharPref("Settings.Conf.vtigerPword");
+		gvturl = oPrefObj.getCharPref("Settings.Conf.vtigerURL");
+	}else
+	{
+		alert_message("Configure login details to access the vtiger CRM");
+		return false;
+	}
+	
+  var p = new Array();
+	p[0] = new SOAPParameter(gvtusername,"user_name");
+	p[1] = new SOAPParameter(gvtpassword,"password");
+  var headers = new Array();
+	var call = new SOAPCall();
+	const objects = "uri:create_sessionRequest";
+	call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
+	call.actionURI = objects + "/" + "create_session";
+	call.encode(0,"create_session",objects,headers.length,headers,p.length,p);
+
+	try
+	{
+		var oResponse = call.invoke();
+	}catch(errorObject)
+	{
+		gErrMsg = "Cannot connect to the vtiger CRM server";
+	}
+  if(oResponse.fault){
+			gErrMsg = "Error while receiving response from the vtiger CRM server";
+	}else
+	{
+      try
+			{
+			   if(oResponse.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+				 {
+					   if(oResponse.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue != 'success')
+					   {
+					     alert_message("Unable to Login to vtigerCRM with the UserName and Password Configured");
+					     return false;
+					   }else
+					   {
+					     return true;
+             }
+         }else
+         {
+            alert_message("Error while Login to vtigerCRM");
+         }
+         
+      }catch(errorObject)
+			{
+				gErrMsg = "Error while parsing response from the vtiger CRM server";
+			}
+	}
+	
+	//Display Error Message if set
+	if(gErrMsg != '')
+	   alert_message(gErrMsg);
+	   
 }
 
 function alert_message(message)

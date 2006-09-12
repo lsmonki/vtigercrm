@@ -21,22 +21,22 @@
 
 <toolbarpalette id="AddressBookToolbarPalette">
 	<toolbarbutton id="import-button" class="toolbarbutton-1" label= "Import Contacts"
-	oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" tooltiptext="Import Contacts from vtiger CRM"/>
+	oncommand="return checkContactView_perm();" tooltiptext="Import Contacts from vtiger CRM"/>
 	<toolbarbutton id="export-button" class="toolbarbutton-1" label= "Export Contacts"
-	oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" tooltiptext="Export Contacts to vtiger CRM"/>
+	oncommand="return checkContact_perm();" tooltiptext="Export Contacts to vtiger CRM"/>
 </toolbarpalette>
 
 <popup id="dirTreeContext">
   <menuseparator insertafter="dirTreeContext-delete"/>
-  <menuitem id="dirTreeImppopup" label="Import from vtiger CRM..." accesskey="p" oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
-  <menuitem id="dirTreeEmppopup" label="Export to vtiger CRM..." accesskey="x" oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+  <menuitem id="dirTreeImppopup" label="Import from vtiger CRM..." accesskey="p" oncommand="return checkContactView_perm();"/>
+  <menuitem id="dirTreeEmppopup" label="Export to vtiger CRM..." accesskey="x" oncommand="return checkContact_perm();"/>
 </popup>
 
 <menu id="tasksMenu">
 	<menupopup id="taskPopup">
 		<menuseparator/>
-		<menuitem label="Import from vtiger CRM..."  accesskey="p" oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" id="impmenu"/>
-		<menuitem label="Export to vtiger CRM..." accesskey="x" id="expmenu" oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+		<menuitem label="Import from vtiger CRM..."  accesskey="p" oncommand="return checkContactView_perm();" id="impmenu"/>
+		<menuitem label="Export to vtiger CRM..." accesskey="x" id="expmenu" oncommand="return checkContact_perm();"/>
  </menupopup>
 </menu>
 		  
