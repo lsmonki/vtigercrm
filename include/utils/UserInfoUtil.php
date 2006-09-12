@@ -4620,7 +4620,8 @@ function getFieldModuleAccessArray()
                 'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
                 'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
                 'Invoice'=>'LBL_INVOICE_FIELD_ACCESS',
-                'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS'
+                'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS',
+		'Faq'=>'LBL_FAQ_FIELD_ACCESS'
               );
 
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
