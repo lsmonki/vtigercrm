@@ -357,7 +357,7 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
   }
 	
 	$contact = new Contact();
-	$contact->column_fields[firstname]=in_array('salutation',$permitted_lists) ? $first_name : "";
+	$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
 	$contact->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
 	$contact->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
