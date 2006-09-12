@@ -266,7 +266,7 @@ following values "Call","Meeting" or "Task".',
 'Select_Duration'=>'Select Duration', 
 'Simple_Time_Filter'=>'Simple Time Filter', 
 'Start_Date'=>'Start Date', 
-'End_Date'=>'End_Date', 
+'End_Date'=>'End Date', 
 'LBL_RULE'=>'RULE' 
 ); 
 ?>
