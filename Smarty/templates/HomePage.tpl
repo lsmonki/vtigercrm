@@ -237,18 +237,6 @@
 
 <br>
 {/if}
-{if $TAGCLOUD_JS ne ''}
-<table width="100%" border=0>
-<tr>
-	<td>
-		<link href="{$TAGCLOUD_CSS}" rel="stylesheet" type="text/css">
-		<script language="JavaScript" type="text/javascript" src="{$TAGCLOUD_JS}"></script>
-	</td>
-</tr>
-</table>
-<br>
-{/if}
-
 
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 <tr>

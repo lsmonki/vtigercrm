@@ -82,7 +82,6 @@ class User {
 	'phone_home' =>'',
 	'imagename' =>'',
 	'date_format' =>'',
-	'tagcloud' =>'',
 	'signature' =>'',
 	'description' =>'',
 	'address_street' =>'',
