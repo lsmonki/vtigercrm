@@ -30,7 +30,7 @@ function callSearch(searchtype)
         	getObj(data_td_id).className = 'searchAlph';
     	{rdelim}
     	gPopupAlphaSearchUrl = '';
-	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+	search_fld_val= $('bas_searchfield').options[$('bas_searchfield').selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
         var urlstring = '';
         if(searchtype == 'Basic')
@@ -151,10 +151,13 @@ function alphabetic(module,url,dataid)
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
-		<td class="small" nowrap><b>{$APP.LBL_IN}</b>&nbsp;
-			<select name ="search_field" class="txtBox" style="width:150px">
+		<td class="small" nowrap><b>{$APP.LBL_IN}</b>&nbsp;</td>
+		<td class="small" nowrap>
+			<div id="basicsearchcolumns_real">
+			<select name="search_field" id="bas_searchfield" class="txtBox" style="width:150px">
 			 {html_options  options=$SEARCHLISTHEADER }
 			</select>
+			</div>
                         <input type="hidden" name="searchtype" value="BasicSearch">
                         <input type="hidden" name="module" value="{$MODULE}">
                         <input type="hidden" name="parenttab" value="{$CATEGORY}">
@@ -169,7 +172,7 @@ function alphabetic(module,url,dataid)
 		<td class="small" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 	</tr>
 	<tr>
-		<td colspan="6" align="center" class="small">
+		<td colspan="7" align="center" class="small">
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 				<tr>
                                                 {$ALPHABETICAL}
