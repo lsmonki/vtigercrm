@@ -37,12 +37,18 @@
 #VTIGER-TICKET{
 	list-style-image:url("chrome://vtiger/skin/Tickets.gif");
 }
-
-
-
-
-
-
-
-
-
+#VTIGER-VENDOR{
+	list-style-image:url("chrome://vtiger/skin/vendor.gif");
+}
+#VTIGER-PRODUCT{
+	list-style-image:url("chrome://vtiger/skin/Products.gif");
+}
+#VTIGER-NOTE{
+	list-style-image:url("chrome://vtiger/skin/Notes.gif");
+}
+#VTIGER-SITE{
+	list-style-image:url("chrome://vtiger/skin/Site.gif");
+}
+#VTIGER-RSS{
+	list-style-image:url("chrome://vtiger/skin/rss.png");
+}
