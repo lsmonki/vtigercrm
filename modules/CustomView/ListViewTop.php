@@ -138,8 +138,8 @@ function getMetricList()
 		$metricslist['name'] = $cvrow['viewname'];
 		$metricslist['module'] = $cvrow['entitytype'];
 		$metricslist['count'] = '';
-
-		$metriclists[] = $metricslist;
+		if(isPermitted($cvrow['entitytype'],"index") == "yes")
+			$metriclists[] = $metricslist;
 	}
 
 	return $metriclists;
