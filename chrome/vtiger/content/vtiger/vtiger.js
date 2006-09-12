@@ -189,6 +189,7 @@ function load_addmsgtoVtiger()
     {
   	alert_message("Pls, Select a Message and Add to vtiger CRM.");
     }
+    return true;
 }  
 
 function alert_message(message)
