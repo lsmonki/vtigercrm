@@ -1397,7 +1397,7 @@ class ReportRun extends CRMEntity
 
 	function GenerateReport($outputformat,$filterlist)
 	{
-		global $adb;
+		global $adb,$current_user;
 		global $modules;
 		global $mod_strings,$current_language;
 
@@ -1418,7 +1418,6 @@ class ReportRun extends CRMEntity
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 				$groupslist = $this->getGroupingList($this->reportid);
-
 				do
 				{
 					$arraylists = Array();
@@ -1447,8 +1446,10 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-						$fieldvalue = $custom_field_values[$i];
-
+						if ($fld->name == "Potentials_Amount")
+							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
+						else
+							$fieldvalue = $custom_field_values[$i];
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
@@ -1532,12 +1533,16 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-						$fieldvalue = $custom_field_values[$i];
+						if ($fld->name == "Potentials_Amount")
+							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
+						else
+							$fieldvalue = $custom_field_values[$i];
+
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
 						}
-						$arraylists[str_replace($modules," ",$fld->name)] = $fieldvalue;
+						$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
 				}while($custom_field_values = $adb->fetch_array($result));
@@ -1568,6 +1573,7 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$keyhdr[$fld->name] = $custom_field_values[$i];
+
 					}
 					foreach($totclmnflds as $key=>$value)
 					{
@@ -1576,7 +1582,7 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -1585,7 +1591,7 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -1594,7 +1600,7 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -1603,7 +1609,7 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_MAX';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -1662,7 +1668,10 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-						$fieldvalue = $custom_field_values[$i];
+						if ($fld->name == "Potentials_Amount")
+							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
+						else
+							$fieldvalue = $custom_field_values[$i];
 
 						if($fieldvalue == "" )
 						{
@@ -1744,6 +1753,7 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$keyhdr[$fld->name] = $custom_field_values[$i];
+
 					}
 					foreach($totclmnflds as $key=>$value)
 					{
@@ -1895,13 +1905,19 @@ class ReportRun extends CRMEntity
 	 **/ 
 	function getLstringforReportHeaders($fldname)
 	{
-		global $modules,$current_language;
+		global $modules,$current_language,$current_user;
 		$rep_header = ltrim(str_replace($modules," ",$fldname));
 		$rep_header_temp = ereg_replace(" ","_",$rep_header);
 		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
 		$temp_mod_strings = return_module_language($current_language,$rep_module);	
-		if($temp_mod_strings[$rep_header] != '')
-			$rep_header = $temp_mod_strings[$rep_header];
+		$curr_symb = "";
+                if($rep_header == 'Amount')
+                        $curr_symb = "(in ".$current_user->currency_symbol.")";
+                if($temp_mod_strings[$rep_header] != '')
+                {
+                        $rep_header = $temp_mod_strings[$rep_header];
+                        $rep_header .=$curr_symb;
+                }
 		return $rep_header;  
 	}
 
