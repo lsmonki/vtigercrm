@@ -115,8 +115,8 @@ for($i=0;$i<$noofprofiles;$i++)
 {
 	$profile_id = $conn->query_result($res,$i,'profileid');
 
-	$sql1 = "insert into vtiger_profile2globalpermissions values ($profile_id,1,0)";
-	$sql2 = "insert into vtiger_profile2globalpermissions values ($profile_id,2,0)";
+	$sql1 = "insert into vtiger_profile2globalpermissions values ($profile_id,1,1)";
+	$sql2 = "insert into vtiger_profile2globalpermissions values ($profile_id,2,1)";
 
 	Execute($sql1);
 	Execute($sql2);
@@ -295,25 +295,25 @@ populateFieldForSecurity('23',$newfieldid);
 
 //changes made to fix the bug in Address Information block of Accounts and Contacs module
 $update_array2 = Array(
-		"UPDATE vtiger_field SET fieldlabel='Billing City' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_city'",
-		"UPDATE vtiger_field SET fieldlabel='Billing State' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_state'",
-		"UPDATE vtiger_field SET fieldlabel='Billing Code' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_code'",
-		"UPDATE vtiger_field SET fieldlabel='Billing Country' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_country'",
+		"UPDATE vtiger_field SET fieldlabel='Billing City', sequence=5 WHERE tabid=6 and fieldname='bill_city'",
+		"UPDATE vtiger_field SET fieldlabel='Billing State', sequence=7 WHERE tabid=6 and fieldname='bill_state'",
+		"UPDATE vtiger_field SET fieldlabel='Billing Code', sequence=9 WHERE tabid=6 and fieldname='bill_code'",
+		"UPDATE vtiger_field SET fieldlabel='Billing Country', sequence=11 WHERE tabid=6 and fieldname='bill_country'",
 
-		"UPDATE vtiger_field SET fieldlabel='Shipping City' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_city'",
-		"UPDATE vtiger_field SET fieldlabel='Shipping Country' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_country'",
-		"UPDATE vtiger_field SET fieldlabel='Shipping State' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_state'",
-		"UPDATE vtiger_field SET fieldlabel='Shipping Code' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_code'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping City', sequence=6 WHERE tabid=6 and fieldname='ship_city'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping State', sequence=8 WHERE tabid=6 and fieldname='ship_state'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping Code', sequence=10 WHERE tabid=6 and fieldname='ship_code'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping Country', sequence=12 WHERE tabid=6 and fieldname='ship_country'",
 
-		"UPDATE vtiger_field SET fieldlabel='Mailing City' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingcity'",
-		"UPDATE vtiger_field SET fieldlabel='Mailing State' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingstate'",
-		"UPDATE vtiger_field SET fieldlabel='Mailing Zip' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingzip'",
-		"UPDATE vtiger_field SET fieldlabel='Mailing Country' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingcountry'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing City', sequence=5 WHERE tabid=4 and fieldname='mailingcity'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing State', sequence=7 WHERE tabid=4 and fieldname='mailingstate'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing Zip', sequence=9 WHERE tabid=4 and fieldname='mailingzip'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing Country', sequence=11 WHERE tabid=4 and fieldname='mailingcountry'",
 
-		"UPDATE vtiger_field SET fieldlabel='Other City' WHERE tabid=4 and tablename='contactaddress' and fieldname='othercity'",
-		"UPDATE vtiger_field SET fieldlabel='Other State' WHERE tabid=4 and tablename='contactaddress' and fieldname='otherstate'",
-		"UPDATE vtiger_field SET fieldlabel='Other Zip' WHERE tabid=4 and tablename='contactaddress' and fieldname='otherzip'",
-		"UPDATE vtiger_field SET fieldlabel='Other Country' WHERE tabid=4 and tablename='contactaddress' and fieldname='othercountry'",
+		"UPDATE vtiger_field SET fieldlabel='Other City', sequence=6 WHERE tabid=4 and fieldname='othercity'",
+		"UPDATE vtiger_field SET fieldlabel='Other State', sequence=8 WHERE tabid=4 and fieldname='otherstate'",
+		"UPDATE vtiger_field SET fieldlabel='Other Zip', sequence=10 WHERE tabid=4 and fieldname='otherzip'",
+		"UPDATE vtiger_field SET fieldlabel='Other Country', sequence=12 WHERE tabid=4 and fieldname='othercountry'",
 		);
 foreach($update_array2 as $query)
 {
@@ -3682,6 +3682,60 @@ Execute("alter table vtiger_campaigncontrel ADD PRIMARY KEY (campaignid,contacti
 //for  vtiger_seactivityrel  table
 Execute("alter table vtiger_seactivityrel DROP PRIMARY KEY");
 Execute("alter table vtiger_seactivityrel ADD PRIMARY KEY (crmid,activityid)");
+
+//change the block for vendor address details
+Execute("update vtiger_field set fieldname='street' where tabid=18 and columnname='street'");
+Execute("update vtiger_field set block=46 where tabid=18 and fieldname in ('city','country','pobox','postalcode','state','street')");
+
+//change the calendar sharing access to private
+Execute("update vtiger_def_org_share set permission=3 where tabid=9");
+//Now sharing access is not available for Emails
+Execute("delete from vtiger_def_org_share where tabid=10");
+
+//we have to delete the entry from datashare_relatedmodules (Settings -> Sharing Access -> Add Privileges)
+Execute("delete from vtiger_datashare_relatedmodules where tabid=10");
+Execute("delete from vtiger_datashare_relatedmodules where relatedto_tabid=10");
+
+
+//change the share_action_name in vtiger_org_share_action_mapping table for entry Public:Read,Create/Edit 
+Execute('update vtiger_org_share_action_mapping set share_action_name="Public: Read, Create/Edit" where share_action_name="Public:Read,Create/Edit"');
+
+//add entries for Campaign and My Sites in profile2tab and profile2standardpermissions tables
+$res = $conn->query("select * from vtiger_profile");
+$noofprofiles = $conn->num_rows($res);
+
+for($i=0;$i<$noofprofiles;$i++)
+{
+	        $profile_id = $conn->query_result($res,$i,'profileid');
+		
+		Execute("insert into vtiger_profile2tab values($profile_id,26,0)");
+		Execute("insert into vtiger_profile2tab values($profile_id,27,0)");
+
+		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,0,0)");
+		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,1,0)");
+		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,2,0)");
+		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,3,0)");
+		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,4,0)");
+}
+
+//add all field entries to def_org_field table for Campaigns
+$field_res = $conn->query("select fieldid from vtiger_field where tabid=26");
+for($i=0;$i<$conn->num_rows($field_res);$i++)
+{
+	$fieldid = $conn->query_result($field_res,$i,'fieldid');
+	
+	Execute("insert into vtiger_def_org_field values(26,$fieldid,0,1)");
+
+	//Also we have to add in profile2tab for all profiles
+	$profile_res = $conn->query("select * from vtiger_profile");
+	for($j=0;$j<$conn->num_rows($profile_res);$j++)
+	{
+		$profile_id = $conn->query_result($profile_res,$j,'profileid');
+
+		Execute("insert into vtiger_profile2field values($profile_id,26,$fieldid,0,1)");
+	}
+	
+}
 
 
 
