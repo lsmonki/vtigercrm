@@ -47,6 +47,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("PARENTTAB",$_REQUEST['parenttab']);
+$smarty->assign("MASTER_CURRENCY",$currency_name);
 $smarty->assign("IMAGE_PATH",$image_path);
 
 if(isset($_REQUEST['detailview']) && $_REQUEST['detailview'] != '')
