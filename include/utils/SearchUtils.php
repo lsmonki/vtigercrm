@@ -468,6 +468,8 @@ function getAdvSearchfields($module)
 		{
 			if ($i==0)
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
+			elseif($fieldlabel == "Product Code")
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$mod_strings[$fieldlabel]."</option>";
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
 		}
