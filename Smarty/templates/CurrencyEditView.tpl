@@ -77,7 +77,7 @@
                             <td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CURRENCY_SYMBOL}" name="currency_symbol"></td>
                           </tr>
                           <tr valign="top">
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY})</td>
+                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
 
                             <td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CONVERSION_RATE}" name="conversion_rate"></td>
                           </tr>
