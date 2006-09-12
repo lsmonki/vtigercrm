@@ -591,7 +591,7 @@ $mod_strings = Array(
 'INVENTORYTERMSANDCONDITIONS'=>'Inventory : Terms & Conditions',//newly added for Inventory terms and conditions
 'LBL_INVENTORY_TERMSANDCONDITIONS'=>' - Edit Terms & Conditions',//newly added
 'LBL_TANDC_TEXT'=>'Terms & Conditions Text',
-'LBL_INVENTORY_TANDC'=>'Terms & Conditions',
+'LBL_INVENTORY_TANDC'=>'Inventory Terms & Conditions',
 
 'LBL_OTHER_SETTINGS'=>'Other Settings',
 'LBL_SCROLL'=>'[Scroll to Top]',
