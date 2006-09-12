@@ -113,6 +113,9 @@ function showDefaultCustomView(selectView,module)
                         $("ListViewContents").innerHTML= result[2];
                         if(result[1] != '')
                                	alert(result[1]);
+			$('basicsearchcolumns_real').innerHTML = $('basicsearchcolumns').innerHTML
+			$('basicsearchcolumns').innerHTML = '';
+			document.basicSearch.search_text.value = '';
                         }
                 }
 	);
