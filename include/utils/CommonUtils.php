@@ -2457,7 +2457,7 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["users"]))
 			{
 				$columnfields = implode(',',$fields["users"]);
-				$query = 'select '.$columnfields.' from users where id='.$id;
+				$query = 'select '.$columnfields.' from vtiger_users where id='.$id;
 				$result = $adb->query($query);
 				foreach($fields["users"] as $columnname)
 				{
