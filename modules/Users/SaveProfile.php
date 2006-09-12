@@ -55,7 +55,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	{
 		$tab_id = $adb->query_result($tab_perr_result,$i,"tabid");
 		$request_var = $tab_id.'_tab';
-		if($tab_id != 3 && $tab_id != 16 && $tab_id != 15)
+		if($tab_id != 3 && $tab_id != 16)
 		{
 			$permission = $_REQUEST[$request_var];
 			if($permission == 'on')
@@ -75,16 +75,6 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
                         	$adb->query($sql4);	
 			}
 		}
-		elseif($tab_id == 13)
-		{
-			$sql4="insert into vtiger_profile2tab values(".$profileid.",13,0)";
-                        $adb->query($sql4);
-		}
-		elseif($tab_id == 15)
-		{
-			$sql4="insert into vtiger_profile2tab values(".$profileid.",15,0)";
-                        $adb->query($sql4);
-		}
 	}
 	
 	//profile2standard permissions	
@@ -92,7 +82,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	{
 		$tab_id = $adb->query_result($act_perr_result,$i,"tabid");
 		$action_id = $adb->query_result($act_perr_result,$i,"operation");
-		if($tab_id != 16 && $tab_id != 15)
+		if($tab_id != 16)
 		{
 			$action_name = getActionname($action_id);
 			if($action_name == 'EditView' || $action_name == 'Delete' || $action_name == 'DetailView')
@@ -129,12 +119,6 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 
 
 
-		}
-		elseif($tab_id == 15)
-		{
-			
-                          $sql7="insert into vtiger_profile2standardpermissions values(".$profileid.", 15, ".$action_id.",0)";
-                          $adb->query($sql7);
 		}
 	}
 
