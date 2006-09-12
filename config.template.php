@@ -171,6 +171,9 @@ $disable_persistent_connections = false;
 // languages default value = en_us=>US English
 $languages = Array('en_us'=>'US English',);
 
+//Master currency name
+$currency_name = '_MASTER_CURRENCY_';
+
 // default charset
 // default charset default value = ISO-8859-1
 $default_charset = 'ISO-8859-1';
