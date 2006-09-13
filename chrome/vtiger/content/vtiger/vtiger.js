@@ -84,6 +84,12 @@ function check_login()
 
 function check_load_addmsg()
 {
+  var messageURI = GetFirstSelectedMessage();
+  if(messageURI == null)
+  {
+    alert_message("Please Select an email to Add to vtigerCRM");
+    return false;
+  }  
   if(check_login())
   {  
     var p = new Array();
@@ -117,6 +123,7 @@ function check_load_addmsg()
   					   }else
   					   {
   					     load_addmsgtoVtiger();
+  					     return true;
                }
            }else
            {
