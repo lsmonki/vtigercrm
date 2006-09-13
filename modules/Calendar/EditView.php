@@ -130,6 +130,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 $userDetails=getOtherUserName($current_user->id,true);
 //echo '<pre>';print_r($userDetails);echo '</pre>';
 $to_email = getUserEmailId('id',$current_user->id);
+$smarty->assign("CURRENTUSERID",$current_user->id);
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')

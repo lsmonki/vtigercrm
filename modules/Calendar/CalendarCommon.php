@@ -9,14 +9,6 @@
 *
  ********************************************************************************/
 //Code Added by Minnie -Starts
-require_once('include/database/PearDatabase.php');
-
-global $mod_strings,$current_user;
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-require('user_privileges/user_privileges_'.$current_user->id.'.php');
 /**
  * To get the lists of sharedids 
  * @param $id -- The user id :: Type integer
@@ -64,19 +56,35 @@ function getSharedCalendarId($sharedid)
  */
 function getOtherUserName($id,$check)
 {
-	global $adb;
-	if($check)
-		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
-	else
-		$query="select * from vtiger_users where deleted=0 and status='Active' and is_admin='off' and id!=".$id;
-	$result = $adb->query($query);
-	$num_rows=$adb->num_rows($result);
+	global $adb,$current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$user_details=Array();
-	for($i=0;$i<$num_rows;$i++)
+	if($check)
 	{
-		$userid=$adb->query_result($result,$i,'id');
-		$username=$adb->query_result($result,$i,'user_name');
- 		$user_details[$userid]=$username;
+		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
+		$result = $adb->query($query);
+		$num_rows=$adb->num_rows($result);
+		for($i=0;$i<$num_rows;$i++)
+		{
+			$userid=$adb->query_result($result,$i,'id');
+			$username=$adb->query_result($result,$i,'user_name');
+			$user_details[$userid]=$username;
+		}
+
+	}
+	else
+	{
+		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
+		{
+			$user_details = get_user_array(FALSE, "Active", $id, 'private');
+			unset($user_details[$id]);
+		}
+		else
+		{
+			$user_details = get_user_array(FALSE, "Active", $id);
+			unset($user_details[$id]);
+		}
 	}
 	return $user_details;
 }
@@ -200,7 +208,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 			$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrtext.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
 		for($i=0;$i<12;$i++)
 		{
 			$minvalue = 5;
@@ -209,7 +217,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 			{
 				$value= '0'.$value;
 			}
-			else $value= $value;
+			else $value = $value;
 			if($min == $value)
 				$minsel = 'selected';
 			else
@@ -217,7 +225,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" value="'.$fmt.'" class=small>';
+		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
 		if($fmt == 'am')
 		{
 			$amselected = 'selected';
@@ -234,7 +242,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 		}
 		else
 		{
-			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small value="'.$hour.'">';
+			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small>';
 			for($i=0;$i<=23;$i++)
 			{
 				if($i <= 9 && strlen(trim($i)) < 2)
@@ -249,7 +257,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrvalue.'</option>';
 			}
 			$combo .= '</select>Hr&nbsp;';
-			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small value="'.$min.'">';
+			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
 			for($i=0;$i<12;$i++)
 			{
 				$minvalue = 5;
@@ -265,7 +273,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 					$minsel = '';
 				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
 			}
-			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt" value="'.$fmt.'">';
+			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 		}
 		return $combo;
 }
@@ -300,11 +308,13 @@ function getActFieldCombo($fieldname,$tablename)
 /*Fuction to get value for Assigned To field
  *returns values of Assigned To field in array format
 */
-function getAssignedTo()
+function getAssignedTo($tabid)
 {
 	global $current_user,$noof_group_rows,$adb;
 	$assigned_user_id = $current_user->id;
-	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[$tabid] == 3 or $defaultOrgSharingPermission[$tabid] == 0))
 	{
 		$result=get_current_user_access_groups('Calendar');
 	}
@@ -313,8 +323,8 @@ function getAssignedTo()
 		$result = get_group_options();
 	}
 	$nameArray = $adb->fetch_array($result);
-	global $current_user;
-	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
+	
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[$tabid] == 3 or $defaultOrgSharingPermission[$tabid] == 0))
 	{
 		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 	}

@@ -94,8 +94,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 {
 	var y=document.getElementById(argg1).style;
 	
-	if (y.display=="none") 
-	{
 		if(type == 'call' || type == 'meeting')
 		{
 			if(type == 'call')
@@ -117,12 +115,15 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 		if(type == 'todo')
 		{
 			document.createTodo.task_date_start.value = startdate;
+			document.createTodo.task_due_date.value = enddate;
 			document.createTodo.starthr.value = starthr;
                         document.createTodo.startmin.value = startmin;
                         document.createTodo.startfmt.value = startfmt;
 			document.createTodo.viewOption.value = viewOption;
                         document.createTodo.subtab.value = subtab;
 		}
+	if (y.display=="none")
+        {
 		y.display="block";
 	}
 }
@@ -302,10 +303,6 @@ function check_form()
         }
         else
         {
-		if(document.EditView.recurringcheck.checked == false)
-		{
-			document.EditView.recurringtype.value = '--None--';
-		}
 		if(document.EditView.record.value != '')
                 {
                         document.EditView.mode.value = 'edit';
@@ -418,6 +415,10 @@ function check_form()
 			return false;
 		document.EditView.time_start.value = starthour+':'+startmin;
 		document.EditView.time_end.value = endhour+':'+endmin;
+		if(document.EditView.recurringcheck.checked == false)
+                {
+                        document.EditView.recurringtype.value = '--None--';
+                }
                 return true;
         }
 }

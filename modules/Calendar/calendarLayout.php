@@ -1308,10 +1308,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
-	if(empty($shared_ids))
-		$shared_ids = $current_user->id;
 	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
@@ -1330,26 +1330,30 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 				OR vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."') ";
 	if($info != '')
 	{
-		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')
-			AND vtiger_crmentity.smownerid = ".$current_user->id." 
-		GROUP BY vtiger_activity.activityid 
-		ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id."
+			GROUP BY vtiger_activity.activityid";
+		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')".$com_q;
+		$total_q =  $query."".$com_q;
+		$total_res = $adb->query($total_q);
+		$total = $adb->num_rows($total_res);
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
+		$cal_log->debug("Exiting getEventList() method...");
+		return Array('totalevent'=>$total,'pendingevent'=>$pending_rows);
 	}
-	if(!is_admin($current_user))
-		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.") ";
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter('Calendar');
+		$query .= $sec_parameter;
+	}
+	/*if(!is_admin($current_user))
+		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.") ";*/
 		
 	$query .= "GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
  	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
-	if($info != '')
-        {
-		$cal_log->debug("Exiting getEventList() method...");
-		return Array('totalevent'=>$rows,'pendingevent'=>$pending_rows);
-        }
 	for($i=0;$i<$rows;$i++)
 	{
 		$element = Array();
@@ -1429,8 +1433,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	global $adb,$current_user,$mod_strings,$cal_log;
 	$cal_log->debug("Entering getTodoList() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
-	if(empty($shared_ids))
-		$shared_ids = $current_user->id;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
         $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_cntactivityrel.contactid, 
 		vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
@@ -1448,28 +1452,36 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                         AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."')";
         if($info != '')
         {
-                $pending_query = $query." AND (vtiger_activity.status != 'Completed')
-                        AND vtiger_crmentity.smownerid = ".$current_user->id."
-                ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id;
+                $pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
+		$total_q =  $query."".$com_q;
 		if( $adb->dbType == "pgsql")
+		{
  		    $pending_query = fixPostgresQuery( $pending_query, $log, 0);
+		    $total_q = fixPostgresQuery( $total_q, $log, 0);
+		}
+		$total_res = $adb->query($total_q);
+		$total = $adb->num_rows($total_res);
                 $res = $adb->query($pending_query);
                 $pending_rows = $adb->num_rows($res);
+		$cal_log->debug("Exiting getTodoList() method...");
+		return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
         }
 	
-	if(!is_admin($current_user))
-                $query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[9] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter('Calendar');
+		$query .= $sec_parameter;
+	}
+								
+	/*if(!is_admin($current_user))
+                $query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";*/
         $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
-        if($info != '')
-        {
-		$cal_log->debug("Exiting getTodoList() method...");
-                return Array('totaltodo'=>$rows,'pendingtodo'=>$pending_rows);
-        }
 	for($i=0;$i<$rows;$i++)
         {
                 $element = Array();
