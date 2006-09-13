@@ -46,8 +46,11 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		$filenameBase64 = $filename.".base64";
 		$rfh = fopen($uploaddir.$filename, "r");
 		$wfh = fopen($uploaddir.$filenameBase64, "w");
-		//FIXME: find a way to stream data to base64_encode() to reduce memory usage -mikefedyk
-		fwrite($wfh,base64_encode(fread($rfh, $filesize)));
+		while(!feof($rfh)) {
+			fwrite($wfh,base64_encode(fread($rfh, 1024*1024)));
+		}
+		fclose($rfh);
+		fclose($wfh);
 		deleteFile($uploaddir,$filename);
 		
 		$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('";
