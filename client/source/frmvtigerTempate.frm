@@ -47,7 +47,7 @@ Begin VB.Form frmvtigerMerge
    Begin VB.PictureBox Picture1 
       Height          =   735
       Left            =   -120
-      Picture         =   "frmvtigerTempate.frx":038A
+      Picture         =   "frmvtigerTempate.frx":058A
       ScaleHeight     =   675
       ScaleWidth      =   7035
       TabIndex        =   6

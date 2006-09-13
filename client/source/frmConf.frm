@@ -18,7 +18,7 @@ Begin VB.Form frmConf
       BorderStyle     =   0  'None
       Height          =   495
       Left            =   240
-      Picture         =   "frmConf.frx":038A
+      Picture         =   "frmConf.frx":058A
       ScaleHeight     =   495
       ScaleWidth      =   630
       TabIndex        =   24
