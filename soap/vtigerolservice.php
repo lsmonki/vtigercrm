@@ -327,7 +327,7 @@ function AddMessageToContact($username,$contactid,$msgdtls)
         $email->column_fields[subject] = $email_subject;
         $email->column_fields[assigned_user_id] = $user_id;
         $email->column_fields[date_start] = $date_sent;
-        $email->column_fields[description]  = htmlentities($email_body);
+        $email->column_fields[description]  = $email_body;
         $email->column_fields[activitytype] = 'Emails'; 
         $email->plugin_save = true; 
         $email->save("Emails");
