@@ -395,7 +395,23 @@ else
 {
 	//Return to the MigrationStep1
 	include("modules/Migration/MigrationStep1.php");
+	exit;
 }
+
+?>
+	<script>
+		function displayMigrationSuccess()
+		{
+			document.getElementById("migration_image").style.display = "block";
+			document.getElementById("migration_message1").innerHTML = "Migration has been completed";
+			document.getElementById("migration_message2").innerHTML = "Your old data is now moved into new vtigerCRM";
+		}
+	</script>
+	<script>
+		displayMigrationSuccess();
+	</script>
+
+<?php
 
 
 ?>
