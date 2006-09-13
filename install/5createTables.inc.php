@@ -100,6 +100,16 @@ function create_default_users() {
 
         $user->save("Users");
 
+	//Inserting Entries into vtiger_groups table
+	$result = $db->query("select groupid from vtiger_groups where groupname='Team Selling';");
+ 	$group1_id = $db->query_result($result,0,"groupid");
+ 	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
+ 	$group2_id = $db->query_result($result,0,"groupid");
+ 	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
+ 	$group3_id = $db->query_result($result,0,"groupid");
+
+ 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
+
         // we need to change the admin user to a fixed id of 1.
         //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
         //$result = $db->query($query, true, "Error updating admin user ID: ");
@@ -145,6 +155,10 @@ function create_default_users() {
 	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
+
+	$db->query("insert into vtiger_users2group values ('".$group1_id."',".$user->id.")");
+ 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
+ 	$db->query("insert into vtiger_users2group values ('".$group3_id."',".$user->id.")");
 
 }
 
