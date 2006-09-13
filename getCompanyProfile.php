@@ -34,9 +34,16 @@ function getComdata($url,$variable="")
         	{
 			$desc=$msft_stats[0];
 			$data=getQuoteData($variable);
-			foreach($data as $key=>$value)
-				array_push($desc,$value);
-			return $desc;
+			if(is_array($data))
+			{
+				foreach($data as $key=>$value)
+					array_push($desc,$value);
+				return $desc;
+			}
+			else
+			{
+				die;
+			}
 		}
 		else
 		        return "Information on ".$variable." is not available or '".$variable."' is not a valid ticker symbol.";
@@ -45,7 +52,7 @@ function getComdata($url,$variable="")
 	{
 		$headlines = array();
 		$news = http::table_into_array($h->body, 'HEADLINES',0, null);
-		if($news != '')
+		if(is_array($news))
 		{
 			$headlines[] = $news[35];
 			$headlines[] = $news[37];
@@ -75,13 +82,17 @@ function getQuoteData($var)
         }
 	$res_arr=array();
 	$quote_data = http::table_into_array($h->body, 'Delayed quote data', 0, null);
-        if($quote_data[0][0] == '')
+        if(is_array($quote_data))
         {
                 array_shift($quote_data);
                 array_shift($quote_data);
                 if($quote_data[0][0]!= 'Last Trade:')
                         array_shift($quote_data);
         }
+	else
+	{
+		die;
+	}
         for($i=0;$i<16;$i++)
         {
                 if($quote_data !='')
