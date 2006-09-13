@@ -45,10 +45,6 @@ class DefaultDataPopulator extends CRMEntity {
 		$profile3_id = $this->db->getUniqueID("vtiger_profile");
 		$profile4_id = $this->db->getUniqueID("vtiger_profile");
 
-		$group1_id = $this->db->getUniqueID("vtiger_groups");
-		$group2_id = $this->db->getUniqueID("vtiger_groups");
-		$group3_id = $this->db->getUniqueID("vtiger_groups");
-
                 $this->db->query("insert into vtiger_role values('H".$role1_id."','Organisation','H".$role1_id."',0)");
                 $this->db->query("insert into vtiger_role values('H".$role2_id."','CEO','H".$role1_id."::H".$role2_id."',1)");
                 $this->db->query("insert into vtiger_role values('H".$role3_id."','Vice President','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
@@ -920,21 +916,21 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
                 // Insert End
 		
 		//Inserting into vtiger_groups table
+		$group1_id = $this->db->getUniqueID("vtiger_groups");
+ 		$group2_id = $this->db->getUniqueID("vtiger_groups");
+ 		$group3_id = $this->db->getUniqueID("vtiger_groups");
+		
 		$this->db->query("insert into vtiger_groups values ('".$group1_id."','Team Selling','Group Related to Sales')");	
 		$this->db->query("insert into vtiger_group2role values ('".$group1_id."','H".$role4_id."')");	
 		$this->db->query("insert into vtiger_group2rs values ('".$group1_id."','H".$role5_id."')");	
-		$this->db->query("insert into vtiger_users2group values ('".$group1_id."',2)");	
 
 		$this->db->query("insert into vtiger_groups values ('".$group2_id."','Marketing Group','Group Related to Marketing Activities')");	
 		$this->db->query("insert into vtiger_group2role values ('".$group2_id."','H".$role2_id."')");	
 		$this->db->query("insert into vtiger_group2rs values ('".$group2_id."','H".$role3_id."')");	
-		$this->db->query("insert into vtiger_users2group values ('".$group2_id."',1)");	
-		$this->db->query("insert into vtiger_users2group values ('".$group2_id."',2)");	
 
 		$this->db->query("insert into vtiger_groups values ('".$group3_id."','Support Group','Group Related to providing Support to Customers')");
 		$this->db->query("insert into vtiger_group2role values ('".$group3_id."','H".$role3_id."')");
 		$this->db->query("insert into vtiger_group2rs values ('".$group3_id."','H".$role3_id."')");
-		$this->db->query("insert into vtiger_users2group values ('".$group3_id."',2)");	
 
 		//New Security Start
 		//Inserting into vtiger_profile vtiger_table
