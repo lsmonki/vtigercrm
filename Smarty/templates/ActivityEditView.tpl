@@ -89,6 +89,7 @@
 							<input type="hidden" name="duration_hours" value="0">
 							<input type="hidden" name="duration_minutes" value="0">
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
+							{if $LABEL.activitytype neq ''}
 							<tr>
 								<td class="cellLabel" nowrap  width=20% align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
 								<td class="cellInfo" width=80% align="left">
@@ -111,9 +112,11 @@
 									</table>
 								</td>
 							</tr>
+							{/if}
 							<tr>
 								<td class="cellLabel" nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
 								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
                                                                         {foreach key=sel_value item=value from=$arr}
                                                                         {if $value eq 'selected' && $sel_value eq 'Public'}
@@ -124,21 +127,27 @@
                                                                         {/foreach}
                                                                         {/foreach}
                                                                         <input name="visibility" value="Public" type="checkbox" {$visiblecheck}>{$MOD.LBL_PUBLIC}
+								{/if}
 								</td>
 							</tr>
+							{if $LABEL.description neq ''}
 							<tr>
                         					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
 								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
+							{/if}
 							<tr>
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
-										<td ><b>{$LABEL.eventstatus}</b></td>
-                                                                                <td ><b>{$LABEL.assigned_user_id}</b></td>
+										<td >{if $LABEL.eventstatus neq ''}<b>{$LABEL.eventstatus}</b>{/if}</td>
+                                                                                <td >{if $LABEL.assigned_user_id != ''}<b>
+											{$LABEL.assigned_user_id}</b>
+											{/if}</td>
 									</tr>
 									<tr>
 										<td valign=top>
+										{if $LABEL.eventstatus neq ''}
                                                                                 <select name="eventstatus" id="eventstatus" class=small>
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
                                                                                         {foreach key=sel_value item=value from=$arr}
@@ -152,8 +161,10 @@
                                                                                         {/foreach}
                                                                                         {/foreach}
                                                                                 </select>
+										{/if}
                                                                         	</td>
 										<td valign=top rowspan=2>
+											{if $ACTIVITYDATA.assigned_user_id != ''}
 											{assign var=check value=1}
                                         						{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
                                                 					{foreach key=sel_value item=value from=$arr}
@@ -199,9 +210,13 @@
                                                         					</select>
                                                 					</span>
                                         						{/if}
-											<br><input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}
+											{else}
+											<input name="assigned_user_id" value="{$CURRENTUSERID}" type="hidden">
+											{/if}
+											<br>{if $LABEL.sendnotification neq ''}<input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}{/if}
 										</td>
 									</tr>
+									{if $LABEL.taskpriority neq ''}
 									<tr>
 										<td valign=top><b>{$LABEL.taskpriority}</b>
 										<br>
@@ -221,6 +236,7 @@
 										</td> 
 										
 									</tr>
+									{/if}
 								</table>
 							</td></tr>
 						     </table>
@@ -344,6 +360,7 @@
 									</DIV>
 									<!-- Reminder UI -->	
 									<DIV id="addEventAlarmUI" style="display:none;width:100%">
+									{if $LABEL.reminder_time neq ''}
 										<table>
 											{assign var=secondval value=$secondvalue.reminder_time}
 											{assign var=check value=$secondval[0]}
@@ -396,15 +413,16 @@
 													{$MOD.LBL_SDRMD}
 												</td>
 												<td >
-													<input type=text name="toemail" class=textbox style="width:90%" value="{$USEREMAILID}">
+													<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="{$USEREMAILID}">
 												</td>
 											</tr>
 										</table>
+									{/if}
 									</DIV>
 									</DIV>
 									<!-- Repeat UI -->
 									<div id="addEventRepeatUI" style="display:none;width:100%">
-
+									{if $LABEL.recurringtype neq ''}
 									<table border=0 cellspacing=0 cellpadding=2  width=100%>
 										<tr>
 											<td nowrap align=right width=20% valign=top>
@@ -517,9 +535,11 @@
 								</td>
 							</tr>
 						</table>
+						{/if}
 						</div>
 						<div id="addEventRelatedtoUI" style="display:none;width:100%">
 						<table width="100%" cellpadding="5" cellspacing="0" border="0">
+							{if $LABEL.parent_id neq ''}	
 							<tr>
 								<td><b>{$MOD.LBL_RELATEDTO}</b></td>
 								<td>
@@ -537,6 +557,7 @@
 									</div>
 								</td>
 							</tr>
+							{/if}
 							<tr>
 								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
@@ -559,19 +580,30 @@
                         	<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
                         	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
+			
 			<tr>
+				{if $LABEL.description != ''}
 				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
 				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
+				{/if}
+				
 			</tr>
 			<tr>
 		    		<td colspan="2" align="center" width="100%" style="padding:0px">
 					<table border="0" cellpadding="5" cellspacing="1" width="100%">
             					<tr>
-							<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</td>
+							{if $LABEL.taskstatus != ''}
+							<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</b></td>
+							{/if}
+							{if $LABEL.taskpriority != ''}
               						<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskpriority}</b></td>
-              						<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
+							{/if}
+              						{if $LABEL.assigned_user_id != ''}
+							<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
+							{/if}
 						</tr>
 						<tr>
+							{if $LABEL.taskstatus != ''}
 							<td align="left" valign="top">
 								<select name="taskstatus" id="taskstatus" class=small>
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
@@ -587,6 +619,8 @@
                                         			{/foreach}
                                 				</select>
 							</td>
+							{/if}
+							{if $LABEL.taskpriority != ''}
 							<td align="left" valign="top">
 								<select name="taskpriority" id="taskpriority" class=small>
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
@@ -602,6 +636,8 @@
                                         			{/foreach}
                                 				</select>
 							</td>
+							{/if}
+							{if $LABEL.assigned_user_id != ''}
 							<td align="left" valign="top">
 								{assign var=check value=1}
                                         			{foreach key=key_one item=arr from=$ACTIVITYDATA.assigned_user_id}
@@ -647,6 +683,9 @@
 				                                </span>
                                 				{/if}	
 							</td>
+							{else}
+								<input name="assigned_user_id" value="{$CURRENTUSERID}" type="hidden">
+							{/if}
 						</tr>
 					</table>
 				</td>
@@ -687,7 +726,7 @@
                                         			{/foreach}
 				      				<script type="text/javascript">
 								Calendar.setup ({ldelim}
-	                                        			inputField : "date_start", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+	                                        			inputField : "due_date", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
 					   			{rdelim})
 								</script>
         						</td></tr>
@@ -714,6 +753,7 @@
 				<td class="dvtContentSpace" style="padding: 10px; height: 120px;" align="left" valign="top" width="100%">
 			<!-- Reminder UI -->
 			<div id="addTaskAlarmUI" style="display: block; width: 100%;">
+			{if $LABEL.sendnotification != ''}
                 	<table>
 				<tr><td>{$LABEL.sendnotification}</td>
 					{if $ACTIVITYDATA.sendnotification eq 1}
@@ -727,9 +767,11 @@
                                 	{/if}
 				</tr>
 			</table>
+			{/if}
 			</div>
 			<div id="addTaskRelatedtoUI" style="display:none;width:100%">
            		     <table width="100%" cellpadding="5" cellspacing="0" border="0">
+			     {if $LABEL.parent_id neq ''}
                 	     <tr>
                         	     <td><b>{$MOD.LBL_RELATEDTO}</b></td>
                                      <td>
@@ -747,6 +789,8 @@
 					 </div>
                                      </td>
 			     </tr>
+			     {/if}
+			     {if $LABEL.contact_id neq ''}	
 			     <tr>
                                      <td><b>{$LABEL.contact_id}</b></td>
 				     <td colspan="2">
@@ -754,6 +798,7 @@
 						<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">
 				     </td>
                              </tr>
+			     {/if}
 		</table>
               	</div>
                 </td></tr></table>
