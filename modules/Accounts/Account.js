@@ -85,21 +85,33 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById('dtlview_Billing Address').innerHTML+' '
-                           +document.getElementById("dtlview_Billing Po Box").innerHTML+' '
-                           +document.getElementById("dtlview_Billing City").innerHTML+' '
-                           +document.getElementById("dtlview_Billing State").innerHTML+' '
-                           +document.getElementById("dtlview_Billing Country").innerHTML+' '
-                           +document.getElementById("dtlview_Billing Code").innerHTML
+		if(fieldname.indexOf('bill_street') > -1)
+                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]).innerHTML+' ';
+                if(fieldname.indexOf('bill_pobox') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]).innerHTML+' ';
+                if(fieldname.indexOf('bill_city') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]).innerHTML+' ';
+		if(fieldname.indexOf('bill_state') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]).innerHTML+' ';
+                if(fieldname.indexOf('bill_country') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]).innerHTML+' ';
+                if(fieldname.indexOf('bill_code') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]).innerHTML+' ';
         }
         else if (addressType == 'Other')
         {
-                mapParameter = document.getElementById("dtlview_Shipping Address").innerHTML+' '
-                           +document.getElementById("dtlview_Shipping Po Box").innerHTML+' '
-                           +document.getElementById("dtlview_Shipping City").innerHTML+' '
-                           +document.getElementById("dtlview_Shipping State").innerHTML+' '
-                           +document.getElementById("dtlview_Shipping Country").innerHTML+' '
-                           +document.getElementById("dtlview_Shipping Code").innerHTML
+		if(fieldname.indexOf('ship_street') > -1)
+                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]).innerHTML+' ';
+                if(fieldname.indexOf('ship_pobox') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]).innerHTML+' ';
+                if(fieldname.indexOf('ship_city') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]).innerHTML+' ';
+                if(fieldname.indexOf('ship_state') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]).innerHTML+' ';
+		if(fieldname.indexOf('ship_country') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]).innerHTML+' ';
+                if(fieldname.indexOf('bill_code') > -1)                                                                                            mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
+
         }
 	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
