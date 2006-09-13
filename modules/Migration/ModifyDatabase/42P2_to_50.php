@@ -9,8 +9,10 @@
 *
  ********************************************************************************/
 
-//This file is used to modify the database from 4.2Patch2 to 5.0 Alpha release
+ini_set("memory_limit","32M");
+set_time_limit(600);
 
+//This file is used to modify the database from 4.2Patch2 to 5.0 Alpha release
 
 global $conn;
 global $migrationlog;
@@ -523,7 +525,7 @@ foreach($role_map_array as $roleid => $rolename)
 		$parentRole = $conn->query_result($rs,0,'roleid');
 	}
 	$empty_array = array(""=>"");
-	$new_role_id = createRole($rolename,$parentRole,$empty_array);
+	$new_role_id = localcreateRole($rolename,$parentRole,$empty_array);
 	$new_role_map_array[$roleid] = $new_role_id;
 }
 
@@ -3698,26 +3700,6 @@ Execute("delete from vtiger_datashare_relatedmodules where relatedto_tabid=10");
 //change the share_action_name in vtiger_org_share_action_mapping table for entry Public:Read,Create/Edit 
 Execute('update vtiger_org_share_action_mapping set share_action_name="Public: Read, Create/Edit" where share_action_name="Public:Read,Create/Edit"');
 
-//This has been already added (line 2939) where as that loop failed because given num_row instead of num_rows
-/*
-//add entries for Campaign and My Sites in profile2tab and profile2standardpermissions tables
-$res = $conn->query("select * from vtiger_profile");
-$noofprofiles = $conn->num_rows($res);
-
-for($i=0;$i<$noofprofiles;$i++)
-{
-	        $profile_id = $conn->query_result($res,$i,'profileid');
-		
-		Execute("insert into vtiger_profile2tab values($profile_id,26,0)");
-		Execute("insert into vtiger_profile2tab values($profile_id,27,0)");
-
-		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,0,0)");
-		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,1,0)");
-		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,2,0)");
-		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,3,0)");
-		Execute("insert into vtiger_profile2standardpermissions values ($profile_id,26,4,0)");
-}
-*/
 
 //add all field entries to def_org_field and profile2field tables for Campaigns
 $field_res = $conn->query("select fieldid from vtiger_field where tabid=26");
@@ -3734,6 +3716,10 @@ Execute("delete from vtiger_profile2standardpermissions where tabid=10");
 //delete the tagcloud entry from users
 Execute("delete from vtiger_field where tabid=29 and fieldname='tagcloud'");
 Execute("alter table vtiger_users drop column tagcloud");
+
+//we have missed to add the Received Shipment in postatus table
+$sortorderid = $conn->query_result($conn->query("select max(sortorderid) as id from vtiger_postatus"),0,'id')+1;
+Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,1)");
 
 
 
@@ -3849,5 +3835,75 @@ function populateFieldForSecurity($tabid,$fieldid)
 	Execute($def_query);
 }
 
+function localcreateRole($roleName,$parentRoleId,$roleProfileArray)
+{
+	global $migrationlog;
+	$migrationlog->debug("Entering localcreateRole(".$roleName.",".$parentRoleId.",".$roleProfileArray.") method ...");
+
+	global $conn;
+	$parentRoleDetails = localgetRoleInformation($parentRoleId);
+	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
+	$roleid_no=$conn->getUniqueId("vtiger_role");
+        $roleId='H'.$roleid_no;
+        $parentRoleHr=$parentRoleInfo[1];
+        $parentRoleDepth=$parentRoleInfo[2];
+        $nowParentRoleHr=$parentRoleHr.'::'.$roleId;
+        $nowRoleDepth=$parentRoleDepth + 1;
+
+	//Inserting vtiger_role into db
+	$query="insert into vtiger_role values('".$roleId."','".$roleName."','".$nowParentRoleHr."',".$nowRoleDepth.")";
+	$conn->query($query);
+
+	//Inserting into vtiger_role2profile vtiger_table
+	foreach($roleProfileArray as $profileId)
+        {
+                if($profileId != '')
+                {
+                        localinsertRole2ProfileRelation($roleId,$profileId);
+                }
+        }
+
+	$migrationlog->debug("Exiting localcreateRole method ...");
+	return $roleId;
+
+}
+function localgetRoleInformation($roleid)
+{
+	global $migrationlog;
+	$migrationlog->debug("Entering localgetRoleInformation(".$roleid.") method ...");
+	global $conn;
+	
+	$query = "select * from vtiger_role where roleid='".$roleid."'";
+	$result = $conn->query($query);
+	$rolename=$conn->query_result($result,0,'rolename');
+	$parentrole=$conn->query_result($result,0,'parentrole');
+	$roledepth=$conn->query_result($result,0,'depth');
+	$parentRoleArr=explode('::',$parentrole);
+	$immediateParent=$parentRoleArr[sizeof($parentRoleArr)-2];
+
+	$roleDet=Array();
+	$roleDet[]=$rolename;
+	$roleDet[]=$parentrole;
+	$roleDet[]=$roledepth;
+	$roleDet[]=$immediateParent;
+	$roleInfo=Array();
+	$roleInfo[$roleid]=$roleDet;
+
+	$migrationlog->debug("Exiting localgetRoleInformation method ...");
+
+	return $roleInfo;	
+}
+
+function localinsertRole2ProfileRelation($roleId,$profileId)
+{
+	global $migrationlog;
+	$migrationlog->debug("Entering localinsertRole2ProfileRelation(".$roleId.",".$profileId.") method ...");
+
+	global $conn;
+	$query="insert into vtiger_role2profile values('".$roleId."',".$profileId.")";
+	$conn->query($query);
+
+	$migrationlog->debug("Exiting localinsertRole2ProfileRelation method ...");
+}
 
 ?>

@@ -53,9 +53,9 @@ require_once($theme_path.'layout_utils.php');
 						<div id="Mig_result" style="position:relative;border:2px solid #8BB73C;width:50%;left:25%;">
 							<table>
 							   <tr>
-								   <td><img src="<?php echo $image_path; ?>migration_sucess.jpg" align="absmiddle" /></td>
-								<td><span class="genHeaderBig">Migration has been Completed</span><br />
-								<span class="genHeaderGray">Your old data is now moved in to new vtiger CRM</span></td>
+								<td><img id="migration_image" src="<?php echo $image_path; ?>migration_sucess.jpg" align="absmiddle" style="display:none;"/></td>
+								<td><span id="migration_message1" class="genHeaderBig"> Migration is in progress. Please wait...</span><br />
+								<span id="migration_message2" class="genHeaderGray">Your old data is now moving into new vtiger CRM</span></td>
 							   </tr>
 							</table>
 						</div>
@@ -103,7 +103,7 @@ require_once($theme_path.'layout_utils.php');
 										MYSQL Password
 									</td>
 									<td align="left" class="dvtCellInfo">
-										<?php echo $this->new_mysql_password; ?>
+										<?php echo ereg_replace('.', '*', $this->new_mysql_password); ?>
 									</td>
 								   </tr>
 								   <tr>
@@ -155,7 +155,7 @@ require_once($theme_path.'layout_utils.php');
 										MYSQL Password
 									</td>
 									<td align="left" class="dvtCellInfo">
-										<?php echo $this->old_mysql_password; ?>
+										<?php echo ereg_replace('.', '*', $this->old_mysql_password); ?>
 									</td>
 								   </tr>
 								   <tr>
