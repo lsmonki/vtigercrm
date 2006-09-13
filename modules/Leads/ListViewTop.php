@@ -74,7 +74,7 @@ function getNewLeads()
 	$noofrows = $adb->num_rows($list_result);
 	$open_lead_list =array();
 	if ($noofrows > 0)
-		for($i=0;$i<$noofrows,$i<5;$i++) 
+		for($i=0;$i<$noofrows && $i<5;$i++) 
 		{
 			$open_lead_list[] = Array('leadname' => $adb->query_result($list_result,$i,'firstname').' '.$adb->query_result($list_result,$i,'lastname'),
 					'company' => $adb->query_result($list_result,$i,'company'),
