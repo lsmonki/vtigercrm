@@ -21,12 +21,14 @@ Public Const sGerman_IniFileName As String = "german.ini"
 Public Const sFrench_IniFileName As String = "french.ini"
 Public Const sPortuguese_IniFileName As String = "portuguese.ini"
 Public Const sDeutsch_IniFileName As String = "deutsch.ini"
+Public Const sFinnish_IniFileName As String = "finnish.ini"
 
 Public Const LangEnglish As String = "en_us"
 Public Const LangGerman As String = "de_ch"
 Public Const LangFrench As String = "fr_fr"
 Public Const LangPortuguese As String = "pt_pt"
 Public Const LangDeutsch As String = "de_de"
+Public Const LangFinnish As String = "fi_fi"
 
 Public Const sSec_Common As String = "vtigerCRM_Common"
 Public Const sSec_WordMenu As String = "vtigerCRM_WordMenu"
@@ -150,6 +152,8 @@ ElseIf sRegLangValue = LangDeutsch Then
     sLangAppPath = gapppath & "\Language\" & sDeutsch_IniFileName
 ElseIf sRegLangValue = LangPortuguese Then
     sLangAppPath = gapppath & "\Language\" & sPortuguese_IniFileName
+ElseIf sRegLangValue = LangFinnish Then
+    sLangAppPath = gapppath & "\Language\" & sFinnish_IniFileName
 End If
 
 sGetLangFilePath = sLangAppPath
