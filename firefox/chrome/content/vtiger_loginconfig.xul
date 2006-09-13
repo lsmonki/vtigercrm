@@ -48,7 +48,7 @@
 		<hbox>
 			<spacer flex="1"/>
 			<hbox style="width:25em">
-				<label value="(e.g.,http://www.vtiger.com/products/crm/demo)"/>
+				<label value="(e.g.,http://en.vtiger.com)"/>
 			</hbox>	
 		</hbox>
 		<!--<hbox>
