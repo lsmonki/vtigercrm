@@ -98,12 +98,18 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById("dtlview_Street").innerHTML+' '
-                           +document.getElementById("dtlview_Po Box").innerHTML+' '
-                           +document.getElementById("dtlview_City").innerHTML+' '
-                           +document.getElementById("dtlview_State").innerHTML+' '
-                           +document.getElementById("dtlview_Country").innerHTML+' '
-                           +document.getElementById("dtlview_Postal Code").innerHTML
+		if(fieldname.indexOf('lane') > -1)
+                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]).innerHTML+' ';
+		if(fieldname.indexOf('pobox') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]).innerHTML+' ';
+		if(fieldname.indexOf('city') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('city')]).innerHTML+' ';
+		if(fieldname.indexOf('state') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('state')]).innerHTML+' ';
+		if(fieldname.indexOf('country') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('country')]).innerHTML+' ';
+		if(fieldname.indexOf('code') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('code')]).innerHTML+' ';
         }
         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
