@@ -36,7 +36,7 @@ setObjectValuesFromRequest(&$focus);
 
 //Added code for auto product stock updation on receiving goods
 $update_prod_stock='';
-if($focus->column_fields['postatus'] == 'Delivered' && $focus->mode == 'edit')
+if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == 'edit')
 {
         $prev_postatus=getPoStatus($focus->id);
         if($focus->column_fields['postatus'] != $prev_postatus)
