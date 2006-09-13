@@ -50,7 +50,7 @@ if($_REQUEST['close_window'] == 'true')
 			   <tr>
 				<th align="left"><img src="images/loginVtigerCRM.gif" width="169" height="49"></th>
 				<th>&nbsp;</th>
-				<th align="right"><img src="images/loginAlpha.gif"></th>
+				<th align="right">&nbsp;</th>
 			   </tr>
 			   <tr class="tableTop"><td colspan="3"></td></tr>
 			   <tr>
