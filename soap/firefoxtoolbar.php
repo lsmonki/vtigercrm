@@ -447,7 +447,7 @@ function create_note_from_webform($username,$subject,$desc)
 	$focus = new Note();
 	if(isPermitted("Notes","EditView") == "yes")
 	{
-		$focus->column_fields['title'] = $subject;
+		$focus->column_fields['notes_title'] = $subject;
 		$focus->column_fields['notecontent'] = $desc;
 
 		$focus->save("Notes");
