@@ -320,7 +320,7 @@ $date_modified = $adb->formatDate(date('YmdHis'));
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
-$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
+$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."',".$date_entered.")";
 
 $adb->query($sql_crmentity1);
 
@@ -382,7 +382,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,".$date_entered.",'".$row['description']."')";
   
 	$adb->query($sql_crmentity);
 
