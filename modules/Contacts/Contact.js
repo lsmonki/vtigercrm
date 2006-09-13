@@ -105,21 +105,31 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById("dtlview_Mailing Street").innerHTML+' '
-                           +document.getElementById("dtlview_Mailing Po Box").innerHTML+' '
-                           +document.getElementById("dtlview_Mailing City").innerHTML+' '
-                           +document.getElementById("dtlview_Mailing State").innerHTML+' '
-                           +document.getElementById("dtlview_Mailing Country").innerHTML+' '
-                           +document.getElementById("dtlview_Mailing Zip").innerHTML
+		if(fieldname.indexOf('mailingstreet') > -1)
+			mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstreet')]).innerHTML+' ';
+		if(fieldname.indexOf('mailingpobox') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingpobox')]).innerHTML+' ';
+		if(fieldname.indexOf('mailingcity') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcity')]).innerHTML+' ';
+		if(fieldname.indexOf('mailingstate') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstate')]).innerHTML+' ';
+		if(fieldname.indexOf('mailingcountry') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcountry')]).innerHTML+' ';
+		if(fieldname.indexOf('mailingzip') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingzip')]).innerHTML;
         }
         else if (addressType == 'Other')
         {
-                mapParameter = document.getElementById("dtlview_Other Street").innerHTML+' '
-                           +document.getElementById("dtlview_Other Po Box").innerHTML+' '
-                           +document.getElementById("dtlview_Other City").innerHTML+' '
-                           +document.getElementById("dtlview_Other State").innerHTML+' '
-                           +document.getElementById("dtlview_Other Country").innerHTML+' '
-                           +document.getElementById("dtlview_Other Zip").innerHTML
+		if(fieldname.indexOf('otherstreet') > -1)
+			mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstreet')]).innerHTML+' ';
+		if(fieldname.indexOf('otherpobox') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]).innerHTML+' ';
+		if(fieldname.indexOf('otherstate') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstate')]).innerHTML+' ';
+                if(fieldname.indexOf('othercountry') > -1)
+			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercountry')]).innerHTML+' ';
+                if(fieldname.indexOf('otherzip') > -1)
+                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherzip')]).innerHTML;
         }
          window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
