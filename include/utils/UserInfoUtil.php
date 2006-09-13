@@ -1534,7 +1534,21 @@ function isPermitted($module,$actionname,$record_id='')
 		if($actionid == 1 || $actionid == 0)
 		{
 
-			$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			if($module == 'Calendar')
+			{
+				if($recOwnType == 'Users')
+				{
+					$permission = isCalendarPermittedBySharing($record_id);
+				}
+				else
+				{
+					$permission='no'; 
+				}		
+			}
+			else
+			{
+				$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			}		
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
@@ -1578,13 +1592,41 @@ function isPermitted($module,$actionname,$record_id='')
 		
 		if($actionid == 3 || $actionid == 4)
 		{
-			$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
+			if($module == 'Calendar')
+			{
+				if($recOwnType == 'Users')
+				{
+					$permission = isCalendarPermittedBySharing($record_id);
+				}
+				else
+				{
+					$permission='no'; 
+				}		
+			}
+			else
+			{
+				$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
+			}	
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
 		elseif($actionid ==0 || $actionid ==1)
 		{
-			$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			if($module == 'Calendar')
+			{
+				if($recOwnType == 'Users')
+				{
+					$permission = isCalendarPermittedBySharing($record_id);
+				}
+				else
+				{
+					$permission='no'; 
+				}		
+			}
+			else
+			{
+				$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			}	
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
@@ -1635,7 +1677,6 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 		return $sharePer;
 	}
 
-	
 	$recordOwnerArr=getRecordOwnerId($record_id);
 	foreach($recordOwnerArr as $type=>$id)
 	{
@@ -4368,7 +4409,13 @@ function getListViewSecurityParameter($module)
 	}
 	elseif($module == 'Calendar')
 	{
-		$sec_query .= "and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%')";
+		require_once('modules/Calendar/CalendarCommon.php');
+		$shared_ids = getSharedCalendarId($current_user->id);
+		if(isset($shared_ids) && $shared_ids != '')
+			$condition = " or (vtiger_crmentity.smownerid in($shared_ids) and vtiger_activity.visibility = 'Public')";
+		else
+			$condition = null;
+		$sec_query .= "and (vtiger_crmentity.smownerid in($current_user->id) $condition or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%')";
 
 		if(sizeof($current_user_groups) > 0)
 		{
@@ -4756,6 +4803,19 @@ function getSharingModuleList()
 }
 
 
+function isCalendarPermittedBySharing($recordId)
+{
+	global $adb;
+	global $current_user;
+	$permission = 'no';
+	$query = "select * from vtiger_sharedcalendar where userid in(select smownerid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where activityid=".$recordId." and visibility='Public' and smownerid !=0) and sharedid=".$current_user->id;
+	$result=$adb->query($query);
+	if($adb->num_rows($result) >0)
+	{
+		$permission = 'yes';
+	}
+	return $permission;	
+}	
 
 //end					   
 ?>
