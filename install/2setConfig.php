@@ -132,7 +132,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	$admin_password = $_REQUEST['admin_password'];
 	
 	if (isset($_REQUEST['currency_name']))
-	$currency_name = $_REQUEST['currency_name'];
+		$currency_name = $_REQUEST['currency_name'];
+	else
+		$currency_name = '';
 	
 	if (isset($_REQUEST['currency_symbol']))
 	$currency_symbol = $_REQUEST['currency_symbol'];
