@@ -28,7 +28,7 @@ function getDBValidationData($tablearray,$tabid='')
   $sql = '';
   $tab_con = "";
   $numValues = count($tablearray);
-  global $adb;
+  global $adb,$mod_strings;
 
   if($tabid!='') $tab_con = ' and tabid='.$tabid;
 	
@@ -63,7 +63,7 @@ function getDBValidationData($tablearray,$tabid='')
   $fieldName_array = Array();
   for($i=0;$i<$noofrows;$i++)
   {
-    $fieldlabel = $adb->query_result($result,$i,'fieldlabel');
+    $fieldlabel = $mod_strings[$adb->query_result($result,$i,'fieldlabel')];
     $fieldname = $adb->query_result($result,$i,'fieldname');
     $typeofdata = $adb->query_result($result,$i,'typeofdata');
    //echo '<br> '.$fieldlabel.'....'.$fieldname.'....'.$typeofdata;
