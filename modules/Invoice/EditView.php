@@ -111,6 +111,18 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         $focus->mode = 'edit';
         $focus->name=$focus->column_fields['subject'];
 
+	/*
+	//Added to display the SO's associated products -- when we select SO in Edit Invoice page
+	if(isset($_REQUEST['salesorder_id']) && $_REQUEST['salesorder_id'] !='')
+	{
+		$associated_prod = getAssociatedProducts("SalesOrder",$so_focus,$focus->column_fields['salesorder_id']);
+	}
+
+	$smarty->assign("SALESORDER_ID", $focus->column_fields['salesorder_id']);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("MODE", $so_focus->mode);
+	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+	*/
     }		
     else
     {	
@@ -146,6 +158,17 @@ else
 		$so_focus->id = $soid;
 		$so_focus->retrieve_entity_info($soid,"SalesOrder");
 		$focus = getConvertSoToInvoice($focus,$so_focus,$soid);
+
+		//Added to display the SO's associated products -- when we select SO in New Invoice page
+		if(isset($_REQUEST['salesorder_id']) && $_REQUEST['salesorder_id'] !='')
+		{
+			$associated_prod = getAssociatedProducts("SalesOrder",$so_focus,$focus->column_fields['salesorder_id']);
+		}
+
+		$smarty->assign("SALESORDER_ID", $focus->column_fields['salesorder_id']);
+		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+		$smarty->assign("MODE", $so_focus->mode);
+		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 
 	}
 }
@@ -240,6 +263,13 @@ elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinv
 {
 	$smarty->assign("MODE", $focus->mode);
 	$se_array=getProductDetailsBlockInfo($focus->mode,"SalesOrder",$so_focus);
+
+	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
+	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
+	
+	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("MODE", $focus->mode);
 }
 elseif($focus->mode == 'edit')
 {
