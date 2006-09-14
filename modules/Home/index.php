@@ -280,8 +280,9 @@ function getGroupTaskLists()
 					$list = '<a href=index.php?module=HelpDesk';
 					$list .= '&action=DetailView&record='.$row["id"].'>'.$row["name"].'</a>';
 				}
-				elseif($row["type"] == "Calendar")
+				elseif($row["type"] == "Activities")
 				{
+					$row["type"] = 'Calendar';
 					$acti_type = getActivityType($row["id"]);
 					$list = '<a href=index.php?module='.$row["type"];
 					if($acti_type == 'Task')
