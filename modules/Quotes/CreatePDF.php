@@ -229,5 +229,5 @@ for($l=0;$l<$num_pages;$l++)
 
 
 $pdf->Output('Quotes.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
-
+exit();
 ?>
