@@ -2125,7 +2125,7 @@ a.alpha:Hover{
     left:300px;
     top:100px;
     position:absolute;
-    z-index:1000001;
+    z-index:10000001;
     display:none;
     padding:10px;
     background:#ffffff url(images/layerPopUpBg.gif);
