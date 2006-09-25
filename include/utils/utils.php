@@ -837,7 +837,8 @@ function to_html($string, $encode=true){
 	$log->debug("Entering to_html(".$string.",".$encode.") method ...");
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
-        $string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
+		if (is_array($toHtml))
+        		$string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
         }
 	$log->debug("Exiting to_html method ...");
         return $string;
