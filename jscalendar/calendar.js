@@ -1703,7 +1703,9 @@ Date.prototype.print = function (str) {
 	return str;
 };
 
+if ( Date.prototype.__msh_oldSetFullYear == null ) {
 Date.prototype.__msh_oldSetFullYear = Date.prototype.setFullYear;
+}
 Date.prototype.setFullYear = function(y) {
 	var d = new Date(this);
 	d.__msh_oldSetFullYear(y);
