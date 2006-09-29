@@ -2430,6 +2430,13 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Contacts':
 			if(is_array($fields["contacts"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}	
+				
 				$columnfields = implode(',',$fields["contacts"]);
 				$query = 'select '.$columnfields.' from vtiger_contactdetails where contactid='.$id;
 				$result = $adb->query($query);
@@ -2443,6 +2450,12 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Leads':	
 			if(is_array($fields["leads"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}
 				$columnfields = implode(',',$fields["leads"]);
 				$query = 'select '.$columnfields.' from vtiger_leaddetails where leadid='.$id;
 				$result = $adb->query($query);
