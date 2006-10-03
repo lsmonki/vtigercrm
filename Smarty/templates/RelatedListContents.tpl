@@ -37,15 +37,16 @@
                                 {/if}
                         {elseif $header eq 'Products'}
                                 {if $MODULE eq 'PriceBooks'}
-                                <input title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
+	                                <input title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
 				{elseif $MODULE eq 'Potentials'}
 					<input title="Change" accessKey="" class="crmbutton small save" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Product}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">&nbsp;
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="crmbutton small save" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='{$return_modname}'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
-					
+
 				{elseif $MODULE eq 'Vendors'}
+					<input title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Product}" accessyKey="F" class="crmbutton small create" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module=Products&action=Popup&return_action={$return_modname}&popuptype=detailview&form=DetailView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button" name="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Product}">
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='{$return_modname}'; this.form.parent_id.value='';" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
                                 {else}
-				<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='{$return_modname}'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
+					<input title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='{$return_modname}'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Product}"></td>
 				{/if}
 			{elseif $header eq 'Leads'}
 				{if $MODULE eq 'Campaigns'}

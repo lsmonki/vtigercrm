@@ -12,11 +12,12 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 
+//This if will be true, when we select product from vendor related list
 if($_REQUEST['destination_module']=='Products')
 {
-	if($_REQUEST['smodule']=='VENDOR')
+	if($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
 	{
-		$sql = "update vtiger_products set vtiger_vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
+		$sql = "update vtiger_products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
 		$adb->query($sql);
 	}
 }
@@ -29,8 +30,11 @@ if($_REQUEST['destination_module']=='Contacts')
 	}
 }
 
+$return_action = 'DetailView';
+if($_REQUEST['return_action'] != '')
+	$return_action = $_REQUEST['return_action'];
 
- header("Location:index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
+header("Location:index.php?action=$return_action&module=Vendors&record=".$_REQUEST["parid"]);
 
 
 
