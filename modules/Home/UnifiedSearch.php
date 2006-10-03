@@ -80,83 +80,77 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	{
 		if(isPermitted($module,"index") == "yes")
 		{
-		$focus = new $object_name();
+			$focus = new $object_name();
 
-		$smarty = new vtigerCRM_Smarty;
+			$smarty = new vtigerCRM_Smarty;
 
-		require_once("modules/$module/language/en_us.lang.php");
-		global $mod_strings;
-		global $app_strings;
+			require_once("modules/$module/language/en_us.lang.php");
+			global $mod_strings;
+			global $app_strings;
 
-		$smarty->assign("MOD", $mod_strings);
-		$smarty->assign("APP", $app_strings);
-		$smarty->assign("IMAGE_PATH",$image_path);
-		$smarty->assign("MODULE",$module);
-		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
-		$smarty->assign("SINGLE_MOD",$module);
+			$smarty->assign("MOD", $mod_strings);
+			$smarty->assign("APP", $app_strings);
+			$smarty->assign("IMAGE_PATH",$image_path);
+			$smarty->assign("MODULE",$module);
+			$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
+			$smarty->assign("SINGLE_MOD",$module);
 
 	
-		$listquery = getListQuery($module);
-		//Avoided the modules Faq and PriceBooks. we should remove this if when change the customview function
-		$oCustomView = '';
-		if($module != 'Faq' && $module != 'PriceBooks')
-		{
-			//Added to get the default 'All' customview query
+			$listquery = getListQuery($module);
+			$oCustomView = '';
+
 			$oCustomView = new CustomView($module);
-			$viewid = $oCustomView->getViewId($module);
-
-			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
-		}
 		
-		if($search_module != '')//This is for Tag search
-		{
+			if($search_module != '')//This is for Tag search
+			{
 		
-			$where = getTagWhere($search_val,$current_user->id);
-			$search_msg =  $app_strings['LBL_TAG_SEARCH'];				       	$search_msg .=	"<b>".$search_val."</b>";
-		}
-		else			//This is for Global search
-		{
-			$where = getUnifiedWhere($listquery,$module,$search_val);
-			$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
-			$search_msg .=	"<b>".$search_val."</b>";
-		}
+				$where = getTagWhere($search_val,$current_user->id);
+				$search_msg =  $app_strings['LBL_TAG_SEARCH'];
+				$search_msg .=	"<b>".$search_val."</b>";
+			}
+			else			//This is for Global search
+			{
+				$where = getUnifiedWhere($listquery,$module,$search_val);
+				$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
+				$search_msg .=	"<b>".$search_val."</b>";
+			}
 
-		if($where != '')
-			$listquery .= ' and ('.$where.')';
+			if($where != '')
+				$listquery .= ' and ('.$where.')';
 		
-		$list_result = $adb->query($listquery);
-		$noofrows = $adb->num_rows($list_result);
+			$list_result = $adb->query($listquery);
+			$noofrows = $adb->num_rows($list_result);
 
-		if($noofrows >= 1)
-			$list_max_entries_per_page = $noofrows;
-		//Here we can change the max list entries per page per module
-		$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
+			if($noofrows >= 1)
+				$list_max_entries_per_page = $noofrows;
+			//Here we can change the max list entries per page per module
+			$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
 
-		$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
-		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
+			$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
+			$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
 
-		//Do not display the Header if there are no entires in listview_entries
-		if(count($listview_entries) > 0)
-		{
-			$display_header = 1;
-		}
-		else
-		{
-			$display_header = 0;
-		}
+			//Do not display the Header if there are no entires in listview_entries
+			if(count($listview_entries) > 0)
+			{
+				$display_header = 1;
+			}
+			else
+			{
+				$display_header = 0;
+			}
 		
-		$smarty->assign("LISTHEADER", $listview_header);
-		$smarty->assign("LISTENTITY", $listview_entries);
-		$smarty->assign("DISPLAYHEADER", $display_header);
-		$smarty->assign("HEADERCOUNT", count($listview_header));
+			$smarty->assign("LISTHEADER", $listview_header);
+			$smarty->assign("LISTENTITY", $listview_entries);
+			$smarty->assign("DISPLAYHEADER", $display_header);
+			$smarty->assign("HEADERCOUNT", count($listview_header));
 
-		$total_record_count = $total_record_count + $noofrows;
+			$total_record_count = $total_record_count + $noofrows;
 
-		$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
-		$smarty->assign("MODULES_LIST", $object_array);
+			$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
+			$smarty->assign("MODULES_LIST", $object_array);
 
-		$smarty->display("GlobalListView.tpl");
-		unset($_SESSION['lvs'][$module]);
+			$smarty->display("GlobalListView.tpl");
+			unset($_SESSION['lvs'][$module]);
 		}
 	}
 
@@ -182,7 +176,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
 
-	$query = "SELECT * FROM vtiger_field WHERE tabid = ".getTabid($module);
+	$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ".getTabid($module);
 	$result = $adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -197,7 +191,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		{
 			if($where != '')
 				$where .= " OR ";
-				$where .= $tablename.".".$columnname." LIKE ".$adb->quote("%$search_val%");
+			$where .= $tablename.".".$columnname." LIKE ".$adb->quote("%$search_val%");
 		}
 	}
 
