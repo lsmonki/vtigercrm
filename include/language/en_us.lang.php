@@ -1027,6 +1027,7 @@ $app_strings = Array(
 
 //Record deleted message
 'LBL_RECORD_DELETE'=>'The record you are trying to view has been deleted.',
+'Part Number'=>'Part Number',
 );
 
 
