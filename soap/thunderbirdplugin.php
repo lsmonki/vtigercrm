@@ -18,7 +18,7 @@ require_once('modules/Contacts/Contact.php');
 $log = &LoggerManager::getLogger('thunderbirdplugin');
 
 $accessDenied = "You are not authorized for performing this action";
-$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 
 $server->configureWSDL('vtigersoap');
