@@ -721,6 +721,7 @@ $mod_strings = Array(
 'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
+'LBL_ADD_TAX_BUTTON'=>'Add Tax',
 );
 
 

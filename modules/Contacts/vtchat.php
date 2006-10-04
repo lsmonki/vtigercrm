@@ -74,7 +74,7 @@ function showPopup()
 			<table width="150" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td class="pchathead"></td>
-					<td class="pchathead1"><b>User List</b></td>
+					<td class="pchathead1"><b><?php echo $mod_strings['User List']; ?></b></td>
 					<td class="pchathead2"></td>
 				</tr>
 				<tr>

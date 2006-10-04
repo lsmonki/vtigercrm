@@ -225,6 +225,7 @@ $mod_strings = Array(
 'Web Site'=>'Web Site',
 'Word of mouth'=>'Word of mouth',
 'Other'=>'Other',
+'User List'=>'User List',
 
 );
 

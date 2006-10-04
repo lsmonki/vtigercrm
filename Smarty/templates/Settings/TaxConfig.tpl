@@ -86,7 +86,7 @@
 			<td>&nbsp;</td>
 			<td id="td_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $EDIT_MODE neq 'true'}
-					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="  Add Tax  " class="crmButton small edit">
+					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="{$MOD.LBL_ADD_TAX_BUTTON}" class="crmButton small edit">
 				{/if}
 			</td>
 			<td class="small" align=right nowrap>

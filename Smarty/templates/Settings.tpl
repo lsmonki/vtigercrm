@@ -22,7 +22,7 @@
 		<td>
 		<!-- heading -->
 
-		<span class="heading2">{$MOD.LBL_SETTINGS}</span>
+		&nbsp;
 		</td>
 	</tr>
 	<tr>
