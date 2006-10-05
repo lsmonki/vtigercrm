@@ -19,6 +19,7 @@ global $app_strings;
 global $mod_strings;
 global $app_list_strings;
 global $adb;
+global $upload_maxsize;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -44,6 +45,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("UMOD", $mod_strings);
 $smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
+$smarty->assign("MAX_FILE_SIZE", $upload_maxsize);
 
 $smarty->display('CreateWordTemplate.tpl');
 
