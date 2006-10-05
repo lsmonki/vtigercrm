@@ -16,7 +16,7 @@ require_once ($theme_path."layout_utils.php");
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/CalendarCommon.php');
  $t=Date("Ymd");
- $userDetails=getOtherUserName($current_user->id,false);
+ $userDetails=getOtherUserName($current_user->id,true);
  $shareduser_ids = getSharedUserId($current_user->id);
 ?>
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
