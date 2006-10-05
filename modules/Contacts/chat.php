@@ -330,6 +330,8 @@ class Chat
    */
   function submit($msg, $to=0)
   {
+    //UTF-8 support added - ding
+    $msg = utf8RawUrlDecode($msg);
     $msg = $this->msgParse($msg);
     if(strlen($msg) == 0) return;
     

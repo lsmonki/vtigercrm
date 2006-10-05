@@ -838,7 +838,7 @@ function to_html($string, $encode=true){
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
 		if (is_array($toHtml))
-        		$string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
+			$string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
         }
 	$log->debug("Exiting to_html method ...");
         return $string;
@@ -2617,5 +2617,41 @@ function strip_selected_tags($text, $tags = array())
 function useInternalMailer() {
 	global $current_user,$adb;
 	return $adb->query_result($adb->query("select int_mailer from vtiger_mail_accounts where user_id='".$current_user->id."'"),0,"int_mailer");
+}
+
+/**
+* the function is like unescape in javascript
+* added by dingjianting on 2006-10-1 for picklist editor
+*/
+function utf8RawUrlDecode ($source) {
+    $decodedStr = "";
+    $pos = 0;
+    $len = strlen ($source);
+    while ($pos < $len) {
+        $charAt = substr ($source, $pos, 1);
+        if ($charAt == '%') {
+            $pos++;
+            $charAt = substr ($source, $pos, 1);
+            if ($charAt == 'u') {
+                // we got a unicode character
+                $pos++;
+                $unicodeHexVal = substr ($source, $pos, 4);
+                $unicode = hexdec ($unicodeHexVal);
+                $entity = "&#". $unicode . ';';
+                $decodedStr .= utf8_encode ($entity);
+                $pos += 4;
+            }
+            else {
+                // we have an escaped ascii character
+                $hexVal = substr ($source, $pos, 2);
+                $decodedStr .= chr (hexdec ($hexVal));
+                $pos += 2;
+            }
+        } else {
+            $decodedStr .= $charAt;
+            $pos++;
+        }
+    }
+    return $decodedStr;
 }
 ?>
