@@ -1172,7 +1172,9 @@ function getweekEventLayer(& $cal,$slice)
         {
 		for($i=0;$i<count($act);$i++)
                 {
-			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i;
+			/* fix given by dartagnanlaf START --integrated by Minnie */
+			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$act[$i]->start_time->hour.'_'.$i;
+			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
 			if(strlen($subject)>25)
