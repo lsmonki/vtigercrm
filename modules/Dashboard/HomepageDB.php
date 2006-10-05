@@ -9,17 +9,10 @@
 *
  ********************************************************************************/
 require_once("modules/Dashboard/Entity_charts.php");
-/**
- * Function to get Dashboard in homepage
- * return the graph - $sHTML
- */
+
 	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
 	$type='recordsforuser';
-	//require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	//if($is_admin)
-	//	$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
-	//else	
-	$homepagedb_query = "select * from vtiger_crmentity se left join vtiger_leaddetails le on le.leadid=se.crmid left join vtiger_activity act on act.activityid=se.crmid where se.deleted=0 and (le.converted=0 or le.converted is null) and ((act.status!='Completed' and act.status!='Deferred') or act.status is null) and ((act.eventstatus!='Held' and act.eventstatus!='Not Held') or act.eventstatus is null) and setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder', 'SalesOrder','Calendar','HelpDesk','Campaigns') and se.deleted=0 and se.smownerid=".$current_user->id;
+	$homepagedb_query = "select * from vtiger_crmentity se left join vtiger_leaddetails le on le.leadid=se.crmid left join vtiger_troubletickets tt on tt.ticketid=se.crmid left join vtiger_activity act on act.activityid=se.crmid where se.deleted=0 and (le.converted=0 or le.converted is null) and (tt.status!='Closed' or tt.status is null) and ((act.status!='Completed' and act.status!='Deferred') or act.status is null) and ((act.eventstatus!='Held' and act.eventstatus!='Not Held') or act.eventstatus is null) and setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder', 'SalesOrder','Calendar','HelpDesk','Campaigns') and se.deleted=0 and se.smownerid=".$current_user->id;
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
