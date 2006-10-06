@@ -43,23 +43,23 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm5
-bin\apache -k uninstall -n vtigercrm5
+bin\apache -k stop -n vtigercrm501
+bin\apache -k uninstall -n vtigercrm501
 echo "Uninstalling apache service again for confirmation after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k stop -n vtigercrm5
-bin\apache -k uninstall -n vtigercrm5 
+bin\apache -k stop -n vtigercrm501
+bin\apache -k uninstall -n vtigercrm501 
 echo ""
 echo ""
-echo "Installing  vtigercrm5 apache service after sleeping for 10 seconds"
+echo "Installing  vtigercrm501 apache service after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k install -n vtigercrm5 -f conf\httpd.conf
+bin\apache -k install -n vtigercrm501 -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm5 apache service"
+echo "Starting  vtigercrm501 apache service"
 echo ""
-bin\apache -n vtigercrm5 -k start
+bin\apache -n vtigercrm501 -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -117,27 +117,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm5 database already exists"
+echo "check to see if vtigercrm501 database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm5'" | "%WINDIR%\system32\find.exe" "vtigercrm5" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm501'" | "%WINDIR%\system32\find.exe" "vtigercrm501" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm5 database exists"
+ECHO  "vtigercrm501 database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm5 database does not exist"
+ECHO "vtigercrm501 database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm5 and populate the same"
+echo "Proceeding to create database vtigercrm501 and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm5"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm501"
 echo ""
-echo "vtigercrm5 database created"
+echo "vtigercrm501 database created"
 echo ""
 goto end
 
