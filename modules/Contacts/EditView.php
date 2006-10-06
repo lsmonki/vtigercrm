@@ -134,7 +134,7 @@ if(isset($cust_fld))
 }
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Contact']);
+$smarty->assign("SINGLE_MOD",'Contact');
 
 if($focus->mode == 'edit')
 {

@@ -47,7 +47,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Campaign']);
+$smarty->assign("SINGLE_MOD",'Campaign');
 
 
 $category = getParentTab();
