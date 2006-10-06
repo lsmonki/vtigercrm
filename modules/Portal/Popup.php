@@ -55,7 +55,7 @@ $portal_inputs.='<div style="display:block;position:relative;" id="orgLay" class
 <table border="0" cellspacing="0" cellpadding="5" width="100%" class="layerPopupTransport">
 	<tr>
 	<td align="center">
-			<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
+			<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="OnUrlChange(); SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
 			<input name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmbutton small cancel" onclick="fninvsh(\'orgLay\');" type="button">
 	</td>
 	</tr>
