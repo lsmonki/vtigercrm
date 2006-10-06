@@ -403,6 +403,8 @@ $mod_strings = Array(
 'High'=>'High',
 'Medium'=>'Medium',
 'Low'=>'Low',
+'LBL_REMAINDER_DAY'=>'days',
+'LBL_REMAINDER_HRS'=>'hrs',
 
 );
 

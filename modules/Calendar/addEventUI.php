@@ -429,7 +429,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 							<?php
 								}
 							?>
-							</select>days 
+							</select><?php echo $mod_strings['LBL_REMAINDER_DAY']; ?> 
 							<select class=small name="remhrs">
                                                         <?php
                                                                 for($h=0;$h<=23;$h++)
@@ -439,7 +439,7 @@ function getAssignedToHTML($assignedto,$toggletype)
                                                         <?php
                                                                 }
                                                         ?>
-                                                        </select>hrs
+							</select><?php echo $mod_strings['LBL_REMAINDER_HRS']; ?>
 							<select class=small name="remmin">
                                                         <?php
                                                                 for($min=1;$min<=59;$min++)
@@ -449,7 +449,7 @@ function getAssignedToHTML($assignedto,$toggletype)
                                                         <?php
                                                                 }
                                                         ?>
-                                                        </select>minutes&nbsp;<?php echo $mod_strings['LBL_BEFOREEVENT'] ?>
+							</select><?php echo $mod_strings['LBL_MINUTES']; ?>&nbsp;<?php echo $mod_strings['LBL_BEFOREEVENT'] ?>
 						</td>
 						</tr>
 						</table>
