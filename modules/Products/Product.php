@@ -517,96 +517,54 @@ class Product extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('vtiger_productcf'))
-		{
 
-		$query = $this->constructCustomQueryAddendum('vtiger_productcf','Products') ."    
-			vtiger_products.productid AS productid,
-			vtiger_products.productname AS productname,
-			vtiger_products.productcode AS productcode,
-			vtiger_products.productcategory AS productcategory,
-			vtiger_products.manufacturer AS manufacturer,
-			vtiger_crmentity.description AS product_description,
-			vtiger_products.qty_per_unit AS qty_per_unit,
-			vtiger_products.unit_price AS unit_price,
-			vtiger_products.weight AS weight,
-			vtiger_products.pack_size AS pack_size,
-				DATE_FORMAT(vtiger_products.start_date, '%Y-%m-%d') AS start_date,
-				DATE_FORMAT(vtiger_products.expiry_date, '%Y-%m-%d') AS expiry_date,
-			vtiger_products.cost_factor AS cost_factor,
-			vtiger_products.commissionrate AS commissionrate,
-			vtiger_products.commissionmethod AS commissionmethod,
-			vtiger_products.discontinued AS discontinued,
-			vtiger_products.sales_start_date AS sales_start_date,
-			vtiger_products.sales_end_date AS sales_end_date,
-			vtiger_products.usageunit AS usageunit,
-			vtiger_products.serialno AS serialno,
-			vtiger_products.currency AS currency,
-			vtiger_products.reorderlevel AS reorderlevel,
-			vtiger_products.website AS website,
-			vtiger_products.taxclass AS taxclass,
-			vtiger_products.mfr_part_no AS mfr_part_no,
-			vtiger_products.vendor_part_no AS vendor_part_no,
-			vtiger_products.qtyinstock AS qtyinstock,
-			vtiger_products.productsheet AS productsheet,
-			vtiger_products.qtyindemand AS qtyindemand
-			FROM ".$this->entity_table."
-			INNER JOIN vtiger_products
-				ON vtiger_crmentity.crmid = vtiger_products.productid
-			INNER JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid 
-			LEFT JOIN vtiger_productcf
-				ON vtiger_productcf.productid = vtiger_products.productid";
+		include("include/utils/ExportUtils.php");
 
-		}
-		else
-		{
-			$query = "SELECT vtiger_products.productid AS productid,
-			vtiger_products.productname AS productname,
-			vtiger_products.productcode AS productcode,
-			vtiger_products.productcategory AS productcategory,
-			vtiger_products.manufacturer AS manufacturer,
-			vtiger_crmentity.description AS product_description,
-			vtiger_products.qty_per_unit AS qty_per_unit,
-			vtiger_products.unit_price AS unit_price,
-			vtiger_products.weight AS weight,
-			vtiger_products.pack_size AS pack_size,
-				DATE_FORMAT(vtiger_products.start_date, '%Y-%m-%d') AS start_date,
-				DATE_FORMAT(vtiger_products.expiry_date, '%Y-%m-%d') AS expiry_date,
-			vtiger_products.cost_factor AS cost_factor,
-			vtiger_products.commissionrate AS commissionrate,
-			vtiger_products.commissionmethod AS commissionmethod,
-			vtiger_products.discontinued AS discontinued,
-			vtiger_products.sales_start_date AS sales_start_date,
-			vtiger_products.sales_end_date AS sales_end_date,
-			vtiger_products.usageunit AS usageunit,
-			vtiger_products.serialno AS serialno,
-			vtiger_products.currency AS vtiger_currency,
-			vtiger_products.reorderlevel AS reorderlevel,
-			vtiger_products.website AS website,
-			vtiger_products.taxclass AS taxclass,
-			vtiger_products.mfr_part_no AS mfr_part_no,
-			vtiger_products.vendor_part_no AS vendor_part_no,
-			vtiger_products.qtyinstock AS qtyinstock,
-			vtiger_products.productsheet AS productsheet,
-			vtiger_products.qtyindemand AS qtyindemand
-			FROM ".$this->table_name ."
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Products", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM ".$this->table_name ."
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid 
+			LEFT JOIN vtiger_productcf
+				ON vtiger_products.productid = vtiger_productcf.productid
+			LEFT JOIN vtiger_seproductsrel
+				ON vtiger_seproductsrel.productid = vtiger_products.productid
+			LEFT JOIN vtiger_producttaxrel
+				ON vtiger_producttaxrel.productid = vtiger_products.productid
 			INNER JOIN vtiger_users
-				ON vtiger_users.id=vtiger_crmentity.smownerid ";
+				ON vtiger_users.id=vtiger_crmentity.smownerid 
 
-		}
+			LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
+				ON vtiger_crmentityRelatedTo.crmid = vtiger_seproductsrel.crmid
+				
+			LEFT JOIN vtiger_leaddetails vtiger_ProductRelatedToLead
+				ON vtiger_ProductRelatedToLead.leadid = vtiger_seproductsrel.crmid
+			LEFT JOIN vtiger_account vtiger_ProductRelatedToAccount
+				ON vtiger_ProductRelatedToAccount.accountid = vtiger_seproductsrel.crmid
+			LEFT JOIN vtiger_potential vtiger_ProductRelatedToPotential
+				ON vtiger_ProductRelatedToPotential.potentialid = vtiger_seproductsrel.crmid
 	
-		  $where_auto = " vtiger_users.status = 'Active'
-                        AND vtiger_crmentity.deleted = 0 ";
+			LEFT JOIN vtiger_contactdetails 
+				ON vtiger_contactdetails.contactid = vtiger_products.contactid
+			LEFT JOIN vtiger_vendor
+				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+			
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_users.status = 'Active'
+				AND ((vtiger_seproductsrel.crmid IS NULL
+					AND (vtiger_products.contactid = 0 OR vtiger_products.contactid IS NULL))
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) 
+			group by vtiger_products.productid
+			";
+			//ProductRelatedToLead, Account and Potential tables are added to get the Related to field
+	
 
-
-
-		 if($where != "")
-                        $query .= " WHERE ($where) AND ".$where_auto;
-                else
-                        $query .= " WHERE ".$where_auto;
+		if($where != "")
+                        $query .= " AND ($where) ";
 
                 if(!empty($order_by))
                         $query .= " ORDER BY $order_by";
