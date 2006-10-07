@@ -263,7 +263,11 @@ class CRMEntity
 
 		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
 		if($module == 'Contacts')
-			$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
+		{
+			//if a image attached already then remove that otherwise do not delete the attachment
+			$query = "select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=$id";
+			$old_attachmentid = $adb->query_result($adb->query($query),0,'attachmentsid');
+		}
 
 		foreach($_FILES as $fileindex => $files)
 		{
@@ -274,7 +278,7 @@ class CRMEntity
 		}
 
 		//This is to handle the delete image for contacts
-		if($module == 'Contacts' && $file_saved)
+		if($module == 'Contacts' && $file_saved && $old_attachmentid != '')
 		{
 			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
 			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
@@ -384,11 +388,13 @@ class CRMEntity
 			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
 			$adb->query($sql3);
 
+			$log->debug("Exiting from uploadAndSaveFile($id,$module,$file_details) method. return true");
 			return true;
 		}
 		else
 		{
 			$log->debug("Skip the save attachment process.");
+			$log->debug("Exiting from uploadAndSaveFile($id,$module,$file_details) method. return false");
 			return false;
 		}
 	}

@@ -304,7 +304,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                    {
                            $imgpath = "test/contact/".$imagename;
                            $label_fld[] =$mod_strings[$fieldlabel];
-                           $label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
+			   //This is used to show the contact image as a thumbnail near First Name field
+                           //$label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
                    }
                    else
                    {
@@ -462,7 +463,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==4)
 		{
 			//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
-			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
+			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
 			$image_res = $adb->query($sql);
 			$image_id = $adb->query_result($image_res,0,'attachmentsid');
 			$image_path = $adb->query_result($image_res,0,'path');
