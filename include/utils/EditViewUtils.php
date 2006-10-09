@@ -106,7 +106,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$curr_time = date('H:i');
+				$endtime = time() + (60 * 60);
+				$curr_time = date('H:i',$endtime);
 			}
 		}
 		$fieldvalue[] = array($disp_value => $curr_time) ;
@@ -152,6 +153,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 17)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue [] = $value;
+	}
+	elseif($uitype == 85) //added for Skype by Minnie
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue [] = $value;
