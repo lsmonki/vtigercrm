@@ -46,7 +46,7 @@ $server->register(
     array('username'=>'xsd:string'),
     array('return'=>'tns:contactdetails'),
     $NAMESPACE);
-    
+
 $server->register(
     'CheckContactPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
 
@@ -55,24 +55,24 @@ $server->register(
 
 $server->register(
 	  'AddContact',
-    array('user_name'=>'xsd:string', 
-          'first_name'=>'xsd:string', 
-          'last_name'=>'xsd:string', 
+    array('user_name'=>'xsd:string',
+          'first_name'=>'xsd:string',
+          'last_name'=>'xsd:string',
           'email_address'=>'xsd:string',
-          'account_name'=>'xsd:string', 
-          'salutation'=>'xsd:string', 
-          'title'=>'xsd:string', 
-          'phone_mobile'=>'xsd:string', 
-          'reports_to'=>'xsd:string', 
-          'primary_address_street'=>'xsd:string', 
-          'primary_address_city'=>'xsd:string', 
-          'primary_address_state'=>'xsd:string' , 
-          'primary_address_postalcode'=>'xsd:string', 
-          'primary_address_country'=>'xsd:string', 
-          'alt_address_city'=>'xsd:string', 
+          'account_name'=>'xsd:string',
+          'salutation'=>'xsd:string',
+          'title'=>'xsd:string',
+          'phone_mobile'=>'xsd:string',
+          'reports_to'=>'xsd:string',
+          'primary_address_street'=>'xsd:string',
+          'primary_address_city'=>'xsd:string',
+          'primary_address_state'=>'xsd:string' ,
+          'primary_address_postalcode'=>'xsd:string',
+          'primary_address_country'=>'xsd:string',
+          'alt_address_city'=>'xsd:string',
           'alt_address_street'=>'xsd:string',
-          'alt_address_state'=>'xsd:string', 
-          'alt_address_postalcode'=>'xsd:string', 
+          'alt_address_state'=>'xsd:string',
+          'alt_address_postalcode'=>'xsd:string',
           'alt_address_country'=>'xsd:string',
           'office_phone'=>'xsd:string',
           'home_phone'=>'xsd:string',
@@ -82,13 +82,41 @@ $server->register(
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
-    
+$server->register(
+	  'AddLead',
+    array('user_name'=>'xsd:string',
+          'first_name'=>'xsd:string',
+          'last_name'=>'xsd:string',
+          'email_address'=>'xsd:string',
+          'account_name'=>'xsd:string',
+          'salutation'=>'xsd:string',
+          'title'=>'xsd:string',
+          'phone_mobile'=>'xsd:string',
+          'reports_to'=>'xsd:string',
+          'primary_address_street'=>'xsd:string',
+          'primary_address_city'=>'xsd:string',
+          'primary_address_state'=>'xsd:string' ,
+          'primary_address_postalcode'=>'xsd:string',
+          'primary_address_country'=>'xsd:string',
+          'alt_address_city'=>'xsd:string',
+          'alt_address_street'=>'xsd:string',
+          'alt_address_state'=>'xsd:string',
+          'alt_address_postalcode'=>'xsd:string',
+          'alt_address_country'=>'xsd:string',
+          'office_phone'=>'xsd:string',
+          'home_phone'=>'xsd:string',
+          'fax'=>'xsd:string',
+          'department'=>'xsd:string',
+	  'description'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
 $server->register(
 	'track_email',
     array('user_name'=>'xsd:string', 'contact_ids'=>'xsd:string', 'date_sent'=>'xsd:date', 'email_subject'=>'xsd:string', 'email_body'=>'xsd:string'),
     array('return'=>'xsd:string'),
-    $NAMESPACE); 
-    
+    $NAMESPACE);
+
 $server->wsdl->addComplexType(
     'contactdetail',
     'complexType',
@@ -97,7 +125,7 @@ $server->wsdl->addComplexType(
     '',
     array(
 	      'id' => array('name'=>'id','type'=>'xsd:string'),
-        'firstname' => array('name'=>'firstname','type'=>'xsd:string'),        
+        'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
         'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
         'emailaddress' => array('name'=>'emailaddress','type'=>'xsd:string'),
         'accountname' => array('name'=>'accountname','type'=>'xsd:string'),
@@ -141,18 +169,18 @@ $server->wsdl->addComplexType(
     ),
     'tns:contactdetail'
 );
-    
+
 
 function SearchContactsByEmail($username,$emailaddress)
 {
      require_once('modules/Contacts/Contact.php');
-     
+
      $seed_contact = new Contact();
      $output_list = Array();
-     
+
      $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
      $contactList = $response['list'];
-     
+
      // create a return array of names and email addresses.
      foreach($contactList as $contact)
      {
@@ -164,21 +192,21 @@ function SearchContactsByEmail($username,$emailaddress)
                "accountname" => $contact[accountname],
           );
      }
-     
+
      //to remove an erroneous compiler warning
      $seed_contact = $seed_contact;
      return $output_list;
-}    
+}
 
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
 	global $adb;
 	require_once('modules/Users/User.php');
 	require_once('modules/Emails/Email.php');
-	
+
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
-	
+
 	$email = new Email();
 	//$log->debug($msgdtls['contactid']);
 	$emailbody = str_replace("'", "''", $email_body);
@@ -189,7 +217,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email->column_fields[assigned_user_id] = $user_id;
 	$email->column_fields[date_start] = $datesent;
 	$email->column_fields[description]  = htmlentities($emailbody);
-	$email->column_fields[activitytype] = 'Emails'; 
+	$email->column_fields[activitytype] = 'Emails';
 	$email->plugin_save = true;
 	$email->save("Emails");
 
@@ -208,7 +236,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	return $email->id;
 }
 
-    
+
 function GetContacts($username)
 {
 	global $adb;
@@ -235,9 +263,9 @@ function GetContacts($username)
 		$namelist = explode(" ", $contact["lastname"]);
 		if(isset($namelist))
 		{
-			if(count($namelist) >= 2) 
+			if(count($namelist) >= 2)
 			{
-				$contact["lastname"] = $namelist[count($namelist)-1];       	
+				$contact["lastname"] = $namelist[count($namelist)-1];
 				for($i=0; $i<count($namelist)-2; $i++)
 				{
 					$middlename[] = $namelist[$i];
@@ -259,27 +287,27 @@ function GetContacts($username)
 				"emailaddress" => $contact["email"],
 				"jobtitle" => $contact["title"],
 				"department" => $contact["department"],
-				"accountname" => $contact["accountname"],                         
+				"accountname" => $contact["accountname"],
 				"officephone" => $contact["phone"],
 				"homephone" => $contact["homephone"],
-				"otherphone" => $contact["otherphone"],           
+				"otherphone" => $contact["otherphone"],
 				"fax" => $contact["fax"],
 				"mobile" => $contact["mobile"],
 				"asstname" => $contact["assistant"],
-				"asstphone" => $contact["assistantphone"],             
+				"asstphone" => $contact["assistantphone"],
 				"reportsto" => $contact["reports_to_name"],
 				"mailingstreet" => $contact["mailingstreet"],
 				"mailingcity" => $contact["mailingcity"],
 				"mailingstate" => $contact["mailingstate"],
 				"mailingzip" => $contact["mailingzip"],
-				"mailingcountry" => $contact["mailingcountry"],              
+				"mailingcountry" => $contact["mailingcountry"],
 				"otherstreet" => $contact["otherstreet"],
 				"othercity" => $contact["othercity"],
 				"otherstate" => $contact["otherstate"],
 				"otherzip" => $contact["otherzip"],
 				"othercountry" => $contact["othercountry"],
 				"description" => "",
-				"category" => "",        
+				"category" => "",
 			  );
 	}
 	//to remove an erroneous compiler warning
@@ -317,13 +345,13 @@ function retrieve_account_id($account_name,$user_id)
 	{
 		$row = $db->fetchByAssoc($result, 0);
 		//mysql_close();
-		return $row["accountid"];	    
+		return $row["accountid"];
 	}
 	else
 	{
 		$row = $db->fetchByAssoc($result, 0);
 		//mysql_close();
-		return $row["accountid"];	    
+		return $row["accountid"];
 	}
 
 }
@@ -334,14 +362,14 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	global $current_user;
 	require_once('modules/Users/User.php');
 	require_once('modules/Contacts/Contact.php');
-	
+
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	
+
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
     $sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
@@ -355,7 +383,7 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
   {
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   }
-	
+
 	$contact = new Contact();
 	$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
@@ -372,18 +400,78 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	$contact->column_fields[mailingcity]=in_array('mailingcity',$permitted_lists) ? $primary_address_city : "";
 	$contact->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $primary_address_state : "";
 	$contact->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $primary_address_postalcode : "";
-	$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $primary_address_country : "";    
+	$contact->column_fields[mailingcountry]=in_array('mailingcountry',$permitted_lists) ? $primary_address_country : "";
 	$contact->column_fields[otherstreet]=in_array('otherstreet',$permitted_lists) ? $alt_address_street : "";
 	$contact->column_fields[othercity]=in_array('othercity',$permitted_lists) ? $alt_address_city : "";
 	$contact->column_fields[otherstate]=in_array('otherstate',$permitted_lists) ? $alt_address_state : "";
 	$contact->column_fields[otherzip]=in_array('otherzip',$permitted_lists) ? $alt_address_postalcode : "";
-	$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $alt_address_country : "";    	
-	$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
+	$contact->column_fields[othercountry]=in_array('othercountry',$permitted_lists) ? $alt_address_country : "";
+	$contact->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
 	$contact->column_fields[description]= "";
-	$contact->save("Contacts");	
-	
-  $contact = $contact;	
+	$contact->save("Contacts");
+
+  $contact = $contact;
 	return $contact->id;
+}
+
+function AddLead($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to ,$primary_address_street , $website ,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone="",$home_phone="",$fax="",$department="",$description="")
+{
+	global $adb;
+	global $current_user;
+	require_once('modules/Users/User.php');
+	require_once('modules/Leads/Lead.php');
+
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve_entity_info($user_id,"Users");
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+  {
+    $sql1 = "select fieldname,columnname from vtiger_field where tabid=7 and block <> 14";
+  }else
+  {
+    $profileList = getCurrentUserProfileList();
+    $sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.block <> 14 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+  }
+  $result1 = $adb->query($sql1);
+  for($i=0;$i < $adb->num_rows($result1);$i++)
+  {
+      $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
+  }
+
+	$Lead = new Lead();
+	$Lead->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
+	$Lead->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
+	$Lead->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
+	$Lead->column_fields[company]=in_array('company',$permitted_lists) ? $account_name : "";
+	$Lead->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
+	$Lead->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
+	$Lead->column_fields[designation]=in_array('designation',$permitted_lists) ? $department : "";
+	$Lead->column_fields[phone]=in_array('phone',$permitted_lists) ? $office_phone : "";
+	$Lead->column_fields[homephone]=in_array('homephone',$permitted_lists) ? $home_phone : "";
+	$Lead->column_fields[website]=in_array('website',$permitted_lists) ? $website : "";
+	$Lead->column_fields[fax]=in_array('fax',$permitted_lists) ? $fax : "";
+	$Lead->column_fields[mobile]=in_array('mobile',$permitted_lists) ? $phone_mobile : "";
+	$Lead->column_fields[mailingstreet]=in_array('mailingstreet',$permitted_lists) ? $primary_address_street : "";
+	$Lead->column_fields[mailingcity]=in_array('mailingcity',$permitted_lists) ? $primary_address_city : "";
+	$Lead->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $primary_address_state : "";
+	$Lead->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $primary_address_postalcode : "";
+	$Lead->column_fields[workCountry]=in_array('mailingcountry',$permitted_lists) ? $workCountry : "";
+	$Lead->column_fields[street]=in_array('street',$permitted_lists) ? $alt_address_street : "";
+	$Lead->column_fields[city]=in_array('city',$permitted_lists) ? $alt_address_city : "";
+	$Lead->column_fields[state]=in_array('state',$permitted_lists) ? $alt_address_state : "";
+	$Lead->column_fields[code]=in_array('code',$permitted_lists) ? $alt_address_postalcode : "";
+	$Lead->column_fields[country]=in_array('country',$permitted_lists) ? $alt_address_country : "";
+	$Lead->column_fields[assigned_user_id]=in_array('assigned_user_id',$permitted_lists) ? $user_id : "";
+	$Lead->column_fields[description]= "";
+//	$log->fatal($Lead->column_fields);
+	$Lead->save("Leads");
+
+  	$Lead = $Lead;
+	return $Lead->id;
 }
 
 function create_session($user_name, $password)
@@ -417,7 +505,7 @@ function create_session($user_name, $password)
 
 function end_session($user_name)
 {
-        return "Success";       
+        return "Success";
 }
 
 function CheckContactPerm($user_name)
@@ -454,6 +542,6 @@ function CheckContactViewPerm($user_name)
 	}
 }
 
-$server->service($HTTP_RAW_POST_DATA); 
-exit(); 
+$server->service($HTTP_RAW_POST_DATA);
+exit();
 ?>
