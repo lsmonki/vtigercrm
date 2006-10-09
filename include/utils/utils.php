@@ -2105,6 +2105,59 @@ function addToProductStock($productId,$qty)
 	$log->debug("Exiting addToProductStock method ...");
 	
 }
+
+/**	This Function adds the specified product quantity to the Product Quantity in Demand in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be added
+  */
+function addToProductDemand($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering addToProductDemand(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInDemand($productId);
+	$updQty=$qtyInStck + $qty;
+	$sql = "UPDATE vtiger_products set qtyindemand=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting addToProductDemand method ...");
+	
+}
+
+/**	This Function subtract the specified product quantity to the Product Quantity in Stock in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be subtracted
+  */
+function deductFromProductStock($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering deductFromProductStock(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInStock($productId);
+	$updQty=$qtyInStck - $qty;
+	$sql = "UPDATE vtiger_products set qtyinstock=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting deductFromProductStock method ...");
+	
+}
+
+/**	This Function subtract the specified product quantity to the Product Quantity in Demand in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be subtract
+  */
+function deductFromProductDemand($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering deductFromProductDemand(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInDemand($productId);
+	$updQty=$qtyInStck - $qty;
+	$sql = "UPDATE vtiger_products set qtyindemand=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting deductFromProductDemand method ...");
+	
+}
+
+
 /** This Function returns the current product quantity in stock.
   * The following is the input parameter for the function:
   *  $product_id --> ProductId, Type:Integer
@@ -2122,6 +2175,23 @@ function getProductQtyInStock($product_id)
 
 
 }
+
+/**	This Function returns the current product quantity in demand.
+  *	@param int $product_id - ProductId
+  *	@return int $qtyInDemand - Quantity in Demand of a product
+  */
+function getProductQtyInDemand($product_id)
+{
+	global $log;
+	$log->debug("Entering getProductQtyInDemand(".$product_id.") method ...");
+        global $adb;
+        $query1 = "select qtyindemand from vtiger_products where productid=".$product_id;
+        $result = $adb->query($query1);
+        $qtyInDemand = $adb->query_result($result,0,"qtyindemand");
+	$log->debug("Exiting getProductQtyInDemand method ...");
+        return $qtyInDemand;
+}
+
 /** Function to seperate the Date and Time
   * This function accepts a sting with date and time and
   * returns an array of two elements.The first element

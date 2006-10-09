@@ -469,7 +469,7 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
  *	@param $update_prod_stock - true or false (default), if true we have to update the stock for PO only
  *	@return void
  */
-function saveInventoryProductDetails($focus, $module, $update_prod_stock='false')
+function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateStockAndDemand='false', $updateDemand='false')
 {
 	global $log, $adb;
 	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
@@ -507,6 +507,18 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
 		{
 			addToProductStock($prod_id,$qty);
+		}
+		if($module == 'SalesOrder')
+		{
+			if($updateStockAndDemand == 'true')
+			{
+				deductFromProductStock($prod_id,$qty);
+				deductFromProductDemand($prod_id,$qty);
+			}
+			if($updateDemand == 'true')
+			{
+				addToProductDemand($prod_id,$qty);
+			}
 		}
 
 		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment')";
