@@ -253,6 +253,8 @@ $mod_strings = Array(
 
 'LBL_MULTISELECT_COMBO'=>'Multi-Select Combo Box',
 
+'Skype'=>'Skype',
+
 
 
 //added for patch2
