@@ -620,8 +620,8 @@ $app_strings = Array(
 
 'LBL_CALCULATOR'=>'Calculator',
 
-'LBL_CLOSE_WON' =>'Closed-Won',			# 'Closed Won'
-'LBL_CLOSE_LOST'=>'Closed-Lost',					# 'Closed Lost'
+'LBL_CLOSE_WON' =>'Closed Won',			# 'Closed Won'
+'LBL_CLOSE_LOST'=>'Closed Lost',					# 'Closed Lost'
 
 'LBL_USER'=>'User',
 
