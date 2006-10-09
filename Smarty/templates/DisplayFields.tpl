@@ -274,6 +274,14 @@
 				<input type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
 			</td>
 
+		{elseif $uitype eq 85}
+                        <td width="20%" class="dvtCellLabel" align=right>
+                                {$fldlabel}
+                        </td>
+                        <td width="30%" align=left class="dvtCellInfo">
+                                <img src="{$IMAGE_PATH}skype.gif" alt="Skype" title="Skype" LANGUAGE=javascript align="absmiddle"></img><input type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
+                        </td>
+
 		{elseif $uitype eq 71 || $uitype eq 72}
 			<td width="20%" class="dvtCellLabel" align=right>
 				{if $uitype eq 72}
