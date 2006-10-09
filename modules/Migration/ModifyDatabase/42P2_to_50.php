@@ -3405,7 +3405,7 @@ for($i=0;$i<$productcount;$i++)
 	$taxres = $conn->query("select taxid from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'");
 	$taxid = $conn->query_result($taxres,0,'taxid');
 
-	$taxquery = "insert into vtiger_producttaxrel ($productid, \"$taxid\", '0.00')";
+	$taxquery = "insert into vtiger_producttaxrel values($productid, \"$taxid\", '0.00')";
 	//Execute($taxquery);
 	$conn->query($taxquery);
 }
@@ -3555,6 +3555,7 @@ Execute("update vtiger_field set typeofdata='V~O' where fieldname='siccode' and 
 
 //changes made for CustomView and Reports - Activities changed to Calendar -- Starts
 //Added to change the entitytype from Activities to Calendar for customview
+Execute("update vtiger_crmentity set setype='Calendar' where setype='Activities'");
 Execute("update vtiger_customview set entitytype='Calendar' where entitytype='Activities'");
 
 //Added to change the primarymodule from Activities to Calendar for Reports
@@ -3722,6 +3723,48 @@ $sortorderid = $conn->query_result($conn->query("select max(sortorderid) as id f
 Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,1)");
 
 
+//Added after 5.0 GA release
+//CALCULATE Activity End Time (time_end)
+//we have to calculate activity end time (time_end) based on start time (time_start) and duration (duration_hours, duration_minutes)
+$sql = "select * from vtiger_activity";
+$result = $conn->query($sql);
+$num_rows = $conn->num_rows($result);
+for($i=0;$i<$num_rows;$i++)
+{
+	//First we have to retrieve the time_start, duration_hours and duration_minutes and form as a date with time
+	$activityid = $conn->query_result($result,$i,'activityid');
+	$date_start = $conn->query_result($result,$i,'date_start');
+	$time_start = $conn->query_result($result,$i,'time_start');
+	$duration_hours = $conn->query_result($result,$i,'duration_hours');
+	$duration_minutes = $conn->query_result($result,$i,'duration_minutes');
+
+	if($duration_hours != '' && $duration_minutes != '')
+	{
+		$date_details = explode("-",$date_start);
+		$start_year = $date_details[0];
+		$start_month = $date_details[1];
+		$start_date = $date_details[2];
+
+		$start_details = explode(":",$time_start);
+		$start_hour = $start_details[0];
+		$start_minutes = $start_details[1];
+
+		$full_duration = "$duration_hours:$duration_minutes:00";
+
+		$start = date("Y-m-d H:i:s",mktime($start_hour, $start_minutes, 0, $start_month, $start_date, $start_year));
+		$end = date("Y-m-d H:i:s",mktime($start_hour+$duration_hours, $start_minutes+$duration_minutes, 0, $start_month, $start_date, $start_year));
+
+		$end_details = explode(" ",$end);
+		$due_date = $end_details[0];
+
+		$end_time_details = explode(":",$end_details[1]);
+		$time_end = $end_time_details[0].":".$end_time_details[1];
+
+		$update_query = "update vtiger_activity set due_date=\"$due_date\", time_end=\"$time_end\" where activityid=$activityid";
+
+		$conn->query($update_query);
+	}
+}
 
 
 
