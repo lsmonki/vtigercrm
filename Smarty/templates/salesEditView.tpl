@@ -115,7 +115,7 @@ function sensex_info()
 
 
 							<!-- This is added to display the existing comments -->
-							{if $header eq 'Comments' || $header eq 'Comment Information'}
+							{if $header eq $MOD.LBL_COMMENTS || $header eq $MOD.LBL_COMMENT_INFORMATION}
 							   <tr><td>&nbsp;</td></tr>
 							   <tr>
 								<td colspan=4 class="dvInnerHeader">

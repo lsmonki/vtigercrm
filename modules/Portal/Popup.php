@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
 * ("License"); You may not use this file except in compliance with the License
@@ -42,7 +42,7 @@ $portal_inputs.='<div style="display:block;position:relative;" id="orgLay" class
 		<tr>
 
 			<td align="right" width="40%" ><b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_URL'] .' </b></td>
-			<td align="left" width="60%"><input name="portalurl" id="portalurl" class="txtBox" value="'.$portalurl.'" type="text"></td>
+			<td align="left" width="60%">http://<input name="portalurl" id="portalurl" class="txtBox" value="'.$portalurl.'" type="text" onkeyup="OnUrlChange();"></td>
 		</tr>
 		<tr>
 			<td align="right" width="40%"> <b>'.$mod_strings['LBL_BOOKMARK'].' ' .$mod_strings['LBL_NAME'] .' </b></td>
@@ -55,7 +55,7 @@ $portal_inputs.='<div style="display:block;position:relative;" id="orgLay" class
 <table border="0" cellspacing="0" cellpadding="5" width="100%" class="layerPopupTransport">
 	<tr>
 	<td align="center">
-			<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
+			<input name="save" value=" &nbsp;'.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmbutton small save" onClick="OnUrlChange(); SaveSite(\''.$portalid.'\')" type="button">&nbsp;&nbsp;
 			<input name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmbutton small cancel" onclick="fninvsh(\'orgLay\');" type="button">
 	</td>
 	</tr>

@@ -16,7 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 $log = &LoggerManager::getLogger('firefoxlog');
 
-$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 $accessDenied = "You are not authorized for performing this action";
 $server->configureWSDL('vtigersoap');

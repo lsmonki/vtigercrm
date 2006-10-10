@@ -18,7 +18,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('vtigerversion.php');
 if($patch_version !='')
 {
-	    $patch_string = $vtiger_version . " Patch " . $patch_version;
+	    $patch_string = $vtiger_current_version . " Patch " . $patch_version;
 }
 else
 {
@@ -173,7 +173,7 @@ global $mod_strings;
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="70%" align="left" class="small">
-							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'];?> : 5.0.0 </span>&nbsp;|&nbsp;
+							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'] ." ".$patch_string;?></span>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt" target="_blank"><?php echo $mod_strings['LBL_READ_LICENSE'];?></a>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" target="_blank"><?php echo $mod_strings['LBL_CONTACT_US'];?></a>
 							</td>

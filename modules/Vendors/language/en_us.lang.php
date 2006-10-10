@@ -32,7 +32,7 @@ $mod_strings = array(
 'Postal Code'=>'Postal Code',
 'Country'=>'Country',
 'Description'=>'Description',
-'Po Box'=>'Po Box',
+'Po Box'=>'PO Box',
 'Vendor'=>'Vendor',
 
 //Added for existing Picklist entries

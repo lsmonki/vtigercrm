@@ -195,6 +195,7 @@ switch($currentModule)
 
 
 }
+$smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);
 
 
 $theme_path="themes/".$theme."/";

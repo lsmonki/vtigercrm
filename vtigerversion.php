@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-$patch_version = '';
+$patch_version = '1';
 $modified_database = '';
 $vtiger_current_version = '5.0.0';
 ?>

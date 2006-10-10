@@ -106,7 +106,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$curr_time = date('H:i');
+				$endtime = time() + (60 * 60);
+				$curr_time = date('H:i',$endtime);
 			}
 		}
 		$fieldvalue[] = array($disp_value => $curr_time) ;
@@ -152,6 +153,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 17)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue [] = $value;
+	}
+	elseif($uitype == 85) //added for Skype by Minnie
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue [] = $value;
@@ -578,8 +584,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
  			    $query = 'select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
  		    }
  		    else
- 		    {
- 			    $query = "select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where contactid=".$col_fields['record_id'];
+		    {
+			    $query = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
  		    }
  		    $result_image = $adb->query($query);
  		    for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
@@ -1195,12 +1201,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 105)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-			$query = "select attachments.path, attachments.name from contactdetails left join seattachmentsrel on seattachmentsrel.crmid=contactdetails.contactid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where contactdetails.imagename=attachments.name and contactid=".$col_fields['record_id'];
-		$result_image = $adb->query($query);
-		for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
-		{
-			$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
-			$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+		 if( isset( $col_fields['record_id']) && $col_fields['record_id'] != '') {
+			$query = "select vtiger_attachments.path, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where vtiger_contactdetails.imagename=vtiger_attachments.name and contactid=".$col_fields['record_id'];
+			$result_image = $adb->query($query);
+			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
+			{
+				$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+				$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+			}
 		}
 		if(is_array($image_array))
 			for($img_itr=0;$img_itr<count($image_array);$img_itr++)

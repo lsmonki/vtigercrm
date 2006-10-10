@@ -168,8 +168,8 @@ $mod_strings = Array(
 'Mailing State'=>'Mailing State',
 'Mailing Zip'=>'Mailing Postal Code',
 'Mailing Country'=>'Mailing Country',
-'Mailing Po Box'=>'Mailing Po Box',
-'Other Po Box'=>'Other Po Box',
+'Mailing Po Box'=>'Mailing PO Box',
+'Other Po Box'=>'Other PO Box',
 'Other City'=>'Other City',
 'Other State'=>'Other State',
 'Other Zip'=>'Other Postal Code',
@@ -225,6 +225,7 @@ $mod_strings = Array(
 'Web Site'=>'Web Site',
 'Word of mouth'=>'Word of mouth',
 'Other'=>'Other',
+'User List'=>'User List',
 
 );
 

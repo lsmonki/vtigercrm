@@ -217,8 +217,33 @@ function fetchEditPickList(module,fieldname,uitype)
                 }
         );
 }
+
 function picklist_validate(mode,fieldname,module,uitype)
 {
+	
+	//alert(trim($("picklist_values").value));
+	
+	var pick_arr=new Array();
+	pick_arr=trim($("picklist_values").value).split('\n');	
+	var len=pick_arr.length;
+	for(i=0;i<len;i++)
+	{
+		var valone;
+		curr_iter = i;
+		valone=pick_arr[curr_iter];
+		for(j=curr_iter+1;j<len;j++)
+		{
+			var valnext;
+			valnext=pick_arr[j];
+			if(trim(valone) == trim(valnext))
+			{
+				alert("Duplicate entries found for the value '"+valone+"'");
+				return false;
+			}
+		}
+		i = curr_iter		
+
+	}
 	if(mode == 'edit')
 	{
 		if(trim($("picklist_values").value) == '')

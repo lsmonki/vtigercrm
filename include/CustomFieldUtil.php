@@ -73,6 +73,10 @@ function getCustomFieldTypeName($uitype)
 	{
 		$fldname = 'Multi-Select Combo Box';
 	}
+	elseif($uitype == 85)
+	{
+		$fldname = 'Skype';
+	}
 $log->debug("Exiting getCustomFieldTypeName method ...");
 	return $fldname;
 }
@@ -216,6 +220,10 @@ function getFldTypeandLengthValue($label,$typeofdata)
         {
                 $fieldtype = '11';
         }
+	elseif($label == 'Skype')
+	{
+		$fieldtype = '12';
+	}
 	$log->debug("Exiting getFldTypeandLengthValue method ...");
 	return $fieldtype;
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 ini_set("include_path", "../:.");
 
 require('send_mail.php');

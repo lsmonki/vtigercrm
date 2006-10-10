@@ -216,7 +216,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	}else if(uitype == '17')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
-	}else if(uitype == '53')
+	}else if(uitype == '85')
+        {
+                getObj(dtlView).innerHTML = "<a href=\"skype://"+ tagValue+"?call\">"+tagValue+"&nbsp;</a>";
+        }else if(uitype == '53')
 	{
 		var hdObj = getObj(hdTxt);
 		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
@@ -311,6 +314,23 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		}
 	}else if(uitype == '33')
   	{
+		/* Wordwrap a long list of multi-select combo box items at the
+                 * item separator string */
+                const DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
+
+                var lineLength = 0;
+                for(var i=0; i < r.length; i++) {
+                        lineLength += r[i].length + 2; // + 2 for item separator string
+                        if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
+                                lineLength = r[i].length + 2; // reset.
+                            r[i] = '<br/>&nbsp;' + r[i]; // prepend newline.
+                        }
+                        // Prevent a browser splitting multiword items:
+                        r[i] = r[i].replace(/ /g, '&nbsp;');
+                }
+                /* Join items with item separator string (which must match string in DetailViewUI.tpl,
+                 * EditViewUtils.php and CRMEntity.php)!!
+                 */
        		getObj(dtlView).innerHTML = r.join(", ");
 	}else
 	{

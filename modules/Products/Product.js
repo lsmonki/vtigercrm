@@ -8,18 +8,16 @@
  *
  ********************************************************************************/
 document.write("<script type='text/javascript' src='modules/Products/multifile.js'></"+"script>");
-function updateListPrice(unitprice,fieldname)
+function updateListPrice(unitprice,fieldname, oSelect)
 {
-	var elem=document.addToPB.elements;
-        var i;
-        for(i=0; i<elem.length; i++)
-        {
-                if(elem[i].name== fieldname)
-                {
-                        elem[i].value=unitprice;
-                }
-        }
-
+	if(oSelect.checked == true)
+	{
+		document.getElementById(fieldname).style.visibility = 'visible';
+		document.getElementById(fieldname).value = unitprice;
+	}else
+	{
+		document.getElementById(fieldname).style.visibility = 'hidden';
+	}
 }
 
 function check4null(form)

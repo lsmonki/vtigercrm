@@ -108,11 +108,18 @@ function updateAllListPrice(unitprice)
 {ldelim}
         var fieldname_array = new Array({$FIELD_NAME_ARRAY});
         var unitprice,fieldname;
+	var id;
+	var fieldinfo;
+	var checkid;
 
         for(j=0; j<fieldname_array.length; j++)
         {ldelim}
+		fieldinfo = fieldname_array[j].split("_");
+		id = fieldinfo[0];
+		checkid = "check_"+id;
+
                 fieldname=fieldname_array[j];
-                updateListPrice(unitprice,fieldname);
+                updateListPrice(unitprice,fieldname,document.getElementById(checkid));
         {rdelim}
 {rdelim}
 

@@ -620,8 +620,8 @@ $app_strings = Array(
 
 'LBL_CALCULATOR'=>'Calculator',
 
-'LBL_CLOSE_WON' =>'Closed-Won',			# 'Closed Won'
-'LBL_CLOSE_LOST'=>'Closed-Lost',					# 'Closed Lost'
+'LBL_CLOSE_WON' =>'Closed Won',			# 'Closed Won'
+'LBL_CLOSE_LOST'=>'Closed Lost',					# 'Closed Lost'
 
 'LBL_USER'=>'User',
 
@@ -1027,6 +1027,7 @@ $app_strings = Array(
 
 //Record deleted message
 'LBL_RECORD_DELETE'=>'The record you are trying to view has been deleted.',
+'Part Number'=>'Part Number',
 );
 
 

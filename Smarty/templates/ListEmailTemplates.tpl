@@ -9,10 +9,43 @@
   *
  ********************************************************************************/
 -->*}
+
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script>
+function ifselected()
+{ldelim}
+  
+      
+      var sel =document.massdelete.selected_id.length;
+      var returnval=false;
+      
+     for(i=0; i < sel; i++)
+     {ldelim}
+     
+      if(document.massdelete.selected_id[i].checked == true)
+        {ldelim}
+            returnval=true;
+            break;
+        {rdelim}
+        
+      {rdelim}
+      
+      
+          if(returnval==true)
+           {ldelim}
+               document.getElementById("myProfile").style.display="none";
+           {rdelim}
+          else
+           {ldelim}
+              document.getElementById("myProfile").style.display="block";
+          {rdelim}
+    	
+{rdelim}
+
+
 function massDelete()
 {ldelim}
+        
         x = document.massdelete.selected_id.length;
         idstring = "";
 
@@ -22,11 +55,15 @@ function massDelete()
                 if (document.massdelete.selected_id.checked)
                {ldelim}
                         document.massdelete.idlist.value=document.massdelete.selected_id.value+';';
+                          
+                        
 			xx=1;
                 {rdelim}
                 else
                 {ldelim}
+                         document.massdelete.profile.style.display="none";
                         alert("Please select at least one entity");
+                        
                         return false;
                 {rdelim}
         {rdelim}
@@ -103,7 +140,7 @@ function massDelete()
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
 					<tr>
 						<td class=small><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="crmButton delete small"></td>
-						<td class=small align=right><input class="crmButton create small" type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"></td>
+						<td class=small align=right id="new_template"><div id = "myProfile"><input class="crmButton create small" type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"></div></td>
 					</tr>
 					</table>
 					<table border="0" cellspacing="0" cellpadding="5" width="100%" class="listTable">
@@ -117,7 +154,7 @@ function massDelete()
 					{foreach name=emailtemplate item=template from=$TEMPLATES}
 					<tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.emailtemplate.iteration}</td>
-						<td class="listTableRow small" valign=top><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall") class=small></td>
+						<td class="listTableRow small" valign=top><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick="ifselected(); " class=small></td>
 						<td class="listTableRow small" valign=top>
 							<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" ><b>{$template.templatename}</b></a>
 						</td>

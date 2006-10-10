@@ -95,7 +95,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Product']);
+$smarty->assign("SINGLE_MOD",'Product');
 
 
 $smarty->assign("MOD", $mod_strings);

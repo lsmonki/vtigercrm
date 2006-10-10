@@ -182,6 +182,7 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 {
 	$combo = '';
+	$min = $min - ($min%5);
 	if($format == 'am/pm')
 	{
 		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
@@ -298,7 +299,7 @@ function getActFieldCombo($fieldname,$tablename)
 	for($i = 0; $i < $noofrows; $i++)
 	{
 		$value = $adb->query_result($Res,$i,$fieldname);
-		$combo .= '<option value="'.$value.'">'.$mod_strings[$value].'</option>';
+		$combo .= '<option value="'.$value.'">'.$value.'</option>';
 	}
 
 	$combo .= '</select>';

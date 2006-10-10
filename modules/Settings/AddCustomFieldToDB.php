@@ -226,6 +226,12 @@ else
 		 $type = "X"; //adodb type
 		 $uichekdata='V~O';
 	}
+	elseif($fldType == 'Skype')
+	{
+		$uitype = 85;
+		$type = "C(255)"; //adodb type
+		$uichekdata='V~O';
+	}
 	// No Decimal Pleaces Handling
 
         

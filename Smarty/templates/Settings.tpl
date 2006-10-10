@@ -311,63 +311,6 @@
 						</table>
 					</td>
 				</tr>
-				<!-- Row 2 -->
-				<tr>
-					<td width=25% valign=top>
-					<!-- icon 15-->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
-						</tr>
-						</table>
-
-					</td>
-					<td width=25% valign=top>
-					<!-- empty -->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-					</td>
-					<td width=25% valign=top>
-					<!-- empty-->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-					</td>
-					<td width=25% valign=top>
-					<!-- empty-->
-
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-
-					</td>
-				</tr>
 				</table>
 				
 				
@@ -536,20 +479,24 @@
                       <td class="small" valign=top>{$MOD.LBL_MIGRATION_INFO}</td>
                     </tr>
                   </table></td>
-		  <td width=25% valign=top>&nbsp;
-			
-		  </td>
-				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
-				  </tr>
-				</table>
-				
-				
-				</td>
-			</tr>
+		<td width=25% valign=top>
+			<!-- icon 15-->
+			<table border=0 cellspacing=0 cellpadding=5 width=100%>
+			<tr>
 
+			<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
+			<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
+			</tr>
+			<tr>
+			<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
+			</tr>
 			</table>
+
+		</td>
+
+		</tr>
+
+		</table>
 		
 		</td>
 	</tr>

@@ -92,7 +92,7 @@ for ($x=0; $x<$y; $x++)
 	{
 		$column_name = "productsRel.productname";
 	}
-	if($tablename == "crmentity")
+	if($tablename == "vtiger_crmentity")
 	{
 		if($modulename == "Contacts")
 		{
@@ -171,7 +171,7 @@ if(count($querycolumns) > 0)
 			left join vtiger_products as productsRel on productsRel.productid = vtiger_troubletickets.product_id
 			left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id
 			left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id               
-			left join vtiger_crmentity as _crmentityAccounts on crmentityAccounts.crmid = vtiger_account.accountid 
+			left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid = vtiger_account.accountid 
 			left join vtiger_accountbillads on vtiger_accountbillads.accountaddressid = vtiger_account.accountid
 			left join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid
 			left join vtiger_accountscf on vtiger_accountbillads.accountaddressid = vtiger_accountscf.accountid 

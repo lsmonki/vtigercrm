@@ -51,7 +51,7 @@
 			{/if}
 		{elseif $uitype eq 19 || $uitype eq 20}
 			<!-- In Add Comment are we should not display anything -->
-			{if $fldlabel eq 'Add Comment'}
+			{if $fldlabel eq $MOD.LBL_ADD_COMMENT}
 				{assign var=fldvalue value=""}
 			{/if}
 			<td width=20% class="dvtCellLabel" align=right>
@@ -135,10 +135,10 @@
 					{assign var=style_group value='display:block'}
 				{/if}
 
-				<input type="radio" tabindex="{$vt_tab}" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+				<input type="radio" tabindex="{$vt_tab}" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_USER}
 
 				{if $secondvalue neq ''}
-					<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Group
+					<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
 				{/if}
 				<span id="assign_user" style="{$style_user}">
 					<select name="assigned_user_id">
@@ -273,6 +273,14 @@
 				&nbsp;&nbsp;http://&nbsp;
 				<input type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
 			</td>
+
+		{elseif $uitype eq 85}
+                        <td width="20%" class="dvtCellLabel" align=right>
+                                {$fldlabel}
+                        </td>
+                        <td width="30%" align=left class="dvtCellInfo">
+                                <img src="{$IMAGE_PATH}skype.gif" alt="Skype" title="Skype" LANGUAGE=javascript align="absmiddle"></img><input type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
+                        </td>
 
 		{elseif $uitype eq 71 || $uitype eq 72}
 			<td width="20%" class="dvtCellLabel" align=right>

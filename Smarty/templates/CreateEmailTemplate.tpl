@@ -86,7 +86,7 @@
                 options[8] = new Option('Lead: Email', '$leads-email$'); 
                 options[9] = new Option('Lead: Annual Revenue', '$leads-annualrevenue$'); 
                 options[10] = new Option('Lead: Title', '$leads-designation$'); 
-                options[11] = new Option('Lead: Salutation', '$leads-salutation$'); 
+                options[11] = new Option('Lead: Salutation', '$leads-salutationtype$'); 
             
 	        allOpts[3] = options;
 

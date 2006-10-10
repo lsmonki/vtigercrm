@@ -600,9 +600,6 @@ function getGroupName($id, $module)
 
 /**
  * Get the username by giving the user id.   This method expects the user id
- * param $label_list - the array of strings to that contains the option list
- * param $key_list - the array of strings to that contains the values list
- * param $selected - the string which contains the default value
  */
      
 function getUserName($userid)
@@ -620,6 +617,29 @@ function getUserName($userid)
 	}
 	$log->debug("Exiting getUserName method ...");
 	return $user_name;	
+}
+
+/**
+* Get the user full name by giving the user id.   This method expects the user id
+* DG 30 Aug 2006
+*/
+
+function getUserFullName($userid)
+{
+	global $log;
+	$log->debug("Entering getUserFullName(".$userid.") method ...");
+	$log->info("in getUserFullName ".$userid);
+	global $adb;
+	if($userid != '')
+	{
+		$sql = "select first_name, last_name from vtiger_users where id=".$userid;
+		$result = $adb->query($sql);
+		$first_name = $adb->query_result($result,0,"first_name");
+		$last_name = $adb->query_result($result,0,"last_name");
+		$user_name = $first_name." ".$last_name;
+	}
+        $log->debug("Exiting getUserFullName method ...");
+        return $user_name;
 }
 
 /**
@@ -2430,6 +2450,13 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Contacts':
 			if(is_array($fields["contacts"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}	
+				
 				$columnfields = implode(',',$fields["contacts"]);
 				$query = 'select '.$columnfields.' from vtiger_contactdetails where contactid='.$id;
 				$result = $adb->query($query);
@@ -2443,6 +2470,12 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Leads':	
 			if(is_array($fields["leads"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}
 				$columnfields = implode(',',$fields["leads"]);
 				$query = 'select '.$columnfields.' from vtiger_leaddetails where leadid='.$id;
 				$result = $adb->query($query);

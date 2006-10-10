@@ -653,36 +653,43 @@ class Contact extends CRMEntity {
         function create_export_query(&$order_by, &$where)
         {
 		global $log;
+		global $current_user;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('vtiger_contactscf'))
-		{
-			$query =  $this->constructCustomQueryAddendum('vtiger_contactscf','Contacts') ."
-                                vtiger_contactdetails.*, vtiger_contactaddress.*,
-                                vtiger_account.accountname account_name,
-                                vtiger_users.user_name assigned_user_name
-                                FROM vtiger_contactdetails
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
-                                LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
-                                LEFT JOIN vtiger_account on vtiger_contactdetails.accountid=vtiger_account.accountid
-				left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid
-			        left join vtiger_contactscf on vtiger_contactscf.contactid=vtiger_contactdetails.contactid
-				where vtiger_crmentity.deleted=0 and vtiger_users.status='Active' ";
-		}
-		else
-		{
-                  	 $query = "SELECT
-                                vtiger_contactdetails.*, vtiger_contactaddress.*,
-                                vtiger_account.accountname account_name,
-                                vtiger_users.user_name assigned_user_name
+
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Contacts", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list 
                                 FROM vtiger_contactdetails
                                 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
                                 LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
                                 LEFT JOIN vtiger_account on vtiger_contactdetails.accountid=vtiger_account.accountid
 				left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid
+				left join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid=vtiger_contactdetails.contactid
 			        left join vtiger_contactscf on vtiger_contactscf.contactid=vtiger_contactdetails.contactid
+			        left join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
+				LEFT JOIN vtiger_contactgrouprelation
+                	                ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
+	                        LEFT JOIN vtiger_groups
+                        	        ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+				LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
+					ON vtiger_contactdetails2.contactid = vtiger_contactdetails.reportsto
 				where vtiger_crmentity.deleted=0 and vtiger_users.status='Active' ";
+				//vtiger_contactdetails2 is added to get the Reports To of Contact
+
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[4] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter("Contacts");
 		}
-                 $log->info("Export Query Constructed Successfully");
+
+                $log->info("Export Query Constructed Successfully");
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
         }

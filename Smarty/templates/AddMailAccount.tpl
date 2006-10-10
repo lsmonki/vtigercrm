@@ -70,7 +70,7 @@
        </tr>
        <tr><td colspan="3" >&nbsp;</td></tr>
        <tr>
-          <td colspan="3"  class="detailedViewHeader"><b>{$MOD.LBL_MAIL_SERVER_SETTINGS}</b></td>
+          <td colspan="3"  class="detailedViewHeader"><b>{$MOD.LBL_INCOME_SERVER_SETTINGS}</b></td>
        </tr>
        <tr>
           <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>{$MOD.LBL_MAIL_SERVER_NAME}</td>

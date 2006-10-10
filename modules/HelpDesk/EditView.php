@@ -52,7 +52,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Ticket']);
+$smarty->assign("SINGLE_MOD",'Ticket');
 
 
 $category = getParentTab();

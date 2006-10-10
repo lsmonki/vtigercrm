@@ -17,7 +17,7 @@ $log = &LoggerManager::getLogger('vtigerolservice');
 
 error_reporting(0);
 
-$NAMESPACE = 'http://www.vtigercrm.com/vtigercrm';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 
 $server = new soap_server;
 

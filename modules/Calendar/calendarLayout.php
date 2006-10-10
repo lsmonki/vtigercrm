@@ -245,7 +245,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
 		</td>";
 		$tabhtml .= "<td width='2%'><img onClick='fnvshobj(this,\"miniCal\"); getMiniCal(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."btnL3Calendar.gif' alt='".$mod_strings['LBL_OPENCAL']."...' title='".$mod_strings['LBL_OPENCAL']."...' align='absmiddle' border='0'></td>";
 		$tabhtml .= "<td width=20% ><img onClick='fnvshobj(this,\"calSettings\"); getCalSettings(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."tbarSettings.gif' alt='".$mod_strings['LBL_SETTINGS']."' title='".$mod_strings['LBL_SETTINGS']."' align='absmiddle' border='0'></td>";
-	$tabhtml .= "<td class='calHdr calTopRight componentName'>".$app_strings[Calendar]."</td>";	
+	$tabhtml .= "<td class='calHdr calTopRight componentName'>".$app_strings['Calendar']."</td>";	
 	$tabhtml .= "</tr>";
 	echo $tabhtml;
 	$cal_log->debug("Exiting get_cal_header_tab() method...");
@@ -1137,7 +1137,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$eventlayer .= '</td>
 				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
-				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
+				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$mod_strings[$eventstatus].' | '.$mod_strings[$priority].')</td>
 			</table>
 			
 			</div>';
@@ -1172,7 +1172,9 @@ function getweekEventLayer(& $cal,$slice)
         {
 		for($i=0;$i<count($act);$i++)
                 {
-			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i;
+			/* fix given by dartagnanlaf START --integrated by Minnie */
+			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$act[$i]->start_time->hour.'_'.$i;
+			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
 			if(strlen($subject)>25)
@@ -1307,7 +1309,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	global $log;
 	$Entries = Array();
 	$category = getParentTab();
-	global $adb,$current_user,$mod_strings,$cal_log;
+	global $adb,$current_user,$mod_strings,$app_strings,$cal_log;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
@@ -1396,16 +1398,16 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&viewtype=calendar&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$app_strings['Call'];
 		if($type == 'Meeting')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
 		if(isPermitted("Calendar","EditView") == "yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		else
 			$element['action'] ="&nbsp;";
-        	$element['status'] = $adb->query_result($result,$i,"eventstatus");
+        	$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;

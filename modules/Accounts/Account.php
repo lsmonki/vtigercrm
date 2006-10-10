@@ -670,64 +670,34 @@ class Account extends CRMEntity {
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
+		global $current_user;
                 $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('vtiger_accountscf'))
-		{
 
-			$query = $this->constructCustomQueryAddendum('vtiger_accountscf','Accounts') . "
-				vtiger_account.*,
-					".$this->entity_table.".*,
-				vtiger_accountbillads.city AS billing_city,
-				vtiger_accountbillads.country AS billing_country,
-				vtiger_accountbillads.code AS billing_code,
-				vtiger_accountbillads.state AS billing_state,
-				vtiger_accountbillads.street AS billing_street,
-				vtiger_accountshipads.city AS shipping_city,
-				vtiger_accountshipads.country AS shipping_country,
-				vtiger_accountshipads.code AS shipping_code,
-				vtiger_accountshipads.state AS shipping_state,
-				vtiger_accountshipads.street AS shipping_street,
-				vtiger_users.user_name,
-				vtiger_users.status AS user_status
-				FROM ".$this->entity_table."
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Accounts", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM ".$this->entity_table."
 				INNER JOIN vtiger_account
 					ON vtiger_crmentity.crmid = vtiger_account.accountid
 				LEFT JOIN vtiger_accountbillads
 					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
 				LEFT JOIN vtiger_accountshipads
 					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-				LEFT JOIN vtiger_accountscf 
+				LEFT JOIN vtiger_accountscf
 					ON vtiger_accountscf.accountid = vtiger_account.accountid
+				LEFT JOIN vtiger_accountgrouprelation
+                	                ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
+	                        LEFT JOIN vtiger_groups
+                        	        ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
 				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id ";
+					ON vtiger_crmentity.smownerid = vtiger_users.id 
+				LEFT JOIN vtiger_account vtiger_account2 
+					ON vtiger_account2.accountid = vtiger_account.parentid
+				";//vtiger_account2 is added to get the Member of account
 
-		}
-		else
-		{
-			$query = "SELECT vtiger_account.*,
-					".$this->entity_table.".*,
-				vtiger_accountbillads.city AS billing_city,
-				vtiger_accountbillads.country AS billing_country,
-				vtiger_accountbillads.code AS billing_code,
-				vtiger_accountbillads.state AS billing_state,
-				vtiger_accountbillads.street AS billing_street,
-				vtiger_accountshipads.city AS shipping_city,
-				vtiger_accountshipads.country AS shipping_country,
-				vtiger_accountshipads.code AS shipping_code,
-				vtiger_accountshipads.state AS shipping_state,
-				vtiger_accountshipads.street AS shipping_street,
-				vtiger_users.user_name,
-				vtiger_users.status AS user_status
-				FROM ".$this->entity_table."
-				INNER JOIN vtiger_account
-					ON vtiger_crmentity.crmid = vtiger_account.accountid
-				LEFT JOIN vtiger_accountbillads
-					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
-				LEFT JOIN vtiger_accountshipads
-					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id ";
-		}
 
 		$where_auto = " vtiger_users.status = 'Active'
 			AND vtiger_crmentity.deleted = 0 ";
@@ -737,8 +707,18 @@ class Account extends CRMEntity {
 		else
 			$query .= "WHERE ".$where_auto;
 
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[6] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter("Accounts");
+		}
+
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
+
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
 	}

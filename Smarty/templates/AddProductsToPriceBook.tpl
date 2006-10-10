@@ -17,11 +17,19 @@ function updateAllListPrice()
 
 	var n=unitprice_array.length;	
 	var unitprice,fieldname;
+	var id;
+	var fieldinfo;
+	var checkid;
+
 	for(j=0; j<unitprice_array.length; j++)
 	{ldelim}
+		fieldinfo = fieldname_array[j].split("_");
+		id = fieldinfo[0];
+		checkid = "check_"+id;
+
 		unitprice=unitprice_array[j];
 		fieldname=fieldname_array[j];	
-		updateListPrice(unitprice,fieldname);
+		updateListPrice(unitprice,fieldname,document.getElementById(checkid));
 	{rdelim}
 {rdelim}
 
