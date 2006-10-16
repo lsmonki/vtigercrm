@@ -41,8 +41,10 @@ require_once('Smarty_setup.php');
 global $mod_strings;
 
 $total_record_count = 0;
-//echo get_module_title("", "Search Results", true); 
-if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
+
+$query_string = trim($_REQUEST['query_string']);
+if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST['query_string'])) 
+{
 
 	//module => object
 	$object_array = Array(
@@ -71,7 +73,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$search_val = $_REQUEST['query_string'];
+	$search_val = $query_string;
 	$search_module = $_REQUEST['search_module'];
 
 	getSearchModulesComboList($search_module);
