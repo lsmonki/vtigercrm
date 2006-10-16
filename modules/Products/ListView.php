@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Products.php');
+require_once('modules/Products/Product.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -56,7 +56,7 @@ if($_REQUEST['errormsg'] != '')
 }
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
-$focus = new Products();
+$focus = new Product();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();

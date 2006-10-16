@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/Campaigns/Campaigns.php');
+require_once('modules/Campaigns/Campaign.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('ticket_delete');
 
-$focus = new Campaigns();
+$focus = new Campaign();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

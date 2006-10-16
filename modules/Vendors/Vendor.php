@@ -58,9 +58,9 @@ class Vendor extends CRMEntity {
 
 	/**	Constructor which will set the column_fields in this object
 	 */
-	function Vendors() {
+	function Vendor() {
 		$this->log =LoggerManager::getLogger('vendor');
-		$this->log->debug("Entering Vendors() method ...");
+		$this->log->debug("Entering Vendor() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Vendors');
 		$this->log->debug("Exiting Vendor method ...");
@@ -75,8 +75,8 @@ class Vendor extends CRMEntity {
 		global $log,$singlepane_view;
 		$log->debug("Entering get_products(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Products/Products.php');
-		$focus = new Products();
+		require_once('modules/Products/Product.php');
+		$focus = new Product();
 
 		$button = '';
 
@@ -100,7 +100,7 @@ class Vendor extends CRMEntity {
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
-		$focus = new PurchaseOrder();
+		$focus = new Order();
 
 		$button = '';
 
@@ -123,8 +123,8 @@ class Vendor extends CRMEntity {
 		global $log,$singlepane_view;
 		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Contacts/Contacts.php');
-		$focus = new Contacts();
+		require_once('modules/Contacts/Contact.php');
+		$focus = new Contact();
 
 		$button = '';
 		if($singlepane_view == 'true')

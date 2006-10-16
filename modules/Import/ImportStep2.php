@@ -250,27 +250,27 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	if($_REQUEST['module']=='Accounts')
 	{
 		$tablename='account';
-		$focus1=new Accounts();
+		$focus1=new Account();
 	}
 	if($_REQUEST['module']=='Contacts')
 	{
 		$tablename='contactdetails';
-		$focus1=new Contacts();
+		$focus1=new Contact();
  	}
 	if($_REQUEST['module']=='Leads')
  	{
 		$tablename='leaddetails';
-		$focus1=new Leads();
+		$focus1=new Lead();
 	}
 	if($_REQUEST['module']=='Potentials')
  	{
 		$tablename='potential';
-		$focus1=new Potentials();
+		$focus1=new Potential();
 	}
 	if($_REQUEST['module']=='Products')
  	{
  		$tablename='products';
- 		$focus1=new Products();
+ 		$focus1=new Product();
  	}
 
 	

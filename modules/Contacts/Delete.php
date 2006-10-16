@@ -17,13 +17,13 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Contacts/Contacts.php');
+require_once('modules/Contacts/Contact.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('contact_delete');
 
-$focus = new Contacts();
+$focus = new Contact();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

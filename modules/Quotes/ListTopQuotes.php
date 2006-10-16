@@ -19,7 +19,7 @@
 function getTopQuotes()
 {
 	require_once("data/Tracker.php");
-	require_once('modules/Quotes/Quotes.php');
+	require_once('modules/Quotes/Quote.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
 	require_once('include/database/PearDatabase.php');
@@ -51,7 +51,7 @@ function getTopQuotes()
 			$viewid = "0";
 		}
 	}
-	$focus = new Quotes();
+	$focus = new Quote();
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";

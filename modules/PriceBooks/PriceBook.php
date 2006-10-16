@@ -51,9 +51,9 @@ class PriceBook extends CRMEntity {
 
 	/**	Constructor which will set the column_fields in this object
 	 */
-	function PriceBooks() {
+	function PriceBook() {
 		$this->log =LoggerManager::getLogger('pricebook');
-		$this->log->debug("Entering PriceBooks() method ...");
+		$this->log->debug("Entering PriceBook() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('PriceBooks');
 		$this->log->debug("Exiting PriceBook method ...");
@@ -98,8 +98,8 @@ class PriceBook extends CRMEntity {
 		global $log,$singlepane_view;
 		$log->debug("Entering get_pricebook_products(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Products/Products.php');	
-		$focus = new Products();
+		require_once('modules/Products/Product.php');	
+		$focus = new Product();
 
 		$button = '';
 

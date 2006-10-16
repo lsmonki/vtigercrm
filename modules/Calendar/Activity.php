@@ -154,7 +154,7 @@ class Activity extends CRMEntity {
                         $log->debug("Entering get_contacts(".$id.") method ...");
 			global $app_strings;
 
-			$focus = new Contacts();
+			$focus = new Contact();
 
 			$button = '';
 
@@ -177,7 +177,7 @@ class Activity extends CRMEntity {
                 $log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 
-		$focus = new Users();
+		$focus = new User();
 
 		$button = '';
 
@@ -395,8 +395,8 @@ function get_tasksforol($username)
 	global $log,$adb;
 	$log->debug("Entering get_tasksforol(".$username.") method ...");
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -447,8 +447,8 @@ function get_calendarsforol($user_name)
 	global $log,$adb;
 	$log->debug("Entering get_calendarsforol(".$user_name.") method ...");
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');

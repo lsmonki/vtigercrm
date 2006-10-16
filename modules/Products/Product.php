@@ -72,9 +72,9 @@ class Product extends CRMEntity {
 
 	/**	Constructor which will set the column_fields in this object
 	 */
-	function Products() {
+	function Product() {
 		$this->log =LoggerManager::getLogger('product');
-		$this->log->debug("Entering Products() method ...");
+		$this->log->debug("Entering Product() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Products');
 		$this->log->debug("Exiting Product method ...");
@@ -301,8 +301,8 @@ class Product extends CRMEntity {
 		global $log, $singlepane_view;
 		$log->debug("Entering get_quotes(".$id.") method ...");	
 		global $app_strings;
-		require_once('modules/Quotes/Quotes.php');	
-		$focus = new Quotes();
+		require_once('modules/Quotes/Quote.php');	
+		$focus = new Quote();
 	
 		$button = '';
 		if($singlepane_view == 'true')
@@ -345,7 +345,7 @@ class Product extends CRMEntity {
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
-		$focus = new PurchaseOrder();
+		$focus = new Order();
 
 		$button = '';
 
@@ -466,8 +466,8 @@ class Product extends CRMEntity {
 		global $log,$singlepane_view;
 		$log->debug("Entering get_product_pricebooks(".$id.") method ...");
 		global $mod_strings;
-		require_once('modules/PriceBooks/PriceBooks.php');
-		$focus = new PriceBooks();
+		require_once('modules/PriceBooks/PriceBook.php');
+		$focus = new PriceBook();
 		$button = '';
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;

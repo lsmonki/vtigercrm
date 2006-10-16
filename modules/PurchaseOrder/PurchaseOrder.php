@@ -30,7 +30,7 @@ require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
 // Account is used to store vtiger_account information.
-class PurchaseOrder extends CRMEntity {
+class Order extends CRMEntity {
 	var $log;
 	var $db;
 		
@@ -94,7 +94,7 @@ class PurchaseOrder extends CRMEntity {
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
 	 */
-	function PurchaseOrder() {
+	function Order() {
 		$this->log =LoggerManager::getLogger('PurchaseOrder');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('PurchaseOrder');

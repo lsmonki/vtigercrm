@@ -11,12 +11,12 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Vendors/Vendors.php');
+require_once('modules/Vendors/Vendor.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new Vendors();
+$focus = new Vendor();
 $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 

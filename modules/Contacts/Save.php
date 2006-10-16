@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Contacts/Contacts.php');
+require_once('modules/Contacts/Contact.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("modules/Emails/mail.php");
@@ -51,7 +51,7 @@ $log->debug("Exiting makeRandomPassword method ...");
 $local_log =& LoggerManager::getLogger('index');
 
 global $log,$adb;
-$focus = new Contacts();
+$focus = new Contact();
 
 setObjectValuesFromRequest(&$focus);
 

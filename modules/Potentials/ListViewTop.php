@@ -28,7 +28,7 @@ function getTopPotentials()
 	$log = LoggerManager::getLogger('top opportunity_list');
 	$log->debug("Entering getTopPotentials() method ...");
 	require_once("data/Tracker.php");
-	require_once('modules/Potentials/Potentials.php');
+	require_once('modules/Potentials/Opportunity.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
 

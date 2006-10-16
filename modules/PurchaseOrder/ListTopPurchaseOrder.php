@@ -47,7 +47,7 @@ function getTopPurchaseOrder()
 			$viewid = "0";
 		}
 	}
-	$focus = new PurchaseOrder();
+	$focus = new Order();
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";

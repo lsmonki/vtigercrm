@@ -15,7 +15,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Quotes/Quotes.php');
+require_once('modules/Quotes/Quote.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
@@ -33,7 +33,7 @@ if (!isset($where)) $where = "";
 
 $url_string = '';
 
-$focus = new Quotes();
+$focus = new Quote();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

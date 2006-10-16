@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Accounts.php,v 1.53 2005/04/28 08:06:45 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.53 2005/04/28 08:06:45 rank Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -26,11 +26,11 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
-require_once('modules/Contacts/Contacts.php');
-require_once('modules/Potentials/Potentials.php');
+require_once('modules/Contacts/Contact.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Notes.php');
-require_once('modules/Emails/Emails.php');
+require_once('modules/Notes/Note.php');
+require_once('modules/Emails/Email.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -96,7 +96,7 @@ class Account extends CRMEntity {
 	var $default_order_by = 'accountname';
 	var $default_sort_order = 'ASC';
 
-	function Accounts() {
+	function Account() {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Accounts');
@@ -147,7 +147,7 @@ class Account extends CRMEntity {
                 $log->debug("Entering get_contacts(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Contacts();
+		$focus = new Contact();
 
 		$button = '';
 		if(isPermitted("Contacts",1,"") == 'yes')
@@ -191,7 +191,7 @@ class Account extends CRMEntity {
                 $log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Potentials();
+		$focus = new Potential();
 		$button = '';
 
 		if(isPermitted("Potentials",1,"") == 'yes')
@@ -388,9 +388,9 @@ class Account extends CRMEntity {
 		global $log, $singlepane_view;
                 $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Quotes/Quotes.php');
+		require_once('modules/Quotes/Quote.php');
 
-		$focus = new Quotes();
+		$focus = new Quote();
 
 		$button = '';
 		if(isPermitted("Quotes",1,"") == 'yes')
@@ -627,10 +627,10 @@ class Account extends CRMEntity {
 	{
 		global $log, $singlepane_view;
                 $log->debug("Entering get_products(".$id.") method ...");
-		require_once('modules/Products/Products.php');
+		require_once('modules/Products/Product.php');
 		global $app_strings;
 
-		$focus = new Products();
+		$focus = new Product();
 
 		$button = '';
 

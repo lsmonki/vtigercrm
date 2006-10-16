@@ -863,15 +863,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$nemail=count($realid);
 
 				if ($pmodule=='Accounts'){
-					require_once('modules/Accounts/Accounts.php');
-					$myfocus = new Accounts();
+					require_once('modules/Accounts/Account.php');
+					$myfocus = new Account();
 					$myfocus->retrieve_entity_info($entityid,"Accounts");
 					$fullname=br2nl($myfocus->column_fields['accountname']);
 					$account_selected = 'selected';
 				}
 				elseif ($pmodule=='Contacts'){
-					require_once('modules/Contacts/Contacts.php');
-					$myfocus = new Contacts();
+					require_once('modules/Contacts/Contact.php');
+					$myfocus = new Contact();
 					$myfocus->retrieve_entity_info($entityid,"Contacts");
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);
@@ -879,8 +879,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$contact_selected = 'selected';
 				}
 				elseif ($pmodule=='Leads'){
-					require_once('modules/Leads/Leads.php');
-					$myfocus = new Leads();
+					require_once('modules/Leads/Lead.php');
+					$myfocus = new Lead();
 					$myfocus->retrieve_entity_info($entityid,"Leads");
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);

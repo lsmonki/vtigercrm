@@ -15,12 +15,12 @@
 
 
 require_once('include/ComboUtil.php');
-require_once('modules/Leads/Leads.php');
+require_once('modules/Leads/Lead.php');
 global $app_list_strings;
 global $app_strings;
 global $current_user;
 
-$focus = new Leads();
+$focus = new Lead();
 $idlist = $_POST['idlist'];
 //echo $idlist;
 

@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Campaigns/Campaigns.php');
+require_once('modules/Campaigns/Campaign.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new Campaigns();
+		$modObj = new Campaign();
 		$modObj->retrieve_entity_info($crmid,"Campaigns");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;

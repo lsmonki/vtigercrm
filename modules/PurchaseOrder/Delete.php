@@ -24,7 +24,7 @@ global $mod_strings;
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('order_delete');
 
-$focus = new PurchaseOrder();
+$focus = new Order();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

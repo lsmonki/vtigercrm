@@ -14,7 +14,7 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Leads/Leads.php');
+require_once('modules/Leads/Lead.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -23,7 +23,7 @@ require_once('include/FormValidationUtil.php');
 
 global $mod_strings,$app_strings,$theme,$currentModule;
 
-$focus = new Leads();
+$focus = new Lead();
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {

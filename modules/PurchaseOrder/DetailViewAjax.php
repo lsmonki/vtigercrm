@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new PurchaseOrder();
+		$modObj = new Order();
 		$modObj->retrieve_entity_info($crmid,"PurchaseOrder");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;

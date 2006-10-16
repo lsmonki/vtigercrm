@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Quotes/Quotes.php');
+require_once('modules/Quotes/Quote.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new Quotes();
+		$modObj = new Quote();
 		$modObj->retrieve_entity_info($crmid,"Quotes");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;

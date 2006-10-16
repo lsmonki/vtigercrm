@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Accounts/Accounts.php');
+require_once('modules/Accounts/Account.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
      $fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
      if($crmid != "")
 	 {
-	     $acntObj = new Accounts();
+	     $acntObj = new Account();
 	     $acntObj->retrieve_entity_info($crmid,"Accounts");
 	     $acntObj->column_fields[$fieldname] = $fieldvalue;
 	     if($fieldname == 'annual_revenue')//annual revenue converted to dollar value while saving

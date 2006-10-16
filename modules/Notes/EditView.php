@@ -22,12 +22,12 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Notes/Note.php');
 require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new Notes();
+$focus = new Note();
 $smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['upload_error'] == true)

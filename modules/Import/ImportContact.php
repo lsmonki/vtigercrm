@@ -18,7 +18,7 @@
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-require_once('modules/Contacts/Contacts.php');
+require_once('modules/Contacts/Contact.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
@@ -169,7 +169,7 @@ class ImportContact extends Contact {
                 $arr = array();
 
 		// check if it already exists
-                $focus = new Accounts();
+                $focus = new Account();
 
 		$query = '';
 

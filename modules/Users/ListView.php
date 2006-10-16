@@ -24,7 +24,7 @@ $image_path=$theme_path."images/";
 global $current_language;
 $mod_strings = return_module_language($current_language,'Users');
 $category = getParentTab();
-$focus = new Users();
+$focus = new User();
 $smarty = new vtigerCRM_Smarty;
 $no_of_users=UserCount();
 //Retreiving the start value from request

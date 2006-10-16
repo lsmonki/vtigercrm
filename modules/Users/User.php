@@ -21,7 +21,7 @@
  ********************************************/
 
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Users.php,v 1.10 2005/04/19 14:40:48 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/User.php,v 1.10 2005/04/19 14:40:48 ray Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -33,7 +33,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Contacts/Contacts.php');
+require_once('modules/Contacts/Contact.php');
 require_once('data/Tracker.php');
 
 // User is used to store customer information.
@@ -155,11 +155,11 @@ class User {
   	  *
  	*/
 	
-	function Users() {
+	function User() {
 		$this->log = LoggerManager::getLogger('user');
-		$this->log->debug("Entering Users() method ...");
+		$this->log->debug("Entering User() method ...");
 		$this->db = new PearDatabase();
-		$this->log->debug("Exiting Users() method ...");
+		$this->log->debug("Exiting User() method ...");
 
 	}
 

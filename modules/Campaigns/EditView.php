@@ -11,12 +11,12 @@
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
-require_once('modules/Campaigns/Campaigns.php');
+require_once('modules/Campaigns/Campaign.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$currentModule,$theme;
 
-$focus = new Campaigns();
+$focus = new Campaign();
 $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 

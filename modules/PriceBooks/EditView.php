@@ -11,12 +11,12 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/PriceBooks/PriceBooks.php');
+require_once('modules/PriceBooks/PriceBook.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new PriceBooks();
+$focus = new PriceBook();
 $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 

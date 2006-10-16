@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('modules/Leads/Leads.php');
+require_once('modules/Leads/Lead.php');
 //Getting the Parameters from the ConvertLead Form
 $id = $_REQUEST["record"];
 
@@ -39,7 +39,7 @@ if($check_unit[1] == "")
         $potential_name = $check_unit[0];
 
 //Retrieve info from all the vtiger_tables related to leads
-$focus = new Leads();
+$focus = new Lead();
 $focus->retrieve_entity_info($id,"Leads");
 
 //get all the lead related columns 

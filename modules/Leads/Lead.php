@@ -19,9 +19,9 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Campaigns/Campaigns.php');
-require_once('modules/Notes/Notes.php');
-require_once('modules/Emails/Emails.php');
+require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Notes/Note.php');
+require_once('modules/Emails/Email.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
@@ -84,9 +84,9 @@ class Lead extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
-	function Leads()	{
+	function Lead()	{
 		$this->log = LoggerManager::getLogger('lead');
-		$this->log->debug("Entering Leads() method ...");
+		$this->log->debug("Entering Lead() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Leads');
 		$this->log->debug("Exiting Lead method ...");
@@ -230,7 +230,7 @@ function get_campaigns($id)
 	global $log, $singlepane_view;
 	$log->debug("Entering get_campaigns(".$id.") method ...");
 	global $mod_strings;
-	$focus = new Campaigns();
+	$focus = new Campaign();
 	$button = '';
 
 	if($singlepane_view == 'true')
@@ -258,7 +258,7 @@ function get_emails($id)
 	global $mod_strings;
 	require_once('include/RelatedListView.php');
 
-	$focus = new Emails();
+	$focus = new Email();
 
 	$button = '';
 
@@ -358,11 +358,11 @@ function get_products($id)
 {
 	global $log, $singlepane_view;
 	$log->debug("Entering get_products(".$id.") method ...");
-	require_once('modules/Products/Products.php');
+	require_once('modules/Products/Product.php');
 	global $mod_strings;
 	global $app_strings;
 
-	$focus = new Products();
+	$focus = new Product();
 
 	$button = '';
 

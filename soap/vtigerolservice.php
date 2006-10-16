@@ -280,9 +280,9 @@ $server->register(
 
 function SearchContactsByEmail($username,$emailaddress)
 {
-     require_once('modules/Contacts/Contacts.php');
+     require_once('modules/Contacts/Contact.php');
      
-     $seed_contact = new Contacts();
+     $seed_contact = new Contact();
      $output_list = Array();
      
      $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
@@ -308,17 +308,17 @@ function SearchContactsByEmail($username,$emailaddress)
 function AddMessageToContact($username,$contactid,$msgdtls)
 {
 	global $adb;
-	require_once('modules/Users/Users.php');
-	require_once('modules/Emails/Emails.php');
+	require_once('modules/Users/User.php');
+	require_once('modules/Emails/Email.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	
 	foreach($msgdtls as $msgdtl)
 	{
     if(isset($msgdtl))
     {    
-        $email = new Emails();
+        $email = new Email();
         //$log->debug($msgdtls['contactid']);
         $email_body = str_replace("'", "''", $msgdtl['body']);
         $email_subject = str_replace("'", "''",$msgdtl['subject']);
@@ -356,11 +356,11 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 function LoginToVtiger($userid,$password)
 {
 	global $adb;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	
 	$return_access = "FALSE";
 	
-	$objuser = new Users();
+	$objuser = new User();
 	
 	if($password != "")
 	{
@@ -385,8 +385,8 @@ function LoginToVtiger($userid,$password)
 function CheckEmailPermission($username)
 {
 	global $current_user,$log;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -403,8 +403,8 @@ function CheckEmailPermission($username)
 function CheckContactPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -421,8 +421,8 @@ function CheckContactPermission($username)
 function CheckActivityPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -439,12 +439,12 @@ function CheckActivityPermission($username)
 function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username)
 {
 	global $adb;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('include/utils/utils.php');
 
 	$date_var = date('YmdHis');
 
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 
 	$crmid = $adb->getUniqueID("vtiger_crmentity");
@@ -483,9 +483,9 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 function GetContacts($username)
 {
 	global $adb;
-	require_once('modules/Contacts/Contacts.php');
+	require_once('modules/Contacts/Contact.php');
 
-	$seed_contact = new Contacts();
+	$seed_contact = new Contact();
 	$output_list = Array();
 
 	$query = $seed_contact->get_contactsforol($username);
@@ -564,15 +564,15 @@ function AddContacts($username,$cntdtls)
 {
 	global $adb;
 	global $current_user;
-	require_once('modules/Users/Users.php');
-	require_once('modules/Contacts/Contacts.php');
+	require_once('modules/Users/User.php');
+	require_once('modules/Contacts/Contact.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
-	$contact = new Contacts();
+	$contact = new Contact();
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -646,15 +646,15 @@ function UpdateContacts($username,$cntdtls)
 {
 	global $adb;
 	global $current_user;
-	require_once('modules/Users/Users.php');
-	require_once('modules/Contacts/Contacts.php');
+	require_once('modules/Users/User.php');
+	require_once('modules/Contacts/Contact.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	
-	$contact = new Contacts();
+	$contact = new Contact();
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
@@ -727,15 +727,15 @@ function UpdateContacts($username,$cntdtls)
 function DeleteContacts($username,$crmid)
 {
 	global $current_user;
-	require_once('modules/Users/Users.php');
-	require_once('modules/Contacts/Contacts.php');
+	require_once('modules/Users/User.php');
+	require_once('modules/Contacts/Contact.php');
 
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 
-	$contact = new Contacts();
+	$contact = new Contact();
 	$contact->id = $crmid;
 	$contact->mark_deleted($contact->id);
 
@@ -760,8 +760,8 @@ function retrieve_account_id($account_name,$user_id)
 	$rows_count =  $db->getRowCount($result);
 	if($rows_count==0)
 	{
-		require_once('modules/Accounts/Accounts.php');
-		$account = new Accounts();
+		require_once('modules/Accounts/Account.php');
+		$account = new Account();
 		$account->column_fields[accountname] = $account_name;
 		$account->column_fields[assigned_user_id]=$user_id;
 		//$account->saveentity("Accounts");
@@ -856,10 +856,10 @@ function GetTasks($username)
 function AddTasks($username,$taskdtls)
 {
 	global $current_user,$adb;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -937,10 +937,10 @@ function AddTasks($username,$taskdtls)
 function UpdateTasks($username,$taskdtls)
 {
 	global $current_user,$adb;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -1022,10 +1022,10 @@ function UpdateTasks($username,$taskdtls)
 function DeleteTasks($username,$crmid)
 {
 	global $current_user;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	   
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -1091,10 +1091,10 @@ function GetClndr($username)
 function AddClndr($username,$clndrdtls)
 {
 	global $current_user,$adb;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -1159,10 +1159,10 @@ function UpdateClndr($username,$clndrdtls)
 {
 	global $current_user;
 	global $adb,$log;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -1228,10 +1228,10 @@ function UpdateClndr($username,$clndrdtls)
 function DeleteClndr($username,$crmid)
 {
 	global $current_user;
-	require_once('modules/Users/Users.php');
+	require_once('modules/Users/User.php');
 	require_once('modules/Calendar/Activity.php');
 	   
-	$seed_user = new Users();
+	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");

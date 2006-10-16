@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contacts.php,v 1.70 2005/04/27 11:21:49 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.70 2005/04/27 11:21:49 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,11 +25,11 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
-require_once('modules/Potentials/Potentials.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Campaigns/Campaigns.php');
-require_once('modules/Notes/Notes.php');
-require_once('modules/Emails/Emails.php');
+require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Notes/Note.php');
+require_once('modules/Emails/Email.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -125,7 +125,7 @@ class Contact extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
-	function Contacts() {
+	function Contact() {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Contacts');
@@ -334,7 +334,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Potentials();
+		$focus = new Potential();
 		$button = '';
 
 		if(isPermitted("Potentials",1,"") == 'yes')
@@ -486,8 +486,8 @@ class Contact extends CRMEntity {
 		global $log, $singlepane_view;
                 $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Quotes/Quotes.php');		
-		$focus = new Quotes();
+		require_once('modules/Quotes/Quote.php');		
+		$focus = new Quote();
 	
 		$button = '';
 		if(isPermitted("Quotes",1,"") == 'yes')
@@ -540,8 +540,8 @@ class Contact extends CRMEntity {
 		 global $log, $singlepane_view;
 		$log->debug("Entering get_products(".$id.") method ...");
 		 global $app_strings;
-		 require_once('modules/Products/Products.php');
-		 $focus = new Products();
+		 require_once('modules/Products/Product.php');
+		 $focus = new Product();
 		 $button = '';
 
 		 if(isPermitted("Products",1,"") == 'yes')
@@ -570,7 +570,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		 global $app_strings;
 		 require_once('modules/PurchaseOrder/PurchaseOrder.php');
-		 $focus = new PurchaseOrder();
+		 $focus = new Order();
 
 		 $button = '';
 
@@ -600,7 +600,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_emails(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Emails();
+		$focus = new Email();
 
 		$button = '';
 
@@ -631,7 +631,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_campaigns(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Campaigns();
+		$focus = new Campaign();
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 		else
@@ -735,8 +735,8 @@ function get_searchbyemailid($username,$emailaddress)
 {
 	global $log;
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -775,8 +775,8 @@ function get_contactsforol($user_name)
 {
 	global $log,$adb;
 	global $current_user;
-	require_once("modules/Users/Users.php");
-	$seed_user=new Users();
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
