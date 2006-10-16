@@ -183,6 +183,8 @@ if(is_array($saved_map_lists))
 	}
 }
 $map_list_combo .= '</select>';
+//This link is Delete link for the selected mapping
+$map_list_combo .= "&nbsp;&nbsp;&nbsp;<span id='delete_mapping' style='visibility:hidden;'><a href='javascript:; deleteMapping();'>Del</a></span>";
 $smarty->assign("SAVED_MAP_LISTS",$map_list_combo);
 
 

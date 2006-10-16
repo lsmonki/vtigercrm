@@ -99,6 +99,14 @@ class ImportMap extends SugarBean
 		$this->content = "".$this->db->getEmptyBlob()."";
                 $this->has_header = $has_header;
                 $this->deleted = 0;
+
+		//check whether this map name is already exist, if yes then overwrite the existing one, else create new
+	        $res = $this->db->query("select id from vtiger_import_maps where name='".trim($name)."'");
+		if($this->db->num_rows($res) > 0)
+		{
+			$this->id = $this->db->query_result($res,0,'id');
+		}
+
                 $returnid = $this->save();
 
 		$this->db->updateBlob($this->table_name,"content","name='".$name."' and module='".$module."'",$content);
@@ -180,7 +188,7 @@ class ImportMap extends SugarBean
 	 */
 	function getSavedMappingsList($module)
 	{
-		$query = "SELECT * FROM $this->table_name where module='".$module."'";
+		$query = "SELECT * FROM $this->table_name where module='".$module."' and deleted=0";
 		$result = $this->db->query($query,true," Error: ");
 		$map_lists = array();
 
@@ -197,7 +205,7 @@ class ImportMap extends SugarBean
 	 */
 	function getSavedMappingContent($mapid)
 	{
-		$query = "SELECT * FROM $this->table_name where id='".$mapid."'";
+		$query = "SELECT * FROM $this->table_name where id='".$mapid."' and deleted=0";
 		$result = $this->db->query($query,true," Error: ");
 		$mapping_arr = array();
 

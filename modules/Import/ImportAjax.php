@@ -12,6 +12,14 @@
 require_once('Smarty_setup.php');
 include('modules/Import/ImportMap.php');
 include('modules/Import/Forms.php');
+
+//This is to delete the map
+if($_REQUEST['delete_map'] != '')
+{
+	$query = "update vtiger_import_maps set deleted=1 where id = ".$_REQUEST['mapping'];
+	$adb->query($query);
+}
+
 $mapping_file = new ImportMap();
 $mapping_arr = $mapping_file->getSavedMappingContent($_REQUEST['mapping']);
 
