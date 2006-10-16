@@ -357,7 +357,7 @@ function return_application_language($language)
  * If you are in the current module, do not call this function unless you are loading it for the first time */
 function return_module_language($language, $module)
 {
-	global $mod_strings, $default_language, $log, $currentModule, $translation_string_prefix;
+	global $mod_strings, $mod_list_strings, $default_language, $log, $currentModule, $translation_string_prefix;
 
 	if($currentModule == $module && isset($mod_strings) && $mod_strings != null)
 	{
