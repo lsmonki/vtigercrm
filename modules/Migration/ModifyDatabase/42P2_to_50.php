@@ -1257,7 +1257,7 @@ $insert_query_array9 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_contactdetails:title:title:Contacts_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:accountname:accountname:Contacts_Account_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:I')",
 		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_contactdetails:email:email:Contacts_Email:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Office_Phone:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
