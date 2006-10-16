@@ -51,13 +51,13 @@ if($_REQUEST['smodule'] != '')
 	$mailbox = 'INBOX';
 }
 
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Email();
+$focus = new Emails();
 
 global $current_user;
 setObjectValuesFromRequest(&$focus);

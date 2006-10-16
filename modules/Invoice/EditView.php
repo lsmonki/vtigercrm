@@ -23,9 +23,9 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -43,7 +43,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
     {
 	$quoteid = $_REQUEST['record'];
-	$quote_focus = new Quote();
+	$quote_focus = new Quotes();
 	$quote_focus->id = $quoteid;
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
@@ -179,7 +179,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 {
-	$potfocus = new Potential();
+	$potfocus = new Potentials();
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
         $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
 	
@@ -194,8 +194,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
  
  
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice")){
-	require_once('modules/Accounts/Account.php');
-	$acct_focus = new Account();
+	require_once('modules/Accounts/Accounts.php');
+	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];

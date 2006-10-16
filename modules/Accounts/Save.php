@@ -21,14 +21,14 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/logging.php');
 //require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 global $log;
-$focus = new Account();
+$focus = new Accounts();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);

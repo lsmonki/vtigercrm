@@ -20,14 +20,14 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 require_once('user_privileges/audit_trail.php');
 
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);

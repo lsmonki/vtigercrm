@@ -10,7 +10,7 @@
   ********************************************************************************/
 	      
 require_once('include/logging.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -24,7 +24,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$userObj = new User();
+		$userObj = new Users();
 		$userObj->retrieve_entity_info($crmid,"Users");
 		$userObj->column_fields[$fieldname] = $fieldvalue;
 		$userObj->id = $crmid;

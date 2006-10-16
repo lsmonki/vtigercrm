@@ -11,7 +11,7 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/utils.php');
 //Redirecting Header for single page layout 
@@ -23,7 +23,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Campaign();
+$focus = new Campaigns();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {

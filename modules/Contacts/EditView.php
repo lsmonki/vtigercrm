@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -39,7 +39,7 @@ $decode_val=base64_decode($encode_val);
  $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
 //end
 
-$focus = new Contact();
+$focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
@@ -68,9 +68,9 @@ if($image_error=="true")
 
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']=='')
 {
-        require_once('modules/Accounts/Account.php');
+        require_once('modules/Accounts/Accounts.php');
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
-        $acct_focus = new Account();
+        $acct_focus = new Accounts();
         $acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
         $focus->column_fields['fax']=$acct_focus->column_fields['fax'];
         $focus->column_fields['otherphone']=$acct_focus->column_fields['phone'];

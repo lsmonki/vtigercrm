@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -32,7 +32,7 @@ global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Email();
+$focus = new Emails();
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 

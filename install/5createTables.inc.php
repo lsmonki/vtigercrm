@@ -22,14 +22,14 @@ $new_tables = 0;
 require_once('config.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
-require_once('modules/Leads/Lead.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Leads/Leads.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Users/User.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Users/Users.php');
 require_once('modules/Import/ImportMap.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Users/LoginHistory.php');
@@ -66,7 +66,7 @@ function create_default_users() {
         global $default_user_is_admin;
 
         // create default admin user
-    	$user = new User();
+    	$user = new Users();
         $user->column_fields["last_name"] = 'Administrator';
         $user->column_fields["user_name"] = 'admin';
         $user->column_fields["status"] = 'Active';
@@ -122,7 +122,7 @@ function create_default_users() {
 
 
 	//Creating the Standard User
-    	$user = new User();
+    	$user = new Users();
         $user->column_fields["last_name"] = 'StandardUser';
         $user->column_fields["user_name"] = 'standarduser';
         $user->column_fields["is_admin"] = 'off';

@@ -10,9 +10,9 @@
  ********************************************************************************/
 //query the specific vtiger_table and then get the data and write the data here 
 require_once('include/database/PearDatabase.php');
-include_once('modules/Contacts/Contact.php');
-include_once('modules/Leads/Lead.php');
-include_once('modules/Users/User.php');
+include_once('modules/Contacts/Contacts.php');
+include_once('modules/Leads/Leads.php');
+include_once('modules/Users/Users.php');
 global $log;
 
 //download the template file and store it in some specific location
@@ -60,11 +60,11 @@ $recordid = $_REQUEST['entityid'];
 //get the module
 if($module == 'leads')
 {
-  $focus = new Lead();
+  $focus = new Leads();
 }
 else
 {
-  $focus = new Contact();
+  $focus = new Contacts();
 }
 
 $focus->retrieve_entity_info($recordid,$module);

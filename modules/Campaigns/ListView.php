@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
@@ -28,7 +28,7 @@ global $currentModule,$theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$focus = new Campaign();
+$focus = new Campaigns();
 $category = getParentTab();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();

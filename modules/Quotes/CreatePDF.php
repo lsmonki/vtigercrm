@@ -11,7 +11,7 @@
 
 
 require_once('include/fpdf/pdf.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('include/database/PearDatabase.php');
 
 global $adb,$app_strings;
@@ -25,7 +25,7 @@ $endpage="1";
 global $products_per_page;
 $products_per_page="6";
 
-$focus = new Quote();
+$focus = new Quotes();
 $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
 $account_name = getAccountName($focus->column_fields[account_id]);
 

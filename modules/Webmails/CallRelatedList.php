@@ -11,7 +11,7 @@
 
 global $current_user;
 require_once('Smarty_setup.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('data/Tracker.php');

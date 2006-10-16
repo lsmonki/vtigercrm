@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
@@ -66,7 +66,7 @@ if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
 
-$focus = new Note();
+$focus = new Notes();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

@@ -21,11 +21,11 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Vendors/Vendor.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
-$focus = new Vendor();
+$focus = new Vendors();
 setObjectValuesFromRequest(&$focus);
 
 $focus->save("Vendors");

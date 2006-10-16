@@ -10,11 +10,11 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new Product();
+$focus = new Products();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	//Display the error message

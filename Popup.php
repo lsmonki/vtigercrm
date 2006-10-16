@@ -33,8 +33,8 @@ $popuptype = $_REQUEST["popuptype"];
 switch($currentModule)
 {
 	case 'Contacts':
-		require_once("modules/$currentModule/Contact.php");
-		$focus = new Contact();
+		require_once("modules/$currentModule/Contacts.php");
+		$focus = new Contacts();
 		$log = LoggerManager::getLogger('contact_list');
 		$comboFieldNames = Array('leadsource'=>'leadsource_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
@@ -47,8 +47,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 		break;
 	case 'Campaigns':
-		require_once("modules/$currentModule/Campaign.php");
-		$focus = new Campaign();
+		require_once("modules/$currentModule/Campaigns.php");
+		$focus = new Campaigns();
 		$log = LoggerManager::getLogger('campaign_list');
 		$comboFieldNames = Array('campaignstatus'=>'campaignstatus_dom',
 					 'campaigntype'=>'campaigntype_dom');
@@ -60,8 +60,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','campaignname','true','basic',$popuptype,"","","");
 		break;
 	case 'Accounts':
-		require_once("modules/$currentModule/Account.php");
-		$focus = new Account();
+		require_once("modules/$currentModule/Accounts.php");
+		$focus = new Accounts();
 		$log = LoggerManager::getLogger('account_list');
 		$comboFieldNames = Array('accounttype'=>'account_type_dom'
 				,'industry'=>'industry_dom');
@@ -74,8 +74,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','accountname','true','basic',$popuptype,"","","");
 		break;
 	case 'Leads':
-		require_once("modules/$currentModule/Lead.php");
-		$focus = new Lead();
+		require_once("modules/$currentModule/Leads.php");
+		$focus = new Leads();
 		$log = LoggerManager::getLogger('contact_list');
 		$comboFieldNames = Array('leadsource'=>'leadsource_dom'
 				,'leadstatus'=>'leadstatus_dom'
@@ -91,8 +91,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 		break;
 	case 'Potentials':
-		require_once("modules/$currentModule/Opportunity.php");
-		$focus = new Potential();
+		require_once("modules/$currentModule/Potentials.php");
+		$focus = new Potentials();
 		$log = LoggerManager::getLogger('potential_list');
 		$comboFieldNames = Array('leadsource'=>'leadsource_dom'
 				,'opportunity_type'=>'opportunity_type_dom'
@@ -104,8 +104,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','potentialname','true','basic',$popuptype,"","","");
 		break;
 	case 'Quotes':
-		require_once("modules/$currentModule/Quote.php");	
-		$focus = new Quote();
+		require_once("modules/$currentModule/Quotes.php");	
+		$focus = new Quotes();
 		$log = LoggerManager::getLogger('quotes_list');
 		$comboFieldNames = Array('quotestage'=>'quotestage_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
@@ -121,8 +121,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'Products':
-		require_once("modules/$currentModule/Product.php");
-		$focus = new Product();
+		require_once("modules/$currentModule/Products.php");
+		$focus = new Products();
 		$smarty->assign("SINGLE_MOD",'Product');
 		if(isset($_REQUEST['curr_row']))
 		{
@@ -135,8 +135,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","","");
 		break;
 	case 'Vendors':
-		require_once("modules/$currentModule/Vendor.php");
-		$focus = new Vendor();
+		require_once("modules/$currentModule/Vendors.php");
+		$focus = new Vendors();
 		$smarty->assign("SINGLE_MOD",'Vendor');
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','vendorname','true','basic',$popuptype,"","","");
 		break;
@@ -150,15 +150,15 @@ switch($currentModule)
 		break;
 	case 'PurchaseOrder':
 		require_once("modules/$currentModule/PurchaseOrder.php");
-		$focus = new Order();
+		$focus = new PurchaseOrder();
 		$smarty->assign("SINGLE_MOD",'PurchaseOrder');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'PriceBooks':
-		require_once("modules/$currentModule/PriceBook.php");
-		$focus = new PriceBook();
+		require_once("modules/$currentModule/PriceBooks.php");
+		$focus = new PriceBooks();
 		$smarty->assign("SINGLE_MOD",'PriceBook');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
@@ -175,8 +175,8 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","","");
 		break;
 	case 'Users':
-                require_once("modules/$currentModule/User.php");
-                $focus = new User();
+                require_once("modules/$currentModule/Users.php");
+                $focus = new Users();
                 $smarty->assign("SINGLE_MOD",'Users');
                 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
                     $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);

@@ -14,7 +14,7 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
@@ -25,7 +25,7 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
     global $log;
-$focus = new Lead();
+$focus = new Leads();
 
 if(isset($_REQUEST['record']))
 {

@@ -17,12 +17,12 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('contact_delete');
 
-$focus = new Potential();
+$focus = new Potentials();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the opportunity.");

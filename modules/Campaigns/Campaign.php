@@ -18,8 +18,8 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Leads/Leads.php');
 require_once('user_privileges/default_module_view.php');
 
 class Campaign extends CRMEntity {
@@ -66,7 +66,7 @@ class Campaign extends CRMEntity {
 			'Campaign Type'=>'campaigntype',
 			);
 
-	function Campaign() 
+	function Campaigns() 
 	{
 		$this->log =LoggerManager::getLogger('campaign');
 		$this->db = new PearDatabase();
@@ -120,7 +120,7 @@ class Campaign extends CRMEntity {
 		$log->debug("Entering get_contacts(".$id.") method ...");
                 global $mod_strings;
 
-                $focus = new Contact();
+                $focus = new Contacts();
 		$button = '';
 
 		if($singlepane_view == 'true')
@@ -145,7 +145,7 @@ class Campaign extends CRMEntity {
                 $log->debug("Entering get_leads(".$id.") method ...");
                 global $mod_strings;
 
-                $focus = new Lead();
+                $focus = new Leads();
 
                 $button = '';
 		if($singlepane_view == 'true')
@@ -169,7 +169,7 @@ class Campaign extends CRMEntity {
 		$log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Potential();
+		$focus = new Potentials();
 
 		$button = '';
 		if($singlepane_view == 'true')

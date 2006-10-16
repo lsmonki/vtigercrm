@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
@@ -30,7 +30,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 //Retreive the list of PriceBooks
 $list_query = getListQuery("PriceBooks");

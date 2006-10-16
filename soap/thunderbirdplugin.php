@@ -13,7 +13,7 @@ require_once("config.php");
 require_once('include/logging.php');
 require_once('include/nusoap/nusoap.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 
 $log = &LoggerManager::getLogger('thunderbirdplugin');
 
@@ -173,9 +173,9 @@ $server->wsdl->addComplexType(
 
 function SearchContactsByEmail($username,$emailaddress)
 {
-     require_once('modules/Contacts/Contact.php');
+     require_once('modules/Contacts/Contacts.php');
 
-     $seed_contact = new Contact();
+     $seed_contact = new Contacts();
      $output_list = Array();
 
      $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
@@ -201,13 +201,13 @@ function SearchContactsByEmail($username,$emailaddress)
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
 	global $adb;
-	require_once('modules/Users/User.php');
-	require_once('modules/Emails/Email.php');
+	require_once('modules/Users/Users.php');
+	require_once('modules/Emails/Emails.php');
 
-	$seed_user = new User();
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 
-	$email = new Email();
+	$email = new Emails();
 	//$log->debug($msgdtls['contactid']);
 	$emailbody = str_replace("'", "''", $email_body);
 	$emailsubject = str_replace("'", "''",$email_subject);
@@ -241,9 +241,9 @@ function GetContacts($username)
 {
 	global $adb;
 	global $log;
-	require_once('modules/Contacts/Contact.php');
+	require_once('modules/Contacts/Contacts.php');
 
-	$seed_contact = new Contact();
+	$seed_contact = new Contacts();
 	$output_list = Array();
 
 	$query = $seed_contact->get_contactsforol($username);
@@ -332,8 +332,8 @@ function retrieve_account_id($account_name,$user_id)
 	$rows_count =  $db->getRowCount($result);
 	if($rows_count==0)
 	{
-		require_once('modules/Accounts/Account.php');
-		$account = new Account();
+		require_once('modules/Accounts/Accounts.php');
+		$account = new Accounts();
 		$account->column_fields[accountname] = $account_name;
 		$account->column_fields[assigned_user_id]=$user_id;
 		//$account->saveentity("Accounts");
@@ -360,10 +360,10 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 {
 	global $adb;
 	global $current_user;
-	require_once('modules/Users/User.php');
-	require_once('modules/Contacts/Contact.php');
+	require_once('modules/Users/Users.php');
+	require_once('modules/Contacts/Contacts.php');
 
-	$seed_user = new User();
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -384,7 +384,7 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   }
 
-	$contact = new Contact();
+	$contact = new Contacts();
 	$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
 	$contact->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
@@ -418,10 +418,10 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 {
 	global $adb;
 	global $current_user;
-	require_once('modules/Users/User.php');
-	require_once('modules/Leads/Lead.php');
+	require_once('modules/Users/Users.php');
+	require_once('modules/Leads/Leads.php');
 
-	$seed_user = new User();
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -442,7 +442,7 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
       $permitted_lists[] = $adb->query_result($result1,$i,'fieldname');
   }
 
-	$Lead = new Lead();
+	$Lead = new Leads();
 	$Lead->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$Lead->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
 	$Lead->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
@@ -478,8 +478,8 @@ function create_session($user_name, $password)
 {
   global $adb,$log;
   $return_access = 'failure';
-  require_once('modules/Users/User.php');
-	$objuser = new User();
+  require_once('modules/Users/Users.php');
+	$objuser = new Users();
   if($password != "" && $user_name != '')
 	{
 		$objuser->column_fields['user_name'] = $user_name;
@@ -511,8 +511,8 @@ function end_session($user_name)
 function CheckContactPerm($user_name)
 {
   global $current_user;
-	require_once('modules/Users/User.php');
-	$seed_user = new User();
+	require_once('modules/Users/Users.php');
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
@@ -528,8 +528,8 @@ function CheckContactPerm($user_name)
 function CheckContactViewPerm($user_name)
 {
   global $current_user,$log;
-	require_once('modules/Users/User.php');
-	$seed_user = new User();
+	require_once('modules/Users/Users.php');
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");

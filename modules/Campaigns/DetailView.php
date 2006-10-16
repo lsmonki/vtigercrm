@@ -11,12 +11,12 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new Campaign();
+$focus = new Campaigns();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!= null ) 
 {

@@ -20,7 +20,7 @@
 require_once('include/logging.php');
 require_once('database/DatabaseConnection.php');
 require_once('modules/Users/LoginHistory.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('config.php');
 require_once('include/db_backup/backup.php');
 require_once('include/db_backup/ftp.php');

@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -37,7 +37,7 @@ global $currentModule;
 global $app_strings;
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
 if(!empty($_REQUEST['record'])) {
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');

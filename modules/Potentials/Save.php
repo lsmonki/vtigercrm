@@ -20,13 +20,13 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Potential();
+$focus = new Potentials();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);

@@ -21,13 +21,13 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('include/logging.php');
 require_once('include/upload_file.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Note();
+$focus = new Notes();
 
 setObjectValuesFromRequest(&$focus);
 
