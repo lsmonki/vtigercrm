@@ -1385,8 +1385,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "specific_account_address")
 				{
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
@@ -1394,8 +1394,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "specific_contact_account_address")
 				{
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
@@ -1405,8 +1405,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				elseif($popuptype == "specific_potential_account_address")
 				{
 					$acntid = $adb->query_result($list_result,$list_result_count,"accountid");
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($acntid,"Accounts");
 					$account_name = getAccountName($acntid);
 
@@ -1461,8 +1461,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}	
 				elseif($popuptype == "specific_vendor_address")
 				{
-					require_once('modules/Vendors/Vendor.php');
-					$acct_focus = new Vendor();
+					require_once('modules/Vendors/Vendors.php');
+					$acct_focus = new Vendors();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendors");
 
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['street']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'"); window.close()\'>'.$temp_val.'</a>';

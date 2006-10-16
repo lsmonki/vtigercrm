@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Opportunity.php,v 1.65 2005/04/28 08:08:27 rank Exp $ 
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Potentials.php,v 1.65 2005/04/28 08:08:27 rank Exp $ 
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,10 +25,10 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -96,7 +96,7 @@ class Potential extends CRMEntity {
 	var $default_order_by = 'potentialname';
 	var $default_sort_order = 'ASC';
 
-	function Potential() {
+	function Potentials() {
 		$this->log = LoggerManager::getLogger('potential');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Potentials');
@@ -233,7 +233,7 @@ class Potential extends CRMEntity {
 		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 
-		$focus = new Contact();
+		$focus = new Contacts();
 
 		$button = '';
 
@@ -294,10 +294,10 @@ class Potential extends CRMEntity {
 	{
 		global $log, $singlepane_view;
 		$log->debug("Entering get_products(".$id.") method ...");
-		require_once('modules/Products/Product.php');
+		require_once('modules/Products/Products.php');
 		global $app_strings;
 
-		$focus = new Product();
+		$focus = new Products();
 
 		$button = '';
 
@@ -446,10 +446,10 @@ class Potential extends CRMEntity {
 		 global $log, $singlepane_view;
 		$log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Quotes/Quote.php');
+		require_once('modules/Quotes/Quotes.php');
 
 		if($this->column_fields['account_id']!='')
-			$focus = new Quote();
+			$focus = new Quotes();
 
 		$button = '';
 		if(isPermitted("Quotes",1,"") == 'yes')

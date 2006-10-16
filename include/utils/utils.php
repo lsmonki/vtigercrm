@@ -2048,9 +2048,9 @@ function getEmailParentsList($module,$id)
 	$log->debug("Entering getEmailParentsList(".$module.",".$id.") method ...");
         global $adb;
 	if($module == 'Contacts')
-		$focus = new Contact();
+		$focus = new Contacts();
 	if($module == 'Leads')
-		$focus = new Lead();
+		$focus = new Leads();
         
 	$focus->retrieve_entity_info($id,$module);
         $fieldid = 0;

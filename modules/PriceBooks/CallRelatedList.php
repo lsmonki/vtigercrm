@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 //Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
 global $singlepane_view;
@@ -22,7 +22,7 @@ else
 {
 global $currentModule;
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];

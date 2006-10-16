@@ -17,12 +17,12 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('note_delete');
 
-$focus = new Note();
+$focus = new Notes();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the note.");

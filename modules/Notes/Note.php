@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.15 2005/03/15 10:01:08 shaw Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Notes.php,v 1.15 2005/03/15 10:01:08 shaw Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -70,9 +70,9 @@ class Note extends CRMEntity {
 	var $default_order_by = 'modifiedtime';
 	var $default_sort_order = 'ASC';
 
-	function Note() {
+	function Notes() {
 		$this->log = LoggerManager::getLogger('notes');
-		$this->log->debug("Entering Note() method ...");
+		$this->log->debug("Entering Notes() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Notes');
 		$this->log->debug("Exiting Note method ...");

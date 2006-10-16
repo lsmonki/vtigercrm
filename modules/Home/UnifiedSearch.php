@@ -21,18 +21,18 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Leads/Leads.php');
 require_once('modules/Faq/Faq.php');
-require_once('modules/Vendors/Vendor.php');
-require_once('modules/PriceBooks/PriceBook.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Vendors/Vendors.php');
+require_once('modules/PriceBooks/PriceBooks.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/Invoice/Invoice.php');
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');

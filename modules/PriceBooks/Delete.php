@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('product_delete');
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

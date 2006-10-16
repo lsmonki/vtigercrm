@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-include("modules/Accounts/Account.php");
+include("modules/Accounts/Accounts.php");
 include("getCompanyProfile.php");
 $variable = $_REQUEST['tickersymbol'];
 $url = "http://finance.yahoo.com/q?s=".$variable;

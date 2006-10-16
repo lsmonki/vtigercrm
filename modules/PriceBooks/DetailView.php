@@ -10,11 +10,11 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {

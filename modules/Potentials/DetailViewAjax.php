@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new Potential();
+		$modObj = new Potentials();
 		$modObj->retrieve_entity_info($crmid,"Potentials");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$_REQUEST[$fieldname] = $fieldvalue;

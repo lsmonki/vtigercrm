@@ -35,7 +35,7 @@ if (!isset($where)) $where = "";
 
 $url_string = '&smodule=PO';
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

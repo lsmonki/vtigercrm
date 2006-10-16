@@ -11,7 +11,7 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('include/utils/utils.php');
 //Redirecting Header for single page layout 
 require_once('user_privileges/default_module_view.php');
@@ -22,7 +22,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Lead();
+$focus = new Leads();
 $MODULE = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 $currentmodule = $_REQUEST['module'];

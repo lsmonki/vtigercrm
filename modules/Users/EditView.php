@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Users/Forms.php');
 require_once('include/database/PearDatabase.php');
@@ -36,7 +36,7 @@ global $currentModule;
 
 
 $smarty=new vtigerCRM_Smarty;
-$focus = new User();
+$focus = new Users();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$smarty->assign("ID",$_REQUEST['record']);

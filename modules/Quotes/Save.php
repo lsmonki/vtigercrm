@@ -21,7 +21,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 include("modules/Emails/mail.php");
@@ -34,7 +34,7 @@ $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
 $log->debug("Inside Quote Save");
 
-$focus = new Quote();
+$focus = new Quotes();
 
 setObjectValuesFromRequest(&$focus);
 

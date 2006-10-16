@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.41 2005/04/28 08:11:21 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Emails.php,v 1.41 2005/04/28 08:11:21 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,10 +25,10 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Users/User.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Users/Users.php');
 
 // Email is used to store customer information.
 class Email extends CRMEntity {
@@ -78,9 +78,9 @@ class Email extends CRMEntity {
 	/** This function will set the columnfields for Email module 
 	*/
 
-	function Email() {
+	function Emails() {
 		$this->log = LoggerManager::getLogger('email');
-		$this->log->debug("Entering Email() method ...");
+		$this->log->debug("Entering Emails() method ...");
 		$this->log = LoggerManager::getLogger('email');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Emails');
@@ -101,7 +101,7 @@ class Email extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$focus = new Contact();
+		$focus = new Contacts();
 
 		$button = '';
 		$returnset = '&return_module=Emails&return_action=CallRelatedList&return_id='.$id;

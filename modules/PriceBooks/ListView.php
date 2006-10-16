@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
@@ -33,7 +33,7 @@ $smarty->assign("SINGLE_MOD",'PriceBook');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 $other_text=Array();
 
 if(!$_SESSION['lvs'][$currentModule])

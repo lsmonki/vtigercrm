@@ -11,7 +11,7 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;
@@ -28,7 +28,7 @@ $decode_val=base64_decode($encode_val);
 
 
 
-$focus = new Product();
+$focus = new Products();
 $smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['record']!="") 

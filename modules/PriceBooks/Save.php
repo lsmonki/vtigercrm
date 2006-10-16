@@ -21,11 +21,11 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 setObjectValuesFromRequest(&$focus);
 
