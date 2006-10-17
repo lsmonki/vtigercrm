@@ -119,7 +119,7 @@ function sensex_info()
 
 								   {foreach key=header item=data from=$BASBLOCKS}
 								   <tr>
-									{if $header== 'Address Information' && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
                                                                         <td colspan=2 class="detailedViewHeader">
                                                                         <b>{$header}</b></td>
                                                                         <td class="detailedViewHeader">
@@ -127,7 +127,7 @@ function sensex_info()
                                                                         <td class="detailedViewHeader">
                                                                         <input name="cpy" onclick="return copyAddressRight(EditView)" type="radio"><b>{$APP.LBL_LCPY_ADDRESS}</b></td>
 
-									{elseif $header== 'Address Information' && $MODULE == 'Contacts'}
+									{elseif $header== $MOD.LBL_ADDRESS_INFORMATION && $MODULE == 'Contacts'}
 									<td colspan=2 class="detailedViewHeader">
                                                                         <b>{$header}</b></td>
                                                                         <td class="detailedViewHeader">
