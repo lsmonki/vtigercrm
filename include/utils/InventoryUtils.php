@@ -489,6 +489,10 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 	$tot_no_prod = $_REQUEST['totalProductCount'];
 
+	//If the taxtype is group then retrieve all available taxes, else retrive associated taxes for each product inside loop
+	if($_REQUEST['taxtype'] == 'group')
+		$all_available_taxes = getAllTaxes('available');
+
 	$prod_seq=1;
 	for($i=1; $i<=$tot_no_prod; $i++)
 	{
@@ -531,8 +535,6 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 			updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,$module);
 		}
 
-		$taxes_for_product = getTaxDetailsForProduct($prod_id,'all');
-
 		//we should update discount and tax details
 		$updatequery = "update vtiger_inventoryproductrel set ";
 
@@ -547,12 +549,11 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 			$updatequery .= " discount_amount='".$discount_amount."',";
 		}
 
-
 		if($_REQUEST['taxtype'] == 'group')
 		{
-			for($tax_count=0;$tax_count<count($taxes_for_product);$tax_count++)
+			for($tax_count=0;$tax_count<count($all_available_taxes);$tax_count++)
 			{
-				$tax_name = $taxes_for_product[$tax_count]['taxname'];
+				$tax_name = $all_available_taxes[$tax_count]['taxname'];
 				$request_tax_name = $tax_name."_group_percentage";
 			
 				$updatequery .= "$tax_name = '".$_REQUEST[$request_tax_name]."',";
@@ -561,6 +562,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		}
 		else
 		{
+			$taxes_for_product = getTaxDetailsForProduct($prod_id,'all');
 			for($tax_count=0;$tax_count<count($taxes_for_product);$tax_count++)
 			{
 				$tax_name = $taxes_for_product[$tax_count]['taxname'];
