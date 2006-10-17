@@ -518,12 +518,18 @@ function fnAddProductRow(module,image_path){
 function decideTaxDiv()
 {
 	var taxtype = document.getElementById("taxtype").value
+
+	calcTotal();
+
 	if(taxtype == 'group')
+	{
+		//if group tax selected then we have to hide the individual taxes and also calculate the group tax
 		hideIndividualTaxes()
+		calcGroupTax();
+	}
 	else if(taxtype == 'individual')
 		hideGroupTax()
 
-	calcTotal();
 }
 
 function hideIndividualTaxes()
