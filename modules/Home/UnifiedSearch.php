@@ -21,18 +21,6 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Contacts/Contacts.php');
-require_once('modules/Accounts/Accounts.php');
-require_once('modules/Potentials/Potentials.php');
-require_once('modules/Leads/Leads.php');
-require_once('modules/Faq/Faq.php');
-require_once('modules/Vendors/Vendors.php');
-require_once('modules/PriceBooks/PriceBooks.php');
-require_once('modules/Quotes/Quotes.php');
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
-require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Invoice/Invoice.php');
-require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
@@ -47,26 +35,12 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 {
 
 	//module => object
-	$object_array = Array(
-				'Potentials'=>'Potential',
-				'Accounts'=>'Account',
-				'Contacts'=>'Contact',
-				'Leads'=>'Lead',
-				'Notes'=>'Note',
-				'Calendar'=>'Activity',
-				'Emails'=>'Email',
-				'HelpDesk'=>'HelpDesk',
-				'Products'=>'Product',
-				'Faq'=>'Faq',
-				//'Events'=>'',
-				'Vendors'=>'Vendor',
-				'PriceBooks'=>'PriceBook',
-				'Quotes'=>'Quote',
-				'PurchaseOrder'=>'Order',
-				'SalesOrder'=>'SalesOrder',
-				'Invoice'=>'Invoice',
-				'Campaigns'=>'Campaign'
-			     );
+	$object_array = getSearchModules();
+	foreach($object_array as $curr_module=>$curr_object)
+	{
+		require_once("modules/$curr_module/$curr_object.php");
+	}
+
 	global $adb;
 	global $current_user;
 	global $theme;
@@ -287,4 +261,28 @@ function getSearchModulesComboList($search_module)
 		</table>
 	<?php
 }
+
+/*To get the modules allowed for global search this function returns all the 
+ * modules which supports global search as an array in the following structure 
+ * array($module_name1=>$object_name1,$module_name2=>$object_name2,$module_name3=>$object_name3,$module_name4=>$object_name4,-----);
+ */
+ function getSearchModules()
+ {
+	 global $adb;
+	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
+	$result = $adb->query($sql);
+	while($module_result = $adb->fetch_array($result))
+	{
+		$modulename = $module_result['name'];
+		if($modulename != 'Calendar')
+		{
+			$return_arr[$modulename] = $modulename;
+		}else
+		{
+			$return_arr[$modulename] = 'Activity';
+		}
+	}
+	return $return_arr;
+ }
+
 ?>
