@@ -294,7 +294,7 @@ class Accounts extends CRMEntity {
                 $log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.status, vtiger_activity.eventstatus,
-			vtiger_activity.activitytype,
+			vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,
 			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
 			vtiger_crmentity.description,
 			vtiger_users.user_name
