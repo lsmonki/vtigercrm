@@ -917,7 +917,7 @@ $this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddet
 $this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid')");
 $this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid')");
 $this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid')");
-$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notestid')");
+$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid')");
 $this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid')");
 $this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid')");
 $this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid')");
