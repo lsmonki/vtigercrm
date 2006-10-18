@@ -2080,7 +2080,7 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_campaigngrouprelation
 				ON vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
 			INNER JOIN vtiger_campaignscf
-			        ON vtiger_campaignscf.campaignid = vtiger_campaignscf.campaignid
+			        ON vtiger_campaign.campaignid = vtiger_campaignscf.campaignid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
 			LEFT JOIN vtiger_users
