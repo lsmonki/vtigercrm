@@ -1028,6 +1028,19 @@ $app_strings = Array(
 //Record deleted message
 'LBL_RECORD_DELETE'=>'The record you are trying to view has been deleted.',
 'Part Number'=>'Part Number',
+
+//Added after 5.0.1
+'Salutation'=>'Salutation ',
+'Rating'=>'Rating',
+'industry'=>'Industry',
+'Severity'=>'Severity',
+'Product Category'=>'Product Category',
+'GL Account'=>'GL Account',
+'Usage Unit'=>'Usage Unit',
+'Carrier'=>'Carrier',
+'Expected Response'=>'Expected Response',
+'LBL_ADDRESS_INF'=>'Address Information',
+
 );
 
 
