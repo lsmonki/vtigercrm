@@ -412,7 +412,7 @@ $this->db->query("insert into vtiger_field values (26,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,25,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,25,2,'T~O',1,null,'BAS')");
  //Added on 26-12-2005 to add attachment in ticket editview
- $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,26,1,'V~O',0,3,'BAS')");
+ $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,25,1,'V~O',0,3,'BAS')");
 
  $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,26,1,'V~M',0,1,'BAS')");
  $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_troubletickets',1,'19','description','Description',1,0,0,100,1,28,1,'V~O',0,2,'BAS')");
