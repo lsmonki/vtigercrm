@@ -66,6 +66,11 @@ if($uitype == 15)
 	$deltablequery = 'drop table '.$colName;
 	$adb->query($deltablequery);
 }
+//we have to delete the custom field from custom views - don
+$adb->query("delete from vtiger_cvcolumnlist where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_cvstdfilter where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_cvadvfilter where columnname like '%".$colName."%'");
+
 
 header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module."&parenttab=Settings");
 ?>
