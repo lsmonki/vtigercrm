@@ -279,11 +279,11 @@ class Potential extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "potentialscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= "potentialscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 			else
 			{	
-				$sql3 .= ", potentialscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= ", potentialscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
         	         }
 	return $sql3;

@@ -180,11 +180,11 @@ class Product extends CRMEntity {
 			//construct query as below
 			if($i == 0)
 			{
-				$sql3 .= "productcf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= "productcf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 			else
 			{
-				$sql3 .= ", productcf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= ", productcf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 
 		}

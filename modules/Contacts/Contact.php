@@ -458,11 +458,11 @@ class Contact extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "contactscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= "contactscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 			else
 			{	
-				$sql3 .= ", contactscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= ", contactscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
         
 	         }

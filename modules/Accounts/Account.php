@@ -585,11 +585,11 @@ class Account extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "accountscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= "accountscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 			else
 			{	
-				$sql3 .= ", accountscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= ", accountscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
         
 	         }

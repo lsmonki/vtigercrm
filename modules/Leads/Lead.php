@@ -205,11 +205,11 @@ class Lead extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "leadscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= "leadscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
 			else
 			{	
-				$sql3 .= ", leadscf.".$columnName. " '" .$fieldlable."'";
+				$sql3 .= ", leadscf.".$columnName. " AS \"" .$fieldlable.'"';
 			}
         
 	         }
