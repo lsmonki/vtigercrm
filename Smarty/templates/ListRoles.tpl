@@ -247,21 +247,21 @@ ul {ldelim}color:black;{rdelim}
 function showhide(argg,imgId)
 {ldelim}
 	var harray=argg.split(",");
-	var harrlen = harray.length;
+	var harrlen = harray.length;	
 	var i;
 	for(i=0; i<harrlen; i++)
 	{ldelim}
-			var x=document.getElementById(harray[i]).style;
+		var x=document.getElementById(harray[i]).style;
         	if (x.display=="none")
         	{ldelim}
-            		x.display="block";
-					//document.all[imgId].src = "{$IMAGE_PATH}minus.gif";   By Ela	
-        	{rdelim}
+           		x.display="block";
+			document.getElementById(imgId).src="{$IMAGE_PATH}minus.gif";
+         	{rdelim}
         	else
-			{ldelim}
-            			x.display="none";
-						//document.all[imgId].src = "{$IMAGE_PATH}plus.gif"; By Ela
-            {rdelim}
+		{ldelim}
+			x.display="none";
+			document.getElementById(imgId).src="{$IMAGE_PATH}plus.gif";
+		{rdelim}
 	{rdelim}
 {rdelim}
 
