@@ -141,7 +141,7 @@
 							{/if}	
 							{else}
 								<div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
-									<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
 										<tr style="cursor:move;">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
