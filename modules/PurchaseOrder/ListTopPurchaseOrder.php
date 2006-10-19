@@ -56,9 +56,9 @@ function getTopPurchaseOrder()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_purchaseorder.duedate >= \''.$date_var.'\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_purchaseorder.duedate >= \''.$date_var.'\'';
 	$query = getListQuery("PurchaseOrder",$where);
-
+	$query .=" ORDER BY total DESC";
 
 	//<<<<<<<<customview>>>>>>>>>
 

@@ -60,9 +60,9 @@ function getTopQuotes()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\'';
 	$query = getListQuery("Quotes",$where);
-
+	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
 	$list_result = $adb->limitQuery($query,0,5);
