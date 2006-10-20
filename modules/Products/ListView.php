@@ -84,6 +84,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');

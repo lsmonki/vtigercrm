@@ -80,6 +80,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));

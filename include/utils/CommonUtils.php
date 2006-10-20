@@ -1999,6 +1999,26 @@ function getUserslist()
 }
 
 
+function getGroupslist()
+{
+	global $log;
+	$log->debug("Entering getGroupslist() method ...");
+	global $adb;
+	$result=$adb->query("select * from vtiger_groups");
+	
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+	       $groupidlist[$i]=$adb->query_result($result,$i,'groupid');
+	       $groupnamelist[$groupidlist[$i]]=$adb->query_result($result,$i,'groupname');
+	       
+	}
+	$change_groups_owner = get_select_options_with_id($groupnamelist,'');
+	$log->debug("Exiting getGroupslist method ...");
+
+	return $change_groups_owner;
+}
+
+
 /**
   *	Function to Check for Security whether the Buttons are permitted in List/Edit/Detail View of all Modules
   *	@param string $module -- module name

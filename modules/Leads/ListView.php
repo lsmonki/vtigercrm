@@ -83,6 +83,7 @@ $change_status = get_select_options_with_id($comboFieldArray['leadstatus_dom'], 
 $smarty->assign("CHANGE_STATUS",$change_status);
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 	
 
 
