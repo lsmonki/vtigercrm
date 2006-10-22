@@ -42,7 +42,7 @@ function getTopPotentials()
 	$title[]='myTopOpenPotentials.gif';
 	$title[]=$current_module_strings['LBL_TOP_OPPORTUNITIES'];
 	$title[]='home_mypot';
-	$where = "AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' AND vtiger_crmentity.smownerid='".$current_user->id."'";
+	$where = "AND vtiger_potential.sales_stage <> 'Closed Won' AND vtiger_potential.sales_stage <> 'Closed Lost' AND vtiger_crmentity.smownerid='".$current_user->id."'";
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_OPPORTUNITY_NAME'];
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];
