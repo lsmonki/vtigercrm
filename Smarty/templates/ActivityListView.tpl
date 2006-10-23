@@ -439,8 +439,8 @@ function alphabetic(module,url,dataid)
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
 	         <form name="change_ownerform_name">
-	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>user&nbsp;
-					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >group<br>
+	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
+					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
 					{$CHANGE_OWNER}
 					</select>
