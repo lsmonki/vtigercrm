@@ -85,8 +85,8 @@
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>
-                                                {if $APP[$sel_value] neq ''}
-                                                        {$APP[$sel_value]}
+                                                {if $APP.$sel_value neq ''}
+                                                {$APP.$sel_value}
                                                 {else}
                                                         {$sel_value}
                                                 {/if}
@@ -101,11 +101,10 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 			   <select MULTIPLE name="{$fldname}[]" size="4" style="width:160px;" tabindex="{$vt_tab}" class="small">
-				{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>{$sel_value}</option>
-					{/foreach}
-				{/foreach}
+				                    									{foreach key=sel_value item=value from=$arr}
+                    										<option value="{$sel_value}" {$value}>{if $APP.$sel_value}{$APP.$sel_value}{else}{$sel_value}{/if}</option>
+                    									
+                    									{/foreach}
 			   </select>
 			</td>
 
