@@ -152,8 +152,8 @@
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
-                                                                                                {if $APP[$sel_value] neq ''}
-                                                                                                {$APP[$sel_value]}
+                                                                                                {if $MOD.$sel_value neq ''}
+                                                                                                {$MOD.$sel_value}
                                                                                                 {else}
                                                                                                         {$sel_value}
                                                                                                 {/if}
@@ -224,8 +224,8 @@
                                                                                         {foreach item=arr from=$ACTIVITYDATA.taskpriority}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
-                                                                                                {if $APP[$sel_value] neq ''}
-                                                                                                {$APP[$sel_value]}
+                                                                                                {if $MOD.$sel_value neq ''}
+                                                                                                {$MOD.$sel_value}
                                                                                                 {else}
                                                                                                         {$sel_value}
                                                                                                 {/if}
@@ -609,8 +609,8 @@
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
                                         			{foreach key=sel_value item=value from=$arr}
                                                 			<option value="{$sel_value}" {$value}>
-                                                        		{if $APP[$sel_value] neq ''}
-                                                                		{$APP[$sel_value]}
+                                                        		{if $MOD.$sel_value neq ''}
+                                                                		{$MOD.$sel_value}
                                                         		{else}
                                                                 		{$sel_value}
                                                         		{/if}
@@ -626,8 +626,8 @@
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
                                 			        {foreach key=sel_value item=value from=$arr}
 			                                                <option value="{$sel_value}" {$value}>
-                        		                                {if $APP[$sel_value] neq ''}
-                                        		                        {$APP[$sel_value]}
+                        		                                {if $MOD.$sel_value neq ''}
+                                        		                        {$MOD.$sel_value}
                                                        			{else}
                                                                 		{$sel_value}
                                                         		{/if}
