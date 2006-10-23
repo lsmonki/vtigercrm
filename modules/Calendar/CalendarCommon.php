@@ -299,7 +299,7 @@ function getActFieldCombo($fieldname,$tablename)
 	for($i = 0; $i < $noofrows; $i++)
 	{
 		$value = $adb->query_result($Res,$i,$fieldname);
-		$combo .= '<option value="'.$value.'">'.$value.'</option>';
+		$combo .= '<option value="'.$value.'">'.$mod_strings[$value].'</option>';
 	}
 
 	$combo .= '</select>';
