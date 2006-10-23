@@ -612,20 +612,6 @@ $vtlog->logthis("module is =".$module,'info');
 
 	  if($insertion_mode == 'edit')
 	  {
-		  if($_REQUEST['module'] == 'Potentials')
-		  {
-			  $dbquery = 'select sales_stage from potential where potentialid = '.$this->id;
-			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
-			  if($sales_stage != $_REQUEST['sales_stage'])
-			  {
-    				  $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
-				  //$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
-				  $id = $adb->getUniqueID('potstagehistory');
-				  $sql = "insert into potstagehistory values($id,".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$date_var.")";
-				  $adb->query($sql);
-			  }
-		  }
-		
 		  //Check done by Don. If update is empty the the query fails
 		  if(trim($update) != '')
         	  {

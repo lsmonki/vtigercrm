@@ -337,6 +337,37 @@ return $exists;
         }
 
 
+	function save($module)
+	{
+		global $adb;
+
+		if($this->id) {
+			$sql = 'SELECT sales_stage
+				FROM potential
+				WHERE potentialid = '.$this->id;
+			$sales_stage = $adb->query_result($adb->query($sql),0,'sales_stage');
+		}
+
+		parent::save($module);
+
+		// update the sales stage history
+		if($this->mode == 'edit' && $sales_stage != $_REQUEST['sales_stage']) {
+			$date_var = $adb->database->DBTimeStamp(date('YmdHis'));
+			$id = $adb->getUniqueID('potstagehistory');
+			$amount = $_REQUEST['amount'] == '' ? 'NULL' : $adb->quote((float) $_REQUEST['amount']);
+			$probability = $_REQUEST['probability'] == '' ? 'NULL' : $adb->quote((float) $_REQUEST['probability']);
+			$sql = "INSERT INTO potstagehistory
+				VALUES (".$id.",
+					".$this->id.",
+					".$amount.",
+					".$adb->quote($sales_stage).",
+					".$probability.",
+					0,
+					".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",
+					".$date_var.")";
+			$adb->query($sql);
+		}
+	}
 
 	function save_relationship_changes($is_update)
     {
