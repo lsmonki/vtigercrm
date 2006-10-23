@@ -658,9 +658,9 @@
                                                 			{assign var=style_user value='display:none'}
                                                 			{assign var=style_group value='display:block'}
                                         			{/if}
-				                                <input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+				                                <input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_USER}
 				                                {if $secondvalue.assigned_user_id neq ''}
-                                			        <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Group
+                                			        <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
                                         			{/if}
                                         			<span id="assign_user" style="{$style_user}">
                                                 		<select name="assigned_user_id" class=small>
