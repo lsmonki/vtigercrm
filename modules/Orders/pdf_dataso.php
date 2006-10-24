@@ -30,7 +30,9 @@ $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
 $account_name = getAccountName($focus->column_fields[account_id]);
 
 // populate data
-$quote_name = getQuoteName($focus->column_fields["quote_id"]);
+if($focus->column_fields['quote_id']) {
+	$quote_name = getQuoteName($focus->column_fields["quote_id"]);
+}
 $po_name = $focus->column_fields["purchaseorder"];
 $subject = $focus->column_fields["subject"];
 
