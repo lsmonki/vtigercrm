@@ -1233,7 +1233,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=$mod_strings[$fieldlabel];
 		if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ) && ($module_name=='Campaigns'))
 		{
-			$fieldvalue[] = convertFromDollar($value,$rate);
+			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
+			$fieldvalue[] = convertFromDollar($value,$rate_symbol['rate']);
 		}
 		else
 			$fieldvalue[] = $value;
