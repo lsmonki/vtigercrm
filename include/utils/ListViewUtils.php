@@ -1309,6 +1309,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 
 					$temp_val = str_replace("'",'\"',$temp_val);
+					$temp_val = popup_from_html($temp_val);
 
 					//Added to avoid the error when select SO from Invoice through AjaxEdit
 					if($module == 'SalesOrder')
@@ -1323,6 +1324,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					elseif($colname == "lastname" && $module == 'Leads')
 						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
 					$temp_val =$temp_val.' '.$firstname;
+					$temp_val = popup_from_html($temp_val);
 
 					$focus->record_id = $_REQUEST['recordid'];
 					if($_REQUEST['return_module'] == "Calendar")
@@ -1334,6 +1336,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "formname_specific")
 				{
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod")
@@ -1354,6 +1357,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
@@ -1372,6 +1376,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$rate = $rate_symbol['rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
+
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
@@ -1381,6 +1387,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$flname =  $_REQUEST['fldname'];
 					$listprice=getListPrice($prod_id,$entity_id);	
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "specific_account_address")
@@ -1389,6 +1396,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
@@ -1398,10 +1406,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
-
 				elseif($popuptype == "specific_potential_account_address")
 				{
 					$acntid = $adb->query_result($list_result,$list_result_count,"accountid");
@@ -1410,6 +1418,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($acntid,"Accounts");
 					$account_name = getAccountName($acntid);
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
@@ -1465,11 +1474,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus = new Vendors();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendors");
 
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['street']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_campaign")
 				{
+					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 				else
@@ -1479,6 +1490,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val =$temp_val.' '.$firstname;
 
 					$temp_val = str_replace("'",'\"',$temp_val);
+					$temp_val = popup_from_html($temp_val);
 
 					$log->debug("Exiting getValue method ...");
 					if($_REQUEST['maintab'] == 'Calendar')

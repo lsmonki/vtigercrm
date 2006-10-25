@@ -220,6 +220,33 @@ function from_html($string, $encode=true){
         return $string;
 }
 
+/**
+ *	Function used to decodes the given single quote and double quote only. This function used for popup selection 
+ *	@param string $string - string to be converted, $encode - flag to decode
+ *	@return string $string - the decoded value in string fromat where as only single and double quotes will be decoded
+ */
+
+function popup_from_html($string, $encode=true)
+{
+	global $log;
+	$log->debug("Entering popup_from_html(".$string.",".$encode.") method ...");
+
+	$popup_toHtml = array(
+        			'"' => '&quot;',
+			        "'" =>  '&#039;',
+			     );
+
+        //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
+        if($encode && is_string($string))
+	{
+                $string = addslashes(str_replace(array_values($popup_toHtml), array_keys($popup_toHtml), $string));
+        }
+
+	$log->debug("Exiting popup_from_html method ...");
+        return $string;
+}
+
+
 /** To get the Currency of the specified user
   * @param $id -- The user Id:: Type integer
   * @returns  vtiger_currencyid :: Type integer
