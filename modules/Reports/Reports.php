@@ -793,10 +793,20 @@ class Reports extends CRMEntity{
 		{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldlist = explode(":",$fieldcolname);
+			
+			//Fix for multilanguage support - code contribution by Ding jianting
+			$fieldlabel_array = explode("_",$fieldlist[2]);
+			$mod_strings = return_module_language($current_language,$fieldlabel_array[0]);
 			if($fieldcolname != "")
 			{
-				$shtml .= "<option value=\"".$fieldcolname."\">".str_replace($modules," ",$fieldlist[2])."</option>";
+				$fieldlabel = trim(str_replace($modules," ",$fieldlist[2]));
+				if(isset($mod_strings[$fieldlabel])) {
+					$shtml .= "<option value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
+				} else {
+					$shtml .= "<option value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				}
 			}
+			//Code contribution ends
 		}
 
 		$log->info("Reports :: Successfully returned getSelectedColumnsList");
