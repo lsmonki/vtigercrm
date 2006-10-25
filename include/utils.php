@@ -2763,6 +2763,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
         {
                 $smodule = 'PriceBook';
         }
+        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'SO')
+        {
+                $smodule = 'SalesOrder';
+        }
         else
         {
                 $smodule = $module;
