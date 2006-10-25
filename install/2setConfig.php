@@ -155,7 +155,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
 		!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
 		!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
-		}
+	}
 		!isset($_REQUEST['check_createdb']) ? $check_createdb = "" : $check_createdb = $_REQUEST['check_createdb'];
 		!isset($_REQUEST['root_user']) ? $root_user = "" : $root_user = $_REQUEST['root_user'];
 		!isset($_REQUEST['root_password']) ? $root_password = "" : $root_password = $_REQUEST['root_password'];
@@ -367,7 +367,7 @@ function verify_data(form) {
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
                <td width="75%" bgcolor="white" align="left">
 		<?php if(!$db_options) : ?>
-			No Database Support Deteched
+			No Database Support Detected
 		<?php elseif(count($db_options) == 1) : ?>
 			<?php list($db_type, $label) = each($db_options); ?>
 			<input type="hidden" name="db_type" value="<?php echo $db_type ?>"><?php echo $label ?>
