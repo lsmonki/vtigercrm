@@ -37,12 +37,6 @@ class Potentials extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $module_name="Potentials";
-	var $table_name = "vtiger_potential";
-	var $rel_product_table = "vtiger_seproductsrel";
-	var $rel_opportunity_table = "vtiger_contpotentialrel";
-	var $module_id = "potentialid";
-	var $object_name = "potential";
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_potential','vtiger_potentialscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_potential'=>'potentialid','vtiger_potentialscf'=>'potentialid');
@@ -102,7 +96,9 @@ class Potentials extends CRMEntity {
 		$this->column_fields = getColumnFields('Potentials');
 	}
 
-	var $new_schema = true;
+	function save_module($module)
+	{
+	}	
 	
 	/**
 	* Function to get sort order
