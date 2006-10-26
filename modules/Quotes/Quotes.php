@@ -106,6 +106,10 @@ class Quotes extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Quotes');
 	}
+
+	function save_module()
+	{
+	}	
 	
 	/**	Function used to get the sort order for Quote listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['QUOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
