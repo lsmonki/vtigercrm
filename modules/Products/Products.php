@@ -32,7 +32,7 @@ class Products extends CRMEntity {
         );
 
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf','vtiger_seproductsrel','vtiger_producttaxrel','vtiger_attachments');
+	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf','vtiger_attachments');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_products'=>'productid','vtiger_productcf'=>'productid','vtiger_seproductsrel'=>'productid','vtiger_producttaxrel'=>'productid','vtiger_attachments'=>'attachmentsid');
 	var $column_fields = Array();
 
@@ -80,6 +80,110 @@ class Products extends CRMEntity {
 		$this->log->debug("Exiting Product method ...");
 	}
 
+	function save_module($module)
+	{
+		//Inserting into vtiger_seproductsrel table
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		{
+			$this->insertIntoEntityTable('vtiger_seproductsrel', 'Products');
+		}
+		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation('vtiger_seproductsrel');
+		}
+		//Inserting into product_taxrel table
+		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
+		{
+			$this->insertTaxInformation('vtiger_producttaxrel', 'Products');
+		}
+
+		//Inserting into attachments
+		$this->insertIntoAttachment($this->id,'Products');	
+		
+	}	
+
+	/**	function to save the product tax information in producttarel vtiger_table
+	 *	@param string $tablename - vtiger_tablename to save the product tax relationship (producttaxrel)
+	 *	@param string $module	 - current module name
+	 *	$return void
+	*/
+	function insertTaxInformation($tablename, $module)
+	{
+		global $adb, $log;
+		$log->debug("Entering into insertTaxInformation($tablename, $module) method ...");
+		$tax_details = getAllTaxes();
+
+		$tax_per = '';
+		//Save the Product - tax relationship if corresponding tax check box is enabled
+		//Delete the existing tax if any
+		if($this->mode == 'edit')
+		{
+			for($i=0;$i<count($tax_details);$i++)
+			{
+				$taxid = getTaxId($tax_details[$i]['taxname']);
+				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
+				$adb->query($sql);
+			}
+		}
+		for($i=0;$i<count($tax_details);$i++)
+		{
+			$tax_name = $tax_details[$i]['taxname'];
+			$tax_checkname = $tax_details[$i]['taxname']."_check";
+			if($_REQUEST[$tax_checkname] == 'on' || $_REQUEST[$tax_checkname] == 1)
+			{
+				$taxid = getTaxId($tax_name);
+				$tax_per = $_REQUEST[$tax_name];
+				if($tax_per == '')
+				{
+					$log->debug("Tax selected but value not given so default value will be saved.");
+					$tax_per = getTaxPercentage($tax_name);
+				}
+				
+				$log->debug("Going to save the Product - $tax_name tax relationship");
+
+				$query = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
+				$adb->query($query);
+			}
+		}
+
+		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");
+	}
+
+	
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		//Remove the deleted vtiger_attachments from db - Products
+		if($module == 'Products' && $_REQUEST['del_file_list'] != '')
+		{
+			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
+			foreach($del_file_list as $del_file_name)
+			{
+				$attach_res = $adb->query("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
+				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
+				
+				$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$attachments_id");
+				$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$attachments_id");
+			}
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}
+
+
+	
 	/**	Function used to get the sort order for Product listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRODUCTS_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
