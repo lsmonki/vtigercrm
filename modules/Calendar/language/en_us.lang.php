@@ -402,6 +402,8 @@ $mod_strings = Array(
 'Pending Input'=>'Pending Input',
 'LBL_REMAINDER_DAY'=>'days',
 'LBL_REMAINDER_HRS'=>'hrs',
+'Call'=>'Call',
+'Meeting'=>'Meeting',
 
 );
 
