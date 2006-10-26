@@ -137,7 +137,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$adb->println("Inside the function setMailerProperties");
 
 	$mail->Subject = $subject;
-	$mail->Body = nl2br($contents);
+	$mail->Body = $contents;
 	//$mail->Body = html_entity_decode(nl2br($contents));	//if we get html tags in mail then we will use this line
 	$mail->AltBody = strip_tags(preg_replace(array("/<p>/i","/<br>/i","/<br \/>/i"),array("\n","\n","\n"),$contents));
 
