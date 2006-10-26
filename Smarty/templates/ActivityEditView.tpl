@@ -456,7 +456,7 @@
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
-													<td colspan=2>Enable Repeat</td>
+													<td colspan=2>{$MOD.LBL_ENABLE_REPEAT}<td>
 												</tr>
 												<tr>
 													<td colspan=2>
