@@ -22,7 +22,7 @@ if($patch_version !='')
 }
 else
 {
-	    $patch_string = "--None--";
+	    $patch_string = $vtiger_current_version;
 }
 global $app_strings;
 global $app_list_strings;
