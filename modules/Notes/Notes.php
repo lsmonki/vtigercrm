@@ -32,15 +32,10 @@ class Notes extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $required_fields =  array("name"=>1);
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
-	var $table_name = "notes";
-	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_senotesrel','vtiger_attachments');
+	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_attachments');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_attachments'=>'attachmentsid');
-
-  	var $module_id = "notesid";
-	var $object_name = "Note";
 
 	var $column_fields = Array();
 
@@ -78,7 +73,49 @@ class Notes extends CRMEntity {
 		$this->log->debug("Exiting Note method ...");
 	}
 
-	var $new_schema = true;
+	function save_module($module)
+	{
+
+		//inserting into vtiger_senotesrel
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		{
+			$this->insertIntoEntityTable('vtiger_senotesrel', $module);
+		}
+		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation('vtiger_senotesrel');
+		}
+
+
+		//Inserting into attachments table
+		$this->insertIntoAttachment($this->id,'Notes');
+				
+	}
+
+
+	/**
+	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
+	 *      @param string $module  - the current module name
+	*/
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}
+
 
 	/** Function to export the notes in CSV Format
 	* @param reference variable - order by is passed when the query is executed
