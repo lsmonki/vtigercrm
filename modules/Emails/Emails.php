@@ -36,16 +36,11 @@ class Emails extends CRMEntity {
 	var $db;
 
 	// Stored vtiger_fields
-  var $module_id="emailid";
   // added to check email save from plugin or not
   var $plugin_save = false;
 
-	var $rel_users_table = "vtiger_salesmanactivityrel";
-	var $rel_contacts_table = "vtiger_cntactivityrel";
-	var $rel_serel_table = "vtiger_seactivityrel";
 
-	var $table_name = "activity";
-	var $tab_name = Array('vtiger_crmentity','vtiger_activity','vtiger_seactivityrel','vtiger_cntactivityrel','vtiger_attachments');
+	var $tab_name = Array('vtiger_crmentity','vtiger_activity');
         var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_attachments'=>'attachmentsid');
 
 	// This is the list of vtiger_fields that are in the lists.
@@ -64,8 +59,6 @@ class Emails extends CRMEntity {
 				    );
 
        var $list_link_field= 'subject';
-
-	var $object_name = "Email";
 
 	var $column_fields = Array();
 
@@ -87,7 +80,99 @@ class Emails extends CRMEntity {
 		$this->log->debug("Exiting Email method ...");
 	}
 
-	var $new_schema = true;
+
+	function save_module($module)
+	{
+		global $adb;
+		//Inserting into seactivityrel
+		
+		  //modified by Richie as raju's implementation broke the feature for addition of webmail to vtiger_crmentity.need to be more careful in future while integrating code
+	   	  if($_REQUEST['module']=="Emails" && $_REQUEST['smodule']!='webmails' && (!$this->plugin_save))
+		  {
+				if($_REQUEST['currentid']!='')
+				{
+					$actid=$_REQUEST['currentid'];
+				}
+				else 
+				{
+					$actid=$_REQUEST['record'];
+				}
+				$parentid=$_REQUEST['parent_id'];
+				if($_REQUEST['module'] != 'Emails' && $_REQUEST['module'] != 'Webmails')
+				{
+					if(!$parentid) {
+						$parentid = $adb->getUniqueID('vtiger_seactivityrel');
+					}
+					$mysql='insert into vtiger_seactivityrel values('.$parentid.','.$actid.')';
+					$adb->query($mysql);
+				}
+				else
+				{	  
+					$myids=explode("|",$parentid);  //2@71|
+					for ($i=0;$i<(count($myids)-1);$i++)
+					{
+						$realid=explode("@",$myids[$i]);
+						$mycrmid=$realid[0];
+						//added to handle the relationship of emails with vtiger_users
+						if($realid[1] == -1)
+							$mysql='insert into vtiger_salesmanactivityrel values('.$mycrmid.','.$actid.')';
+						else	
+							$mysql='insert into vtiger_seactivityrel values('.$mycrmid.','.$actid.')';
+						$adb->query($mysql);
+					}
+				}
+			}
+			else
+			{
+				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+				{
+					$this->insertIntoEntityTable('vtiger_seactivityrel', $module);
+				}
+				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+				{
+					$this->deleteRelation('vtiger_seactivityrel');
+				}
+			}
+
+
+			//Insert into cntactivity rel		
+
+			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
+			{
+				$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
+			}
+			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+			{
+				$this->deleteRelation('vtiger_cntactivityrel');
+			}
+			
+			//Inserting into attachment
+			
+			$this->insertIntoAttachment($this->id,$module);			
+		
+	}
+
+
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}	
+	
 
 	/** Returns a list of the associated contacts
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
