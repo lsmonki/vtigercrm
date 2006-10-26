@@ -106,6 +106,23 @@ class SalesOrder extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('SalesOrder');
 	}
+
+	function save_module($module)
+	{
+	
+		//Checking if quote_id is present and updating the quote status
+		if($this->column_fields["quote_id"] != '')
+		{
+        		$qt_id = $this->column_fields["quote_id"];
+        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
+        		$this->db->query($query1);
+		}
+
+		//Based on the total Number of rows we will save the product relationship with this entity
+		saveInventoryProductDetails(&$this, 'SalesOrder');	
+
+		
+	}	
 	
 	/**	Function used to get the sort order for Sales Order listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['SALESORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
