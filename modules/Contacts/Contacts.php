@@ -43,10 +43,7 @@ class Contacts extends CRMEntity {
 	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails','vtiger_attachments');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid','vtiger_attachments'=>'attachmentsid');
 
-	var $module_id = "contactid";
-	var $object_name = "Contact";
 	
-	var $new_schema = true;
 
 	var $column_fields = Array();
 	
@@ -822,6 +819,47 @@ function get_contactsforol($user_name)
   $log->debug("Exiting get_contactsforol method ...");
 	return $query;
 }
+
+
+	/** Function to handle module specific operations when saving a entity 
+	*/
+	function save_module($module)
+	{
+		$this->insertIntoAttachment($this->id,$module);		
+	}	
+
+	/**
+	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
+	 *      @param string $module  - the current module name
+	*/
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
+		$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		//This is to handle the delete image for contacts
+		if($module == 'Contacts' && $file_saved)
+		{
+			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
+			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}	
 
 
 //End
