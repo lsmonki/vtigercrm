@@ -2000,7 +2000,10 @@ function sendNotificationToOwner($module,$focus)
 
 	foreach($object_column_fields as $fieldname => $fieldlabel)
 	{
-		$description .= $fieldlabel.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+		//Get the translated string
+		$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+
+		$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
 	}
 
 	$description .= '<br><br>Thank You <br>';
