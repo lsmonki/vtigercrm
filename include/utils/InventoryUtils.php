@@ -469,7 +469,7 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
  *	@param $update_prod_stock - true or false (default), if true we have to update the stock for PO only
  *	@return void
  */
-function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateStockAndDemand='false', $updateDemand='false')
+function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateDemand='')
 {
 	global $log, $adb;
 	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
@@ -514,12 +514,11 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		}
 		if($module == 'SalesOrder')
 		{
-			if($updateStockAndDemand == 'true')
+			if($updateDemand == '-')
 			{
-				deductFromProductStock($prod_id,$qty);
 				deductFromProductDemand($prod_id,$qty);
 			}
-			if($updateDemand == 'true')
+			elseif($updateDemand == '+')
 			{
 				addToProductDemand($prod_id,$qty);
 			}

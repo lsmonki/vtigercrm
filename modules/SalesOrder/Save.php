@@ -39,13 +39,13 @@ if($focus->mode == 'edit' && ($focus->column_fields['sostatus'] == 'Delivered' |
 	{
        		if($focus->column_fields['sostatus'] == 'Delivered')
         	{
-			//Deduct the quantity from Quantity In Stock and Quantity In Demand
-                	$updateStockAndDemand = 'true';
+			//Deduct the quantity from Quantity In Demand
+                	$updateDemand = '-';
 		}
 		elseif($focus->column_fields['sostatus'] == 'Approved')
 		{
 			//Add the quantity with Quantity In Demand
-			$updateDemand = 'true';
+			$updateDemand = '+';
 		}
         }
 
@@ -62,7 +62,7 @@ if($focus->column_fields["quote_id"] != '')
 }
 
 //Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'SalesOrder','',$updateStockAndDemand, $updateDemand);
+saveInventoryProductDetails(&$focus, 'SalesOrder','', $updateDemand);
 
 
 $return_id = $focus->id;
