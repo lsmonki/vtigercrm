@@ -206,7 +206,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$hrsel = 'selected';
 			else
 				$hrsel = '';
-			$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrtext.'</option>';
+			$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrtext.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
 		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
@@ -223,7 +223,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$minsel = 'selected';
 			else
 				$minsel = '';
-				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
+				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
 		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
@@ -255,7 +255,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 					$hrsel = 'selected';
 				else
 					$hrsel = '';
-				$combo .= '<option value="'.$hrvalue.'" "'.$hrsel.'">'.$hrvalue.'</option>';
+				$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrvalue.'</option>';
 			}
 			$combo .= '</select>Hr&nbsp;';
 			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
@@ -272,7 +272,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 					$minsel = 'selected';
 				else
 					$minsel = '';
-				$combo .= '<option value="'.$value.'" "'.$minsel.'">'.$value.'</option>';
+				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 			}
 			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 		}
