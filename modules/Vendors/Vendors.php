@@ -66,6 +66,10 @@ class Vendors extends CRMEntity {
 		$this->log->debug("Exiting Vendor method ...");
 	}
 
+	function save_module($module)
+	{
+	}	
+
 	/**	function used to get the list of products which are related to the vendor
 	 *	@param int $id - vendor id
 	 *	@return array - array which will be returned from the function GetRelatedList
