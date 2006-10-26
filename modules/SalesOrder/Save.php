@@ -31,39 +31,7 @@ $local_log =& LoggerManager::getLogger('index');
 $focus = new SalesOrder();
 setObjectValuesFromRequest(&$focus);
 
-if($focus->mode == 'edit' && ($focus->column_fields['sostatus'] == 'Delivered' || $focus->column_fields['sostatus'] == 'Approved'))
-{
-	$prev_sostatus=$adb->query_result($adb->query("select sostatus from vtiger_salesorder where salesorderid=$focus->id"),0,'sostatus');
-
-	if($focus->column_fields['sostatus'] != $prev_sostatus)
-	{
-       		if($focus->column_fields['sostatus'] == 'Delivered')
-        	{
-			//Deduct the quantity from Quantity In Demand
-                	$updateDemand = '-';
-		}
-		elseif($focus->column_fields['sostatus'] == 'Approved')
-		{
-			//Add the quantity with Quantity In Demand
-			$updateDemand = '+';
-		}
-        }
-
-}
-
 $focus->save("SalesOrder");
-
-//Checking if quote_id is present and updating the quote status
-if($focus->column_fields["quote_id"] != '')
-{
-        $qt_id = $focus->column_fields["quote_id"];
-        $query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
-        $adb->query($query1);
-}
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'SalesOrder','', $updateDemand);
-
 
 $return_id = $focus->id;
 
