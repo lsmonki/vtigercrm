@@ -36,10 +36,6 @@ class Leads extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_leaddetails'=>'leadid','vtiger_leadsubdetails'=>'leadsubscriptionid','vtiger_leadaddress'=>'leadaddressid','vtiger_leadscf'=>'leadid');
 
 
-	var $entity_table = "vtiger_crmentity";
-	var $table_name = "vtiger_leaddetails";
-	var $object_name = "Lead";
-	var $new_schema = true;
 
 	//construct this from database;	
 	var $column_fields = Array();
