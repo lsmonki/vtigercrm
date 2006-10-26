@@ -194,7 +194,7 @@
 						{foreach item=entries from=$ACTIVITIES.0.Entries}
 						<tr bgcolor="#FFFFCF">
 						<td style="border-bottom:1px dotted #dddddd;" align="right" width="20" valign=top>{$entries.IMAGE}</td>
-						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b>{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
+						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b>{$entries.0}</b>{*<br />{$entries.ACCOUNT_NAME*}</td>
 					</tr>
 						{/foreach}
 						</table>
@@ -227,7 +227,7 @@
 				{foreach item=entries from=$ACTIVITIES.1.Entries}
 				<tr>	
 					<td  style="border-bottom:1px dotted #dddddd;"  align="right" width="20">{$entries.IMAGE}</td>
-					<td  style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
+					<td  style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b>{*<br />{$entries.ACCOUNT_NAME*}</td>
 				</tr>
 				{/foreach}
 			</table>
