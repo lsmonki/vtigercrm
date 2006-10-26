@@ -56,7 +56,7 @@
 		</table>
 		{elseif $elements.fldname eq 'description'}
 		<div>
-			{$BLOCKS.4.Description.value}
+			{$elements.value}
 		</div>
 		{/if}
 	{/foreach}
