@@ -59,6 +59,10 @@ class PriceBooks extends CRMEntity {
 		$this->log->debug("Exiting PriceBook method ...");
 	}
 
+	function save_module($module)
+	{
+	}	
+
 	/**	Function used to get the sort order for PriceBook listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
