@@ -39,22 +39,9 @@ class Accounts extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $table_name = "vtiger_account";
 	var $tab_name = Array('vtiger_crmentity','vtiger_account','vtiger_accountbillads','vtiger_accountshipads','vtiger_accountscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_account'=>'accountid','vtiger_accountbillads'=>'accountaddressid','vtiger_accountshipads'=>'accountaddressid','vtiger_accountscf'=>'accountid');
 
-	var $entity_table = "vtiger_crmentity";
-
-	var $billadr_table = "vtiger_accountbillads";
-
-	var $object_name = "Accounts";
-	// Mike Crowe Mod --------------------------------------------------------added for general search
-	var $base_table_name = "vtiger_account";
-	var $cf_table_name = "vtiger_accountscf";
-
-	var $new_schema = true;
-
-	var $module_id = "accountid";
 
 	var $column_fields = Array();
 
@@ -89,8 +76,6 @@ class Accounts extends CRMEntity {
 			'City'=>'bill_city',
 			);
 
-	// This is the list of vtiger_fields that are required.
-	var $required_fields =  array("accountname"=>1);
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'accountname';
@@ -101,6 +86,13 @@ class Accounts extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Accounts');
 	}
+
+	/** Function to handle module specific operations when saving a entity 
+	*/
+	function save_module($module)
+	{
+	}
+
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**
