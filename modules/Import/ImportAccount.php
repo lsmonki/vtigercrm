@@ -30,7 +30,7 @@ require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
 
 // Account is used to store vtiger_account information.
-class ImportAccount extends Account {
+class ImportAccount extends Accounts {
 	 var $db;
 
 	// Get _dom arrays from Database

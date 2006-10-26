@@ -36,7 +36,7 @@ $comboFieldNames = Array('leadsource'=>'lead_source_dom'
 $comboFieldArray = getComboArray($comboFieldNames);
 
 // Account is used to store vtiger_account information.
-class ImportOpportunity extends Potential {
+class ImportOpportunity extends Potentials {
 	 var $db;
 
 	// This is the list of vtiger_fields that are required.

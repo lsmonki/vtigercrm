@@ -36,7 +36,7 @@ require_once('include/ComboUtil.php');
 require_once('modules/Leads/Leads.php');
 
 
-class ImportProduct extends Product {
+class ImportProduct extends Products {
 	 var $db;
 
 	// This is the list of the functions to run when importing

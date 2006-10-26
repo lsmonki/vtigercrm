@@ -28,7 +28,7 @@ $comboFieldNames = Array('salutationtype'=>'salutation_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
 // Contact is used to store customer information.
-class ImportContact extends Contact {
+class ImportContact extends Contacts {
 	// these are vtiger_fields that may be set on import
 	// but are to be processed and incorporated
 	// into vtiger_fields of the parent class
