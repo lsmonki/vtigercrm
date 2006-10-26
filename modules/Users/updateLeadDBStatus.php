@@ -32,6 +32,34 @@ $module_array = array (
                           'Campaigns' => 'updateCampaignGroupRelation',
                           'Calendar' => 'updateActivityGroupRelation',
                        );
+
+$deletegroup_array = array (
+                          'Leads'=>'vtiger_leadgrouprelation',
+                          'Accounts'=>'vtiger_accountgrouprelation',
+                          'Contacts'=>'vtiger_contactgrouprelation',
+                          'Potentials'=>'vtiger_potentialgrouprelation',
+                          'Quotes'=>'vtiger_quotegrouprelation',
+                          'SalesOrder'=>'vtiger_sogrouprelation',
+                          'Invoice'=>'vtiger_invoicegrouprelation',
+                          'PurchaseOrder'=>'vtiger_pogrouprelation',
+                          'HelpDesk'=>'vtiger_ticketgrouprelation',
+                          'Campaigns'=>'vtiger_campaigngrouprelation',
+                          'Calendar'=>'vtiger_activitygrouprelation',
+                            );
+$tableId_array= array (
+                       'Leads'=>'leadid',
+                          'Accounts'=>'accountid',
+                          'Contacts'=>'contactid',
+                          'Potentials'=>'potentialid',
+                          'Quotes'=>'quoteid',
+                          'SalesOrder'=>'salesorderid',
+                          'Invoice'=>'invoiceid',
+                          'PurchaseOrder'=>'purchaseorderid',
+                          'HelpDesk'=>'ticketid',
+                          'Campaigns'=>'campaignid',
+                          'Calendar'=>'activityid',       
+                      );
+
 global $current_user;
 global $adb;
 $storearray = explode(";",trim($idlist,';'));
@@ -48,6 +76,11 @@ if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['grou
 		{
 			if($_REQUEST['user_id'] != '' && $id != '')
 			{
+				//First we have to delete the group relationship
+				$delete_query = "delete from ". $deletegroup_array[$return_module] ." where " . $tableId_array[$return_module] . "='".$id."'";
+				$result = $adb->query($delete_query); 
+
+				//Now we have to update the smownerid
 				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 				$result = $adb->query($sql);
 			}
