@@ -1041,6 +1041,8 @@ $app_strings = Array(
 'Expected Response'=>'Expected Response',
 'LBL_ADDRESS_INF'=>'Address Information',
 
+'yes'=>'yes',
+
 );
 
 

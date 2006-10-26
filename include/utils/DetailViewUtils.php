@@ -333,7 +333,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$value = $col_fields[$fieldname];
 		if($value == 1)
 		{
-			$display_val = 'yes';
+			//Since "yes" is not been translated it is given as app strings here..
+			$display_val = $app_strings['yes'];
 		}
 		else
 		{
