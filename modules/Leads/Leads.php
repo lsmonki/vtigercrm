@@ -88,6 +88,12 @@ class Leads extends CRMEntity {
 		$this->log->debug("Exiting Lead method ...");
 	}
 
+	/** Function to handle module specific operations when saving a entity
+	*/
+	function save_module($module)
+	{
+	}
+
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**
 	 * Function to get sort order
