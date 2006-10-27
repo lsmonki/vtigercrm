@@ -182,11 +182,6 @@ function verify_data() {
 	//return true;
 }
 
-function goto_CustomAction(module)
-{
-        document.location.href = "index.php?module="+module+"&action=CustomAction&record={CUSTOMVIEWID}";
-}
-
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -206,7 +201,6 @@ function goto_CustomAction(module)
 				{CANSAVE}
                 <input type="submit" class="button" name="saveNew" value="{APP.LBL_SAVE_BUTTON_LABEL} as New"  tabindex="3">
                 <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
-		{CUSTOMACTIONBUTTON}
             </div></td>
         </tr>
 </table>

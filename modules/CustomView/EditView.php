@@ -144,13 +144,6 @@ else
 
 	$xtpl->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
 	$xtpl->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
-	
-	$cactionhtml = "<input name='customaction' class='button' type='button' value='Create Custom Action' onclick=goto_CustomAction('".$cv_module."');>";
-
-	if($cv_module == "Leads" || $cv_module == "Accounts" || $cv_module == "Contacts")
-	{
-		$xtpl->assign("CUSTOMACTIONBUTTON",$cactionhtml);
-	}
 }
 
 // current user can only save his own records
