@@ -61,7 +61,7 @@ if($adb->num_rows != 0)
 }
 
 
-
+echo "<br>&nbsp; 5.0.2 Database changes has been done.<br>";
 
 
 ?>
