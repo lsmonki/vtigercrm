@@ -19,6 +19,27 @@ require_once('include/logging.php');
 $cal_log =& LoggerManager::getLogger('calendar');
 $cal_log->debug("In CalendarAjax file");
 $mysel = $_REQUEST['view'];
+if($_REQUEST['file'] == 'OpenListView')
+{
+	require_once('Smarty_setup.php');
+	$smarty = new vtigerCRM_Smarty;
+	require_once("modules/Calendar/OpenListView.php");
+	$smarty->assign("APP",$app_strings);
+	$smarty->assign("IMAGE_PATH",$image_path);
+	if($_REQUEST['mode'] == '0')
+	{
+		$activities[0] = getPendingActivities(0);
+		$smarty->assign("ACTIVITIES",$activities);
+		$smarty->display("upcomingActivities.tpl");
+	}
+	else if($_REQUEST['mode'] == '1')
+	{
+		$activities[1] = getPendingActivities(1);
+		$smarty->assign("ACTIVITIES",$activities);
+		$smarty->display("pendingActivities.tpl");
+	}
+	die();
+}
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 $date_data = array();
