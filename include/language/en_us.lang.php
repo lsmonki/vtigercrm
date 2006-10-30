@@ -1042,6 +1042,9 @@ $app_strings = Array(
 'LBL_ADDRESS_INF'=>'Address Information',
 
 'yes'=>'yes',
+'LBL_RENAMEPROFILE_BUTTON_LABEL'=>'Rename',
+'LBL_RENAME_PROFILE'=>'Rename Profile',
+'LBL_PROFILE_NAME'=>'Profile Name',
 
 );
 

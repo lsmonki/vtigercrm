@@ -59,16 +59,24 @@ if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQU
 else
 {
 	$profileName=getProfileName($profileId);
+
 }
 
 $smarty->assign("PROFILE_NAME", $profileName);
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
+	
 	$smarty->assign("PROFILE_DESCRIPTION",$_REQUEST['profile_description']);
+else
+{
+	$profileDescription = getProfileDescription($profileId);
+}
+
+$smarty->assign("Profile_Name", $profileName);
+$smarty->assign("Profile_Description", $profileDescription);
+
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
 	$smarty->assign("MODE",$_REQUEST['mode']);
-
-
 
 
 //Initially setting the secondary selected vtiger_tab
