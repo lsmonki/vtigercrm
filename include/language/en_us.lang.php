@@ -1045,6 +1045,8 @@ $app_strings = Array(
 'LBL_RENAMEPROFILE_BUTTON_LABEL'=>'Rename',
 'LBL_RENAME_PROFILE'=>'Rename Profile',
 'LBL_PROFILE_NAME'=>'Profile Name',
+'LBL_START_DATE'=>'Start Date',
+'LBL_END_DATE'=>'End Date',
 
 );
 

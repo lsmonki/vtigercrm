@@ -383,8 +383,8 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_TYPE'];
 		$header[] = $app_strings['LBL_SUBJECT'];
 		$header[] = $app_strings['LBL_RELATED_TO'];
-		$header[] = $mod_strings['LBL_START_DATE'];
-		$header[] = $mod_strings['LBL_END_DATE'];
+		$header[] = $app_strings['LBL_START_DATE'];
+		$header[] = $app_strings['LBL_END_DATE'];
 		//$header[] = $app_strings['LBL_DESCRIPTION'];
 		$header[] = $app_strings['LBL_ACTION'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
