@@ -42,7 +42,7 @@ $smarty = new vtigerCRM_Smarty;
 
 $category = getParenttab();
 
-$oUser = new User($id);
+$oUser = new Users($id);
 
 
 $user_list = getUserslist();
