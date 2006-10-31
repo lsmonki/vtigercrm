@@ -21,7 +21,20 @@
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">
-
+function checkgroup()
+{ldelim}
+  if(document.change_ownerform_name.user_lead_owner[1].checked)
+  {ldelim}
+  document.change_ownerform_name.lead_group_owner.style.display = "block";
+  document.change_ownerform_name.lead_owner.style.display = "none";
+  {rdelim}
+  else
+  {ldelim}
+  document.change_ownerform_name.lead_owner.style.display = "block";
+  document.change_ownerform_name.lead_group_owner.style.display = "none";
+  {rdelim}    
+  
+{rdelim}
 function callSearch(searchtype)
 {ldelim}
 	for(i=1;i<=26;i++)
@@ -258,18 +271,24 @@ function alphabetic(module,url,dataid)
 		<td class=small >
 		
 			<!-- popup specific content fill in starts -->
-
+      <form name="change_ownerform_name">
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 				<tr>
 					<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 					<td width="2%"><b>:</b></td>
 					<td width="48%">
+					<input type = "radio" name = "user_lead_owner"  onclick=checkgroup(); checked>{$APP.LBL_USER}&nbsp;
+					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
 					{$CHANGE_OWNER}
+					</select>
+					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+					{$CHANGE_GROUP_OWNER}
 					</select>
 					</td>
 				</tr>
 			</table>
+			</form>
 		</td>
 	</tr>
 </table>
@@ -342,13 +361,22 @@ function ajaxChangeStatus(statusname)
 	}
 	else if(statusname == 'owner')
 	{
-		fninvsh('changeowner');
-		var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
-		
-{/literal}
-		var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
-{literal}
-
+	   if(document.change_ownerform_name.user_lead_owner[0].checked)
+	   {
+		    fninvsh('changeowner');
+		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		    {/literal}
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
+		    {literal}
+     }
+    else
+    {
+        fninvsh('changeowner');
+		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
+	       {/literal}
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
+        {literal}
+    }
 	}
 	new Ajax.Request(
                 'index.php',

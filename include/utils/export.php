@@ -20,23 +20,23 @@ if (substr(phpversion(), 0, 1) == "5") {
 require_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Leads/Lead.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Leads/Leads.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Emails/Emails.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Users/User.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Users/Users.php');
+require_once('modules/Products/Products.php');
 require_once('include/utils/UserInfoUtil.php');
 
 global $allow_exports;
 
 session_start();
 
-$current_user = new User();
+$current_user = new Users();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
@@ -87,51 +87,15 @@ function export_all($type)
 {
 	global $log;
 	$log->debug("Entering export_all(".$type.") method ...");
-	$contact_fields = Array();
-	$account_fields = Array();
 	global $adb;
+
 	$focus = 0;
 	$content = '';
 
-	if ($type == "Contacts")
+	if ($type != "")
 	{
-		$focus = new Contact;
+		$focus = new $type;
 	}
-	else if ($type == "Accounts")
-	{
-		$focus = new Account;
-		$exp_query="SELECT columnname, fieldlabel FROM vtiger_field where tabid=6";
-		$account_result=$adb->query($exp_query);
-		if($adb->num_rows($account_result)!=0)
-		{
-			while($result = $adb->fetch_array($account_result))
-			{
-				$account_columnname = $result['columnname'];
-				$account_fieldlabel = $result['fieldlabel'];
-				$account_fields[$account_columnname] = $account_fieldlabel;
-			}
-		}
-	}
-	else if ($type == "Potentials")
-	{
-        	$focus = new Potential;
-	}
-	else if ($type == "Notes")
-	{
-		$focus = new Note;
-	}
-	else if ($type == "Leads")
-	{
-		$focus = new Lead;
-	}
-	else if ($type == "Emails")
-	{
-		$focus = new Email;
-	}
-	else if ($type == "Products")
-        {
-                $focus = new Product;
-        }
 
 	$log = LoggerManager::getLogger('export_'.$type);
 	$db = new PearDatabase();

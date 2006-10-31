@@ -129,6 +129,11 @@ if($_REQUEST['migration_option'] != '')
 	}
 }
 
+//For 5.0.2 we have added this table. After 5.0.2 we have to remove this and provide the migration in some other way
+$res = $adb->query("show create table vtiger_entityname");
+if(!$res)
+	$smarty->assign("502_PATCH","apply");
+
 $smarty->display("MigrationStep1.tpl");
 
 

@@ -221,7 +221,7 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	foreach($oCustomView->module_list[$module] as $key=>$value)
 	{
 		$advfilter = array();			
-		$label = $app_list_strings['moduleList'][$module]." ".$key;
+		$label = $key;
 		if(isset($columnslist[$module][$key]))
 		{
 			foreach($columnslist[$module][$key] as $field=>$fieldlabel)

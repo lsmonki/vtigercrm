@@ -390,6 +390,35 @@ function return_module_language($language, $module)
 	return $return_value;
 }
 
+/*This function returns the mod_strings for the current language and the specified module
+*/
+
+function return_specified_module_language($language, $module)
+{
+	global $log;
+	global $default_language, $translation_string_prefix;
+
+	@include("modules/$module/language/$language.lang.php");
+	if(!isset($mod_strings))
+	{
+		$log->warn("Unable to find the module language file for language: ".$language." and module: ".$module);
+		require("modules/$module/language/$default_language.lang.php");
+		$language_used = $default_language;
+	}
+
+	if(!isset($mod_strings))
+	{
+		$log->fatal("Unable to load the module($module) language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_module_language method ...");
+		return null;
+	}
+
+	$return_value = $mod_strings;
+
+	$log->debug("Exiting return_module_language method ...");
+	return $return_value;
+}
+
 /** This function retrieves an application language file and returns the array of strings included in the $mod_list_strings var.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -2048,9 +2077,9 @@ function getEmailParentsList($module,$id)
 	$log->debug("Entering getEmailParentsList(".$module.",".$id.") method ...");
         global $adb;
 	if($module == 'Contacts')
-		$focus = new Contact();
+		$focus = new Contacts();
 	if($module == 'Leads')
-		$focus = new Lead();
+		$focus = new Leads();
         
 	$focus->retrieve_entity_info($id,$module);
         $fieldid = 0;

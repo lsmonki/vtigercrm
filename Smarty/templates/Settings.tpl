@@ -11,20 +11,14 @@
 -->*}
 
 	{include file="Buttons_List1.tpl"}
+
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
-	<table border=0 cellspacing=0 cellpadding=10 width=90% class="settingsUI">
-	<tr>
-		<td>
-		<!-- heading -->
-
-		<span class="heading2">{$MOD.LBL_SETTINGS}</span>
-		</td>
-	</tr>
+	<table border=0 cellspacing=0 cellpadding=20 width=90% class="settingsUI">
 	<tr>
 		<td>
 			<!--All Icons table -->

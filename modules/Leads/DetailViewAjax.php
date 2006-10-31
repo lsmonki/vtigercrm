@@ -10,7 +10,7 @@
   ********************************************************************************/
 	      
 require_once('include/logging.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -24,7 +24,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$leadObj = new Lead();
+		$leadObj = new Leads();
 		$leadObj->retrieve_entity_info($crmid,"Leads");
 		$leadObj->column_fields[$fieldname] = $fieldvalue;
 		$leadObj->id = $crmid;

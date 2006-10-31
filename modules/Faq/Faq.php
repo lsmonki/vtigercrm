@@ -33,7 +33,7 @@ class Faq extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_faq','vtiger_faqcomments');
+	var $tab_name = Array('vtiger_crmentity','vtiger_faq');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_faq'=>'id','vtiger_faqcomments'=>'faqid');
 				
 	var $entity_table = "vtiger_crmentity";
@@ -85,6 +85,40 @@ class Faq extends CRMEntity {
 		$this->column_fields = getColumnFields('Faq');
 		$this->log->debug("Exiting Faq method ...");
 	}
+
+	function save_module($module)
+	{
+		//Inserting into Faq comment table
+		$this->insertIntoFAQCommentTable('vtiger_faqcomments', $module);
+		
+	}
+
+
+	/** Function to insert values in vtiger_faqcomments table for the specified module,
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
+	function insertIntoFAQCommentTable($table_name, $module)
+	{
+		global $log;
+		$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
+        	global $adb;
+
+        	$current_time = $adb->formatDate(date('YmdHis'));
+
+		if($this->column_fields['comments'] != '')
+			$comment = $this->column_fields['comments'];
+		else
+			$comment = $_REQUEST['comments'];
+
+		if($comment != '')
+		{
+			$comment = addslashes($comment);
+			$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."',".$current_time.")";	
+			$adb->query($sql);
+		}
+	}	
+	
 
 	/**     Function to get the list of comments for the given FAQ id
          *      @param  int  $faqid - FAQ id

@@ -69,7 +69,7 @@ $pdf->addRecBlock($valid_till, "Due Date",$dueBlock);
 
 // vtiger_invoice number block
 $invBlock=array("145","65");
-$pdf->addRecBlock($id, "Invoice Number",$invBlock);
+$pdf->addRecBlock($id, "SO Number",$invBlock);
 
 /* ************ End Invoice Data ************************ */
 

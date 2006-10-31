@@ -81,12 +81,12 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select name="{$fldname}" tabindex="{$vt_tab}" >
+			   <select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>
-                                                {if $APP[$sel_value] neq ''}
-                                                        {$APP[$sel_value]}
+                                                {if $APP.$sel_value neq ''}
+                                                {$APP.$sel_value}
                                                 {else}
                                                         {$sel_value}
                                                 {/if}
@@ -100,12 +100,11 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select MULTIPLE name="{$fldname}[]" size="4" style="width:160px;" tabindex="{$vt_tab}" >
-				{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>{$sel_value}</option>
-					{/foreach}
-				{/foreach}
+			   <select MULTIPLE name="{$fldname}[]" size="4" style="width:160px;" tabindex="{$vt_tab}" class="small">
+				                    									{foreach key=sel_value item=value from=$arr}
+                    										<option value="{$sel_value}" {$value}>{if $APP.$sel_value}{$APP.$sel_value}{else}{$sel_value}{/if}</option>
+                    									
+                    									{/foreach}
 			   </select>
 			</td>
 
@@ -135,13 +134,13 @@
 					{assign var=style_group value='display:block'}
 				{/if}
 
-				<input type="radio" tabindex="{$vt_tab}" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_USER}
+				<input type="radio" tabindex="{$vt_tab}" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)" >&nbsp;{$APP.LBL_USER}
 
 				{if $secondvalue neq ''}
 					<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
 				{/if}
 				<span id="assign_user" style="{$style_user}">
-					<select name="assigned_user_id">
+					<select name="assigned_user_id" class="small">
 						{foreach key=key_one item=arr from=$fldvalue}
 							{foreach key=sel_value item=value from=$arr}
 								<option value="{$key_one}" {$value}>{$sel_value}</option>
@@ -152,7 +151,7 @@
 
 				{if $secondvalue neq ''}
 					<span id="assign_team" style="{$style_group}">
-						<select name="assigned_group_name">';
+						<select name="assigned_group_name" class="small">';
 							{foreach key=key_one item=arr from=$secondvalue}
 								{foreach key=sel_value item=value from=$arr}
 									<option value="{$sel_value}" {$value}>{$sel_value}</option>
@@ -168,11 +167,11 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 				{if $uitype eq 52}
-					<select name="assigned_user_id">
+					<select name="assigned_user_id" class="small">
 				{elseif $uitype eq 77}
-					<select name="assigned_user_id1" tabindex="{$vt_tab}" >
+					<select name="assigned_user_id1" tabindex="{$vt_tab}" class="small">
 				{else}
-					<select name="{$fldname}" tabindex="{$vt_tab}" >
+					<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{/if}
 
 				{foreach key=key_one item=arr from=$fldvalue}
@@ -361,7 +360,7 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 				<input name="{$fldname}" type="text" size="2" value="{$fldvalue}" tabindex="{$vt_tab}" >&nbsp;
-				<select name="duration_minutes" tabindex="{$vt_tab}" >
+				<select name="duration_minutes" tabindex="{$vt_tab}" class="small">
 					{foreach key=labelval item=selectval from=$secondvalue}
 						<option value="{$labelval}" {$selectval}>{$labelval}</option>
 					{/foreach}
@@ -369,7 +368,7 @@
 
 		{elseif $uitype eq 68 || $uitype eq 66 || $uitype eq 62}
 			<td width="20%" class="dvtCellLabel" align=right>
-				<select name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
+				<select class="small" name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
 					{section name=combo loop=$fldlabel}
 						<option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]}>{$fldlabel[combo]}</option>
 					{/section}
@@ -386,7 +385,7 @@
 			<td width="90%" colspan="3">
 				<input name="{$fldname}" type="hidden" value="{$secondvalue}">
 				<textarea readonly name="parent_name" cols="70" rows="2">{$fldvalue}</textarea>&nbsp;
-				<select name="parent_type">
+				<select name="parent_type" class="small">
 					{foreach key=labelval item=selectval from=$fldlabel}
 						<option value="{$labelval}" {$selectval}>{$labelval}</option>
 					{/foreach}
@@ -416,7 +415,7 @@
 		{elseif $uitype eq 55} 
 			<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 			<td width="30%" align=left class="dvtCellInfo">
-				<select name="salutationtype">
+				<select name="salutationtype" class="small">
 					{foreach item=arr from=$fldvalue}
 						{foreach key=sel_value item=value from=$arr}
 							<option value="{$sel_value}" {$value}>{$sel_value}</option>
@@ -528,9 +527,9 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 			   {if $secondvalue eq 1}
-			   	<select name="{$fldname}" tabindex="{$vt_tab}" >
+			   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
-			   	<select disabled name="{$fldname}">
+			   	<select disabled name="{$fldname}" class="small">
 			   {/if} 
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
@@ -568,9 +567,9 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 			   {if $secondvalue eq 1}
-			   	<select name="{$fldname}" tabindex="{$vt_tab}" >
+			   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
-			   	<select disabled name="{$fldname}" tabindex="{$vt_tab}" >
+			   	<select disabled name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {/if} 
 
 				{foreach item=arr key=uivalueid from=$fldvalue}
@@ -618,7 +617,7 @@
 					{assign var=sendname value="$val_arr[2]"}
 					{assign var=disp_text value="$val_arr[3]"}
 					{assign var=sel_val value="$val_arr[4]"}
-					<select name="{$sendname}">
+					<select name="{$sendname}" class="small">
 						{section name=reminder start=$start max=$end loop=$end step=1 }
 							{if $smarty.section.reminder.index eq $sel_val}
 								{assign var=sel_value value="SELECTED"}

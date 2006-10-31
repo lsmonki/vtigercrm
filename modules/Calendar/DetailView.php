@@ -136,21 +136,21 @@ $data['subject'] = $finaldata['subject'];
 $data['date_start'] = $stdate;
 $data['due_date'] = $enddate;
 $data['assigned_user_id'] = $finaldata['assigned_user_id'];
-$data['taskpriority'] = $finaldata['taskpriority'];
+$data['taskpriority'] = $mod_strings[$finaldata['taskpriority']];
 $data['modifiedtime'] = $finaldata['modifiedtime'];
 $data['createdtime'] = $finaldata['createdtime'];
 $data['parent_name'] = $finaldata['parent_id'];
 $data['description'] = $finaldata['description'];
 if($activity_mode == 'Task')
 {
-	$data['taskstatus'] = $finaldata['taskstatus'];
+	$data['taskstatus'] = $mod_strings[$finaldata['taskstatus']];
 	$data['activitytype'] = $activity_mode;
 	$data['contact_id'] = $finaldata['contact_id'];
 }
 elseif($activity_mode == 'Events')
 {
 	$data['visibility'] = $finaldata['visibility'];
-	$data['eventstatus'] = $finaldata['eventstatus'];
+	$data['eventstatus'] = $mod_strings[$finaldata['eventstatus']];
 	$data['activitytype'] = $finaldata['activitytype'];
 	$data['location'] = $finaldata['location'];
 	//Calculating reminder time

@@ -18,6 +18,13 @@
 function getImportSavedMap(impoptions)
 {ldelim}
 	var mapping = impoptions.options[impoptions.options.selectedIndex].value;
+
+	//added to show the delete link
+	if(mapping != -1)
+		document.getElementById("delete_mapping").style.visibility = "visible";
+	else
+		document.getElementById("delete_mapping").style.visibility = "hidden";
+
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -28,6 +35,27 @@ function getImportSavedMap(impoptions)
 				{rdelim}
 			{rdelim}
 		);
+{rdelim}
+function deleteMapping()
+{ldelim}
+	var options_collection = document.getElementById("saved_source").options;
+	var mapid = options_collection[options_collection.selectedIndex].value;
+
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Import&mapping='+mapid+'&action=ImportAjax&delete_map='+mapid,
+			onComplete: function(response) {ldelim}
+					$("importmapform").innerHTML = response.responseText;
+				{rdelim}
+			{rdelim}
+		);
+
+	//we have emptied the map name from the select list
+	document.getElementById("saved_source").options[options_collection.selectedIndex] = null;
+	document.getElementById("delete_mapping").style.visibility = "hidden";
+	alert("This map has been deleted. You cannot use this map again");
 {rdelim}
 
 </script>

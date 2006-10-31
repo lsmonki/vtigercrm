@@ -30,19 +30,8 @@ require_once('data/CRMEntity.php');
 class Activity extends CRMEntity {
 	var $log;
 	var $db;
-
-	var $table_name = "vtiger_activity";
-	#var $object_name = "activity";	
-		// Mike Crowe Mod --------------------------------------------------------Renamed to match vtiger_tab
-	var $object_name = "Activities";
-	// Mike Crowe Mod --------------------------------------------------------added for general search
-    var $base_table_name = "vtiger_activity";
-    var $cf_table_name = "";
-	var $module_id = "activityid";
-	
-	var $reminder_table = "vtiger_activity_reminder";
-	
-	var $tab_name = Array('vtiger_crmentity','vtiger_activity','vtiger_seactivityrel','vtiger_cntactivityrel','vtiger_salesmanactivityrel','vtiger_activity_reminder','vtiger_recurringevents','vtiger_invitees');
+	var $reminder_table = 'vtiger_activity_reminder';
+	var $tab_name = Array('vtiger_crmentity','vtiger_activity');
 
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_salesmanactivityrel'=>'activityid','vtiger_activity_reminder'=>'activity_id','vtiger_recurringevents'=>'activityid');
 
@@ -104,8 +93,261 @@ class Activity extends CRMEntity {
 		$this->column_fields = getColumnFields('Calendar');
 	}
 
-	var $new_schema = true;
 
+	function save_module($module)
+	{
+		//Handling module specific save
+		//Insert into seactivity rel			
+				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+				{
+					$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
+				}
+				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+				{
+					$this->deleteRelation("vtiger_seactivityrel");
+				}
+		//Insert into cntactivity rel		
+
+			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
+			{
+				$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
+			}
+			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+			{
+				$this->deleteRelation('vtiger_cntactivityrel');
+			}
+		
+		//Handling for recurring type
+			//Insert into vtiger_activity_remainder table
+			if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='')
+				$recur_type = trim($this->column_fields['recurringtype']);
+			else
+    				$recur_type='';	
+		
+			if($recur_type == "--None--")
+			{
+				$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
+			}
+
+			//Insert into vtiger_recurring event table
+			$recur_type = trim($this->column_fields['recurringtype']);
+			if($recur_type != "--None--"  && $recur_type != '')
+		      	{		   
+				$recur_data = getrecurringObjValue();
+				if(is_object($recur_data))
+	      				$this->insertIntoRecurringTable($recur_data);
+			}
+
+		//Handling for invitees
+		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+		{
+			$selected_users_string =  $_REQUEST['inviteesid'];
+			$invitees_array = explode(';',$selected_users_string);
+			$this->insertIntoInviteeTable('vtiger_invitees',$module,$invitees_array);
+
+		}
+
+		//Inserting into sales man activity rel
+		$this->insertIntoSmActivityRel($module);
+
+
+			
+	}	
+
+
+	/** Function to insert values in vtiger_activity_remainder table for the specified module,
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */
+	function insertIntoReminderTable($table_name,$module,$recurid)
+	{
+	 	global $log;
+		$log->info("in insertIntoReminderTable  ".$table_name."    module is  ".$module);
+		if($_REQUEST['set_reminder'] == 'Yes')
+		{
+			$log->debug("set reminder is set");
+			$rem_days = $_REQUEST['remdays'];
+			$log->debug("rem_days is ".$rem_days);
+			$rem_hrs = $_REQUEST['remhrs'];
+			$log->debug("rem_hrs is ".$rem_hrs);
+			$rem_min = $_REQUEST['remmin'];
+			$log->debug("rem_minutes is ".$rem_min);
+			$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
+			$log->debug("reminder_time is ".$reminder_time);
+			if ($recurid == "")
+			{
+				if($_REQUEST['mode'] == 'edit')
+				{
+					$this->activity_reminder($this->id,$reminder_time,0,$recurid,'edit');
+				}
+				else
+				{
+					$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
+				}
+			}
+			else
+			{
+				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
+			}
+		}
+		elseif($_REQUEST['set_reminder'] == 'No')
+		{
+			$this->activity_reminder($this->id,'0',0,$recurid,'delete');
+		}
+	}
+	
+
+	// Code included by Jaguar - starts
+	/** Function to insert values in vtiger_recurringevents table for the specified tablename,module
+  	  * @param $recurObj -- Recurring Object:: Type varchar
+ 	 */	
+function insertIntoRecurringTable(& $recurObj)
+{
+	global $log,$adb;
+	$log->info("in insertIntoRecurringTable  ");
+	$st_date = $recurObj->startdate->get_formatted_date();
+	$log->debug("st_date ".$st_date);
+	$end_date = $recurObj->enddate->get_formatted_date();
+	$log->debug("end_date is set ".$end_date);
+	$type = $recurObj->recur_type;
+	$log->debug("type is ".$type);
+        $flag="true";
+
+	if($_REQUEST['mode'] == 'edit')
+	{
+		$activity_id=$this->id;
+
+		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from vtiger_recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
+		
+		$result = $adb->query($sql);
+		$noofrows = $adb->num_rows($result);
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$recur_type_b4_edit = $adb->query_result($result,$i,"recurringtype");
+			$date_start_b4edit = $adb->query_result($result,$i,"min_date");
+			$end_date_b4edit = $adb->query_result($result,$i,"max_date");
+		}
+		if(($st_date == $date_start_b4edit) && ($end_date==$end_date_b4edit) && ($type == $recur_type_b4_edit))
+		{
+			if($_REQUEST['set_reminder'] == 'Yes')
+			{
+				$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
+				$adb->query($sql);
+				$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
+				$adb->query($sql);
+				$flag="true";
+			}
+			elseif($_REQUEST['set_reminder'] == 'No')
+			{
+				$sql = 'delete  from vtiger_activity_reminder where activity_id='.$activity_id;
+				$adb->query($sql);
+				$flag="false";
+			}
+			else
+				$flag="false";
+		}
+		else
+		{
+			$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
+			$adb->query($sql);
+			$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
+			$adb->query($sql);
+		}
+	}
+	$date_array = $recurObj->recurringdates;
+	if(isset($recurObj->recur_freq) && $recurObj->recur_freq != null)
+		$recur_freq = $recurObj->recur_freq;
+	else
+		$recur_freq = 1;
+	if($recurObj->recur_type == 'Daily' || $recurObj->recur_type == 'Yearly')
+		$recurringinfo = $recurObj->recur_type;
+	elseif($recurObj->recur_type == 'Weekly')
+	{
+		$recurringinfo = $recurObj->recur_type;
+		if($recurObj->dayofweek_to_rpt != null)
+			$recurringinfo = $recurringinfo.'::'.implode('::',$recurObj->dayofweek_to_rpt);
+	}
+	elseif($recurObj->recur_type == 'Monthly')
+	{
+		$recurringinfo =  $recurObj->recur_type.'::'.$recurObj->repeat_monthby;
+		if($recurObj->repeat_monthby == 'date')
+			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_datevalue;
+		else
+			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_daytype.'::'.$recurObj->dayofweek_to_rpt[0];
+	}
+	else
+	{
+		$recurringinfo = '';
+	}
+	if($flag=="true")
+	{
+		for($k=0; $k< count($date_array); $k++)
+		{
+			$tdate=$date_array[$k];
+			if($tdate <= $end_date)
+			{
+				$max_recurid_qry = 'select max(recurringid) AS recurid from vtiger_recurringevents;';
+				$result = $adb->query($max_recurid_qry);
+				$noofrows = $adb->num_rows($result);
+				for($i=0; $i<$noofrows; $i++)
+				{
+					$recur_id = $adb->query_result($result,$i,"recurid");
+				}
+				$current_id =$recur_id+1;
+				$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."','".$recur_freq."','".$recurringinfo."')";
+				$adb->query($recurring_insert);
+				if($_REQUEST['set_reminder'] == 'Yes')
+				{
+					$this->insertIntoReminderTable("vtiger_activity_reminder",$module,$current_id,'');
+				}
+			}
+		}
+	}
+}
+
+
+	/** Function to insert values in vtiger_invitees table for the specified module,tablename ,invitees_array
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+	  * @param $invitees_array Array
+ 	 */
+	function insertIntoInviteeTable($table_name,$module,$invitees_array)
+	{
+		global $log,$adb;
+		$log->debug("Entering insertIntoInviteeTable(".$table_name.",".$module.",".$invitees_array.") method ...");
+		foreach($invitees_array as $inviteeid)
+		{
+			if($inviteeid != '')
+			{
+				$query="insert into vtiger_invitees values(".$this->id.",".$inviteeid.")";
+				$adb->query($query);
+			}
+		}
+		$log->debug("Exiting insertIntoInviteeTable method ...");
+
+	}
+
+
+	/** Function to insert values in vtiger_salesmanactivityrel table for the specified module
+  	  * @param $module -- module:: Type varchar
+ 	 */
+
+  	function insertIntoSmActivityRel($module)
+  	{
+    		global $adb;
+    		global $current_user;
+    		if($this->mode == 'edit')
+    		{
+
+      			$sql = "delete from vtiger_salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
+      			$adb->query($sql);
+
+    		}
+		$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
+    		$adb->query($sql_qry);
+
+  	}
+	
 	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**
@@ -154,7 +396,7 @@ class Activity extends CRMEntity {
                         $log->debug("Entering get_contacts(".$id.") method ...");
 			global $app_strings;
 
-			$focus = new Contact();
+			$focus = new Contacts();
 
 			$button = '';
 
@@ -177,7 +419,7 @@ class Activity extends CRMEntity {
                 $log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 
-		$focus = new User();
+		$focus = new Users();
 
 		$button = '';
 
@@ -395,8 +637,8 @@ function get_tasksforol($username)
 	global $log,$adb;
 	$log->debug("Entering get_tasksforol(".$username.") method ...");
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -447,8 +689,8 @@ function get_calendarsforol($user_name)
 	global $log,$adb;
 	$log->debug("Entering get_calendarsforol(".$user_name.") method ...");
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');

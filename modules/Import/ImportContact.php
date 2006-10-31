@@ -18,7 +18,7 @@
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
@@ -28,7 +28,7 @@ $comboFieldNames = Array('salutationtype'=>'salutation_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
 // Contact is used to store customer information.
-class ImportContact extends Contact {
+class ImportContact extends Contacts {
 	// these are vtiger_fields that may be set on import
 	// but are to be processed and incorporated
 	// into vtiger_fields of the parent class
@@ -169,7 +169,7 @@ class ImportContact extends Contact {
                 $arr = array();
 
 		// check if it already exists
-                $focus = new Account();
+                $focus = new Accounts();
 
 		$query = '';
 

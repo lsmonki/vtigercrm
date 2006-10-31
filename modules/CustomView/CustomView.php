@@ -36,25 +36,7 @@ class CustomView extends CRMEntity{
 
 
 
-	var $module_list = Array("Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
-				 "Contacts"=>Array("Information"=>4,"Address"=>7,"Description"=>8,"Custom Information"=>5),
-				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
-				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
-				 "Calendar"=>Array("Information"=>19,"Description"=>20),
- 		                 "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
-				 "Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
-				 "Vendors"=>Array("Information"=>44,"Address"=>46,"Description"=>47,"Custom Information"=>45),
-				 "PriceBooks"=>Array("Information"=>48,"Description"=>50,"Custom Information"=>49),
-				 "Notes"=>Array("Information"=>17,"Description"=>18),
-				 "Emails"=>Array("Information"=>'21,22,23',"Description"=>24),
-				 "HelpDesk"=>Array("Information"=>'25,26',"Description"=>28,"Custom Information"=>27,"Solution"=>29),
-				 "Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Terms and Conditions"=>55,"Custom Information"=>52),
-				 "PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Terms and Conditions"=>61,"Custom Information"=>58),
-				 "SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Terms and Conditions"=>67,"Custom Information"=>64),
-				 "Faq"=>Array("Information"=>'37,38,39'),
-				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Terms and Conditions"=>73,"Custom Information"=>70)
-				);
-
+	var $module_list = Array();
 
 	var $customviewmodule;
 
@@ -292,6 +274,8 @@ class CustomView extends CRMEntity{
 
 	function getModuleColumnsList($module)
 	{
+
+		$module_info = $this->getCustomViewModuleInfo($module);
 		foreach($this->module_list[$module] as $key=>$value)
 		{
 			$columnlist = $this->getColumnsListbyBlock($module,$value);
@@ -342,7 +326,7 @@ class CustomView extends CRMEntity{
 		global $current_user;
         	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
-
+		$module_info = $this->getCustomViewModuleInfo($module);
 		foreach($this->module_list[$module] as $key=>$blockid)
 		{
 			$blockids[] = $blockid;
@@ -1523,6 +1507,36 @@ class CustomView extends CRMEntity{
 			$calist["cvid"] = $carow["cvid"];
 		}
 		return $calist;	
+	}
+
+
+	/* This function sets the block information for the given module to the class variable module_list
+	* and return the array
+	*/
+
+	function getCustomViewModuleInfo($module)
+	{
+		global $adb;
+		global $current_language;
+		$current_mod_strings = return_specified_module_language($current_language, $module); 
+		$block_info = Array();
+		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,6,75,35,30,54,60,66,72) and vtiger_tab.name='$module' order by block";
+		$result = $adb->query($Sql);
+		while($block_result = $adb->fetch_array($result))
+		{
+			$block_label = $block_result['blocklabel'];
+			if (trim($block_label) == '')
+			{
+				$block_info[$pre_block_label] = $block_info[$pre_block_label].",".$block_result['block'];
+			}else
+			{
+				$lan_block_label = $current_mod_strings[$block_label];
+				$block_info[$lan_block_label] = $block_result['block'];
+			}
+			$pre_block_label = $lan_block_label;
+		}
+		$this->module_list[$module] = $block_info;
+		return $this->module_list;
 	}
 
 }

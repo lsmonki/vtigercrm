@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -31,7 +31,7 @@ require_once('include/FormValidationUtil.php');
 global $app_strings,$mod_strings,$currentModule,$theme;
 $smarty=new vtigerCRM_Smarty;
 
-$focus = new Account();
+$focus = new Accounts();
 
 if(isset($_REQUEST['record'])) 
 {

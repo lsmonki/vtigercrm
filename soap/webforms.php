@@ -82,8 +82,8 @@ function create_lead_from_webform($lastname, $email, $phone, $company, $country,
 		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
 	}
 
-	require_once("modules/Leads/Lead.php");
-	$focus = new Lead();
+	require_once("modules/Leads/Leads.php");
+	$focus = new Leads();
 	$focus->column_fields['lastname'] = $lastname;
 	$focus->column_fields['email'] = $email;
 	$focus->column_fields['phone'] = $phone;
@@ -126,8 +126,8 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
 	}
 
-	require_once('modules/Contacts/Contact.php');
-	$focus = new Contact();
+	require_once('modules/Contacts/Contacts.php');
+	$focus = new Contacts();
 
 	$focus->column_fields['firstname'] = $first_name;
 	$focus->column_fields['lastname'] = $last_name;

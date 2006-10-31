@@ -11,7 +11,7 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 //Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
 global $singlepane_view;
@@ -21,7 +21,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Potential();
+$focus = new Potentials();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 

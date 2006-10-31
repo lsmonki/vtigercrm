@@ -333,7 +333,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$value = $col_fields[$fieldname];
 		if($value == 1)
 		{
-			$display_val = 'yes';
+			//Since "yes" is not been translated it is given as app strings here..
+			$display_val = $app_strings['yes'];
 		}
 		else
 		{
@@ -945,7 +946,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
               $col_fields[$fieldname]='';
 	 if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ))
 	 {
-		$label_fld[] = convertFromDollar($col_fields[$fieldname],$rate);
+		  $rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+		  $label_fld[] = convertFromDollar($col_fields[$fieldname],$rate_symbol['rate']);
 	 }
 	else
 		$label_fld[] = $col_fields[$fieldname];

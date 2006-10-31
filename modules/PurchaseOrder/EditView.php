@@ -31,7 +31,7 @@ require_once('include/FormValidationUtil.php');
 global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 $smarty = new vtigerCRM_Smarty();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
@@ -60,8 +60,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 
 // Get vtiger_vendor address if vtiger_vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
-	require_once('modules/Vendors/Vendor.php');
-	$vend_focus = new Vendor();
+	require_once('modules/Vendors/Vendors.php');
+	$vend_focus = new Vendors();
 
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];

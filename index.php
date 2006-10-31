@@ -101,7 +101,7 @@ $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"300000
  	
 set_default_config($default_config_values);
 require_once('include/logging.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 
 global $currentModule;
 
@@ -352,7 +352,7 @@ $record = (isset($_REQUEST['record'])) ? $_REQUEST['record'] : "";
 $lang_crm = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
 $GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang_crm=$lang_crm";
 
-$current_user = new User();
+$current_user = new Users();
 
 if($use_current_login)
 {
@@ -432,90 +432,22 @@ if($action == "DetailView")
 	// Use the record to track the viewing.
 	// todo - Have a record of modules and thier primary object names.
 	//Getting the actual module
-	$actualModule = $currentModule;
 	switch($currentModule)
 	{
-		case 'Leads':
-			require_once("modules/$currentModule/Lead.php");
-			$focus = new Lead();
-			break;
-		case 'Contacts':
-			require_once("modules/$currentModule/Contact.php");
-			$focus = new Contact();
-			break;
-		case 'Accounts':
-			require_once("modules/$currentModule/Account.php");
-			$focus = new Account();
-			break;
-		case 'Potentials':
-			require_once("modules/$currentModule/Opportunity.php");
-			$focus = new Potential();
-			break;
 		case 'Calendar':
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
 			break;
-		case 'Notes':
-			require_once("modules/$currentModule/Note.php");
-			$focus = new Note();
-			break;
-		case 'Emails':
-			require_once("modules/$currentModule/Email.php");
-			$focus = new Email();
-			break;
-		case 'Users':
-			require_once("modules/$currentModule/User.php");
-			$focus = new User();
-			break;
-		case 'Products':
-			require_once("modules/$currentModule/Product.php");
-			$focus = new Product();
-			break;
-		case 'Vendors':
-			require_once("modules/$currentModule/Vendor.php");
-			$focus = new Vendor();
-			$actualModule = 'Vendors';
-			break;
-		case 'PriceBooks':
-			require_once("modules/$currentModule/PriceBook.php");
-			$focus = new PriceBook();
-			$actualModule = 'PriceBooks';
-			break;
-		case 'HelpDesk':
-			require_once("modules/$currentModule/HelpDesk.php");
-			$focus = new HelpDesk();
-			break;
-		case 'Faq':
-			require_once("modules/$currentModule/Faq.php");
-			$focus = new Faq();
-			break;
-		case 'Quotes':
-			require_once("modules/$currentModule/Quote.php");
-			$focus = new Quote();
-			break;
-		case 'PurchaseOrder':
-                        require_once("modules/$currentModule/PurchaseOrder.php");
-                        $focus = new Order();
-                        break;
-                case 'SalesOrder':
-                        require_once("modules/$currentModule/SalesOrder.php");
-                        $focus = new SalesOrder();
-                        break;
-
-		case 'Invoice':
-			require_once("modules/$currentModule/Invoice.php");
-			$focus = new Invoice();
-			break;
-		case 'Campaigns':
-			require_once("modules/$currentModule/Campaign.php");
-			$focus = new Campaign();
+		default:
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
 			break;
 		}
 	
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='' && $_REQUEST["module"] != "Webmails") 
         {
                 // Only track a viewing if the record was retrieved.
-                $focus->track_view($current_user->id, $actualModule,$_REQUEST['record']);
+                $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
         }
 
 }	
@@ -707,7 +639,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left>vtiger CRM 5.0.0 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
+		echo "<tr><td class=small align=left>vtiger CRM 5.0.2 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
 		echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";

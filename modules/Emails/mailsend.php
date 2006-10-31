@@ -124,24 +124,27 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			$fresult=$adb->query($myquery);			
 			if ($pmodule=='Contacts')
 			{
-				require_once('modules/Contacts/Contact.php');
-				$myfocus = new Contact();
+				require_once('modules/Contacts/Contacts.php');
+				$myfocus = new Contacts();
 				$myfocus->retrieve_entity_info($mycrmid,"Contacts");
 			}
 			elseif ($pmodule=='Accounts')
 			{
-				require_once('modules/Accounts/Account.php');
-				$myfocus = new Account();
+				require_once('modules/Accounts/Accounts.php');
+				$myfocus = new Accounts();
 				$myfocus->retrieve_entity_info($mycrmid,"Accounts");
 			} 
 			elseif ($pmodule=='Leads')
 			{
-				require_once('modules/Leads/Lead.php');
-				$myfocus = new Lead();
+				require_once('modules/Leads/Leads.php');
+				$myfocus = new Leads();
 				$myfocus->retrieve_entity_info($mycrmid,"Leads");
 			}
 			$fldname=$adb->query_result($fresult,0,"columnname");
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
+
+//This is to convert the html encoded string to original html entities so that in mail description contents will be displayed correctly
+	$focus->column_fields['description'] = from_html($focus->column_fields['description']);
 
 			if($emailadd != '')
 			{

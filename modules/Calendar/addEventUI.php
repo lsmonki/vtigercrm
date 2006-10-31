@@ -202,8 +202,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="subtab" value="">
 	<input type="hidden" name="maintab" value="Calendar">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
-		<tr>
-			<td class="layerPopupHeading"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
+		<tr style="cursor:move;">
+			<td class="layerPopupHeading" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
@@ -649,7 +649,7 @@ setObjects();
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<div class="calAddEvent layerPopup" style="display:none" id="createTodo" align=center>
+<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
@@ -669,8 +669,8 @@ setObjects();
   <input type="hidden" name="subtab" value="">
   <input type="hidden" name="maintab" value="Calendar">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
-		<tr>
-                	<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
+		<tr style="cursor:move;">
+                	<td class="lvtHeaderText" id="moveTodo"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
 			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
@@ -902,4 +902,14 @@ setObjects();
                 </tr>
         </table>
 </div>
+<script>
+	//for move addEventUI
+	var theEventHandle = document.getElementById("moveEvent");
+	var theEventRoot   = document.getElementById("addEvent");
+	Drag.init(theEventHandle, theEventRoot);
 
+	//for move addToDo
+	var theTodoHandle = document.getElementById("moveTodo");
+	var theTodoRoot   = document.getElementById("createTodo");
+	Drag.init(theTodoHandle, theTodoRoot);
+</script>

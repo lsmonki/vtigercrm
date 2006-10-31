@@ -1269,11 +1269,14 @@ class ReportRun extends CRMEntity
 
 
 		}	
-		if($module == "Campaigns")// added for 5.0
+		if($module == "Campaigns")
 		{
-			$query = "from vtiger_campaign 
-				inner join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid 				             left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid 
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+		 $query = "from vtiger_campaign
+			        inner join vtiger_campaignscf as vtiger_campaignscf on vtiger_campaignscf.campaignid=vtiger_campaign.campaignid   
+				inner join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid
+
+		             left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid
+                                ".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentityCampaigns.deleted=0";
 		}
 		$log->info("ReportRun :: Successfully returned getReportsQuery".$module);

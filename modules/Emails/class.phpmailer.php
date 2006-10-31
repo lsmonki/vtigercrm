@@ -365,14 +365,14 @@ class PHPMailer
         // Choose the mailer
         switch($this->Mailer)
         {
-            case "sendmail":
-                $result = $this->SendmailSend($header, $body);
+             case "sendmail":
+                $result = $this->SendmailSend($header, html_entity_decode($body));
                 break;
             case "mail":
-                $result = $this->MailSend($header, $body);
+                $result = $this->MailSend($header, html_entity_decode($body));
                 break;
             case "smtp":
-                $result = $this->SmtpSend($header, $body);
+                $result = $this->SmtpSend($header, html_entity_decode($body));
                 break;
             default:
             $this->SetError($this->Mailer . $this->Lang("mailer_not_supported"));

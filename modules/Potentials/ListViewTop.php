@@ -28,7 +28,7 @@ function getTopPotentials()
 	$log = LoggerManager::getLogger('top opportunity_list');
 	$log->debug("Entering getTopPotentials() method ...");
 	require_once("data/Tracker.php");
-	require_once('modules/Potentials/Opportunity.php');
+	require_once('modules/Potentials/Potentials.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
 
@@ -42,7 +42,7 @@ function getTopPotentials()
 	$title[]='myTopOpenPotentials.gif';
 	$title[]=$current_module_strings['LBL_TOP_OPPORTUNITIES'];
 	$title[]='home_mypot';
-	$where = "AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' AND vtiger_crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
+	$where = "AND vtiger_potential.sales_stage <> 'Closed Won' AND vtiger_potential.sales_stage <> 'Closed Lost' AND vtiger_crmentity.smownerid='".$current_user->id."'";
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_OPPORTUNITY_NAME'];
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];
@@ -53,6 +53,7 @@ function getTopPotentials()
         $header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.$curr_symbol.')';
 	$header[]=$current_module_strings['LBL_LIST_DATE_CLOSED'];
 	$list_query = getListQuery("Potentials",$where);
+	$list_query .=" ORDER BY amount DESC";
 	$list_result = $adb->limitQuery($list_query,0,5);
 	$open_potentials_list = array();
 	$noofrows = $adb->num_rows($list_result);

@@ -108,7 +108,7 @@ for ($x=0; $x<$y; $x++)
   {
   	if($modulename == "Contacts")
   	{
-  		$tablename = "crmentityContacts";
+  		$tablename = "vtiger_crmentityContacts";
   	}
   }
   $querycolumns[$x] = $tablename.".".$columnname;
@@ -120,20 +120,20 @@ for ($x=0; $x<$y; $x++)
       }
   		if($modulename == "Contacts")
       {
-      	$querycolumns[$x] = "concat(usersContacts.last_name,' ',usersContacts.first_name) as userjoincname";
+      	$querycolumns[$x] = "concat(vtiger_usersContacts.last_name,' ',vtiger_usersContacts.first_name) as userjoincname";
       }
   }
 	if($columnname == "parentid")
 	{
-		$querycolumns[$x] = "accountAccount.accountname";
+		$querycolumns[$x] = "vtiger_accountAccount.accountname";
 	}
 	if($columnname == "accountid")
 	{
-		$querycolumns[$x] = "accountContacts.accountname";
+		$querycolumns[$x] = "vtiger_accountContacts.accountname";
 	}
 	if($columnname == "reportsto")
 	{
-		$querycolumns[$x] = "contactdetailsContacts.lastname";
+		$querycolumns[$x] = "vtiger_contactdetailsContacts.lastname";
 	}
 
 	if($modulename == "Accounts")
@@ -174,7 +174,7 @@ $query = "select  ".$selectcolumns." from vtiger_account
 				left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid
-				where vtiger_crmentity.deleted=0 and (crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null) and vtiger_account.accountid in(".$mass_merge.")";
+				where vtiger_crmentity.deleted=0 and (vtiger_crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null) and vtiger_account.accountid in(".$mass_merge.")";
 //echo $query;
 //die;	
 $result = $adb->query($query);

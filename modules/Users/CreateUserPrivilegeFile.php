@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('config.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/GetUserGroups.php');
@@ -32,7 +32,7 @@ function createUserPrivilegesfile($userid)
 		$newbuf .="<?php\n\n";
 		$newbuf .="\n";		
 		$newbuf .= "//This is the access privilege file\n";
-		$user_focus= new User();
+		$user_focus= new Users();
 		$user_focus->retrieve_entity_info($userid,"Users");
 		$userInfo=Array();
 		$user_focus->column_fields["id"] = '';
@@ -120,7 +120,7 @@ function createUserSharingPrivilegesfile($userid)
 		$newbuf .="<?php\n\n";
 		$newbuf .="\n";		
 		$newbuf .= "//This is the sharing access privilege file\n";
-		$user_focus= new User();
+		$user_focus= new Users();
 		$user_focus->retrieve_entity_info($userid,"Users");
 		if($user_focus->is_admin == 'on')
 		{

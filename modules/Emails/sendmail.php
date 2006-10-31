@@ -18,7 +18,7 @@
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
 
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/logging.php');
 require("modules/Emails/class.phpmailer.php");
 require_once('include/database/PearDatabase.php');

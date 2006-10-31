@@ -73,144 +73,28 @@ $log->info("in  track view method ".$current_module);
         
 //No genius required. Just add an if case and change the query so that it puts the tracker entry whenever you touch on the DetailView of the required entity
          //get the first name and last name from the respective modules
-          if($current_module =='Leads')
-          {
-            $query = 'select firstname,lastname from vtiger_leaddetails where leadid=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'firstname');
-            $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname.' '.$firstname;
-          }
-          elseif ($current_module =='Accounts')
-          {
-            $query = 'select accountname from vtiger_account where accountid=' .$item_id;
-            $result = $this->db->query($query);
-            $accountname = $adb->query_result($result,0,'accountname');
-            $item_summary = $accountname;
-            
-          }
-          elseif($current_module =='Contacts')
-          {
-            $query = 'select firstname,lastname from vtiger_contactdetails where contactid=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'firstname');
-            $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname.' '.$firstname;
-            
-          }
-          elseif($current_module =='Potentials')
-          {
-            $query = 'select potentialname from vtiger_potential where potentialid=' .$item_id;
-            $result = $this->db->query($query);
-            $potentialname =  $adb->query_result($result,0,'potentialname');
-            $item_summary = $potentialname;
-          }
-          elseif($current_module =='Notes')
-          {
-            $query = 'select title from vtiger_notes where notesid=' .$item_id;
-            $result = $this->db->query($query);
-            $title = $adb->query_result($result,0,'title');
-            $item_summary = $title;
-            
-          }
-          elseif($current_module =='HelpDesk')
-          {
-            $query = 'select title from vtiger_troubletickets where ticketid=' .$item_id;
-            $result = $this->db->query($query);
-            $title = $adb->query_result($result,0,'title');
-            $item_summary = $title;
-          }
-          elseif($current_module =='Calendar')
-          {
-            //$query = 'select name from calls where callid=' .$item_id;
-	    $query = 'select subject from vtiger_activity where activityid=' .$item_id;
-            $result = $this->db->query($query);
-            $name = $adb->query_result($result,0,'subject');
-            $item_summary = $name;
-          }
-          elseif($current_module =='Emails')
-          {
-            //$query = 'select name from emails where emailid=' .$item_id;
-	    $query = 'select subject from vtiger_activity where activityid=' .$item_id;
-            $result = $this->db->query($query);
-            $name = $adb->query_result($result,0,'subject');
-            $item_summary = $name;
-          }
-          elseif($current_module =='Products')
-          {
-            $query = 'select productname from vtiger_products where productid=' .$item_id;
-            $result = $this->db->query($query);
-            $productname = $adb->query_result($result,0,'productname');
-            $item_summary = $productname;
-          }
-          elseif($current_module =='Users')
-          {
-            $query = 'select first_name,last_name from vtiger_users where id=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'first_name');
-            $lastname = $adb->query_result($result,0,'last_name');
-            $item_summary = $lastname.' '.$firstname;
-          }
-	  elseif($current_module =='Invoice')
-          {
-            $query = 'select subject from vtiger_invoice where invoiceid=' .$item_id;
-            $result = $this->db->query($query);
-            $invoice = $adb->query_result($result,0,'subject');
-            $item_summary = $invoice;
-          }
-          elseif($current_module =='Quotes')
-          {
-            $query = 'select subject from vtiger_quotes where quoteid=' .$item_id;
-            $result = $this->db->query($query);
-            $quote = $adb->query_result($result,0,'subject');
-            $item_summary = $quote;
-          }
-	  elseif($current_module =='PurchaseOrder')
-          {
-            $query = 'select subject from vtiger_purchaseorder where purchaseorderid=' .$item_id;
-            $result = $this->db->query($query);
-            $po = $adb->query_result($result,0,'subject');
-            $item_summary = $po;
-          }
-	  elseif($current_module =='SalesOrder')
-          {
-            $query = 'select subject from vtiger_salesorder where salesorderid=' .$item_id;
-            $result = $this->db->query($query);
-            $so = $adb->query_result($result,0,'subject');
-            $item_summary = $so;
-          }
-	  elseif($current_module =='Vendors')
-          {
-            $query = 'select vendorname from vtiger_vendor where vendorid=' .$item_id;
-            $result = $this->db->query($query);
-            $vendor = $adb->query_result($result,0,'vendorname');
-            $item_summary = $vendor;
-          }
-	  elseif($current_module =='PriceBooks')
-          {
-            $query = 'select bookname from vtiger_pricebook where pricebookid=' .$item_id;
-            $result = $this->db->query($query);
-            $pb = $adb->query_result($result,0,'bookname');
-            $item_summary = $pb;
-          }	
-  	  elseif($current_module =='Campaigns')
-          {
-            $query = 'select campaignname from vtiger_campaign where campaignid=' .$item_id;
-            $result = $this->db->query($query);
-            $pb = $adb->query_result($result,0,'campaignname');
-            $item_summary = $pb;
-          }
-  	  elseif($current_module =='Faq')
-          {
-            $query = 'select question from vtiger_faq where id=' .$item_id;
-            $result = $this->db->query($query);
-            $pb = $adb->query_result($result,0,'question');
-	    if(strlen($pb) > 30)
-	    {
-		    $pb=substr($pb,0,30).'...';
-	    } 	    
-            $item_summary = $pb;
-          }		  
+	 if($current_module != '')
+	 {
+		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = '$current_module'";
+		 $result = $adb->query($query);
+		 $fieldsname = $adb->query_result($result,0,'fieldname');
+		 $tablename = $adb->query_result($result,0,'tablename'); 
+		 $entityidfield = $adb->query_result($result,0,'entityidfield'); 
+		 if(!(strpos($fieldsname,',') === false))
+		 {
+			 $fieldlists = explode(',',$fieldsname);
+			 $fieldsname = "concat(";
+			 $fieldsname = $fieldsname.implode(",' ',",$fieldlists);
+			 $fieldsname = $fieldsname.")";
+		 }	
+		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield =" .$item_id; 
+		 $result = $adb->query($query1);
+		 $item_summary = $adb->query_result($result,0,'entityname');
+		 if(strlen($item_summary) > 30)
+	     {
+		    $item_summary=substr($item_summary,0,30).'...';
+	     }
+	 }
 	 
 	 #if condition added to skip vtiger_faq in last viewed history
           $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";

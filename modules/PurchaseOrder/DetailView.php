@@ -29,7 +29,7 @@ require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$theme,$currentModule,$singlepane_view;
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"PurchaseOrder");

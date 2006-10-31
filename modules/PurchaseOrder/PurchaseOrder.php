@@ -30,7 +30,7 @@ require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
 // Account is used to store vtiger_account information.
-class Order extends CRMEntity {
+class PurchaseOrder extends CRMEntity {
 	var $log;
 	var $db;
 		
@@ -42,10 +42,6 @@ class Order extends CRMEntity {
 	
 	var $billadr_table = "vtiger_pobillads";
 
-	var $object_name = "Order";
-
-	var $new_schema = true;
-	
 	var $module_id = "purchaseorderid";
 
 	var $column_fields = Array();
@@ -94,12 +90,20 @@ class Order extends CRMEntity {
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
 	 */
-	function Order() {
+	function PurchaseOrder() {
 		$this->log =LoggerManager::getLogger('PurchaseOrder');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('PurchaseOrder');
 	}
 
+	function save_module($module)
+	{
+		//Based on the total Number of rows we will save the product relationship with this entity
+		saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
+	}	
+
+
+	
 	/**	Function used to get the sort order for Purchase Order listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PURCHASEORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */

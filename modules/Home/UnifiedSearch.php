@@ -21,18 +21,6 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Leads/Lead.php');
-require_once('modules/Faq/Faq.php');
-require_once('modules/Vendors/Vendor.php');
-require_once('modules/PriceBooks/PriceBook.php');
-require_once('modules/Quotes/Quote.php');
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
-require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Invoice/Invoice.php');
-require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
@@ -41,37 +29,25 @@ require_once('Smarty_setup.php');
 global $mod_strings;
 
 $total_record_count = 0;
-//echo get_module_title("", "Search Results", true); 
-if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
+
+$query_string = trim($_REQUEST['query_string']);
+if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST['query_string'])) 
+{
 
 	//module => object
-	$object_array = Array(
-				'Potentials'=>'Potential',
-				'Accounts'=>'Account',
-				'Contacts'=>'Contact',
-				'Leads'=>'Lead',
-				'Notes'=>'Note',
-				'Calendar'=>'Activity',
-				'Emails'=>'Email',
-				'HelpDesk'=>'HelpDesk',
-				'Products'=>'Product',
-				'Faq'=>'Faq',
-				//'Events'=>'',
-				'Vendors'=>'Vendor',
-				'PriceBooks'=>'PriceBook',
-				'Quotes'=>'Quote',
-				'PurchaseOrder'=>'Order',
-				'SalesOrder'=>'SalesOrder',
-				'Invoice'=>'Invoice',
-				'Campaigns'=>'Campaign'
-			     );
+	$object_array = getSearchModules();
+	foreach($object_array as $curr_module=>$curr_object)
+	{
+		require_once("modules/$curr_module/$curr_object.php");
+	}
+
 	global $adb;
 	global $current_user;
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$search_val = $_REQUEST['query_string'];
+	$search_val = $query_string;
 	$search_module = $_REQUEST['search_module'];
 
 	getSearchModulesComboList($search_module);
@@ -285,4 +261,28 @@ function getSearchModulesComboList($search_module)
 		</table>
 	<?php
 }
+
+/*To get the modules allowed for global search this function returns all the 
+ * modules which supports global search as an array in the following structure 
+ * array($module_name1=>$object_name1,$module_name2=>$object_name2,$module_name3=>$object_name3,$module_name4=>$object_name4,-----);
+ */
+ function getSearchModules()
+ {
+	 global $adb;
+	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
+	$result = $adb->query($sql);
+	while($module_result = $adb->fetch_array($result))
+	{
+		$modulename = $module_result['name'];
+		if($modulename != 'Calendar')
+		{
+			$return_arr[$modulename] = $modulename;
+		}else
+		{
+			$return_arr[$modulename] = 'Activity';
+		}
+	}
+	return $return_arr;
+ }
+
 ?>

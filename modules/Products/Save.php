@@ -21,14 +21,14 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $log,$current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
-$focus = new Product();
+$focus = new Products();
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];

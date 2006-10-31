@@ -49,7 +49,9 @@ if($focus->id != '')
 	$sql = "select ticketid, comments, createdtime from vtiger_ticketcomments where ticketid=".$_REQUEST['record'];
 	$res = $adb->query($sql);
 	$noofrows = $adb->num_rows($res);
-	$answer .= '\r\n\r\nCOMMENTS:';
+
+	if($noofrows > 0)
+		$answer .= '\r\n\r\nCOMMENTS:';
 	for($i=0; $i < $noofrows; $i++)
 	{
 		$comments = $adb->query_result($res,$i,'comments');

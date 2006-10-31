@@ -6082,6 +6082,29 @@
 		<data>
 		</data>
 	</table>
+	<table name="vtiger_entityname">
+		<field name="tabid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="modulename" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="tablename" type="C" size="100">
+			<notnull />
+		</field>
+		<field name="fieldname" type="C" size="150">
+			<notnull />
+		</field>
+		<field name="entityidfield" type="C" size="150">
+			<notnull />
+		</field>
+		<index name="entityname_tabid_idx">
+			<col>tabid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 
 	
 </schema>

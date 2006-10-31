@@ -91,7 +91,9 @@ $smarty->assign("NON_EDITABLE_ENTRIES", $nonedit_fldVal);
 $smarty->assign("ENTRIES",$fldVal);
 $smarty->assign("MODULE",$moduleName);
 $smarty->assign("FIELDNAME",$tableName);
-$smarty->assign("FIELDLABEL",$fieldlabel);
+//First look into app_strings and then mod_strings and if not available then original label will be displayed
+$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+$smarty->assign("FIELDLABEL",$temp_label);
 $smarty->assign("UITYPE", $uitype);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);

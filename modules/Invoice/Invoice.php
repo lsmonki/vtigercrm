@@ -33,22 +33,12 @@ require_once('user_privileges/default_module_view.php');
 class Invoice extends CRMEntity {
 	var $log;
 	var $db;
-		
+
 	var $table_name = "vtiger_invoice";
+	var $module_id = "invoiceid";	
 	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_invoice'=>'invoiceid','vtiger_invoicebillads'=>'invoicebilladdressid','vtiger_invoiceshipads'=>'invoiceshipaddressid','vtiger_invoicecf'=>'invoiceid');
 				
-	
-	var $entity_table = "vtiger_crmentity";
-	
-	var $billadr_table = "vtiger_invoicebillads";
-
-	var $object_name = "Invoice";
-
-	var $new_schema = true;
-	
-	var $module_id = "invoiceid";
-
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('subject','crmid','invoicestatus','smownerid');		
@@ -102,6 +92,25 @@ class Invoice extends CRMEntity {
 		$this->column_fields = getColumnFields('Invoice');
 		$this->log->debug("Exiting Invoice method ...");
 	}
+
+
+	/** Function to handle the module specific save operations
+	
+	*/
+	
+	function save_module($module)
+	{
+		//Checking if vtiger_salesorderid is present and updating the quote status
+		if($this->column_fields["salesorder_id"] != '')
+		{
+        		$so_id = $this->column_fields["salesorder_id"];
+        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=".$so_id;
+        		$this->db->query($query1);
+		}
+		//Based on the total Number of rows we will save the product relationship with this entity
+		saveInventoryProductDetails(&$this, 'Invoice');
+	}
+
 
 	/**	Function used to get the sort order for Invoice listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['INVOICE_SORT_ORDER'] if this session value is empty then default sort order will be returned. 

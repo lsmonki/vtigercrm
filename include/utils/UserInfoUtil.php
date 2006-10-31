@@ -1346,6 +1346,23 @@ function getProfileName($profileid)
 	$log->debug("Exiting getProfileName method ...");
 	return $profilename;	
 }
+/** Function to get the vtiger_profile Description from the vtiger_profileid
+  * @param $profileid -- Profile Id:: Type integer
+  * @returns $rolename -- Role Name:: Type varchar
+  *
+ */
+function getProfileDescription($profileid)
+{
+        global $log;
+        $log->debug("Entering getProfileDescription(".$profileid.") method ...");
+        global $adb;
+        $sql1 = "select  description from vtiger_profile where profileid=".$profileid;
+        $result = $adb->query($sql1);
+        $profileDescription = $adb->query_result($result,0,"description");
+        $log->debug("Exiting getProfileName method ...");
+        return $profileDescription;
+}
+
 
 /** Function to check if the currently logged in user is permitted to perform the specified action  
   * @param $module -- Module Name:: Type varchar

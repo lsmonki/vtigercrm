@@ -71,6 +71,7 @@ function SaveSite(id)
 	Effect.Puff('orgLay');	
 	$("status").style.display="inline";
 	var portalurl = document.getElementById('portalurl').value;
+	var portalurl = portalurl.replace(/&/g, "#$#$#");
 	var portalname = document.getElementById('portalname').value;
         new Ajax.Request(
         	'index.php',

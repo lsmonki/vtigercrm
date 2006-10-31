@@ -414,13 +414,29 @@ function validateTaxes(countname)
 	taxcount = eval(document.getElementById(countname).value)+1;
 
 	if(countname == 'tax_count')
+	{
 		taxprefix = 'tax';
+		taxLabelPrefix = 'taxlabel_tax';
+	}
 	else
+	{
 		taxprefix = 'shtax';
+		taxLabelPrefix = 'taxlabel_shtax';
+	}
 
 	for(var i=1;i<=taxcount;i++)
 	{
 		taxval = document.getElementById(taxprefix+i).value;
+		taxLabelVal = document.getElementById(taxLabelPrefix+i).value;
+		document.getElementById(taxLabelPrefix+i).value = taxLabelVal.replace(/^\s*|\s*$/g,'').replace(/\s+/g,'');
+
+		if(document.getElementById(taxLabelPrefix+i).value.length == 0)
+		{
+			alert("The tax label name should not be empty");
+			return false
+		} 
+
+		//Tax value - numeric validation	
 		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(taxval);
 		if(!temp)
 		{
@@ -430,6 +446,7 @@ function validateTaxes(countname)
 	}
 	return true;
 }
+
 
 
 //Function used to add a new product row in PO, SO, Quotes and Invoice
@@ -501,12 +518,18 @@ function fnAddProductRow(module,image_path){
 function decideTaxDiv()
 {
 	var taxtype = document.getElementById("taxtype").value
+
+	calcTotal();
+
 	if(taxtype == 'group')
+	{
+		//if group tax selected then we have to hide the individual taxes and also calculate the group tax
 		hideIndividualTaxes()
+		calcGroupTax();
+	}
 	else if(taxtype == 'individual')
 		hideGroupTax()
 
-	calcTotal();
 }
 
 function hideIndividualTaxes()

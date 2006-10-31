@@ -12,7 +12,7 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/LoginHistory.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -42,7 +42,7 @@ $smarty = new vtigerCRM_Smarty;
 
 $category = getParenttab();
 
-$oUser = new User($id);
+$oUser = new Users($id);
 
 
 $user_list = getUserslist();

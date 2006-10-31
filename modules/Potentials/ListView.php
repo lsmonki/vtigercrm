@@ -15,7 +15,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
@@ -38,7 +38,7 @@ if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
 
-$focus = new Potential();
+$focus = new Potentials();
 $smarty = new vtigerCRM_Smarty();
 $other_text = Array();
 
@@ -108,7 +108,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
-
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if(isPermitted('Potentials','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];

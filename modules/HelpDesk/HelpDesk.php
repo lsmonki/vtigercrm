@@ -24,7 +24,7 @@ class HelpDesk extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_seticketsrel','vtiger_ticketcf','vtiger_ticketcomments','vtiger_attachments');
+	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid','vtiger_attachments'=>'attachmentsid');
 	var $column_fields = Array();
 
@@ -91,6 +91,83 @@ class HelpDesk extends CRMEntity {
 		$this->log->debug("Exiting HelpDesk method ...");
 	}
 
+
+	function save_module($module)
+	{
+		//Inserting into Ticket Comment Table
+		$this->insertIntoTicketCommentTable("vtiger_ticketcomments",'HelpDesk');
+
+		//Inserting into vtiger_seticketsrel table
+		
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		{
+			$this->insertIntoEntityTable('vtiger_seticketsrel', 'HelpDesk');
+		}
+		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation('vtiger_seticketsrel');
+		}
+
+		//Inserting into vtiger_attachments
+		$this->insertIntoAttachment($this->id,'HelpDesk');
+				
+	}	
+
+	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
+	function insertIntoTicketCommentTable($table_name, $module)
+	{
+		global $log;
+		$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
+        	global $adb;
+		global $current_user;
+
+        	$current_time = $adb->formatDate(date('YmdHis'));
+		if($this->column_fields['assigned_user_id'] != '')
+			$ownertype = 'user';
+		else
+			$ownertype = 'customer';
+
+		if($this->column_fields['comments'] != '')
+			$comment = $this->column_fields['comments'];
+		else
+			$comment = $_REQUEST['comments'];
+
+		if($comment != '')
+		{
+			$comment = addslashes($comment);
+			$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."',".$current_time.")";	
+	        	$adb->query($sql);
+		}
+	}
+
+
+	/**
+	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
+	 *      @param string $module  - the current module name
+	*/
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}
+	
+	
 	/**	Function used to get the sort order for HelpDesk listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['HELPDESK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
 	 */
@@ -457,7 +534,7 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus,
+		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus, vtiger_activity.date_start, vtiger_activity.due_date,
 		vtiger_activity.activitytype, vtiger_troubletickets.ticketid, vtiger_troubletickets.title, vtiger_crmentity.modifiedtime,
 		vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
 				from vtiger_activity

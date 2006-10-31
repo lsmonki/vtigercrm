@@ -22,7 +22,7 @@ if($patch_version !='')
 }
 else
 {
-	    $patch_string = "--None--";
+	    $patch_string = $vtiger_current_version;
 }
 global $app_strings;
 global $app_list_strings;
@@ -83,18 +83,20 @@ global $mod_strings;
 						<marquee behavior="scroll" direction="up" width="100%" scrollamount="1" scrolldelay="50"  height="100" onMouseOut="javascript:start();" onMouseOver="javascript:stop();">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="rollOver">
 								<tr><th><?php echo $mod_strings['LBL_TEAM'];?></th></tr>
-										<tr><td>Ahmed</td></tr>
+										<tr><td>Anusha</td></tr>
+										<tr><td>Bharath</td></tr>
+										<tr><td>Bharathi</td></tr>
 										<tr><td>Don</td></tr>
-										<tr><td>Ela</td></tr>
 										<tr><td>Gopal</td></tr>
 										<tr><td>Jeri</td></tr>
 										<tr><td>Mani</td></tr>
 										<tr><td>Mickie</td></tr>
 										<tr><td>Minnie</td></tr>
+										<tr><td>Nithya</td></tr>
 										<tr><td>Philip</td></tr>
 										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
-										<tr><td>SRaj</td></tr>
+										<tr><td>Vashni</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?></th></tr>
 										<tr><td>Aissa Belaid</td></tr>

@@ -19,6 +19,47 @@ $idval=$_REQUEST['user_id'];
 $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['return_module'];
 $return_action = $_REQUEST['return_action'];
+$module_array = array (
+                          'Leads' => 'updateLeadGroupRelation',
+                          'Accounts' => 'updateAccountGroupRelation',
+                          'Contacts' => 'updateContactGroupRelation',
+                          'Potentials' => 'updatePotentialGroupRelation',
+                          'Quotes' => 'updateQuoteGroupRelation',
+                          'SalesOrder' => 'updateSoGroupRelation',
+                          'Invoice' => 'updateInvoiceGroupRelation',
+                          'PurchaseOrder' => 'updatePoGroupRelation',
+                          'HelpDesk' => 'updateTicketGroupRelation',
+                          'Campaigns' => 'updateCampaignGroupRelation',
+                          'Calendar' => 'updateActivityGroupRelation',
+                       );
+
+$deletegroup_array = array (
+                          'Leads'=>'vtiger_leadgrouprelation',
+                          'Accounts'=>'vtiger_accountgrouprelation',
+                          'Contacts'=>'vtiger_contactgrouprelation',
+                          'Potentials'=>'vtiger_potentialgrouprelation',
+                          'Quotes'=>'vtiger_quotegrouprelation',
+                          'SalesOrder'=>'vtiger_sogrouprelation',
+                          'Invoice'=>'vtiger_invoicegrouprelation',
+                          'PurchaseOrder'=>'vtiger_pogrouprelation',
+                          'HelpDesk'=>'vtiger_ticketgrouprelation',
+                          'Campaigns'=>'vtiger_campaigngrouprelation',
+                          'Calendar'=>'vtiger_activitygrouprelation',
+                            );
+$tableId_array= array (
+                       'Leads'=>'leadid',
+                          'Accounts'=>'accountid',
+                          'Contacts'=>'contactid',
+                          'Potentials'=>'potentialid',
+                          'Quotes'=>'quoteid',
+                          'SalesOrder'=>'salesorderid',
+                          'Invoice'=>'invoiceid',
+                          'PurchaseOrder'=>'purchaseorderid',
+                          'HelpDesk'=>'ticketid',
+                          'Campaigns'=>'campaignid',
+                          'Calendar'=>'activityid',       
+                      );
+
 global $current_user;
 global $adb;
 $storearray = explode(";",trim($idlist,';'));
@@ -26,15 +67,31 @@ $storearray = explode(";",trim($idlist,';'));
 $ids_list = array();
 
 $date_var = date('YmdHis');
-if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
+
+if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['group_id'] != ''))
 {
 	foreach($storearray as $id)
 	{
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
-			if($id != '') {
+			if($_REQUEST['user_id'] != '' && $id != '')
+			{
+				//First we have to delete the group relationship
+				$delete_query = "delete from ". $deletegroup_array[$return_module] ." where " . $tableId_array[$return_module] . "='".$id."'";
+				$result = $adb->query($delete_query); 
+
+				//Now we have to update the smownerid
 				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 				$result = $adb->query($sql);
+			}
+			else if($_REQUEST['group_id'] != '' && $id != '')
+			{
+				//CHANGE HERE -- Here we have to use the getGroupName function. But that function is not correct one because they have used this function to get the assigned group name for the entity - Mickie
+				$groupname = $adb->query_result($adb->query("select groupname from vtiger_groups where groupid=".$_REQUEST['group_id']),0,'groupname');
+				//This is to update the entity - group relation
+				$module_array[$return_module]($id,$groupname); 
+				//Now we have to set the smownerid as 0 
+				$adb->query("update vtiger_crmentity set smownerid=0 where crmid=$id");
 			}
 		}
 		else

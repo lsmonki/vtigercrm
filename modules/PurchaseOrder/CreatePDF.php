@@ -26,7 +26,7 @@ $products_per_page="6";
 
 $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
-$focus = new Order();
+$focus = new PurchaseOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"PurchaseOrder");
 $vendor_name = getVendorName($focus->column_fields[vendor_id]);
 

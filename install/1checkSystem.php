@@ -203,7 +203,7 @@ $array = Array(
 	    				<table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
 					<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Core Components</strong></span></td></tr>
 					<tr bgcolor="#fafafa">
-						<td valign=top ><strong>PHP version 5.0.x</strong><BR></td>
+						<td valign=top ><strong>PHP version</strong><BR></td>
 						<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#00CC00\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
     					</tr>
 					<tr bgcolor="#fafafa">

@@ -205,6 +205,8 @@ $mod_strings = Array(
 'Press'=>'Press',
 'Prospect'=>'Prospect',
 'Reseller'=>'Reseller',
+'LBL_START_DATE' => 'Start Date',
+'LBL_END_DATE' => 'End Date',
 
 
 

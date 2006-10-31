@@ -27,31 +27,23 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 global $current_user;
-$currencyid=fetchCurrency($current_user->id);
-$rate_symbol = getCurrencySymbolandCRate($currencyid);
-$rate = $rate_symbol['rate'];
 setObjectValuesFromRequest(&$focus);
 
 //Added code for auto product stock updation on receiving goods
-$update_prod_stock='';
+$focus->update_prod_stock='';
 if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == 'edit')
 {
         $prev_postatus=getPoStatus($focus->id);
         if($focus->column_fields['postatus'] != $prev_postatus)
         {
-                $update_prod_stock='true';
+                $focus->update_prod_stock='true';
         }
 
 }
 
 $focus->save("PurchaseOrder");
-
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'PurchaseOrder', $update_prod_stock);
-
 
 $return_id = $focus->id;
 
