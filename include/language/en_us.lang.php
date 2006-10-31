@@ -60,6 +60,20 @@ $app_strings = Array(
 
 'LBL_LAST_VIEWED'=>'Last Viewed',
 
+'LBL_TODAY'=>'Today',
+
+'LBL_ALL'=>'All',
+
+'LBL_SHOW'=>'Show :',
+
+'today'=>"Today's",
+
+'all'=>'All',
+
+'LBL_UPCOMING_EVENTS'=>'Upcoming Activities',
+
+'LBL_PENDING_EVENTS'=>'Pending Activities',
+
 'NTC_WELCOME_MESSAGE'=>"Welcome to vtiger CRM!",
 
 'NTC_DESCRIPTION'=>"Use a valid username and password to login to the vtiger CRM.",
