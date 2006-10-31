@@ -649,7 +649,7 @@ setObjects();
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<div class="calAddEvent layerPopup" style="display:none" id="createTodo" align=center>
+<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
