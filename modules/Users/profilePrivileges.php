@@ -21,6 +21,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $profileId=$_REQUEST['profileid'];
 $profileName='';
+$profileDescription='';
+
 $parentProfileId=$_REQUEST['parentprofile'];
 if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
@@ -66,14 +68,16 @@ $smarty->assign("PROFILE_NAME", $profileName);
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
 	
-	$smarty->assign("PROFILE_DESCRIPTION",$_REQUEST['profile_description']);
+	$profileDescription = $_REQUEST['profile_description'];
 else
 {
-	$profileDescription = getProfileDescription($profileId);
+	if($profileId != null)
+	{
+		$profileDescription = getProfileDescription($profileId);
+	}
 }
 
-$smarty->assign("Profile_Name", $profileName);
-$smarty->assign("Profile_Description", $profileDescription);
+$smarty->assign("PROFILE_DESCRIPTION", $profileDescription);
 
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
 	$smarty->assign("MODE",$_REQUEST['mode']);

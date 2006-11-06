@@ -139,11 +139,11 @@ function UpdateProfile()
 							<table celspacing="0" align="center" bgcolor="white" border="0" cellpadding="5" width="100%">
 								<tr>
 								<td align="right" width="25%" style="padding-right:10px;" nowrap><b>{$APP.LBL_PROFILE_NAME} :</b></td>
-								<td align="left" width="75%" style="padding-right:10px;"><input id = "profile_name" name="profile_name" class="txtBox" value="{$Profile_Name}" type="text"></td>
+								<td align="left" width="75%" style="padding-right:10px;"><input id = "profile_name" name="profile_name" class="txtBox" value="{$PROFILE_NAME}" type="text"></td>
 								</tr>
 								<tr>
                                                                 <td align="right" width="25%" style="padding-right:10px;" nowrap><b>{$APP.LBL_DESCRIPTION} :</b></td>
-                                                                <td align="left" width="75%" style="padding-right:10px;"><textarea name="description" id = "description" class="txtBox">{$Profile_Description} </textarea></td>
+                                                                <td align="left" width="75%" style="padding-right:10px;"><textarea name="description" id = "description" class="txtBox">{$PROFILE_DESCRIPTION} </textarea></td>
                                                                 </tr>
 							</table>
 						</td>

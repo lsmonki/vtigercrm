@@ -1359,7 +1359,7 @@ function getProfileDescription($profileid)
         $sql1 = "select  description from vtiger_profile where profileid=".$profileid;
         $result = $adb->query($sql1);
         $profileDescription = $adb->query_result($result,0,"description");
-        $log->debug("Exiting getProfileName method ...");
+        $log->debug("Exiting getProfileDescription method ...");
         return $profileDescription;
 }
 
