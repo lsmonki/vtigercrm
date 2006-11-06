@@ -362,7 +362,6 @@ $mod_strings = Array(
 'LBL_INVITE'=>'Invite',
 'LBL_REPEAT'=>'Repeat',
 'LBL_REMINDER'=>'Reminder',
-'LBL_ENABLE_REPEAT'=>'Enable Repeat',
 'LBL_SENDREMINDER'=>'Send Reminder',
 'LBL_NOTIFICATION'=>'Notification',
 'LBL_SENDNOTIFICATION'=>'Send Notification',
