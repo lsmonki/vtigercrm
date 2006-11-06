@@ -1112,6 +1112,9 @@ class CustomView extends CRMEntity{
 			}elseif(trim($value) == "" && $datatype == "V")
 			{
 				$rtvalue = " = ".$adb->quote($value);	
+			}elseif(trim($value) == "" && $datatype == "E")
+			{
+				$rtvalue = " = ".$adb->quote($value);	
 			}else
 			{
 				$rtvalue = " is NULL";
@@ -1126,6 +1129,9 @@ class CustomView extends CRMEntity{
 			{
 				$rtvalue = " <> ".$adb->quote($value);
 			}elseif(trim($value) == "" && $datatype == "V")
+			{
+				$rtvalue = " <> ".$adb->quote($value);	
+			}elseif(trim($value) == "" && $datatype == "E")
 			{
 				$rtvalue = " <> ".$adb->quote($value);	
 			}else
