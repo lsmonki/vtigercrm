@@ -182,12 +182,12 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				if($fieldname!='parent_id')
 				{
 					$fld_name=$fieldname;
-                                	$search_header[$fld_name]=$name;
+                                	$search_header[$fld_name]=$mod_strings[$name];
 				}
                         }
                 }
         }
-	$log->debug("Exiting getSearchListHeaderValues method ...");	
+	$log->debug("Exiting getSearchListHeaderValues method ...");		
         return $search_header;
 
 }
@@ -451,7 +451,7 @@ function getAdvSearchfields($module)
 		$block = $adb->query_result($result,$i,"block");
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
-		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
 		if($fieldlabel == "Related To")
 		{
 			$fieldlabel = "Related to";
