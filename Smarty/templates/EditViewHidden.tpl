@@ -76,6 +76,9 @@
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
+{else}
+	{$ERROR_MESSAGE}
+	<form name="EditView" method="POST" action="index.php">
 {/if}
 
 <input type="hidden" name="module" value="{$MODULE}">
