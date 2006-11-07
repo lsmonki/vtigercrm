@@ -60,7 +60,10 @@ function getTopQuotes()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\'';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and vtiger_quotes.quotestage != "Rejected" and  vtiger_quotes.validtill >= \''.$date_var.'\'';
+	//$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\'';
+	
+	
 	$query = getListQuery("Quotes",$where);
 	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
