@@ -349,7 +349,7 @@ function SaveTag(txtBox,crmId,module)
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue,
+                        postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +escape(tagValue),
                         onComplete: function(response) {
 				        getObj('tagfields').innerHTML = response.responseText;
 					$("vtbusy_info").style.display="none";
