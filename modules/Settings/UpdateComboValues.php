@@ -38,7 +38,7 @@ $tabname=explode('cf_',$tableName);
 if($tabname[1]!='')
        	$custom=true;
 
-for($i = 0; $i < $count; $i++)
+/*for($i = 0; $i < $count; $i++)
 {
 	$pickArray[$i] = trim($pickArray[$i]);
 	if($pickArray[$i] != '')
@@ -50,6 +50,17 @@ for($i = 0; $i < $count; $i++)
 
 	        $adb->query($query);
 	}
-}
+}*/
+/* ticket2369 fixed*/
+$columnName = $tableName;
+foreach ($pickArray as $index => $data) {
+        $data = trim($data);
+        if(!empty($data)){
+                $data = $adb->formatString("vtiger_$tableName",$columnName,$data);
+                $query = "insert into vtiger_$tableName values('',$data,$index,1)";
+                $adb->query($query);
+        }
+} 
+
 header("Location:index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module=".$fld_module);
 ?>
