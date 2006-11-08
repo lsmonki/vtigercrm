@@ -1327,6 +1327,30 @@ function getRelatedLists($module,$focus)
 	return $focus_list;
 }
 
+/** This function returns whether related lists is present for this particular module or not
+* Param $module - module name
+* Param $activity_mode - mode of activity 
+* Return type true or false
+*/
+
+
+function isPresentRelatedLists($module,$activity_mode='')
+{
+	global $adb;
+	$retval='true';
+	$tab_id=getTabid($module);
+	$query= "select count(*) as count from vtiger_relatedlists where tabid=".$tab_id;
+	$result=$adb->query($query);
+	$count=$adb->query_result($result,0,'count');
+	if($count < 1 || ($module =='Calendar' && $activity_mode=='task'))
+	{
+		$retval='false';	
+	}	
+	return $retval;	
+			
+	
+}	
+
 /** This function returns the detailed block information of a record in a module.
 * Param $module - module name
 * Param $block - block id
