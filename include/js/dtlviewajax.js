@@ -316,7 +316,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
   	{
 		/* Wordwrap a long list of multi-select combo box items at the
                  * item separator string */
-                const DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
+                var DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
 
                 var lineLength = 0;
                 for(var i=0; i < r.length; i++) {
@@ -339,11 +339,9 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	showHide(dtlView,editArea);  //show,hide
 	itsonview=false;
 }
-
-function SaveTag(txtBox,crmId,module)
+function SaveTag(tagfield,crmId,module)
 {
-	var tagValue = document.getElementById(txtBox).value;
-	document.getElementById(txtBox).value ='';
+	var tagValue = $(tagfield).value;
 	$("vtbusy_info").style.display="inline";
 	new Ajax.Request(
 		'index.php',
@@ -353,6 +351,7 @@ function SaveTag(txtBox,crmId,module)
                         onComplete: function(response) {
 				        getObj('tagfields').innerHTML = response.responseText;
 					$("vtbusy_info").style.display="none";
+					$(tagfield).value = '';
                         }
                 }
         );
