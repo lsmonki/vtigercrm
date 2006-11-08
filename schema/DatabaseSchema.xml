@@ -6130,6 +6130,9 @@
 		<field name="entityidfield" type="C" size="150">
 			<notnull />
 		</field>
+		<field name="entityidcolumn" type="C" size="150">
+			<notnull />
+		</field>
 		<index name="entityname_tabid_idx">
 			<col>tabid</col>
 		</index>

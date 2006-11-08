@@ -913,25 +913,24 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 
 
 //The Entity Name for the modules are maintained in this table
-$this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid')");
-$this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid')");
-$this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid')");
-$this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid')");
-$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid')");
-$this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid')");
-$this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid')");
-$this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid')");
-$this->db->query("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid')");
-$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','last_name,first_name','id')");
-$this->db->query("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid')");
-$this->db->query("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid')");
-$this->db->query("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid')");
-$this->db->query("insert into vtiger_entityname values(22,'SalesOrder','vtiger_salesorder','subject','salesorderid')");
-$this->db->query("insert into vtiger_entityname values(18,'Vendors','vtiger_vendor','vendorname','vendorid')");
-$this->db->query("insert into vtiger_entityname values(19,'PriceBooks','vtiger_pricebook','bookname','pricebookid')");
-$this->db->query("insert into vtiger_entityname values(26,'Campaigns','vtiger_campaign','campaignname','campaignid')");
-$this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','question','id')");
-
+$this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid','leadid')");
+$this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid','account_id')");
+$this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid','contact_id')");
+$this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid','potential_id')");
+$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid','notesid')");
+$this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid','ticketid')");
+$this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid','activityid')");
+$this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid','activityid')");
+$this->db->query("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid','product_id')");
+$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','lastname,firstname','id','id')");
+$this->db->query("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid','invoiceid')");
+$this->db->query("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid','quote_id')");
+$this->db->query("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid','purchaseorderid')");
+$this->db->query("insert into vtiger_entityname values(22,'SalesOrder','vtiger_salesorder','subject','salesorderid','salesorder_id')");
+$this->db->query("insert into vtiger_entityname values(18,'Vendors','vtiger_vendor','vendorname','vendorid','vendor_id')");
+$this->db->query("insert into vtiger_entityname values(19,'PriceBooks','vtiger_pricebook','bookname','pricebookid','pricebookid')");
+$this->db->query("insert into vtiger_entityname values(26,'Campaigns','vtiger_campaign','campaignname','campaignid','campaignid')");
+$this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','question','id','id')");
                 // Insert End
 		
 		//Inserting into vtiger_groups table
