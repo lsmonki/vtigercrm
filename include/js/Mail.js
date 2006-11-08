@@ -79,7 +79,7 @@ function set_return_emails(entity_id,email_id,parentname,emailadd){
 		window.close();
 	}else
 	{
-		alert('The Record '+parentname+' does\'t have email id' );
+		alert('The user "'+parentname+'" doesn\'t have an email id' );
 		return false;
 	}
 }	
