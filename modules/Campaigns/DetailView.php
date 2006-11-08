@@ -70,6 +70,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {
