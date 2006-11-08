@@ -104,6 +104,9 @@ if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 $tabid = getTabid("Notes");
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
