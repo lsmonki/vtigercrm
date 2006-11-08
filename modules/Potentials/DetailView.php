@@ -100,6 +100,8 @@ if($singlepane_view == 'true')
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
 
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");
