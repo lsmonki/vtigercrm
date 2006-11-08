@@ -21,7 +21,7 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 if($_REQUEST['error'] != '')
 {
-		$smarty->assign("ERROR_MSG",'<b><font color="purple">'.$_REQUEST["error"].'</font></b>');
+		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
 $sql="select * from vtiger_systems where server_type = 'proxy'";
 $result = $adb->query($sql);
