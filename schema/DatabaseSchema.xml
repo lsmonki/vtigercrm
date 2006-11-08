@@ -229,6 +229,13 @@
 		</index>
 	</table>
 
+	<table name="vtiger_blocks" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_blocks FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
 	<table name="vtiger_field">
 		<field name="tabid" type="I" size="19">
 			<notnull />
@@ -4123,11 +4130,21 @@
 		<field name="setmetrics" type="I" size="1">
 			<default value="0" />
 		</field>
-		<field name="entitytype" type="C" size="100">
+		<field name="entitytype" type="C" size="25">
 			<notnull />
 		</field>
-
+		<index name="customview_entitytype_idx">
+			<col>entitytype</col>
+		</index>
+		
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_customview" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_customview FOREIGN KEY (entitytype) REFERENCES vtiger_tab (name) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
 	</table>
 
 	<table name="vtiger_cvcolumnlist">
@@ -4152,12 +4169,12 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-<table name="vtiger_cvcolumnlist" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_cvcolumnlist FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
+	<table name="vtiger_cvcolumnlist" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_cvcolumnlist FOREIGN KEY (cvid) REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 	<table name="vtiger_cvstdfilter">
 		<field name="cvid" type="I" size="19">
@@ -5417,10 +5434,10 @@
 </table>
 
 	<table name="vtiger_parenttabrel">
-		<field name="parenttabid" type="I" size="3">
+		<field name="parenttabid" type="I" size="19">
 			<notnull />
 		</field>
-		<field name="tabid" type="I" size="3">
+		<field name="tabid" type="I" size="19">
 			<notnull />
 		</field>
 		<field name="sequence" type="I" size="3">
@@ -5432,6 +5449,20 @@
 			<col>parenttabid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_parenttabrel" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_parenttabrel FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="vtiger_parenttabrel" alter="true">
+		<constraint>ADD CONSTRAINT fk_2_vtiger_parenttabrel FOREIGN KEY (parenttabid) REFERENCES vtiger_parenttab(parenttabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
 	</table>
 
 	<table name="vtiger_campaigntype">
@@ -6103,6 +6134,13 @@
 			<col>tabid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_entityname" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_entityname FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
 	</table>
 
 
