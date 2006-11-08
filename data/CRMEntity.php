@@ -972,15 +972,15 @@ $log->info("in getOldFileName  ".$notesid);
                 for($i=0; $i < $numRows;$i++)
                 {
                         $columnName = $adb->query_result($result,$i,"columnname");
-                        $fieldlable = $adb->query_result($result,$i,"fieldlabel");
+                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         //construct query as below
                         if($i == 0)
                         {
-                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
                         else
                         {
-                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
 
                 }
