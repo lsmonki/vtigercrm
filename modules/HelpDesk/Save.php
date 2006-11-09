@@ -124,7 +124,7 @@ if($isactive == 1)
 	$bodydetails .= 'There is a reply to <b>'.$_REQUEST['ticket_title'].'</b> in the "Customer Portal" at VTiger.';
 	$bodydetails .= "You can use the following link to view the replies made:<br>";
 
-	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
+	$bodydetails .= "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
 	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
 
 	$email_body = $bodysubject.'<br><br>'.$bodydetails;
