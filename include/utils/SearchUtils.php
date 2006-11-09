@@ -126,68 +126,16 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
-                        if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
-                        {
-                                //Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
+			if($fieldname!='parent_id')
+			{
+				$fld_name=$fieldname;
 
-                                foreach($focus->list_fields[$name] as $tab=>$col)
-                                {
-                                        if(in_array($col,$focus->sortby_fields))
-                                        {
-                                                if($relatedlist !='')
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $name = $mod_strings[$name];
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $lbl_name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-								 $lbl_name = $mod_strings[$name];
-                                                        }
-                                                        $name = $lbl_name;
-                                                }
-                                        }
-                                        else
-                                        {       if($app_strings[$name])
-                                                {
-                                                        $name = $app_strings[$name];
-                                                }
-                                                elseif($mod_strings[$name])
-                                                {
-                                                        $name = $mod_strings[$name];
-                                                }
-                                        }
-                                }
-                        }
-                        //Added condition to hide the close column in Related Lists
-                        //if($name == 'Close' && $relatedlist != '')
-                        if($name == 'Close')
-                        {
-                                //$list_header .= '';
-                                // $list_header[] = '';
+				//assign the translated string
+				$search_header[$fld_name] = getTranslatedString($name);
 			}
-                        else
-                        {
-				if($fieldname!='parent_id')
-				{
-					$fld_name=$fieldname;
-                                	$search_header[$fld_name]=$mod_strings[$name];
-				}
-                        }
                 }
         }
-	$log->debug("Exiting getSearchListHeaderValues method ...");		
+	$log->debug("Exiting getSearchListHeaderValues method ...");	
         return $search_header;
 
 }
