@@ -2528,4 +2528,17 @@ function getrecurringObjValue()
 	}
 	
 }
+
+/**	Function used to get the translated string to the input string
+ *	@param string $str - input string which we want to translate
+ *	@return string $str - translated string, if the translated string is available then the translated string other wise original string will be returned
+ */
+function getTranslatedString($str)
+{
+	global $app_strings, $mod_strings, $log;
+	$str = ($app_strings[$str] != '')?$app_strings[$str]:(($mod_strings[$str] != '')?$mod_strings[$str]:$str);
+	$log->debug("function getTranslatedString($str) - translated to ($str)");
+	return $str;
+}
+
 ?>
