@@ -595,7 +595,7 @@ function AddContacts($username,$cntdtls)
 	{
 		if(isset($cntrow))
 		{
-		  		$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+		  		$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
      			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
     			
     			if($cntrow["middlename"] != "")
@@ -677,7 +677,7 @@ function UpdateContacts($username,$cntdtls)
 		if(isset($cntrow))
 		{
 			$contact->retrieve_entity_info($cntrow["id"],"Contacts");
-			$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+			$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
 			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
 			if($cntrow["middlename"] != "")
 			{
