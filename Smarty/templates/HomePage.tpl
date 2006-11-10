@@ -126,7 +126,7 @@ function getHomeActivities(mode,view)
 								</tr>
 								<tr align="left">
 									<td valign=top  colspan=2>
-											<div style="overflow-y:auto;overflow-x:hidden;height:250px;width:99%"> 
+											<div style="overflow-y:auto;overflow-x:hidden;height:200px;width:99%"> 
 											<table border=0 cellspacing=0 cellpadding=5 width=100%>
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
@@ -141,18 +141,16 @@ function getHomeActivities(mode,view)
 													</tr>
 												{/foreach}
 											</table>	
-											</div>
-											<table border=0 cellspacing=0 cellpadding=5 width=100%>
-													<tr>
-														<td colspan="2" align="right" valign="bottom">
-															{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
-																<a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a>
-															{else}
-																&nbsp;	
-															{/if}
-														</td>
-													</tr>
-											</table>										
+											</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="right" valign="bottom">
+									{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
+									 <a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a>
+									{else}
+										&nbsp;	
+									{/if}
 									</td>
 								</tr>
 							</table>
