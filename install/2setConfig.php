@@ -49,9 +49,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
   if(isset($allow_exports))
     $_SESSION['allow_exports'] = $allow_exports;
 
-  if(isset($disable_persistent_connections))
-    $_SESSION['disable_persistent_connections'] = $disable_persistent_connections;
-
   if(isset($default_language))
     $_SESSION['default_language'] = $default_language;
 

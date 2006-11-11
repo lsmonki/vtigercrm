@@ -156,10 +156,6 @@ $create_default_user = false;
 // default_user_is_admin default value = false
 $default_user_is_admin = false;
 
-// if your MySQL/PHP configuration does not support persistent connections set this to true to avoid a large performance slowdown
-// disable_persistent_connections default value = false
-$disable_persistent_connections = false;
-
 // defined languages available. the key must be the language file prefix. (Example 'en_us' is the prefix for every 'en_us.lang.php' file)
 // languages default value = en_us=>US English
 $languages = Array('en_us'=>'US English',);
