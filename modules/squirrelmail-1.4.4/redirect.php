@@ -17,6 +17,11 @@
  * Path for SquirrelMail required files.
  * @ignore
  */
+
+// store this value as squirrelmail uses this variable in the global scope as well
+$vtiger_theme = $theme;
+unset($theme);
+
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 //define('SM_PATH','../');
 
@@ -165,6 +170,7 @@ if ( sqgetGlobalVar('session_expired_location', $session_expired_location, SQ_SE
 }
 */
 
+$theme = $vtiger_theme;
 /* Write session data and send them off to the appropriate page. */
 //session_write_close();
 @header("Location: $redirect_url");

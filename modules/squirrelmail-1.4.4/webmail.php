@@ -26,6 +26,8 @@
  require_once ($theme_path."layout_utils.php");
 */
 
+$vtiger_theme = $theme;
+unset($theme);
 
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 
@@ -172,6 +174,7 @@ else
 }
 
 */
+$theme = $vtiger_theme;
 $smodule = $_REQUEST['smodule'];
 header("Location: index.php?module=squirrelmail-1.4.4&action=right_main&smodule=$smodule");
 
