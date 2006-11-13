@@ -76,7 +76,9 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 			$oCustomView = '';
 
 			$oCustomView = new CustomView($module);
-		
+			$viewid = $oCustomView->getViewId($module);
+			$oCustomView->getCvColumnListSQL($viewid);
+
 			if($search_module != '')//This is for Tag search
 			{
 		
@@ -93,7 +95,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 
 			if($where != '')
 				$listquery .= ' and ('.$where.')';
-		
+			
 			$list_result = $adb->query($listquery);
 			$noofrows = $adb->num_rows($list_result);
 
