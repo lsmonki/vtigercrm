@@ -79,7 +79,9 @@ if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['grou
 				//First we have to delete the group relationship
 				$delete_query = "delete from ". $deletegroup_array[$return_module] ." where " . $tableId_array[$return_module] . "='".$id."'";
 				$result = $adb->query($delete_query); 
-
+				//Inserting changed owner information to salesmanactivityrel table
+				$insert = "insert into vtiger_salesmanactivityrel values(".$idval.",".$id.")";
+				$result = $adb->query($insert);
 				//Now we have to update the smownerid
 				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 				$result = $adb->query($sql);
