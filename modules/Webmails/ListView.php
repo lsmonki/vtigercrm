@@ -177,6 +177,8 @@ $elist = $MailBox->mailList;
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
+$mails_per_page = $MailBox->mails_per_page;
+
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
 } else {

@@ -438,6 +438,9 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
 			break;
+		case 'Webmails':
+			//No need to create a webmail object here
+			break;
 		default:
 			require_once("modules/$currentModule/$currentModule.php");
 			$focus = new $currentModule();
