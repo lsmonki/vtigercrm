@@ -91,6 +91,8 @@ class RecurringType
 		$startdate = $this->startdate->get_formatted_date();
 		$tempdate = $startdate;
 		$enddate = $this->enddate->get_formatted_date();
+		
+		$recurringDates[]=$startdate;	
 		while($tempdate <= $enddate)
 		{
 			if($this->recur_type == 'Daily')
@@ -113,6 +115,7 @@ class RecurringType
 					'year'  => $st_date[0]
 				);
 				$tempdateObj = new DateTime($date_arr,true);
+				
 				if(isset($this->dayofweek_to_rpt) && $this->dayofweek_to_rpt != null)
 				{
 					$weekstartObj = $tempdateObj->getThisweekDaysbyIndex(0);
@@ -120,10 +123,12 @@ class RecurringType
 					{
 						for($i=0;$i<count($this->dayofweek_to_rpt);$i++)
 						{
+							
 							$repeatdateObj = $weekstartObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
 							if($repeatdateObj->get_formatted_date() <= $enddate)
 								$recurringDates[] = $repeatdateObj->get_formatted_date();
 						}
+						
 						if(isset($this->recur_freq))
 							$index = $this->recur_freq * 7;
 						else
@@ -134,9 +139,31 @@ class RecurringType
 							'year'  => $st_date[0]
 						);
 						$tempdateObj = new DateTime($date_arr,true);
+						
+						//echo '<pre>';print_r($recurringDates); echo '</pre>';
+						
 					}
+					
 					else
 					{
+						
+						$eventStart = $this->startdate->get_formatted_date();
+						for($i=0;$i<count($this->dayofweek_to_rpt);$i++)
+                                                {
+
+							$repeatDay = $weekstartObj->getThisweekDaysbyIndex($this->dayofweek_to_rpt[$i]);
+							$repeatDate= $repeatDay->get_formatted_date();
+							
+							if($repeatDate >= $eventStart)
+							{
+								
+								if($repeatDate <= $enddate)
+								$recurringDates[] = $repeatDate;
+
+							}
+							
+						}
+											
 						if(isset($this->recur_freq))
 							$index = $this->recur_freq * 7;
 						else
