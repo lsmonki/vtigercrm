@@ -1821,20 +1821,6 @@ function getQuickCreateModules()
          global $mod_strings;
 
 
-	$new_label=Array('Leads'=>'LNK_NEW_LEAD',
-			 'Accounts'=>'LNK_NEW_ACCOUNT',
-			 'Calendar'=>'LNK_NEW_TASK',
-			 'Campaigns'=>'LNK_NEW_CAMPAIGN',
-			 'Emails'=>'LNK_NEW_EMAIL',
-			 'Events'=>'LNK_NEW_EVENT',
-			 'HelpDesk'=>'LNK_NEW_HDESK',
-			 'Notes'=>'LNK_NEW_NOTE',
-			 'Potentials'=>'LNK_NEW_OPPORTUNITY',
-			 'PriceBooks'=>'LNK_NEW_PRICEBOOK',
-			 'Products'=>'LNK_NEW_PRODUCT',
-			 'Contacts'=>'LNK_NEW_CONTACT',
-			 'Vendors'=>'LNK_NEW_VENDOR'); 	
-
 $qc_query = "select distinct vtiger_tab.tablabel,vtiger_tab.name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where quickcreate=0 order by vtiger_tab.tablabel";
 $result = $adb->query($qc_query);
 $noofrows = $adb->num_rows($result);
@@ -1844,7 +1830,7 @@ for($i = 0; $i < $noofrows; $i++)
          $tablabel = $adb->query_result($result,$i,'tablabel');
 
          $tabname = $adb->query_result($result,$i,'name');
-	 $tablabel = $new_label[$tabname];
+	 $tablabel = "SINGLE_$tabname";
 	 if(isPermitted($tabname,'EditView','') == 'yes')
 	 {
          	$return_qcmodule[] = $tablabel;
