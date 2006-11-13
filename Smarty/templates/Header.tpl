@@ -78,14 +78,14 @@
                                 <select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
 					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-                                        <option value="{$detail.1}">{$APP[$detail.0]}</option>
+                                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$APP[$detail.0]}</option>
                         {/foreach}
                                 </select>
                         {else}
                                 <select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
 					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-                                        <option value="{$detail.1}">{$APP[$detail.0]}</option>
+                                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$APP[$detail.0]}</option>
                         {/foreach}
                                 </select>
 
