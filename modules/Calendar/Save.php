@@ -146,11 +146,11 @@ if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 	$selected_users_string =  $_REQUEST['inviteesid'];
 	$invitees_array = explode(';',$selected_users_string);
 	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-	$description = getActivityDetails($_REQUEST['description']);
 	foreach($invitees_array as $inviteeid)
 	{
 		if($inviteeid != '')
 		{
+			$description=getActivityDetails($_REQUEST['description'],$inviteeid);
 			$to_email = getUserEmailId('id',$inviteeid);
 			$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
 			$record = $focus->id;
@@ -199,24 +199,31 @@ else
  * @param   string   $description       - activity description
  * return   string   $list              - HTML in string format
  */
-function getActivityDetails($description)
+function getActivityDetails($description,$inviteeid='')
 {
-	global $log;
+	global $log,$current_user;
+        global $adb,$mod_strings;
 	$log->debug("Entering getActivityDetails(".$description.") method ...");
-	global $adb;
 
 	$reply = (($_REQUEST['mode'] == 'edit')?'Replied':'Created');
+	if($inviteeid=='')
 	$name = getUserName($_REQUEST['assigned_user_id']);
-	$status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	else
+	$name = getUserName($inviteeid);
 
-	$list = 'Dear '.$name.',';
-	$list .= '<br><br> There is an vtiger_activity('.$_REQUEST['activity_mode'].')'.$reply.'. The details are :';
-	$list .= '<br>Subject : '.$_REQUEST['subject'];
-	$list .= '<br>Status : '.$status;
-	$list .= '<br>Priority : '.$_REQUEST['taskpriority'];
-	$list .= '<br>Related to : '.$_REQUEST['parent_name'];
-	$list .= '<br>Contact : '.$_REQUEST['contact_name'];
-	$list .= '<br><br> Description : '.$description;
+	$current_username = getUserName($current_user->id);
+	$status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	
+	$list = $mod_strings['LBL_DEAR'].' ' .$name.',';
+        $list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'. '.$mod_strings['LBL_DETAILS_STRING'].':';
+        $list .= '<br>'.$mod_strings["LBL_SUBJECT"].' '.$_REQUEST['subject'];
+        $list .= '<br>'.$mod_strings["LBL_STATUS"].': '.$status;
+        $list .= '<br>'.$mod_strings["Priority"].': '.$_REQUEST['taskpriority'];
+        $list .= '<br>'.$mod_strings["Related To"].' : '.$_REQUEST['parent_name'];
+        $list .= '<br>'.$mod_strings["LBL_CONTACT"].' '.$_REQUEST['contact_name'];
+        $list .= '<br>'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description;
+	$list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
+	$list .= '<br>'.$current_username.'.';
 
 	$log->debug("Exiting getActivityDetails method ...");
 	return $list;

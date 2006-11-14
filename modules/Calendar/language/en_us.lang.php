@@ -204,6 +204,7 @@ $mod_strings = Array(
 'LBL_ASSINGEDTO'=>'Assigned To',
 'LBL_RELATEDTO'=>'Related To',
 'LBL_STATUS'=>'Status',
+'LBL_DEAR'=>'Dear',
 'LBL_PENDING'=>'Pending',
 'LBL_PUBLIC'=>'Mark Public',
 'LBL_MORE'=>'More',
@@ -264,6 +265,9 @@ $mod_strings = Array(
 'LBL_EVENT_INFORMATION'=>'Event Information',
 
 'LBL_NAME'=>'Subject:',
+'LBL_ACTIVITY_STRING'=>'There is an activity',
+'LBL_DETAILS_STRING'=>'The details are',
+'LBL_REGARDS_STRING'=>'Thanks & Regards',
 'LBL_CONTACT_NAME'=>'Contact Name',
 'LBL_OPEN_ACTIVITIES'=>'Open Activities',
 'LBL_ACTIVITY'=>'Activity:',
