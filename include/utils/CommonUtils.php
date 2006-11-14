@@ -220,6 +220,33 @@ function from_html($string, $encode=true){
         return $string;
 }
 
+/**
+ *	Function used to decodes the given single quote and double quote only. This function used for popup selection 
+ *	@param string $string - string to be converted, $encode - flag to decode
+ *	@return string $string - the decoded value in string fromat where as only single and double quotes will be decoded
+ */
+
+function popup_from_html($string, $encode=true)
+{
+	global $log;
+	$log->debug("Entering popup_from_html(".$string.",".$encode.") method ...");
+
+	$popup_toHtml = array(
+        			'"' => '&quot;',
+			        "'" =>  '&#039;',
+			     );
+
+        //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
+        if($encode && is_string($string))
+	{
+                $string = addslashes(str_replace(array_values($popup_toHtml), array_keys($popup_toHtml), $string));
+        }
+
+	$log->debug("Exiting popup_from_html method ...");
+        return $string;
+}
+
+
 /** To get the Currency of the specified user
   * @param $id -- The user Id:: Type integer
   * @returns  vtiger_currencyid :: Type integer
@@ -418,6 +445,27 @@ function getContactName($contact_id)
  * returns the Campaign Name in string format.
  */
 
+function getOrgUnitName($orgunit_id)
+{
+	global $log;
+	$log->debug("Entering getOrgUnitName(".$orgunit_id.") method ...");
+	$log->info("in getOrgUnitName ".$orgunit_id);
+
+	global $adb;
+	$sql = "select * from vtiger_orgunit where orgunitid=".$orgunit_id;
+	$result = $adb->query($sql);
+	$orgunit_name = $adb->query_result($result,0,"name");
+	$log->debug("Exiting getOrgUnitName method ...");
+	return $orgunit_name;
+}
+
+
+/**
+ * Function to get the Campaign Name when a campaign id is given
+ * Takes the input as $campaign_id - campaign id
+ * returns the Campaign Name in string format.
+ */
+
 function getCampaignName($campaign_id)
 {
 	global $log;
@@ -600,9 +648,6 @@ function getGroupName($id, $module)
 
 /**
  * Get the username by giving the user id.   This method expects the user id
- * param $label_list - the array of strings to that contains the option list
- * param $key_list - the array of strings to that contains the values list
- * param $selected - the string which contains the default value
  */
      
 function getUserName($userid)
@@ -620,6 +665,29 @@ function getUserName($userid)
 	}
 	$log->debug("Exiting getUserName method ...");
 	return $user_name;	
+}
+
+/**
+* Get the user full name by giving the user id.   This method expects the user id
+* DG 30 Aug 2006
+*/
+
+function getUserFullName($userid)
+{
+	global $log;
+	$log->debug("Entering getUserFullName(".$userid.") method ...");
+	$log->info("in getUserFullName ".$userid);
+	global $adb;
+	if($userid != '')
+	{
+		$sql = "select first_name, last_name from vtiger_users where id=".$userid;
+		$result = $adb->query($sql);
+		$first_name = $adb->query_result($result,0,"first_name");
+		$last_name = $adb->query_result($result,0,"last_name");
+		$user_name = $first_name." ".$last_name;
+	}
+        $log->debug("Exiting getUserFullName method ...");
+        return $user_name;
 }
 
 /**
@@ -1020,7 +1088,6 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$result = $adb->query($sql);
                 $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label,$mode);	
 	}
-	$log->debug("Exiting getBlocks method ...");
 	$index_count =1;
 	$max_index =0;
 	foreach($getBlockInfo as $label=>$contents)
@@ -1045,6 +1112,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 			
 		}
 	}
+	$log->debug("Exiting getBlocks method ...");
 	return $getBlockInfo;
 }	
 /**
@@ -1552,27 +1620,26 @@ function setObjectValuesFromRequest($focus)
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
 		}
-		if(isset($_REQUEST['txtTax']))
-		{
-			$value = convertToDollar($_REQUEST['txtTax'],$rate);
-			$focus->column_fields['txtTax'] = $value;
-		}
-		if(isset($_REQUEST['txtAdjustment']))
-		{
-			$value = convertToDollar($_REQUEST['txtAdjustment'],$rate);
-			$focus->column_fields['txtAdjustment'] = $value;
-		}
-		if(isset($_REQUEST['hdnSubTotal']))
-		{
-			$value = convertToDollar($_REQUEST['hdnSubTotal'],$rate);
-			$focus->column_fields['hdnSubTotal'] = $value;
-		}
-		if(isset($_REQUEST['hdnGrandTotal']))
-		{
-			$value = convertToDollar($_REQUEST['hdnGrandTotal'],$rate);
-			$focus->column_fields['hdnGrandTotal'] = $value;
-		}
-
+	}
+	if(isset($_REQUEST['txtTax']))
+	{
+		$value = convertToDollar($_REQUEST['txtTax'],$rate);
+		$focus->column_fields['txtTax'] = $value;
+	}
+	if(isset($_REQUEST['txtAdjustment']))
+	{
+		$value = convertToDollar($_REQUEST['txtAdjustment'],$rate);
+		$focus->column_fields['txtAdjustment'] = $value;
+	}
+	if(isset($_REQUEST['hdnSubTotal']))
+	{
+		$value = convertToDollar($_REQUEST['hdnSubTotal'],$rate);
+		$focus->column_fields['hdnSubTotal'] = $value;
+	}
+	if(isset($_REQUEST['hdnGrandTotal']))
+	{
+		$value = convertToDollar($_REQUEST['hdnGrandTotal'],$rate);
+		$focus->column_fields['hdnGrandTotal'] = $value;
 	}
 	$log->debug("Exiting setObjectValuesFromRequest method ...");
 }
@@ -1953,7 +2020,10 @@ function sendNotificationToOwner($module,$focus)
 
 	foreach($object_column_fields as $fieldname => $fieldlabel)
 	{
-		$description .= $fieldlabel.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+		//Get the translated string
+		$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+
+		$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
 	}
 
 	$description .= '<br><br>Thank You <br>';
@@ -1976,6 +2046,26 @@ function getUserslist()
 	$change_owner = get_select_options_with_id($usernamelist,'admin');
 	$log->debug("Exiting getUserslist method ...");
 	return $change_owner;
+}
+
+
+function getGroupslist()
+{
+	global $log;
+	$log->debug("Entering getGroupslist() method ...");
+	global $adb;
+	$result=$adb->query("select * from vtiger_groups");
+	
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+	       $groupidlist[$i]=$adb->query_result($result,$i,'groupid');
+	       $groupnamelist[$groupidlist[$i]]=$adb->query_result($result,$i,'groupname');
+	       
+	}
+	$change_groups_owner = get_select_options_with_id($groupnamelist,'');
+	$log->debug("Exiting getGroupslist method ...");
+
+	return $change_groups_owner;
 }
 
 
@@ -2019,214 +2109,30 @@ function getEntityName($module, $ids_list)
 	global $log;
 	$log->debug("Entering getEntityName(".$module.") method ...");
 		
-	switch ($module)
+	if($module != '')
 	{
-		case "Accounts" : $query = "select accountname from vtiger_account where accountid in (".$list.")";
-				  $result = $adb->query($query);
-				  $numrows = $adb->num_rows($result);
-				  $account_name = array();	
-				  	for ($i = 0; $i < $numrows; $i++)
-				  	{
-				 		$acc_id = $ids_list[$i];
-						$account_name[$acc_id] = $adb->query_result($result,$i,'accountname');
-				  	}
-					return $account_name;
-					break;
-
-		  case "Leads" :  $query = "select concat(firstname,' ',lastname) as leadname from vtiger_leaddetails where leadid in (".$list.")";
-				  $result = $adb->query($query);
-				  $numrows = $adb->num_rows($result);
-				  $lead_name = array();
-					for($i = 0; $i < $numrows; $i++)
-					{
-						$lead_id = $ids_list[$i];
-						$lead_name[$lead_id] = $adb->query_result($result,$i,'leadname');
-					}	
-								
-					return $lead_name;
-					break;
-		
-	       case "Contacts" : $query = "select concat(firstname,' ',lastname) as contactname from vtiger_contactdetails where contactid in (".$list.")"; 
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $contact_name = array();
-					for($i=0; $i < $numrows; $i++)
-					{
-						$cont_id = $ids_list[$i];
-						$contact_name[$cont_id] = $adb->query_result($result,$i,'contactname');
-					}
-					
-					return $contact_name;
-					break;
-
-	    case "Potentials"  : $query = "select potentialname from vtiger_potential where potentialid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $potential_name = array();
-					for($i=0; $i < $numrows; $i++)
-					{
-						$pot_id = $ids_list[$i];
-						$potential_name[$pot_id] = $adb->query_result($result,$i,'potentialname');
-					}
-					
-					return $potential_name;
-					break;
-
-	        case "Quotes"  : $query = "select subject from vtiger_quotes where quoteid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $quote_subject = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$quote_id = $ids_list[$i];
-						$quote_subject[$quote_id] = $adb->query_result($result,$i,'subject'); 
-				 	}
-					
-					return $quote_subject;
-					break;	
-
-	    case "SalesOrder"  : $query = "select subject from vtiger_salesorder where salesorderid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $so_subject = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$so_id = $ids_list[$i];
-						$so_subject[$so_id] = $adb->query_result($result,$i,'subject'); 
-				 	}
-					
-					return $so_subject;
-					break;
-	
-	       case "Invoice"  : $query = "select subject from vtiger_invoice where invoiceid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $inv_subject = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$inv_id = $ids_list[$i];
-						$inv_subject[$inv_id] = $adb->query_result($result,$i,'subject'); 
-				 	}
-					
-					return $inv_subject;
-					break;
-		
-	      case "Products"  : $query = "select productname from vtiger_products where productid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $product_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$prod_id = $ids_list[$i];
-						$product_name[$prod_id] = $adb->query_result($result,$i,'productname'); 
-				 	}
-					
-					return $product_name;
-					break;
-
-	   case "PriceBooks"  :  $query = "select bookname from vtiger_pricebook where pricebookid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $pbook_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$pbook_id = $ids_list[$i];
-						$pbook_name[$pbook_id] = $adb->query_result($result,$i,'bookname'); 
-				 	}
-					
-					return $pbook_name;
-					break;
-
-	        case "Notes"  :  $query = "select title from vtiger_notes where notesid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $notes_title = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$note_id = $ids_list[$i];
-						$notes_title[$note_id] = $adb->query_result($result,$i,'title'); 
-				 	}
-					
-					return $notes_title;
-					break;
-		
-	  case "Calendar"  :  $query = "select subject from vtiger_activity where activityid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $activity_subject = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$act_id = $ids_list[$i];
-						$activity_subject[$act_id] = $adb->query_result($result,$i,'subject'); 
-				 	}
-					
-					return $activity_subject;
-					break;
-
-	    case "Campaigns"  :  $query = "select campaignname from vtiger_campaign where campaignid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $campaign_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$cmpn_id = $ids_list[$i];
-						$campaign_name[$cmpn_id] = $adb->query_result($result,$i,'campaignname'); 
-				 	}
-					
-					return $campaign_name;
-					break;
-
-	          case "Faq"  :  $query = "select question from vtiger_faq where id in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $faq_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$faq_id = $ids_list[$i];
-						$faq_name[$faq_id] = $adb->query_result($result,$i,'question'); 
-				 	}
-					
-					return $faq_name;
-					break;
-		
-	      case "Vendors"  :  $query = "select vendorname from vtiger_vendor where vendorid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $vendor_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$ven_id = $ids_list[$i];
-						$vendor_name[$ven_id] = $adb->query_result($result,$i,'vendorname'); 
-				 	}
-					
-					return $vendor_name;
-					break;
-
-	case "PurchaseOrder"  :  $query = "select subject from vtiger_purchaseorder where purchaseorderid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $po_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$po_id = $ids_list[$i];
-						$po_name[$po_id] = $adb->query_result($result,$i,'subject'); 
-				 	}
-					
-					return $po_name;
-					break;
-
-	     case "HelpDesk"  :  $query = "select title from vtiger_troubletickets where ticketid in (".$list.")";
-				 $result = $adb->query($query);
-				 $numrows = $adb->num_rows($result);
-				 $ticket_name = array();		    	
-					for($i=0; $i < $numrows; $i++)
-					{
-						$tick_id = $ids_list[$i];
-						$ticket_name[$tick_id] = $adb->query_result($result,$i,'title'); 
-				 	}
-					
-					return $ticket_name;
-					break;
+		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = '$module'";
+		 $result = $adb->query($query);
+		 $fieldsname = $adb->query_result($result,0,'fieldname');
+		 $tablename = $adb->query_result($result,0,'tablename'); 
+		 $entityidfield = $adb->query_result($result,0,'entityidfield'); 
+		 if(!(strpos($fieldsname,',') === false))
+		 {
+			 $fieldlists = explode(',',$fieldsname);
+			 $fieldsname = "concat(";
+			 $fieldsname = $fieldsname.implode(",' ',",$fieldlists);
+			 $fieldsname = $fieldsname.")";
+		 }	
+		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield in (".$list.")"; 
+		 $result = $adb->query($query1);
+		 $numrows = $adb->num_rows($result);
+	  	 $account_name = array();
+		 for ($i = 0; $i < $numrows; $i++)
+		 {
+			$entity_id = $ids_list[$i];
+			$entity_info[$entity_id] = $adb->query_result($result,$i,'entityname');
+		 }
+		 return $entity_info;
 	}
 	$log->debug("Exiting getEntityName method ...");
 }
@@ -2430,6 +2336,13 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Contacts':
 			if(is_array($fields["contacts"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}	
+				
 				$columnfields = implode(',',$fields["contacts"]);
 				$query = 'select '.$columnfields.' from vtiger_contactdetails where contactid='.$id;
 				$result = $adb->query($query);
@@ -2443,6 +2356,12 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Leads':	
 			if(is_array($fields["leads"]))
 			{
+				//Checking for salutation type and checking the table column to be queried
+				$key = array_search('salutationtype',$fields["contacts"]);
+				if(isset($key) && $key !='')
+				{
+					$fields["contacts"][$key]='salutation';
+				}
 				$columnfields = implode(',',$fields["leads"]);
 				$query = 'select '.$columnfields.' from vtiger_leaddetails where leadid='.$id;
 				$result = $adb->query($query);

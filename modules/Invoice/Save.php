@@ -30,25 +30,9 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Invoice();
 global $current_user;
-$currencyid=fetchCurrency($current_user->id);
-$rate_symbol = getCurrencySymbolandCRate($currencyid);
-$rate = $rate_symbol['rate'];
 setObjectValuesFromRequest(&$focus);
 
 $focus->save("Invoice");
-
-//Checking if vtiger_salesorderid is present and updating the quote status
-if($focus->column_fields["salesorder_id"] != '')
-{
-        $so_id = $focus->column_fields["salesorder_id"];
-        $query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=".$so_id;
-        $adb->query($query1);
-}
-
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'Invoice');
-
 
 $return_id = $focus->id;
 

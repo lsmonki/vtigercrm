@@ -789,6 +789,7 @@
 		<field name="outcomeanalysis" type="I" size="19">
 			<default value="0" />
 		</field>
+		<field name="orgunitid" type="I" size="19" />
 
 		<index name="potential_accountid_idx">
 			<col>accountid</col>
@@ -3407,6 +3408,7 @@
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
 		<field name="sostatus" type="C" size='200' />
+		<field name="orgunitid" type="I" size="19" />
 
 		<index name="salesorder_vendorid_idx">
 			<col>vendorid</col>
@@ -3725,6 +3727,7 @@
 		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
+		<field name="orgunitid" type="I" size="19" />
 
 		<index name="quote_quotestage_idx">
 			<col>quotestage</col>
@@ -3858,6 +3861,7 @@
 		<field name="s_h_amount" type="N" size="11.3" />
 		<field name="terms_conditions" type="X" />
 		<field name="postatus" type="C" size="200" />
+		<field name="orgunitid" type="I" size="19" />
 
 		<index name="purchaseorder_vendorid_idx">
 			<col>vendorid</col>
@@ -3995,6 +3999,7 @@
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
 		<field name="invoicestatus" type="C" size='200' />
+		<field name="orgunitid" type="I" size="19" />
 
 		<index name="invoice_purchaseorderid_idx">
 			<col>invoiceid</col>
@@ -4695,6 +4700,22 @@
 		<field name="website" type="C" size="100" />
 		<field name="logoname" type="C" size="50" />
 		<field name="logo" type="X" />
+		<field name="deleted" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="quote_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="so_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="po_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="invoice_template" type="C" size="30">
+			<default value="" />
+		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -6081,6 +6102,198 @@
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
+	</table>
+
+	<table name="vtiger_entityname">
+		<field name="tabid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="modulename" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="tablename" type="C" size="100">
+			<notnull />
+		</field>
+		<field name="fieldname" type="C" size="150">
+			<notnull />
+		</field>
+		<field name="entityidfield" type="C" size="150">
+			<notnull />
+		</field>
+		<index name="entityname_tabid_idx">
+			<col>tabid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_orgunit">
+		<field name="orgunitid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="organizationname" type="C" size="60">
+			<notnull />
+		</field>
+		<field name="type" type="C" size="30" />
+		<field name="name" type="C" size="60">
+			<notnull />
+		</field>
+		<field name="address" type="C" size="150" />
+		<field name="city" type="C" size="100" />
+		<field name="state" type="C" size="100" />
+		<field name="country" type="C" size="100" />
+		<field name="code" type="C" size="30" />
+		<field name="phone" type="C" size="30" />
+		<field name="fax" type="C" size="30" />
+		<field name="website" type="C" size="100" />
+		<field name="deleted" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="quote_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="so_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="po_template" type="C" size="30">
+			<default value="" />
+		</field>
+		<field name="invoice_template" type="C" size="30">
+			<default value="" />
+		</field>
+
+		<index name="vtiger_orgunit_name_idx">
+			<col>organizationname</col>
+			<col>name</col>
+			<unique />
+		</index>
+		<index name="vtiger_orgunit_type_idx">
+			<col>organizationname</col>
+			<col>type</col>
+		</index>
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_orgunit" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_orgunit FOREIGN KEY (organizationname) REFERENCES vtiger_organizationdetails(organizationname) ON UPDATE CASCADE ON DELETE CASCADE</constraint>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_orgunittype">
+		<field name="orgunittypeid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="orgunittype" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<index name="vtiger_orgunittype_orgunittype_idx">
+			<col>orgunittype</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_user2org">
+		<field name="organizationname" type="C" size="60">
+			<key />
+			<notnull />
+		</field>
+		<field name="userid" type="I" size="19">
+			<key />
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="primarytag" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+
+		<index name="vtiger_user2org_organizationname_idx">
+			<col>organizationname</col>
+		</index>
+		<index name="vtiger_user2org_userid_idx">
+			<col>userid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_user2org" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_user2org FOREIGN KEY (organizationname) REFERENCES vtiger_organizationdetails(organizationname) ON UPDATE CASCADE ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_2_vtiger_user2org FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_user2orgunit">
+		<field name="orgunitid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="userid" type="I" size="19">
+			<key />
+			<default value="0" />
+			<notnull />
+		</field>
+		<field name="primarytag" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+
+		<index name="vtiger_user2orgunit_orgunitid_idx">
+			<col>orgunitid</col>
+		</index>
+		<index name="vtiger_user2orgunit_userid_idx">
+			<col>userid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_user2orgunit" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_user2orgunit FOREIGN KEY (orgunitid) REFERENCES vtiger_orgunit(orgunitid) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_2_vtiger_user2orgunit FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_entity2org">
+		<field name="organizationname" type="C" size="60">
+			<key />
+			<notnull />
+		</field>
+		<field name="crmid" type="I" size="19">
+			<key />
+			<default value="0" />
+			<notnull />
+		</field>
+		<field name="primarytag" type="I" size="1">
+			<notnull />
+			<default value="0" />
+		</field>
+
+		<index name="vtiger_entity2org_organizationname_idx">
+			<col>organizationname</col>
+		</index>
+		<index name="vtiger_entity2org_crmid_idx">
+			<col>crmid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_entity2org" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_entity2org FOREIGN KEY (organizationname) REFERENCES vtiger_organizationdetails(organizationname) ON UPDATE CASCADE ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_2_vtiger_entity2org FOREIGN KEY (crmid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	

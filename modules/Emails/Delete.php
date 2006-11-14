@@ -17,12 +17,12 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('email_delete');
 
-$focus = new Email();
+$focus = new Emails();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");

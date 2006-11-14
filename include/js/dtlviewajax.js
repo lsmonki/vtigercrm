@@ -135,7 +135,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 
-	}else if(globaluitype == 33)
+	}else if(globaluitype == 14 || globaluitype == 33 || globaluitype == 34)
 	{
 	  var txtBox= "txtbox_"+ fieldLabel;
 	  var oMulSelect = $(txtBox);
@@ -182,7 +182,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			tagValue = "off";
 		}
-	}else if(uitype == '33')
+	}else if(uitype == 14 || uitype == '33' || uitype == '34')
 	{
 		tagValue = r.join(" |##| ");
   	}else
@@ -190,9 +190,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		tagValue = trim(document.getElementById(txtBox).value);
 	}
 
+	if(uitype == '3' || uitype == '4' || uitype == '18' || uitype == '31' || uitype == '32') {
+	    if(document.getElementById(txtBox+"_inh").checked) {
+		tagValue = "@##@" + tagValue;
+	    }
+	}
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
+	data = data + "&tableName=" + tableName;
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -216,7 +222,23 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	}else if(uitype == '17')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
-	}else if(uitype == '53')
+	}else if(uitype == '34' || (uitype == '115' && fieldName == 'primary_org'))
+	{
+	    var data = "file=UpdateUserOrg&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId;
+	    new Ajax.Request(
+		'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: data,
+                        onComplete: function(response) {
+			    $("dvtUserOrg").innerHTML = response.responseText;
+                        }
+                }
+            );
+	}else if(uitype == '85')
+        {
+                getObj(dtlView).innerHTML = "<a href=\"skype://"+ tagValue+"?call\">"+tagValue+"&nbsp;</a>";
+        }else if(uitype == '53')
 	{
 		var hdObj = getObj(hdTxt);
 		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
@@ -309,9 +331,40 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = popObj.value;
 		}
-	}else if(uitype == '33')
+	}else if(uitype == '33' || uitype == '34')
   	{
+		/* Wordwrap a long list of multi-select combo box items at the
+                 * item separator string */
+                const DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
+
+                var lineLength = 0;
+                for(var i=0; i < r.length; i++) {
+                        lineLength += r[i].length + 2; // + 2 for item separator string
+                        if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
+                                lineLength = r[i].length + 2; // reset.
+                            r[i] = '<br/>&nbsp;' + r[i]; // prepend newline.
+                        }
+                        // Prevent a browser splitting multiword items:
+                        r[i] = r[i].replace(/ /g, '&nbsp;');
+                }
+                /* Join items with item separator string (which must match string in DetailViewUI.tpl,
+                 * EditViewUtils.php and CRMEntity.php)!!
+                 */
        		getObj(dtlView).innerHTML = r.join(", ");
+	}else if(uitype == '3' || uitype == '4' || uitype == '14' || uitype == '18' || uitype == '31' || uitype == '32') 
+	{
+	    var data = "file=DetailView&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
+	    new Ajax.Request(
+		'index.php',
+                {queue: {position: 'end', scope: 'command'},
+		    method: 'post',
+		    postBody: data,
+		    onComplete: function(response) {
+			result = response.responseText.split('<!-- @#@#@#@# '+fieldLabel+' @#@#@#@# -->');
+			$("mouseArea_"+fieldLabel).innerHTML= result[1];
+		    }
+                }
+            );
 	}else
 	{
 		getObj(dtlView).innerHTML = tagValue;

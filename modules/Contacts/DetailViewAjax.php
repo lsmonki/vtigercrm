@@ -10,7 +10,7 @@
  ********************************************************************************/
 	      
 require_once('include/logging.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -22,10 +22,10 @@ if($ajaxaction == "DETAILVIEW")
      $crmid = $_REQUEST["recordid"];
      $tablename = $_REQUEST["tableName"];
      $fieldname = $_REQUEST["fldName"];
-     $fieldvalue = $_REQUEST["fieldValue"];
+     $fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
      if($crmid != "")
 	 {
-		 $cntObj = new Contact();
+		 $cntObj = new Contacts();
 		 $cntObj->retrieve_entity_info($crmid,"Contacts");
 		 $cntObj->column_fields[$fieldname] = $fieldvalue;
 		 $cntObj->id = $crmid;

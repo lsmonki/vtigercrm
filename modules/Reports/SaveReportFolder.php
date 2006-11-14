@@ -29,7 +29,7 @@ if($mode=="Save")
 	{
 		$sql = "INSERT INTO vtiger_reportfolder ";
 		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-		$sql .= "VALUES ('','".$foldername."','".$folderdesc."','CUSTOMIZED')";
+		$sql .= "VALUES (0,'".$foldername."','".$folderdesc."','CUSTOMIZED')";
 		$result = $adb->query($sql);
 		if($result!=false)
 		{

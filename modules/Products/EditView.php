@@ -11,12 +11,14 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
 global $currentModule;
+global $current_organization;
+global $user_organizations;
 
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
@@ -28,7 +30,7 @@ $decode_val=base64_decode($encode_val);
 
 
 
-$focus = new Product();
+$focus = new Products();
 $smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['record']!="") 
@@ -37,6 +39,8 @@ if($_REQUEST['record']!="")
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Products");
     $focus->name=$focus->column_fields['productname'];		
+} else {
+    $focus->column_fields["otherorgs"][$current_organization]=1;
 }
 
 if($image_error=="true")
@@ -95,7 +99,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Product']);
+$smarty->assign("SINGLE_MOD",'Product');
 
 
 $smarty->assign("MOD", $mod_strings);
@@ -203,6 +207,16 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
 
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');

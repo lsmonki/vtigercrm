@@ -85,6 +85,17 @@ $smarty->assign("CALC",get_calc($image_path));
 $smarty->assign("QUICKACCESS",getAllParenttabmoduleslist());
 $smarty->assign("ANNOUNCEMENT",get_announcements());
 
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
+$smarty->assign("USER_ORGANIZATIONS_COUNT",count($org_array));
+$smarty->assign("CHGORGOK",$org_change_ok);
+
 
 if (is_admin($current_user)) $smarty->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'>".$app_strings['LBL_SETTINGS']."</a>");
 

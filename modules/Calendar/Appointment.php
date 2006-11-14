@@ -12,6 +12,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/database/Postgres8.php');
 require_once('modules/Calendar/Activity.php');
 class Appointment
 {
@@ -56,11 +57,11 @@ class Appointment
 	
 	function readAppointment($userid, &$from_datetime, &$to_datetime, $view)
 	{
-		global $current_user,$adb;
+		global $current_user,$adb,$log;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 		$shared_ids = getSharedCalendarId($current_user->id);
-                $q= "select vtiger_activity.*, vtiger_crmentity.*, vtiger_activitygrouprelation.groupname FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (vtiger_activity.date_start < '". $to_datetime->get_formatted_date() ."' AND vtiger_activity.date_start >= '". $from_datetime->get_formatted_date()."') ";
+                $q= "select vtiger_activity.*, vtiger_crmentity.*, vtiger_activitygrouprelation.groupname FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (vtiger_activity.date_start < '". $to_datetime->get_formatted_date() ."' AND vtiger_activity.date_start >= '". $from_datetime->get_formatted_date()."') ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter('Calendar');
@@ -68,7 +69,10 @@ class Appointment
 		}
 									
                 $q .= " AND vtiger_recurringevents.activityid is NULL ";
-                $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+                $q .= " GROUP BY vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+		//Postgres 8 fixes
+		if( $adb->dbType == "pgsql")
+		    $q = fixPostgresQuery( $q, $log, 0);
 		$r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
@@ -83,7 +87,7 @@ class Appointment
                         unset($obj);
                 }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid";
+		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname ";
 
                 $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (recurringdate < '".$to_datetime->get_formatted_date()."' AND recurringdate >= '".$from_datetime->get_formatted_date(). "') ";
 
@@ -93,7 +97,7 @@ class Appointment
 			$q .= $sec_parameter;
 		}
 													
-                $q .= " ORDER by recurringid";
+                $q .= " ORDER by vtiger_recurringevents.recurringid";
                 $r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;

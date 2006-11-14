@@ -22,7 +22,8 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -30,7 +31,9 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
-$focus = new Potential();
+global $current_organization;
+
+$focus = new Potentials();
 $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
@@ -119,7 +122,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Potential']);
+$smarty->assign("SINGLE_MOD",'Potential');
 
 
  $tabid = getTabid("Potentials");
@@ -132,6 +135,10 @@ $smarty->assign("SINGLE_MOD",$app_strings['Potential']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$organization = new Organization;
+$organization->id = $current_organization;
+$smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");

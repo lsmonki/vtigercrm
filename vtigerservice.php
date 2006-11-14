@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
- 
+ini_set (error_reporting,E_ALL & ~E_NOTICE );
 if(isset($_REQUEST['service']))
 {
 	if($_REQUEST['service'] == "outlook")
@@ -44,11 +44,11 @@ else
 {
 	echo "<h1>vtigerCRM Soap Services</h1>";
 	echo "<li>vtigerCRM Outlook Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=outlook'>here</a></li>";
-	echo "<li>vtigerCRM Word Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=word'>here</a></li>";
+	echo "<li>vtigerCRM Word Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=wordplugin'>here</a></li>";
 	echo "<li>vtigerCRM ThunderBird Extenstion EndPoint URL -- Click <a href='vtigerservice.php?service=thunderbird'>here</a></li>";
 	echo "<li>vtigerCRM Customer Portal EndPoint URL -- Click <a href='vtigerservice.php?service=customerportal'>here</a></li>";
 	echo "<li>vtigerCRM WebForm EndPoint URL -- Click <a href='vtigerservice.php?service=webforms'>here</a></li>";
-	echo "<li>vtigerCRM FireFox Extension EndPoint URL -- Click <a href='vtigerservice.php?service=firefox'>here</a></li>"; 
+	echo "<li>vtigerCRM FireFox Extension EndPoint URL -- Click <a href='vtigerservice.php?service=firefox'>here</a></li>";
 }
 
 

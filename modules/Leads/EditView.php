@@ -14,7 +14,7 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -22,8 +22,10 @@ require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $mod_strings,$app_strings,$theme,$currentModule;
+global $current_organization;
+global $user_organizations;
 
-$focus = new Lead();
+$focus = new Leads();
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -32,6 +34,8 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Leads");		
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
+} else {
+    $focus->column_fields["otherorgs"][$current_organization]=1;
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -89,7 +93,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Lead']);
+$smarty->assign("SINGLE_MOD",'Lead');
 
 
 $smarty->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
@@ -109,10 +113,20 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
+
 if($focus->mode == 'edit')
-$smarty->display("salesEditView.tpl");
+    $smarty->display("salesEditView.tpl");
 else
-$smarty->display("CreateView.tpl");
+    $smarty->display("CreateView.tpl");
 
 
 ?>

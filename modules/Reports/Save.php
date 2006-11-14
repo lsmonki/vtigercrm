@@ -48,43 +48,47 @@ $enddate = $_REQUEST["enddate"];
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>
-$allKeys = array_keys($HTTP_POST_VARS);
-for ($i=0;$i<count($allKeys);$i++)
-{
-   $string = substr($allKeys[$i], 0, 3);
-   if($string == "cb:")
-   {
-	   $columnstototal[] = $allKeys[$i];
-   }
+if( is_array( $HTTP_POST_VARS)) {
+    $allKeys = array_keys($HTTP_POST_VARS);
+    for ($i=0;$i<count($allKeys);$i++)
+    {
+       $string = substr($allKeys[$i], 0, 3);
+       if($string == "cb:")
+       {
+	       $columnstototal[] = $allKeys[$i];
+       }
+    }
 }
 //<<<<<<<columnstototal>>>>>>>>>
 
 //<<<<<<<advancedfilter>>>>>>>>
 //$adv_filter_col = "kcol";
-$allKeys = array_keys($HTTP_POST_VARS);
-for ($i=0;$i<count($allKeys);$i++)
-{
-   $string = substr($allKeys[$i], 0, 4);
-   if($string == "fcol")
-   {
-	   $adv_filter_col[] = $_REQUEST[$allKeys[$i]];
-   }
-}
-for ($i=0;$i<count($allKeys);$i++)
-{
-   $string = substr($allKeys[$i], 0, 3);
-   if($string == "fop")
-   {
-           $adv_filter_option[] = $_REQUEST[$allKeys[$i]];
-   }
-}
-for ($i=0;$i<count($allKeys);$i++)
-{
-   $string = substr($allKeys[$i], 0, 4);
-   if($string == "fval")
-   {
-           $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
-   }
+if( is_array( $HTTP_POST_VARS)) {
+    $allKeys = array_keys($HTTP_POST_VARS);
+    for ($i=0;$i<count($allKeys);$i++)
+    {
+       $string = substr($allKeys[$i], 0, 4);
+       if($string == "fcol")
+       {
+	       $adv_filter_col[] = $_REQUEST[$allKeys[$i]];
+       }
+    }
+    for ($i=0;$i<count($allKeys);$i++)
+    {
+       $string = substr($allKeys[$i], 0, 3);
+       if($string == "fop")
+       {
+	       $adv_filter_option[] = $_REQUEST[$allKeys[$i]];
+       }
+    }
+    for ($i=0;$i<count($allKeys);$i++)
+    {
+       $string = substr($allKeys[$i], 0, 4);
+       if($string == "fval")
+       {
+	       $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
+       }
+    }
 }
 //<<<<<<<advancedfilter>>>>>>>>
 if($reportid == "")
@@ -144,7 +148,11 @@ if($reportid == "")
 					//<<<<step3 vtiger_reportsortcol>>>>>>>
 
 					//<<<<step5 standarfilder>>>>>>>
-					$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$genQueryId.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
+					if( $startdate == '') 
+					    $startdate = date('YmdHis');
+					if( $enddate == '') 
+					    $enddate = date('YmdHis');
+					$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$genQueryId.",'".$stdDateFilterField."','".$stdDateFilter."','".$adb->formatString("vtiger_crmentity","startdate",$startdate)."','".$adb->formatString("vtiger_crmentity","enddate",$enddate)."')";
 					$ireportmoduleresult = $adb->query($ireportmodulesql);
 					$log->info("Reports :: Save->Successfully saved vtiger_reportdatefilter");
 					//<<<<step5 standarfilder>>>>>>>
@@ -242,7 +250,7 @@ if($reportid == "")
 			$idelreportdatefiltersqlresult = $adb->query($idelreportdatefiltersql);
 
 			//<<<<step5 standarfilder>>>>>>>
-			$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
+			$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."','".$adb->formatString("vtiger_crmentity","startdate",$startdate)."','".$adb->formatString("vtiger_crmentity","enddate",$enddate)."')";
 			$ireportmoduleresult = $adb->query($ireportmodulesql);
 			$log->info("Reports :: Save->Successfully saved vtiger_reportdatefilter");
 			//<<<<step5 standarfilder>>>>>>>

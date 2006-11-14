@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -37,7 +37,7 @@ global $currentModule;
 global $app_strings;
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
 if(!empty($_REQUEST['record'])) {
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
@@ -184,6 +184,20 @@ $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+
+
+//Organization assignment
+$crmid=$focus->id;
+require('modules/Users/GetUserOrg.php');
+
+//Assign the organization details to the html output
+$smarty->assign("MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING", $org_separator);
+$smarty->assign("ALL_USER_ORGANIZATIONS", $smarty_allorgs);
+$smarty->assign("EDIT_USER_ORGANIZATIONS", $smarty_orgs);
+$smarty->assign("EDIT_USER_ORGUNITS", $smarty_orgunits);
+$smarty->assign("EDIT_USER_PRIMARY_ORGANIZATION", $curorg);
+$smarty->assign("EDIT_USER_ASSIGNED_ORGANIZATIONS", $assigned_org);
+$smarty->assign("EDIT_USER_PRIMARY_ORGUNITS", $prim_orgunits);
 
 $smarty->display("UserDetailView.tpl");
 

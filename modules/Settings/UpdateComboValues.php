@@ -12,6 +12,8 @@ require_once('include/database/PearDatabase.php');
 $fld_module=$_REQUEST["fld_module"];
 $tableName=$_REQUEST["table_name"];
 $fldPickList =  $_REQUEST['listarea'];
+//changed by dingjianting on 2006-10-1 for picklist editor
+$fldPickList = utf8RawUrlDecode($fldPickList); 
 $uitype = $_REQUEST['uitype'];
 
 global $adb;

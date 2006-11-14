@@ -23,15 +23,16 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$log,$theme,$currentModule;
+global $current_organization;
 
-
-$focus = new Order();
+$focus = new PurchaseOrder();
 $smarty = new vtigerCRM_Smarty();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
@@ -60,8 +61,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 
 // Get vtiger_vendor address if vtiger_vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
-	require_once('modules/Vendors/Vendor.php');
-	$vend_focus = new Vendor();
+	require_once('modules/Vendors/Vendors.php');
+	$vend_focus = new Vendors();
 
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
@@ -199,6 +200,11 @@ if($focus->mode != 'edit')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$organization = new Organization;
+$organization->id = $current_organization;
+$smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
+
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
 else

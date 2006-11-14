@@ -50,7 +50,15 @@ $dbquery = 'alter table '.$delete_module_tables[$fld_module].' drop column '.$co
 $adb->query($dbquery);
 
 
-//HANDLE HERE - we have to remove the entries in customview and report related tables which have this field ($colName)
+//we have to remove the entries in customview and report related tables which have this field ($colName)
+$adb->query("delete from vtiger_cvcolumnlist where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_cvstdfilter where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_cvadvfilter where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_selectcolumn where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_relcriteria where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_reportsortcol where columnname like '%".$colName."%'");
+$adb->query("delete from vtiger_reportdatefilter where datecolumnname like '%".$colName."%'");
+$adb->query("delete from vtiger_reportsummary where columnname like '%".$colName."%'");
 
 
 //Deleting from convert lead mapping vtiger_table- Jaguar
@@ -66,6 +74,8 @@ if($uitype == 15)
 	$deltablequery = 'drop table '.$colName;
 	$adb->query($deltablequery);
 }
+
+
 
 header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module."&parenttab=Settings");
 ?>

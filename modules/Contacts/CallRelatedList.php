@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/utils/utils.php');
 
 //Redirecting Header for single page layout
@@ -22,7 +22,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Contact();
+$focus = new Contacts();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 

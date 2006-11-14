@@ -30,13 +30,6 @@
 	border-left:2px dotted #332211;
 	padding:10px;
 }
-
-
-.yellowBox {
-	background-color:#ffffE1;
-	border:1px solid #999999;
-}
-
 .genHeaderBig{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
@@ -58,18 +51,9 @@
 	color: #000000;
 	font-weight:bold;
 }
-
-.rssDisplayPanel {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	line-height: 12px;
-	color: #ABABAB;
-}
-
-
 .hdrNameBg {
 	background:#ffffff url(images/primeTopBg.gif) repeat-x;
-	
+
 }
 
 .hdrTabBg {
@@ -144,43 +128,6 @@
 	padding-right:40px;
 }
 
-
-/*.level2text {
-	background:#bbbbbb url(images/level2Bg.gif) repeat-x;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-	padding-left:20px;
-	padding-right:20px;
-	padding-top:5px;
-	padding-bottom:5px;
-	font-weight:bold;
-	color:white;
-}*/
-
-.level2text {
-    
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    padding-left:15px;
-    padding-right:15px;
-    padding-top:5px;
-    padding-bottom:5px;
-    font-weight:bold;
-    color:white;
-}
-
-.level2text a{
-	text-decoration:none;
-	color:#555555;
-}
-
-.level2text a:hover {
-	text-decoration:underline;
-	color:#555555;
-
-}
-
-
 .level2Bg {
 	background:#e0dbb0 url(images/level2TabBg.gif) bottom repeat-x;
 	font-family: Arial, Helvetica, sans-serif;
@@ -206,11 +153,6 @@
 	padding-bottom:5px;
 }
 
-
-.tabLiner {
-	background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
-	padding:0px;
-}
 
 .sep1 {
 	background:#999999;
@@ -356,15 +298,6 @@ a:hover {
 	padding-left:0px;
 }
 
-.rightAddInfo {
-	border-left:1px solid #a2a2a2;
-	border-right:1px solid #dddddd;
-	border-bottom:1px solid #dddddd;
-	border-top:1px solid #a2a2a2;
-	background-color:#fafafa;
-	padding:5px;
-}
-
 .dvtCellLabel, .cellLabel {
 	background-color:#efefe2;
 	padding-right:10px;
@@ -398,17 +331,6 @@ a:hover {
 
 }
 
-.rightUpcomingActivitiesHeader{
-	border-bottom:1px solid #ddddcc;
-	padding:5px;
-	background-color:#ffffdd;
-}
-
-.rightUpcomingActivitiesContent {
-	padding:5px;
-	background-color:#ffffef;
-}
-
 .detailedViewHeader{
 	border-bottom:1px solid #ddddcc;
 	padding:5px; 
@@ -426,16 +348,6 @@ a:hover {
 	background-color:#ffffff;
 }
 
-.detailedViewProdTextBox {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #000000;
-	border:1px solid #bababa;
-	padding-left:5px;
-	width:85%;
-	background-color:#ffffff;
-}
-
 .detailedViewTextBoxOn {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -446,31 +358,9 @@ a:hover {
 	background-color:#ffffdd;
 }
 
-.detailedViewTextArea {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #000000;
-	border:1px solid #bababa;
-	padding-left:5px;
-	width:95%;
-	height:100px;
-	background-color:#ffffff;
-	text-align:left;
-}
-
 
 /* Detailed View classes ends  ------------------------------------------- */
 
-.moduleSearch {
-	border:1px solid #dddddd;
-	background-color:#ffffef;
-
-}
-
-.searchHdrBox {
-
-	border-bottom:1px dashed #dddddd;
-}
 
 .advSearch {
 	padding:10px;
@@ -498,28 +388,6 @@ a:hover {
 	width:10px
 
 }
-.searchNotFound {
-	border:2px solid #ff3333;
-	background-color:#fafafa;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #ff0000;
-	height:50px;
-	width:640px;
-}
-
-
-.loginTopBg {
-	background:url(images/loginTopBg.gif) repeat-x;
-}
-
-.loginTopShade {
-	background:url(images/loginTopShade.gif) repeat-x;
-}
-
-.loginBg{
-	background:#448cEB url(images/loginBg.gif) repeat-x;
-}
 
 .textbox {
 	border:1px solid #999999;
@@ -531,28 +399,9 @@ a:hover {
 
 }
 
-.loginBottomBg {
-	background:url(images/loginBottomBg.gif) repeat-x;
-}
 
-.loginSignin {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 18px;
-	color: #448ceb;
-	font-weight:bold;
-}
-
-.loginBillBoard {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color:#ffffff;
-}
 
 .mx {
-}
-
-.calTopBg {
-	background:url(images/calBg.gif) repeat-x;
 }
 
 .calListTable td{
@@ -564,18 +413,7 @@ a:hover {
 	border:1px solid #999999;
 	
 }
-.calDisplay {
-	border-left:1px solid #d0d0d0;
-	border-right:1px solid #d0d0d0;
-}
-.calBottomBg {
-	background:url(images/calBottomBg.gif) repeat-x;
-}
 
-.calDayHourCell {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 18px;
-}
 .calDayHour {
 	border-top:1px solid #a8a591;
 	border-left:1px solid #a8a591;
@@ -583,34 +421,7 @@ a:hover {
 	border-right:1px solid #a8a591;
 	background-color:#eae7da;
 }
-.calDiv {
-	overflow:auto; width:95%;height:320px;padding:0px;background-color:#fefefe;
-	border-top: 1px solid #bababa;
-	border-bottom: 1px solid #bababa;
-}
-.calColHdr{
-	border-top:1px solid #fefefa;
-	border-left:1px solid #fefefa;
-	
-	border-right:1px solid #a8a591;
-	background-color:#eae7da;
-}
-.calHourCol {
-	border-top: 1px solid #fefefa; 
-	border-left: 1px solid #fefefa; 
-	border-right: 1px solid #a8a591; 
-	border-bottom: 1px solid #a8a591; 
-	background-color: #eae7da; 
-	height: 40px;
 
-}
-.calHourOccupied {
-	background-color:#ffffbb;
-
-}
-.calListViewRow {
-	border-bottom:1px solid eae3d1;
-}
 
 .calAddEvent {
 	position:absolute;
@@ -621,102 +432,17 @@ a:hover {
 	background-color:#ffffff;
 }
 
-.addEventHeader{
-	border-bottom:2px dotted #cccccc;
-}
 
-.addEventFooter{
-	border-top:2px dotted #cccccc;
-	height:40px;
-}
 
 .addEventInnerBox {
 	border:1px dotted #dadada;
 
 }
 
-.cellScheduled {
-	background-color:#ffffef;
-	color:#7a7a7a;
-}
-
-.cellSchHover {
-	border-bottom:1px solid #999999;
-	border-right:1px solid #999999;
-	border-left:1px solid #dadada;
-	border-top:1px solid #dadada;
-	background-color:#ffffef;	
-	color:#7a7a7a;	
-}
-
-.cellSch{
-	border:0px;
-	background-color:#ffffef;
-	color:#7a7a7a;
-}
-
-.cellNormalHover {
-	border-bottom:1px solid #999999;
-	border-right:1px solid #999999;
-	border-left:1px solid #dadada;
-	border-top:1px solid #dadada;
-	background-color:#ffffff;	
-	color:#7a7a7a;	
-}
 
 .cellNormal {
 	border:0px;
 	background-color:#ffffff;
-}
-
-.calEventNormal {
-        border:1px solid #999999;
-        background-color:#99ffcc;
-
-}
-
-.calEventCritical {
-        border:1px solid #999999;
-        background-color:#FFCC33;
-}
-.tblPro1 {
-
-border:2px solid #dadada;
-       background-color:white;
-
-}
-
-.tblPro1IconCell {
-    border-right:1px solid #dadada;
-}
-
-.tblPro1HeadingCell {
-    font-weight:bold;
-color:#4a4a4a;
-}
-
-.tblPro1ColHeader {
-    background-color:#dadada;
-    border-left:1px solid white;
-    border-right:1px solid #999999;
-    font-size: 11px;
-    line-height: 14px;
-    background-image:url(images/tblPro1ColBg.gif);
-}
-
-.tblPro1DataCell {
-    border-bottom:1px solid #f5f5f5;
-    color:#5a5a5a;
-    font-size: 11px;
-    line-height: 14px;
-
-}
-
-.divEventToDo {
-overflow:auto;
-height:150px;
-border:1px solid #dadada;
-
 }
 
 .EventToDo{
@@ -732,118 +458,6 @@ float: left;
 	   margin-bottom: 15px;
 }
 
-.thumbnailcaption
-{ font-size: 0.9em; padding-top: 0.2em ;	}
-
-/* For Settings */
-
-.lftMnuTab{
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-size:12px;
-    color:#FFFFFF;
-    background-color:#BBBBBB;
-    border-left:1px solid #666666;
-    border-right:1px solid #666666;
-    border-top:0px solid #666666;
-    border-collapse:collapse;
-    text-align:right;
-    padding-top:0px;
-    padding-left:5px;
-    padding-right:5px;
-    vertical-align:top;
-}
-
-.lftMnuHdr{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    font-weight:bold;
-    color:white;
-    background-color:#DDDDDD;
-    border-bottom:1px solid #BBBBBB;
-    text-decoration:none;
-    width:99%;
-}
-
-.lftMnuHdr tr td{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    font-weight:bold;
-    color:white;
-    background-color:#DDDDDD;
-    border-bottom:1px solid #BBBBBB;
-    text-align:left;
-    text-decoration:none;
-    height:25px;
-    padding-right:0px;
-    padding-left:0px;
-}
-
-a.lftMnuHdr{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    font-weight:bold;
-    color:white;
-    background-color:#666666;
-    border-top:1px solid #BBBBBB;
-    border-bottom:1px solid #999999;
-    text-align:left;
-    text-decoration:none;
-    height:25px;
-    padding-left:5px;
-    width:100%;
-    display:block;
-    vertical-align:middle;
-}
-
-a.lftMnuHdr:Hover{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    font-weight:bold;
-    color:white;
-    background-color:#666666;
-    border-top:1px solid #BBBBBB;
-    border-bottom:1px solid #999999;
-    text-align:left;
-    text-decoration:none;
-    height:25px;
-    padding-left:5px;
-    width:100%;
-    display:block;
-}
-
-a.lftSubMnu{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:11px;
-    font-weight:normal;
-    display:block;
-    color:#666666;
-    height:20px;
-    width:93%;
-    text-align:left;
-    padding-left:15px;
-    text-decoration:none;
-    border-bottom:1px solid #BBBBBB;
-    padding-top:2px;
-    white-space:nowrap;
-}
-
-a.lftSubMnu:Hover{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:11px;
-    font-weight:normal;
-    display:block;
-    color:#666666;
-    height:20px;
-    width:93%;
-    text-align:left;
-    padding-left:15px;
-    text-decoration:none;
-    border-bottom:1px solid #BBBBBB;
-    padding-top:2px;
-    white-space:nowrap;
-    background-color:#CCCCCC;
-}
-
 .padTab{
     padding-top:0px;
     padding-left:0px;
@@ -851,25 +465,6 @@ a.lftSubMnu:Hover{
     padding-bottom:0px;
     vertical-align:top;
 
-}
-
-.controlTab{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    text-align:center;
-    font-weight:bold;
-    text-decoration:none;
-    width:100%;
-    border:0px;
-}   
-
-.controlTab tr td{
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:12px;
-    text-align:center;
-    font-weight:bold;
-    text-decoration:none;
-    vertical-align:bottom;
 }
 
 #company{
@@ -885,31 +480,12 @@ a.lftSubMnu:Hover{
                                
 
 #user{position:relative;left:0px;top:0px;width:100%;display:block;}
-#studio{position:relative;left:0px;top:0px;width:100%;display:block;}
+
 #communication{position:relative;left:0px;top:0px;width:100%;display:block;}
 #config{position:relative;left:0px;top:0px;width:100%;display:block;}
 
 #userTab{position:relative;left:0px;top:0px;width:100%;display:none;}
-#studioTab{position:relative;left:0px;top:0px;width:100%;display:none;}
 
-#scrollTab{
-	position:relative;
-	width:100%;
-	height:350px;
-	overflow:auto;
-	border:0px solid #CCCCCC;
-	display:block;
-}
-
-.dock{
-	vertical-align:middle;
-	text-align:left;
-	padding-left:0px;
-}
-.imgDoc{
-	cursor:pointer;
-	border:0px;
-}
 
 #one{
 	position:relative;
@@ -944,9 +520,7 @@ a.lftSubMnu:Hover{
 
 /* End of Settings */
 
-.bggray{
-	background-color: #dfdfdf;
-}
+
 .bgwhite{
 	background-color: #FFFFFF;
 }
@@ -969,92 +543,10 @@ a.lftSubMnu:Hover{
 	display:none;
 }
 
-/*Added for Advance Seearch*/
-
-#scrollTab{
-	position:relative;
-	width:100%;
-	height:350px;
-	overflow:auto;
-	border:0px solid #CCCCCC;
-	display:block;
-}
-
-.dock{
-	vertical-align:middle;
-	text-align:left;
-	padding-left:0px;
-}
-
-.imgDoc{
-	cursor:pointer;
-	border:0px;
-}
-#slideMnu{
-	background-color:#BBBBBB;
-	vertical-align:top;
-}
-
 #one{
 	position:relative;
 	display:block;
 	width:245px;
-}
-
-.prdTab{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-align:left;
-	width:100%;
-	border-left:0px solid #CCCCCC;
-	border-right:0px solid #CCCCCC;
-	border-collapse:collapse;
-}
-
-.prdTab tr th{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-align:left;
-	border-right:1px solid #CCCCCC;
-	border-left:1px solid #CCCCCC;
-	padding-left:5px;
-	background-color:#E5E5E5;
-	height:20px;
-	color:#000000;
-	font-weight:bold;
-	text-decoration:none;
-	border-bottom:1px solid #CCCCCC;
-}
-
-.prdTab tr td{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-align:left;
-	border-right:1px solid #CCCCCC;
-	border-left:1px solid #CCCCCC;
-	border-bottom:1px solid #CCCCCC;
-	padding-left:5px;
-	color:#000000;
-	text-decoration:none;
-	font-weight:normal;
-	height:20px;
-}
-
-.delTxt{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-decoration:underline;
-	font-weight:normal;
-	color:#000099;
-	cursor:pointer;
-}
-
-/* Dashboard CSS */
-a.dash_href{
-	display:block;
-	width:24px;height:24px;
-	vertical-align:middle;
-	margin-top:10px;
 }
 
 
@@ -1081,11 +573,6 @@ a.dash_href{
 	padding:5px;
 }
 
-.dash_shadow{
-	background-image:url(images/dash_top_shadow.jpg);
-	background-repeat:repeat-x;
-	height:10px;
-}
 
 .dash_white{
 	background-color:#FFFFFF;
@@ -1103,14 +590,7 @@ a.dash_href{
 	color:#000000;
 	padding-left:10px;padding-right:10px;	
 }
-.dashMatrixSeperator{
-	border-left:2px dashed #dadada;
 
-}
-.dashMatrixBottomLiner{
-	border-bottom:2px dashed #dadada;
-
-}
 
 .dash_switch{
 	cursor:pointer;
@@ -1161,55 +641,12 @@ a.dash_href{
 	position:top;
 }
 
-.dash_sel_top{
-	background-image:url(images/dash_sel_top.jpg);
-	background-repeat:repeat-x;
-	height:5px;
-	background-position:left top;
-	font-size:0px;
-}
-
-.dash_sel_btm{
-	background-image:url(images/dash_sel_btm.jpg);
-	background-repeat:repeat-x;
-	height:4px;
-	background-position:left top;
-	font-size:0px;
-}
-
-.dash_sel_left{
-	background-color:#F9F7C9;
-	border-left:1px solid #000000;
-	border-top:1px solid #000000;
-	border-bottom:1px solid #000000;
-	width:200px;
-	text-align:left;
-	padding-left:5px;
-	font-size:11px;
-	font-weight:bold;
-	color:#000000;
-}
-
-.dash_sel_right{
-	background-color:#F9F7C9;
-	border-right:1px solid #000000;
-	border-top:1px solid #000000;
-	border-bottom:1px solid #000000;
-	width:25px;
-	padding-left:5px;	
-	cursor:pointer;
-}
 
 /*  menu */
 
-#mnuSlide{
-	position:absolute;
-	left:0px;
-	top:100px;
-/*	width:110px;*/
-}
 
-/* a.submenu{
+
+ a.submenu{
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
 	padding-top:5px;
@@ -1235,7 +672,7 @@ a.submenu:Hover{
 	text-align:left;
 	text-decoration:none;
 	display:block;
-} */
+}
 
 #mnuKey{
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -1343,11 +780,7 @@ a.submenu:Hover{
 
 
 /* Calculator */
-.calcBg {
-	/*background-color: #666;*//*BFC1B7*/
-	background: url(images/cal_bg.gif);
-	border: 1px solid #009900;
-}
+
 .calcResult {
 	width: 100%;
 	height: 25px;
@@ -1477,21 +910,6 @@ a.submenu:Hover{
 	
 }
 
-.frameHdr{
-	height:32px;
-	background-image:url(images/rssframeHdr.gif);
-	background-repeat:repeat-x;
-	background-position:top left;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
-	font-weight:bold;
-	text-align:left;
-	padding-left:5px;
-	color:#FFFF00;
-	vertical-align:middle;
-	border:0px solid #000000;
-}
-
 .forwardBg{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
@@ -1508,44 +926,7 @@ a.submenu:Hover{
 
 /*  New Styles */
 
-.hometop{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:14px;
-	color:white;
-	text-decoration:none;
-	text-align:left;
-	padding-left:10px;
-	background-image:url(../images/hometop.gif);
-	background-position:top left;
-	background-repeat:repeat-x;
-	height:35px;
-	vertical-align:middle;
-}
 
-.homeBtm{
-	background-image:url(../images/HomeBtm.gif);
-	background-position:top left;
-	background-repeat:repeat-x;
-	height:29px;
-}
-
-.imageTab{
-	background-color:#F5F5F5;
-	border:0px solid #EBEBEB;
-	width:30px;
-	height:30px;
-	position:relative;
-	visibility:visible;
-}
-
-a.imageTab:Hover{
-	background-color:#BFBFFF;
-	border:0px solid #EBEBEB;
-	width:30px;
-	height:30px;
-	display:block;
-	opacity:.5;
-}
 
 .mnuTab{
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -1559,106 +940,6 @@ a.imageTab:Hover{
 	border-bottom:1px solid #EBEBEB;
 	padding-left:5px;
 	vertical-align:middle;
-}
-
-.mnuSel td{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-	color:#000000;
-	padding-left:5px;
-	background-color:#EBEBEB;
-	height:30px;
-	text-decoration:none;
-	padding-top:5px;
-	cursor:pointer;
-	padding-top:5px;
-}
-	
-.mnuSel td:Hover{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-	color:#000000;
-	padding-left:5px;
-	height:30px;
-	text-decoration:underline;
-	padding-top:5px;
-	cursor:pointer;
-	padding-top:5px;
-	background-color:#EBEBEB;
-}
-
-.mnuUnSel td{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	color:#00487F;
-	padding-left:5px;
-	background-color:#D7D7D7;
-	height:30px;
-	text-decoration:none;
-	padding-top:5px;
-	cursor:pointer;
-	padding-top:5px;
-}
-	
-.mnuUnSel td:Hover{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	color:#00487F;
-	padding-left:5px;
-	height:30px;
-	text-decoration:underline;
-	padding-top:5px;
-	cursor:pointer;
-	padding-top:5px;
-	background-color:#D7D7D7;
-}		
-
-.tabRht{
-	background-image:url(../images/tabRht.gif);
-	background-position:top left;
-	background-repeat:repeat-y;
-	width:31px;
-}
-
-
-.frmSelect{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-	border:1px #EBEBEB;
-}
-
-#mnuSlide{
-	position:absolute;
-	left:0px;
-	top:100px;
-	width:110px;
-}
-
-
-#mnuKey{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-	background-color:#666666;
-	color:#FFFFFF;
-	text-decoration:none;
-	padding:5px;
-	font-weight:bold;
-	width:8px;
-	cursor:pointer;
-	vertical-align:top;
-	height:100px;
-	position:relative;
-	top:0px;
-	left:0px;
-}
-
-#slidemenu{
-	height:525px;
-	vertical-align:top;
-	width:100px;
-	background-color:#ECECEC;
-	border-right:1px solid #CCCCCC;
-	opacity:.8;
 }
 
 /* profile */
@@ -1680,56 +961,16 @@ a.imageTab:Hover{
 	border:1px solid #ebebeb;
 }
 
-.prvPrfSelectedTab {
-	background:url(images/prvPrfSelectedTab.gif) repeat-x;
-	cursor:pointer;
 
-}
-
-.prvPrfUnSelectedTab {
-	background:url(images/prvPrfUnSelectedTab.gif) repeat-x;
-	cursor:pointer;
-}
 
 .prvPrfTexture {
 	background:url(images/prvPrfTexture1.gif);
 
 }
-.prvPrfBgOn{
-	background-color:#33ee33;
-}
-.prvPrfBgOff{
-	background-color:#cccccc;
-}
 
 .prvPrfHoverOn {
 	background-color:#ffffef;
 	
-}
-.prvPrfHoverOut {
-	background-color:#ffffff;
-}
-
-.prvPrfBgImgGlobal {
-	background:url(images/prvPrfBgImgGlobal.jpg) top right no-repeat;
-}
-.prvPrfBgImgTab {
-	background:url(images/prvPrfBgImgTab.jpg) top right no-repeat;
-}
-.prvPrfBgImgStandard {
-	background:url(images/prvPrfBgImgStandard.jpg) top right no-repeat;
-}
-.prvPrfBgImgUtils {
-	background:url(images/prvPrfBgImgUtils.jpg) top right no-repeat;
-}
-.prvPrfBgImgField {
-	background:url(images/prvPrfBgImgField.jpg) top right no-repeat;
-}
-
-.prvPrfTabSample {
-	border-top:1px solid #ababab;
-	border-left:1px solid #ababab;
-	border-right:1px solid #a1a1a1;
 }
 
 /*  Organization */
@@ -1765,55 +1006,9 @@ a.imageTab:Hover{
 	border-right:1px solid #CCCCCC;
 }
 
-.globTab{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	font-weight:normal;
-	color:#000000;
-	border:1px solid #999999;
-	border-collapse:collapse;
-	width:100%;
-}
-
-.globTab tr th{
-	text-align:right;
-	background-color:#CCCCCC;
-	border-bottom:1px solid #999999;
-	border-right:2px solid #999999;
-	color:#000000;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
-	text-decoration:none;
-	font-weight:bold;
-	height:20px;
-	padding-right:5px;
-	
-}
-
-.globTab tr td{
-	text-align:left;
-	border:1px solid #CCCCCC;
-	color:#666666;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-decoration:none;
-	font-weight:normal;
-	padding-left:5px;
-	height:20px;
-}
-
 
 /* Groups */
 
-.groupul{
-	margin:0px;
-	font-family:Arial, Helvetica, sans-serif;
-	font-weight:bold;
-	font-size:12px;
-	color:#000000;
-	text-decoration:underline;
-	text-align:left;
-}
 
 .groupli{
 	margin-left:20px;
@@ -1872,36 +1067,6 @@ a.imageTab:Hover{
 	padding-bottom:3px;
 }
 
-.classBtnSmall{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	text-decoration:none;
-	font-weight:normal;
-	font-size:9px;
-	background-color:#DBDBDB;
-	border-bottom:2px solid #999999;
-	border-right:2px solid #999999;
-	border-top:2px solid #F5F5F5;
-	border-left:2px solid #F5F5F5;
-	color:#000000;
-	text-align:center;
-}
-
-.classBtnDisable{
-	font-family:Verdana, Arial, Helvetica, sans-serif;
-	text-decoration:none;
-	font-weight:normal;
-	font-size:10px;
-	background-color:#DBDBDB;
-	border-bottom:2px solid #CCCCCC;
-	border-right:2px solid #CCCCCC;
-	border-top:2px solid #F5F5F5;
-	border-left:2px solid #F5F5F5;
-	color:#666666;
-	text-align:center;
-	padding-top:3px;
-	padding-bottom:3px;
-}
-
 .txtBox{
 	width:85%;
 	border:1px solid #666666;
@@ -1943,13 +1108,6 @@ a.imageTab:Hover{
 	font-size:11px;
 }
 
-#imLead{
-	width:100%;
-	overflow:auto;
-	position:relative;
-	border:1px solid #666666;
-	height:175px;
-}
 
 .txtGreen{
 	color:green;
@@ -1962,14 +1120,6 @@ ul li{
 }
 /* MY PREFERENCES */		
 
-#chPhoto{
-	position:relative;
-	display:none;
-	top:20px;
-	width:100%;
-	border:1px dashed #666666;
-	background-color:#FFFFEC;
-}
 
 /* CSS FOR REPORTS */
 
@@ -2006,7 +1156,7 @@ ul li{
 }
 
 
-/* a.reportMnu{
+a.reportMnu{
 	font-size:11px;
 	color:#0070BA;
 	text-decoration:none;
@@ -2028,20 +1178,8 @@ a.reportMnu:Hover{
 	border-bottom:1px solid #E1E1E1;
 	padding-left:20px;
 	padding-top:3px;
-}	*/
+}	
 
-.reportGenarateTable{
-	border-bottom:1px solid #6D6D6D;
-	border-left:1px solid #6D6D6D;
-	border-right:1px solid #6D6D6D;
-	border-top:0px solid #6D6D6D;
-	background-image:url(../images/report_bg.gif);
-	background-repeat:repeat-x;
-}
-
-.reportGenarateTable tr td{
-	padding:5px;
-}
 #Generate{
 	position:relative;
 	width:100%;
@@ -2049,16 +1187,13 @@ a.reportMnu:Hover{
 	display:none;
 }
 
-.lvtSel{
-	font-weight:bold;
-}
-	
+
 /* END OF REPORT */
 
 
 
 /* WEB MAIL */
-/* a.webMnu{
+ a.webMnu{
 	font-size:11px;
 	color:#0070BA;
 	text-decoration:underline;
@@ -2067,14 +1202,14 @@ a.webMnu:Hover{
 	font-size:11px;
 	color:#0070BA;
 	text-decoration:underline;
-} */
+} 
 
 
 /*  END OF WEB MAIL */
 
 /* POPUP */
 
-/* a.alpha{
+ a.alpha{
 	font-size:11px;
 	color:gray;
 	text-decoration:none;
@@ -2092,7 +1227,7 @@ a.alpha:Hover{
 	padding-right:5px;
 	border:1px dotted #CCCCCC;
 	background-color:#FFFFCC;
-} */
+} 
 
 /* Home Page */
 .MatrixLayer{
@@ -2222,13 +1357,6 @@ a.allMnu:Hover{
 	
 
 }
-
-.calSelTabMask {
-	background-color:#D6D2AB;
-	height:5px;
-
-}
-
 .calInnerBorder {
 	border-left:1px solid #d6d2ab;
 	border-right:1px solid #d6d2ab;
@@ -2241,9 +1369,6 @@ a.allMnu:Hover{
 	border-bottom: 1px solid #939271; 
 	background:#fefefe url(images/layerPopupBg.gif);
 
-}
-.calTopLeft {
-	border-left: 1px solid #939271; 
 }
 
 .calTopRight {
@@ -2258,32 +1383,6 @@ a.allMnu:Hover{
 	width:8%;
 }
 
-.calTitle{
-	background-position:right top;
-	background-repeat:no-repeat;
-	background-image:url(images/cal_title.jpg);
-	width:150px;
-}
-
-.tabBorder{
-	background-color:#EBEBEB;
-	border-bottom:1px solid #666666;
-	border-left:1px solid #666666;
-	border-right:1px solid #666666;
-	padding:10px;
-}
-
-.eventLay{
-	background-color:#DBF3FD;
-	position:relative;
-	left:0px;
-	top:0px;
-	width:100%;
-	visibility:visible;
-	padding:5px 5px 5px 5px;
-	display:block;
-	z-index:1000;
-}
 
 a.calMnu{
 	font-size:11px;
@@ -2303,10 +1402,6 @@ a.calMnu:Hover{
 	height:20px;
 	padding-left:5px;
 	padding-top:3px;
-}
-
-.bggray{
-	background-color: #dfdfdf;
 }
 .bgwhite{
 	background-color: #FFFFFF;
@@ -2330,17 +1425,6 @@ a.calMnu:Hover{
 }
 .style1 {color: #FF0000}
 
-#hrViewContent{
-	width:100%;
-	height:250px;
-	overflow:auto;
-	position:relative;
-	border-top:1px solid #CCCCCC;
-	border-bottom:0px solid white;
-	border-left:0px solid white;
-	border-right:0px solid white;
-}
-
 .event{
 	background-color:#D3EAF0;
 	border:1px solid #999999;
@@ -2356,11 +1440,6 @@ a.calMnu:Hover{
 #hrView{
 	display:block;
 }
-
-#lstView{
-	display:none;
-}	
-
 .calendarNav{
 	font-size:12px;
 	color:#FFFFFF;
@@ -2403,33 +1482,10 @@ a.calMnu:Hover{
 	background-color:#ffffff;
 }
 
-#cal_popup{
-	width:600px;
-	border:3px solid #CCCCCC;
-	background-color:#FFFFFF;
-	padding:5px;
-	position:absolute;
-	left:100px;
-	top:100px;
-}
-
 .outer{
 	border-bottom:1px solid #CCCCCC;
 	border-left:1px solid #CCCCCC;
 	border-right:1px solid #CCCCCC;
-}
-
-.outerBorder{
-	border:1px solid #CCCCCC;
-	width:95%;
-}
-
-.fieldHead{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
-	font-weight:bold;
-	border:0px solid #CCCCCC;
-	padding:2px 5px 2px 5px;
 }
 
 .calTxt{
@@ -2453,38 +1509,7 @@ a.calMnu:Hover{
 /* End of Calendar */
 
 /* Cal Year View */
-.month_table{
-	border:2px solid #CCCCCC;
-	width:100%;
-	background-color:white;
-}
 
-.month_table tr th{
-	background-color:#E9E9E9;
-	color:#000000;
-	text-align:center;
-	border:1px dotted #CCCCCC;
-	height:20px;
-	width:14%;
-	font-weight:normal;
-}
-
-.month_table tr td{
-	border:1px dotted #CCCCCC;
-	color:#000000;
-	text-align:center;
-	height:20px;
-}
-
-.cal_Hdr{
-	background-image:url(images/cal_Hdr.gif);
-	background-repeat:repeat-x;
-	background-position:left top;
-	font-weight:bold;
-	color:#000000;
-	text-align:left;
-	border:0px solid #000000;
-}
 
 .eventDay{
 	background-color:#FF9966;
@@ -2569,12 +1594,7 @@ level2Sel{
     border-right: 1px solid #DDDDDD;
     border-bottom: 1px solid #DDDDDD;
 }
-.rptTitle {
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #333;
-	background: #2C527C;
-	color: #FFF;
-}
+
 .rptGrpHead {
 	background: #FFF;
     border-bottom: 1px solid #FFF;
@@ -2625,31 +1645,7 @@ level2Sel{
 
 /* Css for quick Create */
 
-.qcWindow {
-	    background-color:white;
-            border:2px solid #999999;
-}
 
-.qcHeader{
-	    background:url(images/qcBg.gif) repeat-x;
-	    background-color:gray;
-	    color:black;
-	    font-family: Arial, Helvetica, sans-serif;
-	    font-size: 12px;
-	    line-height: 19px;
-	    padding-left:10px;
-}
-.qcTextBox{
-        border:1px solid #999999;
-	    width:90%;
-}
-.qcTextArea{
-	    border:1px solid #999999;
-	    width:90%;
-	    height:70px;
-	    font-family: Arial, Helvetica, sans-serif;
-	    font-size: 11px;
-}
 .qcTransport{
 	    background-color:#d3d2c1;
 
@@ -2674,50 +1670,7 @@ level2Sel{
 								    
 /* MY SITES */
 
-.SiteSel{
-	font-family:Arial, Helvetica, sans-serif;
-	background-image:url(images/site_sel.jpg);
-	background-position:left bottom;
-	background-repeat:no-repeat;
-	height:33px;
-	width:194px;
-	text-align:center;
-	vertical-align:middle;
-	color:#000000;
-	font-weight:bold;
-	font-size:11px;
-	text-decoration:none;
-}
 
-.SiteUnSel{
-	font-family:Arial, Helvetica, sans-serif;
-	background-image:url(images/site_unsel.jpg);
-	background-position:left bottom;
-	background-repeat:no-repeat;
-	height:33px;
-	width:194px;
-	text-align:center;
-	vertical-align:middle;
-	color:#000000;
-	font-weight:normal;
-	font-size:11px;
-	text-decoration:none;
-	cursor:pointer;
-}
-
-.SiteHdr{
-	font-family:Arial, Helvetica, sans-serif;
-	background-image:url(images/site_hdr.jpg);
-	background-position:right bottom;
-	background-repeat:no-repeat;
-	height:33px;
-	text-align:center;
-	vertical-align:middle;
-	color:#000000;
-	font-weight:normal;
-	font-size:11px;
-	text-decoration:none;
-}
 .unread_email {
 	font-weight:bold;
 }
@@ -2742,12 +1695,6 @@ level2Sel{
     color: #000000;
 
 }
-.adProgressBar {
-	border-style:solid;
-	border-width:2px;
-	border-color:blue;
-
-}
 
 .h2 {
 
@@ -2761,17 +1708,6 @@ level2Sel{
 	color:gray;
 }
 
-.hdeskComments {
-
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	line-height: 14px;
-	color: #999999;
-	border:0px;
-	background-color:#ffffef;
-	width:100%;
-
-}
 
 ul {
 	list-style:circle;
@@ -2783,9 +1719,6 @@ ul {
 }
 
 	
-.branch {
-	list-style-image: url("secAdd.gif");
-}	
 
 
 
@@ -2801,12 +1734,7 @@ ul {
 	
 	
 	
-.heading1 {
-	font-family:  Arial, Helvetica, sans-serif;
-	font-size: 19px;
-	line-height: 14px;
-	color: #000000;
-}
+
 
 .heading2 {
 	font-family:  Arial, Helvetica, sans-serif;
@@ -2816,19 +1744,7 @@ ul {
 	color: #000000;
 }
 
-.heading3 {
-	font-family:  Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	line-height: 14px;
-	color: #999999;
-}
 
-.heading4 {
-	font-family:  Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	line-height: 14px;
-	color: #999999;
-}
 
 .settingsUI {
 	
@@ -2909,7 +1825,7 @@ ul {
 	font-weight:bold;
 
 }
-/*.cellLabel {
+.cellLabel {
 	background-color:#eaebd9;
 	border-top:1px solid #efefef;
 	border-bottom:1px solid #dadada;
@@ -2919,7 +1835,7 @@ ul {
 .cellText {
 	color:#333333;
 	border-bottom:1px solid #dadada;
-} */
+} 
 
 .listTable{
 	border-left:1px solid #cccccc;
@@ -3019,56 +1935,19 @@ textarea {
 	border:1px solid #ebebeb;
 }
 
-.prvPrfSelectedTab {
-	background:url(images/prvPrfSelectedTab.gif) repeat-x;
 
-}
-
-.prvPrfUnSelectedTab {
-	background:url(images/prvPrfUnSelectedTab.gif) repeat-x;
-
-}
 
 .prvPrfTexture {
 	background:url(images/prvPrfTexture1.gif);
 
 }
-.prvPrfBgOn{
-	background-color:#33ee33;
-}
-.prvPrfBgOff{
-	background-color:#cccccc;
-}
+
 
 .prvPrfHoverOn {
 	background-color:#ffffef;
 	
 }
-.prvPrfHoverOut {
-	background-color:#ffffff;
-}
 
-.prvPrfBgImgGlobal {
-	background:url(images/prvPrfBgImgGlobal.jpg) top right no-repeat;
-}
-.prvPrfBgImgTab {
-	background:url(images/prvPrfBgImgTab.jpg) top right no-repeat;
-}
-.prvPrfBgImgStandard {
-	background:url(images/prvPrfBgImgStandard.jpg) top right no-repeat;
-}
-.prvPrfBgImgUtils {
-	background:url(images/prvPrfBgImgUtils.jpg) top right no-repeat;
-}
-.prvPrfBgImgField {
-	background:url(images/prvPrfBgImgField.jpg) top right no-repeat;
-}
-
-.prvPrfTabSample {
-	border-top:1px solid #ababab;
-	border-left:1px solid #ababab;
-	border-right:1px solid #a1a1a1;
-}
 
 .cellBottomDotLine {
 	border-bottom-width: 2px;
@@ -3088,15 +1967,11 @@ textarea {
 	border-bottom-color: #CCCCCC;
 	
 }
-.crmFormDropDown {
-border-width:1px;
-}
+
 .thickBorder {
 	border: 2px solid #999999;
 }
-.trackerBorder {
-	background-color:#ffffff;
-}
+
 .trackerHeading {
 	background-color:#efefef;
 }
@@ -3112,19 +1987,11 @@ border-width:1px;
 .crmTable {
 	border:1px solid #dadada;
 }
-.crmTableColHeading {
-	background-color:#CCCCCC;
-	border-left:1px solid #eaeaea;
-	border-top:1px solid #eaeaea;
-	border-right:1px solid #999999;
-	border-bottom:1px solid #999999;
-}
+
 .crmTableRow {
 	border-bottom:1px dotted #dadada;
 	border-right:1px dotted #dadada
 }
-
-
 
 
 /* Inventory */
@@ -3153,24 +2020,6 @@ border-width:1px;
 /* Inventory */
 
 
-
-
-
-/* styles for RSS Display starts */
-.rssDisplay{
-	background-color:#e8e3ca;
-}
-
-
-/* styles for RSS Display ends */
-
-
-
-
-
-
-
-
 /* Email Client Classes ++++++++++++++++++++++ */
 
 .emailSelected{
@@ -3192,10 +2041,7 @@ border-width:1px;
 	background:#e0dbb0 url(images/mailSubHeaderBg.gif) repeat-x;
 	padding:4px;
 }
-.mailDetailsHeader {
-	border-top:2px dotted #999;
-	border-bottom:1px solid #ddd;
-}
+
 
 .mailClientWriteEmailHeader{
 	font-family:arial, helvetica, sans-serif;

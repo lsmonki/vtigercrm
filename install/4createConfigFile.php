@@ -45,9 +45,11 @@ session_start();
 
 // vtiger CRM version number; do not edit!
 
-$vtiger_version = "5.0.0";
-$release_date = "14 September 2006";
+$vtiger_version = "5.0.2";
+$release_date = "31 October 2006";
 
+
+if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 
 if (isset($_REQUEST['db_hostname']))
 {
@@ -69,8 +71,6 @@ if (isset($_REQUEST['db_username']))$db_username = $_REQUEST['db_username'];
 if (isset($_REQUEST['db_password']))$db_password = $_REQUEST['db_password'];
 
 if (isset($_REQUEST['db_name']))$db_name = $_REQUEST['db_name'];
-
-if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tables'];
 

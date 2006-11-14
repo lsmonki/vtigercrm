@@ -20,14 +20,14 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 require_once('user_privileges/audit_trail.php');
 
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
@@ -106,10 +106,14 @@ if($focus->is_authenticated())
 	{
 		$authenticated_user_language = $default_language;	
 	}
-
+	
 	$_SESSION['authenticated_user_theme'] = $authenticated_user_theme;
 	$_SESSION['authenticated_user_language'] = $authenticated_user_language;
 	
+	// Users default organization --- force loading in index.php
+	$_SESSION['authenticated_user_organizations'] = '';
+	$_SESSION['authenticated_user_current_organization'] = '';
+
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
 	$log->debug("authenticated_user_language is $authenticated_user_language");
 	$log->debug("authenticated_user_id is ". $focus->id);

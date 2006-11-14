@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/logging.php');
 require_once('include/utils/UserInfoUtil.php');
 $log =& LoggerManager::getLogger('index');
@@ -46,7 +46,7 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 if (isset($_POST['record']) && !is_admin($current_user) && $_POST['record'] != $current_user->id) echo ("Unauthorized access to user administration.");
 elseif (!isset($_POST['record']) && !is_admin($current_user)) echo ("Unauthorized access to user administration.");
 
-$focus = new User();
+$focus = new Users();
 if(isset($_REQUEST["record"]) && $_REQUEST["record"] != '')
 {
     $focus->mode='edit';

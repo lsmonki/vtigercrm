@@ -140,7 +140,7 @@ $mod_strings = Array(
 'Postal Code'=>'Postal Code',
 'Country'=>'Country',
 'Description'=>'Description',
-'Po Box'=>'Po Box',
+'Po Box'=>'PO Box',
 
 //Mapping for price book
 'Price Book Name'=>'Price Book Name',
@@ -210,6 +210,10 @@ $mod_strings = Array(
 'Sheet'=>'Sheet',
 'Spiral Binder'=>'Spiral Binder',
 'Sq Ft'=>'Sq Ft',
+
+// Added for multi organization support TRAC #2035
+'LBL_COMPANY_ASSIGNMENT'=>'Organization Assignment',
+'Organization Assignment'=>'Assigned to',
 
 );
 

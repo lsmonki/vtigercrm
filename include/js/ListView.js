@@ -39,7 +39,11 @@ function getviewId()
 	if(typeof(document.getElementById("viewname")) != 'undefined')
 	{
 		var oViewname = document.getElementById("viewname");
-		var viewid = oViewname.options[oViewname.selectedIndex].value;
+		if( oViewname.selectedIndex >= 0) {
+		    var viewid = oViewname.options[oViewname.selectedIndex].value;
+		} else {
+		    var viewid ='';		
+		}
 	}
 	else
 	{

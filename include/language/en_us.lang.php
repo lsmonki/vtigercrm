@@ -60,6 +60,20 @@ $app_strings = Array(
 
 'LBL_LAST_VIEWED'=>'Last Viewed',
 
+'LBL_TODAY'=>'Today',
+
+'LBL_ALL'=>'All',
+
+'LBL_SHOW'=>'Show :',
+
+'today'=>"Today's",
+
+'all'=>'All',
+
+'LBL_UPCOMING_EVENTS'=>'Upcoming Activities',
+
+'LBL_PENDING_EVENTS'=>'Pending Activities',
+
 'NTC_WELCOME_MESSAGE'=>"Welcome to vtiger CRM!",
 
 'NTC_DESCRIPTION'=>"Use a valid username and password to login to the vtiger CRM.",
@@ -620,8 +634,8 @@ $app_strings = Array(
 
 'LBL_CALCULATOR'=>'Calculator',
 
-'LBL_CLOSE_WON' =>'Closed-Won',			# 'Closed Won'
-'LBL_CLOSE_LOST'=>'Closed-Lost',					# 'Closed Lost'
+'LBL_CLOSE_WON' =>'Closed Won',			# 'Closed Won'
+'LBL_CLOSE_LOST'=>'Closed Lost',					# 'Closed Lost'
 
 'LBL_USER'=>'User',
 
@@ -761,6 +775,9 @@ $app_strings = Array(
 'Calendar'=>'Calendar',
 'Home'=>'Home',
 'Campaigns'=>'Campaigns',
+'Organization'=>'Organization',
+'Organization Name'=>'Organization Name',
+'OrgUnit'=>'Org Unit',
 'PriceBooks'=>'Price Books',
 'Notes'=>'Notes',
 'Faq'=>'FAQ',
@@ -1027,6 +1044,27 @@ $app_strings = Array(
 
 //Record deleted message
 'LBL_RECORD_DELETE'=>'The record you are trying to view has been deleted.',
+'Part Number'=>'Part Number',
+
+//Added after 5.0.1
+'Salutation'=>'Salutation ',
+'Rating'=>'Rating',
+'industry'=>'Industry',
+'Severity'=>'Severity',
+'Product Category'=>'Product Category',
+'GL Account'=>'GL Account',
+'Usage Unit'=>'Usage Unit',
+'Carrier'=>'Carrier',
+'Expected Response'=>'Expected Response',
+'LBL_ADDRESS_INF'=>'Address Information',
+
+'yes'=>'yes',
+'LBL_RENAMEPROFILE_BUTTON_LABEL'=>'Rename',
+'LBL_RENAME_PROFILE'=>'Rename Profile',
+'LBL_PROFILE_NAME'=>'Profile Name',
+'LBL_START_DATE'=>'Start Date',
+'LBL_END_DATE'=>'End Date',
+
 );
 
 

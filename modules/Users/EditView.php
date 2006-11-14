@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Users/Forms.php');
 require_once('include/database/PearDatabase.php');
@@ -36,13 +36,13 @@ global $currentModule;
 
 
 $smarty=new vtigerCRM_Smarty;
-$focus = new User();
+$focus = new Users();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$smarty->assign("ID",$_REQUEST['record']);
 	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
-    $focus->retrieve_entity_info($_REQUEST['record'],'Users');
+	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
 	$smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
 }else
 {
@@ -58,6 +58,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->column_fields['user_password']='';
 	$focus->column_fields['confirm_password']='';
 }
+
+if(is_admin($current_user))
+	$smarty->assign("IS_ADMIN", true);
+else
+	$smarty->assign("IS_ADMIN", false);
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -110,10 +115,56 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 }
 
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
-
-
-
 $smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
+
+//Organization assignment
+if( $mode == "create" ) {
+    $orgs = array();
+    $smarty_orgs = array($orgs);
+
+    //all organizations
+    $sql = "SELECT organizationname FROM vtiger_organizationdetails WHERE deleted=0";
+    $result = $adb->query($sql);
+    $allorgs = array();
+    while($org_result = $adb->fetch_array($result)) {
+	$key = $org_result["organizationname"];
+	$allorgs[$key] = '';
+    }
+    $smarty_allorgs = array($allorgs);
+
+    //Organization untis
+    $orgunits = array();
+    $smarty_orgunits = array($orgunits);
+
+    //The remaining field are intentially left blank
+    $curorg = "";
+    $assigned_org = "";
+    $prim_orgunits = "";
+    $org_separator = "<br>&nbsp;";
+
+    //Set up session variables
+    $_SESSION['all_user_organizations'] = $smarty_allorgs;
+    $_SESSION['edit_user_organizations'] = $smarty_orgs;
+    $_SESSION['edit_user_orgunits'] = $smarty_orgunits;
+    $_SESSION['edit_user_primary_organization'] = $curorg;
+    $_SESSION['edit_user_assigned_organization'] = $assigned_org;
+    $_SESSION['edit_user_primary_orgunits'] = $prim_orgunits;
+}
+
+//In case of edit mode use the predefined gathering fuction
+else {
+    $crmid = $focus->id;
+    require('modules/Users/GetUserOrg.php');
+}
+
+//Assign the organization details to the html output
+$smarty->assign("MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING", $org_separator);
+$smarty->assign("ALL_USER_ORGANIZATIONS", $smarty_allorgs);
+$smarty->assign("EDIT_USER_ORGANIZATIONS", $smarty_orgs);
+$smarty->assign("EDIT_USER_ORGUNITS", $smarty_orgunits);
+$smarty->assign("EDIT_USER_PRIMARY_ORGANIZATION", $curorg);
+$smarty->assign("EDIT_USER_ASSIGNED_ORGANIZATIONS", $assigned_org);
+$smarty->assign("EDIT_USER_PRIMARY_ORGUNITS", $prim_orgunits);
 
 $smarty->display('UserEditView.tpl');
 

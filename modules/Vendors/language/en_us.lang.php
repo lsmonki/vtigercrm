@@ -32,7 +32,7 @@ $mod_strings = array(
 'Postal Code'=>'Postal Code',
 'Country'=>'Country',
 'Description'=>'Description',
-'Po Box'=>'Po Box',
+'Po Box'=>'PO Box',
 'Vendor'=>'Vendor',
 
 //Added for existing Picklist entries
@@ -47,6 +47,9 @@ $mod_strings = array(
 '307-Service-Hardware Labor'=>'307-Service-Hardware Labor',
 '308-Sales-Books'=>'308-Sales-Books',
 
+// Added for multi organization support TRAC #2035
+'LBL_COMPANY_ASSIGNMENT'=>'Organization Assignment',
+'Organization Assignment'=>'Assigned to',
 
 );
 ?>

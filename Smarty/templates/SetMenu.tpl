@@ -110,18 +110,13 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
 		{/if} 	
 
-		{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
-		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
-		{/if}
-
+		
 
 		<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_OTHER_SETTINGS}</td></tr>
 		{if $smarty.request.action eq 'OrganizationConfig' || $smarty.request.action eq 'EditCompanyDetails' || $smarty.request.action eq 'add2db'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Organization&action=ListView&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td></tr>
 		{else}	
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Organization&action=ListView&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td></tr>
 		{/if}
 		
 		{if  $smarty.request.action eq 'EmailConfig' ||  $smarty.request.action eq 'Save' }
@@ -179,6 +174,13 @@
 		{/if}
 	
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
+
+		{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
+		{else}
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
+		{/if}
+
 		</table>
 		<!-- Left side navigation table ends -->
 		

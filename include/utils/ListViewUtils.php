@@ -528,7 +528,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	{
 		$list_header =Array();
 		//Getting the entityid
-		if($module != 'Users')
+		if($module == 'Organization')
+		{
+			$entity_id = $adb->query_result($list_result,$i-1,"organizationname");
+		}elseif($module != 'Users')
 		{
 			$entity_id = $adb->query_result($list_result,$i-1,"crmid");
 			$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
@@ -538,22 +541,25 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}	
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 		// begin: Armando Lüscher 05.07.2005 -> §priority
-		// Code contri buted by fredy Desc: Set Priority color
-		$priority = $adb->query_result($list_result,$i-1,"priority");
-
-		$font_color_high = "color:#00DD00;";
-		$font_color_medium = "color:#DD00DD;";
-		$P_FONT_COLOR = "";
-		switch ($priority)
+		// Code contributed by fredy Desc: Set Priority color
+		if($module != 'Organization')
 		{
-			case 'High':
-				$P_FONT_COLOR = $font_color_high;
-				break;
-			case 'Medium':
-				$P_FONT_COLOR = $font_color_medium;
-				break;
-			default:
-				$P_FONT_COLOR = "";
+		    $priority = $adb->query_result($list_result,$i-1,"priority");
+
+		    $font_color_high = "color:#00DD00;";
+		    $font_color_medium = "color:#DD00DD;";
+		    $P_FONT_COLOR = "";
+		    switch ($priority)
+		    {
+			    case 'High':
+				    $P_FONT_COLOR = $font_color_high;
+				    break;
+			    case 'Medium':
+				    $P_FONT_COLOR = $font_color_medium;
+				    break;
+			    default:
+				    $P_FONT_COLOR = "";
+		    }
 		}
 		//end: Armando Lüscher 05.07.2005 -> §priority
 
@@ -572,9 +578,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 			{
-
-
-
 				if($fieldname == '')
 				{
 					$table_name = '';
@@ -772,7 +775,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	}
 	$log->debug("Exiting getListViewEntries method ...");
 	return $list_block;
-	
 }
 
 /**This function generates the List view entries in a popup list view 
@@ -861,9 +863,11 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	{
 		for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 		{
-
 			//Getting the entityid
-			if($module != 'Users')	
+			if($module == 'Organization') 
+			{
+				$entity_id = $adb->query_result($list_result,$i-1,"organizationname");
+			}elseif($module != 'Users')	
 			{
 				$entity_id = $adb->query_result($list_result,$i-1,"crmid");
 			}else
@@ -1275,6 +1279,16 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
         }
+	elseif($uitype == 74)
+	{
+		if($temp_val != '')
+		{
+			$orgunitname=getOrgUnitName($temp_val);
+			$value= '<a href=index.php?module=Organization&action=DetailView&record='.$temp_val.'>'.$orgunitname.'</a>';
+		}
+		else
+			$value='';
+	}
 	elseif($uitype == 75 || $uitype == 81)
         {
 
@@ -1309,12 +1323,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 
 					$temp_val = str_replace("'",'\"',$temp_val);
+					$temp_val = popup_from_html($temp_val);
 
 					//Added to avoid the error when select SO from Invoice through AjaxEdit
 					if($module == 'SalesOrder')
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'","'.$_REQUEST['form'].'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'","'.$_REQUEST['form'].'");\'>'.$temp_val.'</a>';
 					else
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "detailview")
 				{
@@ -1323,18 +1338,20 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					elseif($colname == "lastname" && $module == 'Leads')
 						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
 					$temp_val =$temp_val.' '.$firstname;
+					$temp_val = popup_from_html($temp_val);
 
 					$focus->record_id = $_REQUEST['recordid'];
 					if($_REQUEST['return_module'] == "Calendar")
 					{
-						$value = '<a href="a" id="calendarCont'.$entity_id.'" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" id="calendarCont'.$entity_id.'" LANGUAGE=javascript onclick=\'add_data_to_relatedlist_incal("'.$entity_id.'","'.$temp_val.'");\'>'.$temp_val.'</a>';
 					}
 					else
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "formname_specific")
 				{
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod")
 				{
@@ -1354,7 +1371,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -1372,7 +1390,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$rate = $rate_symbol['rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -1381,36 +1401,39 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$flname =  $_REQUEST['fldname'];
 					$listprice=getListPrice($prod_id,$entity_id);	
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "specific_account_address")
 				{
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_contact_account_address")
 				{
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
-
 				elseif($popuptype == "specific_potential_account_address")
 				{
 					$acntid = $adb->query_result($list_result,$list_result_count,"accountid");
-					require_once('modules/Accounts/Account.php');
-					$acct_focus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($acntid,"Accounts");
 					$account_name = getAccountName($acntid);
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				//added by rdhital/Raju for better emails 
@@ -1429,7 +1452,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
@@ -1445,7 +1468,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
 					}else
 					{
@@ -1454,23 +1477,25 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$name=$lastname.' '.$firstname;
 						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
 
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.',-1,"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 						
 					}
 						
 				}	
 				elseif($popuptype == "specific_vendor_address")
 				{
-					require_once('modules/Vendors/Vendor.php');
-					$acct_focus = new Vendor();
+					require_once('modules/Vendors/Vendors.php');
+					$acct_focus = new Vendors();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendors");
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['street']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['street']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_campaign")
 				{
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+					$temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 				else
 				{
@@ -1479,12 +1504,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val =$temp_val.' '.$firstname;
 
 					$temp_val = str_replace("'",'\"',$temp_val);
+					$temp_val = popup_from_html($temp_val);
 
 					$log->debug("Exiting getValue method ...");
 					if($_REQUEST['maintab'] == 'Calendar')
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_todo("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_todo("'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 					else
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'");\'>'.$temp_val.'</a>';
 				}
 			}
 			else
@@ -1576,6 +1602,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 function getListQuery($module,$where='')
 {
 	global $log;
+	global $current_organization;
 	$log->debug("Entering getListQuery(".$module.",".$where.") method ...");
 
 	global $current_user;
@@ -1595,6 +1622,9 @@ function getListQuery($module,$where='')
 				ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_ticketgrouprelation
 				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
@@ -1628,6 +1658,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_account
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_account.accountid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_accountbillads
 				ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
 			INNER JOIN vtiger_accountshipads
@@ -1692,6 +1725,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_account
 				ON vtiger_potential.accountid = vtiger_account.accountid
 			INNER JOIN vtiger_potentialscf
@@ -1722,6 +1758,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_leaddetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_leadsubdetails
 				ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid
 			INNER JOIN vtiger_leadaddress
@@ -1748,6 +1787,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
 			LEFT JOIN vtiger_seproductsrel
@@ -1771,6 +1813,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_notes.notesid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_senotesrel
 				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
 			LEFT JOIN vtiger_contactdetails
@@ -1798,6 +1843,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_contactaddress
 				ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 			INNER JOIN vtiger_contactsubdetails
@@ -1831,6 +1879,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_activity
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_cntactivityrel
 				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_contactdetails
@@ -1870,6 +1921,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_activity
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_seactivityrel
@@ -1903,6 +1957,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_faq
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_faq.id
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_products
 				ON vtiger_faq.product_id = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0".$where;
@@ -1920,6 +1977,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_vendor
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			WHERE vtiger_crmentity.deleted = 0";
 	}
 	if($module == "PriceBooks")
@@ -1942,6 +2002,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_quotesbillads
 				ON vtiger_quotes.quoteid = vtiger_quotesbillads.quotebilladdressid
 			INNER JOIN vtiger_quotesshipads
@@ -1976,6 +2039,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT OUTER JOIN vtiger_vendor
 				ON vtiger_purchaseorder.vendorid = vtiger_vendor.vendorid
 			INNER JOIN vtiger_pobillads
@@ -2009,6 +2075,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_sobillads
 				ON vtiger_salesorder.salesorderid = vtiger_sobillads.sobilladdressid
 			INNER JOIN vtiger_soshipads
@@ -2045,6 +2114,9 @@ function getListQuery($module,$where='')
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			INNER JOIN vtiger_invoicebillads
 				ON vtiger_invoice.invoiceid = vtiger_invoicebillads.invoicebilladdressid
 			INNER JOIN vtiger_invoiceshipads
@@ -2077,8 +2149,13 @@ function getListQuery($module,$where='')
 			FROM vtiger_campaign
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_campaign.campaignid
+			INNER JOIN vtiger_entity2org
+				ON vtiger_crmentity.crmid = vtiger_entity2org.crmid
+				AND vtiger_entity2org.organizationname = '".$current_organization."'
 			LEFT JOIN vtiger_campaigngrouprelation
 				ON vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
+			INNER JOIN vtiger_campaignscf
+			        ON vtiger_campaign.campaignid = vtiger_campaignscf.campaignid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
 			LEFT JOIN vtiger_users
@@ -2094,9 +2171,13 @@ function getListQuery($module,$where='')
 	{
 		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0 ".$where ;
 	}
+	if($module == "Organization")
+	{
+		$query = "SELECT organizationname,address,city,state,code FROM vtiger_organizationdetails where deleted=0 ".$where;
+	}
 	
 
-	$log->debug("Exiting getListQuery method ...");
+	$log->debug("Exiting getListQuery method ... ");
 	return $query;
 }
 

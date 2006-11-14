@@ -120,8 +120,8 @@ var picklistObj=getObj("fldPickList")
                 } else return false
         }
 }
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo');
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo');
+var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype');
+var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype');
 var currFieldIdx=0,totFieldType;
 var focusFieldType;
 
@@ -175,7 +175,7 @@ function selFieldType(id,scrollLayer,bool) {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea') {
+        } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
                 getObj("lengthdetails").style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"

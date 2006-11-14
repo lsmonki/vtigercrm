@@ -33,18 +33,6 @@ setObjectValuesFromRequest(&$focus);
 
 $focus->save("SalesOrder");
 
-//Checking if quote_id is present and updating the quote status
-if($focus->column_fields["quote_id"] != '')
-{
-        $qt_id = $focus->column_fields["quote_id"];
-        $query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
-        $adb->query($query1);
-}
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'SalesOrder');
-
-
 $return_id = $focus->id;
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];

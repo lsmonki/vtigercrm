@@ -9,7 +9,7 @@
   *
   ********************************************************************************/
 
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('modules/Webmails/Webmail.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -20,7 +20,7 @@ require_once('modules/Webmails/MailBox.php');
 global $current_user;
 
 $local_log =& LoggerManager::getLogger('index');
-$focus = new Email();
+$focus = new Emails();
 
 $to_address = explode(";",$_REQUEST['to_list']);
 $cc_address = explode(";",$_REQUEST['cc_list']);
@@ -61,8 +61,8 @@ if($email->relationship != 0) {
 		add_attachment_to_contact($email->relationship["id"],$email);
 }else {
 	//if relationship is not available create a contact and relate the email to the contact
-	require_once('modules/Contacts/Contact.php');
-	$contact_focus = new Contact();	
+	require_once('modules/Contacts/Contacts.php');
+	$contact_focus = new Contacts();	
 	$contact_focus->column_fields['lastname'] =$email->fromname; 
 	$contact_focus->column_fields['email'] = $email->from;
 	$contact_focus->save("Contacts");

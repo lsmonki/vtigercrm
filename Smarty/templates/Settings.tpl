@@ -11,20 +11,14 @@
 -->*}
 
 	{include file="Buttons_List1.tpl"}
+
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
-	<table border=0 cellspacing=0 cellpadding=10 width=90% class="settingsUI">
-	<tr>
-		<td>
-		<!-- heading -->
-
-		<span class="heading2">{$MOD.LBL_SETTINGS}</span>
-		</td>
-	</tr>
+	<table border=0 cellspacing=0 cellpadding=20 width=90% class="settingsUI">
 	<tr>
 		<td>
 			<!--All Icons table -->
@@ -311,63 +305,6 @@
 						</table>
 					</td>
 				</tr>
-				<!-- Row 2 -->
-				<tr>
-					<td width=25% valign=top>
-					<!-- icon 15-->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
-						</tr>
-						</table>
-
-					</td>
-					<td width=25% valign=top>
-					<!-- empty -->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-					</td>
-					<td width=25% valign=top>
-					<!-- empty-->
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-					</td>
-					<td width=25% valign=top>
-					<!-- empty-->
-
-						<table border=0 cellspacing=0 cellpadding=5 width=100%>
-						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="small" valign=top>&nbsp;</td>
-						</tr>
-						</table>
-
-					</td>
-				</tr>
 				</table>
 				
 				
@@ -391,8 +328,8 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}company.gif" alt="{$MOD.LBL_COMPANY_DETAILS}" title="{$MOD.LBL_COMPANY_DETAILS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Organization&action=ListView&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}company.gif" alt="{$MOD.LBL_COMPANY_DETAILS}" title="{$MOD.LBL_COMPANY_DETAILS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Organization&action=ListView&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_COMPANY_DESCRIPTION}</td>
@@ -536,25 +473,29 @@
                       <td class="small" valign=top>{$MOD.LBL_MIGRATION_INFO}</td>
                     </tr>
                   </table></td>
-		  <td width=25% valign=top>&nbsp;
-			
-		  </td>
-				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
-				  <td valign=top>&nbsp;</td>
-				  </tr>
-				</table>
-				
-				
-				</td>
-			</tr>
+		<td width=25% valign=top>
+			<!-- icon 15-->
+			<table border=0 cellspacing=0 cellpadding=5 width=100%>
+			<tr>
 
+			<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
+			<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
+			</tr>
+			<tr>
+			<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
+			</tr>
 			</table>
+
+		</td>
+
+		</tr>
+
+		</table>
 		
 		</td>
 	</tr>
 	</table>
-		
+	</td></tr></table>	
 	</div>
 
 	</td>

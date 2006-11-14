@@ -19,6 +19,9 @@
 		<td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
 	</tr>
 	<tr>
+                      	<td><div id="tagdiv" style="display:visible;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/></div></td>
+        </tr>
+	<tr>
 		<td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 	</tr>
 	</table>

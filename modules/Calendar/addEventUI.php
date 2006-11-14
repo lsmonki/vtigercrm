@@ -177,9 +177,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
-	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
+	<script type="text/javascript" src="jscalendar/lang/calendar-<?php echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-	<div class="calAddEvent layerPopup" style="display:none;width:500px;left:200px;" id="addEvent" align=center>
+	<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="addEvent" align=center>
 	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
@@ -202,8 +202,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="subtab" value="">
 	<input type="hidden" name="maintab" value="Calendar">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
-		<tr>
-			<td class="layerPopupHeading"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
+		<tr style="cursor:move;">
+			<td class="layerPopupHeading" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
@@ -288,12 +288,12 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<tr>
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
-					<tr><td colspan=3 ><b><?php echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
-				        <tr><td colspan=3>
+					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
+				        <tr><td colspan=3 align="left">
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
-                                        <tr><td>
-					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+                                        <tr><td align="left">
+					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=50% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
 								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -304,12 +304,12 @@ function getAssignedToHTML($assignedto,$toggletype)
 				</td>
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
-					<tr><td colspan=3><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
-				        <tr><td colspan=3>
+					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
+				        <tr><td colspan=3 align="left">
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
 					</td></tr>
-				        <tr><td>
-					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100%><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+				        <tr><td align="left">
+					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
 					<script type="text/javascript">
                                                         Calendar.setup ({
                                                                 inputField : "jscal_field_due_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
@@ -426,30 +426,30 @@ function getAssignedToHTML($assignedto,$toggletype)
 								{
 							?>
 									<option value="<?php echo $m ?>"><?php echo $m ?></option>
-							<?
+							<?php
 								}
 							?>
-							</select>days 
+							</select><?php echo $mod_strings['LBL_REMAINDER_DAY']; ?> 
 							<select class=small name="remhrs">
                                                         <?php
                                                                 for($h=0;$h<=23;$h++)
                                                                 {
                                                         ?>
                                                                         <option value="<?php echo $h ?>"><?php echo $h ?></option>
-                                                        <?
+                                                        <?php
                                                                 }
                                                         ?>
-                                                        </select>hrs
+							</select><?php echo $mod_strings['LBL_REMAINDER_HRS']; ?>
 							<select class=small name="remmin">
                                                         <?php
                                                                 for($min=1;$min<=59;$min++)
                                                                 {
                                                         ?>
                                                                         <option value="<?php echo $min ?>"><?php echo $min ?></option>
-                                                        <?
+                                                        <?php
                                                                 }
                                                         ?>
-                                                        </select>minutes&nbsp;<?php echo $mod_strings['LBL_BEFOREEVENT'] ?>
+							</select><?php echo $mod_strings['LBL_MINUTES']; ?>&nbsp;<?php echo $mod_strings['LBL_BEFOREEVENT'] ?>
 						</td>
 						</tr>
 						</table>
@@ -649,7 +649,7 @@ setObjects();
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<div class="calAddEvent layerPopup" style="display:none" id="createTodo" align=center>
+<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
@@ -669,8 +669,8 @@ setObjects();
   <input type="hidden" name="subtab" value="">
   <input type="hidden" name="maintab" value="Calendar">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
-		<tr>
-                	<td class="lvtHeaderText"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
+		<tr style="cursor:move;">
+                	<td class="lvtHeaderText" id="moveTodo"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
 			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
@@ -734,10 +734,10 @@ setObjects();
 			<table border="0" cellpadding="2" cellspacing="0" width="100%" align=center>
 				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=95% align=center>
-						<tr><td colspan=3 ><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
-						<tr><td colspan=3><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?></td></tr>
-						<tr><td>
-							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100%><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
+						<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
+						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?></td></tr>
+						<tr><td align="left">
+							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_date_start", singleClick : true, step : 1
@@ -747,9 +747,9 @@ setObjects();
 					</table></td>	
 					<td width=50% valign="top">
 						<table border="0" cellpadding="2" cellspacing="0" width="95%" align=center>
-							<tr><td colspan=3><b><?php echo $mod_strings['Due Date'] ?></b></td></tr>
-							<tr><td>
-								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100%><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_due_date">
+							<tr><td colspan=3 align="left"><b><?php echo $mod_strings['Due Date'] ?></b></td></tr>
+							<tr><td align="left">
+								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_due_date">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_due_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_due_date", singleClick : true, step : 1
@@ -767,9 +767,9 @@ setObjects();
 			<td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 					<tr>
-						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
+						<td class="dvtTabCache" style="width:10px" nowrap="nowrap">&nbsp;</td>
 						<td id="cellTabNotification" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabNotification','on');switchClass('cellTabtodoRelatedto','off');gshow('addTaskAlarmUI','todo',document.createTodo.task_date_start.value,document.createTodo.task_due_date.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskRelatedtoUI');"><?php echo $mod_strings['LBL_NOTIFICATION']?></a></td>
-						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">
+						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 						<td id="cellTabtodoRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabtodoRelatedto','on'); switchClass('cellTabNotification','off');gshow('addTaskRelatedtoUI','todo',document.createTodo.task_date_start.value,document.createTodo.task_due_date.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskAlarmUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>					
 						<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 					</tr>
@@ -902,4 +902,14 @@ setObjects();
                 </tr>
         </table>
 </div>
+<script>
+	//for move addEventUI
+	var theEventHandle = document.getElementById("moveEvent");
+	var theEventRoot   = document.getElementById("addEvent");
+	Drag.init(theEventHandle, theEventRoot);
 
+	//for move addToDo
+	var theTodoHandle = document.getElementById("moveTodo");
+	var theTodoRoot   = document.getElementById("createTodo");
+	Drag.init(theTodoHandle, theTodoRoot);
+</script>

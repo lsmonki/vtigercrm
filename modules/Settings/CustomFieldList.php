@@ -22,20 +22,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 $smarty->assign("IMAGE_PATH", $image_path);
-$module_array=Array('Leads'=>'Leads',
-                        'Accounts'=>'Accounts',
-                        'Contacts'=>'Contacts',
-                        'Potentials'=>'Potentials',
-                        'HelpDesk'=>'HelpDesk',
-                        'Products'=>'Products',
-                        'Vendors'=>'Vendors',
-                        'PriceBooks'=>'PriceBooks',
-                        'PurchaseOrder'=>'PurchaseOrder',
-                        'SalesOrder'=>'SalesOrder',
-                        'Quotes'=>'Quotes',
-                        'Invoice'=>'Invoice',
-						'Campaigns'=>'Campaigns'
-                        );
+$module_array=getCustomFieldSupportedModules();
+
 $cfimagecombo = Array($image_path."text.gif",
 $image_path."number.gif",
 $image_path."percent.gif",
@@ -166,4 +154,18 @@ function getListLeadMapping($cfid)
 	return $label;
 }
 
+/* function to get the modules supports Custom Fields
+*/
+
+function getCustomFieldSupportedModules()
+{
+	global $adb;
+	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
+	$result = $adb->query($sql);
+	while($moduleinfo=$adb->fetch_array($result))
+	{
+		$modulelist[$moduleinfo['name']] = $moduleinfo['name'];
+	}
+	return $modulelist;
+}
 ?>

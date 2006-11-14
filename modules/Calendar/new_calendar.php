@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 
-global $theme;
+global $theme,$current_user;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
@@ -28,10 +28,19 @@ if(empty($subtab))
 }
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
-if(empty($mysel))
-{
-        $mysel = 'day';
+/* fix (for Ticket ID:2259 GA Calendar Default View not working) given by dartagnanlaf START --integrated by Minnie */
+if(empty($mysel)){
+	if($current_user->activity_view == "This Year"){
+		$mysel = 'year';
+	}else if($current_user->activity_view == "This Month"){
+		$mysel = 'month';
+	}else if($current_user->activity_view == "This Week"){
+		$mysel = 'week';
+	}else{
+		$mysel = 'day';
+	}
 }
+/* fix given by dartagnanlaf END --integrated by Minnie */
 $date_data = array();
 if ( isset($_REQUEST['day']))
 {
@@ -76,7 +85,6 @@ if(empty($date_data))
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data); 
 if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
 {
-        global $current_user;
         $calendar_arr['calendar']->add_Activities($current_user);
 }
 $calendar_arr['view'] = $mysel;

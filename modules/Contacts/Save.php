@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("modules/Emails/mail.php");
@@ -51,7 +51,7 @@ $log->debug("Exiting makeRandomPassword method ...");
 $local_log =& LoggerManager::getLogger('index');
 
 global $log,$adb;
-$focus = new Contact();
+$focus = new Contacts();
 
 setObjectValuesFromRequest(&$focus);
 
@@ -115,6 +115,11 @@ if($saveimage=="true")
         $focus->column_fields['imagename']=$image_name_val;
         $log->debug("Assign the Image name to the vtiger_field name ");
 }
+
+//if image added then we have to set that $_FILES['name'] in imagename field then only the image will be displayed
+if($_FILES['imagename']['name'] != '')
+	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+	
 //Saving the contact
 if($image_error=="false")
 {

@@ -28,6 +28,11 @@ $mod_strings = array(
 'LBL_PB_LIST_PRICE'=>'List Price',
 'LBL_ACTION'=>'Action',
 'PriceBook'=>'Price Book',
+
+// Added for multi organization support TRAC #2035
+'LBL_COMPANY_ASSIGNMENT'=>'Organization Assignment',
+'Organization Assignment'=>'Assigned to',
+
 );
 
 

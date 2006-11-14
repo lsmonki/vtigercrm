@@ -61,7 +61,7 @@
    </tr>
    {elseif $elements.fldname eq 'description'}
    <tr>
-	<td style="padding: 5px;" colspan="3" valign="top"><div style="overflow:auto;height:415px;width:100%;">{$BLOCKS.4.Description.value}</div></td>
+	<td style="padding: 5px;" colspan="3" valign="top"><div style="overflow:auto;height:415px;width:100%;">{$elements.value}</div></td>
 
    </tr>
    {elseif $elements.fldname eq 'filename'}

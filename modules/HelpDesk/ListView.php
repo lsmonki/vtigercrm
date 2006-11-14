@@ -82,6 +82,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if($viewid != 0)
 {
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
@@ -122,6 +123,8 @@ else
 
 if(isset($where) && $where != '')
 {
+	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+                $list_query .= ' and vtiger_troubletickets.status!="Closed" or vtiger_troubletickets.status is null and '.$where;
 	$list_query .= ' and '.$where;
 }
 

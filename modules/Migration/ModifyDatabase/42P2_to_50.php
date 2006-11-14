@@ -1257,7 +1257,7 @@ $insert_query_array9 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_contactdetails:title:title:Contacts_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:accountname:accountname:Contacts_Account_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:I')",
 		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_contactdetails:email:email:Contacts_Email:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Office_Phone:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
@@ -3405,7 +3405,7 @@ for($i=0;$i<$productcount;$i++)
 	$taxres = $conn->query("select taxid from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'");
 	$taxid = $conn->query_result($taxres,0,'taxid');
 
-	$taxquery = "insert into vtiger_producttaxrel ($productid, \"$taxid\", '0.00')";
+	$taxquery = "insert into vtiger_producttaxrel values($productid, \"$taxid\", '0.00')";
 	//Execute($taxquery);
 	$conn->query($taxquery);
 }
@@ -3555,6 +3555,7 @@ Execute("update vtiger_field set typeofdata='V~O' where fieldname='siccode' and 
 
 //changes made for CustomView and Reports - Activities changed to Calendar -- Starts
 //Added to change the entitytype from Activities to Calendar for customview
+Execute("update vtiger_crmentity set setype='Calendar' where setype='Activities'");
 Execute("update vtiger_customview set entitytype='Calendar' where entitytype='Activities'");
 
 //Added to change the primarymodule from Activities to Calendar for Reports
@@ -3722,6 +3723,101 @@ $sortorderid = $conn->query_result($conn->query("select max(sortorderid) as id f
 Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,1)");
 
 
+//Added after 5.0 GA release
+//CALCULATE Activity End Time (time_end)
+//we have to calculate activity end time (time_end) based on start time (time_start) and duration (duration_hours, duration_minutes)
+$sql = "select * from vtiger_activity";
+$result = $conn->query($sql);
+$num_rows = $conn->num_rows($result);
+for($i=0;$i<$num_rows;$i++)
+{
+	//First we have to retrieve the time_start, duration_hours and duration_minutes and form as a date with time
+	$activityid = $conn->query_result($result,$i,'activityid');
+	$date_start = $conn->query_result($result,$i,'date_start');
+	$time_start = $conn->query_result($result,$i,'time_start');
+	$duration_hours = $conn->query_result($result,$i,'duration_hours');
+	$duration_minutes = $conn->query_result($result,$i,'duration_minutes');
+
+	if($duration_hours != '' && $duration_minutes != '')
+	{
+		$date_details = explode("-",$date_start);
+		$start_year = $date_details[0];
+		$start_month = $date_details[1];
+		$start_date = $date_details[2];
+
+		$start_details = explode(":",$time_start);
+		$start_hour = $start_details[0];
+		$start_minutes = $start_details[1];
+
+		$full_duration = "$duration_hours:$duration_minutes:00";
+
+		$start = date("Y-m-d H:i:s",mktime($start_hour, $start_minutes, 0, $start_month, $start_date, $start_year));
+		$end = date("Y-m-d H:i:s",mktime($start_hour+$duration_hours, $start_minutes+$duration_minutes, 0, $start_month, $start_date, $start_year));
+
+		$end_details = explode(" ",$end);
+		$due_date = $end_details[0];
+
+		$end_time_details = explode(":",$end_details[1]);
+		$time_end = $end_time_details[0].":".$end_time_details[1];
+
+		$update_query = "update vtiger_activity set due_date=\"$due_date\", time_end=\"$time_end\" where activityid=$activityid";
+
+		$conn->query($update_query);
+	}
+}
+
+//Added after 5.0.1
+//we have to delete the entries from customview and report related tables for deleted customfields
+include("modules/Migration/ModifyDatabase/deleteCustomFields.php");
+
+//5.0.2 database changes - added on 27-10-06
+
+//Query added to show Manufacturer field in Products module
+Execute("update vtiger_field set displaytype=1,block=31 where tabid=14 and block=1");
+Execute("update vtiger_field set block=23,displaytype=1 where block=1 and displaytype=23 and tabid=10");
+Execute("update vtiger_field set block=22,displaytype=1 where block=1 and displaytype=22 and tabid=10");
+
+//Added to rearange the attachment in HelpDesk
+Execute(" update vtiger_field set block=25,sequence=12 where tabid=13 and fieldname='filename'");
+
+//Query added to as entityname,its tablename,its primarykey are saved in a table
+Execute(" CREATE TABLE `vtiger_entityname` (
+	`tabid` int(19) NOT NULL default '0',
+	`modulename` varchar(50) NOT NULL,
+	`tablename` varchar(50) NOT NULL,
+	`fieldname` varchar(150) NOT NULL,
+	`entityidfield` varchar(150) NOT NULL,
+	PRIMARY KEY (`tabid`),
+	KEY `entityname_tabid_idx` (`tabid`)
+)");
+
+//Data Populated for the existing modules
+Execute("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid')");
+Execute("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid')");
+Execute("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid')");
+Execute("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid')");
+Execute("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid')");
+Execute("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid')");
+Execute("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid')");
+Execute("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid')");
+Execute("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid')");
+Execute("insert into vtiger_entityname values(29,'Users','vtiger_users','last_name,first_name','id')");
+Execute("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid')");
+Execute("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid')");
+Execute("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid')");
+Execute("insert into vtiger_entityname values(22,'SalesOrder','vtiger_salesorder','subject','salesorderid')");
+Execute("insert into vtiger_entityname values(18,'Vendors','vtiger_vendor','vendorname','vendorid')");
+Execute("insert into vtiger_entityname values(19,'PriceBooks','vtiger_pricebook','bookname','pricebookid')");
+Execute("insert into vtiger_entityname values(26,'Campaigns','vtiger_campaign','campaignname','campaignid')");
+Execute("insert into vtiger_entityname values(15,'Faq','vtiger_faq','question','id')");
+
+//added quantity in stock in product default listview - All
+$res = $conn->query("select vtiger_cvcolumnlist.cvid from vtiger_cvcolumnlist inner join vtiger_customview on vtiger_cvcolumnlist.cvid=vtiger_customview.cvid where entitytype='Products' and viewname='All'");
+if($conn->num_rows != 0)
+{
+	$cvid = $conn->query_result($res,0,'cvid');
+	Execute("insert into vtiger_cvcolumnlist values($cvid,5,'vtiger_products:qtyinstock:qtyinstock:Products_Quantity_In_Stock:V')");
+}
 
 
 

@@ -26,16 +26,16 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 
 
-class ImportLead extends Lead {
+class ImportLead extends Leads {
 	 var $db;
 
 	// This is the list of the functions to run when importing

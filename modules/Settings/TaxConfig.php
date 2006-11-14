@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 
+
 require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
@@ -24,23 +25,30 @@ require_once($theme_path.'layout_utils.php');
 $tax_details = getAllTaxes();
 $sh_tax_details = getAllTaxes('all','sh');
 
+
 //To save the edited value
 if($_REQUEST['save_tax'] == 'true')
 {
 	for($i=0;$i<count($tax_details);$i++)
 	{
+     		$new_labels[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxlabel']];
 		$new_percentages[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxname']];
 	}
 	updateTaxPercentages($new_percentages);
+	updateTaxLabels($new_labels);
 	$getlist = true;
 }
 elseif($_REQUEST['sh_save_tax'] == 'true')
 {
+ 
 	for($i=0;$i<count($sh_tax_details);$i++)
 	{
+	  $new_labels[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxlabel']];
 		$new_percentages[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxname']];
 	}
+	
 	updateTaxPercentages($new_percentages,'sh');
+	updateTaxLabels($new_labels,'sh');
 	$getlist = true;
 }
 
@@ -99,8 +107,9 @@ if(count($tax_details) == 0)
 	$smarty->assign("TAX_COUNT", 0);
 if(count($sh_tax_details) == 0)
 	$smarty->assign("SH_TAX_COUNT", 0);
-	
+
 $smarty->assign("TAX_VALUES", $tax_details);
+
 $smarty->assign("SH_TAX_VALUES", $sh_tax_details);
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
@@ -120,14 +129,12 @@ function updateTaxPercentages($new_percentages, $sh='')
 	global $adb, $log;
 	$log->debug("Entering into the function updateTaxPercentages");
 
-	$tax_percentage = Array();
-
 	foreach($new_percentages as $taxid => $new_val)
 	{
 		if($new_val != '')
 		{
 			if($sh != '' && $sh == 'sh')
-				$query = "update vtiger_shippingtaxinfo set percentage = \"$new_val\" where taxid=\"$taxid\"";
+				$query = "update vtiger_shippingtaxinfo set percentage=\"$new_val\" where taxid=\"$taxid\"";
 			else
 				$query = "update vtiger_inventorytaxinfo set percentage = \"$new_val\" where taxid=\"$taxid\"";
 			$adb->query($query);
@@ -137,6 +144,30 @@ function updateTaxPercentages($new_percentages, $sh='')
 	$log->debug("Exiting from the function updateTaxPercentages");
 }
 
+/**	Function to update the list of Tax Labels for the taxes
+ *	@param array $new_labels - array of tax types and the values like [taxid]=new label ie., [1]=aa, [2]=bb
+ *      @param string $sh - sh or empty, if sh passed then update will be done in shipping and handling related table
+ *      @return void
+ */
+function updateTaxLabels($new_labels, $sh='')
+{
+	global $adb, $log;
+	$log->debug("Entering into the function updateTaxPercentages");
+
+	foreach($new_labels as $taxid => $new_val)
+	{
+		if($new_val != '')
+		{
+			if($sh != '' && $sh == 'sh')
+				$query = "update vtiger_shippingtaxinfo set taxlabel= \"$new_val\" where taxid=\"$taxid\"";
+			else
+				$query = "update vtiger_inventorytaxinfo set taxlabel = \"$new_val\" where taxid=\"$taxid\"";
+			$adb->query($query);
+		}
+	}
+
+	$log->debug("Exiting from the function updateTaxPercentages");
+}
 /**	Function used to add the tax type which will do database alterations
  *	@param string $taxlabel - tax label name to be added
  *	@param string $taxvalue - tax value to be added
@@ -164,7 +195,6 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 	{
 		$taxid = $adb->getUniqueID("vtiger_shippingtaxinfo");
 		$taxname = "shtax".$taxid;
-		
 		$query = "alter table vtiger_inventoryshippingrel add column $taxname decimal(7,3) default NULL";
 	}
 	else

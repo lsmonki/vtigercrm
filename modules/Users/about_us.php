@@ -18,11 +18,11 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('vtigerversion.php');
 if($patch_version !='')
 {
-	    $patch_string = $vtiger_version . " Patch " . $patch_version;
+	    $patch_string = $vtiger_current_version . " Patch " . $patch_version;
 }
 else
 {
-	    $patch_string = "--None--";
+	    $patch_string = $vtiger_current_version;
 }
 global $app_strings;
 global $app_list_strings;
@@ -83,18 +83,20 @@ global $mod_strings;
 						<marquee behavior="scroll" direction="up" width="100%" scrollamount="1" scrolldelay="50"  height="100" onMouseOut="javascript:start();" onMouseOver="javascript:stop();">
 								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="rollOver">
 								<tr><th><?php echo $mod_strings['LBL_TEAM'];?></th></tr>
-										<tr><td>Ahmed</td></tr>
+										<tr><td>Anusha</td></tr>
+										<tr><td>Bharath</td></tr>
+										<tr><td>Bharathi</td></tr>
 										<tr><td>Don</td></tr>
-										<tr><td>Ela</td></tr>
 										<tr><td>Gopal</td></tr>
 										<tr><td>Jeri</td></tr>
 										<tr><td>Mani</td></tr>
 										<tr><td>Mickie</td></tr>
 										<tr><td>Minnie</td></tr>
+										<tr><td>Nithya</td></tr>
 										<tr><td>Philip</td></tr>
 										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
-										<tr><td>SRaj</td></tr>
+										<tr><td>Vashni</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?></th></tr>
 										<tr><td>Aissa Belaid</td></tr>
@@ -173,7 +175,7 @@ global $mod_strings;
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="70%" align="left" class="small">
-							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'];?> : 5.0.0 </span>&nbsp;|&nbsp;
+							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'] ." ".$patch_string;?></span>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt" target="_blank"><?php echo $mod_strings['LBL_READ_LICENSE'];?></a>&nbsp;|&nbsp;
 									<a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54" target="_blank"><?php echo $mod_strings['LBL_CONTACT_US'];?></a>
 							</td>

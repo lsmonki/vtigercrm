@@ -16,7 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 $log = &LoggerManager::getLogger('firefoxlog');
 
-$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 $accessDenied = "You are not authorized for performing this action";
 $server->configureWSDL('vtigersoap');
@@ -175,8 +175,8 @@ $server->register(
 function CheckLeadPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -193,8 +193,8 @@ function CheckLeadPermission($username)
 function CheckContactPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -211,8 +211,8 @@ function CheckContactPermission($username)
 function CheckAccountPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -229,8 +229,8 @@ function CheckAccountPermission($username)
 function CheckTicketPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -247,8 +247,8 @@ function CheckTicketPermission($username)
 function CheckVendorPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -265,8 +265,8 @@ function CheckVendorPermission($username)
 function CheckProductPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -283,8 +283,8 @@ function CheckProductPermission($username)
 function CheckNotePermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -301,8 +301,8 @@ function CheckNotePermission($username)
 function CheckSitePermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -319,8 +319,8 @@ function CheckSitePermission($username)
 function CheckRssPermission($username)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -340,8 +340,8 @@ function create_site_from_webform($username,$portalname,$portalurl)
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -365,11 +365,11 @@ function create_site_from_webform($username,$portalname,$portalurl)
 function LogintoVtigerCRM($user_name,$password)
 {
 	global $log;
-	require_once('modules/Users/User.php');
+	require_once('modules/Users/Users.php');
 	
 	$return_access = "FALSE";
 	
-	$objuser = new User();
+	$objuser = new Users();
 	
 	if($password != "")
 	{
@@ -397,8 +397,8 @@ function create_rss_from_webform($username,$url)
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -436,15 +436,15 @@ function create_note_from_webform($username,$subject,$desc)
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Note from Web Form - Starts");
-	require_once("modules/Notes/Note.php");
+	require_once("modules/Notes/Notes.php");
 
-	$focus = new Note();
+	$focus = new Notes();
 	if(isPermitted("Notes","EditView") == "yes")
 	{
 		$focus->column_fields['notes_title'] = $subject;
@@ -473,17 +473,17 @@ function create_product_from_webform($username,$productname,$code,$website)
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Product from Web Form - Starts");
 	
-  require_once("modules/Products/Product.php");
+  require_once("modules/Products/Products.php");
 	if(isPermitted("Products","EditView") == "yes")
 	{
-		$focus = new Product();
+		$focus = new Products();
 		$focus->column_fields['productname'] = $productname;
 		$focus->column_fields['productcode'] = $code;
 		$focus->column_fields['website'] = $website;
@@ -508,16 +508,16 @@ function create_vendor_from_webform($username,$vendorname,$email,$phone,$website
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Vendor from Web Form - Starts");
-	require_once("modules/Vendors/Vendor.php");
+	require_once("modules/Vendors/Vendors.php");
 	if(isPermitted("Vendors","EditView" ) == "yes")
 	{
-		$focus = new Vendor();
+		$focus = new Vendors();
 		$focus->column_fields['vendorname'] = $vendorname;
 		$focus->column_fields['email'] = $email;
 		$focus->column_fields['phone'] = $phone;
@@ -547,8 +547,8 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -591,15 +591,15 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 function create_account($username,$accountname,$email,$phone,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country)
 {
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id,'Users');
-	require_once("modules/Accounts/Account.php");
+	require_once("modules/Accounts/Accounts.php");
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
-		$account=new Account();
+		$account=new Accounts();
 		$account->column_fields['accountname']=$accountname;
 		$account->column_fields['email1']=$email;
 		$account->column_fields['phone']=$phone;
@@ -642,15 +642,15 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 	global $log;
 	global $adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	$adb->println("Create New Lead from Web Form - Starts");
-	require_once("modules/Leads/Lead.php");
+	require_once("modules/Leads/Leads.php");
 
-	$focus = new Lead();
+	$focus = new Leads();
 	if(isPermitted("Leads","EditView") == "yes")
 	{
 		$focus->column_fields['lastname'] = $lastname;
@@ -689,16 +689,16 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 {
 	global $adb,$log;
 	global $current_user;
-	require_once('modules/Users/User.php');
-	$seed_user = new User();
+	require_once('modules/Users/Users.php');
+	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,'Users');
 
-	require_once('modules/Contacts/Contact.php');
+	require_once('modules/Contacts/Contacts.php');
   if(isPermitted("Contacts","EditView") == "yes")
   {
-   $contact = new Contact();
+   $contact = new Contacts();
    $contact->column_fields[firstname]= $first_name;
    $contact->column_fields[lastname]= $last_name;
    //$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX

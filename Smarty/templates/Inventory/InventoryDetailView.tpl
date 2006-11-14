@@ -111,15 +111,25 @@ function DeleteTag(id)
 					{include file='DetailViewHidden.tpl'}
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
    {strip}
-   <tr nowrap>
+   <tr>
 	<td  colspan=4 style="padding:5px">
-		{if $EDIT_DUPLICATE eq 'permitted'}
-			<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-		<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-		{/if}
-		{if $DELETE eq 'permitted'}
-			<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-		{/if}
+		<table border=0 cellspacing=0 cellpadding=0 width=100%>
+                   <tr>
+                        <td>
+				{if $EDIT_DUPLICATE eq 'permitted'}
+				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
+				{/if}
+			</td>
+			<td align=right>
+				{if $EDIT_DUPLICATE eq 'permitted'}
+				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+				{/if}
+				{if $DELETE eq 'permitted'}
+				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+				{/if}
+			</td>
+                   </tr>
+                </table>
 		<!-- Commented the buttons in DetailView because these buttons have been given as links
 		{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 			{if $CREATEPDF eq 'permitted'}
@@ -219,15 +229,26 @@ function DeleteTag(id)
 			{if $SinglePane_View eq 'false'}
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
    {strip}
-   <tr nowrap>
+   <tr>
 	<td  colspan=4 style="padding:5px">
-		{if $EDIT_DUPLICATE eq 'permitted'}
-			<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-		<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-		{/if}
-		{if $DELETE eq 'permitted'}
-			<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-		{/if}
+		<table border=0 cellspacing=0 cellpadding=0 width=100%>
+                   <tr>
+                        <td>
+				{if $EDIT_DUPLICATE eq 'permitted'}
+				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
+				{/if}
+			</td>
+			<td align=right>
+				{if $EDIT_DUPLICATE eq 'permitted'}
+				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+				{/if}
+				{if $DELETE eq 'permitted'}
+				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+				{/if}
+			</td>
+                   </tr>
+                </table>
+
 		<!-- Commented the buttons in DetailView because these buttons have been given as links
 		{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 			{if $CREATEPDF eq 'permitted'}
@@ -265,14 +286,6 @@ function DeleteTag(id)
 										<!-- right side InventoryActions -->
 										{include file="Inventory/InventoryActions.tpl"}
 
-										<br>
-										<!-- Add Tag link added just above the tag cloud image -->
-										<table border=0 cellspacing=0 cellpadding=5 width=100% >
-										<tr>
-											<td align="left" class="genHeaderSmall" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="crmbutton small cancel" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
-										</tr>
-										</table>
-										<!-- Eng Add Tag Link -->
 										<br>
 										<!-- To display the Tag Clouds -->
 										<div>

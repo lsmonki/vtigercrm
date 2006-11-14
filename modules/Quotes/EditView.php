@@ -22,17 +22,19 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$log,$theme,$currentModule,$current_user;
+global $current_organization;
 
 $log->debug("Inside Quote EditView");
 
-$focus = new Quote();
+$focus = new Quotes();
 $smarty = new vtigerCRM_Smarty;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
@@ -70,8 +72,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 
 // Get Account address if vtiger_account is given
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
-	require_once('modules/Accounts/Account.php');
-	$acct_focus = new Account();
+	require_once('modules/Accounts/Accounts.php');
+	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
@@ -209,6 +211,11 @@ $smarty->assign("MODULE", $module);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$organization = new Organization;
+$organization->id = $current_organization;
+$smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
+
 if($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else

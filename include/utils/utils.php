@@ -390,6 +390,35 @@ function return_module_language($language, $module)
 	return $return_value;
 }
 
+/*This function returns the mod_strings for the current language and the specified module
+*/
+
+function return_specified_module_language($language, $module)
+{
+	global $log;
+	global $default_language, $translation_string_prefix;
+
+	@include("modules/$module/language/$language.lang.php");
+	if(!isset($mod_strings))
+	{
+		$log->warn("Unable to find the module language file for language: ".$language." and module: ".$module);
+		require("modules/$module/language/$default_language.lang.php");
+		$language_used = $default_language;
+	}
+
+	if(!isset($mod_strings))
+	{
+		$log->fatal("Unable to load the module($module) language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_module_language method ...");
+		return null;
+	}
+
+	$return_value = $mod_strings;
+
+	$log->debug("Exiting return_module_language method ...");
+	return $return_value;
+}
+
 /** This function retrieves an application language file and returns the array of strings included in the $mod_list_strings var.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -837,7 +866,8 @@ function to_html($string, $encode=true){
 	$log->debug("Entering to_html(".$string.",".$encode.") method ...");
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
-        $string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
+		if (is_array($toHtml))
+			$string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
         }
 	$log->debug("Exiting to_html method ...");
         return $string;
@@ -947,8 +977,11 @@ function getColumnFields($module)
         $noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
+		$uitype = $adb->query_result($result,$i,"uitype");
 		$fieldname = $adb->query_result($result,$i,"fieldname");
 		$column_fld[$fieldname] = ''; 
+		if( $uitype == 3 || $uitype == 4 || $uitype == 18 || $uitype == 31 || $uitype == 32)
+		    $column_fld[$fieldname."@##@"] = 0;
 	}
 	$log->debug("Exiting getColumnFields method ...");
 	return $column_fld;	
@@ -2047,9 +2080,9 @@ function getEmailParentsList($module,$id)
 	$log->debug("Entering getEmailParentsList(".$module.",".$id.") method ...");
         global $adb;
 	if($module == 'Contacts')
-		$focus = new Contact();
+		$focus = new Contacts();
 	if($module == 'Leads')
-		$focus = new Lead();
+		$focus = new Leads();
         
 	$focus->retrieve_entity_info($id,$module);
         $fieldid = 0;
@@ -2104,6 +2137,59 @@ function addToProductStock($productId,$qty)
 	$log->debug("Exiting addToProductStock method ...");
 	
 }
+
+/**	This Function adds the specified product quantity to the Product Quantity in Demand in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be added
+  */
+function addToProductDemand($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering addToProductDemand(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInDemand($productId);
+	$updQty=$qtyInStck + $qty;
+	$sql = "UPDATE vtiger_products set qtyindemand=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting addToProductDemand method ...");
+	
+}
+
+/**	This Function subtract the specified product quantity to the Product Quantity in Stock in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be subtracted
+  */
+function deductFromProductStock($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering deductFromProductStock(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInStock($productId);
+	$updQty=$qtyInStck - $qty;
+	$sql = "UPDATE vtiger_products set qtyinstock=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting deductFromProductStock method ...");
+	
+}
+
+/**	This Function subtract the specified product quantity to the Product Quantity in Demand in the Warehouse 
+  *	@param int $productId - ProductId
+  *	@param int $qty - Quantity to be subtract
+  */
+function deductFromProductDemand($productId,$qty)
+{
+	global $log;
+	$log->debug("Entering deductFromProductDemand(".$productId.",".$qty.") method ...");
+	global $adb;
+	$qtyInStck=getProductQtyInDemand($productId);
+	$updQty=$qtyInStck - $qty;
+	$sql = "UPDATE vtiger_products set qtyindemand=$updQty where productid=".$productId;
+	$adb->query($sql);
+	$log->debug("Exiting deductFromProductDemand method ...");
+	
+}
+
+
 /** This Function returns the current product quantity in stock.
   * The following is the input parameter for the function:
   *  $product_id --> ProductId, Type:Integer
@@ -2121,6 +2207,23 @@ function getProductQtyInStock($product_id)
 
 
 }
+
+/**	This Function returns the current product quantity in demand.
+  *	@param int $product_id - ProductId
+  *	@return int $qtyInDemand - Quantity in Demand of a product
+  */
+function getProductQtyInDemand($product_id)
+{
+	global $log;
+	$log->debug("Entering getProductQtyInDemand(".$product_id.") method ...");
+        global $adb;
+        $query1 = "select qtyindemand from vtiger_products where productid=".$product_id;
+        $result = $adb->query($query1);
+        $qtyInDemand = $adb->query_result($result,0,"qtyindemand");
+	$log->debug("Exiting getProductQtyInDemand method ...");
+        return $qtyInDemand;
+}
+
 /** Function to seperate the Date and Time
   * This function accepts a sting with date and time and
   * returns an array of two elements.The first element
@@ -2175,6 +2278,12 @@ function getTableNameForField($module,$fieldname)
 	{
 		$tablename = $adb->query_result($res,0,'tablename');
 	}
+
+	//Since the introduction of the entity2org table, crmid has become 
+	//ambiguous. So we need to explicitely set the vtiger_crmentity table
+	//in this case ...
+	if( $tablename == '' && $fieldname == 'crmid')
+	    $tablename = 'vtiger_crmentity';
 
 	$log->debug("Exiting getTableNameForField method ...");
 	return $tablename;
@@ -2616,5 +2725,41 @@ function strip_selected_tags($text, $tags = array())
 function useInternalMailer() {
 	global $current_user,$adb;
 	return $adb->query_result($adb->query("select int_mailer from vtiger_mail_accounts where user_id='".$current_user->id."'"),0,"int_mailer");
+}
+
+/**
+* the function is like unescape in javascript
+* added by dingjianting on 2006-10-1 for picklist editor
+*/
+function utf8RawUrlDecode ($source) {
+    $decodedStr = "";
+    $pos = 0;
+    $len = strlen ($source);
+    while ($pos < $len) {
+        $charAt = substr ($source, $pos, 1);
+        if ($charAt == '%') {
+            $pos++;
+            $charAt = substr ($source, $pos, 1);
+            if ($charAt == 'u') {
+                // we got a unicode character
+                $pos++;
+                $unicodeHexVal = substr ($source, $pos, 4);
+                $unicode = hexdec ($unicodeHexVal);
+                $entity = "&#". $unicode . ';';
+                $decodedStr .= utf8_encode ($entity);
+                $pos += 4;
+            }
+            else {
+                // we have an escaped ascii character
+                $hexVal = substr ($source, $pos, 2);
+                $decodedStr .= chr (hexdec ($hexVal));
+                $pos += 2;
+            }
+        } else {
+            $decodedStr .= $charAt;
+            $pos++;
+        }
+    }
+    return $decodedStr;
 }
 ?>

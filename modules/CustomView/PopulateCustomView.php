@@ -315,6 +315,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		  Array('vtiger_products:productname:productname:Products_Product_Name:V',
                         'vtiger_products:productcode:productcode:Products_Product_Code:V',
                         'vtiger_products:commissionrate:commissionrate:Products_Commission_Rate:V',
+			'vtiger_products:qtyinstock:qtyinstock:Products_Quantity_In_Stock:V',
                         'vtiger_products:qty_per_unit:qty_per_unit:Products_Qty/Unit:V',
                         'vtiger_products:unit_price:unit_price:Products_Unit_Price:V'),
 		  

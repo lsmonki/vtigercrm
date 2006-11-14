@@ -400,9 +400,10 @@ $mod_strings = Array(
 'Not Started'=>'Not Started',
 'In Progress'=>'In Progress',
 'Pending Input'=>'Pending Input',
-'High'=>'High',
-'Medium'=>'Medium',
-'Low'=>'Low',
+'LBL_REMAINDER_DAY'=>'days',
+'LBL_REMAINDER_HRS'=>'hrs',
+'Call'=>'Call',
+'Meeting'=>'Meeting',
 
 );
 

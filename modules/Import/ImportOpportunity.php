@@ -22,11 +22,11 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
 
 // Get _dom arrays from Database
@@ -36,7 +36,7 @@ $comboFieldNames = Array('leadsource'=>'lead_source_dom'
 $comboFieldArray = getComboArray($comboFieldNames);
 
 // Account is used to store vtiger_account information.
-class ImportOpportunity extends Potential {
+class ImportOpportunity extends Potentials {
 	 var $db;
 
 	// This is the list of vtiger_fields that are required.
@@ -131,7 +131,7 @@ class ImportOpportunity extends Potential {
                 $arr = array();
 
 		// check if it already exists
-                $focus = new Account();
+                $focus = new Accounts();
 
 		$query = '';
 

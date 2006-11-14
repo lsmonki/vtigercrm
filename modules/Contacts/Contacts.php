@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.70 2005/04/27 11:21:49 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contacts.php,v 1.70 2005/04/27 11:21:49 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,28 +25,25 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Campaigns/Campaign.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Campaigns/Campaigns.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('user_privileges/default_module_view.php');
 
 
 // Contact is used to store customer information.
-class Contact extends CRMEntity {
+class Contacts extends CRMEntity {
 	var $log;
 	var $db;
 
 	var $table_name = "contactdetails";
-	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails','vtiger_attachments');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid','vtiger_attachments'=>'attachmentsid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails','vtiger_entity2org');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid','vtiger_attachments'=>'attachmentsid','vtiger_entity2org'=>'crmid');
 
-	var $module_id = "contactid";
-	var $object_name = "Contact";
 	
-	var $new_schema = true;
 
 	var $column_fields = Array();
 	
@@ -125,7 +122,7 @@ class Contact extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
-	function Contact() {
+	function Contacts() {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Contacts');
@@ -334,7 +331,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Potential();
+		$focus = new Potentials();
 		$button = '';
 
 		if(isPermitted("Potentials",1,"") == 'yes')
@@ -486,8 +483,8 @@ class Contact extends CRMEntity {
 		global $log, $singlepane_view;
                 $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
-		require_once('modules/Quotes/Quote.php');		
-		$focus = new Quote();
+		require_once('modules/Quotes/Quotes.php');		
+		$focus = new Quotes();
 	
 		$button = '';
 		if(isPermitted("Quotes",1,"") == 'yes')
@@ -540,8 +537,8 @@ class Contact extends CRMEntity {
 		 global $log, $singlepane_view;
 		$log->debug("Entering get_products(".$id.") method ...");
 		 global $app_strings;
-		 require_once('modules/Products/Product.php');
-		 $focus = new Product();
+		 require_once('modules/Products/Products.php');
+		 $focus = new Products();
 		 $button = '';
 
 		 if(isPermitted("Products",1,"") == 'yes')
@@ -570,7 +567,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		 global $app_strings;
 		 require_once('modules/PurchaseOrder/PurchaseOrder.php');
-		 $focus = new Order();
+		 $focus = new PurchaseOrder();
 
 		 $button = '';
 
@@ -600,7 +597,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_emails(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Email();
+		$focus = new Emails();
 
 		$button = '';
 
@@ -631,7 +628,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_campaigns(".$id.") method ...");
 		global $mod_strings;
 
-		$focus = new Campaign();
+		$focus = new Campaigns();
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 		else
@@ -735,8 +732,8 @@ function get_searchbyemailid($username,$emailaddress)
 {
 	global $log;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -775,8 +772,8 @@ function get_contactsforol($user_name)
 {
 	global $log,$adb;
 	global $current_user;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -822,6 +819,47 @@ function get_contactsforol($user_name)
   $log->debug("Exiting get_contactsforol method ...");
 	return $query;
 }
+
+
+	/** Function to handle module specific operations when saving a entity 
+	*/
+	function save_module($module)
+	{
+		$this->insertIntoAttachment($this->id,$module);		
+	}	
+
+	/**
+	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
+	 *      @param string $module  - the current module name
+	*/
+	function insertIntoAttachment($id,$module)
+	{
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		$file_saved = false;
+
+		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
+		$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
+
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		//This is to handle the delete image for contacts
+		if($module == 'Contacts' && $file_saved)
+		{
+			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
+			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}	
 
 
 //End

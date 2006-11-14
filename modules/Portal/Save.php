@@ -13,10 +13,10 @@ require_once('modules/Portal/Portal.php');
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 {
-	$result=UpdatePortal($_REQUEST['portalname'],$_REQUEST['portalurl'],$_REQUEST['record']);
+	$result=UpdatePortal($_REQUEST['portalname'],"http://".str_replace("#$#$#","&",$_REQUEST['portalurl']),$_REQUEST['record']);
 }else
 {
-	$result=SavePortal($_REQUEST['portalname'],$_REQUEST['portalurl']);
+	$result=SavePortal($_REQUEST['portalname'],"http://".str_replace("#$#$#","&",$_REQUEST['portalurl']));
 }
 header("Location: index.php?action=PortalAjax&module=Portal&file=ListView&mode=ajax&datamode=manage");
 ?>

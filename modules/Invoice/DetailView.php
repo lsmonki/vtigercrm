@@ -23,11 +23,14 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$currentModule,$theme,$singlepane_view;
+global $current_organization;
+
 $focus = new Invoice();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -97,6 +100,10 @@ if($singlepane_view == 'true')
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+$organization = new Organization;
+$organization->id = $current_organization;
+$smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
 
 $smarty->display("Inventory/InventoryDetailView.tpl");
 

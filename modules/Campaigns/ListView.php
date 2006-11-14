@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
@@ -28,7 +28,7 @@ global $currentModule,$theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$focus = new Campaign();
+$focus = new Campaigns();
 $category = getParentTab();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
@@ -77,6 +77,7 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 //<<<<<customview>>>>>
 
 if($viewid != 0)
@@ -191,8 +192,6 @@ else
      $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
  else
      $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);	
-	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))

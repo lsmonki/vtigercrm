@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('product_delete');
 
-$focus = new Product();
+$focus = new Products();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

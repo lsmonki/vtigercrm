@@ -18,7 +18,26 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/slider.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
 <script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
+<script language="javascript">
+function getHomeActivities(mode,view)
 
+{ldelim}
+        new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module=Calendar&action=ActivityAjax&file=OpenListView&activity_view='+view+'&mode='+mode+'&parenttab=My Home Page&ajax=true',
+                        onComplete: function(response) {ldelim}
+                                if(mode == 0)
+                                        $("upcomingActivities").innerHTML=response.responseText;
+                                else
+                                        $("pendingActivities").innerHTML=response.responseText;
+                        {rdelim}
+                {rdelim}
+        );
+{rdelim}
+
+</script>
 
 {*<!--Home Page Entries  -->*}
 
@@ -141,7 +160,7 @@
 							{/if}	
 							{else}
 								<div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
-									<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
 										<tr style="cursor:move;">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
@@ -169,75 +188,12 @@
 			</div>
 		</td>
 		<td width="25%" valign="top" style="padding:5px;">
-			{if $ACTIVITIES.0.Entries.noofactivities > 0}	
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td><img src="{$IMAGE_PATH}upcoming_left.gif" align="top"  /></td>
-						<td width="100%" background="{$IMAGE_PATH}upcomingEvents.gif" style="background-repeat:repeat-x; "></td>
-						<td><img src="{$IMAGE_PATH}upcoming_right.gif" align="top"  /></td>
-					</tr>		
-					<tr>
-						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;padding-left:10px;"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />
-						<!-- Check for Single/Multiple Event(s) -->
-						{if $ACTIVITIES.0.Entries.noofactivities eq 1}
-						{$ACTIVITIES.0.Entries.noofactivities} {$APP.Event} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-						{else}	
-							{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-						{/if}
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
-							<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-bottom:1px dashed #aaaaaa;">
-								
-						
-						{foreach item=entries from=$ACTIVITIES.0.Entries}
-						<tr bgcolor="#FFFFCF">
-						<td style="border-bottom:1px dotted #dddddd;" align="right" width="20" valign=top>{$entries.IMAGE}</td>
-						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b>{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
-					</tr>
-						{/foreach}
-						</table>
-						</td>
-					</tr>
-				</table>
-				<br>
-			{/if}
-		
-
-{if $ACTIVITIES.1.Entries.noofactivities > 0}	
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-	<tr>
-		<td><img src="{$IMAGE_PATH}pending_left.gif"></td>
-		<td width="100%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
-			<b class="fontBold">{$MOD.LBL_PENDING_EVENTS}</b><br />
-				<!-- Check for Single/Multiple Event(s) --> 
-	 	                {if $ACTIVITIES.1.Entries.noofactivities eq 1}   
-	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_SINGLE_PENDING_EVENT} 
-	 	                {else} 
-	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_MULTIPLE_PENDING_EVENTS} 
-	 	                {/if}    
-	 	        </td> 
-		
-		<td><img src="{$IMAGE_PATH}pending_right.gif"></td>
-	</tr>		
-	<tr>
-		<td colspan="3" bgcolor="#FEF7C1" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
-			<table width="100%" border="0" cellpadding="5" cellspacing="0">
-				{foreach item=entries from=$ACTIVITIES.1.Entries}
-				<tr>	
-					<td  style="border-bottom:1px dotted #dddddd;"  align="right" width="20">{$entries.IMAGE}</td>
-					<td  style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
-				</tr>
-				{/foreach}
-			</table>
-		</td>
-</tr>
-</table>
-
-<br>
-{/if}
-
+			<div id="upcomingActivities">
+                                {include file="upcomingActivities.tpl"}
+                        </div><br>
+                        <div id="pendingActivities">
+                                {include file="pendingActivities.tpl"}
+                        </div><br>
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 <tr>
 <td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>

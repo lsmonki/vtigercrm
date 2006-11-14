@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -11,7 +11,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/database/Postgres8.php');
 require_once('Smarty_setup.php');
-require_once('modules/Vendors/Vendor.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
@@ -32,7 +32,7 @@ $smarty->assign("SINGLE_MOD",'Vendor');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$focus = new Vendor();
+$focus = new Vendors();
 $other_text = Array();
 
 if(!$_SESSION['lvs'][$currentModule])

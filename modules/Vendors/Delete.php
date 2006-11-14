@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/Vendors/Vendor.php');
+require_once('modules/Vendors/Vendors.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('product_delete');
 
-$focus = new Vendor();
+$focus = new Vendors();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

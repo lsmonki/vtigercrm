@@ -183,34 +183,37 @@ class Potential extends CRMEntity {
 	function create_export_query($order_by, $where)
 	{
 		global $log;
+		global $current_user;
 		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
 
-		if($this->checkIfCustomTableExists('vtiger_potentialscf'))
-		{
-			$query = $this->constructCustomQueryAddendum('vtiger_potentialscf','Potentials') ."
-			vtiger_potential.*,
-			vtiger_account.accountname account_name,
-			vtiger_users.user_name assigned_user_name
-				FROM vtiger_potential
-				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid
-				left join vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid
-				left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id 
-			where vtiger_crmentity.deleted=0 ";
-		}
-		else
-		{
-			$query = "SELECT
-			vtiger_potential.*,
-			vtiger_account.accountname account_name,
-			vtiger_users.user_name assigned_user_name
-				FROM vtiger_potential 
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Potentials", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM vtiger_potential 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid  
 				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid 
+				LEFT JOIN vtiger_potentialgrouprelation
+                	                ON vtiger_potentialscf.potentialid = vtiger_potentialgrouprelation.potentialid
+	                        LEFT JOIN vtiger_groups
+                        	        ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+				LEFT JOIN vtiger_campaign
+					ON vtiger_campaign.campaignid = vtiger_potential.campaignid
+
 			where vtiger_crmentity.deleted=0 ";
-		}	
+
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[2] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter("Potentials");
+		}
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
@@ -276,7 +279,7 @@ class Potential extends CRMEntity {
 		else
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and ((vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus != 'Held'))";
+		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and ((vtiger_activity.status is not NULL AND vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL AND vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus != '' AND  vtiger_activity.eventstatus != 'Held'))";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Potentials','Calendar',$focus,$query,$button,$returnset);
 

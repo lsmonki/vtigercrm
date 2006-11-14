@@ -27,12 +27,24 @@ foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
+	    // Organizations are handled in the organizationdetails record
+	    if( $returnmodule == "Organization") {
+		$sql="update vtiger_orgunit set deleted=1 where organizationname='" .$id ."'";
+		$result = $adb->query($sql);
+		$sql="update vtiger_organizationdetails set deleted=1 where organizationname='" .$id ."'";
+	    }
+
+	    // Anything else is handled in the crmentity table
+	    else {
 		global $current_user;
                 require_once('include/freetag/freetag.class.php');
                 $freetag=new freetag();
                 $freetag->delete_all_object_tags_for_user($current_user->id,$id);
                 $sql="update vtiger_crmentity set deleted=1 where crmid='" .$id ."'";
-                $result = $adb->query($sql);
+	    }
+
+	    // Perform the delete action
+	    $result = $adb->query($sql);
         }
         else
         {

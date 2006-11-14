@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 //Getting the Parameters from the ConvertLead Form
 $id = $_REQUEST["record"];
 
@@ -39,7 +39,7 @@ if($check_unit[1] == "")
         $potential_name = $check_unit[0];
 
 //Retrieve info from all the vtiger_tables related to leads
-$focus = new Lead();
+$focus = new Leads();
 $focus->retrieve_entity_info($id,"Leads");
 
 //get all the lead related columns 
@@ -274,36 +274,51 @@ function saveLeadRelatedCampaigns($leadid, $relatedid)
 }
 
 
-$crmid = $adb->getUniqueID("vtiger_crmentity");
 
-//Saving Account - starts
-$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
-$adb->query($sql_crmentity);
+/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  START-- by Bharathi*/
+$acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = '$accountname'";
+$acc_res = $adb->query($acc_query);
+$acc_rows = $adb->num_rows($acc_res);
+if($acc_rows != 0)
+        $crmid = $adb->query_result($acc_res,0,"accountid");
+else
+{
+	$crmid = $adb->getUniqueID("vtiger_crmentity");
 
-$sql_insert_account = "INSERT INTO vtiger_account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".addslashes($accountname)."','".$row["industry"] ."','" .$row["annualrevenue"] ."','" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["noofemployees"] ."')";
-$adb->query($sql_insert_account);
+	//Saving Account - starts
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
+	$adb->query($sql_crmentity);
+	/* Modified by Minnie to fix the convertlead issue -- START*/
+	if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
+	else $annualrevenue = 'null';
+	if(isset($row["noofemployees"]) && !empty($row["noofemployees"])) $employees = $row["noofemployees"];
+	else $employees = 'null';
+	$sql_insert_account = "INSERT INTO vtiger_account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".addslashes($accountname)."','".$row["industry"] ."',".$annualrevenue.",'" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."',".$employees.")";
+	/* Modified by Minnie -- END*/
+	$adb->query($sql_insert_account);
 
-$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
-$adb->query($sql_insert_accountbillads);
+	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+	$adb->query($sql_insert_accountbillads);
 
+	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+	$adb->query($sql_insert_accountshipads);
 
-$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
-$adb->query($sql_insert_accountshipads);
+	//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
+	$insert_value=$crmid;
+	$insert_column="accountid";	
+	$val= getInsertValues("Accounts",$insert_value);
+	if($val[0]!="")
+		$insert_column.=",";
+	if($val[1]!="")
+		$insert_value.=",";
 
-//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
-$insert_value=$crmid;
-$insert_column="accountid";	
-$val= getInsertValues("Accounts",$insert_value);
-if($val[0]!="")
-	$insert_column.=",";
-if($val[1]!="")
-	$insert_value.=",";
-
-$insert_column.=$val[0];
-$insert_value.=$val[1];
-$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_value.")";
-$adb->query($sql_insert_accountcustomfield);
-//Saving Account - ends
+	$insert_column.=$val[0];
+	$insert_value.=$val[1];
+	$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_value.")";
+	$adb->query($sql_insert_accountcustomfield);
+	//Saving Account - ends
+}
+/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  END-- by Bharathi*/
 
 $account_id=$crmid;
 getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
@@ -320,7 +335,7 @@ $date_modified = $adb->formatDate(date('YmdHis'));
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
-$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."',".$date_entered.")";
+$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."',".$date_entered.",".$date_modified.")";
 
 $adb->query($sql_crmentity1);
 
@@ -382,7 +397,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,".$date_entered.",'".$row['description']."')";
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,".$date_entered.",".$date_modified.",'".$row['description']."')";
   
 	$adb->query($sql_crmentity);
 

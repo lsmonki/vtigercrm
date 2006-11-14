@@ -101,7 +101,7 @@ $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"300000
  	
 set_default_config($default_config_values);
 require_once('include/logging.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 
 global $currentModule;
 
@@ -164,7 +164,7 @@ if($action == 'Export')
 }
 
 //Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
-if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
+if(isset($_REQUEST['record']) && $module!="Organization" && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
 {
         die("An invalid record number specified to view details.");
 }
@@ -350,9 +350,15 @@ $module = (isset($_REQUEST['module'])) ? $_REQUEST['module'] : "";
 $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : "";
 $record = (isset($_REQUEST['record'])) ? $_REQUEST['record'] : "";
 $lang_crm = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
+
+if( isset($_REQUEST['org']) && $_REQUEST['org'] != '') {
+	$_SESSION['authenticated_user_current_organization'] = $_REQUEST['org'];
+	$log->debug("Change organization for user id ".$current_user->id.":".$_REQUEST['org']);
+}
+
 $GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang_crm=$lang_crm";
 
-$current_user = new User();
+$current_user = new Users();
 
 if($use_current_login)
 {
@@ -417,6 +423,58 @@ else
 }
 $log->debug('current_language is: '.$current_language);
 
+//Current Organization
+if( $use_current_login) {
+    if(isset($_SESSION['authenticated_user_organizations']) && $_SESSION['authenticated_user_organizations'] != '') {
+	$user_organizations = $_SESSION['authenticated_user_organizations'];
+
+    } else {
+	$user_org_query = "SELECT organizationname,primarytag FROM vtiger_user2org WHERE userid=".$current_user->id;
+	$user_org_result = $adb->query($user_org_query);
+	$user_organizations = '';
+	$current_organization = '';
+	while($user_org = $adb->fetch_array($user_org_result)) {
+	    if( $user_organizations != '')
+		$user_organizations .= "|";
+	    $user_organizations .= $user_org["organizationname"];
+	    if( $user_org["primarytag"] == 1)
+		$current_organization = $user_org["organizationname"];
+	}
+	if( $current_organization == '') {
+	    if( strpos($user_organizations,"|")) {
+		$current_organization = substr($user_organizations,0,strpos($user_organizations,"|"));
+	    } else {
+		$current_organization = $user_organizations;
+	    }
+	}
+ 
+	$_SESSION['authenticated_user_organizations'] = $user_organizations;
+	$log->debug("Reloaded organizations for user id ".$current_user->id.":".$user_organizations);
+	$log->debug("Primary organization for user id ".$current_user->id.":".$current_organization);
+    }
+
+    if(isset($_SESSION['authenticated_user_current_organization']) && $_SESSION['authenticated_user_current_organization'] != '') {
+	$current_organization = $_SESSION['authenticated_user_current_organization'];
+	$log->debug("Current organization for user id ".$current_user->id.":".$current_organization);
+
+    } else {
+	if( $current_organization == '') {
+	    $current_organization = "-- NONE --";
+	} else {
+	    $_SESSION['authenticated_user_current_organization'] = $current_organization;
+	}
+    }
+
+//No user authenticated, thus no organizations
+} else {
+    $_SESSION['authenticated_user_current_organization'] = '';
+    $_SESSION['authenticated_user_organizations'] = '';
+}
+
+//As long as we are modifying an existing record, the default organization may
+//not change
+$org_change_ok = ($record != "" || $action == "EditView") ? 0 : 1;
+
 //set module and application string arrays based upon selected language
 $app_strings = return_application_language($current_language);
 $app_list_strings = return_app_list_strings_language($current_language);
@@ -432,90 +490,22 @@ if($action == "DetailView")
 	// Use the record to track the viewing.
 	// todo - Have a record of modules and thier primary object names.
 	//Getting the actual module
-	$actualModule = $currentModule;
 	switch($currentModule)
 	{
-		case 'Leads':
-			require_once("modules/$currentModule/Lead.php");
-			$focus = new Lead();
-			break;
-		case 'Contacts':
-			require_once("modules/$currentModule/Contact.php");
-			$focus = new Contact();
-			break;
-		case 'Accounts':
-			require_once("modules/$currentModule/Account.php");
-			$focus = new Account();
-			break;
-		case 'Potentials':
-			require_once("modules/$currentModule/Opportunity.php");
-			$focus = new Potential();
-			break;
 		case 'Calendar':
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
 			break;
-		case 'Notes':
-			require_once("modules/$currentModule/Note.php");
-			$focus = new Note();
-			break;
-		case 'Emails':
-			require_once("modules/$currentModule/Email.php");
-			$focus = new Email();
-			break;
-		case 'Users':
-			require_once("modules/$currentModule/User.php");
-			$focus = new User();
-			break;
-		case 'Products':
-			require_once("modules/$currentModule/Product.php");
-			$focus = new Product();
-			break;
-		case 'Vendors':
-			require_once("modules/$currentModule/Vendor.php");
-			$focus = new Vendor();
-			$actualModule = 'Vendors';
-			break;
-		case 'PriceBooks':
-			require_once("modules/$currentModule/PriceBook.php");
-			$focus = new PriceBook();
-			$actualModule = 'PriceBooks';
-			break;
-		case 'HelpDesk':
-			require_once("modules/$currentModule/HelpDesk.php");
-			$focus = new HelpDesk();
-			break;
-		case 'Faq':
-			require_once("modules/$currentModule/Faq.php");
-			$focus = new Faq();
-			break;
-		case 'Quotes':
-			require_once("modules/$currentModule/Quote.php");
-			$focus = new Quote();
-			break;
-		case 'PurchaseOrder':
-                        require_once("modules/$currentModule/PurchaseOrder.php");
-                        $focus = new Order();
-                        break;
-                case 'SalesOrder':
-                        require_once("modules/$currentModule/SalesOrder.php");
-                        $focus = new SalesOrder();
-                        break;
-
-		case 'Invoice':
-			require_once("modules/$currentModule/Invoice.php");
-			$focus = new Invoice();
-			break;
-		case 'Campaigns':
-			require_once("modules/$currentModule/Campaign.php");
-			$focus = new Campaign();
+		default:
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
 			break;
 		}
 	
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='' && $_REQUEST["module"] != "Webmails") 
         {
                 // Only track a viewing if the record was retrieved.
-                $focus->track_view($current_user->id, $actualModule,$_REQUEST['record']);
+                $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
         }
 
 }	
@@ -586,6 +576,7 @@ $seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' :: 
 
 if(!$skipSecurityCheck)
 {
+
 
 
 	require_once('include/utils/UserInfoUtil.php');
@@ -707,7 +698,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left>vtiger CRM 5.0.0 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
+		echo "<tr><td class=small align=left>vtiger CRM 5.0.2 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
 		echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";

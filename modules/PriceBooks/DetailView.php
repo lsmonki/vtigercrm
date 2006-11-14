@@ -10,11 +10,14 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new PriceBook();
+global $current_organization;
+global $user_organizations;
+
+$focus = new PriceBooks();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {
@@ -82,6 +85,16 @@ if($singlepane_view == 'true')
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
 
 $smarty->display("Inventory/InventoryDetailView.tpl");
 ?>

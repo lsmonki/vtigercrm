@@ -25,6 +25,12 @@
    <tr>
 	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
 		<span class="lvtHeaderText"> {$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_UPGRADE_VTIGER}</span>
+		<span class="lvtHeaderText" align="right">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			{if $502_PATCH eq 'apply'}
+				<a style="color:red;" href="index.php?module=Migration&action=502DBChanges&parenttab=Settings">Click here to apply the 5.0.2 Database changes from 5.0.0/5.0.1</a>
+			{/if}
+		</span>
 		<hr noshade="noshade" size="1" />
 	</td>
 	<td width="5%" class="showPanelBg">&nbsp;</td>

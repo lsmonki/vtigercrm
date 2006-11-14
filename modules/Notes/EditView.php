@@ -22,12 +22,12 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new Note();
+$focus = new Notes();
 $smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['upload_error'] == true)
@@ -110,7 +110,7 @@ $log->info("Note detail view");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Note']);
+$smarty->assign("SINGLE_MOD",'Note');
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 

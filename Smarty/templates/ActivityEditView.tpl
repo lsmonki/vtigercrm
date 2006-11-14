@@ -152,8 +152,8 @@
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
-                                                                                                {if $APP[$sel_value] neq ''}
-                                                                                                {$APP[$sel_value]}
+                                                                                                {if $MOD.$sel_value neq ''}
+                                                                                                {$MOD.$sel_value}
                                                                                                 {else}
                                                                                                         {$sel_value}
                                                                                                 {/if}
@@ -224,8 +224,8 @@
                                                                                         {foreach item=arr from=$ACTIVITYDATA.taskpriority}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
-                                                                                                {if $APP[$sel_value] neq ''}
-                                                                                                {$APP[$sel_value]}
+                                                                                                {if $MOD.$sel_value neq ''}
+                                                                                                {$MOD.$sel_value}
                                                                                                 {else}
                                                                                                         {$sel_value}
                                                                                                 {/if}
@@ -456,7 +456,7 @@
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
-													<td colspan=2>Enable Repeat</td>
+													<td colspan=2>{$MOD.LBL_ENABLE_REPEAT}<td>
 												</tr>
 												<tr>
 													<td colspan=2>
@@ -609,8 +609,8 @@
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
                                         			{foreach key=sel_value item=value from=$arr}
                                                 			<option value="{$sel_value}" {$value}>
-                                                        		{if $APP[$sel_value] neq ''}
-                                                                		{$APP[$sel_value]}
+                                                        		{if $MOD.$sel_value neq ''}
+                                                                		{$MOD.$sel_value}
                                                         		{else}
                                                                 		{$sel_value}
                                                         		{/if}
@@ -626,8 +626,8 @@
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
                                 			        {foreach key=sel_value item=value from=$arr}
 			                                                <option value="{$sel_value}" {$value}>
-                        		                                {if $APP[$sel_value] neq ''}
-                                        		                        {$APP[$sel_value]}
+                        		                                {if $MOD.$sel_value neq ''}
+                                        		                        {$MOD.$sel_value}
                                                        			{else}
                                                                 		{$sel_value}
                                                         		{/if}
@@ -658,9 +658,9 @@
                                                 			{assign var=style_user value='display:none'}
                                                 			{assign var=style_group value='display:block'}
                                         			{/if}
-				                                <input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+				                                <input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_USER}
 				                                {if $secondvalue.assigned_user_id neq ''}
-                                			        <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Group
+                                			        <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
                                         			{/if}
                                         			<span id="assign_user" style="{$style_user}">
                                                 		<select name="assigned_user_id" class=small>
@@ -741,9 +741,9 @@
 						<tr>
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 							<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
-							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
+							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
                                                         <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
-                                                        <td class="dvtTabCache" style="width:100%">
+                                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
 						</tr>
 
 					</table>

@@ -151,7 +151,7 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("SINGLE_MOD",'Note');
-//Retreiving the no of rows
+
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $list_query));
 $noofrows = $adb->query_result($count_result,0,"count");

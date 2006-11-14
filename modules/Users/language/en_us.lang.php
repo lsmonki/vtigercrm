@@ -101,6 +101,11 @@ $mod_strings = Array(
 'LBL_CAL_DURATION'=>'Day starts at',
 'LBL_PRIMARY_ADDRESS'=>'Primary Address:',
 
+'LBL_ORGANIZATION_INFORMATION'=>'Organizations',
+'LBL_PRIMARY_ORGANIZATION'=>'Primary organization',
+'LBL_ASSIGNED_ORGANIZATIONS'=>'Assigned to organizations',
+'LBL_PRIMARY_ORGUNITS'=>'Primary organization units',
+
 'LBL_CHANGE_PASSWORD_BUTTON_TITLE'=>'Change Password [Alt+P]',
 'LBL_CHANGE_PASSWORD_BUTTON_KEY'=>'P',
 'LBL_CHANGE_PASSWORD_BUTTON_LABEL'=>'Change Password',

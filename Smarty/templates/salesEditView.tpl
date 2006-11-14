@@ -115,7 +115,7 @@ function sensex_info()
 
 
 							<!-- This is added to display the existing comments -->
-							{if $header eq 'Comments' || $header eq 'Comment Information'}
+							{if $header eq $MOD.LBL_COMMENTS || $header eq $MOD.LBL_COMMENT_INFORMATION}
 							   <tr><td>&nbsp;</td></tr>
 							   <tr>
 								<td colspan=4 class="dvInnerHeader">
@@ -131,14 +131,14 @@ function sensex_info()
 
 
 									      <tr>
-										{if $header== 'Address Information' && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
                                                                                 <td colspan=2 class="detailedViewHeader">
                                                                                 <b>{$header}</b></td>
                                                                                 <td class="detailedViewHeader">
                                                                                 <input name="cpy" onclick="return copyAddressLeft(EditView)" type="radio"><b>{$APP.LBL_RCPY_ADDRESS}</b></td>
                                                                                 <td class="detailedViewHeader">
                                                                                 <input name="cpy" onclick="return copyAddressRight(EditView)" type="radio"><b>{$APP.LBL_LCPY_ADDRESS}</b></td>
-										{elseif $header== 'Address Information' && $MODULE == 'Contacts'}
+										{elseif $header== $MOD.LBL_ADDRESS_INFORMATION && $MODULE == 'Contacts'}
 										<td colspan=2 class="detailedViewHeader">
                                                                                 <b>{$header}</b></td>
                                                                                 <td class="detailedViewHeader">
@@ -154,15 +154,25 @@ function sensex_info()
 
 										<!-- Handle the ui types display -->
 										{include file="DisplayFields.tpl"}
+									       
+									       <tr><td colspan=4><br><br></td></tr>
 
 									   {/foreach}
-
 
 									   <!-- Added to display the Product Details in Inventory-->
 									   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
 							   		   <tr>
 										<td colspan=4>
 											{include file="ProductDetailsEditView.tpl"}
+										</td>
+							   		   </tr>
+									   {/if}
+
+									   <!-- Added to display the Organization Units --> 
+									   {if $MODULE eq "Organization"}
+							   		   <tr>
+										<td colspan=4>
+										       {include file="DetailsViewOrgUnit.tpl"}
 										</td>
 							   		   </tr>
 									   {/if}

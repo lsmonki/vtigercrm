@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -9,12 +9,14 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
+require_once('include/database/Postgres8.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('include/DatabaseUtil.php');
 
 global $app_strings;
 global $mod_strings;
@@ -56,7 +58,7 @@ if($_REQUEST['errormsg'] != '')
 }
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
-$focus = new Product();
+$focus = new Products();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
@@ -84,6 +86,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');
@@ -118,11 +121,13 @@ if(isset($order_by) && $order_by != '')
 	$tablename = getTableNameForField('Products',$order_by);
 	$tablename = (($tablename != '')?($tablename."."):'');
 
+	if( $adb->dbType == "pgsql")
+	    $list_query .= ' GROUP BY '.$tablename.$order_by;
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
+$count_result = $adb->query( mkCountQuery( $list_query));
 $noofrows = $adb->query_result($count_result,0,"count");
 
 //Storing Listview session object
@@ -136,6 +141,10 @@ $start = $_SESSION['lvs'][$currentModule]['start'];
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+    $list_query = fixPostgresQuery( $list_query, $log, 0);
+
 //modified by rdhital
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
@@ -147,7 +156,10 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+if( $adb->dbType == "pgsql")
+    $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+else
+    $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

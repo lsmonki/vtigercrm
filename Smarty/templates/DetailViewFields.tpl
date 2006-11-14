@@ -13,7 +13,7 @@
 -->*}
 
 <!-- This file is used to display the fields based on the ui type in detailview -->
-		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
+		{if $keyid eq '1' || $keyid eq 2 ||$keyid eq 8 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
                                          		<td width=25% class="dvtCellInfo" align="left">&nbsp;
                                          		      {if $keyid eq '55'}<!--SalutationSymbol-->
                                          		            {$keysalut}
@@ -25,6 +25,9 @@
                                              {elseif $keyid eq '13'} <!--Email-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="mailto:{$keyval}" target="_blank">{$keyval}</a>
                                                   </td>
+                                             {elseif $keyid eq '14'} <!-- Organization picklist-->
+                                                  <td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
+						  </td>
                                              {elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
                							<td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
                							</td>
@@ -37,6 +40,21 @@
                                              {elseif $keyid eq '21' || $keyid eq '24' || $keyid eq '22'} <!--TextArea/Street-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
                                                   </td>
+                                             {elseif $keyid eq '12'} <!-- Orgunit picklist-->
+					          <td width=25% class="dvtCellInfo" align="left">&nbsp;{$ASSIGN_ORGUNIT_LIST.$keyval.name}
+						  </td>
+					     {elseif $keyid eq '3' || $keyid eq '4' || $keyid eq '32' || $keyid eq '31'} <!--TextBox with Inheritance/Extension-->
+					     <td width=25% class="dvtCellInfo" align="left">&nbsp;
+						 {if $keyinherit == 1}
+						     {if $keyid eq '32' || $keyid eq '31'}
+							 {$keyval}&nbsp;&nbsp;<font color="blue">EXT</font>
+						     {else}
+							 <font color="blue">{$MOD.LBL_INHERIT_PARENT}</font>
+						     {/if}
+						 {else}
+						     {$keyval}
+						 {/if}
+					     </td>
                                              {elseif $keyid eq '50' || $keyid eq '73' || $keyid eq '51' || $keyid eq '57' || $keyid eq '59' || $keyid eq '75' || $keyid eq '81' || $keyid eq '76' || $keyid eq '78' || $keyid eq '80'} <!--AccountPopup-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
@@ -86,6 +104,12 @@
 
 				{elseif $keyid eq 69}<!-- for Image Reflection -->
                                                   	<td align="left" width=25%">&nbsp;{$keyval}</td>
+				{elseif $keyid eq 107}<!-- Company Logo -->
+				    <td class="dvtCellInfo" align="left" width="25%">
+					{if $keyval ne ""}
+					    <img src="test/logo/{$keyval}" width="96" height="48" alt="{$keyval}" title="{$keyval}" border="0">
+					{/if}
+				    </td>
 				{else}									
                                                   	<td class="dvtCellInfo" align="left" width=25%">&nbsp;{$keyval}</td>
 				{/if}

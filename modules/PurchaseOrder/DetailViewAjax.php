@@ -22,10 +22,10 @@ if($ajaxaction == "DETAILVIEW")
 	$crmid = $_REQUEST["recordid"];
 	$tablename = $_REQUEST["tableName"];
 	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
+	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new Order();
+		$modObj = new PurchaseOrder();
 		$modObj->retrieve_entity_info($crmid,"PurchaseOrder");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;

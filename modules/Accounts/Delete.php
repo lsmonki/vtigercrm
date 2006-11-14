@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('contact_delete');
 
-$focus = new Account();
+$focus = new Accounts();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);

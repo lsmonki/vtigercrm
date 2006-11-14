@@ -19,7 +19,7 @@
 function getTopQuotes()
 {
 	require_once("data/Tracker.php");
-	require_once('modules/Quotes/Quote.php');
+	require_once('modules/Quotes/Quotes.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
 	require_once('include/database/PearDatabase.php');
@@ -51,7 +51,7 @@ function getTopQuotes()
 			$viewid = "0";
 		}
 	}
-	$focus = new Quote();
+	$focus = new Quotes();
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -60,9 +60,9 @@ function getTopQuotes()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\'';
 	$query = getListQuery("Quotes",$where);
-
+	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
 	$list_result = $adb->limitQuery($query,0,5);

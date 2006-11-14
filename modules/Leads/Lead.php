@@ -138,38 +138,32 @@ class Lead extends CRMEntity {
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
+		global $current_user;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('vtiger_leadscf'))
-		{
 
-			$query = $this->constructCustomQueryAddendum('vtiger_leadscf','Leads') . " 
-			vtiger_leaddetails.*, ".$this->entity_table.".*, vtiger_leadsubdetails.*,vtiger_leadaddress.city city, vtiger_leadaddress.state state,vtiger_leadaddress.code code,vtiger_leadaddress.country country, vtiger_leadaddress.phone phone, vtiger_users.user_name, vtiger_users.status user_status
-				FROM ".$this->entity_table."
-				INNER JOIN vtiger_leaddetails
-				ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
-				LEFT JOIN vtiger_leadaddress 
-				ON vtiger_leaddetails.leadid=vtiger_leadaddress.leadaddressid
-				LEFT JOIN vtiger_leadsubdetails
-				ON vtiger_leaddetails.leadid=vtiger_leadsubdetails.leadsubscriptionid
-				LEFT JOIN vtiger_leadscf 
-				ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid
-				LEFT JOIN vtiger_users
-				ON vtiger_crmentity.smownerid = vtiger_users.id ";
+		include("include/utils/ExportUtils.php");
 
-		}
-		else
-		{
-			$query = "SELECT 
-			vtiger_leaddetails.*, ".$this->entity_table.".*, vtiger_leadsubdetails.*,vtiger_leadaddress.*,vtiger_users.user_name, vtiger_users.status user_status FROM ".$this->entity_table."
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Leads", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list  FROM ".$this->entity_table."
 				INNER JOIN vtiger_leaddetails
-				ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
+					ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
 				LEFT JOIN vtiger_leadsubdetails
-				ON vtiger_leaddetails.leadid = vtiger_leadsubdetails.leadsubscriptionid
+					ON vtiger_leaddetails.leadid = vtiger_leadsubdetails.leadsubscriptionid
 				LEFT JOIN vtiger_leadaddress
-				ON vtiger_leaddetails.leadid=vtiger_leadaddress.leadaddressid
+					ON vtiger_leaddetails.leadid=vtiger_leadaddress.leadaddressid
+				LEFT JOIN vtiger_leadscf 
+					ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid
+				LEFT JOIN vtiger_leadgrouprelation
+                	                ON vtiger_leadscf.leadid = vtiger_leadgrouprelation.leadid
+	                        LEFT JOIN vtiger_groups
+                        	        ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
 				LEFT JOIN vtiger_users
-				ON vtiger_crmentity.smownerid = vtiger_users.id ";
-		}
+					ON vtiger_crmentity.smownerid = vtiger_users.id 
+				";
+
 
 		$where_auto = " vtiger_users.status='Active'
 			AND vtiger_crmentity.deleted=0 AND vtiger_leaddetails.converted =0";
@@ -178,6 +172,15 @@ class Lead extends CRMEntity {
 			$query .= "where ($where) AND ".$where_auto;
 		else
 			$query .= "where ".$where_auto;
+
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[7] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter("Leads");
+		}
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
@@ -213,7 +216,7 @@ function get_activities($id)
 
 
 	// First, get the list of IDs.
-	$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and ((vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus !='' && vtiger_activity.eventstatus != 'Held'))";
+	$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and ((vtiger_activity.status is not NULL AND vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL AND vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus !='' AND vtiger_activity.eventstatus != 'Held'))";
 	$log->debug("Exiting get_activities method ...");
 	return  GetRelatedList('Leads','Calendar',$focus,$query,$button,$returnset);
 }

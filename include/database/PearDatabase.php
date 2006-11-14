@@ -930,9 +930,20 @@ class PearDatabase{
 
     function getUniqueID($seqname)
     {
+	global $log;
 	$this->checkConnection();
+	if( $this->dbType == "pgsql") {
+	    $keytab = $this->database->MetaPrimaryKeys($seqname);
+	    if( count( $keytab) > 0) {
+		$log->info("PearDatabase: Postgres getUniqueID hack: ".$seqname."_".$keytab[0]."_seq");
+		return $this->database->GenID($seqname."_".$keytab[0]."_seq",1);
+	    } else {
+		$log->info("PearDatabase: Problem: getUniqueID but no key for '$seqname'");
+	    }
+	}
 	return $this->database->GenID($seqname."_seq",1);
     }
+
     function get_tables()
     {
 	$this->checkConnection();

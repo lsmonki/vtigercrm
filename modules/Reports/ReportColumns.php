@@ -113,7 +113,7 @@ function getSecondaryColumnsHTML($module)
 					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
 					foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 					{
-						if(isset($mod_strings[$fieldlable]))
+						if(isset($mod_strings[$fieldlabel]))
 						{
 							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 						}else

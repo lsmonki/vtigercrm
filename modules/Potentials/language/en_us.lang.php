@@ -100,6 +100,7 @@ $mod_strings = Array(
 'Account Name'=>'Account Name',
 'Currency'=>'Currency',
 'Expected Close Date'=>'Expected Close Date',
+'Opportunity Type'=>'Opportunity Type',
 'Type'=>'Type',
 'Next Step'=>'Next Step',
 'Lead Source'=>'Lead Source',
@@ -110,6 +111,7 @@ $mod_strings = Array(
 'Description'=>'Description',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
+'Organization unit'=>'Organization unit',
 //Added for 4.2 Release -- CustomView
 'Potential'=>'Potential',
 'Expected Close'=>'Expected Close',

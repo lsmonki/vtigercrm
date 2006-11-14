@@ -71,6 +71,7 @@ function SaveSite(id)
 	Effect.Puff('orgLay');	
 	$("status").style.display="inline";
 	var portalurl = document.getElementById('portalurl').value;
+	var portalurl = portalurl.replace(/&/g, "#$#$#");
 	var portalname = document.getElementById('portalname').value;
         new Ajax.Request(
         	'index.php',
@@ -90,3 +91,25 @@ function setSite(oUrllist)
 	document.getElementById('locatesite').src = url;
 }
 
+var oRegex = new Object() ;
+oRegex.UriProtocol = new RegExp('') ;
+oRegex.UriProtocol.compile( '^(((http|https|ftp|news):\/\/)|mailto:)', 'gi' ) ;
+
+oRegex.UrlOnChangeProtocol = new RegExp('') ;
+oRegex.UrlOnChangeProtocol.compile( '^(http|https|ftp|news)://(?=.)', 'gi' ) ;
+
+function OnUrlChange()
+{
+    var sUrl;
+    var sProtocol;   
+                   
+          sUrl=document.getElementById("portalurl").value ;
+          sProtocol=oRegex.UrlOnChangeProtocol.exec( sUrl ) ;
+          if ( sProtocol )
+          {
+             sUrl = sUrl.substr( sProtocol[0].length ) ;
+             document.getElementById("portalurl").value = sUrl ;
+          }
+
+        
+}

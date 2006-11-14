@@ -11,10 +11,17 @@
 
 
 require_once('include/fpdf/pdf.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/utils/EditViewUtils.php');
 
 global $adb,$app_strings;
+global $log;
+
+// for template checking ...
+$tmpl_dirs = array( "firstpage", "pages", "lastpage");
+$tmpl_files = array( "header.php", "body.php", "footer.php");
 
 $sql="select currency_symbol from vtiger_currency_info";
 $result = $adb->query($sql);
@@ -25,7 +32,7 @@ $endpage="1";
 global $products_per_page;
 $products_per_page="6";
 
-$focus = new Quote();
+$focus = new Quotes();
 $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
 $account_name = getAccountName($focus->column_fields[account_id]);
 
@@ -59,26 +66,64 @@ $description = $focus->column_fields["description"];
 $status = $focus->column_fields["quotestage"];
 
 // Company information
-$add_query = "select * from vtiger_organizationdetails";
-$result = $adb->query($add_query);
-$num_rows = $adb->num_rows($result);
-
-if($num_rows == 1)
-{
-		$org_name = $adb->query_result($result,0,"organizationname");
-		$org_address = $adb->query_result($result,0,"address");
-		$org_city = $adb->query_result($result,0,"city");
-		$org_state = $adb->query_result($result,0,"state");
-		$org_country = $adb->query_result($result,0,"country");
-		$org_code = $adb->query_result($result,0,"code");
-		$org_phone = $adb->query_result($result,0,"phone");
-		$org_fax = $adb->query_result($result,0,"fax");
-		$org_website = $adb->query_result($result,0,"website");
-
-		$logo_name = $adb->query_result($result,0,"logoname");
+$crmid = $focus->column_fields["record_id"];
+$org_query = "select organizationname from vtiger_entity2org where crmid='".$crmid."'";
+$result = $adb->query($org_query);
+$org_rows = $adb->num_rows($result);
+if($org_rows > 1) {
+    global $log;
+    $log->info( $module. " '".$crmid."' assigned to more than one organization");
 }
 
+if($org_rows >=1) {
+    $org_name = $adb->query_result($result,0,"organizationname");
+} else {
+    $log->info( $module. " '".$crmid."' not assigned to any organization");
+    exit();
+}
 
+// get organization/orgunit details
+$orgunitid = $focus->column_fields["orgunit"];
+$organization = new Organization;
+$organization->id = $org_name;
+$log->debug( "Here we are: getOrgUnits( $organization, $orgunitid);");
+$orgunittab = getOrgUnits( $organization, $orgunitid);
+
+if( is_array( $orgunittab[$orgunitid])) {
+    $orgdetails = $orgunittab[$orgunitid];
+    $org_name = $orgdetails["name"];
+    $org_address = $orgdetails["address"];
+    $org_city = $orgdetails["city"];
+    $org_state = $orgdetails["state"];
+    $org_country = $orgdetails["country"];
+    $org_code = $orgdetails["code"];
+    $org_phone = $orgdetails["phone"];
+    $org_fax = $orgdetails["fax"];
+    $org_website = $orgdetails["website"];
+    $logo_name = $orgdetails["logoname"];
+    $template = $orgdetails["quote_template"];
+} else {
+    $log->info( $module. " '".$crmid."' organization/orgunitid mismatch");
+    exit();
+}
+
+// Check the template
+if( $template == "") 
+    $template = "Default";
+
+if( $template != "Default") {
+    foreach( $tmpl_dirs as $dir) {
+	foreach( $tmpl_files as $file) {
+	    if( !file_exists( "modules/".$module."/pdf_templates/".$template."/".$dir."/".$file)) {
+		$log->info( $module. " '".$crmid."' organization/orgunitid template '".$template."' is incomplete");
+		$log->info("Missing file: modules/".$module."/pdf_templates/".$template."/".$dir."/".$file);
+		$log->info("Fallback to the Default template");
+		$template = "Default";
+		break 2;
+	    }
+	}
+    }
+}
 //Population of Product Details - Starts
 
 //we can cut and paste the following lines in a file and include that file here is enough. For that we have to put a new common file. we will do this later
@@ -212,22 +257,28 @@ for($l=0;$l<$num_pages;$l++)
 	}
 
 	$pdf->AddPage();
-	include("pdf_templates/header.php");
-	include("include/fpdf/templates/body.php");
-	include("pdf_templates/footer.php");
+	if( $page_num == "1") {
+	    include("pdf_templates/".$template."/firstpage/header.php");
+	    include("pdf_templates/".$template."/firstpage/body.php");
+	    include("pdf_templates/".$template."/firstpage/footer.php");
+	} else {
+	    include("pdf_templates/".$template."/pages/header.php");
+	    include("pdf_templates/".$template."/pages/body.php");
+	    include("pdf_templates/".$template."/pages/footer.php");
+	}
 
 	$page_num++;
 
 	if (($endpage) && ($lastpage))
 	{
-		$pdf->AddPage();
-		include("pdf_templates/header.php");
-		include("pdf_templates/lastpage/body.php");
-		include("pdf_templates/lastpage/footer.php");
+	    $pdf->AddPage();
+	    include("pdf_templates/".$template."/lastpage/header.php");
+	    include("pdf_templates/".$template."/lastpage/body.php");
+	    include("pdf_templates/".$template."/lastpage/footer.php");
 	}
 }
 
 
-$pdf->Output('Quotes.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
+$pdf->Output('Quotes-'.$crmid.'.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
 exit();
 ?>

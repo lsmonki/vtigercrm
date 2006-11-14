@@ -25,7 +25,7 @@
 				<form action="index.php?module=Users&action=add2db" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="return_module" value="Settings">
 				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
-				<input type="hidden" name="MAX_FILE_SIZE" value="100000">
+				<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}">
 				<input type="hidden" name="action">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}mailmarge.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>

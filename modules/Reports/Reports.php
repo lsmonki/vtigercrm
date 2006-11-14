@@ -48,7 +48,7 @@ $related_modules = Array('Leads'=>Array(),
 			 'PurchaseOrder'=>Array('Contacts'),
 			 'SalesOrder'=>Array(),
 			 'Invoice'=>Array('Accounts'),
-			 'Campaigns'=>Array('Products')
+			 'Campaigns'=>Array('Products','Contacts')
 			);
 
 foreach($report_modules as $values)
@@ -312,13 +312,13 @@ class Reports extends CRMEntity{
 		//Security Check 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$sql = "select * from vtiger_field where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) order by sequence";
+			$sql = "select * from vtiger_field where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) order by sequence";
 		}
 		else
 		{
 			
 			$profileList = getCurrentUserProfileList();
-			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
+			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
 		}
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -793,10 +793,20 @@ class Reports extends CRMEntity{
 		{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldlist = explode(":",$fieldcolname);
+			
+			//Fix for multilanguage support - code contribution by Ding jianting
+			$fieldlabel_array = explode("_",$fieldlist[2]);
+			$mod_strings = return_module_language($current_language,$fieldlabel_array[0]);
 			if($fieldcolname != "")
 			{
-				$shtml .= "<option value=\"".$fieldcolname."\">".str_replace($modules," ",$fieldlist[2])."</option>";
+				$fieldlabel = trim(str_replace($modules," ",$fieldlist[2]));
+				if(isset($mod_strings[$fieldlabel])) {
+					$shtml .= "<option value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
+				} else {
+					$shtml .= "<option value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				}
 			}
+			//Code contribution ends
 		}
 
 		$log->info("Reports :: Successfully returned getSelectedColumnsList");

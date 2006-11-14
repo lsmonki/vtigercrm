@@ -304,7 +304,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                    {
                            $imgpath = "test/contact/".$imagename;
                            $label_fld[] =$mod_strings[$fieldlabel];
-                           $label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
+			   //This is used to show the contact image as a thumbnail near First Name field
+                           //$label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
                    }
                    else
                    {
@@ -332,7 +333,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$value = $col_fields[$fieldname];
 		if($value == 1)
 		{
-			$display_val = 'yes';
+			//Since "yes" is not been translated it is given as app strings here..
+			$display_val = $app_strings['yes'];
 		}
 		else
 		{
@@ -363,7 +365,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $campaign_name;
 		$label_fld["secid"] = $campaign_id;
 		$label_fld["link"] = "index.php?module=Campaigns&action=DetailView&record=".$campaign_id;
-
 	}
 	elseif($uitype == 59)
 	{
@@ -462,7 +463,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==4)
 		{
 			//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
-			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
+			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
 			$image_res = $adb->query($sql);
 			$image_id = $adb->query_result($image_res,0,'attachmentsid');
 			$image_path = $adb->query_result($image_res,0,'path');
@@ -554,11 +555,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 
 	}
-	elseif($uitype == 105)//Added for user image
+	// UItype 105 added for user image
+	elseif($uitype == 105)
 	{
 		$label_fld[] =$mod_strings[$fieldlabel];
-		//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
-		$sql = "select vtiger_attachments.* from vtiger_attachments left join vtiger_salesmanattachmentsrel on vtiger_salesmanattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_salesmanattachmentsrel.smid=".$col_fields['record_id'];
+		$sql = "select vtiger_attachments.* from vtiger_attachments
+		    left join vtiger_salesmanattachmentsrel
+			on vtiger_salesmanattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+		    where vtiger_salesmanattachmentsrel.smid=".$col_fields['record_id'];
 		$image_res = $adb->query($sql);
 		$image_id = $adb->query_result($image_res,0,'attachmentsid');
 		$image_path = $adb->query_result($image_res,0,'path');
@@ -568,6 +572,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] ='<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="450" height="300" alt="'.$col_fields['user_name'].'" title="'.$col_fields['user_name'].'" border="0"></a>';
 		else
 			$label_fld[] = '';
+	}
+	// UItype 107 added for company logo
+	elseif($uitype == 107)
+	{
+		$label_fld[] =$mod_strings[$fieldlabel];
+		$sql = "select logoname from vtiger_organizationdetails where organizationname='".$col_fields['record_id']."'";
+		$image_res = $adb->query($sql);
+		$image_name = $adb->query_result($image_res,0,'logoname');
+		if($image_name != '')
+		    $label_fld[] = $image_name;
+		else
+		    $label_fld[] = '';
 	}
 	elseif($uitype == 66)
 	{
@@ -848,6 +864,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld["cursymb"] = $curr_symbol;
           	$label_fld[] = $display_val;
 	}
+	elseif($uitype == 74)
+	{
+		$label_fld[] =$mod_strings[$fieldlabel];
+		$orgunit_id = $col_fields[$fieldname];
+		if($orgunit_id != '')
+		{
+			$orgunit_name = getOrgUnitName($orgunit_id);
+		}
+		$label_fld[] = $orgunit_name;
+		$label_fld["secid"] = $orgunit_id;
+		$label_fld["link"] = "index.php?module=Organization&action=DetailView&record=".$orgunit_id;
+	}
 	elseif($uitype == 75 || $uitype == 81)
         {
 		 $label_fld[] =$mod_strings[$fieldlabel];
@@ -932,6 +960,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$label_fld[] = '<a href="index.php?module=Users&action=RoleDetailView&roleid='.$col_fields[$fieldname].'">'.getRoleName($col_fields[$fieldname]).'</a>';
 		else
 			$label_fld[] = getRoleName($col_fields[$fieldname]);
+	}elseif($uitype == 85) //Added for Skype by Minnie
+	{
+		$label_fld[] =$mod_strings[$fieldlabel];
+		$label_fld[]= $col_fields[$fieldname];
 	}
 	else
 	{
@@ -940,13 +972,20 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
               $col_fields[$fieldname]='';
 	 if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ))
 	 {
-		$label_fld[] = convertFromDollar($col_fields[$fieldname],$rate);
+		  $rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+		  $label_fld[] = convertFromDollar($col_fields[$fieldname],$rate_symbol['rate']);
 	 }
 	else
 		$label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[]=$uitype;
 	
+	// For inheritance
+	if ( in_array($uitype,array(3,4,18,31,32)) )
+	{
+		$label_fld["inherit"] = $col_fields[$fieldname."@##@"];
+	}
+
 	//sets whether the currenct user is admin or not
 	if(is_admin($current_user))
 	{
@@ -1352,7 +1391,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 		if(is_array($custfld))
 		{
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"inherit"=>$custfld["inherit"]));
 		}
 		$i++;
 		if($i<$noofrows)
@@ -1370,7 +1409,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 			if(is_array($custfld))
 			{
-				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"inherit"=>$custfld["inherit"]));
 			}
 		}
 

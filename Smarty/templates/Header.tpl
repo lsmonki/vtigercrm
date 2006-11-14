@@ -36,6 +36,21 @@
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
 		<td valign=top><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
+		{if $USER_ORGANIZATIONS_COUNT gt 1}
+		    <td style="padding-left:10px;padding-right:10px" class=small nowrap>
+			<select {if $CHGORGOK eq 1}onchange="set_org(this);"{else}disabled{/if} class=small id="orgcombo" style="width:240px">
+			    {foreach key=maintabs item=detail from=$USER_ORGANIZATIONS}
+				{if $CURRENT_ORGANIZATION eq $maintabs}
+				    <option value="{$maintabs}" selected>{$maintabs}</option>
+				{else}
+				    <option value="{$maintabs}">{$maintabs}</option>
+				{/if}
+			    {/foreach}
+			</select>
+		    </td>
+		{else}
+		    <td style="padding-left:10px;padding-right:10px" class=small nowrap>{$CURRENT_ORGANIZATION}</td>
+		{/if}
 		<td width=100% align=center>
 		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee>		
 		</td>
@@ -145,6 +160,26 @@
 <div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
 
 <script>
+function set_org(orgoptions)
+{ldelim}
+	var neworg = orgoptions.options[orgoptions.options.selectedIndex].value;
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module={$MODULE_NAME}&action={$MODULE_NAME}Ajax&file=ListView&org='+neworg+'&ajax=true',
+			onComplete: function(response) {ldelim}
+                        	$("status").style.display="none";
+                                result = response.responseText.split('&#&#&#');
+                                $("ListViewContents").innerHTML= result[2];
+                                if(result[1] != '')
+                                        alert(result[1]);
+                  	{rdelim}
+		{rdelim}
+	);
+
+{rdelim}
+
 function fetch_clock()
 {ldelim}
 	new Ajax.Request(

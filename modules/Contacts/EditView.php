@@ -22,13 +22,15 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $log,$mod_strings,$app_strings,$theme,$currentModule;
+global $current_organization;
+global $user_organizations;
 
 //added for contact image
 $encode_val=$_REQUEST['encode_val'];
@@ -39,7 +41,7 @@ $decode_val=base64_decode($encode_val);
  $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
 //end
 
-$focus = new Contact();
+$focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
@@ -50,7 +52,8 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
     $log->info("Entity info successfully retrieved for EditView.");
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
-
+} else {
+    $focus->column_fields["otherorgs"][$current_organization]=1;
 }
 
 if($image_error=="true")
@@ -68,9 +71,9 @@ if($image_error=="true")
 
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']=='')
 {
-        require_once('modules/Accounts/Account.php');
+        require_once('modules/Accounts/Accounts.php');
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
-        $acct_focus = new Account();
+        $acct_focus = new Accounts();
         $acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
         $focus->column_fields['fax']=$acct_focus->column_fields['fax'];
         $focus->column_fields['otherphone']=$acct_focus->column_fields['phone'];
@@ -134,7 +137,7 @@ if(isset($cust_fld))
 }
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Contact']);
+$smarty->assign("SINGLE_MOD",'Contact');
 
 if($focus->mode == 'edit')
 {
@@ -205,6 +208,16 @@ if($errormessage!="")
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");

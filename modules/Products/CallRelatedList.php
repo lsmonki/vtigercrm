@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 
 //Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
@@ -21,7 +21,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Product();
+$focus = new Products();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 

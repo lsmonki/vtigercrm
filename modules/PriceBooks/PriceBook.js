@@ -103,16 +103,15 @@ function addtopricebook()
 document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook"
 }
 
-function updateListPrice(unitprice,fieldname)
+function updateListPrice(unitprice,fieldname,oSelect)
 {
-	var elem=document.addToPB.elements;
-	var i;	
-	for(i=0; i<elem.length; i++)
+	if(oSelect.checked == true)
 	{
-		if(elem[i].name== fieldname)
-		{
-			elem[i].value=unitprice;	
-		}
+		document.getElementById(fieldname).style.visibility = 'visible';
+		document.getElementById(fieldname).value = unitprice;
+	}else
+	{
+		document.getElementById(fieldname).style.visibility = 'hidden';
 	}
 }
 

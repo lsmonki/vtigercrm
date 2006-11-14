@@ -120,10 +120,10 @@ if(!rename("install/", $renamefile."install/"))
 
 
 ?>
-		<table borde=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
+		<table border=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.0.0 is all set to go!</b>
+			<b>vtigercrm-5.0.2 is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>

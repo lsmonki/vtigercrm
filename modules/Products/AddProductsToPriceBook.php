@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
@@ -29,7 +29,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$focus = new Product();
+$focus = new Products();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
@@ -46,6 +46,8 @@ if(isset($order_by) && $order_by != '')
 {
         $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
+
+$list_query .= " group by vtiger_crmentity.crmid";
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
 
@@ -66,7 +68,7 @@ for($i=0; $i<$num_prod_rows; $i++)
 //Buttons Add To PriceBook and Cancel
 $other_text = '
 	<table width="95%" border="0" cellpadding="1" cellspacing="0" align="center">
-	<form name="addToPB" method="POST">
+	<form name="addToPB" method="POST" id="addToPB">
 	   <tr>
 		<td align="center">&nbsp;
 			<input name="pricebook_id" type="hidden" value="'.$pricebook_id.'">
@@ -130,11 +132,11 @@ for($i=0; $i<$num_rows; $i++)
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$field_name=$entity_id."_listprice";
 
-		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'")\'></td>';
+		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productname").'</td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productcode").'</td>';
 		$list_body .= '<td>'.$unit_price.'</td>';
-		$list_body .= '<td><input type="text" name="'.$field_name.'"></td></tr>';
+		$list_body .= '<td><input type="text" name="'.$field_name.'" id="'.$field_name.'" style="visibility:hidden;"></td></tr>';
 	}
 }
 

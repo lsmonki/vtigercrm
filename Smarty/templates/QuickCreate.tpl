@@ -68,10 +68,9 @@
 				<td width="30%" align=left class="cellText">
 					<select name="{$fldname}">
 					{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-					<option value="{$sel_value}" {$value}>{$sel_value}</option>
-					{/foreach}
-					
+						{foreach key=sel_value item=value from=$arr}
+							<option value="{$sel_value}" {$value}>{$MOD.$sel_value}</option>
+						{/foreach}
 					{/foreach}
 					</select>
 				</td>

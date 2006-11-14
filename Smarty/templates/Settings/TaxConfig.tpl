@@ -13,6 +13,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
+
 {literal}
 <style>
 	
@@ -86,12 +87,12 @@
 			<td>&nbsp;</td>
 			<td id="td_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $EDIT_MODE neq 'true'}
-					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="  Add Tax  " class="crmButton small edit">
+					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="{$MOD.LBL_ADD_TAX_BUTTON}" class="crmButton small edit">
 				{/if}
 			</td>
 			<td class="small" align=right nowrap>
 			{if $EDIT_MODE eq 'true'}	
-				<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.save_tax.value='true'; this.form.parenttab.value='Settings'; return validateTaxes('tax_count')" type="submit" name="button2" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  ">&nbsp;
+				<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.save_tax.value='true'; this.form.parenttab.value='Settings'; return validateTaxes('tax_count');" type="submit" name="button2" value=" {$APP.LBL_SAVE_BUTTON_LABEL}  ">&nbsp;
 				<input class="crmButton small cancel" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" onclick="this.form.action.value='TaxConfig'; this.form.module.value='Settings'; this.form.save_tax.value='false'; this.form.parenttab.value='Settings';" type="submit" name="button22" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  ">
 			{elseif $TAX_COUNT > 0}
 				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='TaxConfig'; this.form.edit_tax.value='true'; this.form.parenttab.value='Settings';" type="submit" name="button" value="  {$APP.LBL_EDIT_BUTTON_LABEL}  " class="crmButton small edit">
@@ -114,8 +115,17 @@
 				{else}
 				   <tr><!-- set color to taxes which are disabled now-->
 				{/if}
-
-				<td width=35% class="cellLabel small">{$tax.taxlabel} </td>
+				
+				<!--assinging tax label name for javascript validation-->
+				{assign var=tax_label value="taxlabel_"|cat:$tax.taxname} 
+        
+				<td width=35% class="cellLabel small" >
+					{if $EDIT_MODE eq 'true'}
+						<input name="{$tax.taxlabel}" id={$tax_label} type="text" value="{$tax.taxlabel}" class="detailedViewTextBox small">
+					{else}
+						{$tax.taxlabel}
+					{/if}
+				</td>
 				<td width=55% class="cellText small">
 					{if $EDIT_MODE eq 'true'}
 						<input name="{$tax.taxname}" id="{$tax.taxname}" type="text" value="{$tax.percentage}" class="detailedViewTextBox small">&nbsp;%
@@ -165,7 +175,7 @@
 			</td>
 			<td class="small" align=right nowrap>
 				{if $SH_EDIT_MODE eq 'true'}
-					<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.sh_save_tax.value='true'; this.form.parenttab.value='Settings'; return validateTaxes('sh_tax_count')" type="submit" name="button2" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  ">
+					<input class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}"  onclick="this.form.action.value='TaxConfig'; this.form.sh_save_tax.value='true'; this.form.parenttab.value='Settings'; return validateTaxes('sh_tax_count');" type="submit" name="button2" value=" {$APP.LBL_SAVE_BUTTON_LABEL}  ">
 					&nbsp;
 					<input class="crmButton small cancel" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" onclick="this.form.action.value='TaxConfig'; this.form.module.value='Settings'; this.form.sh_save_tax.value='false'; this.form.parenttab.value='Settings';" type="submit" name="button22" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  ">
 				{elseif $SH_TAX_COUNT > 0}
@@ -190,7 +200,15 @@
 			   <tr><!-- set color to taxes which are disabled now-->
 			{/if}
 
-			<td width=35% class="cellLabel small">{$tax.taxlabel} </td>
+			{assign var=tax_label value="taxlabel_"|cat:$tax.taxname} 
+			<td width=35% class="cellLabel small">
+			 	{if $SH_EDIT_MODE eq 'true'}
+			 	
+					<input name="{$tax.taxlabel}" id="{$tax_label}" type="text" value="{$tax.taxlabel}" class="detailedViewTextBox small">
+			 	{else} 
+					{$tax.taxlabel}
+				{/if}
+			</td>
 			<td width=55% class="cellText small">
 				{if $SH_EDIT_MODE eq 'true'}
 					<input name="{$tax.taxname}" id="{$tax.taxname}" type="text" value="{$tax.percentage}" class="detailedViewTextBox small">

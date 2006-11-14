@@ -372,72 +372,22 @@ function getHistory($parentmodule,$query,$id)
         }
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
-	
-	$button .= '<table cellspacing=0 cellpadding=2><tr><td>';
-	$button .= '</td></tr></table>';
 
 	if($noofrows == 0)
 	{
+		//There is no entries for history
 	}
 	else
 	{
-		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%" >';
-		$list .= '<tr class="ModuleListTitle" height=20>';
-
-// Armando Lüscher 15.07.2005 -> §scrollableTables
-// Desc: class="blackLine" deleted because of vertical line in title <tr>
-
-		$class_black="";
-		if($noofrows<=15)
-		{
-			$class_black='class="blackLine"';	
-			$colspan = 'colspan=2';
-		}
-
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-		$list .= '<td width="90" '.$colspan.' class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 90, inserted noWrap
-
-		$colspan = ($noofrows<=15)?'colspan="3"':''; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
-		$list .= $app_strings['LBL_CREATED'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_SUBJECT to LBL_CREATED
-		$header[] = $app_strings['LBL_CREATED'];
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-		$list .= '<td '.$colspan.' width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 30%, inserted '.$colspan.' noWrap
-	
-		$list .= $app_strings['LBL_SUBJECT'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_STATUS to LBL_SUBJECT
+		//Form the header columns
+		$header[] = $app_strings['LBL_TYPE'];
 		$header[] = $app_strings['LBL_SUBJECT'];
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-		$list .= '<td width="70%" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 70%, inserted noWrap
-
-		$list .= $app_strings['LBL_DESCRIPTION'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_LIST_CONTACT_NAME to LBL_DESCRIPTION
-		$header[] = $app_strings['LBL_DESCRIPTION'];
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-		$list .= '<td width="80" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 80, inserted noWrap
-
-		$list .= $app_strings['LBL_ACTION'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_RELATED_TO to LBL_ACTION
-		$header[] = $app_strings['LBL_TIME'];
-		$header[] = $app_strings['LBL_ACTION'];
 		$header[] = $app_strings['LBL_RELATED_TO'];
+		$header[] = $app_strings['LBL_START_DATE'];
+		$header[] = $app_strings['LBL_END_DATE'];
+		//$header[] = $app_strings['LBL_DESCRIPTION'];
+		$header[] = $app_strings['LBL_ACTION'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-/* // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Commented out because this is not used for the title row
-*/
-		$list .= '</td>';
-		$colspan = 9;
-		if($noofrows>15)
-		{
-			$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
-			$colspan = 11;
-		}
-		$list .= '</tr>';
-	
-		$list .= '<tr><td COLSPAN="'.$colspan.'" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
-
-// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
-// Desc: 'X'
-//			 Insert new vtiger_table with 1 cell where all entries are in a new vtiger_table.
-//			 This cell will be scrollable when too many entries exist
-		$list .= ($noofrows>15) ? '<tr><td colspan="'.$colspan.'"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
-// end: Armando Lüscher 14.07.2005 -> §scrollableTables
 
 		$i=1;
 		while($row = $adb->fetch_array($result))
@@ -455,125 +405,47 @@ function getHistory($parentmodule,$query,$id)
 				$icon = 'Activities.gif';
 				$status = $row['eventstatus'];
 			}
-			if ($i%2==0)
-				$trowclass = 'evenListRow';
-			else
-				$trowclass = 'oddListRow';
-	
-			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
-			$created_date = $created_arr[0];
-			$created_time = substr($created_arr[1],0,5);
 
-			$list .= '<tr class="'. $trowclass.'">';
-			$entries[] = $created_date;	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			$list .= '<td colspan="2" valign="top" class="visibleDescriptionLink" width="90" style="padding:0px 3px 0px 3px;" noWrap>'.$created_date.'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 4% to 90, inserted colspan="2" align="right" valign="top" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;" noWrap, replaced <IMG SRC="'.$image_path.'/'.$icon.'"> with $created_date
+			$entries[] = $row['activitytype'];
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			$list .= '<td valign="top" colspan="3" width="30%" height="21" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 30%, inserted colspan="3" valign="top" class="visibleDescriptionLink"
 			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
-			$list .= '</td>';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			$list .= '<td valign="top" rowspan="2" width="70%" height="21" class="visibleDescription" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 70%, inserted rowspan="2" valign="top" class="visibleDescription"
-			$entries[] = nl2br($row['description']);
-			$list .= nl2br($row['description']); // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $status with nl2br($row['description'])
-			$list .= '</td>';
+			$parentname = getRelatedTo('Calendar',$result,$i-1);
+			$entries[] = $parentname;
 
-			if($row['firstname'] != 'NULL')	
-				$contactname = $row['firstname'].' ';
-			if($ros['lastname'] != 'NULL')
-				$contactname .= $row['lastname'];
+			$entries[] = $row['date_start'];
+			$entries[] = $row['due_date'];
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td valign="top" width="80" height="21" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 80, inserted valign="top" noWrap
-			// Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: This if-statement replaces the line above
+			//$entries[] = nl2br($row['description']);
+
 			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
 			{
 				$list .= '<a href="index.php?module=Calendar&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
 			
 			}
-			$list .= '</td>';
 
-			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
-			// Desc: Inserted because entries are displayed on 2 rows
-			$list .= '</tr><tr class="'.$trowclass.'">';
-			// end: Armando Lüscher 26.09.2005 -> §visibleDescription 
-
-			$parentname = getRelatedTo('Calendar',$result,$i-1);
-
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			
-			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
-			// Desc: Added
-			$list .= '<td valign="top" width="20" style="padding:0px 0px 0px 10px;">';
-			$list .= '<IMG SRC="'.$image_path.'/'.$icon.'">';
-			$list .= '</td>';
-			// end: Armando Lüscher 26.09.2005 -> §visibleDescription
-	
-			$list .= '<td align="right" valign="top" width="70" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 70, inserted align="right" valign="top"
-			$list .= $created_time; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $parentname with $created_time
-			$list .= '</td>';	
-			$entries[] = $created_time;
-	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			$list .= '<td valign="top" width="8%" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 15% to 8%, inserted valign="top"
-			$list .= $status; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $modifiedtime with $status
 			$entries[] = $status;
-			$list .= '</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
 
-//			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td valign="top" width="18%" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 18%, inserted valign="top"
-			$entries[] = $parentname;
-			$list .= $parentname; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
-			$list .= '</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
-			
-			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
-			// Desc: Added
-			$list .= '<td valign="top" width="4%" style="padding:0px 3px 0px 3px;">';
 			if($row['user_name']==NULL && $row['groupname']!=NULL)
 			{
-				$list .= $row['groupname'];
 				$entries[] = $row['groupname'];
 			}
 			else
 			{
-				$list .= $row['user_name'];
  				$entries[] = $row['user_name'];
 				
 			}
-			$list .= '</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			
-			// the description is in this space
-			
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
-			$list .= '<td valign="top" width="80" style="padding:0px 3px 0px 3px;">';
 			if(isPermitted("Calendar",2,$row["activityid"]) == 'yes')
 			{
 				$list .= '<a href="index.php?module=Calendar&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
 			}
-			$list .= '</td>';
-			
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-
-			$list .= '</tr>';
-
-			$list .= '<tr width="'.$colspan.'"><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
 
 			$i++;
 			$entries_list[] = $entries;
 		}
 
-// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
-// Desc: Close vtiger_table from 
-		$list .= ($noofrows>15) ? '</table></div></td></tr>':'';
-// end: Armando Lüscher 14.07.2005 -> §scrollableTables
-
-		$list .= '<tr><td colspan="14" class="blackLine"></td></tr>';
-
-		$list .= '</table>';
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
 		$log->debug("Exiting getHistory method ...");
 		return $return_data; 

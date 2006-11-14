@@ -253,6 +253,8 @@ $mod_strings = Array(
 
 'LBL_MULTISELECT_COMBO'=>'Multi-Select Combo Box',
 
+'Skype'=>'Skype',
+
 
 
 //added for patch2
@@ -520,6 +522,7 @@ $mod_strings = Array(
 'LBL_LIST_PASSWORD'=>'Password',
 'LBL_MAIL_SERVER_NAME'=>'Mail Server Name or IP',
 'LBL_MAIL_SERVER_SETTINGS'=>'Outgoing Server',
+'LBL_INCOME_SERVER_SETTINGS'=>'Incoming Server',
 'LBL_TEST_SETTINGS'=>'Test my account setting immediately',
 'LBL_TEST_BUTTON_TITLE'=>'Test my account now! [Alt+T]',
 'LBL_TEST_BUTTON_KEY'=>'T',
@@ -721,6 +724,7 @@ $mod_strings = Array(
 'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
+'LBL_ADD_TAX_BUTTON'=>'Add Tax',
 );
 
 

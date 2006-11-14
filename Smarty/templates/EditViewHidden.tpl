@@ -58,8 +58,11 @@
         <form name="EditView" method="POST" action="index.php">
         <input type="hidden" name="campaignid" value="{$campaignid}">
 
-{elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Vendors'}
+{elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Vendors' || $MODULE eq 'OrgUnit'}
 	<form name="EditView" method="POST" action="index.php">
+
+{elseif $MODULE eq 'Organization'}
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 
 {elseif $MODULE eq 'Notes'}
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">

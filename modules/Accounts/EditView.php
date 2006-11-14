@@ -22,16 +22,18 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$currentModule,$theme;
+global $current_organization;
+global $user_organizations;
 $smarty=new vtigerCRM_Smarty;
 
-$focus = new Account();
+$focus = new Accounts();
 
 if(isset($_REQUEST['record'])) 
 {
@@ -39,7 +41,10 @@ if(isset($_REQUEST['record']))
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");		
     $focus->name=$focus->column_fields['accountname']; 
+} else {
+    $focus->column_fields["otherorgs"][$current_organization]=1;
 }
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -95,7 +100,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Account']);
+$smarty->assign("SINGLE_MOD",'Account');
 
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
@@ -111,6 +116,16 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
  
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
+
 if ($focus->mode == 'edit')
 $smarty->display('salesEditView.tpl');
 else

@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
@@ -34,7 +34,7 @@ global $mod_strings;
 global $current_user;
 global $currentModule;
 
-$focus = new Email();
+$focus = new Emails();
 $smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['upload_error'] == true)

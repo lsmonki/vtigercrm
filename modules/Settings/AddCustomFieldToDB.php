@@ -79,25 +79,7 @@ else
   
 	//Assigning the vtiger_table Name
 	$tableName ='';
-	if($fldmodule == 'Leads')
-	{
-		$tableName='vtiger_leadscf';
-	}
-	elseif($fldmodule == 'Accounts')
-	{
-
-		$tableName='vtiger_accountscf';
-	}
-	elseif($fldmodule == 'Contacts')
-	{
-
-		$tableName='vtiger_contactscf';
-	}
-	elseif($fldmodule == 'Potentials')
-	{
-		$tableName='vtiger_potentialscf';
-	}
-	elseif($fldmodule == 'HelpDesk')
+	if($fldmodule == 'HelpDesk')
 	{
 		$tableName='vtiger_ticketcf';
 	}
@@ -113,25 +95,9 @@ else
 	{
 		$tableName='vtiger_pricebookcf';
 	}
-	elseif($fldmodule == 'Quotes')
+	elseif($fldmodule != '')
 	{
-		$tableName='vtiger_quotescf';
-	}
-	elseif($fldmodule == 'PurchaseOrder')
-	{
-		$tableName='vtiger_purchaseordercf';
-	}
-	elseif($fldmodule == 'SalesOrder')
-	{
-		$tableName='vtiger_salesordercf';
-	}
-	elseif($fldmodule == 'Invoice')
-	{
-		$tableName='vtiger_invoicecf';
-	}
-	elseif($fldmodule == 'Campaigns')
-	{
-		$tableName='vtiger_campaignscf';
+		$tableName= 'vtiger_'.strtolower($fldmodule).'cf';
 	}
 	//Assigning the uitype
 	$fldlength=$_REQUEST['fldLength'];
@@ -225,6 +191,12 @@ else
 		 $uitype = 33;
 		 $type = "X"; //adodb type
 		 $uichekdata='V~O';
+	}
+	elseif($fldType == 'Skype')
+	{
+		$uitype = 85;
+		$type = "C(255)"; //adodb type
+		$uichekdata='V~O';
 	}
 	// No Decimal Pleaces Handling
 

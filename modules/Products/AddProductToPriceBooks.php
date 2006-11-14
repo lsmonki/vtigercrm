@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
@@ -30,7 +30,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 //Retreive the list of PriceBooks
 $list_query = getListQuery("PriceBooks");
@@ -70,7 +70,7 @@ for($i=0; $i<$num_rows; $i++)
 
 $other_text = '
 	<table border="0" cellpadding="1" cellspacing="0" width="90%" align="center">
-	<form name="addToPB" method="POST">
+	<form name="addToPB" method="POST" id="addToPB">
 	   <tr>
 		<td align="center">&nbsp;
 			<input name="product_id" type="hidden" value="'.$productid.'">
@@ -113,13 +113,13 @@ for($i=0; $i<$num_rows; $i++)
 	{
 		$list_body .= '<tr class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'" bgcolor="white">';
 		$field_name=$entity_id."_listprice";
-		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'")\'></td>';
+		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"bookname").'</td>';
 		$list_body .= '<td>'.$unit_price.'</td>';
-		$list_body .= '<td><input type="text" name="'.$field_name.'"></td>';
+		$list_body .= '<td><input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'"></td>';
 		$list_body .= '</tr>';
 	}
-	
+
 }
 
 

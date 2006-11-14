@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -13,5 +13,6 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once ($theme_path."layout_utils.php");
-	include ('modules/'.$_REQUEST['module'].'/ListView.php');
+include ('modules/'.$_REQUEST['module'].'/ListView.php');
+
 ?>

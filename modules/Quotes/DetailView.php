@@ -22,13 +22,16 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
+require_once('modules/Organization/Organization.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$currentModule,$theme,$singlepane_view;
-$focus = new Quote();
+global $current_organization;
+
+$focus = new Quotes();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
@@ -108,6 +111,10 @@ if($singlepane_view == 'true')
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+$organization = new Organization;
+$organization->id = $current_organization;
+$smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
 
 $smarty->display("Inventory/InventoryDetailView.tpl");
 

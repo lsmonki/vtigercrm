@@ -17,7 +17,7 @@ require_once('include/database/PearDatabase.php');
 $log = &LoggerManager::getLogger('wordplugin');
 
 error_reporting(0);
-$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 $accessDenied = "You are not permitted to perform this action";
 $server->configureWSDL('vtigersoap');
@@ -215,8 +215,8 @@ $server->register(
 function get_tickets_columns($user_name, $password)
 {
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -237,15 +237,15 @@ function get_tickets_columns($user_name, $password)
 function get_contacts_columns($user_name, $password)
 {
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Contacts","index") == "yes")
 	{
-		require_once('modules/Contacts/Contact.php');
-		$contact = new Contact();
+		require_once('modules/Contacts/Contacts.php');
+		$contact = new Contacts();
 		$log->debug($contact->getColumnNames());
 		return $contact->getColumnNames();	   
 	}
@@ -261,15 +261,15 @@ function get_contacts_columns($user_name, $password)
 function get_accounts_columns($user_name, $password)
 {
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Accounts","index") == "yes")
 	{
-		require_once('modules/Accounts/Account.php');
-		$account = new Account();
+		require_once('modules/Accounts/Accounts.php');
+		$account = new Accounts();
 		$log->debug($account->getColumnNames_Acnt());
 		return $account->getColumnNames_Acnt();
 	}
@@ -285,16 +285,16 @@ function get_accounts_columns($user_name, $password)
 function get_leads_columns($user_name, $password)
 {	
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
 	if(isPermitted("Leads","index") == "yes")
 	{
-		require_once('modules/Leads/Lead.php');
-		$lead = new Lead();
+		require_once('modules/Leads/Leads.php');
+		$lead = new Leads();
 		$log->debug($lead->getColumnNames_Lead());
 		return $lead->getColumnNames_Lead();
 	}
@@ -309,12 +309,12 @@ function get_leads_columns($user_name, $password)
 function get_user_columns($user_name, $password)
 {
 	global $current_user;
-	require_once('modules/Users/User.php');
-	$seed_user=new User();
+	require_once('modules/Users/Users.php');
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
-	$user = new User();
+	$user = new Users();
 	return $user->getColumnNames_User();
 	
 }
@@ -323,8 +323,8 @@ function get_user_columns($user_name, $password)
 function create_session($user_name, $password)
 { 
   	global $adb,$log;
-	require_once('modules/Users/User.php');
-	$objuser = new User();
+	require_once('modules/Users/Users.php');
+	$objuser = new Users();
 	if($password != "" && $user_name != '')
 	{
 		$objuser->column_fields['user_name'] = $user_name;

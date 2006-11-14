@@ -19,7 +19,7 @@
 
 require_once('config.php');
 require_once('include/logging.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('Image/Graph.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/GraphUtils.php');
@@ -102,7 +102,7 @@ class jpgraph {
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
-			$opp = new Potential();
+			$opp = new Potentials();
 			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
@@ -441,7 +441,7 @@ class jpgraph {
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
-			$opp = new Potential();
+			$opp = new Potentials();
 			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
@@ -779,7 +779,7 @@ class jpgraph {
 
 			//Now do the db queries
 			//query for opportunity data that matches $datax and $user
-			$opp = new Potential();
+			$opp = new Potentials();
 			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
@@ -1057,7 +1057,7 @@ class jpgraph {
 				$where .= ")";
 			}
 
-			$opp = new Potential();
+			$opp = new Potentials();
 			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by lead source data
@@ -1124,7 +1124,7 @@ $log->debug("Exiting pipeline_by_lead_source method ...");
 			$imagemap = $canvas->getImageMap();
 			$graph =& Image_Graph::factory('graph', $canvas);
 	
-			$font =& $graph->addNew('font', calculate_font_name('en_en'));
+			$font =& $graph->addNew('font', calculate_font_name($lang_crm));
 			// set the font size to 11 pixels
 			$font->setSize(8);
 			$font->setColor($font_color);

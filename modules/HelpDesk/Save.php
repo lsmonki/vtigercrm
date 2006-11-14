@@ -54,7 +54,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		$filepath = $adb->query_result($result,0,'path');
 
 		$new_attachmentid = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = date('YmdHis');
+		$date_var = $adb->formatDate(date('YmdHis'));
 
 		$upload_filepath = decideFilePath();
 
@@ -64,7 +64,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		fclose($handle);	
 
 		$adb->query("update vtiger_troubletickets set filename=\"$filename\" where ticketid=$focus->id");	
-		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','HelpDesk Attachment','".$date_var."')");
+		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','HelpDesk Attachment',".$date_var.")");
 
 		$adb->query("insert into vtiger_attachments values(".$new_attachmentid.",'".$filename."','','".$filetype."','".$upload_filepath."')");
 

@@ -562,7 +562,7 @@ function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$startdate."','".$enddate."')";
+		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$adb->formatString("vtiger_crmentity","startdate",$startdate)."','".$adb->formatString("vtiger_crmentity","enddate",$enddate)."')";
 		$ireportmoduleresult = $adb->query($ireportmodulesql);
 	}
 

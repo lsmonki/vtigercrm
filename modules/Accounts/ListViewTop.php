@@ -28,7 +28,7 @@ function getTopAccounts()
 	$log = LoggerManager::getLogger('top accounts_list');
 	$log->debug("Entering getTopAccounts() method ...");
 	require_once("data/Tracker.php");
-	require_once('modules/Potentials/Opportunity.php');
+	require_once('modules/Potentials/Potentials.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
 	global $app_strings;

@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -32,7 +32,10 @@ global $app_strings;
 global $app_list_strings;
 global $log, $currentModule, $singlepane_view;
 
-$focus = new Account();
+global $current_organization;
+global $user_organizations;
+
+$focus = new Accounts();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
@@ -117,6 +120,16 @@ if($singlepane_view == 'true')
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+// Assigned organizations
+$smarty->assign("CURRENT_ORGANIZATION",$current_organization);
+$org_array=array();
+$org=strtok( $user_organizations, "|");
+while( $org !== false) {
+    $org_array[$org] = 1;
+    $org=strtok( "|");
+}
+$smarty->assign("USER_ORGANIZATIONS",$org_array);
 
 $smarty->display("DetailView.tpl");
 ?>

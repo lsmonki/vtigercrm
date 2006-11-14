@@ -19,29 +19,29 @@
 
 require_once('config.php');
 
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 require_once('modules/Contacts/contactSeedData.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Campaigns/Campaign.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Campaigns/Campaigns.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('include/language/en_us.lang.php');
 require_once('include/ComboStrings.php');
 require_once('include/ComboUtil.php');
-require_once('modules/Products/Product.php');
-require_once('modules/PriceBooks/PriceBook.php');
-require_once('modules/Vendors/Vendor.php');
+require_once('modules/Products/Products.php');
+require_once('modules/PriceBooks/PriceBooks.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('modules/Faq/Faq.php');
 require_once('modules/HelpDesk/HelpDesk.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('modules/Invoice/Invoice.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/utils/InventoryUtils.php'); //Included to save inventory related products in demo data
 
 global $first_name_array;
@@ -113,7 +113,7 @@ if(isset($default_user_name) && $default_user_name != '' && isset($create_defaul
 }
 
 // Look up the user id for the assigned user
-$seed_user = new User();
+$seed_user = new Users();
 
 //$adb->println("PSD assignname=".$assigned_user_name);
 
@@ -121,7 +121,7 @@ $assigned_user_id = $seed_user->retrieve_user_id($assigned_user_name);
 
 global $current_user;
 
-$current_user = new User();
+$current_user = new Users();
 $result = $current_user->retrieve_entity_info($assigned_user_id,'Users');
 
 $tagkey = 1;
@@ -147,7 +147,7 @@ for($i = 0; $i < $company_name_count; $i++)
 	$account_name = $company_name_array[$i];
 
 	// Create new accounts.
-	$account = new Account();
+	$account = new Accounts();
 	$account->column_fields["accountname"] = $account_name;
 	$account->column_fields["phone"] = create_phone_number();
 	$account->column_fields["assigned_user_id"] = $assigned_user_id;
@@ -196,7 +196,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 		
 //Create new opportunities
-	$opp = new Potential();
+	$opp = new Potentials();
 
 	$opp->column_fields["assigned_user_id"] = $assigned_user_id;
 	$opp->column_fields["potentialname"] = $account_name." - 1000 units";
@@ -235,7 +235,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 for($i=0; $i<10; $i++)
 {
-	$contact = new Contact();
+	$contact = new Contacts();
 	$contact->column_fields["firstname"] = ucfirst(strtolower($first_name_array[$i]));
 	$contact->column_fields["lastname"] = ucfirst(strtolower($last_name_array[$i]));
 	$contact->column_fields["assigned_user_id"] = $assigned_user_id;
@@ -327,7 +327,7 @@ for($i=0; $i<10; $i++)
 	$company_count=0;
 for($i=0; $i<10; $i++)
 {
-	$lead = new Lead();
+	$lead = new Leads();
 	$lead->column_fields["firstname"] = ucfirst(strtolower($first_name_array[$i]));
 	$lead->column_fields["lastname"] = ucfirst(strtolower($last_name_array[$i]));
 
@@ -404,7 +404,7 @@ for($i=0; $i<10; $i++)
 //Populating Vendor Data
 for($i=0; $i<10; $i++)
 {
-	$vendor = new Vendor();
+	$vendor = new Vendors();
 	$vendor->column_fields["vendorname"] = ucfirst(strtolower($first_name_array[$i]));
 	$vendor->column_fields["phone"] = create_phone_number();
 	$vendor->column_fields["email"] = strtolower($vendor->column_fields["vendorname"])."@company.com";
@@ -442,7 +442,7 @@ $product_image_array = array("product1.jpeg###","product2.jpeg###product3.jpeg##
 .jpeg###","product7.jpeg###product8.jpeg###product9.jpeg###product10.jpeg###");
 for($i=0; $i<10; $i++)
 {
-        $product = new Product();
+        $product = new Products();
 	if($i>4)
 	{
 		$parent_key = array_rand($opportunity_ids);
@@ -579,7 +579,7 @@ $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $validtill_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
 for($i=0;$i<5;$i++)
 {
-	$quote = new Quote();
+	$quote = new Quotes();
 	
 	$quote->column_fields["assigned_user_id"] = $assigned_user_id;
 	$account_key = array_rand($account_ids);
@@ -730,7 +730,7 @@ $duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", 
 
 for($i=0;$i<5;$i++)
 {
-	$po = new Order();
+	$po = new PurchaseOrder();
 	
 	$po->column_fields["assigned_user_id"] = $assigned_user_id;
 	$vendor_key = array_rand($vendor_ids);
@@ -896,7 +896,7 @@ $body_array = array("This is a good product! Have a go at it! ","Nice to have yo
 
 for($i=0;$i<5;$i++)
 {
-	$email = new Email();
+	$email = new Emails();
 
 	$email->column_fields["assigned_user_id"] = $assigned_user_id;
 	
@@ -923,7 +923,7 @@ $Active_array = array ("0", "1", "1", "0", "1","0", "1", "1", "0", "1","0","1");
 //$num_array = array(0,1,2,3,4);
 for($i=0;$i<12;$i++)
 {
-	$pricebook = new PriceBook();
+	$pricebook = new PriceBooks();
 
 	$rand = array_rand($num_array);
 	$pricebook->column_fields["bookname"]   = $PB_array[$i];
@@ -940,7 +940,7 @@ $notes_array = array ("Cont_Notes", "Prod_Notes", "Vendor_Notes", "Invoice_Notes
 
 for($i=0;$i<7;$i++)
 {
-	$notes = new Note();
+	$notes = new Notes();
 
 	$rand = array_rand($num_array);
 	$contact_key = array_rand($contact_ids);
@@ -1118,7 +1118,7 @@ $targetaudience = Array("Managers","CEOs","Rookies");
 //$expected_response = Array(null,null,null);
 for($i=0;$i<count($campaign_name_array);$i++)
 {
-	$campaign = new Campaign();
+	$campaign = new Campaigns();
 	$campaign_name = $campaign_name_array[$i];
 	$campaign->column_fields["campaignname"] = $campaign_name;
 	$campaign->column_fields["campaigntype"] = $campaign_type_array[$i];

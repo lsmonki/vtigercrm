@@ -124,41 +124,9 @@ function expandStar($fieldlist,$log)
 //return an expanded table field list
 function expandRecord($table,$log)
 {
+    global $adb;
     $result = "";
-    $log->info( "Debug: expandRecord");
-    $subfields = array();
-
-    //vtiger_products table
-    if( $table == "vtiger_products" )
-	$subfields = array ( "productid", "productname", "productcode", "productcategory", "manufacturer", "product_description", "qty_per_unit", "unit_price", "weight", "pack_size", "sales_start_date", "sales_end_date", "start_date", "expiry_date", "cost_factor", "commissionrate", "commissionmethod", "discontinued", "usageunit", "handler", "contactid", "currency", "reorderlevel", "website", "taxclass", "mfr_part_no", "vendor_part_no", "serialno", "qtyinstock", "productsheet", "qtyindemand", "glacct", "vendor_id", "imagename" );
-
-    //vtiger_activity table
-    elseif( $table == "vtiger_activity") 
-	$subfields = array ( "activityid", "subject", "semodule", "activitytype", "date_start", "due_date", "time_start", "time_end", "sendnotification", "duration_hours", "duration_minutes", "status", "eventstatus", "priority", "location", "notime", "visibility" );
-
-    //vtiger_notes table
-    elseif( $table == "vtiger_notes")
-	$subfields = array ( "notesid", "contact_id", "title", "filename", "notecontent");
-
-    //vtiger_faq table
-    elseif( $table == "vtiger_faq")
-	$subfields = array ( "id", "product_id", "question", "answer", "category", "status");
-
-    //vtiger_profile2field 
-    elseif( $table == "vtiger_profile2field")
-	$subfields = array ( "profileid", "tabid", "fieldid", "visible", "readonly");
-
-    //vtiger_field 
-    elseif( $table == "vtiger_field")
-	$subfields = array ( "tabid", "fieldid", "columnname", "tablename", "generatedtype", "uitype", "fieldname", "fieldlabel", "readonly", "presence", "selected", "maximumlength", "sequence", "block", "displaytype", "typeofdata", "quickcreate", "quickcreatesequence", "info_type");
-
-    //vtiger_activity
-    elseif( $table == "vtiger_activity")
-	$subfields = array ( "activityid", "subject", "semodule", "activitytype", "date_start", "due_date", "time_start", "sendnotification", "duration_hours", "duration_minutes", "status", "eventstatus", "priority", "location", "notime", "visibility");
-
-    //fields of the requested array still undefined
-    else
-	$log->info("function expandRecord: please add structural information for table '".$table."'");
+    $subfields = $adb->getColumnNames($table);
 
     //construct an entity string
     for( $i=0; $i<count($subfields); $i++)

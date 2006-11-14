@@ -106,7 +106,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$curr_time = date('H:i');
+				$endtime = time() + (60 * 60);
+				$curr_time = date('H:i',$endtime);
 			}
 		}
 		$fieldvalue[] = array($disp_value => $curr_time) ;
@@ -151,7 +152,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		$fieldvalue [] = $options;
 	}
-	elseif($uitype == 17)
+	elseif($uitype == 17 || $uitype == 18)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue [] = $value;
+	}
+	elseif($uitype == 85) //added for Skype by Minnie
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue [] = $value;
@@ -578,8 +584,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
  			    $query = 'select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
  		    }
  		    else
- 		    {
- 			    $query = "select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where contactid=".$col_fields['record_id'];
+		    {
+			    $query = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
  		    }
  		    $result_image = $adb->query($query);
  		    for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
@@ -857,15 +863,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$nemail=count($realid);
 
 				if ($pmodule=='Accounts'){
-					require_once('modules/Accounts/Account.php');
-					$myfocus = new Account();
+					require_once('modules/Accounts/Accounts.php');
+					$myfocus = new Accounts();
 					$myfocus->retrieve_entity_info($entityid,"Accounts");
 					$fullname=br2nl($myfocus->column_fields['accountname']);
 					$account_selected = 'selected';
 				}
 				elseif ($pmodule=='Contacts'){
-					require_once('modules/Contacts/Contact.php');
-					$myfocus = new Contact();
+					require_once('modules/Contacts/Contacts.php');
+					$myfocus = new Contacts();
 					$myfocus->retrieve_entity_info($entityid,"Contacts");
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);
@@ -873,8 +879,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$contact_selected = 'selected';
 				}
 				elseif ($pmodule=='Leads'){
-					require_once('modules/Leads/Lead.php');
-					$myfocus = new Lead();
+					require_once('modules/Leads/Leads.php');
+					$myfocus = new Leads();
 					$myfocus->retrieve_entity_info($entityid,"Leads");
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);
@@ -1195,12 +1201,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 105)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-			$query = "select attachments.path, attachments.name from contactdetails left join seattachmentsrel on seattachmentsrel.crmid=contactdetails.contactid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where contactdetails.imagename=attachments.name and contactid=".$col_fields['record_id'];
-		$result_image = $adb->query($query);
-		for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
-		{
-			$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
-			$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+		 if( isset( $col_fields['record_id']) && $col_fields['record_id'] != '') {
+			$query = "select vtiger_attachments.path, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where vtiger_contactdetails.imagename=vtiger_attachments.name and contactid=".$col_fields['record_id'];
+			$result_image = $adb->query($query);
+			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
+			{
+				$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+				$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+			}
 		}
 		if(is_array($image_array))
 			for($img_itr=0;$img_itr<count($image_array);$img_itr++)
@@ -1225,10 +1233,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=$mod_strings[$fieldlabel];
 		if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ) && ($module_name=='Campaigns'))
 		{
-			$fieldvalue[] = convertFromDollar($value,$rate);
+			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
+			$fieldvalue[] = convertFromDollar($value,$rate_symbol['rate']);
 		}
 		else
 			$fieldvalue[] = $value;
+	}
+
+	// For inheritance
+	if ( in_array($uitype,array(3,4,18,31,32)) ) {
+	    $fieldvalue[] = $col_fields[$fieldname."@##@"];
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------force numerics right justified.
@@ -1243,6 +1257,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$final_arr[]=$editview_label;
 	$final_arr[]=$editview_fldname;
 	$final_arr[]=$fieldvalue;
+	$final_arr[]=$inherit;
 	$log->debug("Exiting getOutputHtml method ...");
 	return $final_arr;
 }
@@ -1827,4 +1842,104 @@ function split_validationdataArray($validationData)
 }
 
 
+/** This function returns the detailed list of organization units associated to 
+*   the selected organization
+* Param $organization - organization object 
+*/
+
+function getOrgUnits($organization,$orgunitid="")
+{
+    // The array we're about to build
+    $orgunittab = array();
+    $fields = "orgunitid,type,name,address,city,state,country,code,phone,fax,website";
+    $fields .= ",logoname,quote_template,so_template,po_template,invoice_template";
+    global $adb;
+
+    // Parameter check
+    if( !isset( $organization) || $organization == '' ||
+	!isset( $organization->id) || $organization->id == '')
+	return $orgunittab;
+
+    // Database query
+    if( $orgunitid != "0")
+	$query = "SELECT vtiger_orgunit.orgunitid AS orgunitid,";
+    else
+	$query = "SELECT 0 AS orgunitid,";
+
+    // logoname is only defined in the organization record.
+    $query .= "'@##@' AS logoname, vtiger_organizationdetails.logoname AS org_logoname";
+
+    foreach( split( ',', $fields) as $field) {
+	if( $field != "orgunitid" && $field != "logoname") {
+	    if( $orgunitid != "0")
+		$query .= ",vtiger_orgunit.".$field." AS ".$field;
+	    else
+		$query .= ",NULL AS ".$field;
+	    if( $field != "type" && $field != "name")
+		$query .= ",vtiger_organizationdetails.".$field." AS org_".$field;
+	}
+    }
+
+    if( $orgunitid != "0" ) {
+	// database joins
+	$query .= " FROM vtiger_orgunit 
+			LEFT JOIN vtiger_organizationdetails
+			    ON vtiger_orgunit.organizationname=vtiger_organizationdetails.organizationname ";
+
+	// single or list query?
+	if( $orgunitid == "")
+	    $query .= "WHERE vtiger_orgunit.organizationname='".$organization->id."' ";
+	else
+	    $query .= "WHERE vtiger_orgunit.orgunitid=".$orgunitid." ";
+
+	// do not return deleted orgunits
+	$query .= "AND vtiger_orgunit.deleted=0";
+    }
+
+    else {
+	$query .= " FROM vtiger_organizationdetails ";
+	$query .= " WHERE vtiger_organizationdetails.organizationname='".$organization->id."' ";
+    }
+
+    // Do not return deleted organizations
+    $query .= " AND vtiger_organizationdetails.deleted=0";
+
+    $result = $adb->query( $query);
+    $noofrows = $adb->num_rows($result);
+
+    // Get all rows from database
+    for($j = 0; $j < $noofrows; $j++) {
+	$orgunit = array();
+	foreach( split( ',', $fields) as $field) {
+	    if( $orgunitid != "0") {
+		$orgunit[$field] = $adb->query_result($result,$j,$field);
+
+		// Inherited and extended fields
+		if( substr( $orgunit[$field], 0, 4) == "@##@") {
+		    if( $field == "name") {
+			$orgunit[$field] = substr($orgunit[$field], 4, strlen( $orgunit[$field])-4);
+			if( $orgunitid != "") 
+			    $orgunit[$field] = $organization->id." ".$orgunit[$field];
+		    } else {
+			$orgunit[$field] = $adb->query_result($result,$j,"org_".$field);
+		    }
+		}
+	    }
+
+	    // no orgunit selected
+	    else {
+		if( $field == "name") 
+		    $orgunit[$field] = $organization->id;
+		elseif( $field == "orgunitid")
+		    $orgunit[$field] = 0;
+		else
+		    $orgunit[$field] = $adb->query_result($result,$j,"org_".$field);
+	    }
+	}
+	$id = $orgunit["orgunitid"];
+	$orgunittab[$id] = $orgunit;
+    }
+    // Return what we've found
+    return $orgunittab;
+}
 ?>

@@ -73,20 +73,28 @@ function DeleteTag(id)
 </script>
 {if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads'}
         {if $MODULE eq 'Accounts'}
-                {assign var=address1 value='Billing'}
-                {assign var=address2 value='Shipping'}
+                {assign var=address1 value='$MOD.LBL_BILLING_ADDRESS'}
+                {assign var=address2 value='$MOD.LBL_SHIPPING_ADDRESS'}
         {/if}
         {if $MODULE eq 'Contacts'}
-                {assign var=address1 value='Mailing'}
-                {assign var=address2 value='Other'}
+                {assign var=address1 value='$MOD.LBL_PRIMARY_ADDRESS'}
+                {assign var=address2 value='$MOD.LBL_ALTERNATE_ADDRESS'}
         {/if}
         <div id="locateMap" onMouseOut="fninvsh('locateMap')" onMouseOver="fnvshNrm('locateMap')">
                 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                                 <td>
-                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Main' );" class="calMnu">{$address1} {$APP.LBL_ADDRESS}</a>
-                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Other' );" class="calMnu">{$address2} {$APP.LBL_ADDRESS}</a>
-                                </td>
+                                {if $MODULE eq 'Accounts'}
+                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Main' );" class="calMnu">{$MOD.LBL_BILLING_ADDRESS}</a>
+                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Other' );" class="calMnu">{$MOD.LBL_SHIPPING_ADDRESS}</a>
+                               {/if}
+                               
+                               {if $MODULE eq 'Contacts'}
+                                <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Main' );" class="calMnu">{$MOD.LBL_PRIMARY_ADDRESS}</a>
+                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Other' );" class="calMnu">{$MOD.LBL_ALTERNATE_ADDRESS}</a>
+                               {/if}
+                                        
+                                         </td>
                         </tr>
                 </table>
         </div>
@@ -221,7 +229,7 @@ function DeleteTag(id)
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                              <td align=right>
-							{if $header eq 'Address Information' && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
+							{if $header eq $MOD.LBL_ADDRESS_INFORMATION && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
                              {if $MODULE eq 'Leads'}
                              <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="crmbutton small create" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
                              {else}
@@ -239,15 +247,10 @@ function DeleteTag(id)
 								</td>
 							   </tr>
 							   <tr>
-							   			<td colspan=4 class="dvtCellInfo">{$COMMENT_BLOCK}</td>
+							     <td colspan=4 class="dvtCellInfo">{$COMMENT_BLOCK}</td>
 							   </tr>
 							   <tr><td>&nbsp;</td></tr>
 							{/if}
-
-
-
-
-
 						     <tr>{strip}
 						     <td colspan=4 class="dvInnerHeader">
 							<b>
@@ -255,46 +258,54 @@ function DeleteTag(id)
 	  			     			</b>
 						     </td>{/strip}
 					             </tr>
-						   {foreach item=detail from=$detail}
-						     <tr style="height:25px">
-							{foreach key=label item=data from=$detail}
-							   {assign var=keyid value=$data.ui}
-							   {assign var=keyval value=$data.value}
-							   {assign var=keytblname value=$data.tablename}
-							   {assign var=keyfldname value=$data.fldname}
-							   {assign var=keyoptions value=$data.options}
-							   {assign var=keysecid value=$data.secid}
-							   {assign var=keyseclink value=$data.link}
-							   {assign var=keycursymb value=$data.cursymb}
-							   {assign var=keysalut value=$data.salut}
-							   {assign var=keycntimage value=$data.cntimage}
-							   {assign var=keyadmin value=$data.isadmin}
-							   
-							   
-							   
-                           {if $label ne ''}
-	                        {if $keycntimage ne ''}
-				<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$keycntimage}</td>
-				{elseif $keyid eq '71' || $keyid eq '72'}<!-- Currency symbol -->
-					<td class="dvtCellLabel" align=right width=25%>{$label}<input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input> ({$keycursymb})</td>
-				{else}
-					<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
-				{/if}  
-{if $EDIT_PERMISSION eq 'yes'}							{include file="DetailViewUI.tpl"}
-{else}										{include file="DetailViewFields.tpl"}
-{/if}
-						   {else} 
-                                          <td class="dvtCellLabel" align=right>&nbsp;</td>
-                                           <td class="dvtCellInfo" align=left >&nbsp;</td>
-							   {/if}
-                                   {/foreach}
-						      </tr>	
-						   {/foreach}	
+						     {foreach item=detail from=$detail}
+						       <tr style="height:25px">
+						         {foreach key=label item=data from=$detail}
+						           {assign var=keyid value=$data.ui}
+						           {assign var=keyval value=$data.value}
+						           {assign var=keyinherit value=$data.inherit}
+						           {assign var=keytblname value=$data.tablename}
+					  	           {assign var=keyfldname value=$data.fldname}
+						           {assign var=keyoptions value=$data.options}
+						           {assign var=keysecid value=$data.secid}
+						           {assign var=keyseclink value=$data.link}
+						           {assign var=keycursymb value=$data.cursymb}
+						           {assign var=keysalut value=$data.salut}
+						           {assign var=keycntimage value=$data.cntimage}
+						           {assign var=keyadmin value=$data.isadmin}
+
+						           {if $label ne ''}
+						              {if $keycntimage ne ''}
+						                <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$keycntimage}</td>
+						              {elseif $keyid eq '71' || $keyid eq '72'}<!-- Currency symbol -->
+						                <td class="dvtCellLabel" align=right width=25%>{$label}<input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input> ({$keycursymb})</td>
+						              {else}
+						                <td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
+						              {/if}  
+						              {if $EDIT_PERMISSION eq 'yes'}
+						                {include file="DetailViewUI.tpl"}
+						              {else}
+						                {include file="DetailViewFields.tpl"}
+						              {/if}
+						            {else} 
+						              <td class="dvtCellLabel" align=right>&nbsp;</td>
+						              <td class="dvtCellInfo" align=left >&nbsp;</td>
+						            {/if}
+						          {/foreach}
+						        </tr>	
+						      {/foreach}	
 						     </table>
                      	                      </td>
 					   </tr>
 		<tr>                                                                                                               <td style="padding:10px">
 			{/foreach}
+			 {if $MODULE eq "Organization"}
+			     <tr>
+				<td style="padding:10px">
+				   {include file="DetailsViewOrgUnit.tpl"}
+				</td>
+			     </tr>
+			 {/if}
                     {*-- End of Blocks--*} 
 			</td>
                 </tr>
@@ -380,19 +391,14 @@ function DeleteTag(id)
 		<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
 
-		<!-- Add Tag link added just above the tag cloud image -->
-		<table border=0 cellspacing=0 cellpadding=5 width=100% >
-		<tr>
-			<td align="left" class="genHeaderSmall"  nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()"><b>{$APP.LBL_ADD_TAG}</b></a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="crmbutton small cancel" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td>
-		</tr>
-		</table>
-		<br>
-		<!-- Eng Add Tag Link -->
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>
 			<td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
 		</tr>
+		<tr>
+                      	<td><div id="tagdiv" style="display:visible;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/></div></td>
+                </tr>
 		<tr>
 			<td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 		</tr>

@@ -60,7 +60,7 @@
                 
                 options[1] = new Option('Contact: First Name', '$contacts-firstname$'); 
                 options[2] = new Option('Contact: Last Name', '$contacts-lastname$'); 
-                options[3] = new Option('Contact: Salutation', '$contacts-salutationtype$'); 
+                options[3] = new Option('Contact: Salutation', '$contacts-salutation$'); 
                 options[4] = new Option('Contact: Title', '$contacts-title$'); 
                 options[5] = new Option('Contact: Email', '$contacts-email$'); 
                 options[6] = new Option('Contact: Department', '$contacts-department$'); 

@@ -22,14 +22,14 @@ $new_tables = 0;
 require_once('config.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
-require_once('modules/Leads/Lead.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Leads/Leads.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Users/User.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Users/Users.php');
 require_once('modules/Import/ImportMap.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Users/LoginHistory.php');
@@ -66,7 +66,7 @@ function create_default_users() {
         global $default_user_is_admin;
 
         // create default admin user
-    	$user = new User();
+    	$user = new Users();
         $user->column_fields["last_name"] = 'Administrator';
         $user->column_fields["user_name"] = 'admin';
         $user->column_fields["status"] = 'Active';
@@ -97,18 +97,10 @@ function create_default_users() {
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 	$user->column_fields["roleid"] = $role_id;
+	$user->column_fields["assigned_org"] = array( "0" => "vtiger");
+	$user->column_fields["primray_org"] = "vtiger";
 
         $user->save("Users");
-
-	//Inserting Entries into vtiger_groups table
-	$result = $db->query("select groupid from vtiger_groups where groupname='Team Selling';");
- 	$group1_id = $db->query_result($result,0,"groupid");
- 	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
- 	$group2_id = $db->query_result($result,0,"groupid");
- 	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
- 	$group3_id = $db->query_result($result,0,"groupid");
-
- 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
 
         // we need to change the admin user to a fixed id of 1.
         //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
@@ -122,7 +114,7 @@ function create_default_users() {
 
 
 	//Creating the Standard User
-    	$user = new User();
+    	$user = new Users();
         $user->column_fields["last_name"] = 'StandardUser';
         $user->column_fields["user_name"] = 'standarduser';
         $user->column_fields["is_admin"] = 'off';
@@ -149,17 +141,29 @@ function create_default_users() {
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 	$user->column_fields["roleid"] = $role_id;
+	$user->column_fields["assigned_org"] = array( "0" => "vtiger");
+	$user->column_fields["primray_org"] = "vtiger";
 
-    $user->save('Users');
+	$user->save('Users');
 
 	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
-	$db->query("insert into vtiger_users2group values ('".$group1_id."',".$user->id.")");
- 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
- 	$db->query("insert into vtiger_users2group values ('".$group3_id."',".$user->id.")");
+	//Inserting into vtiger_groups table
+	$db->startTransaction();
+	$result = $db->query("select groupid from vtiger_groups where groupname='Team Selling';");
+	$group1_id = $db->query_result($result,0,"groupid");
+	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
+	$group2_id = $db->query_result($result,0,"groupid");
+	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
+	$group3_id = $db->query_result($result,0,"groupid");
 
+	$db->query("insert into vtiger_users2group values ('".$group1_id."',2)");
+	$db->query("insert into vtiger_users2group values ('".$group2_id."',1)");
+	$db->query("insert into vtiger_users2group values ('".$group2_id."',2)");
+	$db->query("insert into vtiger_users2group values ('".$group3_id."',2)");
+	$db->completeTransaction();
 }
 
 //$startTime = microtime();
@@ -171,69 +175,42 @@ $focus=0;
 $success = $adb->createTables("schema/DatabaseSchema.xml");
 
 //Postgres8 fix - create sequences. 
-//   This should be a part of "createTables" however ...
  if( $adb->dbType == "pgsql" ) {
+     //  Create required functions
+     $adb->query( 'CREATE LANGUAGE plperl');
+     $adb->query( 'CREATE OR REPLACE FUNCTION concat(varchar,varchar)  RETURNS varchar AS $$
+		      my $s = "";
+		      foreach my $t (@_) { $s .= $t; }
+		      return $s;
+		   $$ LANGUAGE plperl');
+     $adb->query( 'CREATE OR REPLACE FUNCTION concat(varchar,varchar,varchar)  RETURNS varchar AS $$
+		      my $s = "";
+		      foreach my $t (@_) { $s .= $t; }
+		      return $s;
+		   $$ LANGUAGE plperl');
+     $adb->query( 'CREATE OR REPLACE FUNCTION concat(varchar,varchar,varchar,varchar)  RETURNS varchar AS $$
+		      my $s = "";
+		      foreach my $t (@_) { $s .= $t; }
+		      return $s;
+		   $$ LANGUAGE plperl');
+
+     //  Create sequences currently not implemented in the database schema
      $sequences = array(
- 	"vtiger_leadsource_seq",
- 	"vtiger_accounttype_seq",
- 	"vtiger_industry_seq",
- 	"vtiger_leadstatus_seq",
- 	"vtiger_rating_seq",
- 	"vtiger_licencekeystatus_seq",
- 	"vtiger_opportunity_type_seq",
- 	"vtiger_salutationtype_seq",
- 	"vtiger_sales_stage_seq",
- 	"vtiger_ticketstatus_seq",
- 	"vtiger_ticketpriorities_seq",
- 	"vtiger_ticketseverities_seq",
- 	"vtiger_ticketcategories_seq",
- 	"vtiger_duration_minutes_seq",
- 	"vtiger_eventstatus_seq",
- 	"vtiger_taskstatus_seq",
- 	"vtiger_taskpriority_seq",
- 	"vtiger_manufacturer_seq",
- 	"vtiger_productcategory_seq",
- 	"vtiger_activitytype_seq",
- 	"vtiger_currency_seq",
- 	"vtiger_faqcategories_seq",
- 	"vtiger_usageunit_seq",
- 	"vtiger_glacct_seq",
- 	"vtiger_quotestage_seq",
- 	"vtiger_carrier_seq",
- 	"vtiger_taxclass_seq",
- 	"vtiger_recurringtype_seq",
- 	"vtiger_faqstatus_seq",
- 	"vtiger_invoicestatus_seq",
- 	"vtiger_postatus_seq",
- 	"vtiger_sostatus_seq",
- 	"vtiger_visibility_seq",
- 	"vtiger_campaigntype_seq",
- 	"vtiger_campaignstatus_seq",
- 	"vtiger_expectedresponse_seq",
- 	"vtiger_status_seq",
- 	"vtiger_activity_view_seq",
- 	"vtiger_lead_view_seq",
- 	"vtiger_date_format_seq",
- 	"vtiger_users_seq",
- 	"vtiger_role_seq",
- 	"vtiger_profile_seq",
- 	"vtiger_field_seq",
- 	"vtiger_def_org_share_seq",
- 	"vtiger_datashare_relatedmodules_seq",
- 	"vtiger_relatedlists_seq",
- 	"vtiger_notificationscheduler_seq",
- 	"vtiger_inventorynotification_seq",
- 	"vtiger_currency_info_seq",
- 	"vtiger_emailtemplates_seq",
- 	"vtiger_inventory_tandc_seq",
- 	"vtiger_selectquery_seq",
- 	"vtiger_customview_seq",
- 	"vtiger_crmentity_seq",
- 	"vtiger_seactivityrel_seq",
- 	"vtiger_freetags_seq",
- 	"vtiger_shippingtaxinfo_seq",
- 	"vtiger_inventorytaxinfo_seq"
- 	);
+	"vtiger_role_roleid_seq",
+	"vtiger_audit_trial_auditid_seq",
+	"vtiger_datashare_relatedmodules_datashare_relatedmodule_id_seq",
+	"vtiger_relatedlists_relation_id_seq",
+	"vtiger_inventory_tandc_id_seq",
+	"vtiger_customview_cvid_seq",
+	"vtiger_crmentity_crmid_seq",
+	"vtiger_seactivityrel_crmid_seq",
+	"vtiger_selectquery_queryid_seq",
+	"vtiger_systems_id_seq",
+	"vtiger_freetags_id_seq",
+	"vtiger_inventorytaxinfo_taxid_seq",
+	"vtiger_shippingtaxinfo_taxid_seq",
+	"vtiger_groups_groupid_seq"
+    );
  
      foreach ($sequences as $sequence ) {
  	$log->info( "Creating sequence ".$sequence);
@@ -249,6 +226,7 @@ elseif ($success==1)
 	die("Error: Tables partially created.  Table creation failed.\n");
 	//eecho("Tables Successfully created.\n");
 
+// Populate default data
 foreach ($modules as $module ) 
 {
 	$focus = new $module();
@@ -265,6 +243,7 @@ $combo->create_tables();
 create_tab_data_file();
 create_parenttab_data_file();
 
+// Create the default users
 create_default_users();
 
 // default report population

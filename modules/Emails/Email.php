@@ -257,8 +257,50 @@ class Email extends CRMEntity {
 	function create_export_query(&$order_by, &$where)
 	{
 		global $log;
+		global $current_user;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		$query = 'SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_attachments.name as filename, vtiger_crmentity.description as email_content FROM vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_seattachmentsrel on vtiger_activity.activityid=vtiger_seattachmentsrel.crmid left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_activity.activitytype="Emails" and vtiger_crmentity.deleted=0';
+
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Emails", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM vtiger_activity 
+			INNER JOIN vtiger_crmentity 
+				ON vtiger_crmentity.crmid=vtiger_activity.activityid 
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_seactivityrel.crmid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+				AND vtiger_cntactivityrel.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			LEFT JOIN vtiger_salesmanactivityrel
+				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_emaildetails
+				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
+			LEFT JOIN vtiger_seattachmentsrel 
+				ON vtiger_activity.activityid=vtiger_seattachmentsrel.crmid 
+			LEFT JOIN vtiger_attachments 
+				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid 
+			WHERE vtiger_activity.activitytype='Emails' AND vtiger_crmentity.deleted=0 ";
+
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+		{
+			$sec_parameter=getListViewSecurityParameter("Emails");
+			$query .= $sec_parameter;	
+		}
 
 		$log->debug("Exiting create_export_query method ...");
                 return $query;

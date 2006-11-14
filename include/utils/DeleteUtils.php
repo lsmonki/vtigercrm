@@ -6,7 +6,7 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
+ *
  ********************************************************************************/
 
 /**
@@ -341,11 +341,22 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		$del_query = "delete from vtiger_portal where portalid=".$record;
 		$adb->query($del_query);
 	break;
+	case Organization:
+		$del_query = "update vtiger_orgunit set deleted=1 where organizationname='".$record."'";
+		$adb->query($del_query);
+		$del_query = "update vtiger_organizationdetails set deleted=1 where organizationname='".$record."'";
+		$adb->query($del_query);
+	break;
+	case OrgUnit:
+		$del_query = "update vtiger_orgunit set deleted=1 where orgunitid=".$record;
+		$adb->query($del_query);
+	break;
 	endswitch;
 	}
 
 	//this is added to update the crmentity.deleted=1 when we delete from listview and not from relatedlist
-	if($return_module == $module && $return_module !='Rss' && $return_module !='Portal')
+	if($return_module == $module && $return_module != 'Rss' && $return_module != 'Portal' &&
+	     $return_module != 'Organization' && $return_module != 'OrgUnit')
 	{	
 		require_once('include/freetag/freetag.class.php');
 		$freetag=new freetag();
@@ -354,7 +365,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	}
 
 	//This is to delete the entity information from tracker ie., lastviewed 
-	if($module != 'Faq')
+	if($module != 'Faq' && $module != 'Organization' && $module != 'OrgUnit')
 	{	
 		$sql_recentviewed ='delete from vtiger_tracker where user_id = '.$current_user->id.' and item_id = '.$record;
         	$adb->query($sql_recentviewed);
