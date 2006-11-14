@@ -1070,26 +1070,29 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	$log->debug("Exiting getBlocks method ...");
 	$index_count =1;
 	$max_index =0;
-	foreach($getBlockInfo as $label=>$contents)
+	if(count($getBlockInfo) > 0)
 	{
+		foreach($getBlockInfo as $label=>$contents)
+		{
 			$no_rows = count($contents);	
 			$index_count = $max_index+1;
-		foreach($contents as $block_row => $elements)
-		{
-			$max_index= $no_rows+$index_count;
-			
-			for($i=0;$i<count($elements);$i++)
-			{	
-				if(sizeof($getBlockInfo[$label][$block_row][$i])!=0)
-				{
-					if($i==0)
-					$getBlockInfo[$label][$block_row][$i][]=array($index_count);
-					else
-					$getBlockInfo[$label][$block_row][$i][]=array($max_index);
+			foreach($contents as $block_row => $elements)
+			{
+				$max_index= $no_rows+$index_count;
+
+				for($i=0;$i<count($elements);$i++)
+				{	
+					if(sizeof($getBlockInfo[$label][$block_row][$i])!=0)
+					{
+						if($i==0)
+						$getBlockInfo[$label][$block_row][$i][]=array($index_count);
+						else
+						$getBlockInfo[$label][$block_row][$i][]=array($max_index);
+					}
 				}
+				$index_count++;
+
 			}
-			$index_count++;
-			
 		}
 	}
 	return $getBlockInfo;
