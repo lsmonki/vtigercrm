@@ -132,7 +132,8 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 
 $entries = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
 $entries['Email Information']['4']['Description']['value'] = from_html($entries['Email Information']['4']['Description']['value']);
-$smarty->assign("BLOCKS", $entries['Email Information']);
+//changed this to view description in all langauge - bharath
+$smarty->assign("BLOCKS",$entries[$mod_strings['LBL_EMAIL_INFORMATION']]); 
 $smarty->assign("SINGLE_MOD", 'Email');
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);

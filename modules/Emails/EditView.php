@@ -163,7 +163,8 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
-$smarty->assign("BLOCKS",$details['Email Information']);
+//changed this below line to view description in all language - bharath
+$smarty->assign("BLOCKS",$details[$mod_strings['LBL_EMAIL_INFORMATION']]); 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
 
