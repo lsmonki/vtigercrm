@@ -5195,6 +5195,7 @@
 			<col>parenttab_label</col>
 			<col>visible</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_tmp_read_user_sharing_per">
