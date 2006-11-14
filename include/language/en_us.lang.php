@@ -635,31 +635,9 @@ $app_strings = array (
   'Expected Response' => 'Expected Response',
   'LBL_ADDRESS_INF' => 'Address Information',
   'yes' => 'yes',
-  'don' => 'don',
-  'nayanthara' => 'nayanthara',
-  'LNK_NEW_DON' => 'New don',
-  'patient' => 'patient',
-  'medical' => 'medical',
-  'LNK_NEW_PATIENT' => 'New patient',
-  'cars' => 'cars',
-  'automobile' => 'automobile',
-  'LNK_NEW_CARS' => 'New cars',
-  'king' => 'king',
-  'LNK_NEW_KING' => 'New king',
-  'Forests' => 'Forests',
-  'Congo' => 'Congo',
-  'LNK_NEW_FORESTS' => 'New Forests',
-  'rock' => 'rock',
-  'Solid' => 'Solid',
-  'LNK_NEW_ROCK' => 'New rock',
-  'lexus' => 'lexus',
-  'toyota' => 'toyota',
-  'LNK_NEW_LEXUS' => 'New lexus',
-  'medicine' => 'medicine',
-  'Indica' => 'Indica',
-  'Tata' => 'Tata',
-  'SINGLE_Indica' => 'Indica',
-);$app_list_strings = array (
+);
+
+$app_list_strings = array (
   'moduleList' => 
   array (
     'Home' => 'Home',
