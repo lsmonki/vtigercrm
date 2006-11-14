@@ -77,7 +77,7 @@ function sensex_info()
 				   <tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 
-					{if $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Products'}	
+					{if $ADVBLOCKS neq ''}	
 						<td width=75 style="width:15%" align="center" nowrap class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab','normal','{$MODULE}')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
                     				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab','normal','{$MODULE}')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
                    				<td class="dvtTabCache" style="width:65%" nowrap>&nbsp;</td>
