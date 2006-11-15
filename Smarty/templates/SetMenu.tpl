@@ -162,9 +162,9 @@
 		{/if}
 
 		{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'UsersAjax' }
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
 		{/if}
 		
 		{if $smarty.request.action eq 'DefModuleView'}
