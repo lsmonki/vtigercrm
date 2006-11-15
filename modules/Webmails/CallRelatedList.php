@@ -85,7 +85,6 @@ $smarty->assign("id",$_REQUEST["record"]);
 $smarty->assign("NAME","From: ".$from);
 $smarty->assign("RELATEDLISTS", $block);
 $smarty->assign("SINGLE_MOD","Webmails");
-$smarty->assign("REDIR_MOD","Webmails");
 $smarty->assign("MODULE", "Webmails");
 $smarty->assign("ID",$_REQUEST["record"] );
 $smarty->assign("MOD",$mod_strings);

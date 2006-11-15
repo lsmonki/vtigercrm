@@ -72,7 +72,6 @@ $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'Contact');
-$smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')

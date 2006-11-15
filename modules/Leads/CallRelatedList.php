@@ -69,7 +69,6 @@ $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD",$app_strings['Lead']);
-$smarty->assign("REDIR_MOD","leads");
 $smarty->assign("MODULE", $currentmodule);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
