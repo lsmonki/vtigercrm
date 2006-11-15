@@ -125,7 +125,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$fieldname = $focus->list_fields_name[$name];
 		}
 
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
@@ -570,7 +570,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 			}
 
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 			{
 
 
