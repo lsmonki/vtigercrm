@@ -22,6 +22,7 @@
 global $entityDel;
 global $display;
 global $category;
+
 require_once('include/utils/utils.php');
 
 
