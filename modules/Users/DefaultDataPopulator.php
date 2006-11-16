@@ -922,7 +922,7 @@ $this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_tro
 $this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid','activityid')");
 $this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid','activityid')");
 $this->db->query("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid','product_id')");
-$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','lastname,firstname','id','id')");
+$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','last_name,first_name','id','id')");
 $this->db->query("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid','invoiceid')");
 $this->db->query("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid','quote_id')");
 $this->db->query("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid','purchaseorderid')");
