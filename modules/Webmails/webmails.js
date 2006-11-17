@@ -27,9 +27,17 @@ function load_webmail(mid) {
         $("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
         $("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
 
-        $("body_area").removeChild($("body_area").firstChild);
-        $("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox='+mailbox, width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
-
+	//Fix for webmails body display in IE - dartagnanlaf 
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Webmails&action=body&mailid=' + mid + '&mailbox='+mailbox,
+                        onComplete: function(response) {
+                                document.getElementById("body_area").innerHTML=response.responseText;
+                        }
+                }
+          );
         tmp = document.getElementsByClassName("previewWindow");
         for(var i=0;i<tmp.length;i++) {
                 if(tmp[i].style.visibility === "hidden") {
