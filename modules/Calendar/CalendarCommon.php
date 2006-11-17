@@ -16,16 +16,20 @@
  */
 function getSharedUserId($id)
 {
-        global $adb;
-	$sharedid = Array();
-        $query = "SELECT * from vtiger_sharedcalendar where userid=".$id;
+	global $adb;
+        $sharedid = Array();
+        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=".$id;
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
         {
-	        $sharedid[] = $adb->query_result($result,$j,'sharedid');
+
+                $id = $adb->query_result($result,$j,'sharedid');
+                $sharedname = $adb->query_result($result,$j,'user_name');
+                $sharedid[$id]=$sharedname;
+
         }
-        return $sharedid;
+	return $sharedid;
 }
 
 /**

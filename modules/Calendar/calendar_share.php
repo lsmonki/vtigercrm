@@ -39,6 +39,8 @@ require_once('modules/Calendar/CalendarCommon.php');
 <input type="hidden" name="subtab" value="<?php echo $_REQUEST['subtab'] ?>">
 <input type="hidden" name="parenttab" value="<?php echo $_REQUEST['parenttab'] ?>">
 <input type="hidden" name="current_userid" value="<? echo $current_user->id ?>" >
+<input type="hidden" name="shar_userid" id="shar_userid" >
+
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 	<tr>
 		<td class=small >
@@ -91,24 +93,65 @@ require_once('modules/Calendar/CalendarCommon.php');
 		<td align="left">
 		<b><?echo $mod_strings['LBL_CALSHARE']?></b><br>
 		<?echo $mod_strings['LBL_CALSHAREMESSAGE']?><br><br>
-		<div id="cal_shar" style="border:1px solid #666666;width:90%;height:200px;overflow:auto;position:relative;">
-			<table width="95%" border="0" cellpadding="5" cellspacing="0" align="center">
-				<?php
-					$cnt = 1;
-					echo '<tr>';
-					foreach($userDetails as $id=>$name)
-					{
-						if(in_array($id,$shareduser_ids))
-							$checkbox = "checked";
-						else
-							$checkbox = "";
-						echo '<td width="50%" align="left"><input type="checkbox" name="user[]" value='.$id.' '.$checkbox.'>&nbsp;'.$name.'</td>';
-						if($cnt%2 == 0)
-							echo '</tr>';
-                                                $cnt++;
-					}
-                    		?>
-			</table>
+		<!-- Calendar sharing UI-->
+			<DIV id="cal_shar" style="display:block;width:100%;height:200px">
+                                <table border=0 cellspacing=0 cellpadding=2 width=100% bgcolor="#FFFFFF">
+                                <tr>
+                                        <td valign=top>
+                                                <table border=0 cellspacing=0 cellpadding=2 width=100%>
+                                                <tr>
+                                                        <td colspan=3>
+                                                                <ul style="padding-left:20px">
+                                                                <li><?php echo $mod_strings['LBL_INVITE_INST1']?>
+                                                                <li><?php echo $mod_strings['LBL_INVITE_INST2']?>
+                                                                </ul>
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td><b><?php echo $mod_strings['LBL_AVL_USERS']?></b></td>
+                                                        <td>&nbsp;</td>
+                                                        <td><b><?php echo $mod_strings['LBL_SEL_USERS']?></b></td>
+                                                </tr>
+                                                <tr>
+                                                        <td width=40% align=center valign=top>
+                                                        <select name="available_users" id="available_users" class=small size=5
+ multiple style="height:70px;width:100%">
+                                                        <?php
+                                                                foreach($userDetails as $id=>$name)
+                                                                {
+                                                                        if($id != '')
+                                                                        echo "<option value=".$id.">".$name."</option>";
+                                                                 }
+                                                        ?>
+                                                                </select>
+
+                                                        </td>
+                                                        <td width=20% align=center valign=top>
+                                                                <input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="addsharedColumn('available_users','selected_users')"><br>
+                                                                <input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="delsharedColumn('selected_users')">
+							</td>
+							<td>
+							<select name="selected_users" id="selected_users" class=small size=5 multiple style="height:70px;width:100%">
+							<?php
+                                                                foreach($shareduser_ids as $shar_id=>$share_user)
+                                                                {
+                                                                        if($shar_id != '')
+                                                                        echo "<option value=".$shar_id.">".$share_user."</option>";
+                                                                }
+                                                        ?>
+                                                                </select>
+	
+
+                                                        </select>
+							<td>
+                                                </tr>
+                                                </table>
+
+
+                                        </td>
+                                </tr>
+                                </table>
+
 		</div>
 		</td>
 	</tr>
@@ -119,7 +162,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
 		<td align="center">
-			<input type="submit" name="save" value=" &nbsp;<? echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>&nbsp;" class="crmbutton small save" />&nbsp;&nbsp;
+			<input type="submit" name="save" value=" &nbsp;<? echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>&nbsp;" class="crmbutton small save" onClick = "userEventSharing('shar_userid','selected_users');"/>&nbsp;&nbsp;
 			<input type="button" name="cancel" value=" <? echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?> " class="crmbutton small cancel" onclick="fninvsh('calSettings');" />
 		</td>
 	</tr>

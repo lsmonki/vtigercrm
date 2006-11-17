@@ -17,7 +17,8 @@ else
 	$hour_format = 'am/pm';
 $delquery = "delete from vtiger_sharedcalendar where userid=".$_REQUEST["current_userid"];
 $adb->query($delquery);
-$sharedid = $_REQUEST['user'];
+$selectedid = $_REQUEST['shar_userid'];
+$sharedid = explode (";",$selectedid);
 if(isset($sharedid) && $sharedid != null)
 {
         foreach($sharedid as $sid)

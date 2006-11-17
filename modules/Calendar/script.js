@@ -190,7 +190,7 @@ function enableCalstarttime()
 }
 function maincheck_form()
 {
-	formSelectColumnString('inviteesid');
+	formSelectColumnString('inviteesid','selectedusers');
 	starthour = document.EditView.starthr.value;
         startmin  = document.EditView.startmin.value;
         startformat = document.EditView.startfmt.value;
@@ -294,7 +294,7 @@ function maincheck_form()
 }
 function check_form()
 {
-	formSelectColumnString('inviteesid');
+	formSelectColumnString('inviteesid','selectedusers');
         if(trim(document.EditView.subject.value) == "")
         {
                 alert("Missing Event Name");
@@ -497,12 +497,20 @@ function setObjects()
 
 }
 
+function userEventSharing(selectedusrid,selcolid)
+{
+        formSelectColumnString(selectedusrid,selcolid);
+}
+
+
 
 
 function addColumn()
 {
+	setObjects();
         var selectlength=selectedColumnsObj.length
         var availlength=availListObj.length
+		
         var s=0
         for (i=0;i<selectlength;i++)
         {
@@ -512,13 +520,16 @@ function addColumn()
         {
                 if (availListObj.options[s].selected==true)
                 {
+			
                         for (j=0;j<selectlength;j++)
                         {
                                 if (selectedColumnsObj.options[j].value==availListObj.options[s].value)
                                 {
+
                                         var rowFound=true
                                         var existingObj=selectedColumnsObj.options[j]
-                                        breaK;
+					
+                                        break;
                                 }
                         }
                         if (rowFound!=true)
@@ -528,22 +539,24 @@ function addColumn()
                                         if (browser_ie) newColObj.innerText=availListObj.options[s].innerText
                                         else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[s].text
                                                 selectedColumnsObj.appendChild(newColObj)
-                                        availListObj.removeChild(availListObj.options[s])
+					availListObj.removeChild(availListObj.options[s])
                                         newColObj.selected=true
                                         rowFound=false
                         }
                         else
                         {
                                 existingObj.selected=true
+				
                         }
                 }
 		else
                         s++
         }
 }
-
 function delColumn()
 {
+	
+	setObjects();
         var selectlength=selectedColumnsObj.length
         var availlength=availListObj.length
         var s=0
@@ -561,7 +574,7 @@ function delColumn()
                                 {
                                         var rowFound=true
                                         var existingObj=availListObj.options[j]
-                                        breaK;
+                                        break;
                                 }
                         }
 
@@ -570,24 +583,85 @@ function delColumn()
                                 var newColObj=document.createElement("OPTION")
                                         newColObj.value=selectedColumnsObj.options[s].value
                                         if (browser_ie) newColObj.innerText=selectedColumnsObj.options[s].innerText
-                                        else if (browser_nn4 || browser_nn6) newColObj.text=selectedColumnsObj.options[s].text
+                                        else if (browser_nn4 || browser_nn6) 
+						newColObj.text=selectedColumnsObj.options[s].text
                                                 availListObj.appendChild(newColObj)
                                         selectedColumnsObj.removeChild(selectedColumnsObj.options[s])
                                         newColObj.selected=true
                                         rowFound=false
                         }
-                        else
+			else
                         {
                                 existingObj.selected=true
                         }
                 }
-		else
+                else
                         s++
-        }
+      
+	}
+
+	
+}
+function addsharedColumn(avail_users,sel_users)
+{
+	availListObj=getObj(avail_users)
+        selectedColumnsObj=getObj(sel_users)
+        var selectlength=selectedColumnsObj.length
+        var availlength=availListObj.length
+
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		selectedColumnsObj.options[i].selected=false
+	}
+	for (i=0;i<availListObj.length;i++) 
+	{
+		if (availListObj.options[i].selected==true) 
+		{
+			for (j=0;j<selectedColumnsObj.length;j++) 
+			{
+				if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+				{
+					var rowFound=true
+						var existingObj=selectedColumnsObj.options[j]
+						break
+				}
+			}
+			if (rowFound!=true) 
+			{
+				var newColObj=document.createElement("OPTION")
+					newColObj.value=availListObj.options[i].value
+					if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+					else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+						selectedColumnsObj.appendChild(newColObj)
+							availListObj.options[i].selected=false
+							newColObj.selected=true
+							rowFound=false
+			}
+			else 
+			{
+				existingObj.selected=true
+			}
+		}
+	}
 }
 
-function formSelectColumnString(usr)
+function delsharedColumn(sel_users)
 {
+	selectedColumnsObj=getObj(sel_users)
+        var selectlength=selectedColumnsObj.options.length
+	for(i = 0; i <= selectlength; i++)
+	{
+		if(selectedColumnsObj.options.selectedIndex >= 0)
+		selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)	
+	}
+	
+}
+
+
+function formSelectColumnString(usr,col)
+{
+	
+	var selectedColumnsObj=getObj(col)
 	usr_id = document.getElementById(usr);
 	var selectedColStr = "";
         for (i=0;i<selectedColumnsObj.options.length;i++)
