@@ -145,11 +145,11 @@ global $list_max_entries_per_page;
 $implict_account = false;
 
 $import_modules_array = Array(
-				"Leads"=>"Lead",
-				"Accounts"=>"Account",
-				"Contacts"=>"Contact",
-				"Potentials"=>"Potential",
-				"Products"=>"Product" 
+				"Leads"=>"Leads",
+				"Accounts"=>"Accounts",
+				"Contacts"=>"Contacts",
+				"Potentials"=>"Potentials",
+				"Products"=>"Products" 
 			     );
 
 foreach($import_modules_array as $module_name => $object_name)
