@@ -55,7 +55,8 @@ class Webmail extends CRMEntity {
 
 		$this->to = $this->headers["theader"]["to"];
 		$this->to_name = $this->headers["theader"]["to_name"];
-		$this->db->println("Webmail TO: $this->to");
+		$this->db->println("Webmail TO:");
+		$this->db->println($this->to);
 
 		$this->from = $this->headers["theader"]["from"];
 		$this->fromname = $this->headers["theader"]["from_name"];

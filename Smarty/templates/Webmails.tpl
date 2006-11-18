@@ -158,7 +158,7 @@
 					</td>
 				   </tr>
 				   <tr>
-					<td>&nbsp;</td>
+					<td colspan="2">&nbsp;</td>
 				   </tr>
 				   <tr style="visibility:hidden" class="previewWindow">
 					<td>&nbsp;</td>
@@ -167,7 +167,7 @@
 					<!-- Table to display the Qualify, Reply, Forward, etc buttons - Starts -->
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					   <tr>
-						<td width="75%">
+						<td width="75%" nowrap>
 							<span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="crmbutton small create" /></span>&nbsp;
 							<span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="crmbutton small edit" /></span>&nbsp;
@@ -196,7 +196,10 @@
 					</table>
 					<!-- Table to display the Header details (From, To, Subject and date) - Ends -->
 
-					<span id="body_area" style="width:95%">&nbsp;</span></td>
+					   <span id="body_area" style="width:95%">
+						<iframe id="email_description" width="100%" height="210" frameBorder="0"></iframe>
+					   </span>
+					</td>
 				   </tr>
 				</table>
 			</td>

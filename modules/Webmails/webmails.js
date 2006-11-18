@@ -27,8 +27,9 @@ function load_webmail(mid) {
         $("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
         $("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
 
-	//Fix for webmails body display in IE - dartagnanlaf 
-	new Ajax.Request(
+	//Fix for webmails body display in IE - dartagnanlaf
+	/*
+        new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
@@ -38,6 +39,12 @@ function load_webmail(mid) {
                         }
                 }
           );
+	*/
+
+	oiframe = $("email_description");
+	oiframe.src = 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox='+mailbox;
+        //$("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox='+mailbox, width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
+
         tmp = document.getElementsByClassName("previewWindow");
         for(var i=0;i<tmp.length;i++) {
                 if(tmp[i].style.visibility === "hidden") {
@@ -267,6 +274,8 @@ function check_for_new_mail(mbox) {
                                         for(var j=0;j<tels.length;j++) {
 					    try {
                                                 if(tels[j].id.match(/row_/)) {
+							//we are deleting the row and add it - AVOID THIS DELTE - MICKIE
+                                                	$("message_table").childNodes[1].deleteRow(tr,tels[j]);
                                                 	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
                                                         break;
                                         	}
@@ -350,7 +359,8 @@ function move_messages() {
                                         'index.php',
                                         {queue: {position: 'end', scope: 'command'},
                                                 method: 'post',
-                                                postBody: 'module=Webmails&action=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                                                postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                                                //postBody: 'module=Webmails&action=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
                                                 onComplete: function(t) {
                                                         //alert(t.responseText);
                                                 }

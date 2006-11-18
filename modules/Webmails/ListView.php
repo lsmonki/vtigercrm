@@ -87,34 +87,47 @@ if($_POST["command"] == "check_mbox_all") {
 if($_POST["command"] == "check_mbox") {
         $adb->println("Inside check_mbox AJAX command");
 
-        $search = imap_search($MailBox->mbox, "ALL NEW");
+	$criteria = 'ALL NEW';
+        $search = imap_search($MailBox->mbox, $criteria);
         if($search === false) {echo "failed";flush();exit();}
 
+	$adb->println("imap_search($MailBox->mbox, $criteria) ===> ");
+	$adb->println($search);
+	
         $data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
         $num=sizeof($data);
+
+	$adb->println("fetched data using imap_fetch_overview ==>");
+	$adb->println($data);
 
         $ret = '';
         if($num > 0) {
                 $ret = '{"mails":[';
-                for($i=0;$i<$num;$i++) {
-                        $ret .= '{"mail":';
-                        $ret .= '{';
-                        $ret .= '"mailid":"'.$data[$i]->msgno.'",';
-                        $ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
-                        $ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
-                        $ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
-                        $ret .= '"to":"'.$data[$i]->to.'",';
-                        $email = new Webmail($MailBox->mbox,$data[$i]->msgno);
-                        if($email->has_attachments)
-                                $ret .= '"attachments":"1"}';
-                        else
-                                $ret .= '"attachments":"0"}';
-                        if(($i+1) == $num)
-                                $ret .= '}';
-                        else
-                                $ret .= '},';
+                for($i=0;$i<$num;$i++) 
+		{
+			//Added condition to avoid show the deleted mails and readed mails
+			if($data[$i]->deleted == 0)// && $data[$i]->seen == 0)
+			{
+                        	$ret .= '{"mail":';
+                        	$ret .= '{';
+                        	$ret .= '"mailid":"'.$data[$i]->msgno.'",';
+                       		$ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
+                        	$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
+                        	$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
+                        	$ret .= '"to":"'.$data[$i]->to.'",';
+                        	$email = new Webmail($MailBox->mbox,$data[$i]->msgno);
+                        	if($email->has_attachments)
+                        	        $ret .= '"attachments":"1"}';
+                        	else
+                        	        $ret .= '"attachments":"0"}';
+                        	if(($i+1) == $num)
+                        	        $ret .= '}';
+                        	else
+                        	        $ret .= '},';
+			}
                 }
                 $ret .= ']}';
+		$adb->println("Ret Value ==> $ret");
         }
 
         echo $ret;
