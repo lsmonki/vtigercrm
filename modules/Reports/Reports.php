@@ -735,6 +735,45 @@ class Reports extends CRMEntity{
 
 		return $sjsStr;
 	}
+function getEscapedColumns($selectedfields)
+	{
+		$fieldname = $selectedfields[3];
+		if($fieldname == "parent_id")
+		{
+			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
+			{
+				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then vtiger_contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
+				return $querycolumn;
+			}
+			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
+			{
+				$querycolumn = "case vtiger_crmentityRelProducts.setype when 'Accounts' then vtiger_accountRelProducts.accountname when 'Leads' then vtiger_leaddetailsRelProducts.lastname when 'Potentials' then vtiger_potentialRelProducts.potentialname End"." '".$selectedfields[2]."', vtiger_crmentityRelProducts.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
+			{
+				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then vtiger_leaddetailsRelCalendar.lastname when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
+			}
+		}
+		return $querycolumn;
+	}
+	function getaccesfield($module)
+	{
+		global $current_user;
+		global $adb;
+		$access_fields = Array();
+		
+		$profileList = getCurrentUserProfileList();
+		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=(select tabid from vtiger_tab where vtiger_tab.name='".$module."') and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+
+		$result = $adb->query($query);
+
+		
+		while($collistrow = $adb->fetch_array($result))
+		{
+			$access_fields[] = $collistrow["fieldname"];
+		}
+		return $access_fields;
+	}
 
 	/** Function to set the order of grouping and to find the columns responsible
 	 *  to the grouping
@@ -777,52 +816,63 @@ class Reports extends CRMEntity{
 
 	function getSelectedColumnsList($reportid)
 	{
-
 		global $adb;
 		global $modules;
-		global $log;
+		global $log,$current_user;
 
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
-		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid where vtiger_report.reportid =".$reportid;
+		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
+		$ssql .= " where vtiger_report.reportid =".$reportid;
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
-
 		$result = $adb->query($ssql);
-		$noofrows = $adb->num_rows($result);
+		
+		$permitted_fields = Array();
 
-		for($i=0; $i<$noofrows; $i++)
+		while($columnslistrow = $adb->fetch_array($result))
 		{
-			$fieldcolname = $adb->query_result($result,$i,"columnname");
-			$fieldlist = explode(":",$fieldcolname);
-			
-			//Fix for multilanguage support - code contribution by Ding jianting
-			$fieldlabel_array = explode("_",$fieldlist[2]);
-			$mod_strings = return_module_language($current_language,$fieldlabel_array[0]);
-			if($fieldcolname != "")
+			$fieldname ="";
+			$fieldcolname = $columnslistrow["columnname"];
+			list($tablename,$fieldname,$module_field,$colname,$single) = split(":",$fieldcolname);
+			require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			if(sizeof($permitted_fields) == 0 && $is_admin != true && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				$fieldlabel = trim(str_replace($modules," ",$fieldlist[2]));
-				if(isset($mod_strings[$fieldlabel])) {
-					$shtml .= "<option value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
-				} else {
-					$shtml .= "<option value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				list($module,$field) = split("_",$module_field);
+				$permitted_fields = $this->getaccesfield($module);	
+			}
+			$selectedfields = explode(":",$fieldcolname);
+
+			$querycolumns = $this->getEscapedColumns($selectedfields);
+
+			
+				$mod_strings = return_module_language($current_language,$module);
+				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));		
+			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields))
+			{
+				if(isset($mod_strings[$fieldlabel])) 
+				{
+					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$mod_strings[$fieldlabel]."</option>";
+				}
+				else 
+				{
+					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
 				}
 			}
-			//Code contribution ends
+			else
+			{
+				if(isset($mod_strings[$fieldlabel])) 
+				{
+					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
+				}
+			    	else 
+				{
+					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				}
+			}
 		}
-
-		$log->info("Reports :: Successfully returned getSelectedColumnsList");
-		return $shtml;
+		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
+		return $shtml;		
 	}
-
-	/** Function to Set the selected columns for the advanced filter for the vtiger_report
-	 *  This function accepts the vtiger_reportid as the argument and get the selected columns
-	 *  in the advanced filter and sets the values
-	 *  $this->advft_column[] = The column name
-	 *  $this->advft_option[] = The filter option
-	 *  $this->advft_value[] = The value to be compared
-	 *	and returns true in sucess
-	 */
-
-	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
 	function getAdvancedFilterList($reportid)
 	{
 		global $adb;
@@ -929,8 +979,8 @@ class Reports extends CRMEntity{
 
 		$log->info("Reports :: Successfully returned sgetColumntoTotalSelected");
 		return $options;
+	
 	}
-
 
 	/** Function to form the HTML for columns to total	
 	 *  This function formulates the HTML format of the

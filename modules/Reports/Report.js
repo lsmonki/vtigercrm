@@ -218,7 +218,15 @@ function addColumnStep1()
 		exit();
 	}
 }
-
+//this function is done for checking,whether the user has access to edit the field :Bharath
+function selectedColumnClick(oSel)
+{
+	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
+	{
+		alert("you are not allowed to edit this field");
+		oSel.options[oSel.selectedIndex].selected = false;	
+	}
+}
 function delColumn() 
 {
 	if (selectedColumnsObj.options.selectedIndex > -1)
@@ -250,6 +258,7 @@ function formSelectColumnString()
 function moveUp() 
 {
 	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
 	for (i=0;i<selectedColumnsObj.length;i++) 
 	{
 		if(i != currpos)
@@ -262,14 +271,20 @@ function moveUp()
 		if (browser_ie) 
 		{
 			temp=selectedColumnsObj.options[prevpos].innerText
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
 			selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
-			selectedColumnsObj.options[currpos].innerText=temp     
+			selectedColumnsObj.options[prevpos].disabled = false;
+			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;     
 		} 
 		else if (browser_nn4 || browser_nn6) 
 		{
 			temp=selectedColumnsObj.options[prevpos].text
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
 			selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[prevpos].disabled = false;
 			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
 		}
 		temp=selectedColumnsObj.options[prevpos].value
 		selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
@@ -283,6 +298,7 @@ function moveUp()
 function moveDown() 
 {
 	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
 	for (i=0;i<selectedColumnsObj.length;i++) 
 	{
 		if(i != currpos)
@@ -295,14 +311,23 @@ function moveDown()
 		if (browser_ie) 
 		{	
 			temp=selectedColumnsObj.options[nextpos].innerText
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
 			selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
+
 			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
 		}
 		else if (browser_nn4 || browser_nn6) 
 		{
 			temp=selectedColumnsObj.options[nextpos].text
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
 			selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
 			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
 		}
 		temp=selectedColumnsObj.options[nextpos].value
 		selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
