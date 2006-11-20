@@ -99,7 +99,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
 	$db_name = $dbconfig['db_name'];
 	else
-	$db_name = 'vtigercrm502';
+	$db_name = 'vtigercrm503';
 
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
@@ -145,7 +145,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
-		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm502" : $db_name = $_REQUEST['db_name'];
+		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm503" : $db_name = $_REQUEST['db_name'];
 		!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 		!isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
 		!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
