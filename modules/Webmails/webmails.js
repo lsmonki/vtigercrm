@@ -73,6 +73,7 @@ function load_webmail(mid) {
         $("full_view").removeChild($("full_view").firstChild);
         $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
 
+	node.className = 'mailSelected' 
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
@@ -439,7 +440,8 @@ function runEmailCommand(com,id) {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
-                                        row.className = "deletedRow";
+					row.className = 'delete_email';
+                                       // row.className = "deletedRow";
 
                                         Try.these (
 						function() {
