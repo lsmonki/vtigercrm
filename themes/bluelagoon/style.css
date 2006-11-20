@@ -1594,16 +1594,25 @@ level2Sel{
 
 .unread_email {
 	font-weight:bold;
+        background-color:#00FF00;
+
 }
 
 								    
 /* MY SITES */
 
-.unread_email {
+.unread_email:hover{
 	font-weight:bold;
 }
 
 
+.delete_email {
+	font-weight:bold;
+        background-color:#FF5151;
+
+}
+
+								    
 .tagCloud {
     border:1px solid #aaf;
 }
@@ -2209,4 +2218,25 @@ a.drop_down:Hover{
 }
 
 /* Recalculate Disable Ends */
-
+.mailSelected {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
+.mailSelected:hover {
+	background:#E1DCB3 url(images/tabSelectedBg.gif) repeat-x;
+	background-color:#1F5EFF;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
