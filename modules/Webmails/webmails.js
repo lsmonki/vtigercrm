@@ -53,22 +53,22 @@ function load_webmail(mid) {
         }
 
         $("delete_button").removeChild($("delete_button").firstChild);
-        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'classWebBtn', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
+        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'crmbutton small delete', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
 
         $("reply_button_all").removeChild($("reply_button_all").firstChild);
-        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'replyall\')'}));
+        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'replyall\')'}));
 
         $("reply_button").removeChild($("reply_button").firstChild);
-        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'reply\')'}));
+        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'reply\')'}));
 
         $("forward_button").removeChild($("forward_button").firstChild);
-        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'forward\')'}));
+        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'forward\')'}));
 
         $("qualify_button").removeChild($("qualify_button").firstChild);
-        $("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'classWebBtn', onclick: 'showRelationships('+mid+')'}));
+        $("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'crmbutton small save', onclick: 'showRelationships('+mid+')'}));
 
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
-        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'classWebBtn', onclick: 'displayAttachments('+mid+')'}));
+        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'crmbutton small save', onclick: 'displayAttachments('+mid+')'}));
 
         $("full_view").removeChild($("full_view").firstChild);
         $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
@@ -262,7 +262,7 @@ function check_for_new_mail(mbox) {
                                                         [ Builder.node('a',
                                                                 {href: 'javascript:;', onclick: 'runEmailCommand(\'delete_msg\','+mailid+')'},
                                                                 [ Builder.node('img',
-                                                                        {src: 'modules/Webmails/images/emailDelete.gif', border: '0', width: '14', height: '14', alt: 'del'}
+                                                                        {src: 'modules/Webmails/images/gnome-fs-trash-empty.png', border: '0', width: '14', height: '14', alt: 'del'}
                                                                 )]
                                                         )]
                                                 )]
@@ -473,7 +473,7 @@ function runEmailCommand(com,id) {
                                         node.style.display = '';
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
-                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/emailDelete.gif" border="0" width="14" height="14" alt="del"></a>';
+                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
                                 	$("status").style.display="none";
                                     break;
                                     case 'clear_flag':

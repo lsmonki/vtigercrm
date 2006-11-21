@@ -13,24 +13,18 @@
                 {include file='Buttons_List1.tpl'} 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
    <tr>
-	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">&nbsp;</td>
-	<td width="5%" class="showPanelBg">&nbsp;</td>
-   </tr>
-   <tr>
-	<td width="95%" style="padding-left:20px;" valign="top">
+	<td valign=top align=right><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">
+	<br>
 	<!-- module Select Table -->
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+		<table class="mailClient" width="100%"  border="0" cellspacing="0" cellpadding="0">
 		   <tr>
-			<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
-			<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
-			<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
-		   </tr>
-		   <tr>
-			<td bgcolor="#EBEBEB" width="7"></td>
-			<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;">
+			<td class="mailClientBg" width="7">&nbsp;</td>
+			<td class="mailClientBg">
+
 				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
                 		   <tr>
-					<td colspan="3" style="padding:10px;vertical-align:middle;">
+					<td colspan="3" style="padding:10px;vertical-align:middle;height:50px;">
 						<table width="100%" cellpadding="0" cellspacing="0" border="0">
 						   <tr>
 							<td width="10%">
@@ -53,18 +47,18 @@
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>
 							</td>
-							<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
+							<td>&nbsp;</td>
 						   </tr>
 						</table>
 					</td>
 				   </tr>
 				   <tr>
-					<td width="22%" bgcolor="#949494" style="overflow:auto"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
+					<td width="22%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
 					<td width="2%">&nbsp;</td>
-					<td width="60%" class="subHdr"><span style="float:left"><strong>{$ACCOUNT} &gt; {$MAILBOX} </strong></span> <span style="float:right">{$NAVIGATION}</span></td>
+					<td width="60%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></td>
 				   </tr>
 				   <tr>
-					<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
+					<td rowspan="6" valign="top" class="hdrNameBg">
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">Add Folder[X]</span></span>
 
 						<ul style="list-style-type:none;">
@@ -78,22 +72,22 @@
 
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
-							<li>
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;<b></b>
 							</li>
-							<li>
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 							</li>
-							<li>
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;
 							</li>
 						</ul><br />
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
-							<li>
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
 							</li>
@@ -101,7 +95,7 @@
 
 					</td>
 					<td>&nbsp;</td>
-					<td class="delBg">
+					<td class="hdrNameBg" style="height:30px;">
 
 			<!-- Table to display Delete, Move To and Search buttons and options - Starts -->
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -214,7 +208,7 @@
 		</table>
 		<br />
 	</td>
-	<td>&nbsp;</td>
+	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
 
