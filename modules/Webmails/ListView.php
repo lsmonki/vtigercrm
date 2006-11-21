@@ -280,7 +280,8 @@ $list = imap_getmailboxes($MailBox->mbox, "{".$MailBox->imapServerAddress."}", "
 sort($list);
 $i=0;
 if (is_array($list)) {
-      	$boxes = '<select name="mailbox" id="mailbox_select">';
+      	$boxes = '<select name="mailbox" id="mailbox_select" onChange="move_messages();">';
+        $boxes .= '<option value="move_to" SELECTED>Move To...</option>';
         foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))
@@ -293,7 +294,7 @@ if (is_array($list)) {
 		$i++;
 
 		if ($_REQUEST["mailbox"] == $tmpval) {
-                        $boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
+                        $boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
