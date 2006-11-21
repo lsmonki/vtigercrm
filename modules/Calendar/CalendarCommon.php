@@ -54,18 +54,13 @@ function getSharedCalendarId($sharedid)
 /**
  * To get userid and username of all vtiger_users except the current user
  * @param $id -- The user id :: Type integer
- * @param $check -- true/false :: Type boolean
  * @returns $user_details -- Array in the following format:
  * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
  */
-function getOtherUserName($id,$check)
+function getOtherUserName($id)
 {
-	global $adb,$current_user;
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	global $adb;
 	$user_details=Array();
-	if($check)
-	{
 		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
 		$result = $adb->query($query);
 		$num_rows=$adb->num_rows($result);
@@ -75,10 +70,23 @@ function getOtherUserName($id,$check)
 			$username=$adb->query_result($result,$i,'user_name');
 			$user_details[$userid]=$username;
 		}
+		return $user_details;
+}
 
-	}
-	else
-	{
+/**
+ * To get userid and username of vtiger_users in hierarchy level
+ * @param $id -- The user id :: Type integer
+ * @returns $user_details -- Array in the following format:
+ * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
+ */
+
+function getSharingUserName($id)
+{
+	global $adb,$current_user;
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+        $user_details=Array();
+
 		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
 		{
 			$user_details = get_user_array(FALSE, "Active", $id, 'private');
@@ -89,7 +97,6 @@ function getOtherUserName($id,$check)
 			$user_details = get_user_array(FALSE, "Active", $id);
 			unset($user_details[$id]);
 		}
-	}
 	return $user_details;
 }
 
