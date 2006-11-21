@@ -49,7 +49,10 @@ $delete_module_tables = Array(
 $dbquery = 'alter table '.$delete_module_tables[$fld_module].' drop column '.$colName;
 $adb->query($dbquery);
 
+//To remove customfield entry from vtiger_field table
+$dbquery = 'delete from vtiger_field where tablename= "'.$delete_module_tables[$fld_module].'" and fieldname="'.$colName.'"';
 
+$adb->query($dbquery);
 //we have to remove the entries in customview and report related tables which have this field ($colName)
 $adb->query("delete from vtiger_cvcolumnlist where columnname like '%".$colName."%'");
 $adb->query("delete from vtiger_cvstdfilter where columnname like '%".$colName."%'");
