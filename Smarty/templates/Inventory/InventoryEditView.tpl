@@ -88,7 +88,7 @@ function sensex_info()
 					<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
 					   <tr>
 
-						<td align=left style="padding:10px;border-right:1px dashed #CCCCCC;" width=80%>
+						<td align=left style="padding:10px;border-right:1px #CCCCCC;" width=80%>
 							{*<!-- content cache -->*}
 					
 							<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -156,10 +156,6 @@ function sensex_info()
 							</table>
 						</td>
 						<!-- Inventory Actions - ends -->
-						<td width=20% valign=top style="padding:10px;">
-							<!-- right side InventoryActions -->
-							{include file="Inventory/InventoryActions.tpl"}
-						</td>
 					   </tr>
 					</table>
 				</td>
