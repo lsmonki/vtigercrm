@@ -79,15 +79,15 @@
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
 							<li>
-								<img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;<b></b>
 							</li>
 							<li>
-								<img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 							</li>
 							<li>
-								<img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;
 							</li>
 						</ul><br />
