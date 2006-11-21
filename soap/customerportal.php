@@ -569,7 +569,32 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
   
  		$updatequery = "update vtiger_crmentity set modifiedtime=".$servercreatedtime." where crmid=".$ticketid;
   		$adb->query($updatequery);
-  	}	
+
+		//To get the username and user email id, user means assigned to user of the ticket
+		$result = $adb->query("select user_name, email1 from vtiger_users inner join vtiger_crmentity on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.crmid=$ticketid");
+		$owner = $adb->query_result($result,0,'user_name');
+		$to_email = $adb->query_result($result,0,'email1');
+
+		//To get the contact name
+		$result1 = $adb->query("select lastname, firstname, email from vtiger_contactdetails where contactid=$ownerid");
+		$customername = $adb->query_result($result1,0,'firstname').' '.$adb->query_result($result1,0,'lastname');
+		$from_email = $adb->query_result($result1,0,'email');
+
+		//send mail to the assigned to user when customer add comment
+		$subject = "Respond to Ticket ID ## $ticketid ## in Customer Portal - URGENT";
+		$contents = "Dear $owner,<br><br>
+				Customer has provided the following additional information to your reply:<br><br>
+
+				<b>".nl2br($comments)."</b><br><br>
+
+				Kindly respond to above ticket at the earliest.<br><br>
+
+				Regards,<br>
+				Support Administrator
+			    ";
+
+		$mailstatus = send_mail('HelpDesk',$to_email,$customername,$from_email,$subject,$contents);
+  	}
 }
 
 /**	function used to close the ticket
