@@ -45,10 +45,11 @@
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
-							<td width="12%">
+<!-- We do not need this feature. Confuses the end user as he is not used to it. Commented out by Richie -->
+							<!-- td width="12%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;"  onclick="show_hidden();" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
-							</td>
+							</td -->
 							<td width="18%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>
