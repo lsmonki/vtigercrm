@@ -286,9 +286,9 @@ if (is_array($list)) {
 		if(preg_match("/trash/i",$tmpval))
 			$img = "webmail_trash.gif";
 		elseif(preg_match("/sent/i",$tmpval))
-			$img = "webmail_uparrow.gif";
+			$img = "emailOutFolder.gif";
 		else
-			$img = "webmail_downarrow.gif";
+			$img = "emailInFolder.gif";
 
 		$i++;
 
