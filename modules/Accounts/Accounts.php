@@ -672,7 +672,8 @@ class Accounts extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Accounts", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list FROM ".$this->entity_table."
+		$query = "SELECT $fields_list, vtiger_accountgrouprelation.groupname as 'Assigned To Group' 
+	       			FROM ".$this->entity_table."
 				INNER JOIN vtiger_account
 					ON vtiger_crmentity.crmid = vtiger_account.accountid
 				LEFT JOIN vtiger_accountbillads
@@ -686,14 +687,13 @@ class Accounts extends CRMEntity {
 	                        LEFT JOIN vtiger_groups
                         	        ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
 				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id 
+					ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status = 'Active'
 				LEFT JOIN vtiger_account vtiger_account2 
 					ON vtiger_account2.accountid = vtiger_account.parentid
 				";//vtiger_account2 is added to get the Member of account
 
 
-		$where_auto = " vtiger_users.status = 'Active'
-			AND vtiger_crmentity.deleted = 0 ";
+		$where_auto = " vtiger_crmentity.deleted = 0 ";
 
 		if($where != "")
 			$query .= "WHERE ($where) AND ".$where_auto;
