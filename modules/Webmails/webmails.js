@@ -262,7 +262,7 @@ function check_for_new_mail(mbox) {
                                                         [ Builder.node('a',
                                                                 {href: 'javascript:;', onclick: 'runEmailCommand(\'delete_msg\','+mailid+')'},
                                                                 [ Builder.node('img',
-                                                                        {src: 'modules/Webmails/images/gnome-fs-trash-empty.png', border: '0', width: '14', height: '14', alt: 'del'}
+                                                                        {src: 'modules/Webmails/images/emailDelete.gif', border: '0', width: '14', height: '14', alt: 'del'}
                                                                 )]
                                                         )]
                                                 )]
@@ -473,7 +473,7 @@ function runEmailCommand(com,id) {
                                         node.style.display = '';
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
-                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
+                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/emailDelete.gif" border="0" width="14" height="14" alt="del"></a>';
                                 	$("status").style.display="none";
                                     break;
                                     case 'clear_flag':
