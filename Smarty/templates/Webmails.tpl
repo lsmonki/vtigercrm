@@ -45,8 +45,7 @@
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
-<!-- We do not need this feature. Confuses the end user as he is not used to it. Commented out by Richie -->
-							<!-- td width="12%">
+							<!--td width="12%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;"  onclick="show_hidden();" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
 							</td -->
@@ -109,7 +108,7 @@
                 	   <tr>
                         	<td width="45%">
 					<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
-					<input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="crmbutton small edit" onclick="move_messages();"/> {$FOLDER_SELECT}
+					{$FOLDER_SELECT}
                         	</td>
 				{if $DEGRADED_SERVICE eq 'false'}
                         	<td width="50%" align="right" nowrap>
@@ -136,8 +135,9 @@
 				   </tr>
 				   <tr>
 					<td>&nbsp;</td>
-					<td style="padding:1px;" align="left">
-						<div id="rssScroll">
+					<!-- td style="padding:1px;" align="left" -->
+					<td  align="left" valign="top" style="height:150px;">
+						<div id="rssScroll" style="height:220px;">
 
 				<!-- Table to display the mails list - Starts -->
 				<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
@@ -158,9 +158,9 @@
 						</div>
 					</td>
 				   </tr>
-				   <tr>
+				   <!-- tr>
 					<td colspan="2">&nbsp;</td>
-				   </tr>
+				   </tr -->
 				   <tr style="visibility:hidden" class="previewWindow">
 					<td>&nbsp;</td>
 					<td class="forwardBg">
