@@ -86,7 +86,7 @@ class ReportRun extends CRMEntity
 
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 					
-			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields))
+			if(sizeof($permitted_fields) != 0 && !in_array($colname,$permitted_fields))
 			{
 				continue;
 			}
@@ -124,6 +124,7 @@ class ReportRun extends CRMEntity
 		while($collistrow = $adb->fetch_array($result))
 		{
 			$access_fields[] = $collistrow["fieldname"];
+
 		}
 		return $access_fields;
 	}
@@ -176,7 +177,7 @@ class ReportRun extends CRMEntity
 		{
 			$sSQL .= $this->orderbylistsql.", ";	
 		}
-
+		
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
@@ -206,7 +207,6 @@ class ReportRun extends CRMEntity
 		$log->info("ReportRun :: Successfully returned getSelectedColumnsList".$reportid);
 		return $sSQL;
 	}
-
 	/** Function to get advanced comparator in query form for the given Comparator and value   
 	 *  @ param $comparator : Type String  
 	 *  @ param $value : Type String  
