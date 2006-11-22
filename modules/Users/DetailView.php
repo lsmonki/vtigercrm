@@ -176,6 +176,8 @@ $tabid = getTabid("Users");
 $validationData = getDBValidationData($lead_tables,$tabid);
 $data = split_validationdataArray($validationData);
 
+if($current_user->id == $_REQUEST['record'] || is_admin($current_user) == true)
+{
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
@@ -186,6 +188,35 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
 
 $smarty->display("UserDetailView.tpl");
+}
+else
+{
+	$output = '<table border="0" cellpadding="5" cellspacing="0" height="450" width="100%">
+		<tr><td align = "center">
+		<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;">
+			<table border="0" cellpadding="5" cellspacing="0" width="98%">
+			<tr>
+				<td rowspan="2" width="11%">
+				  	<img src="themes/bluelagoon/images/denied.gif">
+				</td>
+				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="70%">
+					<span class="genHeaderSmall">'.$app_strings["LBL_PERMISSION"].'
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="small" align="right" nowrap="nowrap">
+					<a href="javascript:window.history.back();">'.$app_strings["LBL_GO_BACK"].'</a>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+		</td></tr>
+	</table>';
+	echo $output;
+}
+
 
 
 ?>
