@@ -834,25 +834,53 @@ function dispLayer(lay)
         tagName.style.visibility = 'visible';
         tagName.style.display = 'block';
 }
+//check whether user form selected or group form selected
+function checkgroup()
+{
+	if(document.change_owner.user_lead_owner[1].checked)
+	{
+		  document.change_owner.lead_group_owner.style.display = "block";
+	          document.change_owner.lead_owner.style.display = "none";
+	}
+	else
+	{
+		document.change_owner.lead_group_owner.style.display = "none";
+                document.change_owner.lead_owner.style.display = "block";
+	}
+}
 
 function calendarChangeOwner()
 {
-	var user_id = document.getElementById('activity_owner').options[document.getElementById('activity_owner').options.selectedIndex].value;
 	var idlist = document.change_owner.idlist.value;
         var view   = document.change_owner.view.value;
         var day    = document.change_owner.day.value;
         var month  = document.change_owner.month.value;
         var year   = document.change_owner.year.value;
         var hour   = document.change_owner.hour.value;
-	var subtab = document.change_owner.subtab.value;
+        var subtab = document.change_owner.subtab.value;
+
+	var checked = document.change_owner.user_lead_owner[0].checked;
+	if(checked==true)
+	{
+		var user_id = document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';
+	}
+	else
+	{
+		var group_id = document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
+		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&group_id='+group_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';
+	}
+		
 	if(subtab == 'event')
 	{
 		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
+		var eventurl = url+'&viewOption='+OptionData+'&subtab=event&ajax=true';
+		
 	 	new Ajax.Request(
                 	'index.php',
                 	{queue: {position: 'end', scope: 'command'},
                         	method: 'post',
-                        	postBody: 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner&viewOption='+OptionData+'&subtab=event&ajax=true',
+                        	postBody: eventurl,
                         	onComplete: function(response) {
 					if(OptionData == 'listview')
 						 $("listView").innerHTML=response.responseText;
@@ -864,11 +892,13 @@ function calendarChangeOwner()
 	}
 	if(subtab == 'todo')
         {
+		
+		var todourl = url+'&subtab=todo&ajax=true';
                 new Ajax.Request(
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner&subtab=todo&ajax=true',
+                                postBody: todourl,
                                 onComplete: function(response) {
                                         $("mnuTab2").innerHTML=response.responseText;
                                 }

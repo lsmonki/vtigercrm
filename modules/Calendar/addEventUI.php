@@ -20,7 +20,8 @@ require_once("modules/Emails/mail.php");
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
- $userDetails=getOtherUserName($current_user->id);
+ $userDetails=getOtherUserName($current_user->id,true);
+ //echo '<pre>';print_r($userDetails);echo '</pre>';
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
  $taskassignedto = getAssignedTo(9);
@@ -869,9 +870,14 @@ setObjects();
 	<td width="50%"><b><?php echo $app_strings['LBL_TRANSFER_OWNERSHIP']; ?></b></td>
 	        <td width="2%"><b>:</b></td>
         	<td width="48%">
-	        	<select name="activity_owner" id="activity_owner" class="detailedViewTextBox">
-				<?php echo getUserslist(); ?>
-		        </select>
+                	<input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
+                        <input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
+                        <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
+			<?php echo getUserslist(); ?>	
+                        </select>
+                        <select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+                         <?php echo getGroupslist(); ?>
+                         </select>
         	</td>
 	</tr>
 	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
