@@ -98,8 +98,12 @@ class PurchaseOrder extends CRMEntity {
 
 	function save_module($module)
 	{
-		//Based on the total Number of rows we will save the product relationship with this entity
-		saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
+		//in ajax save we should not call this function, because this will delete all the existing product values
+		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		{
+			//Based on the total Number of rows we will save the product relationship with this entity
+			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
+		}
 	}	
 
 

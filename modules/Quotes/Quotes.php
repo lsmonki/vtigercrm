@@ -109,6 +109,12 @@ class Quotes extends CRMEntity {
 
 	function save_module()
 	{
+		//in ajax save we should not call this function, because this will delete all the existing product values
+		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		{
+			//Based on the total Number of rows we will save the product relationship with this entity
+			saveInventoryProductDetails(&$this, 'Quotes');
+		}
 	}	
 	
 	/**	Function used to get the sort order for Quote listview
