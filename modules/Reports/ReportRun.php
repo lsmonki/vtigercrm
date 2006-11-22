@@ -94,7 +94,14 @@ class ReportRun extends CRMEntity
 			{
 				if($querycolumns == "")
 				{
-					$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
+					if($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')
+					{
+						$columnslist[$fieldcolname] = " case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as Calendar_Status";
+					}
+					else
+					{
+						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
+					}
 				}
 				else
 				{
@@ -124,7 +131,6 @@ class ReportRun extends CRMEntity
 		while($collistrow = $adb->fetch_array($result))
 		{
 			$access_fields[] = $collistrow["fieldname"];
-
 		}
 		return $access_fields;
 	}
@@ -177,7 +183,7 @@ class ReportRun extends CRMEntity
 		{
 			$sSQL .= $this->orderbylistsql.", ";	
 		}
-		
+
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
@@ -207,6 +213,7 @@ class ReportRun extends CRMEntity
 		$log->info("ReportRun :: Successfully returned getSelectedColumnsList".$reportid);
 		return $sSQL;
 	}
+
 	/** Function to get advanced comparator in query form for the given Comparator and value   
 	 *  @ param $comparator : Type String  
 	 *  @ param $value : Type String  
@@ -1315,7 +1322,6 @@ class ReportRun extends CRMEntity
 		{
 			$selectlist = $columnlist;
 		}
-
 		//columns list
 		if(isset($selectlist))
 		{
@@ -1356,7 +1362,7 @@ class ReportRun extends CRMEntity
 		}
 
 		$reportquery = $this->getReportsQuery($this->primarymodule);
-
+	$log->DEBUG("ReportRun test now this  :: Successfully returned sGetSQLforReport".$reportquery."or and or".$selectedcolumns);
 		if($type == 'COLUMNSTOTOTAL')
 		{
 			if(trim($groupsquery) != "")
@@ -1382,6 +1388,7 @@ class ReportRun extends CRMEntity
 				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 			}
 		}
+		$log->DEBUG("ReportRun :: Successfully returned sGetSQLforReport".$reportquery);
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;
 
