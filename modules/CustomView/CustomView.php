@@ -186,20 +186,28 @@ class CustomView extends CRMEntity{
 		$tabid = getTabid($module);
 		global $current_user;
 	        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		if($tabid == 4 || $tabid ==7)
+		{
+			$display_type = " vtiger_field.displaytype in (1,2,3)";
+		}else
+		{
+			$display_type = " vtiger_field.displaytype in (1,2)";
+		}
 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
 			$sql = "select * from vtiger_field ";
 			$sql.= " where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block.") and";
-			$sql.= " vtiger_field.displaytype in (1,2)";
+			$sql.= $display_type;
 			$sql.= " order by sequence";
 		}
 		else
 		{
+
 			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
 			$sql.= " where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block.") and";
-			$sql.= " vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0";
+			$sql.= "$display_type and vtiger_profile2field.visible=0";
 			$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by sequence";
 		}	
 
