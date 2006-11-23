@@ -24,7 +24,7 @@ function dup_validation()
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                                 method: 'post',
-                                postBody: 'module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
+                                postBody: 'module=Settings&action=SettingsAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
                                 onComplete: function(response) {ldelim}
 					if(response.responseText == 'SUCESS')
 						document.newRoleForm.submit();
@@ -62,7 +62,7 @@ function validate()
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<form name="newRoleForm" action="index.php" method="post">
-				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="SaveRole">
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="returnaction" value="{$RETURN_ACTION}">
@@ -72,9 +72,9 @@ function validate()
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="Roles" width="48" height="48" border=0 title="Roles"></td>
 					{if $MODE eq 'edit'}
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
 					{else}	
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_CREATE_NEW_ROLE}</b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_CREATE_NEW_ROLE}</b></td>
 					{/if}
 				</tr>
 				<tr>

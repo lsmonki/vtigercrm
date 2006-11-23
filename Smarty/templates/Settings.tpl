@@ -55,8 +55,8 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listroles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$MOD.LBL_ROLES}" width="48" height="48" border=0 title="{$MOD.LBL_ROLES}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listroles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$MOD.LBL_ROLES}" width="48" height="48" border=0 title="{$MOD.LBL_ROLES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_ROLE_DESCRIPTION}</td>

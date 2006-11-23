@@ -58,5 +58,5 @@ foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 
 
 
-header("Location: index.php?action=UsersAjax&module=Users&file=listroles&ajax=true");
+header("Location: index.php?action=SettingsAjax&module=Settings&file=listroles&ajax=true");
 ?>
