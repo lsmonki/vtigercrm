@@ -278,10 +278,9 @@ if(isset($action) && isset($module))
 		ereg("^HeadLines",$action) ||
 		ereg("^TodoSave",$action) ||
 		ereg("^RecalculateSharingRules",$action) ||
-		(ereg("^body",$action) &&
-			ereg("^Webmails",$module)) ||
-			(ereg("^DetailView",$action) &&
-			ereg("^Webmails",$module) ))
+		(ereg("^body",$action) && ereg("^Webmails",$module)) ||
+		(ereg("^dlAttachments",$action) && ereg("^Webmails",$module)) ||
+		(ereg("^DetailView",$action) &&	ereg("^Webmails",$module) ))
 	{
 		$skipHeaders=true;
 		//skip headers for all these invocations as they are mostly popups

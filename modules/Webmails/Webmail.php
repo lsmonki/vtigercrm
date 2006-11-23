@@ -114,7 +114,7 @@ class Webmail extends CRMEntity {
 	}
 
 	function downloadAttachments() {
-		return $this->dl_attachments($this->mailid,$this->mbox);
+		return $this->dl_attachments();
 	}
 
     function load_headers() {
@@ -146,7 +146,7 @@ class Webmail extends CRMEntity {
     }
 
     private function get_attachments() {
-       $struct = imap_fetchstructure($this->mbox, $this->mailid);
+       $struct = @imap_fetchstructure($this->mbox, $this->mailid);
        $parts = $struct->parts;
 
         $done="false";
@@ -217,177 +217,361 @@ class Webmail extends CRMEntity {
 	return 0;
     }
 
-    private function dl_inline() {
-        $struct = imap_fetchstructure($this->mbox, $this->mailid);
-        $parts = $struct->parts;
+    
+	private function dl_inline()
+	{
+		$struct = imap_fetchstructure($this->mbox, $this->mailid);
+		$parts = $struct->parts;
 
-        $i = 0;
-        if (!$parts) 
-		return;
-        else {
+		$i = 0;
+		if (!$parts)
+			return;
+		else
+		{
+			$stack = array();
+			$inline = array();
 
-        $stack = array();
-        $inline = array();
+			$endwhile = false;
 
-        $endwhile = false;
+			while (!$endwhile)
+			{
+				if (!$parts[$i])
+				{
+					if (count($stack) > 0)
+					{
+						$parts = $stack[count($stack)-1]["p"];
+						$i = $stack[count($stack)-1]["i"] + 1;
+						array_pop($stack);
+					}
+					else
+					{
+						$endwhile = true;
+					}
+				}
+				if (!$endwhile)
+				{
+					$partstring = "";
+					foreach ($stack as $s)
+					{
+						$partstring .= ($s["i"]+1) . ".";
+					}
+					$partstring .= ($i+1);
 
-        while (!$endwhile) {
-           if (!$parts[$i]) {
-             if (count($stack) > 0) {
-               $parts = $stack[count($stack)-1]["p"];
-               $i    = $stack[count($stack)-1]["i"] + 1;
-               array_pop($stack);
-             } else {
-               $endwhile = true;
-             }
-        }
-           if (!$endwhile) {
+					if (strtoupper($parts[$i]->disposition) == "INLINE")
+					{
+						//if the type is JPEG or GIF then call mail_fetchpart else fetchbody
+						if($parts[$i]->subtype == "JPEG" || $parts[$i]->subtype == "GIF")
+							$filedata = $this->mail_fetchpart($partstring);
+						else
+							$filedata = imap_fetchbody($this->mbox, $this->mailid, $partstring);
+						
+						$inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+					}
+				}
+				if ($parts[$i]->parts)
+				{
+					$stack[] = array("p" => $parts, "i" => $i);
+					$parts = $parts[$i]->parts;
+					$i = 0;
+				}
+				else
+				{
+					$i++;
+				}
+			}
+		}
+		return $inline;
+	}
 
-             $partstring = "";
-             foreach ($stack as $s) {
-               $partstring .= ($s["i"]+1) . ".";
-             }
-             $partstring .= ($i+1);
+	private function dl_attachments()
+	{
 
-             if (strtoupper($parts[$i]->disposition) == "INLINE")
-                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($this->mbox, $this->mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
-             } 
-           if ($parts[$i]->parts) {
-             $stack[] = array("p" => $parts, "i" => $i);
-             $parts = $parts[$i]->parts;
-             $i = 0;
-           } else {
-             $i++;
-           }
-         }
-       }
-	return $inline;
-    }
+		$struct = imap_fetchstructure($this->mbox, $this->mailid);
+		$parts = $struct->parts;
 
-    private function dl_attachments() {
-        $struct = imap_fetchstructure($this->mbox, $this->mailid);
-        $parts = $struct->parts;
+		$i = 0;
+		if (!$parts)
+			return;
+		else
+		{
+			$stack = array();
+			$attachment = array();
 
-        $content = array();
-        $i = 0;
-        if (!$parts)
-		return;
-        else {
+			$endwhile = false;
 
-        $stack = array();
-        $attachment = array();
+			while (!$endwhile)
+			{
+				if (!$parts[$i])
+				{
+					if (count($stack) > 0)
+					{
+						$parts = $stack[count($stack)-1]["p"];
+						$i = $stack[count($stack)-1]["i"] + 1;
+						array_pop($stack);
+					}
+					else
+					{
+						$endwhile = true;
+					}
+				}
+				if (!$endwhile)
+				{
+					$partstring = "";
+					foreach ($stack as $s)
+					{
+						$partstring .= ($s["i"]+1) . ".";
+					}
+					$partstring .= ($i+1);
 
-        $endwhile = false;
+					if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
+					{
+						$filedata = $this->mail_fetchpart($partstring);
+						$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+					}
+				} 
+				if ($parts[$i]->parts)
+				{
+					$stack[] = array("p" => $parts, "i" => $i);
+					$parts = $parts[$i]->parts;
+					$i = 0;
+				}
+				else
+				{
+					$i++;
+				}
+			}
+		}
+		return $attachment;
+	}
 
-        while (!$endwhile) {
-           if (!$parts[$i]) {
-             if (count($stack) > 0) {
-               $parts = $stack[count($stack)-1]["p"];
-               $i    = $stack[count($stack)-1]["i"] + 1;
-               array_pop($stack);
-             } else {
-               $endwhile = true;
-             }
-        }
-           if (!$endwhile) {
 
-             $partstring = "";
-             foreach ($stack as $s) {
-               $partstring .= ($s["i"]+1) . ".";
-             }
-             $partstring .= ($i+1);
+	private function load_mail()
+	{
+		// parse the message
+		$struct = imap_fetchstructure($this->mbox, $this->mailid);
+		$parts = $struct->parts;
 
-             if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($this->mbox, $this->mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
-             } 
-           if ($parts[$i]->parts) {
-             $stack[] = array("p" => $parts, "i" => $i);
-             $parts = $parts[$i]->parts;
-             $i = 0;
-           } else {
-             $i++;
-           }
-         }
-       }
-	return $attachment;
-    }
-    private function load_mail() {
-	// parse the message
-	$struct = imap_fetchstructure($this->mbox, $this->mailid);
-       	$parts = $struct->parts;
+		$content = array();
+		$i = 0;
+		if (!$parts)
+		{
+			/* Simple message, only 1 piece */
+			$attachment = array(); /* No vtiger_attachments */
+			$bod=imap_body($this->mbox, $this->mailid);
+			if(preg_match("/\<br\>/",$bod))
+				$content['body'] = $bod;
+			else 
+				$content['body'] = nl2br($bod);
+		}
+		else
+		{
 
-        $content = array();
-        $i = 0;
-        if (!$parts) { /* Simple message, only 1 piece */
-         $attachment = array(); /* No vtiger_attachments */
-         $bod=imap_body($this->mbox, $this->mailid);
-         if(preg_match("/\<br\>/",$bod))
-                	$content['body'] = $bod;
-         else 
-                	$content['body'] = nl2br($bod);
-        } else {
+			$stack = array(); 
+			$attachment = array();
 
-        $stack = array(); 
-        $attachment = array();
+			$endwhile = false;
 
-        $endwhile = false;
+			while (!$endwhile)
+			{
+				if (!$parts[$i])
+				{
+					if (count($stack) > 0)
+					{
+						$parts = $stack[count($stack)-1]["p"];
+						$i    = $stack[count($stack)-1]["i"] + 1;
+						array_pop($stack);
+					}
+					else
+					{
+						$endwhile = true;
+					}
+				}
+				$search = array("/=20=/","/=20/","/=\r\n/","/=3D/","@&(<a|<A);@i","/=0A/i","/=A0/i");
+				$replace = array("","","","=","<a target='_blank' ","");
+				if (!$endwhile)
+				{
 
-        while (!$endwhile) {
-           if (!$parts[$i]) {
-             if (count($stack) > 0) {
-               $parts = $stack[count($stack)-1]["p"];
-               $i    = $stack[count($stack)-1]["i"] + 1;
-               array_pop($stack);
-             } else {
-               $endwhile = true;
-             }
-        }
-        $search = array("/=20=/","/=20/","/=\r\n/","/=3D/","@&(<a|<A);@i","/=0A/i","/=A0/i");
-        $replace = array("","","","=","<a target='_blank' ","");
-           if (!$endwhile) {
+					$partstring = "";
+					foreach ($stack as $s)
+					{
+						$partstring .= ($s["i"]+1) . ".";
+					}
+					$partstring .= ($i+1);
 
-             $partstring = "";
-             foreach ($stack as $s) {
-               $partstring .= ($s["i"]+1) . ".";
-             }
-             $partstring .= ($i+1);
+					$type='';
+					if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN")
+					{
+						$inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+					}
+					elseif (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
+					{
+						$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 
-             $type='';
-	     if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN") {
-                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
-	     } elseif (strtoupper($parts[$i]->disposition) == "ATTACHMENT") {
-                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
+					}
+					elseif (strtoupper($parts[$i]->subtype) == "HTML")
+					{
+						$content['body'] = preg_replace($search,$replace,imap_fetchbody($this->mbox, $this->mailid, $partstring));
+						$stat="done";
+					}
+					elseif (strtoupper($parts[$i]->subtype) == "TEXT" && !$stat == "done")
+					{
+						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
+						$stat="done";
+					}
+					elseif (strtoupper($parts[$i]->subtype) == "PLAIN" && !$stat == "done")
+					{
+						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
+						$stat="done";
+					}
+					elseif (!$stat == "done")
+					{
+						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
+					}
+				}
 
-             } elseif (strtoupper($parts[$i]->subtype) == "HTML") {
-                        $content['body'] = preg_replace($search,$replace,imap_fetchbody($this->mbox, $this->mailid, $partstring));
-			$stat="done";
-             } elseif (strtoupper($parts[$i]->subtype) == "TEXT" && !$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
-			$stat="done";
-             } elseif (strtoupper($parts[$i]->subtype) == "PLAIN" && !$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
-			$stat="done";
-             } elseif (!$stat == "done") {
-                        $content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
-             }
-           }
+				if ($parts[$i]->parts)
+				{
+					$stack[] = array("p" => $parts, "i" => $i);
+					$parts = $parts[$i]->parts;
+					$i = 0;
+				}
+				else
+				{
+					$i++;
+				}
+			} 
+		} 
+		if($struct->encoding==3)
+			$content['body'] = base64_decode($content['body']);
+		if($struct->encoding==4)
+			$content['body'] = quoted_printable_decode($content['body']);
 
-           if ($parts[$i]->parts) {
-             $stack[] = array("p" => $parts, "i" => $i);
-             $parts = $parts[$i]->parts;
-             $i = 0;
-           } else {
-             $i++;
-           }
-         } 
-       } 
-    	if($struct->encoding==3)
-		$content['body'] = base64_decode($content['body']);
-    	if($struct->encoding==4)
-		$content['body'] = quoted_printable_decode($content['body']);
+		$ret = Array("content" => $content,"attachments"=>$attachment,"inline"=>$inline);
+		return $ret;
+	}
 
-    	$ret = Array("content" => $content,"attachments"=>$attachment,"inline"=>$inline);
-    	return $ret;
-    }
+
+
+
+
+
+
+	// get the body of a part of a message according to the
+	// string in $part
+	function mail_fetchpart($part)
+	{
+		$parts = $this->mail_fetchparts();
+
+		$partNos = explode(".", $part);
+
+		$currentPart = $parts;
+		while(list ($key, $val) = each($partNos))
+		{
+			$currentPart = $currentPart[$val];
+		}
+
+		if ($currentPart != "") return $currentPart;
+		else return false;
+	}
+
+	// splits a message given in the body if it is
+	// a mulitpart mime message and returns the parts,
+	// if no parts are found, returns false
+	function mail_mimesplit($header, $body)
+	{
+		$parts = array();
+
+		$PN_EREG_BOUNDARY = "Content-Type:(.*)boundary=\"([^\"]+)\"";
+
+		if (eregi ($PN_EREG_BOUNDARY, $header, $regs))
+		{
+			$boundary = $regs[2];
+
+			$delimiterReg = "([^\r\n]*)$boundary([^\r\n]*)";
+			if (eregi ($delimiterReg, $body, $results))
+			{
+				$delimiter = $results[0];
+				$parts = explode($delimiter, $body);
+				$parts = array_slice ($parts, 1, -1);
+			}
+
+			return $parts;
+		}
+		else
+		{
+			return false;
+		}   
+	}
+
+	// returns an array with all parts that are
+	// subparts of the given part
+	// if no subparts are found, return the body of
+	// the current part
+	function mail_mimesub($part)
+	{
+		$i = 1;
+		$headDelimiter = "\r\n\r\n";
+		$delLength = strlen($headDelimiter);
+
+		// get head & body of the current part
+		$endOfHead = strpos( $part, $headDelimiter);
+		$head = substr($part, 0, $endOfHead);
+		$body = substr($part, $endOfHead + $delLength, strlen($part));
+
+		// check whether it is a message according to rfc822
+		if (stristr($head, "Content-Type: message/rfc822"))
+		{
+			$part = substr($part, $endOfHead + $delLength, strlen($part));
+			$returnParts[1] = $this->mail_mimesub($part);
+			return $returnParts;
+			// if no message, get subparts and call function recursively
+		}
+		elseif ($subParts = $this->mail_mimesplit($head, $body))
+		{
+			// got more subparts
+			while (list ($key, $val) = each($subParts))
+			{
+				$returnParts[$i] = $this->mail_mimesub($val);
+				$i++;
+			}           
+			return $returnParts;
+			}
+			else
+			{
+				return $body;
+			}
+	}
+
+	// get an array with the bodies all parts of an email
+	// the structure of the array corresponds to the
+	// structure that is available with imap_fetchstructure
+	function mail_fetchparts()
+	{
+		$parts = array();
+		$header = imap_fetchheader($this->mbox, $this->mailid);
+		$body = imap_body($this->mbox, $this->mailid, FT_INTERNAL);
+
+		$i = 1;
+
+		if ($newParts = $this->mail_mimesplit($header, $body))
+		{
+			while (list ($key, $val) = each($newParts))
+			{
+				$parts[$i] = $this->mail_mimesub($val);
+				$i++;               
+			}
+		}
+		else
+		{
+			$parts[$i] = $body;
+		}
+		return $parts;
+	}
+
+
+
+
+
+    
 }
 ?>

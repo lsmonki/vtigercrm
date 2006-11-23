@@ -336,6 +336,10 @@ function mass_delete() {
                 	if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
                         	if(els[i].checked) {
                                 	var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+
+					//change the selected rows as red when they deleted
+					$("row_"+nid).className = "delete_email";
+
 					if(typeof nid == 'undefined' || nid == "checkbox")
 						nids += '';
 					else
