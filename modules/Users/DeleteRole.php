@@ -15,5 +15,5 @@ $tran_id = $_REQUEST['user_role'];
 
 deleteRole($del_id,$tran_id);
 
-header("Location: index.php?action=listroles&module=Users");
+header("Location: index.php?action=listroles&module=Settings");
 ?>

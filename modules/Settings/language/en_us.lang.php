@@ -725,6 +725,20 @@ $mod_strings = Array(
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 'LBL_ADD_TAX_BUTTON'=>'Add Tax',
+//Added while moving role file from User to Setting Module
+'LBL_ROLES'=>'Roles',
+'LBL_CREATE_NEW_ROLE'=>'Create New Role',
+'LBL_PROPERTIES'=>'Properties of',
+'LBL_NEW_ROLE'=>'New Role',
+'LBL_ROLE_NAME'=>'Role Name',
+'LBL_REPORTS_TO'=>'Reports to',
+'LBL_PROFILE_M'=>'Profile',
+'LBL_PROFILES_AVLBL'=>'Profiles Available',
+'LBL_ASSIGN_PROFILES'=>'Assigned Profiles',
+'LBL_MEMBER'=>'Members',
+'LBL_DELETE_ROLE'=>'Delete Role',
+'LBL_ROLE_TO_BE_DELETED'=>'Role to be Deleted',
+'LBL_TRANSFER_USER_ROLE'=>'Transfer Users to Role',
 );
 
 

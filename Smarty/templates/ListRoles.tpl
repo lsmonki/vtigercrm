@@ -201,7 +201,7 @@ ul {ldelim}color:black;{rdelim}
 			{ldelim}
 //				alert("Please Select the Node");
 				parentId = parentId.replace(/user_/gi,'');
-				window.location.href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid="+parentId;
+				window.location.href="index.php?module=Settings&action=RoleDetailView&parenttab=Settings&roleid="+parentId;
 			{rdelim}
 			else
 			{ldelim}

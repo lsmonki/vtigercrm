@@ -23,7 +23,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<form id="form" name="roleView" action="index.php" method="post">
-				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createrole">
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="returnaction" value="RoleDetailView">
@@ -31,7 +31,7 @@
 				<input type="hidden" name="mode" value="edit">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" width="48" height="48" border=0 ></td>
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$ROLE_NAME}&quot; </b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$ROLE_NAME}&quot; </b></td>
 				</tr>
 				<tr>
 					<td valign=top class="small">{$CMOD.LBL_VIEWING} {$CMOD.LBL_PROPERTIES} &quot;{$ROLE_NAME}&quot; {$MOD.LBL_LIST_CONTACT_ROLE} </td>
@@ -74,7 +74,7 @@
 
                             <td width="16"><div align="center"></div></td>
                             <td>
-										<a href="index.php?module=Users&action=profilePrivileges&parenttab=Settings&profileid={$elements.0}&mode=view">{$elements.1}</a><br>
+										<a href="index.php?module=Settings&action=profilePrivileges&parenttab=Settings&profileid={$elements.0}&mode=view">{$elements.1}</a><br>
 			    </td>  	 
                           </tr>
 			{/foreach}
