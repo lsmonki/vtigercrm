@@ -31,9 +31,10 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns','Faq');
+//$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns','Faq');
+$field_module=getFieldModuleAccessArray();
 $allfields=Array();
-foreach($field_module as $fld_module)
+foreach($field_module as $fld_module=>$mod_name)
 {
 	$fieldListResult = getDefOrgFieldList($fld_module);
 	$noofrows = $adb->num_rows($fieldListResult);
