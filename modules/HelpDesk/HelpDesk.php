@@ -80,6 +80,8 @@ class HelpDesk extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'DESC';
 
+	var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function HelpDesk() 
