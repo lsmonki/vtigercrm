@@ -122,6 +122,8 @@ class Contacts extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_contactgrouprelation','contactid');
+
 	function Contacts() {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = new PearDatabase();
