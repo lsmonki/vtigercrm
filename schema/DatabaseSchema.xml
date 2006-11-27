@@ -179,7 +179,8 @@
 		</field>
 		<field name="modifiedby" type="I" size="19" />
 		<field name="modifiedtime" type="I" size="19" />
-		<field name="customized" type="I" size="1" />
+		<field name="customized" type="I" size="19" />
+		<field name="ownedby" type="I" size="19" />
 
 		<index name="tab_name_idx">
 			<col>name</col>
