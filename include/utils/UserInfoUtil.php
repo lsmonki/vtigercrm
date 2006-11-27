@@ -879,6 +879,56 @@ $log->debug("Entering substituteTokens(".$filename.",".$globals.") method ...");
 	return $replacedString;
 }
 
+
+/** Function to add module group relation 
+  * @param $module -- module name:: Type varchar
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+ function insertIntoGroupRelation($module,$moduleid,$groupname)
+ {
+	 global $log;
+	 $log->debug("Entering insertIntoGroupRelation(".$module.",".$moduleid.",".$groupname.") method ...");
+	 global $adb;
+
+	 //Get the module grouptable name and the
+	require_once("modules/$module/$module.php");
+	$modObj = new $module();	 
+	 
+	 $sql = "insert into ".$modObj->groupTable[0]." values (" .$moduleid .",'".$groupname."')";
+	 
+	 $adb->query($sql);
+	 $log->debug("Exiting insert2LeadGroupRelation method ...");
+
+ }
+
+/** Function to update lead group relation
+  * @param $module -- module name:: Type varchar	
+  * @param $leadid -- Lead Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function updateModuleGroupRelation($module,$moduleid,$groupname)
+{
+	global $log;
+	$log->debug("Entering updateModuleGroupRelation(".$moduleid.",".$groupname.") method ...");
+ 	global $adb;
+	
+	//Get the module grouptable name and the
+	require_once("modules/$module/$module.php");
+	$modObj = new $module();
+
+ 	//Deleting the existing entry	 
+  	$sqldelete = "delete from ".$modObj->groupTable[0]." where " .$modObj->groupTable[1] ."=".$moduleid;
+  	$adb->query($sqldelete);
+  	$sql = "insert into ".$modObj->groupTable[0]." values (".$moduleid .",'" .$groupname ."')";  
+  	$adb->query($sql);
+  	$log->debug("Exiting updateLeadGroupRelation method ...");
+
+}
+ 
+
+
 /** Function to add lead group relation 
   * @param $leadid -- Lead Id:: Type integer
   * @param $groupname -- Group Name:: Type varchar
@@ -1491,7 +1541,8 @@ function isPermitted($module,$actionname,$record_id='')
 	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
-		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
+		//if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
+		if(getTabOwnedBy($module) == 0)
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
@@ -4528,45 +4579,9 @@ function getListViewSecurityParameter($module)
 	}	
 	else
 	{
-
-		//Current User	
-		$sec_query = " and (vtiger_crmentity.smownerid=".$current_user->id;
-
-		//Subordinate User
-		$subUsersList=getSubordinateUsersList();
-		if($subUsersList != '')
-		{
-			$sec_query .= " or vtiger_crmentity.smownerid in".$subUsersList;
-		}
-
-		//Shared User
-		$sharedUsersList=getReadSharingUsersList($module);
-		if($sharedUsersList != '')
-		{
-			$sec_query .= " or vtiger_crmentity.smownerid in".$sharedUsersList;
-		}
-
-
-		//Current User Groups
-		if($module == 'Leads' or $module=='HelpDesk' or $module=='Calendar')
-		{
-			$userGroupsList=getCurrentUserGroupList();
-			if($userGroupsList != '')
-			{
-				$sec_query .= " or (vtiger_crmentity.smownerid in(0) and vtiger_groups.groupid in".$userGroupsList.")";
-			}
-
-			//Shared User Groups
-			$sharedGroupsList=getReadSharingGroupsList($module);
-			if($sharedGroupsList != '')
-			{
-				$sec_query .= " or (vtiger_crmentity.smownerid in(0) and vtiger_groups.groupid in".$sharedGroupsList.")";
-			}	
-
-
-		}
-
-		$sec_query .=") ";
+		$mobObj = new $module;
+		$sec_query = $modObj->getListViewSecurityParameter($module);
+		
 	}
 	$log->debug("Exiting getListViewSecurityParameter method ...");
 	return $sec_query;	
@@ -4667,8 +4682,20 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 function getFieldModuleAccessArray()
 {
 	global $log;
+	global $adb;
 	$log->debug("Entering getFieldModuleAccessArray() method ...");
 
+	$fldModArr=Array();
+	$query = 'select distinct(name) from vtiger_profile2field inner join vtiger_tab on vtiger_tab.tabid=vtiger_profile2field.tabid';
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$fldModArr[$adb->query_result($result,$i,'name')]=$adb->query_result($result,$i,'name');
+	}	
+		
+
+	/*
 	$fldModArr=Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
                 'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
                 'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
@@ -4687,6 +4714,7 @@ function getFieldModuleAccessArray()
                 'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS',
 		'Faq'=>'LBL_FAQ_FIELD_ACCESS'
               );
+	 */     
 
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
 	return $fldModArr;
