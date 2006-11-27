@@ -95,6 +95,7 @@ class SalesOrder extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
+	var $groupTable = Array('vtiger_sogrouprelation','salesorderid');
 
 
 	/** Constructor Function for SalesOrder class
