@@ -87,6 +87,8 @@ class Activity extends CRMEntity {
 	var $default_order_by = 'due_date';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_activitygrouprelation','activityid');
+
 	function Activity() {
 		$this->log = LoggerManager::getLogger('Calendar');
 		$this->db = new PearDatabase();
