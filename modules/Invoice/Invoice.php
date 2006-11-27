@@ -83,6 +83,8 @@ class Invoice extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_invoicegrouprelation','invoiceid');
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Invoice() {
