@@ -86,6 +86,8 @@ class PurchaseOrder extends CRMEntity {
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_pogrouprelation','purchaseorderid');
+
 	/** Constructor Function for Order class
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
