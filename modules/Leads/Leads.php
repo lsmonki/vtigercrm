@@ -80,6 +80,8 @@ class Leads extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_leadgrouprelation','leadid');
+	
 	function Leads()	{
 		$this->log = LoggerManager::getLogger('lead');
 		$this->log->debug("Entering Leads() method ...");
