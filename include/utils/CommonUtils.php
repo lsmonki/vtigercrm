@@ -330,6 +330,42 @@ function getTabid($module)
 
 }
 
+
+/**
+ * Function to get the ownedby value for the specified module 
+ * Takes the input as $module - module name
+ * returns the tabid, integer type
+ */
+
+function getTabOwnedBy($module)
+{
+	global $log;
+	$log->debug("Entering getTabid(".$module.") method ...");
+
+	$tabid=getTabid($module);
+	
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
+	{
+		include('tabdata.php');
+		$tab_ownedby= $tab_ownedby_array[$tabid];
+	}
+	else
+	{	
+
+        	$log->info("module  is ".$module);
+        	global $adb;
+		$sql = "select ownedby from vtiger_tab where name='".$module."'";
+		$result = $adb->query($sql);
+		$tab_ownedby=  $adb->query_result($result,0,"ownedby");
+	}
+	$log->debug("Exiting getTabid method ...");
+	return $tab_ownedby;
+
+}
+
+
+
+
 /**
  * Function to get the tabid 
  * Takes the input as $module - module name
@@ -617,6 +653,14 @@ function getGroupName($id, $module)
         {
                $sql = "select vtiger_activitygrouprelation.groupname,vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_activitygrouprelation.activityid=".$id;
 	}
+	else
+        {
+		$modObj = new $module();
+			
+               $sql = "select ".$modObj->groupTable[0].".groupname,vtiger_groups.groupid from ".$modObj->groupTable[0]." inner join vtiger_groups on vtiger_groups.groupname=".$modObj->groupTable[0].".groupname where ".$modObj->groupTable[0].".".$modObj->groupTable[1]."=".$id;
+	}
+	
+	
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
         $group_info[] = $adb->query_result($result,0,"groupid");
@@ -1644,13 +1688,17 @@ function create_tab_data_file()
         $num_rows=$adb->num_rows($result);
         $result_array=Array();
 	$seq_array=Array();
+	$ownedby_array=Array();
+	
         for($i=0;$i<$num_rows;$i++)
         {
                 $tabid=$adb->query_result($result,$i,'tabid');
                 $tabname=$adb->query_result($result,$i,'name');
 		$presence=$adb->query_result($result,$i,'presence');
+		$ownedby=$adb->query_result($result,$i,'ownedby');
                 $result_array[$tabname]=$tabid;
 		$seq_array[$tabid]=$presence;
+		$ownedby_array[$tabid]=$ownedby;
 
         }
 
@@ -1699,6 +1747,8 @@ if (file_exists($filename)) {
                 $newbuf .= "\$tab_info_array=".constructArray($result_array).";\n";
                 $newbuf .= "\n";
                 $newbuf .= "\$tab_seq_array=".constructArray($seq_array).";\n";
+		$newbuf .= "\n";
+		$newbuf .= "\$tab_ownedby_array=".constructArray($ownedby_array).";\n";
 		$newbuf .= "\n";
                 $newbuf .= "\$action_id_array=".constructSingleStringKeyAndValueArray($actionid_array).";\n";
 		$newbuf .= "\n";
