@@ -626,7 +626,10 @@ $app_strings = array (
 'LBL_PROFILE_NAME'=>'Profile Name',
 'LBL_START_DATE'=>'Start Date',
 'LBL_END_DATE'=>'End Date',
-);$app_list_strings = array (
+'LBL_CREATE_MERGE_TEMPLATE'=>'Create Mail Merge templates ',
+);
+
+$app_list_strings = array (
   'moduleList' => 
   array (
     'Home' => 'Home',
