@@ -86,7 +86,7 @@ class ReportRun extends CRMEntity
 
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 					
-			if(sizeof($permitted_fields) != 0 && !in_array($colname,$permitted_fields))
+			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields))
 			{
 				continue;
 			}
@@ -94,14 +94,7 @@ class ReportRun extends CRMEntity
 			{
 				if($querycolumns == "")
 				{
-					if($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')
-					{
-						$columnslist[$fieldcolname] = " case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as Calendar_Status";
-					}
-					else
-					{
-						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
-					}
+					$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
 				}
 				else
 				{
@@ -1322,6 +1315,7 @@ class ReportRun extends CRMEntity
 		{
 			$selectlist = $columnlist;
 		}
+
 		//columns list
 		if(isset($selectlist))
 		{
@@ -1362,7 +1356,7 @@ class ReportRun extends CRMEntity
 		}
 
 		$reportquery = $this->getReportsQuery($this->primarymodule);
-	$log->DEBUG("ReportRun test now this  :: Successfully returned sGetSQLforReport".$reportquery."or and or".$selectedcolumns);
+
 		if($type == 'COLUMNSTOTOTAL')
 		{
 			if(trim($groupsquery) != "")
@@ -1388,7 +1382,6 @@ class ReportRun extends CRMEntity
 				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 			}
 		}
-		$log->DEBUG("ReportRun :: Successfully returned sGetSQLforReport".$reportquery);
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;
 
@@ -1415,10 +1408,9 @@ class ReportRun extends CRMEntity
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
-			$y=$adb->num_fields($result);
-
 			if($result)
 			{
+				$y=$adb->num_fields($result);
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
@@ -1530,10 +1522,10 @@ class ReportRun extends CRMEntity
 
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
-			$y=$adb->num_fields($result);
 
 			if($result)
 			{
+				$y=$adb->num_fields($result);
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 
@@ -1636,10 +1628,10 @@ class ReportRun extends CRMEntity
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
-			$y=$adb->num_fields($result);
-
 			if($result)
 			{
+				
+				$y=$adb->num_fields($result);
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
@@ -1647,6 +1639,7 @@ class ReportRun extends CRMEntity
 				}
 				
 				$noofrows = $adb->num_rows($result);
+			
 				$custom_field_values = $adb->fetch_array($result);
 				$groupslist = $this->getGroupingList($this->reportid);
 
