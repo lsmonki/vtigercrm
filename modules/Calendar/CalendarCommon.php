@@ -359,4 +359,42 @@ function getAssignedTo($tabid)
 }
 
 //Code Added by Minnie -Ends
+/**
+ * Function to get the vtiger_activity details for mail body
+ * @param   string   $description       - activity description
+ * return   string   $list              - HTML in string format
+ */
+function getActivityDetails($description,$inviteeid='')
+{
+        global $log,$current_user;
+        global $adb,$mod_strings;
+        $log->debug("Entering getActivityDetails(".$description.") method ...");
+
+        $reply = (($_REQUEST['mode'] == 'edit')?'Replied':'Created');
+        if($inviteeid=='')
+        $name = getUserName($_REQUEST['assigned_user_id']);
+        else
+        $name = getUserName($inviteeid);
+
+        $current_username = getUserName($current_user->id);
+        $status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+
+        $list = $mod_strings['LBL_DEAR'].' ' .$name.',';
+        $list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'. '.$mod_strings['LBL_DETAILS_STRING'].':';
+        $list .= '<br>'.$mod_strings["LBL_SUBJECT"].' '.$_REQUEST['subject'];
+        $list .= '<br>'.$mod_strings["LBL_STATUS"].': '.$status;
+        $list .= '<br>'.$mod_strings["Priority"].': '.$_REQUEST['taskpriority'];
+        $list .= '<br>'.$mod_strings["Related To"].' : '.$_REQUEST['parent_name'];
+	if($_REQUEST['activity_mode']!= 'Events')
+	{
+        	$list .= '<br>'.$mod_strings["LBL_CONTACT"].' '.$_REQUEST['contactlist'];
+	}
+        $list .= '<br>'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description;
+        $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
+        $list .= '<br>'.$current_username.'.';
+
+        $log->debug("Exiting getActivityDetails method ...");
+        return $list;
+}
+
 ?>

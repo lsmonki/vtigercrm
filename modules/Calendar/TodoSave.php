@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 require_once('modules/Calendar/Activity.php');
+require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/logging.php');
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
@@ -46,6 +47,23 @@ if(isset($_REQUEST['mode']))
  if(isset($_REQUEST['task_sendnotification']) && $_REQUEST['task_sendnotification'] != null)
  	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
 
- $focus->save($tab_type);
+ 	$focus->save($tab_type);
+	if($_REQUEST["task_sendnotification"]=='on' && $_REQUEST['task_assigntype'] == 'U')
+        {
+
+        global $current_user;
+        $local_log->info("send notification is on");
+        require_once("modules/Emails/mail.php");
+        $to_email = getUserEmailId('id',$_REQUEST['task_assigned_user_id']);
+        $subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['task_subject'];
+        $_REQUEST["assigned_user_id"]= $_REQUEST["task_assigned_user_id"];
+	$_REQUEST["subject"]=$subject;
+	$_REQUEST["parent_name"]=$_REQUEST["task_parent_name"];
+	$_REQUEST['contactlist']=$_REQUEST['task_contact_name'];
+        $description = getActivityDetails($_REQUEST['task_description']);
+        $mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+
+        }
+
  header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
 ?>
