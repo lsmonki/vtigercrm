@@ -28,6 +28,7 @@ require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/database/PearDatabase.php');
 
 global $app_strings;
@@ -75,6 +76,13 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
+$changeOwner = getAssignedTo(16);
+$userList = $changeOwner[0];
+$groupList = $changeOwner[1];
+//echo '<pre>';print_r($changeOwner); echo '</pre>';
+
+$smarty->assign("CHANGE_USER",$userList);
+$smarty->assign("CHANGE_GROUP",$groupList);
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 $where = "";

@@ -820,11 +820,11 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
     document.change_owner.month.value = month;
     document.change_owner.year.value = year;
     document.change_owner.subtab.value = type;
-    complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&activity_mode="+activity_mode;
-    actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    changeowner.href="javascript:dispLayer('act_changeowner');";
+    if(complete) complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
+    if(pending) pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
+    if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&activity_mode="+activity_mode;
+    if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
+    if(changeowner) changeowner.href="javascript:dispLayer('act_changeowner');";
 
 }
 

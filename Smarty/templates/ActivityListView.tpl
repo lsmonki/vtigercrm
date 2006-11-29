@@ -315,7 +315,7 @@ function alphabetic(module,url,dataid)
        		       </tr>
 			 </table>
                          <div  class="calDIV" style="overflow:auto;">
-			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="calListTable" class="small">
+			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small" class="small">
 			      <tr>
              			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
@@ -442,10 +442,19 @@ function alphabetic(module,url,dataid)
 	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
 					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-					{$CHANGE_OWNER}
+					{foreach key=id item=data from=$CHANGE_USER}
+						{foreach key=chOw_id item=name from=$data}
+							<option value={$id}{$name}>{$chOw_id}</option>
+						{/foreach}
+					{/foreach}
 					</select>
 					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-					{$CHANGE_GROUP_OWNER}
+					{foreach key=id item=data from=$CHANGE_GROUP}
+                                                {foreach key=chOw_group_id item=group_name from=$data}
+                                                        <option value={$id}{$group_name}>{$chOw_group_id}</option>
+                                                {/foreach}
+                                        {/foreach}
+
 					</select>
 					</form>
 	</td>
