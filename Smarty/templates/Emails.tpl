@@ -66,7 +66,7 @@ function ShowFolders(folderid)
 </script>
 		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
-<div id="mailconfchk" class="small" style="position:absolute;display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><b>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</b></font></div>
+<div id="mailconfchk" class="small" style="position:absolute;display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><b>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Users&action=AddMailAccount&record={$USERID}">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</b></font></div>
 <!-- Shadow starts here -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
@@ -96,7 +96,7 @@ function ShowFolders(folderid)
 												</td>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-							&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" >{$MOD.LBL_SETTINGS}</a>
+							&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}" >{$MOD.LBL_SETTINGS}</a>
 												</td>
 											</tr>
 											</table>

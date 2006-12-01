@@ -167,7 +167,7 @@ class MailBox {
 			{
 				global $current_user;
 				$this->db->println("CONNECTION ERROR - Could not be connected to the server using imap_open function through the connection strings $connectString and $connectString1");
-				echo "<br>&nbsp;<b>Could not connect to the server. Please check the server details <a href='index.php?module=Settings&action=AddMailAccount&record=".$current_user->id."'> Here </a></b>";
+				echo "<br>&nbsp;<b>Could not connect to the server. Please check the server details <a href='index.php?module=Users&action=AddMailAccount&record=".$current_user->id."'> Here </a></b>";
 				exit;
 			}
 		}

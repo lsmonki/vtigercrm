@@ -37,7 +37,7 @@
 							</td>
 							<td width="10%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-								&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
+								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<!--td width="12%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
