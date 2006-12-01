@@ -146,7 +146,18 @@ function mandatoryCheck()
 			{foreach item=filteroption key=label from=$CHOOSECOLUMN1}
 				<optgroup label="{$label}" class=\"select\" style=\"border:none\">
 					{foreach item=text from=$filteroption}
-		   		         <option {$text.selected} value={$text.value}>{$text.text}</option>
+					 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                     {/foreach}
 			{/foreach}
           	        {$CHOOSECOLUMN1}
@@ -156,7 +167,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN2}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                              	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN2}
@@ -166,7 +188,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN3}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN3}
@@ -176,7 +209,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN4}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN4}
@@ -189,7 +233,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN5}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN5}
@@ -199,7 +254,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN6}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                   	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN6}
@@ -209,7 +275,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN7}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN7}
@@ -219,7 +296,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN8}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN8}
@@ -231,7 +319,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN9}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN9}

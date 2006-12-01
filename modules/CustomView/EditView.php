@@ -54,7 +54,7 @@ if($recordid == "")
 	$log->info('CustomView :: Successfully got StandardFilter for the module'.$cv_module);
 	$stdfiltercolhtml = getStdFilterHTML($cv_module);
 	$stdfilterjs = $oCustomView->getCriteriaJS();
-
+	$smarty->assign("MOD",$mod_strings);
 	//step4
 	$advfilterhtml = getAdvCriteriaHTML();
 	for($i=1;$i<10;$i++)
