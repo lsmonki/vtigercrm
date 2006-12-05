@@ -320,6 +320,12 @@ class Reports extends CRMEntity{
 			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
 		}
+		//Added to include vtiger_activity type for Reports Module
+		if($module == 'Calendar' && $block == 19)
+		{
+			 $module_columnlist['vtiger_activity:activitytype:Calendar_Activity_Type:activitytype:C'] = 'Activity Type';
+		}
+
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
