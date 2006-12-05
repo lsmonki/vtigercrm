@@ -892,6 +892,12 @@ $log->info("in getOldFileName  ".$notesid);
 
 	function insertIntoGroupTable($module)
 	{
+		global $log;
+
+		if($module == 'Events')
+		{
+			$module = 'Calendar';
+		}
 		if($this->mode=='edit')
 		{
 						
@@ -900,12 +906,14 @@ $log->info("in getOldFileName  ".$notesid);
 		  	{	  
 			  	if($_REQUEST['assigntype'] == 'T')
 			  	{
-				  	$groupname = $_REQUEST['assigned_group_name'];
+					$groupname = $_REQUEST['assigned_group_name'];
+
+
 					updateModuleGroupRelation($module,$this->id,$groupname);
 
 			  	}
 			  	else
-			  	{
+				{
 					  updateModuleGroupRelation($module,$this->id,'');
 				  
 			  	}
@@ -913,8 +921,6 @@ $log->info("in getOldFileName  ".$notesid);
       		}
 		else
 		{
-				
-			
 			$groupname = $_REQUEST['assigned_group_name'];
 		 	if($_REQUEST['assigntype'] == 'T')
 		  	{
