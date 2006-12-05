@@ -31,6 +31,10 @@ echo '<td>';
 echo '<table border="0" width="100%" cellpadding="0" cellspacing="0">';
 echo '<tr><td width="10%">From:</td><td>'.$elist->from.'</td></tr>';
 echo '<tr><td width="10%">To:</td><td>'.$elist->to.'</td></tr>';
+
+//Added to get the UTF-8 string - 30-11-06 - Mickie
+$elist->subject = utf8_decode(imap_utf8($elist->subject));
+
 echo '<tr><td width="10%">Subject:</td><td>'.$elist->subject.'</td></tr>';
 echo '<tr><td width="10%">Date:</td><td>'.$elist->date.'</td></tr>';
 echo '</table>';

@@ -34,6 +34,10 @@ function show_inline(num) {
 <?php
 
 $email->loadMail();
+
+//Added to get the UTF-8 string - 30-11-06 - Mickie
+$email->body = utf8_decode(imap_utf8($email->body));
+
 echo $email->body;
 echo "<br><br>";
 

@@ -145,7 +145,7 @@ class Webmail extends CRMEntity {
     	return $ret = Array("theader"=>$mailHeader);
     }
 
-    private function get_attachments() {
+    function get_attachments() {
        $struct = @imap_fetchstructure($this->mbox, $this->mailid);
        $parts = $struct->parts;
 
@@ -192,7 +192,7 @@ class Webmail extends CRMEntity {
         return false;
     }
 
-    private function find_relationships() {
+    function find_relationships() {
 	// leads search
 	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".trim($this->from)."' AND vtiger_crmentity.deleted='0'";
 	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
@@ -218,7 +218,7 @@ class Webmail extends CRMEntity {
     }
 
     
-	private function dl_inline()
+	function dl_inline()
 	{
 		$struct = imap_fetchstructure($this->mbox, $this->mailid);
 		$parts = $struct->parts;
@@ -264,7 +264,10 @@ class Webmail extends CRMEntity {
 							$filedata = $this->mail_fetchpart($partstring);
 						else
 							$filedata = imap_fetchbody($this->mbox, $this->mailid, $partstring);
-						
+
+						//Added to get the UTF-8 string - 30-11-06 - Mickie
+						$parts[$i]->dparameters[0]->value = utf8_decode(imap_utf8($parts[$i]->dparameters[0]->value));
+
 						$inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 					}
 				}
@@ -283,7 +286,7 @@ class Webmail extends CRMEntity {
 		return $inline;
 	}
 
-	private function dl_attachments()
+	function dl_attachments()
 	{
 
 		$struct = imap_fetchstructure($this->mbox, $this->mailid);
@@ -345,7 +348,7 @@ class Webmail extends CRMEntity {
 	}
 
 
-	private function load_mail()
+	function load_mail()
 	{
 		// parse the message
 		$struct = imap_fetchstructure($this->mbox, $this->mailid);

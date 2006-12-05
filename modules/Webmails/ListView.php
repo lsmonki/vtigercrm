@@ -157,7 +157,7 @@ addOnloadEvent(function() {
 );
 </script>
 <script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
-<?
+<?php
 
 global $displayed_msgs;
 // AJAX commands (should be moved)
@@ -217,7 +217,7 @@ $overview=$elist["overview"];
 // these are mainly used in the preview window and could be ajaxified/
 // during the preview window load instead.
 var msgCount = "<?php echo $numEmails;?>";
-<?
+<?php
 $mails = array();
 if (is_array($overview)) {
    foreach ($overview as $val) {
@@ -226,9 +226,15 @@ if (is_array($overview)) {
 	webmail[<?php echo $val->msgno;?>] = new Array();
 	webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
 	webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
+
+	<?php 
+		//Added to get the UTF-8 string - 30-11-06 - Mickie
+		$val->subject = utf8_decode(imap_utf8($val->subject));
+	?>
+		
 	webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
 	webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
-	<?
+	<?php
    }
 }
 echo "</script>";
