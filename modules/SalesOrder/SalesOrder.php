@@ -267,8 +267,16 @@ class SalesOrder extends CRMEntity {
 		else
 			$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
 
+			$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject, vtiger_users.user_name
+				from vtiger_invoice 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
+				left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid 
+				inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid 
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+				left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid 
+				left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname 
+				where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 
-		$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
 	
