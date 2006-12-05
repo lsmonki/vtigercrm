@@ -510,6 +510,7 @@ $mod_strings = Array(
 
 'LBL_RSS_CATEGORY'=>'Rss Category',
 
+'LBL_MAIL_SERVER_SETTINGS'=>'Outgoing Server',
 'LBL_USAGEUNIT'=>'Usage Unit',
 'LBL_GLACCT'=>'GL Account',
 'LBL_QUOTE_STAGE'=>'Quote Stage',
