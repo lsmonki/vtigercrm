@@ -333,7 +333,11 @@ class ReportRun extends CRMEntity
 					}
 					$advorsqls = implode(" or ",$advorsql);
 					$fieldvalue = " (".$advorsqls.") ";
-				}else
+				}elseif($selectedfields[1] == 'status')
+				{
+					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
+				}
+				else
 				{
 					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
