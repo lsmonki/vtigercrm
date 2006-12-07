@@ -263,6 +263,7 @@ $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'New Activity',
 'LBL_TASK_INFORMATION'=>'Task Information',
 'LBL_EVENT_INFORMATION'=>'Event Information',
+'LBL_CALENDAR_INFORMATION'=>'Calendar Information',
 
 'LBL_NAME'=>'Subject:',
 'LBL_ACTIVITY_STRING'=>'There is an activity',
