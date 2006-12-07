@@ -693,6 +693,8 @@ $mod_strings = Array(
 'LBL_DELETE_ROLE'=>'Delete Role',
 'LBL_ROLE_TO_BE_DELETED'=>'Role to be Deleted',
 'LBL_TRANSFER_USER_ROLE'=>'Transfer Users to Role',
+'LBL_ASSOCIATED_PROFILES'=>'Associated Profiles :',
+'LBL_ASSOCIATED_USERS'=>'Associated Users :',
 );
 
 

@@ -3794,12 +3794,12 @@ function getEntityDisplayLink($entityType,$entityid)
 	elseif($entityType == 'roles')
 	{
 		$roleName=getRoleName($entityid);	
-		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>Role::".$roleName. "</a>";			
+		$display_out = "<a href='index.php?module=Settings&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>Role::".$roleName. "</a>";			
 	}
 	elseif($entityType == 'rs')
 	{
 		$roleName=getRoleName($entityid);	
-		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
+		$display_out = "<a href='index.php?module=Settings&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
 	}
 	$log->debug("Exiting getEntityDisplayLink method ...");
 	return $display_out;
