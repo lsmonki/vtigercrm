@@ -98,6 +98,10 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = " case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as Calendar_Status";
 					}
+					elseif($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'date_start')
+					{
+						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
+					}
 					else
 					{
 						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
