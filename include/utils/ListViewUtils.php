@@ -984,8 +984,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	global $log;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
+	
+	$viewname = getCVname($viewid);
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
+	$tabid = getTabid($module);
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
 	{
@@ -1020,6 +1023,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 		{
 			$value = $temp_val;
+		}
+		//Added to get both start date & time
+		if(($tabid == 9 || $tabid == 16) && $uitype == 6 && $viewname != 'All')
+		{
+			$timestart = $adb->query_result($list_result,$list_result_count,'time_start');
+			$value = $value .'&nbsp;&nbsp;&nbsp;'.$timestart;
 		}
 		
 	}
@@ -2542,6 +2551,7 @@ function getRelatedTo($module,$list_result,$rset)
 	//code added by raju ends
 	$log->debug("Exiting getRelatedTo method ...");
         return $parent_value;
+	
 
 
 }

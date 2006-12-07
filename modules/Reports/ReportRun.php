@@ -1081,6 +1081,29 @@ class ReportRun extends CRMEntity
 		}
 		if($module == "Calendar")
 		{
+			//Added Leads,Accounts,Potentials as secondarymodule for Calendar
+
+			if($secmodule == "Leads")
+			{
+				$query = "left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid 
+					left join vtiger_crmentity as vtiger_crmentityLeads on vtiger_crmentityLeads.crmid = vtiger_leaddetails.leadid 
+					left join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid 
+					left join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
+					left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid 
+					left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentityLeads.smownerid ";
+	
+			}
+			if($secmodule == "Accounts")
+			{
+				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_seactivityrel.crmid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
+					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
+					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
+					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
+
+			}
 			if($secmodule == "Contacts")
 			{
 				$query = "left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid 
@@ -1093,6 +1116,14 @@ class ReportRun extends CRMEntity
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 			}
+			if($secmodule == "Potentials")
+                        {
+				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_seactivityrel.crmid 
+                                        left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
+                                        left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+                                        left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
+
+                        }
 		}
 		if($module == 'Campaigns')
 		{

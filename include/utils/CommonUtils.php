@@ -329,6 +329,27 @@ function getTabid($module)
 	return $tabid;
 
 }
+/**
+ * Function to get the CustomViewName
+ * Takes the input as $cvid - customviewid
+ * returns the cvname string fromat
+ */
+
+function getCVname($cvid)
+{
+        global $log;
+        $log->debug("Entering getCVname method ...");
+
+        global $adb;
+        $sql = "select viewname from vtiger_customview where cvid=".$cvid;
+        $result = $adb->query($sql);
+        $cvname =  $adb->query_result($result,0,"viewname");
+
+        $log->debug("Exiting getCVname method ...");
+        return $cvname;
+
+}
+
 
 
 /**
@@ -2053,7 +2074,7 @@ function sendNotificationToOwner($module,$focus)
 }
 function getUserslist()
 {
-	global $log;
+	global $log,$current_user;
 	$log->debug("Entering getUserslist() method ...");
 	global $adb;
 	$result=$adb->query("select * from vtiger_users");
@@ -2062,7 +2083,7 @@ function getUserslist()
 	       $useridlist[$i]=$adb->query_result($result,$i,'id');
 	       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
 	}
-	$change_owner = get_select_options_with_id($usernamelist,'admin');
+	$change_owner = get_select_options_with_id($usernamelist,$current_user->user_name);
 	$log->debug("Exiting getUserslist method ...");
 	return $change_owner;
 }

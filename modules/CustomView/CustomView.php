@@ -184,6 +184,8 @@ class CustomView extends CRMEntity{
 	{
 		global $adb;
 		$tabid = getTabid($module);
+		if($tabid == 9)
+			$tabid ="9,16";
 		global $current_user;
 	        require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		if($tabid == 4 || $tabid ==7)
@@ -197,7 +199,7 @@ class CustomView extends CRMEntity{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
 			$sql = "select * from vtiger_field ";
-			$sql.= " where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block.") and";
+			$sql.= " where vtiger_field.tabid in (".$tabid.") and vtiger_field.block in (".$block.") and";
 			$sql.= $display_type;
 			$sql.= " order by sequence";
 		}
@@ -206,13 +208,12 @@ class CustomView extends CRMEntity{
 
 			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
-			$sql.= " where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block.") and";
+			$sql.= " where vtiger_field.tabid in (".$tabid.") and vtiger_field.block in (".$block.") and";
 			$sql.= "$display_type and vtiger_profile2field.visible=0";
-			$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by sequence";
+			$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by sequence group by columnname";
 		}	
-
-
-
+		if($tabid == '9,16')
+                        $tabid ="9";
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		//Added on 14-10-2005 -- added ticket id in list
@@ -287,6 +288,7 @@ class CustomView extends CRMEntity{
 		foreach($this->module_list[$module] as $key=>$value)
 		{
 			$columnlist = $this->getColumnsListbyBlock($module,$value);
+			
 			if(isset($columnlist))
 			{
 				$ret_module_list[$module][$key] = $columnlist;
@@ -1429,6 +1431,7 @@ class CustomView extends CRMEntity{
 	{
 		if($viewid != "" && $listquery != "")
 		{
+			
 			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 			if($module == "Calendar" || $module == "Emails")
 			{
@@ -1539,8 +1542,14 @@ class CustomView extends CRMEntity{
 		global $current_language;
 		$current_mod_strings = return_specified_module_language($current_language, $module); 
 		$block_info = Array();
-		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,6,75,35,30,54,60,66,72) and vtiger_tab.name='$module' order by block";
+		if($module == "Calendar")
+			$module = "Calendar','Events";
+
+		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,6,75,35,30,54,60,66,72) and vtiger_tab.name in ('".$module."') order by block";
 		$result = $adb->query($Sql);
+		if($module == "Calendar','Events")
+			$module = "Calendar";
+
 		while($block_result = $adb->fetch_array($result))
 		{
 			$block_label = $block_result['blocklabel'];
