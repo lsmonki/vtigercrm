@@ -3813,4 +3813,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="vtigerversion">
+		<field name="id" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="project" type="C" size="50" />
+		<field name="revision" type="I" size="19" />
+	</table>
+
 </schema>

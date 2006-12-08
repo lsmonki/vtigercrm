@@ -34,6 +34,8 @@ $focus = new User();
 $focus->user_name = to_html($_REQUEST['user_name']);
 $user_password = $_REQUEST['user_password'];
 
+include 'update.php';
+
 $focus->load_user($user_password);
 
 if($focus->is_authenticated())

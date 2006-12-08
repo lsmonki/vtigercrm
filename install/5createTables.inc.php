@@ -285,6 +285,14 @@ foreach ( $modules as $module ) {
 }
 eecho ("Done.");
 
+// insert database version control 
+include 'vtigerversion.php'; 
+foreach($svn_revision as $project=>$version) { 
+	$sql = "INSERT INTO vtigerversion (project, revision) 
+		VALUES (".$db->quote($project).", ".$version.")"; 
+	$db->query($sql); 
+} 
+
 /*
 if ($new_tables)
         create_default_users();

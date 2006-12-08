@@ -12,5 +12,6 @@
 $patch_version = '';
 $modified_database = '';
 $vtiger_version = '4.2.4';
+$svn_revision['vtiger'] = 9947;
 $release_date = '1 June 2006';
 ?>
