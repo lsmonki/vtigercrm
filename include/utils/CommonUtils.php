@@ -2074,16 +2074,28 @@ function sendNotificationToOwner($module,$focus)
 }
 function getUserslist()
 {
-	global $log,$current_user;
+	global $log,$current_user,$module,$adb,$assigned_user_id;
 	$log->debug("Entering getUserslist() method ...");
-	global $adb;
-	$result=$adb->query("select * from vtiger_users");
-	for($i=0;$i<$adb->num_rows($result);$i++)
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 	{
-	       $useridlist[$i]=$adb->query_result($result,$i,'id');
-	       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
 	}
-	$change_owner = get_select_options_with_id($usernamelist,$current_user->user_name);
+	else
+	{
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id),$current_user->id);
+	}
+	foreach($users_combo as $userid=>$value)	
+	{
+
+		foreach($value as $username=>$selected)
+		{
+			$change_owner .= "<option value=$userid $selected>".$username."</option>";
+		}
+	}
+	
 	$log->debug("Exiting getUserslist method ...");
 	return $change_owner;
 }
@@ -2091,20 +2103,40 @@ function getUserslist()
 
 function getGroupslist()
 {
-	global $log;
+	global $log,$adb,$module,$current_user;
 	$log->debug("Entering getGroupslist() method ...");
-	global $adb;
-	$result=$adb->query("select * from vtiger_groups");
-	
-	for($i=0;$i<$adb->num_rows($result);$i++)
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 	{
-	       $groupidlist[$i]=$adb->query_result($result,$i,'groupid');
-	       $groupnamelist[$groupidlist[$i]]=$adb->query_result($result,$i,'groupname');
-	       
+		$result=get_current_user_access_groups($module);
 	}
-	$change_groups_owner = get_select_options_with_id($groupnamelist,'');
-	$log->debug("Exiting getGroupslist method ...");
+	else
+	{
+		$result = get_group_options();
+	}
+	$groupArray = $adb->fetch_array($result);
 
+	do{
+		$groupname=$groupArray["groupname"];
+		$group_id=$groupArray["groupid"];
+		$selected = '';
+		if($groupname == $selected_groupname[0])
+		{
+			$selected = "selected";
+		}
+		if($groupname != '')
+			$group_option[$group_id] = array($groupname=>$selected);
+          }while($groupArray = $adb->fetch_array($result));
+
+	foreach($group_option as $groupid=>$value)  
+	{ 
+		foreach($value as $groupname=>$selected) 
+		{
+			$change_groups_owner .= "<option value=$groupid $selected >".$groupname."</option>";  
+		} 
+	}
+	$log->debug("Exiting getGroupslist method ...");
 	return $change_groups_owner;
 }
 
