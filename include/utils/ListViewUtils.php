@@ -985,7 +985,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
-	$viewname = getCVname($viewid);
+	if($viewid != '')
+	{
+		$viewname = getCVname($viewid);
+	}
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
 	$tabid = getTabid($module);
