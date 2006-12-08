@@ -25,7 +25,7 @@ $theme_path="themes/".$theme."/";
 
 ?>
 
-<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">
+<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $upload_maxsize; ?>">
 <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
 <INPUT TYPE="hidden" NAME="return_action" VALUE="<?php echo $ret_action ?>">
 <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
