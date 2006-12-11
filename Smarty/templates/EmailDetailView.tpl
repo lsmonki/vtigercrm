@@ -24,12 +24,12 @@
 <tbody>
    <tr>
 	<td colspan="3">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		   <tr>
-			<td background="{$IMAGE_PATH}mailHdr.jpg" style="background-repeat:repeat-x;" width="100%">&nbsp;</td>
-			<td width="86"><img src="{$IMAGE_PATH}mailTitle.jpg"></td>
-		   </tr>
-		</table>	
+		<table border=0 cellspacing=0 cellpadding=0 width=100% class="mailClientWriteEmailHeader">
+		<tr>
+		<td >{$MOD.LBL_DETAILVIEW_EMAIL}</td>
+		</tr>
+		</table>
+
 	</td>
    </tr> 
    {foreach item=row from=$BLOCKS}
