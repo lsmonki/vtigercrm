@@ -204,9 +204,6 @@ function DeleteTag(id,recordid)
 					{else}
 						{include file="DetailViewFields.tpl"}
 					{/if}
-				{else} 
-					<td class="dvtCellLabel" align=right>&nbsp;</td>
-					<td class="dvtCellInfo" align=left >&nbsp;</td>
 				{/if}
 		{/foreach}
 	   </tr>	

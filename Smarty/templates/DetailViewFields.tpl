@@ -32,7 +32,7 @@
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="http://{$keyval}" target="_blank">{$keyval}</a>
                                                   </td>
                                              {elseif $keyid eq '19' || $keyid eq '20'} <!--TextArea/Description-->
-                                                  <td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}                   
+                                                  <td width=100% class="dvtCellInfo" align="left">&nbsp;{$keyval}                   
                                                   </td>
                                              {elseif $keyid eq '21' || $keyid eq '24' || $keyid eq '22'} <!--TextArea/Street-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;{$keyval}
