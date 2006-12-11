@@ -192,8 +192,8 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
 
-							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_PICKLIST_EDITOR}" title="{$MOD.LBL_PICKLIST_EDITOR}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=PickList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_PICKLIST_EDITOR}" title="{$MOD.LBL_PICKLIST_EDITOR}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_PICKLIST_DESCRIPTION}</td>	
@@ -254,8 +254,8 @@
 					<!-- icon 11-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}ViewTemplate.gif" alt="{$MOD.EMAILTEMPLATES}" title="{$MOD.EMAILTEMPLATES}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}ViewTemplate.gif" alt="{$MOD.EMAILTEMPLATES}" title="{$MOD.EMAILTEMPLATES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td>
 
 						</tr>
 						<tr>
@@ -268,8 +268,8 @@
 
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}mailmarge.gif" alt="{$MOD.LBL_MAIL_MERGE}" title="{$MOD.LBL_MAIL_MERGE}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listwordtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}mailmarge.gif" alt="{$MOD.LBL_MAIL_MERGE}" title="{$MOD.LBL_MAIL_MERGE}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_MAIL_MERGE_DESCRIPTION}</td>
@@ -281,8 +281,8 @@
 					<!-- icon 13-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}notification.gif" alt="{$MOD.NOTIFICATIONSCHEDULERS}" title="{$MOD.NOTIFICATIONSCHEDULERS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}notification.gif" alt="{$MOD.NOTIFICATIONSCHEDULERS}" title="{$MOD.NOTIFICATIONSCHEDULERS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td>
 
 						</tr>
 						<tr>
@@ -295,8 +295,8 @@
 
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.INVENTORYNOTIFICATION}" title="{$MOD.INVENTORYNOTIFICATION}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.INVENTORYNOTIFICATION}" title="{$MOD.INVENTORYNOTIFICATION}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_INV_NOTIF_DESCRIPTION}</td>

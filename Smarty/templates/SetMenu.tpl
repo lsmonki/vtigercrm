@@ -87,27 +87,27 @@
 		<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_COMMUNICATION_TEMPLATES}</td></tr>
 
 		{if $smarty.request.action eq 'listemailtemplates' || $smarty.request.action eq 'detailviewemailtemplate' || $smarty.request.action eq 'editemailtemplate' || $smarty.request.action eq 'saveemailtemplate' || $smarty.request.action eq 'deleteemailtemplate' || $smarty.request.action eq 'createemailtemplate'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
 		{/if}
 
-		{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate' || $smarty.request.action eq 'upload'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
+		{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'savewordtemplate' || $smarty.request.action eq 'deletewordtemplate' || $smarty.request.action eq 'upload'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
 		{else}	
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
 		{/if}
 
-		{if $smarty.request.action eq 'listnotificationschedulers' || $smarty.request.action eq 'UsersAjax'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
+		{if $smarty.request.action eq 'listnotificationschedulers' || $smarty.request.action eq 'SettingsAjax'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
 		{/if}
 				
 		{if $smarty.request.action eq 'listinventorynotifications' || $smarty.request.action eq 'UsersAjax'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
 		{else}	
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
 		{/if} 	
 
 		

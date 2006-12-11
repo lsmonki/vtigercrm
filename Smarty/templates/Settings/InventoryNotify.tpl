@@ -104,7 +104,7 @@ function fetchSaveNotify(id)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=UsersAjax&module=Users&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id,
+                        postBody: 'action=SettingsAjax&module=Settings&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id,
                         onComplete: function(response) {
                                 $("status").style.display="none";
                         }
@@ -119,7 +119,7 @@ function fetchEditNotify(id)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=UsersAjax&module=Users&file=EditInventoryNotification&record='+id,
+                        postBody: 'action=SettingsAjax&module=Settings&file=EditInventoryNotification&record='+id,
                         onComplete: function(response) {
                                 $("status").style.display="none";
 				$("editdiv").innerHTML=response.responseText;
