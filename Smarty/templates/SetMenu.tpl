@@ -104,7 +104,7 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
 		{/if}
 				
-		{if $smarty.request.action eq 'listinventorynotifications' || $smarty.request.action eq 'UsersAjax'}
+		{if $smarty.request.action eq 'listinventorynotifications' || $smarty.request.action eq 'SettingsAjax'}
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
 		{else}	
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
@@ -161,7 +161,7 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td></tr>
 		{/if}
 
-		{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'UsersAjax' }
+		{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'SettingsAjax' }
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>		
 		{else}
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>

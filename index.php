@@ -280,7 +280,10 @@ if(isset($action) && isset($module))
 		ereg("^RecalculateSharingRules",$action) ||
 		(ereg("^body",$action) && ereg("^Webmails",$module)) ||
 		(ereg("^dlAttachments",$action) && ereg("^Webmails",$module)) ||
-		(ereg("^DetailView",$action) &&	ereg("^Webmails",$module) ))
+		(ereg("^DetailView",$action) &&	ereg("^Webmails",$module) ) ||
+		ereg("^savewordtemplate",$action))
+	
+		
 	{
 		$skipHeaders=true;
 		//skip headers for all these invocations as they are mostly popups

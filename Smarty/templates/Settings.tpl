@@ -68,8 +68,8 @@
 					<!-- icon 3-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td>
 						</tr>
 
 						<tr>
@@ -82,8 +82,8 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listgroups&parenttab=Settings"><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$MOD.USERGROUPLIST}" width="48" height="48" border=0 title="{$MOD.USERGROUPLIST}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listgroups&parenttab=Settings"><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$MOD.USERGROUPLIST}" width="48" height="48" border=0 title="{$MOD.USERGROUPLIST}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_GROUP_DESCRIPTION}</td>
@@ -98,9 +98,9 @@
 					<!-- icon 5-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings"><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_SHARING_ACCESS}" width="48" height="48" border=0 title="{$MOD.LBL_SHARING_ACCESS}"></a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings"><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_SHARING_ACCESS}" width="48" height="48" border=0 title="{$MOD.LBL_SHARING_ACCESS}"></a></td>
 
-							<td class=big valign=top><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_SHARING_ACCESS_DESCRIPTION}</td>
@@ -112,8 +112,8 @@
 					<!-- icon 6 -->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="Fields to be shown" width="48" height="48" border=0 title="Fields to be shown"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="Fields to be shown" width="48" height="48" border=0 title="Fields to be shown"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_SHARING_FIELDS_DESCRIPTION}</td>
@@ -125,8 +125,8 @@
 					<!-- icon 7-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}audit.gif" alt="{$MOD.LBL_AUDIT_TRAIL}" title="{$MOD.LBL_AUDIT_TRAIL}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=AuditTrailList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}audit.gif" alt="{$MOD.LBL_AUDIT_TRAIL}" title="{$MOD.LBL_AUDIT_TRAIL}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td>
 						</tr>
 
 						<tr>
@@ -140,8 +140,8 @@
 					<!-- icon 8-->	
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoLoginHistory.gif" alt="{$MOD.LBL_LOGIN_HISTORY_DETAILS}" width="48" height="48" border=0 title="{$MOD.LBL_LOGIN_HISTORY_DETAILS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ListLoginHistory&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoLoginHistory.gif" alt="{$MOD.LBL_LOGIN_HISTORY_DETAILS}" width="48" height="48" border=0 title="{$MOD.LBL_LOGIN_HISTORY_DETAILS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_LOGIN_HISTORY_DESCRIPTION}</td>
@@ -192,8 +192,8 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
 
-							<td rowspan=2 valign=top><a href="index.php?module=Users&action=PickList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_PICKLIST_EDITOR}" title="{$MOD.LBL_PICKLIST_EDITOR}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_PICKLIST_EDITOR}" title="{$MOD.LBL_PICKLIST_EDITOR}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_PICKLIST_DESCRIPTION}</td>	
@@ -455,8 +455,8 @@
 					<!-- icon 9-->	
 					<table border=0 cellspacing=0 cellpadding=5 width=100%>
 					<tr>
-						<td rowspan=2 valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoTwoTabConfig.gif" alt="{$MOD.LBL_DEFAULT_MODULE_VIEW}" width="48" height="48" border=0 title="{$MOD.LBL_DEFAULT_MODULE_VIEW}"></a></td>
-						<td class=big valign=top><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td>
+						<td rowspan=2 valign=top><a href="index.php?module=Settings&action=DefModuleView&parenttab=Settings"><img src="{$IMAGE_PATH}set-IcoTwoTabConfig.gif" alt="{$MOD.LBL_DEFAULT_MODULE_VIEW}" width="48" height="48" border=0 title="{$MOD.LBL_DEFAULT_MODULE_VIEW}"></a></td>
+						<td class=big valign=top><a href="index.php?module=Settings&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td>
 					</tr>
 					<tr>
 						<td class="small" valign=top>{$MOD.LBL_DEFAULT_MODULE_VIEW_DESC}</td>
@@ -478,8 +478,8 @@
 			<table border=0 cellspacing=0 cellpadding=5 width=100%>
 			<tr>
 
-			<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
-			<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
+			<td rowspan=2 valign=top><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
+			<td class=big valign=top><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
 			</tr>
 			<tr>
 			<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
