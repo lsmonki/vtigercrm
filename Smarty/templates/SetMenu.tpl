@@ -36,39 +36,39 @@
 		{/if}
 
 		{if $smarty.request.action eq 'ListProfiles' || $smarty.request.action eq 'profilePrivileges' ||  $smarty.request.action eq 'CreateProfile' ||  $smarty.request.action eq 'SaveProfile' || $smarty.request.action eq 'UpdateProfileChanges' }
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
 		{/if}
 
 		{if $smarty.request.action eq 'listgroups' || $smarty.request.action eq 'GroupDetailView' || $smarty.request.action eq 'createnewgroup' || $smarty.request.action eq 'SaveGroup'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td></tr>   	
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td></tr>   	
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td></tr>
 		{/if}
 
 		{if  $smarty.request.action eq 'OrgSharingEditView' || $smarty.request.action eq 'OrgSharingDetailView' || $smarty.request.action eq 'SaveOrgSharing'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>  	
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>  	
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>
 		{/if}
 			
 		{if $smarty.request.action eq 'DefaultFieldPermissions' || $smarty.request.action eq 'UpdateDefaultFieldLevelAccess' || $smarty.request.action eq 'EditDefOrgFieldLevelAccess' }
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
 		{/if}
 			
 		{if $smarty.request.action eq 'AuditTrailList'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
         {else}
-        <tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
+        <tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=AuditTrailList&parenttab=Settings">{$MOD.LBL_AUDIT_TRAIL}</a></td></tr>
         {/if}
 
 		{if $smarty.request.action eq 'ListLoginHistory'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ListLoginHistory&parenttab=Settings">{$MOD.LBL_LOGIN_HISTORY_DETAILS}</a></td></tr>
 		{/if}
 
 		
@@ -168,17 +168,17 @@
 		{/if}
 		
 		{if $smarty.request.action eq 'DefModuleView'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
 		{/if}
 	
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
 
 		{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
-		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
 		{else}
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
 		{/if}
 
 		</table>

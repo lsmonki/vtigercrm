@@ -788,6 +788,35 @@ $mod_strings = Array(
 'QuoteNotification'=>'Product Stock Notification during Quote Generation',
 'SalesOrderNotification'=>'Product Stock Notification during Sales Order Generation',
 'LBL_NOTE_DO_NOT_REMOVE_INFO'=>'Note: Donot remove or alter the values within {  }',
+
+//Added while moving Profile file from User to Setting Module
+'LBL_TOTAL'=>'Total :',
+'LBL_NEW_PROFILE'=>'New Profile',
+'LBL_LIST_NO'=>'#',
+'LBL_NEW_PROFILE_NAME'=>'Profile Name',
+'LBL_LIST_TOOLS'=>'Tools',
+'LBL_PROFILE_MESG'=>'Viewing access privileges for',
+'LBL_PROFILE_PRIVILEGES'=>'Profile Privileges',
+'LBL_DEFINE_PRIV_FOR'=>' Define Privileges for ',
+'LBL_USE_OPTION_TO_SET_PRIV'=>'Use the options below to set privileges',
+'LBL_SUPER_USER_PRIV'=>'Global Privileges',
+'LBL_SET_PRIV_FOR_EACH_MODULE'=>'Set Privileges for each Module ',
+'LBL_FIELDS_AND_TOOLS_SETTINGS'=>'Fields & Tools Settings',
+'LBL_VIEW_ALL'=>'View all',
+'LBL_EDIT_ALL'=>'Edit all',
+'LBL_ALLOW'=>'Allows',
+'LBL_MESG_VIEW'=>'to view all information / modules of vtiger CRM',
+'LBL_MESG_EDIT'=>'to edit all information / modules of vtiger CRM',
+'LBL_TAB_MESG_OPTION'=>'modules to be shown',
+'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
+'LBL_CREATE_EDIT'=>'Create/Edit',
+'LBL_VIEW'=>'View',
+'LBL_MANDATORY_MSG'=>'Mandatory Fields',
+'LBL_DISABLE_FIELD_MSG'=>'Fields Disabled from Global Field Access Settings',
+'LBL_DELETE'=>'Delete',
+
+'LBL_STEP_2_2'=>'Step 2 of 2',
+'LBL_FINISH_BUTTON'=>'Finish',
 );
 
 

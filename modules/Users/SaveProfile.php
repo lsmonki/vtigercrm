@@ -180,7 +180,7 @@ foreach($modArr as $fld_module => $fld_label)
                 $adb->query($sql11);
 	}
 }
-	$loc = "Location: index.php?action=ListProfiles&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
 	header($loc);
 
 

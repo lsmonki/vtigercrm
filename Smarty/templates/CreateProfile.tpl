@@ -21,7 +21,7 @@
 	<div align=center>
 				{include file='SetMenu.tpl'}
 				<form action="index.php" method="post" name="profileform" id="form">
-                                <input type="hidden" name="module" value="Users">
+                                <input type="hidden" name="module" value="Settings">
                                 <input type="hidden" name="mode" value="{$MODE}">
                                 <input type="hidden" name="action" value="profilePrivileges">
                                 <input type="hidden" name="parenttab" value="Settings">
@@ -32,7 +32,7 @@
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></td>
-					<td class=heading2 valign=bottom><b> <a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a></b></td>
+					<td class=heading2 valign=bottom><b> <a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a></b></td>
 				</tr>
 				<tr>
 					<td valign=top class="small">{$MOD.LBL_PROFILE_DESCRIPTION}</td>
