@@ -11,27 +11,8 @@
 
 global $current_user;
 global $adb;
-
 if(isset($_REQUEST['file']) && ($_REQUEST['file'] !=''))
 {
 	require_once('modules/Users/'.$_REQUEST['file'].'.php');
-}
-if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
-{
-	require_once('modules/Users/CreateSharingRule.php');	
-}
-elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
-{
-	$date_var = date('YmdHis');
-	$announcement = $_REQUEST['announcement'];
-	$title = $_REQUEST['title_announcement'];
-	$sql="select * from vtiger_announcement where creatorid=".$current_user->id;
-	$is_announce=$adb->query($sql);
-	if($adb->num_rows($is_announce) > 0)
-		$query="update vtiger_announcement set announcement=".$adb->formatString("vtiger_announcement","announcement",$announcement).",time=".$adb->formatString("vtiger_announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
-	else
-		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("vtiger_announcement","announcement",$announcement).",'announcement',".$adb->formatString("vtiger_announcement","time",$date_var).")";
-	$result=$adb->query($query);
-	echo $announcement;
 }
 ?>
