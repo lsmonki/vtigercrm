@@ -1789,7 +1789,6 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 * Return type array 
 */
 
-
 function split_validationdataArray($validationData)
 {
 	global $log;
@@ -1812,11 +1811,11 @@ function split_validationdataArray($validationData)
 		{
 			if($fieldLabel == '')
 			{
-				$fieldLabel = "'".$fldLabel ."'";
+				$fieldLabel = "'".addslashes($fldLabel)."'";
 			}
 			else
 			{
-				$fieldLabel .= ",'".$fldLabel ."'";
+				$fieldLabel .= ",'".addslashes($fldLabel)."'";
 			}
 			if($fldDataType == '')
 			{
