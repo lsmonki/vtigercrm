@@ -14,7 +14,7 @@
 <body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
 
 <form action="index.php" method="post" id="form">
-<input type='hidden' name='module' value='Users'>
+<input type='hidden' name='module' value='Settings'>
 <input type='hidden' id='userid' name='userid' value='{$USERID}'>
 
 <table  width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
@@ -50,7 +50,7 @@ function getListViewEntries_js(module,url)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&file=ShowAuditTrail&ajax=true&'+url+'&userid='+userid,
+                        postBody: 'module=Settings&action=SettingsAjax&file=ShowAuditTrail&ajax=true&'+url+'&userid='+userid,
                         onComplete: function(response) {
                                 $("AuditTrailContents").innerHTML= response.responseText;
                         }
