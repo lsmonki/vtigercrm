@@ -817,6 +817,17 @@ $mod_strings = Array(
 
 'LBL_STEP_2_2'=>'Step 2 of 2',
 'LBL_FINISH_BUTTON'=>'Finish',
+
+//Added while moving Groups file from User to Setting Module
+'LBL_NEW_GROUP'=>'New Group',
+'LBL_GROUPS'=>'Groups',
+'LBL_GROUP_NAME'=>'Group Name',
+'LBL_ROLES_SUBORDINATES'=>'Roles and Subordinates',
+'LBL_MEMBER_AVLBL'=>'Available Entities & Members',
+'LBL_MEMBER_SELECTED'=>'Selected Members',
+'LBL_ENTITY'=>'Entity',
+'LBL_OF'=>'of',
+
 );
 
 

@@ -613,7 +613,7 @@ function createNewGroup($groupName,$groupDescription)
 	$sql = "insert into vtiger_groups(name,description) values('" .$groupName ."','". $groupDescription ."')";
 	$result = $adb->query($sql); 
 	$log->debug("Exiting createNewGroup method ...");
-	header("Location: index.php?module=Users&action=listgroups");
+	header("Location: index.php?module=Settings&action=listgroups");
 	
 }
 
@@ -3789,7 +3789,7 @@ function getEntityDisplayLink($entityType,$entityid)
 	if($entityType == 'groups')
 	{
 		$groupNameArr = getGroupInfo($entityid); 
-		$display_out = "<a href='index.php?module=Users&action=GroupDetailView&returnaction=OrgSharingDetailView&groupId=".$entityid."'>Group::". $groupNameArr[0]." </a>";			
+		$display_out = "<a href='index.php?module=Settings&action=GroupDetailView&returnaction=OrgSharingDetailView&groupId=".$entityid."'>Group::". $groupNameArr[0]." </a>";			
 	}
 	elseif($entityType == 'roles')
 	{

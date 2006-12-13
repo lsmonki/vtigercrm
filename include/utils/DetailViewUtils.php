@@ -222,7 +222,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$label_fld["secid"][] = $user_id;
 			$label_fld["link"][] = "index.php?module=Users&action=DetailView&record=".$user_id;
 			$label_fld["secid"][] = $groupid;
-			$label_fld["link"][] = "index.php?module=Users&action=GroupDetailView&groupId=".$groupid;
+			$label_fld["link"][] = "index.php?module=Settings&action=GroupDetailView&groupId=".$groupid;
 		}
 		//Security Checks
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
