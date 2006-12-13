@@ -228,7 +228,7 @@ function callEditDiv(obj,modulename,mode,id)
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
+                        postBody: 'module=Settings&action=SettingsAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
