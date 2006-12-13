@@ -828,6 +828,46 @@ $mod_strings = Array(
 'LBL_ENTITY'=>'Entity',
 'LBL_OF'=>'of',
 
+//Sharing
+'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Organization-level Sharing Rules',
+'LBL_RECALCULATE_BUTTON'=>'Recalculate',
+'LBL_CHANGE'=>'Change',
+'LBL_PRIVILEGES'=>'Privileges',
+'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Sharing Rules',
+'LBL_ADD_PRIVILEGES_BUTTON'=>'Add Privileges',
+'LBL_RULE_NO'=>'Rule No.',
+'LBL_CAN_BE_ACCESSED'=>'can be accessed by',
+'LBL_CUSTOM_ACCESS_MESG'=>'No Custom Access Rules defined .',
+'LNK_CLICK_HERE'=>'Click here',
+'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
+'LBL_RECALC_MSG'=>'Are you sure, you wish to Recalculate Sharing Access?',
+'LBL_YES'=>'Yes',
+'LBL_NO'=>'No',
+'LBL_IN_PERMISSION'=>'in the permission',
+'LBL_RELATED_MODULE_RIGHTS'=>'Related Module Rights',
+'LBL_USR_CAN_ACCESS'=>'Users can ',
+'LBL_USR_OTHERS'=>' other users ',
+'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other users ',
+ 
+'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
+'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
+'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
+'LBL_READ_ONLY'=>'Public: Read Only',
+'LBL_EDIT_CREATE_ONLY'=>'Public: Read, Create/Edit',
+'LBL_READ_CREATE_EDIT_DEL'=>'Public: Read, Create/Edit, Delete',
+'LBL_PRIVATE'=>'Private',
+ 
+'Public: Read Only'=>'Public: Read Only',
+'Public: Read, Create/Edit'=>'Public: Read, Create/Edit',
+'Public: Read, Create/Edit, Delete'=>'Public: Read, Create/Edit, Delete',
+'Private'=>'Private',
+'Hide Details'=>'Hide Details',
+'Hide Details and Add Events'=>'Hide Details and Add Events',
+'Show Details'=>'Show Details',
+'Show Details and Add Events'=>'Show Details and Add Events',
+
+//Added for User Login History While moving from User to Settings
+'LBL_LOGIN_HISTORY'=>'Login History',
 );
 
 
