@@ -18,7 +18,7 @@
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 <form action="index.php" method="post" name="tandc">
-<input type="hidden" name="module" value="Users">
+<input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action">
 <input type="hidden" name="inv_terms_mode">
 <input type="hidden" name="parenttab" value="Settings">
