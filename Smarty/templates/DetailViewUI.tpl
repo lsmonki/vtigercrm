@@ -133,7 +133,7 @@
 						{/if}
 							<!--{assign var="DESCRIPTION_SEPARATOR_STRING" value=" "}  {* Separates Description *}-->
 							<!--{assign var="DESCRIPTION_WORDWRAP_WIDTH" value="70"} {* No. of chars for word wrapping long lines of Description *}-->
-                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
+                                                  <td width="100%" class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
 							{$keyval}<!--|replace:$DESCRIPTION_SEPARATOR_STRING:"\x1"|replace:" ":"\x0"|replace:"\x1":$DESCRIPTION_SEPARATOR_STRING|wordwrap:$DESCRIPTION_WORDWRAP_WIDTH:"<br>&nbsp;"|replace:"\x0":"&nbsp;"}-->
 							</span>
                                               		<div id="editarea_{$label}" style="display:none;">
