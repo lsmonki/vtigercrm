@@ -203,7 +203,7 @@ function DeleteTag(id)
                                                                                         <td width="30%" valign="top" align=right><b>{$MOD.LBL_USERS}</b></td>
                                                                                         <td width="70%" align=left valign="top" >
 												{foreach item=username key=userid from=$INVITEDUSERS}
-                                                                                        	        {$username.3}<br>
+                                                                                        	        {$username}<br>
                                                                                                 {/foreach}
 											</td>
                                                                                 </tr>

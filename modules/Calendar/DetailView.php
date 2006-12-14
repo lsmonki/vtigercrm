@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/calendarLayout.php');
 include_once 'modules/Calendar/header.php';
-global $mod_strings, $currentModule;
+global $mod_strings, $currentModule,$adb;
 if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
@@ -247,8 +247,18 @@ elseif($activity_mode == 'Events')
 		$data['recurringcheck'] = 'No';
 		$data['repeat_month_str'] = '';
 	}
+	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
+	$result = $adb->query($sql);
+	$num_rows=$adb->num_rows($result);
+	$invited_users=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$userid=$adb->query_result($result,$i,'inviteeid');
+		$username=$adb->query_result($result,$i,'user_name');
+		$invited_users[$userid]=$username;
+	}
+	$smarty->assign("INVITEDUSERS",$invited_users);
 	$related_array = getRelatedLists("Calendar", $focus);
-	$smarty->assign("INVITEDUSERS",$related_array['Users']['entries']);
 	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
 
 
