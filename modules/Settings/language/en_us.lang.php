@@ -827,8 +827,13 @@ $mod_strings = Array(
 'LBL_MEMBER_SELECTED'=>'Selected Members',
 'LBL_ENTITY'=>'Entity',
 'LBL_OF'=>'of',
+'LBL_CREATE_NEW_GROUP'=>'Create New Group',
+'LBL_ADD_GROUP_BUTTON'=>'Add Group',
+'LBL_GROUP_MESG1'=>'Groups are a flexible way to assign access rights, when complex access rights has to be defined. You can combine multiple entities like Roles, Users, profiles etc into a single group.',
+'LBL_GROUP_MESG2'=>'To add, select the Entity members from left and click the ">>" button.',
+'LBL_GROUP_MESG3'=>'To remove, select the group members from the right and click the "<<" button.',
 
-//Sharing
+//Sharing Privileges
 'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Organization-level Sharing Rules',
 'LBL_RECALCULATE_BUTTON'=>'Recalculate',
 'LBL_CHANGE'=>'Change',
@@ -868,6 +873,12 @@ $mod_strings = Array(
 
 //Added for User Login History While moving from User to Settings
 'LBL_LOGIN_HISTORY'=>'Login History',
+//Sharing Access module moved to Setting
+'Read/Write'=>'Read/Write',
+'Read Only '=>'Read Only ',
+'LBL_GROUP'=>'Group',
+'LBL_ACCESS_RIGHTS_FOR_MODULES'=>'Access rights for relative modules',
+'LBL_ADD_RULE'=>'Add Rule',
 );
 
 
