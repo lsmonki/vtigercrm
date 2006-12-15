@@ -879,7 +879,12 @@ $mod_strings = Array(
 'LBL_GROUP'=>'Group',
 'LBL_ACCESS_RIGHTS_FOR_MODULES'=>'Access rights for relative modules',
 'LBL_ADD_RULE'=>'Add Rule',
+'LBL_ADD_CUSTOM_RULE'=>'Add Custom Privilege Rule',
+'LBL_RULE_CONSTRUCTION'=>'Rule Construction Display',
+'LBL_STEP'=>'Step',
+'LBL_SELECT_ENTITY'=>'Select an entity below',
+'LBL_CAN_BE_ACCESSED_BY'=>'Can be accessed by',
+'LBL_PERMISSIONS'=>'Permissions',
+
 );
-
-
 ?>
