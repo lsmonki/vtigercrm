@@ -79,7 +79,7 @@ function set_return_emails(entity_id,email_id,parentname,emailadd){
 		window.close();
 	}else
 	{
-		alert('The user "'+parentname+'" doesn\'t have an email id' );
+		alert('"'+parentname+'" doesn\'t have an Email Id' );
 		return false;
 	}
 }	
