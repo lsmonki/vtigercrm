@@ -61,7 +61,11 @@ function sensex_info()
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
+			{if $DUPLICATE neq 'true'}
 			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$APP[$SINGLE_MOD]}</span> <br>
+			{else}
+			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
+			{/if}
 		 {/if}
 
 		 <hr noshade size=1>

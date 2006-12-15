@@ -205,6 +205,7 @@ if($errormessage!="")
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");

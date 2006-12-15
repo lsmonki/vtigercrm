@@ -90,7 +90,11 @@ function check_duplicate()
 					{if $MODE eq 'edit'}
 						{$UMOD.LBL_EDITING} "{$USERNAME}" 
 					{else}
+						{if $DUPLICATE neq 'true'}
 						{$UMOD.LBL_CREATE_NEW_USER}
+						{else}
+						{$APP.LBL_DUPLICATING} "{$USERNAME}"
+						{/if}
 					{/if}
 					</b></span>
 				{else}
@@ -106,7 +110,9 @@ function check_duplicate()
 			{if $MODE eq 'edit'}
 				<td><b class="small">{$UMOD.LBL_EDIT_VIEW} "{$USERNAME}"</b>
 			{else}
+				{if $DUPLICATE neq 'true'}
 				<td><b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
+				{/if}
 			{/if}
 			</td>
                 </tr>

@@ -424,6 +424,7 @@ $app_strings = array (
 'LBL_MORE' => 'More',
 'LBL_BASIC' => 'Basic',
 'LBL_CREATING' => 'Creating',
+'LBL_DUPLICATING' => 'Duplicating',
 'LBL_EDITING' => 'Editing',
 'LBL_NEW' => 'New',
 'Lead' => 'Lead',

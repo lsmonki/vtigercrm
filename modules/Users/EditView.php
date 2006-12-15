@@ -110,8 +110,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 }
 
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
-
-
+$smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
 
 $smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
 

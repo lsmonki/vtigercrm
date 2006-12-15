@@ -240,6 +240,7 @@ $smarty->assign("ID", $focus->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 $smarty->display("ActivityEditView.tpl");
 
