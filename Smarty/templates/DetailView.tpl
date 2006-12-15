@@ -46,7 +46,7 @@ function callConvertLeadDiv(id)
 
 function tagvalidate()
 {ldelim}
-	if(document.getElementById('txtbox_tagfields').value != '')
+	if(trim(document.getElementById('txtbox_tagfields').value) != '')
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
