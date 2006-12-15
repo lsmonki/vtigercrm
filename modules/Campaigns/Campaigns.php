@@ -187,7 +187,7 @@ class Campaigns extends CRMEntity {
 		else
 			$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
 
-		$query = 'select vtiger_users.user_name,vtiger_groups.groupname, vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid from vtiger_campaign inner join vtiger_potential on vtiger_campaign.campaignid = vtiger_potential.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_campaign.campaignid = '.$id.' and vtiger_crmentity.deleted=0';
+		$query = 'select vtiger_users.user_name,vtiger_groups.groupname, vtiger_potential.accountid, vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid from vtiger_campaign inner join vtiger_potential on vtiger_campaign.campaignid = vtiger_potential.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_campaign.campaignid = '.$id.' and vtiger_crmentity.deleted=0';
 		if($this->column_fields['account_id'] != 0)
 		$log->debug("Exiting get_opportunities method ...");
 		return GetRelatedList('Campaigns','Potentials',$focus,$query,$button,$returnset);
@@ -248,6 +248,7 @@ class Campaigns extends CRMEntity {
 				OR activitytype = 'Meeting')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Campaigns','Calendar',$focus,$query,$button,$returnset);
+	
 	}
 
 }

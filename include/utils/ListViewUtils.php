@@ -2335,7 +2335,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 {
 	global $log;
 	$log->debug("Entering getRelatedToEntity(".$module.",".$list_result.",".$rset.") method ...");
-
+	
 	global $adb;
 	$seid = $adb->query_result($list_result,$rset,"relatedto");
 	$action = "DetailView";
@@ -2462,8 +2462,10 @@ function getRelatedTo($module,$list_result,$rset)
         $evt_result = $adb->query($evt_query);
 		$numrows= $adb->num_rows($evt_result);
 		
-		$parent_module = $adb->query_result($evt_result,0,'setype');
+	$parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
+
+
 		
 		if ($numrows>1){
 		$parent_module ='Multiple';
@@ -2536,6 +2538,16 @@ function getRelatedTo($module,$list_result,$rset)
 		$parent_query = "SELECT title FROM vtiger_troubletickets WHERE ticketid=".$parent_id;
 		$parent_result = $adb->query($parent_query);
 		$parent_name = $adb->query_result($parent_result,0,"title");
+		if(strlen($parent_name) > 25)
+		{
+			$parent_name = substr($parent_name,0,25).'...';
+		}
+	}
+	if($parent_module == 'Campaigns')
+	{
+		$parent_query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"campaignname");
 		if(strlen($parent_name) > 25)
 		{
 			$parent_name = substr($parent_name,0,25).'...';
