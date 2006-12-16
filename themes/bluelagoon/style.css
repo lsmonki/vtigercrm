@@ -1753,9 +1753,8 @@ ul {
 
 }
 
-/*
 .cellLabel {
-	background-color:#eaebd9;
+	background-color:#f5f5ff;
 	border-top:1px solid #efefef;
 	border-bottom:1px solid #dadada;
 	color:#555555;
@@ -1765,7 +1764,6 @@ ul {
 	color:#333333;
 	border-bottom:1px solid #dadada;
 }
-*/
 
 .listTable{
 	border-left:1px solid #cccccc;
