@@ -420,7 +420,8 @@ class CRMEntity
 				  }
 				  else
 				  {
-					  $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+					  //Added to avoid function call getDBInsertDateValue in ajax save
+					  $fldvalue = (($_REQUEST['ajxaction'] == 'DETAILVIEW')?$this->column_fields[$fieldname]:getDBInsertDateValue($this->column_fields[$fieldname]));
 				  }
 			  }
 			  elseif($uitype == 7)
