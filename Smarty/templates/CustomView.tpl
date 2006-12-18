@@ -568,6 +568,8 @@ function mandatoryCheck()
   </td></tr>
   <tr><td colspan="4">&nbsp;</td></tr>
 </table>
+</table>
+</table>
 {$STDFILTER_JAVASCRIPT}
 {$JAVASCRIPT}
 <!-- to show the mandatory fields while creating new customview -->
