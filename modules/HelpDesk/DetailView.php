@@ -85,6 +85,7 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
                 $optionString[$tempVal["templateid"]]=$tempVal["filename"];
                 $tempVal = $adb->fetch_array($wordTemplateResult);
         }
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }

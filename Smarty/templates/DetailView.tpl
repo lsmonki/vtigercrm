@@ -293,10 +293,10 @@ function DeleteTag(id,recordid)
 				{else}
 					{include file="DetailViewFields.tpl"}
 				{/if}
-			{else}
-                                <td class="dvtCellLabel" align=right>&nbsp;</td>
-                                <td class="dvtCellInfo" align=left >&nbsp;</td>
-			{/if}
+			   {else}
+				<td class="dvtCellLabel" align=right>&nbsp;</td>
+				<td class="dvtCellInfo" align=left >&nbsp;</td>
+			   {/if}
                                    {/foreach}
 						      </tr>	
 						   {/foreach}	
@@ -416,10 +416,14 @@ function DeleteTag(id,recordid)
       					   <td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
       				</tr>
       				<tr style="height:25px">
-      						<td class="rightMailMergeContent">
-          						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
-          						<input class="crmbutton small create" value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input>
-      					  </td>
+					<td class="rightMailMergeContent">
+						{if $TEMPLATECOUNT neq 0}
+						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
+                                                   <input class="crmbutton small create" value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input> 
+						{else}
+						<a href=index.php?module=Settings&action=upload&tempModule={$MODULE}>{$APP.LBL_CREATE_MERGE_TEMPLATE}</a>
+						{/if}
+					</td>
       				</tr>
   				</table>
 				</form>
