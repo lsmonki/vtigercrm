@@ -307,12 +307,14 @@ function SearchContactsByEmail($username,$emailaddress)
 
 function AddMessageToContact($username,$contactid,$msgdtls)
 {
+	global $current_user;
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Emails/Emails.php');
 	
-	$seed_user = new Users();
-	$user_id = $seed_user->retrieve_user_id($username);
+	$current_user = new Users();
+	$user_id = $current_user->retrieve_user_id($username);
+	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
 	
 	foreach($msgdtls as $msgdtl)
 	{
