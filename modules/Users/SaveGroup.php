@@ -112,7 +112,7 @@ function constructGroupMemberArray($member_array)
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
 
-		$loc = "Location: index.php?action=".$returnaction."&module=Users&parenttab=Settings&groupId=".$groupId;
+		$loc = "Location: index.php?action=".$returnaction."&module=Settings&parenttab=Settings&groupId=".$groupId;
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
@@ -120,7 +120,7 @@ function constructGroupMemberArray($member_array)
 		$member_array = explode(';',$selected_col_string);
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		$groupId=createGroup($groupName,$groupMemberArray,$description);
-		$loc = "Location: index.php?action=".$returnaction."&parenttab=Settings&module=Users&groupId=".$groupId; 	 
+		$loc = "Location: index.php?action=".$returnaction."&parenttab=Settings&module=Settings&groupId=".$groupId; 	 
 
 	}
 
