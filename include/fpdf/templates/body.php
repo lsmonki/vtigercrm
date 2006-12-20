@@ -82,28 +82,33 @@ for($i=0;$i<count($total);$i++) {
 if($focus->column_fields["hdnTaxType"] != "individual") {
 	$lineData=array("105",$bottom+37,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_NET_TOTAL'].":                                                                   ".$price_subtotal."";
+	$data= $app_strings['LBL_NET_TOTAL'].":                                                                  ".$price_subtotal."";
 	$pdf->SetXY( 105 , 168 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+43,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_DISCOUNT'].":                                                                      ".$price_discount."";
+
+	//For alignment
+	if($final_price_discount_percent != '')
+		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                ".$price_discount."";
+	else
+		$data= $app_strings['LBL_DISCOUNT'].":                                                                  ".$price_discount."";
 	$pdf->SetXY( 105 , 174 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+49,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_TAX'].":  ($group_total_tax_percent %)                                                               ".$price_salestax."";
+	$data= $app_strings['LBL_TAX'].":  ($group_total_tax_percent %)                                                                  ".$price_salestax."";
 	$pdf->SetXY( 105 , 180 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+55,"94");
 	$pdf->drawLine($lineData);
-	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                     ".$price_shipping;
+	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                  ".$price_shipping;
 	$pdf->SetXY( 105 , 186 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
@@ -111,21 +116,27 @@ if($focus->column_fields["hdnTaxType"] != "individual") {
 } else {
 	$lineData=array("105",$bottom+43,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_NET_TOTAL'].":                                                                   ".$price_subtotal."";
+	$data= $app_strings['LBL_NET_TOTAL'].":                                                                  ".$price_subtotal."";
 	$pdf->SetXY( 105 , 174 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+49,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_DISCOUNT'].":                                                                      ".$price_discount."";
+
+	//For alignment
+	if($final_price_discount_percent != '')
+		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                 ".$price_discount."";
+	else
+		$data= $app_strings['LBL_DISCOUNT'].":                                                                   ".$price_discount."";
+
 	$pdf->SetXY( 105 , 180 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+55,"94");
 	$pdf->drawLine($lineData);
-	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                   ".$price_shipping;
+	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                  ".$price_shipping;
 	$pdf->SetXY( 105 , 186 );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
@@ -133,21 +144,21 @@ if($focus->column_fields["hdnTaxType"] != "individual") {
 
 $lineData=array("105",$bottom+61,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].":  ($sh_tax_percent %)                      ".$price_shipping_tax;
+$data = $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].":  ($sh_tax_percent %)               ".$price_shipping_tax;
 $pdf->SetXY( 105 , 192 );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);
 
 $lineData=array("105",$bottom+67,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_ADJUSTMENT'].":                                                                    ".$price_adjustment;
+$data = $app_strings['LBL_ADJUSTMENT'].":                                                                   ".$price_adjustment;
 $pdf->SetXY( 105 , 198 );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);
 
 $lineData=array("105",$bottom+73,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_GRAND_TOTAL'].":(in $currency_symbol)                                                  ".$price_total;
+$data = $app_strings['LBL_GRAND_TOTAL'].":(in $currency_symbol)                                                    ".$price_total;
 $pdf->SetXY( 105 , 204 );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);

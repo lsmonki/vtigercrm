@@ -96,7 +96,11 @@ $discount_percent = $focus->column_fields["hdnDiscountPercent"];
 if($discount_amount != "")
 	$price_discount = number_format($discount_amount,2,'.',',');
 else if($discount_percent != "")
-	$price_discount = $discount_percent."%";
+{
+	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
+	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
+	$price_discount = number_format((($discount_percent*$focus->column_fields["hdnSubTotal"])/100),2,'.',',');
+}
 else
 	$price_discount = "0.00";
 
