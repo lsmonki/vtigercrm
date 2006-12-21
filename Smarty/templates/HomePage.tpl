@@ -131,7 +131,11 @@ function getHomeActivities(mode,view)
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
 														{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics' &&  $tabledetail.Title.2 neq 'home_mytoppo' &&  $tabledetail.Title.2 neq 'home_myfaq'  }
-															<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
+															<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" />{$elements.0} 
+															 	{if $modulename eq 'Leads'}
+																 - {$elements.1}	
+																{/if}
+															</td>
 														{elseif $tabledetail.Title.2 eq 'home_metrics'}
 															<td><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
 															<td align="absmiddle" /> {$elements.1}</td>
