@@ -1717,4 +1717,26 @@ function getCalendarPopup(imageid,fieldid,dateformat)
                 inputField : fieldid, ifFormat : dateformat, showsTime : false, button : imageid, singleClick : true, step : 1
         });
 }
+function AjaxDuplicateValidate(module,fieldname,oform)
+{
+	var fieldvalue = getObj(fieldname).value;
+	var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
+	new Ajax.Request(
+          	  	      'index.php',
+			      	{queue: {position: 'end', scope: 'command'},
+		                        method: 'post',
+                		        postBody:url,
+		                        onComplete: function(response) {
+						var str = response.responseText
+						if(str.indexOf('SUCCESS') > -1)
+						{
+							oform.submit();	
+						}else
+						{
+							alert(str);
+						}
+		                        }
+              			 }
+       			);	
 
+}

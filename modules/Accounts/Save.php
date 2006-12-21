@@ -26,6 +26,26 @@ require_once('include/logging.php');
 //require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
+{
+	//started
+	$value = $_REQUEST['accountname'];
+        $query = "SELECT accountname FROM vtiger_account WHERE accountname ='".$value."'";
+	$result = $adb->query($query);
+        if($adb->num_rows($result) > 0)
+	{
+		echo 'Account Name Already Exists!';
+	}
+	else
+	{
+		echo 'SUCCESS';
+	}
+	die;
+}
+//Ended
+
+
+
 $local_log =& LoggerManager::getLogger('index');
 global $log;
 $focus = new Accounts();
@@ -51,9 +71,7 @@ foreach($focus->column_fields as $fieldname => $val)
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
-		//echo '<BR>';
-		//echo $fieldname."         ".$value;
-		//echo '<BR>';
+		$log->DEBUG($fieldname."=Field Name &first& Value =".$value);
 		$focus->column_fields[$fieldname] = $value;
 	}
 	if(isset($_REQUEST['annual_revenue']))
