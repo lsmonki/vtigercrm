@@ -419,7 +419,8 @@ class Products extends CRMEntity {
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
-			vtiger_inventoryproductrel.productid
+			vtiger_inventoryproductrel.productid,
+			vtiger_users.user_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
@@ -433,6 +434,8 @@ class Products extends CRMEntity {
 				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			LEFT JOIN vtiger_users 
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_inventoryproductrel.productid = ".$id;
 		$log->debug("Exiting get_quotes method ...");
@@ -461,7 +464,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
-			vtiger_inventoryproductrel.productid
+			vtiger_inventoryproductrel.productid,
+			vtiger_users.user_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
@@ -473,6 +477,8 @@ class Products extends CRMEntity {
 				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_purchase_orders method ...");
@@ -501,7 +507,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_users.user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -515,6 +522,8 @@ class Products extends CRMEntity {
 				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+			LEFT JOIN vtiger_users 
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
@@ -543,7 +552,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_users.user_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
@@ -555,6 +565,8 @@ class Products extends CRMEntity {
 				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON  vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_inventoryproductrel.productid = ".$id;
 		$log->debug("Exiting get_invoices method ...");

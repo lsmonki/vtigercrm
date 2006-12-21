@@ -494,7 +494,16 @@ class Potentials extends CRMEntity {
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
 
-		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename, vtiger_account.accountname, vtiger_potential.potentialname from vtiger_salesorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid left outer join vtiger_potential on vtiger_potential.potentialid=vtiger_salesorder.potentialid left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid=vtiger_sogrouprelation.salesorderid left join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_potential.potentialid = ".$id;
+		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename, vtiger_account.accountname, vtiger_potential.potentialname,vtiger_users.user_name
+			from vtiger_salesorder 
+			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid
+			left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid 
+			left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid 
+			left outer join vtiger_potential on vtiger_potential.potentialid=vtiger_salesorder.potentialid 
+			left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid=vtiger_sogrouprelation.salesorderid 
+			left join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname
+			left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+			 where vtiger_crmentity.deleted=0 and vtiger_potential.potentialid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 
