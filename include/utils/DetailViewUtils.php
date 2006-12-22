@@ -1299,7 +1299,7 @@ function getRelatedLists($module,$focus)
 	
 	$cur_tab_id = getTabid($module);
 
-	$sql1 = "select * from vtiger_relatedlists where tabid=".$cur_tab_id;
+	$sql1 = "select * from vtiger_relatedlists where tabid=".$cur_tab_id." order by sequence";
 	$result = $adb->query($sql1);
 	$num_row = $adb->num_rows($result);
 	for($i=0; $i<$num_row; $i++)
