@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require('include/fpdf/pdf.php');
+require_once('include/fpdf/pdfconfig.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/database/PearDatabase.php');
 
@@ -21,8 +22,6 @@ $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no
 $endpage="1";
-global $products_per_page;
-$products_per_page="6";
 
 $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
@@ -217,7 +216,14 @@ for($l=0;$l<$num_pages;$l++)
 	$pdf->AddPage();
 	include("pdf_templates/header.php");
 	include("include/fpdf/templates/body.php");
-	include("pdf_templates/footer.php");
+
+	//if bottom > 145 then we skip the Description and T&C in every page and display only in lastpage
+	//if you want to display the description and T&C in each page then set the display_desc_tc='true' and bottom <= 145 in pdfconfig.php
+	if($display_desc_tc == 'true')
+	if($bottom <= 145)
+	{
+		include("pdf_templates/footer.php");
+	}
 
 	$page_num++;
 
