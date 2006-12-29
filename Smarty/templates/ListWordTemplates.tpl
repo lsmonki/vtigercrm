@@ -78,11 +78,11 @@ function massDelete()
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 	               		<form  name="massdelete" method="POST">
 	    			<input name="idlist" type="hidden">
-    				<input name="module" type="hidden" value="Users">
+    				<input name="module" type="hidden" value="Settings">
     				<input name="parenttab" type="hidden" value="Settings">
     				<input name="action" type="hidden">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}mailmarge.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}mailmarge.gif" alt="Settings" width="48" height="48" border=0 title="Settings"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_WORD_TEMPLATES} </b></td>
 				</tr>
 				<tr>
@@ -126,7 +126,7 @@ function massDelete()
 						<td class="listTableRow small" valign=top><b>{$template.filename}</b></a></td>
 						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
 				        <td class="listTableRow small" valign=top>{$template.module}</td>
-				        <td class="listTableRow small" valign=top><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD}</a></td>
+				        <td class="listTableRow small" valign=top><a href="index.php?module=Settings&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD}</a></td>
 			          </tr>
 					{/foreach}
 					</table>
