@@ -45,7 +45,6 @@ $mod_strings = Array(
 //END DON'T CONVERT
 
 'LBL_ACCOUNT'=>'Account:',
-'LBL_ACCOUNT_NAME'=>'Account Name:',
 'LBL_PHONE'=>'Phone:',
 'LBL_WEBSITE'=>'Website:',
 'LBL_FAX'=>'Fax:',

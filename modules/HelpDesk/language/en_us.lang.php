@@ -36,7 +36,6 @@ $mod_strings = Array(
 'Accounts'=>'Account',
 'Contacts'=>'Contact',
 'Opportunities'=>'Opportunity',
-'LBL_TICKET_INFORMATION'=>'Ticket Information',
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 
@@ -57,7 +56,6 @@ $mod_strings = Array(
 'LBL_PRIORITY'=>'Priority',
 'LBL_CATEGORY'=>'Category',
 
-'LBL_QUESTION'=>'Question',
 'LBL_ANSWER'=>'Answer',
 'LBL_COMMENTS'=>'Comments',
 

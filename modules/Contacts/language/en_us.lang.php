@@ -22,7 +22,6 @@
 
 $mod_strings = Array(
 // Mike Crowe Mod --------------------------------------------------------Added for general search
-'LBL_GENERAL_INFORMATION'=>'General Information',
 'LBL_MODULE_NAME'=>'Contacts',
 'LBL_INVITEE'=>'Direct Reports',
 'LBL_MODULE_TITLE'=>'Contacts: Home',
@@ -57,7 +56,6 @@ $mod_strings = Array(
 'LBL_CREATED_CALL' => 'Created a new call',
 'LBL_CREATED_MEETING' => 'Created a new meeting',
 'LBL_ADDMORE_BUSINESSCARD' =>'Add another business card',
-'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
 
 'LBL_BUSINESSCARD' => 'Business Card',
 

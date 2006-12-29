@@ -75,7 +75,6 @@ $mod_strings = Array(
 // Contacts-SubPanelViewContactsAndUsers.php
 'LBL_BULK_MAILS'=>'Bulk Mails',
 'LBL_ATTACHMENT'=>'Attachment',
-'LBL_DESCRIPTION'=>'Description',
 'LBL_UPLOAD'=>'Upload',
 'LBL_FILE_NAME'=>'File Name',
 'LBL_SEND'=>'Send',

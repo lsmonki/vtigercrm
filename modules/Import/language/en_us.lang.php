@@ -125,7 +125,6 @@ $mod_strings = Array(
 'LBL_LEADS_NOTE_2'=>'Company Name must be mapped.',
 'LBL_IMPORT_NOW'=>'Import Now',
 'LBL_'=>'',
-'LBL_'=>'',
 'LBL_CANNOT_OPEN'=>'Cannot open the imported file for reading',
 'LBL_NOT_SAME_NUMBER'=>'There were not the same number of fields per line in your file',
 'LBL_NO_LINES'=>'There were no lines in your import file',
@@ -167,7 +166,6 @@ $mod_strings = Array(
 );
 
 /*$mod_list_strings = Array(
-'contacts_import_fields' => Array(
 	"id"=>"Contact ID"
 	,"first_name"=>"First Name"
 	,"last_name"=>"Last Name"

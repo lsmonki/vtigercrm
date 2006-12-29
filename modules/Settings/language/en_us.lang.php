@@ -139,7 +139,6 @@ $mod_strings = Array(
 
 //Settings/index.php
 
-'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings:',
 
 'LBL_PICKLIST_FIELD_SETTINGS'=>'Picklist Field Settings:',
 
@@ -193,7 +192,6 @@ $mod_strings = Array(
 
 'PicklistFields'=>' Picklist Fields',
 
-'LBL_PICKLIST_EDITOR'=>'Picklist Editor',
 
 'Edit'=>'Edit',
 
@@ -340,8 +338,6 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_SETTINGS'=>'Currencies',
 
-'LBL_YES'=>'yes',
-'LBL_NO'=>'no',
 
 'LBL_USERNAME'=>'User Name',
 'LBL_PASWRD'=>'Password',
@@ -358,7 +354,6 @@ $mod_strings = Array(
 
 'LBL_CREATE_AND_MANAGE_USERS'=>'- Create and Manage Users (e.g., admin)',
 
-'LBL_ROLES'=>'Roles',
 
 'LBL_CREATE_AND_MANAGE_USER_ROLES'=>'- Create and Manage user roles (e.g., Administrator, Standard User, etc.)',
 
@@ -761,7 +756,6 @@ $mod_strings = Array(
 //Added while moving Mail Merge templates from Users to Settings
 'LBL_TEMPLATE_FILE'=>'Template File',
 'LBL_MODULENAMES'=>'Module',
-'LBL_LIST_TOOLS'=>'Tools',
 'LBL_DOWNLOAD'=>'Download',
 'LBL_ADD_TEMPLATE'=>'Add Template',
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
@@ -808,7 +802,6 @@ $mod_strings = Array(
 'LBL_MESG_VIEW'=>'to view all information / modules of vtiger CRM',
 'LBL_MESG_EDIT'=>'to edit all information / modules of vtiger CRM',
 'LBL_TAB_MESG_OPTION'=>'modules to be shown',
-'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
 'LBL_CREATE_EDIT'=>'Create/Edit',
 'LBL_VIEW'=>'View',
 'LBL_MANDATORY_MSG'=>'Mandatory Fields',

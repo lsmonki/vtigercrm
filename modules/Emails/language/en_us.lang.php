@@ -35,8 +35,6 @@ $mod_strings = Array(
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 'LBL_DATE_SENT'=>'Date Sent:',
-'LBL_SUBJECT'=>'Subject :',
-'LBL_BODY'=>'Body:',
 'LBL_DATE_AND_TIME'=>'Date & Time Sent:',
 'LBL_DATE'=>'Date Sent:',
 'LBL_TIME'=>'Time Sent:',
@@ -75,7 +73,6 @@ $mod_strings = Array(
 // Contacts-SubPanelViewContactsAndUsers.php
 'LBL_BULK_MAILS'=>'Bulk Mails',
 'LBL_ATTACHMENT'=>'Attachment',
-'LBL_DESCRIPTION'=>'Description',
 'LBL_UPLOAD'=>'Upload',
 'LBL_FILE_NAME'=>'File Name',
 'LBL_SEND'=>'Send',
