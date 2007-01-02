@@ -400,6 +400,11 @@ function getAdvSearchfields($module)
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
 		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
+
+		// Added to display customfield label in search options
+		if($fieldlabel == "")
+			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+					
 		if($fieldlabel == "Related To")
 		{
 			$fieldlabel = "Related to";
