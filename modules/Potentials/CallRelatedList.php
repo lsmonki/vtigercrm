@@ -52,6 +52,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
+$smarty->assign("BASE_ACCOUNT",getAccountName($focus->column_fields[account_id]));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

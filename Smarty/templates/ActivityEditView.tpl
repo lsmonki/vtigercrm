@@ -566,8 +566,8 @@
 								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
-									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">{$CONTACTSNAME}</textarea>&nbsp;
-									<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
+									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'>{$CONTACTSNAME}</textarea>&nbsp;
+									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contacts">
 								</td>
 							</tr>
 						</table>
@@ -796,8 +796,8 @@
 			     <tr>
                                      <td><b>{$LABEL.contact_id}</b></td>
 				     <td colspan="2">
-						<input name="contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id" type="hidden" value="{$secondvalue.contact_id}">&nbsp;
-						<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">
+						<input name="contact_name" id = "contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id"  type="hidden" value="{$secondvalue.contact_id}">&nbsp;
+						<input type="button" onclick="selectContact('false','task',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contact">
 				     </td>
                              </tr>
 			     {/if}

@@ -17,7 +17,9 @@
 {else}
 	{assign var = return_modname value='CallRelatedList'}
 {/if}
-
+{if $BASE_ACCOUNT neq ''}
+        {assign var="search_string" value="&search_field=accountid&query=true&searchtype=BasicSearch&search_text=$BASE_ACCOUNT"}
+{/if}
 {foreach key=header item=detail from=$RELATEDLISTS}
 
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
@@ -56,7 +58,7 @@
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Lead}" accessyKey="F" class="crmbutton small edit" onclick="this.form.action.value='EditView';this.form.module.value='Leads'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Lead}"></td>
 			{elseif $header eq 'Contacts' }
 				{if $MODULE eq 'Calendar' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
-				<input title="Change" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
+				<input title="Change" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}{$search_string}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 				{elseif $MODULE eq 'Emails'}
 				<input title="{$APP.LBL_BULK_MAILS}" accessykey="F" class="crmbutton small create" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="{$APP.LBL_BULK_MAILS}" type="submit">&nbsp;
 				<input title="Change" accessKey="" class="crmbutton small create" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>

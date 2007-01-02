@@ -1717,26 +1717,120 @@ function getCalendarPopup(imageid,fieldid,dateformat)
                 inputField : fieldid, ifFormat : dateformat, showsTime : false, button : imageid, singleClick : true, step : 1
         });
 }
-function AjaxDuplicateValidate(module,fieldname,oform)
-{
-	var fieldvalue = getObj(fieldname).value;
-	var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
-	new Ajax.Request(
-          	  	      'index.php',
-			      	{queue: {position: 'end', scope: 'command'},
-		                        method: 'post',
-                		        postBody:url,
-		                        onComplete: function(response) {
-						var str = response.responseText
-						if(str.indexOf('SUCCESS') > -1)
-						{
-							oform.submit();	
-						}else
-						{
-							alert(str);
-						}
-		                        }
-              			 }
-       			);	
 
+/**to get SelectContacts Popup
+check->to check select options enable or disable
+*type->to differentiate from task
+*frmName->form name*/
+
+function selectContact(check,type,frmName)
+{
+        if($("single_accountid"))
+        {
+		var potential_id = '';
+		if($("potential_id"))
+			potential_id = frmName.potential_id.value;
+		account_id = frmName.account_id.value;
+		if(potential_id != '')
+		{
+			record_id = potential_id;
+			module_string = "&parent_module=Potentials";
+		}	
+		else
+		{
+			record_id = account_id;
+			module_string = "&parent_module=Accounts";
+		}
+		if(record_id != '')
+	                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView"+module_string+"&relmod_id="+record_id,"test","width=640,height=602,resizable=0,scrollbars=0");
+		else
+			 window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");	
+        }
+        else if(($("parentid")) && type != 'task' )
+        {
+                rel_parent_module = frmName.parent_type.value;
+		record_id = frmName.parent_id.value;
+                module = rel_parent_module.split("&");	
+		if(record_id != '' && module == "Leads")
+		{
+			alert("You can't select related contacts from Lead ");
+			document.formName.selectcnt.disabled="true";
+		}
+		else
+		{
+			if(check == 'true')
+				search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+			else
+				search_string="&popuptype=specific";
+			if(record_id != '')
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+			else
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+
+
+		}
+        }
+	else if(($("contact_name")) && type == 'task')
+	{
+		var formName = frmName.name;
+		if(formName == 'EditView')
+		{
+			task_parent_module = frmName.parent_type.value;
+			task_recordid = frmName.parent_id.value;
+			task_module = task_parent_module.split("&");
+			popuptype="&popuptype=specific";
+		}
+		else
+		{
+			task_parent_module = frmName.task_parent_type.value;
+			task_recordid = frmName.task_parent_id.value;
+			task_module = task_parent_module.split("&");
+			popuptype="&popuptype=toDospecific";
+		}
+		if(task_recordid != '' && task_module == "Leads" )
+		{
+			alert("You can't select related contacts from Lead ");
+			document.frmName.selectcnt.disabled="true";
+		}
+		else
+		{
+			if(task_recordid != '')
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+			else	
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+		}
+
+	}
+        else
+        {
+                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+        }
+}
+//to get Select Potential Popup
+function selectPotential()
+{
+	var record_id= document.EditView.account_id.value;
+	if(record_id != '')
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	else
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+}
+//to select Quote Popup
+function selectQuote()
+{
+	var record_id= document.EditView.account_id.value;
+        if(record_id != '')
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+
+	else
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+}
+//to get select SalesOrder Popup
+function selectSalesOrder()
+{
+	var record_id= document.EditView.account_id.value;
+        if(record_id != '')
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	else
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
