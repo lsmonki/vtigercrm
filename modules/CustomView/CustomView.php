@@ -210,7 +210,7 @@ class CustomView extends CRMEntity{
 			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
 			$sql.= " where vtiger_field.tabid in (".$tabid.") and vtiger_field.block in (".$block.") and";
 			$sql.= "$display_type and vtiger_profile2field.visible=0";
-			$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by sequence group by columnname";
+			$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." group by columnname order by sequence";
 		}	
 		if($tabid == '9,16')
                         $tabid ="9";
