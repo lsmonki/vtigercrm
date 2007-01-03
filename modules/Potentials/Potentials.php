@@ -92,6 +92,7 @@ class Potentials extends CRMEntity {
 	var $default_order_by = 'potentialname';
 	var $default_sort_order = 'ASC';
 
+	var $groupTable = Array('vtiger_potentialgrouprelation','potentialid');
 	function Potentials() {
 		$this->log = LoggerManager::getLogger('potential');
 		$this->db = new PearDatabase();
@@ -246,7 +247,7 @@ class Potentials extends CRMEntity {
 		else
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
-		$query = 'select vtiger_contactdetails.accountid, vtiger_users.user_name,vtiger_groups.groupname,vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_potential inner join vtiger_contpotentialrel on vtiger_contpotentialrel.potentialid = vtiger_potential.potentialid inner join vtiger_contactdetails on vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_potential.potentialid = '.$id.' and vtiger_crmentity.deleted=0';
+		$query = 'select case when (vtiger_users.user_name not like "") then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.accountid,vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_potential inner join vtiger_contpotentialrel on vtiger_contpotentialrel.potentialid = vtiger_potential.potentialid inner join vtiger_contactdetails on vtiger_contpotentialrel.contactid = vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_potential.potentialid = '.$id.' and vtiger_crmentity.deleted=0';
 		
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
@@ -278,7 +279,7 @@ class Potentials extends CRMEntity {
 		else
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and ((vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus != 'Held'))";
+		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and ((vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus != 'Held'))";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Potentials','Calendar',$focus,$query,$button,$returnset);
 
@@ -462,7 +463,7 @@ class Potentials extends CRMEntity {
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
 
-		$query = "select vtiger_crmentity.*, vtiger_quotes.*, vtiger_potential.potentialname, vtiger_users.user_name from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid left outer join vtiger_potential on vtiger_potential.potentialid=vtiger_quotes.potentialid left join vtiger_quotegrouprelation on vtiger_quotes.quoteid=vtiger_quotegrouprelation.quoteid left join vtiger_groups on vtiger_groups.groupname=vtiger_quotegrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_potential.potentialid=".$id;
+		$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.*, vtiger_quotes.*, vtiger_potential.potentialname from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid left outer join vtiger_potential on vtiger_potential.potentialid=vtiger_quotes.potentialid left join vtiger_quotegrouprelation on vtiger_quotes.quoteid=vtiger_quotegrouprelation.quoteid left join vtiger_groups on vtiger_groups.groupname=vtiger_quotegrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_potential.potentialid=".$id;
 		$log->debug("Exiting get_quotes method ...");
 		return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 	}
@@ -494,7 +495,7 @@ class Potentials extends CRMEntity {
 			$returnset = '&return_module=Potentials&return_action=CallRelatedList&return_id='.$id;
 
 
-		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename, vtiger_account.accountname, vtiger_potential.potentialname,vtiger_users.user_name
+		$query = "select vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject as quotename, vtiger_account.accountname, vtiger_potential.potentialname,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 			from vtiger_salesorder 
 			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid
 			left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid 
