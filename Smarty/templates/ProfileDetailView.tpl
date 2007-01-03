@@ -120,16 +120,16 @@ function UpdateProfile()
 
                                                     </tr>
                                                 </tbody></table></td>
-                                              <td align="right" valign="bottom">&nbsp;<input type="button" value="{$APP.LBL_RENAMEPROFILE_BUTTON_LABEL}" class="crmButton small edit" name="rename_profile"  onClick = "fnvshobj(this,'renameProfile');">&nbsp;<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit" >
+                                              <td align="right" valign="bottom">&nbsp;<input type="button" value="{$APP.LBL_RENAMEPROFILE_BUTTON_LABEL}" class="crmButton small edit" name="rename_profile"  onClick = "show('renameProfile');">&nbsp;<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit" >
                               		     </td>
 					    	
                                             </tr></tbody></table>
 					    <!-- RenameProfile Div start -->	 
-					    <div id="renameProfile" style="left: 49px; top: 152px; display: none; visibility: visible;position:absolute;" class="layerPopup">
+					    <div class="layerPopup"  style="left:350px;width:500px;top:300px;display:none;" id="renameProfile">
 						<table class="layerHeadingULine" border="0" cellpadding="3" cellspacing="0" width="100%">
 						<tr style="cursor:move;">
 						<td class="layerPopupHeading" id = "renameUI" align="left" width="60%">{$APP.LBL_RENAME_PROFILE}</td>
-						<td align="right" width="40%"><a href="javascript:fninvsh('renameProfile');"><img src="themes/bluelagoon/images/close.gif" align="middle" border="0"></a></td>
+						<td align="right" width="40%"><a href="javascript:hide('renameProfile');"><img src="themes/bluelagoon/images/close.gif" align="middle" border="0"></a></td>
 						</tr>
 						</table>
 					    <table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
@@ -153,7 +153,7 @@ function UpdateProfile()
 					    <tr>
 						<td align = "center">
 							<input name="save" value="Update" class="crmbutton small save" onclick="UpdateProfile();" type="button">&nbsp;&nbsp;
-							<input name="cancel" value="Cancel" class="crmbutton small save" onclick="fninvsh('renameProfile');" type="button">&nbsp;&nbsp;
+							<input name="cancel" value="Cancel" class="crmbutton small save" onclick="hide('renameProfile');" type="button">&nbsp;&nbsp;
 						</td>
 					    </tr>		
 					    </table>		
@@ -390,9 +390,9 @@ function fnToggleVIew(obj){
 {/literal}
 {literal}
         //for move RenameProfile
-        var theEventHandle = document.getElementById("renameUI");
-        var theEventRoot   = document.getElementById("renameProfile");
-        Drag.init(theEventHandle, theEventRoot);
+        var Handle = document.getElementById("renameUI");
+        var Root   = document.getElementById("renameProfile");
+        Drag.init(Handle,Root);
 {/literal}
 </script>
 
