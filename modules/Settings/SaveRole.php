@@ -11,7 +11,7 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
-$rolename = $_REQUEST['roleName'];
+$rolename = addslashes($_REQUEST['roleName']);
 $mode = $_REQUEST['mode'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {

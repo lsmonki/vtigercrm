@@ -13,7 +13,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
-$profilename = $_REQUEST['profile_name'];
+$profilename = addslashes($_REQUEST['profile_name']);
 $description= $_REQUEST['profile_description'];
 $def_module = $_REQUEST['selected_module'];
 $def_tab = $_REQUEST['selected_tab'];
