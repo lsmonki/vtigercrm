@@ -140,11 +140,25 @@ else
 	$desc .= '<br><br>Description : <br>'.$focus->column_fields['description'];
 	$desc .= '<br><br>Solution : <br>'.$focus->column_fields['solution'];
 	$desc .= getTicketComments($focus->id);
-
+	
+	// code contribution by john read. Topik. 09.11.06
+	// get the ticketCF field contents
+	$sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = \"".$focus->id."\"";
+	$result = $adb->query($sql);
+	$cffields = $adb->getFieldsArray($result);
+	foreach ($cffields as $cfOneField)
+	{
+		if ($cfOneField != 'ticketid')
+		{
+			$cfData = $adb->query_result($result,0,$cfOneField);
+			$sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = \"$cfOneField\"";
+			$cfLabel = $adb->query_result($adb->query($sql),0,'fieldlabel');
+			$desc .= '<br><br>'.$cfLabel.' : <br>'.$cfData;
+		}
+	}
+	// end of contribution
 	$desc .= '<br><br><br>';
-	$desc .= '<br><br><br>';
-	$desc .= '<br><br><br>';
-	$desc .= '<br>Regards, HelpDesk Team<br>';
+	$desc .= '<br>Regards,<br>HelpDesk Team<br>';
 	$email_body = $desc;
 }
 $_REQUEST['return_id'] = $return_id;
