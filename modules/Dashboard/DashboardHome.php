@@ -26,7 +26,7 @@ $image_path=$theme_path."images/";
 ?>		
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 			  <tr>
-				<td><a name="1"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="1"></a><table width="20%"  border="0" cellspacing="3" cellpadding="0" align="left">
 				 		 <tr>
 
 				 		   <td rowspan="2"><span class="dash_count">1</span>&nbsp;&nbsp;</td>
@@ -61,7 +61,7 @@ $image_path=$theme_path."images/";
 			  <!-- SCEOND CHART  -->
 			  
 			  <tr>
-				<td><a name="2"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="2"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">2</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_MONTH_BY_OUTCOME'];?></span></td>
@@ -98,7 +98,7 @@ $image_path=$theme_path."images/";
 			  <!-- THIRD CHART  -->
 			  
 			  <tr>
-				<td><a name="3"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="3"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">3</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME'];?></span></td>
@@ -133,7 +133,7 @@ $image_path=$theme_path."images/";
 			  <!-- FOURTH CHART  -->
 			  
 			  <tr>
-				<td><a name="4"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="4"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">4</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_FORM_TITLE'];?></span></td>
