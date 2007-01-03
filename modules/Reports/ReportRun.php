@@ -68,7 +68,7 @@ class ReportRun extends CRMEntity
 		$ssql .= " where vtiger_report.reportid =".$reportid;
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
 		$result = $adb->query($ssql);
-		
+	
 		$permitted_fields = Array();
 
 		while($columnslistrow = $adb->fetch_array($result))
@@ -81,6 +81,7 @@ class ReportRun extends CRMEntity
 			{
 				list($module,$field) = split("_",$module_field);
 				$permitted_fields = $this->getaccesfield($module);	
+			
 			}
 			$selectedfields = explode(":",$fieldcolname);
 
@@ -128,7 +129,15 @@ class ReportRun extends CRMEntity
 		$access_fields = Array();
 		
 		$profileList = getCurrentUserProfileList();
-		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=(select tabid from vtiger_tab where vtiger_tab.name='".$module."') and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where";
+		if($module == "Calendar")
+		{
+			$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		}
+		else
+		{
+			$query .= " vtiger_field.tabid=(select tabid from vtiger_tab where vtiger_tab.name='".$module."') and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		}
 		
 		$result = $adb->query($query);
 		
