@@ -281,7 +281,8 @@ if(isset($action) && isset($module))
 		(ereg("^body",$action) && ereg("^Webmails",$module)) ||
 		(ereg("^dlAttachments",$action) && ereg("^Webmails",$module)) ||
 		(ereg("^DetailView",$action) &&	ereg("^Webmails",$module) ) ||
-		ereg("^savewordtemplate",$action))
+		ereg("^savewordtemplate",$action) ||
+		ereg("^mailmergedownloadfile",$action))
 	
 		
 	{
@@ -298,10 +299,11 @@ if(isset($action) && isset($module))
 			ereg("^".$module."Ajax",$action) ||
 			ereg("^chat",$action) ||
 			ereg("^vtchat",$action) ||
-			ereg("^massdelete", $action))
+			ereg("^massdelete", $action) ||
+			ereg("^mailmergedownloadfile",$action))
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
-		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
+		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action))
 		{
 			$viewAttachment = true;
 		}
