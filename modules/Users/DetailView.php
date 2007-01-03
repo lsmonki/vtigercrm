@@ -39,7 +39,8 @@ global $mod_strings;
 
 $focus = new Users();
 
-if(!empty($_REQUEST['record'])) {
+if(!empty($_REQUEST['record'])) 
+{
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
 	$focus->id = $_REQUEST['record'];	
 }
@@ -55,22 +56,28 @@ else
 
 if( $focus->user_name == "" )
 {  
-   
+
+	if(is_admin($current_user))
+	{
     echo "
             <table>
                 <tr>
                     <td>
                         <b>User does not exist.</b>
                     </td>
-                </tr>
+		    </tr>";
+	
+    echo "
                 <tr>
                     <td>
                         <a href='index.php?module=Users&action=ListView'>List Users</a>
                     </td>
                 </tr>
             </table>
-        ";
-    exit;  
+	    ";
+    exit;
+	}
+  
 }
 
 
