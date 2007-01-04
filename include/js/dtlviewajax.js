@@ -334,7 +334,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
        		getObj(dtlView).innerHTML = r.join(", ");
 	}else
 	{
-		getObj(dtlView).innerHTML = tagValue;
+		getObj(dtlView).innerHTML = tagValue.replace(/[\n\r]+/g, "<br>&nbsp;");
 	}
 	showHide(dtlView,editArea);  //show,hide
 	itsonview=false;
