@@ -60,7 +60,7 @@
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_DESCRIPTION}</strong></td>
-						<td class="cellText small" valign=top><textarea name="txtDescription" class=small style="width:90%;height:50px" value={$textDesc}></textarea></td>
+						<td class="cellText small" valign=top><textarea name="txtDescription" class=small style="width:90%;height:50px">{$smarty.request.description}</textarea></td>
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_MODULENAMES}</strong></td>

@@ -62,7 +62,9 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	//    $fileid = create_guid();
 		$date_entered = date('YmdHis');
 		//Retreiving the return module and setting the parent type
+		
 		$ret_module = $_REQUEST['return_module'];
+		//$ret_module = $_REQUEST['target_module'];
 		$parent_type;		
 		if($_REQUEST['return_module'] == 'Leads')
 		{
@@ -76,9 +78,9 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		{
 			$parent_type = 'Contact';
 		}
-		elseif($_REQUEST['return_module'] == 'Potentials')
+		elseif($_REQUEST['return_module'] == 'HelpDesk')
 		{
-			$parent_type = 'Potential';
+			$parent_type = 'HelpDesk';
 		}
 	 
 		$genQueryId = $adb->getUniqueID("vtiger_wordtemplates");
@@ -97,11 +99,12 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			   deleteFile($uploaddir,$filename);
 			   	header("Location: index.php?action=listwordtemplates&module=Settings&parenttab=Settings");	
 			}
-		   	   elseif($savefile=="false")
-	                   {
-			   	header("Location: index.php?action=upload&module=Settings&parenttab=Settings&flag=".$error_flag);	
+		   	elseif($savefile=="false")
+	                {
+				$module = $_REQUEST['target_module'];
+			   	header("Location: index.php?action=upload&module=Settings&parenttab=Settings&flag=".$error_flag."&description=".$strDescription."&tempModule=".$module);	
 				   
-			   }  			   
+			}  			   
 			else
 			{
 				include('themes/'.$theme.'/header.php');
