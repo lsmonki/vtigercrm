@@ -21,6 +21,7 @@
 <style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
+<script src="include/js/general.js" type="text/javascript"></script>
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
@@ -78,14 +79,14 @@
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
 	<td class="cellText" style="padding: 5px;">
-		<input name="ccmail" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
+		<input name="ccmail" id ="cc_name" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
 	</td>	
 	<td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
    </tr>
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
 	<td class="cellText" style="padding: 5px;">
-		<input name="bccmail" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
+		<input name="bccmail" id="bcc_name" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
    </tr>
 	{elseif $elements.2.0 eq 'subject'}
@@ -154,6 +155,35 @@ function email_validate(oform,mode)
 	{
 		alert('No recipients were specified');
 		return false;
+	}
+	if(document.EditView.ccmail.value.length >= 1)
+	{
+		var str = document.EditView.ccmail.value;
+		arr = new Array();
+		arr = str.split(",");
+		for(var i=0; i<=arr.length-1; i++)
+		{
+			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
+			{
+				alert("Your CC Email Id for "+ arr[i] +" is not correct");
+				return false;
+			}
+		}
+	}
+	
+	if(document.EditView.bccmail.value.length >= 1)
+	{
+		var str = document.EditView.bccmail.value;
+		arr = new Array();
+		arr = str.split(",");
+		for(var i=0; i<=arr.length-1; i++)
+		{
+			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
+			{
+				alert("Your BCC Email Id for "+ arr[i] +" is not correct");
+				return false;	
+			}
+		}	
 	}
 	if(oform.subject.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
