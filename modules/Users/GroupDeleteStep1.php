@@ -24,7 +24,7 @@ $delete_group_name = fetchGroupName($delete_group_id);
 
 
 $output='';
-$output ='<div id="DeleteLay" class="layerPopup">
+$output ='<div id="DeleteLay" class="layerPopup" style="width:400px;">
 <form name="deleteGroupForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteGroup">
@@ -71,7 +71,12 @@ $output ='<div id="DeleteLay" class="layerPopup">
 		{
 			$user_name=$adb->query_result($result1,$i,"user_name");
 			$user_id=$adb->query_result($result1,$i,"id");
-		
+			
+			if(strlen($user_name)>20)
+			{
+				$user_name=substr($user_name,0,20)."...";
+			}
+								
 	    		$output.='<option value="'.$user_id.'">'.$user_name.'</option>';
 		}	
 	
@@ -91,6 +96,10 @@ $output ='<div id="DeleteLay" class="layerPopup">
 				$group_id=$temprow["groupid"];
 				if($delete_group_id 	!= $group_id)
 				{
+					if(strlen($group_name)>20)
+					{
+						$group_name=substr($group_name,0,20)."...";
+					}
     					$output.='<option value="'.$group_id.'">'.$group_name.'</option>';
 	    			}	
 			}while($temprow = $adb->fetch_array($result));
