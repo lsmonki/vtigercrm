@@ -1859,3 +1859,24 @@ function selectSalesOrder()
 	else
 		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
+
+/**check whether emailid is available for a specific contact or not.
+contactname->name of the contact
+mailaddress->emailaddress
+index->checkbox index
+type->whether its a yahooid or emailid*/
+
+function checkEmailid(contactname,mailaddress,index,type)
+{
+        mail = document.SendMail.elements;
+        mailid = mail[index].checked;
+        if(mailid == true)
+        {
+                if(mailaddress == '')
+                {
+                        alert("'"+contactname+"'"+" doesn't have "+type);
+                        mail[index].checked=false;
+                }
+        }
+
+}
