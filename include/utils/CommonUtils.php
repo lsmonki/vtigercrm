@@ -1302,6 +1302,7 @@ function getParentTabFromModule($module)
 			if(in_array($tabid,$childArr))
 			{
 				$parent_tabname= $parent_tab_info_array[$parid];
+				break;
 			}
 		}
 		$log->debug("Exiting getParentTabFromModule method ...");
