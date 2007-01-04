@@ -164,37 +164,58 @@ function AddFolder()
 	}
 	else
 	{
-		fninvsh('orgLay');
-		var foldername = getObj('folder_name').value;
-		var folderdesc = getObj('folder_desc').value;
-		getObj('folder_name').value = '';
-		getObj('folder_desc').value = '';
-		foldername = foldername.replace(/&/gi,'*amp*')
-			folderdesc = folderdesc.replace(/&/gi,'*amp*')
-			var mode = getObj('fldrsave_mode').value;
-		if(mode == 'save')
-		{
-			url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;
-		}
-		else
-		{
-			var folderid = getObj('folder_id').value;
-			url ='&savemode=Edit&foldername='+foldername+'&folderdesc='+folderdesc+'&record='+folderid;
-		}
-		getObj('fldrsave_mode').value = 'save';
 		new Ajax.Request(
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'action=ReportsAjax&mode=ajax&file=SaveReportFolder&module=Reports'+url,
+                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+getObj('folder_name').value,
                                 onComplete: function(response) {
-                                        var item = response.responseText;
-                                        getObj('customizedrep').innerHTML = item;
-                                }
-                        }
-                );
+					if(response.responseText!=0)
+					{
+						alert("Folder name already exists, try again...");
+						return false;
+					}
+					else
+					{
+						fninvsh('orgLay');
+						var foldername = getObj('folder_name').value;
+						var folderdesc = getObj('folder_desc').value;
+						getObj('folder_name').value = '';
+						getObj('folder_desc').value = '';
+						foldername = foldername.replace(/&/gi,'*amp*')
+						folderdesc = folderdesc.replace(/&/gi,'*amp*')
+						var mode = getObj('fldrsave_mode').value;
+						if(mode == 'save')
+						{
+							url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;
+						}
+						else
+						{
+							var folderid = getObj('folder_id').value;
+							url ='&savemode=Edit&foldername='+foldername+'&folderdesc='+folderdesc+'&record='+folderid;
+						}
+						getObj('fldrsave_mode').value = 'save';
+						new Ajax.Request(
+				                        'index.php',
+				                        {queue: {position: 'end', scope: 'command'},
+			                                method: 'post',
+			                                postBody: 'action=ReportsAjax&mode=ajax&file=SaveReportFolder&module=Reports'+url,
+			                                onComplete: function(response) {
+			                                        var item = response.responseText;
+                        			                getObj('customizedrep').innerHTML = item;
+			                                }
+						}
+			                      
+				                );
+					}
+				}
+			}
+			);
+		
 	}
 }
+
+
 function EditFolder(id,name,desc)
 {
 {/literal}

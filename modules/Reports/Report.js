@@ -464,12 +464,32 @@ function changeSteps()
 			alert("Missing Report Name");
 		}else
 		{
-			hide('step1');
-			show('step2');
-			document.getElementById('back_rep').disabled = false;
-			getObj('step1label').className = 'settingsTabList'; 
-			getObj('step2label').className = 'settingsTabSelected';
+			new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=reportCheck&reportName='+document.NewRep.reportname.value,
+                                onComplete: function(response) {
+					if(response.responseText!=0)
+					{
+						alert("Report name already exists, try again...");
+						return false;
+					}
+					else
+					{		
+						hide('step1');
+			                        show('step2');
+			                        document.getElementById('back_rep').disabled = false;
+                        			getObj('step1label').className = 'settingsTabList';
+			                        getObj('step2label').className = 'settingsTabSelected';
+					}
+
+                                }
+                        }
+        	        );
+	
 		}
+
 	}
 	else
 	{
