@@ -6,10 +6,10 @@ $waterMarkPositions=array("50","180");
 $waterMarkRotate=array("45","50","180");
 $pdf->watermark( $status, $waterMarkPositions, $waterMarkRotate );
 
-$bottom="130";
-$top="80";
+include("include/fpdf/pdfconfig.php");
+
 // blow a bubble around the table
-$Bubble=array("10",$top,"170","$bottom");
+$Bubble=array("10",$body_top,"170","$bottom");
 $pdf->tableWrapper($Bubble);
 
 /* ************ Begin Table Setup ********************** */
@@ -19,7 +19,9 @@ $pdf->tableWrapper($Bubble);
 // correctly
 $prodTable=array("10","60");
 
-if($focus->column_fields["hdnTaxType"] == "individual") {
+//if taxtype is individual
+if($focus->column_fields["hdnTaxType"] == "individual")
+{
 	$colsAlign["Product Name"] = "L";
 	$colsAlign["Description"] = "L";
 	$colsAlign["Qty"] = "R";
@@ -35,7 +37,10 @@ if($focus->column_fields["hdnTaxType"] == "individual") {
 	$cols["Discount"] = "15";
 	$cols["Tax"] = "20";
 	$cols["Total"] = "25";
-} else {
+}
+else
+{
+	//if taxtype is group
 	$colsAlign["Product Name"] = "L";
 	$colsAlign["Description"] = "L";
 	$colsAlign["Qty"] = "R";
@@ -61,10 +66,11 @@ $pdf->addLineFormat( $colsAlign);
 
 /* ************* Begin Product Population *************** */
 $ppad=3;
-$y    = $top+10;
-for($i=0;$i<count($product_name);$i++) {
-        $size = $pdf->addProductLine( $y, $line[$i] );
-        $y   += $size+$ppad;
+$y    = $body_top+10;
+for($i=0;$i<count($product_name);$i++)
+{
+	$size = $pdf->addProductLine( $y, $line[$i] );
+	$y   += $size+$ppad;
 }
 
 /* ******************* End product population ********* */
@@ -73,17 +79,20 @@ for($i=0;$i<count($product_name);$i++) {
 /* ************* Begin Totals ************************** */
 $t=$bottom+56;
 $pad=6;
-for($i=0;$i<count($total);$i++) {
-        $size = $pdf->addProductLine( $t, $total[$i], $total[$i] );
-        $t   += $pad;
+for($i=0;$i<count($total);$i++)
+{
+	$size = $pdf->addProductLine( $t, $total[$i], $total[$i] );
+	$t   += $pad;
 }
 
-
-if($focus->column_fields["hdnTaxType"] != "individual") {
+//Set the x and y positions to place the NetTotal, Discount, S&H charge
+//if taxtype is not individual ie., group tax
+if($focus->column_fields["hdnTaxType"] != "individual")
+{
 	$lineData=array("105",$bottom+37,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_NET_TOTAL'].":                                                               ".$price_subtotal."";
-	$pdf->SetXY( 105 , 168 );
+	$data= $app_strings['LBL_NET_TOTAL'].":                                                                  ".$price_subtotal."";
+	$pdf->SetXY( 105 , ($nettotal_y+(0*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
@@ -92,33 +101,35 @@ if($focus->column_fields["hdnTaxType"] != "individual") {
 
 	//For alignment
 	if($final_price_discount_percent != '')
-		$data= $app_strings['LBL_DISCOUNT'].":                                                              $final_price_discount_percent                                                ".$price_discount."";
-
+		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                ".$price_discount."";
 	else
-		$data= $app_strings['LBL_DISCOUNT'].":                                                              ".$price_discount."";
-	$pdf->SetXY( 105 , 174 );
+		$data= $app_strings['LBL_DISCOUNT'].":                                                                  ".$price_discount."";
+	$pdf->SetXY( 105 , ($nettotal_y+(1*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+49,"94");
 	$pdf->drawLine($lineData);
 	$data= $app_strings['LBL_TAX'].":  ($group_total_tax_percent %)                                                                  ".$price_salestax."";
-	$pdf->SetXY( 105 , 180 );
+	$pdf->SetXY( 105 , ($nettotal_y+(2*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+55,"94");
 	$pdf->drawLine($lineData);
-	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                                              ".$price_shipping;
-	$pdf->SetXY( 105 , 186 );
+	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                  ".$price_shipping;
+	$pdf->SetXY( 105 , ($nettotal_y+(3*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
-} else {
+}
+else
+{
+	//if taxtype is individual
 	$lineData=array("105",$bottom+43,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_NET_TOTAL'].":                                                               ".$price_subtotal."";
-	$pdf->SetXY( 105 , 174 );
+	$data= $app_strings['LBL_NET_TOTAL'].":                                                                  ".$price_subtotal."";
+	$pdf->SetXY( 105 , ($nettotal_y+(1*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
@@ -127,40 +138,41 @@ if($focus->column_fields["hdnTaxType"] != "individual") {
 
 	//For alignment
 	if($final_price_discount_percent != '')
-		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                                ".$price_discount."";
+		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                 ".$price_discount."";
 	else
 		$data= $app_strings['LBL_DISCOUNT'].":                                                                   ".$price_discount."";
 
-	$pdf->SetXY( 105 , 180 );
+	$pdf->SetXY( 105 , ($nettotal_y+(2*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 
 	$lineData=array("105",$bottom+55,"94");
 	$pdf->drawLine($lineData);
-	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                    ".$price_shipping;
-	$pdf->SetXY( 105 , 186 );
+	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":                                  ".$price_shipping;
+	$pdf->SetXY( 105 , ($nettotal_y+(3*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
 }
 
+//Set the x and y positions to place the S&H Tax, Adjustment and Grand Total
 $lineData=array("105",$bottom+61,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].":  ($sh_tax_percent %)                     ".$price_shipping_tax;
-$pdf->SetXY( 105 , 192 );
+$data = $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].":  ($sh_tax_percent %)               ".$price_shipping_tax;
+$pdf->SetXY( 105 , ($nettotal_y+(4*$next_y)) );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);
 
 $lineData=array("105",$bottom+67,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_ADJUSTMENT'].":                                                               ".$price_adjustment;
-$pdf->SetXY( 105 , 198 );
+$data = $app_strings['LBL_ADJUSTMENT'].":                                                                   ".$price_adjustment;
+$pdf->SetXY( 105 , ($nettotal_y+(5*$next_y)) );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);
 
 $lineData=array("105",$bottom+73,"94");
 $pdf->drawLine($lineData);
-$data = $app_strings['LBL_GRAND_TOTAL'].":(in $currency_symbol)                                                ".$price_total;
-$pdf->SetXY( 105 , 204 );
+$data = $app_strings['LBL_GRAND_TOTAL'].":(in $currency_symbol)                                                    ".$price_total;
+$pdf->SetXY( 105 , ($nettotal_y+(6*$next_y)) );
 $pdf->SetFont( "Helvetica", "", 10);
 $pdf->MultiCell(110, 4, $data);
 
