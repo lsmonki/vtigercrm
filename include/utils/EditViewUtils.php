@@ -128,7 +128,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 15 || $uitype == 16 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$pick_query="select * from vtiger_".$fieldname;
+		$pick_query="select * from vtiger_".$fieldname." order by ".$fieldname." ASC";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
