@@ -67,7 +67,8 @@ $pdf->addLineFormat( $colsAlign);
 /* ************* Begin Product Population *************** */
 $ppad=3;
 $y    = $body_top+10;
-for($i=0;$i<count($product_name);$i++)
+
+for($i=0;$i<count($line);$i++)
 {
 	$size = $pdf->addProductLine( $y, $line[$i] );
 	$y   += $size+$ppad;
