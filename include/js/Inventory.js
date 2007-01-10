@@ -294,12 +294,15 @@ function FindDuplicate()
 	var max_row_count = document.getElementById('proTab').rows.length;
         max_row_count = eval(max_row_count)-2;//As the table has two header rows, we will reduce two from row length
 
+	var duplicate = false, iposition = '', positions = '', duplicate_products = '';
+
 	var product_id = new Array(max_row_count-1);
 	var product_name = new Array(max_row_count-1);
 	product_id[1] = getObj("hdnProductId"+1).value;
 	product_name[1] = getObj("productName"+1).value;
 	for (var i=1;i<=max_row_count;i++)
 	{
+		iposition = ""+i;
 		for(var j=i+1;j<=max_row_count;j++)
 		{
 			if(i == 1)
@@ -308,10 +311,20 @@ function FindDuplicate()
 			}
 			if(product_id[i] == product_id[j] && product_id[i] != '')
 			{
-				alert("You have selected < "+getObj("productName"+j).value+" > more than once in line items  "+i+" & "+j+".\n It is advisable to select the product just once but change the Qty. Thank You");
-				//return false;
+				if(!duplicate) positions = iposition;
+				duplicate = true;
+				if(positions.search(j) == -1) positions = positions+" & "+j;
+
+				if(duplicate_products.search(getObj("productName"+j).value) == -1)
+					duplicate_products = duplicate_products+getObj("productName"+j).value+" \n";
 			}
 		}
+	}
+	if(duplicate)
+	{
+		//alert("You have selected < "+duplicate_products+" > more than once in line items  "+positions+".\n It is advisable to select the product just once but change the Qty. Thank You");
+		if(!confirm("You have selected  the following product(s) more than once. \n"+duplicate_products+"\n Do you want to Continue?"))
+			return false;
 	}
         return true;
 }
@@ -493,7 +506,7 @@ function fnAddProductRow(module,image_path){
 	
 	//Quantity
 	colfour.className = "crmTableRow small"
-	colfour.innerHTML='<input id="qty'+count+'" name="qty'+count+'" type="text" class="small " style="width:50px" onfocus="this.className=\'detailedViewTextBoxOn\'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(); loadTaxes_Ajax('+count+');" onChange="setDiscount(this,'+count+')" value=""/>';
+	colfour.innerHTML='<input id="qty'+count+'" name="qty'+count+'" type="text" class="small " style="width:50px" onfocus="this.className=\'detailedViewTextBoxOn\'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('+count+');" onChange="setDiscount(this,'+count+')" value=""/>';
 	
 	//List Price with Discount, Total after Discount and Tax labels
 	colfive.className = "crmTableRow small"
