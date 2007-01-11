@@ -1774,16 +1774,7 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
-			LEFT JOIN vtiger_seproductsrel
-				ON vtiger_seproductsrel.productid = vtiger_products.productid
-			WHERE vtiger_crmentity.deleted = 0
-			AND ((vtiger_seproductsrel.crmid IS NULL
-					AND (vtiger_products.contactid = 0
-						OR vtiger_products.contactid IS NULL))
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) ";
+			WHERE vtiger_crmentity.deleted = 0";
 			break;
 	Case "Notes":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
@@ -2224,12 +2215,10 @@ function getReadEntityIds($module)
 				ON vtiger_seproductsrel.productid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
 			AND ((vtiger_seproductsrel.crmid IS NULL
-					OR vtiger_products.contactid = 0
-					OR vtiger_products.contactid IS NULL)
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) ";
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) ";
 	}
 
 	if($module == "PurchaseOrder")

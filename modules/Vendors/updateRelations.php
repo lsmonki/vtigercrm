@@ -15,6 +15,22 @@ global $adb, $singlepane_view;
 
 $idlist = $_REQUEST['idlist'];
 
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+	
+//This will be true, when we select product from vendor related list
+if($_REQUEST['destination_module']=='Products')
+{
+	if($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
+	{
+		$sql = "update vtiger_products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
+		$adb->query($sql);
+		$record = $_REQUEST['parid'];
+	}
+}
+
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
@@ -29,10 +45,8 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 			$adb->query($sql);
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parentid"]);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parentid"]);
+ 	
+	$record = $_REQUEST["parentid"];	
 }
 
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
@@ -42,13 +56,12 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 		$adb->query($sql);
 		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
 		$adb->query($sql);
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
-		else
- 			header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
+		
+		$record = $_REQUEST["parid"];
 }
 
 
+header("Location:index.php?action=$action&module=Vendors&record=".$record);
 
 
 

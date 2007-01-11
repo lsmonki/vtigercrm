@@ -553,9 +553,15 @@ class Contacts extends CRMEntity {
 		else
 			$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 
-		 $query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid left outer join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_products.contactid where vtiger_contactdetails.contactid = '.$id.' and vtiger_crmentity.deleted = 0';
+		 $query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname 
+		 		FROM vtiger_products 
+				INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid 
+				INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.productid=vtiger_products.productid
+				INNER JOIN vtiger_contactdetails on vtiger_seproductsrel.crmid = vtiger_contactdetails.contactid 
+				where vtiger_crmentity.deleted = 0 and vtiger_contactdetails.contactid = '.$id;
+
 		$log->debug("Exiting get_products method ...");
-		 return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
+		return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
 	 }
 
 	/**

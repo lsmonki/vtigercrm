@@ -1106,7 +1106,6 @@
 		<field name="discontinued" type="I" size="1" />
 		<field name="usageunit" type="C" size="200" />
 		<field name="handler" type="I" size="11" />
-		<field name="contactid" type="I" size="11" />
 		<field name="currency" type="C" size="200" />
 		<field name="reorderlevel" type="I" size="11" />
 		<field name="website" type="C" size="100" />
