@@ -466,8 +466,8 @@
 					</td>
 				  <td valign=top><table border=0 cellspacing=0 cellpadding=5 width=100%>
                     <tr>
-                      <td rowspan=2 valign=top><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}migrate.gif" alt="{$MOD.LBL_MIGRATION}" title="{$MOD.LBL_MIGRATION}"></a></td>
-                      <td class=big valign=top><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td>
+                      <td rowspan=2 valign=top><a href="index.php?module=Migration&action=index&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}migrate.gif" alt="{$MOD.LBL_MIGRATION}" title="{$MOD.LBL_MIGRATION}"></a></td>
+                      <td class=big valign=top><a href="index.php?module=Migration&action=index&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td>
                     </tr>
                     <tr>
                       <td class="small" valign=top>{$MOD.LBL_MIGRATION_INFO}</td>

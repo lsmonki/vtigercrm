@@ -173,7 +173,7 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=DefModuleView&parenttab=Settings">{$MOD.LBL_DEFAULT_MODULE_VIEW}</a></td></tr>
 		{/if}
 	
-		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Migration&action=index&parenttab=Settings">{$MOD.LBL_MIGRATION}</a></td></tr>
 
 		{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
