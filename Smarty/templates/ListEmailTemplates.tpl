@@ -145,11 +145,11 @@ function massDelete()
 					</table>
 					<table border="0" cellspacing="0" cellpadding="5" width="100%" class="listTable">
 					<tr>
-						<td width="2%" class="colHeader small">#</td>
-						<td width="3%" class="colHeader small">{$UMOD.LBL_LIST_SELECT}</td>
-						<td width="25%" class="colHeader small">{$UMOD.LBL_EMAIL_TEMPLATE}</td>
-						<td width="50%" class="colHeader small">{$UMOD.LBL_DESCRIPTION}</td>
-					        <td width="20%" class="colHeader small">{$UMOD.LBL_TEMPLATE_TOOLS}</td>
+						<td width="5%" class="colHeader small">#</td>
+						<td width="5%" class="colHeader small">{$UMOD.LBL_LIST_SELECT}</td>
+						<td width="30%" class="colHeader small">{$UMOD.LBL_EMAIL_TEMPLATE}</td>
+						<td width="60%" class="colHeader small">{$UMOD.LBL_DESCRIPTION}</td>
+					        <!--<td width="20%" class="colHeader small">{$UMOD.LBL_TEMPLATE_TOOLS}</td>-->
 					</tr>
 					{foreach name=emailtemplate item=template from=$TEMPLATES}
 					<tr>
@@ -159,9 +159,9 @@ function massDelete()
 							<a href="index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" ><b>{$template.templatename}</b></a>
 						</td>
 						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
-					        <td class="listTableRow small" valign=top>
+					        <!--<td class="listTableRow small" valign=top>
 							<a href="index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">{$UMOD.LNK_SAMPLE_EMAIL}</a>
-						</td>
+						</td>-->
 					</tr>
 					{/foreach}	
 					</table>

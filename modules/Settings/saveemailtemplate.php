@@ -19,7 +19,7 @@ $templateName = addslashes($_REQUEST["templatename"]);
 	  $log->debug("the templatename is ".$templateName);
 $templateid = $_REQUEST["templateid"];
 	  $log->debug("the templateid is ".$templateid);
-$description = $_REQUEST["description"];
+$description = addslashes($_REQUEST["description"]);
 	  $log->debug("the description is ".$description);
 $subject = addslashes($_REQUEST["subject"]);
 	  $log->debug("the subject is ".$subject);  
