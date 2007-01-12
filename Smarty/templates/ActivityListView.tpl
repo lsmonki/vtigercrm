@@ -442,19 +442,10 @@ function alphabetic(module,url,dataid)
 	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
 					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-					{foreach key=id item=data from=$CHANGE_USER}
-						{foreach key=chOw_id item=name from=$data}
-							<option value={$id}{$name}>{$chOw_id}</option>
-						{/foreach}
-					{/foreach}
+						{$CHANGE_OWNER}
 					</select>
 					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-					{foreach key=id item=data from=$CHANGE_GROUP}
-                                                {foreach key=chOw_group_id item=group_name from=$data}
-                                                        <option value={$id}{$group_name}>{$chOw_group_id}</option>
-                                                {/foreach}
-                                        {/foreach}
-
+						{$CHANGE_GROUP_OWNER}
 					</select>
 					</form>
 	</td>
