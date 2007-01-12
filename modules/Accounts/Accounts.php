@@ -289,8 +289,7 @@ class Accounts extends CRMEntity {
 			vtiger_activity.status, vtiger_activity.eventstatus,
 			vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,
 			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
-			vtiger_crmentity.description,
-			vtiger_users.user_name
+			vtiger_crmentity.description,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 			FROM vtiger_activity
 			INNER JOIN vtiger_seactivityrel
 				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
@@ -300,8 +299,8 @@ class Accounts extends CRMEntity {
 				ON vtiger_activitygrouprelation.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
-			INNER JOIN vtiger_users
-				ON vtiger_crmentity.smcreatorid = vtiger_users.id
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE (vtiger_activity.activitytype = 'Meeting'
 				OR vtiger_activity.activitytype = 'Call'
 				OR vtiger_activity.activitytype = 'Task')

@@ -397,10 +397,7 @@ class Contacts extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus,
-		vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
-		vtiger_contactdetails.lastname, vtiger_crmentity.modifiedtime,
-		vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
+		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus,vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime, vtiger_crmentity.description, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 				from vtiger_activity
 				inner join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
 				inner join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid
@@ -408,7 +405,7 @@ class Contacts extends CRMEntity {
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
                                 left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
-				inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
 				and vtiger_cntactivityrel.contactid=".$id;
@@ -553,15 +550,9 @@ class Contacts extends CRMEntity {
 		else
 			$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 
-		 $query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname 
-		 		FROM vtiger_products 
-				INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid 
-				INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.productid=vtiger_products.productid
-				INNER JOIN vtiger_contactdetails on vtiger_seproductsrel.crmid = vtiger_contactdetails.contactid 
-				where vtiger_crmentity.deleted = 0 and vtiger_contactdetails.contactid = '.$id;
-
+		 $query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_contactdetails.lastname from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid left outer join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_products.contactid where vtiger_contactdetails.contactid = '.$id.' and vtiger_crmentity.deleted = 0';
 		$log->debug("Exiting get_products method ...");
-		return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
+		 return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
 	 }
 
 	/**

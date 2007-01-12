@@ -376,13 +376,13 @@ class Potentials extends CRMEntity {
 			$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
 		vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
 		vtiger_activity.due_date, vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime, 
-		vtiger_crmentity.description, vtiger_users.user_name
+		vtiger_crmentity.description,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
 				from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
 				left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
-				inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
 				and vtiger_seactivityrel.crmid=".$id;
