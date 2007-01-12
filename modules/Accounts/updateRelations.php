@@ -26,7 +26,7 @@ if($dest_mod == 'Products')
 	$accountid = $_REQUEST['parid'];
 	$productid = $_REQUEST['entityid'];
 	if($accountid != '' && $productid != '')
-		$adb->query("insert into vtiger_seproductsrel values($accountid,$productid)");
+		$adb->query("insert into vtiger_seproductsrel values($accountid,$productid,'".$dest_mod."')");
 		
 	$record = $accountid;
 }

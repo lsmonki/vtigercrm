@@ -19,7 +19,9 @@ if($singlepane_view == 'true')
 	$action = "DetailView";
 else
 	$action = "CallRelatedList";
-	
+
+$dest_mod = $_REQUEST['destination_module'];
+
 //This will be true, when we select product from vendor related list
 if($_REQUEST['destination_module']=='Products')
 {
@@ -41,7 +43,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		{
 			$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST["parentid"].",".$id.")";
 			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.")";
+			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'".$dest_mod."')";
 			$adb->query($sql);
 		}
 	}
@@ -54,7 +56,7 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 
 		$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
 		$adb->query($sql);
-		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
+		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'".$dest_mod."')";
 		$adb->query($sql);
 		
 		$record = $_REQUEST["parid"];

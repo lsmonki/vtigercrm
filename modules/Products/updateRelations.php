@@ -32,18 +32,22 @@ if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$des
 	{
 		if($crmid != '' && $productid != '')
 		{
-			$sql = "insert into vtiger_seproductsrel values ($crmid,$productid)";
+			$sql = "insert into vtiger_seproductsrel values ($crmid,$productid,'".$dest_mod."')";
 			$adb->query($sql);
 		}
 	}
+	
+	$return_module = 'Products';
 }
 
-$return_action = 'DetailView';
-$return_module = 'Vendors';
-if($_REQUEST['return_action'] != '') $return_action = $_REQUEST['return_action'];
+if($singlepane_view == 'true')
+	$return_action = "DetailView";
+else
+	$return_action = "CallRelatedList";
+
 if($_REQUEST['return_module'] != '') $return_module = $_REQUEST['return_module'];
 
-header("Location:index.php?action=$return_action&module=$return_module&record=".$_REQUEST["parid"]);
+header("Location:index.php?action=$return_action&module=$return_module&record=".$productid);
 
 
 

@@ -922,12 +922,12 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Products")
 			{
-				$query = "left join vtiger_seproductsrel on vtiger_seproductsrel.crmid = vtiger_account.accountid
+				$query = "left join vtiger_seproductsrel on vtiger_seproductsrel.crmid = vtiger_account.accountid and vtiger_seproductsrel.setype = 'Accounts'
 					left join vtiger_products on vtiger_products.productid = vtiger_seproductsrel.productid
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
-					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid
+					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_seproductsrel.crmid
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_crmentity as vtiger_crmentityRel on vtiger_crmentityRel.crmid = vtiger_seproductsrel.crmid
 					left join vtiger_account as vtiger_accountRel on vtiger_accountRel.accountid=vtiger_crmentityRel.crmid
@@ -1010,11 +1010,14 @@ class ReportRun extends CRMEntity
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 		}
+
+		//Here we will get the Products - Accounts, Contacts relationship (Also Leads, Potentials)
 		if($module == "Products")
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_crmentityRelProducts.crmid
+				$query = "
+					left join vtiger_account on vtiger_account.accountid = vtiger_seproductsrel.crmid
 					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
@@ -1024,7 +1027,8 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_products.contactid
+				$query = "
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_seproductsrel.crmid
 					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
@@ -1083,7 +1087,6 @@ class ReportRun extends CRMEntity
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
-					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid 
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
 					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
@@ -1146,7 +1149,6 @@ class ReportRun extends CRMEntity
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
-					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid 
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
 					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
@@ -1215,21 +1217,17 @@ class ReportRun extends CRMEntity
 				where vtiger_crmentityPotentials.deleted=0 ";
 		}
 
+		//For this Product - we can related Accounts, Contacts (Also Leads, Potentials)
 		if($module == "Products")
 		{
 			$query = "from vtiger_products 
 				inner join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid 
 				left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid 
 				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid 
-				left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_products.contactid
-				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id  
-				left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid 
-				left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid 
-				left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_crmentityRelProducts.crmid 
-				left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_crmentityRelProducts.crmid 
-				left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_crmentityRelProducts.crmid 
+				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id 
+				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_products.productid and vtiger_seproductsrel.setype='".$this->secondarymodule."'	
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
-				where vtiger_crmentityProducts.deleted=0 ";
+				where vtiger_crmentityProducts.deleted=0";
 		}
 
 		if($module == "HelpDesk")

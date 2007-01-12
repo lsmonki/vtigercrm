@@ -1870,6 +1870,9 @@
 			<key />
 			<default value="0" />
 		</field>
+		<field name="setype" type="C" size="30">
+			<notnull />
+		</field>
 
 		<index name="seproductsrel_productid_idx">
 			<col>productid</col>

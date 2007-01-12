@@ -13,12 +13,13 @@ require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
-$returnmodule = $_REQUEST['return_module'];
+$dest_mod = $_REQUEST['destination_module'];
 
 if($singlepane_view == 'true')
 	$action = "DetailView";
 else
 	$action = "CallRelatedList";
+
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
@@ -29,7 +30,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		{
 			$sql = "insert into vtiger_contpotentialrel values (".$id.",".$_REQUEST["parentid"] .")";
 			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.")";
+			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'".$dest_mod."')";
 			$adb->query($sql);
 		}
 	}
@@ -40,7 +41,7 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$sql = "insert into vtiger_contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 	$adb->query($sql);
-	$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
+	$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'".$dest_mod."')";
 	$adb->query($sql);
 
 	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parid"]);

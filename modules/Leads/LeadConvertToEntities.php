@@ -228,26 +228,20 @@ function getRelatedActivities($accountid,$contact_id)
 /**	Function used to save the lead related products with other entities Account, Contact and Potential
  *	$leadid - leadid
  *	$relatedid - related entity id (accountid/contactid/potentialid)
- *	$relatedmodule - related entity module name - optional, but for contacts we have to pass Contact because we have to update contactid in vtiger_products table.
  */
-function saveLeadRelatedProducts($leadid, $relatedid, $relatedmodule = '')
+function saveLeadRelatedProducts($leadid, $relatedid)
 {
 	global $adb, $log;
-	$log->debug("Entering into function saveLeadRelatedProducts($leadid, $relatedid, \"$relatedmodule\")");
+	$log->debug("Entering into function saveLeadRelatedProducts($leadid, $relatedid)");
 
 	$product_result = $adb->query("select * from vtiger_seproductsrel where crmid=$leadid");
 	$noofproducts = $adb->num_rows($product_result);
 	for($i = 0; $i < $noofproducts; $i++)
 	{
 		$productid = $adb->query_result($product_result,$i,'productid');
+		$setype = $adb->query_result($product_result,$i,'setype');
 
-		$adb->query("insert into vtiger_seproductsrel (productid, crmid) values($productid, $relatedid)");
-
-		if($relatedmodule == 'Contacts')
-		{
-			//update contactid in products table then only the products will be shown in contact relatedlist
-			$adb->query("update vtiger_products set contactid=$relatedid where productid=$productid");
-		}
+		$adb->query("insert into vtiger_seproductsrel values($relatedid, $productid,'".$setype."')");
 	}
 
 	$log->debug("Exit from function saveLeadRelatedProducts.");
@@ -376,7 +370,7 @@ $adb->query($sql_insert_contactcustomfield);
 getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
 
 //Retrieve the lead related products and relate them with this new contact
-saveLeadRelatedProducts($id, $contact_id, "Contacts");
+saveLeadRelatedProducts($id, $contact_id);
 
 //Retrieve the lead related Campaigns and relate them with this new contact --Minnie
 saveLeadRelatedCampaigns($id, $contact_id);

@@ -82,15 +82,6 @@ class Products extends CRMEntity {
 
 	function save_module($module)
 	{
-		//Inserting into vtiger_seproductsrel table
-		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_seproductsrel', 'Products');
-		}
-		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_seproductsrel');
-		}
 		//Inserting into product_taxrel table
 		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
