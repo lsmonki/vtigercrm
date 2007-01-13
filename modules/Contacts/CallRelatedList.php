@@ -64,9 +64,11 @@ $parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 $category = getparenttab();
 $smarty->assign("CATEGORY",$category);
-
 $smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->name);
+$smarty->assign("EMAIL",$focus->column_fields['email']);
+$smarty->assign("YAHOO",$focus->column_fields['yahooid']);
+
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);

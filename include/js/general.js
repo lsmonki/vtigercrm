@@ -1790,10 +1790,10 @@ function selectContact(check,type,frmName)
                 rel_parent_module = frmName.parent_type.value;
 		record_id = frmName.parent_id.value;
                 module = rel_parent_module.split("&");	
-		if(record_id != '' && module == "Leads")
+		if(record_id != '' && module[0] == "Leads")
 		{
 			alert("You can't select related contacts from Lead ");
-			document.formName.selectcnt.disabled="true";
+			formName.selectcnt.disabled="true";
 		}
 		else
 		{
@@ -1804,7 +1804,7 @@ function selectContact(check,type,frmName)
 			if(record_id != '')
 				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
 			else
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
 
 
 		}
@@ -1826,10 +1826,11 @@ function selectContact(check,type,frmName)
 			task_module = task_parent_module.split("&");
 			popuptype="&popuptype=toDospecific";
 		}
-		if(task_recordid != '' && task_module == "Leads" )
+		if(task_recordid != '' && task_module[0] == "Leads" )
 		{
 			alert("You can't select related contacts from Lead ");
-			document.frmName.selectcnt.disabled="true";
+			frmName.contact_name.value = '';
+ 	                frmName.selectcnt.disabled="true"
 		}
 		else
 		{
@@ -1874,23 +1875,13 @@ function selectSalesOrder()
 		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
 
-/**check whether emailid is available for a specific contact or not.
-contactname->name of the contact
-mailaddress->emailaddress
-index->checkbox index
-type->whether its a yahooid or emailid*/
-
-function checkEmailid(contactname,mailaddress,index,type)
-{
-        mail = document.SendMail.elements;
-        mailid = mail[index].checked;
-        if(mailid == true)
-        {
-                if(mailaddress == '')
-                {
-                        alert("'"+contactname+"'"+" doesn't have "+type);
-                        mail[index].checked=false;
-                }
-        }
-
-}
+function checkEmailid(parent_module,emailid,yahooid)
+ {
+       var check = true;
+       if(emailid == '' && yahooid == '')
+       {
+               alert("This "+parent_module+" doesn't have any mail ids");
+               check=false;
+       }
+       return check;
+ }

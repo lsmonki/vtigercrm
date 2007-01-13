@@ -83,14 +83,10 @@ if($single_record)
 				$field_value[$count++] = $adb->query_result($result,0,$columnname);
 			}	
 			$entity_name = $adb->query_result($result,0,'contactname');
-			$emailid = $adb->query_result($result,0,'email');
-			$yahooid = $adb->query_result($result,0,'yahooid');
 			break;	
 	}	
 }
 $smarty->assign('ENTITY_NAME',$entity_name);
-$smarty->assign('EMAIL_ID',$emailid);
-$smarty->assign('YAHOO_ID',$yahooid);
 $smarty->assign('ONE_RECORD',$single_record);
 $smarty->assign('MAILDATA',$field_value);
 $smarty->assign('MAILINFO',$returnvalue);

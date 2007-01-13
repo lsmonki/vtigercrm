@@ -118,6 +118,9 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
+$smarty->assign("EMAIL",$focus->column_fields['email']);
+$smarty->assign("YAHOO",$focus->column_fields['yahooid']);
       
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

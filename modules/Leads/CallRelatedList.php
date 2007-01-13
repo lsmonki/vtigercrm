@@ -66,6 +66,8 @@ $parent_email = getEmailParentsList('Leads',$focus->id);
 
 $smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$smarty->assign("EMAIL",$focus->column_fields['email']);
+$smarty->assign("YAHOO",$focus->column_fields['yahooid']);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD",$app_strings['Lead']);

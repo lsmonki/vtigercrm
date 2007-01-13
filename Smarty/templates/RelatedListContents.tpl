@@ -18,7 +18,7 @@
 	{assign var = return_modname value='CallRelatedList'}
 {/if}
 {if $BASE_ACCOUNT neq ''}
-        {assign var="search_string" value="&search_field=accountid&query=true&searchtype=BasicSearch&search_text=$BASE_ACCOUNT"}
+        {assign var="search_string" value="&search_field=accountid&query=true&searchtype=BasicSearch&search_text=$BASE_ACCOUNT&check_rel=potential_rel"}
 {/if}
 {foreach key=header item=detail from=$RELATEDLISTS}
 

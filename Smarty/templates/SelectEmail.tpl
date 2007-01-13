@@ -10,7 +10,6 @@
  ********************************************************************************/
 -->*}
 <!-- BEGIN: main -->
-{if $EMAIL_ID neq '' || $YAHOO_ID neq ''}
 <div id="roleLay" style="z-index:12;display:block;width:400px;" class="layerPopup">
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
@@ -39,9 +38,9 @@
 			{foreach name=emailids key=fieldid item=elements from=$MAILINFO}
 			<tr>
 				{if $smarty.foreach.emailids.iteration eq 1}	
-					<td align="center"><input  type="checkbox" value="{$fieldid}" name="email" onClick="checkEmailid('{$ENTITY_NAME}','{$EMAIL_ID}',0,'{$elements.0}')"/></td>
+					<td align="center"><input  type="checkbox" value="{$fieldid}" name="email" /></td>
 			{else}
-					<td align="center"><input type="checkbox" value="{$fieldid}" name="email" onClick="checkEmailid('{$ENTITY_NAME}','{$YAHOO_ID}',1,'{$elements.0}')" /></td>
+					<td align="center"><input type="checkbox" value="{$fieldid}" name="email"  /></td>
 				{/if}
 				{if $ONE_RECORD eq 'true'}	
 					<td align="left"><b>{$elements.0} </b><br>{$MAILDATA[$smarty.foreach.emailids.iteration]}</td>
@@ -67,6 +66,3 @@
 </tr>
 </table>
 </div>
-{else} 
-	<font color='red'>"{$ENTITY_NAME}" doesn't have an emailid</font>
-{/if}
