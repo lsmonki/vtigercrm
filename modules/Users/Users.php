@@ -1013,7 +1013,8 @@ class Users {
 			if($_REQUEST[$this->homeorder_array[$i]] != '')
 				$save_array[] = $this->homeorder_array[$i];
 		}
-		$homeorder = implode(',',$save_array);	
+		if(count($save_array))
+			$homeorder = implode(',',$save_array);	
 		$query = "update vtiger_users set homeorder ='$homeorder' where id=$id";
 		$adb->query($query);
                 $log->debug("Exiting from function saveHomeOrder($id)");

@@ -20,6 +20,7 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/Activity.js"></script>
 <script type="text/javascript">
+var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}

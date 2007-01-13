@@ -537,7 +537,7 @@
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>{$sel_value}</option>
 						<!-- code added to pass Status field value, if Disabled for nonadmin -->
-						{if $value eq 'selected'}
+						{if $value eq 'selected' && $secondvalue neq 1}
 							{assign var="user_stat" value="$sel_value"}
 						{/if}
 						<!--code ends -->
@@ -588,7 +588,7 @@
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$uivalueid}" {$value}>{$sel_value}</option>
 						<!-- code added to pass Currency field value, if Disabled for nonadmin -->
-						{if $value eq 'selected'}
+						{if $value eq 'selected' && $secondvalue neq 1}
 							{assign var="curr_stat" value="$uivalueid"}
 						{/if}
 						<!--code ends -->

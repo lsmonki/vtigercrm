@@ -28,6 +28,7 @@
 <script>
 {literal}
 
+var gVTModule = '{$smarty.request.module}';
 function callConvertLeadDiv(id)
 {
         new Ajax.Request(

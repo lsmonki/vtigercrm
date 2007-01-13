@@ -20,6 +20,7 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script type="text/javascript">
+var gVTModule = '{$smarty.request.module}';
 function sensex_info()
 {ldelim}
         var Ticker = $('tickersymbol').value;

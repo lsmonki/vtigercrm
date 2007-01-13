@@ -705,6 +705,17 @@ function numConstComp(fldName,fldLabel,type,constval) {
 }
 
 function formValidate() {
+;
+//Validation for Portal User
+
+if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
+{
+	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
+		alert("Portal user should provide email Id for portal login");
+		return false;
+	}
+}
+
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
 		{
@@ -1148,6 +1159,8 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
    var oform = document.forms['EditView'];
    oform.action.value='Save';	
+   //global variable to check the validation calling function to avoid validating when tab change
+   gValidationCall = 'tabchange'; 	
    if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
    if(formValidate())
    {	
@@ -1170,6 +1183,7 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 
 	   tagName2.style.display='none';
    }
+   gValidationCall = ''; 	
 }
 
 function fnCopy(source,design){
