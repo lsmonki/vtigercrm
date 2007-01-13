@@ -247,7 +247,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = "yes";
 		}else
 		{
-			getObj(dtlView).innerHTML = "";
+			getObj(dtlView).innerHTML = "no";
 		}
 
 	}else if(uitype == 116)

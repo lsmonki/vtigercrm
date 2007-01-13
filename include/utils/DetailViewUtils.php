@@ -338,7 +338,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		else
 		{
-			$display_val = '';
+			$display_val = 'no';
 		}
 		$label_fld[] = $display_val;
 	}
