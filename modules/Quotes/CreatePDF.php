@@ -53,8 +53,8 @@ $ship_state = $focus->column_fields["ship_state"];
 $ship_code = $focus->column_fields["ship_code"];
 $ship_country = $focus->column_fields["ship_country"];
 
-$conditions = $focus->column_fields["terms_conditions"];
-$description = $focus->column_fields["description"];
+$conditions = from_html($focus->column_fields["terms_conditions"]);
+$description = from_html($focus->column_fields["description"]);
 $status = $focus->column_fields["quotestage"];
 
 // Company information

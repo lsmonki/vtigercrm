@@ -1450,7 +1450,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		$product_Detail[$i]['hdnProductId'.$i] = $hdnProductId;
 		$product_Detail[$i]['productName'.$i]= from_html($productname);
-		$product_Detail[$i]['productDescription'.$i]= $productdescription;
+		$product_Detail[$i]['productDescription'.$i]= from_html($productdescription);
 		$product_Detail[$i]['comment'.$i]= $comment;
 
 		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
