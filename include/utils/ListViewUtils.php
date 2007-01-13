@@ -641,7 +641,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								if(isPermitted("Calendar",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Calendar&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?return_module=Calendar&return_action=ListView&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
