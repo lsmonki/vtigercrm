@@ -130,6 +130,9 @@ $smarty->assign("SINGLE_MOD",'Potential');
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+//fix for potential duplicate header
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
