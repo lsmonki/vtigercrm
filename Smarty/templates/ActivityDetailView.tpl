@@ -31,22 +31,23 @@ function tagvalidate()
 		return false;
 	{rdelim}
 {rdelim}
-function DeleteTag(id)
+function DeleteTag(id,recordid)
 {ldelim}
-	$("vtbusy_info").style.display="inline";
-	Effect.Fade('tag_'+id);
-	new Ajax.Request(
-		'index.php',
+        $("vtbusy_info").style.display="inline";
+        Effect.Fade('tag_'+id);
+        new Ajax.Request(
+                'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&tagid=" +id,
+                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&recordid="+recordid+"&tagid=" +id,
                         onComplete: function(response) {ldelim}
-						getTagCloud();
-						$("vtbusy_info").style.display="none";
+                                                getTagCloud();
+                                                $("vtbusy_info").style.display="none";
                         {rdelim}
                 {rdelim}
         );
 {rdelim}
+
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
