@@ -67,13 +67,22 @@ foreach($query_array as $query)
 {
 	ExecuteQuery($query);
 
-	/*
-	if($adb->query($query))
-		$success[] = $query;
-	else
-		$failure[] = $query;
-	*/
+	/*if($adb->query($query))	$success[] = $query;	else	$failure[] = $query;*/
 }
+
+
+ExecuteQuery("ALTER TABLE vtiger_users MODIFY user_password varchar(32)");
+
+//Changes related to Product - Lead/Account/Contact/Potential relationship - Mickie - 13-01-2007
+ExecuteQuery("delete from vtiger_field where tabid=14 and fieldname in ('parent_id','contact_id')");
+ExecuteQuery("alter table vtiger_products drop column contactid");
+
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",14,7,'get_leads',9,'Leads',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",14,6,'get_accounts',10,'Accounts',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",14,4,'get_contacts',11,'Contacts',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",14,2,'get_opportunities',12,'Potentials',0)");
+
+ExecuteQuery("alter table vtiger_seproductsrel add column setype varchar(100)");
 
 
 //echo "<br><font color='red'>&nbsp; 5.0.2 ==> 5.0.3 Database changes has been done.</font><br>";
