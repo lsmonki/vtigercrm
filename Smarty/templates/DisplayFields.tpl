@@ -155,7 +155,7 @@
 						<select name="assigned_group_name" class="small">';
 							{foreach key=key_one item=arr from=$secondvalue}
 								{foreach key=sel_value item=value from=$arr}
-									<option value="{$sel_value}" {$value}>{$sel_value}</option>
+									<option value="{$sel_value}" {$value}>{$sel_value|truncate:20:'...'}</option>
 								{/foreach}
 							{/foreach}
 						</select>
