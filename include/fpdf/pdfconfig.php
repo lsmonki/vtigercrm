@@ -31,10 +31,10 @@ $next_y = "6";
 
 
 //Following variables will be used in modules/{PO/SO/Quotes/Invoice}/pdf_templates/footer.php
-$top = $nettotal_y+42;//"216";
+$top = $nettotal_y+48;//"216";
 
 
-//if trye then Description and Terms & Conditions will be displayed in all pages, false - displayed only in the last page
+//if true then Description and Terms & Conditions will be displayed in all pages, false - displayed only in the last page
 $display_desc_tc = 'true';
 
 
