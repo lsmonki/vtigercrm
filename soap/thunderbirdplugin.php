@@ -54,6 +54,9 @@ $server->register(
     'CheckContactViewPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
 
 $server->register(
+	'CheckLeadViewPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
+
+$server->register(
 	  'AddContact',
     array('user_name'=>'xsd:string',
           'first_name'=>'xsd:string',
@@ -543,6 +546,22 @@ function CheckContactViewPerm($user_name)
 	}
 }
 
+function CheckLeadViewPerm($user_name)
+{
+  global $current_user,$log;
+	require_once('modules/Users/Users.php');
+	$seed_user = new Users();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve_entity_info($user_id,"Users");
+	if(isPermitted("Leads","EditView") == "yes")
+	{
+		return "allowed";
+	}else
+	{
+		return "denied";
+	}
+}
 $server->service($HTTP_RAW_POST_DATA);
 exit();
 ?>
