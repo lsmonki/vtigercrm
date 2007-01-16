@@ -85,6 +85,8 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 	
 //HANDLE HERE - Mickie
 //Here we have to update the version in table. so that when we do migration next time we will get the version
+global $adb, $vtiger_current_version;
+$adb->query("update vtiger_version set old_version='".$versions[$source_version]."',current_version='".$vtiger_current_version."'");
 
 
 
