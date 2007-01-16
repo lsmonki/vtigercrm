@@ -2214,7 +2214,7 @@ function getReadEntityIds($module)
 			LEFT JOIN vtiger_seproductsrel
 				ON vtiger_seproductsrel.productid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
-			AND ((vtiger_seproductsrel.crmid IS NULL
+			AND (vtiger_seproductsrel.crmid IS NULL
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
