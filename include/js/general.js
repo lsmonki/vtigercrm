@@ -10,6 +10,8 @@
 
 //Utility Functions
 
+var gValidationCall='';
+
 if (document.all)
 
 	var browser_ie=true

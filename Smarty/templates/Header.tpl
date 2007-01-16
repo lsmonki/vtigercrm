@@ -145,6 +145,7 @@
 <div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
 
 <script>
+var gVTModule = '{$smarty.request.module}';
 function fetch_clock()
 {ldelim}
 	new Ajax.Request(
