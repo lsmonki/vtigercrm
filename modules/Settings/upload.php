@@ -13,7 +13,7 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Users/add2db.php');
+require_once('modules/Settings/savewordtemplate.php');
 
 global $app_strings;
 global $mod_strings;
@@ -35,10 +35,14 @@ if(isset($_REQUEST['flag']) && $_REQUEST['flag'] != '')
 	switch($flag)
 	{
 		case 1:
-			$smarty->assign("ERRORFLAG","<font color='red'><B>File has to be a Document of type doc/msword</B></font>");
+			$smarty->assign("ERRORFLAG","<font color='red'>".$mod_strings['LBL_DOC_MSWORD']."</B></font>");
+			break;
+		case 2:
+			$smarty->assign("ERRORFLAG","<font color='red'>".$mod_strings['LBL_NODOC']."</B></font>");
 			break;
 		default:
 			$smarty->assign("ERRORFLAG","");
+			break;
 	}		
 }
 

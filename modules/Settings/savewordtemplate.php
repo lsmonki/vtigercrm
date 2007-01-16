@@ -26,8 +26,8 @@ $binFile = $_FILES['binFile']['name'];
                 $binFile .= ".txt";
         }
 $_FILES["binFile"]["name"] = $binFile;
+$strDescription = urlencode(addslashes($_REQUEST['txtDescription']));
 // Vulnerability fix ends
-
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
@@ -57,8 +57,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	    
  		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-	        $textDesc = $_REQUEST['txtDescription'];	
-		$strDescription = addslashes($textDesc);
+	        //$textDesc = $_REQUEST['txtDescription'];	
 	//    $fileid = create_guid();
 		$date_entered = date('YmdHis');
 		//Retreiving the return module and setting the parent type
@@ -117,7 +116,15 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 				include "upload.php";
 			}
 		}
-	} 
+	}
+	//Added for Invaild file path 
+	else
+        {
+		$module = $_REQUEST['target_module'];
+	   	header("Location: index.php?action=upload&module=Settings&parenttab=Settings&flag=2&description=".$strDescription."&tempModule=".$module);	
+
+        }
+ 
 } 
 else 
 {

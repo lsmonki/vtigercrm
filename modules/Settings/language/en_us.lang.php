@@ -878,6 +878,7 @@ $mod_strings = Array(
 'LBL_SELECT_ENTITY'=>'Select an entity below',
 'LBL_CAN_BE_ACCESSED_BY'=>'Can be accessed by',
 'LBL_PERMISSIONS'=>'Permissions',
-
+'LBL_DOC_MSWORD'=>'File has to be a Document of type doc/msword',
+'LBL_NODOC'=>'No doc File in this directory.Please try again!',
 );
 ?>
