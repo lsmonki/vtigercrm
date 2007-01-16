@@ -144,7 +144,9 @@ class LoggerAppenderRollingFile extends LoggerAppenderFile {
             $this->closeFile(); // keep windows happy.
     
             $file = $fileName;
-            rename($file, $target);
+
+	    //As of now suppress the error in rename. we have to handle in future
+            @rename($file, $target);
         }
         
         $this->setFile($fileName, false);
