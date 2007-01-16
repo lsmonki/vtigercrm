@@ -2192,7 +2192,10 @@ Should any need arise,please do give us a call.';
 	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shsalesid decimal(7,3) default NULL");
 	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shserviceid decimal(7,3) default NULL");
 
-
+	//version file is included here because without including this file version cannot be get
+	include('vtigerversion.php');
+	$this->db->query("insert into vtiger_version values('','".$vtiger_current_version."','".$vtiger_current_version."')");
+	
 	}
 }
 ?>

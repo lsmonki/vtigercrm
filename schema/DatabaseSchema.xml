@@ -6150,6 +6150,15 @@
 		</data>
 	</table>
 
+	<table name="vtiger_version">
+		<field name="id" type="I" size="11">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="old_version" type="C" size="30" />
+		<field name="current_version" type="C" size="30" />
+	</table>
+
 
 	
 </schema>
