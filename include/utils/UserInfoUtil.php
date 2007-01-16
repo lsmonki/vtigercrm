@@ -1542,7 +1542,7 @@ function isPermitted($module,$actionname,$record_id='')
 	if($record_id != '')
 	{
 		//if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
-		if(getTabOwnedBy($module) == 0)
+		if(getTabOwnedBy($module) == 1)
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
