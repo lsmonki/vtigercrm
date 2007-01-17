@@ -628,6 +628,7 @@ $app_strings = array (
 'LBL_START_DATE'=>'Start Date',
 'LBL_END_DATE'=>'End Date',
 'LBL_CREATE_MERGE_TEMPLATE'=>'Create Mail Merge templates ',
+'LBL_IMG_FORMATS'=>'(Only jpg, gif, bmp and png images)',
 );
 
 $app_list_strings = array (

@@ -555,7 +555,7 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" /><br>{$APP.LBL_IMG_FORMATS}
 					<input type="hidden" name="id" value=""/>
 					{$maindata[3].0.name}
 			</td>
