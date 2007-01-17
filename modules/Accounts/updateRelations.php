@@ -20,13 +20,13 @@ if($singlepane_view == 'true')
 else
 	$action = "CallRelatedList";
 
-//save the relationship when we select Product from Lead RelatedList
+//save the relationship when we select Product from Account RelatedList
 if($dest_mod == 'Products')
 {
 	$accountid = $_REQUEST['parid'];
 	$productid = $_REQUEST['entityid'];
 	if($accountid != '' && $productid != '')
-		$adb->query("insert into vtiger_seproductsrel values($accountid,$productid,'".$dest_mod."')");
+		$adb->query("insert into vtiger_seproductsrel values($accountid,$productid,'Accounts')");
 		
 	$record = $accountid;
 }

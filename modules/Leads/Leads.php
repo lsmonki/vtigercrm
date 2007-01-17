@@ -380,7 +380,15 @@ function get_products($id)
 	else
 		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
-	$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid from vtiger_products inner join vtiger_seproductsrel on vtiger_products.productid = vtiger_seproductsrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  where vtiger_leaddetails.leadid = '.$id.' and vtiger_crmentity.deleted = 0';
+	$query = "SELECT vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, 
+			vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, 
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid 
+		   FROM vtiger_products 
+		   INNER JOIN vtiger_seproductsrel ON vtiger_products.productid = vtiger_seproductsrel.productid and vtiger_seproductsrel.setype = 'Leads'
+		   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid 
+		   INNER JOIN vtiger_leaddetails ON vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  
+		   WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.leadid = $id";
+
 	$log->debug("Exiting get_products method ...");
 	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
 }

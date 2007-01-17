@@ -89,7 +89,14 @@ class Vendors extends CRMEntity {
 		else
 			$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
 
-		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendor.vendorname from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid left outer join vtiger_vendor on vtiger_vendor.vendorid = vtiger_products.vendor_id where vtiger_vendor.vendorid = '.$id.' and vtiger_crmentity.deleted = 0';
+		$query = "SELECT vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, 
+				vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, 
+				vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendor.vendorname 
+			  FROM vtiger_products 
+			  INNER JOIN vtiger_vendor ON vtiger_vendor.vendorid = vtiger_products.vendor_id 
+			  INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid 
+			  WHERE vtiger_crmentity.deleted = 0 AND vtiger_vendor.vendorid = $id";
+
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
 	}

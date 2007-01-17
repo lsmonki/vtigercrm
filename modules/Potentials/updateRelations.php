@@ -30,7 +30,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		{
 			$sql = "insert into vtiger_contpotentialrel values (".$id.",".$_REQUEST["parentid"] .")";
 			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'".$dest_mod."')";
+			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'Potentials')";
 			$adb->query($sql);
 		}
 	}
@@ -41,7 +41,7 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$sql = "insert into vtiger_contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 	$adb->query($sql);
-	$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'".$dest_mod."')";
+	$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'Potentials')";
 	$adb->query($sql);
 
 	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parid"]);

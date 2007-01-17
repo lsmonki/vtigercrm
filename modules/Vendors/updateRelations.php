@@ -33,33 +33,31 @@ if($_REQUEST['destination_module']=='Products')
 	}
 }
 
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+//select contact from vendor relatedlist
+if($_REQUEST['destination_module']=='Contacts')
 {
-	//split the string and store in an array
-	$storearray = explode (";",$idlist);
-	foreach($storearray as $id)
+	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
-		if($id != '')
+		$record = $_REQUEST["parentid"];
+
+		//split the string and store in an array
+		$storearray = explode (";",$idlist);
+		foreach($storearray as $id)
 		{
-			$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST["parentid"].",".$id.")";
-			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'".$dest_mod."')";
-			$adb->query($sql);
+			if($id != '')
+			{
+				$sql = "insert into vtiger_vendorcontactrel values (".$record.",".$id.")";
+				$adb->query($sql);
+			}
 		}
 	}
- 	
-	$record = $_REQUEST["parentid"];	
-}
-
-elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{
-
-		$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
-		$adb->query($sql);
-		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'".$dest_mod."')";
-		$adb->query($sql);
-		
+	elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+	{
 		$record = $_REQUEST["parid"];
+
+		$sql = "insert into vtiger_vendorcontactrel values (".$record.",".$_REQUEST['entityid'].")";
+		$adb->query($sql);
+	}
 }
 
 
