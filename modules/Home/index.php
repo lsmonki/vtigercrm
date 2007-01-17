@@ -237,8 +237,8 @@ function getGroupTaskLists()
 	global $app_strings;
 	$userid= $current_user->id;
 	$groupids = fetchUserGroupids($userid);
-	if($groupids !='')
-	{
+        //Check for permission before constructing the query.
+	if($groupids !='' && (isPermitted('Leads','index') == "yes"  || isPermitted('Calendar','index') == "yes" || isPermitted('HelpDesk','index') == "yes"))	{
 		$query = '';
 		if(isPermitted('Leads','index') == "yes")
         	{
