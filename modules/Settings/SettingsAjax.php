@@ -21,6 +21,9 @@ elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
 {
         $date_var = date('YmdHis');
         $announcement = $_REQUEST['announcement'];
+	//Change ##$## to & (reverse process has done in Smarty/templates/Settings/Announcements.tpl)
+	$announcement = str_replace("##$##","&",$announcement);
+
         $title = $_REQUEST['title_announcement'];
         $sql="select * from vtiger_announcement where creatorid=".$current_user->id;
         $is_announce=$adb->query($sql);
