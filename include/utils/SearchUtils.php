@@ -16,8 +16,8 @@ require_once('include/database/Postgres8.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contact_id','product_id','campaignid');
-$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname');
+$column_array=array('accountid','contact_id','product_id','campaignid','quoteid','vendorid','potentialid','salesorderid');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname','vtiger_quotes.subject','vtiger_vendor.vendorname','vtiger_potential.potentialname','vtiger_salesorder.subject');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
@@ -279,12 +279,11 @@ function BasicSearch($module,$search_field,$search_string)
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	global $column_array,$table_col_array;
-
 	if($search_field =='crmid')
 	{
 		$column_name='crmid';
 		$table_name='vtiger_crmentity';
-		$where="$table_name.$column_name like '%".$search_string."%'";	
+		$where="$table_name.$column_name like '%".$search_string."%'";
 	}else
 	{	
 		//Check added for tickets by accounts/contacts in dashboard
@@ -309,6 +308,7 @@ function BasicSearch($module,$search_field,$search_string)
 				if ($search_field_first	== 'contactid') $search_field_first = 'contact_id';
 				$column_name = $search_field_first;
 			}
+				
 			//Check ends
 			$table_name=$adb->query_result($result,0,'tablename');
 			if($table_name == "vtiger_crmentity" && $column_name == "smownerid")
