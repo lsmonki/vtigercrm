@@ -1,5 +1,5 @@
 <?php
-ini_set("include_path", "../:.");
+ini_set("include_path", "../");
 
 require('send_mail.php');
 require_once('config.php');
