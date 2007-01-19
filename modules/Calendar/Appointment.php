@@ -235,8 +235,8 @@ class Appointment
 			'month' => $emonth,
 			'year'  => $eyear
 		);
-                $this->start_time        = new DateTime($start_date_arr,true);
-                $this->end_time          = new DateTime($end_date_arr,true);
+                $this->start_time        = new vt_DateTime($start_date_arr,true);
+                $this->end_time          = new vt_DateTime($end_date_arr,true);
 		if($view == 'day' || $view == 'week')
 		{
 			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
