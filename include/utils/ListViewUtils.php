@@ -1927,6 +1927,8 @@ function getListQuery($module,$where='')
 			FROM vtiger_vendor
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
+			INNER JOIN vtiger_vendorcf
+				ON vtiger_vendor.vendorid = vtiger_vendorcf.vendorid
 			WHERE vtiger_crmentity.deleted = 0";
 			break;
 	Case "PriceBooks":
@@ -1934,6 +1936,8 @@ function getListQuery($module,$where='')
 			FROM vtiger_pricebook
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid
+			INNER JOIN vtiger_pricebookcf 
+				ON vtiger_pricebook.pricebookid = vtiger_pricebookcf.pricebookid
 			WHERE vtiger_crmentity.deleted = 0";
 			break;
 	Case "Quotes":
