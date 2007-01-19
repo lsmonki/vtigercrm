@@ -125,7 +125,11 @@ function DeleteTag(id,recordid)
 							 </tr>
 							 <tr>
                         					<td class="cellLabel" align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
-					                        <td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.subject}</td>
+					                        <td class="cellInfo" colspan=1 align="left" >{$ACTIVITYDATA.subject}</td>
+			
+								<td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
+                                        		        <td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.location}</td>
+
              						 </tr>
 							 {if $LABEL.description neq ''}
 							 <tr>

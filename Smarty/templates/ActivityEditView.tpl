@@ -142,6 +142,14 @@ var gVTModule = '{$smarty.request.module}';
                 					</tr>
 							{/if}
 							<tr>
+			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
+								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location}" style="width:50%">
+							</tr>
+								
+
+
+
+							<tr>
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
