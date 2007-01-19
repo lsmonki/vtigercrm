@@ -99,10 +99,6 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 		}
 		$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 		
-		if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
-		{
-			$calendar_arr['calendar']->add_Activities($current_user);
-		}
 		$calendar_arr['view'] = $mysel;
 		if($calendar_arr['calendar']->view == 'day')
 			$start_date = $end_date = $calendar_arr['calendar']->date_time->get_formatted_date();
@@ -150,6 +146,11 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			if($type == 'activity_postpone')
 			{
 			}
+			if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
+                	{
+                        	$calendar_arr['calendar']->add_Activities($current_user);
+                	}
+
 			if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption'] != null && $subtab == 'event')
 			{
 				if($_REQUEST['viewOption'] == 'hourview')
