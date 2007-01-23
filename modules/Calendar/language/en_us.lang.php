@@ -235,6 +235,8 @@ $mod_strings = Array(
 'db_title' => 'LBL_LIST_TITLE',
 'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
 'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
+//END DON'T CONVERT
+
 'LBL_COMPLETED'=>'Mark Completed',
 'LBL_DEFERRED'=>'Mark Deferred',
 'LBL_HELD'=>'Mark Held',
@@ -242,7 +244,6 @@ $mod_strings = Array(
 'LBL_POSTPONE'=>'Postpone',
 'LBL_CHANGEOWNER'=>'Change Owner',
 'LBL_DEL'=>'Delete',
-//END DON'T CONVERT
 
 //Added for actvity merge with calendar
 'LBL_SEARCH_FORM_TITLE'=>'Activity Search',
