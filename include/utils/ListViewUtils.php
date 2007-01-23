@@ -1524,11 +1524,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$result = $adb->query($query);
 						$contact_image = '';
 						$imagename=$adb->query_result($result,0,'imagename');
-						if($imagename != '')
-						{
-							$imgpath = "test/contact/".$imagename;
-							$contact_image='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=fnhide("dynloadarea");>';
-						}
 						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>'.$contact_image;
 					}else
 					{
