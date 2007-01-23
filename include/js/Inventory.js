@@ -496,7 +496,7 @@ function fnAddProductRow(module,image_path){
 
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
-	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="'+image_path+'search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment1" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><br>[<a href="javascript:;" onclick="getObj(\'comment'+count+'\').value=\'\'";>Clear Comment</a>]</td></tr></tbody></table>';	
+	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="'+image_path+'search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><br>[<a href="javascript:;" onclick="getObj(\'comment'+count+'\').value=\'\'";>Clear Comment</a>]</td></tr></tbody></table>';	
 	
 	//Quantity In Stock - only for SO, Quotes and Invoice
 	if(module != "PurchaseOrder"){
