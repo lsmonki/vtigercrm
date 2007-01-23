@@ -194,7 +194,6 @@ $mod_strings = Array(
 'LBL_ASSINGEDTO'=>'Assigned To',
 'LBL_RELATEDTO'=>'Related To',
 'LBL_STATUS'=>'Status',
-'LBL_DEAR'=>'Dear',
 'LBL_PENDING'=>'Pending',
 'LBL_PUBLIC'=>'Mark Public',
 'LBL_MORE'=>'More',
@@ -229,13 +228,13 @@ $mod_strings = Array(
 
 
 
-//DON'T CONVERT THESE THEY ARE MAPPINGS
+//DON'T CONVERT THESE THEY ARE MAPPINGS - Starts
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',
 'db_title' => 'LBL_LIST_TITLE',
 'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
 'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
-//END DON'T CONVERT
+//DON'T CONVERT THESE THEY ARE MAPPINGS  - Ends
 
 'LBL_COMPLETED'=>'Mark Completed',
 'LBL_DEFERRED'=>'Mark Deferred',

@@ -379,7 +379,7 @@ function getActivityDetails($description,$inviteeid='')
         $current_username = getUserName($current_user->id);
         $status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
 
-        $list = $mod_strings['LBL_DEAR'].' ' .$name.',';
+        $list = $name.',';
         $list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'. '.$mod_strings['LBL_DETAILS_STRING'].':';
         $list .= '<br>'.$mod_strings["LBL_SUBJECT"].' '.$_REQUEST['subject'];
         $list .= '<br>'.$mod_strings["LBL_STATUS"].': '.$status;
