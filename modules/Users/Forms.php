@@ -120,7 +120,7 @@ function verify_data(form) {
             if((aUpload[aUpload.length-1]!="jpg") &&  (aUpload[aUpload.length-1]!="gif") &&  (aUpload[aUpload.length-1]!="bmp") &&  (aUpload[aUpload.length-1]!="png"))
 		{
 
-		alert("Pleae Select a Valid Image");
+		alert("Please Select a Valid Image");
 		form.imagename.focus();                                                                                                    exit();
 
 		}
