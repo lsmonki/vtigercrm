@@ -383,8 +383,8 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_TYPE'];
 		$header[] = $app_strings['LBL_SUBJECT'];
 		$header[] = $app_strings['LBL_RELATED_TO'];
-		$header[] = $app_strings['LBL_START_DATE'];
-		$header[] = $app_strings['LBL_END_DATE'];
+		$header[] = $app_strings['LBL_START_DATE']." & ".$app_strings['LBL_TIME'];
+		$header[] = $app_strings['LBL_END_DATE']." & ".$app_strings['LBL_TIME'];
 		//$header[] = $app_strings['LBL_DESCRIPTION'];
 		$header[] = $app_strings['LBL_ACTION'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
@@ -413,10 +413,10 @@ function getHistory($parentmodule,$query,$id)
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
-
-			$entries[] = $row['date_start'];
-			$entries[] = $row['due_date'];
-
+		
+			$entries[] = $row['date_start']."   ".$row['time_start'];
+			$entries[] = $row['due_date']."   ".$row['time_end'];
+			
 			//$entries[] = nl2br($row['description']);
 
 			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
@@ -445,7 +445,7 @@ function getHistory($parentmodule,$query,$id)
 			$i++;
 			$entries_list[] = $entries;
 		}
-
+	
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
 		$log->debug("Exiting getHistory method ...");
 		return $return_data; 

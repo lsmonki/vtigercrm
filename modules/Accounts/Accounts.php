@@ -288,6 +288,7 @@ class Accounts extends CRMEntity {
 		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject,
 			vtiger_activity.status, vtiger_activity.eventstatus,
 			vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.due_date,
+			vtiger_activity.time_start, vtiger_activity.time_end,
 			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
 			vtiger_crmentity.description,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 			FROM vtiger_activity

@@ -292,7 +292,8 @@ function get_history($id)
 	$log->debug("Entering get_history(".$id.") method ...");
 	$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
 		vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
-		vtiger_activity.due_date, vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime,
+		vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,
+		vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime,
 		vtiger_crmentity.description, vtiger_users.user_name,vtiger_activitygrouprelation.groupname
 			from vtiger_activity
 			inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
