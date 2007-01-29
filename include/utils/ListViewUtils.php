@@ -61,7 +61,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$focus->list_fields = $oCv->list_fields;
 		}
 	}
-
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list ='(';
 	$j=0;
@@ -132,7 +131,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				//Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
 				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
 				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
-
+			
 				foreach($focus->list_fields[$name] as $tab=>$col)
 				{
 					if(in_array($col,$focus->sortby_fields))
@@ -178,7 +177,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							$arrow = '';
 					}
 					else
-					{       if($app_strings[$name])
+					{
+					       if($app_strings[$name])
 						{
 							$name = $app_strings[$name];
 						}
@@ -1027,12 +1027,20 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			$value = $temp_val;
 		}
+			
+	
 		//Added to get both start date & time
 		if(($tabid == 9 || $tabid == 16) && $uitype == 6 && $viewname != 'All')
 		{
 			$timestart = $adb->query_result($list_result,$list_result_count,'time_start');
-			$value = $value .'&nbsp;&nbsp;&nbsp;'.$timestart;
+			$value = $value .'&nbsp;&nbsp;&nbsp;'.$timestart;	
 		}
+		else if($viewname != 'All' && isset($focus->list_fields['End Date & Time']))
+		{
+			$timeend = $adb->query_result($list_result,$list_result_count,'time_end');
+                        $value = $value .'&nbsp;&nbsp;&nbsp;'.$timeend;
+		}
+		
 		
 	}
 	elseif($uitype == 71 || $uitype == 72)

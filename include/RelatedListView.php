@@ -216,6 +216,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
 		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
 		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
+
 		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;
 	}
@@ -244,7 +245,6 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			}
 		}
 	</script>';
-	echo $list;
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
