@@ -228,14 +228,13 @@ $mod_strings = Array(
 
 
 
-//DON'T CONVERT THESE THEY ARE MAPPINGS - Starts
+//DON'T CONVERT THESE THEY ARE MAPPINGS - STARTS
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',
 'db_title' => 'LBL_LIST_TITLE',
 'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
 'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
-//DON'T CONVERT THESE THEY ARE MAPPINGS  - Ends
-
+//DON'T CONVERT THESE THEY ARE MAPPINGS -ENDS
 'LBL_COMPLETED'=>'Mark Completed',
 'LBL_DEFERRED'=>'Mark Deferred',
 'LBL_HELD'=>'Mark Held',
@@ -253,7 +252,7 @@ $mod_strings = Array(
 'LBL_CALENDAR_INFORMATION'=>'Calendar Information',
 
 'LBL_NAME'=>'Subject:',
-'LBL_ACTIVITY_STRING'=>'There is an activity',
+'LBL_ACTIVITY_STRING'=>'This is a notification that an activity you have been invited to has been',
 'LBL_DETAILS_STRING'=>'The details are',
 'LBL_REGARDS_STRING'=>'Thanks & Regards',
 'LBL_CONTACT_NAME'=>'Contact Name',
