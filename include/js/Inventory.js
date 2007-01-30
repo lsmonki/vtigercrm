@@ -601,14 +601,16 @@ function setDiscount(currObj,curr_row)
 			discount_amount = eval(document.getElementById("productTotal"+curr_row).innerHTML)*eval(document.getElementById("discount_percentage"+curr_row).value)/eval(100);
 		}
 
-		document.getElementById("discountTotal"+curr_row).innerHTML = discount_amount;
+		//Rounded the decimal part of discount amount to two digits
+		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(discount_amount.toString());
 	}
 	if(discount_checks[2].checked == true)
 	{
 		document.getElementById("discount_type"+curr_row).value = 'amount';
 		document.getElementById("discount_percentage"+curr_row).style.visibility = 'hidden';
 		document.getElementById("discount_amount"+curr_row).style.visibility = 'visible';
-		document.getElementById("discountTotal"+curr_row).innerHTML = document.getElementById("discount_amount"+curr_row).value;
+		//Rounded the decimal part of discount amount to two digits
+		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(document.getElementById("discount_amount"+curr_row).value.toString());
 	}
 
 	calcTotal();
@@ -638,7 +640,10 @@ function calcCurrentTax(tax_name, curr_row, tax_row)
 	var new_amount_lbl = document.getElementsByName("popup_tax_row"+curr_row);
 
 	//calculate the new tax amount
-	new_tax_amount = eval(product_total)*eval(new_tax_percent)/eval(100);
+	var new_tax_amount = eval(product_total)*eval(new_tax_percent)/eval(100);
+
+	//Rounded the decimal part of tax amount to two digits
+	new_tax_amount = roundValue(new_tax_amount.toString());
 
 	//assign the new tax amount in the corresponding text box
 	new_amount_lbl[tax_row].value = new_tax_amount;
@@ -680,11 +685,13 @@ function calcSHTax()
 	for(var i=1;i<=sh_tax_count;i++)
 	{
 		tax_amount = eval(sh_charge)*eval(document.getElementById("sh_tax_percentage"+i).value)/eval(100);
-		document.getElementById("sh_tax_amount"+i).value = tax_amount;
+		//Rounded the decimal part of S&H Tax amount to two digits
+		document.getElementById("sh_tax_amount"+i).value = roundValue(tax_amount.toString());
 		sh_tax_total = eval(sh_tax_total) + eval(tax_amount);
 	}
 
-	document.getElementById("shipping_handling_tax").innerHTML = sh_tax_total;
+	//Rounded the decimal part of Total S&H Tax amount to two digits
+	document.getElementById("shipping_handling_tax").innerHTML = roundValue(sh_tax_total.toString());
 
 	calcTotal();
 }
