@@ -199,7 +199,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					   </tr>
 					   <tr>
 						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);">&nbsp;%</td>
+						<td align="right"><input type="text" class="small" size="5" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);">&nbsp;%</td>
 					   </tr>
 					   <tr>
 						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
@@ -299,7 +299,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			   </tr>
 			   <tr>
 				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
+				<td align="right"><input type="text" class="small" size="5" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
 			   </tr>
 			   <tr>
 				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
