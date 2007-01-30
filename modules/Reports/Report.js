@@ -179,6 +179,8 @@ function addColumn()
 
 function addColumnStep1()
 {
+	//the below line is added for report not woking properly in browser IE7 --bharath
+	document.getElementById("selectedColumns").style.width="164px";
 	if (availListObj.options.selectedIndex > -1)
 	{
 		for (i=0;i<availListObj.length;i++) 
