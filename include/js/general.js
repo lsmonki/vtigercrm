@@ -1887,3 +1887,71 @@ function checkEmailid(parent_module,emailid,yahooid)
        }
        return check;
  }
+
+function calQCduedatetime()
+{
+        var datefmt = document.QcEditView.dateFormat.value;
+        var type = document.QcEditView.activitytype.value;
+        var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        var dateelements1=splitDateVal(dateval1);
+        dd1=parseInt(dateelements1[0],10);
+        mm1=dateelements1[1];
+        yyyy1=dateelements1[2];
+        var date1=new Date();
+        date1.setYear(yyyy1);
+        date1.setMonth(mm1-1,dd1+1);
+        var yy = date1.getFullYear();
+        var mm = date1.getMonth() + 1;
+        var dd = date1.getDate();
+        var date = document.QcEditView.date_start.value;
+        var starttime = document.QcEditView.time_start.value;
+        if (!timeValidate('time_start',' Start Date & Time','OTH'))
+                return false;
+        var timearr = starttime.split(":");
+        var hour = parseInt(timearr[0],10);
+        var min = parseInt(timearr[1],10);
+        dd = _2digit(dd);
+        mm = _2digit(mm);
+        var tempdate = yy+'-'+mm+'-'+dd;
+        if(datefmt == '%d-%m-%Y')
+                var tempdate = dd+'-'+mm+'-'+yy;
+        else if(datefmt == '%m-%d-%Y')
+                var tempdate = mm+'-'+dd+'-'+yy;
+        if(type == 'Meeting')
+        {
+                hour = hour + 1;
+                if(hour == 24)
+                {
+                        hour = 0;
+                        date =  tempdate;
+                }
+                hour = _2digit(hour);
+		min = _2digit(min);
+                document.QcEditView.due_date.value = date;
+                document.QcEditView.time_end.value = hour+':'+min;
+        }
+        if(type == 'Call')
+        {
+                if(min == 55)
+                {
+                        min = 0;
+                        hour = hour + 1;
+                }else min = min + 5;
+                if(hour == 24)
+                {
+                        hour = 0;
+                        date =  tempdate;
+                }
+                hour = _2digit(hour);
+		min = _2digit(min);
+                document.QcEditView.due_date.value = date;
+                document.QcEditView.time_end.value = hour+':'+min;
+        }
+
+}
+
+function _2digit( no ){
+        if(no < 10) return "0" + no;
+        else return "" + no;
+}
+
