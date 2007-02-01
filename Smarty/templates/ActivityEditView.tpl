@@ -90,9 +90,12 @@ var gVTModule = '{$smarty.request.module}';
 						     {/foreach}
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
+							<input type="hidden" name="followup_time_start" id="followup_time_start">
+                                                        <input type="hidden" name="followup_time_end" id="followup_time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">
 							<input type="hidden" name="duration_hours" value="0">
 							<input type="hidden" name="duration_minutes" value="0">
+							<input type="hidden" name="dateformat" value="{$DATEFORMAT}">
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							{if $LABEL.activitytype neq ''}
 							<tr>
@@ -102,17 +105,20 @@ var gVTModule = '{$smarty.request.module}';
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
                                                                                 {foreach key=sel_value item=value from=$typearr}
-                                                                                {if $value eq 'selected' && $sel_value eq 'Meeting'}
+                                                                                {if $value eq 'selected' && $sel_value eq 'Call'}
+                                                                                        {assign var='meetcheck' value=''}
+                                                                                        {assign var='callcheck' value='checked'}
+                                                                                {elseif $value eq 'selected' && $sel_value eq 'Meeting'}
                                                                                         {assign var='meetcheck' value='checked'}
                                                                                         {assign var='callcheck' value=''}
                                                                                 {else}
-                                                                                        {assign var='meetcheck' value=''}
+											{assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
                                                                                 {/if}
                                                                                 {/foreach}
                                                                                 {/foreach}
-											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck}></td><td>{$APP.Call}</td><td style="width:10px">
-											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck}></td><td>{$APP.Meeting}</td><td style="width:20px">
+											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck} onClick="calDuedatetime('call');" ></td><td>{$APP.Call}</td>
+											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck} onClick="calDuedatetime('meeting');" ></td><td>{$APP.Meeting}</td>
 										</tr>
 									</table>
 								</td>
@@ -161,7 +167,7 @@ var gVTModule = '{$smarty.request.module}';
 									<tr>
 										<td valign=top>
 										{if $LABEL.eventstatus neq ''}
-                                                                                <select name="eventstatus" id="eventstatus" class=small>
+                                                                                <select name="eventstatus" id="eventstatus" class=small onChange = "getSelectedStatus();" >
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
@@ -254,12 +260,12 @@ var gVTModule = '{$smarty.request.module}';
 							</td></tr>
 						     </table>
 						     <hr noshade size=1>
-						     <table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF">
+						     <table border=0 id="date_table" cellspacing=0 cellpadding=5 width=100% align=center bgcolor="#FFFFFF">
 							<tr>
 								<td >
 									<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
-									<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
-										<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+									<tr><td width=50% id="date_table_firsttd" valign=top style="border-right:1px solid #dddddd">
+										<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 											<tr><td colspan=3 ><b>{$MOD.LBL_EVENTSTAT}</b></td></tr>
 											<tr><td colspan=3>{$STARTHOUR}</td></tr>
 											<tr><td>
@@ -267,7 +273,7 @@ var gVTModule = '{$smarty.request.module}';
                                                                                                         {assign var=date_val value="$date_value"}
                                                                                                         {assign var=time_val value="$time_value"}
 	                                                                                        {/foreach}
-                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
 													{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 													{assign var=date_vl value="$date_fmt"}
 													{/foreach}
@@ -278,8 +284,8 @@ var gVTModule = '{$smarty.request.module}';
 													</script>
 											</td></tr>
 										</table></td>
-										<td width=50% valign=top >
-											<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+										<td width=50% valign=top id="date_table_secondtd">
+											<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 												<tr><td colspan=3><b>{$MOD.LBL_EVENTEDAT}</b></td></tr>
 												<tr><td colspan=3>{$ENDHOUR}
 												</td></tr>
@@ -300,6 +306,28 @@ var gVTModule = '{$smarty.request.module}';
 												</td></tr>
 											</table>
 										</td>
+										<td width=33% valign=top style="display:none;border-left:1px solid #dddddd" id="date_table_thirdtd">
+                                                                                        <table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
+                                                                                                <tr><td colspan=3><b><input type="checkbox" name="followup"><b>{$MOD.LBL_HOLDFOLLOWUP}</b></td></tr>
+                                                                                                <tr><td colspan=3>{$FOLLOWUP}</td></tr>
+                                                                                                <tr><td>
+                                                                                                        {foreach key=date_value item=time_value from=$ACTIVITYDATA.due_date}
+                                                                                                        {assign var=date_val value="$date_value"}
+                                                                                                        {assign var=time_val value="$time_value"}
+                                                                                                        {/foreach}
+                                                                                                        <input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_followup_date">
+                                                                                                        {foreach key=date_fmt item=date_str from=$secondvalue.due_date}
+                                                                                                        {assign var=date_vl
+ value="$date_fmt"}
+                                                                                                        {/foreach}
+													<script type="text/javascript">
+                                                                                                        Calendar.setup ({ldelim}
+                                                                                                                inputField : "jscal_field_followup_date", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_followup_date", singleClick : true, step : 1
+                                                                                                                {rdelim})
+                                                                                                        </script>
+                                                                                                </td></tr>
+                                                                                        </table>
+                                                                                </td>
 									</tr>
 								</table></td>
 							</tr>
@@ -712,7 +740,7 @@ var gVTModule = '{$smarty.request.module}';
 	                                        		{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
                                         		{/foreach}
-							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" onChange="dochange('date_start','due_date');" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
 							{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 								{assign var=date_vl value="$date_fmt"}
 							{/foreach}				
