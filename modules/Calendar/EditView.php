@@ -40,11 +40,13 @@ $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Calendar';
+	$taskcheck = true;	
 	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_TODO']);
 }
 elseif($activity_mode == 'Events')
 {
 	$tab_type = 'Events';
+	$taskcheck = false;
 	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_EVENT']);
 }
 
@@ -128,7 +130,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 }
 $userDetails=getOtherUserName($current_user->id);
-//echo '<pre>';print_r($userDetails);echo '</pre>';
 $to_email = getUserEmailId('id',$current_user->id);
 $smarty->assign("CURRENTUSERID",$current_user->id);
 
@@ -158,11 +159,7 @@ foreach($act_data as $header=>$blockitem)
 		}
 	}
 }
-if($current_user->hour_format == '')
-	$format = 'am/pm';
-else
-	$format = $current_user->hour_format;
-//echo '<pre>';print_r($value);echo '</pre>';
+$format = ($current_user->hour_format == '')?'am/pm':$current_user->hour_format;
 $stdate = key($value['date_start']);
 $enddate = key($value['due_date']);
 $sttime = $value['date_start'][$stdate];
@@ -174,9 +171,9 @@ $value['startfmt'] = $time_arr['startfmt'];
 $value['endhr'] = $time_arr['endhour'];
 $value['endmin'] = $time_arr['endmin'];
 $value['endfmt'] = $time_arr['endfmt'];
-$smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt']));
+$smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt'],$taskcheck));
 $smarty->assign("ENDHOUR",getTimeCombo($format,'end',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
-//echo '<pre>';print_r($value);echo '</pre>';
+$smarty->assign("FOLLOWUP",getTimeCombo($format,'followup_start',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
 $smarty->assign("ACTIVITYDATA",$value);
 $smarty->assign("LABEL",$fldlabel);
 $smarty->assign("secondvalue",$secondvalue);
@@ -189,6 +186,7 @@ $smarty->assign("HOURFORMAT",$format);
 $smarty->assign("USERSLIST",$userDetails);
 $smarty->assign("USEREMAILID",$to_email);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 global $theme;
 $theme_path="themes/".$theme."/";
