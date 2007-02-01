@@ -31,21 +31,13 @@ global $adb;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
-if($activity_mode == 'Task')
-{
-        $tab_type = 'Calendar';
-	$focus->column_fields["activitytype"] = 'Task';
-}
-elseif($activity_mode == 'Events')
-{
-        $tab_type = 'Events';
-}
-
+$tab_type = 'Calendar';
+$focus->column_fields["activitytype"] = 'Task';
 
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
-$local_log->debug("id is ".$id);
+	$local_log->debug("id is ".$id);
 }
 if(isset($_REQUEST['mode']))
 {
@@ -93,13 +85,33 @@ else
 	else
 	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
+	/* For Followup START -- by Minnie */
+	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
+	{
+		$focus->column_fields['subject'] = '[Followup] '.$focus->column_fields['subject'];
+		$focus->column_fields['date_start'] = $_REQUEST['followup_date'];
+		$focus->column_fields['due_date'] = $_REQUEST['followup_date'];
+		$focus->column_fields['time_start'] = $_REQUEST['followup_time_start'];
+		$focus->column_fields['time_end'] = $_REQUEST['followup_time_end'];
+		$focus->column_fields['eventstatus'] = 'Planned';
+		$focus->mode = 'create';
+		$focus->save($tab_type);
+
+	}
+	/* For Followup END -- by Minnie */
 	$return_id = $focus->id;
 }
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Calendar";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") 
+	$return_module = $_REQUEST['return_module'];
+else 
+	$return_module = "Calendar";
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") 
+	$return_action = $_REQUEST['return_action'];
+else 
+	$return_action = "DetailView";
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
+	$return_id = $_REQUEST['return_id'];
 
 if($_REQUEST['mode'] != 'edit' && $_REQUEST['return_module'] == 'Products')
 {
@@ -122,7 +134,8 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts"
 									
 									
 $activemode = "";
-if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
+if($activity_mode != '') 
+	$activemode = "&activity_mode=".$activity_mode;
 
 //Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
 if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
@@ -177,19 +190,30 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 }
 
 
-if(isset($_REQUEST['view']) && $_REQUEST['view']!='') $view=$_REQUEST['view'];
-if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='') $hour=$_REQUEST['hour'];
-if(isset($_REQUEST['day']) && $_REQUEST['day']!='') $day=$_REQUEST['day'];
-if(isset($_REQUEST['month']) && $_REQUEST['month']!='') $month=$_REQUEST['month'];
-if(isset($_REQUEST['year']) && $_REQUEST['year']!='') $year=$_REQUEST['year'];
-if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='') $viewOption=$_REQUEST['viewOption'];
-if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') $subtab=$_REQUEST['subtab'];
+if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
+	$view=$_REQUEST['view'];
+if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
+	$hour=$_REQUEST['hour'];
+if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
+	$day=$_REQUEST['day'];
+if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
+	$month=$_REQUEST['month'];
+if(isset($_REQUEST['year']) && $_REQUEST['year']!='') 
+	$year=$_REQUEST['year'];
+if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='') 
+	$viewOption=$_REQUEST['viewOption'];
+if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') 
+	$subtab=$_REQUEST['subtab'];
 
 //code added for returning back to the current view after edit from list view
-if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
-if($_REQUEST['start'] !='')$page='&start='.$_REQUEST['start'];
+if($_REQUEST['return_viewname'] == '') 
+	$return_viewname='0';
+if($_REQUEST['return_viewname'] != '')
+	$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['parenttab'] != '')
+	$parenttab=$_REQUEST['parenttab'];
+if($_REQUEST['start'] !='')
+	$page='&start='.$_REQUEST['start'];
 if($_REQUEST['maintab'] == 'Calendar')
 	header("Location: index.php?action=".$return_action."&module=".$return_module."&view=".$view."&hour=".$hour."&day=".$day."&month=".$month."&year=".$year."&record=".$return_id."&viewOption=".$viewOption."&subtab=".$subtab."&parenttab=$parenttab");
 else
