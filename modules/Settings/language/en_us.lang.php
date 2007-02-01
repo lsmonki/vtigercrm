@@ -742,7 +742,6 @@ $mod_strings = Array(
 'LBL_LIST_SELECT'=>'Select',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_TEMPLATE_TOOLS'=>'Tools',
-'LBL_DELETE' => 'Delete',
 'LBL_NEW_TEMPLATE' =>'New Template',
 'LBL_FOLDER'=>'Folder',
 'LBL_NAME'=>'Name',
