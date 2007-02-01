@@ -106,7 +106,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$endtime = time() + (60 * 60);
+				$endtime = time() + (5 * 60);
 				$curr_time = date('H:i',$endtime);
 			}
 		}
