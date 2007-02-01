@@ -115,69 +115,25 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 	if($format == 'am/pm')
 	{
 		$hr = $sthr+0;
-		if($hr <= 11)
-		{
-			if($hr == 0)
-				$sthr = 12;
-			$timearr['starthour'] = $sthr;
-			$timearr['startfmt'] = 'am';
-		}
-		else
-		{
-			if($hr == 12) $sthr = $hr;
-			else $sthr = $hr - 12;
-				
-			if($sthr <= 9 && strlen(trim($sthr)) < 2)
-                                $hrvalue= '0'.$sthr;
-			else $hrvalue=$sthr;
-			
-			$timearr['starthour'] = $hrvalue;
-			$timearr['startfmt'] = 'pm';
-		}
-		$edhr = $edhr+0;
-                if($edhr <= 11)
-                {
-			if($edhr == 0)
-				$edhr = 12;
-				
-			if($edhr <= 9 && strlen(trim($edhr)) < 2)
-				$edhr = '0'.$edhr;
-			$timearr['endhour'] = $edhr;
-                        $timearr['endfmt'] = 'am';
-                }
-                else
-                {
-			$fmt = 'pm';
-			if($edhr == 12)
-				$edhr =	$edhr;
-			else
-			{
-				$edhr = $edhr - 12;
-				if($edhr == 12)
-					$fmt = 'am';
-			}
-                        if($edhr <= 9 && strlen(trim($edhr)) < 2)
-                                $hrvalue= '0'.$edhr;
-			else $hrvalue=$edhr;
-			
-                        $timearr['endhour'] = $hrvalue;
-                        $timearr['endfmt'] = $fmt;
-                }
+		$timearr['startfmt'] = ($hr >= 12) ? "pm" : "am";
+		if($hr == 0) $hr = 12;
+		$timearr['starthour'] = twoDigit(($hr>12)?($hr-12):$hr);
 		$timearr['startmin']  = $stmin;
+
+		$edhr = $edhr+0;
+		$timearr['endfmt'] = ($edhr >= 12) ? "pm" : "am";
+		if($edhr == 0) $edhr = 12;
+		$timearr['endhour'] = twoDigit(($edhr>12)?($edhr-12):$edhr);
 		$timearr['endmin']    = $edmin;
 		return $timearr;
 	}
 	if($format == '24')
 	{
-		if($edhr <= 9 && strlen(trim($edhr)) < 2)
-			$edhr = '0'.$edhr;
-		if($sthr <= 9 && strlen(trim($sthr)) < 2)
-			$sthr = '0'.$sthr;
-		$timearr['starthour'] = $sthr;
+		$timearr['starthour'] = twoDigit($sthr);
 		$timearr['startmin']  = $stmin;
 		$timearr['startfmt']  = '';
-		$timearr['endhour']   = $edhr;
-                $timearr['endmin']    = $edmin;
+		$timearr['endhour']   = twoDigit($edhr);
+		$timearr['endmin']    = $edmin;
 		$timearr['endfmt']    = '';
 		return $timearr;
 	}
@@ -190,13 +146,17 @@ function getaddEventPopupTime($starttime,$endtime,$format)
  *constructs html select combo box for time selection
  *and returns it in string format.
  */
-function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
+function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 {
 	$combo = '';
 	$min = $min - ($min%5);
+	if($bimode == 'start' && !$todocheck)
+		$jsfn = 'onChange="changeEndtime_StartTime();"';
+	else
+		$jsfn = null;
 	if($format == 'am/pm')
 	{
-		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
+		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr" '.$jsfn.'>';
 		for($i=0;$i<12;$i++)
 		{
 			if($i == 0)
@@ -205,84 +165,43 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$hrvalue = 12;
 			}
 			else
-			{	
-				if($i <= 9 && strlen(trim($i)) < 2)
-				{
-					$hrtext= '0'.$i;
-				}
-				else $hrtext= $i;
-				$hrvalue =  $hrtext;
-			}
-			if($hour == $hrvalue)
-				$hrsel = 'selected';
-			else
-				$hrsel = '';
+				$hrvalue = $hrtext = twoDigit($i);
+			$hrsel = ($hour == $hrvalue)?'selected':'';	
 			$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrtext.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small '.$jsfn.'>';
 		for($i=0;$i<12;$i++)
 		{
-			$minvalue = 5;
 			$value = $i*5;
-			if($value <= 9 && strlen(trim($value)) < 2)
-			{
-				$value= '0'.$value;
-			}
-			else $value = $value;
-			if($min == $value)
-				$minsel = 'selected';
-			else
-				$minsel = '';
-				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
+			$value = twoDigit($value);
+			$minsel = ($min == $value)?'selected':'';
+			$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
 		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
-		if($fmt == 'am')
-		{
-			$amselected = 'selected';
-			$pmselected = '';
-		}
-		elseif($fmt == 'pm')
-		{
-			$amselected = '';
-			$pmselected = 'selected';
-		}
+		$amselected = ($fmt == 'am')?'selected':'';
+		$pmselected = ($fmt == 'pm')?'selected':'';
 		$combo .= '<option value="am" '.$amselected.'>AM</option>';
 		$combo .= '<option value="pm" '.$pmselected.'>PM</option>';
 		$combo .= '</select>';
 		}
 		else
 		{
-			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small>';
+			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small '.$jsfn.'>';
 			for($i=0;$i<=23;$i++)
 			{
-				if($i <= 9 && strlen(trim($i)) < 2)
-				{
-					$hrvalue= '0'.$i;
-				}
-				else $hrvalue = $i;
-				if($hour == $hrvalue)
-					$hrsel = 'selected';
-				else
-					$hrsel = '';
+				$hrvalue = twoDigit($i);
+				$hrsel = ($hour == $hrvalue)?'selected':'';
 				$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrvalue.'</option>';
 			}
 			$combo .= '</select>Hr&nbsp;';
-			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
+			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small '.$jsfn.'>';
 			for($i=0;$i<12;$i++)
 			{
-				$minvalue = 5;
 				$value = $i*5;
-				if($value <= 9 && strlen(trim($value)) < 2)
-				{
-					$value= '0'.$value;
-				}
-				else $value=$value;
-				if($min == $value)
-					$minsel = 'selected';
-				else
-					$minsel = '';
+				$value= twoDigit($value);
+				$minsel = ($min == $value)?'selected':'';
 				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 			}
 			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
@@ -302,7 +221,10 @@ function getActFieldCombo($fieldname,$tablename)
 {
 	global $adb, $mod_strings;
 	$combo = '';
-	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small>';
+	$js_fn = '';
+	if($fieldname == 'eventstatus')
+		$js_fn = 'onChange = "getSelectedStatus();"';
+	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small '.$js_fn.'>';
 	$q = "select * from ".$tablename;
 	$Res = $adb->query($q);
 	$noofrows = $adb->num_rows($Res);
@@ -396,5 +318,33 @@ function getActivityDetails($description,$inviteeid='')
         $log->debug("Exiting getActivityDetails method ...");
         return $list;
 }
+
+function twoDigit( $no ){
+	if($no < 10 && strlen(trim($no)) < 2) return "0".$no;
+	else return "".$no;
+}
+
+function timeString($datetime,$fmt){
+
+	if(is_object($datetime)){
+		$hr = $datetime->hour;
+		$min = $datetime->minute;
+	} else {
+		$hr = $datetime['hour'];
+		$min = $datetime['minute'];
+	}
+	$timeStr = "";
+	if($fmt != 'am/pm'){
+		$timeStr .= twoDigit($hr).":".twoDigit($min);
+	}else{
+		$am = ($hr >= 12) ? "pm" : "am";
+		if($hr == 0) $hr = 12;
+		$timeStr .= ($hr>12)?($hr-12):$hr;
+		$timeStr .= ":".twoDigit($min);
+		$timeStr .= $am;
+	}
+	return $timeStr;
+}
+
 
 ?>
