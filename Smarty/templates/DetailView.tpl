@@ -386,6 +386,22 @@ function DeleteTag(id,recordid)
 		</td>
 		<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
+		<!-- Action links for Event & Todo START-by Minnie -->
+                {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads'}
+                        <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                                <tr><td>&nbsp;</td></tr>
+                                <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
+                                <tr><td align="left" style="padding-left:10px;">
+                                        <img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+                                        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
+                                </td></tr>
+                                <tr><td align="left" style="padding-left:10px;">
+                                        <img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+                                        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
+                        </table>
+                <br>
+                {/if}
+                <!-- Action links for Event & Todo END-by Minnie -->
 
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
