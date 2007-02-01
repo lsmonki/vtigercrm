@@ -66,7 +66,12 @@
 					{$fldlabel}
 				</td>
 				<td width="30%" align=left class="cellText">
-					<select name="{$fldname}">
+					{if $QCMODULE eq 'Event'}
+                                                {assign var=typejsfn value="onChange='calQCduedatetime();'"}
+                                        {else}
+                                                {assign var=typejsfn value=""}
+                                        {/if}
+					<select name="{$fldname}" {$typejsfn}>
 					{foreach item=arr from=$fldvalue}
 						{foreach key=sel_value item=value from=$arr}
 							{if $MOD.$sel_value neq ''}
@@ -232,10 +237,22 @@
 								{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
-							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
+							   {foreach key=date_fmt item=date_str from=$secondvalue}
+                                                                {assign var=dateFormat value="$date_fmt"}
+                                                                {assign var=dateStr value="$date_str"}
+                                                           {/foreach}
+                                                        {if $uitype eq 6 && $QCMODULE eq 'Event'}
+                                                                {assign var=datejsfn value="onChange='dochange(\"jscal_field_date_start\",\"jscal_field_due_date\");'"}
+                                                                {assign var=timejsfn value="onChange='calQCduedatetime();'"}
+                                                                <input name="dateFormat" type="hidden" value="{$dateFormat}">
+                                                        {else}
+                                                                {assign var=datejsfn value=""}
+                                                                {assign var=timejsfn value=""}
+                                                        {/if}	
+							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}" {$datejsfn}>
 							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$fldname}">
 							{if $uitype eq 6}
-							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
+							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}" {$timejsfn} >
 							{/if}
 							{if $uitype eq 23 && $QCMODULE eq 'Event'}
                                                            <input name="time_end" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
@@ -243,10 +260,6 @@
                                                                 getCalendarPopup('jscal_trigger_{$fldname}','jscal_field_{$fldname}','{$dateFormat}');
                                                              </script>
                                                         {/if}
-							{foreach key=date_format item=date_str from=$secondvalue}
-                                                                {assign var=dateFormat value="$date_format"}
-							        {assign var=dateStr value="$date_str"}
-							{/foreach}
 							{if $uitype eq 5 || $uitype eq 23}
 							   <br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
 							   {else}
