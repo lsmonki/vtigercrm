@@ -195,12 +195,15 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
+	<input type="hidden" name="followup_time_start" id="followup_time_start">
+	<input type="hidden" name="followup_time_end" id="followup_time_end">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 	<input type="hidden" name="parenttab" value="<?php echo $category ?>">
 	<input type="hidden" name="viewOption" value="">
 	<input type="hidden" name="subtab" value="">
 	<input type="hidden" name="maintab" value="Calendar">
+	<input type="hidden" name="dateformat" value="<?php echo $date_format ?>">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
 			<td class="layerPopupHeading" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
@@ -217,8 +220,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td width=80% align="left">
 				<table>
 					<tr>
-					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked></td><td><?php echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;'></td><td><?php echo $mod_strings['LBL_MEET']?></td><td style="width:20px">
+					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked onClick="calDuedatetime('call');"></td><td><?php echo $mod_strings['LBL_CALL']?></td>
+					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onClick="calDuedatetime('meeting');"></td><td><?php echo $mod_strings['LBL_MEET']?></td>
 					</tr>
 				</table>
 			</td>
@@ -281,19 +284,19 @@ function getAssignedToHTML($assignedto,$toggletype)
 			</tr>		
 			</table>
 			<hr noshade size=1>
-			<table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF" align=center>
+			<table id="date_table" border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor="#FFFFFF" align=center>
 			<tr>
 			<td >
 				<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 				<tr>
-				<td width=50% valign=top style="border-right:1px solid #dddddd">
-					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+				<td width=50% id="date_table_firsttd" valign=top style="border-right:1px solid #dddddd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
 				        <tr><td colspan=3 align="left">
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
                                         <tr><td align="left">
-					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=50% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
 								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -302,8 +305,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 					</td></tr>
 					</table>
 				</td>
-				<td width=50% valign=top >
-					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+				<td width=50% valign=top id="date_table_secondtd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
 				        <tr><td colspan=3 align="left">
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
@@ -318,11 +321,26 @@ function getAssignedToHTML($assignedto,$toggletype)
 					</td></tr>
 					</table>
 				</td>
+				<td width=34% valign=top style="display:none;border-left:1px solid #dddddd" id="date_table_thirdtd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
+					<tr><td colspan=3 align="left"><b><input type="checkbox" name="followup"><?php echo $mod_strings['LBL_HOLDFOLLOWUP']?></b></td></tr>
+					<tr><td colspan=3 align="left">
+					<?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'followup_start');?>
+					</td></tr>
+					<tr><td align="left">
+						<input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_followup_date">
+						<script type="text/javascript">
+						Calendar.setup ({
+							inputField : "jscal_field_followup_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_followup_date", singleClick : true, step : 1
+						})
+						</script>
+					</td></tr>
+					</table>
+				</td>
 				</tr>
 				</table></td>
 			</tr>
 			</table>
-
 
 			<!-- Alarm, Repeat, Invite starts-->
 			<br>
@@ -747,9 +765,9 @@ setObjects();
 				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=95% align=center>
 						<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
-						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?></td></tr>
+						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start','','','',true); ?></td></tr>
 						<tr><td align="left">
-							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
+							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" onChange="dochange('task_date_start','task_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_date_start", singleClick : true, step : 1
