@@ -263,8 +263,8 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	global $current_user,$app_strings;
         $date_format = $current_user->date_format;
 	$format = $cal_arr['calendar']->hour_format;
-	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour,false); 
-	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');	
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$temp_ts = $cal_arr['calendar']->date_time->ts;
 	//To get date in user selected format
@@ -657,7 +657,6 @@ function getTodosListView($cal, $check='',$subtab='')
  */
 function getDayViewLayout(& $cal)
 {
-	//echo '<pre>';print_r($cal);echo '</pre>';
 	global $current_user,$app_strings,$cal_log,$adb;
 	$no_of_rows = 1;
 	$cal_log->debug("Entering getDayViewLayout() method...");
@@ -686,39 +685,11 @@ function getDayViewLayout(& $cal)
 	}
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
-		
-		if($cal['calendar']->hour_format == 'am/pm')
-		{
-			if($i == 12)
-			{
-				$hour = $i;
-				$sub_str = 'pm';
-			}
-			elseif($i>12)
-			{
-				$hour = $i - 12;
-				$sub_str = 'pm';
-			}
-			else
-			{
-				if($i == 0)
-					$hour = 12;
-				else
-					$hour = $i;
-				$sub_str = 'am';
-			}
-			
-		}
-		else
-		{
-			$hour = $i;
-			if($hour <= 9 && strlen(trim($hour)) < 2)
-				$hour = "0".$hour;
-			$sub_str = ':00';
-		}
+		$time = array('hour'=>$i,'minute'=>0);
+		$sub_str = timeString($time,$format);
 		$y = $i+1;
-		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
-		$hour_endat = convertTime2UserSelectedFmt($format,$y,false);
+		$hour_startat = timeString(array('hour'=>$i,'minute'=>0),'24');
+		$hour_endat = timeString(array('hour'=>$y,'minute'=>0),'24');
 		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$temp_ts = $cal['calendar']->date_time->ts;
 		$sttemp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
@@ -736,7 +707,7 @@ function getDayViewLayout(& $cal)
 		if(isPermitted("Calendar","EditView") == "yes")
 		              $js_string = 'onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'call\',\''.$sttemp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')"';
 		$dayview_layout .= '<tr>
-					<td style="cursor:pointer;" class="lvtCol" valign=top height="75"  width="10%" '.$js_string.'>'.$hour.''.$sub_str.'</td>';
+					<td style="cursor:pointer;" class="lvtCol" valign=top height="75"  width="10%" '.$js_string.'>'.$sub_str.'</td>';
 		//To display events in Dayview
 		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i],$no_of_rows);
 		$dayview_layout .= '</tr>';
@@ -789,44 +760,17 @@ function getWeekViewLayout(& $cal)
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
 		$count = $i;
-		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
-	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1),false);
+		$hour_startat = timeString(array('hour'=>$i,'minute'=>0),'24');
+		$hour_endat = timeString(array('hour'=>($i+1),'minute'=>0),'24');
 		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
         	{
-        	       	if($cal['calendar']->hour_format == 'am/pm')
-                	{
-                       		if($i == 12)
-                       		{
-                               		$hour = $i;
-	                               	$sub_str = 'pm';
-	                        }
-        	       	        elseif($i>12)
-                        	{
-                       	        	$hour = $i - 12;
-	                       	        $sub_str = 'pm';
-	                        }
-        	       	        else
-                        	{
-					if($i == 0)
-						$hour = 12;
-					else
-                       	        		$hour = $i;
-	                       	        $sub_str = 'am';
-        	                }
-
-       	        	}
-       			else
-           		{
-                       		$hour = $i;
-				if($hour <= 9 && strlen(trim($hour)) < 2)
-		                        $hour = "0".$hour;
-                        	$sub_str = ':00';
-       	        	}
-
+			$time = array('hour'=>$i,'minute'=>0);
+			$sub_str = timeString($time,$format);
+			
 			$weekview_layout .= '<td style="border-top: 1px solid rgb(239, 239, 239); background-color: rgb(234, 234, 234); height: 40px;" valign="top" width="12%">';
-			$weekview_layout .=$hour.''.$sub_str;
+			$weekview_layout .=$sub_str;
 	                $weekview_layout .= '</td>';
 		}
 		for ($column=0;$column<=6;$column++)
@@ -879,8 +823,8 @@ function getMonthViewLayout(& $cal)
                 $rows = 6;
         }
 	$format = $cal['calendar']->hour_format;
-        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$monthview_layout = '';
 	$monthview_layout .= '<table class="calDayHour" style="background-color: rgb(218, 218, 218);" border="0" cellpadding="5" cellspacing="1" width="98%"><tr>';
@@ -1084,8 +1028,6 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$id = $act[$i]->record;
 			if(strlen($subject)>25)
 				$subject = substr($subject,0,25)."...";
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
 			$duration_min =$act[$i]->duration_minute;
@@ -1098,17 +1040,16 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				$rowspan = $duration_hour;
 			}
 			$row_cnt = $rowspan;
-			//$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-			//$start_hour = $st_end_time['starttime'];
-			//$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+			$end_hour = timeString($act[$i]->end_time,$format);
 			$account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
-			$shared = $act[$i]->shared;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			if($act[$i]->recurring)
+				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+			else
+				$recurring = '&nbsp;';
 			$height = $rowspan * 75;
 			$javacript_str = '';
 			/*if($eventstatus != 'Held')
@@ -1126,18 +1067,18 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0"></td>
-					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
-				</tr>';
-			$eventlayer .= '<tr><td>';
-			if($shared)
-				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
-			else
-				$eventlayer .= '&nbsp;';
+					<td width="10%" align="center"><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="90%"><b>'.$start_hour.' - '.$end_hour.'</b></td></tr>';
+			$eventlayer .= '<tr><td align="center">'.$recurring;
 			$eventlayer .= '</td>
 				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
-				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$mod_strings[$eventstatus].' | '.$mod_strings[$priority].')</td>
+				<tr><td align="center">';
+			if($act[$i]->shared)
+				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+			else
+				$eventlayer .= '&nbsp;';
+			$eventlayer .= '</td><td>('.$user.' | '.$mod_strings[$eventstatus].' | '.$mod_strings[$priority].')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 			</table>
 			
 			</div>';
@@ -1180,22 +1121,17 @@ function getweekEventLayer(& $cal,$slice)
 			if(strlen($subject)>25)
 				$subject = substr($subject,0,25)."...";
 			$format = $cal['calendar']->hour_format;
-                        $duration_hour = $act[$i]->duration_hour;
-                        $duration_min = $act[$i]->duration_minute;
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
-                        //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-			//$start_hour = $st_end_time['starttime'];
-                        //$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+                        $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
-			$shared = $act[$i]->shared;
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			if($act[$i]->recurring)
+				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+			else
+				$recurring = '&nbsp;';
                         $color = $act[$i]->color;
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 				$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
@@ -1204,22 +1140,25 @@ function getweekEventLayer(& $cal,$slice)
 			$eventlayer .='<div class ="event" '.$javacript_str.' id="event_'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i.'">
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0"></td>
-					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
+					<td width="10%" align="center"><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="90%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>
 				<tr>
-					<td>';
-			if($shared)
+					<td align="center">'.$recurring;
+
+			$eventlayer .= '</td>
+					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
+				</tr>
+				<tr><td align="center">';
+			if($act[$i]->shared)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '	
-				</td>
-					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
-				</tr>
-				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
+			$eventlayer .= '</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td></tr>
+			<tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
+
 			</table>
-		        </div><br>';
+			</div><br>';
                 }
 		$cal_log->debug("Exiting getweekEventLayer() method...");
 		return $eventlayer;
@@ -1261,27 +1200,14 @@ function getmonthEventLayer(& $cal,$slice)
                         $subject = $act[$i]->subject;
                         if(strlen($subject)>10)
                                 $subject = substr($subject,0,10)."...";
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
 			$format = $cal['calendar']->hour_format;
-                        $duration_hour = $act[$i]->duration_hour;
-                        $duration_min = $act[$i]->duration_minute;
-                        //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-                        //$start_hour = $st_end_time['starttime'];
-                        //$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+                        $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$color = $act[$i]->color;
 			$eventlayer .='<div class ="event" id="event_'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i.'">
-					<table border="0" cellpadding="1" cellspacing="0" width="100%">
-						<tr>
-							<td><img src="'.$image.'" align="middle" border="0"></td>
-							<td width="100%"><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></td>
-						</tr>
-					</table>
+			<nobr><img src="'.$image.'" border="0"></img>&nbsp;<a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></nobr>
                                 </div><br>';
                 }
 		if($remin_list != null)
@@ -1363,12 +1289,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$image_tag = "";
 		$contact_data = "";
 		$more_link = "";
-		$duration_hour = $adb->query_result($result,$i,"duration_hours");
-                $duration_min = $adb->query_result($result,$i,"duration_minutes");
 		$start_time = $adb->query_result($result,$i,"time_start");
 		$end_time = $adb->query_result($result,$i,"time_end");
 		$format = $calendar['calendar']->hour_format;
-		//$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
 		$value = getaddEventPopupTime($start_time,$end_time,$format);
 		$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
@@ -1493,7 +1416,6 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $more_link = "";
                 $start_time = $adb->query_result($result,$i,"time_start");
                 $format = $calendar['calendar']->hour_format;
-                //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time);
 		$value = getaddEventPopupTime($start_time,$start_time,$format);
                 $element['starttime'] = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 		$date_start = $adb->query_result($result,$i,"date_start");
@@ -1566,8 +1488,8 @@ function constructEventListView(& $cal,$entry_list)
 	$cal_log->debug("Entering constructEventListView() method...");
 	$format = $cal['calendar']->hour_format;
 	$date_format = $current_user->date_format;
-	$hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-	$hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$temp_ts = $cal['calendar']->date_time->ts;
 	//to get date in user selected date format
@@ -1688,8 +1610,8 @@ function constructTodoListView($todo_list,$cal,$subtab)
         global $current_user,$app_strings;
         $date_format = $current_user->date_format;
         $format = $cal['calendar']->hour_format;
-        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
         $time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
         $temp_ts = $cal['calendar']->date_time->ts;
 	//to get date in user selected date format
@@ -1826,175 +1748,4 @@ function constructTodoListView($todo_list,$cal,$subtab)
         return $list_view;
 }
 
-/**
- * Function to convert time to user selected format
- * @param  string    $format                      - hour format. either 'am/pm' or '24'
- * @param  string    $time                        - time
- * @param  boolean   $format_check                - true/false
- * return  string    $hour                        - time string
- */
-function convertTime2UserSelectedFmt($format,$time,$format_check)
-{
-	global $cal_log;
-	$cal_log->debug("Entering convertTime2UserSelectedFmt() method...");
-	if($format == 'am/pm' && $format_check)
-        {
-		if($time>='12')
-                {
-			if($time == '12')
-				$hour = $time;
-			else
-				$hour = $time - 12;
-			$hour = $hour.":00pm";
-		}
-		else
-                {
-                        $hour = $time;
-			$hour = $hour.":00am";
-		}
-		$cal_log->debug("Exiting convertTime2UserSelectedFmt() method...");
-		return $hour;
-	}
-	else
-        {
-                $hour = $time;
-		if($hour <= 9 && strlen(trim($hour)) < 2)
-                                $hour = "0".$hour;
-		$hour = $hour.":00";
-		$cal_log->debug("Exiting convertTime2UserSelectedFmt() method...");
-		return $hour;
-	}
-}
-
-/**
- * Function to convert events/todos start and endtime to user selected format
- * @param  string    $format                      - hour format. either 'am/pm' or '24'
- * @param  string    $start_time                  - time
- * @param  string    $duration_hr                 - duration in hours or empty string
- * @param  string    $duration_min                - duration in minutes or empty string
- * return  array     $return_data                 - start and end time in array format
- */
-function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$duration_min='')
-{
-	global $cal_log;
-	$cal_log->debug("Entering convertStEdTime2UserSelectedFmt() method...");
-	list($hour,$min) = explode(":",$start_time);
-	if($format == 'am/pm')
-        {
-                if($hour>'12')
-		{
-			$hour = $hour - 12;
-                        $start_hour = $hour;
-			$start_time = $start_hour.":".$min."pm";
-                        $end_min = $min+$duration_min;
-                        $end_hour = $hour+$duration_hr;
-                        if($end_min>=60)
-                        {
-	                        $end_min = $end_min%60;
-                                $end_hour++;
-                        }
-                        if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-                                $end_hour = "0".$end_hour;
-                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
-                                $end_min = "0".$end_min;
-                        $end_time = $end_hour.":".$end_min."pm";
-		}
-		elseif($hour == '12')
-		{
-			$start_hour = $hour;
-			$start_time = $start_hour.":".$min."pm";
-			$end_min = $min+$duration_min;
-			$end_hour = $hour+$duration_hr;
-			if($end_min>=60)
-			{
-				$end_min = $end_min%60;
-				$end_hour++;
-			}
-			if($end_hour>'12')
-			{
-				$end_hour = $end_hour - 12;
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time = $end_hour.":".$end_min."pm";
-			}
-			else
-			{
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time  = $end_hour.":".$end_min."am";
-			}
-		}
-		else
-		{
-			$start_hour = $hour;
-			$start_time = $start_hour.":".$min."am";
-			$end_min = $min+$duration_min;
-			$end_hour = $hour+$duration_hr;
-			if($end_min>=60)
-			{
-				$end_min = $end_min%60;
-				$end_hour++;
-			}
-			if($end_hour>='12')
-			{
-				if($end_hour == '12' && $end_hour > '00')
-					$end_hour = $end_hour;
-				else
-					$end_hour = $end_hour - 12;
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time = $end_hour.":".$end_min."pm";
-			}
-			else
-			{
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time  = $end_hour.":".$end_min."am";
-			}
-
-		}
-		$return_data = Array(
-					'starttime'=>$start_time,
-					'endtime'  =>$end_time
-				    );
-	}
-	else
-	{
-		$hour = $hour;
-		$min = $min;
-		$end_min = $min+$duration_min;
-		$end_hour = $hour+$duration_hr;
-		if($end_min>=60)
-		{
-			$end_min = $end_min%60;
-			$end_hour++;
-		}
-		if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-			$end_hour = "0".$end_hour;
-		if($end_min <= 9 && strlen(trim($end_min)) < 2)
-			$end_min = "0".$end_min;
-		$end_time  = $end_hour.":".$end_min;
-		if($hour <= 9 && strlen(trim($hour)) < 2)
-                                $hour = "0".$hour;
-                $start_time = $hour.":".$min;
-		$return_data = Array(
-                                        'starttime'=>$start_time,
-                                        'endtime'  =>$end_time
-                                    );
-	}
-	$cal_log->debug("Exiting convertStEdTime2UserSelectedFmt() method...");
-	return $return_data;
-
-
-}
-
-		
 ?>
