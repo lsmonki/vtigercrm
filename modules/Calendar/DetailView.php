@@ -129,9 +129,9 @@ $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
 if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
-        $data['sendnotification'] = 'Yes';
+        $data['sendnotification'] = $mod_strings['LBL_YES'];
 else
-        $data['sendnotification'] = 'No';
+        $data['sendnotification'] = $mod_strings['LBL_NO'];
 $data['subject'] = $finaldata['subject'];
 $data['date_start'] = $stdate;
 $data['due_date'] = $enddate;
@@ -168,18 +168,18 @@ elseif($activity_mode == 'Events')
 	$rem_min = 0;
 	if($focus->column_fields['reminder_time'] != null)
 	{
-		$data['set_reminder'] = 'Yes';
+		$data['set_reminder'] = $mod_strings['LBL_YES'];
 		$data['reminder_str'] = $finaldata['reminder_time'];
 	}
 	else
-		$data['set_reminder'] = 'No';
+		$data['set_reminder'] = $mod_strings['LBL_NO'];
 	//To set recurring details
 	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
 	$res = $adb->query($query);
 	$rows = $adb->num_rows($res);
 	if($rows != 0)
 	{
-		$data['recurringcheck'] = 'Yes';
+		$data['recurringcheck'] = $mod_strings['LBL_YES'];
 		$data['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
 		$recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
 		$data['recurringtype'] = $recurringinfo[0];
@@ -206,7 +206,7 @@ elseif($activity_mode == 'Events')
 			if($recurringinfo[1] == 'date')
 			{
 				$data['repeatMonth_date'] = $recurringinfo[2];
-				$monthrpt_str .= 'on '.$recurringinfo[2].' day of the month';
+				$monthrpt_str .= $mod_strings['on'].'&nbsp;'.$recurringinfo[2].'&nbsp;'.$mod_strings['day of the month'];
 			}
 			else 
 			{ 
@@ -244,7 +244,7 @@ elseif($activity_mode == 'Events')
 	}
 	else 
 	{   
-		$data['recurringcheck'] = 'No';
+		$data['recurringcheck'] = $mod_strings['LBL_NO'];
 		$data['repeat_month_str'] = '';
 	}
 	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;

@@ -379,6 +379,8 @@ $mod_strings = Array(
 'Last'=>'Last', 
 'on'=>'on', 
 'day of the month'=>'day of the month',
+'Private'=>'Private',
+'Public'=>'Public',
 
 //Added for existing Picklist entries
 
