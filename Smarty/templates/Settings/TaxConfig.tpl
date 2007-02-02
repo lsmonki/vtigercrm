@@ -87,7 +87,7 @@
 			<td>&nbsp;</td>
 			<td id="td_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $EDIT_MODE neq 'true'}
-					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="{$MOD.LBL_ADD_TAX_BUTTON}" class="crmButton small edit">
+					<input title="{$MOD.LBL_ADD_TAX_BUTTON}" accessKey="{$MOD.LBL_ADD_TAX_BUTTON}" onclick="fnAddTaxConfigRow('');" type="button" name="button" value="{$MOD.LBL_ADD_TAX_BUTTON}" class="crmButton small edit">
 				{/if}
 			</td>
 			<td class="small" align=right nowrap>
@@ -105,7 +105,7 @@
 		<!-- Table to display the List of Product Tax values - Starts -->
 		<table id="add_tax" border=0 cellspacing=0 cellpadding=5 width=100% class="listRow">
 		   {if $TAX_COUNT eq 0}
-			<tr><td>No taxes available. Please Add Tax.</td></tr>
+			<tr><td>{$MOD.LBL_NO_TAXES_AVAILABLE}. {$MOD.LBL_PLEASE} {$MOD.LBL_ADD_TAX_BUTTON}.</td></tr>
 		   {else}
 			{foreach item=tax key=count from=$TAX_VALUES}
 
@@ -170,7 +170,7 @@
 			<td>&nbsp;</td>
         		<td id="td_sh_add_tax" class="small" colspan="2" align="right" nowrap>
 				{if $SH_EDIT_MODE neq 'true'}
-					<input title="Add Tax" accessKey="Add Tax" onclick="fnAddTaxConfigRow('sh');" type="button" name="button" value="  Add Tax  " class="crmButton small edit">
+					<input title="{$MOD.LBL_ADD_TAX_BUTTON}" accessKey="{$MOD.LBL_ADD_TAX_BUTTON}" onclick="fnAddTaxConfigRow('sh');" type="button" name="button" value="  {$MOD.LBL_ADD_TAX_BUTTON}  " class="crmButton small edit">
 				{/if}
 			</td>
 			<td class="small" align=right nowrap>
@@ -189,7 +189,7 @@
 		<!-- Table to display the List of S&H Tax Values - Starts -->
 		<table id="sh_add_tax" border=0 cellspacing=0 cellpadding=5 width=100% class="listRow">
 		   {if $SH_TAX_COUNT eq 0}
-			<tr><td>No taxes available. Please Add Tax.</td></tr>
+			<tr><td>{$MOD.LBL_NO_TAXES_AVAILABLE}. {$MOD.LBL_PLEASE} {$MOD.LBL_ADD_TAX_BUTTON}.</td></tr>
 		   {else}
 		   	{foreach item=tax key=count from=$SH_TAX_VALUES}
 

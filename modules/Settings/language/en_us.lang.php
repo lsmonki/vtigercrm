@@ -720,6 +720,8 @@ $mod_strings = Array(
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 'LBL_ADD_TAX_BUTTON'=>'Add Tax',
+'LBL_NO_TAXES_AVAILABLE'=>'No taxes available',
+'LBL_PLEASE'=>'Please',
 //Added while moving role file from User to Setting Module
 'LBL_ROLES'=>'Roles',
 'LBL_CREATE_NEW_ROLE'=>'Create New Role',
