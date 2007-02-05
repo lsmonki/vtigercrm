@@ -16,8 +16,8 @@
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
-// memory limit default value = 16M
-ini_set('memory_limit','16M');
+// memory limit default value = 64M
+ini_set('memory_limit','64M');
 
 // show or hide world clock, calculator and FCKEditor
 // world_clock_display default value = true
