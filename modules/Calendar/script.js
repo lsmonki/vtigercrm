@@ -632,12 +632,6 @@ function maintask_check_form()
 
 
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
-function setObjects()
-{
-        availListObj=getObj("availableusers")
-        selectedColumnsObj=getObj("selectedusers")
-
-}
 
 function userEventSharing(selectedusrid,selcolid)
 {
@@ -645,106 +639,7 @@ function userEventSharing(selectedusrid,selcolid)
 }
 
 
-
-
-function addColumn()
-{
-	setObjects();
-        var selectlength=selectedColumnsObj.length
-        var availlength=availListObj.length
-		
-        var s=0
-        for (i=0;i<selectlength;i++)
-        {
-                selectedColumnsObj.options[i].selected=false
-        }
-        for (i=0;i<availlength;i++)
-        {
-                if (availListObj.options[s].selected==true)
-                {
-			
-                        for (j=0;j<selectlength;j++)
-                        {
-                                if (selectedColumnsObj.options[j].value==availListObj.options[s].value)
-                                {
-
-                                        var rowFound=true
-                                        var existingObj=selectedColumnsObj.options[j]
-					
-                                        break;
-                                }
-                        }
-                        if (rowFound!=true)
-                        {
-                                var newColObj=document.createElement("OPTION")
-                                        newColObj.value=availListObj.options[s].value
-                                        if (browser_ie) newColObj.innerText=availListObj.options[s].innerText
-                                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[s].text
-                                                selectedColumnsObj.appendChild(newColObj)
-					availListObj.removeChild(availListObj.options[s])
-                                        newColObj.selected=true
-                                        rowFound=false
-                        }
-                        else
-                        {
-                                existingObj.selected=true
-				
-                        }
-                }
-		else
-                        s++
-        }
-}
-function delColumn()
-{
-	
-	setObjects();
-        var selectlength=selectedColumnsObj.length
-        var availlength=availListObj.length
-        var s=0
-        for (i=0;i<availlength;i++)
-        {
-                availListObj.options[i].selected=false
-        }
-        for (i=0;i<selectlength;i++)
-        {
-                if (selectedColumnsObj.options[s].selected==true)
-                {
-                        for (j=0;j<availlength;j++)
-                        {
-                                if (availListObj.options[j].value==selectedColumnsObj.options[s].value)
-                                {
-                                        var rowFound=true
-                                        var existingObj=availListObj.options[j]
-                                        break;
-                                }
-                        }
-
-                        if (rowFound!=true)
-                        {
-                                var newColObj=document.createElement("OPTION")
-                                        newColObj.value=selectedColumnsObj.options[s].value
-                                        if (browser_ie) newColObj.innerText=selectedColumnsObj.options[s].innerText
-                                        else if (browser_nn4 || browser_nn6) 
-						newColObj.text=selectedColumnsObj.options[s].text
-                                                availListObj.appendChild(newColObj)
-                                        selectedColumnsObj.removeChild(selectedColumnsObj.options[s])
-                                        newColObj.selected=true
-                                        rowFound=false
-                        }
-			else
-                        {
-                                existingObj.selected=true
-                        }
-                }
-                else
-                        s++
-      
-	}
-
-	
-}
-function addsharedColumn(avail_users,sel_users)
+function incUser(avail_users,sel_users)
 {
 	availListObj=getObj(avail_users)
         selectedColumnsObj=getObj(sel_users)
@@ -787,7 +682,7 @@ function addsharedColumn(avail_users,sel_users)
 	}
 }
 
-function delsharedColumn(sel_users)
+function rmvUser(sel_users)
 {
 	selectedColumnsObj=getObj(sel_users)
         var selectlength=selectedColumnsObj.options.length

@@ -33,7 +33,6 @@ $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 $tab_type = 'Calendar';
 $focus->column_fields["activitytype"] = 'Task';
-
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
@@ -160,6 +159,7 @@ if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 	$selected_users_string =  $_REQUEST['inviteesid'];
 	$invitees_array = explode(';',$selected_users_string);
 	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
+	$record = $focus->id;
 	foreach($invitees_array as $inviteeid)
 	{
 		if($inviteeid != '')
@@ -167,9 +167,6 @@ if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 			$description=getActivityDetails($_REQUEST['description'],$inviteeid);
 			$to_email = getUserEmailId('id',$inviteeid);
 			$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-			$record = $focus->id;
-			$sql = "insert into vtiger_salesmanactivityrel values (".$inviteeid.",".$record.")";
-			$adb->query($sql);
 		}
 	}
 }

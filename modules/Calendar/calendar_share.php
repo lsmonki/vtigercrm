@@ -127,8 +127,8 @@ require_once('modules/Calendar/CalendarCommon.php');
 
                                                         </td>
                                                         <td width=20% align=center valign=top>
-                                                                <input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="addsharedColumn('available_users','selected_users')"><br>
-                                                                <input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="delsharedColumn('selected_users')">
+                                                                <input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="incUser('available_users','selected_users')"><br>
+                                                                <input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="rmvUser('selected_users')">
 							</td>
 							<td>
 							<select name="selected_users" id="selected_users" class=small size=5 multiple style="height:70px;width:100%">
