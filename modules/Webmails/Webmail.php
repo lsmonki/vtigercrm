@@ -268,6 +268,9 @@ class Webmail extends CRMEntity {
 						//Added to get the UTF-8 string - 30-11-06 - Mickie
 						$parts[$i]->dparameters[0]->value = utf8_decode(imap_utf8($parts[$i]->dparameters[0]->value));
 
+						//Added to get the UTF-8 string - 02-02-06 - Mickie
+						$filedata = utf8_decode(imap_utf8($filedata));
+
 						$inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 					}
 				}

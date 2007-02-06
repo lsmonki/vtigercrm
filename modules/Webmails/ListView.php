@@ -219,23 +219,26 @@ $overview=$elist["overview"];
 var msgCount = "<?php echo $numEmails;?>";
 <?php
 $mails = array();
-if (is_array($overview)) {
-   foreach ($overview as $val) {
-	$mails[$val->msgno] = $val;
-	?>
-	webmail[<?php echo $val->msgno;?>] = new Array();
-	webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
-	webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
-
-	<?php 
+if (is_array($overview))
+{
+	foreach ($overview as $val)
+	{
+		$mails[$val->msgno] = $val;
+	
 		//Added to get the UTF-8 string - 30-11-06 - Mickie
+		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
+		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
+		$val->to = utf8_decode(imap_utf8(addslashes($val->to)));
 		$val->subject = utf8_decode(imap_utf8($val->subject));
 	?>
-		
-	webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
-	webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
+
+		webmail[<?php echo $val->msgno;?>] = new Array();
+		webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
+		webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
+		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
+		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
 	<?php
-   }
+	}
 }
 echo "</script>";
 
