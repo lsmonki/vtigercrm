@@ -379,8 +379,8 @@ var gVTModule = '{$smarty.request.module}';
 														</select>
 														</td>
 														<td width=20% align=center valign=top>
-														<input type=button value="{$MOD.LBL_ADD_BUTTON} >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
-														<input type=button value="<< {$MOD.LBL_RMV_BUTTON} " class="crm button small cancel" style="width:100%" onClick="delColumn()">
+														<input type=button value="{$MOD.LBL_ADD_BUTTON} >>" class="crm button small save" style="width:100%"  onClick="incUser('availableusers','selectedusers')"><br>
+														<input type=button value="<< {$MOD.LBL_RMV_BUTTON} " class="crm button small cancel" style="width:100%" onClick="rmvUser('selectedusers')">
 														</td>
 														<td width=40% align=center valign=top>
 														<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -901,7 +901,4 @@ var gVTModule = '{$smarty.request.module}';
 			document.EditView.imagelist.value=imagelists
 	{rdelim}
 
-</script>
-<script language="JavaScript" type="text/JavaScript">
-	setObjects();
 </script>
