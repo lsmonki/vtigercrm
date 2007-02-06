@@ -177,7 +177,6 @@ $mod_strings = Array(
 'LBL_MERGE_FIELDS'=>'Merge Fields',
 'LBL_COPY_PASTE'=>'Copy & Paste',
 'LNK_GO_TO_TOP'=>'Go to Page Top',
-'LNK_SAMPLE_EMAIL'=>'View Sample Email',
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
