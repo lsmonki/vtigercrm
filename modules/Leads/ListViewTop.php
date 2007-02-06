@@ -68,7 +68,7 @@ function getNewLeads()
 		$start_date = date("Y-m-d", strtotime("-1 week"));
 	}	
 
-	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_crmentity.createdtime >='.$start_date.' AND vtiger_crmentity.smownerid = '.$current_user->id; 
+	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") AND vtiger_crmentity.createdtime >='.$start_date.' AND vtiger_crmentity.smownerid = '.$current_user->id; 
 	
 	$list_result = $adb->query($list_query);
 	$noofrows = $adb->num_rows($list_result);
