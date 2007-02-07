@@ -106,7 +106,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = $adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature");
+	$sign = nl2br($adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature"));
 	if($sign != '')
 	{
 		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
