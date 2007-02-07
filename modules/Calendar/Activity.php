@@ -150,7 +150,7 @@ class Activity extends CRMEntity {
 		}
 
 		//Inserting into sales man activity rel
-		$this->insertIntoSmActivityRel($module,$invitees_array);
+		$this->insertIntoSmActivityRel($module);
 
 
 			
@@ -338,7 +338,7 @@ function insertIntoRecurringTable(& $recurObj)
   	  * @param $module -- module:: Type varchar
  	 */
 
-  	function insertIntoSmActivityRel($module,$invitees_array)
+  	function insertIntoSmActivityRel($module)
   	{
     		global $adb;
     		global $current_user;
@@ -347,15 +347,20 @@ function insertIntoRecurringTable(& $recurObj)
       			$adb->query($sql);
     		}
 		$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
-		foreach($invitees_array as $inviteeid)
-		{
-			if($inviteeid != '')
-			{
-				$query="insert into vtiger_salesmanactivityrel values(".$inviteeid.",".$this->id.")";
-				$adb->query($query);
-			}
-		}
     		$adb->query($sql_qry);
+		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+		{
+			$selected_users_string =  $_REQUEST['inviteesid'];
+			$invitees_array = explode(';',$selected_users_string);
+			foreach($invitees_array as $inviteeid)
+			{
+				if($inviteeid != '')
+				{
+					$query="insert into vtiger_salesmanactivityrel values(".$inviteeid.",".$this->id.")";
+					$adb->query($query);
+				}
+			}
+		}	
   	}
 	
 	
