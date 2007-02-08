@@ -895,10 +895,17 @@ class CustomView extends CRMEntity{
 	  */
 	function getRealValues($tablename,$fieldname,$comparator,$value,$datatype)
 	{
-		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value),$datatype);
-		}else if($fieldname == "parentid")
+	if($fieldname == "smownerid")
+                {
+
+                $temp_value = "( vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
+                $temp_value.= " OR  vtiger_groups.groupname".$this->getAdvComparator($comparator,$value,$datatype);
+                $value=$temp_value.")";
+		}elseif( $fieldname == "inventorymanager")
+                {
+
+                 $value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value),$datatype);
+                }else if($fieldname == "parentid")
 		{
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value),$datatype);
 		}else if($fieldname == "accountid")
