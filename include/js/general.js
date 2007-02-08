@@ -713,7 +713,7 @@ function formValidate() {
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
 	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
-		alert("Portal user should provide email Id for portal login");
+		alert("Portal user should provide email address for portal login");
 		return false;
 	}
 }
