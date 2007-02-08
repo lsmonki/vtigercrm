@@ -51,8 +51,8 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
         $mail->Subject =$adb->query_result($result1,0,"subject");
 
 	$DESCRIPTION = $adb->query_result($result1,0,"description");
-	$DESCRIPTION .= '<br><br>';
-	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from vtiger_users where user_name=".$adb->quote($from)),0,"signature")).'</font>';
+	$DESCRIPTION .= '<br><br>\n';
+	$DESCRIPTION .= nl2br($adb->query_result($adb->query("select * from vtiger_users where user_name=".$adb->quote($from)),0,"signature"));
 
 	$mail->IsHTML(true);
         $mail->Body    = nl2br($DESCRIPTION);
