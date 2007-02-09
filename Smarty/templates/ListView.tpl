@@ -23,7 +23,7 @@
 <script language="javascript">
 function checkgroup()
 {ldelim}
-  if(document.change_ownerform_name.user_lead_owner[1].checked)
+  if($("group_checkbox").checked)
   {ldelim}
   document.change_ownerform_name.lead_group_owner.style.display = "block";
   document.change_ownerform_name.lead_owner.style.display = "none";
@@ -277,13 +277,15 @@ function alphabetic(module,url,dataid)
 					<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 					<td width="2%"><b>:</b></td>
 					<td width="48%">
-					<input type = "radio" name = "user_lead_owner"  onclick=checkgroup(); checked>{$APP.LBL_USER}&nbsp;
-					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
-					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-					{$CHANGE_OWNER}
-					</select>
-					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+					<input type = "radio" id="user_checkbox"  name="user_lead_owner" {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup(); {/if} checked>{$APP.LBL_USER}&nbsp;
+					{if $CHANGE_GROUP_OWNER neq ''}
+					<input type = "radio" id="group_checkbox" name="user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
+					<select name="lead_group_owner" id="lead_group_owner" class="select" style="display:none;">  
 					{$CHANGE_GROUP_OWNER}
+					</select>
+					{/if}				
+					<select name="lead_owner" id="lead_owner" class="select">
+					{$CHANGE_OWNER}
 					</select>
 					</td>
 				</tr>
@@ -361,7 +363,7 @@ function ajaxChangeStatus(statusname)
 	}
 	else if(statusname == 'owner')
 	{
-	   if(document.change_ownerform_name.user_lead_owner[0].checked)
+	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
