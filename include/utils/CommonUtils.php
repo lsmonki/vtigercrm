@@ -2116,29 +2116,31 @@ function getGroupslist()
 	{
 		$result = get_group_options();
 	}
+
 	$groupArray = $adb->fetch_array($result);
+	if(!empty($groupArray)){
+		do{
+			$groupname=$groupArray["groupname"];
+			$group_id=$groupArray["groupid"];
+			$selected = '';
+			if($groupname == $selected_groupname[0])
+			{
+				$selected = "selected";
+			}
+			if($groupname != '')
+				$group_option[$group_id] = array($groupname=>$selected);
+	          }while($groupArray = $adb->fetch_array($result));
 
-	do{
-		$groupname=$groupArray["groupname"];
-		$group_id=$groupArray["groupid"];
-		$selected = '';
-		if($groupname == $selected_groupname[0])
-		{
-			$selected = "selected";
+		foreach($group_option as $groupid=>$value)  
+		{ 
+			foreach($value as $groupname=>$selected) 
+			{
+				$change_groups_owner .= "<option value=$groupid $selected >".$groupname."</option>";  
+			}	 
 		}
-		if($groupname != '')
-			$group_option[$group_id] = array($groupname=>$selected);
-          }while($groupArray = $adb->fetch_array($result));
-
-	foreach($group_option as $groupid=>$value)  
-	{ 
-		foreach($value as $groupname=>$selected) 
-		{
-			$change_groups_owner .= "<option value=$groupid $selected >".$groupname."</option>";  
-		} 
-	}
-	$log->debug("Exiting getGroupslist method ...");
-	return $change_groups_owner;
+		$log->debug("Exiting getGroupslist method ...");
+		return $change_groups_owner;
+	}	
 }
 
 
