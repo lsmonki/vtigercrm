@@ -85,8 +85,6 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
-	$smarty->assign("EMAIL", $focus->column_fields['email']); 
-	$smarty->assign("YAHOO", $focus->column_fields['yahooid']); 
 }
 
 if(isPermitted("Contacts","Merge",'') == 'yes')
@@ -120,6 +118,9 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
+$smarty->assign("EMAIL",$focus->column_fields['email']);
+$smarty->assign("YAHOO",$focus->column_fields['yahooid']);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
