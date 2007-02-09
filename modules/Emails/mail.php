@@ -109,7 +109,7 @@ function addSignature($contents, $fromname)
 	$sign = nl2br($adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature"));
 	if($sign != '')
 	{
-		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
+		$contents .= '<br><br>'.$sign;
 		$adb->println("Signature is added with the body => '.".$sign."'");
 	}
 	else
