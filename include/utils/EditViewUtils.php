@@ -44,7 +44,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
-	global $noof_group_rows;
 
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -75,7 +74,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if($fieldname == 'support_end_date' && $_REQUEST['module'] == 'Contacts')
 			{
 				$addyear = strtotime("+1 year");
-				global $current_user;
 				$dat_fmt = (($current_user->date_format == '')?('dd-mm-yyyy'):($current_user->date_format));
 
 				$disp_value = (($dat_fmt == 'dd-mm-yyyy')?(date('d-m-Y',$addyear)):(($dat_fmt == 'mm-dd-yyyy')?(date('m-d-Y',$addyear)):(($dat_fmt == 'yyyy-mm-dd')?(date('Y-m-d', $addyear)):(''))));
@@ -220,7 +218,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 52 || $uitype == 77)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		global $current_user;
 		if($value != '')
 		{
 			$assigned_user_id = $value;	
@@ -251,6 +248,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 53)     
 	{  
+		global $noof_group_rows;
 		$editview_label[]=$mod_strings[$fieldlabel];
 		//Security Checks
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
@@ -263,37 +261,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		$nameArray = $adb->fetch_array($result);
 
-
-		global $current_user;
 		if($value != '' && $value != 0)
-		{
 			$assigned_user_id = $value;
-			$user_checked = "checked";
-			$team_checked = '';
-			$user_style='display:block';
-			$team_style='display:none';			
-		}
-		else
-		{
-			if($value=='0')
-			{
+		else{
+			if($value=='0'){
 				$record = $col_fields["record_id"];
 				$module = $col_fields["record_module"];
-
 				$selected_groupname = getGroupName($record, $module);
-				$user_checked = '';
-				$team_checked = 'checked';
-				$user_style='display:none';
-				$team_style='display:block';
-			}
-			else	
-			{				
+			}else
 				$assigned_user_id = $current_user->id;
-				$user_checked = "checked";
-				$team_checked = '';
-				$user_style='display:block';
-				$team_style='display:none';
-			}	
 		}
 		
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
@@ -305,32 +281,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
 
-
-		$GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
-			name="assigntype" value="U" '.$user_checked.'
-			onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'];
-
 		if($noof_group_rows!=0)
 		{
-
-			$log->debug("Has a Group, get the Radio button");
-			$GROUP_SELECT_OPTION .= '<input
-				type="radio" name="assigntype" value="T"'.$team_checked.'
-				onclick="toggleAssignType(this.value)">'.$app_strings['LBL_GROUP'];
-		}
-
-		$GROUP_SELECT_OPTION .='<br><span
-			id="assign_user" style="'.$user_style.'"><select name="assigned_user_id">';
-
-		$GROUP_SELECT_OPTION .= $users_combo;
-
-		$GROUP_SELECT_OPTION .= '</select></span>';
-
-		if($noof_group_rows!=0)
-		{
-			$log->debug("Has a Group, getting the group names ");
-			$GROUP_SELECT_OPTION .='<span id="assign_team" style="'.$team_style.'"><select name="assigned_group_name">';
-			
 			do
 			{
 				$groupname=$nameArray["groupname"];
@@ -366,7 +318,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 54)
 	{
-		$options =Array();
+		$options = array();
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from vtiger_groups";
 		$pickListResult = $adb->query($pick_query);
@@ -391,7 +343,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 55)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$options = Array();
+		$options = array();
 		$pick_query="select * from vtiger_salutationtype order by sortorderid";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -436,7 +388,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=$mod_strings[$fieldlabel];
 		if($value=='')
 			$value=1;
-		$options = Array();
+		$options = array();
 		$pick_query="select * from vtiger_duration_minutes order by sortorderid";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -530,7 +482,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 61)
 	{
-		global $current_user;
 		if($value != '')
 		{
 			$assigned_user_id = $value;
