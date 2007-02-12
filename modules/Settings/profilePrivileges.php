@@ -476,7 +476,7 @@ elseif($mode=='edit')
 				$mandatory = '<font color="blue">*</font>';
 				$readonly = 'disabled';
 			}
-			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -525,7 +525,7 @@ elseif($mode=='create')
 					$mandatory = '<font color="blue">*</font>';
 					$readonly = 'disabled';
 				}
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -571,7 +571,7 @@ elseif($mode=='create')
 					$mandatory = '<font color="blue">*</font>';
 					$readonly = 'disabled';
 				}
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
