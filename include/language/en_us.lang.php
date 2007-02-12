@@ -361,6 +361,7 @@ $app_strings = array (
 'Product Name' => 'Product Name',
 'Product Code' => 'Part Number',
 'Commission Rate' => 'Commission Rate',
+'Quantity In Stock' => 'Quantity In Stock',
 'Qty/Unit' => 'Qty/Unit',
 'Unit Price' => 'Unit Price',
 'Question' => 'Question',
