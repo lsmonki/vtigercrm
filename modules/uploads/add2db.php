@@ -22,7 +22,6 @@ $log->debug("DGDEBUG In add2db.php");
 
 	//fix for space in file name.
 	$_FILES['filename']['name'] = preg_replace('/\s+/', '_', $_FILES['filename']['name']);
-	
 	// Arbitrary File Upload Vulnerability fix - Philip
 	$binFile = $_FILES['filename']['name'];
 
@@ -100,7 +99,6 @@ $log->debug("DGDEBUG In add2db.php");
 			# DG 19 June 2006
 			# Strip out single quotes from filenames
 			$filename = preg_replace('/\'/', '', $filename);
-
 			$sql = "insert into vtiger_attachments values(";
 			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
 			$result = $adb->query($sql);
@@ -129,8 +127,7 @@ $log->debug("DGDEBUG In add2db.php");
 				<li><font color='red'>Invalid file OR</font>
 				<li><font color='red'>File has no data</font>
 				</ul></B></font> <br>" ;
-			echo $errormessage;
-			include "upload.php";
+			header("Location: index.php?module=uploads&action=uploadsAjax&msg=true&file=upload&errormessage=".$errormessage);
 		}			
 	} 
 	else 
