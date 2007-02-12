@@ -77,8 +77,6 @@
 		<input type="hidden" name="save_tax" value="">
 		<input type="hidden" name="edit_tax" value="">
 		<input type="hidden" name="add_tax_type" value="">
-		<input type="hidden" id="tax_savebutton" value="{$APP.LBL_SAVE_BUTTON_LABEL}">
-		<input type="hidden" id="tax_cancelbutton" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 
 		<!-- Table to display the Product Tax Add and Edit Buttons - Starts -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
@@ -262,3 +260,9 @@
    </tr>
 </tbody>
 </table>
+<script>
+	var tax_labelarr = {ldelim}SAVE_BUTTON:'{$APP.LBL_SAVE_BUTTON_LABEL}',
+                                CANCEL_BUTTON:'{$APP.LBL_CANCEL_BUTTON_LABEL}',
+                                TAX_NAME:'{$APP.LBL_TAX_NAME}',
+                                TAX_VALUE:'{$APP.LBL_TAX_VALUE}'{rdelim};
+</script>
