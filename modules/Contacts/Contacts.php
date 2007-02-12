@@ -669,7 +669,7 @@ class Contacts extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Contacts", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_contactgrouprelation.groupname as 'Assigned To Group' 
+		$query = "SELECT vtiger_contactdetails.salutation as 'Salutation',$fields_list, vtiger_contactgrouprelation.groupname as 'Assigned To Group' 
                                 FROM vtiger_contactdetails
                                 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
                                 LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id and vtiger_users.status='Active' 
