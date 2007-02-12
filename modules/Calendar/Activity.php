@@ -126,7 +126,7 @@ class Activity extends CRMEntity {
 			else
     				$recur_type='';	
 		
-			if($recur_type == "--None--")
+			if(($recur_type == "--None--" || $recur_type=='') && $_REQUEST['set_reminder'] == 'Yes')
 			{
 				$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
 			}
