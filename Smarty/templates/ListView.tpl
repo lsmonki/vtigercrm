@@ -79,7 +79,8 @@ function callSearch(searchtype)
                                 result = response.responseText.split('&#&#&#');
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
-                                        alert(result[1]);
+                                       alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 	       {rdelim}
         );
@@ -106,6 +107,7 @@ function alphabetic(module,url,dataid)
 				$("ListViewContents").innerHTML= result[2];
 				if(result[1] != '')
 			                alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 		{rdelim}
 	);
@@ -391,6 +393,7 @@ function ajaxChangeStatus(statusname)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
                         }
                 }
         );
