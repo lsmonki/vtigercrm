@@ -2281,5 +2281,8 @@ a.drop_down:Hover{
 	margin: 0;
 	font-weight: normal;
 }
+.groupname{
+                width:125px;
+          }
 
 /* Recalculate Disable Ends */
