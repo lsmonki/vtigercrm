@@ -99,7 +99,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	     $label_fld[] = $mod_strings[$fieldlabel];
 	     $label_fld[] = $col_fields[$fieldname];
 	     
-		$pick_query="select * from vtiger_".$fieldname;
+		$pick_query="select * from vtiger_".$fieldname." order by sortorderid";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
