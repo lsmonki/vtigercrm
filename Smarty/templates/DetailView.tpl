@@ -179,6 +179,11 @@ function DeleteTag(id,recordid)
 								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(checkEmailid('{$MODULE}','{$EMAIL}','{$YAHOO}')){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}return false{rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
 								{/if}
 						{/if}
+						{if $MODULE eq 'Accounts'} 
+ 		                                	{if $SENDMAILBUTTON eq 'permitted'} 
+ 		                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(checkEmailid('{$MODULE}','{$EMAIL1}','{$EMAIL2}')){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}return false{rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp; 
+ 		                                	{/if} 
+ 		                                                {/if} 
 						{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 								{if $CREATEPDF eq 'permitted'}
 								<input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
@@ -332,6 +337,11 @@ function DeleteTag(id,recordid)
 								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(checkEmailid('{$MODULE}','{$EMAIL}','{$YAHOO}')){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}return false{rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
 								{/if}
 						{/if}
+						{if $MODULE eq 'Accounts'} 
+ 		                                                                {if $SENDMAILBUTTON eq 'permitted'} 
+ 		                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(checkEmailid('{$MODULE}','{$EMAIL1}','{$EMAIL2}')){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}return false{rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp; 
+ 		                                                                {/if} 
+ 	                                                {/if} 
 						{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 								{if $CREATEPDF eq 'permitted'}
 								<input title="Export To PDF" accessKey="Alt+e" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;

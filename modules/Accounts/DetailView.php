@@ -80,6 +80,13 @@ if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("Accounts","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+if(isPermitted("Emails","EditView",'') == 'yes') 
+{ 
+	$smarty->assign("SENDMAILBUTTON","permitted"); 
+	$smarty->assign("EMAIL1", $focus->column_fields['email1']); 
+	$smarty->assign("EMAIL2", $focus->column_fields['email2']); 
+} 
+
 if(isPermitted("Accounts","Merge",'') == 'yes')
 {
 	$smarty->assign("MERGEBUTTON","permitted");
