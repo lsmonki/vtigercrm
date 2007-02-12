@@ -20,6 +20,9 @@ $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtiger
 $crmid = $_REQUEST['return_id'];
 $log->debug("DGDEBUG In add2db.php");
 
+	//fix for space in file name.
+	$_FILES['filename']['name'] = preg_replace('/\s+/', '_', $_FILES['filename']['name']);
+	
 	// Arbitrary File Upload Vulnerability fix - Philip
 	$binFile = $_FILES['filename']['name'];
 
