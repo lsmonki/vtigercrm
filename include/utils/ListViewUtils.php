@@ -1004,11 +1004,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$colname="activitystatus";
 	}
 	//Ends
-	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
-	if(strlen($temp_val) > 40)
+	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
+	if(strlen($field_val) > 40)
         {
-                $temp_val = substr($temp_val,0,40).'...';
-        }
+                $temp_val = substr($field_val,0,40).'...';
+        }else
+	{
+		$temp_val = $field_val;
+	}
 	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
@@ -1059,14 +1062,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 17)
 	{
-		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
+		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
 	}
 	elseif($uitype == 13 || $uitype == 104)
         {
 		if(useInternalMailer() == 1)
                 	$value = '<a href="javascript:InternalMailer('.$entity_id.',\'record_id\')">'.$temp_val.'</a>';
 		else
-                	$value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
+                	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
         }
 	elseif($uitype == 56)
 	{
