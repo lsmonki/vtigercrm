@@ -1304,8 +1304,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		{
 			$date_start = $adb->query_result($result,$i,"date_start");
 			$due_date = $adb->query_result($result,$i,"due_date");
-			$element['starttime'] = getDisplayDate($date_start);
-			$element['endtime'] = getDisplayDate($due_date);
+			$element['starttime'] = getDisplayDate($date_start).' '.$start_hour;
+			$element['endtime'] = getDisplayDate($due_date).' '.$end_hour;
 		}
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
@@ -1504,13 +1504,13 @@ function constructEventListView(& $cal,$entry_list)
 	$list_view = "";
 	if($cal['view'] == 'day')
 	{
-		$start_datetime = $mod_strings['LBL_APP_START_TIME'];
-		$end_datetime = $mod_strings['LBL_APP_END_TIME'];
+		$start_datetime = $mod_strings['LBL_START_TIME'];
+		$end_datetime = $mod_strings['LBL_END_TIME'];
 	}
 	else
 	{
-		 $start_datetime = $mod_strings['LBL_APP_START_DATE'];
-		 $end_datetime = $mod_strings['LBL_APP_END_DATE'];
+		 $start_datetime = $app_strings['LBL_START_DATE_TIME'];
+		 $end_datetime = $app_strings['LBL_END_DATE_TIME'];
 				 
 	}
 	//Events listview header labels
@@ -1518,7 +1518,7 @@ function constructEventListView(& $cal,$entry_list)
                         '1'=>$start_datetime,
                         '2'=>$end_datetime,
                         '3'=>$mod_strings['LBL_EVENTTYPE'],
-                        '4'=>$mod_strings['LBL_EVTDTL'],
+                        '4'=>$mod_strings['LBL_EVENTDETAILS'],
 			'5'=>$mod_strings['LBL_RELATEDTO'],
                         );
                                 if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
@@ -1647,8 +1647,8 @@ function constructTodoListView($todo_list,$cal,$subtab)
 		$colspan = 10;
 	        $header = Array('0'=>'#',
                         '1'=>$mod_strings['LBL_TIME'],
-			'2'=>$mod_strings['LBL_APP_START_DATE'],
-			'3'=>$mod_strings['LBL_LIST_DUE_DATE'],
+			'2'=>$mod_strings['LBL_START_DATE'],
+			'3'=>$mod_strings['LBL_DUE_DATE'],
                         '4'=>$mod_strings['LBL_TODO'],
 			'5'=>$mod_strings['LBL_RELATEDTO'],
 			'6'=>$mod_strings['LBL_LIST_CONTACT'],
