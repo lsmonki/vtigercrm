@@ -981,7 +981,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
@@ -1015,6 +1015,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
+	}
+	if($uitype == 15 && $module == 'Calendar')
+	{
+		$activitytype = $adb->query_result($list_result,$list_result_count,'activitytype');
+		$value = $app_strings[$activitytype];
 	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
