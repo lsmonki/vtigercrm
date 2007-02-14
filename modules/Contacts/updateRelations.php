@@ -8,13 +8,13 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
 $rel_table = 'vtiger_campaigncontrel';
+$record = $_REQUEST['record'];
 
 if($singlepane_view == 'true')
 	$action = "DetailView";
@@ -53,6 +53,12 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 	$adb->query($sql);
 	$record = $_REQUEST["parid"];
 }
+elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
+{	
+	$sql = "insert into vtiger_contpotentialrel values(".$record.",".$_REQUEST["pot_id"].")";
+	$adb->query($sql);
+}
+
 
 $module = 'Contacts';
 if($_REQUEST['return_module'] != '') $module = $_REQUEST['return_module'];
