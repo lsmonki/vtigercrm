@@ -132,6 +132,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
 	{assign var="comment" value="comment"|cat:$row_no}
+	{assign var="productDescription" value="productDescription"|cat:$row_no}
 	{assign var="qtyInStock" value="qtyInStock"|cat:$row_no}
 	{assign var="qty" value="qty"|cat:$row_no}
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
@@ -169,6 +170,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small" valign="top">
 				<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" readonly />
 				<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
+				<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
 				<img src="{$IMAGE_PATH}search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
 			</td>
 		   </tr>

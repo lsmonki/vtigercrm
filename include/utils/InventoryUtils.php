@@ -497,6 +497,13 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	for($i=1; $i<=$tot_no_prod; $i++)
 	{
 	        $prod_id = $_REQUEST['hdnProductId'.$i];
+		if(isset($_REQUEST['productDescription'.$i]))
+			$description = $_REQUEST['productDescription'.$i];
+		else{
+			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=".$prod_id;
+			$desc_res = $adb->query($desc_duery);
+			$description = $adb->query_result($desc_res,0,"product_description");
+		}	
 	        $qty = $_REQUEST['qty'.$i];
 	        $listprice = $_REQUEST['listPrice'.$i];
 		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
@@ -524,7 +531,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 			}
 		}
 
-		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment')";
+		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment','$description')";
 		$prod_seq++;
 		$adb->query($query);
 
