@@ -713,7 +713,7 @@ function formValidate() {
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
 	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
-		alert("Portal user should provide email address for portal login");
+		alert("Portal user should provide email Id for portal login");
 		return false;
 	}
 }
@@ -1549,7 +1549,12 @@ function InternalMailer(record_id,type) {
 function fnHide_Event(obj){
         document.getElementById(obj).style.visibility = 'hidden';
 }
-
+function ReplyCompose(id,mode)
+{
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&reply=true';
+	
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');	
+}
 function OpenCompose(id,mode) 
 {
 	switch(mode)

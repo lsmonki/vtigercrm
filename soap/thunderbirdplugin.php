@@ -211,6 +211,9 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 
 	$current_user = new Users();
 	$user_id = $current_user->retrieve_user_id($user_name);
+	$query = "select email1 from vtiger_users where id =".$user_id;
+	$result = $adb->query($query);
+	$user_emailid = $adb->query_result($result,0,"email1");
 	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
 	$email = new Emails();
 	//$log->debug($msgdtls['contactid']);
@@ -225,6 +228,9 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email->column_fields[activitytype] = 'Emails';
 	$email->plugin_save = true;
 	$email->save("Emails");
+	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+	$result = $adb->query($query);
+	$field_id = $adb->query_result($result,0,"fieldid");
 	$email->set_emails_contact_invitee_relationship($email->id,$contact_ids);
 	$email->set_emails_se_invitee_relationship($email->id,$contact_ids);
 	$email->set_emails_user_invitee_relationship($email->id,$user_id);
@@ -234,7 +240,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	if(isset($camodulerow))
 	{
 		$emailid = $camodulerow["email"];
-		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contact_ids."@77|".'","THUNDERBIRD")';
+		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"'.$emailid.'","'.$user_emailid.'","","","","'.$user_id.'@-1|'.$contact_ids.'@'.$field_id.'|","THUNDERBIRD")';
 		$adb->query($query);
 	}
 	return $email->id;

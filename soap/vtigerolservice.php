@@ -314,6 +314,9 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	
 	$current_user = new Users();
 	$user_id = $current_user->retrieve_user_id($username);
+	$query = "select email1 from vtiger_users where id =".$user_id;
+	$result = $adb->query($query);
+	$user_emailid = $adb->query_result($result,0,"email1");
 	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
 	
 	foreach($msgdtls as $msgdtl)
@@ -333,17 +336,19 @@ function AddMessageToContact($username,$contactid,$msgdtls)
         $email->column_fields[activitytype] = 'Emails'; 
         $email->plugin_save = true; 
         $email->save("Emails");
-        
+	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+	$result = $adb->query($query);
+	$field_id = $adb->query_result($result,0,"fieldid");
         $email->set_emails_contact_invitee_relationship($email->id,$contactid);
         $email->set_emails_se_invitee_relationship($email->id,$contactid);
-        $email->set_emails_user_invitee_relationship($email->id,$user_id);
+	$email->set_emails_user_invitee_relationship($email->id,$user_id);
         $sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
         $result = $adb->query($sql);
         $camodulerow = $adb->fetch_array($result);
         if(isset($camodulerow))
         {
             $emailid = $camodulerow["email"];
-            $query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contactid."@77|".'","OUTLOOK")';
+			$query = 'insert into vtiger_emaildetails values ('.$email->id.',"'.$emailid.'","'.$user_emailid.'","","","","'.$user_id.'@-1|'.$contactid.'@'.$field_id.'|","OUTLOOK")';
             $adb->query($query);
         }
         return $email->id;
