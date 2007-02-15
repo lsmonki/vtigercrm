@@ -187,6 +187,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$user_id = $col_fields[$fieldname];
 		$user_name = getUserName($user_id);
+		$assigned_user_id = $current_user->id;
 		if(is_admin($current_user))
 		{
 			$label_fld[] ='<a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a>';
@@ -195,6 +196,16 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$label_fld[] =$user_name;
 		}
+		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+		{
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+		}
+		else
+		{
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $user_id), $assigned_user_id);
+		}
+		$label_fld ["options"] = $users_combo;
+
 	}
 	elseif($uitype == 53)
 	{

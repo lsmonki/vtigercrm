@@ -240,7 +240,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Settings&action=GroupDetailView&groupId="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
 		}
-	}else if(uitype == '56')
+	}
+	else if(uitype == '52' || uitype == '77')
+	{
+		if(isAdmin == "1")
+			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text+"&nbsp;</a>";
+		else
+			getObj(dtlView).innerHTML = document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text;
+	}
+	else if(uitype == '56')
 	{
 		if(tagValue == '1')
 		{

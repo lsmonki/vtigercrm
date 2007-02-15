@@ -189,6 +189,21 @@
                                              {elseif $keyid eq 80} <!--SalesOrderPopup-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<a href="{$keyseclink}">{$keyval}</a>
                                                   </td>
+					     {elseif $keyid eq '52' || $keyid eq '77'} 
+                                                                <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
+                                                        <div id="editarea_{$label}" style="display:none;">
+                                                                           <select id="txtbox_{$label}" name="{$keyfldname}">
+                                                                                {foreach item=arr key=uid from=$keyoptions}
+                                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                                <option value="{$uid}" {$value}>{if $APP.$sel_value}{$APP.$sel_value}{else}{$sel_value}{/if}</option>
+
+                                                                                        {/foreach}
+                                                                                {/foreach}
+                                                                           </select>
+                                                                           <br><input name="button_{$label}" type="button" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label|escape:'quotes'}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
+                                                           <a href="javascript:;" onclick="hndCancel('dtlview_{$label|escape:'quotes'}','editarea_{$label|escape:'quotes'}','{$label|escape:'quotes'}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
+                                                                        </div>
+                                                                </td>	
 					     {elseif $keyid eq '53'} <!--Assigned To-->
                     				  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
                     				{if $keyoptions.0 eq 'User' && $keyadmin eq 1}
