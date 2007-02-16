@@ -95,6 +95,15 @@ foreach($focus->column_fields as $fieldname => $val)
 	}
 }*/
 
+//This is added dinakaran----------STARTS--------------
+//When changing the Account Address Information  it should also change the related contact address.
+if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
+{
+                $query = "update vtiger_contactaddress set mailingcity='".$focus->column_fields['bill_city']."',mailingstreet='".$focus->column_fields['bill_street']."',mailingcountry='".$focus->column_fields['bill_country']."',mailingzip='".$focus->column_fields['bill_code']."',mailingpobox='".$focus->column_fields['bill_pobox']."',mailingstate='".$focus->column_fields['bill_state']."',othercountry='".$focus->column_fields['ship_country']."',othercity='".$focus->column_fields['ship_city']."',otherstate='".$focus->column_fields['ship_state']."',otherzip='".$focus->column_fields['ship_code']."',otherstreet='".$focus->column_fields['ship_street']."',otherpobox='".$focus->column_fields['ship_pobox']."'  where contactaddressid in (select contactid from vtiger_contactdetails where accountid=".$focus->id.")" ;
+                $adb->query($query);
+}
+//This is added dinakaran----------STARTS--------------
+
 //$focus->saveentity("Accounts");
 $focus->save("Accounts");
 //echo '<BR>';

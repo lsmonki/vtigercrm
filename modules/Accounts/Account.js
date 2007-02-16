@@ -242,4 +242,52 @@ function set_return_todo(product_id, product_name) {
         window.opener.document.createTodo.task_parent_name.value = product_name;
         window.opener.document.createTodo.task_parent_id.value = product_id;
 }
+//Added for dinakaran---------STARTS----------
+//When changing the Account Address Information  it should also change the related contact address.
+function checkAddress(form,id)
+{
+		var bill_street = form.bill_street.value;
+                var ship_street = form.ship_street.value;
+                var bill_city   = form.bill_city.value;
+                var ship_city   = form.ship_city.value;
+                var bill_state  = form.bill_state.value;
+                var ship_state  = form.ship_state.value;
+                var bill_code   = form.bill_code.value;
+                var ship_code   = form.ship_code.value;
+                var bill_country= form.bill_country.value;
+                var ship_country= form.ship_country.value;
+                var bill_pobox  = form.bill_pobox.value;
+                var ship_pobox  = form.ship_pobox.value;
+		
 
+       var url = "bill_street="+bill_street+"&ship_street="+ship_street+"&bill_city="+bill_city+"&ship_city="+ship_city+"&bill_state="+bill_state+"&ship_state="+ship_state+"&bill_code="+bill_code+"&ship_code="+ship_code+"&bill_country="+bill_country+"&ship_country="+ship_country+"&bill_pobox="+bill_pobox+"&ship_pobox="+ship_pobox+"&record="+id;		
+	
+		$("status").style.display="inline";
+                        new Ajax.Request(
+                              'index.php',
+                                {queue: {position: 'end', scope: 'command'},
+                                        method: 'post',
+                                        postBody:"module=Accounts&action=AccountsAjax&ajax=true&file=AddressChange&"+url,
+                                        onComplete: function(response) {
+						if(response.responseText  == 'address_change')
+                                        	{
+                                            		if(confirm("Do you want to change the addresses of the Contacts related to this Account?") == true)
+								{
+									form.address_change.value='yes';
+									form.submit();	
+								}
+								else
+								{	
+	                                                                form.submit();
+								}
+						}
+						else
+						{
+							form.submit();	
+						}
+                      			}
+			}
+                        );
+
+}
+//Added for dinakaran --------ENDS ------------
