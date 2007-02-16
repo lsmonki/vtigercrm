@@ -113,7 +113,6 @@ function export_all($type)
 
 	$query = $focus->create_export_query($order_by,$where);
 
-
 	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
 
 	$fields_array = $adb->getFieldsArray($result);
@@ -131,10 +130,11 @@ function export_all($type)
 
 		foreach ($val as $key => $value)
 		{
-			if($key=="description")
+			if($key=="description" || $key=="note")
 			{
 				$value=br2nl_vt($value);
 			}
+			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$value);
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
 		$line = implode("\",\"",$new_arr);
