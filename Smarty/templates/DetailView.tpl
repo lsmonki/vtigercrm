@@ -402,11 +402,11 @@ function DeleteTag(id,recordid)
                                 <tr><td>&nbsp;</td></tr>
                                 <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
                                 <tr><td align="left" style="padding-left:10px;">
-                                        <img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+		        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddEvent.gif" hspace="5" align="absmiddle"  border="0"/></a>
                                         <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
                                 </td></tr>
                                 <tr><td align="left" style="padding-left:10px;">
-                                        <img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
                                         <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
                         </table>
                 <br>
