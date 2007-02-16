@@ -1744,6 +1744,11 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
       var fieldvalue = getObj(fieldname).value;
+	if(fieldvalue == '')
+	{
+		alert("AccountName Cannot be Empty");
+		return false;	
+	}
       var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
       new Ajax.Request(
                             'index.php',

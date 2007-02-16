@@ -30,7 +30,7 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
 	//started
 	$value = $_REQUEST['accountname'];
-        $query = "SELECT accountname FROM vtiger_account WHERE accountname ='".$value."'";
+	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$value."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
 	$result = $adb->query($query);
         if($adb->num_rows($result) > 0)
 	{
