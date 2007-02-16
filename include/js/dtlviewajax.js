@@ -192,7 +192,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
-	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
+	data = data + "&fldName=" + fieldName + "&fieldValue=" + escapeAll(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -355,6 +355,13 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	showHide(dtlView,editArea);  //show,hide
 	itsonview=false;
 }
+
+// Replace the % sign with %25 to make sure the AJAX url is going wel. 
+function escapeAll(tagValue) 
+{ 
+ 	return escape(tagValue.replace(/%/g, '%25')); 
+}
+ 
 function SaveTag(tagfield,crmId,module)
 {
 	var tagValue = $(tagfield).value;
