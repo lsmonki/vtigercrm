@@ -2044,35 +2044,67 @@ function sendNotificationToOwner($module,$focus)
 			      		     );
 	}	
 	
-	$description = 'Dear '.$ownername.',<br><br>';
-
-	if($focus->mode == 'edit')
+	if($module == "Accounts" || $module == "Potentials" || $module == "Contacts")
 	{
-		$subject = 'Regarding '.$mod_name.' updation - '.$objectname;
-		$description .= 'The '.$mod_name.' has been updated.';
+		$description = 'Dear '.$ownername.',<br><br>';
+
+		if($focus->mode == 'edit')
+		{
+			$subject = 'Regarding '.$mod_name.' updation - '.$objectname;
+			$description .= 'The '.$mod_name.' has been updated.';
+		}
+		else
+		{
+			$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
+			$description .= 'The '.$mod_name.' has been assigned to you.';
+		}
+		$description .= '<br>The '.$mod_name.' details are:<br><br>';
+		$description .= $mod_name.' Id : '.$focus->id.'<br>';
+		foreach($object_column_fields as $fieldname => $fieldlabel)
+		{
+			//Get the translated string
+			$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+
+			$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+		}
+
+		$description .= '<br><br>Thank You <br>';
+		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
+
+		$log->debug("Exiting sendNotificationToOwner method ...");
+		return $status;
 	}
-	else
-	{
-		$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
-		$description .= 'The '.$mod_name.' has been assigned to you.';
-	}
-	$description .= '<br>The '.$mod_name.' details are:<br><br>';
-	$description .= $mod_name.' Id : '.$focus->id.'<br>';
-
-	foreach($object_column_fields as $fieldname => $fieldlabel)
-	{
-		//Get the translated string
-		$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
-
-		$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
-	}
-
-	$description .= '<br><br>Thank You <br>';
-	$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
-
-	$log->debug("Exiting sendNotificationToOwner method ...");
-	return $status;
 }
+
+//Function to send notification to the users of a group
+function sendNotificationToGroups($groupid,$crmid,$module)
+{
+       global $adb;
+       $returnEntity=Array();
+       $returnEntity=getEntityName($module,Array($crmid));
+       $mycrmid=$groupid;
+       require_once('include/utils/GetGroupUsers.php');
+       $getGroupObj=new GetGroupUsers();
+       $getGroupObj->getAllUsersInGroup($mycrmid);
+       $userIds=$getGroupObj->group_users;
+        $groupqry="select email1,id,user_name from vtiger_users where id in(".implode(',',$userIds).")";
+       $groupqry_res=$adb->query($groupqry);
+       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
+       {
+               //handle the mail send to vtiger_users
+               $emailadd = $adb->query_result($groupqry_res,$z,'email1');
+               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
+               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
+               $pmodule = 'Users';
+               $description = "Dear $tosender,<br>$returnEntity[$crmid] has been created for $module.<br><br>Thanks,<br>vTiger Team.";
+               require_once('modules/Emails/mail.php');
+               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$focus->id);
+               $all_to_emailids []= $emailadd;
+                $mail_status_str .= $emailadd."=".$mail_status."&&&";
+        }
+}
+
+
 function getUserslist()
 {
 	global $log,$current_user,$module,$adb,$assigned_user_id;

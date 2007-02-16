@@ -72,6 +72,9 @@ class CRMEntity
 	
 	//Calling the Module specific save code
 	$this->save_module($module);
+
+	$assigntype=$_REQUEST['assigntype'];
+          $this->whomToSendMail($module,$this ->mode,$assigntype);
 	
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");
@@ -546,6 +549,34 @@ class CRMEntity
 	  }
 
   }
+
+function whomToSendMail($module,$insertion_mode,$assigntype)
+{
+ global $adb;
+       if($insertion_mode!="edit")
+       {
+               if($assigntype=='U')
+               {
+                       if($module == 'Events' || $module == 'Calendar')
+                       {
+                               $moduleObj=new Activity();
+                       }else
+                       {
+                               $moduleObj=new $module();
+                       }
+                       sendNotificationToOwner($module,$moduleObj);
+               }
+               elseif($assigntype=='T')
+               {
+                       $groupname=$_REQUEST['assigned_group_name'];
+                       $resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+                       $groupid=$adb->query_result($resultqry,0,"groupid");
+                       sendNotificationToGroups($groupid,$this->id,$module);
+               }
+       }
+}
+
+
 	/** Function to delete a record in the specifed table 
   	  * @param $table_name -- table name:: Type varchar
 	  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
