@@ -725,11 +725,16 @@ function get_calendarsforol($user_name)
   {
       $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
       $permitted_lists[] = $adb->query_result($result1,$i,'columnname');
-      /*if($adb->query_result($result1,$i,'columnname') == "parentid")
+      if($adb->query_result($result1,$i,'columnname') == "date_start")
       {
-        $permitted_lists[] = 'vtiger_account';
-        $permitted_lists[] = 'accountname';
-      }*/
+        $permitted_lists[] = 'vtiger_activity';
+        $permitted_lists[] = 'time_start';
+      }
+      if($adb->query_result($result1,$i,'columnname') == "due_date")
+      {
+	$permitted_lists[] = 'vtiger_activity';
+        $permitted_lists[] = 'time_end';
+      }
   }
 	$permitted_lists = array_chunk($permitted_lists,2);
 	$column_table_lists = array();
