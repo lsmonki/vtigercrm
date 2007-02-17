@@ -1016,7 +1016,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
 	}
-	if($uitype == 15 && $module == 'Calendar')
+	elseif($uitype == 15 && $module == 'Calendar')
 	{
 		$activitytype = $adb->query_result($list_result,$list_result_count,'activitytype');
 		$value = $app_strings[$activitytype];
