@@ -359,9 +359,13 @@ class ReportRun extends CRMEntity
 				{
 					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
-				elseif($selectedfields[0] == 'vtiger_crmentityRelHelpDesk' && $selectedfields[1] == 'setype')
+			/*	elseif($selectedfields[0] == 'vtiger_crmentityRelHelpDesk' && $selectedfields[1] == 'setype')
 				{
 					$fieldvalue = "(case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname else concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value),$datatype);
+				}*/
+				elseif($selectedfields[0] == 'vtiger_crmentityRelHelpDesk' && $selectedfields[1]=='setype')
+				{
+						$fieldvalue = "(vtiger_accountRelHelpDesk.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.lastname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_contactdetailsRelHelpDesk.firstname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
 				}
 				else
 				{
