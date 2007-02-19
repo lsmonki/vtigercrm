@@ -1093,7 +1093,7 @@
 		<field name="qty_per_unit" type="N" size="11.2">
 			<default value="0" />
 		</field>
-		<field name="unit_price" type="N" size="11.2" />
+		<field name="unit_price" type="N" size="25.2" />
 		<field name="weight" type="N" size="11.3" />
 		<field name="pack_size" type="I" size="11" />
 		<field name="sales_start_date" type="D" />
@@ -1387,9 +1387,9 @@
 		<field name="campaignname" type="C" size="255" />
 		<field name="campaigntype" type="C" size="255" />
 		<field name="campaignstatus" type="C" size="255" />
-		<field name="expectedrevenue" type="N" size="11.3" />
-		<field name="budgetcost" type="N" size="11.3" />
-		<field name="actualcost" type="N" size="11.3" />
+		<field name="expectedrevenue" type="N" size="25.3" />
+		<field name="budgetcost" type="N" size="25.3" />
+		<field name="actualcost" type="N" size="25.3" />
 		<field name="expectedresponse" type="C" size="255" />
 		<field name="numsent" type="N" size="11.0" />
 		<field name="product_id" type="I" size="19" />
@@ -1398,10 +1398,10 @@
 		<field name="targetsize" type="I" size="19" />
 		<field name="expectedresponsecount" type="I" size="19" />
 		<field name="expectedsalescount" type="I" size="19" />
-		<field name="expectedroi" type="N" size="11.3" />
+		<field name="expectedroi" type="N" size="25.3" />
 		<field name="actualresponsecount" type="I" size="19" />
 		<field name="actualsalescount" type="I" size="19" />
-		<field name="actualroi" type="N" size="11.3" />
+		<field name="actualroi" type="N" size="25.3" />
 		<field name="campaignid" type="I" size="19">
 			<key />
 		</field>
@@ -3403,16 +3403,16 @@
 		<field name="carrier" type="C" size='100' />
 		<field name="pending" type="C" size='200' />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="11.3" />
-		<field name="adjustment" type="N" size="11.3" />
-		<field name="salescommission" type="N" size="11.3" />
-		<field name="exciseduty" type="N" size="11.3" />
-		<field name="total" type="N" size="11.3" />
-		<field name="subtotal" type="N" size="11.3" />
+		<field name="salestax" type="N" size="25.3" />
+		<field name="adjustment" type="N" size="25.3" />
+		<field name="salescommission" type="N" size="25.3" />
+		<field name="exciseduty" type="N" size="25.3" />
+		<field name="total" type="N" size="25.3" />
+		<field name="subtotal" type="N" size="25.3" />
 		<field name="taxtype" type="C" size="25" />
-		<field name="discount_percent" type="N" size="11.3" />
-		<field name="discount_amount" type="N" size="11.3" />
-		<field name="s_h_amount" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="25.3" />
+		<field name="discount_amount" type="N" size="25.3" />
+		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
@@ -3658,7 +3658,7 @@
 		<field name="productid" type="I" size="19">
 			<key />
 		</field>
-		<field name="listprice" type="N" size="11.3" />
+		<field name="listprice" type="N" size="25.3" />
 
 		<index name="pricebookproductrel_pricebookid_idx">
 			<col>pricebookid</col>
@@ -3721,18 +3721,18 @@
 		<field name="contactid" type="I" size="19">
 		</field>
 		<field name="currency" type="C" size="100" />
-		<field name="subtotal" type="N" size="11.3" />
+		<field name="subtotal" type="N" size="25.3" />
 		<field name="carrier" type="C" size='100' />
 		<field name="shipping" type="C" size="100" />
 		<field name="inventorymanager" type="I" size="19" />
 		<field name="type" type="C" size="100" />
-		<field name="tax" type="N" size="11.3" />
-		<field name="adjustment" type="N" size="11.3" />
-		<field name="total" type="N" size="11.3" />
+		<field name="tax" type="N" size="25.3" />
+		<field name="adjustment" type="N" size="25.3" />
+		<field name="total" type="N" size="25.3" />
 		<field name="taxtype" type="C" size="25" />
-		<field name="discount_percent" type="N" size="11.3" />
-		<field name="discount_amount" type="N" size="11.3" />
-		<field name="s_h_amount" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="25.3" />
+		<field name="discount_amount" type="N" size="25.3" />
+		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 
@@ -3856,16 +3856,16 @@
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="11.3" />
-		<field name="adjustment" type="N" size="11.3" />
-		<field name="salescommission" type="N" size="11.3" />
-		<field name="exciseduty" type="N" size="11.3" />
-		<field name="total" type="N" size="11.3" />
-		<field name="subtotal" type="N" size="11.3" />
+		<field name="salestax" type="N" size="25.3" />
+		<field name="adjustment" type="N" size="25.3" />
+		<field name="salescommission" type="N" size="25.3" />
+		<field name="exciseduty" type="N" size="25.3" />
+		<field name="total" type="N" size="25.3" />
+		<field name="subtotal" type="N" size="25.3" />
 		<field name="taxtype" type="C" size="25" />
-		<field name="discount_percent" type="N" size="11.3" />
-		<field name="discount_amount" type="N" size="11.3" />
-		<field name="s_h_amount" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="25.3" />
+		<field name="discount_amount" type="N" size="25.3" />
+		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="terms_conditions" type="X" />
 		<field name="postatus" type="C" size="200" />
 
@@ -3990,16 +3990,16 @@
 		<field name="duedate" type="D" />
 		<field name="invoiceterms" type="C" size="100" />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="11.3" />
-		<field name="adjustment" type="N" size="11.3" />
-		<field name="salescommission" type="N" size="11.3" />
-		<field name="exciseduty" type="N" size="11.3" />
-		<field name="subtotal" type="N" size="11.3" />
-		<field name="total" type="N" size="11.3" />
+		<field name="salestax" type="N" size="25.3" />
+		<field name="adjustment" type="N" size="25.3" />
+		<field name="salescommission" type="N" size="25.3" />
+		<field name="exciseduty" type="N" size="25.3" />
+		<field name="subtotal" type="N" size="25.3" />
+		<field name="total" type="N" size="25.3" />
 		<field name="taxtype" type="C" size="25" />
-		<field name="discount_percent" type="N" size="11.3" />
-		<field name="discount_amount" type="N" size="11.3" />
-		<field name="s_h_amount" type="N" size="11.3" />
+		<field name="discount_percent" type="N" size="25.3" />
+		<field name="discount_amount" type="N" size="25.3" />
+		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="shipping" type="C" size="100" />
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
@@ -6048,7 +6048,7 @@
 		<field name="productid" type="I" size="19" />
 		<field name="sequence_no" type="I" size="4" />
 		<field name="quantity" type="I" size="19" />
-		<field name="listprice" type="N" size="11.3" />
+		<field name="listprice" type="N" size="25.3" />
 		<field name="discount_percent" type="N" size="7.3" />
 		<field name="discount_amount" type="N" size="7.3" />
 		<field name="comment" type="C" size="100" />
