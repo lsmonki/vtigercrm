@@ -16,6 +16,8 @@ class vtigerCRM_Smarty extends Smarty{
 	*/
 	function vtigerCRM_Smarty()
 	{
+		global $CALENDAR_DISPLAY, $WORLD_CLOCK_DISPLAY, $CALCULATOR_DISPLAY, $CHAT_DISPLAY;
+
 		$this->Smarty();
 		$this->template_dir = 'Smarty/templates';
 		$this->compile_dir = 'Smarty/templates_c';
@@ -24,6 +26,10 @@ class vtigerCRM_Smarty extends Smarty{
 
 		//$this->caching = true;
 	        //$this->assign('app_name', 'Login');
+		$this->assign('CALENDAR_DISPLAY', $CALENDAR_DISPLAY); 
+ 		$this->assign('WORLD_CLOCK_DISPLAY', $WORLD_CLOCK_DISPLAY); 
+ 		$this->assign('CALCULATOR_DISPLAY', $CALCULATOR_DISPLAY); 
+ 		$this->assign('CHAT_DISPLAY', $CHAT_DISPLAY);
 	}
 }
 
