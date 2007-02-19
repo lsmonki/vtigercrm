@@ -622,7 +622,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 	
 	   var splitval=val.split(".")
 
-                if(splitval[0]>2147483647)
+                if(splitval[0]>18446744073709551615)
                 {
                         alert( fldLabel + " exceeds the maximum limit ");
                         return false;

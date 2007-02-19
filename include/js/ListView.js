@@ -72,7 +72,8 @@ function massDelete(module)
             alert("Please select at least one entity");
             return false;
         }
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		var alert_str = (module=="Accounts") ? "Deleting this account(s) will remove its related Potentials,Quotes,Sales Order & Invoice. Are you sure you want to delete the selected "+xx+" records?" : "Are you sure you want to delete the selected "+xx+" records ?";
+		if(confirm(alert_str))
 		{
 			
 			$("status").style.display="inline";

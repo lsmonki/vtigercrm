@@ -49,11 +49,13 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "delete from vtiger_seproductsrel where crmid=$record and productid=$return_id";
 			$adb->query($sql);
 		}
+		delAccRelRecords($record);
 		if($return_id!='')
 		{
 			$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 			$adb->query($sql);
 		}
+		
 	break;
 	case Campaigns:
 		if($return_module == "Leads") {
@@ -372,5 +374,56 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
         	$adb->query($sql_recentviewed);
 	}
 	$log->debug("Entering DeleteEntity method ...");
+}
+
+function delAccRelRecords($record){
+
+	global $adb;
+
+	//Deleting Account related Potentials.
+	$pot_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_potential on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.accountid=".$record;
+	$pot_res = $adb->query($pot_q);
+	for($k=0;$k < $adb->num_rows($pot_res);$k++)
+	{
+		$pot_id = $adb->query_result($pot_res,$k,"crmid");
+		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$pot_id;
+		$adb->query($sql);
+	}
+	//Deleting Account related Sales Orders.
+	$so_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_salesorder on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid inner join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid where vtiger_crmentity.deleted=0 and vtiger_salesorder.accountid=".$record;
+	$so_res = $adb->query($so_q);
+	for($k=0;$k < $adb->num_rows($so_res);$k++)
+	{
+		$so_id = $adb->query_result($so_res,$k,"crmid");
+		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$so_id;
+		$adb->query($sql);
+	}
+	//Deleting Account related Quotes.
+	$quo_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_quotes on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_account on vtiger_account.accountid=vtiger_quotes.accountid where  vtiger_crmentity.deleted=0 and vtiger_quotes.accountid=".$record;
+	$quo_res = $adb->query($quo_q);
+	for($k=0;$k < $adb->num_rows($quo_res);$k++)
+	{
+		$quo_id = $adb->query_result($quo_res,$k,"crmid");
+		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$quo_id;
+		$adb->query($sql);
+	}
+	//Deleting Account related Invoices.
+	$inv_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_invoice on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid where  vtiger_crmentity.deleted=0 and vtiger_invoice.accountid=".$record;
+	$inv_res = $adb->query($inv_q);
+	for($k=0;$k < $adb->num_rows($inv_res);$k++)
+	{
+		$inv_id = $adb->query_result($inv_res,$k,"crmid");
+		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$inv_id;
+		$adb->query($sql);
+	}
+	//Deleting Contact-Account Relation.
+	$con_q = "update vtiger_contactdetails set accountid = '' where accountid = ".$record;
+	$con_res = $adb->query($con_q);
+	$adb->query($con_q);
+
+	//Deleting Trouble Tickets-Account Relation.
+	$tt_q = "update vtiger_troubletickets set parent_id = '' where parent_id = ".$record;
+	$tt_res = $adb->query($tt_q);
+	$adb->query($tt_q);
 }
 ?>

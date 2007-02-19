@@ -33,6 +33,8 @@ foreach($storearray as $id)
                 $freetag->delete_all_object_tags_for_user($current_user->id,$id);
                 $sql="update vtiger_crmentity set deleted=1 where crmid='" .$id ."'";
                 $result = $adb->query($sql);
+		if($returnmodule == 'Accounts')
+			delAccRelRecords($id);
         }
         else
         {
