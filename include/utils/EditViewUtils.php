@@ -1350,27 +1350,91 @@ function getAssociatedProducts($module,$focus,$seid='')
 	
 	if($module == 'Quotes')
 	{
-		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.listprice, vtiger_inventoryproductrel.description as product_description, vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.comment,vtiger_inventoryproductrel.quantity from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id." ORDER BY sequence_no";
+		$query="SELECT 
+					vtiger_products.productname,
+					vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_inventoryproductrel.listprice, 
+ 		                        vtiger_inventoryproductrel.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* 
+ 	                                FROM vtiger_inventoryproductrel 
+ 		                        INNER JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        WHERE id=".$focus->id." 
+ 		                        ORDER BY sequence_no"; 
 	}
 	elseif($module == 'PurchaseOrder')
 	{
-		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.listprice, vtiger_inventoryproductrel.description as product_description, vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.comment,vtiger_inventoryproductrel.quantity from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id." ORDER BY sequence_no";
+		$query="SELECT 
+ 		                        vtiger_products.productname, 
+ 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_inventoryproductrel.listprice, 
+ 		                        vtiger_inventoryproductrel.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* 
+ 		                        FROM vtiger_inventoryproductrel 
+ 		                        INNER JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        WHERE id=".$focus->id." 
+ 		                        ORDER BY sequence_no";
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.listprice, vtiger_inventoryproductrel.description as product_description, vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.comment,vtiger_inventoryproductrel.quantity from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id." ORDER BY sequence_no";
+		$query="SELECT 
+ 		                        vtiger_products.productname, 
+ 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_inventoryproductrel.listprice, 
+ 		                        vtiger_inventoryproductrel.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* 
+ 		                        FROM vtiger_inventoryproductrel 
+ 		                        INNER JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        WHERE id=".$focus->id." 
+ 		                        ORDER BY sequence_no";
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select vtiger_products.productname, vtiger_products.unit_price, vtiger_products.qtyinstock, vtiger_inventoryproductrel.listprice, vtiger_inventoryproductrel.description as product_description, vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.comment,vtiger_inventoryproductrel.quantity from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=".$focus->id." ORDER BY sequence_no";
+		$query="SELECT 
+ 		                        vtiger_products.productname, 
+ 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_inventoryproductrel.listprice, 
+ 		                        vtiger_inventoryproductrel.description AS product_description, 
+ 		                        vtiger_inventoryproductrel.* 
+ 		                        FROM vtiger_inventoryproductrel 
+ 		                        INNER JOIN vtiger_products 
+ 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        WHERE id=".$focus->id." 
+ 		                        ORDER BY sequence_no";
 	}
 	elseif($module == 'Potentials')
 	{
-		$query="select vtiger_products.productname, vtiger_products.product_description, vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_seproductsrel.* from vtiger_products inner join vtiger_seproductsrel on vtiger_seproductsrel.productid=vtiger_products.productid where crmid=".$seid;
+		$query="SELECT 
+ 		                        vtiger_products.productname, 
+ 		                        vtiger_products.product_description, 
+ 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_seproductsrel.* 
+ 		                        FROM vtiger_products 
+ 		                        INNER JOIN vtiger_seproductsrel 
+ 		                                ON vtiger_seproductsrel.productid=vtiger_products.productid 
+ 		                        WHERE crmid=".$seid;
 	}
 	elseif($module == 'Products')
 	{
-		$query="select vtiger_products.productid, vtiger_products.productname, vtiger_products.product_description, vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_crmentity.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid where vtiger_crmentity.deleted=0 and productid=".$seid;
+		$query="SELECT 
+ 		                        vtiger_products.productid, 
+ 		                        vtiger_products.productname, 
+ 		                        vtiger_products.product_description, 
+ 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.qtyinstock, 
+ 		                        vtiger_crmentity.* 
+ 		                        FROM vtiger_products  
+ 		                        INNER JOIN vtiger_crmentity 
+ 		                                ON vtiger_crmentity.crmid=vtiger_products.productid 
+ 		                        WHERE vtiger_crmentity.deleted=0 
+ 		                                AND productid=".$seid;
 	}
 
 	$result = $adb->query($query);
