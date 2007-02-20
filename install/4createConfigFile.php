@@ -45,7 +45,7 @@ session_start();
 
 // vtiger CRM version number; do not edit!
 
-$vtiger_version = "5.0.3-rc2";
+$vtiger_version = "5.0.3";
 $release_date = "25 January 2007";
 
 
