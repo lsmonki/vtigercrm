@@ -647,8 +647,8 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left>vtiger CRM 5.0.3 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
-		echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td></tr></table>";
+		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.0.3</span></td>";
+		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2005-2007 <a href='http://www.vtiger.com'>vtiger.com</a> | <a href='javascript:mypopup()'>Read License</a></span></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
