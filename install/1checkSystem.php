@@ -314,8 +314,10 @@ $array = Array(
 		    				<td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
 					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
-					
-
+					<tr bgcolor="#fafafa">
+						<td valign=top ><strong>Logs Directory</strong><br> (logs/)</td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./logs/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>System will experience problems while writing to the logs. You are strongly urged to give write permissions to the logs folder please!!!"; ?></td>
+					</tr>
        				</table>
 				<br><br>
 	   	   		<!-- Recommended Settings -->
