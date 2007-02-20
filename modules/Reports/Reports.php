@@ -230,7 +230,8 @@ class Reports extends CRMEntity{
 				$report_details ['description'] = $report["description"];
 				$report_details ['reportname'] = $report["reportname"];
 
-				$returndata []=$report_details; 
+				if(isPermitted($report["primarymodule"],'index') == "yes")
+					$returndata []=$report_details; 
 			}while($report = $adb->fetch_array($result));
 		}
 
@@ -776,9 +777,8 @@ function getEscapedColumns($selectedfields)
 		}
 		else
 		{
-			$query .= " vtiger_field.tabid=(select tabid from vtiger_tab where vtiger_tab.name='".$module."') and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+			$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in ('".$this->primodule."','".$this->secmodule."')) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
 		}
-
 
 		$result = $adb->query($query);
 
@@ -840,25 +840,22 @@ function getEscapedColumns($selectedfields)
 		$ssql .= " where vtiger_report.reportid =".$reportid;
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
 		$result = $adb->query($ssql);
-		
 		$permitted_fields = Array();
 
 		while($columnslistrow = $adb->fetch_array($result))
 		{
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
-			list($tablename,$fieldname,$module_field,$colname,$single) = split(":",$fieldcolname);
+			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
-			if(sizeof($permitted_fields) == 0 && $is_admin != true && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
 				list($module,$field) = split("_",$module_field);
 				$permitted_fields = $this->getaccesfield($module);	
 			}
 			$selectedfields = explode(":",$fieldcolname);
-
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 
-			
 				$mod_strings = return_module_language($current_language,$module);
 				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
 				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));		
