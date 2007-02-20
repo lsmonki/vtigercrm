@@ -75,7 +75,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	);   
 
 	// Generate colours
-	$colors = color_generator(count($datay),'#33CCFF','#3322FF');
+	$colors = color_generator(count($datay),'#33DDFF','#3322FF');
 	$dataset = & Image_Graph::factory('dataset');
 	$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 	$sum = 0;
