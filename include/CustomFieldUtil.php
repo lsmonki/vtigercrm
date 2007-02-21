@@ -202,7 +202,7 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	{
 		$fieldtype = '6';
 	}
-	elseif($label == 'PickList')
+	elseif($label == 'Pick List')
 	{
 		$fieldtype = '7';
 	}
