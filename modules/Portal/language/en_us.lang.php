@@ -25,6 +25,6 @@ $mod_strings = Array(
 'LBL_BOOKMARK_NAME_URL'=>'Bookmark Name &amp; URL',
 'LBL_TOOLS'=>'Tools',
 'LBL_MANAGE_SITES'=>'Manage Sites',
-'LBL_MY_SITES'=>'My Sites',
+'LBL_MY_SITES'=>'Sites',
 );
 ?>
