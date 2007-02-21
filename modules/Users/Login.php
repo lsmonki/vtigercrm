@@ -103,10 +103,6 @@ function set_focus() {
 			<td class="small z1" align="center">
 
 				<img src="themes/images/bullets.gif">
-					<br>
-					<div align="center">
-						 <a href="http://forums.vtiger.com">Visit vtiger Forums</a> | Call us : +1 877 788 4437
-					 </div>
 			</td>
 	       		<td class="small z2" align="center">
 			<?php
