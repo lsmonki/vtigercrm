@@ -84,7 +84,9 @@ global $mod_strings;
 										<tr><td>Anusha</td></tr>
 										<tr><td>Bharath</td></tr>
 										<tr><td>Bharathi</td></tr>
+										<tr><td>Dina</td></tr>
 										<tr><td>Don</td></tr>
+										<tr><td>Fenzik</td></tr>
 										<tr><td>Gopal</td></tr>
 										<tr><td>Jeri</td></tr>
 										<tr><td>Mani</td></tr>
@@ -94,6 +96,8 @@ global $mod_strings;
 										<tr><td>Philip</td></tr>
 										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
+										<tr><td>Shahul</td></tr>
+										<tr><td>Tamilmani</td></tr>
 										<tr><td>Vashni</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?></th></tr>
