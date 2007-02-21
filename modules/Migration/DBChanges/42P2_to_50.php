@@ -100,12 +100,7 @@ $create_sql1 ="CREATE TABLE vtiger_profile2globalpermissions (`profileid` int(19
 
 Execute($create_sql1);
 
-$create_sql2 = "CREATE TABLE vtiger_actionmapping (
-	`actionid` int(19) NOT NULL default '0',
-	`actionname` varchar(200) NOT NULL default '',
-	`securitycheck` int(19) default NULL,
-PRIMARY KEY (`actionid`,`actionname`)
-	) TYPE=InnoDB";
+$create_sql2 = "CREATE TABLE vtiger_actionmapping (`actionid` int(19) NOT NULL,	`actionname` varchar(200) NOT NULL, `securitycheck` int(19) default NULL, PRIMARY KEY (`actionid`,`actionname`)) TYPE=InnoDB";
 Execute($create_sql2);
 
 //For all Profiles, insert the following entries into vtiger_profile2global permissions table:
@@ -848,7 +843,7 @@ $migrationlog->debug("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha 
 //echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha starts here.....</b><br>";
 $alter_query_array6 = Array(
 				"ALTER TABLE vtiger_users ADD column activity_view VARCHAR(25) DEFAULT 'Today' AFTER homeorder",
-				"ALTER TABLE vtiger_activity ADD column notime CHAR(3) DEFAULT '0' AFTER location"
+				"ALTER TABLE vtiger_activity ADD column notime VARCHAR(3) NOT NULL DEFAULT '0' AFTER location"
 			   );
 foreach($alter_query_array6 as $query)
 {
@@ -1491,12 +1486,13 @@ foreach($alter_tables_array as $tablename)
 }
 
 
-$create_query6 = "CREATE TABLE vtiger_accountgrouprelation ( accountid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`accountid`))";
+$create_query6 = "CREATE TABLE vtiger_accountgrouprelation ( accountid int(19) NOT NULL, groupname varchar(100) default NULL, PRIMARY KEY  (`accountid`)) ENGINE=InnoDB";
 Execute($create_query6);
 
 $alter_query_array8 = Array(
-				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
-				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
+				"ALTER TABLE `vtiger_accountgrouprelation` ADD KEY accountgrouprelation_groupname_idx (groupname)",
 			   );
 foreach($alter_query_array8 as $query)
 {
@@ -1693,13 +1689,12 @@ foreach($alter_query_array17 as $query)
 	Execute($query);
 }
 
-$create_query20 = "CREATE TABLE vtiger_freetags ( id int(19) NOT NULL, tag varchar(50) NOT NULL default '', raw_tag varchar(50) NOT NULL default '', PRIMARY KEY  (id)) TYPE=MyISAM";
+$create_query20 = "CREATE TABLE vtiger_freetags ( id int(19) NOT NULL, tag varchar(50) NOT NULL default '', raw_tag varchar(50) NOT NULL default '', PRIMARY KEY  (id)) TYPE=InnoDB";
 Execute($create_query20);
 
-$create_query21 = "CREATE TABLE vtiger_freetagged_objects ( tag_id int(19) NOT NULL default '0', tagger_id int(19) NOT NULL default '0', object_id int(19) NOT NULL default '0', tagged_on datetime NOT NULL default '0000-00-00 00:00:00', module varchar(50) NOT NULL default '', PRIMARY KEY  (`tag_id`,`tagger_id`,`object_id`), KEY `tag_id_index` (`tag_id`), KEY `tagger_id_index` (`tagger_id`),  KEY `object_id_index` (`object_id`)
-) TYPE=MyISAM";
+$create_query21 = "CREATE TABLE vtiger_freetagged_objects ( tag_id int(20) NOT NULL default '0', tagger_id int(20) NOT NULL default '0', object_id int(20) NOT NULL default '0', tagged_on timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, module varchar(50) NOT NULL default '', PRIMARY KEY  (`tag_id`,`tagger_id`,`object_id`), KEY `freetagged_objects_tag_id_tagger_id_object_id_idx` (`tag_id`,`tagger_id`,`object_id`)) TYPE=InnoDB";
 Execute($create_query21);
-  
+
 $alter_query4 = "alter table vtiger_profile add column description text";
 Execute($alter_query4);
 
@@ -1721,14 +1716,14 @@ foreach($insert_query_array23 as $query)
 	Execute($query);
 }
 
-$alter_query6 = "alter table vtiger_activity add column visibility varchar(50) NOT NULL after notime";
+$alter_query6 = "ALTER TABLE vtiger_activity ADD COLUMN visibility varchar(50) NOT NULL DEFAULT 'all' after notime";
 Execute($alter_query6);
 
 $create_query22 = "CREATE TABLE vtiger_visibility ( `visibilityid` int(19) NOT NULL auto_increment, `visibility` varchar(200) NOT NULL default '', `sortorderid` int(19) NOT NULL default '0', `presence` int(1) NOT NULL default '1', PRIMARY KEY  (`visibilityid`), UNIQUE KEY `Visibility_VLY` (`visibility`)) ENGINE=InnoDB";
 Execute($create_query22);
 
 
-$create_query23 = "CREATE TABLE vtiger_sharedcalendar ( `userid` int(19) NOT NULL default '0',  `sharedid` int(19) NOT NULL default '0', PRIMARY KEY  (`userid`,`sharedid`)) ENGINE=MyISAM";
+$create_query23 = "CREATE TABLE vtiger_sharedcalendar ( `userid` int(19) NOT NULL default '0',  `sharedid` int(19) NOT NULL default '0', PRIMARY KEY  (`userid`,`sharedid`)) ENGINE=InnoDB";
 Execute($create_query23);
 
 $insert_query6 = "INSERT INTO vtiger_tab VALUES(26,'Campaigns',0,23,'Campaigns',null,null,1)";
@@ -1914,103 +1909,8 @@ Execute("update vtiger_invoice set salesorderid=NULL where salesorderid=0");
 //echo "<br><br><b>Database Modifications for Indexing and some missded tables starts here.....</b><br>";
 //Added queries which are for indexing and the missing tables - Mickie - on 06-04-2006
 
-$query_array = Array(
+$create_table_query_array = Array(
 
-//"ALTER TABLE `vtiger_accountgrouprelation` DROP INDEX `fk_accountgrouprelation2`",
-//"ALTER TABLE `vtiger_activity` DROP INDEX `status`",
-"ALTER TABLE `vtiger_carrier` DROP INDEX `carrier_UK0`",
-//"ALTER TABLE `vtiger_contactgrouprelation` DROP INDEX `fk_contactgrouprelation2`",
-//"ALTER TABLE `vtiger_customview` DROP INDEX `customview`",
-//"ALTER TABLE `vtiger_def_org_field` DROP INDEX `tabid`",
-//"ALTER TABLE `vtiger_field` DROP INDEX `tabid`",
-"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `tagger_id_index`",
-"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `object_id_index`",
-//"ALTER TABLE `vtiger_groups` DROP INDEX `groupname`",
-//"ALTER TABLE `vtiger_invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
-//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_354`",
-//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_358`",
-//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_360`",
-//"ALTER TABLE `vtiger_pogrouprelation` DROP INDEX `fk_productgrouprelation2`",
-//"ALTER TABLE `vtiger_potential` DROP INDEX `potentialid`",
-//"ALTER TABLE `vtiger_potentialgrouprelation` DROP INDEX `fk_potentialgrouprelation2`",
-//"ALTER TABLE `vtiger_profile2field` DROP INDEX `tabid`",
-"ALTER TABLE `vtiger_profile2tab` DROP INDEX `idx_profile2tab`",
-//"ALTER TABLE `vtiger_quotegrouprelation` DROP INDEX `fk_quotegrouprelation2`",
-"ALTER TABLE `vtiger_reportmodules` DROP INDEX `reportmodules_IDX0`",
-"ALTER TABLE `vtiger_reportsortcol` DROP INDEX `reportsortcol_IDX0`",
-"ALTER TABLE `vtiger_reportsummary` DROP INDEX `reportsummary_IDX0`",
-//"ALTER TABLE `vtiger_seattachmentsrel` DROP INDEX `attachmentsid`",
-//"ALTER TABLE `vtiger_sogrouprelation` DROP INDEX `fk_sogrouprelation2`",
-//"ALTER TABLE `vtiger_tab` DROP INDEX `tabid`",
-//"ALTER TABLE `vtiger_troubletickets` DROP INDEX `status`",
-"ALTER TABLE `vtiger_accountgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_activity_reminder` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_activsubtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_contactgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-//"DROP TABLE `crmentity_seq`",
-//"ALTER TABLE `vtiger_customerdetails` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-//"DROP TABLE `customfield_sequence_seq`",
-"ALTER TABLE `vtiger_customview_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_def_org_field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_def_org_share` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_def_org_share_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-//"ALTER TABLE `vtiger_defaultcv` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_durationhrs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_durationmins` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_emailtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-//"ALTER TABLE `vtiger_emailtemplates_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_faqcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_faqstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_field_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_files` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_freetagged_objects` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_group2grouprel` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_group2role` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_group2rs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-//"DROP TABLE `groups_seq`",
-"ALTER TABLE `vtiger_headers` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_import_maps` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_inventorynotification_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_invoicegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_loginhistory` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_mail_accounts` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_notificationscheduler_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_ownernotify` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_parenttabrel` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_pogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_portal` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-//"ALTER TABLE `vtiger_portalinfo` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_potentialgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_profile2field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_profile2globalpermissions` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_profile2standardpermissions` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_profile2tab` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_profile2utility` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_profile_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_quotegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_rating` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_relatedlists` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_relatedlists_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_role2profile` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_role_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_rss` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_sales_stage` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_salutationtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_selectquery_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_sogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `vtiger_systems` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_taskpriority` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_taskstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_ticketcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_ticketpriorities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_ticketseverities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_ticketstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_ticketstracktime` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_tracker` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_users2group` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `vtiger_users_last_import` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `vtiger_users_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-//"ALTER TABLE `vtiger_wordtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 
 "CREATE TABLE vtiger_actualcost (
   `actualcostid` int(19) NOT NULL auto_increment,
@@ -2047,7 +1947,6 @@ $query_array = Array(
   KEY `idx_datashare_module_rel_tabid` (`tabid`)
 ) ENGINE=InnoDB",
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_grp2grp (
 	  `shareid` int(19) NOT NULL,
 	    `share_groupid` int(19) default NULL,
@@ -2057,20 +1956,6 @@ $query_array = Array(
 		    KEY `datashare_grp2grp_share_groupid_idx` (`share_groupid`),
 		      KEY `datashare_grp2grp_to_groupid_idx` (`to_groupid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_grp2grp (
-  `shareid` int(19) NOT NULL,
-  `share_groupid` int(19) default NULL,
-  `to_groupid` int(19) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_grp2grp_share_groupid` (`share_groupid`),
-  KEY `idx_datashare_grp2grp_to_groupid` (`to_groupid`),
-  CONSTRAINT `fk_datashare_grp2grp2` FOREIGN KEY (`to_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2grp1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2grp789` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
 "CREATE TABLE vtiger_datashare_grp2role (
 	  `shareid` int(19) NOT NULL,
@@ -2081,22 +1966,7 @@ $query_array = Array(
 		    KEY `idx_datashare_grp2role_share_groupid` (`share_groupid`),
 		      KEY `idx_datashare_grp2role_to_roleid` (`to_roleid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_grp2role (
-  `shareid` int(19) NOT NULL,
-  `share_groupid` int(19) default NULL,
-  `to_roleid` varchar(255) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_grp2role_share_groupid` (`share_groupid`),
-  KEY `idx_datashare_grp2role_to_roleid` (`to_roleid`),
-  CONSTRAINT `fk_datashare_grp2role2` FOREIGN KEY (`to_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2role1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2role345` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_grp2rs (
 	  `shareid` int(19) NOT NULL,
 	    `share_groupid` int(19) default NULL,
@@ -2106,20 +1976,6 @@ $query_array = Array(
 		    KEY `datashare_grp2rs_share_groupid_idx` (`share_groupid`),
 		      KEY `datashare_grp2rs_to_roleandsubid_idx` (`to_roleandsubid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_grp2rs (
-  `shareid` int(19) NOT NULL,
-  `share_groupid` int(19) default NULL,
-  `to_roleandsubid` varchar(255) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_grp2rs_share_groupid` (`share_groupid`),
-  KEY `idx_datashare_grp2rs_to_roleandsubid` (`to_roleandsubid`),
-  CONSTRAINT `fk_datashare_grp2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2rs1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2rs36` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
 "CREATE TABLE vtiger_datashare_relatedmodule_permission (
   `shareid` int(19) NOT NULL,
@@ -2129,7 +1985,6 @@ $query_array = Array(
   KEY `datashare_relatedmodule_permission_UK1` (`shareid`,`permission`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_relatedmodules (
 	  `datashare_relatedmodule_id` int(19) NOT NULL,
 	    `tabid` int(19) default NULL,
@@ -2138,24 +1993,11 @@ $query_array = Array(
 		  KEY `datashare_relatedmodules_tabid_idx` (`tabid`),
 		    KEY `datashare_relatedmodules_relatedto_tabid_idx` (`relatedto_tabid`)
 	    ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_relatedmodules (
-  `datashare_relatedmodule_id` int(19) NOT NULL,
-  `tabid` int(19) default NULL,
-  `relatedto_tabid` int(19) default NULL,
-  PRIMARY KEY  (`datashare_relatedmodule_id`),
-  KEY `idx_datashare_relatedmodules_tabid` (`tabid`),
-  KEY `idx_datashare_relatedmodules_relatedto_tabid` (`relatedto_tabid`),
-  CONSTRAINT `fk_datashare_relatedmodules1` FOREIGN KEY (`relatedto_tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_relatedmodules123` FOREIGN KEY (`tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
 "CREATE TABLE vtiger_datashare_relatedmodules_seq (
   `id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_role2group (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
@@ -2165,22 +2007,7 @@ $query_array = Array(
 		    KEY `idx_datashare_role2group_share_roleid` (`share_roleid`),
 		      KEY `idx_datashare_role2group_to_groupid` (`to_groupid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_role2group (
-  `shareid` int(19) NOT NULL,
-  `share_roleid` varchar(255) default NULL,
-  `to_groupid` int(19) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_role2group_share_roleid` (`share_roleid`),
-  KEY `idx_datashare_role2group_to_groupid` (`to_groupid`),
-  CONSTRAINT `fk_datashare_role2group3` FOREIGN KEY (`to_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2group1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2group568` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_role2role (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
@@ -2190,22 +2017,7 @@ $query_array = Array(
 		    KEY `datashare_role2role_share_roleid_idx` (`share_roleid`),
 		      KEY `datashare_role2role_to_roleid_idx` (`to_roleid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_role2role (
-  `shareid` int(19) NOT NULL,
-  `share_roleid` varchar(255) default NULL,
-  `to_roleid` varchar(255) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_role2role_share_roleid` (`share_roleid`),
-  KEY `idx_datashare_role2role_to_roleid` (`to_roleid`),
-  CONSTRAINT `fk_datashare_role2role3` FOREIGN KEY (`to_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2role1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2role345` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
-//Added on 06-06-06
 "CREATE TABLE vtiger_datashare_role2rs (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
@@ -2215,20 +2027,6 @@ $query_array = Array(
 		    KEY `datashare_role2s_share_roleid_idx` (`share_roleid`),
 		      KEY `datashare_role2s_to_roleandsubid_idx` (`to_roleandsubid`)
 	      ) ENGINE=InnoDB",
-/*
-"CREATE TABLE vtiger_datashare_role2rs (
-  `shareid` int(19) NOT NULL,
-  `share_roleid` varchar(255) default NULL,
-  `to_roleandsubid` varchar(255) default NULL,
-  `permission` int(19) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_role2s_share_roleid` (`share_roleid`),
-  KEY `idx_datashare_role2s_to_roleandsubid` (`to_roleandsubid`),
-  CONSTRAINT `fk_datashare_role2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2rs1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2rs987` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-*/
 
 "CREATE TABLE vtiger_datashare_rs2grp (
   `shareid` int(19) NOT NULL,
@@ -2346,39 +2144,142 @@ $query_array = Array(
   KEY `tmp_write_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"ALTER TABLE `vtiger_account` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_account` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-//"ALTER TABLE `vtiger_accountgrouprelation` MODIFY COLUMN `accountid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_actionmapping` MODIFY COLUMN `actionid` INTEGER(19) NOT NULL PRIMARY KEY",
+
+				 );
+
+foreach($create_table_query_array as $query)
+{
+	Execute($query);
+}
+
+$query_array = Array(
+
+//"ALTER TABLE `vtiger_activity` DROP INDEX `status`",
+//"ALTER TABLE `vtiger_contactgrouprelation` DROP INDEX `fk_contactgrouprelation2`",
+//"ALTER TABLE `vtiger_customview` DROP INDEX `customview`",
+//"ALTER TABLE `vtiger_def_org_field` DROP INDEX `tabid`",
+//"ALTER TABLE `vtiger_field` DROP INDEX `tabid`",
+//"ALTER TABLE `vtiger_groups` DROP INDEX `groupname`",
+//"ALTER TABLE `vtiger_invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
+//"ALTER TABLE `vtiger_pogrouprelation` DROP INDEX `fk_productgrouprelation2`",
+//"ALTER TABLE `vtiger_potential` DROP INDEX `potentialid`",
+//"ALTER TABLE `vtiger_potentialgrouprelation` DROP INDEX `fk_potentialgrouprelation2`",
+//"ALTER TABLE `vtiger_profile2field` DROP INDEX `tabid`",
+"ALTER TABLE `vtiger_profile2tab` DROP INDEX `idx_profile2tab`",
+"ALTER TABLE `vtiger_profile2tab` ADD KEY `profile2tab_profileid_tabid_idx` (`profileid`, `tabid`)",
+//"ALTER TABLE `vtiger_quotegrouprelation` DROP INDEX `fk_quotegrouprelation2`",
+"ALTER TABLE `vtiger_reportmodules` DROP INDEX `reportmodules_IDX0`",
+"ALTER TABLE `vtiger_reportmodules` MODIFY COLUMN `reportmodulesid` INTEGER(19) NOT NULL",
+
+"ALTER TABLE `vtiger_reportsortcol` DROP INDEX `reportsortcol_IDX0`",
+"ALTER TABLE `vtiger_reportsortcol` ADD KEY `fk_1_vtiger_reportsortcol` (`reportid`)",
+"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `sortcolid` INTEGER(19) NOT NULL",
+"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL",
+
+"ALTER TABLE `vtiger_reportsummary` DROP INDEX `reportsummary_IDX0`",
+"ALTER TABLE `vtiger_reportsummary` ADD KEY `reportsummary_reportsummaryid_idx` (`reportsummaryid`)",
+"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `reportsummaryid` INTEGER(19) NOT NULL",
+"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `summarytype` INTEGER(19) NOT NULL",
+
+//"ALTER TABLE `vtiger_seattachmentsrel` DROP INDEX `attachmentsid`",
+//"ALTER TABLE `vtiger_sogrouprelation` DROP INDEX `fk_sogrouprelation2`",
+//"ALTER TABLE `vtiger_tab` DROP INDEX `tabid`",
+//"ALTER TABLE `vtiger_troubletickets` DROP INDEX `status`",
+"ALTER TABLE `vtiger_activity_reminder` TYPE=InnoDB",
+"ALTER TABLE `vtiger_activsubtype` TYPE=InnoDB",
+"ALTER TABLE `vtiger_contactgrouprelation` TYPE=InnoDB",
+//"ALTER TABLE `vtiger_customerdetails` TYPE=InnoDB",
+"ALTER TABLE `vtiger_customview_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_def_org_field` TYPE=InnoDB",
+"ALTER TABLE `vtiger_def_org_share` TYPE=InnoDB",
+"ALTER TABLE `vtiger_def_org_share_seq` TYPE=InnoDB",
+//"ALTER TABLE `vtiger_defaultcv` TYPE=InnoDB",
+"ALTER TABLE `vtiger_durationhrs` TYPE=InnoDB",
+"ALTER TABLE `vtiger_durationmins` TYPE=InnoDB",
+"ALTER TABLE `vtiger_emailtemplates` TYPE=InnoDB",
+//"ALTER TABLE `vtiger_emailtemplates_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_faqcategories` TYPE=InnoDB",
+"ALTER TABLE `vtiger_faqstatus` TYPE=InnoDB",
+"ALTER TABLE `vtiger_field_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_files` TYPE=InnoDB",
+"ALTER TABLE `vtiger_group2grouprel` TYPE=InnoDB",
+"ALTER TABLE `vtiger_group2role` TYPE=InnoDB",
+"ALTER TABLE `vtiger_group2rs` TYPE=InnoDB",
+//"DROP TABLE `groups_seq`",
+"ALTER TABLE `vtiger_headers` TYPE=InnoDB",
+"ALTER TABLE `vtiger_import_maps` TYPE=InnoDB",
+"ALTER TABLE `vtiger_inventorynotification_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_invoicegrouprelation` TYPE=InnoDB",
+"ALTER TABLE `vtiger_loginhistory` TYPE=InnoDB",
+"ALTER TABLE `vtiger_mail_accounts` TYPE=InnoDB",
+"ALTER TABLE `vtiger_notificationscheduler_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ownernotify` TYPE=InnoDB",
+"ALTER TABLE `vtiger_parenttabrel` TYPE=InnoDB",
+"ALTER TABLE `vtiger_pogrouprelation` TYPE=InnoDB",
+"ALTER TABLE `vtiger_portal` TYPE=InnoDB",
+"ALTER TABLE `vtiger_portalinfo` TYPE=InnoDB",
+"ALTER TABLE `vtiger_potentialgrouprelation` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile2field` TYPE=InnoDB",
+"ALTER TABLE `vtiger_reportmodules` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile2globalpermissions` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile2standardpermissions` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile2tab` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile2utility` TYPE=InnoDB",
+"ALTER TABLE `vtiger_profile_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_quotegrouprelation` TYPE=InnoDB",
+"ALTER TABLE `vtiger_rating` TYPE=InnoDB",
+"ALTER TABLE `vtiger_relatedlists` TYPE=InnoDB",
+"ALTER TABLE `vtiger_relatedlists_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_role2profile` TYPE=InnoDB",
+"ALTER TABLE `vtiger_role_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_rss` TYPE=InnoDB",
+"ALTER TABLE `vtiger_sales_stage` TYPE=InnoDB",
+"ALTER TABLE `vtiger_salutationtype` TYPE=InnoDB",
+"ALTER TABLE `vtiger_selectquery_seq` TYPE=InnoDB",
+"ALTER TABLE `vtiger_sogrouprelation` TYPE=InnoDB",
+"ALTER TABLE `vtiger_systems` TYPE=InnoDB",
+"ALTER TABLE `vtiger_taskpriority` TYPE=InnoDB",
+"ALTER TABLE `vtiger_taskstatus` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ticketcategories` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ticketpriorities` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ticketseverities` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ticketstatus` TYPE=InnoDB",
+"ALTER TABLE `vtiger_ticketstracktime` TYPE=InnoDB",
+"ALTER TABLE `vtiger_tracker` TYPE=InnoDB",
+"ALTER TABLE `vtiger_users2group` TYPE=InnoDB",
+"ALTER TABLE `vtiger_users_last_import` TYPE=InnoDB",
+"ALTER TABLE `vtiger_users_seq` TYPE=InnoDB",
+//"ALTER TABLE `vtiger_wordtemplates` TYPE=InnoDB",
+
+//Create table queries are moved from here to above this array
+
+"ALTER TABLE `vtiger_account` MODIFY COLUMN `website` VARCHAR(100) DEFAULT NULL",
 //"ALTER TABLE `vtiger_activity` MODIFY COLUMN `date_start` DATE NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_activity` MODIFY COLUMN `sendnotification` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
-"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_hours` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_minutes` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_activity` MODIFY COLUMN `notime` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
-//"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `activity_id` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `sendnotification` VARCHAR(3) NOT NULL DEFAULT '0'",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_hours` VARCHAR(2) DEFAULT NULL",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_minutes` VARCHAR(2) DEFAULT NULL",
 "ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `reminder_time` INTEGER(11) NOT NULL",
 "ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `reminder_sent` INTEGER(2) NOT NULL",
-//"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `recurringid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_activitygrouprelation` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_announcement` MODIFY COLUMN `creatorid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `blockid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_blocks` MODIFY COLUMN `sequence` INTEGER(10) DEFAULT NULL",
 "ALTER TABLE `vtiger_blocks` MODIFY COLUMN `show_title` INTEGER(2) DEFAULT NULL",
-"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `donotcall` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `reference` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
+
+//HANDLE HERE - MICKIE - Check the following queries
+
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `donotcall` VARCHAR(3) DEFAULT NULL",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `emailoptout` VARCHAR(3) DEFAULT '0'",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) DEFAULT NULL",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `reference` VARCHAR(3) DEFAULT NULL",
 //"ALTER TABLE `vtiger_contactgrouprelation` MODIFY COLUMN `contactid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_convertleadmapping` MODIFY COLUMN `leadfid` INTEGER(19) NOT NULL",
 //"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `description` TEXT",
 "ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
 "ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `modifiedtime` DATETIME NOT NULL",
 "ALTER TABLE `vtiger_customaction` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_customaction` MODIFY COLUMN `content` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_customaction` MODIFY COLUMN `content` TEXT",
 //"ALTER TABLE `vtiger_customerdetails` MODIFY COLUMN `customerid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_customerdetails` MODIFY COLUMN `portal` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_customerdetails` MODIFY COLUMN `portal` VARCHAR(3) DEFAULT NULL",
 //"ALTER TABLE `vtiger_customview` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_customview_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 //"ALTER TABLE `vtiger_cvadvfilter` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2392,13 +2293,13 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_def_org_share` MODIFY COLUMN `permission` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_def_org_share_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 //"ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `query` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `body` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `query` TEXT",
+"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `description` TEXT",
+"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `body` TEXT",
 //"ALTER TABLE `vtiger_emailtemplates_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `vtiger_faq` MODIFY COLUMN `question` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_faq` MODIFY COLUMN `answer` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_faq` MODIFY COLUMN `question` TEXT",
+"ALTER TABLE `vtiger_faq` MODIFY COLUMN `answer` TEXT",
+"ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `comments` TEXT",
 "ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
 //"ALTER TABLE `vtiger_field` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_field` MODIFY COLUMN `readonly` INTEGER(1) NOT NULL",
@@ -2412,19 +2313,19 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_group2role` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_group2rs` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_groups` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_groups` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_import_maps` MODIFY COLUMN `is_published` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no'",
+"ALTER TABLE `vtiger_groups` MODIFY COLUMN `description` TEXT",
+"ALTER TABLE `vtiger_import_maps` MODIFY COLUMN `is_published` VARCHAR(3) NOT NULL DEFAULT 'no'",
 //"ALTER TABLE `vtiger_inventory_tandc` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_inventory_tandc` MODIFY COLUMN `tandc` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_inventory_tandc` MODIFY COLUMN `tandc` TEXT",
 "ALTER TABLE `vtiger_inventory_tandc_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `vtiger_inventorynotification` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_inventorynotification` MODIFY COLUMN `notificationbody` TEXT",
 "ALTER TABLE `vtiger_inventorynotification_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 //"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `salesorderid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `terms_conditions` TEXT",
 //"ALTER TABLE `vtiger_invoicegrouprelation` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_lar` MODIFY COLUMN `createdon` DATE NOT NULL",
 //"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `comments` TEXT",
 //"ALTER TABLE `vtiger_leadgrouprelation` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_mail_accounts` MODIFY COLUMN `account_id` INTEGER(11) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_mail_accounts` MODIFY COLUMN `user_id` INTEGER(11) NOT NULL",
@@ -2434,15 +2335,15 @@ $query_array = Array(
 "ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `sslmeth` VARCHAR(50) DEFAULT NULL",
 "ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `showbody` VARCHAR(10) DEFAULT NULL",
 "ALTER TABLE `vtiger_notes` MODIFY COLUMN `contact_id` INTEGER(19) DEFAULT '0'",
-"ALTER TABLE `vtiger_notes` MODIFY COLUMN `notecontent` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_notificationscheduler` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_notes` MODIFY COLUMN `notecontent` TEXT",
+"ALTER TABLE `vtiger_notificationscheduler` MODIFY COLUMN `notificationbody` TEXT",
 "ALTER TABLE `vtiger_notificationscheduler_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 "ALTER TABLE `vtiger_opportunitystage` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT '0.00'",
 //"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_org_share_action_mapping` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `logo` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `website` VARCHAR(100) DEFAULT NULL",
+"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `logo` TEXT",
 "ALTER TABLE `vtiger_ownernotify` MODIFY COLUMN `crmid` INTEGER(19) DEFAULT NULL UNIQUE",
 //"ALTER TABLE `vtiger_parenttab` MODIFY COLUMN `parenttabid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_parenttab` MODIFY COLUMN `sequence` INTEGER(10) NOT NULL",
@@ -2451,7 +2352,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
 //"ALTER TABLE `vtiger_pogrouprelation` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalname` VARCHAR(200) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalname` VARCHAR(200) NOT NULL UNIQUE",
 "ALTER TABLE `vtiger_portal` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
 //"ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `id` INTEGER(11) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `last_login_time` DATETIME NOT NULL",
@@ -2460,18 +2361,18 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_potcompetitorrel` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_potcompetitorrel` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_potential` MODIFY COLUMN `amount` DECIMAL(10,2) DEFAULT '0.00'",
-"ALTER TABLE `vtiger_potential` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_potential` MODIFY COLUMN `description` TEXT",
 //"ALTER TABLE `vtiger_potentialgrouprelation` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL",
 "ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `probability` DECIMAL(7,3) DEFAULT NULL",
 "ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `lastmodified` DATETIME default NULL",
-"ALTER TABLE `vtiger_pricebook` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_pricebook` MODIFY COLUMN `description` TEXT",
 //"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `pricebookid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_productcollaterals` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_productcollaterals` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_productcollaterals` MODIFY COLUMN `description` TEXT",
 //"ALTER TABLE `vtiger_products` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_products` MODIFY COLUMN `product_description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_products` MODIFY COLUMN `product_description` TEXT",
 "ALTER TABLE `vtiger_products` MODIFY COLUMN `commissionrate` DECIMAL(3,3) DEFAULT NULL",
 //"ALTER TABLE `vtiger_profile2field` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_profile2field` MODIFY COLUMN `fieldid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2487,12 +2388,12 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `quoteid` INTEGER(19) DEFAULT NULL UNIQUE",
 //"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
 //"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `terms_conditions` TEXT",
 //"ALTER TABLE `vtiger_quotegrouprelation` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `potentialid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `quotestage` VARCHAR(200) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `quotestage` VARCHAR(200) DEFAULT NULL",
 //"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `terms_conditions` TEXT",
 "ALTER TABLE `vtiger_recurringevents` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL",
 //"ALTER TABLE `vtiger_relatedlists` MODIFY COLUMN `relation_id` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_relatedlists_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
@@ -2501,17 +2402,12 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_report` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_report` MODIFY COLUMN `folderid` INTEGER(19) NOT NULL UNIQUE",
 //"ALTER TABLE `vtiger_reportdatefilter` MODIFY COLUMN `datefilterid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_reportmodules` MODIFY COLUMN `reportmodulesid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `sortcolid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `reportsummaryid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `summarytype` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_role2profile` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_role_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 //"ALTER TABLE `vtiger_rss` MODIFY COLUMN `rssid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `terms_conditions` TEXT",
 //"ALTER TABLE `vtiger_seactivityrel` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_seactivityrel` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_selectcolumn` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2521,44 +2417,42 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_sharedcalendar` MODIFY COLUMN `sharedid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_sogrouprelation` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_systems` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_username` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_password` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `vtiger_ticketcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server` VARCHAR(30) DEFAULT NULL",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_username` VARCHAR(30) DEFAULT NULL",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_password` VARCHAR(30) DEFAULT NULL",
+"ALTER TABLE `vtiger_ticketcomments` MODIFY COLUMN `comments` TEXT",
 "ALTER TABLE `vtiger_ticketcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
 //"ALTER TABLE `vtiger_ticketgrouprelation` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `solution` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `update_log` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `description` TEXT",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `solution` TEXT",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `update_log` TEXT",
 //"ALTER TABLE `vtiger_user2role` MODIFY COLUMN `userid` INTEGER(11) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_user2role` MODIFY COLUMN `roleid` VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `vtiger_users` MODIFY COLUMN `is_admin` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-"ALTER TABLE `vtiger_users` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_users` MODIFY COLUMN `user_preferences` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_users` MODIFY COLUMN `homeorder` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL'",
+//"ALTER TABLE `vtiger_user2role` MODIFY COLUMN `roleid` VARCHAR(255) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `is_admin` VARCHAR(3) DEFAULT '0'",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `description` TEXT",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `user_preferences` TEXT",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `homeorder` VARCHAR(255) DEFAULT 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL'",
 "ALTER TABLE `vtiger_users` ADD COLUMN `currency_id` INTEGER(19) NOT NULL DEFAULT '1'",
-"ALTER TABLE `vtiger_users` ADD COLUMN `defhomeview` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT 'home_metrics'",
+"ALTER TABLE `vtiger_users` ADD COLUMN `defhomeview` VARCHAR(100) DEFAULT 'home_metrics'",
 //"ALTER TABLE `vtiger_users2group` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_users2group` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_users_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `street` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `street` TEXT",
+"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `description` TEXT",
 //"ALTER TABLE `vtiger_wordtemplates` MODIFY COLUMN `templateid` INTEGER(19) NOT NULL PRIMARY KEY",
-//"ALTER TABLE `vtiger_wordtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vtiger_accountgrouprelation` ADD KEY `accountgrouprelation_IDX1` (`groupname`)",
+//"ALTER TABLE `vtiger_wordtemplates` MODIFY COLUMN `description` TEXT",
 "ALTER TABLE `vtiger_activity` ADD KEY `status1` (`status`, `eventstatus`)",
 "ALTER TABLE `vtiger_attachments` ADD KEY `attachmentsid1` (`attachmentsid`)",
 "ALTER TABLE `vtiger_blocks` ADD KEY `block_tabid` (`tabid`)",
-"ALTER TABLE `vtiger_carrier` ADD UNIQUE KEY `carrier_UK01` (`carrier`)",
+"ALTER TABLE `vtiger_carrier` DROP INDEX `carrier_UK0`",
+"ALTER TABLE `vtiger_carrier` ADD UNIQUE KEY `carrier_carrier_idx` (`carrier`)",
 "ALTER TABLE `vtiger_contactgrouprelation` ADD KEY `contactgrouprelation_IDX1` (`groupname`)",
 "ALTER TABLE `vtiger_def_org_field` ADD KEY `tabid4` (`tabid`)",
 "ALTER TABLE `vtiger_def_org_share` ADD KEY `fk_def_org_share23` (`permission`)",
 "ALTER TABLE `vtiger_field` ADD KEY `tabid2` (`tabid`)",
 "ALTER TABLE `vtiger_field` ADD KEY `blockid` (`block`)",
 "ALTER TABLE `vtiger_field` ADD KEY `displaytypeid` (`displaytype`)",
-"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX tag_id_index",
-"ALTER TABLE `vtiger_freetagged_objects` ADD INDEX `tag_id_index` (`tag_id`, `tagger_id`, `object_id`)",
 "ALTER TABLE `vtiger_group2grouprel` ADD KEY `fk_group2grouprel2` (`containsgroupid`)",
 "ALTER TABLE `vtiger_group2role` ADD KEY `fk_group2role2` (`roleid`)",
 "ALTER TABLE `vtiger_group2rs` ADD KEY `fk_group2rs2` (`roleandsubid`)",
@@ -2582,7 +2476,6 @@ $query_array = Array(
 "ALTER TABLE `vtiger_profile2field` ADD KEY `tabid3` (`tabid`, `profileid`)",
 //"ALTER TABLE `vtiger_profile2globalpermissions` ADD KEY `idx_profile2globalpermissions` (`profileid`, `globalactionid`)",
 "ALTER TABLE `vtiger_profile2standardpermissions` ADD KEY `idx_prof2stad` (`profileid`, `tabid`, `Operation`)",
-"ALTER TABLE `vtiger_profile2tab` ADD KEY `idx_profile2tab1` (`profileid`, `tabid`)",
 "ALTER TABLE `vtiger_profile2utility` ADD KEY `idx_prof2utility` (`profileid`, `tabid`, `activityid`)",
 "ALTER TABLE `vtiger_purchaseorder` ADD KEY `PO_Vend_IDX` (`vendorid`)",
 "ALTER TABLE `vtiger_purchaseorder` ADD KEY `PO_Quote_IDX` (`quoteid`)",
@@ -2593,7 +2486,6 @@ $query_array = Array(
 "ALTER TABLE `vtiger_quotes` ADD KEY `potentialid2` (`potentialid`)",
 "ALTER TABLE `vtiger_quotes` ADD KEY `contactid` (`contactid`)",
 "ALTER TABLE `vtiger_recurringtype` ADD UNIQUE KEY `RecurringEvent_UK0` (`recurringtype`)",
-"ALTER TABLE `vtiger_reportsortcol` ADD KEY `FK1_reportsortcol` (`reportid`)",
 "ALTER TABLE `vtiger_role2profile` ADD KEY `idx_role2profileid1` (`roleid`, `profileid`)",
 "ALTER TABLE `vtiger_salesorder` ADD KEY `SoVend_IDX` (`vendorid`)",
 "ALTER TABLE `vtiger_salesorder` ADD KEY `SoContact_IDX` (`contactid`)",
@@ -2601,7 +2493,7 @@ $query_array = Array(
 "ALTER TABLE `vtiger_selectquery` ADD KEY `selectquery_IDX0` (`queryid`)",
 "ALTER TABLE `vtiger_sogrouprelation` ADD KEY `sogrouprelation_IDX1` (`groupname`)",
 "ALTER TABLE `vtiger_tab` ADD KEY `tabid1` (`tabid`)",
-"ALTER TABLE `vtiger_taxclass` ADD UNIQUE KEY `carrier_UK02` (`taxclass`)",
+"ALTER TABLE `vtiger_taxclass` ADD UNIQUE KEY `taxclass_carrier_idx` (`taxclass`)",
 "ALTER TABLE `vtiger_troubletickets` ADD KEY `status2` (`status`)",
 "ALTER TABLE `vtiger_users2group` ADD KEY `idx_users2group` (`groupid`, `userid`)",
 "ALTER TABLE `vtiger_users2group` ADD KEY `fk_users2group2` (`userid`)",
@@ -2619,7 +2511,9 @@ $query_array = Array(
 		    );
 foreach($query_array as $query)
 {
-	Execute($query);
+	//Execute($query);
+	//These above array queries will not make any problems if failed to execute. whereas the user get confused if it fails. so we are not goiong to display these queries if it is executed successfully or not
+	$conn->query($query);
 }
 
 //First check whether this table is exist and the proceed
@@ -3644,7 +3538,7 @@ Execute("alter table vtiger_activity change column subject subject varchar(100) 
 Execute("alter table vtiger_activity change column activitytype activitytype varchar(50) NOT NULL");
 Execute("alter table vtiger_activity change column date_start date_start date NOT NULL");
 Execute("alter table vtiger_activity change column time_start time_start varchar(50) default NULL");
-Execute("alter table vtiger_activity change column visibility visibility varchar(50) NOT NULL default 'all'");
+//Execute("alter table vtiger_activity change column visibility visibility varchar(50) NOT NULL default 'all'");
 
 Execute("delete from vtiger_field where tabid=14 and fieldname='currency'");
 
