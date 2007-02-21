@@ -347,12 +347,14 @@ class CRMEntity
 	  if($insertion_mode == 'edit')
 	  {
 		  $update = '';
-		  $tabid= getTabid($module);	
+		  $tabid= getTabid($module);
+	  	  if($tabid == 9)
+	          	$tabid ="9,16";	  
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
 
-			  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+			  $sql = "select * from vtiger_field where tabid in (".$tabid.") and tablename='".$table_name."' and displaytype in (1,3) group by columnname"; 
 		  }
 		  else
 		  {
@@ -363,10 +365,10 @@ class CRMEntity
 			  ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 			  INNER JOIN vtiger_def_org_field
 			  ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			  WHERE vtiger_field.tabid = ".$tabid."
+			  WHERE vtiger_field.tabid in (".$tabid.")
 			  AND vtiger_profile2field.visible = 0 
 			  AND vtiger_profile2field.profileid IN ".$profileList."
-			  AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='".$table_name."' and vtiger_field.displaytype in (1,3)";
+			  AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='".$table_name."' and vtiger_field.displaytype in (1,3) group by columnname";
 		  }	   
 
 	  }
