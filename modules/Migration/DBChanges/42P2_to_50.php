@@ -850,14 +850,15 @@ foreach($alter_query_array6 as $query)
 	Execute($query);
 }
 
-$insert_field_array1 = Array(
-				"Insert into vtiger_field values (9,".$conn->getUniqueID("vtiger_field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,1,3,'C~O',1,'')",
-				"Insert into vtiger_field values (16,".$conn->getUniqueID("vtiger_field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,1,1,'C~O',1,'')"
-			    );
-foreach($insert_field_array1 as $query)
-{
-	Execute($query);
-}
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (9,".$newfieldid.",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,1,3,'C~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('9',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (16,".$newfieldid.",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,1,1,'C~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('16',$newfieldid);
 
 $alter_query_array7 = Array(
 				"alter table vtiger_vendor add column pobox varchar(30) after state",
@@ -880,33 +881,75 @@ foreach($alter_query_array7 as $query)
 	Execute($query);
 }
 
-$insert_field_array2 = Array(
-				"insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'bill_pobox','invoicebillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
-				
-				"insert into vtiger_field values (6,".$conn->getUniqueID("vtiger_field").",'pobox','accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (6,".$conn->getUniqueID("vtiger_field").",'pobox','accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
-				
-				"insert into vtiger_field values (7,".$conn->getUniqueID("vtiger_field").",'pobox','leadaddress',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (23,".$newfieldid.",'bill_pobox','invoicebillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('23',$newfieldid);
 
-				"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'mailingpobox','contactaddress',1,'1','mailingpobox','Mailing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'otherpobox','contactaddress',1,'1','otherpobox','Other Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (23,".$newfieldid.",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('23',$newfieldid);
 
-				"insert into vtiger_field values (18,".$conn->getUniqueID("vtiger_field").",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (6,".$newfieldid.",'pobox','accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('6',$newfieldid);
 
-				"insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'bill_pobox','quotesbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (6,".$newfieldid.",'pobox','accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('6',$newfieldid);
 
-				"insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'bill_pobox','pobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (7,".$newfieldid.",'pobox','leadaddress',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('7',$newfieldid);
 
-				"insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'bill_pobox','sobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')"
-			    );
-foreach($insert_field_array2 as $query)
-{
-	Execute($query);
-}
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (4,".$newfieldid.",'mailingpobox','contactaddress',1,'1','mailingpobox','Mailing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('4',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (4,".$newfieldid.",'otherpobox','contactaddress',1,'1','otherpobox','Other Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('4',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (18,".$newfieldid.",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('18',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (20,".$newfieldid.",'bill_pobox','quotesbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (20,".$newfieldid.",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (21,".$newfieldid.",'bill_pobox','pobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('21',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (21,".$newfieldid.",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('21',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (22,".$newfieldid.",'bill_pobox','sobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('22',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (22,".$newfieldid.",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')";
+Execute($insert_query);
+populateFieldForSecurity('22',$newfieldid);
 
 
 $fieldname =array('bill_city','bill_state','bill_code','bill_country','ship_city','ship_state','ship_code','ship_country');
@@ -970,7 +1013,7 @@ $query_array1 = Array(
 			"delete from vtiger_actionmapping where actionname='SaveSalesOrder'",
 			"delete from vtiger_actionmapping where actionname='DeleteSalesOrder'",
 
-			"insert into vtiger_field values (13,".$conn->getUniqueID("vtiger_field").",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)",
+			//"insert into vtiger_field values (13,".$conn->getUniqueID("vtiger_field").",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)",
 
 			"alter table vtiger_troubletickets add column filename varchar(50) default NULL after title"
 		     );
@@ -978,6 +1021,12 @@ foreach($query_array1 as $query)
 {
 	Execute($query);
 }
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (13,".$newfieldid.",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)";
+Execute($insert_query);
+populateFieldForSecurity('13',$newfieldid);
+
 
 $create_query3 = "create table vtiger_parenttab(parenttabid int(19) not null, parenttab_label varchar(100) not null, sequence int(10) not null, visible int(2) not null default '0', Primary Key(parenttabid))";
 Execute($create_query3);
@@ -1491,7 +1540,7 @@ Execute($create_query6);
 
 $alter_query_array8 = Array(
 				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
-				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE",
 				"ALTER TABLE `vtiger_accountgrouprelation` ADD KEY accountgrouprelation_groupname_idx (groupname)",
 			   );
 foreach($alter_query_array8 as $query)
@@ -1611,8 +1660,10 @@ Execute($alter_query);
 
 //$update_query2 = "UPDATE vtiger_field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
 //changed in 24-04-06 because the reference has not been entered into the vtiger_field table. 
-$update_query2 = "insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$update_query2 = "insert into vtiger_field values (4,".$newfieldid.",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
 Execute($update_query2);
+populateFieldForSecurity('4',$newfieldid);
 
 $update_query_array4 = Array(
 				"UPDATE vtiger_field SET info_type = 'BAS'",
@@ -1704,17 +1755,23 @@ Execute($alter_query5);
 $alter_query = "ALTER TABLE vtiger_contactdetails ADD column reference varchar(3) default NULL after imagename";
 Execute($alter_query);
 
-$insert_query_array23 = Array(
-				"insert into vtiger_blocks values(75,4,'LBL_IMAGE_INFORMATION',5,0,0,0,0,0)",
-				"insert into vtiger_field values(4,".$conn->getUniqueID("vtiger_field").",'imagename','contactdetails',1,'69','imagename','Contact Image',1,0,0,100,1,75,1,'V~O',1,null,'ADV')",
+Execute("insert into vtiger_blocks values(75,4,'LBL_IMAGE_INFORMATION',5,0,0,0,0,0)");
 
-				"Insert into vtiger_field values(9,".$conn->getUniqueID("vtiger_field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')",
-				"Insert into vtiger_field values(16,".$conn->getUniqueID("vtiger_field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')"
-			     );
-foreach($insert_query_array23 as $query)
-{
-	Execute($query);
-}
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (4,".$newfieldid.",'imagename','contactdetails',1,'69','imagename','Contact Image',1,0,0,100,1,75,1,'V~O',1,null,'ADV')";
+Execute($insert_query);
+populateFieldForSecurity('4',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (9,".$newfieldid.",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('9',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (16,".$newfieldid.",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('16',$newfieldid);
+
 
 $alter_query6 = "ALTER TABLE vtiger_activity ADD COLUMN visibility varchar(50) NOT NULL DEFAULT 'all' after notime";
 Execute($alter_query6);
@@ -1738,35 +1795,132 @@ Execute($insert_query8);
 $insert_query9 = "insert into vtiger_blocks values(78,26,'LBL_DESCRIPTION_INFORMATION',3,0,0,0,0,0)";
 Execute($insert_query9);
 
-$insert_query_array24 = Array(
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'product_id','campaign',1,59,'product_id','Product',1,0,0,100,3,76,1,'I~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedresponse','campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'sponsor','campaign',1,'1','sponsor','Sponsor',1,0,0,100,12,76,1,'V~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')"
-			     );
-foreach($insert_query_array24 as $query)
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid,'product_id','campaign',1,59,'product_id','Product',1,0,0,100,3,76,1,'I~O',0,5,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid,'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'expectedresponse','campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'sponsor','campaign',1,'1','sponsor','Sponsor',1,0,0,100,12,76,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (26, $newfieldid, 'description','crmentity',1,'19','description','Description',1,0,0,100,1,82,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('26',$newfieldid);
+
+/*
+//add all field entries to def_org_field and profile2field tables for Campaigns
+$field_res = $conn->query("select fieldid from vtiger_field where tabid=26");
+for($i=0;$i<$conn->num_rows($field_res);$i++)
 {
-	Execute($query);
+	$fieldid = $conn->query_result($field_res,$i,'fieldid');
+
+	populateFieldForSecurity('26',$fieldid);
 }
+*/
 
 $insert_query_array25 = Array(
 	"insert into vtiger_relatedlists values (".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)",
@@ -1777,15 +1931,16 @@ foreach($insert_query_array25 as $query)
 	Execute($query);
 }
 
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (7, $newfieldid, 'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,13,3,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('7',$newfieldid);
 
-$insert_query_array26 = Array(
-	"insert into vtiger_field values (7,".$conn->getUniqueID("vtiger_field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,13,3,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')"
-			     );
-foreach($insert_query_array26 as $query)
-{
-	Execute($query);
-}
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (4, $newfieldid, 'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('4',$newfieldid);
+
 
 $create_query24 = "
 CREATE TABLE vtiger_campaign (
@@ -2555,18 +2710,28 @@ $migrationlog->debug("Database Modifications after 5.0(Alpha 5) starts here.");
 
 
 //Added on 22-04-06 - to add the Notify Owner vtiger_field in Contacts and Accounts
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (4, $newfieldid, 'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')";
+Execute($insert_query);
+populateFieldForSecurity('4',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (6, $newfieldid, 'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')";
+Execute($insert_query);
+populateFieldForSecurity('6',$newfieldid);
+
 $notify_owner_array = Array(
 	"update vtiger_field set sequence=26 where tabid=4 and fieldname='modifiedtime'",
 	"update vtiger_field set sequence=25 where tabid=4 and fieldname='createdtime'",
 	
-	"insert into vtiger_field values(4,".$conn->getUniqueID("vtiger_field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
+	//"insert into vtiger_field values(4,".$conn->getUniqueID("vtiger_field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
 	"alter table vtiger_contactdetails add column notify_owner varchar(3) default 0 after reference",
 
 	"update vtiger_field set sequence=21 where tabid=6 and fieldname='modifiedtime'",
 	"update vtiger_field set sequence=20 where tabid=6 and fieldname='createdtime'",
 	"update vtiger_field set sequence=19 where tabid=6 and fieldname='assigned_user_id'",
 	
-	"insert into vtiger_field values(6,".$conn->getUniqueID("vtiger_field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
+	//"insert into vtiger_field values(6,".$conn->getUniqueID("vtiger_field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
 	"alter table vtiger_account add column notify_owner varchar(3) default 0 after emailoptout"
 			   );
 foreach($notify_owner_array as $query)
@@ -2575,8 +2740,10 @@ foreach($notify_owner_array as $query)
 }
 
 //Added for RSS entries
-$rss_insert_query = "insert into vtiger_field values (24,".$conn->getUniqueID("vtiger_field").",'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')";
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$rss_insert_query = "insert into vtiger_field values (24, $newfieldid, 'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')";
 Execute($rss_insert_query);
+populateFieldForSecurity('24',$newfieldid);
 
 //Quick Create Feature added for Vendor & PriceBook
 $quickcreate_query = Array(
@@ -2924,44 +3091,172 @@ $user_query_array = Array(
 "insert into vtiger_blocks values (79,29,'LBL_USERLOGIN_ROLE',1,0,0,0,0,0)",
 "insert into vtiger_blocks values (80,29,'LBL_MORE_INFORMATION',2,0,0,0,0,0)",
 "insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)",
-
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')",
 			 );
 foreach($user_query_array as $query)
 {
 	Execute($query);
 }
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid, 'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid, 'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid, 'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid, 'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$insert_query = "insert into vtiger_field values (29, $newfieldid,'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')";
+Execute($insert_query);
+populateFieldForSecurity('29',$newfieldid);
+
 
 $create_query29 = "CREATE TABLE vtiger_status (
 			`statusid` int(19) NOT NULL auto_increment,
@@ -3028,14 +3323,28 @@ Execute("drop table vtiger_rsscategory");
 Execute("delete from vtiger_field where tabid=24");
 
 //Added on 23-06-06
-Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'hour_format','vtiger_users',1,'116','hour_format','Calendar Hour Format',1,0,0,100,13,79,3,'I~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'end_hour','vtiger_users',1,'116','end_hour','Day ends at',1,0,0,100,15,79,3,'I~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'start_hour','vtiger_users',1,'116','start_hour','Day starts at',1,0,0,100,14,79,3,'I~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (29, $newfieldid, 'hour_format','vtiger_users',1,'116','hour_format','Calendar Hour Format',1,0,0,100,13,79,3,'I~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (29, $newfieldid, 'end_hour','vtiger_users',1,'116','end_hour','Day ends at',1,0,0,100,15,79,3,'I~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('29',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (29, $newfieldid, 'start_hour','vtiger_users',1,'116','start_hour','Day starts at',1,0,0,100,14,79,3,'I~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('29',$newfieldid);
 
 Execute("insert into vtiger_relatedlists values (".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",".getTabid("Potentials").",'get_opportunities',3,'Potentials',0)");
 Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",9,'get_activities',4,'Activities',0)");
 
-Execute("insert into vtiger_field values (2,".$conn->getUniqueID("vtiger_field").",'campaignid','vtiger_potential',1,'58','campaignid','Campaign Source',1,0,0,100,12,1,1,'N~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (2, $newfieldid, 'campaignid','vtiger_potential',1,'58','campaignid','Campaign Source',1,0,0,100,12,1,1,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('2',$newfieldid);
 
 //Added on 28-06-06
 //Campaigns module added in Leads and Contacts RelatedList
@@ -3109,25 +3418,86 @@ Execute("CREATE TABLE vtiger_shippingtaxinfo ( taxid int(3) NOT NULL, taxname va
 
 Execute("CREATE TABLE vtiger_inventoryshippingrel (id int(19) NOT NULL, KEY inventoryishippingrel_id_idx (id) ) ENGINE=InnoDB");
 
-Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_purchaseorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,57,3,'V~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_purchaseorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_purchaseorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_purchaseorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (21, $newfieldid, 'taxtype','vtiger_purchaseorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,57,3,'V~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('21',$newfieldid);
 
-Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_salesorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,15,63,3,'V~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_salesorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_salesorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_salesorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (21, $newfieldid, 'discount_percent','vtiger_purchaseorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,57,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('21',$newfieldid);
 
-Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_quotes',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,51,3,'V~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_quotes',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_quotes',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_quotes',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (21, $newfieldid, 'discount_amount','vtiger_purchaseorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('21',$newfieldid);
 
-Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'taxtype','vtiger_invoice',1,'15','hdnTaxType','Tax Type',1,0,0,100,13,69,3,'V~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'discount_percent','vtiger_invoice',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'discount_amount','vtiger_invoice',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,13,69,3,'N~O',1,null,'BAS')");
-Execute("insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'s_h_amount','vtiger_invoice',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (21, $newfieldid, 's_h_amount','vtiger_purchaseorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('21',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (22, $newfieldid, 'taxtype','vtiger_salesorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,15,63,3,'V~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('22',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (22, $newfieldid, 'discount_percent','vtiger_salesorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,15,63,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('22',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (22, $newfieldid, 'discount_amount','vtiger_salesorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('22',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (22, $newfieldid, 's_h_amount','vtiger_salesorder',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,15,63,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('22',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (20, $newfieldid, 'taxtype','vtiger_quotes',1,'15','hdnTaxType','Tax Type',1,0,0,100,14,51,3,'V~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (20, $newfieldid, 'discount_percent','vtiger_quotes',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,14,51,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (20, $newfieldid, 'discount_amount','vtiger_quotes',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (20, $newfieldid, 's_h_amount','vtiger_quotes',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,51,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('20',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (23, $newfieldid, 'taxtype','vtiger_invoice',1,'15','hdnTaxType','Tax Type',1,0,0,100,13,69,3,'V~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('23',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (23, $newfieldid, 'discount_percent','vtiger_invoice',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,13,69,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('23',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (23, $newfieldid, 'discount_amount','vtiger_invoice',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,13,69,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('23',$newfieldid);
+
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (23, $newfieldid, 's_h_amount','vtiger_invoice',1,'1','hdnS_H_Amount','S&H Amount',1,0,0,100,14,57,3,'N~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('23',$newfieldid);
+
 
 Execute("alter table vtiger_purchaseorder add column taxtype varchar(25) default NULL after subtotal");
 Execute("alter table vtiger_purchaseorder add column discount_percent decimal(11,3) default NULL after taxtype");
@@ -3427,9 +3797,15 @@ Execute("delete from vtiger_tab where tabid=17");
 
 Execute("update vtiger_tab set name='Calendar',tablabel='Calendar' where tabid=9");
 
-Execute("insert into vtiger_field values (9,".$conn->getUniqueID("vtiger_field").",'time_end','vtiger_activity', 1,'2','time_end','End  Time',1,0,0,100,6,19,3,'T~O',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (9, $newfieldid, 'time_end','vtiger_activity', 1,'2','time_end','End  Time',1,0,0,100,6,19,3,'T~O',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('9',$newfieldid);
 
-Execute("insert into vtiger_field values (16,".$conn->getUniqueID("vtiger_field").",'time_end','vtiger_activity', 1,'2','time_end','End Time',1,0,0,100,6,41,3,'T~M',1,null,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+$query = "insert into vtiger_field values (16, $newfieldid, 'time_end','vtiger_activity', 1,'2','time_end','End Time',1,0,0,100,6,41,3,'T~M',1,null,'BAS')";
+Execute($query);
+populateFieldForSecurity('16',$newfieldid);
 
 Execute("delete from vtiger_profile2tab where tabid=17");
 
@@ -3594,16 +3970,6 @@ Execute("delete from vtiger_datashare_relatedmodules where relatedto_tabid=10");
 
 //change the share_action_name in vtiger_org_share_action_mapping table for entry Public:Read,Create/Edit 
 Execute('update vtiger_org_share_action_mapping set share_action_name="Public: Read, Create/Edit" where share_action_name="Public:Read,Create/Edit"');
-
-
-//add all field entries to def_org_field and profile2field tables for Campaigns
-$field_res = $conn->query("select fieldid from vtiger_field where tabid=26");
-for($i=0;$i<$conn->num_rows($field_res);$i++)
-{
-	$fieldid = $conn->query_result($field_res,$i,'fieldid');
-
-	populateFieldForSecurity('26',$fieldid);
-}
 
 //delete the entries from vtiger_profile2standardpermissions table for Emails
 Execute("delete from vtiger_profile2standardpermissions where tabid=10");
