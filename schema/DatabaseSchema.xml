@@ -6051,7 +6051,7 @@
 		<field name="listprice" type="N" size="25.3" />
 		<field name="discount_percent" type="N" size="7.3" />
 		<field name="discount_amount" type="N" size="7.3" />
-		<field name="comment" type="C" size="100" />
+		<field name="comment" type="C" size="250" />
 		<field name="description" type="X" />
 
 		<index name="inventoryproductrel_id_idx">
