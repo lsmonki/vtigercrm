@@ -242,7 +242,6 @@ function set_return_todo(product_id, product_name) {
         window.opener.document.createTodo.task_parent_name.value = product_name;
         window.opener.document.createTodo.task_parent_id.value = product_id;
 }
-//Added for dinakaran---------STARTS----------
 //When changing the Account Address Information  it should also change the related contact address.
 function checkAddress(form,id)
 {
@@ -290,4 +289,4 @@ function checkAddress(form,id)
                         );
 
 }
-//Added for dinakaran --------ENDS ------------
+//Changing account address info - ENDS

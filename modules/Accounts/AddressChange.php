@@ -16,7 +16,7 @@ require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $adb;
 global $log;
-//When changing the Account Address Information  it should also change the related contact address. --Dinakaran
+//When changing the Account Address Information  it should also change the related contact address --Dinakaran
 $record = $_REQUEST['record'];
 $sql ="select vtiger_account.accountid,vtiger_accountbillads.street as billingstreet, vtiger_accountbillads.city as billingcity,vtiger_accountbillads.code as billingcode,vtiger_accountbillads.country as billingcountry,vtiger_accountbillads.state as billingstate,vtiger_accountbillads.pobox as billingpobox ,vtiger_accountshipads.* from vtiger_account inner join vtiger_accountbillads on vtiger_accountbillads.accountaddressid=vtiger_account.accountid inner join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid where accountid=".$record;
 //$sql ="select vtiger_account.accountid,vtiger_accountbillads.* ,vtiger_accountshipads.* from vtiger_accountbillads,vtiger_accountshipads,vtiger_account where accountid =".$record;
