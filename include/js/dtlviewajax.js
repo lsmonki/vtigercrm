@@ -213,6 +213,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
+		if(fieldName == "email" || fieldName == "email1"){
+			var priEmail = getObj("pri_email");
+			if(priEmail)
+				priEmail.value = tagValue;
+		}else{
+			var secEmail = getObj("sec_email");
+			if(secEmail)
+                	        secEmail.value = tagValue;
+		}
 	}else if(uitype == '17')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";

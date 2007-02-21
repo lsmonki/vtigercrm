@@ -33,14 +33,14 @@
 		{else}
 			{$MOD.LBL_MAILSELECT_INFO1} {$APP[$FROM_MODULE]}.{$MOD.LBL_MAILSELECT_INFO2}<br><br>
 		{/if}
-			<div style="height:120px;overflow-y:auto;averflow-x:hidden;" align="center">
+			<div style="height:120px;overflow-y:auto;overflow-x:hidden;" align="center">
 			<table border="0" cellpadding="5" cellspacing="0" width="90%">
 			{foreach name=emailids key=fieldid item=elements from=$MAILINFO}
 			<tr>
 				{if $smarty.foreach.emailids.iteration eq 1}	
-					<td align="center"><input  type="checkbox" value="{$fieldid}" name="email" /></td>
+					<td align="center"><input  type="checkbox" value="{$fieldid}" name="semail" /></td>
 			{else}
-					<td align="center"><input type="checkbox" value="{$fieldid}" name="email"  /></td>
+					<td align="center"><input type="checkbox" value="{$fieldid}" name="semail"  /></td>
 				{/if}
 				{if $ONE_RECORD eq 'true'}	
 					<td align="left"><b>{$elements.0} </b><br>{$MAILDATA[$smarty.foreach.emailids.iteration]}</td>
