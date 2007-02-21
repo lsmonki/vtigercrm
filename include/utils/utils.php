@@ -867,7 +867,7 @@ function to_html($string, $encode=true){
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
 		if (is_array($toHtml))
-			$string =strip_tags($string, '<span><br /><div><a><br><b><u><i><table><td><tr><style><p><command>');
+			$string =strip_tags($string, '<span><br /><div><a><br><b><u><i><table><td><tr><style><p><command><h1><h2><h3><h4><h5><h6><li><ol><ul><th><tbody><font><center><big><hr><format> <strong><html><small>');
         }
 	$log->debug("Exiting to_html method ...");
         return $string;
