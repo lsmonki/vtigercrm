@@ -12,14 +12,14 @@
 global $current_user;
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailBox.php');
 
 if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] != $current_user->id) {echo "ajax failed";flush();exit();}
 $mailid=$_REQUEST["mailid"];
 if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 $MailBox = new MailBox($mailbox);
-$email = new Webmail($MailBox->mbox,$mailid);
+$email = new Webmails($MailBox->mbox,$mailid);
 
 ?>
 <script type="text/javascript">

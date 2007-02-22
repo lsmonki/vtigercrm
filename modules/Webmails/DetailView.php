@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 require_once('include/utils/UserInfoUtil.php');
-require_once("modules/Webmails/Webmail.php");
+require_once("modules/Webmails/Webmails.php");
 require_once("modules/Webmails/MailBox.php");
 
 global $app_strings;
@@ -21,7 +21,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") { $mailid=$_REQUEST[
 global $MailBox;
 $MailBox = new MailBox($mailbox);
 
-$webmail = new Webmail($MailBox->mbox,$mailid);
+$webmail = new Webmails($MailBox->mbox,$mailid);
 $elist = $MailBox->mailList["overview"][($mailid-1)];
 
 echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="previewWindow"><tr>';

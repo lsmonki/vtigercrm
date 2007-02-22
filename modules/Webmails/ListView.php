@@ -22,7 +22,7 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/MailBox.php");
-require_once("modules/Webmails/Webmail.php");
+require_once("modules/Webmails/Webmails.php");
 require_once("modules/Webmails/MailParse.php");
 
 $MailBox = new MailBox($mailbox);
@@ -115,7 +115,7 @@ if($_POST["command"] == "check_mbox") {
                         	$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
                         	$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
                         	$ret .= '"to":"'.$data[$i]->to.'",';
-                        	$email = new Webmail($MailBox->mbox,$data[$i]->msgno);
+                        	$email = new Webmails($MailBox->mbox,$data[$i]->msgno);
                         	if($email->has_attachments)
                         	        $ret .= '"attachments":"1"}';
                         	else

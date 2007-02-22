@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('modules/Emails/Emails.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -30,7 +30,7 @@ $start_message=$_REQUEST["start_message"];
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 $MailBox = new MailBox($mailbox);
-$email = new Webmail($MailBox->mbox, $_REQUEST["mailid"]);
+$email = new Webmails($MailBox->mbox, $_REQUEST["mailid"]);
 $subject = $email->subject;
 $date = $email->date;
 

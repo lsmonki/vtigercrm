@@ -13,7 +13,7 @@
 include('config.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailBox.php');
 
 global $MailBox;
@@ -22,7 +22,7 @@ $MailBox = new MailBox($_REQUEST["mailbox"]);
 $mailid=$_REQUEST["mailid"];
 $num=$_REQUEST["num"];
 
-$email = new Webmail($MailBox->mbox,$mailid);
+$email = new Webmails($MailBox->mbox,$mailid);
 $attachments=$email->downloadAttachments();
 $inline=$email->downloadInlineAttachments();
 
