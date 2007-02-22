@@ -148,6 +148,7 @@ function getaddEventPopupTime($starttime,$endtime,$format)
  */
 function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 {
+	global $mod_strings;
 	$combo = '';
 	$min = $min - ($min%5);
 	if($bimode == 'start' && !$todocheck)
@@ -195,7 +196,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 				$hrsel = ($hour == $hrvalue)?'selected':'';
 				$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrvalue.'</option>';
 			}
-			$combo .= '</select>Hr&nbsp;';
+			$combo .= '</select>'.$mod_strings[LBL_HR].'&nbsp;';
 			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small '.$jsfn.'>';
 			for($i=0;$i<12;$i++)
 			{
@@ -204,7 +205,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 				$minsel = ($min == $value)?'selected':'';
 				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 			}
-			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
+			$combo .= '</select>&nbsp;'.$mod_strings[LBL_MIN].'<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 		}
 		return $combo;
 }
