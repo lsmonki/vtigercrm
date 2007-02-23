@@ -2668,4 +2668,48 @@ function getTranslatedString($str)
 	return $str;
 }
 
+/**	function used to get the list of importable fields
+ *	@param string $module - module name
+ *	@return array $fieldslist - array with list of fieldnames and the corresponding translated fieldlabels. The return array will be in the format of [fieldname]=>[fieldlabel] where as the fieldlabel will be translated
+ */
+function getImportFieldsList($module)
+{
+	global $adb, $log;
+	$log->debug("Entering into function getImportFieldsList($module)");
+	
+	$tabid = getTabid($module);
+
+	//Here we can add special cases for module basis, ie., if we want the fields of display type 3, we can add
+	$displaytype = " displaytype=1 ";
+
+	$fieldnames = "";
+	//For module basis we can add the list of fields for Import mapping
+	if($module == "Leads")
+	{
+		$fieldnames = " fieldname='salutationtype' ";
+	}
+
+	//Form the where condition based on tabid , displaytype and extra fields
+	$where = " WHERE tabid=$tabid and ( $displaytype ";
+	if($fieldnames != "")
+	{
+		$where .= " or $fieldnames ";
+	}
+	$where .= ")";
+
+	//Get the list of fields and form as array with [fieldname] => [fieldlabel]
+	$query = "SELECT fieldname, fieldlabel FROM vtiger_field $where";
+	$result = $adb->query($query);
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$fieldname = $adb->query_result($result,$i,'fieldname');
+		$fieldlabel = $adb->query_result($result,$i,'fieldlabel');
+		$fieldslist[$fieldname] = $fieldlabel;
+	}
+
+	$log->debug("Exit from function getImportFieldsList($module)");
+
+	return $fieldslist;
+}
+
 ?>

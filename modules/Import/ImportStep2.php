@@ -226,10 +226,11 @@ for($row_count = $start_at; $row_count < count($rows); $row_count++ )
 $list_string_key = strtolower($_REQUEST['module']);
 $list_string_key .= "_import_fields";
 
-$translated_column_fields = $mod_list_strings[$list_string_key];
+//Now we are getting the import fields from DB instead of hard coded array $mod_list_strings
+$translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list_strings[$list_string_key];
 
 // adding custom vtiger_fields translations
-getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
+//getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
 
 $cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
