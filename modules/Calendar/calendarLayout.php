@@ -113,7 +113,7 @@ EOQ;
  */
 function get_mini_calendar(& $cal)
 {
-	global $current_user,$adb,$cal_log;
+	global $current_user,$adb,$cal_log,$mod_strings;
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
@@ -133,7 +133,7 @@ function get_mini_calendar(& $cal)
 	                     </td></tr>";
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
-	$minical .= '<th width="12%">Week</th>';
+	$minical .= '<th width="12%">'.$mod_strings['LBL_WEEK'].'</th>';
 	for ($i = 0; $i < 7; $i ++)
         {
                 $weekdays_row = $cal['calendar']->month_array[$cal['calendar']->slices[$i]];
