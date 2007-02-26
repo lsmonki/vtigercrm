@@ -490,20 +490,27 @@ function create_session($user_name, $password)
   $return_access = 'failure';
   require_once('modules/Users/Users.php');
 	$objuser = new Users();
-  if($password != "" && $user_name != '')
+	if($password != "" && $user_name != '')
 	{
-		$objuser->column_fields['user_name'] = $user_name;
-		$encrypted_password = $objuser->encrypt_password($password);
-		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
-		$result = $adb->query($query);
-		if($adb->num_rows($result) > 0)
+		if($objuser->is_authenticated())
 		{
-			$return_access = 'success';
-			$log->debug("Logged in sucessfully from thunderbirdplugin");
-		}else
+			$objuser->column_fields['user_name'] = $user_name;
+			$encrypted_password = $objuser->encrypt_password($password);
+			$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
+			$result = $adb->query($query);
+			if($adb->num_rows($result) > 0)
+			{
+				$return_access = 'success';
+				$log->debug("Logged in sucessfully from thunderbirdplugin");
+			}else
+			{
+				$return_access = 'failure';
+				$log->debug("Logged in failure from thunderbirdplugin");
+			}
+		}
+		else
 		{
 			$return_access = 'failure';
-			$log->debug("Logged in failure from thunderbirdplugin");
 		}
 	}else
 	{
