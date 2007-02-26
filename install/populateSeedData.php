@@ -209,7 +209,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$comboSalesStageArray = Array ("Closed Won");
+	$comboSalesStageArray = Array ("Closed Won","Needs Analysis","Value Proposition","Qualification","Prospecting","Id.Decision Makers");
 	$key = array_rand($comboSalesStageArray);
 	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
@@ -576,7 +576,7 @@ for($i=0;$i<12;$i++)
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$validtill_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$validtill_array = array ("2007-09-21", "2007-10-29", "2007-12-11", "2007-03-29", "2007-06-18");
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quotes();
@@ -648,7 +648,7 @@ for($i=0;$i<5;$i++)
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-08-11", "2007-09-09", "2007-02-28");
 
 for($i=0;$i<5;$i++)
 {
@@ -726,7 +726,7 @@ $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk",
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-07-11", "2007-04-09", "2006-08-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -885,7 +885,7 @@ for($i=0;$i<5;$i++)
 //Populate Email Data
 
 $esubj_array =  array ("Vtiger 5 Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
-$startdate_array =  array ("2006-1-2","2003-3-4","2003-4-5","2001-2-1","2005-8-8");
+$startdate_array =  array ("2007-07-27","2007-05-09","2007-04-05","2007-11-01","2007-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 
 $to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
