@@ -28,13 +28,13 @@
 	<td>
 		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
-				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="{$MOD.LBL_CREATE_REPORT}..." title="{$MOD.LBL_CREATE_REPORT}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="{$MOD.Create_New_Folder}..." title="{$MOD.Create_New_Folder}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="{$MOD.Move_Reports}..." title="{$MOD.Move_Reports}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="{$MOD.LBL_DELETE_FOLDER}..." title="{$MOD.LBL_DELETE_FOLDER}..." border=0></a></td>
 			</tr>
 		</table>
 	</td>
