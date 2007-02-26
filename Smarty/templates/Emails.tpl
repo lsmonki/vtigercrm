@@ -104,7 +104,7 @@ function ShowFolders(folderid)
 										<td align=right>
 											<table >
 											<tr>
-												<td class="componentName" align=right>vtiger Email Client <!-- <img src="{$IMAGE_PATH}titleMailClient.gif" align="right"/> --></td>
+												<td class="componentName" align=right>{$MOD.LBL_VTIGER_EMAIL_CLIENT}<!-- <img src="{$IMAGE_PATH}titleMailClient.gif" align="right"/> --></td>
 											</tr>
 											</table>
 									</td>

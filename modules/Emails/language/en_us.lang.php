@@ -146,6 +146,7 @@ $mod_strings = Array(
 'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
 'LBL_MULTIPLE'=>'Multiple',
 'LBL_COMPOSE_EMAIL'=>'Compose E-Mail',
+'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Email Client',
 );
 
 ?>
