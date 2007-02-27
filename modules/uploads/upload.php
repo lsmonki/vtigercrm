@@ -66,8 +66,8 @@ $theme_path="themes/".$theme."/";
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr>
 			<td colspan="2" align="center">
-					<input type="submit" name="save" value=" &nbsp;Attach&nbsp; " class="crmbutton small save" />&nbsp;&nbsp;
-					<input type="button" name="cancel" value=" Cancel " class="crmbutton small cancel" onclick="self.close();" />
+					<input type="submit" name="save" value="&nbsp;<? echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" />&nbsp;&nbsp;
+					<input type="button" name="cancel" value=" <? echo $mod_strings["LBL_CANCEL"];?> " class="crmbutton small cancel" onclick="self.close();" />
 			</td>	
 		</tr>
 	</table>
