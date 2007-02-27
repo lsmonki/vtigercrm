@@ -84,7 +84,7 @@ function set_password(form) {
 
 <table width='100%' cellspacing='0' cellpadding='5' border='0' class="small">
 <tr>
-	<td class="detailedViewHeader" colspan="2"><b>Change Password</b></td>
+	<td class="detailedViewHeader" colspan="2"><b><?php echo $mod_strings['LBL_CHANGE_PASSWORD']; ?></b></td>
 </tr>
 <?php if (!is_admin($current_user)) {
 	echo "<tr>";
