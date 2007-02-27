@@ -87,7 +87,7 @@ function deleteMapping()
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 				   <tr>
-					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
 				   </tr>
 				   <tr>
 					<td>&nbsp;</td>
@@ -95,13 +95,13 @@ function deleteMapping()
 				   <tr>
 					<td align="left"  style="padding-left:40px;">
 						<span class="genHeaderGray">{$MOD.LBL_STEP_2_3} </span>&nbsp; 
-						<span class="genHeaderSmall">{$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
+						<span class="genHeaderSmall">{$APP.$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
 				   <tr>
 					<td align="left" style="padding-left:40px;"> 
-					   {$MOD.LBL_STEP_2_MSG} {$MODULE} {$MOD.LBL_STEP_2_MSG1} 
-					   {$MOD.LBL_STEP_2_TXT} {$MODULE}. 
+					   {$MOD.LBL_STEP_2_MSG} {$APP.$MODULE} {$MOD.LBL_STEP_2_MSG1} 
+					   {$MOD.LBL_STEP_2_TXT} {$APP.$MODULE}. 
 					</td>
 				   </tr>
 				   <tr>
