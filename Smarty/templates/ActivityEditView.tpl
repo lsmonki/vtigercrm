@@ -232,7 +232,14 @@ var gVTModule = '{$smarty.request.module}';
 											{else}
 											<input name="assigned_user_id" value="{$CURRENTUSERID}" type="hidden">
 											{/if}
-											<br>{if $LABEL.sendnotification neq ''}<input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}{/if}
+											<br>{if $LABEL.sendnotification neq ''}
+												{if $ACTIVITYDATA.sendnotification eq 1}
+
+												<input type="checkbox" name="sendnotification" checked>&nbsp;{$LABEL.sendnotification}
+												{else}
+												<input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}
+												{/if}
+											{/if}
 										</td>
 									</tr>
 									{if $LABEL.taskpriority neq ''}
