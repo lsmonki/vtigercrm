@@ -9,10 +9,25 @@
  ********************************************************************************/
 function load_webmail(mid) {
         var node = $("row_"+mid);
-	if(node.className == "unread_email") {
+	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
+	{
+		$('fnt_subject_'+mid).color="";
+		$('fnt_date_'+mid).color="";
+		$('fnt_from_'+mid).color="";
+
+	}
+	if(node.className == "mailSelected") {
 		var unread  = parseInt($(mailbox+"_unread").innerHTML);
 		if(unread != 0)
-			$(mailbox+"_unread").innerHTML = (unread-1);
+	{
+			var curUnread;
+			curUnread = unread -1;
+			if(curUnread == 0)
+				$(mailbox+"_count").style.display="none";
+			else
+				$(mailbox+"_unread").innerHTML = curUnread;
+		}
+			
 
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
@@ -158,13 +173,12 @@ function check_for_new_mail(mbox) {
                         method: 'post',
                         postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true&file=ListView',
                         onComplete: function(t) {
-			//alert(t.responseText);
-                            try {
+		             try {
 				// TODO: replace this at some point with prototype JSON
 				// tools
                                 var data = eval('(' + t.responseText + ')');
-				var read  = parseInt($(mailbox+"_read").innerHTML);
-				$(mailbox+"_read").innerHTML = (read+data.mails.length);
+				//var read  = parseInt($(mailbox+"_read").innerHTML);
+				//$(mailbox+"_read").innerHTML = (read+data.mails.length);
 				var unread  = parseInt($(mailbox+"_unread").innerHTML);
 				$(mailbox+"_unread").innerHTML = (unread+data.mails.length);
                                 for (var i=0;i<data.mails.length;i++) {
@@ -191,8 +205,11 @@ function check_for_new_mail(mbox) {
                                                 'td',
                                                 [ Builder.node(
                                                         'input',
-                                                        {type: 'checkbox', name: 'checkbox_'+mailid, className: 'msg_check'}
+ {type: 'checkbox', name: 'selected_id', value: mailid, className: 'msg_check'}
+                                                       
                                                 )]
+
+
                                         );
 
                                         tr.appendChild(check);
@@ -275,9 +292,12 @@ function check_for_new_mail(mbox) {
                                         for(var j=0;j<tels.length;j++) {
 					    try {
                                                 if(tels[j].id.match(/row_/)) {
-							//we are deleting the row and add it - AVOID THIS DELTE - MICKIE
-                                                	$("message_table").childNodes[1].deleteRow(tr,tels[j]);
-                                                	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
+							//we are
+                                        deleting the row and add it -
+                                        AVOID THIS DELTE - MICKIE
+
+                                                	//$("message_table").childNodes[1].deleteRow(tr,tels[j]);commented since header does not come when new mails arrive                                                
+	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
                                                         break;
                                         	}
 					    }catch(f){}
@@ -319,44 +339,39 @@ function show_hidden() {
                         new Effect.Fade(els[i],{queue: {position: 'end', scope: 'show'}, duration: 0.2});
         }
 }
-function mass_delete() {
-	var ok = confirm("Are you sure you want to delete these messages?");
-	if(ok) {
-		// TODO: CHANGE THIS ASAP.  This spikes the client proc @ 100% and
-		// depending on the mbox size may seem completely unresponsive for
-		// extended periods.  Could be changed with getElementsByClassName()
-		// to shorten the loop.  The majority of the slowdown probably comes from
-		// executing an AJAX delete_msg for each mailid :).
-        	$("status").style.display="block";
-        	var els = document.getElementsByTagName("INPUT");
-        	var cnt = (els.length-1);
-		var nids='';
-		var j=0;
-        	for(var i=cnt;i>0;i--) {
-                	if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
-                        	if(els[i].checked) {
-                                	var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
-
-					//change the selected rows as red when they deleted
-					$("row_"+nid).className = "delete_email";
-
-					if(typeof nid == 'undefined' || nid == "checkbox")
-						nids += '';
-					else
-						nids += nid+":";
-				}
-			}
-			j++;
-		}
+function mass_delete()
+{
+       var select_options  =  document.getElementsByName('selected_id');
+       var x = select_options.length;
+       var nids = "";
+       var nid='';
+       xx = 0;
+        for(i = 0; i < x ; i++)
+        {
+            if(select_options[i].checked)
+            {
+                idvalue= select_options[i].value;
+		nid += idvalue +":";
+                xx++;
+            }
+        }
+        if (xx != 0)
+           nids=nid;
+        else
+        {
+            alert("Please select at least one message to delete");
+            return false;
+        }
+        if(confirm("Are you sure you want to delete ?"))
 		runEmailCommand("delete_multi_msg",nids);
-	}
 }
+
 function move_messages() {
         $("status").style.display="block";
         var els = document.getElementsByTagName("INPUT");
         var cnt = (els.length-1);
         for(var i=cnt;i>0;i--) {
-                if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
+                if(els[i].type == "checkbox" && els[i].name.indexOf("_")) {
                         if(els[i].checked) {
                                 var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
                                 var mvmbox = $("mailbox_select").value;
@@ -365,8 +380,7 @@ function move_messages() {
                                         {queue: {position: 'end', scope: 'command'},
                                                 method: 'post',
                                                 postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
-                                                //postBody: 'module=Webmails&action=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
-                                                onComplete: function(t) {
+                                              onComplete: function(t) {
                                                         //alert(t.responseText);
                                                 }
                                         }
@@ -394,6 +408,7 @@ function runEmailCommand(com,id) {
                         postBody: 'module=Webmails&action=WebmailsAjax&command='+command+'&mailid='+id+'&mailbox='+mailbox,
                         onComplete: function(t) {
                                 resp = t.responseText;
+	id=resp;
                                 if(resp.match(/ajax failed/)) {return;}
                                 switch(command) {
                                     case 'expunge':
@@ -407,11 +422,11 @@ function runEmailCommand(com,id) {
 					for(i=0;i<rows.length;i++)  {
 						var id = rows[i];
                                         	var row = $("row_"+id);
-						if(row.className == "unread_email") {
+						if(row.className == "mailSelected") {
 							var unread  = parseInt($(mailbox+"_unread").innerHTML);
 							$(mailbox+"_unread").innerHTML = (unread-1);
 						}
-                                        	row.className = "deletedRow";
+                                        	row.className = "delete_email";
 
                                         	Try.these (
 							function() {
@@ -528,8 +543,11 @@ function show_addfolder() {
 }
 function show_remfolder(mb) {
         var fldr = $("remove_"+mb);
+  if(typeof(fldr) != "undefined")
+	{
         if(fldr.style.display == 'none')
                 fldr.style.display="";
         else
                 fldr.style.display="none";
+}
 }
