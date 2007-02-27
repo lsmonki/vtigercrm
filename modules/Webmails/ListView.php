@@ -10,7 +10,15 @@
   ********************************************************************************/
 
 // figure out which page we are on and what mailbox we want to view
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+//if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != ""){$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "")
+{
+	$mailbox=$_REQUEST["mailbox"];
+}
+else
+{
+	$mailbox="INBOX";
+}
 if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
 $show_hidden=$_REQUEST["show_hidden"];
 
@@ -87,9 +95,9 @@ if($_POST["command"] == "check_mbox_all") {
 if($_POST["command"] == "check_mbox") {
         $adb->println("Inside check_mbox AJAX command");
 
-	$criteria = 'ALL NEW';
+	$criteria = 'NEW';
         $search = imap_search($MailBox->mbox, $criteria);
-        if($search === false) {echo "failed";flush();exit();}
+        //if($search === false) {echo "failed";flush();exit();}
 
 	$adb->println("imap_search($MailBox->mbox, $criteria) ===> ");
 	$adb->println($search);
@@ -247,7 +255,7 @@ $listview_entries = array();
 
 $displayed_msgs=0;
 $new_msgs=0;
-if(($numEmails-1) <= 0)
+if(($numEmails) <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
 else {
 
@@ -255,13 +263,12 @@ if(isset($_REQUEST["search"])) {
 	$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
 	//echo $searchstring."<br>";
 	$searchlist = imap_search($MailBox->mbox,$searchstring);
-	if($searchlist === false)
-  		echo "The search failed";
+//	if($searchlist === false)
+  //		echo "The search failed";
 
 	$num_searches = count($searchlist);
 
-	//print_r($searchlist);
-	$c=$numEmails;
+		$c=$numEmails;
 }
 
 flush();
@@ -269,7 +276,7 @@ flush();
 // MAIN LOOP
 // Main loop to create listview entries
 $i=1;
-while ($i<$c) {
+while ($i<=$c) {
 	if(is_array($searchlist)) {
 		for($l=0;$l<$num_searches;$l++) {
 			if($mails[$start_message]->msgno == $searchlist[$l])
@@ -303,18 +310,40 @@ if (is_array($list)) {
 		$i++;
 
 		if ($_REQUEST["mailbox"] == $tmpval) {
+	if($tmpval != "INBOX")
                         $boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span> of <span id="'.$tmpval.'_read">'.$num.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			$folders .= '<li class="tabUnSelected"
+			style="padding-left:0px;"><img
+			src="'.$image_path.'/'.$img.'"
+			align="absmiddle" />&nbsp;&nbsp;<a
+			href="javascript:changeMbox(\''.$tmpval.'\');"
+			class="webMnu"
+			onmouseover="show_remfolder(\''.$tmpval.'\');"
+			onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span
+			id="'.$tmpval.'_count"
+			style="font-weight:bold">';
+if($new_msgs > 0)
+				$folders .= '(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 		} else {
 			$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$tmpval, SA_ALL);
 			$_SESSION["mailboxes"][$tmpval] = $box->unseen;
 
 			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'"><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span> of <span id="'.$tmpval.'_read">'.$num.'</span>)</span></li>';
+			$folders .= '<li class="lvtColData"
+                      	onmouseover="this.className=\'lvtColDataHover\'"
+                      	onmouseout="this.className=\'lvtColData\'"><img
+                      	src="'.$image_path.'/'.$img.'"
+                      	align="absmiddle" />&nbsp;&nbsp;<a
+                      	href="javascript:changeMbox(\''.$tmpval.'\');"
+                      	class="webMnu">'.$tmpval.'</a>&nbsp;<span
+                      	id="'.$tmpval.'_count"
+                      	style="font-weight:bold">';
+	if($box->unseen > 0)
+				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 		}
  	}
         $boxes .= '</select>';
@@ -323,6 +352,7 @@ if (is_array($list)) {
 imap_close($MailBox->mbox);
 
 $smarty = new vtigerCRM_Smarty;
+$smarty->assign("SEARCH_VALUE",$_REQUEST['search_input']);
 $smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
