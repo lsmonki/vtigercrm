@@ -492,10 +492,10 @@ function create_session($user_name, $password)
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
 	{
-		if($objuser->is_authenticated())
+		$objuser->column_fields['user_name'] = $user_name;
+		$encrypted_password = $objuser->encrypt_password($password);
+		if($objuser->load_user($password) && $objuser->is_authenticated())
 		{
-			$objuser->column_fields['user_name'] = $user_name;
-			$encrypted_password = $objuser->encrypt_password($password);
 			$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
 			$result = $adb->query($query);
 			if($adb->num_rows($result) > 0)
@@ -508,15 +508,11 @@ function create_session($user_name, $password)
 				$log->debug("Logged in failure from thunderbirdplugin");
 			}
 		}
-		else
-		{
-			$return_access = 'failure';
-		}
 	}else
 	{
 		$return_access = 'failure';
 		$log->debug("Logged in failure from thunderbirdplugin");
-  }
+	}
 	return $return_access;
 }
 
