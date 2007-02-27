@@ -604,7 +604,7 @@ $app_strings = array (
 'LBL_ZERO_DISCOUNT' => 'Zero Discount',
 'LBL_OF_PRICE' => 'of Price',
 'LBL_DIRECT_PRICE_REDUCTION' => 'Direct Price Reduction',
-'LBL_INDIVIDUAL' => 'Individual',
+'LBL_INDIVIDUAL' => 'individual',
 'LBL_CPY_MAILING_ADDRESS' => 'Copy Mailing Address',
 'LBL_CPY_OTHER_ADDRESS' => 'Copy Other Address',
 'LBL_PERMISSION' => 'You are not permitted to execute this Operation',
@@ -637,6 +637,9 @@ $app_strings = array (
 'LBL_END_DATE_TIME'=>'End Date & Time',
 'LBL_CREATE_MERGE_TEMPLATE'=>'Create Mail Merge templates ',
 'LBL_IMG_FORMATS'=>'(Only jpg, gif, bmp and png images)',
+//Added for Taxmode in detail view of Product Details.
+'group'=>'Group',
+'individual'=>'individual',
 );
 
 $app_list_strings = array (
@@ -731,4 +734,5 @@ $app_list_strings = array (
     'Leads' => 'Lead',
     'Opportunities' => 'Opportunity',
   ),
+
 ); ?>

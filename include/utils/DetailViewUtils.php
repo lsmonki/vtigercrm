@@ -989,6 +989,7 @@ function getDetailAssociatedProducts($module,$focus)
 	global $log;
 	$log->debug("Entering getDetailAssociatedProducts(".$module.",".$focus.") method ...");
 	global $adb;
+	global $mod_strings;
 	global $theme;
 	global $log;
 	global $app_strings,$current_user;
@@ -1015,7 +1016,7 @@ function getDetailAssociatedProducts($module,$focus)
 	   <tr valign="top">
 	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
 		<td class="dvInnerHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].' : </b></td>
-		<td class="dvInnerHeader">'.$taxtype.'</td>
+		<td class="dvInnerHeader">'.$app_strings[$taxtype].'</td>
 	   </tr>
 	   <tr valign="top">
 		<td width=40% class="lvtCol"><font color="red">*</font>
