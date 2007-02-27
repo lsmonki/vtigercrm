@@ -998,6 +998,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$uitype = $key;
 		$colname = $value;
         }
+
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Calendar' && $colname == "status")
 	{
@@ -1005,6 +1006,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
+	
 	if(strlen($field_val) > 40)
         {
                 $temp_val = substr($field_val,0,40).'...';
@@ -1012,9 +1014,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$temp_val = $field_val;
 	}
-	if($uitype == 52 || $uitype == 53 || $uitype == 77)
+	if($uitype == 53 || $uitype == 77)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
+	}
+	elseif($uitype == 52)
+	{	
+		$value = getUserName($adb->query_result($list_result,$list_result_count,'handler'));
 	}
 	elseif($uitype == 15 && $module == 'Calendar')
 	{
