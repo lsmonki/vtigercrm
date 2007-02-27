@@ -442,7 +442,7 @@
 			<td colspan="3" width="30%" align=left class="dvtCellInfo">
 				{if $MODULE eq 'Products'}
 					<input name="del_file_list" type="hidden" value="">
-					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						<input id="my_file_element" type="file" name="file_1" tabindex="{$vt_tab}" >
 						{assign var=image_count value=0}
 						{if $maindata[3].0.name neq ''}
