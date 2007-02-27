@@ -448,9 +448,9 @@ function getAdvSearchfields($module)
 
 function getcriteria_options()
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>contains</option><option value=\'dcts\'>does not contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>begins with</option><option value=\'ewt\'>ends with</option><option value=\'grt\'>greater than</option><option value=\'lst\'>less than</option><option value=\'grteq\'>greater or equal</option><option value=\'lsteq\'>lesser or equal</option>";
+	$CRIT_OPT = "<option value=\'cts\'>".$app_strings['contains']."</option><option value=\'dcts\'>".$app_strings['does not contains']."</option><option value=\'is\'>".$app_strings['is']."</option><option value=\'isn\'>".$app_strings['is not']."</option><option value=\'bwt\'>".$app_strings['begins with']."</option><option value=\'ewt\'>".$app_strings['ends with']."</option><option value=\'grt\'>".$app_strings['greater than']."</option><option value=\'lst\'>".$app_strings['less than']."</option><option value=\'grteq\'>".$app_strings['greater or equal']."</option><option value=\'lsteq\'>".$app_strings['less or equal']."</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }

@@ -637,9 +637,22 @@ $app_strings = array (
 'LBL_END_DATE_TIME'=>'End Date & Time',
 'LBL_CREATE_MERGE_TEMPLATE'=>'Create Mail Merge templates ',
 'LBL_IMG_FORMATS'=>'(Only jpg, gif, bmp and png images)',
+
 //Added for Taxmode in detail view of Product Details.
 'group'=>'Group',
 'individual'=>'individual',
+
+//Added for values of picklist in Advanced Search filter
+'contains'=>'contains',
+'does not contains'=>'does not contains',
+'is'=>'is',
+'is not'=>'is not',
+'begins with'=>'begins with',
+'ends with'=>'ends with',
+'greater than'=>'greater than',
+'less than'=>'less than',
+'greater or equal'=>'greater or equal',
+'less or equal'=>'less or equal',
 );
 
 $app_list_strings = array (
