@@ -132,7 +132,7 @@ $result = $adb->query("SELECT productname from vtiger_products where expiry_date
 while ($myrow = $adb->fetch_array($result))
 {
   $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support Ending","Dear Admin,<br> This is to inform you that the support for ".$productname ."\n ends shortly. Kindly renew your support please<br>Regards,<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Support Ending","Dear Admin,<br> This is to inform you that the support for ".$productname ."\n ends shortly. To help us serve you better, kindly renew your support please<br>Regards,<br>HelpDesk Team<br>",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
