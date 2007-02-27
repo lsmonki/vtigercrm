@@ -37,24 +37,24 @@ function displayCoords(currObj,obj,mode,curr_row)
 	//Set the Header value for Discount
 	if(mode == 'discount')
 	{ldelim}
-		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
+		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR_X_COLON} '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'tax')
 	{ldelim}
-		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>Set Tax for "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
+		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>{$APP.LABEL_SET_TAX_FOR} "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
-		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
+		document.getElementById("discount_div_title_final").innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR_COLON} '+document.getElementById("netTotal").innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'sh_tax_div_title')
 	{ldelim}
-		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value+'</b>';
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_SH_TAX_FOR_COLON} '+document.getElementById("shipping_handling_charge").value+'</b>';
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
 		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
+		document.getElementById("group_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_GROUP_TAX_FOR_COLON} '+net_total_after_discount+'</b>';
 	{rdelim}
 
 	fnvshobj(currObj,'tax_container');

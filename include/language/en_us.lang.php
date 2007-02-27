@@ -653,6 +653,17 @@ $app_strings = array (
 'less than'=>'less than',
 'greater or equal'=>'greater or equal',
 'less or equal'=>'less or equal',
+
+//For Product Details
+'LABEL_SET_DISCOUNT_FOR_COLON'=>'Set Discount for :',
+'LABEL_SET_TAX_FOR'=>'Set Tax for',
+'LABEL_SET_DISCOUNT_FOR'=>'Set Discount for',
+'LABEL_SET_GROUP_TAX_FOR_COLON'=>'Set Group Tax for :',
+'LABEL_SET_DISCOUNT_FOR_X_COLON'=>'Set Discount for x :',
+'LABEL_SET_TAX_FOR_X'=>'Set Tax for x',
+'LABEL_SET_SH_TAX_FOR_COLON'=>'Set S&H Tax for :',
+
+'Files_Maximum_6'=>'Files Maximum 6',
 );
 
 $app_list_strings = array (
