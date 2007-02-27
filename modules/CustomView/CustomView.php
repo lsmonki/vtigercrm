@@ -22,14 +22,14 @@ require_once('include/utils/utils.php');
 global $adv_filter_options;
 
 $adv_filter_options = array("e"=>"".$mod_strings['equals']."",
-                            "n"=>"".$mod_strings['not_equal_to']."",
-                            "s"=>"".$mod_strings['starts_with']."",
+                            "n"=>"".$mod_strings['not equal to']."",
+                            "s"=>"".$mod_strings['starts with']."",
                             "c"=>"".$mod_strings['contains']."",
-                            "k"=>"".$mod_strings['does_not_contain']."",
-                            "l"=>"".$mod_strings['less_than']."",
-                            "g"=>"".$mod_strings['greater_than']."",
-                            "m"=>"".$mod_strings['less_or_equal']."",
-                            "h"=>"".$mod_strings['greater_or_equal']."",
+                            "k"=>"".$mod_strings['does not contain']."",
+                            "l"=>"".$mod_strings['less than']."",
+                            "g"=>"".$mod_strings['greater than']."",
+                            "m"=>"".$mod_strings['less or equal']."",
+                            "h"=>"".$mod_strings['greater or equal']."",
                             );
 
 class CustomView extends CRMEntity{
