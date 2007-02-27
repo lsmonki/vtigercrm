@@ -100,6 +100,7 @@ foreach($pieces as $val)
 		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This Configuration Wizard will create the requisite data needed to get working with vtiger. The entire process should take about four minutes. Click the Start button when you are ready. 
 <br><br>
 <p><span style="color:#555555">- vtiger CRM 5.0.3 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
+<p><span style="color:#555555">- vtiger CRM does not work with PHP 5.2.x as of now</p> 
 <p align="center"><font color='red'><b>vtiger CRM 5.0.3 will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
 <p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
 						
