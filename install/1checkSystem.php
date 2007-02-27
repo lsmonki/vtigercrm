@@ -322,6 +322,12 @@ $array = Array(
 						<td valign=top ><strong>WebMail attachments Directory</strong><br> (modules/Webmails/tmp/)</td>
 						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Webmails/tmp/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>System will experience problems in saving attachments in received mail. You are strongly urged to give write permissions to ./modules/Webmails/tmp/ folder please!!!"; ?></td>
 					</tr>
+
+					 <tr bgcolor="#fafafa">
+                                                <td valign=top ><strong>WebMail attachments Directory</strong><br> (modules/Webmails/tmp/cache)</td>
+                                                <td valign=top bgcolor="white"><?php echo (is_writable('./modules/Webmails/tmp/cache'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>System will experience problems in saving attachments in received mail. You are strongly urged to give write permissions to ./modules/Webmails/tmp/cache folder please!!!"; ?></td>
+                                        </tr>
+
        				</table>
 				<br><br>
 	   	   		<!-- Recommended Settings -->
