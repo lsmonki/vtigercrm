@@ -292,12 +292,9 @@ function check_for_new_mail(mbox) {
                                         for(var j=0;j<tels.length;j++) {
 					    try {
                                                 if(tels[j].id.match(/row_/)) {
-							//we are
-                                        deleting the row and add it -
-                                        AVOID THIS DELTE - MICKIE
-
+							//we are deleting the row and add it - AVOID THIS DELTE - MICKIE
                                                 	//$("message_table").childNodes[1].deleteRow(tr,tels[j]);commented since header does not come when new mails arrive                                                
-	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
+							$("message_table").childNodes[1].insertBefore(tr,tels[j]);
                                                         break;
                                         	}
 					    }catch(f){}
