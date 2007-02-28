@@ -1942,9 +1942,9 @@ function calQCduedatetime()
         }
         if(type == 'Call')
         {
-                if(min == 55)
+                if(min >= 55)
                 {
-                        min = 0;
+                        min = min%55;
                         hour = hour + 1;
                 }else min = min + 5;
                 if(hour == 24)
