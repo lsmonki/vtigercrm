@@ -655,6 +655,14 @@ $app_strings = array (
 'greater or equal'=>'greater or equal',
 'less or equal'=>'less or equal',
 
+'Private'=>'Private',
+'Public'=>'Public',
+
+'High'=>'High',
+'Medium'=>'Medium',
+'Low'=>'Low',
+
+
 //For Product Details
 'LABEL_SET_DISCOUNT_FOR_COLON'=>'Set Discount for :',
 'LABEL_SET_TAX_FOR'=>'Set Tax for',
