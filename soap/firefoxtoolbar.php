@@ -591,7 +591,8 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 
 function create_account($username,$accountname,$email,$phone,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country)
 {
-	global $current_user;
+	global $current_user,$log,$adb;
+	$log->DEBUG("Entering with data ".$username.$accountname.$email.$phone."<br>".$primary_address_street.$primary_address_city.$primary_address_state.$primary_address_postalcode.$primary_address_country);
 	require_once("modules/Users/Users.php");
 	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
@@ -600,6 +601,13 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	require_once("modules/Accounts/Accounts.php");
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
+		$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$accountname."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+		$result = $adb->query($query);
+	        if($adb->num_rows($result) > 0)
+		{
+			return "Account Name already exists";
+			die;
+		}
 		$account=new Accounts();
 		$account->column_fields['accountname']=$accountname;
 		$account->column_fields['email1']=$email;
