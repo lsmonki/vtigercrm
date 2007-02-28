@@ -50,6 +50,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	$label_fld = Array();
 	$data_fld = Array();
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
