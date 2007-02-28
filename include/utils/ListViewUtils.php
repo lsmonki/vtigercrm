@@ -210,7 +210,14 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	}
      }
 
-	//Added for Action - edit and delete link header in listview
+	        //Added i18n support for email listview header
+		       if($module == "Emails")
+		       {
+			               $list_header[] = $app_strings["Subject"];
+			               $list_header[] = $app_strings["Sender"];
+			               $list_header[] = $app_strings["Date Sent"];
+		       }
+	//Added for Action - edit and delete link header in listview		
 	$list_header[] = $app_strings["LBL_ACTION"];
 
 	$log->debug("Exiting getListViewHeader method ...");
