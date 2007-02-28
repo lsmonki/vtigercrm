@@ -19,7 +19,7 @@ $parenttab = $_REQUEST["parenttab"];
 $return_action = $_REQUEST["return_action"];
 if($cvmodule != "")
 {
-	$viewname = $_REQUEST["viewName"];
+	$viewname = htmlentities($_REQUEST["viewName"]);
 	if(isset($_REQUEST["setDefault"]))
 	{
 	  $setdefault = 1;
@@ -83,7 +83,7 @@ if($cvmodule != "")
    	   $string = substr($allKeys[$i], 0, 4);
 	   if($string == "fval")
    	   {
-		   $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
+		   $adv_filter_value[] = htmlentities($_REQUEST[$allKeys[$i]]);
    	   }
 	}
 	//<<<<<<<advancedfilter>>>>>>>>
