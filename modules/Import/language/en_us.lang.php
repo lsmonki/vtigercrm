@@ -163,6 +163,8 @@ $mod_strings = Array(
 'LBL_MAPPING_RESULTS'=>'Mapping Results ',
 'LBL_LAST_IMPORTED'=>'Last Imported',
 
+'are_imported_succesfully'=>'are imported successfully',
+
 );
 
 /*$mod_list_strings = Array(
