@@ -14,6 +14,7 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Rss/Rss.php');
 
+global $mod_strings;
 $log = LoggerManager::getLogger('rss_save');
 
 if(isset($_REQUEST["record"]))
@@ -35,14 +36,14 @@ elseif(isset($_REQUEST["rssurl"]))
 			$result = $oRss->saveRSSUrl($newRssUrl,$setstarred);
         	if($result == false)
         	{
-				echo "Unable to save the RSS Feed URL" ;
+				echo $mod_strings['UNABLE_TO_SAVE'] ;
         	}else
         	{
 				echo $result;
         	}
 	}else
 	{
-		echo "Not a valid RSS Feed URL" ;
+		echo $mod_strings['NOT_A_VALID'];
 
 	}
 }
