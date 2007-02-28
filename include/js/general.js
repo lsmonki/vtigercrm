@@ -1965,3 +1965,10 @@ function _2digit( no ){
         else return "" + no;
 }
 
+function confirmdelete(url)
+{
+if(confirm("Are you sure?"))
+       {
+            document.location.href=url;
+       }
+}

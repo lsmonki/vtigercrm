@@ -756,7 +756,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
 
 		$list_header[] = $links_info;
-
+/*commented to fix: attachments and notes cant be deleted in Invoice Related List.
 		echo '<script>
 				function confirmdelete(url)
 		                {
@@ -766,7 +766,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		                        }
 		                }
 		        </script>';
-
+*/
 		$list_block[$entity_id] = $list_header;
 
 	}
