@@ -1359,7 +1359,9 @@ function constructSingleStringKeyValueArray($var)
                 $code = 'array(';
                 foreach ($var as $key => $value)
                 {
-                        if($i<$size)
+        //fix for signatue quote(') issue
+        $value=addslashes($value);    
+	            if($i<$size)
                         {
                                 $code .= "'".$key."'=>'".$value."',";
                         }
