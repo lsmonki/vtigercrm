@@ -77,7 +77,11 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 
 			$oCustomView = new CustomView($module);
 			$viewid = $oCustomView->getViewId($module);
-			$oCustomView->getCvColumnListSQL($viewid);
+                        $listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+                        if ($module == "Calendar"){
+                                if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
+                                if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
+                        }
 
 			if($search_module != '')//This is for Tag search
 			{
