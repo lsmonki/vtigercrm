@@ -1122,7 +1122,7 @@ a.reportMnu:Hover{
 /* END OF REPORT */
 /* WEB MAIL */
 a.webMnu{
-	font-size:11px;
+	font-size:5px;
 	color:#0070BA;
 	text-decoration:underline;
 }
@@ -1986,7 +1986,7 @@ textarea {
 .mailClientWriteEmailHeader {
 	font-family:arial, helvetica, sans-serif;
 	font-size:20px;
-	line-height:24px;
+	line-height:3px;
 	font-weight:bold;
 	background:#e0dbb0 url(images/mailSubHeaderBg.gif) repeat-x;
 	padding:10px;
