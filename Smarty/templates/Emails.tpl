@@ -115,9 +115,8 @@ function ShowFolders(folderid)
 							</tr>
 							<!-- Columns -->
 							<tr>
-							<td width="25%" class="big mailSubHeader" ><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
-							<td width="2%">&nbsp;</td>
-							<td width="73%" class="big mailSubHeader" align="left"><span id="mail_fldrname"><b>{$MOD.LBL_ALLMAILS}</b></span></td>
+							<td width="18%" class="big mailSubHeader" ><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
+							<td width="82%" class="big mailSubHeader" align="left"><span id="mail_fldrname"><b>{$MOD.LBL_ALLMAILS}</b></span></td>
 							</tr>
 							
 							<tr>
@@ -152,7 +151,6 @@ function ShowFolders(folderid)
 									</li>
 								</ul>
 								</td>
-								<td>&nbsp;</td>
 								<!-- All mails pane -->
 								<td class="hdrNameBg">
 									<!-- Command Buttons and Search Email -->
@@ -177,7 +175,6 @@ function ShowFolders(folderid)
 							</tr>
 							<!-- Mail Subject Headers list -->
 							<tr>
-								<td>&nbsp;</td>
 								<td align="left">
 									<div id="email_con">
 									{include file="EmailContents.tpl"}
@@ -186,17 +183,6 @@ function ShowFolders(folderid)
 							</tr>
 							
 							<tr>
-								<td>&nbsp;</td>
-								<td height="5"></td>
-							</tr>
-							
-							<tr>
-								<td>&nbsp;</td>
-								<td class="mailSubHeader" id="subjectsetter" align=left><b>&nbsp;</b></td>
-							</tr>
-							
-							<tr>
-								<td>&nbsp;</td>	
 								<td valign="top">
 									<div id="EmailDetails" > 
 									{include file="EmailDetails.tpl"}

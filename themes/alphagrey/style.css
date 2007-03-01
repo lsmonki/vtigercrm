@@ -27,7 +27,7 @@
 .componentName {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
-	line-height: 18px;
+	line-height: 3px;
 	color: #000;
 	font-weight:bold;
 	border-left:2px dotted #333;
@@ -865,7 +865,7 @@ a.submenu:Hover{
 	font-size:12px;
 	background-color:#FFFFFF;
 	width:100%;
-	height:130px;
+	height:175px;
 	overflow:auto;
 	border:0px solid #000000;
 }
