@@ -74,6 +74,7 @@ class CRMEntity
 	$this->save_module($module);
 
 	$assigntype=$_REQUEST['assigntype'];
+	if($module != "Calendar")
           $this->whomToSendMail($module,$this ->mode,$assigntype);
 	
 	$this->db->completeTransaction();

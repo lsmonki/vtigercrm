@@ -27,6 +27,7 @@ require_once('include/logging.php');
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/CalendarCommon.php');
+require_once('data/CRMEntity.php');
 global $adb;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
@@ -137,18 +138,47 @@ if($activity_mode != '')
 	$activemode = "&activity_mode=".$activity_mode;
 
 //Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
-if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
+if($_REQUEST['sendnotification'] == 'on')
 {
 	global $current_user;
 	$local_log->info("send notification is on");
         require_once("modules/Emails/mail.php");
-        $to_email = getUserEmailId('id',$_REQUEST['assigned_user_id']);
-
 	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-	$description = getActivityDetails($_REQUEST['description']);
 
-        $mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+	$crmentity = new CRMEntity();
+	if($_REQUEST['assigntype'] == 'U')
+	{
+	        $to_email[0] = getUserEmailId('id',$_REQUEST['assigned_user_id']);
+		$description = getActivityDetails($_REQUEST['description']);
+		$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+	}
+	//code added to send mail to group
+	if($_REQUEST['assigntype'] == 'T')
+	{
+		$groupname=$_REQUEST['assigned_group_name'];
+		$resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+		$groupid=$adb->query_result($resultqry,0,"groupid");
+		 require_once('include/utils/GetGroupUsers.php');
+		 $getGroupObj=new GetGroupUsers();
+		 $getGroupObj->getAllUsersInGroup($groupid);
+		 $userIds=$getGroupObj->group_users;
+		 $groupqry="select email1,id from vtiger_users where id in(".implode(',',$userIds).")";
+		 $groupqry_res=$adb->query($groupqry);
+		 $noOfRows = $adb->num_rows($groupqry_res);
+		 for($z=0;$z < $noOfRows;$z++)
+		 {
+			 $emailadd = $adb->query_result($groupqry_res,$z,'email1');
+			 $curr_userid = $adb->query_result($groupqry_res,$z,'id');
+			 $description = getActivityDetails($_REQUEST['description'],$curr_userid);
+			 $mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
+
+		 }
+
+
+	}
+
 }
+
 
 //code added to send mail to the vtiger_invitees
 if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
