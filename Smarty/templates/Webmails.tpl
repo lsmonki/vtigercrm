@@ -53,9 +53,8 @@
 					</td>
 				   </tr>
 				   <tr>
-					<td width="22%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
-					<td width="2%">&nbsp;</td>
-					<td width="60%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></td>
+					<td width="20%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
+					<td width="80%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></td>
 				   </tr>
 				   <tr>
 					<td rowspan="6" valign="top" class="hdrNameBg">
@@ -94,7 +93,6 @@
 						</ul>
 
 					</td>
-					<td>&nbsp;</td>
 					<td class="hdrNameBg" style="height:30px;">
 
 			<!-- Table to display Delete, Move To and Search buttons and options - Starts -->
@@ -128,7 +126,6 @@
 					</td>
 				   </tr>
 				   <tr>
-					<td>&nbsp;</td>
 					<!-- td style="padding:1px;" align="left" -->
 					<td  align="left" valign="top" style="height:150px;">
 						<div id="rssScroll" style="height:220px;">
@@ -156,7 +153,6 @@
 					<td colspan="2">&nbsp;</td>
 				   </tr -->
 				   <tr style="visibility:hidden" class="previewWindow">
-					<td>&nbsp;</td>
 					<td class="forwardBg">
 
 					<!-- Table to display the Qualify, Reply, Forward, etc buttons - Starts -->
@@ -177,7 +173,6 @@
 					</td>
 				   </tr>
 				   <tr style="visibility:hidden" class="previewWindow">
-					<td>&nbsp;</td>
 					<td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
 
 					<!-- Table to display the Header details (From, To, Subject and date) - Starts -->
