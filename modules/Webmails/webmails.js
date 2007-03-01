@@ -372,11 +372,13 @@ function move_messages() {
                         if(els[i].checked) {
                                 var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
                                 var mvmbox = $("mailbox_select").value;
+                                var row = $("row_"+nid);
+                                new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
                                 new Ajax.Request(
                                         'index.php',
                                         {queue: {position: 'end', scope: 'command'},
                                                 method: 'post',
-                                                postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                                                postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
                                               onComplete: function(t) {
                                                         //alert(t.responseText);
                                                 }
@@ -385,7 +387,7 @@ function move_messages() {
                         }
                 }
         }
-        runEmailCommand('expunge','');
+        //runEmailCommand('expunge','');
         $("status").style.display="none";
 }
 function search_emails() {
