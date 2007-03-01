@@ -128,6 +128,10 @@ $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {
+	$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+	$accountid = $adb->query_result($sql,0,'accountid');
+	if($accountid == 0) $accountid='';
+	$smarty->assign("accountid",$accountid);
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
