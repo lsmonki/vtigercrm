@@ -147,7 +147,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 function Search($module)
 {
-	global $log;
+	global $log,$default_charset;
         $log->debug("Entering Search(".$module.") method ...");
 	$url_string='';	
 	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
@@ -156,7 +156,16 @@ function Search($module)
         }
         if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
         {
-                $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
+		// search other characters like "|, ?, ?" by jagi
+
+		$search_string = $_REQUEST['search_text'];
+		
+		$stringConvert = iconv("UTF-8",$default_charset,$search_string);
+
+		$search_string=addslashes(ltrim(rtrim($stringConvert)));
+
+		// $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
+
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
         {
@@ -534,7 +543,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 
 function getWhereCondition($currentModule)
 {
-	global $log;
+	global $log,$default_charset;
 	global $column_array,$table_col_array;
 
         $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
@@ -561,6 +570,7 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
+			$srch_val = iconv("UTF-8",$default_charset,$srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			if($tab_col == "vtiger_crmentity.smownerid")
