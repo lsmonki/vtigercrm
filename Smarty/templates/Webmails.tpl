@@ -24,7 +24,7 @@
 
 				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
                 		   <tr>
-					<td colspan="3" style="padding:10px;vertical-align:middle;height:50px;">
+					<td colspan="3" style="padding:10px;vertical-align:middle;height:2px;">
 						<table width="100%" cellpadding="0" cellspacing="0" border="0">
 						   <tr>
 							<td width="10%">
