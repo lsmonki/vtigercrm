@@ -881,5 +881,16 @@ $mod_strings = Array(
 'LBL_PERMISSIONS'=>'Permissions',
 'LBL_DOC_MSWORD'=>'File has to be a Document of type doc/msword',
 'LBL_NODOC'=>'No doc File in this directory.Please try again!',
+
+//Added for error messages on Company Info.
+'LOGO_ERROR'=>'Logo has to be an Image of type jpeg/png',
+'Error_Message'=>'Error Message',
+'Invalid_file'=>'Invalid file OR',
+'File_has_no_data'=>'File has no data',
+'Sorry'=>'Sorry',
+'uploaded_file_exceeds_maximum_limit'=>'the uploaded file exceeds the maximum vtiger_filesize limit',
+'try_file_smaller'=>'Please try a file smaller than 800000 bytes',
+'Problems_in_upload'=>'Problems in file upload',
+'Please_try_again'=>'Please try again!',
 );
 ?>
