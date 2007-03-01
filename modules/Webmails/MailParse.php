@@ -47,7 +47,7 @@ function show_msg($mails,$start_message)
 	}
 	else
 	{
-		$flags = "<tr onmouseover='this.className=\"tabSelected\"' onmouseout='this.className=\"\"' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr style='cursor:pointer;' onClick='load_webmail(\"".$num."\");makeSelected(\"row_".$num."\");' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 	}
 
 
