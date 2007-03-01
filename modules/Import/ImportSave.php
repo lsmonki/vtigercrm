@@ -234,7 +234,7 @@ function b()
 </script>
 
 <?php
-$_SESSION['import_display_message'] = '<br>'.$start.' to '.$end.' of '.$totalnoofrows.' '.$mod_strings['are_imported_succesfully'];
+$_SESSION['import_display_message'] = '<br>'.$start.' '.$mod_strings['to'].' '.$end.' '.$mod_strings['of'].' '.$totalnoofrows.' '.$mod_strings['are_imported_succesfully'];
 //return $_SESSION['import_display_message'];
 }
 ?>
