@@ -124,7 +124,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$fieldname = $focus->list_fields_name[$name];
 		}
 
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) )
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
@@ -199,10 +199,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 
 		//Added condition to hide the close column in Related Lists
-		if($name == $app_strings['Close'] && $relatedlist != '')
-		{
-			// $list_header[] = '';
-		}
+		if($name == $app_strings['Close'] && $relatedlist != '' && $relatedlist != 'global')
+                {
+                        // $list_header[] = '';
+               }
+
 		else
 		{
 			$list_header[]=$name;
@@ -210,14 +211,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	}
      }
 
-	        //Added i18n support for email listview header
-		       if($module == "Emails")
-		       {
-			               $list_header[] = $app_strings["Subject"];
-			               $list_header[] = $app_strings["Sender"];
-			               $list_header[] = $app_strings["Date Sent"];
-		       }
-	//Added for Action - edit and delete link header in listview		
+	//Added for Action - edit and delete link header in listview
 	$list_header[] = $app_strings["LBL_ACTION"];
 
 	$log->debug("Exiting getListViewHeader method ...");
@@ -648,7 +642,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								if(isPermitted("Calendar",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Calendar&return_action=ListView&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?return_module=Calendar&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
@@ -763,7 +757,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
 
 		$list_header[] = $links_info;
-/*commented to fix: attachments and notes cant be deleted in Invoice Related List.
+
 		echo '<script>
 				function confirmdelete(url)
 		                {
@@ -773,7 +767,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		                        }
 		                }
 		        </script>';
-*/
+
 		$list_block[$entity_id] = $list_header;
 
 	}
@@ -988,51 +982,33 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log,$app_strings;
+	global $log;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
-	if($viewid != '')
-	{
-		$viewname = getCVname($viewid);
-	}
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
-	$tabid = getTabid($module);
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
 	{
 		$uitype = $key;
 		$colname = $value;
         }
-
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Calendar' && $colname == "status")
 	{
 		$colname="activitystatus";
 	}
 	//Ends
-	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
+	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
 	
-	if(strlen($field_val) > 40)
+        if(strlen($temp_val) > 40)
         {
-                $temp_val = substr($field_val,0,40).'...';
-        }else
-	{
-		$temp_val = $field_val;
-	}
-	if($uitype == 53 || $uitype == 77)
+                $temp_val = substr($temp_val,0,40).'...';
+        }
+	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
-	}
-	elseif($uitype == 52)
-	{	
-		$value = getUserName($adb->query_result($list_result,$list_result_count,'handler'));
-	}
-	elseif($uitype == 15 && $module == 'Calendar')
-	{
-		$activitytype = $adb->query_result($list_result,$list_result_count,$colname);
-		$value = $app_strings[$activitytype];
 	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
@@ -1051,7 +1027,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			
 	
 		//Added to get both start date & time
-		if(($tabid == 9 || $tabid == 16) && $uitype == 6 && $viewname != 'All')
+		/*if(($tabid == 9 || $tabid == 16) && $uitype == 6 && $viewname != 'All')
 		{
 			$timestart = $adb->query_result($list_result,$list_result_count,'time_start');
 			$value = $value .'&nbsp;&nbsp;&nbsp;'.$timestart;	
@@ -1060,7 +1036,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			$timeend = $adb->query_result($list_result,$list_result_count,'time_end');
                         $value = $value .'&nbsp;&nbsp;&nbsp;'.$timeend;
-		}
+		}*/
 		
 		
 	}
@@ -1080,14 +1056,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 17)
 	{
-		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
+		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
 	}
 	elseif($uitype == 13 || $uitype == 104)
         {
 		if(useInternalMailer() == 1)
                 	$value = '<a href="javascript:InternalMailer('.$entity_id.',\'record_id\')">'.$temp_val.'</a>';
 		else
-                	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
+                	$value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
         }
 	elseif($uitype == 56)
 	{
@@ -1331,7 +1307,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
         }
 	elseif($uitype == 98)
 	{
-		$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab=Settings&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
+		$value = '<a href="index.php?action=RoleDetailView&module=Users&parenttab=Users&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
 	}
 	else
 	{
@@ -1340,7 +1316,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			if($mode == "search")
 			{
-				if($popuptype == "specific" || $popuptype=="toDospecific")
+				if($popuptype == "specific")
 				{
 					// Added for get the first name of contact in Popup window
 					if($colname == "lastname" && $module == 'Contacts')
@@ -1402,7 +1378,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$temp_val = popup_from_html($temp_val);
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -1553,6 +1529,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$result = $adb->query($query);
 						$contact_image = '';
 						$imagename=$adb->query_result($result,0,'imagename');
+						 if($imagename != '')
+                                                {
+                                                        $imgpath = "test/contact/".$imagename;
+                                                        $contact_image='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=fnhide("dynloadarea");>';
+                                                }
+
 						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>'.$contact_image;
 					}else
 					{
