@@ -13,6 +13,7 @@ require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
 
 global $app_strings;
+global $mod_strings;
 $oPrint_smarty=new vtigerCRM_Smarty;
 $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
@@ -25,6 +26,7 @@ $arr_values = $oReportRun->GenerateReport("PRINT",$filterlist);
 $total_report = $oReportRun->GenerateReport("PRINT_TOTAL",$filterlist);
 $oPrint_smarty->assign("COUNT",$arr_values[1]);
 $oPrint_smarty->assign("APP",$app_strings);
+$oPrint_smarty->assign("MOD",$mod_strings);
 $oPrint_smarty->assign("REPORT_NAME",$oReport->reportname);
 $oPrint_smarty->assign("PRINT_CONTENTS",$arr_values[0]);
 $oPrint_smarty->assign("TOTAL_HTML",$total_report);
