@@ -160,7 +160,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["forward"] == "true" ) {
-		$smarty->assign('TO_MAIL',$webmail->from[0]);	
+		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
 		$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		if(preg_match("/FW:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);
