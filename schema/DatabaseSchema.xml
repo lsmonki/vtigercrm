@@ -449,9 +449,6 @@
 		<field name="emailoptout" type="C" size="3">
 			<default value="0" />
 		</field>
-		<field name="currency" type="C" size="20">
-			<default value="Dollars" />
-		</field>
 		<field name="imagename" type="C" size="150" />
 		<field name="reference" type="C" size="3" />
 		<field name="notify_owner" type="C" size="3">
@@ -652,9 +649,6 @@
 		<field name="leadsubscriptionid" type="I" size="19">
 			<key />
 			<default value="0" />
-		</field>
-		<field name="currency" type="C" size="20">
-			<default value="Dollars" />
 		</field>
 		<field name="website" type="C" size="255" />
 		<field name="callornot" type="I" size="1">
