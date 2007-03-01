@@ -236,5 +236,21 @@ function OpenCompose(id,mode)
                 {rdelim}
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
 {rdelim}
+var gselected_mail = '';
+{if $smarty.request.mailbox.value neq ''}
+var gCurrentFolder = '{$smarty.request.mailbox}';
+{else}	
+var gCurrentFolder = 'INBOX';
+{/if}
+{literal}
+function makeSelected(rowId)
+{
+	if(gselected_mail != '')
+		$(gselected_mail).className = '';
+		
+	$(rowId).className = 'tabSelected';
+	gselected_mail = rowId;
+}
+{/literal}
 </script>
 <!-- END -->
