@@ -126,7 +126,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$mailid = $_REQUEST["mailid"];
 	$mailbox = $_REQUEST["mailbox"];
 	require_once('include/utils/UserInfoUtil.php');
-	require_once("modules/Webmails/Webmail.php");
+	require_once("modules/Webmails/Webmails.php");
 	require_once("modules/Webmails/MailParse.php");
 	require_once('modules/Webmails/MailBox.php');
 
@@ -136,7 +136,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$MailBox = new MailBox($mailbox);
 	$mbox = $MailBox->mbox;
 
-	$webmail = new Webmail($mbox,$mailid);
+	$webmail = new Webmails($mbox,$mailid);
 	$webmail->loadMail();
 
 	$smarty->assign('WEBMAIL',"true");
