@@ -82,15 +82,15 @@
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 			<tr>
 				<td align="right" nowrap class="cellLabel small"><b>{$MOD.LBL_REP_FOLDER_NAME} </b></td>
-				<td align="left" class="cellText small">
+				<td align="left">
 				<input id="folder_id" name="folderId" type="hidden" value=''>
 				<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
-				<input id="folder_name" name="folderName" class="txtBox" type="text">
+				<input id="folder_name" name="folderName"  type="text" width="100%" solid="#666666" font-family="Arial, Helvetica,sans-serif" font-size="11px">
 				</td>
 			</tr>
 			<tr>
 				<td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_DESC} </b></td>
-				<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
+				<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc"  type="text" width="100%" solid="#666666" font-family="Arial, Helvetica,sans-serif" font-size="11px"></td>
 			</tr>
 			</table>
 		</td>
