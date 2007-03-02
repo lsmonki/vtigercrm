@@ -11,8 +11,8 @@
 -->*}
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>vtiger CRM - Create Report</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
+	<title>{$MOD.TITLE_VTIGERCRM_CREATE_REPORT}</title>
 	<link href="{$THEME_PATH}style.css" rel="stylesheet" type="text/css">
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
