@@ -151,6 +151,12 @@ $mod_strings = Array(
 //Added for 5.0.3
 'TITLE_VTIGERCRM_MAIL'=>'vtigerCRM Mail',
 'TITLE_COMPOSE_MAIL'=>'Compose Mail',
+
+'MESSAGE_MAIL_COULD_NOT_BE_SEND'=>'Mail could not be sent to the assigned to user.',
+'MESSAGE_PLEASE_CHECK_ASSIGNED_USER_EMAILID'=>'Please check the assigned to user email id...',
+'MESSAGE_PLEASE_CHECK_THE_FROM_MAILID'=>'Please check the from email id',
+'MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID'=>'Mail could not be sent to this email id'
+'PLEASE_CHECK_THIS_EMAILID'=>'Please check this mail id...',
 );
 
 ?>
