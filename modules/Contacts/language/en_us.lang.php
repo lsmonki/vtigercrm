@@ -225,6 +225,16 @@ $mod_strings = Array(
 'Other'=>'Other',
 'User List'=>'User List',
 
+//Added for 5.0.3
+'Customer Portal Login Details'=>'Customer Portal Login Details',
+'Dear'=>'Dear',
+'Your Customer Portal Login details are given below:'=>'Your Customer Portal Login details are given below:',
+'User Id :'=>'User Id :',
+'Password :'=>'Password :',
+'Please Login Here'=>'Please Login Here',
+'Note :'=>'Note :',
+'We suggest you to change your password after logging in first time'=>'We suggest you to change your password after logging in first time.',
+'Support Team'=>'Support Team',
 );
 
 ?>
