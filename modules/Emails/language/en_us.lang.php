@@ -146,12 +146,11 @@ $mod_strings = Array(
 'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
 'LBL_MULTIPLE'=>'Multiple',
 'LBL_COMPOSE_EMAIL'=>'Compose E-Mail',
-//5.0.3 fixes
-'LBL_CC_EMAIL_ERROR'=>'Your cc mailid is not proper',
-'LBL_BCC_EMAIL_ERROR'=>'Your bcc mailid is not proper',
-'LBL_NO_RCPTS_EMAIL_ERROR'=>'No recepients specified',
-'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings tab',
 'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Email Client',
+
+//Added for 5.0.3
+'TITLE_VTIGERCRM_MAIL'=>'vtigerCRM Mail',
+'TITLE_COMPOSE_MAIL'=>'Compose Mail',
 );
 
 ?>

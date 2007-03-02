@@ -199,6 +199,9 @@ $mod_strings = Array(
 'MAX'=>'MAX',
 'MIN'=>'MIN',
 'LBL_CUSTOM_REPORTS'=>'Custom Reports',
+
+//Added for 5.0.3
+'TITLE_VTIGERCRM_CREATE_REPORT'=>'vtiger CRM - Create Report',
 )
 
 ?>
