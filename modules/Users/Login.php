@@ -146,13 +146,13 @@ function set_focus() {
 							</tr>
 							<tr bgcolor="#f5f5f5">
 								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_THEME'] ?></td>
-								<td class="small" align="left" width="70%"><select class="small" name='login_theme' style="width:100%" tabindex="3">
+								<td class="small" align="left" width="70%"><select class="small" name='login_theme' style="width:70%" tabindex="3">
 									<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
 								</select></td>
 							</tr>
 							<tr bgcolor="#f5f5f5">
 								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
-								<td class="small" align="left" width="70%"><select class="small" name='login_language' style="width:100%" tabindex="4">
+								<td class="small" align="left" width="70%"><select class="small" name='login_language' style="width:70%" tabindex="4">
 									<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
 								</select></td>		
 							</tr>
@@ -177,7 +177,7 @@ function set_focus() {
 							?>
 							<tr>
 								<td class="small">&nbsp;</td>
-								<td class="small"><input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" src="themes/images/btnSignIn.gif" type="image" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5"></td>
+								<td class="small"><input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" src="themes/images/btnSignInNEW.gif" type="image" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5"></td>
 							</tr>
 							</table>
 							<br><br>

@@ -132,7 +132,7 @@ function getHomeActivities(mode,view)
 									<td align="left" class="homePageMatrixHdr" ><b>{$tabledetail.Title.1}</b></td>
 									<td align="right" class="homePageMatrixHdr" ><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 								</tr>
-								<tr align="left">
+								<tr align="left" class="winmarkModulesdef">
 									<td valign=top  colspan=2>
 											<div style="overflow-y:auto;overflow-x:hidden;height:200px;width:99%"> 
 											<table border=0 cellspacing=0 cellpadding=5 width=100%>
@@ -169,13 +169,13 @@ function getHomeActivities(mode,view)
 								</div>
 							{/if}	
 							{else}
-								<div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
+								<div class="MatrixLayer" style="float:left;width:70%;" id="homepagedb">
 									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
 										<tr style="cursor:move;">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 										</tr>
-										<tr>	
+										<tr align="left" class="winmarkModulesdef">	
 											<td colspan="2">
 											<div style="overflow:hidden;height:255px;width:99%"> 
 												<table border=0 cellspacing=0 cellpadding=5 width=100%>

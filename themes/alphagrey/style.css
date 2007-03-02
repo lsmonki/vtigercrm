@@ -2244,6 +2244,11 @@ a.drop_down:Hover{
 .groupname{
 		width:125px;
 	  }
-	
+.winmarkModulesdef{
+   background-image:url(images/windowmarkModule.jpg);
+   background-position:top right;
+   background-repeat:no-repeat;
+
+
 /* Recalculate Disable Ends */
 
