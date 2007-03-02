@@ -32,8 +32,8 @@ global $mod_strings;
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>vtiger CRM 5 - Free, Commercial grade Open Source CRM</title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $app_strings['LBL_CHARSET'];?>">
+<title><?php echo $mod_strings['TITLE_VTIGER_CRM_5'];?></title>
 <link href="<? echo $theme_path;?>style.css" rel="stylesheet" type="text/css">
 <script language="javascript" type="text/javascript" src="include/js/popup.js"></script>
 </head>
