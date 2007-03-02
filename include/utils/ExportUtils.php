@@ -93,19 +93,19 @@ function getFieldsListFromQuery($query)
 		//HANDLE HERE - Mismatch fieldname-tablename in field table, in future we have to avoid these if elses
 		if($columnName == 'smownerid')//for all assigned to user name
 		{
-			$fields .= "vtiger_users.user_name as '".$fieldlabel."', ";
+			$fields .= "vtiger_users.user_name as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_account' && $columnName == 'parentid')//Account - Member Of
 		{
-			 $fields .= "vtiger_account2.accountname as '".$fieldlabel."', ";
+			 $fields .= "vtiger_account2.accountname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_contactdetails' && $columnName == 'accountid')//Contact - Account Name
 		{
-			$fields .= "vtiger_account.accountname as '".$fieldlabel."', ";
+			$fields .= "vtiger_account.accountname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_contactdetails' && $columnName == 'reportsto')//Contact - Reports To
 		{
-			$fields .= " concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname) as 'Reports To Contact', ";
+			$fields .= " concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname) as 'Reports To Contact',";
 		}
 		elseif($tablename == 'vtiger_potential' && $columnName == 'accountid')//Potential - Account Name
 		{
@@ -155,11 +155,11 @@ function getFieldsListFromQuery($query)
 		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
 		{
-			$fields .= $tablename.".name '".$fieldlabel."',";
+			$fields .= $tablename.".name as '".$fieldlabel."',";
 		}
 		else
 		{
-			$fields .= $tablename.".".$columnName. " '" .$fieldlabel."',";
+			$fields .= $tablename.".".$columnName. " as '" .$fieldlabel."',";
 		}
 	}
 	$fields = trim($fields,",");
