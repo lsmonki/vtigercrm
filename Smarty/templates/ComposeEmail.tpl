@@ -147,13 +147,18 @@
 </table>
 </form>
 </body>
-{literal}
 <script>
+var cc_err_msg = '{$MOD.LBL_CC_EMAIL_ERROR}';
+var no_rcpts_err_msg = '{$MOD.LBL_NO_RCPTS_EMAIL_ERROR}';
+var bcc_err_msg = '{$MOD.LBL_BCC_EMAIL_ERROR}';
+var conf_mail_srvr_err_msg = '{$MOD.LBL_CONF_MAILSERVER_ERROR}';
+{literal}
 function email_validate(oform,mode)
 {
 	if(oform.parent_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
-		alert('No recipients were specified');
+		//alert('No recipients were specified');
+				alert(no_rcpts_err_msg);
 		return false;
 	}
 	if(document.EditView.ccmail.value.length >= 1)
@@ -165,7 +170,8 @@ function email_validate(oform,mode)
 		{
 			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
 			{
-				alert("Your CC Email Id for "+ arr[i] +" is not correct");
+				//alert("Your CC Email Id for "+ arr[i] +" is not correct");
+				alert(cc_err_msg);
 				return false;
 			}
 		}
@@ -180,7 +186,9 @@ function email_validate(oform,mode)
 		{
 			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
 			{
-				alert("Your BCC Email Id for "+ arr[i] +" is not correct");
+				//alert("Your BCC Email Id for "+ arr[i] +" is not correct");
+				alert(bcc_err_msg);
+
 				return false;	
 			}
 		}	
@@ -220,7 +228,8 @@ function server_check()
 				oform.submit();
 			}else
 			{
-				alert('Please Configure Your Mail Server');
+				//alert('Please Configure Your Mail Server');
+				alert(conf_mail_srvr_err_msg);
 				return false;
 			}
                	    }
@@ -243,6 +252,7 @@ function delAttachments(id)
     );
 
 }
+{/literal}
 </script>
 <script type="text/javascript" defer="1">
 var oFCKeditor = null;
@@ -250,5 +260,4 @@ oFCKeditor = new FCKeditor( "description" ,"100%","370") ;
 oFCKeditor.BasePath   = "include/fckeditor/" ;
 oFCKeditor.ReplaceTextarea();
 </script>
-{/literal}
 </html>
