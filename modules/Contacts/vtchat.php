@@ -1,21 +1,24 @@
-<?php ?>
+<?php 
+global $mod_strings;
+global $app_strings;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-<meta content="text/html; charset=iso-8859-1" http-equiv="content-type"/>
+<meta content="text/html; charset=<?php echo $app_strings['LBL_CHARSET'];?>" http-equiv="content-type"/>
 <meta name="author" content="rolosworld@gmail.com"/>
 <meta http-equiv="expires" content="-1"/>
 <meta http-equiv="pragma" content="no-cache"/>
 
-<title>Ajax Css-Popup chat</title>
+<title><?php echo $mod_strings['TITLE_AJAX_CSS_POPUP_CHAT'];?></title>
 
 <!-- NEEDED SCRIPTS  -->
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/ajax.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/dom-drag_p.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/css-window_p.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/chat.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/ajax.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/dom-drag_p.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/css-window_p.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/chat.js"></script>
 <!-- /NEEDED SCRIPTS -->
 
 
