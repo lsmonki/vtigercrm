@@ -436,13 +436,13 @@ function parseEmailErrorString($mail_error_str)
 			if($status_str[1] == 'connect_host')
 			{
 				$adb->println("if part - Mail sever is not configured");
-				$errorstr .= '<br><b><font color=red>Please Check the Mail Server Name...</font></b>';
+				$errorstr .= '<br><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME'].'</font></b>';
 				break;
 			}
 			elseif($status_str[1] == '0')
 			{
 				$adb->println("first elseif part - status will be 0 which is the case of assigned to vtiger_users's email is empty.");
-				$errorstr .= '<br><b><font color=red> Mail could not be sent to the assigned to user. Please check the assigned to user email id...</font></b>';
+				$errorstr .= '<br><b><font color=red> '.$mod_strings['MESSAGE_MAIL_COULD_NOT_BE_SEND'].' '.$mod_strings['MESSAGE_PLEASE_CHECK_FROM_THE_MAILID'].'</font></b>';
 				//Added to display the message about the CC && BCC mail sending status
 				if($status_str[0] == 'cc_success')
 				{
@@ -454,12 +454,12 @@ function parseEmailErrorString($mail_error_str)
 			{
 				$adb->println("second elseif part - from email id is failed.");
 				$from = explode('from_failed',$status_str[1]);
-				$errorstr .= "<br><b><font color=red>Please check the from email id '".$from[1]."'</font></b>";
+				$errorstr .= "<br><b><font color=red>".$mod_strings['MESSAGE_PLEASE_CHECK_THE_FROM_MAILID']." '".$from[1]."'</font></b>";
 			}
 			else
 			{
 				$adb->println("else part - mail send process failed due to the following reason.");
-				$errorstr .= "<br><b><font color=red> Mail could not be sent to this email id '".$status_str[0]."'. Please check this mail id...</font></b>";	
+			D	$errorstr .= "<br><b><font color=red> ".$mod_strings['MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID']." '".$status_str[0]."'. ".$mod_strings['PLEASE_CHECK_THIS_EMAILID']."</font></b>";	
 			}
 		}
 	}
