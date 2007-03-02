@@ -882,7 +882,7 @@ $mod_strings = Array(
 'LBL_DOC_MSWORD'=>'File has to be a Document of type doc/msword',
 'LBL_NODOC'=>'No doc File in this directory.Please try again!',
 
-//Added for error messages on Company Info.
+//Added for 5.0.3
 'LOGO_ERROR'=>'Logo has to be an Image of type jpeg/png',
 'Error_Message'=>'Error Message',
 'Invalid_file'=>'Invalid file OR',
@@ -892,5 +892,14 @@ $mod_strings = Array(
 'try_file_smaller'=>'Please try a file smaller than 800000 bytes',
 'Problems_in_upload'=>'Problems in file upload',
 'Please_try_again'=>'Please try again!',
+
+'RECORD_DOESNOT_EXIST'=>'Record does not exist',
+
+'MSG_TEST_MAIL_ABOUT_MAIL_SERVER'=>'Test mail about the mail server configuration.',
+'MSG_Dear'=>'Dear',
+'MSG_THIS_IS_TEST_MAIL'=>'This is a test mail sent to confirm if a mail is actually being sent through the vtiger system.',
+'MSG_YOU_ARE_FREE_TO_THIS_MAIL'=>'You are free to delete this mail.',
+'MSG_THANKS_AND_REGARDS'=>'Thanks and Regards',
+'MSG_TEAM_VTIGER'=>'Team vTiger',
 );
 ?>
