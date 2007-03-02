@@ -356,7 +356,6 @@ $app_strings = array (
 'Type' => 'Type',
 'Start Date/Due Date' => 'Start Date/Due Date',
 'Date Sent' => 'Date Sent',
-'Sender'=>'Sender',
 'Ticket ID' => 'Ticket ID',
 'Status' => 'Status',
 'Priority' => 'Priority',
@@ -655,14 +654,6 @@ $app_strings = array (
 'greater or equal'=>'greater or equal',
 'less or equal'=>'less or equal',
 
-'Private'=>'Private',
-'Public'=>'Public',
-
-'High'=>'High',
-'Medium'=>'Medium',
-'Low'=>'Low',
-
-
 //For Product Details
 'LABEL_SET_DISCOUNT_FOR_COLON'=>'Set Discount for :',
 'LABEL_SET_TAX_FOR'=>'Set Tax for',
@@ -672,7 +663,9 @@ $app_strings = array (
 'LABEL_SET_TAX_FOR_X'=>'Set Tax for x',
 'LABEL_SET_SH_TAX_FOR_COLON'=>'Set S&H Tax for :',
 
+//Added for 5.0.3
 'Files_Maximum_6'=>'Files Maximum 6',
+'To'=>'To:',
 );
 
 $app_list_strings = array (
