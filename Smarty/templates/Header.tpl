@@ -43,7 +43,7 @@
 			<table border=0 cellspacing=0 cellpadding=0>
 			 <tr>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
-			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=34&Itemid=60" target="_blank">{$APP.LNK_HELP}</a></td>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://wiki.vtiger.com/index.php/Main_Page" target="_blank">{$APP.LNK_HELP}</a></td>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
 			 </tr>
