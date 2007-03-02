@@ -10,7 +10,6 @@
  ********************************************************************************/
 
 require_once("include/database/PearDatabase.php");
-global $mod_strings;
 $server=$_REQUEST['server'];
 $port=$_REQUEST['port'];
 $server_username=$_REQUEST['server_username'];
@@ -100,8 +99,8 @@ if($server_type != 'backup' && $server_type != 'proxy')
 
 	$to_email = getUserEmailId('id',$current_user->id);
 	$from_email = $to_email;
-	$subject = $mod_strings['MSG_TEST_MAIL_ABOUT_MAIL_SERVER'];
-	$description = $mod_strings['MSG_Dear'].' '.$current_user->user_name.', <br><br> '.$mod_strings['MSG_THIS_IS_TEST_MAIL'].' '.$mod_strings['MSG_YOU_ARE_FREE_TO_THIS_MAIL'].'<br> '.$mod_strings['MSG_THANKS_AND_REGARDS'].'<br> '.$mod_strings['MSG_TEAM_VTIGER'] <br><br>';
+	$subject = 'Test mail about the mail server configuration.';
+	$description = 'Dear '.$current_user->user_name.', <br><br><b> This is a test mail sent to confirm if a mail is actually being sent through the smtp server that you have configured. </b><br>Feel free to delete this mail.<br><br>Thanks  and  Regards,<br> Team vTiger <br><br>';
 	if($to_email != '')
 	{
 		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
