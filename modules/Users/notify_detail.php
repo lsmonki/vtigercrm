@@ -10,6 +10,8 @@
  ********************************************************************************/
 
 global $theme;
+global $app_strings;
+global $mod_strings;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -20,8 +22,8 @@ $image_path=$theme_path."images/";
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Untitled Document</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title><?php echo $mod_strings['TITLE_USER_DOCUMENT']; ?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $app_strings['LBL_CHARSET']; ?>">
 </head>
 <body>
 <form method="post" action="index.php?module=Users&action=listnotificationschedulers" name="">
@@ -44,7 +46,7 @@ $image_path=$theme_path."images/";
     </tr>
     <tr >
       <td nowrap class="dataLabel">Active: </td>
-      <td> <img src="yes.gif" alt="" width="13" height="12" align="absmiddle"> 
+      <td> <img src="yes.gif" alt="" title="" width="13" height="12" align="absmiddle"> 
         [<a href=#>Deactivate</a>]</td>
     </tr>
     <tr >
