@@ -116,6 +116,11 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "delete from vtiger_seproductsrel where crmid=$record and productid=$return_id";
 			$adb->query($sql);
 		}
+		if($return_module == 'Contacts')
+		{
+			$sql = "delete from vtiger_contpotentialrel where potentialid=$record and contactid=$return_id";
+			$adb->query($sql);
+		}
 		$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 		$adb->query($sql);
 	break;
