@@ -193,15 +193,15 @@ if($image_error=="false")
 			$adb->query($sql);
 		}
 
-		$subject = "Customer Portal Login Details";
-		$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
-		$contents .= 'Your Customer Portal Login details are given below:';
-		$contents .= "<br><br>User Id : ".$_REQUEST['email'];
-		$contents .= '<br>Password : '.$password;
-		$contents .= "<br><br><a href='".$PORTAL_URL."/login.php'>Please Login Here</a>";
+		$subject = $mod_strings['Customer Portal Login Details'];
+		$contents = $mod_strings['Dear']." ".$_REQUEST['firstname']." ".$_REQUEST['lastname'].",<br><br>";
+		$contents .= $mod_strings['Your Customer Portal Login details are given below:'];
+		$contents .= "<br><br>".$mod_strings['User Id :']." ".$_REQUEST['email'];
+		$contents .= "<br>".$mod_strings['Password :']." ".$password;
+		$contents .= "<br><br><a href=''.$PORTAL_URL.'/login.php'>".$mod_strings['Please Login Here']."</a>";
 
-		$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
-		$contents .= '<br><br>Support Team';
+		$contents .= "<br><br><b>".$mod_strings['Note :']." </b>".$mod_strings['We suggest you to change your password after logging in first time'];
+		$contents .= "<br><br>".$mod_strings['Support Team'];
 
 		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 		if($insert == 'true' || $update == 'true')
