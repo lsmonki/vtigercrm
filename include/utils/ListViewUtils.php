@@ -1780,7 +1780,7 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
-			WHERE vtiger_crmentity.deleted = 0";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Notes":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
@@ -2754,6 +2754,29 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 				$condition ="and vtiger_potential.potentialid in ".$potids_comma;
 		}
 		
+	}
+	else if($current_module == "Products")
+	{
+		if($relmodule == 'Accounts')
+		{
+			$pro_query = "select productid from vtiger_seproductsrel where setype='Accounts' and crmid=".$relmod_recordid;
+			$pro_result = $result = $adb->query($pro_query);
+			$rows = $adb->num_rows($pro_result);
+			if($rows != 0)
+			{
+				$proids_comma = "(";
+				for($k=0; $k < $rows; $k++)
+				{
+					$product_ids = $adb->query_result($pro_result,$k,'productid');
+					$proids_comma .= $product_ids;
+					if($k < ($rows-1))
+						$proids_comma.=',';
+				}
+				$proids_comma.= ")";
+			}
+			if($proids_comma != '')
+				$condition ="and vtiger_products.productid in ".$proids_comma;
+		}
 	}
 	else if($current_module == 'Quotes')
 	{

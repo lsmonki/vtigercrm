@@ -59,8 +59,13 @@ function productPickList(currObj,module, row_no) {
 	popuptype = 'inventory_prod';
 	if(module == 'PurchaseOrder')
 		popuptype = 'inventory_prod_po';
-
-	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId,"productWin","width=640,height=565,resizable=0,scrollbars=0,status=1,top=150,left=200");
+	var record_id = ''
+        if(document.getElementsByName("account_id").length != 0)
+                record_id= document.EditView.account_id.value;
+        if(record_id != '')
+                window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts","productWin","width=640,height=565,resizable=0,scrollbars=0,status=1,top=150,left=200");
+        else
+		window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId,"productWin","width=640,height=565,resizable=0,scrollbars=0,status=1,top=150,left=200");
 }
 
 function priceBookPickList(currObj, row_no) {
