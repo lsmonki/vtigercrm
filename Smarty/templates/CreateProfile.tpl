@@ -173,6 +173,7 @@
 </tbody>
 </table>
 <script>
+var profile_err_msg='{$MOD.LBL_ENTER_PROFILE}';
 function rolevalidate()
 {ldelim}
     var profilename = document.getElementById('pobox').value;
@@ -181,7 +182,7 @@ function rolevalidate()
 	dup_validation(profilename);
     else
     {ldelim}
-        alert('Enter The Profile name');
+        alert(profile_err_msg);
         document.getElementById('pobox').focus();
     {rdelim}
 {rdelim}
