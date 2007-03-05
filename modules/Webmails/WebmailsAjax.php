@@ -84,6 +84,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	$email = new Webmails($MailBox->mbox,$mailid);
         $email->setFlag();
 	imap_close($MailBox->mbox);
+	echo $mailid;
 	flush();
 	exit();
     }
@@ -92,6 +93,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	$email = new Webmails($MailBox->mbox,$mailid);
         $email->delFlag();
 	imap_close($MailBox->mbox);
+	echo $mailid;
 	flush();
 	exit();
     }
