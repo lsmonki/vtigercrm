@@ -370,7 +370,9 @@ function move_messages() {
         for(var i=cnt;i>0;i--) {
                 if(els[i].type == "checkbox" && els[i].name.indexOf("_")) {
                         if(els[i].checked) {
-                                var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+         //  var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+
+         var nid = els[i].value;
                                 var mvmbox = $("mailbox_select").value;
                                 var row = $("row_"+nid);
                                 new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
@@ -387,7 +389,8 @@ function move_messages() {
                         }
                 }
         }
-        runEmailCommand('expunge','');
+	$('mailbox_select').selectedIndex=0;
+        //runEmailCommand('expunge','');
         $("status").style.display="none";
 }
 function search_emails() {
