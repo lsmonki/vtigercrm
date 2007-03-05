@@ -72,7 +72,13 @@ function massDelete(module)
             alert("Please select at least one entity");
             return false;
         }
-		var alert_str = (module=="Accounts") ? "Deleting this account(s) will remove its related Potentials,Quotes,Sales Order & Invoice. Are you sure you want to delete the selected "+xx+" records?" : "Are you sure you want to delete the selected "+xx+" records ?";
+		var alert_str = "Are you sure you want to delete the selected "+xx+" records ?";
+
+		if(module=="Accounts")
+			alert_str = "Deleting this account(s) will remove its related Potentials,Quotes,Sales Orders & Invoice. Are you sure you want to delete the selected "+xx+" records?";
+		else if(module=="Vendors")
+			alert_str = "Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected "+xx+" records?";
+
 		if(confirm(alert_str))
 		{
 			

@@ -428,7 +428,29 @@ function delAccRelRecords($record){
 
 	//Deleting Trouble Tickets-Account Relation.
 	$tt_q = "update vtiger_troubletickets set parent_id = '' where parent_id = ".$record;
-	$tt_res = $adb->query($tt_q);
 	$adb->query($tt_q);
 }
+
+function delVendorRelRecords($record){
+	
+	global $adb;
+
+	//Deleting Vendor related PO.
+	$po_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_purchaseorder on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid inner join vtiger_vendor on vtiger_vendor.vendorid=vtiger_purchaseorder.vendorid where vtiger_crmentity.deleted=0 and vtiger_purchaseorder.vendorid=".$record;
+	$po_res = $adb->query($po_q);
+	for($k=0;$k < $adb->num_rows($po_res);$k++)
+	{
+		$po_id = $adb->query_result($po_res,$k,"crmid");
+		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$po_id;
+		$adb->query($sql);
+	}
+
+	//Deleting Product-Vendor Relation.
+	$pro_q = "update vtiger_products set vendor_id = '' where vendor_id = ".$record;
+	$adb->query($pro_q);
+	//Deleting Contact-Vendor Relaton
+	$vc_sql = "delete from vtiger_vendorcontactrel where vendorid=".$record;
+	$adb->query($vc_sql);
+}
+
 ?>
