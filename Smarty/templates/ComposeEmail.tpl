@@ -16,7 +16,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>{MOD.TITLE_COMPOSE_MAIL}</title>
+<title>{$MOD.TITLE_COMPOSE_MAIL}</title>
 <link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 <style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
