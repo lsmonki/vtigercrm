@@ -545,7 +545,7 @@ class Accounts extends CRMEntity {
 				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
-			WHERE  vtiger_troubletickets.parent_id=".$id." or " ;
+			WHERE  vtiger_crmentity.deleted = 0 and ( vtiger_troubletickets.parent_id=".$id." or " ;
 
 		$query .= "vtiger_troubletickets.parent_id in(SELECT vtiger_contactdetails.contactid
 			FROM vtiger_contactdetails
@@ -573,7 +573,7 @@ class Accounts extends CRMEntity {
 
 		}
 
-		$query .= ") ";
+		$query .= ") )";
 		
 		/*
 		$query .= " UNION ALL
