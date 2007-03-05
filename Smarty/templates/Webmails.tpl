@@ -37,7 +37,7 @@
 							</td>
 							<td width="10%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
+								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<!--td width="12%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -73,16 +73,30 @@
 						<ul style="list-style-type:none;">
 							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;<b></b>
+								<a href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 							</li>
 							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
+								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 							</li>
 							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
+							</li>	
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 							</li>
+							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
+							</li>
+	<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
+								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<a
+						href="index.php?module=Emails&action=ListView&folderid=7&parenttab=My
+						Home Page"
+						class="webMnu">{$MOD.LBL_TO_GROUPS}</a>&nbsp; </li>
 						</ul><br />
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
@@ -105,7 +119,7 @@
 				{if $DEGRADED_SERVICE eq 'false'}
                         	<td width="50%" align="right" nowrap>
 					<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;
-					<input type="text" name="srch" class="importBox" id="search_input"/>&nbsp;
+					<input type="text"		name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
 					<select name="optionSel" class="importBox" id="search_type">
 						<option selected value="SUBJECT">in Subject</option>
 						<option value="BODY">in Body</option>
@@ -130,10 +144,11 @@
 					<td  align="left" valign="top" style="height:150px;">
 						<div id="rssScroll" style="height:220px;">
 
-				<!-- Table to display the mails list - Starts -->
+				<!-- Table to display the mails list -	Starts -->
+	<form name="massdelete" method="post">
 				<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
 				   <tr>
-					<th><input type="checkbox" name="checkbox" value="checkbox"  onclick="select_all();"/></th>
+				<th><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
 					{foreach item=element from=$LISTHEADER}
 						{$element}
 					{/foreach}
@@ -144,6 +159,7 @@
 						{/foreach}
 					{/foreach}
 				</table>
+	</form>
 				<!-- Table to display the mails list - Ends -->
 
 						</div>
@@ -180,7 +196,12 @@
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td id="from_addy">&nbsp;</td></tr>
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td id="to_addy">&nbsp;</td></tr>
 						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
-						<tr><td align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td>
+						<tr><td
+			   		align="right"><b>{$MOD.LBL_DATE}</b></td><td
+			   		id="webmail_date"></td>
+
+
+	<tr><td align="right"><b>{$MOD.LBL_ATTACHMENT}</b></td><td id="webmail_attachment"></td>
 							<td id="full_view"><a href="javascript:;"> Full Email View</a></td></tr>
 						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 					</table>
