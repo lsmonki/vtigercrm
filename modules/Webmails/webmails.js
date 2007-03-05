@@ -387,7 +387,7 @@ function move_messages() {
                         }
                 }
         }
-        //runEmailCommand('expunge','');
+        runEmailCommand('expunge','');
         $("status").style.display="none";
 }
 function search_emails() {
