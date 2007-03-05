@@ -33,21 +33,22 @@ function show_msg($mails,$start_message)
 	$displayed_msgs++;
 	if ($mails[$start_message]->deleted && !$show_hidden)
 	{
-                $flags = "<tr id='row_".$num."' class='mailSelected' style='display:none'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+                $flags = "<tr id='row_".$num."' class='mailSelected' style='display:none'><td width='2px'><input type='checkbox' class='msg_check'></td><td colspan='1'>";
         	$displayed_msgs--;
 	}
 	elseif ($mails[$start_message]->deleted && $show_hidden)
 	{
-		$flags = "<tr id='row_".$num."' class='mailSelected'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."' class='mailSelected'><td width='2px'><input type='checkbox' class='msg_check'></td><td colspan='1'>";
 	}
 	elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$flags = "<tr class='mailSelected' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+			$flags = "<tr class='mailSelected' id='row_".$num."'><td width='2px'><input type='checkbox' name='selected_id' onclick='toggleSelectAll(this.name,\"select_all\")' value='$num' class='msg_check'></td><td colspan='1'>";
 		$new_msgs++;
 	}
 	else
 	{
-		$flags = "<tr style='cursor:pointer;' onClick='load_webmail(\"".$num."\");makeSelected(\"row_".$num."\");' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+	$flags = "<tr onmouseover='this.className=\"tabSelected\"' onmouseout='this.className=\"\"' id='row_".$num."'><td width='2px'><input type='checkbox' name='selected_id'	value='$num' onclick='toggleSelectAll(this.name,\"select_all\")' class='msg_check'></td><td colspan='1'>";
+
 	}
 
 
@@ -101,9 +102,9 @@ function show_msg($mails,$start_message)
 	}
 	elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
-		$listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="ndeleted_date_'.$num.'" >'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
-		$listview_entries[$num][] = '<td  width="10%" nowrap align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,20).'</td>';
+		$listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,50).'</font></a></td>';
+		$listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="ndeleted_date_'.$num.'"><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
+		$listview_entries[$num][] = '<td  width="10%" nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'">'.substr($from,0,20).'</font></td>';
 	}
 	else
 	{
