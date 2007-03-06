@@ -135,8 +135,13 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$order_by = $focus->default_order_by;
 		$sorder = $focus->default_sort_order;
 	}
-		
-	$query .= ' ORDER BY '.$order_by.' '.$sorder;
+		//Added by Don for AssignedTo ordering issue in Related Lists
+	$query_order_by = $order_by;
+	if($order_by == 'smownerid')
+	{
+		$query_order_by = 'user_name';
+	}	
+	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
 	$url_qry .="&order_by=".$order_by;
 	//Added for PHP version less than 5
 	if (!function_exists("stripos"))
