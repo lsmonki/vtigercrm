@@ -166,7 +166,7 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-
+/*
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Leads',$order_by);
@@ -177,7 +177,24 @@ if(isset($order_by) && $order_by != '')
 	
         $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
+*/
+if(isset($order_by) && $order_by != '')
+{
+	if($order_by == 'smownerid')
+	{
+		$query .= ' ORDER BY user_name '.$sorder;
+	}
+	else
+	{
+		$tablename = getTableNameForField('Leads',$order_by);
+		$tablename = (($tablename != '')?($tablename."."):'');
+		if( $adb->dbType == "pgsql")
+			$query .= ' GROUP BY '.$tablename.$order_by;
 
+
+		$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+	}
+}
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $query));
 $noofrows = $adb->query_result($count_result,0,"count");
