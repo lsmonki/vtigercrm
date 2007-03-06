@@ -1778,8 +1778,10 @@ function getListQuery($module,$where='')
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid
-			LEFT JOIN vtiger_productcf
+			INNER JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
+			LEFT JOIN vtiger_vendor
+				ON vtiger_vendor.vendorid = vtiger_products.vendor_id	
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Notes":
@@ -1992,6 +1994,8 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
 			LEFT OUTER JOIN vtiger_vendor
 				ON vtiger_purchaseorder.vendorid = vtiger_vendor.vendorid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_purchaseorder.contactid = vtiger_contactdetails.contactid	
 			INNER JOIN vtiger_pobillads
 				ON vtiger_purchaseorder.purchaseorderid = vtiger_pobillads.pobilladdressid
 			INNER JOIN vtiger_poshipads
