@@ -17,10 +17,16 @@ require_once('modules/Webmails/MailBox.php');
 
 if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] != $current_user->id) {echo "ajax failed";flush();exit();}
 $mailid=$_REQUEST["mailid"];
-if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "")
+{
+	$mailbox=$_REQUEST["mailbox"];
+}
+else
+{
+	$mailbox="INBOX";
+}
 $MailBox = new MailBox($mailbox);
 $email = new Webmails($MailBox->mbox,$mailid);
-
 ?>
 <script type="text/javascript">
 function show_inline(num) {
@@ -79,8 +85,12 @@ if(is_array($email->inline))
 			echo '</div>';
 		}
 		else 
-			echo "<br>".($i+1).") <a target='_BLANK' href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"]."</a> <br>";
-	}
+                        {
+                                echo "<br>".($i+1).") <a target='_BLANK' href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailbox=".$mailbox."&mailid=".$mailid."'>".$inline[$i]["filename"]."</a>
+			<br>";
+//                      echo "<br>".($i+1).") <a target='_BLANK' href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"]."</a> <br>";
+	}                
+}                    
 }
 imap_close($MailBox->mbox);
 
