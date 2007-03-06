@@ -133,8 +133,8 @@ if(isset($order_by) && $order_by != '')
 	if($order_by == 'smownerid')
 	{
 		if( $adb->dbType == "pgsql")
- 		    $list_query .= ' GROUP BY vtiger_users.user_name';
-		$list_query .= ' ORDER BY vtiger_users.user_name '.$sorder;
+ 		    $list_query .= ' GROUP BY user_name';
+		$list_query .= ' ORDER BY user_name '.$sorder;
 	}
 	else
 	{
