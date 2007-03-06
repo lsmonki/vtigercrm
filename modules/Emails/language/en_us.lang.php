@@ -157,6 +157,12 @@ $mod_strings = Array(
 'MESSAGE_PLEASE_CHECK_THE_FROM_MAILID'=>'Please check the from email id',
 'MESSAGE_MAIL_COULD_NOT_BE_SEND_TO_THIS_EMAILID'=>'Mail could not be sent to this email id',
 'PLEASE_CHECK_THIS_EMAILID'=>'Please check this mail id...',
+'LBL_CC_EMAIL_ERROR'=>'Your cc mailid is not proper',
+'LBL_BCC_EMAIL_ERROR'=>'Your bcc mailid is not proper',
+'LBL_NO_RCPTS_EMAIL_ERROR'=>'No recepients specified',
+'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings tab',
+'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Email Client',
+
 );
 
 ?>
