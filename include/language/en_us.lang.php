@@ -667,6 +667,28 @@ $app_strings = array (
 //Added for 5.0.3
 'Files_Maximum_6'=>'Files Maximum 6',
 'To'=>'To:',
+
+'Date & Time' => 'Date & Time',
+'Reminder' => '[Reminder:',
+'Visit_Link' => 'Kindly visit the link for more details on the activity',
+'Click here' => 'Click here',
+'Subject' => 'Subject:',
+'Support_starting' => 'Support starting',
+'Congratulations' => 'Congratulations! Your support starts from today',
+'Hello_Support' => 'Hello! Support Starts for',
+'Suppport_Ending' => 'Support Ending',
+'kindly_renew' => 'ends shortly. Kindly renew your support please<br>Regards,<br>HelpDesk Team<br>',
+'Dear_Admin' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
+'Pending_Tickets' => 'Too many pending tickets',
+'Pending_Ticket_notification' => 'Pending Ticket notification',
+'Kind_Attention' => 'Dear Admin,<br> This is to bring to your kind attention that ticket number ',
+'Thank_You_HelpDesk' => ' is yet to be closed<br> Thank You,<br> HelpDesk Team<br>',
+'Big_Deal_Closed_Successfully' => 'Big Deal Closed Successfully',
+'Dear_Team_Time_to_Party' => 'Dear Team,<br>Congratulations!Time to Party! <br>We closed a deal worth more than 10000!!!!<br> Time to hit the dance floor!<br>',
+'Task_Not_completed' => 'Task Not completed',
+'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br> Thank You<br>HelpDesk Team<br>',
+'Too_many_pending_tickets' => 'Too many pending tickets',
+'Dear_Admin_too_ many_tickets_pending' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
 );
 
 $app_list_strings = array (

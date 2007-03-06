@@ -28,7 +28,7 @@ require("config.php");
 
 // Get the list of activity for which reminder needs to be sent
 
-global $adb;
+global $adb,$app_strings;
 global $log;
 $log =& LoggerManager::getLogger('SendReminder');
 $log->debug(" invoked SendReminder ");
@@ -94,10 +94,10 @@ if($adb->num_rows($result) >= 1)
 			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=7";
 			$result_main = $adb->query($sql);
 
-			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
+			$subject = $app_strings['Reminder'].$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Subject : ".$activity_sub."\n ". $parent_content ." Date & Time : ".$date_start." ".$time_start."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
 
 			if(count($to_addr) >=1)
 			{
