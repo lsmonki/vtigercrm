@@ -160,7 +160,7 @@ $mod_strings = Array(
 'LBL_CC_EMAIL_ERROR'=>'Your cc mailid is not proper',
 'LBL_BCC_EMAIL_ERROR'=>'Your bcc mailid is not proper',
 'LBL_NO_RCPTS_EMAIL_ERROR'=>'No recepients specified',
-'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings tab',
+'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings ---> Outgoing Server link',
 'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Email Client',
 
 );
