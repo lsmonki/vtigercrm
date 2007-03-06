@@ -130,6 +130,8 @@ if(!rename("install/", $renamefile."install/"))
 			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
+			<li>Talk to us at http://forums.vtiger.com
+			<li>Discuss with us at http://blogs.vtiger.com
 			</ul>
 			</div>
 
