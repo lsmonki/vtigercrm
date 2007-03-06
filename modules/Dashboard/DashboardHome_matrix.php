@@ -33,10 +33,10 @@ $image_path=$theme_path."images/";
 		    		<table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
 				<tr>
 	 		   		<td rowspan="2"><span class="dash_count">1</span>&nbsp;&nbsp;</td>
-				 	<td nowrap><span class="genHeaderSmall"><?echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
+				 	<td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
 				 </tr>
 				 <tr>
-				 	<td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
+				 	<td><span class="big"><?php echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 				</tr>
 				</table>
 		    	</td>
@@ -57,7 +57,7 @@ $image_path=$theme_path."images/";
 				 	<td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_MONTH_BY_OUTCOME'];?></span></td>
 				</tr>
 				<tr>
-					<td><span class="big"><? echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
+					<td><span class="big"><?php echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
 				</tr>
 				</table>
 			</td>
@@ -83,7 +83,7 @@ $image_path=$theme_path."images/";
 				 	<td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME'];?></span></td>
 				</tr>
 				<tr>
-				       	<td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
+				       	<td><span class="big"><?php echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 				</tr>
 				</table>
 			</td>
@@ -105,7 +105,7 @@ $image_path=$theme_path."images/";
 				 	<td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_FORM_TITLE'];?></span></td>
 				</tr>
 				<tr>
-			       		<td><span class="big"><? echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
+			       		<td><span class="big"><?php echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
 				</tr>
 				</table>
 			</td>

@@ -34,7 +34,7 @@ global $mod_strings;
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $app_strings['LBL_CHARSET'];?>">
 <title><?php echo $mod_strings['TITLE_VTIGER_CRM_5'];?></title>
-<link href="<? echo $theme_path;?>style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $theme_path;?>style.css" rel="stylesheet" type="text/css">
 <script language="javascript" type="text/javascript" src="include/js/popup.js"></script>
 </head>
 <style>
@@ -73,7 +73,7 @@ global $mod_strings;
 <body>
 <table border="0" cellpadding="0" cellspacing="0" width="500">
 		<tr>
-				<td colspan="3"><img src="<? echo $image_path;?>aboutUS.jpg" width="500" height="301"></td>
+				<td colspan="3"><img src="<?php echo $image_path;?>aboutUS.jpg" width="500" height="301"></td>
 		</tr>
 		<tr>
 				<td width="15%" style="border-left:2px solid #7F7F7F;">&nbsp;</td>
@@ -173,7 +173,7 @@ global $mod_strings;
 		</tr>
 		<tr><td colspan="3"  style="border-left:2px solid #7F7F7F;border-right:2px solid #7F7F7F">&nbsp;</td></tr>
 		<tr>
-		  <td colspan="3" background="<? echo $image_path;?>about_btm.jpg" height="75">
+		  <td colspan="3" background="<?php echo $image_path;?>about_btm.jpg" height="75">
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="70%" align="left" class="small">

@@ -184,7 +184,7 @@ else
 						<b><?php echo $error_msg ?></b>
 						</div>
 						<?php if($error_msg_info) : ?>
-							<p><? echo $error_msg_info ?><p>
+							<p><?php echo $error_msg_info ?><p>
 						<?php endif ?>
 					<?php endif ?>
 					<table width="90%" cellpadding="5" border="0" class="small" style="background-color:#cccccc" cellspacing="1">

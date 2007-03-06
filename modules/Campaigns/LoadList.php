@@ -33,7 +33,7 @@ if ($singlepane_view == 'true')
 ?>
 <script>
 addOnloadEvent(function() {
-	window.location.href = "index.php?action=DetailView&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
+	window.location.href = "index.php?action=DetailView&module=Campaigns&record=<?php echo $_REQUEST['return_id'];?>";
 });
 </script>
 <?php
@@ -43,7 +43,7 @@ else
 ?>
 <script>
 addOnloadEvent(function() {
-	window.location.href = "index.php?action=CallRelatedList&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
+	window.location.href = "index.php?action=CallRelatedList&module=Campaigns&record=<?php echo $_REQUEST['return_id'];?>";
 });
 </script>
 <?php
