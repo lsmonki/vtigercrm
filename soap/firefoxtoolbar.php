@@ -354,7 +354,7 @@ function create_site_from_webform($username,$portalname,$portalurl)
 		$adb->println("Create New Portal from Web Form - Ends");
 
 		if($result != '')
-		  return 'Portal added sucessfully';
+		  return 'URL added sucessfully';
 		else
 		  return "Portal creation failed. Try again";
 	}
