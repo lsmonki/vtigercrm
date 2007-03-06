@@ -191,6 +191,9 @@ $mod_strings = Array(
 'Next 60 Days'=>'Next 60 Days',
 'Next 90 Days'=>'Next 90 Days',
 'Next 120 Days'=>'Next 120 Days',
+'TITLE_VTIGERCRM_CREATE_REPORT' => 'vtiger CRM - Create Report',
+'TITLE_VTIGERCRM_PRINT_REPORT' => 'vtiger -  Print Report',
+'NO_FILTER_SELECTED' => 'No filter Selected',
 
 'LBL_GENERATE_NOW'=>'Generate Now',
 'Totals'=>'Totals',
@@ -200,8 +203,6 @@ $mod_strings = Array(
 'MIN'=>'MIN',
 'LBL_CUSTOM_REPORTS'=>'Custom Reports',
 
-//Added for 5.0.3
-'TITLE_VTIGERCRM_CREATE_REPORT'=>'vtiger CRM - Create Report',
 )
 
 ?>

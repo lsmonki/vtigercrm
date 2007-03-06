@@ -64,13 +64,13 @@
 			{if $report_in_fld_id neq $REPORTID}
 				<option value={$report_in_fld_id}>{$MOD.$report_in_fld_name}</option>
 			{else}	
-				<option value={$report_in_fld_id} "selected">{$MOD.$report_in_fld_name}</option>
+				<option value={$report_in_fld_id} selected>{$MOD.$report_in_fld_name}</option>
 			{/if}
 		{else}
 			{if $report_in_fld_id neq $REPORTID}
 				<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
 			{else}	
-				<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
+				<option value={$report_in_fld_id} selected>{$report_in_fld_name}</option>
 			{/if}
 		{/if}
 		{/foreach}
@@ -205,7 +205,9 @@ function ReportInfor()
 		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (  till  '+enddatevalue+')';
 	}else if(startdatevalue == '' && enddatevalue =='')
 	{
-		var reportinfr = 'No filter Selected';
+		{/literal}
+                var reportinfr = "{$MOD.NO_FILTER_SELECTED}";
+                {literal}
 	}else if(startdatevalue != '' && enddatevalue !='')
 	{
 	var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"  of  "'+stdDateFiltervalue+'"  ( '+startdatevalue+'  to  '+enddatevalue+' )';
