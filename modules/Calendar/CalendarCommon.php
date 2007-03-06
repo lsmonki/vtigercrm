@@ -293,26 +293,26 @@ function getActivityDetails($description,$inviteeid='')
         global $adb,$mod_strings;
         $log->debug("Entering getActivityDetails(".$description.") method ...");
 
-        $reply = (($_REQUEST['mode'] == 'edit')?'updated':'created');
+        $reply = (($description['mode'] == 'edit')?'updated':'created');
         if($inviteeid=='')
-        $name = getUserName($_REQUEST['assigned_user_id']);
+        $name = getUserName($description['user_id']);
         else
         $name = getUserName($inviteeid);
 
         $current_username = getUserName($current_user->id);
-        $status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+        $status = $description['status'];
 
         $list = $name.',';
-        $list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':';
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_SUBJECT"].' '.$_REQUEST['subject'];
+	$list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_SUBJECT"].' '.$description['subject'];
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.$_REQUEST['taskpriority'];
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].' : '.$_REQUEST['parent_name'];
-	if($_REQUEST['activity_mode']!= 'Events')
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.$description['taskpriority'];
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].' : '.$description['relatedto'];
+	if($description['activity_mode'] != 'Events')
 	{
-        	$list .= '<br>'.$mod_strings["LBL_CONTACT"].' '.$_REQUEST['contactlist'];
+        	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT"].' '.$description['contact_name'];
 	}
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description;
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description['description'];
         $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
         $list .= '<br>'.$current_username.'.';
 
@@ -346,6 +346,120 @@ function timeString($datetime,$fmt){
 	}
 	return $timeStr;
 }
+//added to fix Ticket#3068
+function getEventNotification($mail_id,$mode,$subject,$desc)
+{
+	global $current_user,$adb;
+	require_once("modules/Emails/mail.php");
+	$subject = $mode.' : '.$subject;
+	$crmentity = new CRMEntity();
 
+	if($desc['assingn_type'] == "U")
+	{
+		$to_email = getUserEmailId('id',$mail_id);
+		$description = getActivityDetails($desc);
+		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+	}
+	if($desc['assingn_type'] == "T")
+	{
+		$groupname=$desc['group_name'];
+		$resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+		$groupid=$adb->query_result($resultqry,0,"groupid");
+		require_once('include/utils/GetGroupUsers.php');
+		$getGroupObj=new GetGroupUsers();
+		$getGroupObj->getAllUsersInGroup($groupid);
+		$userIds=$getGroupObj->group_users;
+		$groupqry="select email1,id from vtiger_users where id in(".implode(',',$userIds).")";
+		$groupqry_res=$adb->query($groupqry);
+		$noOfRows = $adb->num_rows($groupqry_res);
+		for($z=0;$z < $noOfRows;$z++)
+		{
+			$emailadd = $adb->query_result($groupqry_res,$z,'email1');
+			$curr_userid = $adb->query_result($groupqry_res,$z,'id');
+			$description = getActivityDetails($desc,$curr_userid);
+			$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
+
+		}
+	}
+}
+
+function sendInvitation($inviteesid,$mode,$subject,$desc)
+{
+	global $current_user;
+	require_once("modules/Emails/mail.php");
+	$invitees_array = explode(';',$inviteesid);
+	$subject = $mode.' : '.$subject;
+	$record = $focus->id;
+	foreach($invitees_array as $inviteeid)
+	{
+		if($inviteeid != '')
+		{
+			$description=getActivityDetails($desc,$inviteeid);
+			$to_email = getUserEmailId('id',$inviteeid);
+			send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+		}
+	}
+
+}
+
+function getActivityMailInfo($return_id,$status,$activity_type)
+{
+	$mail_data = Array();
+	global $adb;
+	$qry = "select * from vtiger_activity where activityid=".$return_id;
+	$ary_res = $adb->query($qry);
+	$send_notification = $adb->query_result($ary_res,0,"sendnotification");
+	$subject = $adb->query_result($ary_res,0,"subject");
+	$priority = $adb->query_result($ary_res,0,"priority");
+	//$parent_name = $adb->query_result($ary_res,0,"priority");
+
+	$usr_qry = "select smownerid from vtiger_crmentity where crmid=".$return_id;
+	$res = $adb->query($usr_qry);
+	$usr_id = $adb->query_result($res,0,"smownerid");
+	$assignType = "U";
+	if($usr_id == '')
+	{
+		$assignType = "T";
+		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=".$return_id;
+		$grp_res = $adb->query($group_qry);
+		$grp_name = $adb->query_result($res,0,"groupname");
+	}
+
+
+	$desc_qry = "select description from vtiger_crmentity where crmid=".$return_id;
+	$des_res = $adb->query($desc_qry);
+	$description = $adb->query_result($des_res,0,"description");
+
+		
+	$rel_qry = "select case vtiger_crmentity.setype when 'Leads' then vtiger_leaddetails.lastname when 'Accounts' then vtiger_account.accountname when 'Potentials' then vtiger_potential.potentialname when 'Quotes' then vtiger_quotes.subject when 'PurchaseOrder' then vtiger_purchaseorder.subject when 'SalesOrder' then vtiger_salesorder.subject when 'Invoice' then vtiger_invoice.subject when 'Campaigns' then vtiger_campaign.campaignname when 'HelpDesk' then vtiger_troubletickets.title  end as relname from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid  left join vtiger_account on vtiger_account.accountid=vtiger_seactivityrel.crmid left join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_quotes on vtiger_quotes.quoteid= vtiger_seactivityrel.crmid left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_seactivityrel.crmid  left join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_seactivityrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_seactivityrel.crmid  left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_seactivityrel.crmid left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid where vtiger_seactivityrel.activityid=".$return_id;
+
+	$rel_res = $adb->query($rel_qry);
+	$rel_name = $adb->query_result($rel_res,0,"relname");
+
+
+	$cont_qry = "select * from vtiger_cntactivityrel where activityid=".$return_id;
+	$cont_res = $adb->query($cont_qry);
+	$cont_id = $adb->query_result($cont_res,0,"contactid");
+	$cont_name = '';
+	if($cont_id != '')
+	{
+		$cont_name = getContactName($cont_id);
+	}
+	$mail_data['mode'] = "edit";
+	$mail_data['activity_mode'] = $activity_type;
+	$mail_data['sendnotification'] = $send_notification;
+	$mail_data['user_id'] = $usr_id;
+	$mail_data['subject'] = $subject;
+	$mail_data['status'] = $status;
+	$mail_data['taskpriority'] = $priority;
+	$mail_data['relatedto'] = $rel_name;
+	$mail_data['contact_name'] = $cont_name;
+	$mail_data['description'] = $description;
+	$mail_data['assingn_type'] = $assignType;
+	$mail_data['group_name'] = $grp_name;
+	return $mail_data;
+
+
+}
 
 ?>

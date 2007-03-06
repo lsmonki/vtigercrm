@@ -142,6 +142,24 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$activity_type = "Events";
 				}
 				ChangeStatus($status,$return_id,$activity_type);
+				$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
+				if($mail_data['sendnotification'] == 1)
+				{
+					getEventNotification($mail_data['user_id'],$activity_type,$mail_data['subject'],$mail_data);
+				}
+				$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
+				$invitee_res = $adb->query($invitee_qry);
+				$count = $adb->num_rows($invitee_res);
+				if($count != 0)
+				{
+					for($j = 0; $j < $count; $j++)
+					{
+						$invitees_ids[]= $adb->query_result($invitee_res,$j,"inviteeid");
+
+					}
+					$invitees_ids_string = implode(';',$invitees_ids);
+					sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
+				}
 			}
 			if($type == 'activity_postpone')
 			{

@@ -23,11 +23,9 @@
 
 require_once('modules/Calendar/Activity.php');
 require_once('include/logging.php');
-//require("modules/Emails/class.phpmailer.php");
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/CalendarCommon.php');
-require_once('data/CRMEntity.php');
 global $adb;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
@@ -59,8 +57,27 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 		$status = $_REQUEST['eventstatus'];	
 		$activity_type = "Events";	
 	}
-	
 	ChangeStatus($status,$return_id,$activity_type);
+	$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
+	if($mail_data['sendnotification'] == 1)
+	{
+		getEventNotification($mail_data['user_id'],$activity_type,$mail_data['subject'],$mail_data);
+	}
+	$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
+	$invitee_res = $adb->query($invitee_qry);
+	$count = $adb->num_rows($invitee_res);
+	if($count != 0)
+	{
+		for($j = 0; $j < $count; $j++)
+		{
+			$invitees_ids[]= $adb->query_result($invitee_res,$j,"inviteeid");
+
+		}
+		$invitees_ids_string = implode(';',$invitees_ids);
+		sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
+	}
+
+
 }
 else
 {
@@ -137,68 +154,34 @@ $activemode = "";
 if($activity_mode != '') 
 	$activemode = "&activity_mode=".$activity_mode;
 
+function getRequestData()
+{
+	$mail_data = Array();
+	$mail_data['user_id'] = $_REQUEST['assigned_user_id'];
+	$mail_data['subject'] = $_REQUEST['subject'];
+	$mail_data['status'] = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	$mail_data['activity_mode'] = $_REQUEST['activity_mode'];
+	$mail_data['taskpriority'] = $_REQUEST['taskpriority'];
+	$mail_data['relatedto'] = $_REQUEST['parent_name'];
+	$mail_data['contact_name'] = $_REQUEST['contact_name'];
+	$mail_data['description'] = $_REQUEST['description'];
+	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
+	$mail_data['group_name'] = $_REQUEST['assigned_group_name'];
+	$mail_data['mode'] = $_REQUEST['mode'];
+	return $mail_data;
+}
 //Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
 if($_REQUEST['sendnotification'] == 'on')
 {
-	global $current_user;
-	$local_log->info("send notification is on");
-        require_once("modules/Emails/mail.php");
-	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-
-	$crmentity = new CRMEntity();
-	if($_REQUEST['assigntype'] == 'U')
-	{
-	        $to_email[0] = getUserEmailId('id',$_REQUEST['assigned_user_id']);
-		$description = getActivityDetails($_REQUEST['description']);
-		$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-	}
-	//code added to send mail to group
-	if($_REQUEST['assigntype'] == 'T')
-	{
-		$groupname=$_REQUEST['assigned_group_name'];
-		$resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
-		$groupid=$adb->query_result($resultqry,0,"groupid");
-		 require_once('include/utils/GetGroupUsers.php');
-		 $getGroupObj=new GetGroupUsers();
-		 $getGroupObj->getAllUsersInGroup($groupid);
-		 $userIds=$getGroupObj->group_users;
-		 $groupqry="select email1,id from vtiger_users where id in(".implode(',',$userIds).")";
-		 $groupqry_res=$adb->query($groupqry);
-		 $noOfRows = $adb->num_rows($groupqry_res);
-		 for($z=0;$z < $noOfRows;$z++)
-		 {
-			 $emailadd = $adb->query_result($groupqry_res,$z,'email1');
-			 $curr_userid = $adb->query_result($groupqry_res,$z,'id');
-			 $description = getActivityDetails($_REQUEST['description'],$curr_userid);
-			 $mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
-
-		 }
-
-
-	}
-
+	$mail_contents = getRequestData();
+	getEventNotification($_REQUEST['assigned_user_id'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
-
 
 //code added to send mail to the vtiger_invitees
 if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 {
-	global $current_user;
-	$local_log->info("send notification is on");
-	require_once("modules/Emails/mail.php");
-	$selected_users_string =  $_REQUEST['inviteesid'];
-	$invitees_array = explode(';',$selected_users_string);
-	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-	$record = $focus->id;
-	foreach($invitees_array as $inviteeid)
-	{
-		if($inviteeid != '')
-		{
-			$description=getActivityDetails($_REQUEST['description'],$inviteeid);
-			$to_email = getUserEmailId('id',$inviteeid);
-			$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-		}
-	}
+	$mail_contents = getRequestData();
+        sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')

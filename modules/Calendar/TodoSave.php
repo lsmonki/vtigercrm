@@ -15,7 +15,6 @@ require_once("config.php");
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
-
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -48,22 +47,29 @@ if(isset($_REQUEST['mode']))
  	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
 
  	$focus->save($tab_type);
-	if($_REQUEST["task_sendnotification"]=='on' && $_REQUEST['task_assigntype'] == 'U')
+	if($_REQUEST["task_sendnotification"]=='on')
         {
-
-        global $current_user;
-        $local_log->info("send notification is on");
-        require_once("modules/Emails/mail.php");
-        $to_email = getUserEmailId('id',$_REQUEST['task_assigned_user_id']);
-        $subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['task_subject'];
-        $_REQUEST["assigned_user_id"]= $_REQUEST["task_assigned_user_id"];
-	$_REQUEST["subject"]=$subject;
-	$_REQUEST["parent_name"]=$_REQUEST["task_parent_name"];
-	$_REQUEST['contactlist']=$_REQUEST['task_contact_name'];
-        $description = getActivityDetails($_REQUEST['task_description']);
-        $mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+		$mail_contents = getRequestedToData();
+		getEventNotification($_REQUEST['task_assigned_user_id'],$_REQUEST['activity_mode'],$_REQUEST['task_subject'],$mail_contents);
 
         }
+function getRequestedToData()
+{
+	$mail_data = Array();
+	$mail_data['user_id'] = $_REQUEST["task_assigned_user_id"];
+	$mail_data['subject'] = $_REQUEST['task_subject'];
+	$mail_data['status'] = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	$mail_data['activity_mode'] = $_REQUEST['activity_mode'];
+	$mail_data['taskpriority'] = $_REQUEST['taskpriority'];
+	$mail_data['relatedto'] = $_REQUEST['task_parent_name'];
+	$mail_data['contact_name'] = $_REQUEST['task_contact_name'];
+	$mail_data['description'] = $_REQUEST['task_description'];
+	$mail_data['assingn_type'] = $_REQUEST['task_assigntype'];
+	$mail_data['group_name'] = $_REQUEST['task_assigned_group_name'];
+	$mail_data['mode'] = $_REQUEST['task_mode'];
+	return $mail_data;
+}
 
- header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
+
+ header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=todo&parenttab=".$_REQUEST['parenttab']);
 ?>
