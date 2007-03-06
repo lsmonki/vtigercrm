@@ -75,7 +75,7 @@ $image_path=$theme_path."images/";
 				<td  align="right">
 					<table cellpadding="0" cellspacing="0" border="0" class="small">
 						<tr>
-							<td class="small">View Chart :&nbsp;</td>
+							<td class="small"><?php echo $mod_strings['VIEWCHART'];?> :&nbsp;</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#1">1</a></td>
 							<td class="dash_row_sel">2</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#3">3</a></td>
@@ -112,7 +112,7 @@ $image_path=$theme_path."images/";
 				<td align="right">
 					<table cellpadding="0" cellspacing="0" border="0" class="small">
 						<tr>
-							<td class="small">View Chart :&nbsp;</td>
+							<td class="small"><?php echo $mod_strings['VIEWCHART']; ?> :&nbsp;</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#1">1</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#2">2</a></td>
 							<td class="dash_row_sel">3</td>
