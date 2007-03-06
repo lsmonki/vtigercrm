@@ -46,7 +46,8 @@ $mod_strings = Array(
 'LBL_COLON'=>':',
 'LBL_CHK_MAIL'=>'Check Mail',
 'LBL_COMPOSE'=>'Compose',
-'LBL_SETTINGS'=>'Settings',
+//Single change for 5.0.3
+'LBL_SETTINGS'=>'Incoming Mail Server Settings',
 'LBL_EMAIL_FOLDERS'=>'Email Folders',
 'LBL_INBOX'=>'Inbox',
 'LBL_SENT_MAILS'=>'Sent Mails',
