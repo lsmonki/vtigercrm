@@ -664,6 +664,8 @@ $app_strings = array (
 'LABEL_SET_TAX_FOR_X'=>'Set Tax for x',
 'LABEL_SET_SH_TAX_FOR_COLON'=>'Set S&H Tax for :',
 
+'NO_DATA_AVAILABLE_WITH_SPECIFIED_PERIOD'=>'No data available with the specified time period',
+
 //Added for 5.0.3
 'Files_Maximum_6'=>'Files Maximum 6',
 'To'=>'To:',

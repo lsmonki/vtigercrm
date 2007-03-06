@@ -101,7 +101,7 @@ function color_generator($count = 1, $start = '33CCFF', $step = '221133')
 
 function get_tickspacing($max = 10)
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering get_tickspacing(".$max.") method ...");
 	$result = array(1,1);
 	
@@ -110,7 +110,7 @@ function get_tickspacing($max = 10)
 	if($coef == 0)
 	{
 		$data=0;
-		echo "<h3> No data available with the specified time period</h3>";
+		echo "<h3>".$app_strings['NO_DATA_AVAILABLE_WITH_SPECIFIED_PERIOD']."</h3>";
 		$log->debug("Exiting get_tickspacing method ...");
 		return $data;
 	}
