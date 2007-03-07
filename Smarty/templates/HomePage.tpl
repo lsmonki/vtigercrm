@@ -169,7 +169,7 @@ function getHomeActivities(mode,view)
 								</div>
 							{/if}	
 							{else}
-								<div class="MatrixLayer" style="float:left;width:70%;" id="homepagedb">
+								<div class="MatrixLayer" style="float:left;width:93%;" id="homepagedb">
 									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
 										<tr style="cursor:move;">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>

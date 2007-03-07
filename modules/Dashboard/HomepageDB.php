@@ -34,7 +34,7 @@ require_once("modules/Dashboard/Entity_charts.php");
                 $cnt_table=$graph_details[6];
 	       	$test_target_val=$graph_details[7];
 
-                $width=425;
+                $width=560;
                 $height=225;
                 $top=30;
                 $left=140;
