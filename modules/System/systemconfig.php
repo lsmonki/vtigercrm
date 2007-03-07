@@ -16,6 +16,7 @@
 // phpsysinfo release version number
 $VERSION = "2.5.2_rc2";
 $startTime = array_sum( explode( " ", microtime() ) );
+global $app_strings;
 
 
 define('IN_PHPSYSINFO', true);
@@ -137,7 +138,7 @@ if ($lng == 'browser') {
 
 $lng = basename($lng);
 if (file_exists(APP_ROOT . '/includes/lang/' . $lng . '.php')) {
-  $charset = 'iso-8859-1';
+  $charset = $app_strings['LBL_CHARSET'];
   require_once(APP_ROOT . '/includes/lang/' . $lng . '.php'); // get our language include
   // Store the current language selection in a cookie, set expire date to 30 days later
  @setcookie("lng", $lng, (time() + 60 * 60 * 24 * 30));
@@ -168,7 +169,7 @@ require_once(APP_ROOT . '/includes/xml/mbinfo.php');
 require_once(APP_ROOT . '/includes/xml/hddtemp.php');
 
 // build the xml
-$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
+$xml = "<?xml version=\"1.0\" encoding=\"".$app_strings['LBL_CHARSET']."\"?>\n";
 $xml .= "<!DOCTYPE phpsysinfo SYSTEM \"phpsysinfo.dtd\">\n\n";
 $xml .= created_by();
 $xml .= "<phpsysinfo>\n";
@@ -200,12 +201,12 @@ if (TEMPLATE_SET == 'xml') {
   $XPath = new XPath();
   $XPath->importFromString($xml); 
 
-  header("Content-type: text/vnd.wap.wml; charset=iso-8859-1");
+  header("Content-type: text/vnd.wap.wml; charset=".$app_strings['LBL_CHARSET']);
   header("");
   header("Cache-Control: no-cache, must-revalidate");
   header("Pragma: no-cache");
 
-  echo "<?xml version='1.0' encoding='iso-8859-1'?>\n";
+  echo "<?xml version='1.0' encoding='".$app_strings['LBL_CHARSET']."'?>\n";
   echo "<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\" \"http://www.wapforum.org/DTD/wml_1.1.xml\" >\n";
   echo "<wml>\n";
   echo "<card id=\"start\" title=\"phpSysInfo - Menu\">\n";

@@ -16,7 +16,7 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
 <link rel="stylesheet" media="print" href="print.css" type="text/css">
 <title>vtiger -  {$MOD.LBL_PRINT_REPORT}</title>
 <style>
