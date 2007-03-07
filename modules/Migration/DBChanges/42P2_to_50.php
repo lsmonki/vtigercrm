@@ -58,7 +58,7 @@ $ann_query = "CREATE TABLE vtiger_announcement (
 	        `time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
 		  PRIMARY KEY  (`creatorid`),
 		    KEY `announcement_UK01` (`creatorid`)
-	    ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+	    ) ENGINE=InnoDB";
 Execute($ann_query);
 
 //Added Primay Keys for the left out tables
@@ -96,7 +96,7 @@ foreach($alter_array1 as $query)
 
 //Tables vtiger_profile2globalpermissions, vtiger_actionmapping creation
 
-$create_sql1 ="CREATE TABLE vtiger_profile2globalpermissions (`profileid` int(19) NOT NULL, `globalactionid` int(19) NOT NULL, `globalactionpermission` int(19) default NULL, PRIMARY KEY  (`profileid`,`globalactionid`),  KEY `idx_profile2globalpermissions` (`profileid`,`globalactionid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+$create_sql1 ="CREATE TABLE vtiger_profile2globalpermissions (`profileid` int(19) NOT NULL, `globalactionid` int(19) NOT NULL, `globalactionpermission` int(19) default NULL, PRIMARY KEY  (`profileid`,`globalactionid`),  KEY `idx_profile2globalpermissions` (`profileid`,`globalactionid`)) ENGINE=InnoDB";
 
 Execute($create_sql1);
 
@@ -2074,7 +2074,7 @@ $create_table_query_array = Array(
   `presence` int(1) NOT NULL default '1',
   PRIMARY KEY  (`actualcostid`),
   UNIQUE KEY `CampaignActCst_UK01` (`actualcost`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_campaignstatus (
   `campaignstatusid` int(19) NOT NULL auto_increment,
@@ -2138,7 +2138,7 @@ $create_table_query_array = Array(
   `permission` int(19) default NULL,
   PRIMARY KEY  (`shareid`,`datashare_relatedmodule_id`),
   KEY `datashare_relatedmodule_permission_UK1` (`shareid`,`permission`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_datashare_relatedmodules (
 	  `datashare_relatedmodule_id` int(19) NOT NULL,
@@ -2151,7 +2151,7 @@ $create_table_query_array = Array(
 
 "CREATE TABLE vtiger_datashare_relatedmodules_seq (
   `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_datashare_role2group (
 	  `shareid` int(19) NOT NULL,
@@ -2191,7 +2191,7 @@ $create_table_query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `datashare_rs2grp_share_roleandsubid_idx` (`share_roleandsubid`),
   KEY `datashare_rs2grp_to_groupid_idx` (`to_groupid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_datashare_rs2role (
   `shareid` int(19) NOT NULL,
@@ -2201,7 +2201,7 @@ $create_table_query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `datashare_rs2role_share_roleandsubid_idx` (`share_roleandsubid`),
   KEY `datashare_rs2role_to_roleid_idx` (`to_roleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_datashare_rs2rs (
   `shareid` int(19) NOT NULL,
@@ -2211,7 +2211,7 @@ $create_table_query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `datashare_rs2rs_share_roleandsubid_idx` (`share_roleandsubid`),
   KEY `idx_datashare_rs2rs_to_roleandsubid_idx` (`to_roleandsubid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_expectedresponse (
   `expectedresponseid` int(19) NOT NULL auto_increment,
@@ -2229,7 +2229,7 @@ $create_table_query_array = Array(
   `presence` int(1) NOT NULL default '1',
   PRIMARY KEY  (`expectedrevenueid`),
   UNIQUE KEY `CampaignExpRev_UK01` (`expectedrevenue`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_read_group_rel_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2238,7 +2238,7 @@ $create_table_query_array = Array(
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`sharedgroupid`),
   KEY `tmp_read_group_rel_sharing_per_userid_sharedgroupid_tabid` (`userid`,`sharedgroupid`,`tabid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_read_group_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2246,7 +2246,7 @@ $create_table_query_array = Array(
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`sharedgroupid`),
   KEY `tmp_read_group_sharing_per_userid_sharedgroupid_idx` (`userid`,`sharedgroupid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_read_user_rel_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2255,7 +2255,7 @@ $create_table_query_array = Array(
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`shareduserid`),
   KEY `tmp_read_user_rel_sharing_per_userid_shared_reltabid_idx` (`userid`,`shareduserid`,`relatedtabid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_read_user_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2263,7 +2263,7 @@ $create_table_query_array = Array(
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`shareduserid`),
   KEY `tmp_read_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_write_group_rel_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2272,7 +2272,7 @@ $create_table_query_array = Array(
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`sharedgroupid`),
   KEY `tmp_write_group_rel_sharing_per_userid_sharedgroupid_tabid_idx` (`userid`,`sharedgroupid`,`tabid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_write_group_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2280,7 +2280,7 @@ $create_table_query_array = Array(
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`sharedgroupid`),
   KEY `tmp_write_group_sharing_per_UK1` (`userid`,`sharedgroupid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_write_user_rel_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2289,7 +2289,7 @@ $create_table_query_array = Array(
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`shareduserid`),
   KEY `tmp_write_user_rel_sharing_per_userid_sharduserid_tabid_idx` (`userid`,`shareduserid`,`tabid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE vtiger_tmp_write_user_sharing_per (
   `userid` int(11) NOT NULL,
@@ -2297,7 +2297,7 @@ $create_table_query_array = Array(
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`shareduserid`),
   KEY `tmp_write_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 
 				 );
