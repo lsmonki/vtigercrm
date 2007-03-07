@@ -61,7 +61,7 @@
 	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<textarea id="parent_name" readonly cols="70">{$TO_MAIL}</textarea>
+		<input id="parent_name" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width:99%">&nbsp;
 	</td>
 	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
