@@ -153,7 +153,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 
 	} elseif($_REQUEST["reply"] == "single"){
 		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
-		$smarty->assign('BCC_MAIL',$webmail->to[0]);
+		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		if(preg_match("/RE:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);
 		else
