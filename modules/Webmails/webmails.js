@@ -41,6 +41,7 @@ function load_webmail(mid) {
         $("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
         $("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
         $("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
+        $("webmail_cc").innerHTML = "&nbsp;"+webmail[mid]["cc"];
 
 	//Fix for webmails body display in IE - dartagnanlaf
 	/*
