@@ -88,7 +88,7 @@ class Webmails extends CRMEntity {
 	}
 
 	function replyBody() {
-		$tmp = "<br><br><p style='font-weight:bold'>In reply to the message sent by ".$this->reply_name." on ".$this->date."</p>";
+		$tmp = "<br><br><p style='font-weight:bold'>".$mod_strings['IN_REPLY_TO_THE_MESSAGE'].$this->reply_name." on ".$this->date."</p>";
 		$tmp .= "<blockquote style='border-left:1px solid blue;padding-left:5px'>".$this->body."</blockquote>";
 		return $tmp;
 	}
