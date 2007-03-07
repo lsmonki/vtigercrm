@@ -19,10 +19,19 @@ else
 {
 	$mailbox="INBOX";
 }
-if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
+
+if($_REQUEST["start"] && $_REQUEST["start"] != "")
+{
+	$start=$_REQUEST["start"];
+}
+else
+{
+	$start="1";
+}
 $show_hidden=$_REQUEST["show_hidden"];
 
 global $current_user;
+
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -199,21 +208,25 @@ $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
 $mails_per_page = $MailBox->mails_per_page;
-
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
 } else {
-	$start_message=($numEmails-($start*$mails_per_page));
+	$start_message=($numEmails-(($start-1)*$mails_per_page));
 }
+
 $c=$numEmails;
 
 if(!isset($_REQUEST["search"])) {
-	$numPages = round($numEmails/$MailBox->mails_per_page);
+	$numPages = ceil($numEmails/$MailBox->mails_per_page);
 	if($numPages > 1) {
+		if($start != 1){
 		$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
 		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/previous.gif' border='0'></a> &nbsp;";
+		}
+		if($start <= ($numPages-1)){
 		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/next.gif' border='0'></a>&nbsp;&nbsp;";
 		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'><img src='modules/Webmails/images/end.gif' border='0'></a>";
+		}
 	}
 }
 
@@ -278,6 +291,7 @@ flush();
 
 // MAIN LOOP
 // Main loop to create listview entries
+
 $i=1;
 while ($i<=$c) {
 	if(is_array($searchlist)) {
@@ -286,9 +300,13 @@ while ($i<=$c) {
 				$listview_entries[] = show_msg($mails,$start_message);
 		}
 	} else {
-		$listview_entries[] = show_msg($mails,$start_message);
-		if($displayed_msgs == $MailBox->mails_per_page) {break;}
-	}
+			
+		if($start_message > 0)
+		{
+			$listview_entries[] = show_msg($mails,$start_message);
+			if($displayed_msgs == $MailBox->mails_per_page) {break;}
+		}
+	       }
   	$i++;
   	$start_message--;
 }
