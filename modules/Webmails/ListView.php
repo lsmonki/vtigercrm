@@ -232,7 +232,7 @@ if (is_array($overview))
 	foreach ($overview as $val)
 	{
 		$mails[$val->msgno] = $val;
-	
+	 $hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
 		//Added to get the UTF-8 string - 30-11-06 - Mickie
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
 		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
@@ -245,6 +245,9 @@ if (is_array($overview))
 		webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
 		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
 		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
+
+		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $hdr->ccaddress;?>";
+
 	<?php
 	}
 }
