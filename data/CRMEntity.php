@@ -947,11 +947,6 @@ $log->info("in getOldFileName  ".$notesid);
 					updateModuleGroupRelation($module,$this->id,$groupname);
 
 			  	}
-			  	else
-				{
-					  updateModuleGroupRelation($module,$this->id,'');
-				  
-			  	}
 		  	}
       		}
 		else
