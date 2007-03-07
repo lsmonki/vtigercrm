@@ -328,6 +328,13 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
 			}
+			elseif($table_name == "vtiger_activity" && $column_name == "sendnotification")
+			{
+				if(stristr($search_string,'yes'))
+					$where="$table_name.$column_name = 1";
+				if(stristr($search_string,'no'))
+					$where="$table_name.$column_name = 0";
+			}
 			elseif($table_name == "vtiger_pricebook" && $column_name == "active")
 			{
 				if(stristr($search_string,'yes'))
@@ -595,7 +602,13 @@ function getWhereCondition($currentModule)
 				if(stristr($srch_val,'no'))
 					$adv_string .= " ".getSearch_criteria($srch_cond,NULL,'vtiger_pricebook.active')." ".$matchtype;	
 			}
-
+			elseif($tab_col == "vtiger_activity.sendnotification")
+			{
+				if(stristr($srch_val,'yes'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,"1",'vtiger_activity.sendnotification')." ".$matchtype;
+				if(stristr($srch_val,'no'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,"0",'vtiger_activity.sendnotification')." ".$matchtype;
+			}
 			elseif(in_array($column_name,$column_array))
                         {
                                 $adv_string .= getValuesforColumns($column_name,$srch_val)." ".$matchtype;
