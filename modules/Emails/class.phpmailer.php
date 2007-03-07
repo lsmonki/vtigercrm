@@ -17,7 +17,6 @@
  * @author Brent R. Matzelle
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
-global $app_strings;
 class PHPMailer
 {
     /////////////////////////////////////////////////
@@ -34,7 +33,7 @@ class PHPMailer
      * Sets the CharSet of the message.
      * @var string
      */
-    var $CharSet           = $app_strings['LBL_CHARSET'];
+    var $CharSet           = "iso-8859-1";
 
     /**
      * Sets the Content-type of the message.
