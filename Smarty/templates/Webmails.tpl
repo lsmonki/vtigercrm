@@ -195,6 +195,8 @@
 			   		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td id="from_addy">&nbsp;</td></tr>
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td id="to_addy">&nbsp;</td></tr>
+<tr><td width="20%" align="right"><b>{$MOD.LBL_CC}</b></td><td id="webmail_cc">&nbsp;</td></tr>
+
 						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
 						<tr><td
 			   		align="right"><b>{$MOD.LBL_DATE}</b></td><td
