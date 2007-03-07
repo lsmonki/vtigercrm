@@ -43,5 +43,5 @@ else
 
 $adb->query($sql);
 
-header("Location:index.php?module=Webmails&action=index&parenttab=My Home Page");
+header("Location:index.php?module=Webmails&action=index&mailbox=INBOX&parenttab=My Home Page");
 ?>
