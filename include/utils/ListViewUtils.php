@@ -946,6 +946,12 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$quotename = getQuoteName($quote_id);
 							$value = $quotename;
 						}
+						elseif($name == 'Account Name' && $module=='Contacts' )
+						{
+							$account_id = $adb->query_result($list_result,$i-1,"accountid");
+							$account_name = getAccountName($account_id);
+							$value = $account_name;
+						}
 						else
 						{
 							$list_result_count = $i-1;
