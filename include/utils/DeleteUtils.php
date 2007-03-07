@@ -154,7 +154,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case HelpDesk:
 		if($return_module == 'Contacts' || $return_module == 'Accounts')
 		{
-			$sql = "update vtiger_troubletickets set parent_id='' where ticketid=".$record;
+			$sql = "update vtiger_troubletickets set parent_id=null where ticketid=".$record;
 			$adb->query($sql);
 			$se_sql= 'delete from vtiger_seticketsrel where ticketid='.$record;
 			$adb->query($se_sql);
@@ -162,7 +162,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		if($return_module == 'Products')
 		{
-			$sql = "update vtiger_troubletickets set product_id='' where ticketid=".$record;
+			$sql = "update vtiger_troubletickets set product_id=null where ticketid=".$record;
 			$adb->query($sql);
 		}
 	break;
@@ -187,7 +187,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		if($return_module == "Vendors")
 		{
-			$sql = "update vtiger_products set vendor_id = '' where productid = $record";
+			$sql = "update vtiger_products set vendor_id = null where productid = $record";
 			$adb->query($sql);
 		}
 	break;
@@ -237,17 +237,17 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Quotes")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set quoteid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set quoteid=null where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set potentialid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set potentialid=null where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set contactid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set contactid=null where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		//Following condition is commented because in Product Relatedlist we have SO which should not be deleted.
@@ -283,12 +283,12 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE vtiger_quotes set potentialid='' where quoteid=".$record;
+			$relation_query = "UPDATE vtiger_quotes set potentialid=null where quoteid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE vtiger_quotes set contactid='' where quoteid=".$record;
+			$relation_query = "UPDATE vtiger_quotes set contactid=null where quoteid=".$record;
 			$adb->query($relation_query);
 		}
 		//Following condition is commented because in Product Relatedlist we have Quotes which should not be deleted.
@@ -324,7 +324,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module=="SalesOrder")
 		{
-			$relation_query = "UPDATE vtiger_invoice set salesorderid='' where invoiceid=".$record;
+			$relation_query = "UPDATE vtiger_invoice set salesorderid=null where invoiceid=".$record;
 			$adb->query($relation_query);
 		}
 		//Following condition is commented because in Product Relatedlist we have Invoice which should not be deleted.
@@ -422,12 +422,12 @@ function delAccRelRecords($record){
 		$adb->query($sql);
 	}
 	//Deleting Contact-Account Relation.
-	$con_q = "update vtiger_contactdetails set accountid = '' where accountid = ".$record;
+	$con_q = "update vtiger_contactdetails set accountid = null where accountid = ".$record;
 	$con_res = $adb->query($con_q);
 	$adb->query($con_q);
 
 	//Deleting Trouble Tickets-Account Relation.
-	$tt_q = "update vtiger_troubletickets set parent_id = '' where parent_id = ".$record;
+	$tt_q = "update vtiger_troubletickets set parent_id = null where parent_id = ".$record;
 	$adb->query($tt_q);
 }
 
@@ -446,7 +446,7 @@ function delVendorRelRecords($record){
 	}
 
 	//Deleting Product-Vendor Relation.
-	$pro_q = "update vtiger_products set vendor_id = '' where vendor_id = ".$record;
+	$pro_q = "update vtiger_products set vendor_id = null where vendor_id = ".$record;
 	$adb->query($pro_q);
 	//Deleting Contact-Vendor Relaton
 	$vc_sql = "delete from vtiger_vendorcontactrel where vendorid=".$record;
