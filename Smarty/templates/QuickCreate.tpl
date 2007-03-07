@@ -17,7 +17,7 @@
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class=small>
 	<tr>
 		<td width-90% class="mailSubHeader" background="{$IMAGE_PATH}qcBg.gif"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$QCMODULE}</b></td>
-		<td nowrap class="mailSubHeader moduleName" align=right><i>Quick Create</i></td></tr>
+		<td nowrap class="mailSubHeader moduleName" align=right><i>{$APP.LBL_QUICK_CREATE}</i></td></tr>
 	</table>
 
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
