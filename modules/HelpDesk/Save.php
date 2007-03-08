@@ -125,7 +125,7 @@ if($contact_mailid != '')
 if($isactive == 1)
 {
 	$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$id."&fun=detail'>Ticket Details</a>";
-	$email_body = $subject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
+	$email_body = $bodysubject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
 }
 else
 {
