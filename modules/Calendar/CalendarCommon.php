@@ -83,20 +83,31 @@ function getOtherUserName($id)
 function getSharingUserName($id)
 {
 	global $adb,$current_user;
-        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
         $user_details=Array();
-
-		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
-		{
-			$user_details = get_user_array(FALSE, "Active", $id, 'private');
-			unset($user_details[$id]);
+	$assigned_user_id = $current_user->id;
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
+	{
+		$role_seq = implode($parent_roles, "::");
+		$query = "select id as id,user_name as user_name from vtiger_users where id=".$current_user->id." and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$role_seq."::%' and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=".$current_user->id." and vtiger_tmp_write_user_sharing_per.tabid=9";
+		if (!empty($assigned_user_id)) {
+			$query .= " OR id='$assigned_user_id'";
 		}
-		else
+		$query .= " order by user_name ASC";
+		$result = $adb->query($query, true, "Error filling in user array: ");
+		while($row = $adb->fetchByAssoc($result))
 		{
-			$user_details = get_user_array(FALSE, "Active", $id);
-			unset($user_details[$id]);
+			$temp_result[$row['id']] = $row['user_name'];
 		}
+		$user_details = &$temp_result;
+		unset($user_details[$id]);
+	}
+	else
+	{
+		$user_details = get_user_array(FALSE, "Active", $id);
+		unset($user_details[$id]);
+	}
 	return $user_details;
 }
 
