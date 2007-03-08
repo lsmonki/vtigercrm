@@ -1319,7 +1319,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
         }
 	elseif($uitype == 98)
 	{
-		$value = '<a href="index.php?action=RoleDetailView&module=Users&parenttab=Users&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
+		$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab=Settings&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
 	}
 	else
 	{
