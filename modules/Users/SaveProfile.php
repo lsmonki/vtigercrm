@@ -27,10 +27,17 @@ $adb->query($sql1);
         $profileid = $adb->query_result($result2,0,'current_id');
 
 
-//Retreiving the vtiger_tabs permission array
-$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=1");
-$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=1");
-$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=1");
+	//Retreiving the vtiger_tabs permission array
+	//
+
+	//Retreiving the first profileid
+	$prof_query="select profileid from vtiger_profile order by profileid ASC";
+	$prof_result = $adb->query($prof_query);
+	$first_prof_id = $adb->query_result($prof_result,0,'profileid');
+
+$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=".$first_prof_id);
+$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=".$first_prof_id);
+$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=".$first_prof_id);
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
@@ -154,7 +161,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 
 foreach($modArr as $fld_module => $fld_label)
 {
-	$fieldListResult = getProfile2FieldList($fld_module, 1);
+	$fieldListResult = getProfile2FieldList($fld_module, $first_prof_id);
 	$noofrows = $adb->num_rows($fieldListResult);
 	$tab_id = getTabid($fld_module);
 	for($i=0; $i<$noofrows; $i++)
