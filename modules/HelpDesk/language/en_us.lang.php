@@ -179,6 +179,21 @@ $mod_strings = Array(
 'Wait For Response'=>'Wait For Response',
 'Closed'=>'Closed',
 
+//added to support i18n in ticket mails
+'Hi' => 'Hi',
+'Dear'=> 'Dear',
+'LBL_PORTAL_BODY_MAILINFO'=> 'The Ticket is',
+'LBL_DETAIL' => 'the details are :',
+'LBL_REGARDS'=> 'Regards',
+'LBL_TEAM'=> 'HelpDesk Team',
+'created' => 'created',
+'replied' => 'replied',
+'reply'=>'There is a reply to',
+'customer_portal' => 'in the "Customer Portal" at VTiger.',
+'link' => 'You can use the following link to view the replies made:',
+'Thanks' => 'Thanks',
+'Support_team' => 'Vtiger Support Team',
+
 );
 
 ?>

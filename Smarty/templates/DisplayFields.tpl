@@ -62,6 +62,9 @@
 			</td>
 			<td colspan=3>
 				<textarea class="detailedViewTextBox" tabindex="{$vt_tab}" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">{$fldvalue}</textarea>
+				{if $fldlabel eq $MOD.Solution}
+				<input type = "hidden" name="helpdesk_solution" value = '{$fldvalue}'>
+				{/if}
 			</td>
 		{elseif $uitype eq 21 || $uitype eq 24}
 			<td width=20% class="dvtCellLabel" align=right>

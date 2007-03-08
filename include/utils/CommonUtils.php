@@ -2704,12 +2704,94 @@ function getImportFieldsList($module)
 	{
 		$fieldname = $adb->query_result($result,$i,'fieldname');
 		$fieldlabel = $adb->query_result($result,$i,'fieldlabel');
-		$fieldslist[$fieldname] = $fieldlabel;
+		$fieldslist[$fieldname] = getTranslatedString($fieldlabel);
 	}
 
 	$log->debug("Exit from function getImportFieldsList($module)");
 
 	return $fieldslist;
 }
+/**     Function to get all the comments for a troubleticket
+  *     @param int $ticketid -- troubleticket id
+  *     return all the comments as a sequencial string which are related to this ticket
+**/
+function getTicketComments($ticketid)
+{
+        global $log;
+        $log->debug("Entering getTicketComments(".$ticketid.") method ...");
+        global $adb;
+
+        $commentlist = '';
+        $sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid;
+        $result = $adb->query($sql);
+        for($i=0;$i<$adb->num_rows($result);$i++)
+        {
+                $comment = $adb->query_result($result,$i,'comments');
+                if($comment != '')
+                {
+                        $commentlist .= '<br><br>'.$comment;
+                }
+        }
+        if($commentlist != '')
+                $commentlist = '<br><br> The comments are : '.$commentlist;
+
+        $log->debug("Exiting getTicketComments method ...");
+        return $commentlist;
+}
+
+function getTicketDetails($id,$whole_date)
+{
+	 global $adb,$mod_strings;
+	 if($whole_date['mode'] == 'edit')
+	 {
+		$reply = $mod_strings["replied"];
+		$temp = "Re : ";
+	 }
+	 else	
+	 {
+		$reply = $mod_strings["created"];
+		$temp = " ";
+	 }
+	
+	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br> Ticket Title : '. $temp .' '.$whole_date['sub'];
+	 $desc .= "<br><br>".$mod_strings['Hi']." ". $whole_date['parent_name'].",<br><br>".$mod_strings['LBL_PORTAL_BODY_MAILINFO']." ".$reply." ".$mod_strings['LBL_DETAIL']."<br>";
+	 $desc .= "<br>".$mod_strings['Status']." : ".$whole_date['status'];
+	 $desc .= "<br>".$mod_strings['Category']." : ".$whole_date['category'];
+	 $desc .= "<br>".$mod_strings['Severity']." : ".$whole_date['severity'];
+	 $desc .= "<br>".$mod_strings['Priority']." : ".$whole_date['priority'];
+	 $desc .= "<br><br>".$mod_strings['Description']." : <br>".$whole_date['description'];
+	 $desc .= "<br><br>".$mod_strings['Solution']." : <br>".$whole_date['solution'];
+	 $desc .= getTicketComments($id);
+
+	 $sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = \"".$id."\"";
+	 $result = $adb->query($sql);
+	 $cffields = $adb->getFieldsArray($result);
+	 foreach ($cffields as $cfOneField)
+	 {
+		 if ($cfOneField != 'ticketid')
+		 {
+			 $cfData = $adb->query_result($result,0,$cfOneField);
+			 $sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = \"$cfOneField\"";
+			 $cfLabel = $adb->query_result($adb->query($sql),0,'fieldlabel');
+			 $desc .= '<br><br>'.$cfLabel.' : <br>'.$cfData;
+		 }
+	 }
+	 // end of contribution
+	 $desc .= '<br><br><br>';
+	 $desc .= '<br>'.$mod_strings["LBL_REGARDS"].',<br>'.$mod_strings["LBL_TEAM"].'.<br>';
+	 return $desc;
+
+}
+function getPortalInfo_Ticket($id,$title,$contactname,$portal_url)
+{
+	global $mod_strings;
+	$bodydetails =$mod_strings['Dear']." ".$contactname.",<br><br>";
+        $bodydetails .= $mod_strings['reply'].' <b>'.$title.'</b>'.$mod_strings['customer_portal'];
+        $bodydetails .= $mod_strings["link"].'<br>';
+        $bodydetails .= $portal_url;
+        $bodydetails .= '<br><br>'.$mod_strings["Thanks"].'<br><br>'.$mod_strings["Support_team"];
+	return $bodydetails;
+}
+
 
 ?>
