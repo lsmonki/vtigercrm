@@ -59,7 +59,7 @@ vtiger_users.user_name from
 		{
 			$value=array();
 			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.substr($adb->query_result($tktresult,$i,"title"),0,20).'...'.'</a>';
 			$value[]=$ticketid;
 
 			$parent_id = $adb->query_result($tktresult,$i,"parent_id");

@@ -70,7 +70,7 @@ function getTopPotentials()
 					);
 			$potentialid=$adb->query_result($list_result,$i,'potentialid');                                  
 			$value=array();
-			$value[]='<a href="index.php?action=DetailView&module=Potentials&record='.$adb->query_result($list_result,$i,"potentialid").'">'.$adb->query_result($list_result,$i,"potentialname").'</a>';
+			$value[]='<a href="index.php?action=DetailView&module=Potentials&record='.$adb->query_result($list_result,$i,"potentialid").'">'.substr($adb->query_result($list_result,$i,"potentialname"),0,20).'...'.'</a>';
 			$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$adb->query_result($list_result,$i,'accountid').'">'.$adb->query_result($list_result,$i,"accountname").'</a>';
 			$value[]=convertFromDollar($adb->query_result($list_result,$i,'amount'),$rate);
 			$value[]=getDisplayDate($adb->query_result($list_result,$i,'closingdate'));
