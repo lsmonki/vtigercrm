@@ -398,8 +398,13 @@ function DeleteTag(id,recordid)
                                         <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
                                 </td></tr>
                                 <tr><td align="left" style="padding-left:10px;">
-			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
-                                        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&parent_id={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
+				{if $MODULE eq 'Contacts'}
+					{assign var=subst value="contact_id"}
+				{else}
+					{assign var=subst value="parent_id"}
+				{/if}
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
+                                        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
                         </table>
                 <br>
                 {/if}
