@@ -185,7 +185,11 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	}else if(uitype == '33')
 	{
 		tagValue = r.join(" |##| ");
-  	}else
+  	}else if(uitype == '24' || uitype == '21')
+        {
+                tagValue = document.getElementById(txtBox).value.replace(/<br\s*\/>/g, " ");
+
+        }else
 	{
 		tagValue = trim(document.getElementById(txtBox).value);
 	}
