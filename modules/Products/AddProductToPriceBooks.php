@@ -115,9 +115,12 @@ for($i=0; $i<$num_rows; $i++)
 		$field_name=$entity_id."_listprice";
 		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"bookname").'</td>';
-		$list_body .= '<td>'.$unit_price.'</td>';
-		$list_body .= '<td><input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'"></td>';
-		$list_body .= '</tr>';
+		$list_body .= '<td>'.$unit_price.'</td><td>';
+		if(isPermitted("PriceBooks","EditView","") == 'yes')
+			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'">';
+		else
+			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" readonly id="'.$field_name.'">';	
+		$list_body .= '</td></tr>';
 	}
 
 }

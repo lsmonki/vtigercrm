@@ -492,7 +492,9 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	$header[]=$mod_strings['LBL_PRODUCT_CODE'];
 	$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
 	$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
-	$header[]=$mod_strings['LBL_ACTION'];
+	if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
+		$header[]=$mod_strings['LBL_ACTION'];
+	
 
 	for($i=0; $i<$num_rows; $i++)
 	{
@@ -507,8 +509,17 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$entries[] = $adb->query_result($list_result,$i,"productcode");
 		$entries[] = $unit_price;
 		$entries[] = $listprice;
-		$entries[] = '<img style="cursor:pointer;" src="'.$image_path.'editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/><!--a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a-->&nbsp;|&nbsp;<img src="'.$image_path.'delete.gif" onclick="if(confirm(\'Are you sure?\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';
-
+		$action = "";
+		if(isPermitted("PriceBooks","EditView","") == 'yes')
+			$action .= '<img style="cursor:pointer;" src="'.$image_path.'editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
+		if(isPermitted("PriceBooks","Delete","") == 'yes')
+		{		
+			if($action != "")
+				$action .= '&nbsp;|&nbsp;';
+			$action .= '<img src="'.$image_path.'delete.gif" onclick="if(confirm(\'Are you sure?\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';	
+		}
+		if($action != "")		
+			$entries[] = $action;
 		$entries_list[] = $entries;
 	}
 	if($num_rows>0)

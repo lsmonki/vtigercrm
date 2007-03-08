@@ -123,8 +123,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{
 			$fieldname = $focus->list_fields_name[$name];
 		}
-
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) )
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
@@ -212,7 +211,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
      }
 
 	//Added for Action - edit and delete link header in listview
-	$list_header[] = $app_strings["LBL_ACTION"];
+	if(isPermitted($module,"EditView","") == 'yes' || isPermitted($module,"Delete","") == 'yes')
+		$list_header[] = $app_strings["LBL_ACTION"];
 
 	$log->debug("Exiting getListViewHeader method ...");
 	return $list_header;
@@ -570,7 +570,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$fieldname = $oCv->list_fields_name[$name];
 				}
 			}
-
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 			{
 
@@ -749,14 +748,21 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 
 		//Added for Actions ie., edit and delete links in listview 
-		$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);
-		$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
-
-		$links_info = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
-		if($del_link != '')
-			$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
-
-		$list_header[] = $links_info;
+		$links_info = "";
+		if(isPermitted($module,"EditView","") == 'yes'){
+			$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);
+			$links_info .= "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
+		}
+		
+			
+		if(isPermitted($module,"Delete","") == 'yes'){
+			if($links_info != "")
+				$links_info .=  " | ";
+			$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
+			$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
+		}	
+		if($links_info != "")
+			$list_header[] = $links_info;
 
 		echo '<script>
 				function confirmdelete(url)
