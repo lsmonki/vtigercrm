@@ -486,33 +486,43 @@ class CustomView extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
     
-		if(date("m") <= 4)
+		if(date("m") <= 3)
 		{
 			$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-			$nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-			$pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")-1));
 			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
-		}else if(date("m") > 4 and date("m") <= 8)
-    		{
+		}else if(date("m") > 3 and date("m") <= 6)
+		{
 			$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
-		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
-		  	$cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      			$nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
-      
-    		}else
-    		{
-		  	$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
-		  	$nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
-		  	$pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
-		  	$pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
-      			$cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
-		  	$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
-    		}
-    
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+
+		}else if(date("m") > 6 and date("m") <= 9)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+		}
+		else if(date("m") > 9 and date("m") <= 12)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")+1));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+
+		}
+
 		$sjsStr = '<script language="JavaScript" type="text/javaScript">
 			function showDateRange( type )
 			{

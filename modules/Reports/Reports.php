@@ -562,6 +562,42 @@ class Reports extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
+		if(date("m") <= 3)
+		{
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")-1));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+		}else if(date("m") > 3 and date("m") <= 6)
+		{
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+
+		}else if(date("m") > 6 and date("m") <= 9)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+		}
+		else if(date("m") > 9 and date("m") <= 12)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")+1));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+
+		}
 
 		$sjsStr = '<script language="JavaScript" type="text/javaScript">
 			function showDateRange( type )
@@ -717,19 +753,19 @@ class Reports extends CRMEntity{
 				else if( type == "nextfq" )
 				{
 
-					document.NewReport.startdate.value = "2005-07-01";
-					document.NewReport.enddate.value = "2005-09-30";
+					document.NewReport.startdate.value = "'.$nFq.'";
+					document.NewReport.enddate.value = "'.$nFq1.'";
 				}                        
 				else if( type == "prevfq" )
 				{
 
-					document.NewReport.startdate.value = "2005-01-01";
-					document.NewReport.enddate.value = "2005-03-31";
+					document.NewReport.startdate.value = "'.$pFq.'";
+					document.NewReport.enddate.value = "'.$pFq1.'";
 				}                
 				else if( type == "thisfq" )
 				{
-					document.NewReport.startdate.value = "2005-04-01";
-					document.NewReport.enddate.value = "2005-06-30";
+					document.NewReport.startdate.value = "'.$cFq.'";
+					document.NewReport.enddate.value = "'.$cFq1.'";
 				}                
 				else
 				{
