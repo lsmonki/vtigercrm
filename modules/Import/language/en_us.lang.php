@@ -164,8 +164,8 @@ $mod_strings = Array(
 'LBL_LAST_IMPORTED'=>'Last Imported',
 
 //Added for 5.0.3
-'to'=>'to';
-'of'=>'of';
+'to'=>'to',
+'of'=>'of',
 'are_imported_succesfully'=>'are imported successfully',
 
 
