@@ -1081,11 +1081,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		if($temp_val == 1)
 		{
-			$value = 'yes';
+			$value = $app_strings['yes'];
 		}
 		else
 		{
-			$value = 'no';
+			$value = $app_strings['no'];
 		}
 	}	
 	elseif($uitype == 57)
