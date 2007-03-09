@@ -12,10 +12,7 @@ require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 
 
-global $app_strings;
-global $mod_strings;
-
-global $theme;
+global $app_strings,$mod_strings,$current_user,$theme;
 $image_path = 'themes/'.$theme.'/images/';
 $idlist = $_REQUEST['idlist'];
 $pmodule=$_REQUEST['return_module'];
@@ -26,6 +23,25 @@ if(!strpos($idlist,':'))
 	$single_record = true;
 }
 $smarty = new vtigerCRM_Smarty;
+
+$userid =  $current_user->id;
+if($pmodule == "Contacts")
+{
+	$permit = getFieldVisibilityPermission("Contacts", $userid, "email");
+}
+elseif($pmodule == "Accounts")
+{
+	$permit = getFieldVisibilityPermission("Accounts", $userid, "email1");
+}
+elseif($pmodule == "Leads")
+{
+	$permit = getFieldVisibilityPermission("Leads", $userid, "email");
+}
+if($permit == '0');
+{
+	$smarty->assign("PERMIT", $permit);
+}
+
 if ($pmodule=='Accounts')
 {
 	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype=13;"; 
@@ -49,7 +65,6 @@ for ($i=0;$i<$numrows;$i++)
 	$fieldid=$adb->query_result($result,$i,'fieldid');
 	$value[] =$adb->query_result($result,$i,'fieldlabel');
 	$returnvalue [$fieldid]= $value;
-	
 }
 
 if($single_record)
