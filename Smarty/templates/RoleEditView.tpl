@@ -38,7 +38,7 @@ function dup_validation()
 function validate()
 {ldelim}
 	formSelectColumnString();
-	if( !emptyCheck( "roleName", "Role Name" ) )
+	if( !emptyCheck("roleName", "Role Name", "text" ) )
 		return false;
 
 	if(document.newRoleForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
