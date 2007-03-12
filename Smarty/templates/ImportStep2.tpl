@@ -55,7 +55,7 @@ function deleteMapping()
 	//we have emptied the map name from the select list
 	document.getElementById("saved_source").options[options_collection.selectedIndex] = null;
 	document.getElementById("delete_mapping").style.visibility = "hidden";
-	alert("This map has been deleted. You cannot use this map again");
+	alert("{$APP.MAP_DELETED_INFO}");
 {rdelim}
 
 </script>

@@ -62,8 +62,7 @@ function massDelete()
                 else
                 {ldelim}
                          document.massdelete.profile.style.display="none";
-                        alert("Please select at least one entity");
-                        
+                        alert("{$APP.SELECT_ATLEAST_ONE}");
                         return false;
                 {rdelim}
         {rdelim}
@@ -84,11 +83,11 @@ function massDelete()
                 {rdelim}
                else
                 {ldelim}
-                        alert("Please select at least one entity");
+                        alert("{$APP.SELECT_ATLEAST_ONE}");
                         return false;
                 {rdelim}
        {rdelim}
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		if(confirm("{$APP.DELETE_CONFIRMATION}"+xx+"{$APP.RECORDS}"))
 		{ldelim}
 	        document.massdelete.action="index.php?module=Settings&action=deleteemailtemplate&return_module=Settings&return_action=listemailtemplates";
 		{rdelim}

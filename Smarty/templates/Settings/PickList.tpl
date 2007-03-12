@@ -62,9 +62,11 @@ function validate() {
 		//empty check validation
 		for (i=0;i<picklistary.length;i++) {
 			if (picklistary[i]=="") {
-				alert("picklist value cannot be empty")
+				{/literal}
+                                alert("{$APP.PICKLIST_CANNOT_BE_EMPTY}")
 				picklistobj.focus()
 				return false
+				{literal}
 			}
 		}
 
@@ -72,9 +74,11 @@ function validate() {
 		for (i=0;i<picklistary.length;i++) {
 			for (j=i+1;j<picklistary.length;j++) {
 				if (picklistary[i]==picklistary[j]) {
-					alert("duplicate values found")
+					{/literal}
+                                        alert("{$APP.DUPLICATE_VALUES_FOUND}")
 					picklistobj.focus()
 					return false
+					{literal}
 				}
 			}
 		}
@@ -237,8 +241,10 @@ function picklist_validate(mode,fieldname,module,uitype)
 			valnext=pick_arr[j];
 			if(trim(valone) == trim(valnext))
 			{
-				alert("Duplicate entries found for the value '"+valone+"'");
-				return false;
+				{/literal}
+                                alert("{$APP.DUPLICATE_ENTRIES_FOUND}"+valone+"'");
+                                return false;
+                                {literal}
 			}
 		}
 		i = curr_iter		
@@ -248,9 +254,11 @@ function picklist_validate(mode,fieldname,module,uitype)
 	{
 		if(trim($("picklist_values").value) == '')
 		{
-			alert("Picklist value cannot be empty");
-			$("picklist_values").focus();	
-			return false;
+			{/literal}
+                        alert("{$APP.PICKLIST_CANNOT_BE_EMPTY}");
+                        $("picklist_values").focus();
+                        return false;
+                        {literal}
 		}
 	}
 	SavePickList(fieldname,module,uitype)	

@@ -28,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("Please select a Product");
+			alert("{$APP.PLEASE_SELECT_PRODUCT}");
 			return false;
 		{rdelim}
 	{rdelim}

@@ -34,8 +34,10 @@ function GetRssFeedList(id)
 function DeleteRssFeeds(id)
 {
    if(id != '')	
-   {		
-  	if(confirm('Are you sure to delete the rss feed?'))
+   {
+	{/literal}
+        if(confirm('{$APP.DELETE_RSSFEED_CONFIRMATION}'))
+        {literal}
 	{	
 		show('status');	
 		var feed = 'feed_'+id;

@@ -136,7 +136,7 @@ function validate()
 
 	if(trim(document.newGroupForm.groupName.value) == "")
 	{ldelim}	
-		alert('Group Name cannot be none');
+		alert('{$APP.GROUPNAME_CANNNOT_BE_NONE}');
 		return false;		
 	{rdelim}
 
@@ -144,7 +144,7 @@ function validate()
 	if(document.newGroupForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 
-		alert('Group should have at least one member. Select a member to the group');
+		alert('{$APP.GROUP_SHOULDHAVE_ONEMEMBER_INFO}');
 		return false;
 	{rdelim}
 	dup_validation();	

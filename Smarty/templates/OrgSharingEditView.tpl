@@ -87,7 +87,7 @@ function checkAccessPermission(share_value)
 {ldelim}
 	if (share_value == "3")
 	{ldelim}
-		alert("Potentials, HelpDesk, Quotes, SalesOrder & Invoice Access must be set to Private when the Account Access is set to Private");
+		alert("{$APP.ACCOUNT_ACCESS_INFO}");
 		document.getElementById('2_perm_combo').options[3].selected=true
 		document.getElementById('13_perm_combo').options[3].selected=true
 		document.getElementById('20_perm_combo').options[3].selected=true

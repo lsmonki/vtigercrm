@@ -31,7 +31,9 @@ function UpdateProfile()
 	{
 		
 		$('profile_name').focus();
-		alert("Profile Name Cannot be empty");
+		{/literal}
+                alert("{$APP.PROFILENAME_CANNOT_BE_EMPTY}");
+                {literal}
 	}
 	else
 	{
@@ -49,7 +51,9 @@ function UpdateProfile()
 			{
 				$('renameProfile').style.display="none";
 				window.location.reload();
-				alert("Profile Details are updated");
+				{/literal}
+                                alert("{$APP.PROFILE_DETAILS_UPDATED}");
+                                {literal}
 			}
                 }
 		);

@@ -131,8 +131,10 @@
 						if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate")
 .value) == 0)
                                                 {
-                                                        alert("Enter valid Conversion Rate")
+							{/literal}
+                                                        alert("{$APP.ENTER_VALID_CONVERSION_RATE}")
                                                         return false
+                                                        {literal}
                                                 }
                                                 return true;
 

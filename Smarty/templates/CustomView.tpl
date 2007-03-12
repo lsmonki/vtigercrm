@@ -92,7 +92,7 @@ function mandatoryCheck()
         {rdelim}
         if(mandatorycheck == false)
         {ldelim}
-                alert("Must have one Required field to be selected\n"+showvalues);
+                alert("{$APP.MUSTHAVE_ONE_REQUIREDFIELD}"+showvalues);
         {rdelim}
         
         return false;
@@ -608,9 +608,11 @@ function checkDuplicate()
 					selected_cv_icolumnvalue = $(cvselect_array[iloop]).options[$(cvselect_array[iloop]).selectedIndex].value;	
 					if(selected_cv_columnvalue == selected_cv_icolumnvalue)
 					{
-						alert('Columns cannot be duplicated');
-						$(cvselect_array[iloop]).selectedIndex = 0;
-						return false;
+						{/literal}
+                                                alert('{$APP.COLUMNS_CANNOT_BE_DUPLICATED}');
+                                                $(cvselect_array[iloop]).selectedIndex = 0;
+                                                return false;
+                                                {literal}
 					}
 
 				}

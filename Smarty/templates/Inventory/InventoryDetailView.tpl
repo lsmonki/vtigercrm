@@ -25,7 +25,7 @@ function tagvalidate()
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
-		alert("Please enter a tag");
+		alert("{$APP.PLEASE_ENTER_TAG}");
 		return false;
 	{rdelim}
 {rdelim}

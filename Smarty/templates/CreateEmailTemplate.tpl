@@ -311,7 +311,7 @@ function check4null(form)
 
         // Here we decide whether to submit the form.
         if (isError == true) {ldelim}
-                alert("Missing required fields: " + errorMessage);
+                alert("{$APP.MISSING_FIELDS}" + errorMessage);
                 return false;
         {rdelim}
  return true;

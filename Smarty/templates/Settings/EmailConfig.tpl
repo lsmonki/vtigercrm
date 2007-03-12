@@ -164,8 +164,10 @@ function validate_mail_server(form)
 {
 	if(form.server.value =='')
 	{
-		alert("Server Name cannot be empty")
-			return false;
+		{/literal}
+                alert("{$APP.SERVERNAME_CANNOT_BE_EMPTY}")
+                        return false;
+                {literal}
 	}
 	return true;
 }

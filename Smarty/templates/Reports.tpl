@@ -135,7 +135,9 @@ function DeleteFolder(id)
 {
 	var title = 'folder'+id;
 	var fldr_name = getObj(title).innerHTML;
-	if(confirm("Are you sure you want to delete the folder  '"+fldr_name +"' ?"))
+	{/literal}
+        if(confirm("{$APP.DELETE_FOLDER_CONFIRMATION}"+fldr_name +"' ?"))
+        {literal}
 	{
 		new Ajax.Request(
 			'index.php',
@@ -159,8 +161,10 @@ function AddFolder()
 {
 	if(getObj('folder_name').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
-		alert('The Folder name cannot be empty');
-		return false;
+		{/literal}
+                alert('{$APP.FOLDERNAME_CANNOT_BE_EMPTY}');
+                return false;
+                {literal}
 	}
 	else
 	{
@@ -172,8 +176,10 @@ function AddFolder()
                                 onComplete: function(response) {
 					if(response.responseText!=0)
 					{
-						alert("Folder name already exists, try again...");
-						return false;
+						{/literal}
+                                                alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
+                                                return false;
+                                                {literal}
 					}
 					else
 					{
@@ -262,8 +268,9 @@ function massDeleteReport()
 		}
 	}
 	if(idstring != '')
-	{
-		if(confirm("Are you sure you want to delete the selected "+count+" reports ?"))
+	{	{/literal}
+                if(confirm("{$APP.DELETE_CONFIRMATION}"+count+"{$APP.RECORDS}"))
+                {literal}
        		{
 			new Ajax.Request(
                         'index.php',
@@ -283,13 +290,17 @@ function massDeleteReport()
 			
 	}else
 	{
-		alert('Please select at least one Report');
-		return false;
+		{/literal}
+                alert('{$APP.SELECT_ATLEAST_ONE_REPORT}');
+                return false;
+                {literal}
 	}
 }
 function DeleteReport(id)
 {
-	if(confirm("Are you sure you want to delete this report ?"))
+	{/literal}
+        if(confirm("{$APP.DELETE_REPORT_CONFIRMATION}"))
+        {literal}
 	{
 		new Ajax.Request(
                         'index.php',
@@ -344,7 +355,9 @@ function MoveReport(id,foldername)
 	}
 	if(idstring != '')
 	{
-		if(confirm("Are you sure you want to move this report to "+foldername+" folder ?"))
+		{/literal}
+                if(confirm("{$APP.MOVE_REPORT_CONFIRMATION}"+foldername+"{$APP.FOLDER}"))
+                {literal}
         	{
 			new Ajax.Request(
                         'index.php',
@@ -363,8 +376,10 @@ function MoveReport(id,foldername)
 			
 	}else
 	{
-		alert('Please select at least one Report');
-		return false;
+		{/literal}
+                alert('{$APP.SELECT_ATLEAST_ONE_REPORT}');
+                return false;
+                {literal}
 	}
 }
 </script>

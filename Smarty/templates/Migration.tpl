@@ -136,7 +136,9 @@
 		{
 			var tagName = document.getElementById('source_version');
 			var source_version = tagName.options[tagName.selectedIndex].text;
-			if(confirm("Are you sure to apply the Database Changes from "+source_version+" to "+current_version))
+			{/literal}
+                        if(confirm("{$APP.DATABASE_CHANGE_CONFIRMATION}"+source_version+"{$APP.TO}"+current_version))
+                        {literal}
 				return true;
 			else
 				return false;

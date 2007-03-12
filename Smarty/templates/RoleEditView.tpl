@@ -44,7 +44,7 @@ function validate()
 	if(document.newRoleForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 
-		alert('Role should have at least one profile');
+		alert('{$APP.ROLE_SHOULDHAVE_INFO}');
 		return false;
 	{rdelim}
 	dup_validation();

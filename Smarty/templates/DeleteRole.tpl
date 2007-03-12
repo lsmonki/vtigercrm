@@ -83,8 +83,10 @@ function roleDeleteValidate()
 {
 	if(document.getElementById('role_name').value == '')
 	{
-		alert('Specfiy the Role to Transfer Existing Roles Users');
-		return false;
+		{/literal}
+                alert('{$APP.SPECIFY_ROLE_INFO}');
+                return false;
+                {literal}
 	}
 	return true;
 }

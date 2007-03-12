@@ -693,7 +693,7 @@
 	{ldelim}
 			temp= /^\d+\.\d+$/.test(document.getElementById(txtObj).value);
 			if(temp == false)
-				alert("Please enter Valid TAX value");
+				alert("{$APP.ENTER_VALID_TAX}");
 	{rdelim}	
 
 function delimage(id)
@@ -708,7 +708,7 @@ function delimage(id)
 					if(response.responseText.indexOf("SUCESS")>-1)
 						$("replaceimage").innerHTML='{$APP.LBL_IMAGE_DELETED}';
 					else
-						alert("Error while Deleting")
+						alert("{$APP.ERROR_WHILE_EDITING}")
 				    {rdelim}
 		{rdelim}
 	);
