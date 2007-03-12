@@ -26,7 +26,7 @@ require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');
 
 
-global $app_strings,$list_max_entries_per_page;
+global $app_strings,$list_max_entries_per_page,$mod_strings;
 
 $log = LoggerManager::getLogger('potential_list');
 
@@ -134,11 +134,12 @@ if($viewid != "0")
 	$list_query = getListQuery("Potentials");
 }
 //<<<<<<<<customview>>>>>>>>>
-
 if(isset($where) && $where != '')
 {
 	if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
-		$list_query .= " AND vtiger_potential.sales_stage = 'Closed Won' AND ".$where;
+		$list_query .= " AND vtiger_potential.sales_stage = '".$mod_strings['Closed Won']."' AND ".$where;
+	elseif(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+		$list_query .= " AND vtiger_potential.sales_stage not in( '".$mod_strings['Closed Won']."' , '".$mod_strings['Closed Lost']."' )AND ".$where;
 	else
 		$list_query .= " AND ".$where;
 }
