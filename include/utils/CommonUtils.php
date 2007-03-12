@@ -2782,6 +2782,7 @@ function getTicketDetails($id,$whole_date)
 	 return $desc;
 
 }
+
 function getPortalInfo_Ticket($id,$title,$contactname,$portal_url)
 {
 	global $mod_strings;
@@ -2791,6 +2792,45 @@ function getPortalInfo_Ticket($id,$title,$contactname,$portal_url)
         $bodydetails .= $portal_url;
         $bodydetails .= '<br><br>'.$mod_strings["Thanks"].'<br><br>'.$mod_strings["Support_team"];
 	return $bodydetails;
+}
+
+/**
+ * This function is used to get a random password.
+ * @return a random password with alpha numeric chanreters of length 8
+ */
+function makeRandomPassword()
+{
+	global $log;
+	$log->debug("Entering makeRandomPassword() method ...");
+	$salt = "abcdefghijklmnopqrstuvwxyz0123456789";
+	srand((double)microtime()*1000000);
+	$i = 0;
+	while ($i <= 7)
+	{
+		$num = rand() % 33;
+		$tmp = substr($salt, $num, 1);
+		$pass = $pass . $tmp;
+		$i++;
+	}
+	$log->debug("Exiting makeRandomPassword method ...");
+	return $pass;
+}
+
+//added to get mail info for portal user
+function getmail_contents_portalUser($request_array,$password)
+{
+	global $mod_strings;
+	$subject = $mod_strings['Customer Portal Login Details'];
+	$contents = $mod_strings['Dear']." ".$request_array['first_name']." ".$request_array['last_name'].",<br><br>";
+	$contents .= $mod_strings['Your Customer Portal Login details are given below:'];
+	$contents .= "<br><br>".$mod_strings['User Id :']." ".$request_array['email'];
+	$contents .= "<br>".$mod_strings['Password :']." ".$password;
+	$contents .= "<br><br>".$request_array['portal_url'];
+
+	$contents .= "<br><br><b>".$mod_strings['Note :']." </b>".$mod_strings['We suggest you to change your password after logging in first time'];
+	$contents .= "<br><br>".$mod_strings['Support Team'];
+	return $contents;
+
 }
 
 

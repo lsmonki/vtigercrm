@@ -192,6 +192,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
         }else
 	{
 		tagValue = trim(document.getElementById(txtBox).value);
+		if(module == "Contacts")
+                {
+                        var port_obj = getObj('portal').checked;
+                        if(fieldName == "email" && tagValue == '' && port_obj == true)
+                        {
+                                alert('Portal user should provide email id for portal login');
+                                return false;
+                        }
+                }
 	}
 
 
@@ -265,7 +274,21 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	{
 		if(tagValue == '1')
 		{
-			getObj(dtlView).innerHTML = "yes";
+			if(module == "Contacts")
+                        {
+                                var obj = getObj("email");
+                                if((fieldName == "portal") && (obj.value == ''))
+                                {
+                                        alert("Portal user should provide email Id for portal login");
+                                        return false;
+
+                                }
+                                else
+                                        getObj(dtlView).innerHTML = "yes";
+
+                        }
+                        else
+                                getObj(dtlView).innerHTML = "yes";
 		}else
 		{
 			getObj(dtlView).innerHTML = "no";
