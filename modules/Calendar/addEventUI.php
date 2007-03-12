@@ -638,10 +638,6 @@ function getAssignedToHTML($assignedto,$toggletype)
   </form>
   </div>
 							 
-	<script language="JavaScript" type="text/JavaScript">
-setObjects();
-	</script>
-
 	<!-- Add Activity DIV stops-->
 
 <div id="eventcalAction" class="calAction" style="width:125px;" onMouseout="fninvsh('eventcalAction')" onMouseover="fnvshNrm('eventcalAction')">
