@@ -1536,10 +1536,21 @@ class ReportRun extends CRMEntity
 			if($result)
 			{
 				$y=$adb->num_fields($result);
+				$arrayHeaders = Array();
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
-					$header .= "<td class='rptCellLabel'>".$this->getLstringforReportHeaders($fld->name)."</td>";
+					if(in_array($this->getLstringforReportHeaders($fld->name), $arrayHeaders))
+					{
+						$headerLabel = str_replace("_"," ",$fld->name);
+						$arrayHeaders[] = $headerLabel;
+					}
+					else
+					{
+						$headerLabel = str_replace($modules," ",$this->getLstringforReportHeaders($fld->name));
+						$arrayHeaders[] = $headerLabel;
+					}
+					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
 				}
 
 				$noofrows = $adb->num_rows($result);
@@ -1676,7 +1687,10 @@ class ReportRun extends CRMEntity
 						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
-						$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
+						if(array_key_exists($this->getLstringforReportHeaders($fld->name), $arraylists))
+							$arraylists[str_replace("_"," ",$fld->name)] = $fieldvalue;
+						else	
+							$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
 				}while($custom_field_values = $adb->fetch_array($result));
@@ -1764,12 +1778,22 @@ class ReportRun extends CRMEntity
 			if($result)
 			{
 				$y=$adb->num_fields($result);
+				$arrayHeaders = Array();
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
-					$header .= "<th>".$this->getLstringforReportHeaders($fld->name)."</th>";
+					if(in_array($this->getLstringforReportHeaders($fld->name), $arrayHeaders))
+					{
+						$headerLabel = str_replace("_"," ",$fld->name);
+						$arrayHeaders[] = $headerLabel;
+					}
+					else
+					{
+						$headerLabel = str_replace($modules," ",$this->getLstringforReportHeaders($fld->name));
+						$arrayHeaders[] = $headerLabel;	
+					}	
+					$header .= "<th>".$headerLabel."</th>";
 				}
-				
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 				$groupslist = $this->getGroupingList($this->reportid);
