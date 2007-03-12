@@ -29,7 +29,7 @@ function change(obj,divid)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	fnvshobj(obj,divid);
@@ -69,15 +69,15 @@ function massDelete(module)
         }
         else
         {
-            alert("Please select at least one entity");
+            alert(alert_arr.SELECT);
             return false;
         }
-		var alert_str = "Are you sure you want to delete the selected "+xx+" records ?";
+		var alert_str = alert_arr.DELETE + xx +alert_arr.RECORDS;
 
 		if(module=="Accounts")
-			alert_str = "Deleting this account(s) will remove its related Potentials,Quotes,Sales Orders & Invoice. Are you sure you want to delete the selected "+xx+" records?";
+			alert_str = alert_arr.DELETE_ACCOUNT +xx+alert_arr.RECORDS;
 		else if(module=="Vendors")
-			alert_str = "Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected "+xx+" records?";
+			alert_str = alert_arr.DELETE_VENDOR+xx+alert_arr.RECORDS;
 
 		if(confirm(alert_str))
 		{

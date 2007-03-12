@@ -194,7 +194,7 @@ function emptyCheck(fldName,fldLabel, fldType) {
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 
-       			alert(fldLabel+" cannot be empty")
+       			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
 
 			currObj.focus()
 
@@ -208,7 +208,7 @@ function emptyCheck(fldName,fldLabel, fldType) {
 	} else {
 		if (currObj.value == "" ) {
 
-	                alert(fldLabel+" cannot be none")
+	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
 
         	        return false
 
@@ -253,7 +253,7 @@ function patternValidate(fldName,fldLabel,type) {
 	}
 	
 	if (!re.test(currObj.value)) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -292,27 +292,27 @@ function compareDates(date1,fldLabel1,date2,fldLabel2,type) {
 	var ret=true
 	switch (type) {
 		case 'L'	:	if (date1>=date2) {//DATE1 VALUE LESS THAN DATE2
-							alert(fldLabel1+" should be less than "+fldLabel2)
+							alert(fldLabel1+ alert_arr.SHOULDBE_LESS +fldLabel2)
 							ret=false
 						}
 						break;
 		case 'LE'	:	if (date1>date2) {//DATE1 VALUE LESS THAN OR EQUAL TO DATE2
-							alert(fldLabel1+" should be less than or equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_LESS_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
 		case 'E'	:	if (date1!=date2) {//DATE1 VALUE EQUAL TO DATE
-							alert(fldLabel1+" should be equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
 		case 'G'	:	if (date1<=date2) {//DATE1 VALUE GREATER THAN DATE2
-							alert(fldLabel1+" should be greater than "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_GREATER+fldLabel2)
 							ret=false
 						}
 						break;	
 		case 'GE'	:	if (date1<date2) {//DATE1 VALUE GREATER THAN OR EQUAL TO DATE2
-							alert(fldLabel1+" should be greater than or equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_GREATER_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
@@ -334,19 +334,19 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
@@ -357,7 +357,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						getObj(dateFldName).focus()
 						return false
 					}	
@@ -372,7 +372,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	var currObj=getObj(timeFldName)
 	
 	if (hourval>23 || minval>59) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -453,19 +453,19 @@ function dateValidate(fldName,fldLabel,type) {
 	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
@@ -476,7 +476,7 @@ function dateValidate(fldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						getObj(fldName).focus()
 						return false
 					}	
@@ -541,7 +541,7 @@ function timeValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
 	
 	if (hourval>23 || minval>59) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -614,7 +614,7 @@ function numValidate(fldName,fldLabel,format,neg) {
                    invalid=true
        }
               if (invalid==true) {
-           alert("Invalid "+fldLabel)
+           alert(alert_arr.INVALID+fldLabel)
            getObj(fldName).focus()
            return false
        } else return true
@@ -624,7 +624,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 
                 if(splitval[0]>18446744073709551615)
                 {
-                        alert( fldLabel + " exceeds the maximum limit ");
+                        alert( fldLabel + alert_arr.EXCEEDS_MAX);
                         return false;
                 }
 
@@ -635,7 +635,7 @@ function numValidate(fldName,fldLabel,format,neg) {
            var re=/^\d+(\.\d\d*)*$/
    }
       if (!re.test(val)) {
-       alert("Invalid "+fldLabel)
+       alert(alert_arr.INVALID+fldLabel)
        getObj(fldName).focus()
        return false
    } else return true
@@ -646,13 +646,13 @@ function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount')) 
 	{
-		alert("Invalid "+fldLabel)
+		alert(alert_arr.INVALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	} 
         else if( val < -2147483648 || val > 2147483647)
         {
-                alert(fldLabel +" is out of range");
+                alert(fldLabel +alert_arr.OUT_OF_RANGE);
                 return false;
         }
 
@@ -669,32 +669,32 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	var ret=true
 	switch (type) {
 		case "L"  : if (val>=constval) {
-						alert(fldLabel+" should be less than "+constval)
+						alert(fldLabel+alert_arr.SHOULDBE_LESS+constval)
 						ret=false
 					}
 					break;
 		case "LE" :	if (val>constval) {
-					alert(fldLabel+" should be less than or equal to "+constval)
+					alert(fldLabel+alert_arr.SHOULDBE_LESS_EQUAL+constval)
 			        ret=false
 					}
 					break;
 		case "E"  :	if (val!=constval) {
-                                        alert(fldLabel+" should be equal to "+constval)
+                                        alert(fldLabel+alert_arr.SHOULDBE_EQUAL+constval)
                                         ret=false
                                 }
                                 break;
 		case "NE" : if (val==constval) {
-						 alert(fldLabel+" should not be equal to "+constval)
+						 alert(fldLabel+alert_arr.SHOULDNOTBE_EQUAL+constval)
 							ret=false
 					}
 					break;
 		case "G"  :	if (val<=constval) {
-							alert(fldLabel+" should be greater than "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER+constval)
 							ret=false
 					}
 					break;
 		case "GE" : if (val<constval) {
-							alert(fldLabel+" should be greater than or equal to "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER_EQUAL+constval)
 							ret=false
 					}
 					break;
@@ -713,7 +713,7 @@ function formValidate() {
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
 	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
-		alert("Portal user should provide email Id for portal login");
+		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
 		return false;
 	}
 }
@@ -1598,7 +1598,7 @@ function SelectAll(mod,parmod)
                 }
                 else
 		{
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -1625,10 +1625,10 @@ function SelectAll(mod,parmod)
         }
         else
         {
-                alert("Please select at least one entity");
+                alert(alert_arr.SELECT);
                 return false;
         }
-        if(confirm("Are you sure you want to add the selected "+y+" records ?"))
+        if(confirm(alert_arr.ADD_CONFIRMATION+y+alert_arr.RECORDS))
         {
 		if(parmod == 'Calendar')
                 {
@@ -1746,7 +1746,7 @@ function AjaxDuplicateValidate(module,fieldname,oform)
       var fieldvalue = getObj(fieldname).value;
 	if(fieldvalue == '')
 	{
-		alert("AccountName Cannot be Empty");
+		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
 		return false;	
 	}
       var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
@@ -1804,7 +1804,7 @@ function selectContact(check,type,frmName)
                 module = rel_parent_module.split("&");	
 		if(record_id != '' && module[0] == "Leads")
 		{
-			alert("You can't select related contacts from Lead ");
+			alert(alert_arr.CANT_SELECT_CONTACTS);
 			formName.selectcnt.disabled="true";
 		}
 		else
@@ -1840,7 +1840,7 @@ function selectContact(check,type,frmName)
 		}
 		if(task_recordid != '' && task_module[0] == "Leads" )
 		{
-			alert("You can't select related contacts from Lead ");
+			alert(alert_arr.CANT_SELECT_CONTACTS);
 			frmName.contact_name.value = '';
  	                frmName.selectcnt.disabled="true"
 		}
@@ -1892,7 +1892,7 @@ function checkEmailid(parent_module,emailid,yahooid)
        var check = true;
        if(emailid == '' && yahooid == '')
        {
-               alert("This "+parent_module+" doesn't have any mail ids");
+               alert(alert_arr.LBL_THIS+parent_module+alert_arr.DOESNOT_HAVE_MAILIDS);
                check=false;
        }
        return check;
@@ -1967,7 +1967,7 @@ function _2digit( no ){
 
 function confirmdelete(url)
 {
-if(confirm("Are you sure?"))
+if(confirm(alert_arr.ARE_YOU_SURE))
        {
             document.location.href=url;
        }

@@ -214,7 +214,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         onComplete: function(response) {
                   				if(response.responseText.indexOf(":#:FAILURE")>-1)
                   				{
-                  					alert("Error while Editing");
+                  					alert(alert_arr.ERROR_WHILE_EDITING);
                   				}
                   				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
                        		{

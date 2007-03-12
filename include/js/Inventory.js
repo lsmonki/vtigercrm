@@ -230,7 +230,7 @@ function validateInventory(module)
 
 	if(max_row_count == 0)
 	{
-		alert('No product is selected. Select at least one Product');
+		alert(alert_arr.NO_PRODUCT_SELECTED);
 		return false;
 	}
 
@@ -261,7 +261,7 @@ function validateInventory(module)
 		temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_percentage_final").value);
 		if(!temp)
 		{
-			alert("Enter valid Final Discount Percentage");
+			alert(alert_arr.VALID_FINAL_PERCENT);
 			return false;
 		}
 	}
@@ -270,7 +270,7 @@ function validateInventory(module)
 		temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_amount_final").value);
 		if(!temp)
 		{
-			alert("Enter valid Final Discount Amount");
+			alert(alert_arr.VALID_FINAL_AMOUNT);
 			return false;
 		}
 	}
@@ -279,7 +279,7 @@ function validateInventory(module)
 	temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("shipping_handling_charge").value);
 	if(!temp)
 	{
-		alert("Enter a valid Shipping & Handling charge");
+		alert(alert_arr.VALID_SHIPPING_CHARGE);
 		return false;
 	}
 
@@ -287,7 +287,7 @@ function validateInventory(module)
 	temp = /^-?(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("adjustment").value)
 	if(!temp)
 	{
-		alert("Enter a valid Adjustment");
+		alert(alert_arr.VALID_ADJUSTMENT);
 		return false;
 	}
 
@@ -328,7 +328,7 @@ function FindDuplicate()
 	if(duplicate)
 	{
 		//alert("You have selected < "+duplicate_products+" > more than once in line items  "+positions+".\n It is advisable to select the product just once but change the Qty. Thank You");
-		if(!confirm("You have selected  the following product(s) more than once. \n"+duplicate_products+"\n Do you want to Continue?"))
+		if(!confirm(alert_arr.SELECTED_MORE_THAN_ONCE+"\n"+duplicate_products+"\n "+alert_arr.WANT_TO_CONTINUE))
 			return false;
 	}
         return true;
@@ -346,7 +346,7 @@ function ValidateTax(txtObj)
 {
 	temp= /^\d+(\.\d\d*)*$/.test(document.getElementById(txtObj).value);
 	if(temp == false)
-		alert("Please enter Valid TAX value");
+		alert(alert_arr.ENTER_VALID_TAX);
 }
 
 function loadTaxes_Ajax(curr_row)
@@ -406,12 +406,12 @@ function validateNewTaxType(fieldname, fieldvalue)
 {
 	if(trim(document.getElementById(fieldname).value)== '')
 	{
-		alert("Enter valid Tax Name");
+		alert(alert_arr.VALID_TAX_NAME);
 		return false;
 	}
 	if(trim(document.getElementById(fieldvalue).value)== '')
 	{
-		alert("Enter Correct Tax Value");
+		alert(alert_arr.CORRECT_TAX_VALUE);
 		return false;
 	}
 	else
@@ -419,7 +419,7 @@ function validateNewTaxType(fieldname, fieldvalue)
 		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById(fieldvalue).value);
 		if(!temp)
 		{
-			alert("Please enter positive value");
+			alert(alert_arr.ENTER_POSITIVE_VALUE);
 			return false;
 		}
 	}
@@ -450,7 +450,7 @@ function validateTaxes(countname)
 
 		if(document.getElementById(taxLabelPrefix+i).value.length == 0)
 		{
-			alert("The tax label name should not be empty");
+			alert(alert_arr.LABEL_SHOULDNOT_EMPTY);
 			return false
 		} 
 
@@ -458,7 +458,7 @@ function validateTaxes(countname)
 		var temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(taxval);
 		if(!temp)
 		{
-			alert("'"+taxval+"' is not a valid entry. Please enter correct value");
+			alert("'"+taxval+"' "+alert_arr.NOT_VALID_ENTRY);
 			return false;
 		}
 	}
@@ -719,7 +719,7 @@ function validateProductDiscounts()
 			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_percentage"+i).value);
 			if(!temp)
 			{
-				alert("Enter a valid Discount percentage");
+				alert(alert_arr.VALID_DISCOUNT_PERCENT);
 				return false;
 			}
 		}
@@ -728,7 +728,7 @@ function validateProductDiscounts()
 			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("discount_amount"+i).value);
 			if(!temp)
 			{
-				alert("Enter a valid Discount Amount");
+				alert(alert_arr.VALID_DISCOUNT_AMOUNT);
 				return false;
 			}
 		}
