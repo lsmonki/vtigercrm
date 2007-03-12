@@ -45,7 +45,7 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
         window.opener.document.EditView.account_id.value = account_id;
 
 	//Ask the user to overwite the address or not - Modified on 06-01-2007
-	if(confirm("Overwrite the existing address with this selected account("+account_name+") address details?"))
+	if(confirm(alert_arr.OVERWRITE_EXISTING_ACCOUNT1+account_name+alert_arr.OVERWRITE_EXISTING_ACCOUNT2))
 	{
 		window.opener.document.EditView.bill_street.value = bill_street;
 		window.opener.document.EditView.ship_street.value = ship_street;
@@ -270,7 +270,7 @@ function checkAddress(form,id)
                                         onComplete: function(response) {
 						if(response.responseText  == 'address_change')
                                         	{
-                                            		if(confirm("Do you want to change the addresses of the Contacts related to this Account?") == true)
+                                            		if(confirm(alert_arr.WANT_TO_CHANGE_CONTACT_ADDR) == true)
 								{
 									form.address_change.value='yes';
 									form.submit();	

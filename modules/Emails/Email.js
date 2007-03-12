@@ -95,7 +95,7 @@ function massDelete()
                 }
                 else
                 {
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -121,11 +121,11 @@ function massDelete()
                 }
                 else
                 {
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		if(confirm(alert_arr.DELETE + xx + alert_arr.RECORDS))
 		{	
 			getObj('search_text').value = '';
 			show("status");
@@ -170,7 +170,7 @@ function massDelete()
 
 function DeleteEmail(id)
 {
-	if(confirm("Are you sure you want to delete ?"))
+	if(confirm(alert_arr.SURE_TO_DELETE))
 	{	
 		getObj('search_text').value = '';
 		gselectedrowid = 0;

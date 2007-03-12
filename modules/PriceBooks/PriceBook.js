@@ -32,12 +32,12 @@ function addtopricebook()
 				{
 					if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 					{
-						alert("List Price cannot be empty");
+						alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			               		return false;	
 					}
 					else if(isNaN(elem[i].value))
 					{
-						alert("Invalid List Price");
+						alert(alert_arr.INVALID_LIST_PRICE);
 						return false;	
 					}
 	
@@ -47,7 +47,7 @@ function addtopricebook()
 		}
 		else 
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
@@ -80,12 +80,12 @@ function addtopricebook()
 						if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 						{
 		
-							alert("List Price cannot be empty");
+							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
 						else if(isNaN(elem[i].value))
 						{
-							alert("Invalid List Price");
+							alert(alert_arr.INVALID_LIST_PRICE);
 			                		return false;	
 							
 						}
@@ -96,7 +96,7 @@ function addtopricebook()
 		}
 		else
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
@@ -127,7 +127,7 @@ function check4null(form)
 	}
 	if (isError == true) 
 	{
-		alert("Missing required fields: " + errorMessage);
+		alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
 		return false;
 	}
 	return true;

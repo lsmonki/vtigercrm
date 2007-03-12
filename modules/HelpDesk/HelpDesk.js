@@ -14,12 +14,12 @@ function verify_data(form) {
 	{
         	if (form.potential_name.value == "")
 		{
-                	alert("Opportunity Name field cannot be empty");
+                	alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
 			return false;	
 		}
 		if (form.closedate.value == "")
 		{
-                	alert("Close Date field cannot be empty");
+                	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);
 			return false;	
 		}
 		return dateValidate('closedate','Potential Close Date','GECD');

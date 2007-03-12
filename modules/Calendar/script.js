@@ -23,7 +23,7 @@ function DisableSharing()
                 }
                 else
                 {
-                        alert("Please select at least one user");
+                        alert(alert_arr.SELECT_ATLEAST_ONE_USER);
                         return false;
                 }
         }
@@ -43,11 +43,11 @@ function DisableSharing()
                 }
                 else
                 {
-                        alert("Please select at least one user");
+                        alert(alert_arr.SELECT_ATLEAST_ONE_USER);
                         return false;
                 }
         }
-        if(confirm("Are you sure you want to disable sharing for selected "+xx+" user(s) ?"))
+        if(confirm(alert_arr.DISABLE_SHARING_CONFIRMATION+xx+alert_arr.USERS))
         {
                 document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=calendar_share";
         }
@@ -275,7 +275,7 @@ function maincheck_form()
 		{
 			if((endhour*60+endmin) <= (starthour*60+startmin))
 			{
-				alert("End Time should be greater than Start Time ");
+				alert(alert_arr.ENDTIME_GREATER_THAN_STARTTIME);
 				document.EditView.endhr.focus();
 				return false;
 			}
@@ -333,7 +333,7 @@ function maincheck_form()
                                 {
                                         if((followuphour*60+followupmin) <= (endhour*60+endmin))
                                         {
-                                                alert("Followup Time should be greater than End Time ");
+                                                alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
                                                 document.EditView.followup_starthr.focus();
                                                 return false;
                                         }
@@ -368,7 +368,7 @@ function check_form()
 	formSelectColumnString('inviteesid','selectedusers');
         if(trim(document.EditView.subject.value) == "")
         {
-                alert("Missing Event Name");
+                alert(alert_arr.MISSING_EVENT_NAME);
                 document.EditView.subject.focus()
                 return false;
         }
@@ -474,7 +474,7 @@ function check_form()
                 	{
                         	if((endhour*60+endmin) <= (starthour*60+startmin))
           	        	{
-                	                alert("End Time should be greater than Start Time ");
+                	                alert(alert_arr.ENDTIME_GREATER_THAN_STARTTIME);
                                 	document.EditView.endhr.focus();
      		                        return false;
                 	        }
@@ -531,7 +531,7 @@ function check_form()
                                         {
                                                 if((followuphour*60+followupmin) <= (endhour*60+endmin))
                                                 {
-                                                        alert("Followup Time should be greater than End Time ");
+                                                        alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
                                                         document.EditView.followup_starthr.focus();
                                                         return false;
                                                 }
@@ -1187,7 +1187,7 @@ function changeEndtime_StartTime()
         else if(select_meeting)
                 calDuedatetime('meeting');
         else
-                alert('Event Type is not selected');
+                alert(alert_arr.EVENT_TYPE_NOT_SELECTED);
 }
 
 function calDuedatetime(type)
