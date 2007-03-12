@@ -173,7 +173,7 @@ class Reports extends CRMEntity{
 					$details = Array();	
 					$details['state'] = $reportfldrow["state"]; 
 					$details['id'] = $reportfldrow["folderid"]; 
-					$details['name'] = $mod_strings[$reportfldrow["foldername"]]; 
+					$details['name'] = ($mod_strings[$reportfldrow["foldername"]] == '' ) ? $reportfldrow["foldername"]:$mod_strings[$reportfldrow["foldername"]]; 
 					$details['description'] = $reportfldrow["description"]; 
 					$details['details'] = $this->sgetRptsforFldr($reportfldrow["folderid"]);
 					$returndata[] = $details;
@@ -186,7 +186,7 @@ class Reports extends CRMEntity{
 				$details = Array();	
 				$details['state'] = $reportfldrow["state"]; 
 				$details['id'] = $reportfldrow["folderid"]; 
-				$details['name'] = $mod_strings[$reportfldrow["foldername"]]; 
+				$details['name'] = ($mod_strings[$reportfldrow["foldername"]] == '' ) ? $reportfldrow["foldername"]:$mod_strings[$reportfldrow["foldername"]]; 
 				$details['description'] = $reportfldrow["description"]; 
 				$returndata[] = $details;
 			}while($reportfldrow = $adb->fetch_array($result));
