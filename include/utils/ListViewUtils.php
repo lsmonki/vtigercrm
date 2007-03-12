@@ -253,7 +253,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		$j++;
 	}
 	$field_list .=')';
-	if($is_admin==false)
+	if($is_admin==false || $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
 		$query  = "SELECT DISTINCT vtiger_field.fieldname
@@ -284,7 +284,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 
 		global $current_user;
                 require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		if($is_admin==false)
+	/*	if($is_admin==false)
 		{
                 	$profileList = getCurrentUserProfileList();
                 	$query = "SELECT vtiger_profile2field.*
@@ -300,9 +300,9 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 				AND vtiger_field.fieldname = '".$fieldname."'";
 
                 	$result = $adb->query($query);
-                }
+                }*/
 
-                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $module == 'Users')
                 {
 		
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
@@ -824,7 +824,8 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		$j++;
 	}
 	$field_list .=')';
-	if($is_admin==false)
+	
+	if($is_admin==false || $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
 		$query  = "SELECT DISTINCT vtiger_field.fieldname
@@ -839,6 +840,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			AND vtiger_profile2field.profileid IN ".$profileList."
 			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
+		
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -884,7 +886,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			{
 				$fieldname = $focus->search_fields_name[$name];
 
-				if($is_admin==false)
+				/*
+
+				if($is_admin==false && $module != 'Users')
 				{
 					$profileList = getCurrentUserProfileList();
 					$query = "SELECT vtiger_profile2field.*
@@ -901,8 +905,8 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 					$result = $adb->query($query);
 				}
-
-				if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+				*/
+				if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $module == 'Users')
 				{			
 					if($fieldname == '')
 					{
