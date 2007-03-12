@@ -164,6 +164,11 @@ $mod_strings = Array(
 'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings ---> Outgoing Server link',
 'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Email Client',
 'LBL_MAILSELECT_INFO3'=>'You don\'t have permission to view email id(s) of the selected Record(s).',
+//Added  for script alerts
+'FEATURE_AVAILABLE_INFO' => 'This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait f
+or an update!',
+'DOWNLOAD_CONFIRAMATION' => 'Do you want to download the file ?',
+
 );
 
 ?>

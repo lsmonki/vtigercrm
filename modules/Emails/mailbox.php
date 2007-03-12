@@ -73,9 +73,9 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	      
 	   function handleFile(nr) {
 	   	if (b != "ie") {
- 	      		alert("This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait for an update!");
+ 	      		alert('.$mod_strings['FEATURE_AVAILABLE_INFO'].');
 	   	} else {
-	   		check = confirm("Do you want to download the file ?");
+	   		check = confirm('.$mod_strings['DOWNLOAD_CONFIRAMATION'].');
 			if (check) {
 				setTimeout("this.location.reload()",8000);
 				location.href="index.php?action=gotodownload&module=Emails&download=1&file="+ nr +"&msgno='.$msg.'";					     } else {

@@ -41,6 +41,11 @@ $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
 $lbl_user_image=$mod_strings['User Image'];
+$err_select_valid_image = $app_strings['SELECT_VALID_IMAGE'];
+$the_emailid = $app_strings['THE_EMAILID'];
+$email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
+$other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
+$yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_email_address;
 
 $the_script  = <<<EOQ
 
@@ -96,17 +101,17 @@ function verify_data(form) {
 		set_fieldfocus(errorMessage,oField_miss);
 	}
 	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert("The email id '"+form.email1.value+"' in the email field is $err_invalid_email_address");
+		alert("$the_emailid"+form.email1.value+"$email_field_is");
 		form.email1.focus();
 		exit();
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert("The email id '"+form.email2.value+"' in other email field is $err_invalid_email_address");
+		alert("$the_emailid"+form.email1.value+"$other_email_field_is");
 		form.email2.focus();
 		exit();
 	}
 	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value)) {
-		alert("The email id '"+form.yahoo_id.value+"' in yahoo email field is $err_invalid_email_address");
+		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
 		form.yahoo_id.focus();
 		exit();
 	}
@@ -120,7 +125,7 @@ function verify_data(form) {
             if((aUpload[aUpload.length-1]!="jpg") &&  (aUpload[aUpload.length-1]!="gif") &&  (aUpload[aUpload.length-1]!="bmp") &&  (aUpload[aUpload.length-1]!="png"))
 		{
 
-		alert("Please Select a Valid Image");
+		alert("$err_select_valid_image");
 		form.imagename.focus();                                                                                                    exit();
 
 		}

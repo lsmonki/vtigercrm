@@ -4060,10 +4060,10 @@ for($field_count=0;$field_count<$conn->num_rows($field_res);$field_count++)
 	function ajaxSaveResponse(response)
 	{
 		//alert(response.responseText);
-		alert("Currency Changes has been made Successfully");
+		alert(alert_arr.CURRENCY_CHANGE_INFO);
 	}
 
-	if(!confirm("Are you using Dollar $ as Currency? \n Click OK to remain as $, Cancel to change the currency conversion rate."))
+	if(!confirm(alert_arr.CURRENCY_CONVERSION_INFO))
 	{
 		getConversionRate('');
 	}

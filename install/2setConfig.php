@@ -281,11 +281,11 @@ function verify_data(form) {
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert("Missing required fields: " + errorMessage);
+		alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
 		return false;
 	}
 	if (trim(form.admin_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.admin_email.value)) {
-		alert("The email id '"+form.admin_email.value+"' in the email field is invalid");
+		alert(alert_arr.THE_EMAILID+form.admin_email.value+alert_arr.EMAIL_FIELD_INVALID);
 		form.admin_email.focus();
 		exit();
 	}

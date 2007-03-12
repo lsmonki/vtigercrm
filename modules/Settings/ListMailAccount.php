@@ -131,7 +131,7 @@ function massDelete()
                 }
                 else
                 {
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -153,7 +153,7 @@ function massDelete()
                 }
                 else
                 {
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
