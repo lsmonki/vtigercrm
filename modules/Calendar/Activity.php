@@ -98,47 +98,48 @@ class Activity extends CRMEntity {
 
 	function save_module($module)
 	{
+		global $adb;
 		//Handling module specific save
 		//Insert into seactivity rel			
-				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-				{
-					$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
-				}
-				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-				{
-					$this->deleteRelation("vtiger_seactivityrel");
-				}
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		{
+			$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
+		}
+		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation("vtiger_seactivityrel");
+		}
 		//Insert into cntactivity rel		
-
-			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-			{
-				$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
-			}
-			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-			{
-				$this->deleteRelation('vtiger_cntactivityrel');
-			}
-		
+		if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
+		{
+			$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
+		}
+		elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation('vtiger_cntactivityrel');
+		}
+	
+		$recur_type='';	
+		if(($recur_type == "--None--" || $recur_type == '') && $this->mode == "edit")
+		{
+			$sql = 'delete  from vtiger_recurringevents where activityid='.$this->id;
+			$adb->query($sql);		
+		}	
 		//Handling for recurring type
-			//Insert into vtiger_activity_remainder table
-			if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='')
-				$recur_type = trim($this->column_fields['recurringtype']);
-			else
-    				$recur_type='';	
-		
-			if(($recur_type == "--None--" || $recur_type=='') && $_REQUEST['set_reminder'] == 'Yes')
-			{
-				$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
-			}
-
-			//Insert into vtiger_recurring event table
+		//Insert into vtiger_recurring event table
+		if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='' && $this->column_fields['recurringtype']!='--None--')
+		{
 			$recur_type = trim($this->column_fields['recurringtype']);
-			if($recur_type != "--None--"  && $recur_type != '')
-		      	{		   
-				$recur_data = getrecurringObjValue();
-				if(is_object($recur_data))
-	      				$this->insertIntoRecurringTable($recur_data);
-			}
+			$recur_data = getrecurringObjValue();
+			if(is_object($recur_data))
+	      			$this->insertIntoRecurringTable($recur_data);
+		}	
+	
+		//Insert into vtiger_activity_remainder table
+		if(($recur_type == "--None--" || $recur_type=='') && $_REQUEST['set_reminder'] == 'Yes')
+		{
+			$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
+		}
 
 		//Handling for invitees
 		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
@@ -151,8 +152,6 @@ class Activity extends CRMEntity {
 
 		//Inserting into sales man activity rel
 		$this->insertIntoSmActivityRel($module);
-
-
 			
 	}	
 
