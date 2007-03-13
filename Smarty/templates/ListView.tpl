@@ -19,7 +19,7 @@
 {if $MODULE eq 'Contacts'}
 <div id="dynloadarea" style="z-index:100000001;float:left;position:absolute;left:350px;top:150px;"></div>
 {/if}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript">
 function checkgroup()
 {ldelim}
@@ -136,7 +136,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="images/searching.gif" alt="Searching... please wait"  title="Searching... please wait">
+                                                <img src="{$IMAGE_PATH}searching.gif" alt="Searching... please wait"  title="Searching... please wait">
                                                 </td>
                                         </tr>
                                         </table>
