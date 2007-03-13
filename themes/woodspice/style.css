@@ -2287,9 +2287,9 @@ a.drop_down:Hover{
 
 
 .winmarkModulesdef{
-   background-image:url(images/windowmarkModule.jpg);
-   background-position:top right;
-   background-repeat:no-repeat;
+   background-image:url(images/woodspiceHomeMark.gif);
+   background-position:top;
+   background-repeat:repeat-x;
 }
 
 /* Recalculate Disable Ends */

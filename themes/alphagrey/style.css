@@ -2245,9 +2245,9 @@ a.drop_down:Hover{
 		width:125px;
 	  }
 .winmarkModulesdef{
-   background-image:url(images/windowmarkModule.jpg);
-   background-position:top right;
-   background-repeat:no-repeat;
+   background-image:url(images/alphagrayHomeMark.gif);
+   background-position:top;
+   background-repeat:repeat-x;
 
 
 /* Recalculate Disable Ends */
