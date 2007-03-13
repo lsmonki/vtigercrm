@@ -253,7 +253,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		$j++;
 	}
 	$field_list .=')';
-	if($is_admin==false || $module != 'Users')
+	if($is_admin==false && $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
 		$query  = "SELECT DISTINCT vtiger_field.fieldname
@@ -825,7 +825,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	}
 	$field_list .=')';
 	
-	if($is_admin==false || $module != 'Users')
+	if($is_admin==false && $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
 		$query  = "SELECT DISTINCT vtiger_field.fieldname
