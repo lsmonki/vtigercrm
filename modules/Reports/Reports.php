@@ -334,8 +334,13 @@ class Reports extends CRMEntity{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldname = $adb->query_result($result,$i,"fieldname");
 			$fieldtype = $adb->query_result($result,$i,"typeofdata");
+			$uitype = $adb->query_result($result,$i,"uitype");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
+			if($uitype == 68 || $uitype == 59)
+			{
+				$fieldtypeofdata = 'V';
+			}
 			if($fieldtablename == "vtiger_crmentity")
 			{
 				$fieldtablename = $fieldtablename.$module;
