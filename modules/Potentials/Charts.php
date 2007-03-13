@@ -86,24 +86,24 @@ class jpgraph {
 			$log->debug("cache_file_name is: $cache_file_name");
 
 			//build the where clause for the query that matches $user
-			$where = "(";
+			$where = "";
 			$first = true;
 			$current = 0;
-			foreach ($user_id as $the_id) {
+			/*foreach ($user_id as $the_id) {
 				if (!$first) $where .= "OR ";
 				$first = false;
 				$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
 			}
-			$where .= ") ";
+			$where .= ") ";*/
 
 			//build the where clause for the query that matches $date_start and $date_end
-			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
+			$where .= " closingdate >= '$date_start' AND closingdate <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
 			$opp = new Potentials();
-			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
+			$opp_list = $opp->get_full_list("vtiger_potential.amount DESC, vtiger_potential.closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -412,7 +412,7 @@ class jpgraph {
 
 			$where="";
 			//build the where clause for the query that matches $user
-			$count = count($user_id);
+			/*$count = count($user_id);
 			if ($count>0) {
 				$where = "(";
 				$first = true;
@@ -423,12 +423,12 @@ class jpgraph {
 					$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
 				}
 				$where .= ") ";
-			}
+			}*/
 
 			//build the where clause for the query that matches $datay
 			$count = count($datay);
 			if ($count>0) {
-				$where .= "AND ( ";
+				$where .= " ( ";
 				unset($first);
 				$first = true;
 				foreach ($datay as $key=>$value) {
@@ -442,7 +442,7 @@ class jpgraph {
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
 			$opp = new Potentials();
-			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
+			$opp_list = $opp->get_full_list("vtiger_potential.amount DESC, vtiger_potential.closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -743,7 +743,7 @@ class jpgraph {
 
 			$where="";
 			//build the where clause for the query that matches $user
-			$count = count($user_id);
+			/*$count = count($user_id);
 			if ($count>0) {
 				$where = "(";
 				$first = true;
@@ -757,12 +757,12 @@ class jpgraph {
 					$where .= "vtiger_crmentity.smownerid='$the_id' ";
 				}
 				$where .= ") ";
-			}
+			}*/
 
 			//build the where clause for the query that matches $datax
 			$count = count($datax);
 			if ($count>0) {
-				$where .= "AND ( ";
+				$where .= " ( ";
 				unset($first);
 				$first = true;
 				foreach ($datax as $key=>$value) {
@@ -780,7 +780,7 @@ class jpgraph {
 			//Now do the db queries
 			//query for opportunity data that matches $datax and $user
 			$opp = new Potentials();
-			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
+			$opp_list = $opp->get_full_list("vtiger_potential.amount DESC, vtiger_potential.closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -831,7 +831,7 @@ class jpgraph {
 					array_push($datay[$the_id], 0);
 					array_push($aAlts[$the_id], "");
 				}
-				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&assigned_user_id=$the_id&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd");
+				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd");
 			  }
 			  array_push($legend,$stage_translation);
 			}
@@ -1032,7 +1032,7 @@ class jpgraph {
 			//query for opportunity data that matches $legends and $user
 			$where="";
 			//build the where clause for the query that matches $user
-			$count = count($user_id);
+			/*$count = count($user_id);
 			if ($count>0) {
 				$where = "(";
 				$first = true;
@@ -1042,12 +1042,12 @@ class jpgraph {
 					$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
 				}
 				$where .= ") ";
-			}
+			}*/
 
 			//build the where clause for the query that matches $datax
 			$count = count($legends);
 			if ($count>0) {
-				$where .= "AND ( ";
+				$where .= " ( ";
 				$first = true;
 				foreach ($legends as $key=>$value) {
 					if (!$first) $where .= "OR ";
@@ -1058,7 +1058,7 @@ class jpgraph {
 			}
 
 			$opp = new Potentials();
-			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
+			$opp_list = $opp->get_full_list("vtiger_potential.amount DESC, vtiger_potential.closingdate DESC", $where);
 
 			//build pipeline by lead source data
 			$total = 0;

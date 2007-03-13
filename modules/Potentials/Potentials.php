@@ -142,7 +142,10 @@ class Potentials extends CRMEntity {
 	*/
 	function create_list_query($order_by, $where)
 	{
-		global $log;
+		global $log,$current_user;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+        	$tab_id = getTabid("Potentials");
 		$log->debug("Entering create_list_query(".$order_by.",". $where.") method ...");
 		// Determine if the vtiger_account name is present in the where clause.
 		$account_required = ereg("accounts\.name", $where);
@@ -154,19 +157,25 @@ class Potentials extends CRMEntity {
 		}
 		else
 		{
-			$query = 'SELECT potentialid, potentialname, smcreatorid, closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid ';
-			$where_auto = 'AND vtiger_crmentity.deleted=0';
+			$query = 'SELECT vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_crmentity.smcreatorid, vtiger_potential.closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid LEFT JOIN vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid LEFT JOIN vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid ';
+			$where_auto = 'AND vtiger_crmentity.deleted=0 ';
 		}
 
 		if($where != "")
 			$query .= "where $where ".$where_auto;
 		else
 			$query .= "where ".$where_auto;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+                {
+                                $sec_parameter=getListViewSecurityParameter("Potentials");
+                                $query .= $sec_parameter;
+
+                }
 
 		if($order_by != "")
-			$query .= " ORDER BY vtiger_potential.$order_by";
+			$query .= " ORDER BY $order_by";
 		else
-			$query .= " ORDER BY vtiger_potential.potentialname";
+			$query .= " ORDER BY vtiger_potential.potentialname ";
 
 
 
