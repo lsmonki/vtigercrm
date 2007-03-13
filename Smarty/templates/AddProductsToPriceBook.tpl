@@ -34,7 +34,7 @@ function updateAllListPrice()
 {rdelim}
 
 </script>
-<script language="javascript" src="modules/PriceBooks/PriceBook.js"></script>
+<script language="javascript" src="modules/PriceBooks/PriceBooks.js"></script>
 <BR>
 <BR>
 {$PRODUCTLISTHEADER}

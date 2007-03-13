@@ -11,7 +11,7 @@
 -->*}
 
 
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script type="text/javascript" src="include/js/general.js"></script>
 <script>
 

@@ -12,7 +12,7 @@
 
 -->*}
 <br>
-<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>

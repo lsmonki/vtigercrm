@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <!-- Activity createlink layer start  -->
 {if $MODULE eq 'Calendar'}
 <div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">

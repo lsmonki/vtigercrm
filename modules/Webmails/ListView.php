@@ -173,7 +173,7 @@ addOnloadEvent(function() {
 	}
 );
 </script>
-<script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/Webmails/Webmails.js"></script>
 <?php
 
 global $displayed_msgs;

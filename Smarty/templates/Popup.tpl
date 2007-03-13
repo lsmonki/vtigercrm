@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}

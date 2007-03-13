@@ -16,7 +16,7 @@
 	<link href="{$THEME_PATH}style.css" rel="stylesheet" type="text/css">
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
+	<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 </head>
 <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">

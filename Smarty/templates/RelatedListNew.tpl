@@ -11,8 +11,8 @@
  ********************************************************************************/
 
 -->*}
-<script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBooks.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 {literal}
 <script>
 function editProductListPrice(id,pbid,price)

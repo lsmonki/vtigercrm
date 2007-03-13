@@ -124,7 +124,7 @@ function updateAllListPrice(unitprice)
 {rdelim}
 
 </script>
-<script language="javascript" src="modules/Products/Product.js"></script>
+<script language="javascript" src="modules/Products/Products.js"></script>
 <table width="95%" border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="3">&nbsp;</td></tr>
 <tr>

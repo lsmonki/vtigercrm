@@ -11,7 +11,7 @@
 -->*}
 
 
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
