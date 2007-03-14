@@ -266,13 +266,13 @@ if (is_array($overview))
 }
 echo "</script>";
 
-$listview_header = array("<th>Info</th>","<th>Subject</th>","<th>Date</th>","<th>From</th>","<th>Del</th>");
+$listview_header = array("<th>".$mod_strings['LBL_INFO']."</th>","<th>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th>".$mod_strings['LABEL_DATE']."</th>","<th>".$mod_strings['LABEL_FROM']."</th>","<th>".$mod_strings['LBL_DEL']."</th>");
 $listview_entries = array();
 
 $displayed_msgs=0;
 $new_msgs=0;
 if(($numEmails) <= 0)
-	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
+	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>'.$mod_strings['LBL_NO_EMAILS'].'</b></td>';
 else {
 
 if(isset($_REQUEST["search"])) {
@@ -318,7 +318,7 @@ sort($list);
 $i=0;
 if (is_array($list)) {
       	$boxes = '<select name="mailbox" id="mailbox_select" onChange="move_messages();">';
-        $boxes .= '<option value="move_to" SELECTED>Move To...</option>';
+        $boxes .= '<option value="move_to" SELECTED>'.$mod_strings['LBL_MOVE_TO'].'</option>';
         foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))

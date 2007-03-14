@@ -136,6 +136,15 @@ $mod_strings = Array(
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
 // Added for 5.0.3 release
 'IN_REPLY_TO_THE_MESSAGE' => 'In reply to the message sent by ',
+'LBL_NO_EMAILS'=>'No Emails In This Folder',
+'LBL_MOVE_TO'=>'Move To...',
+'LBL_DEL'=>'Del ',
+'LABEL_FROM'=>'From',
+'LBL_INFO'=>'Info',
+'LABEL_DATE'=>'Date',
+'LBL_NO_IFRAMES_SUPPORTED'=>'No Iframes supported',
+'LBL_EMAIL_ATTACHMENTS'=>'Email Attachments:',
+
 
 );
 ?>
