@@ -1999,7 +1999,7 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 **/
 function sendNotificationToOwner($module,$focus)
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering sendNotificationToOwner(".$module.",".$focus.") method ...");
 	require_once("modules/Emails/mail.php");
 	global $current_user;
@@ -2046,20 +2046,20 @@ function sendNotificationToOwner($module,$focus)
 	
 	if($module == "Accounts" || $module == "Potentials" || $module == "Contacts")
 	{
-		$description = 'Dear '.$ownername.',<br><br>';
+		$description = $app_strings['MSG_DEAR'].' '.$ownername.',<br><br>';
 
 		if($focus->mode == 'edit')
 		{
-			$subject = 'Regarding '.$mod_name.' updation - '.$objectname;
-			$description .= 'The '.$mod_name.' has been updated.';
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_UPDATION'].' '.$objectname;
+			$description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_UPDATED'].'.';
 		}
 		else
 		{
-			$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
-			$description .= 'The '.$mod_name.' has been assigned to you.';
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_ASSIGNMENT'].' '.$objectname;
+		        $description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_ASSIGNED_TO_YOU'].'.';
 		}
-		$description .= '<br>The '.$mod_name.' details are:<br><br>';
-		$description .= $mod_name.' Id : '.$focus->id.'<br>';
+		$description .= '<br>'.$app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_DETAILS_ARE'].':<br><br>';
+                $description .= $mod_name.' '.$app_strings['MSG_ID'].' '.$focus->id.'<br>';
 		foreach($object_column_fields as $fieldname => $fieldlabel)
 		{
 			//Get the translated string
@@ -2068,7 +2068,7 @@ function sendNotificationToOwner($module,$focus)
 			$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
 		}
 
-		$description .= '<br><br>Thank You <br>';
+		$description .= '<br><br>'.$app_strings['MSG_THANK_YOU'].'<br>';
 		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
 
 		$log->debug("Exiting sendNotificationToOwner method ...");
@@ -2079,7 +2079,7 @@ function sendNotificationToOwner($module,$focus)
 //Function to send notification to the users of a group
 function sendNotificationToGroups($groupid,$crmid,$module)
 {
-       global $adb;
+       global $adb,$app_strings;
        $returnEntity=Array();
        $returnEntity=getEntityName($module,Array($crmid));
        $mycrmid=$groupid;
@@ -2096,7 +2096,7 @@ function sendNotificationToGroups($groupid,$crmid,$module)
                $curr_userid = $adb->query_result($groupqry_res,$z,'id');
                $tosender=$adb->query_result($groupqry_res,$z,'user_name');
                $pmodule = 'Users';
-               $description = "Dear $tosender,<br>$returnEntity[$crmid] has been created for $module.<br><br>Thanks,<br>vTiger Team.";
+	       $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
                require_once('modules/Emails/mail.php');
                $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$focus->id);
                $all_to_emailids []= $emailadd;
@@ -2363,7 +2363,7 @@ function getModuleFileStoragePath($module)
 */
 function validateImageFile($file_details)
 {
-	global $adb, $log;
+	global $adb, $log,$app_strings;
 	$log->debug("Entering into validateImageFile($file_details) method.");
 	
 	$savefile = 'true';
@@ -2377,7 +2377,7 @@ function validateImageFile($file_details)
 	else
 	{
 		$saveimage = 'false';
-		$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>$file_details[name]</b> is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif.";
+		$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>".$file_details[name]."</b>".$app_strings['MSG_IS_NOT_UPLOADED'];
 		$log->debug("Invalid Image type == $filetype");
 	}
 

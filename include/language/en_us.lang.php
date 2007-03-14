@@ -810,7 +810,21 @@ $app_strings = array (
 'DATABASE_CHANGE_CONFIRMATION' => 'Are you sure to apply the Database Changes from ',
 'TO' => ' to ',
 'DELETE_RSSFEED_CONFIRMATION' => 'Are you sure to delete the rss feed?',
-
+//Added for 5.0.3
+'MSG_DEAR'=>'Dear',
+'MSG_REGARDING'=>'Regarding',
+'MSG_UPDATION'=>'updation -',
+'MSG_THE'=>'The',
+'MSG_HAS_BEEN_UPDATED'=>'has been updated',
+'MSG_ASSIGNMENT'=>'assignment -',
+'MSG_HAS_BEEN_ASSIGNED_TO_YOU'=>'has been assigned to you',
+'MSG_DETAILS_ARE'=>'details are',
+'MSG_ID'=>'Id :',
+'MSG_THANK_YOU'=>'Thank You',
+'MSG_HAS_BEEN_CREATED_FOR'=>'has been created for',
+'MSG_THANKS'=>'Thanks,',
+'MSG_VTIGERTEAM'=>' vTiger Team',
+'MSG_IS_NOT_UPLOADED'=>'is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif',
 );
 
 $app_list_strings = array (
