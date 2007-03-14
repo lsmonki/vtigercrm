@@ -209,6 +209,15 @@ $mod_strings = Array(
 'Spiral Binder'=>'Spiral Binder',
 'Sq Ft'=>'Sq Ft',
 
+//Added for 5.0.3
+'MSG_STOCK_LEVEL'=>'Stock Level is Low',
+'MSG_DEAR'=>'Dear',
+'MSG_CURRENT_STOCK'=>'The current stock of',
+'MSG_IN_OUR_WAREHOUSE'=>'in our warehouse is',
+'MSG_PROCURE_REQUIRED_NUMBER'=>'Kindly procure required number of units as the stock level is below reorder level',
+'MSG_SEVERITY'=>'Severity: Major',
+'MSG_THANKS'=>'Thanks,',
+
 );
 
 ?>
