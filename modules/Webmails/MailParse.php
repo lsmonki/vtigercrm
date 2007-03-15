@@ -56,7 +56,7 @@ function show_msg($mails,$start_message)
 
         // Attachment Icons
         if($msg_ob->has_attachments)
-                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14" title="Attachment"></a>&nbsp;';
         else
                 $flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
 
@@ -65,7 +65,7 @@ function show_msg($mails,$start_message)
         // read/unread/forwarded/replied
         if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$flags.='<span id="unread_img_'.$num.'"><a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14" title="Replied"></a></span>&nbsp;';
+		$flags.='<span id="unread_img_'.$num.'"><a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14" title="Unread"></a></span>&nbsp;';
 	}
 	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 	{
@@ -73,11 +73,11 @@ function show_msg($mails,$start_message)
 	}
 	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
 	{
-		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13" title="Replied" ></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13" title="Forward" ></a>&nbsp;';
 	}
 	else
 	{
-                $flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11" title="Replied" ></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11" title="Read" ></a>&nbsp;';
 	}
 
         // Set IMAP flag

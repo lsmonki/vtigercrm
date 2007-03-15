@@ -144,7 +144,8 @@ $mod_strings = Array(
 'LABEL_DATE'=>'Date',
 'LBL_NO_IFRAMES_SUPPORTED'=>'No Iframes supported',
 'LBL_EMAIL_ATTACHMENTS'=>'Email Attachments:',
-
-
+'LBL_ALLMAILS'=>'All Mails',
+'LBL_TO_USERS'=>'TO Users',
+'LBL_TO_GROUPS'=>'To Groups',
 );
 ?>
