@@ -40,7 +40,7 @@ function gotoUpdateListPrice(id,pbid,proid)
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=DetailView&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
+                                postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
                                 onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("RLContents").innerHTML= response.responseText;
