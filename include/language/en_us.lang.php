@@ -825,6 +825,7 @@ $app_strings = array (
 'MSG_THANKS'=>'Thanks,',
 'MSG_VTIGERTEAM'=>' vTiger Team',
 'MSG_IS_NOT_UPLOADED'=>'is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif',
+'MSG_IMAGE_ERROR'=>'Image not found',
 );
 
 $app_list_strings = array (
