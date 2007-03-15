@@ -433,6 +433,13 @@ function getAdvSearchfields($module)
 
 		}
 		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+		//Check added to search the lists by Inventory manager
+                if($fieldtablename == 'vtiger_quotes' && $fieldcolname == 'inventorymanager')
+                {
+                        $fieldtablename = 'vtiger_usersQuotes';
+                        $fieldcolname = 'user_name';
+                }
+
 		if($fieldlabel != 'Related to')
 		{
 			if ($i==0)

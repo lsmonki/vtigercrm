@@ -1999,6 +1999,8 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users as vtiger_usersQuotes
+			        ON vtiger_usersQuotes.id = vtiger_quotes.inventorymanager
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
