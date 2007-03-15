@@ -798,15 +798,23 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	//added by rdhital/Raju for better email support
 	elseif($uitype == 357)
 	{
-		$contact_selected = 'selected';
-		$account_selected = '';
-		$lead_selected = '';
+		if($_REQUEST['pmodule'] == 'Contacts')
+		{
+			$contact_selected = 'selected';
+		}
+		elseif($_REQUEST['pmodule'] == 'Accounts')
+		{
+			$account_selected = 'selected';
+		}
+		elseif($_REQUEST['pmodule'] == 'Leads')
+		{
+			$lead_selected = 'selected';
+		}
 		if(isset($_REQUEST['emailids']) && $_REQUEST['emailids'] != '')
 		{
 			$parent_id = $_REQUEST['emailids'];
 			$parent_name='';
 			$pmodule=$_REQUEST['pmodule'];
-
 			$myids=explode("|",$parent_id);
 			for ($i=0;$i<(count($myids)-1);$i++)
 			{
