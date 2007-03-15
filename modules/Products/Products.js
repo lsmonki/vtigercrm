@@ -31,7 +31,7 @@ function check4null(form)
   }
 
   if (isError == true) {
-			 alert("Missing required fields: " + errorMessage);
+			 alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
 			 return false;
   }
   return true;

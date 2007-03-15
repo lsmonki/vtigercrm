@@ -37,7 +37,7 @@ function set_values(form) {
 
 		form.duetime.readOnly=false;
 
-		if (form.duetime.readonly) alert ("it's readonly");
+		if (form.duetime.readonly) alert (alert_arr.READONLY);
 
 		document.images.jscal_trigger.width = 16;
 

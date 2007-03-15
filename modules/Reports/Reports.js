@@ -151,7 +151,7 @@ function verify_data(form) {
 	}
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert("Missing required fields:" + errorMessage);
+		alert(alert_arr.MISSING_FIELDS + errorMessage);
 		return false;
 	}
 	return true;
@@ -225,7 +225,7 @@ function selectedColumnClick(oSel)
 {
 	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
 	{
-		alert("you are not allowed to edit this field");
+		alert(alert_arr.NOT_ALLOWED_TO_EDIT);
 		oSel.options[oSel.selectedIndex].selected = false;	
 	}
 }
@@ -385,7 +385,7 @@ function saveAndRunReport()
 {
 	if(selectedColumnsObj.options.length == 0)
 	{
-		alert("Selected Columns cannot be empty");
+		alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 		return false;
 	}
 
@@ -407,7 +407,7 @@ function changeSteps1()
 			{
 				if(i == 1 && selectedColumnsObj.options.length == 0)
 				{
-					alert("Selected Columns cannot be empty");
+					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
 				}	
 				if(divarray[i] == 'step4')
@@ -463,7 +463,7 @@ function changeSteps()
 	{
 		if (trim(document.NewRep.reportname.value) == "")
 		{
-			alert("Missing Report Name");
+			alert(alert_arr.MISSING_REPORT_NAME);
 		}else
 		{
 			new Ajax.Request(
@@ -474,7 +474,7 @@ function changeSteps()
                                 onComplete: function(response) {
 					if(response.responseText!=0)
 					{
-						alert("Report name already exists, try again...");
+						alert(alert_arr.REPORT_NAME_EXISTS);
 						return false;
 					}
 					else

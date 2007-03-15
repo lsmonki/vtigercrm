@@ -99,7 +99,7 @@ function showRelationships(mid) {
 	// TODO: present the user with a simple DHTML div to
 	// choose what type of relationship they would like to create
 	// before creating it.
-	alert('Are you sure you wish to Qualify this Mail as Contact?');
+	alert(alert_arr.WISH_TO_QUALIFY_MAIL_AS_CONTACT);
         add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
@@ -357,10 +357,10 @@ function mass_delete()
            nids=nid;
         else
         {
-            alert("Please select at least one message to delete");
+            alert(alert_arr.SELECT_ATLEAST_ONEMSG_TO_DEL);
             return false;
         }
-        if(confirm("Are you sure you want to delete ?"))
+        if(confirm(alert_arr.SURE_TO_DELETE))
 		runEmailCommand("delete_multi_msg",nids);
 }
 
