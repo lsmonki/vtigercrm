@@ -81,12 +81,15 @@ function show_msg($mails,$start_message)
 	}
 
         // Set IMAP flag
-        if($mails[$start_message]->flagged)
-                $flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
-        else
+	if($mails[$start_message]->flagged)
+	{
+		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
+	}
+	else
+	{
                 $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"title="Important"></a></span>';
 
-
+	}
 
         $tmp=imap_mime_header_decode($mails[$start_message]->from);
         $from = $tmp[0]->text;
