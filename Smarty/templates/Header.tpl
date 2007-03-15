@@ -548,7 +548,8 @@ function openwin()
                                 VALID_DISCOUNT_PERCENT:'{$APP.VALID_DISCOUNT_PERCENT}',
                                 VALID_DISCOUNT_AMOUNT:'{$APP.VALID_DISCOUNT_AMOUNT}',
                                 SELECT_TEMPLATE_TO_MERGE:'{$APP.SELECT_TEMPLATE_TO_MERGE}',
-
+				YES:'{$APP.yes}',
+                                NO:'{$APP.no}',
                         {rdelim};
 
 	var THandle = document.getElementById("Track_Handle");

@@ -284,14 +284,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 
                                 }
                                 else
-                                        getObj(dtlView).innerHTML = "yes";
+                                        getObj(dtlView).innerHTML = alert_arr.YES;
 
                         }
                         else
-                                getObj(dtlView).innerHTML = "yes";
+                                getObj(dtlView).innerHTML = alert_arr.YES;
 		}else
 		{
-			getObj(dtlView).innerHTML = "no";
+			getObj(dtlView).innerHTML = alert_arr.NO;
 		}
 
 	}else if(uitype == 116)
@@ -345,7 +345,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			if(tagValue == '1')
 			{
-				getObj(dtlView).innerHTML = "yes";
+				getObj(dtlView).innerHTML = alert_arr.YES;
 			}else
 			{
 				getObj(dtlView).innerHTML = "";
