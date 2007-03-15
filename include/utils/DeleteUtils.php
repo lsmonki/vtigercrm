@@ -50,12 +50,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$adb->query($sql);
 		}
 		delAccRelRecords($record);
-		if($return_id!='')
-		{
-			$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
-			$adb->query($sql);
-		}
-		
 	break;
 	case Campaigns:
 		if($return_module == "Leads") {
@@ -429,6 +423,10 @@ function delAccRelRecords($record){
 	//Deleting Trouble Tickets-Account Relation.
 	$tt_q = "update vtiger_troubletickets set parent_id = null where parent_id = ".$record;
 	$adb->query($tt_q);
+
+	//Deleting Activity-Account Relation
+        $sql="delete from vtiger_seactivityrel where crmid=".$record;
+        $adb->query($sql);
 }
 
 function delVendorRelRecords($record){
