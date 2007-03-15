@@ -325,6 +325,12 @@ class Reports extends CRMEntity{
 		{
 			 $module_columnlist['vtiger_activity:activitytype:Calendar_Activity_Type:activitytype:C'] = 'Activity Type';
 		}
+		
+		if($module == 'HelpDesk' && $block == 25)
+                {
+                        $module_columnlist['vtiger_crmentity:crmid:HelpDesk_Ticket_ID:ticketid:I'] = 'Ticket ID';
+                }
+
 
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -899,7 +905,7 @@ function getEscapedColumns($selectedfields)
 				$mod_strings = return_module_language($current_language,$module);
 				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
 				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));		
-			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields))
+			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields) && $fieldname != 'ticketid')
 			{
 				if(isset($mod_strings[$fieldlabel])) 
 				{

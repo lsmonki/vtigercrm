@@ -153,6 +153,9 @@ class ReportRun extends CRMEntity
 		{
 			$access_fields[] = $collistrow["fieldname"];
 		}
+		//added to include ticketid for Reports module in select columnlist for all users
+		if($module == "HelpDesk")
+			$access_fields[] = "ticketid";
 		return $access_fields;
 	}
 	

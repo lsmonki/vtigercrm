@@ -203,6 +203,8 @@ $mod_strings = Array(
 'MIN'=>'MIN',
 'LBL_CUSTOM_REPORTS'=>'Custom Reports',
 
+'ticketid'=>'Ticket Id',
+
 )
 
 ?>
