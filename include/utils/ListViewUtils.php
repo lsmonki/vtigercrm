@@ -1325,6 +1325,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab=Settings&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
 	}
+	elseif($uitype == 33)
+	{
+		$value = ($temp_val != "") ? str_ireplace(' |##| ',', ',$temp_val) : "";
+	}
+	elseif($uitype == 85)
+	{
+		$value = ($temp_val != "") ? "<a href='skype:{$temp_val}?call'>{$temp_val}</a>" : "";
+	}
 	else
 	{
 
