@@ -35,15 +35,11 @@
 								<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
-							<td width="10%">
+							<td width="20%" nowrap>
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
-							<!--td width="12%">
-								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-								&nbsp;<a href="javascript:;"  onclick="show_hidden();" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
-							</td -->
-							<td width="18%">
+							<td width="30%">
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>
 							</td>
