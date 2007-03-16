@@ -124,10 +124,15 @@ if($focus->column_fields["hdnTaxType"] != "individual")
 
 	$lineData=array("105",$bottom+49,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_TAX'].":  ($group_total_tax_percent %)                                                                  ".$price_salestax."";
+	$data= $app_strings['LBL_TAX'].":  ($group_total_tax_percent %)";//                                                                  ".$price_salestax."";
 	$pdf->SetXY( 105 , ($nettotal_y+(2*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(110, 4, $data);
+
+	//Added for value field alignment
+	$pdf->SetXY( $space[strlen($price_salestax)] , ($nettotal_y+(2*$next_y)) );
+	$pdf->SetFont( "Helvetica", "", 10);
+	$pdf->MultiCell(110, 4, $price_salestax);
 
 	$lineData=array("105",$bottom+55,"94");
 	$pdf->drawLine($lineData);
