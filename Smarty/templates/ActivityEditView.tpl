@@ -147,13 +147,12 @@ var gVTModule = '{$smarty.request.module}';
 								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
 							{/if}
+							{if $LABEL.location neq ''}
 							<tr>
 			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
 								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location}" style="width:50%">
 							</tr>
-								
-
-
+							{/if}
 
 							<tr>
 								<td colspan=2 width=80% align="center">
