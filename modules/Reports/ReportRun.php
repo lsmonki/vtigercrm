@@ -1595,6 +1595,10 @@ class ReportRun extends CRMEntity
 						{
 							$fieldvalue = "-";
 						}
+						else if(stristr($fieldvalue,"|##|"))
+						{
+							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
+						}
 						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
@@ -1686,6 +1690,10 @@ class ReportRun extends CRMEntity
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
+						}
+						else if(stristr($fieldvalue,"|##|"))
+						{
+							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
 						}
 						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
 							$fieldvalue = getDisplayDate($fieldvalue);
@@ -1837,6 +1845,10 @@ class ReportRun extends CRMEntity
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
+						}
+						else if(stristr($fieldvalue,"|##|"))
+						{
+							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
 						}
 						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
 							$fieldvalue = getDisplayDate($fieldvalue);
