@@ -244,7 +244,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$list = '<script>
 		function confirmdelete(url)
 		{
-			if(confirm("Are you sure?"))
+			if(confirm("'.$app_strings['ARE_YOU_SURE'].'"))
 			{
 				document.location.href=url;
 			}
@@ -516,7 +516,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		{		
 			if($action != "")
 				$action .= '&nbsp;|&nbsp;';
-			$action .= '<img src="'.$image_path.'delete.gif" onclick="if(confirm(\'Are you sure?\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';	
+			$action .= '<img src="'.$image_path.'delete.gif" onclick="if(confirm(\''.$app_strings['ARE_YOU_SURE'].'\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';	
 		}
 		if($action != "")		
 			$entries[] = $action;

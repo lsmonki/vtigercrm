@@ -767,7 +767,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		echo '<script>
 				function confirmdelete(url)
 		                {
-		                        if(confirm("Are you sure?"))
+		                        if(confirm("'.$app_strings['ARE_YOU_SURE'].'"))
 		                        {
 		                                document.location.href=url;
 		                        }

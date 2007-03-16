@@ -548,6 +548,7 @@ function openwin()
                                 VALID_DISCOUNT_PERCENT:'{$APP.VALID_DISCOUNT_PERCENT}',
                                 VALID_DISCOUNT_AMOUNT:'{$APP.VALID_DISCOUNT_AMOUNT}',
                                 SELECT_TEMPLATE_TO_MERGE:'{$APP.SELECT_TEMPLATE_TO_MERGE}',
+				SELECTED_MORE_THAN_ONCE:'{$APP.SELECTED_MORE_THAN_ONCE}',
 				YES:'{$APP.yes}',
                                 NO:'{$APP.no}',
                         {rdelim};
