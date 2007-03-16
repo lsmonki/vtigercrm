@@ -763,7 +763,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}	
 		if($links_info != "")
 			$list_header[] = $links_info;
-
+		/*commented to fix: attachments and notes cant be deleted in Invoice Related List. 
 		echo '<script>
 				function confirmdelete(url)
 		                {
@@ -773,7 +773,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		                        }
 		                }
 		        </script>';
-
+		*/
 		$list_block[$entity_id] = $list_header;
 
 	}
@@ -998,12 +998,13 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
+	$tabid = getTabid($module);
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
 	{
@@ -1016,15 +1017,32 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$colname="activitystatus";
 	}
 	//Ends
-	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
 	
-        if(strlen($temp_val) > 40)
+        if(strlen($field_val) > 40)
         {
-                $temp_val = substr($temp_val,0,40).'...';
+                $temp_val = substr($field_val,0,40).'...';
         }
-	if($uitype == 52 || $uitype == 53 || $uitype == 77)
+	else
+	{
+		$temp_val = $field_val;
+	}
+	if($uitype == 53)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
+	}
+	elseif($uitype == 52) 
+	{        
+		$value = getUserName($adb->query_result($list_result,$list_result_count,'handler')); 
+	}
+	elseif($uitype == 77) 
+	{        
+		$value = getUserName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
+	} 
+	elseif($uitype == 15 && $module == 'Calendar') 
+	{ 
+	               $activitytype = $adb->query_result($list_result,$list_result_count,$colname); 
+	               $value = $app_strings[$activitytype];
 	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
@@ -1072,14 +1090,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 17)
 	{
-		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
+		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
 	}
 	elseif($uitype == 13 || $uitype == 104)
         {
 		if(useInternalMailer() == 1)
                 	$value = '<a href="javascript:InternalMailer('.$entity_id.',\'record_id\')">'.$temp_val.'</a>';
 		else
-                	$value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
+                	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
         }
 	elseif($uitype == 56)
 	{
@@ -1340,7 +1358,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			if($mode == "search")
 			{
-				if($popuptype == "specific")
+				if($popuptype == "specific" || $popuptype=="toDospecific")
 				{
 					// Added for get the first name of contact in Popup window
 					if($colname == "lastname" && $module == 'Contacts')
@@ -1553,7 +1571,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$result = $adb->query($query);
 						$contact_image = '';
 						$imagename=$adb->query_result($result,0,'imagename');
-						 if($imagename != '')
+						if($imagename != '')
                                                 {
                                                         $imgpath = "test/contact/".$imagename;
                                                         $contact_image='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=fnhide("dynloadarea");>';
