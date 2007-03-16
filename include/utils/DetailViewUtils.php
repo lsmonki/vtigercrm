@@ -559,6 +559,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a>';
 			}
+			elseif($parent_module == "HelpDesk")
+			{
+				$label_fld[] = $mod_strings[$fieldlabel];
+				$label_fld[] = '';
+			}
 		}
 		else
 		{
