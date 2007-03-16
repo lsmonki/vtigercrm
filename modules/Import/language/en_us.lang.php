@@ -162,6 +162,10 @@ $mod_strings = Array(
 'LBL_STEP_3_3'=>'Step 3 of 3 : ',
 'LBL_MAPPING_RESULTS'=>'Mapping Results ',
 'LBL_LAST_IMPORTED'=>'Last Imported',
+//Added for sript alerts
+'PLEASE_CHECK_MAPPING' => "' is mapped more than once. Please check the mapping.",
+'MAP_MANDATORY_FIELD' => 'Please map the mandatory field "',
+'ENTER_SAVEMAP_NAME' => 'Please Enter Save Map Name',
 
 //Added for 5.0.3
 'to'=>'to',
