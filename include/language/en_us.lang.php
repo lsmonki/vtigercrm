@@ -810,6 +810,8 @@ $app_strings = array (
 'DATABASE_CHANGE_CONFIRMATION' => 'Are you sure to apply the Database Changes from ',
 'TO' => ' to ',
 'DELETE_RSSFEED_CONFIRMATION' => 'Are you sure to delete the rss feed?',
+'NOT_PERMITTED_TO_EXPORT' => 'you are not permitted to export!',
+
 //Added for 5.0.3
 'MSG_DEAR'=>'Dear',
 'MSG_REGARDING'=>'Regarding',

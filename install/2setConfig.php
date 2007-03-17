@@ -27,8 +27,7 @@ $hostname = $_SERVER['SERVER_NAME'];
 // TODO: introduce Apache port as parameters to use non-default value 80
 //$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
 //$web_root = $hostname.$_SERVER['PHP_SELF'];
-//$web_root = $HTTP_SERVER_VARS["HTTP_HOST"] . $HTTP_SERVER_VARS["REQUEST_URI"];
-$web_root = $_ENV["HOSTNAME"] . $HTTP_SERVER_VARS["REQUEST_URI"];
+$web_root = $HTTP_SERVER_VARS["HTTP_HOST"] . $HTTP_SERVER_VARS["REQUEST_URI"];
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://".$web_root;
 
@@ -282,11 +281,11 @@ function verify_data(form) {
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
+		alert("Missing required fields:" + errorMessage);
 		return false;
 	}
 	if (trim(form.admin_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.admin_email.value)) {
-		alert(alert_arr.THE_EMAILID+form.admin_email.value+alert_arr.EMAIL_FIELD_INVALID);
+		alert("The email id \'"+form.admin_email.value+"\' in the email field is invalid");
 		form.admin_email.focus();
 		exit();
 	}

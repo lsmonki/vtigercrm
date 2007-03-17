@@ -81,7 +81,7 @@ function VtigerAjax(cb)
         var response = me.callback(me.requester);
         break;
       default:
-        alert(alert_arr.ERROR);
+        alert("Error");
         break;
     }
   }

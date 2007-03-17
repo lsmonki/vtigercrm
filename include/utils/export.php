@@ -32,7 +32,7 @@ require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
 require_once('include/utils/UserInfoUtil.php');
 
-global $allow_exports;
+global $allow_exports,$app_strings;
 
 session_start();
 
@@ -60,7 +60,7 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 
 ?>
 	<script language=javascript>
-		alert("you are not permitted to export!");
+		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
 		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
 	</script>
 <?php

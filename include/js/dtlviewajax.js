@@ -197,7 +197,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         var port_obj = getObj('portal').checked;
                         if(fieldName == "email" && tagValue == '' && port_obj == true)
                         {
-                                alert('Portal user should provide email id for portal login');
+                                alert(alert_arr.PORTAL_PROVIDE_EMAILID);
                                 return false;
                         }
                 }
@@ -279,7 +279,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                                 var obj = getObj("email");
                                 if((fieldName == "portal") && (obj.value == ''))
                                 {
-                                        alert("Portal user should provide email Id for portal login");
+                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
                                         return false;
 
                                 }
