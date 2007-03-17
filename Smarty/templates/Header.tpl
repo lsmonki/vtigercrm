@@ -464,7 +464,7 @@ function openwin()
 	{/foreach}
 	</table>
 </div>
-{include file=JsArray.tpl}	
+	
 <script>
 	var THandle = document.getElementById("Track_Handle");
 	var TRoot   = document.getElementById("tracker");

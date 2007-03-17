@@ -11,6 +11,7 @@
 //Utility Functions
 
 var gValidationCall='';
+document.write('<script src="include/js/en_us.lang.js"></script>');
 
 if (document.all)
 
