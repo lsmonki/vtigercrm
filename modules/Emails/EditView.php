@@ -143,9 +143,14 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	if($_REQUEST["reply"] == "all") {
 		$smarty->assign('TO_MAIL',$webmail->fromaddr);	
 		if(is_array($webmail->cc_list))
+		{
 			$smarty->assign('CC_MAIL',implode(",",$webmail->cc_list).",".implode(",",$webmail->to));
+		}
 		else
-			$smarty->assign('CC_MAIL',implode(",",$webmail->to));
+		{
+			//to fix #3231
+		//	$smarty->assign('CC_MAIL',implode(",",$webmail->to));
+		}
 		if(preg_match("/RE:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);
 		else
