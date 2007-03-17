@@ -50,6 +50,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     if($command == "delete_msg") {
 	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
     	$MailBox = new MailBox($mailbox);
+        imap_mail_move($MailBox->mbox,$mailid,"Trash");
 	$email = new Webmails($MailBox->mbox,$mailid);
        	$email->delete();
 	imap_close($MailBox->mbox);
@@ -61,9 +62,10 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     	$MailBox = new MailBox($mailbox);
 	$tlist = explode(":",$mailid);
 	foreach($tlist as $id) {
+	        imap_mail_move($MailBox->mbox,$id,"Trash");
 		$adb->println("DELETE MULTI MESSAGE $id");
 		$email = new Webmails($MailBox->mbox,$id);
-       	 	$email->delete();
+		$email->delete();
 	}
 	imap_close($MailBox->mbox);
 	echo $mailid;
