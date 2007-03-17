@@ -37,7 +37,7 @@
                                                   </td>
 						<!-- uitype 111 added for noneditable existing picklist values - ahmed -->
                                              {elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
-               							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$APP.$keyval}</span>
+               							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}</span>
                                               		<div id="editarea_{$label}" style="display:none;">
                     							   <select id="txtbox_{$label}" name="{$keyfldname}">
                     								{foreach item=arr from=$keyoptions}
@@ -270,7 +270,7 @@
                         </td>    
 			{elseif $keyid eq '156'} <!--CheckBox for is admin-->
 			{if $smarty.request.record neq $CURRENT_USERID && $keyadmin eq 1} 
-                      <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onMouseOver="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$APP.$keyval}&nbsp;</span>
+                      <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onMouseOver="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}&nbsp;</span>
                     	<div id="editarea_{$label}" style="display:none;">
                         {if $keyval eq 'on'}                                              		  
                             <input id="txtbox_{$label}" name="{$keyfldname}" type="checkbox" style="border:1px solid #bababa;" checked value="1">
