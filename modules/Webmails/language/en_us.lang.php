@@ -145,7 +145,7 @@ $mod_strings = Array(
 'LBL_NO_IFRAMES_SUPPORTED'=>'No Iframes supported',
 'LBL_EMAIL_ATTACHMENTS'=>'Email Attachments:',
 'LBL_ALLMAILS'=>'All Mails',
-'LBL_TO_USERS'=>'TO Users',
+'LBL_TO_USERS'=>'To Users',
 'LBL_TO_GROUPS'=>'To Groups',
 );
 ?>
