@@ -120,6 +120,11 @@ if($_REQUEST['reply'] == "true")
 }
 
 
+//Added to set the cc when click reply all
+if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
+{
+        $smarty->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
+}
 
 // Webmails
 if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
@@ -138,19 +143,20 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 
 	$webmail = new Webmails($mbox,$mailid);
 	$webmail->loadMail();
-
+	  $hdr = @imap_headerinfo($mbox, $mailid);
 	$smarty->assign('WEBMAIL',"true");
 	if($_REQUEST["reply"] == "all") {
 		$smarty->assign('TO_MAIL',$webmail->fromaddr);	
-		if(is_array($webmail->cc_list))
+		$smarty->assign('CC_MAIL',$hdr->ccaddress);
+		/*if(is_array($webmail->cc_list))
 		{
 			$smarty->assign('CC_MAIL',implode(",",$webmail->cc_list).",".implode(",",$webmail->to));
 		}
 		else
 		{
-			//to fix #3231
+			//Commenting this to fix #3231
 		//	$smarty->assign('CC_MAIL',implode(",",$webmail->to));
-		}
+		}*/
 		if(preg_match("/RE:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);
 		else
@@ -165,7 +171,6 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["forward"] == "true" ) {
-		//commenting it out to fix #3232
 		//$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
 		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		if(preg_match("/FW:/i", $webmail->subject))
@@ -227,12 +232,6 @@ $smarty->assign("APP", $app_strings);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-
-//Added to set the cc when click reply all
-if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
-{
-        $smarty->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
-}
 
 if($focus->mode == 'edit')
 {
