@@ -22,6 +22,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script src="include/js/general.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
