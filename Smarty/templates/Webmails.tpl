@@ -54,7 +54,7 @@
 				   </tr>
 				   <tr>
 					<td rowspan="6" valign="top" class="hdrNameBg">
-						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">Add Folder[X]</span></span>
+						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 
 						<ul style="list-style-type:none;">
 
@@ -117,12 +117,12 @@
 					<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;
 					<input type="text"		name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
 					<select name="optionSel" class="importBox" id="search_type">
-						<option selected value="SUBJECT">in Subject</option>
-						<option value="BODY">in Body</option>
-						<option value="TO">in To:</option>
-						<option value="CC">in CC:</option>
-						<option value="BCC">in BCC:</option>
-						<option value="FROM">in From:</option>
+						<option selected value="SUBJECT">{$MOD.IN_SUBJECT}</option>
+						<option value="BODY">{$MOD.IN_BODY}</option>
+						<option value="TO">{$MOD.IN_TO}</option>
+						<option value="CC">{$MOD.IN_CC}</option>
+						<option value="BCC">{$MOD.IN_BCC}</option>
+						<option value="FROM">{$MOD.IN_FROM}</option>
 					</select>&nbsp;
 				</td>
 				<td width="5%">
