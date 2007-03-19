@@ -427,8 +427,6 @@ for($i=0; $i<$noofrows; $i++)
 if($mode=='view')
 {
 	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);
-	for($i=0; $i<count($fieldListResult);$i++)
-	{
 		$field_module=array();
 		$module_name=key($fieldListResult);
 		$module_id = getTabid($module_name);
@@ -436,13 +434,13 @@ if($mode=='view')
 		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
 			$field=array();
-			if($fieldListResult[$module_name][$j][1] == 0)
+			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
-				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+				$visible = "<img src=".$image_path."/no.gif>";
 			}
 			else
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 			}
 			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
 				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
