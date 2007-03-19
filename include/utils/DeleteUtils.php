@@ -389,14 +389,14 @@ function delAccRelRecords($record){
 		$adb->query($sql);
 	}
 	//Deleting Account related Sales Orders.
-	$so_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_salesorder on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid inner join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid where vtiger_crmentity.deleted=0 and vtiger_salesorder.accountid=".$record;
+	/*$so_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_salesorder on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid inner join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid where vtiger_crmentity.deleted=0 and vtiger_salesorder.accountid=".$record;
 	$so_res = $adb->query($so_q);
 	for($k=0;$k < $adb->num_rows($so_res);$k++)
 	{
 		$so_id = $adb->query_result($so_res,$k,"crmid");
 		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$so_id;
 		$adb->query($sql);
-	}
+	}*/
 	//Deleting Account related Quotes.
 	$quo_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_quotes on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_account on vtiger_account.accountid=vtiger_quotes.accountid where  vtiger_crmentity.deleted=0 and vtiger_quotes.accountid=".$record;
 	$quo_res = $adb->query($quo_q);
@@ -407,14 +407,14 @@ function delAccRelRecords($record){
 		$adb->query($sql);
 	}
 	//Deleting Account related Invoices.
-	$inv_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_invoice on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid where  vtiger_crmentity.deleted=0 and vtiger_invoice.accountid=".$record;
+	/*$inv_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_invoice on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid where  vtiger_crmentity.deleted=0 and vtiger_invoice.accountid=".$record;
 	$inv_res = $adb->query($inv_q);
 	for($k=0;$k < $adb->num_rows($inv_res);$k++)
 	{
 		$inv_id = $adb->query_result($inv_res,$k,"crmid");
 		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$inv_id;
 		$adb->query($sql);
-	}
+	}*/
 	//Deleting Contact-Account Relation.
 	$con_q = "update vtiger_contactdetails set accountid = null where accountid = ".$record;
 	$con_res = $adb->query($con_q);

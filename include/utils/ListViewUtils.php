@@ -2782,13 +2782,14 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$pot_query = "select potentialid from vtiger_potential where accountid=".$relmod_recordid;
+			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.accountid=".$relmod_recordid;
 			$pot_result = $result = $adb->query($pot_query);
 			$rows = $adb->num_rows($pot_result);
+			$potids_comma = "";	
 			if($rows != 0)
 			{
 				$j = 0;
-				$potids_comma = "(";
+				$potids_comma .= "(";
 				for($k=0; $k < $rows; $k++)
 				{
 					$potential_ids = $adb->query_result($pot_result,$k,'potentialid');
