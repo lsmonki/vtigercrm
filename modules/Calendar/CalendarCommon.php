@@ -305,24 +305,43 @@ function getActivityDetails($description,$inviteeid='')
         $log->debug("Entering getActivityDetails(".$description.") method ...");
 
         $reply = (($description['mode'] == 'edit')?'updated':'created');
+	if($description['activity_mode'] == "Events")
+	{
+		$end_date_lable=$mod_strings['End date and time'];
+	}
+	else
+	{
+		$end_date_lable=$mod_strings['End date'];
+	}
         if($inviteeid=='')
-        $name = getUserName($description['user_id']);
+	{
+        	$name = getUserName($description['user_id']);
+		$msg = $mod_strings['LBL_ACTIVITY_NOTIFICATION'];
+	}
         else
-        $name = getUserName($inviteeid);
+	{
+	        $name = getUserName($inviteeid);
+		$msg = $mod_strings['LBL_ACTIVITY_INVITATION'];
+	}	
 
         $current_username = getUserName($current_user->id);
         $status = $description['status'];
 
         $list = $name.',';
-	$list .= '<br><br>'.$mod_strings['LBL_ACTIVITY_STRING'].' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
+	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_SUBJECT"].' '.$description['subject'];
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Start date and time"].' : '.$description['st_date_time'];
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$end_date_lable.' : '.$description['end_date_time'];
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.$description['taskpriority'];
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].' : '.$description['relatedto'];
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.$description['relatedto'];
 	if($description['activity_mode'] != 'Events')
 	{
         	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT"].' '.$description['contact_name'];
 	}
+	else
+		$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Location"].' : '.$description['location'];
+			
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description['description'];
         $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
         $list .= '<br>'.$current_username.'.';
@@ -422,7 +441,11 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$send_notification = $adb->query_result($ary_res,0,"sendnotification");
 	$subject = $adb->query_result($ary_res,0,"subject");
 	$priority = $adb->query_result($ary_res,0,"priority");
-	//$parent_name = $adb->query_result($ary_res,0,"priority");
+	$st_date = $adb->query_result($ary_res,0,"date_start");
+	$st_time = $adb->query_result($ary_res,0,"time_start");
+	$end_date = $adb->query_result($ary_res,0,"due_date");
+	$end_time = $adb->query_result($ary_res,0,"time_end");
+	$location = $adb->query_result($ary_res,0,"location");
 
 	$usr_qry = "select smownerid from vtiger_crmentity where crmid=".$return_id;
 	$res = $adb->query($usr_qry);
@@ -468,6 +491,9 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$mail_data['description'] = $description;
 	$mail_data['assingn_type'] = $assignType;
 	$mail_data['group_name'] = $grp_name;
+	$mail_data['st_date_time']=$st_date." ".$st_time;
+	$mail_data['end_date_time']=$end_date." ".$end_time;
+	$mail_data['location']=$location;
 	return $mail_data;
 
 

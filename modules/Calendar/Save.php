@@ -168,6 +168,9 @@ function getRequestData()
 	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
 	$mail_data['group_name'] = $_REQUEST['assigned_group_name'];
 	$mail_data['mode'] = $_REQUEST['mode'];
+	$mail_data['st_date_time'] = $_REQUEST['date_start']." ".$_REQUEST['time_start'];
+	$mail_data['end_date_time']=$_REQUEST['due_date']." ".$_REQUEST['time_end'];
+	$mail_data['location']=$_REQUEST['location'];
 	return $mail_data;
 }
 //Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user

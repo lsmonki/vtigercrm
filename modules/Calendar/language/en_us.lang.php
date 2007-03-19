@@ -257,7 +257,8 @@ $mod_strings = Array(
 'LBL_CALENDAR_INFORMATION'=>'Calendar Information',
 
 'LBL_NAME'=>'Subject:',
-'LBL_ACTIVITY_STRING'=>'This is a notification that an activity you have been invited to has been',
+'LBL_ACTIVITY_NOTIFICATION'=>'This is a notification that an activity is assigned to you that has been',
+'LBL_ACTIVITY_INVITATION'=>'You have been invited for an activity that has been ',
 'LBL_DETAILS_STRING'=>'The details are',
 'LBL_REGARDS_STRING'=>'Thanks & Regards',
 'LBL_CONTACT_NAME'=>'Contact Name',
@@ -402,6 +403,14 @@ $mod_strings = Array(
 'LBL_REMAINDER_HRS'=>'hrs',
 'Call'=>'Call',
 'Meeting'=>'Meeting',
+
+//added to send dates and time in calendar notification/invitation mail.
+
+'Start date and time'=>'Start Date & Time',
+'End date and time'=>'End Date & Time',
+//this is for task
+'End date'=>'End date',
+
 
 );
 
