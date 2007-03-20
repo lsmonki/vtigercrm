@@ -93,4 +93,15 @@
                                 SELECT_TEMPLATE_TO_MERGE:'Please select a template to merge',
 				YES:'yes',
                                 NO:'no',
+
+				EQUALS:'equals',
+				NOT_EQUALS_TO:'not equal to',
+				STARTS_WITH:'starts with',
+				CONTAINS:'contains',	
+				DOES_NOT_CONTAINS:'does not contains',
+				LESS_THAN:'less than',
+				GREATER_THAN:'greater than',
+				LESS_OR_EQUALS:'less or equal',
+				GREATER_OR_EQUALS:'greater or equal',
+				
                        };

@@ -647,7 +647,7 @@ $app_strings = array (
 //Added for values of picklist in Advanced Search filter
 'contains'=>'contains',
 'does not contains'=>'does not contains',
-'is'=>'is',
+'equals'=>'equals',
 'is not'=>'is not',
 'begins with'=>'begins with',
 'ends with'=>'ends with',
@@ -828,6 +828,17 @@ $app_strings = array (
 'MSG_VTIGERTEAM'=>' vTiger Team',
 'MSG_IS_NOT_UPLOADED'=>'is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif',
 'MSG_IMAGE_ERROR'=>'Image not found',
+
+'Information'=>'Information',
+'Address'=>'Address',
+'Custom Information'=>'Custom Information',
+'Portal Information'=>'- Portal Information',
+'Description'=>'Description',
+'Expectations'=>'Expectations',
+'Pricing Information'=>'Pricing Information',
+'Stock Information'=>'Stock Information',
+'Solution'=>'Solution',
+'Terms and Conditions'=>'Terms and Conditions',
 );
 
 $app_list_strings = array (

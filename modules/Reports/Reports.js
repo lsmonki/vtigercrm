@@ -16,15 +16,15 @@ typeofdata['C'] = ['e','n'];
 typeofdata['D'] = ['e','n','l','g','m','h'];
 
 var fLabels = new Array();
-fLabels['e'] = 'equals';
-fLabels['n'] = 'not equal to';
-fLabels['s'] = 'starts with';
-fLabels['c'] = 'contains';
-fLabels['k'] = 'does not contain';
-fLabels['l'] = 'less than';
-fLabels['g'] = 'greater than';
-fLabels['m'] = 'less or equal';
-fLabels['h'] = 'greater or equal';
+fLabels['e'] = alert_arr.EQUALS;
+fLabels['n'] = alert_arr.NOT_EQUALS_TO;
+fLabels['s'] = alert_arr.STARTS_WITH;
+fLabels['c'] = alert_arr.CONTAINS;
+fLabels['k'] = alert_arr.DOES_NOT_CONTAINS;
+fLabels['l'] = alert_arr.LESS_THAN;
+fLabels['g'] = alert_arr.GREATER_THAN;
+fLabels['m'] = alert_arr.LESS_OR_EQUALS;
+fLabels['h'] = alert_arr.GREATER_OR_EQUALS;
 var noneLabel;
 var gcurrepfolderid=0;
 function trimfValues(value)
