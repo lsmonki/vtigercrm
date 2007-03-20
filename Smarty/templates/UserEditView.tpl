@@ -50,7 +50,7 @@ function check_duplicate()
 
 </script>
 
-
+<br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
