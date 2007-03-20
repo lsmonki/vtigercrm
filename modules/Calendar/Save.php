@@ -168,8 +168,11 @@ function getRequestData()
 	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
 	$mail_data['group_name'] = $_REQUEST['assigned_group_name'];
 	$mail_data['mode'] = $_REQUEST['mode'];
-	$mail_data['st_date_time'] = $_REQUEST['date_start']." ".$_REQUEST['time_start'];
-	$mail_data['end_date_time']=$_REQUEST['due_date']." ".$_REQUEST['time_end'];
+	$value = getaddEventPopupTime($_REQUEST['time_start'],$_REQUEST['time_end'],'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['date_start'])." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($_REQUEST['due_date'])." ".$end_hour;
 	$mail_data['location']=$_REQUEST['location'];
 	return $mail_data;
 }

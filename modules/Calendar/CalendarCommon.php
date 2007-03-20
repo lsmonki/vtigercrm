@@ -491,8 +491,11 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$mail_data['description'] = $description;
 	$mail_data['assingn_type'] = $assignType;
 	$mail_data['group_name'] = $grp_name;
-	$mail_data['st_date_time']=$st_date." ".$st_time;
-	$mail_data['end_date_time']=$end_date." ".$end_time;
+	$value = getaddEventPopupTime($st_time,$end_time,'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+	$mail_data['st_date_time']=getDisplayDate($st_date)." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($end_date)." ".$end_hour;
 	$mail_data['location']=$location;
 	return $mail_data;
 

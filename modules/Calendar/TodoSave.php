@@ -67,8 +67,10 @@ function getRequestedToData()
 	$mail_data['assingn_type'] = $_REQUEST['task_assigntype'];
 	$mail_data['group_name'] = $_REQUEST['task_assigned_group_name'];
 	$mail_data['mode'] = $_REQUEST['task_mode'];
-	$mail_data['st_date_time'] = $_REQUEST['task_date_start']." ".$_REQUEST['task_time_start'];
-	$mail_data['end_date_time']=$_REQUEST['task_due_date'];
+	$value = getaddEventPopupTime($_REQUEST['task_time_start'],$_REQUEST['task_time_end'],'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['task_date_start'])." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($_REQUEST['task_due_date']);
 	return $mail_data;
 }
 
