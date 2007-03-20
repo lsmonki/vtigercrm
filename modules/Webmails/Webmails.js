@@ -163,6 +163,8 @@ function check_in_all_boxes(mymbox) {
 	);
 }
 function check_for_new_mail(mbox) {
+	window.location=window.location;
+/*
 	if(degraded_service == 'true') {
 		window.location=window.location;
 		return;
@@ -308,6 +310,7 @@ function check_for_new_mail(mbox) {
                         }
                 }
         );
+*/
 }
 function periodic_event() {
 	// NOTE: any functions you put in here may race.  This could probably
