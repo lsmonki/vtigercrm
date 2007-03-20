@@ -222,7 +222,7 @@ if($start == 1 || $start == "") {
 	$start_message=($numEmails-(($start-1)*$mails_per_page));
 }
 
-//$c=$numEmails;
+$c=$numEmails;
 
 if(!isset($_REQUEST["search"])) {
 	$numPages = ceil($numEmails/$MailBox->mails_per_page);
