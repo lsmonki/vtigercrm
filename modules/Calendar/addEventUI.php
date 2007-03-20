@@ -866,9 +866,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 	</td></tr></table>
   </form>
   <script>
-  	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
-	var fieldlabel = new Array('Subject','Date','Time','Status');
-	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+  	var fieldname = new Array('task_subject','task_date_start','task_time_start','task_due_date','taskstatus');
+	var fieldlabel = new Array('<?php echo $mod_strings['LBL_LIST_SUBJECT']?>','<?php echo $mod_strings['LBL_START_DATE']?>','<?php echo $mod_strings['LBL_TIME']?>','<?php echo $mod_strings['LBL_DUE_DATE']?>','<?php echo $mod_strings['LBL_STATUS']?>');
+	var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
   </script>
   </div>
 
