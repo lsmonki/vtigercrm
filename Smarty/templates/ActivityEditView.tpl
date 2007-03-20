@@ -279,7 +279,7 @@ var gVTModule = '{$smarty.request.module}';
                                                                                                         {assign var=date_val value="$date_value"}
                                                                                                         {assign var=time_val value="$time_value"}
 	                                                                                        {/foreach}
-                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_date_start">
 													{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 													{assign var=date_vl value="$date_fmt"}
 													{/foreach}
@@ -300,7 +300,7 @@ var gVTModule = '{$smarty.request.module}';
 													{assign var=date_val value="$date_value"}
 													{assign var=time_val value="$time_value"}
 													{/foreach}
-													<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+													<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_due_date">
 													{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
 													{assign var=date_vl value="$date_fmt"}
                                                                                                         {/foreach}
@@ -321,7 +321,7 @@ var gVTModule = '{$smarty.request.module}';
                                                                                                         {assign var=date_val value="$date_value"}
                                                                                                         {assign var=time_val value="$time_value"}
                                                                                                         {/foreach}
-                                                                                                        <input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_followup_date">
+                                                                                                        <input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_followup_date">
                                                                                                         {foreach key=date_fmt item=date_str from=$secondvalue.due_date}
                                                                                                         {assign var=date_vl
  value="$date_fmt"}
@@ -746,7 +746,7 @@ var gVTModule = '{$smarty.request.module}';
 	                                        		{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
                                         		{/foreach}
-							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" onChange="dochange('date_start','due_date');" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" onChange="dochange('date_start','due_date');" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_date_start" align="middle" border="0">
 							{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 								{assign var=date_vl value="$date_fmt"}
 							{/foreach}				
@@ -765,7 +765,7 @@ var gVTModule = '{$smarty.request.module}';
 									{assign var=date_val value="$date_value"}
 									{assign var=time_val value="$time_value"}
 								{/foreach}
-								<input name="due_date" id="due_date" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date" border="0">
+								<input name="due_date" id="due_date" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_due_date" border="0">
 								{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
                                                 			{assign var=date_vl value="$date_fmt"}
                                         			{/foreach}
@@ -877,13 +877,13 @@ var gVTModule = '{$smarty.request.module}';
         </table>
 <script>
 {if $ACTIVITY_MODE eq 'Task'}
-	var fieldname = new Array('subject','date_start','time_start','taskstatus');
-	var fieldlabel = new Array('Subject','Date','Time','Status');
-	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+	var fieldname = new Array('subject','date_start','time_start','due_date','taskstatus');
+        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_TIME}','{$MOD.LBL_DUE_DATE}','{$MOD.LBL_STATUS}');
+        var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
 {else}
 	var fieldname = new Array('subject','date_start','due_date','taskpriority','sendnotification','parent_id','contact_id','reminder_time','recurringtype');
-	var fieldlabel = new Array('Subject','Start Date','Due Date','Priority','Send Notification','Related To','Contact Name','Send Reminder','Recurrence');
-	var fielddatatype = new Array('V~M','D~M','D~M~OTH~GE~date_start~Start Date','V~O','C~O','I~O','I~O','I~O','O~O');
+        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_DUE_DATE}','{$MOD.Priority}','{$MOD.LBL_SENDNOTIFICATION}','{$MOD.LBL_RELATEDTO}','{$MOD.LBL_CONTACT_NAME}','{$MOD.LBL_SENDREMINDER}','{$MOD.Recurrence}');
+        var fielddatatype = new Array('V~M','D~M','D~M~OTH~GE~date_start~Start Date','V~O','C~O','I~O','I~O','I~O','O~O');
 {/if}
 </script>
 <script>	

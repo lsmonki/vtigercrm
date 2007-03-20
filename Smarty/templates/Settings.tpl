@@ -112,7 +112,7 @@
 					<!-- icon 6 -->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="Fields to be shown" width="48" height="48" border=0 title="Fields to be shown"></a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="{$MOD.LBL_FIELDS_TO_BE_SHOWN}" width="48" height="48" border=0 title="{$MOD.LBL_FIELDS_TO_BE_SHOWN}"></a></td>
 							<td class=big valign=top><a href="index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td>
 						</tr>
 						<tr>
