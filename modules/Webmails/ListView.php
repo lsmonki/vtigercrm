@@ -222,7 +222,7 @@ if($start == 1 || $start == "") {
 	$start_message=($numEmails-(($start-1)*$mails_per_page));
 }
 
-$c=$numEmails;
+//$c=$numEmails;
 
 if(!isset($_REQUEST["search"])) {
 	$numPages = ceil($numEmails/$MailBox->mails_per_page);
@@ -287,9 +287,11 @@ if(isset($_REQUEST["search"])) {
 	$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
 	//echo $searchstring."<br>";
 	$searchlist = imap_search($MailBox->mbox,$searchstring);
-	$num_searches = count($searchlist);
-
+	if(is_array($searchlist))
+	{
+		$num_searches = count($searchlist);
 		$c=$numEmails;
+	}
 }
 
 flush();
