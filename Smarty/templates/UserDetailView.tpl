@@ -80,7 +80,7 @@
 							<tr><td colspan="2">&nbsp;</td></tr>
 							<tr>
 								<td colspan="2" nowrap align="right">
-									{if $IS_ADMIN eq 'true'}
+									{if $IS_ADMIN eq 'true' && $AUDITTRAIL eq 'true'}
 									<input type="button" onclick="showAuditTrail();" value="{$MOD.LBL_VIEW_AUDIT_TRAIL}" class="crmButton small save"></input>
 									{/if}
 									{if $CATEGORY eq 'Settings'}
@@ -157,10 +157,10 @@
 										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
 											{if $homeitems neq ''}
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
+												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
 												{else}	
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
+												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
 											{/if}	
 										</tr>			
 									{/foreach}

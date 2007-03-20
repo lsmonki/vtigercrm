@@ -28,6 +28,8 @@ require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/GetUserGroups.php');
+//to check audittrail if enable or not
+require_once('user_privileges/audit_trail.php');
 
 global $current_user;
 global $theme;
@@ -193,6 +195,8 @@ $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+//for check audittrail if it is enable or not
+$smarty->assign("AUDITTRAIL",$audit_trail);
 
 $smarty->display("UserDetailView.tpl");
 }
