@@ -131,13 +131,17 @@ if(!rename("install/", $renamefile."install/"))
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
 			<li>
-			<li>
-			<li><b>You are the most important to us! </b>
-			<li>
-			<li>
-			<li><b>Talk to us at http://forums.vtiger.com</b>
-			<li><b>Discuss with us at http://blogs.vtiger.com</b>
 			</ul>
+		
+
+			<ul>
+			<li>
+			<li><b><font color='red'>You are the most important to us!</font> We take pride in being associated with you</b>
+			</ul>
+			<p>
+			<b>Talk to us at http://forums.vtiger.com</b>
+			<p>
+			<b>Discuss with us at http://blogs.vtiger.com</b>
 			</div>
 
 			</td>
