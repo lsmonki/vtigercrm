@@ -1681,7 +1681,7 @@ level2Sel{
 	padding-bottom:2px;
 	
 }
-.mailSelected:hover {
+.mailSelected_select {
 	background:#E1DCB3 url(images/tabSelectedBg.gif) repeat-x;
 	background-color:#1F5EFF;
 	font-family:  Arial, Helvetica, sans-serif;

@@ -57,7 +57,6 @@ $degraded_service='false';
 if($MailBox->mail_protocol == "imap" || $MailBox->mail_protocol == "pop3")
 	$degraded_service='true';
 
-
 if($_POST["command"] == "check_mbox_all") {
 	exit();
         $boxes = array();
@@ -100,18 +99,18 @@ if($_POST["command"] == "check_mbox_all") {
         flush();
         exit();
 }
-
+//This is invoked from Webmails.js as a result of the periodic event function call, checks only for NEW mails; this in turn checks for new mails in all the mailboxes
 if($_POST["command"] == "check_mbox") {
         $adb->println("Inside check_mbox AJAX command");
 
-	$criteria = 'NEW';
-        $search = imap_search($MailBox->mbox, $criteria);
+	$search = imap_search($MailBox->mbox, 'NEW');
+
         //if($search === false) {echo "failed";flush();exit();}
 
 	$adb->println("imap_search($MailBox->mbox, $criteria) ===> ");
 	$adb->println($search);
 	
-        $data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
+	$data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
         $num=sizeof($data);
 
 	$adb->println("fetched data using imap_fetch_overview ==>");
@@ -159,7 +158,15 @@ if($_POST["command"] == "check_mbox") {
 
 <script type="text/javascript">
 // Pass our PHP variables to js.
-<?php if($degraded_service == 'true') { echo 'var degraded_service="true";';}else{echo 'var degraded_service="false";';};?>
+<?php if($degraded_service == 'true')
+				{
+					echo 'var degraded_service="true";';
+				}
+else
+{
+	echo 'var degraded_service="false";';
+};
+?>
 var mailbox = "<?php echo $MailBox->mailbox;?>";
 var box_refresh=<?php echo $MailBox->box_refresh;?>;
 var webmail = new Array();
@@ -206,8 +213,9 @@ $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 $elist = $MailBox->mailList;
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
-
 $mails_per_page = $MailBox->mails_per_page;
+
+
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
 } else {
@@ -266,7 +274,7 @@ if (is_array($overview))
 }
 echo "</script>";
 
-$listview_header = array("<th>".$mod_strings['LBL_INFO']."</th>","<th>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th>".$mod_strings['LABEL_DATE']."</th>","<th>".$mod_strings['LABEL_FROM']."</th>","<th>".$mod_strings['LBL_DEL']."</th>");
+$listview_header = array("<th width='10%'>".$mod_strings['LBL_INFO']."</th>","<th width='45%'>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th width='25%'>".$mod_strings['LABEL_DATE']."</th>","<th width='10%'>".$mod_strings['LABEL_FROM']."</th>","<th>".$mod_strings['LBL_DEL']."</th>");
 $listview_entries = array();
 
 $displayed_msgs=0;
@@ -279,16 +287,12 @@ if(isset($_REQUEST["search"])) {
 	$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
 	//echo $searchstring."<br>";
 	$searchlist = imap_search($MailBox->mbox,$searchstring);
-//	if($searchlist === false)
-  //		echo "The search failed";
-
 	$num_searches = count($searchlist);
 
 		$c=$numEmails;
 }
 
 flush();
-
 // MAIN LOOP
 // Main loop to create listview entries
 
@@ -319,7 +323,7 @@ $i=0;
 if (is_array($list)) {
       	$boxes = '<select name="mailbox" id="mailbox_select" onChange="move_messages();">';
         $boxes .= '<option value="move_to" SELECTED>'.$mod_strings['LBL_MOVE_TO'].'</option>';
-        foreach ($list as $key => $val) {
+	foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))
 			$img = "webmail_trash.gif";
@@ -331,25 +335,26 @@ if (is_array($list)) {
 		$i++;
 
 		if ($_REQUEST["mailbox"] == $tmpval) {
-	if($tmpval != "INBOX")
-                        $boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+			if($tmpval != "INBOX")
+				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-	if($new_msgs > 0)
-			$folders .= '(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			if($new_msgs > 0)
+				$folders .= '(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+
 		} else {
 			$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$tmpval, SA_ALL);
 			$_SESSION["mailboxes"][$tmpval] = $box->unseen;
 
 			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
-                      	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+			$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'"><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-	if($box->unseen > 0)
+			if($box->unseen > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 		}
- 	}
+	}
         $boxes .= '</select>';
 }
 

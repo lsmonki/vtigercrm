@@ -54,7 +54,7 @@
 				   </tr>
 				   <tr>
 					<td rowspan="6" valign="top" class="hdrNameBg">
-						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
+						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 
 						<ul style="list-style-type:none;">
 
@@ -94,11 +94,11 @@
 						Home Page"
 						class="webMnu">{$MOD.LBL_TO_GROUPS}</a>&nbsp; </li>
 						</ul><br />
-						<!-- img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
+						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
 							<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
 								<img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b -->
+								<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
 							</li>
 						</ul>
 
@@ -141,7 +141,7 @@
 						<div id="rssScroll" style="height:220px;">
 
 				<!-- Table to display the mails list -	Starts -->
-	<form name="massdelete" method="post">
+				<form name="massdelete" method="post">
 				<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
 				   <tr>
 				<th><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
@@ -155,7 +155,7 @@
 						{/foreach}
 					{/foreach}
 				</table>
-	</form>
+				</form>
 				<!-- Table to display the mails list - Ends -->
 
 						</div>
@@ -194,11 +194,7 @@
 <tr><td width="20%" align="right"><b>{$MOD.LBL_CC}</b></td><td id="webmail_cc">&nbsp;</td></tr>
 
 						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
-						<tr><td
-			   		align="right"><b>{$MOD.LBL_DATE}</b></td><td
-			   		id="webmail_date"></td>
-
-
+		<tr><td	align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td>
 	<tr><td align="right"><b>{$MOD.LBL_ATTACHMENT}</b></td><td id="webmail_attachment"></td>
 							<td id="full_view"><a href="javascript:;"> Full Email View</a></td></tr>
 						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
@@ -267,7 +263,7 @@ function makeSelected(rowId)
 	if(gselected_mail != '')
 		$(gselected_mail).className = '';
 		
-	$(rowId).className = 'tabSelected';
+	$(rowId).className = 'mailSelected_select';
 	gselected_mail = rowId;
 }
 {/literal}

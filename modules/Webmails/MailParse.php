@@ -47,7 +47,7 @@ function show_msg($mails,$start_message)
 	}
 	else
 	{
-	$flags = "<tr onmouseover='this.className=\"tabSelected\"' onmouseout='this.className=\"\"' id='row_".$num."'><td width='2px'><input type='checkbox' name='selected_id'	value='$num' onclick='toggleSelectAll(this.name,\"select_all\")' class='msg_check'></td><td colspan='1'>";
+	$flags = "<tr id='row_".$num."'><td width='2px'><input type='checkbox' name='selected_id' value='$num' onclick='toggleSelectAll(this.name,\"select_all\")' class='msg_check'></td><td colspan='1'>";
 
 	}
 
@@ -99,15 +99,15 @@ function show_msg($mails,$start_message)
 
 	if ($mails[$start_message]->deleted)
 	{
-		$listview_entries[$num][] = '<td width="20%" nowrap align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
-		$listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="deleted_date_'.$num.'"><s>'.substr($mails[$start_message]->date,0,30).'</s></td>';
-		$listview_entries[$num][] = '<td width="10%" nowrap align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,20).'</s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" id="deleted_subject_'.$num.'" onclick="load_webmail(\''.$num.'\');"><s><a href="javascript:;" >'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" nowrap id="deleted_date_'.$num.'"><s>'.substr($mails[$start_message]->date,0,30).'</s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" id="deleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');"><s>'.substr($from,0,20).'</s></td>';
 	}
 	elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,50).'</font></a></td>';
-		$listview_entries[$num][] = '<td width="10%" nowrap align="left" nowrap id="ndeleted_date_'.$num.'"><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
-		$listview_entries[$num][] = '<td  width="10%" nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'">'.substr($from,0,20).'</font></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,50).'</font></a></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" ><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
+		$listview_entries[$num][] = '<td  nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</font></td>';
 	}
 	else
 	{
@@ -132,9 +132,9 @@ function show_msg($mails,$start_message)
 		//Option 2 - Ends
 		//Added to shown the original UTF-8 characters - Mickie - 30-11-06 - Ends
 
-		$listview_entries[$num][] = '<td width="20%" nowrap align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
-		$listview_entries[$num][] = '<td width="10%" npwrap align="left" nowrap id="ndeleted_date_'.$num.'">'.substr($mails[$start_message]->date,0,30).'</td>';
-		$listview_entries[$num][] = '<td width="10%" nowrap align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,20).'</td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+		$listview_entries[$num][] = '<td npwrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($mails[$start_message]->date,0,30).'</td>';
+		$listview_entries[$num][] = '<td nowrap align="left" id="ndeleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</td>';
 	}
 
 

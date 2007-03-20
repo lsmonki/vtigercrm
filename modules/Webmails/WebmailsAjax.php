@@ -42,6 +42,17 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     $command = $_REQUEST["command"];
     if($command == "expunge") {
     	$MailBox = new MailBox($mailbox);
+	/*
+	$search = imap_search($MailBox->mbox,'DELETED');
+	$data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
+	for($i=0;$i<$num;$i++)
+	{
+        	if($data[$i]->deleted != 0)
+		{
+			imap_delete($MailBox->mbox,$data[$i]->message_id);
+		}
+	}
+	 */
     	imap_expunge($MailBox->mbox);
 	imap_close($MailBox->mbox);
 	flush();
@@ -50,9 +61,8 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     if($command == "delete_msg") {
 	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
     	$MailBox = new MailBox($mailbox);
-        imap_mail_move($MailBox->mbox,$mailid,"Trash");
+        imap_mail_move($MailBox->mbox,$mailid,"Deleted");
 	$email = new Webmails($MailBox->mbox,$mailid);
-       	$email->delete();
 	imap_close($MailBox->mbox);
 	echo $mailid;
 	flush();

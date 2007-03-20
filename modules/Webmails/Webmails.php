@@ -12,9 +12,18 @@
 
 include_once('config.php');
 require_once('include/logging.php');
+require_once('modules/Webmails/conf.php');
+require_once('modules/Webmails/functions.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
+class result
+{
+	  var $text = "";
+	    var $charset = "";
+}
+
+
 
 class Webmails extends CRMEntity {
         var $log;
@@ -37,6 +46,7 @@ class Webmails extends CRMEntity {
 	var $body;
 	var $attachments = array();
 	var $inline = array();
+	var $attachtab = array();
 	var $mbox;
 	var $email;
 	var $relationship = array();
@@ -79,18 +89,25 @@ class Webmails extends CRMEntity {
 		imap_delete($this->mbox, $this->mailid);
 	}
 
-	function loadMail() {
-		$this->email = $this->load_mail();
+	function loadMail($attach_tab) {
+		
+		$this->email = $this->load_mail($attach_tab);
+		/* commented out by richie
 		$this->inline = $this->email["inline"];
 		$this->attachments = $this->email["attachments"];
 		$this->body = $this->email["content"]["body"];
 		$this->relationship = $this->find_relationships();
+		 */
+		$this->body = $this->email["body"];
+		$this->attachtab = $this->email["attachtab"];
+		$this->att= $this->email["att"];
+		//echo ' body is ssssssssssssssss '.$this->email["body"];
 	}
 
 	function replyBody() {
-		$tmp = "<br><br><p style='font-weight:bold'>".$mod_strings['IN_REPLY_TO_THE_MESSAGE'].$this->reply_name." on ".$this->date."</p>";
-		$tmp .= "<blockquote style='border-left:1px solid blue;padding-left:5px'>".$this->body."</blockquote>";
-		return $tmp;
+		$tmpvar = "<br><br><p style='font-weight:bold'>".$mod_strings['IN_REPLY_TO_THE_MESSAGE'].$this->reply_name." on ".$this->date."</p>";
+		$tmpvar .= "<blockquote style='border-left:1px solid blue;padding-left:5px'>".$this->body."</blockquote>";
+		return $tmpvar;
 	}
 
 	function unDeleteMsg() {
@@ -121,7 +138,7 @@ class Webmails extends CRMEntity {
 	// get the header info
 	$mailHeader=Array();
 	$theader = @imap_headerinfo($this->mbox, $this->mailid);
-	$tmp = imap_mime_header_decode($theader->fromaddress);
+	$tmpvar = imap_mime_header_decode($theader->fromaddress);
 
 	for($p=0;$p<count($theader->to);$p++) {
 		$mailHeader['to'][] = $theader->to[$p]->mailbox.'@'.$theader->to[$p]->host;
@@ -220,7 +237,7 @@ class Webmails extends CRMEntity {
     
 	function dl_inline()
 	{
-		$struct = imap_fetchstructure($this->mbox, $this->mailid);
+		$struct = @imap_fetchstructure($this->mbox, $this->mailid);
 		$parts = $struct->parts;
 
 		$i = 0;
@@ -292,7 +309,7 @@ class Webmails extends CRMEntity {
 	function dl_attachments()
 	{
 
-		$struct = imap_fetchstructure($this->mbox, $this->mailid);
+		$struct = @imap_fetchstructure($this->mbox, $this->mailid);
 		$parts = $struct->parts;
 
 		$i = 0;
@@ -351,109 +368,501 @@ class Webmails extends CRMEntity {
 	}
 
 
-	function load_mail()
-	{
-		// parse the message
-		$struct = imap_fetchstructure($this->mbox, $this->mailid);
-		$parts = $struct->parts;
 
-		$content = array();
-		$i = 0;
-		if (!$parts)
+
+
+	function graphicalsmilies($body) {
+		$user_prefs = $_SESSION['nocc_user_prefs'];
+		if (isset($user_prefs->graphical_smilies) && $user_prefs->graphical_smilies) {
+			$body = ereg_replace("\;-?\)","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/wink.png\" alt=\"wink\"/>", $body);
+			$body = ereg_replace("\;-?D","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/grin.png\" alt=\"grin\"/>", $body);
+			$body = ereg_replace(":\'\(?","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/cry.png\" alt=\"cry\"/>", $body);
+			$body = ereg_replace(":-?[xX]","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/confused.png\" alt=\"confused\"/>", $body);
+			$body = ereg_replace(":-?\[\)","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/embarassed.png\" alt=\"embarassed\"/>", $body);
+			$body = ereg_replace(":-?\*","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/love.png\" alt=\"love\"/>", $body);
+			$body = ereg_replace(":-?[pP]","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/tongue.png\" alt=\"tongue\"/>", $body);
+			$body = ereg_replace(":-?\)","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/happy.png\" alt=\"happy\"/>", $body);
+			$body = ereg_replace(":-?\(","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/unhappy.png\" alt=\"unhappy\"/>", $body);
+			$body = ereg_replace(":-[oO]","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/surprised.png\" alt=\"surprised\"/>", $body);
+			$body = ereg_replace("8-?\)","<img src=\"themes/" . $_SESSION['nocc_theme'] . "/img/smilies/cool.png\" alt=\"cool\"/>", $body);
+		}
+		return ($body);
+	}
+
+// based on a function from matt@bonneau.net
+function GetPart(&$attach_tab, &$this_part, $part_no, &$display_rfc822)
+{
+    $att_name = '[unknown]';
+    if ($this_part->ifdescription == true)
+    {
+	    $att_name = $this_part->description;
+    }
+    for ($i = 0; $i < count($this_part->parameters); $i++)
+    {
+        // PHP 5.x doesn't allow to convert a stdClass object to an array
+	// We sometimes have this issue with Mailer daemon reports
+	if (!(get_class($this_part->parameters) == "stdClass") &&
+		!(get_class($this_part->parameters) == "stdclass")) 
+	{ 
+            $param = $this_part->parameters[$i];
+            if ((($param->attribute == 'NAME') || ($param->attribute == 'name')) && ($param->value != ''))
+            {
+                $att_name = $param->value;
+                break;
+            }
+	}
+    }
+    if (isset($this_part->type))
+    {
+        switch ($this_part->type)
+        {
+            case 0:
+                $mime_type = 'text';
+                break;
+            case 1:
+		    $mime_type = 'multipart';
+                for ($i = 0; $i < count($this_part->parts); $i++)
+	{
+                    if ($part_no != '')
+                        $part_no = $part_no . '.';
+                    // if it's an alternative, we skip the text part to only keep the HTML part
+                    if ($this_part->subtype == 'ALTERNATIVE')// && $read == true)
+                        $this->GetPart($attach_tab, $this_part->parts[++$i], $part_no . ($i + 1), $display_rfc822);
+                    else 
+                        $this->GetPart($attach_tab, $this_part->parts[$i], $part_no . ($i + 1), $display_rfc822);
+                }
+                break;
+            case 2:
+                $mime_type = 'message';
+                // well it's a message we have to parse it to find attachments or text message
+		if(isset($this_part->parts[0]->parts)) 
 		{
-			/* Simple message, only 1 piece */
-			$attachment = array(); /* No vtiger_attachments */
-			$bod=imap_body($this->mbox, $this->mailid);
-			if(preg_match("/\<br\>/",$bod))
-				$content['body'] = $bod;
+                    $num_parts = count($this_part->parts[0]->parts);
+		    for ($i = 0; $i < $num_parts; $i++)
+		{
+			    $this->GetPart($attach_tab, $this_part->parts[0]->parts[$i], $part_no . '.' . ($i + 1), $display_rfc822);
+		    }
+                }
+                break;
+            // Maybe we can do something with the mime types later ??
+            case 3:
+                $mime_type = 'application';
+                break;
+            case 4:
+                $mime_type = 'audio';
+                break;
+            case 5:
+                $mime_type = 'image';
+                break;
+            case 6:
+                $mime_type = 'video';
+                break;
+            case 7:
+                $mime_type = 'other';
+                break;
+            default:
+                $mime_type = 'unknown';
+        }
+    }
 			else 
-				$content['body'] = nl2br($bod);
+    {	
+		    $mime_type = 'text';
+    }
+	$full_mime_type = $mime_type . '/' . $this_part->subtype;
+    if (isset($this_part->encoding))
+    {
+        switch ($this_part->encoding)
+        {
+            case 0:
+                $encoding = '7BIT';
+                break;
+            case 1:
+                $encoding = '8BIT';
+                break;
+            case 2:
+                $encoding = 'BINARY';
+                break;
+            case 3:
+                $encoding = 'BASE64';
+                break;
+            case 4:
+                $encoding = 'QUOTED-PRINTABLE';
+                break;
+            case 5:
+                $encoding = 'OTHER';
+                break;
+            default:
+                $encoding = 'none';
+                break;
+        }
 		}
 		else
 		{
+	    $encoding = '7BIT';
+    }
 
-			$stack = array(); 
-			$attachment = array();
+    if (($full_mime_type == 'message/RFC822' && $display_rfc822 == true) || ($mime_type != 'multipart' && $full_mime_type != 'message/RFC822'))
+    {
+        $charset = '';
+        if ($this_part->ifparameters)
+            while ($obj = array_pop($this_part->parameters))
+                if (strtolower($obj->attribute) == 'charset')
+                {
+                    $charset = $obj->value;
+                    break;
+                }
+        $tmp = Array(
+            'number' => ($part_no != '' ? $part_no : 1),
+            'id' => $this_part->ifid ? $this_part->id : 0,
+            'name' => $att_name,
+            'mime' => $full_mime_type,
+            'transfer' => $encoding,
+            'disposition' => $this_part->ifdisposition ? $this_part->disposition : '',
+            'charset' => $charset,
+            'size' => ($this_part->bytes > 1000) ? ceil($this_part->bytes / 1000) : 1
+        );
 
-			$endwhile = false;
+        array_unshift($attach_tab, $tmp);
+    }
+}
 
-			while (!$endwhile)
+function GetCodeScoreAll($Data,$beg_charset) {
+	global $cad_StatsTableWin, $cad_StatsTableKoi;
+	$PairSize = 2;
+
+	$Data=substr($Data,$beg_charset,100);
+	$Data=preg_replace('/[\n\r]/','',$Data);
+	setlocale(LC_CTYPE,'ru_RU.KOI8-R');
+
+	$Mark_koi=0;
+	$Mark_win=0;
+	$cnt=0;
+	$max_detect_limit=10;
+
+	$sp=preg_split('/[\.\,\-\s\:\;\?\!\'\"\(\)\d<>]+/',$Data);
+	while ( list($key2,$val2) = each($sp) ) {
+		$rc=preg_match("/(.*)([\x7F-\xFF]+)/x",$val2);
+		if($rc == 0) {
+			continue;
+		}
+
+		if($cnt > $max_detect_limit) {
+			break;
+		} else {
+			$cnt++;
+		}
+		$dlina=strlen($val2)-$PairSize;
+		if($dlina < 1) {$cnt--; continue;}
+		$val3=strtolower($val2);
+		if (ucfirst($val3) == $val2) {
+			$scaleK=2;
+		} else {
+			$scaleK=1;
+		}
+		if(substr($val3,0,1).strtoupper(substr($val2,1,strlen($val2))) == $val2) {
+			$scaleW=2;
+		} else {
+			$scaleW=1;
+		}
+		$Cur_mark_koi=0;
+		$Cur_mark_win=0;
+		for ($i=0; $i<$dlina; $i++ ) {
+			$pp=substr ($val3, $i, $PairSize);
+			if (isset($cad_StatsTableKoi[$pp])) {
+				$Cur_mark_koi += $cad_StatsTableKoi[$pp];
+			}
+			if (isset($cad_StatsTableWin[$pp])) {
+				$Cur_mark_win += $cad_StatsTableWin[$pp];
+			}
+		}
+		$Mark_koi+=$Cur_mark_koi*$scaleK;
+		$Mark_win+=$Cur_mark_win*$scaleW;
+	}
+	$Mark_list=array($Mark_koi,$Mark_win);
+	//setlocale(LC_CTYPE,$old_locale);
+	return $Mark_list;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* lxnt:  patched to return charset names that iconv() understands*/
+function detect_charset($Data,$dbg_fl = 0) {
+	/* for many small pices of text -  list of sender/subject*/
+	$rc=preg_match("/(.*)([\x7F-\xFF]+)/xU",$Data,$tst_ar);
+	if($rc == 0) {
+		return 'US-ASCII';
+	} else {
+		$beg_charset=strpos($Data,$tst_ar[2]);
+	}
+	list($KoiMark,$WinMark) = GetCodeScoreAll($Data,$beg_charset);
+	$Ratio['koi8-r'] =  $KoiMark/($WinMark + 1);
+	$Ratio['windows-1251'] =  $WinMark/($KoiMark + 1);
+
+	list($MaxRation,$MaxRatioKey)=max_from_ratio($Ratio);
+	return $MaxRatioKey;
+}
+
+
+
+
+
+
+
+function mime_header_decode(&$header)
+{
+	$output_charset = $GLOBALS['charset'];
+	$source = imap_mime_header_decode($header);
+	$result[] = new result;
+	$result[0]->text='';
+	$result[0]->charset='ISO-8859-1';
+	for ($j = 0; $j < count($source); $j++ )
+       	{
+	$element_charset =  ($source[$j]->charset == "default") ? $this->detect_charset($source[$j]->text) : $source[$j]->charset;
+		if ($element_charset == 'x-unknown')
+			$element_charset = 'ISO-8859-1';
+
+		$element_converted = @iconv( $element_charset, $output_charset, $source[$j]->text);
+		$result[$j]->text = $element_converted;
+		$result[$j]->charset = $output_charset;
+	}
+	return $result;
+}
+
+
+
+
+function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
+{
+	sort($attach_tab);
+	$link = '';
+	while ($tmp = array_shift($attach_tab))
+		if (!empty($tmp['name']))
 			{
-				if (!$parts[$i])
+			$mime = str_replace('/', '-', $tmp['mime']);
+			if ($display_part_no == true)
+				$link .= $tmp['number'] . '&nbsp;&nbsp;';
+			unset($att_name);
+			$att_name_array = imap_mime_header_decode($tmp['name']);
+			for ($i=0; $i<count($att_name_array); $i++) {
+				$att_name .= $att_name_array[$i]->text;
+			}
+			$att_name_dl = $att_name;
+			$att_name = $this->convertLang2Html($att_name);
+			$link .= '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
+		}
+	return ($link);
+}
+
+
+
+
+
+
+
+
+
+
+
+// Convert mail data (from, to, ...) to HTML
+function convertMailData2Html($maildata, $cutafter = 0)
 				{
-					if (count($stack) > 0)
+	if (($cutafter > 0) && (strlen($maildata) > $cutafter)) 
 					{
-						$parts = $stack[count($stack)-1]["p"];
-						$i    = $stack[count($stack)-1]["i"] + 1;
-						array_pop($stack);
+       		return htmlspecialchars(substr($maildata, 0, $cutafter)) . '&hellip;';
 					}
 					else
 					{
-						$endwhile = true;
-					}
-				}
-				$search = array("/=20=/","/=20/","/=\r\n/","/=3D/","@&(<a|<A);@i","/=0A/i","/=A0/i");
-				$replace = array("","","","=","<a target='_blank' ","");
-				if (!$endwhile)
-				{
-
-					$partstring = "";
-					foreach ($stack as $s)
-					{
-						$partstring .= ($s["i"]+1) . ".";
-					}
-					$partstring .= ($i+1);
-
-					$type='';
-					if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN")
-					{
-						$inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
-					}
-					elseif (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-					{
-						$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
-
-					}
-					elseif (strtoupper($parts[$i]->subtype) == "HTML")
-					{
-						$content['body'] = preg_replace($search,$replace,imap_fetchbody($this->mbox, $this->mailid, $partstring));
-						$stat="done";
-					}
-					elseif (strtoupper($parts[$i]->subtype) == "TEXT" && !$stat == "done")
-					{
-						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
-						$stat="done";
-					}
-					elseif (strtoupper($parts[$i]->subtype) == "PLAIN" && !$stat == "done")
-					{
-						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
-						$stat="done";
-					}
-					elseif (!$stat == "done")
-					{
-						$content['body'] = nl2br(imap_fetchbody($this->mbox, $this->mailid, $partstring));
+             return htmlspecialchars($maildata);
 					}
 				}
 
-				if ($parts[$i]->parts)
-				{
-					$stack[] = array("p" => $parts, "i" => $i);
-					$parts = $parts[$i]->parts;
-					$i = 0;
+// Convert a language string to HTML
+ function convertLang2Html($langstring) {
+   global $charset;
+     return htmlentities($langstring, 2, $charset);
+					}
+
+
+
+
+
+
+
+
+	function load_mail($attach_tab)
+	{
+		// parse the message
+	$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
+		$struct_msg = imap_fetchstructure($this->mbox, $this->mailid);
+		$mail = $this->mbox;
+		$ev = $this->mailid;
+$conf->display_rfc822 = true;
+		if ($struct_msg->type == 3 || (isset($struct_msg->parts) && (sizeof($struct_msg->parts) > 0)))
+					{
+			$this->GetPart($attach_tab, $struct_msg, NULL, $conf->display_rfc822);
+					}
+		else
+					{
+			$pop_fetchheader_mail_ev = imap_fetchheader($mail, $ev);
+			$pop_body_mail_ev = imap_body($mail, $ev);
+			GetSinglePart($attach_tab, $struct_msg, $pop_fetchheader_mail_ev, $pop_body_mail_ev);
+		}
+		$conf->use_verbose = true;
+		$header = "";
+		if (($verbose == 1) && ($conf->use_verbose == true)) {
+			$header = imap_fetchheader($mail, $ev);
+		}
+
+		$tmpvar = array_pop($attach_tab);
+		if ($struct_msg->type == 3)
+		{
+			$body = '';
+					}
+		else
+					{
+			$body = imap_fetchbody($mail,$ev,$tmpvar['number']);
+
+					}
+
+
+
+		if (eregi('text/html', $tmpvar['mime']) || eregi('text/plain', $tmpvar['mime']))
+					{
+			if ($tmpvar['transfer'] == 'QUOTED-PRINTABLE')
+				$body = imap_qprint($body);
+			if ($tmpvar['transfer'] == 'BASE64')
+				$body = base64_decode($body);
+			$body = remove_stuff($body, $tmpvar['mime']);
+			$body_charset =  ($tmpvar['charset'] == "default") ? $this->detect_charset($body) : $tmpvar['charset'];
+
+
+			if (strtolower($body_charset) == "us-ascii") {
+				$body_charset = "ISO-8859-1";
+					}
+
+			if ($body_charset == "" || $body_charset == null) {
+				if (isset($conf->default_charset) && $conf->default_charset != "") {
+					$body_charset = $conf->default_charset;
+				} else {
+					$body_charset = "ISO-8859-1";
+					}
+					}
+
+			if (isset($_REQUEST['user_charset']) && $_REQUEST['user_charset'] != '') {
+				$body_charset = $_REQUEST['user_charset'];
+				}
+
+			$body_converted = @iconv( $body_charset, $GLOBALS['charset'], $body);
+			$body = ($body_converted===FALSE) ? $body : $body_converted;
+			$tmpvar['charset'] = ($body_converted===FALSE) ? $body_charset : $GLOBALS['charset'];
 				}
 				else
 				{
-					$i++;
+			array_push($attach_tab, $tmpvar);
 				}
+		$link_att = '';
+$conf->display_part_no = true;
+		if ($struct_msg->subtype != 'ALTERNATIVE' && $struct_msg->subtype != 'RELATED')
+		{
+			switch (sizeof($attach_tab))
+			{
+			case 0:
+				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right"></th><td class="mailHeaderData"></td></tr></span>';
+				break;
+			case 1:
+				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right">' . $html_att . ':</th><td class="mailHeaderData">' . $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev) . '</td></tr></span>';
+				break;
+			default:
+				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right">' . $html_atts . ':</th><td class="mailHeaderData">' . $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev) . '</td></tr></span>';
+				break;
 			} 
+		}else
+			{
+				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right"></th><td class="mailHeaderData"></td></tr></span>';
 		} 
-		if($struct->encoding==3)
-			$content['body'] = base64_decode($content['body']);
-		if($struct->encoding==4)
-			$content['body'] = quoted_printable_decode($content['body']);
 
-		$ret = Array("content" => $content,"attachments"=>$attachment,"inline"=>$inline);
-		return $ret;
+		$struct_msg = imap_fetchstructure($mail, $ev);
+		$msg_charset = '';
+		if ($struct_msg->ifparameters) {
+			while ($obj = array_pop($struct_msg->parameters)) {
+				if (strtolower($obj->attribute) == 'charset') {
+					$msg_charset = $obj->value;
+					break;
+				}
+			}
+		}
+		if ($msg_charset == '') {
+			$msg_charset = 'ISO-8859-1';
+		}
+
+
+	$subject_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->subject);
+	$subject_array = $this->mime_header_decode($subject_header);
+	for ($j = 0; $j < count($subject_array); $j++)
+			$subject .= $subject_array[$j]->text;
+
+	$from_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->fromaddress);
+	$from_array = $this->mime_header_decode($from_header);
+	for ($j = 0; $j < count($from_array); $j++)
+		$from .= $from_array[$j]->text;
+
+	$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
+	$to_array = $this->mime_header_decode($to_header);
+	for ($j = 0; $j < count($to_array); $j++)
+		$to .= $to_array[$j]->text;
+	$to = str_replace(',', ', ', $to);
+
+	$cc_header = isset($ref_contenu_message->ccaddress) ? $ref_contenu_message->ccaddress : '';
+	$cc_header = str_replace('x-unknown', $msg_charset, $cc_header);
+	$cc_array = isset($ref_contenu_message->ccaddress) ? imap_mime_header_decode($cc_header) :0;
+	if ($cc_array != 0) {
+		for ($j = 0; $j < count($cc_array); $j++)
+			$cc .= $cc_array[$j]->text;
+	}
+	$cc = str_replace(',', ', ', $cc);
+
+	$reply_to_header = isset($ref_contenu_message->reply_toaddress) ? $ref_contenu_message->reply_toaddress : '';
+	$reply_to_header = str_replace('x-unknown', $msg_charset, $reply_to_header);
+	$reply_to_array = isset($ref_contenu_message->reply_toaddress) ? imap_mime_header_decode($reply_to_header) : 0;
+	if ($reply_to_array != 0) {
+		for ($j = 0; $j < count($reply_to_array); $j++)
+			$reply_to .= $reply_to_array[$j]->text;
+	}
+
+	$timestamp = chop($ref_contenu_message->udate);
+	$date = format_date($timestamp, $lang);
+	$time = format_time($timestamp, $lang);
+	$content = Array(
+		'from' => $from,
+		'to' => $to,
+		'cc' => $cc,
+		'reply_to' => $reply_to,
+		'subject' => $subject,
+		'date' => $date,
+		'time' => $time,
+		'complete_date' => $date,
+		'att' => $link_att,
+		'body' => $this->graphicalsmilies($body),
+		'body_mime' => $this->convertLang2Html($tmpvar['mime']),
+		'body_transfer' => $this->convertLang2Html($tmpvar['transfer']),
+		'header' => $header,
+		'verbose' => $verbose,
+		'prev' => $prev_msg,
+		'next' => $next_msg,
+		'msgnum' => $mail,
+		'attachtab' => $attach_tab,
+		'charset' => $body_charset
+	);
+return ($content);
+
 	}
 
 

@@ -17,8 +17,8 @@ function load_webmail(mid) {
 
 	}
 	if(node.className == "mailSelected") {
-		var unread  = parseInt($(mailbox+"_unread").innerHTML);
-		if(unread != 0)
+	var unread  = parseInt($(mailbox+"_unread").innerHTML);
+	if(unread != 0)
 	{
 			var curUnread;
 			curUnread = unread -1;
@@ -89,7 +89,7 @@ function load_webmail(mid) {
         $("full_view").removeChild($("full_view").firstChild);
         $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
 
-	node.className = 'mailSelected' 
+	makeSelected(node.id)
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
@@ -363,17 +363,38 @@ function mass_delete()
         if(confirm(alert_arr.SURE_TO_DELETE))
 		runEmailCommand("delete_multi_msg",nids);
 }
+function move_messages()
+{
+	var nid = '';
+	$("status").style.display = "block";
+	var chkname=document.getElementsByName("selected_id");
+	var mvmbox = $("mailbox_select").value;
+	for(var m=0;m<chkname.length;m++)
+	{
+		if(chkname[m].checked)
+			nid =  chkname[m].value;
+	}
+	  new Ajax.Request(
+                          'index.php',
+                          {queue: {position: 'end', scope: 'command'},
+                          method: 'post',
+                          postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                          onComplete: function(t) {
+				window.location=window.location.href;
+				$("status").style.display = "none";
+                           }
+                         }
+                      );
+}
 
-function move_messages() {
+/*function move_messages() {
         $("status").style.display="block";
         var els = document.getElementsByTagName("INPUT");
         var cnt = (els.length-1);
         for(var i=cnt;i>0;i--) {
                 if(els[i].type == "checkbox" && els[i].name.indexOf("_")) {
                         if(els[i].checked) {
-         //  var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
-
-         var nid = els[i].value;
+                                var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
                                 var mvmbox = $("mailbox_select").value;
                                 var row = $("row_"+nid);
                                 new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
@@ -393,7 +414,7 @@ function move_messages() {
 	$('mailbox_select').selectedIndex=0;
         //runEmailCommand('expunge','');
         $("status").style.display="none";
-}
+}*/
 function search_emails() {
 	// TODO: find a way to search in degraded functionality mode.
         var search_query = $("search_input").value;
@@ -411,7 +432,7 @@ function runEmailCommand(com,id) {
                         postBody: 'module=Webmails&action=WebmailsAjax&command='+command+'&mailid='+id+'&mailbox='+mailbox,
                         onComplete: function(t) {
                                 resp = t.responseText;
-	id=resp;
+				id=resp;
                                 if(resp.match(/ajax failed/)) {return;}
                                 switch(command) {
                                     case 'expunge':
