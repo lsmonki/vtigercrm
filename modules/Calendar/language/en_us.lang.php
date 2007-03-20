@@ -410,6 +410,8 @@ $mod_strings = Array(
 'End date and time'=>'End Date & Time',
 //this is for task
 'End date'=>'End date',
+'LBL_SET_DATE'=>'Set date..',
+'Recurrence'=>'Recurrence',
 
 
 );

@@ -839,6 +839,10 @@ $app_strings = array (
 'Stock Information'=>'Stock Information',
 'Solution'=>'Solution',
 'Terms and Conditions'=>'Terms and Conditions',
+'LBL_SEARCHING'=>'Searching... please wait',
+'LBL_SKYPE'=>'Skype',
+'LBL_FIND'=>'Find',
+'LBL_CLEAR'=>'Clear',
 );
 
 $app_list_strings = array (

@@ -898,6 +898,10 @@ $mod_strings = Array(
 'LBL_MAILSENDERROR'=>'Mail could not be sent to the admin user. Please check the admin emailid',
 'LBL_RECORD_NOEXIST'=>'Record not present',
 'LBL_ENTER_PROFILE'=>'Enter Profile Name',
+'LBL_ENABLE'=>'Enable',
+'LBL_DISABLE'=>'Disable',
+'LBL_PROXY'=>'proxy',
+'LBL_FIELDS_TO_BE_SHOWN'=>'Fields to be shown',
 //Added for alerts
 'SPECIFY_FILE_TO_MERGE' => 'Please Specify a File to Merge',
 'FILESIZE_EXCEEDS_INFO' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file',
