@@ -53,9 +53,10 @@ $log->debug("DGDEBUG In add2db.php");
 			$desc = $_REQUEST['txtDescription'];
 			$description = addslashes($desc);
 			$date_var = $adb->formatDate(date('YmdHis'));	
-
-			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
-			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."',".$date_var.")";	
+			$current_date = getdate();
+			$current_date = $adb->formatDate(date('YmdHis'));	
+			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('";
+			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."',".$date_var.",".$current_date.")";	
 			$result = $adb->query($query);
 
 			# Added by DG 26 Oct 2005
