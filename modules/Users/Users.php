@@ -112,7 +112,7 @@ class Users {
 	var $object_name = "User";
 	var $user_preferences;
 	var $defhomeview;
-	var $homeorder_array = array('ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+	var $homeorder_array = array('HDB','ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
