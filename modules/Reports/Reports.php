@@ -107,7 +107,7 @@ class Reports extends CRMEntity{
 
 	var $module_list = Array(
 				"Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
-				"Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
+				"Contacts"=>Array("Information"=>4,"Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
 				"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
 				"Calendar"=>Array("Information"=>19,"Description"=>20),
