@@ -427,30 +427,33 @@ for($i=0; $i<$noofrows; $i++)
 if($mode=='view')
 {
 	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);
-	$field_module=array();
-	$module_name=key($fieldListResult);
-	$module_id = getTabid($module_name);
-	$language_strings = return_module_language($current_language,$module_name);
-	for($j=0; $j<count($fieldListResult[$module_name]); $j++)
+	for($i=0; $i<count($fieldListResult);$i++)
 	{
-		$field=array();
-		if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+		$field_module=array();
+		$module_name=key($fieldListResult);
+		$module_id = getTabid($module_name);
+		$language_strings = return_module_language($current_language,$module_name);
+		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
-			$visible = "<img src=".$image_path."/no.gif>";
+			$field=array();
+			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+			{
+				$visible = "<img src=".$image_path."/no.gif>";
+			}
+			else
+			{
+				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+			}
+			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
+				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
+			else
+				$field[]=$fieldListResult[$module_name][$j][0];
+			$field[]=$visible;
+			$field_module[]=$field;
 		}
-		else
-		{
-			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
-		}
-		if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
-			$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
-		else
-			$field[]=$fieldListResult[$module_name][$j][0];
-		$field[]=$visible;
-		$field_module[]=$field;
+		$privilege_field[$module_id] = array_chunk($field_module,3);
+		next($fieldListResult);
 	}
-	$privilege_field[$module_id] = array_chunk($field_module,3);
-	next($fieldListResult);
 }
 elseif($mode=='edit')
 {
