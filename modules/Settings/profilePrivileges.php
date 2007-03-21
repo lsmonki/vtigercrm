@@ -436,13 +436,17 @@ if($mode=='view')
 		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
 			$field=array();
-			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 			}
 			else
 			{
-				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+				$visible = "<img src=".$image_path."/no.gif>";
+			}
+			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+			{
+				$visible = "<img src=".$image_path."/no.gif>";
 			}
 			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
 				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
