@@ -94,7 +94,7 @@
 				SELECTED_MORE_THAN_ONCE:'You have selected the following product(s) more than once.',
 				YES:'yes',
                                 NO:'no',
-
+                                MAIL:'mail',
 				EQUALS:'equals',
 				NOT_EQUALS_TO:'not equal to',
 				STARTS_WITH:'starts with',
@@ -104,5 +104,4 @@
 				GREATER_THAN:'greater than',
 				LESS_OR_EQUALS:'less or equal',
 				GREATER_OR_EQUALS:'greater or equal',
-				
                        };

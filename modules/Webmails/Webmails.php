@@ -700,17 +700,17 @@ function convertMailData2Html($maildata, $cutafter = 0)
 	function load_mail($attach_tab)
 	{
 		// parse the message
-	$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
+		$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
 		$struct_msg = imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;
 		$ev = $this->mailid;
-$conf->display_rfc822 = true;
+		$conf->display_rfc822 = true;
 		if ($struct_msg->type == 3 || (isset($struct_msg->parts) && (sizeof($struct_msg->parts) > 0)))
-					{
+		{
 			$this->GetPart($attach_tab, $struct_msg, NULL, $conf->display_rfc822);
-					}
+		}
 		else
-					{
+		{
 			$pop_fetchheader_mail_ev = imap_fetchheader($mail, $ev);
 			$pop_body_mail_ev = imap_body($mail, $ev);
 			GetSinglePart($attach_tab, $struct_msg, $pop_fetchheader_mail_ev, $pop_body_mail_ev);
@@ -725,17 +725,17 @@ $conf->display_rfc822 = true;
 		if ($struct_msg->type == 3)
 		{
 			$body = '';
-					}
+		}
 		else
-					{
+		{
 			$body = imap_fetchbody($mail,$ev,$tmpvar['number']);
 
-					}
+		}
 
 
 
 		if (eregi('text/html', $tmpvar['mime']) || eregi('text/plain', $tmpvar['mime']))
-					{
+		{
 			if ($tmpvar['transfer'] == 'QUOTED-PRINTABLE')
 				$body = imap_qprint($body);
 			if ($tmpvar['transfer'] == 'BASE64')
@@ -746,30 +746,30 @@ $conf->display_rfc822 = true;
 
 			if (strtolower($body_charset) == "us-ascii") {
 				$body_charset = "ISO-8859-1";
-					}
+			}
 
 			if ($body_charset == "" || $body_charset == null) {
 				if (isset($conf->default_charset) && $conf->default_charset != "") {
 					$body_charset = $conf->default_charset;
 				} else {
 					$body_charset = "ISO-8859-1";
-					}
-					}
+				}
+			}
 
 			if (isset($_REQUEST['user_charset']) && $_REQUEST['user_charset'] != '') {
 				$body_charset = $_REQUEST['user_charset'];
-				}
+			}
 
 			$body_converted = @iconv( $body_charset, $GLOBALS['charset'], $body);
 			$body = ($body_converted===FALSE) ? $body : $body_converted;
 			$tmpvar['charset'] = ($body_converted===FALSE) ? $body_charset : $GLOBALS['charset'];
-				}
-				else
-				{
+		}
+		else
+		{
 			array_push($attach_tab, $tmpvar);
-				}
+		}
 		$link_att = '';
-$conf->display_part_no = true;
+		$conf->display_part_no = true;
 		if ($struct_msg->subtype != 'ALTERNATIVE' && $struct_msg->subtype != 'RELATED')
 		{
 			switch (sizeof($attach_tab))
@@ -787,7 +787,7 @@ $conf->display_part_no = true;
 		}else
 			{
 				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right"></th><td class="mailHeaderData"></td></tr></span>';
-		} 
+			} 
 
 		$struct_msg = imap_fetchstructure($mail, $ev);
 		$msg_charset = '';
@@ -804,64 +804,64 @@ $conf->display_part_no = true;
 		}
 
 
-	$subject_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->subject);
-	$subject_array = $this->mime_header_decode($subject_header);
-	for ($j = 0; $j < count($subject_array); $j++)
+		$subject_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->subject);
+		$subject_array = $this->mime_header_decode($subject_header);
+		for ($j = 0; $j < count($subject_array); $j++)
 			$subject .= $subject_array[$j]->text;
 
-	$from_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->fromaddress);
-	$from_array = $this->mime_header_decode($from_header);
-	for ($j = 0; $j < count($from_array); $j++)
-		$from .= $from_array[$j]->text;
+		$from_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->fromaddress);
+		$from_array = $this->mime_header_decode($from_header);
+		for ($j = 0; $j < count($from_array); $j++)
+			$from .= $from_array[$j]->text;
 
-	$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
-	$to_array = $this->mime_header_decode($to_header);
-	for ($j = 0; $j < count($to_array); $j++)
-		$to .= $to_array[$j]->text;
-	$to = str_replace(',', ', ', $to);
+		$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
+		$to_array = $this->mime_header_decode($to_header);
+		for ($j = 0; $j < count($to_array); $j++)
+			$to .= $to_array[$j]->text;
+		$to = str_replace(',', ', ', $to);
 
-	$cc_header = isset($ref_contenu_message->ccaddress) ? $ref_contenu_message->ccaddress : '';
-	$cc_header = str_replace('x-unknown', $msg_charset, $cc_header);
-	$cc_array = isset($ref_contenu_message->ccaddress) ? imap_mime_header_decode($cc_header) :0;
-	if ($cc_array != 0) {
-		for ($j = 0; $j < count($cc_array); $j++)
-			$cc .= $cc_array[$j]->text;
-	}
-	$cc = str_replace(',', ', ', $cc);
+		$cc_header = isset($ref_contenu_message->ccaddress) ? $ref_contenu_message->ccaddress : '';
+		$cc_header = str_replace('x-unknown', $msg_charset, $cc_header);
+		$cc_array = isset($ref_contenu_message->ccaddress) ? imap_mime_header_decode($cc_header) :0;
+		if ($cc_array != 0) {
+			for ($j = 0; $j < count($cc_array); $j++)
+				$cc .= $cc_array[$j]->text;
+		}
+		$cc = str_replace(',', ', ', $cc);
 
-	$reply_to_header = isset($ref_contenu_message->reply_toaddress) ? $ref_contenu_message->reply_toaddress : '';
-	$reply_to_header = str_replace('x-unknown', $msg_charset, $reply_to_header);
-	$reply_to_array = isset($ref_contenu_message->reply_toaddress) ? imap_mime_header_decode($reply_to_header) : 0;
-	if ($reply_to_array != 0) {
-		for ($j = 0; $j < count($reply_to_array); $j++)
-			$reply_to .= $reply_to_array[$j]->text;
-	}
+		$reply_to_header = isset($ref_contenu_message->reply_toaddress) ? $ref_contenu_message->reply_toaddress : '';
+		$reply_to_header = str_replace('x-unknown', $msg_charset, $reply_to_header);
+		$reply_to_array = isset($ref_contenu_message->reply_toaddress) ? imap_mime_header_decode($reply_to_header) : 0;
+		if ($reply_to_array != 0) {
+			for ($j = 0; $j < count($reply_to_array); $j++)
+				$reply_to .= $reply_to_array[$j]->text;
+		}
 
-	$timestamp = chop($ref_contenu_message->udate);
-	$date = format_date($timestamp, $lang);
-	$time = format_time($timestamp, $lang);
-	$content = Array(
-		'from' => $from,
-		'to' => $to,
-		'cc' => $cc,
-		'reply_to' => $reply_to,
-		'subject' => $subject,
-		'date' => $date,
-		'time' => $time,
-		'complete_date' => $date,
-		'att' => $link_att,
-		'body' => $this->graphicalsmilies($body),
-		'body_mime' => $this->convertLang2Html($tmpvar['mime']),
-		'body_transfer' => $this->convertLang2Html($tmpvar['transfer']),
-		'header' => $header,
-		'verbose' => $verbose,
-		'prev' => $prev_msg,
-		'next' => $next_msg,
-		'msgnum' => $mail,
-		'attachtab' => $attach_tab,
-		'charset' => $body_charset
-	);
-return ($content);
+		$timestamp = chop($ref_contenu_message->udate);
+		$date = format_date($timestamp, $lang);
+		$time = format_time($timestamp, $lang);
+		$content = Array(
+			'from' => $from,
+			'to' => $to,
+			'cc' => $cc,
+			'reply_to' => $reply_to,
+			'subject' => $subject,
+			'date' => $date,
+			'time' => $time,
+			'complete_date' => $date,
+			'att' => $link_att,
+			'body' => $this->graphicalsmilies($body),
+			'body_mime' => $this->convertLang2Html($tmpvar['mime']),
+			'body_transfer' => $this->convertLang2Html($tmpvar['transfer']),
+			'header' => $header,
+			'verbose' => $verbose,
+			'prev' => $prev_msg,
+			'next' => $next_msg,
+			'msgnum' => $mail,
+			'attachtab' => $attach_tab,
+			'charset' => $body_charset
+		);
+		return ($content);
 
 	}
 

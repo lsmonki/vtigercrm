@@ -99,12 +99,14 @@ function showRelationships(mid) {
 	// TODO: present the user with a simple DHTML div to
 	// choose what type of relationship they would like to create
 	// before creating it.
-	alert(alert_arr.WISH_TO_QUALIFY_MAIL_AS_CONTACT);
-        add_to_vtiger(mid);
+	if(confirm(alert_arr.WISH_TO_QUALIFY_MAIL_AS_CONTACT))
+       		add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
 	// TODO: update this function to allow you to set what entity type
 	// you would like to associate to
+	var rowId = "row_"+mid;
+	$(rowId).className = "unread_email";
         $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
@@ -113,6 +115,7 @@ function add_to_vtiger(mid) {
                         postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
                         onComplete: function(t) {
                                 $("status").style.display="block";
+				setTimeout('makeSelected("'+rowId+'");',3000);
                         }
                 }
         );
@@ -164,12 +167,11 @@ function check_in_all_boxes(mymbox) {
 }
 function check_for_new_mail(mbox) {
 	window.location=window.location;
-/*
 	if(degraded_service == 'true') {
-		window.location=window.location;
 		return;
 	}
         $("status").style.display="block";
+/*
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -310,7 +312,7 @@ function check_for_new_mail(mbox) {
                         }
                 }
         );
-*/
+	*/
 }
 function periodic_event() {
 	// NOTE: any functions you put in here may race.  This could probably
@@ -372,22 +374,35 @@ function move_messages()
 	$("status").style.display = "block";
 	var chkname=document.getElementsByName("selected_id");
 	var mvmbox = $("mailbox_select").value;
+	var nid = Array();
+	var i=0;
 	for(var m=0;m<chkname.length;m++)
 	{
 		if(chkname[m].checked)
-			nid =  chkname[m].value;
+			nid[i++] =  chkname[m].value;
 	}
-	  new Ajax.Request(
-                          'index.php',
-                          {queue: {position: 'end', scope: 'command'},
-                          method: 'post',
-                          postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
-                          onComplete: function(t) {
-				window.location=window.location.href;
-				$("status").style.display = "none";
-                           }
-                         }
-                      );
+	
+	if(nid.length > 0)
+	{
+		new Ajax.Request(
+				'index.php',
+				{queue: {position: 'end', scope: 'command'},
+					method: 'post',
+					postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					onComplete: function(t) {
+						for(i=0;i<nid.length;i++)
+						{
+							var oRow = $('row_'+nid[i]);
+							new Effect.Fade(oRow,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
+						}
+						$("status").style.display = "none";
+					}
+				}
+			);
+	}else
+	{
+		alert("Please select a mail and then move..");
+	}
 }
 
 /*function move_messages() {
@@ -425,9 +440,14 @@ function search_emails() {
         window.location = "index.php?module=Webmails&action=index&search=true&search_type="+search_type+"&search_input="+search_query;
 }
 function runEmailCommand(com,id) {
-        $("status").style.display="block";
         command=com;
         id=id;
+	if(com == 'delete_msg')
+	{
+		if(!confirm(alert_arr.DELETE+" "+alert_arr.MAIL+" ?"))
+			return;
+	}
+        $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},

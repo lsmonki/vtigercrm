@@ -115,15 +115,8 @@
 				{if $DEGRADED_SERVICE eq 'false'}
                         	<td width="50%" align="right" nowrap>
 					<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;
-					<input type="text"		name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
-					<select name="optionSel" class="importBox" id="search_type">
-						<option selected value="SUBJECT">{$MOD.IN_SUBJECT}</option>
-						<option value="BODY">{$MOD.IN_BODY}</option>
-						<option value="TO">{$MOD.IN_TO}</option>
-						<option value="CC">{$MOD.IN_CC}</option>
-						<option value="BCC">{$MOD.IN_BCC}</option>
-						<option value="FROM">{$MOD.IN_FROM}</option>
-					</select>&nbsp;
+					<input type="text" name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
+					{$SEARCH_HTML}&nbsp;
 				</td>
 				<td width="5%">
 					<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="crmbutton small create" onclick="search_emails();" />
@@ -253,9 +246,9 @@ function OpenCompose(id,mode)
 {rdelim}
 var gselected_mail = '';
 {if $smarty.request.mailbox.value neq ''}
-var gCurrentFolder = '{$smarty.request.mailbox}';
+	var gCurrentFolder = '{$smarty.request.mailbox}';
 {else}	
-var gCurrentFolder = 'INBOX';
+	var gCurrentFolder = 'INBOX';
 {/if}
 {literal}
 function makeSelected(rowId)
