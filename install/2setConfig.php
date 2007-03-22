@@ -28,7 +28,8 @@ $hostname = $_SERVER['SERVER_NAME'];
 //$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
 //$web_root = $hostname.$_SERVER['PHP_SELF'];
 //$web_root = $HTTP_SERVER_VARS["HTTP_HOST"] . $HTTP_SERVER_VARS["REQUEST_URI"];
-$web_root = $_ENV["HOSTNAME"] . $HTTP_SERVER_VARS["REQUEST_URI"];
+$web_root = ($_ENV["HOSTNAME"]=='')? $HTTP_SERVER_VARS["HTTP_HOST"]:$_ENV["HOSTNAME"];
+$web_root .= $HTTP_SERVER_VARS["REQUEST_URI"];
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://".$web_root;
 
