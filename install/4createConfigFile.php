@@ -235,7 +235,7 @@ $cache_dir = 'cache/';
 			<div id="config_info">
 			<p><strong class="big">Successfully created configuration file (config.inc.php) in :</strong><br><br>
 			<font color="green"><b><?php echo $root_directory; ?></b></font><br><br>
-			The installation will take at least 4 minutes.<p> Grab a coffee,sit back and relax or browse through our <a href='http://blogs.vtiger.com/index.php'>blogs</a><br>
+			The installation will take at least 4 minutes.<p> Grab a coffee,sit back and relax or browse through our <a href='http://blogs.vtiger.com/index.php' target="_blank">blogs</a><br>
 			</p>
 			</div>
 			<br>		
