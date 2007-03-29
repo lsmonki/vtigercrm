@@ -1665,6 +1665,15 @@ level2Sel{
 	font-weight:bold;
         background-color:#00FF00;
 }
+
+
+.qualify_email {
+	                   font-weight:bold;
+	                   background-color:#FFA500;
+	
+          }
+
+
 .delete_email {
 	font-weight:bold;
         background-color:#FF5151;
