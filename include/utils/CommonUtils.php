@@ -2059,7 +2059,7 @@ function sendNotificationToOwner($module,$focus)
 		        $description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_ASSIGNED_TO_YOU'].'.';
 		}
 		$description .= '<br>'.$app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_DETAILS_ARE'].':<br><br>';
-                $description .= $mod_name.' '.$app_strings['MSG_ID'].' '.$focus->id.'<br>';
+                $description .= $mod_name.' '.$app_strings['MSG_ID'].' '.'<b>'.$focus->id.'</b><br>';
 		foreach($object_column_fields as $fieldname => $fieldlabel)
 		{
 			//Get the translated string
