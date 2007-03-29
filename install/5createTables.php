@@ -136,14 +136,15 @@ if(!rename("install/", $renamefile."install/"))
 
 			<ul>
 			<li>
-			<li><b><font color='red'>You are the most important to us!</font> We take pride in being associated with you</b>
-			</ul>
+			<li><b><font color='red'>You are the most important to us!</font></b>
+<li><b> We take pride in being associated with you</li></b>
 			<p>
 			<b>Talk to us at <a href='http://forums.vtiger.com' target="_blank">forums</a></b>
 			<p>
 			<b>Discuss with us at <a href='http://blogs.vtiger.com' target="_blank">blogs</a></b>
 			<p>
-			<b>We aim to be - simply the best. Come on over, there is space for you too!</b>
+			<b>We aim to be -simply the best.Come on over,there is space for you too!</b>
+			</ul>
 			</div>
 
 			</td>
