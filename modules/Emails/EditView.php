@@ -142,7 +142,8 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$mbox = $MailBox->mbox;
 
 	$webmail = new Webmails($mbox,$mailid);
-	$webmail->loadMail();
+	$array_tab = Array();
+	$webmail->loadMail($array_tab);
 	  $hdr = @imap_headerinfo($mbox, $mailid);
 	$smarty->assign('WEBMAIL',"true");
 	if($_REQUEST["reply"] == "all") {
