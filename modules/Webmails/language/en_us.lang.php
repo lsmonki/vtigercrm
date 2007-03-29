@@ -155,6 +155,7 @@ $mod_strings = Array(
 'FROM' => 'From:',
 'IN'=>'in',
 'ADD_FOLDER' => 'Add Folder[X]',
-
+//Added for 5.0.3
+'LBL_LOADING_IMAGE' => 'Loading Image',
 );
 ?>
