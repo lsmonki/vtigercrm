@@ -19,18 +19,15 @@ global $migrationlog;
 global $query_count, $success_query_count, $failure_query_count;
 global $success_query_array, $failure_query_array;
 
+$migrationlog->debug("\n\nDB Changes from 4.2.x to 5.0 GA -------- Starts \n\n");
+
 //Added to put prefix vtiger_ in some of the columns in tables which are used for CV and Reports and field -- 23-06-06
 $migrationlog->debug("Going to rename the table names with prefix vtiger_");
 include("modules/Migration/rename_tables.php");
 $migrationlog->debug("Renaming the table names with prefix vtiger_ has been finished");
 
 
-
-
-
-
 $migrationlog->debug("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
-
 
 
 //These changes have been made in 4.2.3. The following queries have been included who has run the migration from 4.2 Patch2
@@ -4052,6 +4049,7 @@ for($field_count=0;$field_count<$conn->num_rows($field_res);$field_count++)
 }
 
 
+$migrationlog->debug("\n\nDB Changes from 4.2.x to 5.0 GA -------- Ends \n\n");
 			     
 
 //Added to get the conversion rate and update for all records
@@ -4118,7 +4116,7 @@ function Execute($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		$failure_query_array[$failure_query_count++] = $query;
-		$migrationlog->debug("Query Failed ==> $query");
+		$migrationlog->debug("Query Failed ==> $query \n Error is ==> [".$conn->database->ErrorNo()."]".$conn->database->ErrorMsg());
 		//$migrationlog->debug("Error is ==> ".$conn->ErrorMsg());
 	}
 }

@@ -13,6 +13,8 @@
 //5.0.2 database changes - added on 27-10-06
 global $adb;
 
+$migrationlog->debug("\n\nDB Changes from 5.0.1 to 5.0.2 -------- Starts \n\n");
+
 //Query added to show Manufacturer field in Products module
 ExecuteQuery("update vtiger_field set displaytype=1,block=31 where tabid=14 and block=1");
 ExecuteQuery("update vtiger_field set block=23,displaytype=1 where block=1 and displaytype=23 and tabid=10");
@@ -63,5 +65,6 @@ if($adb->num_rows != 0)
 
 //echo "<br><font color='red'>&nbsp; 5.0/5.0.1 ==> 5.0.2 Database changes has been done.</font><br>";
 
+$migrationlog->debug("\n\nDB Changes from 5.0.1 to 5.0.2 -------- Ends \n\n");
 
 ?>

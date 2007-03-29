@@ -10,6 +10,7 @@
 ********************************************************************************/
 
 include("modules/Migration/versions.php");
+$migrationlog =& LoggerManager::getLogger('MIGRATION');
 
 //global $vtiger_current_version;
 if($_REQUEST['source_version'] != '')
@@ -76,8 +77,11 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 	echo '<br><br><b style="color:#FF0000">Failed Queries Log</b>
 		<div id="failedLog" style="border:1px solid #666666;width:90%;position:relative;height:200px;overflow:auto;left:5%;top:10px;">';
 
-	foreach($failure_query_array as $failed_query)
-		echo '<br><font color="red">'.$failed_query.';</font>';
+	if(is_array($failure_query_array))
+		foreach($failure_query_array as $failed_query)
+			echo '<br><font color="red">'.$failed_query.';</font>';
+	else
+		echo '<br> No queries failed during Patch Update.';
 
 	echo '<br></div>';
 	//echo "Failed Queries ==> <pre>";print_r($failure_query_array);echo '</pre>';
@@ -109,6 +113,7 @@ function ExecuteQuery($query)
 				<td width="80%">'.$query.'</td>
 			</tr>';
 		$success_query_array[$success_query_count++] = $query;
+		$migrationlog->debug("Query Success ==> $query");
 	}
 	else
 	{
@@ -119,16 +124,9 @@ function ExecuteQuery($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		$failure_query_array[$failure_query_count++] = $query;
+		$migrationlog->debug("Query Failed ==> $query \n Error is ==> [".$adb->database->ErrorNo()."]".$adb->database->ErrorMsg());
 	}
 }
-
-
-
-
-
-
-
-
 
 
 ?>
