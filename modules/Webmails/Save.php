@@ -33,8 +33,8 @@ $MailBox = new MailBox($mailbox);
 $email = new Webmails($MailBox->mbox, $_REQUEST["mailid"]);
 $subject = $email->subject;
 $date = $email->date;
-
-$email->loadMail();
+$array_tab = Array();
+$email->loadMail($array_tab);
 $msgData = $email->body;
 
 $focus->column_fields['subject']=$subject;

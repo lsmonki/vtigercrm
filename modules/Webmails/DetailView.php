@@ -40,8 +40,8 @@ echo '<tr><td width="10%">'.$mod_strings['LBL_DATE'].'</td><td>'.$elist->date.'<
 echo '</table>';
 
 echo '</td></tr>';
-
-$webmail->loadMail();
+$array_tab = Array();
+$webmail->loadMail($array_tab);
 
 echo '<tr><td align="center"><iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&mailbox='.$mailbox.'" width="100%" height="450" frameborder="0" style="border:1px solid gray">'.$mod_strings['LBL_NO_IFRAMES_SUPPORTED'].'</iframe></td></tr>';
 
