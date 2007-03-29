@@ -106,7 +106,7 @@ function add_to_vtiger(mid) {
 	// TODO: update this function to allow you to set what entity type
 	// you would like to associate to
 	var rowId = "row_"+mid;
-	$(rowId).className = "unread_email";
+	$(rowId).className = "qualify_email";
         $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
