@@ -135,7 +135,10 @@ $mod_strings = Array(
 'LBL_EMAILS_TITLE'=>'Emails',
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
 // Added for 5.0.3 release
+'LBL_MAIL_CONNECT_ERROR'=>'Could not connect to the mail server. Please check the mail server details',
 'IN_REPLY_TO_THE_MESSAGE' => 'In reply to the message sent by ',
+'LBL_CLICK_HERE' => 'Click Here ',
+'LBL_GOTO_EMAILS_MODULE' => ' go to Emails module',
 'LBL_NO_EMAILS'=>'No Emails In This Folder',
 'LBL_MOVE_TO'=>'Move To...',
 'LBL_DEL'=>'Del ',
@@ -155,7 +158,6 @@ $mod_strings = Array(
 'FROM' => 'From:',
 'IN'=>'in',
 'ADD_FOLDER' => 'Add Folder[X]',
-//Added for 5.0.3
-'LBL_LOADING_IMAGE' => 'Loading Image',
+
 );
 ?>
