@@ -466,9 +466,9 @@ function verify_data(form) {
             <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 			<tr>
 				<td colspan=2><strong>Currency
-		Configuration</strong></td> This will setup the
+		Configuration</strong></td> <i>This will setup the
 		default currency which will be used for maintaining
-		transactions in vtiger. 
+		transactions in vtiger.</i> 
             </tr>
 			<tr>
 				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>Name</strong><sup><font color=red>*</font></sup></td>
