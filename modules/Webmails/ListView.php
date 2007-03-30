@@ -130,7 +130,8 @@ if($_POST["command"] == "check_mbox") {
                        		$ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
                         	$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
                         	$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
-                        	$ret .= '"to":"'.$data[$i]->to.'",';
+				$ret .= '"to":"'.$data[$i]->to.'",';
+				echo  ' to field is  ' .$data[$i]->to;
                         	$email = new Webmails($MailBox->mbox,$data[$i]->msgno);
                         	if($email->has_attachments)
                         	        $ret .= '"attachments":"1"}';
@@ -265,6 +266,7 @@ if (is_array($overview))
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
 		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
 		$val->to = utf8_decode(imap_utf8(addslashes($val->to)));
+		echo ' 2 to is   '.$val->to;
 		$val->subject = utf8_decode(imap_utf8($val->subject));
 	?>
 
