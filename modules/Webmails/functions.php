@@ -235,7 +235,9 @@ function remove_stuff(&$body, &$mime)
             "'<mocha[^>]*>.*?</mocha>'si",
             "'<meta[^>]*>'si"
         );
-        $body = preg_replace($to_removed_array, '', $body);
+	$body = preg_replace($to_removed_array, '', $body);
+	//line added to fix #3245
+	$body=preg_replace("/(http:\/\/|ftp:\/\/)([^\s,]*)/i","<a href='$1$2'>$1$2</a> target=_blank",$body    );
         $body = preg_replace("|href=\"(.*)script:|i", 'href="nocc_removed_script:', $body);
         $body = preg_replace("|<([^>]*)java|i", '<nocc_removed_java_tag', $body);
         $body = preg_replace("|<([^>]*)&{.*}([^>]*)>|i", "<&{;}\\3>", $body);
