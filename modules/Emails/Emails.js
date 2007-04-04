@@ -30,7 +30,10 @@ function gotoWebmail()
 
 function setSubject(subject)
 {
-	document.getElementById("subjectsetter").innerHTML=subject
+	if(getObj("subjectsetter"))
+	{
+		document.getElementById("subjectsetter").innerHTML=subject;
+	}
 }
 
 function getEmailContents(id)

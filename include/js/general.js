@@ -1117,13 +1117,13 @@ function hideLocateMapMenu(ev)
 * @param divId :: div tag ID
 */
 function show(divId)
-
 {
+	if(getObj(divId))
+	{
+		var id = document.getElementById(divId);
 
-    var id = document.getElementById(divId);
-
-    id.style.display = 'inline';
-
+		id.style.display = 'inline';
+	}
 }
 
 /*
