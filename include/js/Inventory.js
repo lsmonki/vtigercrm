@@ -624,13 +624,15 @@ function setDiscount(currObj,curr_row)
 function callTaxCalc(curr_row)
 {
 	//when we change discount or list price, we have to calculate the taxes again before calculate the total
-	tax_count = eval(document.getElementById('tax_table'+curr_row).rows.length-1);//subtract the title tr length
-
-	for(var i=0, j=i+1;i<tax_count;i++,j++)
+	if(getObj('tax_table'+curr_row))
 	{
-		var tax_hidden_name = "hidden_tax"+j+"_percentage"+curr_row;
-		var tax_name = document.getElementById(tax_hidden_name).value;
-		calcCurrentTax(tax_name,curr_row,i);
+		tax_count = eval(document.getElementById('tax_table'+curr_row).rows.length-1);//subtract the title tr length
+		for(var i=0, j=i+1;i<tax_count;i++,j++)
+		{
+			var tax_hidden_name = "hidden_tax"+j+"_percentage"+curr_row;
+			var tax_name = document.getElementById(tax_hidden_name).value;
+			calcCurrentTax(tax_name,curr_row,i);
+		}
 	}
 }
 
