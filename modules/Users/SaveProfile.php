@@ -14,7 +14,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 $profilename = addslashes($_REQUEST['profile_name']);
-$description= $_REQUEST['profile_description'];
+$description= addslashes($_REQUEST['profile_description']);
 $def_module = $_REQUEST['selected_module'];
 $def_tab = $_REQUEST['selected_tab'];
 //Inserting values into Profile Table
