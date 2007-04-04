@@ -61,7 +61,7 @@ function validate()
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form name="newRoleForm" action="index.php" method="post">
+				<form name="newRoleForm" action="index.php" method="post" onSubmit="return validate()">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="SaveRole">
 				<input type="hidden" name="parenttab" value="Settings">
