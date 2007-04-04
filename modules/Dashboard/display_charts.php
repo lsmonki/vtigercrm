@@ -393,7 +393,7 @@ $graph_array = Array(
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Campaigns by Contact
-		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && (getFieldVisibilityPermission('Campaigns',$user_id,'campaignid') == "0"))
+		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && $profileTabsPermission[getTabid("Campaigns")] == 0)
 		    {
 			    $graph_by="campaignname";
 			    $graph_title=$mod_strings['contactbycampaign'];
