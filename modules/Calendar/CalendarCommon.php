@@ -296,9 +296,10 @@ function getAssignedTo($tabid)
 /**
  * Function to get the vtiger_activity details for mail body
  * @param   string   $description       - activity description
+ * @param   string   $from              - to differenciate from notification to invitation.
  * return   string   $list              - HTML in string format
  */
-function getActivityDetails($description,$inviteeid='')
+function getActivityDetails($description,$user_id,$from='')
 {
         global $log,$current_user;
         global $adb,$mod_strings;
@@ -311,18 +312,15 @@ function getActivityDetails($description,$inviteeid='')
 	}
 	else
 	{
-		$end_date_lable=$mod_strings['End date'];
+		$end_date_lable=$mod_strings['Due Date'];
 	}
-        if($inviteeid=='')
-	{
-        	$name = getUserName($description['user_id']);
-		$msg = $mod_strings['LBL_ACTIVITY_NOTIFICATION'];
-	}
-        else
-	{
-	        $name = getUserName($inviteeid);
+
+	$name = getUserName($user_id);
+	
+	if($from == "invite")
 		$msg = $mod_strings['LBL_ACTIVITY_INVITATION'];
-	}	
+	else
+		$msg = $mod_strings['LBL_ACTIVITY_NOTIFICATION'];
 
         $current_username = getUserName($current_user->id);
         $status = $description['status'];
@@ -387,7 +385,7 @@ function getEventNotification($mail_id,$mode,$subject,$desc)
 	if($desc['assingn_type'] == "U")
 	{
 		$to_email = getUserEmailId('id',$mail_id);
-		$description = getActivityDetails($desc);
+		$description = getActivityDetails($desc,$current_user->id);
 		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
 	}
 	if($desc['assingn_type'] == "T")
@@ -424,7 +422,7 @@ function sendInvitation($inviteesid,$mode,$subject,$desc)
 	{
 		if($inviteeid != '')
 		{
-			$description=getActivityDetails($desc,$inviteeid);
+			$description=getActivityDetails($desc,$inviteeid,"invite");
 			$to_email = getUserEmailId('id',$inviteeid);
 			send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
 		}
@@ -493,7 +491,8 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$mail_data['group_name'] = $grp_name;
 	$value = getaddEventPopupTime($st_time,$end_time,'24');
 	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-	$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+	if($activity_type != 'Task' )
+		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
 	$mail_data['st_date_time']=getDisplayDate($st_date)." ".$start_hour;
 	$mail_data['end_date_time']=getDisplayDate($end_date)." ".$end_hour;
 	$mail_data['location']=$location;
