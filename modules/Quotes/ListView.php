@@ -128,7 +128,7 @@ if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
         {
-                $query .= ' ORDER BY user_name '.$sorder;
+                $query .= ' ORDER BY vtiger_users.user_name '.$sorder;
         }
         else
         {
