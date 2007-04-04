@@ -91,8 +91,8 @@ if($_REQUEST['mode'] == 'edit')
 else
 	$reply = '';
 
-$subject = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = ' Ticket ID : '.$focus->id.'<br> Subject : '.$_REQUEST['ticket_title'];
+$subject = '[ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
 
@@ -124,7 +124,7 @@ if($contact_mailid != '')
 }
 if($isactive == 1)
 {
-	$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$id."&fun=detail'>Ticket Details</a>";
+	$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
 	$email_body = $bodysubject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
 }
 else

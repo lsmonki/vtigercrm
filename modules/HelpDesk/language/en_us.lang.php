@@ -81,14 +81,6 @@ $mod_strings = Array(
 'LBL_SELECT_TICKET'=>'Select Ticket',
 'LBL_CHANGE_OWNER'=>'Change Owner',
 'LBL_CHANGE_STATUS'=>'Change Status',
-
-
-
-
-
-
-
-
 'LBL_TICKET_TITLE'=>'Title',
 'LBL_TICKET_DESCRIPTION'=>'Description',
 'LBL_TICKET_CATEGORY'=>'Category',
@@ -186,6 +178,8 @@ $mod_strings = Array(
 'LBL_DETAIL' => 'the details are :',
 'LBL_REGARDS'=> 'Regards',
 'LBL_TEAM'=> 'HelpDesk Team',
+'LBL_TICKET_DETAILS' => 'Ticket Details',
+'LBL_SUBJECT' => 'Subject : ',
 'created' => 'created',
 'replied' => 'replied',
 'reply'=>'There is a reply to',
