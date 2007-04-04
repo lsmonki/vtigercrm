@@ -1390,6 +1390,10 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
+    if(Lay == 'editdiv') {
+        leftSide = leftSide - 225;
+        topSide = topSide - 125;
+    }
     var getVal = eval(leftSide) + eval(widthM);
     if(getVal  > document.body.clientWidth ){
         leftSide = eval(leftSide) - eval(widthM);
