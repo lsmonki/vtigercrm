@@ -24,8 +24,25 @@ else if (document.layers || (!document.all && document.getElementById))
 
 	var browser_nn6=true
 
+var gBrowserAgent = navigator.userAgent.toLowerCase();
 
+function hideSelect()
+{
+        var oselect_array = document.getElementsByTagName('SELECT');
+        for(var i=0;i<oselect_array.length;i++)
+        {
+                oselect_array[i].style.display = 'none';
+        }
+}
 
+function showSelect()
+{
+        var oselect_array = document.getElementsByTagName('SELECT');
+        for(var i=0;i<oselect_array.length;i++)
+        {
+                oselect_array[i].style.display = 'block';
+        }
+}
 function getObj(n,d) {
 
   var p,i,x; 
