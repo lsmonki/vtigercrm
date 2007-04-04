@@ -491,8 +491,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			INNER JOIN vtiger_profile2field
 				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 			INNER JOIN vtiger_def_org_field
-				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			WHERE vtiger_field.tabid = ".$tabid."
+				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
+			if($module == "Calendar")
+				$query .=" WHERE vtiger_field.tabid in (9,16)";
+			else
+				$query .=" WHERE vtiger_field.tabid =".$tabid;
+	                $query .=" AND vtiger_profile2field.visible = 0
 			AND vtiger_profile2field.visible = 0
 			AND vtiger_def_org_field.visible = 0
 			AND vtiger_profile2field.profileid IN ".$profileList."
@@ -508,9 +512,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$ui_col_array=Array();
 
 	$query = "SELECT uitype, columnname, fieldname
-		FROM vtiger_field
-		WHERE tabid = ".$tabid."
-		AND fieldname IN".$field_list;
+		FROM vtiger_field";
+	if($module == "Calendar")
+	        $query .=" WHERE vtiger_field.tabid in (9,16)";
+	else
+	        $query .=" WHERE vtiger_field.tabid =".$tabid;
+	$query .=" AND fieldname IN".$field_list;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)

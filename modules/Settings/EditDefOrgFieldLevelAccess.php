@@ -56,6 +56,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 	for($i=0; $i<$noofrows; $i++,$row++)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
+		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
                 $mandatory = '';
 		$readonly = '';
                 if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53)
@@ -69,9 +70,14 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			$standCustFld []= $mandatory.' '.$lang_strings[$fieldlabel];
 		else
 			$standCustFld []= $mandatory.' '.$fieldlabel;
-		if($adb->query_result($fieldListResult,$i,"visible") == 0)
+		if($adb->query_result($fieldListResult,$i,"visible") == 0 && $displaytype!=3)
 		{
 			$visible = "checked";
+		}
+		elseif($displaytype==3)
+		{
+			$visible = "checked";
+			$readonly = 'disabled';
 		}
 		else
 		{

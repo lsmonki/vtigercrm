@@ -26,6 +26,7 @@ foreach($field_module as $fld_module=>$fld_name)
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$fieldid =  $adb->query_result($fieldListResult,$i,"fieldid");
+		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
 		$visible = $_REQUEST[$fieldid];
 		if($visible == 'on')
 		{
@@ -37,7 +38,7 @@ foreach($field_module as $fld_module=>$fld_name)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
+		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3)
 		{
 			$visible_value = 0; 
 		}		

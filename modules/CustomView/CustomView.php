@@ -188,13 +188,8 @@ class CustomView extends CRMEntity{
 			$tabid ="9,16";
 		global $current_user;
 	        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		if($tabid == 4 || $tabid ==7)
-		{
+
 			$display_type = " vtiger_field.displaytype in (1,2,3)";
-		}else
-		{
-			$display_type = " vtiger_field.displaytype in (1,2)";
-		}
 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
