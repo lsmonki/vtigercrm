@@ -214,7 +214,7 @@ $array = Array(
 						<td valign=top ><strong>GD graphics library</strong><br> version 2.0 or later</td>
 						<td valign=top bgcolor="white"><?php
 						if (!extension_loaded('gd')) {
-							echo "<strong><font size=-1 color=\"#FF0000\">GD Graphics Library not configured. </strong>.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
+							echo "<strong><font size=-1 color=\"#FF0000\">GD Graphics Library not configured. </strong>.<br>Check out our <a target=\"_blank\" href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font>";
 						}
 						else {
 							if (!function_exists('gd_info'))
@@ -253,7 +253,7 @@ $array = Array(
 		 			
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
-            					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+            					<td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file vtiger_attachments feature. Refer <a target=\"_blank\"  href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
         				</tr>
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Install Directory</strong><br> (install/)</td>
@@ -290,7 +290,7 @@ $array = Array(
 
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a target=\"_blank\" href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
 					</tr>
 				
 					<tr bgcolor="#fafafa">
@@ -300,19 +300,19 @@ $array = Array(
 				
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/product/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Products.Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission target=\"_blank\">File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>User Image Directory</strong><br> (test/user/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/user/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Users. Refer <a target=\"_blank\"  href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Contact Image Directory</strong><br> (test/contact/)</td>
-						<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+						<td valign=top bgcolor="white"><?php echo (is_writable('./test/contact/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems while attaching image for Contacts. Refer <a target=\"_blank\" href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>	
 					<tr bgcolor="#fafafa">
 		    				<td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
-					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
+					        <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a target=\"_blank\" href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File vtiger_attachments issue</a> for more details </font>"; ?></td>
 					</tr>
 					<tr bgcolor="#fafafa">
 						<td valign=top ><strong>Logs Directory</strong><br> (logs/)</td>
