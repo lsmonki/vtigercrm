@@ -54,7 +54,7 @@ class Potentials extends CRMEntity {
 			'Account Name'=>Array('account'=>'accountname'),	  			
 			'Sales Stage'=>Array('potential'=>'sales_stage'),
 			'Amount'=>Array('potential'=>'amount'),
-			'Expected Close'=>Array('potential'=>'closingdate'),
+			'Expected Close Date'=>Array('potential'=>'closingdate'),
 			'Assigned To'=>Array('crmentity','smownerid')
 			);
 
@@ -63,7 +63,7 @@ class Potentials extends CRMEntity {
 			'Account Name'=>'accountid',	  			
 			'Sales Stage'=>'sales_stage',	  			
 			'Amount'=>'amount',
-			'Expected Close'=>'closingdate',
+			'Expected Close Date'=>'closingdate',
 			'Assigned To'=>'assigned_user_id');
 
 	var $list_link_field= 'potentialname';
@@ -71,13 +71,13 @@ class Potentials extends CRMEntity {
 	var $search_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
 			'Account Name'=>Array('potential'=>'accountid'),
-			'Expected Close'=>Array('potential'=>'closedate')
+			'Expected Close Date'=>Array('potential'=>'closedate')
 			);
 
 	var $search_fields_name = Array(
 			'Potential'=>'potentialname',
 			'Account Name'=>'account_id',
-			'Expected Close'=>'closingdate'
+			'Expected Close Date'=>'closingdate'
 			);
 
 	var $required_fields =  array(
