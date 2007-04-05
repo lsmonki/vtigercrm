@@ -102,6 +102,7 @@ else
 	else
 	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
+	$heldevent_id = $focus->id;
 	/* For Followup START -- by Minnie */
 	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
 	{
@@ -146,6 +147,10 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts"
 	        {
 	                $sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
 	                $adb->query($sql);
+			if(!empty($heldevent_id)){
+				$sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$heldevent_id.")";
+				$adb->query($sql);
+			}
 	        }
 }
 									

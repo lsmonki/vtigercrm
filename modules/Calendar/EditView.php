@@ -124,6 +124,13 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	    $value['recurringcheck'] = 'No';
     }
 
+}else
+{
+	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
+		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
+		$contact_name = getContactName($_REQUEST['contact_id']);
+		$smarty->assign("CONTACTSNAME",$contact_name);
+	}	
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";

@@ -1826,7 +1826,6 @@ function selectContact(check,type,frmName)
 		if(record_id != '' && module[0] == "Leads")
 		{
 			alert(alert_arr.CANT_SELECT_CONTACTS);
-			formName.selectcnt.disabled="true";
 		}
 		else
 		{
@@ -1862,8 +1861,6 @@ function selectContact(check,type,frmName)
 		if(task_recordid != '' && task_module[0] == "Leads" )
 		{
 			alert(alert_arr.CANT_SELECT_CONTACTS);
-			frmName.contact_name.value = '';
- 	                frmName.selectcnt.disabled="true"
 		}
 		else
 		{

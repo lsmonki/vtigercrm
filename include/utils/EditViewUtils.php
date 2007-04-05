@@ -650,13 +650,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 66)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+		{
 			$value = $_REQUEST['parent_id'];
+			$parent_module = getSalesEntityType($value);
+		}	
 		// Check for vtiger_activity type if task orders to be added in select option
 		$act_mode = $_REQUEST['activity_mode'];
 
-		if($value != '')
+		if($parent_module != "Contacts")
 		{
-			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
 				$sql = "select * from vtiger_leaddetails where leadid=".$value;
@@ -683,14 +685,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$potential_selected = "selected";
 
 			}
-			elseif($parent_module == "Quotes")
+			elseif($parent_module == "HelpDesk")
 			{
-				$sql = "select * from  vtiger_quotes where quoteid=".$value;
+				$sql = "select title from vtiger_troubletickets where ticketid=".$value;
 				$result = $adb->query($sql);
-				$parent_name = $adb->query_result($result,0,"subject");
-				$quote_selected = "selected";
-
+				$parent_name = $adb->query_result($result,0,"title");
+				$ticket_selected = "selected";
 			}
+
 			elseif($act_mode == "Task")
 			{
 				if($parent_module == "PurchaseOrder")
@@ -721,79 +723,59 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$parent_name = $adb->query_result($result,0,"campaignname");
 					$campaign_selected = "selected";
 				}
-				if($parent_module == "HelpDesk")
+				if($parent_module == "Quotes")
 				{
-					$sql = "select title from vtiger_troubletickets where ticketid=".$value;
+					$sql = "select * from  vtiger_quotes where quoteid=".$value;
 					$result = $adb->query($sql);
-					$parent_name = $adb->query_result($result,0,"title");
-					$ticket_selected = "selected";
+					$parent_name = $adb->query_result($result,0,"subject");
+					$quote_selected = "selected";
 				}
 			}
-			elseif($act_mode == "Events")
-			{
-				if($parent_module == "HelpDesk")
-				{
-					$sql = "select title from vtiger_troubletickets where ticketid=".$value;
-					$result = $adb->query($sql);
-					$parent_name = $adb->query_result($result,0,"title");
-					$ticket_selected = "selected";
-				}
-			}
-
+			$fieldvalue[] =$parent_name;
+			$fieldvalue[] = $value;
 		}
+		$editview_label[0] = array(
+			$app_strings['COMBO_LEADS'],
+			$app_strings['COMBO_ACCOUNTS'],
+			$app_strings['COMBO_POTENTIALS'],
+		);
+		$editview_label[1] = array(
+			$lead_selected,
+			$account_selected,
+			$potential_selected
+		);
+		$editview_label[2] = array(
+			"Leads&action=Popup",
+			"Accounts&action=Popup",
+			"Potentials&action=Popup"
+		);
+
 		if($act_mode == "Task")
                 {
-                        $editview_label[] = array($app_strings['COMBO_LEADS'],
-                                $app_strings['COMBO_ACCOUNTS'],
-                                $app_strings['COMBO_POTENTIALS'],
+                        array_push($editview_label[0],
                                 $app_strings['COMBO_QUOTES'],
                                 $app_strings['COMBO_PORDER'],
                                 $app_strings['COMBO_SORDER'],
                                 $app_strings['COMBO_INVOICES'],
 				$app_strings['COMBO_CAMPAIGNS'],
 				$app_strings['COMBO_HELPDESK']
-                                        );
-			$editview_label[] = array($lead_selected,
-                                $account_selected,
-                                $potential_selected,
+                        );
+			array_push($editview_label[1],
                                 $quote_selected,
                                 $purchase_selected,
                                 $sales_selected,
                                 $invoice_selected,
 				$campaign_selected,
 				$ticket_selected
-                                        );
-                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup","Campaigns&action=Popup","HelpDesk&action=Popup");
+                        );
+                        array_push($editview_label[2],"Quotes&action=Popup","PurchaseOrder&action=Popup","SalesOrder&action=Popup","Invoice&action=Popup","Campaigns&action=Popup","HelpDesk&action=Popup");
                 }
 		elseif($act_mode == "Events")
 		{
-			$editview_label[] = array($app_strings['COMBO_LEADS'],
-				$app_strings['COMBO_ACCOUNTS'],
-				$app_strings['COMBO_POTENTIALS'],
-				$app_strings['COMBO_HELPDESK']
-			);
-			$editview_label[] = array($lead_selected,
-				$account_selected,
-				$potential_selected,
-				$ticket_selected
-			);
-			$editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup","HelpDesk&action=Popup");
+			array_push($editview_label[0],$app_strings['COMBO_HELPDESK']);
+			array_push($editview_label[1],$ticket_selected);
+			array_push($editview_label[2],"HelpDesk&action=Popup");
 		}
-                else
-                {
-                        $editview_label[] = array($app_strings['COMBO_LEADS'],
-                                $app_strings['COMBO_ACCOUNTS'],
-                                $app_strings['COMBO_POTENTIALS'],
-                                );
-                        $editview_label[] = array($lead_selected,
-                                $account_selected,
-                                $potential_selected
-                                );
-                        $editview_label[] = array("Leads&action=Popup","Accounts&action=Popup","Potentials&action=Popup");
-
-                }
-		$fieldvalue[] =$parent_name;
-		$fieldvalue[] = $value;
 	}
 	//added by rdhital/Raju for better email support
 	elseif($uitype == 357)
