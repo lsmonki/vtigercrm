@@ -218,8 +218,8 @@ else
 		{		
 			$smarty->assign("RECORDID",$_REQUEST['recordid']);
 			$url_string .='&recordid='.$_REQUEST['recordid'];
+        		$where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
 		}
-        $where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
 	if($where_relquery == '')
 	{
 		if(isset($_REQUEST['relmod_id']))
