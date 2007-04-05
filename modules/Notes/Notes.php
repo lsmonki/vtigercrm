@@ -39,7 +39,7 @@ class Notes extends CRMEntity {
 
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('notes_title','modifiedtime','contact_id','filename');		  
+        var $sortby_fields = Array('title','modifiedtime','contact_id','filename');		  
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('', '', '', '');
@@ -47,7 +47,7 @@ class Notes extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'Subject'=>Array('notes'=>'notes_title'),
-				'Contact Name'=>Array('notes'=>'contact_id'),
+				'Contact Name'=>Array('contactdetails'=>'lastname'),
 				'Related to'=>Array('senotesrel'=>'crmid'),
 				'File'=>Array('notes'=>'filename'),
 				'Last Modified'=>Array('crmentity'=>'modifiedtime')
