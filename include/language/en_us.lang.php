@@ -647,7 +647,7 @@ $app_strings = array (
 //Added for values of picklist in Advanced Search filter
 'contains'=>'contains',
 'does not contains'=>'does not contains',
-'equals'=>'equals',
+'is'=>'is',
 'is not'=>'is not',
 'begins with'=>'begins with',
 'ends with'=>'ends with',
