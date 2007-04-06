@@ -131,6 +131,7 @@ switch($currentModule)
 		}
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');	
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","","");
 		break;
 	case 'Vendors':

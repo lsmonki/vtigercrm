@@ -13,25 +13,10 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
-$rel_table = 'vtiger_campaigncontrel';
 $record = $_REQUEST['record'];
 
-if($singlepane_view == 'true')
-	$action = "DetailView";
-else
-	$action = "CallRelatedList";
-
-//save the relationship when we select Product from Contact RelatedList
-if($dest_mod == 'Products')
-{
-	$contactid = $_REQUEST['parid'];
-	$productid = $_REQUEST['entityid'];
-	if($contactid != '' && $productid != '')
-		$adb->query("insert into vtiger_seproductsrel values ($contactid,$productid,'Contacts')");
-
-	$record = $contactid;
-}
-
+if($singlepane_view == 'true') $action = "DetailView";
+else $action = "CallRelatedList";
 
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
@@ -41,16 +26,20 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		    $sql = "insert into  ".$rel_table." values(".$id.",".$_REQUEST["parentid"].")";
-	            $adb->query($sql);
+			if($dest_mod == 'Products')
+				$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parentid"].",".$id.",'Contacts')");	
+			elseif($dest_mod == 'Campaigns')
+				$adb->query("insert into vtiger_campaigncontrel values(".$id.",".$_REQUEST["parentid"].")");
 		}
 	}
 	$record = $_REQUEST["parentid"];
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{	
-	$sql = "insert into ".$rel_table." values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")";
-	$adb->query($sql);
+{
+	if($dest_mod == 'Products')
+		$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parid"].",".$_REQUEST["entityid"].",'Contacts')");
+	elseif($dest_mod == 'Campaigns')
+		$adb->query("insert into vtiger_campaigncontrel values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")");
 	$record = $_REQUEST["parid"];
 }
 elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
@@ -59,11 +48,6 @@ elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
 	$adb->query($sql);
 }
 
-
-$module = 'Contacts';
-if($_REQUEST['return_module'] != '') $module = $_REQUEST['return_module'];
-
-
-header("Location: index.php?action=$action&module=$module&record=".$record);
+header("Location: index.php?action=$action&module=Contacts&record=".$record);
 
 ?>

@@ -25,7 +25,17 @@ $dest_mod = $_REQUEST['destination_module'];
 //This will be true, when we select product from vendor related list
 if($_REQUEST['destination_module']=='Products')
 {
-	if($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
+	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+	{
+		$record = $_REQUEST["parentid"];
+		$storearray = explode (";",$idlist);
+		foreach($storearray as $id)
+		{
+			if($id != '')
+				$adb->query("update vtiger_products set vendor_id=".$record." where productid=".$id);
+		}
+	}
+	elseif($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
 	{
 		$sql = "update vtiger_products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
 		$adb->query($sql);

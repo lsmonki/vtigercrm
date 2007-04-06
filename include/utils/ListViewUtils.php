@@ -2963,6 +2963,13 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = $selectfield = 'campaignid';
 		$table = 'vtiger_campaign';
 	}
+	elseif($currentmodule == "Products" && ($returnmodule == "Potentials" || $returnmodule == "Accounts" || $returnmodule == "Contacts"))
+	{
+		$reltable = 'vtiger_seproductsrel';
+		$condition = 'WHERE crmid = '.$recordid.' and setype = "'.$returnmodule.'"';
+		$field = $selectfield ='productid';
+		$table = 'vtiger_products';
+	}
 
 	if($reltable != null)
 		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;

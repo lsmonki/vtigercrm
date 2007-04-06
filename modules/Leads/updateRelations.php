@@ -14,23 +14,9 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
-$rel_table = 'vtiger_campaignleadrel';
 
-if($singlepane_view == 'true')
-	$action = "DetailView";
-else
-	$action = "CallRelatedList";
-
-//save the relationship when we select Product from Lead RelatedList
-if($dest_mod == 'Products')
-{
-	$leadid = $_REQUEST['parid'];
-	$productid = $_REQUEST['entityid'];
-	if($leadid != '' && $productid != '')
-		$adb->query("insert into vtiger_seproductsrel values($leadid,$productid,'Leads')");
-	
-	$record = $leadid;
-}
+if($singlepane_view == 'true') $action = "DetailView";
+else $action = "CallRelatedList";
 
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
@@ -40,25 +26,24 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		    $sql = "insert into  ".$rel_table." values(".$id.",".$_REQUEST["parentid"].")";
-	            $adb->query($sql);
+			if($dest_mod == 'Products')
+				$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parentid"].",".$id.",'Leads')");
+			elseif($dest_mod == 'Campaigns')	
+		    		$adb->query("insert into  vtiger_campaignleadrel values(".$id.",".$_REQUEST["parentid"].")");
 		}
 	}
-
 	$record = $_REQUEST["parentid"];
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{	
-	$sql = "insert into ".$rel_table." values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")";
-	$adb->query($sql);
-
+{
+	if($dest_mod == 'Products')
+		$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parid"].",".$_REQUEST["entityid"].",'Leads')");	
+	elseif($dest_mod == 'Campaigns')
+		$adb->query("insert into vtiger_campaignleadrel values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")");
 	$record = $_REQUEST["parid"];
 }
 
-$module = "Leads";
-if($_REQUEST['return_module'] != '') $module = $_REQUEST['return_module'];
-
-header("Location: index.php?action=$action&module=$module&record=".$record);
+header("Location: index.php?action=$action&module=Leads&record=".$record);
 
 
 
