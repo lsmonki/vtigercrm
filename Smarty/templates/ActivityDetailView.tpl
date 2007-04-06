@@ -151,6 +151,7 @@ function DeleteTag(id,recordid)
 								<td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 								{/if}
                                                          </tr>
+							{if $LABEL.taskpriority neq '' || $LABEL.sendnotification neq ''}
 							 <tr>
 								{if $LABEL.taskpriority neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.taskpriority}</b></td>
@@ -161,12 +162,15 @@ function DeleteTag(id,recordid)
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.sendnotification}</td>
 								{/if}
                                                          </tr>
+							{/if}
+							{if $LABEL.createdtime neq '' || $LABEL.modifiedtime neq ''}
                                                          <tr>
                                                                 <td class="cellLabel" align="right" nowrap valign="top"align="right">{if $LABEL.createdtime neq ''}<b>{$LABEL.createdtime}</b>{/if}</td>
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{if $LABEL.createdtime neq ''}{$ACTIVITYDATA.createdtime}{/if}</td>
                                                                 <td class="cellLabel" align="right" nowrap valign="top"align="right">{if $LABEL.modifiedtime neq ''}<b>{$LABEL.modifiedtime}</b>{/if}</td>
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{if $LABEL.modifiedtime neq ''}{$ACTIVITYDATA.modifiedtime}{/if}</td>
                                                          </tr>
+							{/if}
 						     </table>
 						     <table border=0 cellspacing=1 cellpadding=0 width=100%>
 							<tr><td width=50% valign=top >
@@ -294,14 +298,22 @@ function DeleteTag(id,recordid)
                         					<td colspan="2" align="center" style="padding:0px">
                                 				<table border="0" cellpadding="5" cellspacing="1" width="100%" >
                                        					<tr>
-                                                				<td class="cellLabel" width=33% align="left">{if $LABEL.taskstatus neq ''}<b>{$LABEL.taskstatus}</b>{/if}</td>
-										<td class="cellLabel" width=33% align="left">{if $LABEL.taskpriority neq ''}<b>{$LABEL.taskpriority}</b>{/if}</td>
-										<td class="cellLabel" width=34% align="left">{if $LABEL.assigned_user_id neq ''}<b>{$LABEL.assigned_user_id}</b>{/if}</td>
+										{if $LABEL.taskstatus neq ''}
+                                                					<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</b></td>
+										{/if}
+										{if $LABEL.taskpriority neq ''}
+											<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskpriority}</b></td>
+										{/if}
+										<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
 									</tr>
 									<tr>
-                                                				<td class="cellInfo" align="left" valign="top">{if $LABEL.taskstatus neq ''}{$ACTIVITYDATA.taskstatus}{/if}</td>
-										<td class="cellInfo" align="left" valign="top">{if $LABEL.taskpriority neq ''}{$ACTIVITYDATA.taskpriority}{/if}</td>
-										<td class="cellInfo" align="left" valign="top">{if $LABEL.taskpriority neq ''}{$ACTIVITYDATA.assigned_user_id}{/if}</td>
+										{if $LABEL.taskstatus neq ''}
+                                                					<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskstatus}</td>
+										{/if}
+										{if $LABEL.taskpriority neq ''}		
+											<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskpriority}</td>
+										{/if}
+										<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 									</tr>
 								</table>
 								</td>
@@ -322,7 +334,7 @@ function DeleteTag(id,recordid)
 									<tr><td class="cellInfo">&nbsp;</td></tr>
 								</table>
 							</td>
-						     </table>
+						     </table>	
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							<tr>
 								<td class="cellLabel" align=right nowrap width=20%>{if $LABEL.createdtime neq ''}<b>{$LABEL.createdtime}</b>{/if}</td>

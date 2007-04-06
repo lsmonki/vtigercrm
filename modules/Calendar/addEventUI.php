@@ -648,8 +648,10 @@ function getAssignedToHTML($assignedto,$toggletype)
 				if(isPermitted("Calendar","EditView") == "yes")
 				{
 				?>
-				<a href="javascript:;" id="complete" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_HELD']?></a>
-				<a href="javascript:;" id="pending" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_NOTHELD']?></a>
+					<?php if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') { ?>
+						<a href="javascript:;" id="complete" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_HELD']?></a>
+						<a href="javascript:;" id="pending" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_NOTHELD']?></a>
+					<?php }?>		
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
 				<a href="javascript:;" id="postpone" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
 				<a href="javascript:;" id="changeowner" onClick="fnvshobj(this,'act_changeowner');fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
@@ -927,8 +929,11 @@ function getAssignedToHTML($assignedto,$toggletype)
                                 if(isPermitted("Calendar","EditView") == "yes")
                                 {
                                 ?>
-                                <a href="" id="taskcomplete" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
-                                <a href="" id="taskpending" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_DEFERRED']?></a>
+					<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0') { ?>
+	                                	<a href="" id="taskcomplete" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
+        	                        	<a href="" id="taskpending" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_DEFERRED']?></a>
+					<?php } ?>		
+						
                                 <span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
                                 <a href="" id="taskpostpone" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
                                 <a href="" id="taskchangeowner" onClick="fnvshobj(this,'act_changeowner'); fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
