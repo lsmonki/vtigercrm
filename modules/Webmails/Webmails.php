@@ -423,8 +423,10 @@ function GetPart(&$attach_tab, &$this_part, $part_no, &$display_rfc822)
 		    $mime_type = 'multipart';
                 for ($i = 0; $i < count($this_part->parts); $i++)
 	{
-                    if ($part_no != '')
-                        $part_no = $part_no . '.';
+                    if ($part_no != ''){
+			if(!strpos($part_no,'.'))
+                     	   $part_no = $part_no . '.';
+		    }
                     // if it's an alternative, we skip the text part to only keep the HTML part
                     if ($this_part->subtype == 'ALTERNATIVE')// && $read == true)
                         $this->GetPart($attach_tab, $this_part->parts[++$i], $part_no . ($i + 1), $display_rfc822);
@@ -648,7 +650,7 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			{
 			$mime = str_replace('/', '-', $tmp['mime']);
 			if ($display_part_no == true)
-				$link .= $tmp['number'] . '&nbsp;&nbsp;';
+				$link .= $tmp['number']-1 . '&nbsp;&nbsp;';
 			unset($att_name);
 			$att_name_array = imap_mime_header_decode($tmp['name']);
 			for ($i=0; $i<count($att_name_array); $i++) {
@@ -769,6 +771,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			array_push($attach_tab, $tmpvar);
 		}
 		$link_att = '';
+		$att_links = '';//variable added to display the attachments in full email view
 		$conf->display_part_no = true;
 		if ($struct_msg->subtype != 'ALTERNATIVE' && $struct_msg->subtype != 'RELATED')
 		{
@@ -779,9 +782,11 @@ function convertMailData2Html($maildata, $cutafter = 0)
 				break;
 			case 1:
 				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right">' . $html_att . ':</th><td class="mailHeaderData">' . $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev) . '</td></tr></span>';
+				$this->att_links .= $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev)."</br>";
 				break;
 			default:
 				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right">' . $html_atts . ':</th><td class="mailHeaderData">' . $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev) . '</td></tr></span>';
+				$this->att_links .= $this->link_att($mail, $attach_tab, $conf->display_part_no,$ev)."</br>";
 				break;
 			} 
 		}else

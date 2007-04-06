@@ -44,11 +44,14 @@ $array_tab = Array();
 $webmail->loadMail($array_tab);
 
 echo '<tr><td align="center"><iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&mailbox='.$mailbox.'" width="100%" height="450" frameborder="0" style="border:1px solid gray">'.$mod_strings['LBL_NO_IFRAMES_SUPPORTED'].'</iframe></td></tr>';
-
-echo "<tr><td><p style='font-weight:bold'>".$mod_strings['LBL_EMAIL_ATTACHMENTS']."</p></td></tr>";
-
-foreach($webmail->attachments as $key=>$value) {
-	echo '<tr><td>'.($key+1).') <a href="index.php?module=Webmails&action=dlAttachments&num='.$key.'&mailid='.$mailid.'&mailbox='.$mailbox.'" target="_blank">'.$value["filename"]."</a></td></tr>";
+if($webmail->has_attachments)
+{
+	//check for attachments
+	echo "<tr><td><p style='font-weight:bold'>".$mod_strings['LBL_EMAIL_ATTACHMENTS']."</p></td></tr>";
+	echo "<tr><td>".$webmail->att_links."</td></tr>";
 }
+/*foreach($webmail->attachments as $key=>$value) {
+	echo '<tr><td>'.($key+1).') <a href="index.php?module=Webmails&action=dlAttachments&num='.$key.'&mailid='.$mailid.'&mailbox='.$mailbox.'" target="_blank">'.$value["filename"]."</a></td></tr>";
+}*/
 echo '</table>';
 ?>
