@@ -28,14 +28,6 @@ function gotoWebmail()
 
 }
 
-function setSubject(subject)
-{
-	if(getObj("subjectsetter"))
-	{
-		document.getElementById("subjectsetter").innerHTML=subject;
-	}
-}
-
 function getEmailContents(id)
 {
 	$("status").style.display="inline";

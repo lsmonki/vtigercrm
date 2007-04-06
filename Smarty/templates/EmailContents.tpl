@@ -23,9 +23,9 @@
 				<td>
 				<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
 				</span></td>
-				<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.0}</b></td>
-				<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.1}</td>
-				<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.2}</td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;"><b>{$row.0}</b></td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.1}</td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td>
 			        </tr>
 			{/foreach}
 		{else}
