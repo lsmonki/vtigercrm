@@ -1916,6 +1916,8 @@ function getListQuery($module,$where='')
 				ON vtiger_account.accountid = vtiger_contactdetails.accountid
 			LEFT OUTER JOIN vtiger_recurringevents
 				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+			LEFT OUTER JOIN vtiger_activity_reminder
+                        	ON vtiger_activity_reminder.activity_id = vtiger_activity.activityid
 			WHERE vtiger_crmentity.deleted = 0
 			AND (vtiger_activity.activitytype = 'Meeting'
 				OR vtiger_activity.activitytype = 'Call'
