@@ -369,7 +369,7 @@ function DeleteTag(id,recordid)
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <td align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
-                                                                                        <td align=left>{$ACTIVITYDATA.contact_id}</td>
+											<td align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
                                                                                 </tr>
                                                                         </table>
 									{/if}

@@ -108,10 +108,10 @@ foreach($act_data as $block=>$entry)
 		{
 			$fldlabel[$field['fldname']] = $label;
 			$finaldata[$field['fldname']] = $field['value'];
+			$finaldata[$field['fldname'].'link'] = $field['link'];
 		}
 	}
 }
-
 //Start
 //To set user selected hour format
 if($current_user->hour_format == '')
@@ -152,6 +152,7 @@ if($activity_mode == 'Task')
 		$data['taskstatus'] = $finaldata['taskstatus'];
 	$data['activitytype'] = $activity_mode;
 	$data['contact_id'] = $finaldata['contact_id'];
+	$data['contact_idlink'] = $finaldata['contact_idlink'];
 }
 elseif($activity_mode == 'Events')
 {
