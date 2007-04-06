@@ -29,7 +29,7 @@ $id = $_REQUEST['record'];
 $focus = new Invoice();
 $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");
 $account_name = getAccountName($focus->column_fields[account_id]);
-
+$invoice_no = $focus->column_fields[invoice_no];
 
 // **************** BEGIN POPULATE DATA ********************
 

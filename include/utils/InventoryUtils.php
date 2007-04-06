@@ -716,4 +716,88 @@ function getInventorySHTaxPercent($id, $taxname)
 }
 
 
+/**	function used to set invoice string and increment invoice id 
+ *	@param string $mode - mode should be configure_invoiceno or increment_incoiceno
+ *	@param string $req_str - invoice string which is part of the invoice number, this may be alphanumeric characters
+ *	@param int $req_no - This should be a number which will written in file and will be used as a next invoice number
+ *	@return void. The invoice string and number are stored in the  file CustomInvoiceNo.php so that concatenated string 		with number will be used as a next invoice number
+ */
+
+function setInventoryInvoiceNumber($mode, $req_str='', $req_no='')
+{
+        global $root_directory;
+        $filename = $root_directory.'user_privileges/CustomInvoiceNo.php';
+        $readhandle = fopen($filename, "r+");
+        $buffer = '';
+        $new_buffer = '';
+
+	//when we configure the invoice number in Settings this will be used
+	if ($mode == "configure_invoiceno" && $req_str != '' && $req_no != '')
+	{
+
+ 	        while(!feof($readhandle))
+               	{
+                       	$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
+
+			if($starter == '$inv_str')
+			{
+				$new_buffer .= "\$inv_str = '".$req_str."';\n";
+			}
+			elseif($starter == '$inv_no')
+			{
+				$new_buffer .= "\$inv_no = '".$req_no."';\n";
+			}
+			else
+				$new_buffer .= $buffer;
+		}
+	}
+	else if ($mode == "increment_invoiceno")//when we save new invoice we will increment the invoice id and write
+	{
+		require_once('user_privileges/CustomInvoiceNo.php');
+		while(!feof($readhandle))
+		{
+			$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
+
+			if($starter == '$inv_no')
+			{
+				//if number is 001, 002 like this (starting with zero) then when we increment 1, zeros will be striped out and result comes as 1,2, etc. So we have added 0 previously for the needed length ie., two zeros for 001, 002, etc.,
+				//If the value is less than 0, then we assign 0 to it(to avoid error).
+				$strip=strlen($inv_no)-strlen($inv_no+1);
+				if($strip<0)$strip=0;
+
+				$temp = str_repeat("0",$strip);
+				$new_buffer .= "\$inv_no = '".$temp.($inv_no+1)."';\n";
+			}
+			else
+				$new_buffer .= $buffer;
+
+		}
+	}
+
+	//we have the contents in buffer. Going to write the contents in file
+	fclose($readhandle);
+	$handle = fopen($filename, "w");
+	fputs($handle, $new_buffer);
+	fclose($handle);
+}
+
+/**	Function used to check whether the provided invoicenumber is already available or not
+ *	@param int $invoiceno - invoice number, which we are going to check for duplicate
+ *	@return binary true or false. If invoice number is already available then return true else return false
+ */
+function CheckDuplicateInvoiceNumber($invoiceno)
+{
+	global $adb;
+	$result=$adb->query("select invoice_no  from vtiger_invoice where invoice_no = '".$invoiceno."'");
+	$num_rows = $adb->num_rows($result);
+
+	if($num_rows > 0)
+		return true;
+	else
+		return false;
+}
+
+
 ?>

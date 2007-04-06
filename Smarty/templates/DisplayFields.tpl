@@ -46,6 +46,11 @@
 					<span id="vtbusy_info" style="display:none;">
 						<img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>
 				</td>
+			{elseif $fldname eq 'invoice_no' && $MODULE eq 'Invoice'}
+
+                                <td width=30% align=left class="dvtCellInfo"><input readonly type="text" tabindex="{$vt_tab}" name="{$fldname}" id ="{$fldname}" {if $MODE eq 'edit'} value="{$fldvalue}" {else} value="{$inv_no}" {/if} class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
+		
+
 			{else}
 				<td width=30% align=left class="dvtCellInfo"><input type="text" tabindex="{$vt_tab}" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 			{/if}

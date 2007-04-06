@@ -3999,6 +3999,10 @@
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
 		<field name="invoicestatus" type="C" size='200' />
+		<field name="invoice_no" type="C" size='100' >
+                        <default value="NULL" />
+                        <unique />
+                </field>
 
 		<index name="invoice_purchaseorderid_idx">
 			<col>invoiceid</col>

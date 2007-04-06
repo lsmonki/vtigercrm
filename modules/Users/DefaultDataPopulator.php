@@ -866,7 +866,8 @@ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,74,1,'V~O',1,null,'ADV')");
  //Block74
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'terms_conditions','vtiger_invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,73,1,'V~O',1,null,'ADV')");
-
+//Added for Custom invoice Number
+$this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'invoice_no','vtiger_invoice',1,'1','invoice_no','invoice_no',1,0,0,100,3,69,1,'V~M',1,null,'BAS')");	
 
 //Invoice Details -- END
  //users Details Starts Block 79,80,81

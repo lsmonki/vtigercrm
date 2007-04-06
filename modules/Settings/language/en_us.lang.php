@@ -907,5 +907,14 @@ $mod_strings = Array(
 'FILESIZE_EXCEEDS_INFO' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file',
 'PROBLEMS_IN_FILEUPLOAD' => 'Problems in file upload. Please try again!',
 
+//Added fields for Invoice Number labels
+'LBL_CUSTOMIZE_INVOICE_NUMBER'=>'Customize Invoice Number',
+'LBL_CUSTOMIZE_INVOICE_NUMBER_DESCRIPTION'=>'Invoice Number Customization',
+'LBL_CUSTOM_INVOICE_NUMBER_VIEW'=>'Invoice Number Customization',
+'LBL_CUSTOMINVOICE_STRING'=>'Custom Invoice String',
+'LBL_CUSTOMINVOICE_NUMBER'=>'Custom Invoice Number',
+'LBL_INVOICE_NUMBER_PREVIEW'=>'Preview',
+'LBL_INVOICE_NUMBER_BUTTON'=>'Update Invoice Number',
+
 );
 ?>

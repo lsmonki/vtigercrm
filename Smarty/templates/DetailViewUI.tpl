@@ -14,7 +14,11 @@
 
 <!-- This file is used to display the fields based on the ui type in detailview -->
 		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72' || $keyid eq '103'} <!--TextBox-->
+				{if $label eq 'Invoice No'}
+                                                        <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">
+                                {else}
                                          		<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">
+                                 {/if}
                                          		      {if $keyid eq '55'}<!--SalutationSymbol-->
                                          		            {$keysalut}
                                          		      {*elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->

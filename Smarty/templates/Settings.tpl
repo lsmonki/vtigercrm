@@ -490,6 +490,26 @@
 
 		</tr>
 
+		<!-- Added for Custom Invoice Number #start -->
+		<!-- icon for Invoice Number Configuration -->
+		<tr>
+			<td width=25% valign=top>
+			<!-- empty-->
+
+			<table border=0 cellspacing=0 cellpadding=5 width=100%>
+			<tr>
+				<td rowspan=2 valign=top><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings"><img src="{$IMAGE_PATH}settingsInvNumber.gif" alt="{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}" width="48" height="48" border=0 title="{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}"></a></td>
+				<td class=big valign=top><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}</a></td>
+			</tr>
+			<tr>
+				<td class="small" valign=top>{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER_DESCRIPTION}</td>
+			</tr>
+
+			</table>
+			</td>
+		</tr>
+		<!-- Added for Custom Invoice Number #end -->
+
 		</table>
 		
 		</td>

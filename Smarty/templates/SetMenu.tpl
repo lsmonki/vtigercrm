@@ -181,6 +181,16 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
 		{/if}
 
+<!-- Added For Custom Invoice Number #start -->
+
+		{if $smarty.request.action eq 'CustomInvoiceNo'}
+			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}</a></td></tr>
+		{else}
+			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}</a></td></tr>
+		{/if}
+
+<!-- Added For Custom Invoice Number #end -->
+
 		</table>
 		<!-- Left side navigation table ends -->
 		
