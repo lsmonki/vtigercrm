@@ -375,17 +375,16 @@ function timeString($datetime,$fmt){
 	return $timeStr;
 }
 //added to fix Ticket#3068
-function getEventNotification($mail_id,$mode,$subject,$desc)
+function getEventNotification($mode,$subject,$desc)
 {
 	global $current_user,$adb;
 	require_once("modules/Emails/mail.php");
 	$subject = $mode.' : '.$subject;
 	$crmentity = new CRMEntity();
-
 	if($desc['assingn_type'] == "U")
 	{
-		$to_email = getUserEmailId('id',$mail_id);
-		$description = getActivityDetails($desc,$current_user->id);
+		$to_email = getUserEmailId('id',$desc['user_id']);
+		$description = getActivityDetails($desc,$desc['user_id']);
 		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
 	}
 	if($desc['assingn_type'] == "T")
@@ -449,12 +448,12 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$res = $adb->query($usr_qry);
 	$usr_id = $adb->query_result($res,0,"smownerid");
 	$assignType = "U";
-	if($usr_id == '')
+	if($usr_id == 0)
 	{
 		$assignType = "T";
 		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=".$return_id;
 		$grp_res = $adb->query($group_qry);
-		$grp_name = $adb->query_result($res,0,"groupname");
+		$grp_name = $adb->query_result($grp_res,0,"groupname");
 	}
 
 

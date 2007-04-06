@@ -50,7 +50,7 @@ if(isset($_REQUEST['mode']))
 	if($_REQUEST["task_sendnotification"]=='on')
         {
 		$mail_contents = getRequestedToData();
-		getEventNotification($_REQUEST['task_assigned_user_id'],$_REQUEST['activity_mode'],$_REQUEST['task_subject'],$mail_contents);
+		getEventNotification($_REQUEST['activity_mode'],$_REQUEST['task_subject'],$mail_contents);
 
         }
 function getRequestedToData()

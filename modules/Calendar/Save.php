@@ -61,7 +61,7 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 	$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
 	if($mail_data['sendnotification'] == 1)
 	{
-		getEventNotification($mail_data['user_id'],$activity_type,$mail_data['subject'],$mail_data);
+		getEventNotification($activity_type,$mail_data['subject'],$mail_data);
 	}
 	$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
 	$invitee_res = $adb->query($invitee_qry);
@@ -186,7 +186,7 @@ function getRequestData()
 if($_REQUEST['sendnotification'] == 'on')
 {
 	$mail_contents = getRequestData();
-	getEventNotification($_REQUEST['assigned_user_id'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
+	getEventNotification($_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 //code added to send mail to the vtiger_invitees
