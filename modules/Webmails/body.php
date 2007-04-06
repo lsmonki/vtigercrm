@@ -101,8 +101,6 @@ while ($tmp = array_pop($content['attachtab']))
                         {
 			echo '<hr />';
 			echo '<center>';
-			echo $mod_strings['LBL_LOADING_IMAGE'];
-			echo '..........<br>';
 			echo '<img src="index.php?module=Webmails&action=get_img&mail=' . $mailid.'&num=' . $tmp['number'] . '&mime=' . $img_type . '&transfer=' . $tmp['transfer'] . '" />';
 			echo '</center>';
 	}                
