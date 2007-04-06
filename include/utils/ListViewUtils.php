@@ -1574,21 +1574,21 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					if($module == "Contacts")
 					{
-						$query="SELECT vtiger_contactdetails.imagename FROM vtiger_contactdetails WHERE contactid='".$entity_id."'";
-						$result = $adb->query($query);
+						$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$entity_id;
+						$image_res = $adb->query($sql);
+						$image_id = $adb->query_result($image_res,0,'attachmentsid');
+						$image_path = $adb->query_result($image_res,0,'path');
+						$image_name = $adb->query_result($image_res,0,'name');
+						$imgpath = $image_path.$image_id."_".$image_name;
 						$contact_image = '';
-						$imagename=$adb->query_result($result,0,'imagename');
-						if($imagename != '')
-                                                {
-                                                        $imgpath = "test/contact/".$imagename;
-                                                        $contact_image='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=fnhide("dynloadarea");>';
-                                                }
+						if($image_name != '')
+							$contact_image ='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover="modifyimage(\'dynloadarea\',\''.$imgpath.'\');" onMouseOut="fnhide(\'dynloadarea\');" alt="'.$app_strings['MSG_IMAGE_ERROR'].'" title="'.$app_strings['Contact Image'].'">';
+						$value =$contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 
-						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>'.$contact_image;
 					}else
 					{
 						//Commented to give link even to the first name - Jaguar
-						$value = $contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
+						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 					}
 				}
 				elseif($module == "Calendar")
