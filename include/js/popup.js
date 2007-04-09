@@ -15,6 +15,6 @@ function mypopup()
 }
 
 function newpopup(str){
-                window.open (str,"mywinw","menubar=1,resizable=1");
+                window.open (str,"mywinw","menubar=1,resizable=1,scrollbars=yes");
 //              window.parent.close();
 }
