@@ -69,11 +69,11 @@ class HelpDesk extends CRMEntity {
 				);
 	var $search_fields = Array(
 		'Ticket ID' => Array('vtiger_crmentity'=>'crmid'),
-		'Subject' => Array('vtiger_troubletickets'=>'title')
+		'Title' => Array('vtiger_troubletickets'=>'title')
 		);
 	var $search_fields_name = Array(
 		'Ticket ID' => '',
-		'Subject'=>'ticket_title',
+		'Title'=>'ticket_title',
 		);
 
 	//Added these variables which are used as default order by and sortorder in ListView
