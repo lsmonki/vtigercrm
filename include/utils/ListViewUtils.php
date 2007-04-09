@@ -83,6 +83,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		$j++;
 	}
 	$field_list .=')';
+	$field=Array();
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
@@ -98,7 +99,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			AND vtiger_profile2field.profileid IN ".$profileList."
 			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
-		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -253,6 +253,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		$j++;
 	}
 	$field_list .=')';
+	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
@@ -268,7 +269,6 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 			AND vtiger_profile2field.profileid IN ".$profileList."
 			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
-		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -483,6 +483,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$j++;
 	}
 	$field_list .=')';
+	$field=Array();
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
@@ -502,7 +503,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			AND vtiger_profile2field.profileid IN ".$profileList."
 			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
-		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -832,6 +832,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	}
 	$field_list .=')';
 	
+	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
 		$profileList = getCurrentUserProfileList();
@@ -848,7 +849,6 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		
-		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
