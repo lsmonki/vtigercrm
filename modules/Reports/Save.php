@@ -34,7 +34,7 @@ $smodule = $_REQUEST["secondarymodule"];
 //<<<<<<<reportmodules>>>>>>>>>
 
 //<<<<<<<report>>>>>>>>>
-$reportname = $_REQUEST["reportName"];
+$reportname = addslashes($_REQUEST["reportName"]);
 $reportdescription = $_REQUEST["reportDesc"];
 $reporttype = $_REQUEST["reportType"];
 $folderid = $_REQUEST["folder"];
