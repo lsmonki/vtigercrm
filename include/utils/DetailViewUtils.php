@@ -1214,10 +1214,11 @@ function getDetailAssociatedProducts($module,$focus)
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
 		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
-		$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT']." = $finalDiscount";
 	}
-	if($final_discount_info != '')
-		$final_discount_info = 'onclick="alert(\''.$final_discount_info.'\');"';
+
+	//Alert the Final Discount amount even it is zero
+	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT']." = $finalDiscount";
+	$final_discount_info = 'onclick="alert(\''.$final_discount_info.'\');"';
 
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small lineOnTop">(-)&nbsp;<b><a href="javascript:;" '.$final_discount_info.'>'.$app_strings['LBL_DISCOUNT'].'</a></b></td>';
