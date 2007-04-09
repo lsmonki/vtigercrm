@@ -496,6 +496,10 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	$prod_seq=1;
 	for($i=1; $i<=$tot_no_prod; $i++)
 	{
+		//if the product is deleted then we should avoid saving the deleted products
+		if($_REQUEST["deleted".$i] == 1)
+			continue;
+
 	        $prod_id = $_REQUEST['hdnProductId'.$i];
 		if(isset($_REQUEST['productDescription'.$i]))
 			$description = $_REQUEST['productDescription'.$i];
@@ -509,10 +513,6 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
 
 		$comment = addslashes($_REQUEST['comment'.$i]);
-
-		//if the product is deleted then we should avoid saving the deleted products
-		if($_REQUEST["deleted".$i] == 1)
-			continue;
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
 		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
