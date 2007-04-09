@@ -174,7 +174,7 @@ var iChars = "!@#$%^&*()+=[]\\\';,./{}|\":<>?";
             {
                if (iChars.indexOf(invstring.charAt(i)) != -1)
                 {
-               alert ("Special Characters are not allowed in Invoice String.\n Please remove them and try again.");
+               alert (alert_arr.NO_SPECIAL_CHARS);
                return false;
                 }
 

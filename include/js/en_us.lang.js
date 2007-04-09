@@ -103,5 +103,7 @@
 				LESS_THAN:'less than',
 				GREATER_THAN:'greater than',
 				LESS_OR_EQUALS:'less or equal',
-				GREATER_OR_EQUALS:'greater or equal'
+				GREATER_OR_EQUALS:'greater or equal',
+
+				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String'
                        };
