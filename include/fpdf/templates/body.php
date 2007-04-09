@@ -1,7 +1,7 @@
 <?php
 // watermark based on status
 // this is the postion of the watermark before the rotate
-$waterMarkPositions=array("50","180");
+$waterMarkPositions=array("30","180");
 // this is the rotate amount (todo)
 $waterMarkRotate=array("45","50","180");
 $pdf->watermark( $status, $waterMarkPositions, $waterMarkRotate );
@@ -31,9 +31,8 @@ if($focus->column_fields["hdnTaxType"] == "individual")
 	$colsAlign["Discount"] = "R";
 	$colsAlign["Tax"] = "R";
 	$colsAlign["Total"] = "R";
-
-	$cols["Product Name"] = "25";
-	$cols["Description"] = "70";
+	$cols["Product Code"] = "30";
+	$cols["Product Name"] = "65";
 	$cols["Qty"] = "10";
 	$cols["Price"] = "25";
 	$cols["Discount"] = "15";
@@ -49,9 +48,8 @@ else
 	$colsAlign["Price"] = "R";
 	$colsAlign["Discount"] = "R";
 	$colsAlign["Total"] = "R";
-
-	$cols["Product Name"] = "25";
-	$cols["Description"] = "70";
+	$cols["Product Code"] = "30";
+	$cols["Product Name"] = "65";
 	$cols["Qty"] = "15";
 	$cols["Price"] = "30";
 	$cols["Discount"] = "20";

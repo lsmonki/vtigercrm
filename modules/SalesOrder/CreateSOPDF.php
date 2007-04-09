@@ -46,6 +46,7 @@ $bill_city = $focus->column_fields["bill_city"];
 $bill_state = $focus->column_fields["bill_state"];
 $bill_code = $focus->column_fields["bill_code"];
 $bill_country = $focus->column_fields["bill_country"];
+$contact_name =getContactName($focus->column_fields["contact_id"]);
 
 $ship_street = $focus->column_fields["ship_street"];
 $ship_city = $focus->column_fields["ship_city"];
@@ -156,6 +157,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$list_price[$i] = number_format($associated_products[$i]['listPrice'.$i],2,'.',',');
 	$list_pricet[$i] = $associated_products[$i]['listPrice'.$i];
 	$discount_total[$i] = $associated_products[$i]['discountTotal'.$i];
+        //aded for 5.0.3 pdf changes
+        $product_code[$i] = $associated_products[$i]['hdnProductcode'.$i];
 	
 	$taxable_total = $qty[$i]*$list_pricet[$i]-$discount_total[$i];
 
@@ -177,8 +180,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	}
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
 
+        $product_line[$j]["Product Code"] = $product_code[$i];
 	$product_line[$j]["Product Name"] = $product_name[$i];
-	$product_line[$j]["Description"] = $prod_description[$i];
 	$product_line[$j]["Qty"] = $qty[$i];
 	$product_line[$j]["Price"] = $list_price[$i];
 	$product_line[$j]["Discount"] = $discount_total[$i];

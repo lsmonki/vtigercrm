@@ -1342,6 +1342,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
 					vtiger_products.productname,
+ 		                        vtiger_products.productcode, 
 					vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
@@ -1357,6 +1358,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
  		                        vtiger_products.productname, 
+ 		                        vtiger_products.productcode, 
  		                        vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
@@ -1372,6 +1374,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
  		                        vtiger_products.productname, 
+ 		                        vtiger_products.productcode, 
  		                        vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
@@ -1387,6 +1390,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
  		                        vtiger_products.productname, 
+ 		                        vtiger_products.productcode, 
  		                        vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
@@ -1402,6 +1406,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
  		                        vtiger_products.productname, 
+ 		                        vtiger_products.productcode, 
  		                        vtiger_products.product_description, 
  		                        vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
@@ -1415,6 +1420,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="SELECT 
  		                        vtiger_products.productid, 
+ 		                        vtiger_products.productcode, 
  		                        vtiger_products.productname, 
  		                        vtiger_products.product_description, 
  		                        vtiger_products.unit_price, 
@@ -1432,6 +1438,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	for($i=1;$i<=$num_rows;$i++)
 	{
 		$hdnProductId = $adb->query_result($result,$i-1,'productid');
+		$hdnProductcode = $adb->query_result($result,$i-1,'productcode');
 		$productname=$adb->query_result($result,$i-1,'productname');
 		$productdescription=$adb->query_result($result,$i-1,'product_description');
 		$comment=$adb->query_result($result,$i-1,'comment');
@@ -1456,6 +1463,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 		$product_Detail[$i]['hdnProductId'.$i] = $hdnProductId;
 		$product_Detail[$i]['productName'.$i]= from_html($productname);
+		$product_Detail[$i]['hdnProductcode'.$i] = $hdnProductcode;
 		$product_Detail[$i]['productDescription'.$i]= from_html($productdescription);
 		$product_Detail[$i]['comment'.$i]= $comment;
 
