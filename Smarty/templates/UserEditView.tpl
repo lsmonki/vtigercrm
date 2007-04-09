@@ -32,6 +32,9 @@ function openPopup(){ldelim}
 function check_duplicate()
 {ldelim}
 	var user_name = window.document.EditView.user_name.value;
+	var status = usernameValid(user_name);
+        if(status)
+	{ldelim}
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -45,7 +48,9 @@ function check_duplicate()
                         {rdelim}
                 {rdelim}
         );
-
+	{rdelim}
+	else
+            alert("Please Enter Character & Numerical Values");
 {rdelim}
 
 </script>

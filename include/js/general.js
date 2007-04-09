@@ -2008,3 +2008,18 @@ if(confirm(alert_arr.ARE_YOU_SURE))
             document.location.href=url;
        }
 }
+
+function usernameCharValid(c) {
+  return ( ((c >= 'a') && (c <= 'z')) ||
+           ((c >= 'A') && (c <= 'Z')) ||
+           ((c >= '0') && (c <= '9')) ||
+           (c == '.') );
+}
+
+function usernameValid(s) {
+  for (var i = 0; i < s.length; i++) {
+    if (!usernameCharValid(s.charAt(i))){
+      return false;}
+  }
+  return true;
+}
