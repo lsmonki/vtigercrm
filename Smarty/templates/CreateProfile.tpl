@@ -20,7 +20,7 @@
 	<br>
 	<div align=center>
 				{include file='SetMenu.tpl'}
-				<form action="index.php" method="post" name="profileform" id="form">
+				<form action="index.php" method="post" name="profileform" id="form" onSubmit="return rolevalidate();">
                                 <input type="hidden" name="module" value="Settings">
                                 <input type="hidden" name="mode" value="{$MODE}">
                                 <input type="hidden" name="action" value="profilePrivileges">
@@ -125,7 +125,7 @@
 					<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 					<tr>
 						<td colspan="2" align="right">
-						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="crmButton small" onClick="rolevalidate();"/>&nbsp;&nbsp;
+						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 						<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back();" class="crmButton small cancel"/>
 						</td>
 					</tr>
@@ -184,6 +184,7 @@ function rolevalidate()
     {ldelim}
         alert(profile_err_msg);
         document.getElementById('pobox').focus();
+	return false
     {rdelim}
 {rdelim}
 
