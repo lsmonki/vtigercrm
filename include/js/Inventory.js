@@ -659,7 +659,7 @@ function calcCurrentTax(tax_name, curr_row, tax_row)
 	{
 		tax_total = tax_total + eval(new_amount_lbl[i].value);
 	}
-	document.getElementById("taxTotal"+curr_row).innerHTML = tax_total;
+	document.getElementById("taxTotal"+curr_row).innerHTML = roundValue(tax_total);
 
 	calcTotal();
 }
@@ -677,7 +677,7 @@ function calcGroupTax()
 		group_tax_total = eval(group_tax_total) + eval(tax_amount);
 	}
 
-	document.getElementById("tax_final").innerHTML = group_tax_total;
+	document.getElementById("tax_final").innerHTML = roundValue(group_tax_total);
 
 	calcTotal();
 }
