@@ -1629,7 +1629,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
 	{
 		$colspan = 9;
 		$header = Array('0'=>'#','1'=>$mod_strings['LBL_TIME'],'2'=>$mod_strings['LBL_LIST_DUE_DATE'],
-				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_RELATEDTO'],'5'=>$mod_strings['LBL_LIST_CONTACT'],'6'=>$mod_strings['LBL_STATUS'],);
+				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_RELATEDTO'],'5'=>$mod_strings['LBL_CONTACT_NAME'],'6'=>$mod_strings['LBL_STATUS']);
 				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 	                        {
 				array_push($header,$mod_strings['LBL_ACTION']);
@@ -1651,7 +1651,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
 			'3'=>$mod_strings['LBL_DUE_DATE'],
                         '4'=>$mod_strings['LBL_TODO'],
 			'5'=>$mod_strings['LBL_RELATEDTO'],
-			'6'=>$mod_strings['LBL_LIST_CONTACT'],
+			'6'=>$mod_strings['LBL_CONTACT_NAME'],
 			'7'=>$mod_strings['LBL_STATUS'],
 			);
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
