@@ -23,7 +23,18 @@ $sql ="select vtiger_account.accountid,vtiger_accountbillads.street as billingst
 $result = $adb->query($sql);
 $value = $adb->fetch_row($result);
 
-if(($_REQUEST['bill_city'] != $value['billingcity'])  ||  $_REQUEST['bill_street'] != $value['billingstreet']  ||  $_REQUEST['bill_country']!=$value['billingcountry']  ||  $_REQUEST['bill_code']!=$value['billingcode']  ||  $_REQUEST['bill_pobox']!=$value['billingpobox']   ||  $_REQUEST['bill_state']!=$value['billingstate']   ||  $_REQUEST['ship_country']!=$value['country']  ||  $_REQUEST['ship_city']!=$value['city']  ||  $_REQUEST['ship_state']!=$value['state']  ||  $_REQUEST['ship_code']!=$value['code']   ||  $_REQUEST['ship_street']!=$value['street']   ||  $_REQUEST['ship_pobox']!=$value['pobox'] )
+if(($_REQUEST['bill_city'] != $value['billingcity'] && isset($_REQUEST['bill_city']))  ||
+ ($_REQUEST['bill_street'] != $value['billingstreet'] && isset($_REQUEST['bill_street'])) ||
+ ($_REQUEST['bill_country']!=$value['billingcountry'] && isset($_REQUEST['bill_country']))|| 
+ ($_REQUEST['bill_code']!=$value['billingcode'] && isset($_REQUEST['bill_code']))||
+ ($_REQUEST['bill_pobox']!=$value['billingpobox'] && isset($_REQUEST['bill_pobox'])) || 
+ ($_REQUEST['bill_state']!=$value['billingstate'] && isset($_REQUEST['bill_state']))||
+ ($_REQUEST['ship_country']!=$value['country'] && isset($_REQUEST['ship_country']))|| 
+ ($_REQUEST['ship_city']!=$value['city'] && isset($_REQUEST['ship_city']))||
+ ($_REQUEST['ship_state']!=$value['state'] && isset($_REQUEST['ship_state']))||
+ ($_REQUEST['ship_code']!=$value['code'] && isset($_REQUEST['ship_code']))||
+ ($_REQUEST['ship_street']!=$value['street'] && isset($_REQUEST['ship_street']))|| 
+ ($_REQUEST['ship_pobox']!=$value['pobox'] && isset($_REQUEST['ship_pobox'])))
 {
 	$sql1="select contactid from vtiger_contactdetails where accountid=".$record;
 	$result1 = $adb->query($sql1);

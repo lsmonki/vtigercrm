@@ -245,28 +245,40 @@ function set_return_todo(product_id, product_name) {
 //When changing the Account Address Information  it should also change the related contact address.
 function checkAddress(form,id)
 {
-		var bill_street = form.bill_street.value;
-                var ship_street = form.ship_street.value;
-                var bill_city   = form.bill_city.value;
-                var ship_city   = form.ship_city.value;
-                var bill_state  = form.bill_state.value;
-                var ship_state  = form.ship_state.value;
-                var bill_code   = form.bill_code.value;
-                var ship_code   = form.ship_code.value;
-                var bill_country= form.bill_country.value;
-                var ship_country= form.ship_country.value;
-                var bill_pobox  = form.bill_pobox.value;
-                var ship_pobox  = form.ship_pobox.value;
-		
+		var url='';
+		if(typeof(form.bill_street) != 'undefined')
+     			url +="&bill_street="+form.bill_street.value;
+		if(typeof(form.ship_street) != 'undefined')
+     			url +="&ship_street="+form.ship_street.value;
+		if(typeof(form.bill_city) != 'undefined')
+    			url +="&bill_city="+form.bill_city.value;
+		if(typeof(form.ship_city) != 'undefined')
+     			url +="&ship_city="+form.ship_city.value;
+		if(typeof(form.bill_state) != 'undefined')
+     			url +="&bill_state="+form.bill_state.value;
+		if(typeof(form.ship_state) != 'undefined')
+     			url +="&ship_state="+form.ship_state.value;
+		if(typeof(form.bill_code) != 'undefined')
+    			url +="&bill_code="+ form.bill_code.value;
+		if(typeof(form.ship_code) != 'undefined')
+			url +="&ship_code="+ form.ship_code.value;
+		if(typeof(form.bill_country) != 'undefined')
+			url +="&bill_country="+form.bill_country.value;
+		if(typeof(form.ship_country) != 'undefined')
+			url +="&ship_country="+form.ship_country.value;
+		if(typeof(form.bill_pobox) != 'undefined')
+			url +="&bill_pobox="+ form.bill_pobox.value;
+		if(typeof(form.ship_pobox) != 'undefined')
+			url +="&ship_pobox="+ form.ship_pobox.value;
 
-       var url = "bill_street="+bill_street+"&ship_street="+ship_street+"&bill_city="+bill_city+"&ship_city="+ship_city+"&bill_state="+bill_state+"&ship_state="+ship_state+"&bill_code="+bill_code+"&ship_code="+ship_code+"&bill_country="+bill_country+"&ship_country="+ship_country+"&bill_pobox="+bill_pobox+"&ship_pobox="+ship_pobox+"&record="+id;		
+      		url +="&record="+id;		
 	
 		$("status").style.display="inline";
                         new Ajax.Request(
                               'index.php',
                                 {queue: {position: 'end', scope: 'command'},
                                         method: 'post',
-                                        postBody:"module=Accounts&action=AccountsAjax&ajax=true&file=AddressChange&"+url,
+                                        postBody:"module=Accounts&action=AccountsAjax&ajax=true&file=AddressChange"+url,
                                         onComplete: function(response) {
 						if(response.responseText  == 'address_change')
                                         	{
