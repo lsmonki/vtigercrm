@@ -536,7 +536,7 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   {if $secondvalue eq 1}
+			   {if $secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record}
 			   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
 			   	<select disabled name="{$fldname}" class="small">
