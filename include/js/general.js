@@ -651,6 +651,22 @@ function numValidate(fldName,fldLabel,format,neg) {
        else
            var re=/^\d+(\.\d\d*)*$/
    }
+
+	//for precision check. ie.number must contains only one "."	
+	var dotcount=0;
+	for (var i = 0; i < val.length; i++)
+	{   
+	  	if (val.charAt(i) == ".")
+			 dotcount++;
+	}	
+
+	if(dotcount>1)
+	{
+       		alert(alert_arr.INVALID+fldLabel)
+		getObj(fldName).focus()
+		return false;
+	}
+
       if (!re.test(val)) {
        alert(alert_arr.INVALID+fldLabel)
        getObj(fldName).focus()
