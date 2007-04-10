@@ -135,7 +135,7 @@ if(isset($order_by) && $order_by != '')
 	{
 		if( $adb->dbType == "pgsql")
  		    $list_query .= ' GROUP BY vtiger_users.user_name';
-		$list_query .= ' ORDER BY vtiger_users.user_name '.$sorder;
+		$list_query .= " ORDER BY case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ".$sorder;
 	}
 	else
 	{

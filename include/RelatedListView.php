@@ -139,7 +139,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$query_order_by = $order_by;
 	if($order_by == 'smownerid')
 	{
-		$query_order_by = 'user_name';
+		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
 	}	
 	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
 	$url_qry .="&order_by=".$order_by;
