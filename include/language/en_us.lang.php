@@ -675,7 +675,7 @@ $app_strings = array (
 'Reminder' => '[Reminder:',
 'Visit_Link' => 'Kindly visit the link for more details on the activity',
 'Click here' => 'Click here',
-'Subject' => 'Subject:',
+'Subject' => 'Subject',
 'Support_starting' => 'Support starting',
 'Congratulations' => 'Congratulations! Your support starts from today',
 'Hello_Support' => 'Hello! Support Starts for',
@@ -843,6 +843,9 @@ $app_strings = array (
 'LBL_SKYPE'=>'Skype',
 'LBL_FIND'=>'Find',
 'LBL_CLEAR'=>'Clear',
+
+// Added for display the label of Invoice no
+'invoice no'=>'invoice no',
 );
 
 $app_list_strings = array (

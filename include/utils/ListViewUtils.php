@@ -1005,13 +1005,14 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log,$app_strings;
+	global $log,$app_strings,$current_language;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
 	$tabid = getTabid($module);
+	$current_module_strings = return_module_language($current_language, $module);
 	$uicolarr=$field_result[$fieldname];
 	foreach($uicolarr as $key=>$value)
 	{
@@ -1080,6 +1081,22 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}*/
 		
 		
+	}
+	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16)
+	{
+		$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+		if($current_module_strings[$temp_val] != '')
+		{
+			$value = $current_module_strings[$temp_val];
+		}
+		elseif($app_strings[$temp_val] != '')
+		{
+			$value = $app_strings[$temp_val];
+		}
+		else
+		{
+			$value = $temp_val;
+		}
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
