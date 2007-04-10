@@ -138,7 +138,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						if($order_by == $col)
 						{
 							$temp_sorder = $change_sorder[$sorder];
-							$arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
+							$arrow = "&nbsp;<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
 						}
 						else
 						{
@@ -164,15 +164,15 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							}
 							if($relatedlist !='' && $relatedlist != 'global')
 								if($singlepane_view == 'true')	
-									$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+									$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 								else
-									$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+									$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 							elseif($module == 'Users' && $name == 'User Name')
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."&nbsp;".$arrow."</a>";
+								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."".$arrow."</a>";
 							elseif($relatedlist == "global")
 							        $name = $lbl_name;
 							else
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 							$arrow = '';
 					}
 					else
@@ -758,7 +758,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$links_info = "";
 		if(isPermitted($module,"EditView","") == 'yes'){
 			$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);
-			$links_info .= "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
+			$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
 		}
 		
 			
@@ -766,7 +766,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			if($links_info != "")
 				$links_info .=  " | ";
 			$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
-			$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
+			$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
 		}	
 		if($links_info != "")
 			$list_header[] = $links_info;
