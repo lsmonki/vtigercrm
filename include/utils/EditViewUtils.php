@@ -956,6 +956,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$account_selected = "selected";
 
 			}
+			else
+			{
+				$parent_name = "";
+				$value = "";
+			}
+				
 		}
 		$editview_label[] = array($app_strings['COMBO_CONTACTS'],
                                         $app_strings['COMBO_ACCOUNTS']
