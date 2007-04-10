@@ -106,5 +106,6 @@
 				GREATER_OR_EQUALS:'greater or equal',
 
 				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String',
-				SHARED_EVENT_DEL_MSG:'The User does not have permission to Delete this record.'
+				SHARED_EVENT_DEL_MSG:'The User does not have permission to Delete this record.',
+				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n'
                        };

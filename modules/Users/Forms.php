@@ -41,7 +41,6 @@ $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
 $lbl_user_image=$mod_strings['User Image'];
-$err_select_valid_image = $app_strings['SELECT_VALID_IMAGE'];
 $the_emailid = $app_strings['THE_EMAILID'];
 $email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
 $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
@@ -116,22 +115,13 @@ function verify_data(form) {
 		exit();
 	}
 
-// fix for new user upload image validation
-	if (trim(form.imagename.value) != "")
 
- {
-	var valimg=form.imagename.value;	
-	    var aUpload=valimg.split(".");
-            if((aUpload[aUpload.length-1]!="jpg") &&  (aUpload[aUpload.length-1]!="gif") &&  (aUpload[aUpload.length-1]!="bmp") &&  (aUpload[aUpload.length-1]!="png"))
-		{
 
-		alert("$err_select_valid_image");
-		form.imagename.focus();                                                                                                    exit();
-
-		}
-	
- }
-
+	if(! upload_filter("imagename", "jpg|gif|bmp|png") )
+	{
+		form.imagename.focus();
+		return false;
+	}
 
 
 	if(form.mode.value != 'edit')

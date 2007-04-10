@@ -12,7 +12,29 @@
 
 
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+<script type="text/javascript" language="Javascript">
+function validateFile(form) 
+	{ldelim}
 
+	if(!emptyCheck("userfile","File Location","any"))
+		{ldelim}
+                
+			form.userfile.focus();
+		        return false;
+		{rdelim}
+
+
+    	if(! upload_filter("userfile", "csv") )
+		{ldelim}
+        
+                	form.userfile.focus();
+	                return false;
+	
+		{rdelim}
+	
+		return true;
+	{rdelim}
+</script>
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
 
@@ -86,7 +108,7 @@
 				   <tr ><td colspan="2" height="50">&nbsp;</td></tr>
 				    <tr >
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
-							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return verify_data(this.form);">
+							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return validateFile(this.form);">
 						&nbsp;
  <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="window.history.back()">
 

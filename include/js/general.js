@@ -768,7 +768,7 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	 
 						if (type[1]=="M")
-							if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
+							if (!emptyCheck(fieldname[2],fieldlabel[i],getObj(type[2]).type))
 								return false
 
 									if(typeof(type[3])=="undefined") var currdatechk="OTH"
@@ -2023,3 +2023,35 @@ function usernameValid(s) {
   }
   return true;
 }
+
+/** Check Upload file is in specified format(extension).
+  * @param fldname -- name of the file field
+  * @param fldLabel -- Lable of the file field
+  * @param filter -- List of file extensions to allow. each extension must be seperated with a | sybmol.
+  * Example: upload_filter("imagename","Image", "jpg|gif|bmp|png") 
+  * @returns true -- if the extension is IN  specified extension.
+  * @returns false -- if the extension is NOT IN specified extension.
+  *
+  * NOTE: If this field is mandatory,  please call emptyCheck() function before calling this function.
+ */
+
+function upload_filter(fldName, filter)
+{
+	var currObj=getObj(fldName)
+	if(currObj.value !="")
+	{
+		var file=currObj.value;
+		var type=file.split(".");
+		var valid_extn=filter.split("|");	
+	
+		if(valid_extn.indexOf(type[type.length-1]) == -1)
+		{
+			alert(alert_arr.PLS_SELECT_VALID_FILE+valid_extn)
+			currObj.focus();
+		 	return false;
+		}
+	}	
+	return true
+	
+}
+
