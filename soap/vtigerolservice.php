@@ -365,17 +365,14 @@ function LoginToVtiger($userid,$password,$version)
 	global $log;
 	global $adb;
 	$log->DEBUG("Entered into vtigerCRM with userid".$userid." and Version".$version);
-	require_once('vtigerversion.php');	
+	include('vtigerversion.php');	
 	if($version != $vtiger_current_version)
 	{
-		$log->DEBUG("outlook plugin version is not compatible with the vtigerCRM");
 		return "VERSION";
-	}	
+	}
 	require_once('modules/Users/Users.php');
 	$return_access = "FALSE";
-	
 	$objuser = new Users();
-	
 	if($password != "")
 	{
 		$objuser->column_fields['user_name'] = $userid;
