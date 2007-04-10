@@ -1482,6 +1482,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
 		$discountTotal = '0.00';
 		//Based on the discount percent or amount we will show the discount details
+
+		//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(for Each Product)
+		$product_Detail[$i]['discount_percent'.$i] = 0;
+		$product_Detail[$i]['discount_amount'.$i] = 0;
+
 		if($discount_percent != 'NULL' && $discount_percent != '')
 		{
 			$product_Detail[$i]['discount_type'.$i] = "percentage";
@@ -1567,6 +1572,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
 	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
+
+//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(For Final Discount)
+		$product_Detail[1]['final_details']['discount_percentage_final'] = 0;
+		$product_Detail[1]['final_details']['discount_amount_final'] = 0;
 
 	if($focus->column_fields['hdnDiscountPercent'] != '')
 	{
