@@ -41,8 +41,8 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	//if module is HelpDesk then from_email will come based on support email id 
 	if($from_email == '')//$module != 'HelpDesk')
 		$from_email = getUserEmailId('user_name',$from_name);
-
-	$contents = addSignature($contents,$from_name);
+	if($module != "Calendar")
+                $contents = addSignature($contents,$from_name);	
 
 	$mail = new PHPMailer();
 
