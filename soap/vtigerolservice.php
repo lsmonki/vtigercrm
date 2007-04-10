@@ -360,11 +360,18 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	}
 }
 
-function LoginToVtiger($userid,$password)
+function LoginToVtiger($userid,$password,$version)
 {
+	global $log;
 	global $adb;
+	$log->DEBUG("Entered into vtigerCRM with userid".$userid." and Version".$version);
+	require_once('vtigerversion.php');	
+	if($version != $vtiger_current_version)
+	{
+		$log->DEBUG("outlook plugin version is not compatible with the vtigerCRM");
+		return "VERSION";
+	}	
 	require_once('modules/Users/Users.php');
-	
 	$return_access = "FALSE";
 	
 	$objuser = new Users();
@@ -375,16 +382,17 @@ function LoginToVtiger($userid,$password)
 		$objuser->load_user($password);
 		if($objuser->is_authenticated())
 		{
-			$return_access = "TRUE";
+			$return_access = "TRUES";
 		}else
 		{
-			$return_access = "FALSE";
+			$return_access = "LOGIN";
 		}
 	}else
 	{
 			//$server->setError("Invalid username and/or password");
 			$return_access = "FALSE";
 	}
+$log->DEBUG("The return access to outlook was ".$return_access." from vtigerCRM");
 	$objuser = $objuser;
 	return $return_access;
 }
