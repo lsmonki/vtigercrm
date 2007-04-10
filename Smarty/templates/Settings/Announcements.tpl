@@ -77,9 +77,9 @@ function Announcement()
 						<td class="listTableRow small" valign=top><textarea class=small width=90% height=100px id="announcement" name="announcement">{$ANNOUNCE}</textarea></td>
 					  </tr>
 					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
-					</table>
+					</table-->
 				</td>
 				</tr>
 				</table>
