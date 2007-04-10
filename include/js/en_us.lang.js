@@ -107,5 +107,6 @@
 
 				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String',
 				SHARED_EVENT_DEL_MSG:'The User does not have permission to Delete this record.',
-				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n'
+				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n',
+                                NO_SPECIAL:'Special Characters are not allowed'
                        };

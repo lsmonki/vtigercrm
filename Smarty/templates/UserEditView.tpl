@@ -50,7 +50,7 @@ function check_duplicate()
         );
 	{rdelim}
 	else
-            alert("Please Enter Character & Numerical Values");
+            alert(alert_arr.NO_SPECIAL+" in User Name ")
 {rdelim}
 
 </script>
