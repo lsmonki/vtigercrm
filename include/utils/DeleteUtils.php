@@ -63,18 +63,33 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case Contacts:
 		if($return_module == 'Accounts')
 		{
-			$sql = 'update vtiger_contactdetails set accountid = "" where contactid = '.$record;
+			$sql = 'update vtiger_contactdetails set accountid = null where contactid = '.$record;
 			$adb->query($sql);
 		}
-		if($return_module == 'Potentials' && $record != '' && $return_id != '')
+		elseif($return_module == 'Potentials' && $record != '' && $return_id != '')
 		{
 			$sql = 'delete from vtiger_contpotentialrel where contactid='.$record.' and potentialid='.$return_id;
 			$adb->query($sql);
 		}
-		if($return_module == "Campaigns") {
+		elseif($return_module == "Campaigns") {
 			$sql = 'delete from vtiger_campaigncontrel where contactid='.$record.' and campaignid='.$return_id;
 			$adb->query($sql);
 		}
+		elseif($return_module == 'Products')//Delete Contact from Product relatedlist
+		{
+			$sql = "delete from vtiger_seproductsrel where crmid=$record and productid=$return_id";
+			$adb->query($sql);
+		}
+		elseif($return_module == 'Vendors')
+		{
+			$sql = "delete from vtiger_vendorcontactrel where vendorid=$return_id and contactid=$record";
+			$adb->query($sql);
+		}
+		else
+		{
+			$sql = "delete from vtiger_cntactivityrel where contactid=".$record;
+			$adb->query($sql);
+		}	
 		if($record != '' && $return_id != '')
 		{
 			$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
@@ -82,41 +97,36 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql_recentviewed ='delete from vtiger_tracker where user_id = '.$current_user->id.' and item_id = '.$record;
 			$adb->query($sql_recentviewed);
 		}
-		if($return_module == 'Products')//Delete Contact from Product relatedlist
-		{
-			$sql = "delete from vtiger_seproductsrel where crmid=$record and productid=$return_id";
-			$adb->query($sql);
-		}
-		if($return_module == 'Vendors')
-		{
-			$sql = "delete from vtiger_vendorcontactrel where vendorid=$return_id and contactid=$record";
-			$adb->query($sql);
-		}
-		if($return_module == 'Calendar')
-		{
-			$sql = "delete from vtiger_cntactivityrel where activityid=$return_id and contactid=$record";
-			$adb->query($sql);
-		}
 	break;
 	case Potentials:
-		if($return_module == 'Accounts' || $return_module == 'Campaigns')
+		if($return_module == 'Accounts')
 		{
 			//we can call $focus->mark_deleted($record)
 			$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$record;
 			$adb->query($sql);
+			$sql ='delete from vtiger_seactivityrel where crmid = '.$record;
+			$adb->query($sql);
 		}
-		if($return_module == 'Products')//Delete Potential from Product relatedlist
+		elseif($return_module == 'Campaigns')
+		{
+			$sql = 'update vtiger_potential set campaignid = null where potentialid = '.$record;
+		        $adb->query($sql);	
+		}
+		elseif($return_module == 'Products')//Delete Potential from Product relatedlist
 		{
 			$sql = "delete from vtiger_seproductsrel where crmid=$record and productid=$return_id";
 			$adb->query($sql);
 		}
-		if($return_module == 'Contacts')
+		elseif($return_module == 'Contacts')
 		{
 			$sql = "delete from vtiger_contpotentialrel where potentialid=$record and contactid=$return_id";
 			$adb->query($sql);
 		}
-		$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
-		$adb->query($sql);
+		else
+		{
+			$sql ='delete from vtiger_seactivityrel where crmid = '.$record;
+			$adb->query($sql);
+		}	
 	break;
 	case Calendar:
 		if($return_module == 'Contacts')
