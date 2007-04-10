@@ -105,5 +105,6 @@
 				LESS_OR_EQUALS:'less or equal',
 				GREATER_OR_EQUALS:'greater or equal',
 
-				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String'
+				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String',
+				SHARED_EVENT_DEL_MSG:'The User does not have permission to Delete this record.'
                        };

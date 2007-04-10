@@ -56,7 +56,7 @@ if(!$_SESSION['lvs'][$currentModule])
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
-        $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
+        $smarty->assign("ERROR",$mod_strings["SHARED_EVENT_DEL_MSG"]);
 }else
 {
         $smarty->assign("ERROR","");

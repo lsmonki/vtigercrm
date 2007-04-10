@@ -1052,11 +1052,12 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				$recurring = '&nbsp;';
 			$height = $rowspan * 75;
 			$javacript_str = '';
+			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";	
 			/*if($eventstatus != 'Held')
 			{*/
 				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\',\''.$idShared.'\');" align="middle" border="0">';
 			/*}
 			else
 			{
@@ -1128,6 +1129,7 @@ function getweekEventLayer(& $cal,$slice)
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
 			if($act[$i]->recurring)
 				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
 			else
@@ -1135,7 +1137,7 @@ function getweekEventLayer(& $cal,$slice)
                         $color = $act[$i]->color;
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 				$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-			$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
+			$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\',\''.$idShared.'\');" align="middle" border="0">';
 												 
 			$eventlayer .='<div class ="event" '.$javacript_str.' id="event_'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i.'">
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -1240,7 +1242,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
 	$shared_ids = getSharedCalendarId($current_user->id);
-	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,
+	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1254,8 +1256,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
 			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
-			AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
-				OR vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."') ";
+			AND (((vtiger_activity.date_start between '".$start_date."' AND  '".$end_date."') OR (vtiger_activity.due_date between '". $start_date."' AND '".$end_date."') OR (vtiger_activity.date_start<'".$start_date."' and vtiger_activity.due_date>'".$end_date."') AND (vtiger_recurringevents.recurringdate is NULL))
+			OR (vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')) ";
 	if($info != '')
 	{
 		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id."
@@ -1295,22 +1297,27 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$value = getaddEventPopupTime($start_time,$end_time,$format);
 		$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
-		if($calendar['view'] == 'day')
-		{
-			$element['starttime'] = $start_hour;
-                	$element['endtime'] = $end_hour;
-		}
-		else
-		{
-			$date_start = $adb->query_result($result,$i,"date_start");
-			$due_date = $adb->query_result($result,$i,"due_date");
-			$element['starttime'] = getDisplayDate($date_start).' '.$start_hour;
-			$element['endtime'] = getDisplayDate($due_date).' '.$end_hour;
-		}
+		$date_start = $adb->query_result($result,$i,"date_start");
+		$due_date = $adb->query_result($result,$i,"due_date");
+		$element['starttime'] = getDisplayDate($date_start).' '.$start_hour;
+		$element['endtime'] = getDisplayDate($due_date).' '.$end_hour;
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
 		$eventstatus = $adb->query_result($result,$i,"eventstatus");
+		$assignedto = $adb->query_result($result,$i,"user_name");
+		$userid = $adb->query_result($result,$i,"smownerid");
+		$idShared = "normal";
+		if(!empty($assignedto) && $userid != $current_user->id && $adb->query_result($result,$i,"visibility") == "Public")
+		{
+			$que = "select * from vtiger_sharedcalendar where sharedid=".$current_user->id." and userid=".$userid;
+			$row = $adb->query($que);
+			$no = $adb->getRowCount($row);
+			if($no > 0) $idShared = "shared";
+			else  $idShared = "normal";
+				
+
+		}
                 if(strlen($subject)>25)
 	                $subject = substr($subject,0,25)."...";
 		if($contact_id != '')
@@ -1328,9 +1335,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
 		$element['relatedto']= getRelatedTo('Calendar',$result,$i);
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\",\"".$idShared."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
         	$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
-		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
 		else
@@ -1439,7 +1445,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$element['task_contact'] = "<a href=\"index.php?module=Contacts&action=DetailView&record=".$contact_id."\">".$contact_name."</a>"; 
 		$element['status'] = $adb->query_result($result,$i,"status");
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\",\"normal\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
@@ -1502,17 +1508,8 @@ function constructEventListView(& $cal,$entry_list)
 		$endtemp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$endtemp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$endtemp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $endtemp_ts)):(''))));
 	}
 	$list_view = "";
-	if($cal['view'] == 'day')
-	{
-		$start_datetime = $mod_strings['LBL_START_TIME'];
-		$end_datetime = $mod_strings['LBL_END_TIME'];
-	}
-	else
-	{
-		 $start_datetime = $app_strings['LBL_START_DATE_TIME'];
-		 $end_datetime = $app_strings['LBL_END_DATE_TIME'];
-				 
-	}
+	$start_datetime = $app_strings['LBL_START_DATE_TIME'];
+	$end_datetime = $app_strings['LBL_END_DATE_TIME'];
 	//Events listview header labels
 	$header = Array('0'=>'#',
                         '1'=>$start_datetime,
