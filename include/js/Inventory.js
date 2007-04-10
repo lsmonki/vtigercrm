@@ -290,8 +290,40 @@ function validateInventory(module)
 		alert(alert_arr.VALID_ADJUSTMENT);
 		return false;
 	}
+	
+	//Group - Tax Validation  - not allow negative values
+	//We need to validate group tax only if taxtype is group.
+	var taxtype=document.getElementById("taxtype").value;
+	if(taxtype=="group")
+	{
+		var tax_count=document.getElementById("group_tax_count").value;
+		for(var i=1;i<=tax_count;i++)
+		{
 
-	return true    
+			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("group_tax_percentage"+i).value);
+			if(!temp)
+			{
+				alert(alert_arr.VALID_TAX_PERCENT);
+				return false;
+			}
+		}
+	}
+	
+	//Taxes for Shippring and Handling  validation - not allow negative values
+		var shtax_count=document.getElementById("sh_tax_count").value;
+		for(var i=1;i<=shtax_count;i++)
+		{
+
+			temp = /^(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("sh_tax_percentage"+i).value);
+			if(!temp)
+			{
+				alert(alert_arr.VALID_SH_TAX);
+				return false;
+			}
+		}
+
+
+	return true;    
 }
 
 function FindDuplicate()
