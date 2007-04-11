@@ -29,6 +29,7 @@ require_once('include/upload_file.php');
 
 // Note is used to store customer information.
 class Notes extends CRMEntity {
+	
 	var $log;
 	var $db;
 
@@ -64,7 +65,6 @@ class Notes extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'modifiedtime';
 	var $default_sort_order = 'ASC';
-
 	function Notes() {
 		$this->log = LoggerManager::getLogger('notes');
 		$this->log->debug("Entering Notes() method ...");
@@ -75,7 +75,8 @@ class Notes extends CRMEntity {
 
 	function save_module($module)
 	{
-
+		
+		$insertion_mode = $this->mode;
 		//inserting into vtiger_senotesrel
 		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
 		{
