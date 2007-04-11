@@ -288,9 +288,9 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 			{
 				$headerdata .="<tr><td>&nbsp;</td>";
 			}
-			$headerdata .="<td align='center' width='53%'>";
+			$headerdata .="<td align='center' width='53%'><span id='total_activities'>";
 	$headerdata .= getEventTodoInfo($cal_arr,'listcnt'); 
-	$headerdata .= "	</td>
+	$headerdata .= "</span></td>
 				<td align='center' width='30%'><table border=0 cellspacing=0 cellpadding=2><tr><td class=small><b>".$mod_strings['LBL_VIEW']." : </b></td><td>";
 	$view_options = getEventViewOption($cal_arr,$viewBox);
 	$headerdata .=$view_options."</td></tr></form></table>
@@ -1260,7 +1260,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			OR (vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')) ";
 	if($info != '')
 	{
-		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id."
+		$groupids = fetchUserGroupids($current_user->id);
+		$com_q = " AND (vtiger_crmentity.smownerid = ".$current_user->id."
+				OR vtiger_groups.groupid in (".$groupids."))
 			GROUP BY vtiger_activity.activityid";
 		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')".$com_q;
 		$total_q =  $query."".$com_q;
@@ -1686,7 +1688,7 @@ function constructTodoListView($todo_list,$cal,$subtab)
 			{
 				$list_view .="<tr><td>&nbsp;</td>";
 			}
-			$list_view .="<td align='center' width='60%'>&nbsp;</td>
+			$list_view .="<td align='center' width='60%'><span id='total_activities'>".getEventTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
 				<td align='right' width='28%'>&nbsp;</td>
 			</tr>
 		</table>

@@ -863,7 +863,8 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type,isShared){
     document.change_owner.subtab.value = type;
     if(complete) complete.href="javascript:updateStatus("+id+",'"+heldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
     if(pending) pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&activity_mode="+activity_mode;
+
+    if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&return_action=index&activity_mode="+activity_mode+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&viewOption="+OptionData+"&subtab="+type+"&maintab=Calendar";
     if(isShared == "shared")
     {
 	if(actdelete) actdelete.href="javascript:alert('"+alert_arr.SHARED_EVENT_DEL_MSG+"')";	
@@ -968,9 +969,18 @@ function delActivity(id,view,hour,day,month,year,subtab)
                         	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
                         	onComplete: function(response) {
 					if(OptionData == 'listview')
-                                        	$("listView").innerHTML=response.responseText;
+		                        {
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("listView").innerHTML=result[0];
+                                        }
                                 	if(OptionData == 'hourview')
-                                        	$("hrView").innerHTML=response.responseText;
+					{
+
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("hrView").innerHTML=result[0];
+                                        }
                         	}
                 	}
 		);
@@ -983,7 +993,9 @@ function delActivity(id,view,hour,day,month,year,subtab)
                                 method: 'post',
                                 postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&subtab=todo&ajax=true',
                                 onComplete: function(response) {
-                                        $("mnuTab2").innerHTML=response.responseText;
+					result = response.responseText.split('####');
+					$("total_activities").innerHTML = result[1];
+					$("mnuTab2").innerHTML=result[0];
                                 }
                         }
                 );

@@ -24,9 +24,17 @@ var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form name="EditView" method="POST" action="index.php">
 <input type="hidden" name="time_start" id="time_start">
+<input type="hidden" name="view" value="{$view}">
+<input type="hidden" name="hour" value="{$hour}">
+<input type="hidden" name="day" value="{$day}">
+<input type="hidden" name="month" value="{$month}">
+<input type="hidden" name="year" value="{$year}">
+<input type="hidden" name="viewOption" value="{$viewOption}">
+<input type="hidden" name="subtab" value="{$subtab}">
+<input type="hidden" name="maintab" value="{$maintab}">
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
         <td>
                 <table cellpadding="0" cellspacing="5" border="0">

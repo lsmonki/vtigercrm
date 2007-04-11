@@ -223,17 +223,35 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if (isset($_REQUEST['return_module']))
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action']))
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id']))
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+	$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 if (isset($_REQUEST['ticket_id']))
-$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
+	$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
 if (isset($_REQUEST['product_id']))
-$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+	$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
 if (isset($_REQUEST['return_viewname']))
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+	$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
+	$smarty->assign("view",$_REQUEST['view']);
+if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
+	$smarty->assign("hour",$_REQUEST['hour']);
+if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
+	$smarty->assign("day",$_REQUEST['day']);
+if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
+	$smarty->assign("month",$_REQUEST['month']);
+if(isset($_REQUEST['year']) && $_REQUEST['year']!='')
+	$smarty->assign("year",$_REQUEST['year']);
+if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='')
+	$smarty->assign("viewOption",$_REQUEST['viewOption']);
+if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='')
+	$smarty->assign("subtab",$_REQUEST['subtab']);
+if(isset($_REQUEST['maintab']) && $_REQUEST['maintab']!='')
+	$smarty->assign("maintab",$_REQUEST['maintab']);
+	
+	
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
