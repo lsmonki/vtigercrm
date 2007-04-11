@@ -127,7 +127,7 @@
    <tr>
 	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true'}
-                <textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
+                <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}
 	</td>
