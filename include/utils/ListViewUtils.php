@@ -2991,7 +2991,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = $selectfield = 'campaignid';
 		$table = 'vtiger_campaign';
 	}
-	elseif($currentmodule == "Products" && ($returnmodule == "Potentials" || $returnmodule == "Accounts" || $returnmodule == "Contacts"))
+	elseif($currentmodule == "Products" && ($returnmodule == "Potentials" || $returnmodule == "Accounts" || $returnmodule == "Contacts" || $returnmodule == "Leads"))
 	{
 		$reltable = 'vtiger_seproductsrel';
 		$condition = 'WHERE crmid = '.$recordid.' and setype = "'.$returnmodule.'"';
