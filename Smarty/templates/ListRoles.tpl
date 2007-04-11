@@ -213,7 +213,7 @@ ul {ldelim}color:black;{rdelim}
 					        method: 'post',
 					        postBody: 'module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId='+parentId+'&childId='+childId,
 						onComplete: function(response) {ldelim}
-							if(response.responseText != 'You cannot move a Parent Node under a Child Node')
+							if(response.responseText != alert_arr.ROLE_DRAG_ERR_MSG)
 							{ldelim}
 						                $('RoleTreeFull').innerHTML=response.responseText;
 						                hideAll = false;

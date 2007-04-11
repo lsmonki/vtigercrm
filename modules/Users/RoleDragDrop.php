@@ -14,7 +14,7 @@ $toid=$_REQUEST['parentId'];
 $fromid=$_REQUEST['childId'];
 
 
-global $adb;
+global $adb,$mod_strings;
 $query = "select * from vtiger_role where roleid='".$toid."'";
 $result=$adb->query($query);
 $parentRoleList=$adb->query_result($result,0,'parentrole');
@@ -27,7 +27,7 @@ $parentRoles=explode('::',$parentRoleList);
 
 if(in_array($fromid,$parentRoles))
 {
-	echo 'You cannot move a Parent Node under a Child Node';
+	echo $mod_strings['ROLE_DRAG_ERR_MSG'];
         die;
 }
 
