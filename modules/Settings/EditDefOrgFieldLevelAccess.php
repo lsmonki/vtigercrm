@@ -72,6 +72,12 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			$standCustFld []= $mandatory.' '.$fieldlabel;
 		if($adb->query_result($fieldListResult,$i,"visible") == 0 && $displaytype!=3)
 		{
+			if($fieldlabel == 'Activity Type')
+			{
+				$visible = "checked";
+                        	$readonly = 'disabled';
+			}
+			else
 			$visible = "checked";
 		}
 		elseif($displaytype==3)
