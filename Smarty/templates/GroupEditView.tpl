@@ -21,6 +21,9 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
+	var status = usernameValid(groupname);
+	if(status)
+	{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -33,9 +36,11 @@ function dup_validation()
 					alert(response.responseText);
 			{rdelim}
 		{rdelim}
-	);
+		);
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+" in Group Name ")
 {rdelim}
-
 var constructedOptionValue;
 var constructedOptionName;
 
