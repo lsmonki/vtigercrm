@@ -921,8 +921,10 @@ function updateModuleGroupRelation($module,$moduleid,$groupname)
  	//Deleting the existing entry	 
   	$sqldelete = "delete from ".$modObj->groupTable[0]." where " .$modObj->groupTable[1] ."=".$moduleid;
   	$adb->query($sqldelete);
-  	$sql = "insert into ".$modObj->groupTable[0]." values (".$moduleid .",'" .$groupname ."')";  
-  	$adb->query($sql);
+	if($groupname != ""){	
+	  	$sql = "insert into ".$modObj->groupTable[0]." values (".$moduleid .",'" .$groupname ."')";  
+	  	$adb->query($sql);
+	}	
   	$log->debug("Exiting updateLeadGroupRelation method ...");
 
 }

@@ -943,10 +943,15 @@ $log->info("in getOldFileName  ".$notesid);
 			  	{
 					$groupname = $_REQUEST['assigned_group_name'];
 
-
 					updateModuleGroupRelation($module,$this->id,$groupname);
 
 			  	}
+				else
+				{
+					updateModuleGroupRelation($module,$this->id,'');
+
+				}
+
 		  	}
       		}
 		else
