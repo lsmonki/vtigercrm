@@ -186,6 +186,7 @@ function rolevalidate()
         document.getElementById('pobox').focus();
 	return false
     {rdelim}
+    return false
 {rdelim}
 
 

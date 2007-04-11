@@ -47,7 +47,7 @@ function validate()
 		alert('{$APP.ROLE_SHOULDHAVE_INFO}');
 		return false;
 	{rdelim}
-	dup_validation();
+	dup_validation();return false
 {rdelim}
 </script>
 <br>
