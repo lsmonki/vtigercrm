@@ -49,7 +49,7 @@ function validate() {
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
         var str = getObj("fldLabel").value;
-        if (!emptyCheck("fldLabel","Label"))
+        if (!emptyCheck("fldLabel","Label","text"))
                 return false
 
         var re1=/^[a-z\d\_ ]+$/i
