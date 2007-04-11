@@ -85,7 +85,11 @@ if($_REQUEST["internal_mailer"] == "true") {
 	$smarty->assign('INT_MAILER',"true");
 	$rec_type = $_REQUEST["type"];
 	$rec_id = $_REQUEST["rec_id"];
-
+	//added for getting list-ids to compose email popup from list view(Accounts,Contacts,Leads)
+	if(isset($_REQUEST['field_id']) && strlen($_REQUEST['field_id']) != 0) {
+             $id_list = $_REQUEST['rec_id'].'@'.$_REQUEST['field_id'].'|';
+             $smarty->assign("IDLISTS", $id_list);
+        }
 	if($rec_type == "record_id") {
 		$rs = $adb->query("select setype from vtiger_crmentity where crmid='".$rec_id."'");
 		$type = $adb->query_result($rs,0,'setype');
@@ -194,7 +198,6 @@ $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
 $smarty->assign("BLOCKS",$details[$mod_strings['LBL_EMAIL_INFORMATION']]); 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
-
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
