@@ -160,7 +160,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							{
 								$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 								$curr_symbol = $rate_symbol['symbol'];
-								$lbl_name .=': (in '.$curr_symbol.')';
+								$lbl_name .=' (in '.$curr_symbol.')';
 							}
 							if($relatedlist !='' && $relatedlist != 'global')
 								if($singlepane_view == 'true')	
@@ -194,7 +194,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{
 			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 			$curr_symbol = $rate_symbol['symbol'];
-			$name .=': (in '.$curr_symbol.')';
+			$name .=' (in '.$curr_symbol.')';
 		}
 
 		//Added condition to hide the close column in Related Lists
