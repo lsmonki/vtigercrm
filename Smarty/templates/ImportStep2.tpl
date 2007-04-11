@@ -57,7 +57,42 @@ function deleteMapping()
 	document.getElementById("delete_mapping").style.visibility = "hidden";
 	alert("{$APP.MAP_DELETED_INFO}");
 {rdelim}
+{literal}
+function check_submit()
+{
+	if(validate_import_map())
+	{	
+		if(document.getElementById("save_map").checked)
+	        {
+	                var name=document.getElementById("save_map_as").value
+	                $("status").style.display="block";
+	                new Ajax.Request(
+	                'index.php',
+	                {queue: {position: 'end', scope: 'command'},
+	                method: 'post',
+                        postBody: 'module=Import&name='+name+'&ajax_action=check_dup_map_name&action=ImportAjax',
+                        onComplete: function(response) {
 
+			if(response.responseText == 'true')
+        	                document.Import.submit();
+{/literal}              else
+				if(confirm("{$APP.MAP_NAME_EXISTS}"))
+{literal}					document.Import.submit();
+	                	$("status").style.display="none";
+
+                			                }
+                        }
+			                );
+
+
+		}
+		else
+			document.Import.submit();
+	}
+}
+
+
+{/literal}
 </script>
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
@@ -173,7 +208,7 @@ function deleteMapping()
 					<td align="right" style="padding-right:40px;" class="reportCreateBottom" >
 						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="crmbutton small cancel" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="crmbutton small save" onclick="this.form.action.value='Import';this.form.step.value='3'; return validate_import_map();" />
+						<input type="button" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="crmbutton small save" onclick="this.form.action.value='Import';this.form.step.value='3'; check_submit();" />
 					</td>
 				   </tr>
 				  </table>

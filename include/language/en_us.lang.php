@@ -850,6 +850,7 @@ $app_strings = array (
 //Added for the link Read License in footer
 'LNK_READ_LICENSE'=>'Read License',
 'ACTIVITIES' => 'Activities',
+'MAP_NAME_EXISTS'=>'This map name already exists. \n Do you want to overwrite it?',
 );
 
 $app_list_strings = array (
