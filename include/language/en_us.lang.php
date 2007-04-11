@@ -843,9 +843,12 @@ $app_strings = array (
 'LBL_SKYPE'=>'Skype',
 'LBL_FIND'=>'Find',
 'LBL_CLEAR'=>'Clear',
-
 // Added for display the label of Invoice no
 'invoice no'=>'invoice no',
+//Added for title to the button Select Lead
+'LBL_SELECT_LEAD_BUTTON_LABEL' => 'Select Lead',
+//Added for the link Read License in footer
+'LNK_READ_LICENSE'=>'Read License',
 );
 
 $app_list_strings = array (
