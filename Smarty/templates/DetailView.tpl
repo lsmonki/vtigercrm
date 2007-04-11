@@ -311,7 +311,7 @@ function DeleteTag(id,recordid)
 		   <tr>
 			{$ASSOCIATED_PRODUCTS}
 		   </tr>
-			{if $SinglePane_View eq 'false'}
+			{if $SinglePane_View eq 'false' || $MODULE eq 'Notes' }
 			                  <tr>
 					     <td style="padding:10px">
 		           <table border=0 cellspacing=0 cellpadding=0 width=100%>
