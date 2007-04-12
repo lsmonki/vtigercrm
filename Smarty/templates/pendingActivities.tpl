@@ -48,7 +48,7 @@ function changePendingView(view)
 			<div id="pendingActivitiesEntry" style="overflow-y:auto;overflow-x:hidden;height:150px;width:100%">
                 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
                         	<tr>
-                                <td style="border-bottom:1px dotted #dddddd;" colspan=3 align="right" valign=top>&nbsp;</td>
+                                <td style="border-bottom:1px dotted #dddddd;" colspan=4 align="right" valign=top>&nbsp;</td>
                                 </tr>
 				{if $ACTIVITIES.2.noofactivities != 0}
                                 {foreach item=entries name=entryloop from=$ACTIVITIES.2.Entries}
@@ -88,7 +88,7 @@ function changePendingView(view)
 			<div id="pendingActivitiesEntry" style="overflow-y:auto;overflow-x:hidden;height:150px;width:100%">
                 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
                         	<tr>
-                                <td style="border-bottom:1px dotted #dddddd;" colspan=3 align="right" valign=top>&nbsp;</td>
+                                <td style="border-bottom:1px dotted #dddddd;" colspan=4 align="right" valign=top>&nbsp;</td>
                                 </tr>
                                 {foreach item=entries name=entryloop from=$ACTIVITIES.3.Entries}
                                 <tr>

@@ -127,18 +127,18 @@ function DeleteTag(id,recordid)
 							 </tr>
 							 <tr>
                         					<td class="cellLabel" align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
-					                        <td class="cellInfo" colspan=1 align="left" >{$ACTIVITYDATA.subject}</td>
+					                        <td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.subject}</td>
              						 </tr>
 							 {if $LABEL.description neq ''}
 							 <tr>
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.description}</b></td>
-								<td class="cellInfo" valign="top" align="left" colspan="3" height="60px">{$ACTIVITYDATA.description}</td>
+								<td class="cellInfo" valign="top" align="left" colspan="3" height="60px">{$ACTIVITYDATA.description}&nbsp;</td>
 							 </tr>
 							{/if}
 							{if $LABEL.location neq ''}
 							<tr>
 								<td class="cellLabel" align="right" valign="top"><b>{$LABEL.location}</b></td>
-								<td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.location}</td>
+								<td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.location}&nbsp;</td>
 							</tr>
 							{/if}	
 							 <tr>
@@ -291,7 +291,7 @@ function DeleteTag(id,recordid)
 							{if $LABEL.description neq ''}
 							<tr>
 								<td class="cellLabel" align="right" valign="top"><b>{$LABEL.description}</b></td>
-                                                                <td class="cellInfo" align="left" colspan="3" valign="top" height="60px">{$ACTIVITYDATA.description}</td>
+                                                                <td class="cellInfo" align="left" colspan="3" valign="top" height="60px">{$ACTIVITYDATA.description}&nbsp;</td>
                 					</tr>
 							{/if}
 							<tr>

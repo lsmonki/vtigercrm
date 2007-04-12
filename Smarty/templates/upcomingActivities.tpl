@@ -50,7 +50,7 @@ function changeUpcomingView(view)
 			<div id="upcomingActivitiesEntry" style="overflow-y:auto;overflow-x:hidden;height:150px;width:100%">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
 					<tr bgcolor="#FFFFCF">
-	                                        <td style="border-bottom:1px dotted #dddddd;" colspan=3 align="right" valign=top>&nbsp;</td>
+	                                        <td style="border-bottom:1px dotted #dddddd;" colspan=4 align="right" valign=top>&nbsp;</td>
                                         </tr>
 					{if $ACTIVITIES.0.noofactivities != 0}
                                         {foreach item=entries name=entryloop from=$ACTIVITIES.0.Entries}
@@ -92,7 +92,7 @@ function changeUpcomingView(view)
 			<div id="upcomingActivitiesEntry" style="overflow-y:auto;overflow-x:hidden;height:150px;width:100%">
 				<table width="100%" border="0" cellpadding="5" cellspacing="0">
 					<tr bgcolor="#FFFFCF">
-	                                        <td style="border-bottom:1px dotted #dddddd;" colspan=3 align="right" valign=top>&nbsp;</td>
+	                                        <td style="border-bottom:1px dotted #dddddd;" colspan=4 align="right" valign=top>&nbsp;</td>
                                         </tr>
                                         {foreach item=entries name=entryloop from=$ACTIVITIES.1.Entries}
                                         <tr bgcolor="#FFFFCF">
