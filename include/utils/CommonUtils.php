@@ -487,11 +487,15 @@ function getContactName($contact_id)
 	$log->info("in getContactName ".$contact_id);
 
         global $adb;
-        $sql = "select * from vtiger_contactdetails where contactid=".$contact_id;
-        $result = $adb->query($sql);
-        $firstname = $adb->query_result($result,0,"firstname");
-        $lastname = $adb->query_result($result,0,"lastname");
-        $contact_name = $lastname.' '.$firstname;
+	$contact_name = '';
+	if($contact_id != '')
+	{
+        	$sql = "select * from vtiger_contactdetails where contactid=".$contact_id;
+        	$result = $adb->query($sql);
+        	$firstname = $adb->query_result($result,0,"firstname");
+        	$lastname = $adb->query_result($result,0,"lastname");
+        	$contact_name = $lastname.' '.$firstname;
+	}
 	$log->debug("Exiting getContactName method ...");
         return $contact_name;
 }
