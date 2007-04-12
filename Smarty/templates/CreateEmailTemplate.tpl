@@ -66,7 +66,7 @@
                 options[7] = new Option('Contact: Other Email','$contacts-otheremail$'); 
                 options[8] = new Option('Contact: Phone', '$contacts-phone$'); 
                 options[9] = new Option('Contact: Mobile', '$contacts-mobile$'); 
-                options[10] = new Option('Contact: Currency', '$contacts-currency$'); 
+                //options[10] = new Option('Contact: Currency', '$contacts-currency$'); 
                             
             allOpts[2] = options;
         
