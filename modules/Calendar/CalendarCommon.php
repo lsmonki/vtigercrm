@@ -191,7 +191,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 			$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
+		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small '.$jsfn.'>';
 		$amselected = ($fmt == 'am')?'selected':'';
 		$pmselected = ($fmt == 'pm')?'selected':'';
 		$combo .= '<option value="am" '.$amselected.'>AM</option>';

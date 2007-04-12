@@ -762,7 +762,7 @@ class CustomView extends CRMEntity{
 					$sqllist_column = $list[0].".".$list[1];
 					if($this->customviewmodule == "Calendar")
 					{
-						if($list[1] == "status")
+						if($list[1] == "status" || $list[1] == "eventstatus")
 						{
 							$sqllist_column = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as activitystatus";
 						}
@@ -869,7 +869,7 @@ class CustomView extends CRMEntity{
 						}else
 						{
 							//Added for getting vtiger_activity Status -Jaguar
-							if($this->customviewmodule == "Calendar" && $columns[1] == "status")
+							if($this->customviewmodule == "Calendar" && ($columns[1] == "status" || $columns[1] == "eventstatus"))
 							{
 								$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
 							}
@@ -1446,7 +1446,7 @@ class CustomView extends CRMEntity{
 			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 			if($module == "Calendar" || $module == "Emails")
 			{
-				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_activity.* ".$listviewquery;
+				$query = "select ".$this->getCvColumnListSQL($viewid)." , vtiger_activity.activityid, vtiger_activity.activitytype as type, vtiger_activity.priority, case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as status, vtiger_crmentity.crmid ".$listviewquery;
 			}else if($module == "Notes")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_notes.* ".$listviewquery;

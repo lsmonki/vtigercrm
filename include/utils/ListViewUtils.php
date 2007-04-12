@@ -625,8 +625,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
-						if($status == '')
-							$status = $adb->query_result($list_result,$i-1,"eventstatus");
 						if ($name=='Related to')
 							$value=getRelatedTo($module,$list_result,$i-1);
 						if($name=='Contact Name')
@@ -666,7 +664,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							else
 							{
 								$activityid = $adb->query_result($list_result,$i-1,"activityid");
-								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+								$activitytype = $adb->query_result($list_result,$i-1,"type");
 								if($activitytype=='Task')
 									$evt_status='&status=Completed';
 								else
@@ -1054,21 +1052,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$colname = $value;
         }
 	//added for getting event status in Custom view - Jaguar
-	if($module == 'Calendar' && $colname == "status")
+	if($module == 'Calendar' && ($colname == "status" || $colname == "eventstatus"))
 	{
 		$colname="activitystatus";
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	
+	$temp_val = $field_val;
         if(strlen($field_val) > 40)
         {
                 $temp_val = substr($field_val,0,40).'...';
         }
-	else
-	{
-		$temp_val = $field_val;
-	}
+
 	if($uitype == 53)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
@@ -1081,11 +1076,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{        
 		$value = getUserName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
 	} 
-	elseif($uitype == 15 && $module == 'Calendar') 
-	{ 
-	               $activitytype = $adb->query_result($list_result,$list_result_count,$colname); 
-	               $value = $app_strings[$activitytype];
-	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
 		if($temp_val != '' && $temp_val != '0000-00-00')
@@ -1118,7 +1108,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16)
 	{
-		$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
 		if($current_module_strings[$temp_val] != '')
 		{
 			$value = $current_module_strings[$temp_val];

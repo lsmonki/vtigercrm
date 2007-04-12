@@ -787,9 +787,17 @@ function updateStatus(record,status,view,hour,day,month,year,type){
                         	postBody: 'module=Calendar&action=ActivityAjax&record='+record+'&'+status+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_status&viewOption='+OptionData+'&subtab=event&ajax=true',
                         	onComplete: function(response) {
 					if(OptionData == 'listview')
-						$("listView").innerHTML=response.responseText;
+					{
+						result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("listView").innerHTML=result[0];
+					}		
                                 	if(OptionData == 'hourview')
-                        			$("hrView").innerHTML=response.responseText;
+					{
+						result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];	
+                        			$("hrView").innerHTML=result[0];
+					}
                         	}
                 	}
 		);
@@ -802,7 +810,9 @@ function updateStatus(record,status,view,hour,day,month,year,type){
                                 method: 'post',
 				postBody: 'module=Calendar&action=ActivityAjax&record='+record+'&'+status+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_status&subtab=todo&ajax=true',
                                 onComplete: function(response) {
-                                        $("mnuTab2").innerHTML=response.responseText;
+					result = response.responseText.split('####');
+					$("total_activities").innerHTML = result[1];
+					$("mnuTab2").innerHTML=result[0];
                                 }
                         }
                 )
@@ -932,9 +942,17 @@ function calendarChangeOwner()
                         	postBody: eventurl,
                         	onComplete: function(response) {
 					if(OptionData == 'listview')
-						 $("listView").innerHTML=response.responseText;
+					{
+						result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("listView").innerHTML=result[0];
+					}
 					if(OptionData == 'hourview')
-                                        	$("hrView").innerHTML=response.responseText;
+					{
+						result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("hrView").innerHTML=result[0];
+					}
                         	}
                 	}
 		);
@@ -949,7 +967,9 @@ function calendarChangeOwner()
                                 method: 'post',
                                 postBody: todourl,
                                 onComplete: function(response) {
-                                        $("mnuTab2").innerHTML=response.responseText;
+					result = response.responseText.split('####');
+					$("total_activities").innerHTML = result[1];
+					$("mnuTab2").innerHTML=result[0];
                                 }
                         }
                 );
@@ -1276,14 +1296,10 @@ function calDuedatetime(type)
 		{
                         if(hour == 11)
                         {
-                                hour = 12;
-                                min = min;
-                                fmt = 'pm';
+                                hour = 12; min = min; fmt = 'pm';
                         }else if(hour == 12)
                         {
-                                hour = 1;
-                                min = min;
-                                fmt = 'am';
+                                hour = 1; min = min; fmt = 'am';
                         }
                         else hour = hour + 1;
 			hour = _2digit(hour);
@@ -1320,11 +1336,13 @@ function calDuedatetime(type)
                 {
                         if(hour == 11 && min == 55)
                         {
-                                hour = 12;
-                                min = 0;
-                                fmt = 'am';
+                                hour = 12; min = 0; fmt = 'am';
                                 date = tempdate;
                         }
+			else if(hour == 12 && min == 55)
+			{
+				hour = 1; min = 0; fmt = 'pm';
+			}
                         else
                         {
                                 if(min == 55)
@@ -1352,6 +1370,12 @@ function calDuedatetime(type)
                                 min = 0;
                                 fmt = 'pm';
                         }
+			else if(hour == 12 && min == 55)
+			{
+				hour = 1;
+                                min = 0;
+				fmt = 'am';
+			}
                         else
                         {
                                 if(min == 55)
