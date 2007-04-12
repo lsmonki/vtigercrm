@@ -86,18 +86,26 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$field=Array();
 	if($is_admin==false)
 	{
-		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT vtiger_field.fieldname
-			FROM vtiger_field
-			INNER JOIN vtiger_profile2field
-				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
-			INNER JOIN vtiger_def_org_field
-				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			WHERE vtiger_field.tabid = ".$tabid."
-			AND vtiger_profile2field.visible = 0
-			AND vtiger_def_org_field.visible = 0
-			AND vtiger_profile2field.profileid IN ".$profileList."
-			AND vtiger_field.fieldname IN ".$field_list;
+		if($module == 'Emails')
+		{
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$query  = "SELECT DISTINCT vtiger_field.fieldname
+				FROM vtiger_field
+				INNER JOIN vtiger_profile2field
+					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+				INNER JOIN vtiger_def_org_field
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+				WHERE vtiger_field.tabid = ".$tabid."
+				AND vtiger_profile2field.visible = 0
+				AND vtiger_def_org_field.visible = 0
+				AND vtiger_profile2field.profileid IN ".$profileList."
+				AND vtiger_field.fieldname IN ".$field_list;
+		}
+
 		$result = $adb->query($query);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -256,18 +264,26 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
-		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT vtiger_field.fieldname
-			FROM vtiger_field
-			INNER JOIN vtiger_profile2field
-				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
-			INNER JOIN vtiger_def_org_field
-				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			WHERE vtiger_field.tabid = ".$tabid."
-			AND vtiger_profile2field.visible=0
-			AND vtiger_def_org_field.visible=0
-			AND vtiger_profile2field.profileid IN ".$profileList."
-			AND vtiger_field.fieldname IN ".$field_list;
+		if($module == 'Emails')
+		{
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$query  = "SELECT DISTINCT vtiger_field.fieldname
+				FROM vtiger_field
+				INNER JOIN vtiger_profile2field
+					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+				INNER JOIN vtiger_def_org_field
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+				WHERE vtiger_field.tabid = ".$tabid."
+				AND vtiger_profile2field.visible=0
+				AND vtiger_def_org_field.visible=0
+				AND vtiger_profile2field.profileid IN ".$profileList."
+				AND vtiger_field.fieldname IN ".$field_list;
+		}
+
 		$result = $adb->query($query);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -486,22 +502,32 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$field=Array();
 	if($is_admin==false)
 	{
-		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT vtiger_field.fieldname
-			FROM vtiger_field
-			INNER JOIN vtiger_profile2field
-				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
-			INNER JOIN vtiger_def_org_field
-				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
-			if($module == "Calendar")
-				$query .=" WHERE vtiger_field.tabid in (9,16)";
-			else
-				$query .=" WHERE vtiger_field.tabid =".$tabid;
-	                $query .=" AND vtiger_profile2field.visible = 0
-			AND vtiger_profile2field.visible = 0
-			AND vtiger_def_org_field.visible = 0
-			AND vtiger_profile2field.profileid IN ".$profileList."
-			AND vtiger_field.fieldname IN ".$field_list;
+		if($module == 'Emails')
+		{
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$query  = "SELECT DISTINCT vtiger_field.fieldname
+				FROM vtiger_field
+				INNER JOIN vtiger_profile2field
+					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+				INNER JOIN vtiger_def_org_field
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
+
+				if($module == "Calendar")
+					$query .=" WHERE vtiger_field.tabid in (9,16)";
+				else
+					$query .=" WHERE vtiger_field.tabid =".$tabid;
+
+		                $query .=" AND vtiger_profile2field.visible = 0
+				AND vtiger_profile2field.visible = 0
+				AND vtiger_def_org_field.visible = 0
+				AND vtiger_profile2field.profileid IN ".$profileList."
+				AND vtiger_field.fieldname IN ".$field_list;
+		}
+
 		$result = $adb->query($query);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -835,18 +861,26 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
-		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT vtiger_field.fieldname
-			FROM vtiger_field
-			INNER JOIN vtiger_profile2field
-				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
-			INNER JOIN vtiger_def_org_field
-				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			WHERE vtiger_field.tabid = ".$tabid."
-			AND vtiger_profile2field.visible = 0
-			AND vtiger_def_org_field.visible = 0
-			AND vtiger_profile2field.profileid IN ".$profileList."
-			AND vtiger_field.fieldname IN ".$field_list;
+		if($module == 'Emails')
+		{
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$query  = "SELECT DISTINCT vtiger_field.fieldname
+				FROM vtiger_field
+				INNER JOIN vtiger_profile2field
+					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+				INNER JOIN vtiger_def_org_field
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+				WHERE vtiger_field.tabid = ".$tabid."
+				AND vtiger_profile2field.visible = 0
+				AND vtiger_def_org_field.visible = 0
+				AND vtiger_profile2field.profileid IN ".$profileList."
+				AND vtiger_field.fieldname IN ".$field_list;
+		}
+		
 		$result = $adb->query($query);
 		
 		for($k=0;$k < $adb->num_rows($result);$k++)
