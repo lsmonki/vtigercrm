@@ -12,7 +12,7 @@
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 $check=$_REQUEST['check'];
-
+global $default_charset;
 
 if($_REQUEST['check']== 'reportCheck')
 {
@@ -26,6 +26,7 @@ if($_REQUEST['check']== 'reportCheck')
 else if($_REQUEST['check']== 'folderCheck')
 {
 	$folderName = $_REQUEST['folderName'];
+	$folderName = iconv("UTF-8",$default_charset,$folderName);
 	$sSQL="select * from vtiger_reportfolder where foldername='".$folderName."'";
 	
 	$sqlresult = $adb->query($sSQL);
