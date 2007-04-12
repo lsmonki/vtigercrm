@@ -78,6 +78,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 				$disp_value = (($dat_fmt == 'dd-mm-yyyy')?(date('d-m-Y',$addyear)):(($dat_fmt == 'mm-dd-yyyy')?(date('m-d-Y',$addyear)):(($dat_fmt == 'yyyy-mm-dd')?(date('Y-m-d', $addyear)):(''))));
 			}
+
+			if($fieldname == 'validtill' && $_REQUEST['module'] == 'Quotes')
+                        {
+                                $disp_value = '';
+                        }
+
 		}
 		else
 		{
