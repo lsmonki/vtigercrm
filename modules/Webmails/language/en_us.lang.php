@@ -18,8 +18,8 @@
  ********************************************************************************/
 
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Emails',
-'LBL_MODULE_TITLE'=>'Emails: Home',
+'LBL_MODULE_NAME'=>'Email',
+'LBL_MODULE_TITLE'=>'Email: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Email Search',
 'LBL_LIST_FORM_TITLE'=>'Email List',
 'LBL_NEW_FORM_TITLE'=>'Track Email',
@@ -132,14 +132,14 @@ $mod_strings = Array(
 'LBL_ALL'=>'All',
 'MESSAGE_CONTACT_NOT_WANT_MAIL'=>'This Contact does not want to receive mails.',
 'LBL_WEBMAILS_TITLE'=>'WebMails',
-'LBL_EMAILS_TITLE'=>'Emails',
+'LBL_EMAILS_TITLE'=>'Email',
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
 // Added for 5.0.3 release
 'LBL_MAIL_CONNECT_ERROR'=>'Could not connect to the mail server. Please check the mail server details',
 'IN_REPLY_TO_THE_MESSAGE' => 'In reply to the message sent by ',
 'LBL_CLICK_HERE' => 'Click Here ',
-'LBL_GOTO_EMAILS_MODULE' => ' go to Emails module',
-'LBL_NO_EMAILS'=>'No Emails In This Folder',
+'LBL_GOTO_EMAILS_MODULE' => ' go to Email module',
+'LBL_NO_EMAILS'=>'No Email In This Folder',
 'LBL_MOVE_TO'=>'Move To...',
 'LBL_DEL'=>'Del ',
 'LABEL_FROM'=>'From',
@@ -147,7 +147,7 @@ $mod_strings = Array(
 'LABEL_DATE'=>'Date',
 'LBL_NO_IFRAMES_SUPPORTED'=>'No Iframes supported',
 'LBL_EMAIL_ATTACHMENTS'=>'Email Attachments:',
-'LBL_ALLMAILS'=>'Emails',
+'LBL_ALLMAILS'=>'Email',
 'LBL_TO_USERS'=>'To Users',
 'LBL_TO_GROUPS'=>'To Groups',
 'SUBJECT' => 'Subject',

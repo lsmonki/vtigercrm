@@ -556,7 +556,7 @@ $mod_strings = Array(
 'LBL_3_MIN'=>'3 minutes',
 'LBL_4_MIN'=>'4 minutes',
 'LBL_5_MIN'=>'5 minutes',
-'LBL_EMAILS_PER_PAGE'=>'Emails per Page',
+'LBL_EMAILS_PER_PAGE'=>'Email per Page',
 
 //Added for Organization Details (4.2 release)
 'LBL_ORGANIZATION_NAME'=>'Company Name',

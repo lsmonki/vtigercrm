@@ -145,7 +145,7 @@ $mod_strings = Array(
 'LBL_OPPURTUNITIES'=>'Opportunities',
 'LBL_TASKS'=>'Tasks',
 'LBL_CASES'=>'Cases',
-'LBL_EMAILS'=>'Emails',
+'LBL_EMAILS'=>'Email',
 'LBL_NOTES'=>'Notes',
 'LBL_MEETINGS'=>'Meetings',
 'LBL_CALLS'=>'Calls',
@@ -641,7 +641,7 @@ $mod_strings = Array(
 'LBL_3_MIN'=>'3 minutes',
 'LBL_4_MIN'=>'4 minutes',
 'LBL_5_MIN'=>'5 minutes',
-'LBL_EMAILS_PER_PAGE'=>'Emails per Page',
+'LBL_EMAILS_PER_PAGE'=>'Email per Page',
 
 // Added for 5.0.3
 

@@ -21,8 +21,8 @@ $mod_strings = Array(
 // Mike Crowe Mod --------------------------------------------------------added for general search
 'LBL_GENERAL_INFORMATION'=>'General Information',
 
-'LBL_MODULE_NAME'=>'Emails',
-'LBL_MODULE_TITLE'=>'Emails: Home',
+'LBL_MODULE_NAME'=>'Email',
+'LBL_MODULE_TITLE'=>'Email: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Email Search',
 'LBL_LIST_FORM_TITLE'=>'Email List',
 'LBL_NEW_FORM_TITLE'=>'Track Email',
@@ -131,7 +131,7 @@ $mod_strings = Array(
 'LBL_ALL'=>'All',
 'MESSAGE_CONTACT_NOT_WANT_MAIL'=>'This Contact does not want to receive mails.',
 'LBL_WEBMAILS_TITLE'=>'WebMails',
-'LBL_EMAILS_TITLE'=>'Emails',
+'LBL_EMAILS_TITLE'=>'Email',
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
 'LBL_ALLMAILS'=>'All Mails',
 'LBL_TO_USERS'=>'To Users',
