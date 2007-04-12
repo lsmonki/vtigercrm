@@ -138,7 +138,7 @@
 							<!--{assign var="DESCRIPTION_SEPARATOR_STRING" value=" "}  {* Separates Description *}-->
 							<!--{assign var="DESCRIPTION_WORDWRAP_WIDTH" value="70"} {* No. of chars for word wrapping long lines of Description *}-->
 							{if $MODULE eq 'Notes'}
-                                                        <td width="100%" colspan="3" class="dvtCellInfo" align="left">{$keyval|replace:"\n":"<br>&nbsp;&nbsp;"}
+                                                        <td width="100%" colspan="3" class="dvtCellInfo" align="left">{$keyval|replace:"\n":"<br>&nbsp;&nbsp;"}&nbsp;
                                                         </td>
                                                   	{else}
                                                         <td width="100%" colspan="3" class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
