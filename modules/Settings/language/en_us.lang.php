@@ -915,6 +915,7 @@ $mod_strings = Array(
 'LBL_CUSTOMINVOICE_NUMBER'=>'Custom Invoice Number',
 'LBL_INVOICE_NUMBER_PREVIEW'=>'Preview',
 'LBL_INVOICE_NUMBER_BUTTON'=>'Update Invoice Number',
+'LBL_PROXY_AUTHENTICATION_REQUIRED'=>'Proxy Authentication Required',
 
 );
 ?>

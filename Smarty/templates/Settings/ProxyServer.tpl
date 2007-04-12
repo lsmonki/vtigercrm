@@ -63,20 +63,20 @@
                         <tr>
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
                             <td width="80%" class="small cellText">
-				<input type="text" class="detailedViewTextBox small" value="{$PROXYSERVER}" name="server"></strong>
+				<input type="text" class="detailedViewTextBox small" value="{$PROXYSERVER}{$smarty.request.server}" name="server"></strong>
 			    </td>
                           </tr>
 			  <tr>
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PROXY_PORT} </strong></td>
                             <td width="80%" class="small cellText">
-                                <input type="text" class="detailedViewTextBox small" value="{$PROXYPORT}" name="port"></strong>
+                                <input type="text" class="detailedViewTextBox small" value="{$PROXYPORT}{$smarty.request.port}" name="port"></strong>
                             </td>
                           </tr>
                           <tr valign="top">
 
                             <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
                             <td class="small cellText">
-				<input type="text" class="detailedViewTextBox small" value="{$PROXYUSER}" name="server_username">
+				<input type="text" class="detailedViewTextBox small" value="{$PROXYUSER}{$smarty.request.server_username}" name="server_username">
 			    </td>
                           </tr>
                           <tr>
