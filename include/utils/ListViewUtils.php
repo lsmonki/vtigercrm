@@ -2069,6 +2069,8 @@ function getListQuery($module,$where='')
 				ON vtiger_account.accountid = vtiger_quotes.accountid
 			LEFT OUTER JOIN vtiger_potential
 				ON vtiger_potential.potentialid = vtiger_quotes.potentialid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_quotes.contactid
 			LEFT JOIN vtiger_quotegrouprelation
 				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
 			LEFT JOIN vtiger_groups
@@ -2138,6 +2140,8 @@ function getListQuery($module,$where='')
 				ON vtiger_quotes.quoteid = vtiger_salesorder.quoteid
 			LEFT OUTER JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_salesorder.accountid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_salesorder.contactid = vtiger_contactdetails.contactid	
 			LEFT JOIN vtiger_sogrouprelation
 				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups
@@ -2171,6 +2175,8 @@ function getListQuery($module,$where='')
 				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
 			LEFT OUTER JOIN vtiger_account
 			        ON vtiger_account.accountid = vtiger_invoice.accountid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_invoice.contactid
 			INNER JOIN vtiger_invoicecf
 				ON vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
 			LEFT JOIN vtiger_invoicegrouprelation
