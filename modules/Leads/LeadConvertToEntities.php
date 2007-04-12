@@ -14,7 +14,6 @@ require_once('modules/Leads/Leads.php');
 //Getting the Parameters from the ConvertLead Form
 $id = $_REQUEST["record"];
 
-
 $module = $_REQUEST["module"];
 $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
@@ -268,7 +267,6 @@ function saveLeadRelatedCampaigns($leadid, $relatedid)
 }
 
 
-
 /*Code integrated to avoid duplicate Account creation during ConvertLead Operation  START-- by Bharathi*/
 $acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = '$accountname'";
 $acc_res = $adb->query($acc_query);
@@ -291,10 +289,10 @@ else
 	/* Modified by Minnie -- END*/
 	$adb->query($sql_insert_account);
 
-	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street,pobox) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."','".$row["pobox"]."')";
 	$adb->query($sql_insert_accountbillads);
 
-	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,pobox,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["pobox"]."','".$row["state"] ."','" .$row["lane"]."')";
 	$adb->query($sql_insert_accountshipads);
 
 	//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
@@ -323,7 +321,6 @@ saveLeadRelatedProducts($id, $crmid);
 //Up to this, Account related data save finshed
 
 
-
 $date_entered = $adb->formatDate(date('YmdHis'));
 $date_modified = $adb->formatDate(date('YmdHis'));
 
@@ -345,7 +342,7 @@ $sql_insert_contactsubdetails = "INSERT INTO vtiger_contactsubdetails (contactsu
 
 $adb->query($sql_insert_contactsubdetails);
 
-$sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingzip) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["lane"] ."','".$row['state']."','" .$row["country"] ."','".$row['code']."')";
+$sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingpobox,mailingzip) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["lane"] ."','".$row['state']."','" .$row["country"] ."','".$row["pobox"]."','".$row['code']."')";
 
 $adb->query($sql_insert_contactaddress);
 
