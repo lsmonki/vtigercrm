@@ -103,9 +103,13 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
 					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && $selectedfields[1] == 'user_name')
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
 					{
 						$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end as ".$this->primarymodule."_Assigned_To";
+					}
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
+					{
+						$columnslist[$fieldcolname] = $selectedfields[0].".user_name as ".$this->primarymodule."_Handler";
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
@@ -969,7 +973,7 @@ class ReportRun extends CRMEntity
 					left join vtiger_products on vtiger_products.productid = vtiger_seproductsrel.productid
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
-					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
+					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_seproductsrel.crmid
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_crmentity as vtiger_crmentityRel on vtiger_crmentityRel.crmid = vtiger_seproductsrel.crmid
@@ -1129,7 +1133,7 @@ class ReportRun extends CRMEntity
 				$query = "left join vtiger_products on vtiger_products.productid = vtiger_troubletickets.product_id
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
-					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
+					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
 					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
@@ -1191,7 +1195,7 @@ class ReportRun extends CRMEntity
 				$query = "left join vtiger_products on vtiger_products.productid = vtiger_campaign.product_id  
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
-					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentityProducts.smownerid
+					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
 					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
 					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
@@ -1274,7 +1278,7 @@ class ReportRun extends CRMEntity
 			$query = "from vtiger_products 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid 
 				left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid 
-				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_crmentity.smownerid 
+				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler 
 				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id 
 				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_products.productid and vtiger_seproductsrel.setype='".$this->secondarymodule."'	
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
