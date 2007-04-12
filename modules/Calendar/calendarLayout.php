@@ -293,10 +293,10 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	$headerdata .= "</span></td>
 				<td align='center' width='30%'><table border=0 cellspacing=0 cellpadding=2><tr><td class=small><b>".$mod_strings['LBL_VIEW']." : </b></td><td>";
 	$view_options = getEventViewOption($cal_arr,$viewBox);
-	$headerdata .=$view_options."</td></tr></form></table>
+	$headerdata .=$view_options."</td></tr></table>
 				</td>
 			</tr>
-		</table>";
+		</table></form>";
 	echo $headerdata;	
 	$cal_log->debug("Exiting get_cal_header_data() method...");
 }
@@ -357,8 +357,7 @@ function getEventViewOption(& $cal,$viewBox)
 	}
 	else
 		die("view is not defined");
-	$view .="</select>
-		</form>";
+	$view .="</select>";
 	$cal_log->debug("Exiting getEventViewOption() method...");
 	return $view;
 }
