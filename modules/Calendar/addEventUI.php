@@ -227,7 +227,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 			</td>
 			</tr>
 			<tr>
-				<td nowrap align="right"><b><?php echo $mod_strings['LBL_EVENTNAME']?></b></td>
+				<td nowrap align="right"><b><font color="red">*</font><?php echo $mod_strings['LBL_EVENTNAME']?></b></td>
 				<td align="left"><input name="subject" type="text" class="textbox" value="" style="width:50%">&nbsp;&nbsp;&nbsp; 
 			<?php if(getFieldVisibilityPermission('Events',$current_user->id,'visibility') == '0') { ?>	
 			<input name="visibility" value="Public" type="checkbox"><?php echo $mod_strings['LBL_PUBLIC']; ?>
@@ -704,7 +704,7 @@ function getAssignedToHTML($assignedto,$toggletype)
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
 		<tr>
-                        <td width="20%" align="right"><b><?php echo $mod_strings['LBL_TODONAME'] ?></b></td>
+			<td width="20%" align="right"><b><font color="red">*</font><?php echo $mod_strings['LBL_TODONAME'] ?></b></td>
                         <td width="80%" align="left"><input name="task_subject" type="text" value="" class="textbox" style="width:70%"></td>
                 </tr>
 		<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'description') == '0') { ?>

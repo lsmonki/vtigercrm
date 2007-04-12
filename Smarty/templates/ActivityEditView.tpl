@@ -133,7 +133,7 @@ var gVTModule = '{$smarty.request.module}';
 							</tr>
 							{/if}
 							<tr>
-								<td class="cellLabel" nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
+								<td class="cellLabel" nowrap align="right"><b><font color="red">*</font>{$MOD.LBL_EVENTNAME}</b></td>
 								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
@@ -630,7 +630,7 @@ var gVTModule = '{$smarty.request.module}';
 		{else}
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-                        	<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
+                        	<td class="cellLabel" width="20%" align="right"><b><font color="red">*</font>{$MOD.LBL_TODO}</b></td>
                         	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			
