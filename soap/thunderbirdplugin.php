@@ -545,11 +545,18 @@ function CheckContactViewPerm($user_name)
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	if(isPermitted("Contacts","index") == "yes")
-	{
-		return "allowed";
+	{	
+		if(isPermitted("Emails","EditView") == "yes")
+		{
+			return "allowed";
+		}
+		else
+		{
+			return "email";
+		}
 	}else
 	{
-		return "denied";
+		return "contact";
 	}
 }
 

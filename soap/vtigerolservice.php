@@ -403,7 +403,7 @@ function CheckEmailPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Emails","EditView") == "yes")
+	if(isPermitted("Emails","EditView") == "yes" && (isPermitted("Contacts","index") == 'yes'))
 	{
 		return "allowed";
 	}else
