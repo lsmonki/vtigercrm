@@ -19,6 +19,7 @@ if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
+	document.write("<br><br>Click <a href='#' onclick='window.history.back();'>here</a> to return to the previous page");
 	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,5,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
