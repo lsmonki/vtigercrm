@@ -636,14 +636,31 @@ function numValidate(fldName,fldLabel,format,neg) {
            return false
        } else return true
    } else {
-	
+	   // changes made -- to fix the ticket#3272
 	   var splitval=val.split(".")
-
-                if(splitval[0]>18446744073709551615)
-                {
+	   var arr_len = splitval.length;
+           var len = 0;
+	   if(fldName == "probability" || fldName == "commissionrate")
+           {
+                   if(arr_len > 1)
+                           len = splitval[1].length;
+                   if(isNaN(val))
+                   {
+                        alert(alert_arr.INVALID+fldLabel)
+                        getObj(fldName).focus()
+                        return false
+                   }
+                   else if(splitval[0] > 100 || len > 3)
+                   {
                         alert( fldLabel + alert_arr.EXCEEDS_MAX);
                         return false;
-                }
+                   }
+           }
+	   else if(splitval[0]>18446744073709551615)
+           {
+                   alert( fldLabel + alert_arr.EXCEEDS_MAX);
+                   return false;
+           }
 
 
        if (neg==true)
@@ -683,12 +700,16 @@ function intValidate(fldName,fldLabel) {
 		getObj(fldName).focus()
 		return false
 	} 
-        else if( val < -2147483648 || val > 2147483647)
+        else if((fldName != 'employees') && (val < -2147483648 || val > 2147483647))
         {
                 alert(fldLabel +alert_arr.OUT_OF_RANGE);
                 return false;
         }
-
+	else if((fldName == 'employees') && (val < 0 || val > 2147483647))
+        {
+                alert(fldLabel +alert_arr.OUT_OF_RANGE);
+                return false;
+        }
 	else
 	{
 		return true
