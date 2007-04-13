@@ -35,7 +35,7 @@ setObjectValuesFromRequest(&$focus);
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
 	$file_upload_error = true;
-	$_FILES = '';
+	//$_FILES = '';
 }
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
