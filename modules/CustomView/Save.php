@@ -120,22 +120,24 @@ if($cvmodule != "")
 						$columnresult = $adb->query($columnsql);
 					}
 					$log->info("CustomView :: Save :: vtiger_cvcolumnlist created successfully");
-
-					$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
-								(cvid,
-								columnname,
-								stdfilter,
-								startdate,
-								enddate)
+					if($std_filter_list["columnname"] !="")
+					{
+						$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
+							(cvid,
+							 columnname,
+							 stdfilter,
+							 startdate,
+							 enddate)
 							VALUES
-								(".$genCVid.",
-								".$adb->quote($std_filter_list["columnname"]).",
-								
-								".$adb->quote($std_filter_list["stdfilter"]).",
-								".$adb->formatDate($std_filter_list["startdate"]).",
-								".$adb->formatDate($std_filter_list["enddate"]).")";
-					$stdfilterresult = $adb->query($stdfiltersql);
-					$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
+							(".$genCVid.",
+							 ".$adb->quote($std_filter_list["columnname"]).",
+
+							 ".$adb->quote($std_filter_list["stdfilter"]).",
+							 ".$adb->formatDate($std_filter_list["startdate"]).",
+							 ".$adb->formatDate($std_filter_list["enddate"]).")";
+						$stdfilterresult = $adb->query($stdfiltersql);
+						$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
+					}
 					for($i=0;$i<count($adv_filter_col);$i++)
 					{
 						$advfiltersql = "INSERT INTO vtiger_cvadvfilter
@@ -195,20 +197,23 @@ if($cvmodule != "")
 					$columnresult = $adb->query($columnsql);
 				}
 				$log->info("CustomView :: Save :: vtiger_cvcolumnlist update successfully".$genCVid);
-				$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
-							(cvid,
-							columnname,
-							stdfilter,
-							startdate,
-							enddate)
+				if($std_filter_list["columnname"] !="")
+				{
+					$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
+						(cvid,
+						 columnname,
+						 stdfilter,
+						 startdate,
+						 enddate)
 						VALUES
-							(".$genCVid.",
-							".$adb->quote($std_filter_list["columnname"]).",
-							".$adb->quote($std_filter_list["stdfilter"]).",
-							".$adb->formatDate($std_filter_list["startdate"]).",
-							".$adb->formatDate($std_filter_list["enddate"]).")";
-				$stdfilterresult = $adb->query($stdfiltersql);
-				$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
+						(".$genCVid.",
+						 ".$adb->quote($std_filter_list["columnname"]).",
+						 ".$adb->quote($std_filter_list["stdfilter"]).",
+						 ".$adb->formatDate($std_filter_list["startdate"]).",
+						 ".$adb->formatDate($std_filter_list["enddate"]).")";
+					$stdfilterresult = $adb->query($stdfiltersql);
+					$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
+				}
 				for($i=0;$i<count($adv_filter_col);$i++)
 				{
 					$advfiltersql = "INSERT INTO vtiger_cvadvfilter
