@@ -397,7 +397,6 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	$contact = new Contacts();
 	$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
-	$contact->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
 	$contact->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
 	$contact->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
 	$contact->column_fields[department]=in_array('department',$permitted_lists) ? $department : "";
@@ -455,7 +454,6 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 	$Lead = new Leads();
 	$Lead->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$Lead->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
-	$Lead->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
 	$Lead->column_fields[company]=in_array('company',$permitted_lists) ? $account_name : "";
 	$Lead->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
 	$Lead->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
