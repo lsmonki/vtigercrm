@@ -51,14 +51,17 @@ if($tabname[1]!='')
 	        $adb->query($query);
 	}
 }*/
-/* ticket2369 fixed*/
+/* ticket2369 fixed */
 $columnName = $tableName;
 foreach ($pickArray as $index => $data) {
         $data = trim($data);
         if(!empty($data)){
-                $data = $adb->formatString("vtiger_$tableName",$columnName,$data);
-                $query = "insert into vtiger_$tableName values('',$data,$index,1)";
-                $adb->query($query);
+		$data = $adb->formatString("vtiger_$tableName",$columnName,$data);
+		if($uitype == 111)
+			$query = "insert into vtiger_$tableName values('',$data,$index,0)";
+		else
+			$query = "insert into vtiger_$tableName values('',$data,$index,1)";
+		$adb->query($query);
         }
 } 
 
