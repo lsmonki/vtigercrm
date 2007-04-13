@@ -94,7 +94,7 @@ function getPendingActivities($mode,$view='')
 	}
 	
 	$list_query.= " GROUP BY vtiger_activity.activityid";
-	$list_query.= " ORDER BY due_date ASC";
+	$list_query.= " ORDER BY date_start,time_start ASC";
 	$res = $adb->query($list_query);
 	$noofrecords = $adb->num_rows($res);
 	$open_activity_list = array();
