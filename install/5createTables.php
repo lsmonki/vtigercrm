@@ -143,7 +143,7 @@ if(!rename("install/", $renamefile."install/"))
 			<p>
 			<b>Discuss with us at <a href='http://blogs.vtiger.com' target="_blank">blogs</a></b>
 			<p>
-			<b>We aim to be -simply the best.Come on over,there is space for you too!</b>
+			<b>We aim to be - simply the best. Come on over,there is space for you too!</b>
 			</ul>
 			</div>
 
