@@ -16,7 +16,7 @@ function ShowFolders(folderid)
 	gselectedrowid = 0;
 	$("status").style.display="inline";
 	gFolderid = folderid;
-	getObj('search_text').value = '';
+//	getObj('search_text').value = '';
 	switch(folderid)
 	{ldelim}
 		case 1:
