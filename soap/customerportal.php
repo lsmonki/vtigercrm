@@ -17,11 +17,12 @@ require_once('modules/Emails/mail.php');
 
 $log = &LoggerManager::getLogger('customerportal');
 
-//$serializer = new XML_Serializer();
-$NAMESPACE = 'http://www.vtigercrm.com/vtigercrm';
+error_reporting(0);
+
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 
-$server->configureWSDL('vtigersoap');
+$server->configureWSDL('customerportal');
 
 
 
