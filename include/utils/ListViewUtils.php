@@ -692,6 +692,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($name=='Account Name')
 					{
+					
 						//modified for vtiger_customview 27/5
 						if($module == 'Accounts')
 						{
@@ -699,7 +700,14 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$account_name = getAccountName($account_id);
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-						}else
+						}
+						elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
+                                                {
+							$accountname = $adb->query_result($list_result,$i-1,"accountname");
+							$accountid = getAccountId($accountname);
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
+     				                }
+						else
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
@@ -3237,5 +3245,18 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	
 	return $del_link;
 }
+ function getAccountId($account_name)
+        {
+                 global $log;
+                $log->info("in getAccountId ".$account_name);
+                global $adb;
+                if($account_name != '')
+                {
+                        $sql = "select accountid from vtiger_account where accountname='".$account_name."'";
+                        $result = $adb->query($sql);
+                        $accountid = $adb->query_result($result,0,"accountid");
+                }
+                return $accountid;
+        }
 
 ?>

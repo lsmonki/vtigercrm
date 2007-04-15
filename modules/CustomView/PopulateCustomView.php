@@ -203,7 +203,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		   Array('vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
                          'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V',
                          'vtiger_contactdetails:title:title:Contacts_Title:V',
-                         'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:I',
+                         'vtiger_account:accountname:accountname:Contacts_Account_Name:V',
                          'vtiger_contactdetails:email:email:Contacts_Email:E',
                          'vtiger_contactdetails:phone:phone:Contacts_Office_Phone:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V'),
@@ -219,7 +219,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		   Array('vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
                          'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V',
                          'vtiger_contactdetails:title:title:Contacts_Title:V',
-                         'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:I',
+                         'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:V',
                          'vtiger_contactdetails:email:email:Contacts_Email:E',
 			 'vtiger_contactsubdetails:otherphone:otherphone:Contacts_Phone:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V'),
@@ -267,20 +267,20 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 			 'vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
-                         'vtiger_quotes:accountid:account_id:Quotes_Account_Name:I',
+                         'vtiger_account:accountname:accountname:Quotes_Account_Name:V',
                          'vtiger_quotes:total:hdnGrandTotal:Quotes_Total:I',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 
 		   Array('vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
-                         'vtiger_quotes:accountid:account_id:Quotes_Account_Name:I',
+			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V'
                          'vtiger_quotes:validtill:validtill:Quotes_Valid_Till:D',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 
 		   Array('vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
-                         'vtiger_quotes:accountid:account_id:Quotes_Account_Name:I',
+			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V'
                          'vtiger_quotes:validtill:validtill:Quotes_Valid_Till:D',
                          'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 			
@@ -327,7 +327,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		  
 	          Array('vtiger_crmentity:crmid::SalesOrder_Order_Id:I',
                         'vtiger_salesorder:subject:subject:SalesOrder_Subject:V',
-                        'vtiger_account:accountid:account_id:SalesOrder_Account_Name:V',
+                       	'vtiger_account:accountname:accountname:SalesOrder_Account_Name:V',
                         'vtiger_quotes:quoteid:quote_id:SalesOrder_Quote_Name:I',
                         'vtiger_salesorder:total:hdnGrandTotal:SalesOrder_Total:V',
                         'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V'),
@@ -388,7 +388,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		
 		 Array(  'vtiger_invoice:invoice_no:invoice_no:Invoice_invoice_no:V',
 		 	 'vtiger_invoice:subject:subject:Invoice_Subject:V',
-			 'vtiger_invoice:accountid:account_id:Invoice_Account_Name:I',
+			 'vtiger_account:accountname:accountname:Invoice_Account_Name:V',
 			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
 			 'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V',
@@ -396,14 +396,14 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		 
 		 Array(	 'vtiger_invoice:invoice_no:invoice_no:Invoice_invoice_no:V',
 			 'vtiger_invoice:subject:subject:Invoice_Subject:V',
-			 'vtiger_invoice:accountid:account_id:Invoice_Account_Name:I',
+			 'vtiger_account:accountname:accountname:Invoice_Account_Name:V',
 			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
 			 'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
 			 'vtiger_invoiceshipads:ship_street:ship_street:Invoice_Shipping_Address:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V'),
 
 		 Array(	 'vtiger_salesorder:subject:subject:SalesOrder_Subject:V',
-			 'vtiger_salesorder:accountid:account_id:SalesOrder_Account_Name:I',
+			 'vtiger_account:accountname:accountname:SalesOrder_Account_Name:V',
 			 'vtiger_salesorder:sostatus:sostatus:SalesOrder_Status:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V',
 			 'vtiger_soshipads:ship_street:ship_street:SalesOrder_Shipping_Address:V',

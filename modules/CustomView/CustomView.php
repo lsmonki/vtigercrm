@@ -243,7 +243,10 @@ class CustomView extends CRMEntity{
 
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
-			$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			if($fieldname == 'account_id')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name 
+				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else
+				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			//added to escape attachments fields in customview as we have multiple attachments
 			if($module != 'HelpDesk' || $fieldname !='filename')
 				$module_columnlist[$optionvalue] = $fieldlabel;

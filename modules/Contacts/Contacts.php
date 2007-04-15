@@ -47,7 +47,7 @@ class Contacts extends CRMEntity {
 
 	var $column_fields = Array();
 	
-	var $sortby_fields = Array('lastname','firstname','title','email','phone','smownerid','accountid');
+	var $sortby_fields = Array('lastname','firstname','title','email','phone','smownerid','accountname');
 
 	var $list_link_field= 'lastname';
 
