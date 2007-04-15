@@ -164,4 +164,26 @@ function deletePriceBookProductRel(id,pbid)
                 }
 	);
 }
+function verify_data(form)
+{
+	var returnValue = true;
+        if(form.list_price.value != '')
+        {
+                 intval= intValidate('list_price','EditListPrice');
+
+                if(!intval)
+                {
+                        returnValue =  false;
+                }
+               
+        }
+        else
+        {
+
+                alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
+                returnValue = false;
+        }
+	return returnValue;
+
+}
 
