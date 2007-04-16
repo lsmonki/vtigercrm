@@ -274,13 +274,13 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		   Array('vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
-			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V'
+			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V',
                          'vtiger_quotes:validtill:validtill:Quotes_Valid_Till:D',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 
 		   Array('vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
-			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V'
+			 'vtiger_account:accountname:accountname:Quotes_Account_Name:V',
                          'vtiger_quotes:validtill:validtill:Quotes_Valid_Till:D',
                          'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 			
