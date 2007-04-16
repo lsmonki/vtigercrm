@@ -41,14 +41,14 @@ $related_modules = Array('Leads'=>Array(),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','PurchaseOrder'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
-			 'Calendar'=>Array('Contacts'),
+			 'Calendar'=>Array('Leads','Accounts','Contacts','Potentials'),
 			 'Products'=>Array('Accounts','Contacts'),
 			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
 			 'PurchaseOrder'=>Array('Contacts'),
 			 'SalesOrder'=>Array(),
 			 'Invoice'=>Array('Accounts'),
-			 'Campaigns'=>Array('Products','Contacts')
+			 'Campaigns'=>Array('Products')
 			);
 
 foreach($report_modules as $values)
@@ -107,7 +107,7 @@ class Reports extends CRMEntity{
 
 	var $module_list = Array(
 				"Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
-				"Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
+				"Contacts"=>Array("Information"=>4,"Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
 				"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
 				"Calendar"=>Array("Information"=>19,"Description"=>20),
@@ -159,8 +159,7 @@ class Reports extends CRMEntity{
 	function sgetRptFldr($mode='')
 	{
 
-		global $adb;
-		global $log;
+		global $adb,$log,$mod_strings;
 		$returndata = Array();
 		$sql = "select * from vtiger_reportfolder order by folderid";
 		$result = $adb->query($sql);
@@ -174,7 +173,7 @@ class Reports extends CRMEntity{
 					$details = Array();	
 					$details['state'] = $reportfldrow["state"]; 
 					$details['id'] = $reportfldrow["folderid"]; 
-					$details['name'] = $reportfldrow["foldername"]; 
+					$details['name'] = ($mod_strings[$reportfldrow["foldername"]] == '' ) ? $reportfldrow["foldername"]:$mod_strings[$reportfldrow["foldername"]]; 
 					$details['description'] = $reportfldrow["description"]; 
 					$details['details'] = $this->sgetRptsforFldr($reportfldrow["folderid"]);
 					$returndata[] = $details;
@@ -187,7 +186,7 @@ class Reports extends CRMEntity{
 				$details = Array();	
 				$details['state'] = $reportfldrow["state"]; 
 				$details['id'] = $reportfldrow["folderid"]; 
-				$details['name'] = $reportfldrow["foldername"]; 
+				$details['name'] = ($mod_strings[$reportfldrow["foldername"]] == '' ) ? $reportfldrow["foldername"]:$mod_strings[$reportfldrow["foldername"]]; 
 				$details['description'] = $reportfldrow["description"]; 
 				$returndata[] = $details;
 			}while($reportfldrow = $adb->fetch_array($result));
@@ -230,7 +229,8 @@ class Reports extends CRMEntity{
 				$report_details ['description'] = $report["description"];
 				$report_details ['reportname'] = $report["reportname"];
 
-				$returndata []=$report_details; 
+				if(isPermitted($report["primarymodule"],'index') == "yes")
+					$returndata []=$report_details; 
 			}while($report = $adb->fetch_array($result));
 		}
 
@@ -312,14 +312,26 @@ class Reports extends CRMEntity{
 		//Security Check 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$sql = "select * from vtiger_field where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) order by sequence";
+			$sql = "select * from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) order by sequence";
 		}
 		else
 		{
 			
 			$profileList = getCurrentUserProfileList();
-			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
+			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
 		}
+		//Added to include vtiger_activity type for Reports Module
+		if($module == 'Calendar' && $block == 19)
+		{
+			 $module_columnlist['vtiger_activity:activitytype:Calendar_Activity_Type:activitytype:C'] = 'Activity Type';
+		}
+		
+		if($module == 'HelpDesk' && $block == 25)
+                {
+                        $module_columnlist['vtiger_crmentity:crmid:HelpDesk_Ticket_ID:ticketid:I'] = 'Ticket ID';
+                }
+
+
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
@@ -328,8 +340,13 @@ class Reports extends CRMEntity{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldname = $adb->query_result($result,$i,"fieldname");
 			$fieldtype = $adb->query_result($result,$i,"typeofdata");
+			$uitype = $adb->query_result($result,$i,"uitype");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
+			if($uitype == 68 || $uitype == 59)
+			{
+				$fieldtypeofdata = 'V';
+			}
 			if($fieldtablename == "vtiger_crmentity")
 			{
 				$fieldtablename = $fieldtablename.$module;
@@ -556,6 +573,42 @@ class Reports extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
+		if(date("m") <= 3)
+		{
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")-1));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+		}else if(date("m") > 3 and date("m") <= 6)
+		{
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+
+		}else if(date("m") > 6 and date("m") <= 9)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+		}
+		else if(date("m") > 9 and date("m") <= 12)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")+1));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+
+		}
 
 		$sjsStr = '<script language="JavaScript" type="text/javaScript">
 			function showDateRange( type )
@@ -711,19 +764,19 @@ class Reports extends CRMEntity{
 				else if( type == "nextfq" )
 				{
 
-					document.NewReport.startdate.value = "2005-07-01";
-					document.NewReport.enddate.value = "2005-09-30";
+					document.NewReport.startdate.value = "'.$nFq.'";
+					document.NewReport.enddate.value = "'.$nFq1.'";
 				}                        
 				else if( type == "prevfq" )
 				{
 
-					document.NewReport.startdate.value = "2005-01-01";
-					document.NewReport.enddate.value = "2005-03-31";
+					document.NewReport.startdate.value = "'.$pFq.'";
+					document.NewReport.enddate.value = "'.$pFq1.'";
 				}                
 				else if( type == "thisfq" )
 				{
-					document.NewReport.startdate.value = "2005-04-01";
-					document.NewReport.enddate.value = "2005-06-30";
+					document.NewReport.startdate.value = "'.$cFq.'";
+					document.NewReport.enddate.value = "'.$cFq1.'";
 				}                
 				else
 				{
@@ -734,6 +787,53 @@ class Reports extends CRMEntity{
 		</script>';
 
 		return $sjsStr;
+	}
+function getEscapedColumns($selectedfields)
+	{
+		$fieldname = $selectedfields[3];
+		if($fieldname == "parent_id")
+		{
+			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
+			{
+				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then vtiger_contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
+				return $querycolumn;
+			}
+			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
+			{
+				$querycolumn = "case vtiger_crmentityRelProducts.setype when 'Accounts' then vtiger_accountRelProducts.accountname when 'Leads' then vtiger_leaddetailsRelProducts.lastname when 'Potentials' then vtiger_potentialRelProducts.potentialname End"." '".$selectedfields[2]."', vtiger_crmentityRelProducts.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
+			{
+				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then vtiger_leaddetailsRelCalendar.lastname when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
+			}
+		}
+		return $querycolumn;
+	}
+	function getaccesfield($module)
+	{
+		global $current_user;
+		global $adb;
+		$access_fields = Array();
+		
+		$profileList = getCurrentUserProfileList();
+		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where";
+		if($module == "Calendar")
+		{
+			$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		}
+		else
+		{
+			$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in ('".$this->primodule."','".$this->secmodule."')) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+		}
+
+		$result = $adb->query($query);
+
+		
+		while($collistrow = $adb->fetch_array($result))
+		{
+			$access_fields[] = $collistrow["fieldname"];
+		}
+		return $access_fields;
 	}
 
 	/** Function to set the order of grouping and to find the columns responsible
@@ -777,52 +877,60 @@ class Reports extends CRMEntity{
 
 	function getSelectedColumnsList($reportid)
 	{
-
 		global $adb;
 		global $modules;
-		global $log;
+		global $log,$current_user;
 
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
-		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid where vtiger_report.reportid =".$reportid;
+		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
+		$ssql .= " where vtiger_report.reportid =".$reportid;
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
-
 		$result = $adb->query($ssql);
-		$noofrows = $adb->num_rows($result);
+		$permitted_fields = Array();
 
-		for($i=0; $i<$noofrows; $i++)
+		while($columnslistrow = $adb->fetch_array($result))
 		{
-			$fieldcolname = $adb->query_result($result,$i,"columnname");
-			$fieldlist = explode(":",$fieldcolname);
-			
-			//Fix for multilanguage support - code contribution by Ding jianting
-			$fieldlabel_array = explode("_",$fieldlist[2]);
-			$mod_strings = return_module_language($current_language,$fieldlabel_array[0]);
-			if($fieldcolname != "")
+			$fieldname ="";
+			$fieldcolname = $columnslistrow["columnname"];
+			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+			require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				$fieldlabel = trim(str_replace($modules," ",$fieldlist[2]));
-				if(isset($mod_strings[$fieldlabel])) {
-					$shtml .= "<option value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
-				} else {
-					$shtml .= "<option value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				list($module,$field) = split("_",$module_field);
+				$permitted_fields = $this->getaccesfield($module);	
+			}
+			$selectedfields = explode(":",$fieldcolname);
+			$querycolumns = $this->getEscapedColumns($selectedfields);
+
+				$mod_strings = return_module_language($current_language,$module);
+				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));		
+			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields) && $fieldname != 'ticketid')
+			{
+				if(isset($mod_strings[$fieldlabel])) 
+				{
+					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$mod_strings[$fieldlabel]."</option>";
+				}
+				else 
+				{
+					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
 				}
 			}
-			//Code contribution ends
+			else
+			{
+				if(isset($mod_strings[$fieldlabel])) 
+				{
+					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
+				}
+			    	else 
+				{
+					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				}
+			}
 		}
-
-		$log->info("Reports :: Successfully returned getSelectedColumnsList");
-		return $shtml;
+		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
+		return $shtml;		
 	}
-
-	/** Function to Set the selected columns for the advanced filter for the vtiger_report
-	 *  This function accepts the vtiger_reportid as the argument and get the selected columns
-	 *  in the advanced filter and sets the values
-	 *  $this->advft_column[] = The column name
-	 *  $this->advft_option[] = The filter option
-	 *  $this->advft_value[] = The value to be compared
-	 *	and returns true in sucess
-	 */
-
-	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
 	function getAdvancedFilterList($reportid)
 	{
 		global $adb;
@@ -929,8 +1037,8 @@ class Reports extends CRMEntity{
 
 		$log->info("Reports :: Successfully returned sgetColumntoTotalSelected");
 		return $options;
+	
 	}
-
 
 	/** Function to form the HTML for columns to total	
 	 *  This function formulates the HTML format of the
@@ -989,7 +1097,7 @@ class Reports extends CRMEntity{
 					}
 
 					$columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
-					$options []= $columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'];
+					$options []= getTranslatedString($columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel']);
 					if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
 					{
 						$options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';					    
@@ -1022,7 +1130,7 @@ class Reports extends CRMEntity{
 					}
 				}else
 				{
-					$options []= $columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'];
+					$options []= getTranslatedString($columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel']);
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="" >';
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4"type="checkbox" value="" >';

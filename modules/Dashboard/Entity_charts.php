@@ -454,7 +454,7 @@ function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$h
 	}
 
 $sHTML .= "<tr>
-	   <td><a name='1'></a><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	   <td><a name='1'></a><table width=20%  border=0 cellspacing=12 cellpadding=0 align=left>
 	         <tr>
 	    	   <td rowspan=2 valign=top><span class=\"dash_count\">1</span></td>
 	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
@@ -523,7 +523,7 @@ $sHTML .= "</td>
 	}
 
 $sHTML .= "<tr>
-	   <td><a name='2'></a><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	   <td><a name='2'></a><table width=20%  border=0 cellspacing=12 cellpadding=0 align=left>
            	 <tr>
 	           <td rowspan=2 valign=top><span class=\"dash_count\">2</span></td>
 	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>

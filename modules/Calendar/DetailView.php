@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/calendarLayout.php');
 include_once 'modules/Calendar/header.php';
-global $mod_strings, $currentModule;
+global $mod_strings, $currentModule,$adb;
 if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
@@ -108,10 +108,10 @@ foreach($act_data as $block=>$entry)
 		{
 			$fldlabel[$field['fldname']] = $label;
 			$finaldata[$field['fldname']] = $field['value'];
+			$finaldata[$field['fldname'].'link'] = $field['link'];
 		}
 	}
 }
-
 //Start
 //To set user selected hour format
 if($current_user->hour_format == '')
@@ -129,28 +129,38 @@ $data['endmin'] = $time_arr['endmin'];
 $data['endfmt'] = $time_arr['endfmt'];
 $data['record'] = $focus->id;
 if(isset($finaldata['sendnotification']) && $finaldata['sendnotification'] == 'yes')
-        $data['sendnotification'] = 'Yes';
+        $data['sendnotification'] = $mod_strings['LBL_YES'];
 else
-        $data['sendnotification'] = 'No';
+        $data['sendnotification'] = $mod_strings['LBL_NO'];
 $data['subject'] = $finaldata['subject'];
 $data['date_start'] = $stdate;
 $data['due_date'] = $enddate;
 $data['assigned_user_id'] = $finaldata['assigned_user_id'];
-$data['taskpriority'] = $mod_strings[$finaldata['taskpriority']];
+if($mod_strings[$finaldata['taskpriority']] != '')
+	$data['taskpriority'] = $mod_strings[$finaldata['taskpriority']];
+else
+	$data['taskpriority'] = $finaldata['taskpriority'];
 $data['modifiedtime'] = $finaldata['modifiedtime'];
 $data['createdtime'] = $finaldata['createdtime'];
 $data['parent_name'] = $finaldata['parent_id'];
 $data['description'] = $finaldata['description'];
 if($activity_mode == 'Task')
 {
-	$data['taskstatus'] = $mod_strings[$finaldata['taskstatus']];
+	if($mod_strings[$finaldata['taskstatus']] != '')
+		$data['taskstatus'] = $mod_strings[$finaldata['taskstatus']];
+	else
+		$data['taskstatus'] = $finaldata['taskstatus'];
 	$data['activitytype'] = $activity_mode;
 	$data['contact_id'] = $finaldata['contact_id'];
+	$data['contact_idlink'] = $finaldata['contact_idlink'];
 }
 elseif($activity_mode == 'Events')
 {
 	$data['visibility'] = $finaldata['visibility'];
-	$data['eventstatus'] = $mod_strings[$finaldata['eventstatus']];
+	if($mod_strings[$finaldata['taskstatus']] != '')
+		$data['eventstatus'] = $mod_strings[$finaldata['eventstatus']];
+	else
+		$data['eventstatus'] = $finaldata['eventstatus'];
 	$data['activitytype'] = $finaldata['activitytype'];
 	$data['location'] = $finaldata['location'];
 	//Calculating reminder time
@@ -159,18 +169,18 @@ elseif($activity_mode == 'Events')
 	$rem_min = 0;
 	if($focus->column_fields['reminder_time'] != null)
 	{
-		$data['set_reminder'] = 'Yes';
+		$data['set_reminder'] = $mod_strings['LBL_YES'];
 		$data['reminder_str'] = $finaldata['reminder_time'];
 	}
 	else
-		$data['set_reminder'] = 'No';
+		$data['set_reminder'] = $mod_strings['LBL_NO'];
 	//To set recurring details
 	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
 	$res = $adb->query($query);
 	$rows = $adb->num_rows($res);
 	if($rows != 0)
 	{
-		$data['recurringcheck'] = 'Yes';
+		$data['recurringcheck'] = $mod_strings['LBL_YES'];
 		$data['repeat_frequency'] = $adb->query_result($res,0,'recurringfreq');
 		$recurringinfo =  explode("::",$adb->query_result($res,0,'recurringinfo'));
 		$data['recurringtype'] = $recurringinfo[0];
@@ -197,7 +207,7 @@ elseif($activity_mode == 'Events')
 			if($recurringinfo[1] == 'date')
 			{
 				$data['repeatMonth_date'] = $recurringinfo[2];
-				$monthrpt_str .= 'on '.$recurringinfo[2].' day of the month';
+				$monthrpt_str .= $mod_strings['on'].'&nbsp;'.$recurringinfo[2].'&nbsp;'.$mod_strings['day of the month'];
 			}
 			else 
 			{ 
@@ -235,11 +245,21 @@ elseif($activity_mode == 'Events')
 	}
 	else 
 	{   
-		$data['recurringcheck'] = 'No';
+		$data['recurringcheck'] = $mod_strings['LBL_NO'];
 		$data['repeat_month_str'] = '';
 	}
+	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
+	$result = $adb->query($sql);
+	$num_rows=$adb->num_rows($result);
+	$invited_users=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$userid=$adb->query_result($result,$i,'inviteeid');
+		$username=$adb->query_result($result,$i,'user_name');
+		$invited_users[$userid]=$username;
+	}
+	$smarty->assign("INVITEDUSERS",$invited_users);
 	$related_array = getRelatedLists("Calendar", $focus);
-	$smarty->assign("INVITEDUSERS",$related_array['Users']['entries']);
 	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
 
 

@@ -74,7 +74,7 @@ function verify_data() {
 	}
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert("Missing required fields:" + errorMessage);
+		alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
 		return false;
 	}
 	//return true;
@@ -102,7 +102,7 @@ function check4null(form)
 
         // Here we decide whether to submit the form.
         if (isError == true) {
-                alert("Missing required fields: " + errorMessage);
+                alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
                 return false;
         }
  return true;

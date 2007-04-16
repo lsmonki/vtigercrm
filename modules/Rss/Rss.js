@@ -34,7 +34,7 @@ function makeRequest(targetUrl) {
                 return httpRequest.responseText;
             break;
             default:
-                alert("Problem accessing url: "+targetUrl+" Code: "+httpRequest.status);
+                alert(alert_arr.PROBLEM_ACCESSSING_URL+targetUrl+alert_arr.CODE+httpRequest.status);
                 return null;
             break;
         }       
@@ -48,7 +48,7 @@ function verify_data(form) {
         }
         // Here we decide whether to submit the form.
         if (isError == true) {
-                alert("Missing required fields:" + errorMessage);
+                alert(alert_arr.MISSING_REQUIRED_FIELDS + errorMessage);
                 return false;
         }
         return true;

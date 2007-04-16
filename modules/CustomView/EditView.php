@@ -72,7 +72,7 @@ if($recordid == "")
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
 
-	$smarty->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
+	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 }
 else
@@ -82,6 +82,7 @@ else
 	$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
 	$log->info('CustomView :: Successfully got ViewDetails for the Viewid'.$recordid);
 	$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
+
 	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
 	$log->info('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid);
 
@@ -128,7 +129,7 @@ else
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
 
-	$smarty->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
+	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 
 	$cactionhtml = "<input name='customaction' class='button' type='button' value='Create Custom Action' onclick=goto_CustomAction('".$cv_module."');>";
@@ -216,8 +217,9 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	global $oCustomView;
 	global $app_list_strings;
 	$advfilter = array();
-	$mod_strings = return_module_language($current_language,$module);
-
+	$mod_strings = return_specified_module_language($current_language,$module);
+	
+	$check_dup = Array();
 	foreach($oCustomView->module_list[$module] as $key=>$value)
 	{
 		$advfilter = array();			
@@ -226,37 +228,67 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 		{
 			foreach($columnslist[$module][$key] as $field=>$fieldlabel)
 			{
-				if(isset($mod_strings[$fieldlabel]))
+				if(!in_array($fieldlabel,$check_dup))
 				{
-					if($selected == $field)
+					if(isset($mod_strings[$fieldlabel]))
 					{
-						$advfilter_option['value'] = $field;
-						$advfilter_option['text'] = $mod_strings[$fieldlabel];
-						$advfilter_option['selected'] = "selected";
+						if($selected == $field)
+						{
+							$advfilter_option['value'] = $field;
+							$advfilter_option['text'] = $mod_strings[$fieldlabel];
+							$advfilter_option['selected'] = "selected";
+						}else
+						{
+							$advfilter_option['value'] = $field;
+							$advfilter_option['text'] = $mod_strings[$fieldlabel];
+							$advfilter_option['selected'] = "";
+						}
 					}else
 					{
-						$advfilter_option['value'] = $field;
-						$advfilter_option['text'] = $mod_strings[$fieldlabel];
-						$advfilter_option['selected'] = "";
+						if($selected == $field)
+						{
+							$advfilter_option['value'] = $field;
+							$advfilter_option['text'] = $fieldlabel;
+							$advfilter_option['selected'] = "selected";
+						}else
+						{
+							$advfilter_option['value'] = $field;
+							$advfilter_option['text'] = $fieldlabel;
+							$advfilter_option['selected'] = "";
+						}
 					}
-				}else
-				{
-					if($selected == $field)
-					{
-						$advfilter_option['value'] = $field;
-						$advfilter_option['text'] = $fieldlabel;
-						$advfilter_option['selected'] = "selected";
-					}else
-					{
-						$advfilter_option['value'] = $field;
-						$advfilter_option['text'] = $fieldlabel;
-						$advfilter_option['selected'] = "";
-					}
+					$advfilter[] = $advfilter_option;
+					$check_dup [] = $fieldlabel;
 				}
-				$advfilter[] = $advfilter_option;
 			}
 			$advfilter_out[$label]= $advfilter;
 		}
+	}
+	
+	$finalfield = Array();
+	foreach($advfilter_out as $header=>$value)
+	{
+		if($header == $mod_strings['LBL_TASK_INFORMATION'])
+		{
+			$newLabel = $mod_strings['LBL_CALENDAR_INFORMATION'];
+		    	$finalfield[$newLabel] = $advfilter_out[$header];
+		    	
+		}
+		elseif($header == $mod_strings['LBL_EVENT_INFORMATION'])
+		{
+			$index = count($finalfield[$newLabel]);
+			foreach($value as $key=>$result)
+			{
+				$finalfield[$newLabel][$index]=$result;
+				$index++;
+			}
+		}
+		else
+		{
+			$finalfield = $advfilter_out;
+		}
+
+		$advfilter_out=$finalfield;
 	}
 	return $advfilter_out;
 }

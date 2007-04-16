@@ -13,13 +13,14 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 global $adb;
-
+global $default_charset;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Reports();
 
 $rfid = $_REQUEST['record'];
 $mode = $_REQUEST['savemode'];
 $foldername = addslashes($_REQUEST["foldername"]);
+$foldername = iconv("UTF-8",$default_charset,$foldername);
 $folderdesc = addslashes($_REQUEST["folderdesc"]);
 $foldername = str_replace('*amp*','&',$foldername);
 $folderdesc = str_replace('*amp*','&',$folderdesc);
@@ -29,7 +30,7 @@ if($mode=="Save")
 	{
 		$sql = "INSERT INTO vtiger_reportfolder ";
 		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-		$sql .= "VALUES (0,'".$foldername."','".$folderdesc."','CUSTOMIZED')";
+		$sql .= "VALUES ('','".$foldername."','".$folderdesc."','CUSTOMIZED')";
 		$result = $adb->query($sql);
 		if($result!=false)
 		{

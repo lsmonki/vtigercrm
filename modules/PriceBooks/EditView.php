@@ -94,6 +94,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 // Assigned organizations
 $smarty->assign("CURRENT_ORGANIZATION",$current_organization);
@@ -106,7 +107,7 @@ while( $org !== false) {
 $smarty->assign("USER_ORGANIZATIONS",$org_array);
 
 if($focus->mode == 'edit')
-	$smarty->display('Inventory/InventoryEditView.tpl');
+    $smarty->display('Inventory/InventoryEditView.tpl');
 else 
-	$smarty->display('Inventory/InventoryCreateView.tpl');
+    $smarty->display('Inventory/InventoryCreateView.tpl');
 ?>

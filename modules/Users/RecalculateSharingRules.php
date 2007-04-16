@@ -11,7 +11,7 @@
 
 RecalculateSharingRules();
 
-header("Location: index.php?action=OrgSharingDetailView&parenttab=Settings&module=Users");
+header("Location: index.php?action=OrgSharingDetailView&parenttab=Settings&module=Settings");
 
 
 ?>

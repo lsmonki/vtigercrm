@@ -45,6 +45,8 @@ foreach($storearray as $id)
 
 	    // Perform the delete action
 	    $result = $adb->query($sql);
+	    if($returnmodule == 'Accounts')
+		delAccRelRecords($id);
         }
         else
         {

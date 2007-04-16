@@ -69,8 +69,6 @@ class Tracker {
       $log->info("in  track view method ".$current_module);
         // Add a new item to the user's list
 
-        $esc_item_id = addslashes($item_id);
-        
 //No genius required. Just add an if case and change the query so that it puts the tracker entry whenever you touch on the DetailView of the required entity
          //get the first name and last name from the respective modules
 	 if($current_module != '')
@@ -94,11 +92,17 @@ class Tracker {
 		 }
 		 $result = $adb->query($query1);
 		 $item_summary = $adb->query_result($result,0,'entityname');
-		 if(strlen($item_summary) > 30)
-	     {
-		    $item_summary=substr($item_summary,0,30).'...';
-	     }
 	 }
+
+	 ### Check database item sizes
+	 #
+	 if(strlen($item_summary) > 251) {
+	     $item_summary=substr($item_summary,0,251).'...';
+	 }
+	 if(strlen($item_id) > 32) {
+	     $item_id=substr($item_id,0,32).'...';
+	 }
+         $esc_item_id = addslashes($item_id);
 	 
 	 #if condition added to skip vtiger_faq in last viewed history
           $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";

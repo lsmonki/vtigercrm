@@ -99,10 +99,6 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 		}
 		$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 		
-		if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
-		{
-			$calendar_arr['calendar']->add_Activities($current_user);
-		}
 		$calendar_arr['view'] = $mysel;
 		if($calendar_arr['calendar']->view == 'day')
 			$start_date = $end_date = $calendar_arr['calendar']->date_time->get_formatted_date();
@@ -146,10 +142,33 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$activity_type = "Events";
 				}
 				ChangeStatus($status,$return_id,$activity_type);
+				$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
+				if($mail_data['sendnotification'] == 1)
+				{
+					getEventNotification($activity_type,$mail_data['subject'],$mail_data);
+				}
+				$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
+				$invitee_res = $adb->query($invitee_qry);
+				$count = $adb->num_rows($invitee_res);
+				if($count != 0)
+				{
+					for($j = 0; $j < $count; $j++)
+					{
+						$invitees_ids[]= $adb->query_result($invitee_res,$j,"inviteeid");
+
+					}
+					$invitees_ids_string = implode(';',$invitees_ids);
+					sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
+				}
 			}
 			if($type == 'activity_postpone')
 			{
 			}
+			if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
+                	{
+                        	$calendar_arr['calendar']->add_Activities($current_user);
+                	}
+
 			if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption'] != null && $subtab == 'event')
 			{
 				if($_REQUEST['viewOption'] == 'hourview')
@@ -157,19 +176,19 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$cal_log->debug("going to get calendar Event HourView");
 					if($calendar_arr['view'] == 'day')
 					{
-						echo getDayViewLayout($calendar_arr);
+						echo getDayViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
 					}
 					elseif($calendar_arr['view'] == 'week')
 					{
-						echo getWeekViewLayout($calendar_arr);	
+						echo getWeekViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');	
 					}
 					elseif($calendar_arr['view'] == 'month')
 					{
-						echo getMonthViewLayout($calendar_arr);
+						echo getMonthViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
 					}
 					elseif($calendar_arr['view'] == 'year')
 					{
-						echo getYearViewLayout($calendar_arr);
+						echo getYearViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
 					}
 					else
 					{
@@ -181,7 +200,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$cal_log->debug("going to get calendar Event ListView");
 					//To get Events List
 					$activity_list = getEventList($calendar_arr, $start_date, $end_date);
-					echo constructEventListView($calendar_arr,$activity_list);
+					echo constructEventListView($calendar_arr,$activity_list)."####".getEventTodoInfo($calendar_arr,'listcnt');
 				}
 			}
 			elseif($subtab == 'todo')
@@ -189,7 +208,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 				$cal_log->debug("going to get calendar Todo ListView");
 				//To get Todos List
 				$todo_list = getTodoList($calendar_arr, $start_date, $end_date);
-				echo constructTodoListView($todo_list,$calendar_arr,$subtab);
+				echo constructTodoListView($todo_list,$calendar_arr,$subtab)."####".getEventTodoInfo($calendar_arr,'listcnt');
 			}
 		}
 		elseif($type == 'view')

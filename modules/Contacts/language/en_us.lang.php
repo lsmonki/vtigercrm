@@ -22,7 +22,6 @@
 
 $mod_strings = Array(
 // Mike Crowe Mod --------------------------------------------------------Added for general search
-'LBL_GENERAL_INFORMATION'=>'General Information',
 'LBL_MODULE_NAME'=>'Contacts',
 'LBL_INVITEE'=>'Direct Reports',
 'LBL_MODULE_TITLE'=>'Contacts: Home',
@@ -57,7 +56,6 @@ $mod_strings = Array(
 'LBL_CREATED_CALL' => 'Created a new call',
 'LBL_CREATED_MEETING' => 'Created a new meeting',
 'LBL_ADDMORE_BUSINESSCARD' =>'Add another business card',
-'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
 
 'LBL_BUSINESSCARD' => 'Business Card',
 
@@ -232,6 +230,19 @@ $mod_strings = Array(
 'Organization Assignment'=>'Assigned to',
 
 
+//Added for 5.0.3
+'Customer Portal Login Details'=>'Customer Portal Login Details',
+'Dear'=>'Dear',
+'Your Customer Portal Login details are given below:'=>'Your Customer Portal Login details are given below:',
+'User Id :'=>'User Id :',
+'Password :'=>'Password :',
+'Please Login Here'=>'Please Login Here',
+'Note :'=>'Note :',
+'We suggest you to change your password after logging in first time'=>'We suggest you to change your password after logging in first time.',
+'Support Team'=>'Support Team',
+
+
+'TITLE_AJAX_CSS_POPUP_CHAT'=>'Ajax Css-Popup chat',
 );
 
 ?>

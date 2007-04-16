@@ -28,6 +28,8 @@ require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/GetUserGroups.php');
+//to check audittrail if enable or not
+require_once('user_privileges/audit_trail.php');
 
 global $current_user;
 global $theme;
@@ -39,7 +41,8 @@ global $mod_strings;
 
 $focus = new Users();
 
-if(!empty($_REQUEST['record'])) {
+if(!empty($_REQUEST['record'])) 
+{
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
 	$focus->id = $_REQUEST['record'];	
 }
@@ -55,22 +58,28 @@ else
 
 if( $focus->user_name == "" )
 {  
-   
+
+	if(is_admin($current_user))
+	{
     echo "
             <table>
                 <tr>
                     <td>
                         <b>User does not exist.</b>
                     </td>
-                </tr>
+		    </tr>";
+	
+    echo "
                 <tr>
                     <td>
                         <a href='index.php?module=Users&action=ListView'>List Users</a>
                     </td>
                 </tr>
             </table>
-        ";
-    exit;  
+	    ";
+    exit;
+	}
+  
 }
 
 
@@ -110,7 +119,7 @@ if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
 	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
-	</div><script language='JavaScript' type='text/javascript' src='include/js/prototype.js'></script>
+	</div><script language='JavaScript' type='text/javascript' src='include/scriptaculous/prototype.js'></script>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
 	<div class='scale-image' style='padding: 10px; float: left; width: 83.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
@@ -176,6 +185,8 @@ $tabid = getTabid("Users");
 $validationData = getDBValidationData($lead_tables,$tabid);
 $data = split_validationdataArray($validationData);
 
+if($current_user->id == $_REQUEST['record'] || is_admin($current_user) == true)
+{
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
@@ -185,6 +196,8 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
 
+//for check audittrail if it is enable or not
+$smarty->assign("AUDITTRAIL",$audit_trail);
 
 //Organization assignment
 $crmid=$focus->id;
@@ -200,6 +213,35 @@ $smarty->assign("EDIT_USER_ASSIGNED_ORGANIZATIONS", $assigned_org);
 $smarty->assign("EDIT_USER_PRIMARY_ORGUNITS", $prim_orgunits);
 
 $smarty->display("UserDetailView.tpl");
+}
+else
+{
+	$output = '<table border="0" cellpadding="5" cellspacing="0" height="450" width="100%">
+		<tr><td align = "center">
+		<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;">
+			<table border="0" cellpadding="5" cellspacing="0" width="98%">
+			<tr>
+				<td rowspan="2" width="11%">
+				  	<img src="themes/bluelagoon/images/denied.gif">
+				</td>
+				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="70%">
+					<span class="genHeaderSmall">'.$app_strings["LBL_PERMISSION"].'
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="small" align="right" nowrap="nowrap">
+					<a href="javascript:window.history.back();">'.$app_strings["LBL_GO_BACK"].'</a>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+		</td></tr>
+	</table>';
+	echo $output;
+}
+
 
 
 ?>

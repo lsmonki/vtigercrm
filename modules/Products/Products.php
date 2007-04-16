@@ -66,6 +66,17 @@ class Products extends CRMEntity {
                                         'Unit Price'=>'unit_price'
                                      );
 	
+	var $dependend_fields = Array(
+                                'Product Name'=>Array('products'=>'productname'),
+                                'Part Number'=>Array('products'=>'productcode'),
+                                'Unit Price'=>Array('products'=>'unit_price')
+                                );
+        var $dependend_fields_name = Array(
+                                        'Product Name'=>'productname',
+                                        'Part Number'=>'productcode',
+                                        'Unit Price'=>'unit_price'
+                                     );
+	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
@@ -82,15 +93,6 @@ class Products extends CRMEntity {
 
 	function save_module($module)
 	{
-		//Inserting into vtiger_seproductsrel table
-		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_seproductsrel', 'Products');
-		}
-		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_seproductsrel');
-		}
 		//Inserting into product_taxrel table
 		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
@@ -270,30 +272,142 @@ class Products extends CRMEntity {
         	return getAttachmentsAndNotes('Products',$query,$id);
 	}
 
+	/**	function used to get the list of leads which are related to the product
+	 *	@param int $id - product id 
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_leads($id)
+	{
+		global $log, $singlepane_view, $mod_strings;
+		$log->debug("Entering get_leads(".$id.") method ...");
+
+		require_once('modules/Leads/Leads.php');
+		$focus = new Leads();
+
+		$button = '';
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT vtiger_leaddetails.leadid, vtiger_crmentity.crmid, vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.company, vtiger_leadaddress.phone, vtiger_leadsubdetails.website, vtiger_leaddetails.email, case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
+			FROM vtiger_leaddetails
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_leadaddress ON vtiger_leadaddress.leadaddressid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_leadsubdetails ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid=vtiger_leaddetails.leadid
+			INNER JOIN vtiger_products ON vtiger_seproductsrel.productid = vtiger_products.productid
+			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_leadgrouprelation ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_products.productid = ".$id;
+
+		$log->debug("Exiting get_leads($id) method ...");
+		return GetRelatedList('Products','Leads',$focus,$query,$button,$returnset);
+        }
+
+	/**	function used to get the list of accounts which are related to the product
+	 *	@param int $id - product id 
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_accounts($id)
+	{
+		global $log, $singlepane_view, $mod_strings;
+		$log->debug("Entering get_accounts(".$id.") method ...");
+
+		require_once('modules/Accounts/Accounts.php');
+		$focus = new Accounts();
+
+		$button = '';
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT vtiger_account.accountid, vtiger_crmentity.crmid, vtiger_account.accountname, vtiger_accountbillads.city, vtiger_account.website, vtiger_account.phone, case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
+			FROM vtiger_account
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid
+			INNER JOIN vtiger_accountbillads ON vtiger_accountbillads.accountaddressid = vtiger_account.accountid
+			INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid=vtiger_account.accountid
+			INNER JOIN vtiger_products ON vtiger_seproductsrel.productid = vtiger_products.productid
+			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_accountgrouprelation ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_products.productid = ".$id;
+
+			
+		$log->debug("Exiting get_accounts method ...");
+		return GetRelatedList('Products','Accounts',$focus,$query,$button,$returnset);
+        }
+
+	/**	function used to get the list of contacts which are related to the product
+	 *	@param int $id - product id 
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_contacts($id)
+	{
+		global $log, $singlepane_view, $mod_strings;
+		$log->debug("Entering get_contacts(".$id.") method ...");
+
+		require_once('modules/Contacts/Contacts.php');
+		$focus = new Contacts();
+
+		$button = '';
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_contactdetails.title, vtiger_contactdetails.accountid, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid=vtiger_contactdetails.contactid
+			INNER JOIN vtiger_products ON vtiger_seproductsrel.productid = vtiger_products.productid
+			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_contactgrouprelation ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_products.productid = ".$id;
+
+		$log->debug("Exiting get_contacts method ...");
+		return GetRelatedList('Products','Contacts',$focus,$query,$button,$returnset);
+        }
+
+
 	/**	function used to get the list of potentials which are related to the product
 	 *	@param int $id - product id 
-	 *	@return void - but this function will call the function renderRelatedPotentials with parameter query
+	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
 	function get_opportunities($id)
 	{
-		global $log;
+		global $log, $singlepane_view, $mod_strings;
 		$log->debug("Entering get_opportunities(".$id.") method ...");
-		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.potentialname,
-			vtiger_potential.potentialtype, vtiger_products.productid,
-			vtiger_products.productname, vtiger_products.qty_per_unit,
-			vtiger_products.unit_price, vtiger_products.expiry_date
+
+		require_once('modules/Potentials/Potentials.php');
+		$focus = new Potentials();
+
+		$button = '';
+
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid, vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.accountid, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
 			FROM vtiger_potential
-			INNER JOIN vtiger_products
-				ON vtiger_potential.productid = vtiger_products.productid
-			LEFT JOIN vtiger_potentialgrouprelation
-				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
-			inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid
-			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_products.productid = ".$id;
-		$log->debug("Exiting get_opportunities method ...");
-          renderRelatedPotentials($query);
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			INNER JOIN vtiger_account ON vtiger_potential.accountid = vtiger_account.accountid
+			INNER JOIN vtiger_seproductsrel ON vtiger_seproductsrel.crmid = vtiger_potential.potentialid
+			INNER JOIN vtiger_products ON vtiger_seproductsrel.productid = vtiger_products.productid
+			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_potentialgrouprelation ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_products.productid = ".$id;
+
+		$log->debug("Exiting get_opportunities($id) method ...");
+		return GetRelatedList('Products','Potentials',$focus,$query,$button,$returnset);
         }
 
 	/**	function used to get the list of tickets which are related to the product
@@ -315,7 +429,7 @@ class Products extends CRMEntity {
 		else
 			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
+		$query = "SELECT  case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_users.id,
 			vtiger_products.productid, vtiger_products.productname,
 			vtiger_troubletickets.ticketid,
 			vtiger_troubletickets.parent_id, vtiger_troubletickets.title,
@@ -335,7 +449,8 @@ class Products extends CRMEntity {
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
-	$log->debug("Exiting get_tickets method ...");
+	
+		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
 	}
 
@@ -419,7 +534,8 @@ class Products extends CRMEntity {
 			vtiger_quotes.*,
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
-			vtiger_inventoryproductrel.productid
+			vtiger_inventoryproductrel.productid,
+			vtiger_users.user_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
@@ -433,6 +549,8 @@ class Products extends CRMEntity {
 				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			LEFT JOIN vtiger_users 
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_inventoryproductrel.productid = ".$id;
 		$log->debug("Exiting get_quotes method ...");
@@ -461,7 +579,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
-			vtiger_inventoryproductrel.productid
+			vtiger_inventoryproductrel.productid,
+			vtiger_users.user_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
@@ -473,6 +592,8 @@ class Products extends CRMEntity {
 				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_purchase_orders method ...");
@@ -501,7 +622,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_users.user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -515,6 +637,8 @@ class Products extends CRMEntity {
 				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+			LEFT JOIN vtiger_users 
+				ON vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
@@ -543,7 +667,8 @@ class Products extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_users.user_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
@@ -555,6 +680,8 @@ class Products extends CRMEntity {
 				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON  vtiger_users.id=vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_inventoryproductrel.productid = ".$id;
 		$log->debug("Exiting get_invoices method ...");
@@ -591,6 +718,82 @@ class Products extends CRMEntity {
 			AND vtiger_pricebookproductrel.productid = ".$id; 
 		$log->debug("Exiting get_product_pricebooks method ...");
 		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
+	}
+
+	/**	function used to get the piecelist for this product
+	 *	@param int $id - product id
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_piecelist($id)
+	{     
+		return $this->get_product_dependencies($id,10);
+	}
+
+	/**	function used to get the list of required products for this product
+	 *	@param int $id - product id
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_depends($id)
+	{     
+		return $this->get_product_dependencies($id,20);
+	}
+
+	/**	function used to get the list of products incompatible with this product
+	 *	@param int $id - product id
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_incompatibles($id)
+	{     
+		return $this->get_product_dependencies($id,21);
+	}
+
+	/**	function used to get the list of optional products related to this product
+	 *	@param int $id - product id
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_options($id)
+	{     
+		return $this->get_product_dependencies($id,30);
+	}
+
+	/**	function used to get the list of products to be purchased to sell this product
+	 *	@param int $id - product id
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_purchaselist($id)
+	{     
+		return $this->get_product_dependencies($id,40);
+	}
+
+	/**	function used to get generic product dependencies
+	 *	@param int $id - product id
+	 *	@param int $type - dependency typ (10=piecelist, 20=requirement, 21=incompatible, 30=option, 40=purchaselist)
+	 *	@return array - array which will be returned from the function GetRelatedList
+	 */
+	function get_product_dependencies($id,$type)
+	{     
+		global $log,$singlepane_view;
+		$log->debug("Entering get_product_dependencies(".$id.",".$type.") method ...");
+		global $mod_strings;
+		$button = '';
+		$returnset = '&return_module=Products&return_action=CallDependencyList&return_id='.$id;
+		$focus = new Products();
+
+		$query = "SELECT vtiger_crmentity.crmid,
+			vtiger_products.*,
+			vtiger_products2products_rel.related_productid as prodid,
+			vtiger_products2products_rel.quantity as quantity,
+			vtiger_products2products_rel.product_relgroup as product_relgroup
+			FROM vtiger_products2products_rel
+			INNER JOIN vtiger_products
+				ON vtiger_products.productid = vtiger_products2products_rel.related_productid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_products.productid
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_products2products_rel.productid = ".$id."
+			AND vtiger_products2products_rel.relation_type = ".$type; 
+		$log->debug("Exiting get_product_dependencies method ...");
+		return GetRelatedList('Products','Products',$focus,$query,$button,$returnset,'','','',$type);
 	}
 
 	/**	function used to get the number of vendors which are related to the product
@@ -650,18 +853,19 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_potential vtiger_ProductRelatedToPotential
 				ON vtiger_ProductRelatedToPotential.potentialid = vtiger_seproductsrel.crmid
 	
-			LEFT JOIN vtiger_contactdetails 
-				ON vtiger_contactdetails.contactid = vtiger_products.contactid
+			LEFT JOIN vtiger_contactdetails vtiger_ProductRelatedToContact 
+				ON vtiger_ProductRelatedToContact.contactid = vtiger_seproductsrel.crmid
+
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
 			
 			WHERE vtiger_crmentity.deleted = 0 AND vtiger_users.status = 'Active'
-				AND ((vtiger_seproductsrel.crmid IS NULL
-					AND (vtiger_products.contactid = 0 OR vtiger_products.contactid IS NULL))
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) 
+				AND (
+					(vtiger_seproductsrel.crmid IS NULL)
+					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) 
 			group by vtiger_products.productid
 			";
 			//ProductRelatedToLead, Account and Potential tables are added to get the Related to field

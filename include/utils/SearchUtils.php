@@ -16,8 +16,8 @@ require_once('include/database/Postgres8.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contact_id','product_id','campaignid');
-$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname');
+$column_array=array('accountid','contact_id','product_id','campaignid','quoteid','vendorid','potentialid','salesorderid','vendor_id','contactid');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname','vtiger_quotes.subject','vtiger_vendor.vendorname','vtiger_potential.potentialname','vtiger_salesorder.subject','vtiger_vendor.vendorname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
@@ -126,65 +126,13 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
-                        if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
-                        {
-                                //Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
+			if($fieldname!='parent_id')
+			{
+				$fld_name=$fieldname;
 
-                                foreach($focus->list_fields[$name] as $tab=>$col)
-                                {
-                                        if(in_array($col,$focus->sortby_fields))
-                                        {
-                                                if($relatedlist !='')
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $name = $mod_strings[$name];
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $lbl_name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-								 $lbl_name = $mod_strings[$name];
-                                                        }
-                                                        $name = $lbl_name;
-                                                }
-                                        }
-                                        else
-                                        {       if($app_strings[$name])
-                                                {
-                                                        $name = $app_strings[$name];
-                                                }
-                                                elseif($mod_strings[$name])
-                                                {
-                                                        $name = $mod_strings[$name];
-                                                }
-                                        }
-                                }
-                        }
-                        //Added condition to hide the close column in Related Lists
-                        //if($name == 'Close' && $relatedlist != '')
-                        if($name == 'Close')
-                        {
-                                //$list_header .= '';
-                                // $list_header[] = '';
+				//assign the translated string
+				$search_header[$fld_name] = getTranslatedString($name);
 			}
-                        else
-                        {
-				if($fieldname!='parent_id')
-				{
-					$fld_name=$fieldname;
-                                	$search_header[$fld_name]=$name;
-				}
-                        }
                 }
         }
 	$log->debug("Exiting getSearchListHeaderValues method ...");	
@@ -199,7 +147,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 function Search($module)
 {
-	global $log;
+	global $log,$default_charset;
         $log->debug("Entering Search(".$module.") method ...");
 	$url_string='';	
 	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
@@ -208,7 +156,16 @@ function Search($module)
         }
         if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
         {
-                $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
+		// search other characters like "|, ?, ?" by jagi
+
+		$search_string = $_REQUEST['search_text'];
+		
+		$stringConvert = iconv("UTF-8",$default_charset,$search_string);
+
+		$search_string=addslashes(ltrim(rtrim($stringConvert)));
+
+		// $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
+
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
         {
@@ -331,12 +288,11 @@ function BasicSearch($module,$search_field,$search_string)
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	global $column_array,$table_col_array;
-
 	if($search_field =='crmid')
 	{
 		$column_name='crmid';
 		$table_name='vtiger_crmentity';
-		$where="$table_name.$column_name like '%".$search_string."%'";	
+		$where="$table_name.$column_name like '%".$search_string."%'";
 	}else
 	{	
 		//Check added for tickets by accounts/contacts in dashboard
@@ -361,6 +317,7 @@ function BasicSearch($module,$search_field,$search_string)
 				if ($search_field_first	== 'contactid') $search_field_first = 'contact_id';
 				$column_name = $search_field_first;
 			}
+				
 			//Check ends
 			$table_name=$adb->query_result($result,0,'tablename');
 			if($table_name == "vtiger_crmentity" && $column_name == "smownerid")
@@ -370,6 +327,13 @@ function BasicSearch($module,$search_field,$search_string)
 			elseif($table_name == "vtiger_activity" && $column_name == "status")
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
+			}
+			elseif($table_name == "vtiger_activity" && $column_name == "sendnotification")
+			{
+				if(stristr($search_string,'yes'))
+					$where="$table_name.$column_name = 1";
+				if(stristr($search_string,'no'))
+					$where="$table_name.$column_name = 0";
 			}
 			elseif($table_name == "vtiger_pricebook" && $column_name == "active")
 			{
@@ -451,7 +415,12 @@ function getAdvSearchfields($module)
 		$block = $adb->query_result($result,$i,"block");
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
-		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
+
+		// Added to display customfield label in search options
+		if($fieldlabel == "")
+			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+					
 		if($fieldlabel == "Related To")
 		{
 			$fieldlabel = "Related to";
@@ -464,6 +433,13 @@ function getAdvSearchfields($module)
 
 		}
 		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+		//Check added to search the lists by Inventory manager
+                if($fieldtablename == 'vtiger_quotes' && $fieldcolname == 'inventorymanager')
+                {
+                        $fieldtablename = 'vtiger_usersQuotes';
+                        $fieldcolname = 'user_name';
+                }
+
 		if($fieldlabel != 'Related to')
 		{
 			if ($i==0)
@@ -495,9 +471,9 @@ function getAdvSearchfields($module)
 
 function getcriteria_options()
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>contains</option><option value=\'dcts\'>does not contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>begins with</option><option value=\'ewt\'>ends with</option><option value=\'grt\'>greater than</option><option value=\'lst\'>less than</option><option value=\'grteq\'>greater or equal</option><option value=\'lsteq\'>lesser or equal</option>";
+	$CRIT_OPT = "<option value=\'cts\'>".$app_strings['contains']."</option><option value=\'dcts\'>".$app_strings['does not contains']."</option><option value=\'is\'>".$app_strings['is']."</option><option value=\'isn\'>".$app_strings['is not']."</option><option value=\'bwt\'>".$app_strings['begins with']."</option><option value=\'ewt\'>".$app_strings['ends with']."</option><option value=\'grt\'>".$app_strings['greater than']."</option><option value=\'lst\'>".$app_strings['less than']."</option><option value=\'grteq\'>".$app_strings['greater or equal']."</option><option value=\'lsteq\'>".$app_strings['less or equal']."</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
@@ -581,7 +557,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 
 function getWhereCondition($currentModule)
 {
-	global $log;
+	global $log,$default_charset;
 	global $column_array,$table_col_array;
 
         $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
@@ -608,6 +584,7 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
+			$srch_val = iconv("UTF-8",$default_charset,$srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			if($tab_col == "vtiger_crmentity.smownerid")
@@ -632,7 +609,13 @@ function getWhereCondition($currentModule)
 				if(stristr($srch_val,'no'))
 					$adv_string .= " ".getSearch_criteria($srch_cond,NULL,'vtiger_pricebook.active')." ".$matchtype;	
 			}
-
+			elseif($tab_col == "vtiger_activity.sendnotification")
+			{
+				if(stristr($srch_val,'yes'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,"1",'vtiger_activity.sendnotification')." ".$matchtype;
+				if(stristr($srch_val,'no'))
+					$adv_string .= " ".getSearch_criteria($srch_cond,"0",'vtiger_activity.sendnotification')." ".$matchtype;
+			}
 			elseif(in_array($column_name,$column_array))
                         {
                                 $adv_string .= getValuesforColumns($column_name,$srch_val)." ".$matchtype;
@@ -673,7 +656,6 @@ function getdashboardcondition()
 	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
 	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
 	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 	
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
@@ -693,10 +675,6 @@ function getdashboardcondition()
 		array_push($where_clauses, "vtiger_potential.leadsource = ".$adb->quote($lead_source));
 		$url_string .= "&leadsource=".$lead_source;
 	}
-	if(isset($assigned_user_id) && $assigned_user_id != "") {
-	        array_push($where_clauses, "vtiger_crmentity.smownerid = ".$assigned_user_id);
-	        $url_string .= "&assigned_user_id=".$assigned_user_id;
-		}
 	if(isset($date_closed) && $date_closed != "") {
 		array_push($where_clauses, $adb->getDBDateString("vtiger_potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
 		$url_string .= "&date_closed=".$date_closed;

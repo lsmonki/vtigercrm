@@ -14,5 +14,5 @@ $del_id =  $_REQUEST['delete_prof_id'];
 $tran_id = $_REQUEST['transfer_prof_id'];
 //Deleting the Profile
 deleteProfile($del_id,$tran_id);
-header("Location: index.php?module=Users&action=ListProfiles&parenttab=Settings");
+header("Location: index.php?module=Settings&action=ListProfiles&parenttab=Settings");
 ?>

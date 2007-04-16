@@ -142,7 +142,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>';
 			if($mode == 'edit')
-				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$mod_strings[$customfield_typename].'</td>';
+				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$customfield_typename.'</td>';
 			else
 				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
 				

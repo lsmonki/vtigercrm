@@ -200,13 +200,14 @@ if($focus->mode != 'edit')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 $organization = new Organization;
 $organization->id = $current_organization;
 $smarty->assign("ASSIGN_ORGUNIT_LIST", getOrgUnits($organization));
 
 if($focus->mode == 'edit')
-	$smarty->display('Inventory/InventoryEditView.tpl');
+    $smarty->display('Inventory/InventoryEditView.tpl');
 else
-	$smarty->display('Inventory/InventoryCreateView.tpl');
+    $smarty->display('Inventory/InventoryCreateView.tpl');
 ?>

@@ -19,9 +19,10 @@ if($_REQUEST['mail_error'] != '')
 {
         require_once("modules/Emails/mail.php");
         $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
-	if(strstr($error_msg,"Please check the assigned to user email id"))
-		$error_msg = "Mail could not be sent to the admin user. Please check the admin user email id.";
-	$smarty->assign("ERROR_MSG",'<b><font color="red">Test Mail status : '.$error_msg.'</font></b>');
+	//if(strstr($error_msg,"Please check the assigned to user email id"))
+	if(strstr($error_msg,$mod_strings['LBL_CHECK_ASSIGNEDTO_MAILID']))
+		$error_msg = $mod_strings['LBL.MAILSENDERROR'];
+	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font color=red>     '.$error_msg.'</font></b>');
 }
 
 global $adb;

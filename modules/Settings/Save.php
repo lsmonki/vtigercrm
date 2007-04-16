@@ -10,6 +10,8 @@
  ********************************************************************************/
 
 require_once("include/database/PearDatabase.php");
+global $mod_strings;
+
 $server=$_REQUEST['server'];
 $port=$_REQUEST['port'];
 $server_username=$_REQUEST['server_username'];
@@ -45,7 +47,7 @@ if($server_type == 'proxy')
 		
 		if(substr_count($proxy_cont, "Cache Access Denied") > 0)
 		{
-			$error_str = 'error=Proxy Authentication Required';
+			$error_str = 'error=LBL_PROXY_AUTHENTICATION_REQUIRED';
 			$db_update = false;
 		}
 		else
@@ -100,7 +102,7 @@ if($server_type != 'backup' && $server_type != 'proxy')
 	$to_email = getUserEmailId('id',$current_user->id);
 	$from_email = $to_email;
 	$subject = 'Test mail about the mail server configuration.';
-	$description = 'Dear '.$current_user->user_name.', <br><br> This is a test mail sent to confirm if a mail is actually being sent through the vtiger system. You are free to delete this mail.<br> Thanks  and  Regards<br> Team vTiger <br><br>';
+	$description = 'Dear '.$current_user->user_name.', <br><br><b> This is a test mail sent to confirm if a mail is actually being sent through the smtp server that you have configured. </b><br>Feel free to delete this mail.<br><br>Thanks  and  Regards,<br> Team vTiger <br><br>';
 	if($to_email != '')
 	{
 		$mail_status = send_mail('Users',$to_email,$current_user->user_name,$from_email,$subject,$description);
@@ -115,5 +117,14 @@ if($server_type != 'backup' && $server_type != 'proxy')
 	if($mail_status != 1)
 		$action = 'EmailConfig&emailconfig_mode=edit';
 }
-header("Location: index.php?module=Settings&parenttab=Settings&action=$action&$error_str");
+//While configuring Proxy settings, the submitted values will be retained when exception is thrown - dina
+if($server_type == 'proxy' && $error_str == 'error=LBL_PROXY_AUTHENTICATION_REQUIRED')
+{
+        header("Location: index.php?module=Settings&parenttab=Settings&action=$action&server=$server&port=$port&server_username=$server_username&$error_str");
+}
+else
+{
+        header("Location: index.php?module=Settings&parenttab=Settings&action=$action&$error_str");
+}
+
 ?>

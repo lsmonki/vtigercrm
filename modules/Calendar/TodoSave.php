@@ -9,12 +9,12 @@
 *
  ********************************************************************************/
 require_once('modules/Calendar/Activity.php');
+require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/logging.php');
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
-
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -46,6 +46,34 @@ if(isset($_REQUEST['mode']))
  if(isset($_REQUEST['task_sendnotification']) && $_REQUEST['task_sendnotification'] != null)
  	$focus->column_fields["sendnotification"] =  $_REQUEST["task_sendnotification"];
 
- $focus->save($tab_type);
- header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
+ 	$focus->save($tab_type);
+	if($_REQUEST["task_sendnotification"]=='on')
+        {
+		$mail_contents = getRequestedToData();
+		getEventNotification($_REQUEST['activity_mode'],$_REQUEST['task_subject'],$mail_contents);
+
+        }
+function getRequestedToData()
+{
+	$mail_data = Array();
+	$mail_data['user_id'] = $_REQUEST["task_assigned_user_id"];
+	$mail_data['subject'] = $_REQUEST['task_subject'];
+	$mail_data['status'] = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	$mail_data['activity_mode'] = $_REQUEST['activity_mode'];
+	$mail_data['taskpriority'] = $_REQUEST['taskpriority'];
+	$mail_data['relatedto'] = $_REQUEST['task_parent_name'];
+	$mail_data['contact_name'] = $_REQUEST['task_contact_name'];
+	$mail_data['description'] = $_REQUEST['task_description'];
+	$mail_data['assingn_type'] = $_REQUEST['task_assigntype'];
+	$mail_data['group_name'] = $_REQUEST['task_assigned_group_name'];
+	$mail_data['mode'] = $_REQUEST['task_mode'];
+	$value = getaddEventPopupTime($_REQUEST['task_time_start'],$_REQUEST['task_time_end'],'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['task_date_start'])." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($_REQUEST['task_due_date']);
+	return $mail_data;
+}
+
+
+ header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=todo&parenttab=".$_REQUEST['parenttab']);
 ?>

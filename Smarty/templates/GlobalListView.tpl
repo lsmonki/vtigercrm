@@ -20,7 +20,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/thumbnail.js"></script>
 <div id="dynloadarea" style=float:left;position:absolute;left:350px;top:150px;></div>
 {/if}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 
 {if $SEARCH_MODULE eq 'All'}
 <script>

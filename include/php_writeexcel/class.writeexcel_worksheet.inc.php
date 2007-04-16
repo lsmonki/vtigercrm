@@ -110,7 +110,7 @@ class writeexcel_worksheet extends writeexcel_biffwriter {
 
         $rowmax                   = 65536; // 16384 in Excel 5
         $colmax                   = 256;
-        $strmax                   = 255;
+        $strmax                   = 20000;
 
         $this->_name              = $name;
         $this->_index             = $index;

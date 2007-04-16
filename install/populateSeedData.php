@@ -209,7 +209,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$comboSalesStageArray = Array ("Closed Won");
+	$comboSalesStageArray = Array ("Closed Won","Needs Analysis","Value Proposition","Qualification","Prospecting","Id.Decision Makers");
 	$key = array_rand($comboSalesStageArray);
 	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
@@ -576,7 +576,7 @@ for($i=0;$i<12;$i++)
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$validtill_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$validtill_array = array ("2007-09-21", "2007-10-29", "2007-12-11", "2007-03-29", "2007-06-18");
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quotes();
@@ -648,7 +648,7 @@ for($i=0;$i<5;$i++)
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-08-11", "2007-09-09", "2007-02-28");
 
 for($i=0;$i<5;$i++)
 {
@@ -726,7 +726,7 @@ $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk",
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-07-11", "2007-04-09", "2006-08-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -798,6 +798,7 @@ for($i=0;$i<5;$i++)
 //Populate Invoice Data
 
 $isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
+$invoiceno_array = array ("INV2007_1","INV2007_2","INV2007_3","INV2007_4","INV2007_5");
 $istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
 $itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000");
 
@@ -814,6 +815,7 @@ for($i=0;$i<5;$i++)
         $invoice->column_fields["contactid"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$invoice->column_fields["subject"] = $isubj_array[$i];
+	$invoice->column_fields["invoice_no"] = $invoiceno_array[$i];
 	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];	
 	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
 
@@ -884,15 +886,15 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Vtiger 5 Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
-$startdate_array =  array ("2006-1-2","2003-3-4","2003-4-5","2001-2-1","2005-8-8");
+$esubj_array =  array ("Vtiger 5.0.3 Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
+$startdate_array =  array ("2007-07-27","2007-05-09","2007-04-05","2007-11-01","2007-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 
 $to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
 $cc_array = array("andrewa@a.com","casterb@b.com", "indomine@variancevtiger.com","becker@nosbest.com","electra@violet.com");
 $bcc_array = array("nathan@nathantests.com","jeff@karl1.com", "isotope@uranium.com","bunny@bugs.com","explosive@dud.com");
-$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com");
-$body_array = array("This is a good product! Have a go at it! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
+$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com","joy@vtiger.com","success@vtiger.com");
+$body_array = array("This release has close to 500 fixes in it and has gone through almost 7 rounds of validation. We think it is a stable product that you can directly use in deployment! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
 
 for($i=0;$i<5;$i++)
 {

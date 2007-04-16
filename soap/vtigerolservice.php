@@ -307,12 +307,17 @@ function SearchContactsByEmail($username,$emailaddress)
 
 function AddMessageToContact($username,$contactid,$msgdtls)
 {
+	global $current_user;
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Emails/Emails.php');
 	
-	$seed_user = new Users();
-	$user_id = $seed_user->retrieve_user_id($username);
+	$current_user = new Users();
+	$user_id = $current_user->retrieve_user_id($username);
+	$query = "select email1 from vtiger_users where id =".$user_id;
+	$result = $adb->query($query);
+	$user_emailid = $adb->query_result($result,0,"email1");
+	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
 	
 	foreach($msgdtls as $msgdtl)
 	{
@@ -331,17 +336,19 @@ function AddMessageToContact($username,$contactid,$msgdtls)
         $email->column_fields[activitytype] = 'Emails'; 
         $email->plugin_save = true; 
         $email->save("Emails");
-        
+	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+	$result = $adb->query($query);
+	$field_id = $adb->query_result($result,0,"fieldid");
         $email->set_emails_contact_invitee_relationship($email->id,$contactid);
         $email->set_emails_se_invitee_relationship($email->id,$contactid);
-        $email->set_emails_user_invitee_relationship($email->id,$user_id);
+	$email->set_emails_user_invitee_relationship($email->id,$user_id);
         $sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
         $result = $adb->query($sql);
         $camodulerow = $adb->fetch_array($result);
         if(isset($camodulerow))
         {
             $emailid = $camodulerow["email"];
-            $query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contactid."@77|".'","OUTLOOK")';
+			$query = 'insert into vtiger_emaildetails values ('.$email->id.',"'.$emailid.'","'.$user_emailid.'","","","","'.$user_id.'@-1|'.$contactid.'@'.$field_id.'|","OUTLOOK")';
             $adb->query($query);
         }
         return $email->id;
@@ -353,31 +360,36 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	}
 }
 
-function LoginToVtiger($userid,$password)
+function LoginToVtiger($userid,$password,$version)
 {
+	global $log;
 	global $adb;
+	$log->DEBUG("Entered into vtigerCRM with userid".$userid." and Version".$version);
+	include('vtigerversion.php');	
+	if($version != $vtiger_current_version)
+	{
+		return "VERSION";
+	}
 	require_once('modules/Users/Users.php');
-	
 	$return_access = "FALSE";
-	
 	$objuser = new Users();
-	
 	if($password != "")
 	{
 		$objuser->column_fields['user_name'] = $userid;
 		$objuser->load_user($password);
 		if($objuser->is_authenticated())
 		{
-			$return_access = "TRUE";
+			$return_access = "TRUES";
 		}else
 		{
-			$return_access = "FALSE";
+			$return_access = "LOGIN";
 		}
 	}else
 	{
 			//$server->setError("Invalid username and/or password");
 			$return_access = "FALSE";
 	}
+$log->DEBUG("The return access to outlook was ".$return_access." from vtigerCRM");
 	$objuser = $objuser;
 	return $return_access;
 }
@@ -391,7 +403,7 @@ function CheckEmailPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Emails","EditView") == "yes")
+	if(isPermitted("Emails","EditView") == "yes" && (isPermitted("Contacts","index") == 'yes'))
 	{
 		return "allowed";
 	}else
@@ -595,7 +607,7 @@ function AddContacts($username,$cntdtls)
 	{
 		if(isset($cntrow))
 		{
-		  		$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+		  		$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
      			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
     			
     			if($cntrow["middlename"] != "")
@@ -677,7 +689,7 @@ function UpdateContacts($username,$cntdtls)
 		if(isset($cntrow))
 		{
 			$contact->retrieve_entity_info($cntrow["id"],"Contacts");
-			$contact->column_fields[salutation]=in_array('salutation',$permitted_lists) ? $cntrow["title"] : "";		
+			$contact->column_fields[salutationtype]=in_array('salutationtype',$permitted_lists) ? $cntrow["title"] : "";		
 			$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $cntrow["firstname"] : "";
 			if($cntrow["middlename"] != "")
 			{
@@ -751,7 +763,7 @@ function retrieve_account_id($account_name,$user_id)
 		return null;
 	}
 
-	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname='" .$account_name."'";
+	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname='" .addslashes($account_name)."'";
 
 
 	$db = new PearDatabase();

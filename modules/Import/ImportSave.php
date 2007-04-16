@@ -29,6 +29,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 {
 	global $current_user;
 	global $adb;
+	global $mod_strings;
 
 // MWC ** Getting vtiger_users
 $temp = get_user_array(FALSE);
@@ -233,7 +234,7 @@ function b()
 </script>
 
 <?php
-$_SESSION['import_display_message'] = '<br>'.$start.' to '.$end.' of '.$totalnoofrows.' are imported successfully';
+$_SESSION['import_display_message'] = '<br>'.$start.' '.$mod_strings['to'].' '.$end.' '.$mod_strings['of'].' '.$totalnoofrows.' '.$mod_strings['are_imported_succesfully'];
 //return $_SESSION['import_display_message'];
 }
 ?>

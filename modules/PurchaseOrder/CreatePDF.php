@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require('include/fpdf/pdf.php');
+require_once('include/fpdf/pdfconfig.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('modules/Organization/Organization.php');
 require_once('include/database/PearDatabase.php');
@@ -28,8 +29,6 @@ $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no
 $endpage="1";
-global $products_per_page;
-$products_per_page="6";
 
 $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
@@ -55,14 +54,15 @@ $bill_state = $focus->column_fields["bill_state"];
 $bill_code = $focus->column_fields["bill_code"];
 $bill_country = $focus->column_fields["bill_country"];
 
+$contact_name =getContactName($focus->column_fields["contact_id"]);
 $ship_street = $focus->column_fields["ship_street"];
 $ship_city = $focus->column_fields["ship_city"];
 $ship_state = $focus->column_fields["ship_state"];
 $ship_code = $focus->column_fields["ship_code"];
 $ship_country = $focus->column_fields["ship_country"];
 
-$conditions = $focus->column_fields["terms_conditions"];
-$description = $focus->column_fields["description"];
+$conditions = from_html($focus->column_fields["terms_conditions"]);
+$description = from_html($focus->column_fields["description"]);
 $status = $focus->column_fields["postatus"];
 
 // Company information
@@ -141,7 +141,11 @@ $discount_percent = $focus->column_fields["hdnDiscountPercent"];
 if($discount_amount != "")
 	$price_discount = number_format($discount_amount,2,'.',',');
 else if($discount_percent != "")
-	$price_discount = $discount_percent."%";
+{
+	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
+	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
+	$price_discount = number_format((($discount_percent*$focus->column_fields["hdnSubTotal"])/100),2,'.',',');
+}
 else
 	$price_discount = "0.00";
 
@@ -199,6 +203,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$list_price[$i] = number_format($associated_products[$i]['listPrice'.$i],2,'.',',');
 	$list_pricet[$i] = $associated_products[$i]['listPrice'.$i];
 	$discount_total[$i] = $associated_products[$i]['discountTotal'.$i];
+        //aded for 5.0.3 pdf changes
+        $product_code[$i] = $associated_products[$i]['hdnProductcode'.$i];
 	
 	$taxable_total = $qty[$i]*$list_pricet[$i]-$discount_total[$i];
 
@@ -219,13 +225,47 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 		$product_line[$j]["Tax"] = number_format($total_taxes,2,'.',',')."\n ($total_tax_percent %) ";
 	}
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
-
+        $product_line[$j]["Product Code"] = $product_code[$i];
 	$product_line[$j]["Product Name"] = $product_name[$i];
-	$product_line[$j]["Description"] = $prod_description[$i];
 	$product_line[$j]["Qty"] = $qty[$i];
 	$product_line[$j]["Price"] = $list_price[$i];
 	$product_line[$j]["Discount"] = $discount_total[$i];
 	$product_line[$j]["Total"] = $prod_total[$i];
+
+	// Product piecelists
+	$query = "SELECT vtiger_crmentity.crmid,
+	    vtiger_products.productname as productname,
+	    vtiger_products2products_rel.related_productid as prodid,
+	    vtiger_products2products_rel.quantity as quantity,
+	    vtiger_products2products_rel.product_relgroup as product_relgroup
+	    FROM vtiger_products2products_rel
+	    INNER JOIN vtiger_products
+		ON vtiger_products.productid = vtiger_products2products_rel.related_productid
+	    INNER JOIN vtiger_crmentity
+		ON vtiger_crmentity.crmid = vtiger_products.productid
+	    WHERE vtiger_crmentity.deleted = 0
+	    AND vtiger_products2products_rel.productid = ".$product_id[$i]."
+	    AND vtiger_products2products_rel.relation_type = 10";
+	$result = $adb->query($query);
+	$pieces = $adb->num_rows($result);
+	if( $pieces > 0) {
+	    $product_line[++$j]["Product Name"] = "";
+	    $product_line[$j]["Description"] = "consisting of:";
+	    $product_line[$j]["Qty"] = "";
+	    $product_line[$j]["Price"] = "";
+	    $product_line[$j]["Discount"] = "";
+	    $product_line[$j]["Total"] = "";
+	    for( $pl=0; $pl<$pieces; $pl++) {
+	        $product_line[++$j]["Product Name"] = "";
+		$product_line[$j]["Description"] =
+		    $adb->query_result( $result, $pl, "productname");
+		$product_line[$j]["Qty"] =
+		    $adb->query_result( $result, $pl, "quantity");
+		$product_line[$j]["Price"] = "";
+		$product_line[$j]["Discount"] = "";
+		$product_line[$j]["Total"] = "";
+	    }
+	}
 }
 //echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
 //echo '<pre>';print_r($associated_products);echo '</pre>';
@@ -240,7 +280,7 @@ $page_num='1';
 $pdf = new PDF( 'P', 'mm', 'A4' );
 $pdf->Open();
 
-$num_pages=ceil(($num_products/$products_per_page));
+$num_pages=ceil(count($product_line)/$products_per_page);
 
 
 $current_product=0;
@@ -256,15 +296,21 @@ for($l=0;$l<$num_pages;$l++)
 		$current_product++;
 	}
 
+	//if bottom > 145 then we skip the Description and T&C in every
+	//page and display only in lastpage
+	//if you want to display the description and T&C in each page then
+	//set the display_desc_tc='true' and bottom <= 145 in pdfconfig.php
 	$pdf->AddPage();
 	if( $page_num == "1") {
 	    include("pdf_templates/".$template."/firstpage/header.php");
 	    include("pdf_templates/".$template."/firstpage/body.php");
-	    include("pdf_templates/".$template."/firstpage/footer.php");
+	    if($display_desc_tc == 'true' && $bottom <= 145)
+		include("pdf_templates/".$template."/firstpage/footer.php");
 	} else {
 	    include("pdf_templates/".$template."/pages/header.php");
 	    include("pdf_templates/".$template."/pages/body.php");
-	    include("pdf_templates/".$template."/pages/footer.php");
+	    if($display_desc_tc == 'true' && $bottom <= 145)
+		include("pdf_templates/".$template."/pages/footer.php");
 	}
 
 	$page_num++;

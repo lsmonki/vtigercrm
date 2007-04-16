@@ -33,6 +33,9 @@ global $log;
 $log =& LoggerManager::getLogger('SendReminder');
 $log->debug(" invoked SendReminder ");
 
+// retrieve the translated strings.
+$app_strings = return_application_language($current_language);
+
 //modified query for recurring events -Jag
  	$query="select vtiger_crmentity.crmid,vtiger_seactivityrel.crmid as setype,vtiger_activity.*,vtiger_activity_reminder.reminder_time,vtiger_activity_reminder.reminder_sent,vtiger_activity_reminder.recurringid,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_activity_reminder on vtiger_activity.activityid=vtiger_activity_reminder.activity_id left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid where DATE_FORMAT(vtiger_activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and vtiger_crmentity.crmid != 0 and vtiger_activity.eventstatus = 'Planned' and vtiger_activity_reminder.reminder_sent = 0 group by vtiger_activity.activityid,vtiger_recurringevents.recurringid";
 
@@ -94,10 +97,10 @@ if($adb->num_rows($result) >= 1)
 			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=7";
 			$result_main = $adb->query($sql);
 
-			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
+			$subject = $app_strings['Reminder'].$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Subject : ".$activity_sub."\n ". $parent_content ." Date & Time : ".$date_start." ".$time_start."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
 
 			if(count($to_addr) >=1)
 			{

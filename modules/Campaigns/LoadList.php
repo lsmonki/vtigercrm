@@ -28,24 +28,6 @@ while($row=$adb->fetch_array($rs)) {
 	$adb->query("INSERT INTO ".$reltable." VALUES('".$_REQUEST["return_id"]."','".$row["crmid"]."')");
 }
 
-if ($singlepane_view == 'true')
-{
-?>
-<script>
-addOnloadEvent(function() {
-	window.location.href = "index.php?action=DetailView&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
-});
-</script>
-<?php
-}
-else
-{
-?>
-<script>
-addOnloadEvent(function() {
-	window.location.href = "index.php?action=CallRelatedList&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
-});
-</script>
-<?php
-}
+header("Location: index.php?module=Campaigns&action=CampaignsAjax&file=CallRelatedList&ajax=true&record=".$_REQUEST['return_id']);
+
 ?>

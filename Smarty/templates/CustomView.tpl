@@ -92,7 +92,7 @@ function mandatoryCheck()
         {rdelim}
         if(mandatorycheck == false)
         {ldelim}
-                alert("Must have one Required field to be selected\n"+showvalues);
+                alert("{$APP.MUSTHAVE_ONE_REQUIREDFIELD}"+showvalues);
         {rdelim}
         
         return false;
@@ -146,7 +146,18 @@ function mandatoryCheck()
 			{foreach item=filteroption key=label from=$CHOOSECOLUMN1}
 				<optgroup label="{$label}" class=\"select\" style=\"border:none\">
 					{foreach item=text from=$filteroption}
-		   		         <option {$text.selected} value={$text.value}>{$text.text}</option>
+					 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                     {/foreach}
 			{/foreach}
           	        {$CHOOSECOLUMN1}
@@ -156,7 +167,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN2}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                              	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN2}
@@ -166,7 +188,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN3}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN3}
@@ -176,7 +209,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN4}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN4}
@@ -189,7 +233,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN5}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN5}
@@ -199,7 +254,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN6}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                   	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN6}
@@ -209,7 +275,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN7}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN7}
@@ -219,7 +296,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN8}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN8}
@@ -231,7 +319,18 @@ function mandatoryCheck()
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN9}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
-                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                    	 {assign var=option_values value=$text.text}
+		   		         <option {$text.selected} value={$text.value}>
+			{if $MOD.$option_values neq ''}
+				{$MOD.$option_values}
+
+			{elseif $APP.$option_values neq ''}
+				{$APP.$option_values}
+
+			{else}
+				{$option_values}
+			{/if}
+</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN9}
@@ -469,6 +568,8 @@ function mandatoryCheck()
   </td></tr>
   <tr><td colspan="4">&nbsp;</td></tr>
 </table>
+</table>
+</table>
 {$STDFILTER_JAVASCRIPT}
 {$JAVASCRIPT}
 <!-- to show the mandatory fields while creating new customview -->
@@ -507,9 +608,11 @@ function checkDuplicate()
 					selected_cv_icolumnvalue = $(cvselect_array[iloop]).options[$(cvselect_array[iloop]).selectedIndex].value;	
 					if(selected_cv_columnvalue == selected_cv_icolumnvalue)
 					{
-						alert('Columns cannot be duplicated');
-						$(cvselect_array[iloop]).selectedIndex = 0;
-						return false;
+						{/literal}
+                                                alert('{$APP.COLUMNS_CANNOT_BE_DUPLICATED}');
+                                                $(cvselect_array[iloop]).selectedIndex = 0;
+                                                return false;
+                                                {literal}
 					}
 
 				}

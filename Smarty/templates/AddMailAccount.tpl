@@ -21,7 +21,7 @@
                         <hr noshade="noshade" size="1"><br>
 
   		<form action="index.php" method="post" name="EditView" id="form">
-			<input type="hidden" name="module" value="Settings">
+			<input type="hidden" name="module" value="Users">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">
 			<input type="hidden" name="record" value="{$ID}">

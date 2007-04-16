@@ -39,6 +39,8 @@ class CRMEntity
    * Contributor(s): ______________________________________..
    */
 
+  var $ownedby;
+   
 	
   function saveentity($module)
   {
@@ -66,8 +68,18 @@ class CRMEntity
 		}
 	}
 
+	//Inserting into the group Table
+	if($this->ownedby == 0)
+	{
+		$this->insertIntoGroupTable($module);
+	}	
+	
 	//Calling the Module specific save code
 	$this->save_module($module);
+
+	$assigntype=$_REQUEST['assigntype'];
+	if($module != "Calendar")
+          $this->whomToSendMail($module,$this ->mode,$assigntype);
 	
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");
@@ -233,12 +245,18 @@ class CRMEntity
 	{
 		$ownerid = $this->column_fields['assigned_user_id'];
 	}
-                
-	if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendors' || $module == 'PriceBooks')
+        
+	$sql="select ownedby from vtiger_tab where name='".$module."'";
+	$res=$adb->query($sql);
+	$this->ownedby = $adb->query_result($res,0,'ownedby');
+	
+	if($this->ownedby == 1)
 	{
 		$log->info("module is =".$module);
 		$ownerid = $current_user->id;
-	}
+	}	
+	
+	
 	if($module == 'Events')
 	{
 		$module = 'Calendar';
@@ -280,6 +298,12 @@ class CRMEntity
 			$sql1 = "insert into vtiger_ownernotify values(".$this->id.",".$ownerid.",null)";
 			$adb->query($sql1);
 		}
+		
+		
+
+		
+
+		
 	}
 	else
 	{
@@ -318,9 +342,8 @@ class CRMEntity
 		    $sql = "insert into vtiger_entity2org (crmid,organizationname,primarytag) values (".$this->id.",'".$org."',1)";
 		    $adb->query($sql);
 		}
+	    }
 	}
-
-    }
 
 	/** Function to insert values in the vtiger_entity2org relation
 	 *  @param $crmid -- CRM id
@@ -399,7 +422,6 @@ class CRMEntity
 	    $log->debug( "Exit from insertIntoEntity2Org for crmid=".$crmid." module=".$module);
 	}
 
-
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
   	  * @param $module -- module:: Type varchar
@@ -429,12 +451,14 @@ class CRMEntity
 	  if($insertion_mode == 'edit')
 	  {
 		  $update = '';
-		  $tabid= getTabid($module);	
+		  $tabid= getTabid($module);
+	  	  if($tabid == 9)
+	          	$tabid ="9,16";	  
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
 
-			  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+			  $sql = "select * from vtiger_field where tabid in (".$tabid.") and tablename='".$table_name."' and displaytype in (1,3)"; 
 		  }
 		  else
 		  {
@@ -445,7 +469,7 @@ class CRMEntity
 			  ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 			  INNER JOIN vtiger_def_org_field
 			  ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			  WHERE vtiger_field.tabid = ".$tabid."
+			  WHERE vtiger_field.tabid in (".$tabid.")
 			  AND vtiger_profile2field.visible = 0 
 			  AND vtiger_profile2field.profileid IN ".$profileList."
 			  AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='".$table_name."' and vtiger_field.displaytype in (1,3)";
@@ -517,7 +541,8 @@ class CRMEntity
 				  }
 				  else
 				  {
-					  $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+					  //Added to avoid function call getDBInsertDateValue in ajax save
+					  $fldvalue = (($_REQUEST['ajxaction'] == 'DETAILVIEW')?$this->column_fields[$fieldname]:getDBInsertDateValue($this->column_fields[$fieldname]));
 				  }
 			  }
 			  elseif($uitype == 7)
@@ -537,7 +562,8 @@ class CRMEntity
 		  {
 			  $fldvalue = '';
 		  }
-		  if($fldvalue=='') $fldvalue ="NULL";
+		  if( is_string($fldvalue) && $fldvalue == '')
+		      $fldvalue ="NULL";
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
@@ -627,172 +653,46 @@ class CRMEntity
 
 		  	$adb->query($sql1); 
 		  }
-		  //to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
-		  if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
-		  {	  
-			  if($_REQUEST['assigntype'] == 'T')
-			  {
-				  $groupname = $_REQUEST['assigned_group_name'];
-				  //echo 'about to update lead group relation';
-				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
-				  {
-					  updateLeadGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-				  {
-					  updateAccountGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-				  {
-					  updateContactGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-				  {
-					  updatePotentialGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-				  {
-					  updateQuoteGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-				  {
-					  updateSoGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-				  {
-					  updateInvoiceGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-				  {
-					  updatePoGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-				  {
-					  updateTicketGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-				  {
-					  updateCampaignGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
-				  {
-					  if($table_name == 'vtiger_activity')
-					  {
-						  updateActivityGroupRelation($this->id,$groupname);
-					  }
-				  }
-
-
-			  }
-			  else
-			  {
-				  //echo 'about to update lead group relation again!';
-				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
-				  {
-					  updateLeadGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-				  {
-					  updateAccountGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-				  {
-					  updateContactGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-				  {
-					  updatePotentialGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-				  {
-					  updateQuoteGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-				  {
-					  updateSoGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-				  {
-					  updateInvoiceGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-				  {
-					  updatePoGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-				  {
-					  updateTicketGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-				  {
-					  updateCampaignGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
-				  {
-					  if($table_name == 'vtiger_activity')
-					  {
-						  updateActivityGroupRelation($this->id,$groupname);
-					  }
-				  }
-
-
-			  }
-		  }
+		  
 
 	  }
 	  else
-	  {	
+	  {
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
-		  $groupname = $_REQUEST['assigned_group_name'];
-		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_leaddetails')
-		  {
-			  insert2LeadGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_account')
-		  {
-			  insert2AccountGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_contactdetails')
-		  {
-			  insert2ContactGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_potential')
-		  {
-			  insert2PotentialGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_quotes')
-		  {
-			  insert2QuoteGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_salesorder')
-		  {
-			  insert2SoGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_invoice')
-		  {
-			  insert2InvoiceGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_purchaseorder')
-		  {
-			  insert2PoGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_activity') 
-		  {
-			  insert2ActivityGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_troubletickets') 
-		  {
-			  insert2TicketGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_campaign')
-		  {
-			  insert2CampaignGroupRelation($this->id,$groupname);
-		  }
+		  
 
 	  }
 
   }
+
+function whomToSendMail($module,$insertion_mode,$assigntype)
+{
+ global $adb;
+       if($insertion_mode!="edit")
+       {
+               if($assigntype=='U')
+               {
+                       if($module == 'Events' || $module == 'Calendar')
+                       {
+                               $moduleObj=new Activity();
+                       }else
+                       {
+                               $moduleObj=new $module();
+                       }
+                       sendNotificationToOwner($module,$moduleObj);
+               }
+               elseif($assigntype=='T')
+               {
+                       $groupname=$_REQUEST['assigned_group_name'];
+                       $resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+                       $groupid=$adb->query_result($resultqry,0,"groupid");
+                       sendNotificationToGroups($groupid,$this->id,$module);
+               }
+       }
+}
+
+
 	/** Function to delete a record in the specifed table 
   	  * @param $table_name -- table name:: Type varchar
 	  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
@@ -873,6 +773,7 @@ $log->info("in getOldFileName  ".$notesid);
       $fieldcolname = $adb->query_result($result1,$i,"columnname");
       $tablename = $adb->query_result($result1,$i,"tablename");
       $fieldname = $adb->query_result($result1,$i,"fieldname");
+
       $uitype = $adb->query_result($result1,$i,"uitype");
 
       // vtiger_entity2org results in a list value
@@ -883,7 +784,7 @@ $log->info("in getOldFileName  ".$notesid);
 	      $fld_value[$adb->query_result($result[$tablename],$o,'organizationname')] = 
 		  $adb->query_result($result[$tablename],$o,'primarytag');
 	  }
-      } else {
+      } elseif( $tablename != 'vtiger_products2products_rel') {
 	  $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
       }
 
@@ -898,7 +799,7 @@ $log->info("in getOldFileName  ".$notesid);
 	  }
       }
       $this->column_fields[$fieldname] = $fld_value;
-				
+
     }
 	if($module == 'Users')
 	{
@@ -1117,15 +1018,15 @@ $log->info("in getOldFileName  ".$notesid);
                 for($i=0; $i < $numRows;$i++)
                 {
                         $columnName = $adb->query_result($result,$i,"columnname");
-                        $fieldlable = $adb->query_result($result,$i,"fieldlabel");
+                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         //construct query as below
                         if($i == 0)
                         {
-                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
                         else
                         {
-                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
 
                 }
@@ -1164,6 +1065,47 @@ $log->info("in getOldFileName  ".$notesid);
 		$tracker = new Tracker();
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
+
+	function insertIntoGroupTable($module)
+	{
+		global $log;
+
+		if($module == 'Events')
+		{
+			$module = 'Calendar';
+		}
+		if($this->mode=='edit')
+		{
+						
+		  	//to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
+			if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
+		  	{	  
+			  	if($_REQUEST['assigntype'] == 'T')
+			  	{
+					$groupname = $_REQUEST['assigned_group_name'];
+
+					updateModuleGroupRelation($module,$this->id,$groupname);
+
+			  	}
+				else
+				{
+					updateModuleGroupRelation($module,$this->id,'');
+
+				}
+
+		  	}
+      		}
+		else
+		{
+			$groupname = $_REQUEST['assigned_group_name'];
+		 	if($_REQUEST['assigntype'] == 'T')
+		  	{
+			  	insertIntoGroupRelation($module,$this->id,$groupname);
+		  	}
+		  
+		}			
+
+	}	
 
 	
 

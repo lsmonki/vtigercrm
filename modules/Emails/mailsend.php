@@ -71,9 +71,12 @@ if($to_email == '' && $cc == '' && $bcc == '')
 }
 else
 {
+	$query1 = "select email1 from vtiger_users where id =".$current_user->id;
+	$res1 = $adb->query($query1);
+	$val = $adb->query_result($res1,0,"email1");
 	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
 	
-	$query = 'update vtiger_emaildetails set email_flag ="SENT" where emailid='.$focus->id;
+	$query = 'update vtiger_emaildetails set email_flag ="SENT",from_email ='."'$val'".' where emailid='.$focus->id;
 	$adb->query($query);
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails

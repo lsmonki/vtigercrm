@@ -20,7 +20,6 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-
 global $app_strings;
 global $currentModule;
 global $theme;
@@ -31,6 +30,7 @@ if (!isset($where)) $where = "";
 $popuptype = '';
 $filter = '';
 $popuptype = $_REQUEST["popuptype"];
+$dependency_type = '';
 switch($currentModule)
 {
 	case 'Contacts':
@@ -47,40 +47,6 @@ switch($currentModule)
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 
-		//set up a filter if we got a parent
-		if(isset($_REQUEST['Parent']) && $_REQUEST['Parent'] !='') {
-		    $sql = "SELECT tablename,entityidfield FROM vtiger_entityname
-				JOIN vtiger_crmentity ON
-				    vtiger_entityname.modulename = vtiger_crmentity.setype
-				WHERE crmid=".$_REQUEST['Parent'];
-		    $result = $adb->query($sql);
-		    $tablename = $adb->query_result($result,0,"tablename");
-		    if( $tablename == "vtiger_quotes" ||
-			$tablename == "vtiger_salesorder" ||
-			$tablename == "vtiger_invoice") {
-			$fieldname = "accountid";
-		    /*
-		    } elseif( $tablename == "vtiger_purchaseorder") {
-			$fieldname = "vendorid";
-		    */
-		    } else {
-			$fieldname = "";
-		    }
-
-		    //get the fieldvalue to filter on. We cannot just set 
-		    //up a filter addon, because the listquery is to hard
-		    //to change ...
-		    if( $fieldname != "") {
-			$tableindex = $adb->query_result($result,0,"entityidfield");
-			$sql = "SELECT ".$fieldname." FROM ".$tablename."
-				  WHERE ".$tableindex."=".$_REQUEST['Parent'];
-			$result = $adb->query($sql);
-			$filter = $adb->query_result($result,0,$fieldname);
-
-			if( $filter != '') 
-			    $filter = "vtiger_contactdetails.accountid=".$filter;
-		    }
-		}
 		break;
 	case 'Campaigns':
 		require_once("modules/$currentModule/Campaigns.php");
@@ -168,6 +134,10 @@ switch($currentModule)
 		}
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
+		if (isset($_REQUEST['dependency_type']) && $_REQUEST['dependency_type'] != '') {
+		    $dependency_type = $_REQUEST['dependency_type'];
+		}
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","","");
 		break;
 	case 'Vendors':
@@ -240,6 +210,7 @@ switch($currentModule)
 		break;
 }
 $smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);
+$smarty->assign("DEPENDENCY_TYPE",$dependency_type);
 
 
 $theme_path="themes/".$theme."/";
@@ -263,12 +234,19 @@ else
 		{		
 			$smarty->assign("RECORDID",$_REQUEST['recordid']);
 			$url_string .='&recordid='.$_REQUEST['recordid'];
+			$where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid'],$dependency_type);
 		}
-        $where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
+	if($where_relquery == '')
+	{
+		if(isset($_REQUEST['relmod_id']))
+			$where_relquery = getPopupCheckquery($currentModule,$_REQUEST['parent_module'],$_REQUEST['relmod_id']);
+		else
+			$where_relquery = getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
+	}
+	
         $query = getListQuery($currentModule,$where_relquery);
 }
 			
-
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
@@ -283,7 +261,6 @@ if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
-
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')	$sorder = $_REQUEST['sorder'];
 
@@ -294,7 +271,6 @@ if(isset($order_by) && $order_by != '')
 $list_result = $adb->query($query);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
-
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -353,8 +329,6 @@ if(isset($_REQUEST['select']) && $_REQUEST['select'] == 'enable')
 	$url_string .='&select=enable';
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != '')
 	$url_string .='&return_module='.$_REQUEST['return_module'];
-if(isset($_REQUEST['Parent']) && $_REQUEST['Parent'] != '')
-	$url_string .='&Parent='.$_REQUEST['Parent'];
 $listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 

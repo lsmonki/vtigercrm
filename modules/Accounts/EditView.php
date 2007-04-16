@@ -115,6 +115,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE",$_REQUEST['isDuplicate'] );
  
 // Assigned organizations
 $smarty->assign("CURRENT_ORGANIZATION",$current_organization);

@@ -86,11 +86,10 @@ function create_default_users() {
         $user->column_fields["activity_view"] = 'This Year';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
-        //added by philip for default default admin emailid
+        //added by philip for default admin emailid
 	if($admin_email == '')
-	$admin_email ="admin@vtigeruser.com";
+	    $admin_email ="admin@vtigeruser.com";
         $user->column_fields["email1"] = $admin_email;
-	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='CEO'";
 	$db->checkConnection();
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -111,6 +110,7 @@ function create_default_users() {
 	//Creating the flat files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
+	$admin_uid = $user->id;
 
 
 	//Creating the Standard User
@@ -127,12 +127,13 @@ function create_default_users() {
         $user->column_fields["namedays"] = '';
         $user->column_fields["currency_id"] = 1;
 	$user->column_fields["date_format"] = 'yyyy-mm-dd';
+	$user->column_fields["hour_format"] = '24';
+	$user->column_fields["start_hour"] = '08:00';
+	$user->column_fields["end_hour"] = '23:00';
 	$user->column_fields["imagename"] = '';
         $user->column_fields["activity_view"] = 'This Year';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
-        //added by philip for default default admin emailid
-	if($admin_email == '')
 	$std_email ="standarduser@vtigeruser.com";
         $user->column_fields["email1"] = $std_email;
 	//to get the role id for standard_user	
@@ -150,20 +151,22 @@ function create_default_users() {
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
-	//Inserting into vtiger_groups table
+	//Inserting Entries into vtiger_groups table
 	$db->startTransaction();
 	$result = $db->query("select groupid from vtiger_groups where groupname='Team Selling';");
-	$group1_id = $db->query_result($result,0,"groupid");
-	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
-	$group2_id = $db->query_result($result,0,"groupid");
-	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
-	$group3_id = $db->query_result($result,0,"groupid");
+ 	$group1_id = $db->query_result($result,0,"groupid");
+ 	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
+ 	$group2_id = $db->query_result($result,0,"groupid");
+ 	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
+ 	$group3_id = $db->query_result($result,0,"groupid");
 
-	$db->query("insert into vtiger_users2group values ('".$group1_id."',2)");
-	$db->query("insert into vtiger_users2group values ('".$group2_id."',1)");
-	$db->query("insert into vtiger_users2group values ('".$group2_id."',2)");
-	$db->query("insert into vtiger_users2group values ('".$group3_id."',2)");
+ 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$admin_uid.")");
+
+	$db->query("insert into vtiger_users2group values ('".$group1_id."',".$user->id.")");
+ 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
+ 	$db->query("insert into vtiger_users2group values ('".$group3_id."',".$user->id.")");
 	$db->completeTransaction();
+
 }
 
 //$startTime = microtime();
@@ -175,6 +178,7 @@ $focus=0;
 $success = $adb->createTables("schema/DatabaseSchema.xml");
 
 //Postgres8 fix - create sequences. 
+//   This should be a part of "createTables" however ...
  if( $adb->dbType == "pgsql" ) {
      //  Create required functions
      $adb->query( 'CREATE LANGUAGE plperl');
@@ -226,7 +230,6 @@ elseif ($success==1)
 	die("Error: Tables partially created.  Table creation failed.\n");
 	//eecho("Tables Successfully created.\n");
 
-// Populate default data
 foreach ($modules as $module ) 
 {
 	$focus = new $module();

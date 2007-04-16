@@ -18,7 +18,7 @@ require_once('data/Tracker.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailParse.php');
 
 global $log;
@@ -40,7 +40,7 @@ global $mbox;
 $mbox = getImapMbox($mailbox,$temprow);
 
 
-$email = new Webmail($mbox, $mailid);
+$email = new Webmails($mbox, $mailid);
 $from = $email->from;
 $subject=$email->subject;
 $date=$email->date;
@@ -85,7 +85,6 @@ $smarty->assign("id",$_REQUEST["record"]);
 $smarty->assign("NAME","From: ".$from);
 $smarty->assign("RELATEDLISTS", $block);
 $smarty->assign("SINGLE_MOD","Webmails");
-$smarty->assign("REDIR_MOD","Webmails");
 $smarty->assign("MODULE", "Webmails");
 $smarty->assign("ID",$_REQUEST["record"] );
 $smarty->assign("MOD",$mod_strings);

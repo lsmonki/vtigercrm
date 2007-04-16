@@ -299,8 +299,8 @@ class Migration
 
 		//To handle the file includes for each and every version
 		//Here we have to decide which files should be included, where the files will be added newly for every public release
-		//Handle Here -- Mickie
-		include("modules/Migration/ModifyDatabase/MigrationInfo.php");
+		//In this included file we have included modules/Migration/DBChanges/42P2_to_50.php which will apply the db changes upto 5.0.
+		include("modules/Migration/MigrationInfo.php");
 
 		$migrationlog->debug("Mickie ---- Ends\n\n\n");
 	}

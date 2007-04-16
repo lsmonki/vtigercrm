@@ -45,8 +45,8 @@ session_start();
 
 // vtiger CRM version number; do not edit!
 
-$vtiger_version = "5.0.2";
-$release_date = "31 October 2006";
+$vtiger_version = "5.0.3";
+$release_date = "25 January 2007";
 
 
 if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
@@ -235,7 +235,7 @@ $cache_dir = 'cache/';
 			<div id="config_info">
 			<p><strong class="big">Successfully created configuration file (config.inc.php) in :</strong><br><br>
 			<font color="green"><b><?php echo $root_directory; ?></b></font><br><br>
-			The installation will take at least 4 minutes. Grab a coffee,sit back and relax...<br>
+			The installation will take at least 4 minutes.<p> Grab a coffee,sit back and relax or browse through our <a href='http://blogs.vtiger.com/index.php' target="_blank">blogs</a><br>
 			</p>
 			</div>
 			<br>		
@@ -260,13 +260,8 @@ $cache_dir = 'cache/';
  	$config .= " * Contributor(s): ______________________________________.\n";
  	$config .= "********************************************************************************/\n\n";
  	$config .= "include('vtigerversion.php');\n\n";
- 	$config .= "// more than 8MB memory needed for graphics\n\n";
- 	$config .= "// memory limit default value = 16M\n\n";
- 	$config .= "ini_set('memory_limit','16M');\n\n";
+ 	$config .= "ini_set('memory_limit','64M');\n\n";
  	$config .= "// show or hide world clock, calculator and FCKEditor\n\n";
- 	$config .= "// world_clock_display default value = true\n";
- 	$config .= "// calculator_display default value = true\n";
- 	$config .= "// fckeditor_display default value = true\n\n";
  	$config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
  	$config .= "\$CALCULATOR_DISPLAY = 'true';\n";
  	$config .= "\$FCKEDITOR_DISPLAY = 'true';\n\n";

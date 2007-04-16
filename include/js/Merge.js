@@ -25,7 +25,7 @@ function massMerge(module)
                 else
                 {
                 			
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -47,7 +47,7 @@ function massMerge(module)
                else
                 {
                 			
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -59,7 +59,7 @@ function massMerge(module)
 	
 	if(getObj('mergefile').value == '')
 	{
-	         alert("Please select a template to merge");
+	         alert(alert_arr.SELECT_TEMPLATE_TO_MERGE);
            	 return false;   
         }
         document.massdelete.action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";

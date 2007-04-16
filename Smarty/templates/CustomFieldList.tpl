@@ -29,7 +29,9 @@ function getCustomFieldList(customField)
 {literal}
 function deleteCustomField(id, fld_module, colName, uitype)
 {
-        if(confirm("Are you sure?"))
+	{/literal}
+        if(confirm("{$APP.ARE_YOU_SURE}"))
+        {literal}
         {
                 document.form.action="index.php?module=Settings&action=DeleteCustomField&fld_module="+fld_module+"&fld_id="+id+"&colName="+colName+"&uitype="+uitype
                 document.form.submit()
@@ -88,7 +90,7 @@ var gselected_fieldtype = '';
 			
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tbody><tr>
-					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
+					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
 					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
 				</tr>
 

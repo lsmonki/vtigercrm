@@ -31,12 +31,12 @@ function addtopricebook()
 				{
 					if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 					{
-						alert("List Price cannot be empty");
+						alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			               		return false;	
 					}	
 					else if(isNaN(elem[i].value))
                                         {
-                                                alert("Invalid List Price");
+                                                alert(alert_arr.INVALID_LIST_PRICE);
                                                 return false;
                                         }
 
@@ -46,7 +46,7 @@ function addtopricebook()
 		}
 		else 
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
@@ -79,12 +79,12 @@ function addtopricebook()
                                         {
 						if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 						{
-							alert("List Price cannot be empty");
+							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
 						else if(isNaN(elem[i].value))
                 	                        {
-        	                                        alert("Invalid List Price");
+        	                                        alert(alert_arr.INVALID_LIST_PRICE);
                                                 	return false;
                                         	}
 	
@@ -95,7 +95,7 @@ function addtopricebook()
 		}
 		else
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
@@ -124,7 +124,7 @@ function updateAllListPrice(unitprice)
 {rdelim}
 
 </script>
-<script language="javascript" src="modules/Products/Product.js"></script>
+<script language="javascript" src="modules/Products/Products.js"></script>
 <table width="95%" border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="3">&nbsp;</td></tr>
 <tr>

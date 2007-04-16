@@ -13,8 +13,11 @@ require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
-$update_mod = $_REQUEST['destination_module'];
-$rel_table = 'vtiger_campaignleadrel';
+$dest_mod = $_REQUEST['destination_module'];
+
+if($singlepane_view == 'true') $action = "DetailView";
+else $action = "CallRelatedList";
+
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
@@ -23,24 +26,25 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		    $sql = "insert into  ".$rel_table." values(".$id.",".$_REQUEST["parentid"].")";
-	            $adb->query($sql);
+			if($dest_mod == 'Products')
+				$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parentid"].",".$id.",'Leads')");
+			elseif($dest_mod == 'Campaigns')	
+		    		$adb->query("insert into  vtiger_campaignleadrel values(".$id.",".$_REQUEST["parentid"].")");
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Leads&record=".$_REQUEST["parentid"]);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Leads&record=".$_REQUEST["parentid"]);
+	$record = $_REQUEST["parentid"];
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{	
-		$sql = "insert into ".$rel_table." values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")";
-		$adb->query($sql);
-
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Leads&record=".$_REQUEST["parid"]);
-		else
- 			header("Location: index.php?action=CallRelatedList&module=Leads&record=".$_REQUEST["parid"]);
+{
+	if($dest_mod == 'Products')
+		$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parid"].",".$_REQUEST["entityid"].",'Leads')");	
+	elseif($dest_mod == 'Campaigns')
+		$adb->query("insert into vtiger_campaignleadrel values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")");
+	$record = $_REQUEST["parid"];
 }
+
+header("Location: index.php?action=$action&module=Leads&record=".$record);
+
+
 
 ?>

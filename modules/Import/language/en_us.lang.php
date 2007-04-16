@@ -125,7 +125,6 @@ $mod_strings = Array(
 'LBL_LEADS_NOTE_2'=>'Company Name must be mapped.',
 'LBL_IMPORT_NOW'=>'Import Now',
 'LBL_'=>'',
-'LBL_'=>'',
 'LBL_CANNOT_OPEN'=>'Cannot open the imported file for reading',
 'LBL_NOT_SAME_NUMBER'=>'There were not the same number of fields per line in your file',
 'LBL_NO_LINES'=>'There were no lines in your import file',
@@ -163,11 +162,20 @@ $mod_strings = Array(
 'LBL_STEP_3_3'=>'Step 3 of 3 : ',
 'LBL_MAPPING_RESULTS'=>'Mapping Results ',
 'LBL_LAST_IMPORTED'=>'Last Imported',
+//Added for sript alerts
+'PLEASE_CHECK_MAPPING' => "' is mapped more than once. Please check the mapping.",
+'MAP_MANDATORY_FIELD' => 'Please map the mandatory field "',
+'ENTER_SAVEMAP_NAME' => 'Please Enter Save Map Name',
+
+//Added for 5.0.3
+'to'=>'to',
+'of'=>'of',
+'are_imported_succesfully'=>'are imported successfully',
+
 
 );
 
 /*$mod_list_strings = Array(
-'contacts_import_fields' => Array(
 	"id"=>"Contact ID"
 	,"first_name"=>"First Name"
 	,"last_name"=>"Last Name"

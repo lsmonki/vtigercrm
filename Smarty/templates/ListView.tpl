@@ -19,11 +19,11 @@
 {if $MODULE eq 'Contacts'}
 <div id="dynloadarea" style="z-index:100000001;float:left;position:absolute;left:350px;top:150px;"></div>
 {/if}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript">
 function checkgroup()
 {ldelim}
-  if(document.change_ownerform_name.user_lead_owner[1].checked)
+  if($("group_checkbox").checked)
   {ldelim}
   document.change_ownerform_name.lead_group_owner.style.display = "block";
   document.change_ownerform_name.lead_owner.style.display = "none";
@@ -79,7 +79,8 @@ function callSearch(searchtype)
                                 result = response.responseText.split('&#&#&#');
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
-                                        alert(result[1]);
+                                       alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 	       {rdelim}
         );
@@ -106,6 +107,7 @@ function alphabetic(module,url,dataid)
 				$("ListViewContents").innerHTML= result[2];
 				if(result[1] != '')
 			                alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 		{rdelim}
 	);
@@ -134,7 +136,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="images/searching.gif" alt="Searching... please wait"  title="Searching... please wait">
+                                                <img src="{$IMAGE_PATH}searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -277,13 +279,15 @@ function alphabetic(module,url,dataid)
 					<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 					<td width="2%"><b>:</b></td>
 					<td width="48%">
-					<input type = "radio" name = "user_lead_owner"  onclick=checkgroup(); checked>{$APP.LBL_USER}&nbsp;
-					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
-					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-					{$CHANGE_OWNER}
-					</select>
-					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+					<input type = "radio" id="user_checkbox"  name="user_lead_owner" {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup(); {/if} checked>{$APP.LBL_USER}&nbsp;
+					{if $CHANGE_GROUP_OWNER neq ''}
+					<input type = "radio" id="group_checkbox" name="user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
+					<select name="lead_group_owner" id="lead_group_owner" class="select" style="display:none;">  
 					{$CHANGE_GROUP_OWNER}
+					</select>
+					{/if}				
+					<select name="lead_owner" id="lead_owner" class="select">
+					{$CHANGE_OWNER}
 					</select>
 					</td>
 				</tr>
@@ -361,7 +365,7 @@ function ajaxChangeStatus(statusname)
 	}
 	else if(statusname == 'owner')
 	{
-	   if(document.change_ownerform_name.user_lead_owner[0].checked)
+	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
@@ -389,6 +393,7 @@ function ajaxChangeStatus(statusname)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
                         }
                 }
         );

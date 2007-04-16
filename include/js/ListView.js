@@ -29,7 +29,7 @@ function change(obj,divid)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	fnvshobj(obj,divid);
@@ -73,10 +73,17 @@ function massDelete(module)
         }
         else
         {
-            alert("Please select at least one entity");
+            alert(alert_arr.SELECT);
             return false;
         }
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		var alert_str = alert_arr.DELETE + xx +alert_arr.RECORDS;
+
+		if(module=="Accounts")
+			alert_str = alert_arr.DELETE_ACCOUNT +xx+alert_arr.RECORDS;
+		else if(module=="Vendors")
+			alert_str = alert_arr.DELETE_VENDOR+xx+alert_arr.RECORDS;
+
+		if(confirm(alert_str))
 		{
 			
 			$("status").style.display="inline";
@@ -91,6 +98,8 @@ function massDelete(module)
                         	        	$("ListViewContents").innerHTML= result[2];
 	                        	        if(result[1] != '')
                                         		alert(result[1]);
+
+						$('basicsearchcolumns').innerHTML = '';
 		                        }
               			 }
        			);
@@ -144,6 +153,7 @@ function getListViewEntries_js(module,url)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
                   	}
                 }
         );

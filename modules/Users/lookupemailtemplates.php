@@ -13,9 +13,8 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
-global $theme;
+global $theme,$current_user;
 $theme_path="themes/".$theme."/";
-
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -39,16 +38,32 @@ $theme_path="themes/".$theme."/";
    $sql = "select * from vtiger_emailtemplates order by templateid desc";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
+   
 $cnt=1;
 
 require_once('include/utils/UserInfoUtil.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
 do
 {
-  printf("<tr class='lvtColData' onmouseover=\"this.className='lvtColDataHover'\" onmouseout=\"this.className='lvtColData'\" bgcolor='white'> <td height='25'>");
- $templatename = $temprow["templatename"]; 
-  echo "<a href='javascript:submittemplate(".$temprow['templateid'].");'>".$temprow["templatename"]."</a></td>";
-   printf("<td height='25'>%s</td>",$temprow["description"]);
-  $cnt++;
+	$templatename = $temprow["templatename"];
+	if($is_admin == false)
+	{
+		$folderName = $temprow['foldername'];
+		if($folderName != 'Personal')
+		{
+			printf("<tr class='lvtColData' onmouseover=\"this.className='lvtColDataHover'\" onmouseout=\"this.className='lvtColData'\" bgcolor='white'> <td height='25'>");
+			echo "<a href='javascript:submittemplate(".$temprow['templateid'].");'>".$temprow["templatename"]."</a></td>";
+			printf("<td height='25'>%s</td>",$temprow["description"]);
+		}
+	}
+	else
+	{
+		printf("<tr class='lvtColData' onmouseover=\"this.className='lvtColDataHover'\" onmouseout=\"this.className='lvtColData'\" bgcolor='white'> <td height='25'>");
+		echo "<a href='javascript:submittemplate(".$temprow['templateid'].");'>".$temprow["templatename"]."</a></td>";
+		printf("<td height='25'>%s</td>",$temprow["description"]);
+	}	
+        $cnt++;
+
 }while($temprow = $adb->fetch_array($result));
 ?>
 </table>

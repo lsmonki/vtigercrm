@@ -16,9 +16,9 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
 <link rel="stylesheet" media="print" href="print.css" type="text/css">
-<title>vtiger -  Print Report</title>
+<title>vtiger -  {$MOD.LBL_PRINT_REPORT}</title>
 <style>
 {literal}
 body{
@@ -58,7 +58,7 @@ body table tr td{
 	<table width="80%" border="0" cellpadding="5" cellspacing="0" align="center">
 	<tr>
 		<td align="left" valign="top" style="border:0px solid #000000;">
-		<h2>{$REPORT_NAME}</h2>
+		<h2>{$MOD.$REPORT_NAME}</h2>
 		<font  color="#666666"><div id="report_info"></div></font>
 		</td>
 		<td align="right" style="border:0px solid #000000;" valign="top"><h3 style="color:#CCCCCC">{$COUNT} {$APP.LBL_RECORDS}</h3></td>

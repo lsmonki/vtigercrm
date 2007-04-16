@@ -13,7 +13,7 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Webmails/MailBox.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 
 global $adb,$current_user;
 
@@ -42,6 +42,17 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     $command = $_REQUEST["command"];
     if($command == "expunge") {
     	$MailBox = new MailBox($mailbox);
+	/*
+	$search = imap_search($MailBox->mbox,'DELETED');
+	$data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
+	for($i=0;$i<$num;$i++)
+	{
+        	if($data[$i]->deleted != 0)
+		{
+			imap_delete($MailBox->mbox,$data[$i]->message_id);
+		}
+	}
+	 */
     	imap_expunge($MailBox->mbox);
 	imap_close($MailBox->mbox);
 	flush();
@@ -50,8 +61,8 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     if($command == "delete_msg") {
 	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
     	$MailBox = new MailBox($mailbox);
-	$email = new Webmail($MailBox->mbox,$mailid);
-       	$email->delete();
+        imap_mail_move($MailBox->mbox,$mailid,"Deleted");
+	$email = new Webmails($MailBox->mbox,$mailid);
 	imap_close($MailBox->mbox);
 	echo $mailid;
 	flush();
@@ -61,9 +72,10 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     	$MailBox = new MailBox($mailbox);
 	$tlist = explode(":",$mailid);
 	foreach($tlist as $id) {
+	        imap_mail_move($MailBox->mbox,$id,"Trash");
 		$adb->println("DELETE MULTI MESSAGE $id");
-		$email = new Webmail($MailBox->mbox,$id);
-       	 	$email->delete();
+		$email = new Webmails($MailBox->mbox,$id);
+		$email->delete();
 	}
 	imap_close($MailBox->mbox);
 	echo $mailid;
@@ -72,7 +84,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     } 
     if($command == "undelete_msg") {
     	$MailBox = new MailBox($mailbox);
-	$email = new Webmail($MailBox->mbox,$mailid);
+	$email = new Webmails($MailBox->mbox,$mailid);
         $email->unDeleteMsg();
 	imap_close($MailBox->mbox);
 	echo $mailid;
@@ -81,17 +93,19 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     }
     if($command == "set_flag") {
     	$MailBox = new MailBox($mailbox);
-	$email = new Webmail($MailBox->mbox,$mailid);
+	$email = new Webmails($MailBox->mbox,$mailid);
         $email->setFlag();
 	imap_close($MailBox->mbox);
+	echo $mailid;
 	flush();
 	exit();
     }
     if($command == "clear_flag") {
     	$MailBox = new MailBox($mailbox);
-	$email = new Webmail($MailBox->mbox,$mailid);
+	$email = new Webmails($MailBox->mbox,$mailid);
         $email->delFlag();
 	imap_close($MailBox->mbox);
+	echo $mailid;
 	flush();
 	exit();
     }

@@ -54,7 +54,8 @@
 					</table>
                 </td>
 				<td width=100% align="right">
-					<!-- Filters -->
+				   <!-- Filters -->
+				   {if $HIDE_CUSTOM_LINKS neq '1'}
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
@@ -71,10 +72,13 @@
 							<span class="small">|</span>
                             <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
                             <span class="small">|</span>
-							<a href="index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_DELETE}</a></td>
+							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
 						    {/if}
 					</tr>
-					</table>
+					</table> 
+				   <!-- Filters  END-->
+				   {/if}
+
 				</td>	
        		    </tr>
 			</table>

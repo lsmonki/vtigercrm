@@ -53,19 +53,19 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
                              'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
 			     'vtiger_account:industry:Accounts_industry:industry:V',
-			     'vtiger_contactdetails:email:Contacts_Email:email:V'),
+			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
                              'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
                              'vtiger_account:industry:Accounts_industry:industry:V',
-                             'vtiger_contactdetails:email:Contacts_Email:email:V'),
+                             'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
-                             'vtiger_contactdetails:email:Contacts_Email:email:V',
+                             'vtiger_contactdetails:email:Contacts_Email:email:E',
                              'vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
                              'vtiger_potential:sales_stage:Potentials_Sales_Stage:sales_stage:V'),
 
@@ -164,7 +164,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
 			     'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-			     'vtiger_contactdetails:email:Contacts_Email:email:V'),
+			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_purchaseorder:subject:PurchaseOrder_Subject:subject:V',
 			     'vtiger_vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
@@ -562,7 +562,7 @@ function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$adb->formatString("vtiger_crmentity","startdate",$startdate)."','".$adb->formatString("vtiger_crmentity","enddate",$enddate)."')";
+		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$startdate."','".$enddate."')";
 		$ireportmoduleresult = $adb->query($ireportmodulesql);
 	}
 

@@ -61,7 +61,6 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("SINGLE_MOD", 'Lead');
-$smarty->assign("REDIR_MOD","leads");
 
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
@@ -97,6 +96,9 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
+	$smarty->assign("EMAIL1",$focus->column_fields['email']);
+	$smarty->assign("EMAIL2",$focus->column_fields['yahooid']);
+      
 }
 
 if(isPermitted("Leads","Merge",'') == 'yes') 
@@ -110,6 +112,7 @@ if(isPermitted("Leads","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]] =$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -121,12 +124,14 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-      
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {

@@ -36,6 +36,7 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";
 		$modObj->save("Potentials");
+	        sendNotificationToOwner('Potentials',&$modObj);
 		if($modObj->id != "")
 		{
 			echo ":#:SUCCESS";

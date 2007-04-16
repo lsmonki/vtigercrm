@@ -24,7 +24,7 @@
 .componentName {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
-	line-height: 18px;
+	line-height: 3px;
 	color: #998877;
 	font-weight:bold;
 	border-left:2px dotted #332211;
@@ -311,7 +311,6 @@ a:hover {
 	padding-left:10px;
 	padding-right:10px;
 	border-bottom:1px solid #999;
-	white-space:nowrap;
 }
 
 .rightMailMerge {
@@ -356,6 +355,28 @@ a:hover {
 	padding-left:5px;
 	width:90%;
 	background-color:#ffffdd;
+}
+
+.detailedViewTextBoxDis {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #555555;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:90%;
+	background-color:#aaaaaa;
+}
+
+.detailedViewTextArea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:95%;
+	height:100px;
+	background-color:#ffffff;
+	text-align:left;
 }
 
 
@@ -877,7 +898,7 @@ a.submenu:Hover{
 	font-size:12px;
 	background-color:#FFFFFF;
 	width:100%;
-	height:130px;
+	height:175px;
 	overflow:auto;
 	border:0px solid #000000;
 }
@@ -1662,18 +1683,54 @@ level2Sel{
         text-align:left;
         background-color:#FFFFFF;
     }
-
 .unread_email {
 	font-weight:bold;
+        background-color:#00FF00;
 }
 
+
+.qualify_email {
+	                   font-weight:bold;
+	                   background-color:#FFA500;
+	
+          }
+
+
+.delete_email {
+	font-weight:bold;
+        background-color:#FF5151;
+
+}
+
+.mailSelected {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
+.mailSelected_select {
+	background:#E1DCB3 url(images/tabSelectedBg.gif) repeat-x;
+	background-color:#1F5EFF;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
 								    
 /* MY SITES */
 
-
-.unread_email {
+.unread_email:hover {
 	font-weight:bold;
 }
+
 
 
 .tagCloud {
@@ -2254,6 +2311,16 @@ a.drop_down:Hover{
 	border-bottom: 1px solid #373D4C;
 	margin: 0;
 	font-weight: normal;
+}
+.groupname{
+                width:125px;
+          }
+
+
+.winmarkModulesdef{
+   background-image:url(images/woodspiceHomeMark.gif);
+   background-position:top;
+   background-repeat:repeat-x;
 }
 
 /* Recalculate Disable Ends */

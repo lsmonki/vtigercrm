@@ -8,13 +8,13 @@
 * 
  ********************************************************************************/
 -->
-<?
+<?php
 global $theme;
 $theme_path="themes/".$theme."/";
 ?>
 <HTML>
 <head>
-	<link type="text/css" href="<? echo $theme_path;?>style.css" rel="stylesheet">
+	<link type="text/css" href="<?php echo $theme_path;?>style.css" rel="stylesheet">
 </head>
 <BODY marginheight="0" marginwidth="0" leftmargin="0" rightmargin="0" bottommargin="0" topmargin="0">
 <FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data" style="margin:0px;">
@@ -25,7 +25,7 @@ $theme_path="themes/".$theme."/";
 
 ?>
 
-<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">
+<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $upload_maxsize; ?>">
 <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
 <INPUT TYPE="hidden" NAME="return_action" VALUE="<?php echo $ret_action ?>">
 <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
@@ -34,7 +34,7 @@ $theme_path="themes/".$theme."/";
 <td>
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 		<tr>
-			<td class="layerPopupHeading" align="left"><? echo $mod_strings["LBL_ATTACH_FILE"];?></td>
+			<td class="layerPopupHeading" align="left"><?php echo $mod_strings["LBL_ATTACH_FILE"];?></td>
 			<td width="70%" align="right">&nbsp;</td>
 		</tr>
 	</table>
@@ -44,8 +44,8 @@ $theme_path="themes/".$theme."/";
 				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white class="small">
 					<tr>
 						<td width="30%" colspan="2" align="left">
-							<b><? echo $mod_strings["LBL_STEP_SELECT_FILE"];?></b><br>
-							<? echo $mod_strings["LBL_BROWSE_FILES"]; ?>
+							<b><?php echo $mod_strings["LBL_STEP_SELECT_FILE"];?></b><br>
+							<?php echo $mod_strings["LBL_BROWSE_FILES"]; ?>
 						</td>
 					</tr>
 					<tr>
@@ -54,7 +54,7 @@ $theme_path="themes/".$theme."/";
 					<tr><td colspan="2">&nbsp;</td></tr>
 					<tr>
 						<td width="30%" colspan="2" align="left">
-							<b> <? echo $mod_strings["LBL_DESCRIPTION"];?> </b><? echo $mod_strings["LBL_OPTIONAL"];?>
+							<b> <?php echo $mod_strings["LBL_DESCRIPTION"];?> </b><?php echo $mod_strings["LBL_OPTIONAL"];?>
 						</td>
 					</tr>
 					<tr><td colspan="2" align="left"><textarea cols="50" rows="5"  name="txtDescription" class="txtBox"></textarea></td></tr>
@@ -66,8 +66,8 @@ $theme_path="themes/".$theme."/";
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr>
 			<td colspan="2" align="center">
-					<input type="submit" name="save" value=" &nbsp;Attach&nbsp; " class="crmbutton small save" />&nbsp;&nbsp;
-					<input type="button" name="cancel" value=" Cancel " class="crmbutton small cancel" onclick="self.close();" />
+					<input type="submit" name="save" value="&nbsp;<?php echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" />&nbsp;&nbsp;
+					<input type="button" name="cancel" value=" <?php echo $mod_strings["LBL_CANCEL"];?> " class="crmbutton small cancel" onclick="self.close();" />
 			</td>	
 		</tr>
 	</table>

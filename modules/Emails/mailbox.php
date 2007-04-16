@@ -73,9 +73,9 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	      
 	   function handleFile(nr) {
 	   	if (b != "ie") {
- 	      		alert("This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait for an update!");
+ 	      		alert('.$mod_strings['FEATURE_AVAILABLE_INFO'].');
 	   	} else {
-	   		check = confirm("Do you want to download the file ?");
+	   		check = confirm('.$mod_strings['DOWNLOAD_CONFIRAMATION'].');
 			if (check) {
 				setTimeout("this.location.reload()",8000);
 				location.href="index.php?action=gotodownload&module=Emails&download=1&file="+ nr +"&msgno='.$msg.'";					     } else {
@@ -126,7 +126,7 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 					$selectBoxDisplay[$k] = $att[$k]->parameters[1]->value;
 				}
    		        } 
-			elseif ($att[$k]->parameters[0]->value != "iso-8859-1" &&    $att[$k]->parameters[0]->value != "ISO-8859-1") {
+			elseif ($att[$k]->parameters[0]->value != $app_strings['LBL_CHARSET'] &&  $att[$k]->parameters[0]->value != $app_strings['LBL_CHARSET']) {
 				$selectBoxDisplay[$k] = $att[$k]->parameters[0]->value;
 			}
 		    }
@@ -341,7 +341,7 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
   global $log;
         $log->debug("Entering transformHTML(".$str.") method ...");
    if ((strpos($str,"<HTML") < 0) || (strpos($str,"<html")    < 0)) {
-  		$makeHeader = "<html><head><meta http-equiv=\"Content-Type\"    content=\"text/html; charset=iso-8859-1\"></head>\n";
+  		$makeHeader = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$app_strings['LBL_CHARSET']."\"></head>\n";
    	if ((strpos($str,"<BODY") < 0) || (strpos($str,"<body")    < 0)) {
    		$makeBody = "\n<body>\n";
    		$str = $makeHeader . $makeBody . $str ."\n</body></html>";
@@ -349,7 +349,7 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
    		$str = $makeHeader . $str ."\n</html>";
    	}
    } else {
-   	$str = "<meta http-equiv=\"Content-Type\" content=\"text/html;    charset=iso-8859-1\">\n". $str;
+   	$str = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$app_strings['LBL_CHARSET']."\">\n". $str;
    }
         $log->debug("Exiting transformHTML method ...");
    	return $str;

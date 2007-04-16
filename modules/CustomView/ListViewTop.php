@@ -104,8 +104,8 @@ function getKeyMetrics()
 					'MODULE' => $metriclist['module']
 					);
 
-			$value[]='<a href="index.php?action=index&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['name'].'</a>';
-			$value[]='<a href="index.php?action=index&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['count'].'</a>';
+			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.substr($metriclist['name'],0,20).'...'.'</a>';
+			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['count'].'</a>';
 			$entries[$metriclist['id']]=$value;
 		}
 

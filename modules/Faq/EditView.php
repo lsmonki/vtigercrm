@@ -111,7 +111,7 @@ if($_REQUEST['record'] != '')
 	//Added to display the Faq comments information
 	$smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
 }
-
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

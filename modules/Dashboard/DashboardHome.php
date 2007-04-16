@@ -26,14 +26,14 @@ $image_path=$theme_path."images/";
 ?>		
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 			  <tr>
-				<td><a name="1"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="1"></a><table width="20%"  border="0" cellspacing="3" cellpadding="0" align="left">
 				 		 <tr>
 
 				 		   <td rowspan="2"><span class="dash_count">1</span>&nbsp;&nbsp;</td>
-				 		   <td nowrap><span class="genHeaderSmall"><?echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
+				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
 				 		 </tr>
 					     <tr>
-					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
+					       <td><span class="big"><?php echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 
@@ -61,21 +61,21 @@ $image_path=$theme_path."images/";
 			  <!-- SCEOND CHART  -->
 			  
 			  <tr>
-				<td><a name="2"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="2"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">2</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_MONTH_BY_OUTCOME'];?></span></td>
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big"><? echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
+					       <td><span class="big"><?php echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>
 				<td  align="right">
 					<table cellpadding="0" cellspacing="0" border="0" class="small">
 						<tr>
-							<td class="small">View Chart :&nbsp;</td>
+							<td class="small"><?php echo $mod_strings['VIEWCHART'];?> :&nbsp;</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#1">1</a></td>
 							<td class="dash_row_sel">2</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#3">3</a></td>
@@ -98,21 +98,21 @@ $image_path=$theme_path."images/";
 			  <!-- THIRD CHART  -->
 			  
 			  <tr>
-				<td><a name="3"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="3"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">3</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME'];?></span></td>
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
+					       <td><span class="big"><?php echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>
 				<td align="right">
 					<table cellpadding="0" cellspacing="0" border="0" class="small">
 						<tr>
-							<td class="small">View Chart :&nbsp;</td>
+							<td class="small"><?php echo $mod_strings['VIEWCHART']; ?> :&nbsp;</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#1">1</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#2">2</a></td>
 							<td class="dash_row_sel">3</td>
@@ -133,14 +133,14 @@ $image_path=$theme_path."images/";
 			  <!-- FOURTH CHART  -->
 			  
 			  <tr>
-				<td><a name="4"></a><table width="20%"  border="0" cellspacing="0" cellpadding="0" align="left">
+				<td><a name="4"></a><table width="20%"  border="0" cellspacing="5" cellpadding="0" align="left">
 				 		 <tr>
 				 		   <td rowspan="2"><span class="dash_count">4</span>&nbsp;&nbsp;</td>
 				 		   <td nowrap><span class="genHeaderSmall"><?php echo $mod_strings['LBL_LEAD_SOURCE_FORM_TITLE'];?></span></td>
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big"><? echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
+					       <td><span class="big"><?php echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>

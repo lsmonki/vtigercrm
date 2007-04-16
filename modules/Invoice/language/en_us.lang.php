@@ -183,7 +183,8 @@ $mod_strings = Array(
 'Sent'=>'Sent',
 'Credit Invoice'=>'Credit Invoice',
 'Paid'=>'Paid',
-
+//Added to Custom Invoice Number
+'invoice_no'=>'Invoice No',
 );
 
 ?>

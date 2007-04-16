@@ -165,6 +165,9 @@ $focus->column_fields["date_start"]= date('Y-m-d');
 $focus->save("Emails");
 
 //saving the email details in vtiger_emaildetails vtiger_table
+$qry = 'select email1 from vtiger_users where id = '.$current_user->id;
+$res = $adb->query($qry);
+$user_email = $adb->query_result($res,0,"email1");
 $return_id = $focus->id;
 $email_id = $return_id;
 $query = 'select emailid from vtiger_emaildetails where emailid ='.$email_id;
@@ -176,12 +179,13 @@ if(isset($_REQUEST["saved_toid"]) && $_REQUEST["saved_toid"]!='')
 	
 $all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
 $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
+$userid = $current_user->id;
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
+	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$userid."@-1|".$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
 }else
 {
-	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
+	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"'.$user_email.'","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$userid."@-1|".$_REQUEST["parent_id"].'","SAVED")';
 }
 $adb->query($query);
 

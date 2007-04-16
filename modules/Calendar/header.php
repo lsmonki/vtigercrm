@@ -11,6 +11,7 @@
 require_once('include/utils/CommonUtils.php');
 $category = getParentTab();
 global $theme,$app_strings,$mod_strings;
+global $CALENDAR_DISPLAY, $WORLD_CLOCK_DISPLAY, $CALCULATOR_DISPLAY, $CHAT_DISPLAY;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -41,11 +42,19 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 
 				<table border=0 cellspacing=0 cellpadding=5>
 
-				<tr>
-					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick=\'fnvshobj(this,"miniCal");getMiniCal("parenttab='.$category.'");\'><img src="'.$image_path.'btnL3Calendar.gif" alt="'.$app_strings['LBL_CALENDAR_ALT'].'" title="'.$app_strings['LBL_CALENDAR_TITLE'].'" border=0></a></a></td>
-					<td style="padding-right:0px"><a href="javascript:;"><img src="'.$image_path.'btnL3Clock.gif" alt="'.$app_strings['LBL_CLOCK_ALT'].'" title="'.$app_strings['LBL_CLOCK_TITLE'].'" border=0 onClick="fnvshobj(this,\'wclock\');"></a></a></td>
-					<td style="padding-right:0px"><a href="#"><img src="'.$image_path.'btnL3Calc.gif" alt="'.$app_strings['LBL_CALCULATOR_ALT'].'" title="'.$app_strings['LBL_CALCULATOR_TITLE'].'" border=0 onClick="fnvshobj(this,\'calculator_cont\');fetch_calc();"></a></td>
-					<td style="padding-right:10px"><a href="javascript:;" onClick=\'return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");\'><img src="'.$image_path.'tbarChat.gif" alt="'.$app_strings['LBL_CHAT_ALT'].'" title="'.$app_strings['LBL_CHAT_TITLE'].'" border=0></a></td>
+					<tr>'; 
+ 		 
+ 		 
+ 		if($CALENDAR_DISPLAY == 'true') 
+ 		        $html_string .= '               <td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick=\'fnvshobj(this,"miniCal");getMiniCal("parenttab='.$category.'");\'><img src="'.$image_path.'btnL3Calendar.gif" alt="'.$app_strings['LBL_CALENDAR_ALT'].'" title="'.$app_strings['LBL_CALENDAR_TITLE'].'" border=0></a></a></td>'; 
+ 		if($WORLD_CLOCK_DISPLAY == 'true') 
+ 		        $html_string .= '               <td style="padding-right:0px"><a href="javascript:;"><img src="'.$image_path.'btnL3Clock.gif" alt="'.$app_strings['LBL_CLOCK_ALT'].'" title="'.$app_strings['LBL_CLOCK_TITLE'].'" border=0 onClick="fnvshobj(this,\'wclock\');"></a></a></td>'; 
+ 		if($CALCULATOR_DISPLAY == 'true') 
+ 		        $html_string .= '               <td style="padding-right:0px"><a href="#"><img src="'.$image_path.'btnL3Calc.gif" alt="'.$app_strings['LBL_CALCULATOR_ALT'].'" title="'.$app_strings['LBL_CALCULATOR_TITLE'].'" border=0 onClick="fnvshobj(this,\'calculator_cont\');fetch_calc();"></a></td>'; 
+ 		if($CHAT_DISPLAY == 'true') 
+ 		        $html_string .= '               <td style="padding-right:10px"><a href="javascript:;" onClick=\'return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");\'><img src="'.$image_path.'tbarChat.gif" alt="'.$app_strings['LBL_CHAT_ALT'].'" title="'.$app_strings['LBL_CHAT_TITLE'].'" border=0></a></td>'; 
+ 		 
+ 		$html_string .= ' 
 					<td style="padding-right:10px"><img src="'.$image_path.'btnL3Tracker.gif" alt="'.$app_strings['LBL_LAST_VIEWED'].'" title="'.$app_strings['LBL_LAST_VIEWED'].'" border=0 onClick="fnvshobj(this,\'tracker\');"></td>
 				</tr>
 				</table>

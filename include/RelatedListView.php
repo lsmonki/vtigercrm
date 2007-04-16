@@ -24,11 +24,12 @@ require_once("include/ListView/ListViewSession.php");
   * @param $id -- id:: Type string
   * @param $edit_val -- edit value:: Type string
   * @param $del_val -- delete value:: Type string
+  * @param $rel_type -- relation type:: Type integer
   * @returns $related_entries -- related entires:: Type string array
   *
   */
 
-function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='')
+function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='',$rel_type='')
 {
 	$log = LoggerManager::getLogger('account_list');
 	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".$focus.",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
@@ -135,8 +136,13 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$order_by = $focus->default_order_by;
 		$sorder = $focus->default_sort_order;
 	}
-		
-	$query .= ' ORDER BY '.$order_by.' '.$sorder;
+		//Added by Don for AssignedTo ordering issue in Related Lists
+	$query_order_by = $order_by;
+	if($order_by == 'smownerid')
+	{
+		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
+	}	
+	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
 	$url_qry .="&order_by=".$order_by;
 	//Added for PHP version less than 5
 	if (!function_exists("stripos"))
@@ -187,35 +193,43 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	else
 	{
 		$id = $_REQUEST['record'];
-		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
 		if ($noofrows > 15)
 		{
 			$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
 			$smarty->assign('SCROLLSTOP','</div>');
 		}
-		$smarty->assign("LISTHEADER", $listview_header);
-															
-		if($module == 'PriceBook' && $relatedmodule == 'Products')
+		if($module == 'Products' && $relatedmodule == 'Products') {
+		    $listview_entries = getDepListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditView','Delete','',$rel_type);
+		    $listview_header = getDepListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module,$rel_type);
+		}
+		else
 		{
+		    $listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);
+		    if($module == 'PriceBook' && $relatedmodule == 'Products')
+		    {
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
-		}
-		if($module == 'Products' && $relatedmodule == 'PriceBook')
-		{
+		    }
+		    if($module == 'Products' && $relatedmodule == 'PriceBook')
+		    {
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel');
-		}
-		elseif($relatedmodule == 'SalesOrder')
-		{
+		    }
+		    elseif($relatedmodule == 'SalesOrder')
+		    {
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
-		}else
-		{
+		    }else
+		    {
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
+		    }
 		}
+
+		$smarty->assign("LISTHEADER", $listview_header);
 
 		$navigationOutput = Array();
 		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
 		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
 		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
+
 		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;
 	}
@@ -238,13 +252,12 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$list = '<script>
 		function confirmdelete(url)
 		{
-			if(confirm("Are you sure?"))
+			if(confirm("'.$app_strings['ARE_YOU_SURE'].'"))
 			{
 				document.location.href=url;
 			}
 		}
 	</script>';
-	echo $list;
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -383,8 +396,8 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_TYPE'];
 		$header[] = $app_strings['LBL_SUBJECT'];
 		$header[] = $app_strings['LBL_RELATED_TO'];
-		$header[] = $app_strings['LBL_START_DATE'];
-		$header[] = $app_strings['LBL_END_DATE'];
+		$header[] = $app_strings['LBL_START_DATE']." & ".$app_strings['LBL_TIME'];
+		$header[] = $app_strings['LBL_END_DATE']." & ".$app_strings['LBL_TIME'];
 		//$header[] = $app_strings['LBL_DESCRIPTION'];
 		$header[] = $app_strings['LBL_ACTION'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
@@ -413,10 +426,10 @@ function getHistory($parentmodule,$query,$id)
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
-
-			$entries[] = $row['date_start'];
-			$entries[] = $row['due_date'];
-
+		
+			$entries[] = $row['date_start']."   ".$row['time_start'];
+			$entries[] = $row['due_date']."   ".$row['time_end'];
+			
 			//$entries[] = nl2br($row['description']);
 
 			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
@@ -445,7 +458,7 @@ function getHistory($parentmodule,$query,$id)
 			$i++;
 			$entries_list[] = $entries;
 		}
-
+	
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
 		$log->debug("Exiting getHistory method ...");
 		return $return_data; 
@@ -487,7 +500,9 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	$header[]=$mod_strings['LBL_PRODUCT_CODE'];
 	$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
 	$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
-	$header[]=$mod_strings['LBL_ACTION'];
+	if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
+		$header[]=$mod_strings['LBL_ACTION'];
+	
 
 	for($i=0; $i<$num_rows; $i++)
 	{
@@ -502,8 +517,17 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$entries[] = $adb->query_result($list_result,$i,"productcode");
 		$entries[] = $unit_price;
 		$entries[] = $listprice;
-		$entries[] = '<img style="cursor:pointer;" src="'.$image_path.'editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/><!--a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a-->&nbsp;|&nbsp;<img src="'.$image_path.'delete.gif" onclick="if(confirm(\'Are you sure?\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';
-
+		$action = "";
+		if(isPermitted("PriceBooks","EditView","") == 'yes')
+			$action .= '<img style="cursor:pointer;" src="'.$image_path.'editfield.gif" border="0" onClick="fnvshobj(this,\'editlistprice\'),editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="'.$app_strings["LBL_EDIT_BUTTON"].'" title="'.$app_strings["LBL_EDIT_BUTTON"].'"/>';
+		if(isPermitted("PriceBooks","Delete","") == 'yes')
+		{		
+			if($action != "")
+				$action .= '&nbsp;|&nbsp;';
+			$action .= '<img src="'.$image_path.'delete.gif" onclick="if(confirm(\''.$app_strings['ARE_YOU_SURE'].'\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="'.$app_strings["LBL_DELETE"].'" title="'.$app_strings["LBL_DELETE"].'" style="cursor:pointer;" border="0">';	
+		}
+		if($action != "")		
+			$entries[] = $action;
 		$entries_list[] = $entries;
 	}
 	if($num_rows>0)

@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('modules/Emails/Emails.php');
-require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/Webmails.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -30,11 +30,11 @@ $start_message=$_REQUEST["start_message"];
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 $MailBox = new MailBox($mailbox);
-$email = new Webmail($MailBox->mbox, $_REQUEST["mailid"]);
+$email = new Webmails($MailBox->mbox, $_REQUEST["mailid"]);
 $subject = $email->subject;
 $date = $email->date;
-
-$email->loadMail();
+$array_tab = Array();
+$email->loadMail($array_tab);
 $msgData = $email->body;
 
 $focus->column_fields['subject']=$subject;
@@ -54,7 +54,7 @@ $focus->column_fields["description"]=$msgData;
 //to save the email details in vtiger_emaildetails vtiger_tables
 $fieldid = $adb->query_result($adb->query('select fieldid from vtiger_field where tablename="contactdetails" and fieldname="email" and columnname="email"'),0,'fieldid');
 
-if($email->relationship != 0) {
+if(count($email->relationship) != 0) {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
 
 	if($email->relationship["type"] == "Contacts")

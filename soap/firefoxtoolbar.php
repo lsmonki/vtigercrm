@@ -31,6 +31,7 @@ $server->register(
 	'create_lead_from_webform',
 	array('username'=>'xsd:string', 
 		'lastname'=>'xsd:string',
+		'firstname'=>'xsd:string',
 		'email'=>'xsd:string', 
 		'phone'=>'xsd:string', 
 		'company'=>'xsd:string', 
@@ -65,7 +66,7 @@ $server->register(
 	
 $server->register(
    'create_contacts',
-    array('user_name'=>'xsd:string','lastname'=>'xsd:string','phone'=>'xsd:string','mobile'=>'xsd:string','email'=>'xsd:string','street'=>'xsd:string','city'=>'xsd:string','state'=>'xsd:string','country'=>'xsd:string','zipcode'=>'xsd:string'),
+    array('user_name'=>'xsd:string','firstname'=>'xsd:string','lastname'=>'xsd:string','phone'=>'xsd:string','mobile'=>'xsd:string','email'=>'xsd:string','street'=>'xsd:string','city'=>'xsd:string','state'=>'xsd:string','country'=>'xsd:string','zipcode'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -353,7 +354,7 @@ function create_site_from_webform($username,$portalname,$portalurl)
 		$adb->println("Create New Portal from Web Form - Ends");
 
 		if($result != '')
-		  return 'Portal added sucessfully';
+		  return 'URL added sucessfully';
 		else
 		  return "Portal creation failed. Try again";
 	}
@@ -590,7 +591,8 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 
 function create_account($username,$accountname,$email,$phone,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country)
 {
-	global $current_user;
+	global $current_user,$log,$adb;
+	$log->DEBUG("Entering with data ".$username.$accountname.$email.$phone."<br>".$primary_address_street.$primary_address_city.$primary_address_state.$primary_address_postalcode.$primary_address_country);
 	require_once("modules/Users/Users.php");
 	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($username);
@@ -599,6 +601,13 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	require_once("modules/Accounts/Accounts.php");
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
+		$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$accountname."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+		$result = $adb->query($query);
+	        if($adb->num_rows($result) > 0)
+		{
+			return "Account Name already exists";
+			die;
+		}
 		$account=new Accounts();
 		$account->column_fields['accountname']=$accountname;
 		$account->column_fields['email1']=$email;
@@ -636,7 +645,7 @@ function get_version($user_name, $password)
 
 
 
-function create_lead_from_webform($username,$lastname,$email,$phone,$company,$country,$description)
+function create_lead_from_webform($username,$lastname,$email,$phone,$company,$country,$description,$firstname)
 {
 
 	global $log;
@@ -654,6 +663,7 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 	if(isPermitted("Leads","EditView") == "yes")
 	{
 		$focus->column_fields['lastname'] = $lastname;
+		$focus->column_fields['firstname'] = $firstname;
 		$focus->column_fields['email'] = $email;
 		$focus->column_fields['phone'] = $phone;
 		$focus->column_fields['company'] = $company;
@@ -675,13 +685,14 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 
 }
 
-function create_contacts($user_name,$lastname,$phone,$mobile,$email,$street,$city,$state,$country,$zipcode)
+function create_contacts($user_name,$firstname,$lastname,$phone,$mobile,$email,$street,$city,$state,$country,$zipcode)
 {
-  global $log;
-  $log->debug($user_name);
-  $birthdate = "0000-00-00";
+	global $log;
+	$log->DEBUG("Entering into create_contacts");
+	$log->DEBUG($firstname."Firstisname");
+	$birthdate = "0000-00-00";
 	
-	return create_contact1($user_name, "", $lastname, $email,"", "","", $mobile, "",$street,$city,$state,$zipcode,$country,$city,$street,$state,$zipcode,$country,$phone,"","","","",$birthdate,"","");
+	return create_contact1($user_name, $firstname, $lastname, $email,"", "","", $mobile, "",$street,$city,$state,$zipcode,$country,$city,$street,$state,$zipcode,$country,$phone,"","","","",$birthdate,"","");
 	
 }
 
@@ -696,6 +707,7 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	$current_user->retrieve_entity_info($user_id,'Users');
 
 	require_once('modules/Contacts/Contacts.php');
+	$log->DEBUG($first_name."First & Name");
   if(isPermitted("Contacts","EditView") == "yes")
   {
    $contact = new Contacts();

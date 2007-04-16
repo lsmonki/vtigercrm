@@ -29,7 +29,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("Please select a Product");
+			alert("{$APP.PLEASE_SELECT_PRODUCT}");
 			return false;
 		{rdelim}
 	{rdelim}
@@ -37,24 +37,24 @@ function displayCoords(currObj,obj,mode,curr_row)
 	//Set the Header value for Discount
 	if(mode == 'discount')
 	{ldelim}
-		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
+		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR_X_COLON} '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'tax')
 	{ldelim}
-		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>Set Tax for "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
+		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>{$APP.LABEL_SET_TAX_FOR} "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
-		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
+		document.getElementById("discount_div_title_final").innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR_COLON} '+document.getElementById("netTotal").innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'sh_tax_div_title')
 	{ldelim}
-		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value+'</b>';
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_SH_TAX_FOR_COLON} '+document.getElementById("shipping_handling_charge").value+'</b>';
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
 		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
+		document.getElementById("group_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_GROUP_TAX_FOR_COLON} '+net_total_after_discount+'</b>';
 	{rdelim}
 
 	fnvshobj(currObj,'tax_container');
@@ -132,6 +132,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
 	{assign var="comment" value="comment"|cat:$row_no}
+	{assign var="productDescription" value="productDescription"|cat:$row_no}
 	{assign var="qtyInStock" value="qtyInStock"|cat:$row_no}
 	{assign var="qty" value="qty"|cat:$row_no}
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
@@ -169,6 +170,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small" valign="top">
 				<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" readonly />
 				<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
+				<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
 				<img src="{$IMAGE_PATH}search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
 			</td>
 		   </tr>
@@ -192,7 +194,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop" valign="top">
-		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');" value="{$data.$qty}"/>
+		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -201,7 +203,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc('{$row_no}');"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
+				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc('{$row_no}');" onChange="setDiscount(this,'{$row_no}')"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
 			</td>
 		   </tr>
 		   <tr>
@@ -220,7 +222,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					   </tr>
 					   <tr>
 						<td align="left"><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');" {$data.$checked_discount_percent}>&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" {$data.$style_discount_percent} onBlur="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');">&nbsp;%</td>
+						<td align="right"><input type="text" class="small" size="5" id="discount_percentage{$row_no}" name="discount_percentage{$row_no}" value="{$data.$discount_percent}" {$data.$style_discount_percent} onBlur="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');">&nbsp;%</td>
 					   </tr>
 					   <tr>
 						<td align="left" nowrap><input type="radio" name="discount{$row_no}" onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');" {$data.$checked_discount_amount}>&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
@@ -350,7 +352,7 @@ so we will get that array, parse that array and fill the details
 			   </tr>
 			   <tr>
 				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();" {$FINAL.checked_discount_percentage_final}>&nbsp; % {$APP.LBL_OF_PRICE}</td>
-				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="{$FINAL.discount_percentage_final}" {$FINAL.style_discount_percentage_final} onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
+				<td align="right"><input type="text" class="small" size="5" id="discount_percentage_final" name="discount_percentage_final" value="{$FINAL.discount_percentage_final}" {$FINAL.style_discount_percentage_final} onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
 			   </tr>
 			   <tr>
 				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();" {$FINAL.checked_discount_amount_final}>&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
