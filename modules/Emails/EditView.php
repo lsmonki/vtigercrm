@@ -48,6 +48,13 @@ if($_REQUEST['mail_error'] != '')
 	require_once("modules/Emails/mail.php");
 	echo parseEmailErrorString($_REQUEST['mail_error']);
 }
+//added to select the module in combobox of compose-popup
+if(isset($_REQUEST['par_module']) && $_REQUEST['par_module']!=''){
+	$smarty->assign('select_module',$_REQUEST['par_module']);
+}
+elseif(isset($_REQUEST['pmodule']) && $_REQUEST['pmodule']!='') {
+	$smarty->assign('select_module',$_REQUEST['pmodule']);	
+}
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 
 {
@@ -85,22 +92,27 @@ if($_REQUEST["internal_mailer"] == "true") {
 	$smarty->assign('INT_MAILER',"true");
 	$rec_type = $_REQUEST["type"];
 	$rec_id = $_REQUEST["rec_id"];
+	
 	//added for getting list-ids to compose email popup from list view(Accounts,Contacts,Leads)
 	if(isset($_REQUEST['field_id']) && strlen($_REQUEST['field_id']) != 0) {
-             $id_list = $_REQUEST['rec_id'].'@'.$_REQUEST['field_id'].'|';
+	     if($_REQUEST['par_module'] == "Users")
+		$id_list = $_REQUEST['rec_id'].'@'.'-1|';
+	     else
+                $id_list = $_REQUEST['rec_id'].'@'.$_REQUEST['field_id'].'|';
              $smarty->assign("IDLISTS", $id_list);
         }
 	if($rec_type == "record_id") {
 		$rs = $adb->query("select setype from vtiger_crmentity where crmid='".$rec_id."'");
 		$type = $adb->query_result($rs,0,'setype');
-
-		if($type == "Leads") 
+		//check added for email link in user detail view
+		if($_REQUEST['par_module'] == "Users")
+			$q = "select email1,email2 from vtiger_users where id='".$rec_id."'";	
+		elseif($type == "Leads") 
 			$q = "select email as email1 from vtiger_leaddetails where leadid='".$rec_id."'";
 		elseif ($type == "Contacts")
 			$q = "select email as email1 from vtiger_contactdetails where contactid='".$rec_id."'";
 		elseif ($type == "Accounts")
 			$q = "select email1,email2 from vtiger_account where accountid='".$rec_id."'";
-
 		$email1 = $adb->query_result($adb->query($q),0,"email1");
 	} elseif ($rec_type == "email_addy") {
 		$email1 = $_REQUEST["email_addy"];
