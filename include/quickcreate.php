@@ -23,7 +23,6 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-
 $smarty = new vtigerCRM_Smarty;
 
 $qcreate_array = QuickCreate("$module");
@@ -37,9 +36,9 @@ $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("ACTIVITY_MODE", $_REQUEST['activity_mode']);
 if($module == 'Calendar')
-	$smarty->assign("QCMODULE", $app_strings['Task']);
+	$smarty->assign("QCMODULE", 'Todo');
 elseif($module == "HelpDesk")
-	$smarty->assign("QCMODULE", $app_strings['Ticket']);
+	$smarty->assign("QCMODULE", 'Ticket');
 else
 	$smarty->assign("QCMODULE",rtrim($module,'s'));
 $smarty->assign("USERID",$current_user->id);
