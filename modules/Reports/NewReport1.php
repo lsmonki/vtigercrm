@@ -61,6 +61,10 @@ if(isset($_REQUEST["record"]))
 	$ogReport->getSecModuleColumnsList($secondarymodule);
 	$list_report_form->assign('BACK_WALK','true');
 }
+
+$date_format='<script> var userDateFormat = \''.$current_user->date_format.'\' </script>';
+$list_report_form->assign('DATE_FORMAT',$date_format);
+
 $list_report_form->assign('PRI_MODULE',$primarymodule);
 $list_report_form->assign('SEC_MODULE',$secondarymodule);
 $list_report_form->assign('REPORT_NAME',$reportname);

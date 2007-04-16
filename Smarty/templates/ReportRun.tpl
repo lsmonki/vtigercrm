@@ -171,6 +171,24 @@ function generateReport(id)
 	var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
+
+	var date1=getObj("startdate")
+        var date2=getObj("enddate")
+	
+if ((date1.value != '') || (date2.value != ''))
+{
+
+        if(!dateValidate("startdate","Start Date","D"))
+                return false
+
+        if(!dateValidate("enddate","End Date","D"))
+                return false
+
+        if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
+                return false;
+}
+
+
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
