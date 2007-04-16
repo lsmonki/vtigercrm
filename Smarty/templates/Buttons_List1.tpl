@@ -10,22 +10,6 @@
  ********************************************************************************/
 -->*}
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
-<!-- Activity createlink layer start  -->
-{if $MODULE eq 'Calendar'}
-<div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
-        <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                        <td>
-                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_EVENT}</a>
-                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_TASK}</a>
-                        </td>
-                </tr>
-        </table>
-
-</div>
-{/if}
-<!-- Activity createlink layer end  -->
-
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
