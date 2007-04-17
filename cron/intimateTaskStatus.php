@@ -4,7 +4,8 @@ ini_set("include_path", "../");
 require('send_mail.php');
 require_once('config.php');
 require_once('include/utils/utils.php');
-
+require_once('include/language/en_us.lang.php');
+global $app_strings;
 // Email Setup
 $emailresult = $adb->query("SELECT email1 from vtiger_users");
 $emailid = $adb->fetch_array($emailresult);
@@ -32,7 +33,6 @@ if($activevalue[0] == 1)
 $today = date("Ymd"); 
 $result = $adb->query("select (vtiger_activity.date_start +1) from vtiger_activity where vtiger_activity.status <> 'Completed' and ".$today." > (vtiger_activity.date_start+1)",$db);
 
-" > (vtiger_activity.date_start+1)";
 while ($myrow = $adb->fetch_array($result))
 {
   $status=$myrow[0];
@@ -57,8 +57,7 @@ while ($myrow = $adb->fetch_array($result))
   $stage = $myrow[0];
   if($stage == 'Closed Won' &&  $amount > 10000)
   {
-    
-    sendmail($emailaddress,$emailaddress,$app_srings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -136,4 +135,5 @@ while ($myrow = $adb->fetch_array($result))
 }
 
 }
+
 ?>
