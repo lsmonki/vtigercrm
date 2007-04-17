@@ -392,6 +392,10 @@ function getAdvSearchfields($module)
 		$sql = "select * from vtiger_field ";
 		$sql.= " where vtiger_field.tabid=".$tabid." and";
 		$sql.= " vtiger_field.displaytype in (1,2)";
+		if($tabid == 13 || $tabid == 15)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
+		}
 		$sql.= " order by block,sequence";
 	}
 	else
@@ -400,7 +404,13 @@ function getAdvSearchfields($module)
 		$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
 		$sql.= " where vtiger_field.tabid=".$tabid." and";
 		$sql.= " vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0";
-		$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by block,sequence";
+		$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList;
+		if($tabid == 13 || $tabid == 15)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
+		}
+		$sql .= " order by block,sequence";
+
 	}
 
 
