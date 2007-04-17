@@ -114,7 +114,7 @@ $server->register(
 
 $server->register(
     'LogintoVtigerCRM',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
     
@@ -363,12 +363,16 @@ function create_site_from_webform($username,$portalname,$portalurl)
 		return $accessDenied;
 	}
 }
-function LogintoVtigerCRM($user_name,$password)
+function LogintoVtigerCRM($user_name,$password,$version)
 {
 	global $log;
 	require_once('modules/Users/Users.php');
-	
-	$return_access = "FALSE";
+	include('vtigerversion.php');
+	if($version != $vtiger_current_version)
+	{
+		return "VERSION";
+	}
+	$return_access = "FALSES";
 	
 	$objuser = new Users();
 	
@@ -378,15 +382,15 @@ function LogintoVtigerCRM($user_name,$password)
 		$objuser->load_user($password);
 		if($objuser->is_authenticated())
 		{
-			$return_access = "TRUE";
+			$return_access = "TRUES";
 		}else
 		{
-			$return_access = "FALSE";
+			$return_access = "FALSES";
 		}
 	}else
 	{
 			//$server->setError("Invalid username and/or password");
-			$return_access = "FALSE";
+			$return_access = "FALSES";
 	}
 	$objuser = $objuser;
 	return $return_access;
