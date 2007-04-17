@@ -295,7 +295,9 @@ $listview_header = array("<th width='10%'>".$mod_strings['LBL_INFO']."</th>","<t
 $listview_entries = array();
 
 $displayed_msgs=0;
-$new_msgs=0;
+$info = imap_mailboxmsginfo($MailBox->mbox);
+$unread_msgs = $info->Unread;
+//$new_msgs=0;
 if(($numEmails) <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>'.$mod_strings['LBL_NO_EMAILS'].'</b></td>';
 else {
@@ -379,12 +381,12 @@ if (is_array($list)) {
 		/*	if($tmpval != "INBOX")
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 		 */
-			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
+			$_SESSION["mailboxes"][$tmpval] = $unread_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
 			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-			if($new_msgs > 0)
-				$folders .= '(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			if($unread_msgs > 0)
+				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 
 		} else {
 			$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$tmpval, SA_ALL);

@@ -388,7 +388,7 @@ function move_messages()
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
 					method: 'post',
-					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+gCurrentFolder+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
 					onComplete: function(t) {
 						for(i=0;i<nid.length;i++)
 						{

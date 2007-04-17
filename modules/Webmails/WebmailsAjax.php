@@ -61,7 +61,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	$MailBox = new MailBox($mailbox);
 	$elist = $MailBox->mailList;
         $num_mails = $elist['count'];
-        $start_page = ceil($num_mails/$MailBox->mails_per_page);
+	$start_page = cal_start($num_mails,$MailBox->mails_per_page);
 	imap_close($MailBox->mbox);
 	echo $start_page;
 	flush();
@@ -76,7 +76,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	$MailBox = new MailBox($mailbox);
 	$elist = $MailBox->mailList;
 	$num_mails = $elist['count'];
-	$start_page = ceil($num_mails/$MailBox->mails_per_page); 
+	$start_page = cal_start($num_mails,$MailBox->mails_per_page);
 	imap_close($MailBox->mbox);
 	echo "start=".$start_page.";";
 	echo "id=".$mailid.";";
@@ -96,7 +96,7 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	$MailBox = new MailBox($mailbox);
         $elist = $MailBox->mailList;
         $num_mails = $elist['count'];
-        $start_page = ceil($num_mails/$MailBox->mails_per_page);
+	$start_page = cal_start($num_mails,$MailBox->mails_per_page);
 	imap_close($MailBox->mbox);
 	echo "start=".$start_page.";";
         echo "ids='".$mailid."';";
@@ -118,8 +118,8 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
         $MailBox = new MailBox($mailbox);
         $elist = $MailBox->mailList;
         $num_mails = $elist['count'];
-        $start_page = ceil($num_mails/$MailBox->mails_per_page);
-        imap_close($MailBox->mbox);
+        $start_page = cal_start($num_mails,$MailBox->mails_per_page);
+	imap_close($MailBox->mbox);
 	echo $start_page;
         flush();
         exit();
@@ -152,9 +152,22 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	flush();
 	exit();
     }
-
 imap_close($MailBox->mbox);
 flush();
 exit();
+}
+function cal_start($num_mails,$mail_per_page) {
+	if(isset($_REQUEST['start']) && $_REQUEST['start']!=0) {
+                $pre_start = $_REQUEST['start'];
+                $cal = (($pre_start-1) * $mail_per_page);
+                if($num_mails > $cal)
+                        $res = $pre_start;
+                else
+                        $res = $pre_start - 1;
+        }
+        else
+                $res = 0;
+
+	return $res;
 }
 ?>
