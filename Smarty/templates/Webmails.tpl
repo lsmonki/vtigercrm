@@ -50,7 +50,7 @@
 				   </tr>
 				   <tr>
 					<td width="20%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
-					<td width="80%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></td>
+					<td width="80%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right"><div id="nav">{$NAVIGATION}</div></span></td>
 				   </tr>
 				   <tr>
 					<td rowspan="6" valign="top" class="hdrNameBg">

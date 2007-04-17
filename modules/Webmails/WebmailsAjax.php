@@ -29,6 +29,10 @@ if($_POST['config_chk'] == 'true')
 	}
 	exit();
 }
+if(isset($_REQUEST['file']) && $_REQUEST['file']!='' && !isset($_REQUEST['ajax'])){
+	include("modules/".$_REQUEST['module']."/".$_REQUEST['file'].".php");
+	exit();
+}
 $mailid = $_REQUEST["mailid"];
 if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
@@ -54,17 +58,28 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
 	}
 	 */
     	imap_expunge($MailBox->mbox);
+	$MailBox = new MailBox($mailbox);
+	$elist = $MailBox->mailList;
+        $num_mails = $elist['count'];
+        $start_page = ceil($num_mails/$MailBox->mails_per_page);
 	imap_close($MailBox->mbox);
+	echo $start_page;
 	flush();
 	exit();
     }
     if($command == "delete_msg") {
 	$adb->println("DELETE SINGLE WEBMAIL MESSAGE $mailid");
     	$MailBox = new MailBox($mailbox);
-        imap_mail_move($MailBox->mbox,$mailid,"Deleted");
+        imap_delete($MailBox->mbox,$mailid);
+	imap_expunge($MailBox->mbox);
 	$email = new Webmails($MailBox->mbox,$mailid);
+	$MailBox = new MailBox($mailbox);
+	$elist = $MailBox->mailList;
+	$num_mails = $elist['count'];
+	$start_page = ceil($num_mails/$MailBox->mails_per_page); 
 	imap_close($MailBox->mbox);
-	echo $mailid;
+	echo "start=".$start_page.";";
+	echo "id=".$mailid.";";
 	flush();
 	exit();
     }
@@ -72,16 +87,44 @@ if(isset($_REQUEST["command"]) && $_REQUEST["command"] != "") {
     	$MailBox = new MailBox($mailbox);
 	$tlist = explode(":",$mailid);
 	foreach($tlist as $id) {
-	        imap_mail_move($MailBox->mbox,$id,"Trash");
+	        imap_delete($MailBox->mbox,$id);
 		$adb->println("DELETE MULTI MESSAGE $id");
 		$email = new Webmails($MailBox->mbox,$id);
 		$email->delete();
 	}
+	imap_expunge($MailBox->mbox);
+	$MailBox = new MailBox($mailbox);
+        $elist = $MailBox->mailList;
+        $num_mails = $elist['count'];
+        $start_page = ceil($num_mails/$MailBox->mails_per_page);
 	imap_close($MailBox->mbox);
-	echo $mailid;
+	echo "start=".$start_page.";";
+        echo "ids='".$mailid."';";
 	flush();
 	exit();
     } 
+    if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
+	 $MailBox = new MailBox($mailbox);
+        if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != '')
+        {
+                $mailids = explode(':',$_REQUEST["mailid"]);
+        }
+        foreach($mailids as $mailid)
+        {
+                imap_mail_move($MailBox->mbox,$mailid,$_REQUEST["mvbox"]);
+        }
+        imap_expunge($MailBox->mbox);
+        imap_close($MailBox->mbox);
+        $MailBox = new MailBox($mailbox);
+        $elist = $MailBox->mailList;
+        $num_mails = $elist['count'];
+        $start_page = ceil($num_mails/$MailBox->mails_per_page);
+        imap_close($MailBox->mbox);
+	echo $start_page;
+        flush();
+        exit();
+    }
+
     if($command == "undelete_msg") {
     	$MailBox = new MailBox($mailbox);
 	$email = new Webmails($MailBox->mbox,$mailid);

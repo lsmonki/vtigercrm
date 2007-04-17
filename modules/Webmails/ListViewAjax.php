@@ -57,170 +57,6 @@ $degraded_service='false';
 if($MailBox->mail_protocol == "imap" || $MailBox->mail_protocol == "pop3")
 	$degraded_service='true';
 
-if($_POST["command"] == "check_mbox_all") {
-	exit();
-        $boxes = array();
-        $i=0;
-        foreach ($_SESSION["mailboxes"] as $key => $val) {
-                $MailBox = new MailBox($key);
-                $box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$key, SA_ALL);
-
-                $boxes[$i]["name"] = $key;
-                if($val == $box->unseen)
-                        $boxes[$i]["newmsgs"] = 0;
-                elseif($val < $box->unseen) {
-                        $boxes[$i]["newmsgs"] = ($box->unseen-$val);
-                        $_SESSION["mailboxes"][$key] = $box->unseen;
-                } else {
-                        $boxes[$i]["newmsgs"] = 0;
-                        $_SESSION["mailboxes"][$key] = $box->unseen;
-                }
-                $i++;
-                imap_close($MailBox->mbox);
-        }
-
-        $ret = '';
-        if(count($boxes) > 0) {
-                $ret = '{"msgs":[';
-                for($i=0,$num=count($boxes);$i<$num;$i++) {
-                        $ret .= '{"msg":';
-                        $ret .= '{';
-                        $ret .= '"box":"'.$boxes[$i]["name"].'",';
-                        $ret .= '"newmsgs":"'.$boxes[$i]["newmsgs"].'"}';
-
-                        if(($i+1) == $num)
-                                $ret .= '}';
-                        else
-                                $ret .= '},';
-                }
-                $ret .= ']}';
-        }
-        echo $ret;
-        flush();
-        exit();
-}
-//This is invoked from Webmails.js as a result of the periodic event function call, checks only for NEW mails; this in turn checks for new mails in all the mailboxes
-if($_POST["command"] == "check_mbox") {
-        $adb->println("Inside check_mbox AJAX command");
-
-	$search = imap_search($MailBox->mbox, 'NEW');
-
-        //if($search === false) {echo "failed";flush();exit();}
-
-	$adb->println("imap_search($MailBox->mbox, $criteria) ===> ");
-	$adb->println($search);
-	
-	$data = imap_fetch_overview($MailBox->mbox,implode(',',$search));
-        $num=sizeof($data);
-
-	$adb->println("fetched data using imap_fetch_overview ==>");
-	$adb->println($data);
-
-        $ret = '';
-        if($num > 0) {
-                $ret = '{"mails":[';
-                for($i=0;$i<$num;$i++) 
-		{
-			//Added condition to avoid show the deleted mails and readed mails
-			if($data[$i]->deleted == 0)// && $data[$i]->seen == 0)
-			{
-                        	$ret .= '{"mail":';
-                        	$ret .= '{';
-                        	$ret .= '"mailid":"'.$data[$i]->msgno.'",';
-                       		$ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
-                        	$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
-                        	$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
-				$ret .= '"to":"'.$data[$i]->to.'",';
-				echo  ' to field is  ' .$data[$i]->to;
-                        	$email = new Webmails($MailBox->mbox,$data[$i]->msgno);
-                        	if($email->has_attachments)
-                        	        $ret .= '"attachments":"1"}';
-                        	else
-                        	        $ret .= '"attachments":"0"}';
-                        	if(($i+1) == $num)
-                        	        $ret .= '}';
-                        	else
-                        	        $ret .= '},';
-			}
-                }
-                $ret .= ']}';
-		$adb->println("Ret Value ==> $ret");
-        }
-
-        echo $ret;
-        flush();
-        imap_close($MailBox->mbox);
-	exit();
-}
-
-?>
-<script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/scriptaculous/scriptaculous.js?load=effects,builder"></script>
-
-<script type="text/javascript">
-// Pass our PHP variables to js.
-<?php if($degraded_service == 'true')
-				{
-					echo 'var degraded_service="true";';
-				}
-else
-{
-	echo 'var degraded_service="false";';
-};
-?>
-var mailbox = "<?php echo $MailBox->mailbox;?>";
-var box_refresh=<?php echo $MailBox->box_refresh;?>;
-var webmail = new Array();
-var timer;
-var command;
-var id;
-
-
-addOnloadEvent(function() {
-		window.setTimeout("periodic_event()",box_refresh);
-	}
-);
-</script>
-<script language="JavaScript" type="text/javascript" src="modules/Webmails/Webmails.js"></script>
-<?php
-
-global $displayed_msgs;
-// AJAX commands (should be moved)
-if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
-	if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != '')
-	{
-		$mailids = explode(':',$_REQUEST["mailid"]);
-	}
-	foreach($mailids as $mailid)
-	{
-		imap_mail_move($MailBox->mbox,$mailid,$_REQUEST["mvbox"]);
-	}
-	imap_expunge($MailBox->mbox);
-	imap_close($MailBox->mbox);
-	$MailBox = new MailBox($mailbox);
-        $elist = $MailBox->mailList;
-        $num_mails = $elist['count'];
-        $start_page = ceil($num_mails/$MailBox->mails_per_page);
-        imap_close($MailBox->mbox);
-        echo "start=".$start_page.";";
-        echo "id=".$mailid.";";
-	flush();
-	exit();
-}
-
-// Function to remove directories used for tmp attachment storage
-function SureRemoveDir($dir) {
-   if(!$dh = @opendir($dir)) return;
-   while (($obj = readdir($dh))) {
-     if($obj=='.' || $obj=='..') continue;
-     if (!@unlink($dir.'/'.$obj)) {
-         SureRemoveDir($dir.'/'.$obj);
-     } else {
-         $file_deleted++;
-     }
-   }
-   if (@rmdir($dir)) $dir_deleted++;
-}
 $save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
@@ -254,42 +90,20 @@ if(!isset($_REQUEST["search"])) {
 }
 
 $overview=$elist["overview"];
-?>
-<!-- MAIN MSG LIST TABLE -->
-<script type="text/javascript">
-// Here we are creating a multi-dimension array to store mail info
-// these are mainly used in the preview window and could be ajaxified/
-// during the preview window load instead.
-var msgCount = "<?php echo $numEmails;?>";
-var start = "<?php echo $_REQUEST['start'];?>";
-<?php
 $mails = array();
 if (is_array($overview))
 {
-	foreach ($overview as $val)
-	{
-		$mails[$val->msgno] = $val;
-		$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
-		//Added to get the UTF-8 string - 30-11-06 - Mickie
-		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
-		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
-		$val->to = utf8_decode(imap_utf8(addslashes($val->to)));
-		$val->subject = utf8_decode(imap_utf8($val->subject));
-	?>
-
-		webmail[<?php echo $val->msgno;?>] = new Array();
-		webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
-		webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
-		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
-		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
-
-		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $hdr->ccaddress;?>";
-
-	<?php
+        foreach ($overview as $val)
+        {
+                $mails[$val->msgno] = $val;
+                $hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);
+                //Added to get the UTF-8 string - 30-11-06 - Mickie
+                //we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
+                $val->from = utf8_decode(imap_utf8(addslashes($val->from)));
+                $val->to = utf8_decode(imap_utf8(addslashes($val->to)));
+                $val->subject = utf8_decode(imap_utf8($val->subject));
 	}
 }
-echo "</script>";
-
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");
 $listview_header = array("<th width='10%'>".$mod_strings['LBL_INFO']."</th>","<th width='45%'>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th width='25%'>".$mod_strings['LABEL_DATE']."</th>","<th width='10%'>".$mod_strings['LABEL_FROM']."</th>","<th>".$mod_strings['LBL_DEL']."</th>");
 $listview_entries = array();
@@ -399,28 +213,29 @@ if (is_array($list)) {
 	}
         $boxes .= '</select>';
 }
-
+$check = imap_mailboxmsginfo($MailBox->mbox);
+$unread_count = $check->Unread; 
 imap_close($MailBox->mbox);
 
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("SEARCH_VALUE",$_REQUEST['search_input']);
-$smarty->assign("USERID", $current_user->id);
-$smarty->assign("MOD", $mod_strings);
-$smarty->assign("APP", $app_strings);
-$smarty->assign("IMAGE_PATH",$image_path);
+//$smarty->assign("USERID", $current_user->id);
+//$smarty->assign("MOD", $mod_strings);
+//$smarty->assign("APP", $app_strings);
+//$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("UNREAD_COUNT",$unread_count);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("LISTHEADER", $listview_header);
-$smarty->assign("SEARCH_HTML", $search_html);
-$smarty->assign("MODULE","Webmails");
-$smarty->assign("SINGLE_MOD",'Webmails');
-$smarty->assign("BUTTONS",$other_text);
-$smarty->assign("CATEGORY","My Home Page");
+//$smarty->assign("SEARCH_HTML", $search_html);
+//$smarty->assign("MODULE","Webmails");
+//$smarty->assign("SINGLE_MOD",'Webmails');
+//$smarty->assign("BUTTONS",$other_text);
+//$smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("FOLDER_SELECT", $boxes);
+//$smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $MailBox->mailbox);
-$smarty->assign("ACCOUNT", $MailBox->display_name);
-$smarty->assign("BOXLIST",$folders);
-$smarty->assign("DEGRADED_SERVICE",$degraded_service);
-$smarty->display("Webmails.tpl");
+//$smarty->assign("ACCOUNT", $MailBox->display_name);
+//$smarty->assign("BOXLIST",$folders);
+//$smarty->assign("DEGRADED_SERVICE",$degraded_service);
+       $smarty->display("ListViewAjax.tpl");
 ?>

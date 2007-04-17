@@ -388,7 +388,7 @@ function move_messages()
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
 					method: 'post',
-					postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
 					onComplete: function(t) {
 						for(i=0;i<nid.length;i++)
 						{
@@ -396,6 +396,8 @@ function move_messages()
 							new Effect.Fade(oRow,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
 						}
 						$("status").style.display = "none";
+					        start = t.responseText;	
+						runEmailCommand("reload",0);
 					}
 				}
 			);
@@ -442,6 +444,10 @@ function search_emails() {
 function runEmailCommand(com,id) {
         command=com;
         id=id;
+	if(com=="reload")
+		var file="ListViewAjax";
+	else
+		var file="";
 	if(com == 'delete_msg')
 	{
 		if(!confirm(alert_arr.DELETE+" "+alert_arr.MAIL+" ?"))
@@ -452,19 +458,35 @@ function runEmailCommand(com,id) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&command='+command+'&mailid='+id+'&mailbox='+mailbox,
+                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox,
                         onComplete: function(t) {
                                 resp = t.responseText;
 				id=resp;
                                 if(resp.match(/ajax failed/)) {return;}
                                 switch(command) {
+				    case 'reload':
+					$("rssScroll").innerHTML = resp;
+					var unread_count = parseInt($(mailbox+"_tempcount").innerHTML);
+					if(unread_count > 0) {
+						$(mailbox+"_unread").innerHTML = unread_count;
+					}
+					else{
+						$(mailbox+"_count").innerHTML = "";
+					}
+					$("nav").innerHTML = $("navTemp").innerHTML;
+					$("navTemp").innerHTML = '';
+					$(mailbox+"_tempcount").innerHTML = "";
+					break;
                                     case 'expunge':
                                         // NOTE: we either have to reload the page or count up from the messages that
                                         // are deleted and moved or we introduce a bug from invalid mail ids
-                                        window.location = window.location;
+                                        //window.location = window.location;
+					start = resp;
+					runEmailCommand("reload",0);
                                     break;
                                     case 'delete_multi_msg':
-					var ids=resp;
+					var ids;
+					eval(resp);
 					var rows = ids.split(":");
 					for(i=0;i<rows.length;i++)  {
 						var id = rows[i];
@@ -497,10 +519,14 @@ function runEmailCommand(com,id) {
 					}catch(g){}
 
                                 	$("status").style.display="none";
+						if(i == ((rows.length)-2)){ 
+							runEmailCommand("reload",0);
+						}
 					}
                                     break;
                                     case 'delete_msg':
-					id=resp;
+					//id=resp;
+					eval(resp);
                                         var row = $("row_"+id);
 					if(row.className == "unread_email") {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
@@ -531,6 +557,7 @@ function runEmailCommand(com,id) {
                                                         tmp[i].style.visibility="hidden";
                                                 }
                                         }
+					runEmailCommand("reload",0);
                                     break;
                                     case 'undelete_msg':
 					id=resp;
