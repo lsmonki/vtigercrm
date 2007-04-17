@@ -625,7 +625,7 @@
 		<field name="evaluationstatus" type="C" size="50" />
 		<field name="transferdate" type="D" />
 		<field name="revenuetype" type="C" size="50" />
-		<field name="noofemployees" type="C" size="50" />
+		<field name="noofemployees" type="I" size="50" />
 		<field name="yahooid" type="C" size="100" />
 		<field name="assignleadchk" type="I" size="1">
 			<default value="0" />

@@ -240,8 +240,12 @@ function emptyCheck(fldName,fldLabel, fldType) {
 function patternValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
-		var re=new RegExp(/^.+@.+\..+$/)
-	
+	{
+		/*changes made to fix -- ticket#3278 & ticket#3461
+		  var re=new RegExp(/^.+@.+\..+$/)*/
+		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+	}
+
 	if (type.toUpperCase()=="DATE") {//DATE validation 
 		//YMD
 		//var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ //2 digit year
@@ -700,12 +704,12 @@ function intValidate(fldName,fldLabel) {
 		getObj(fldName).focus()
 		return false
 	} 
-        else if((fldName != 'employees') && (val < -2147483648 || val > 2147483647))
+        else if((fldName != 'employees' || fldName != 'noofemployees') && (val < -2147483648 || val > 2147483647))
         {
                 alert(fldLabel +alert_arr.OUT_OF_RANGE);
                 return false;
         }
-	else if((fldName == 'employees') && (val < 0 || val > 2147483647))
+	else if((fldName == 'employees' || fldName != 'noofemployees') && (val < 0 || val > 2147483647))
         {
                 alert(fldLabel +alert_arr.OUT_OF_RANGE);
                 return false;
