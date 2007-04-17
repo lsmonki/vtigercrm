@@ -819,11 +819,11 @@ function getEscapedColumns($selectedfields)
 		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where";
 		if($module == "Calendar")
 		{
-			$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+			$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
 		}
 		else
 		{
-			$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in ('".$this->primodule."','".$this->secmodule."')) and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+			$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in ('".$this->primodule."','".$this->secmodule."')) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
 		}
 
 		$result = $adb->query($query);
