@@ -192,6 +192,9 @@ function rolevalidate()
 
 function dup_validation(profilename)
 {ldelim}
+	var status = CharValidation(profilename,'namespace');
+	if(status)
+	{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -205,5 +208,8 @@ function dup_validation(profilename)
 				{rdelim}
 		{rdelim}
 	);
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_PROFILENAME)
 {rdelim}
 </script>

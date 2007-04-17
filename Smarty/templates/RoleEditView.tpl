@@ -20,6 +20,9 @@ function dup_validation()
 		var urlstring ="&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
 	else
 		var urlstring ="&roleName="+rolename;
+	var status = CharValidation(rolename,'namespace');
+	if(status)
+	{ldelim}
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -33,6 +36,9 @@ function dup_validation()
                                 {rdelim}
                         {rdelim}
                 );
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_ROLENAME)
 
 {rdelim}
 function validate()

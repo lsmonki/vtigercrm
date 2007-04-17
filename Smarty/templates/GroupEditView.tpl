@@ -21,7 +21,7 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
-	var status = usernameValid(groupname);
+	var status = CharValidation(groupname,'namespace');
 	if(status)
 	{ldelim}
 	new Ajax.Request(
@@ -39,7 +39,7 @@ function dup_validation()
 		);
 	{rdelim}
 	else
-		alert(alert_arr.NO_SPECIAL+" in Group Name ")
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_GROUPNAME)
 {rdelim}
 var constructedOptionValue;
 var constructedOptionName;

@@ -32,7 +32,7 @@ function openPopup(){ldelim}
 function check_duplicate()
 {ldelim}
 	var user_name = window.document.EditView.user_name.value;
-	var status = usernameValid(user_name);
+	var status = CharValidation(user_name,'name');
         if(status)
 	{ldelim}
 	new Ajax.Request(

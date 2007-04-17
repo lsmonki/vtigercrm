@@ -2034,20 +2034,31 @@ if(confirm(alert_arr.ARE_YOU_SURE))
        }
 }
 
-function usernameCharValid(c) {
-  return ( ((c >= 'a') && (c <= 'z')) ||
-           ((c >= 'A') && (c <= 'Z')) ||
-           ((c >= '0') && (c <= '9')) ||
-           (c == '.') );
+
+function valid(c,type)
+{
+	if(type == 'name')
+	{
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.'));
+	}
+	else if(type == 'namespace')
+	{
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.')||(c==' '));
+	}
 }
 
-function usernameValid(s) {
-  for (var i = 0; i < s.length; i++) {
-    if (!usernameCharValid(s.charAt(i))){
-      return false;}
-  }
-  return true;
+function CharValidation(s,type)
+{
+	for (var i = 0; i < s.length; i++)
+	{
+		if (!valid(s.charAt(i),type))
+		{
+			return false;
+		}
+	}
+	return true;
 }
+
 
 /** Check Upload file is in specified format(extension).
   * @param fldname -- name of the file field
