@@ -851,6 +851,8 @@ $app_strings = array (
 'LNK_READ_LICENSE'=>'Read License',
 'ACTIVITIES' => 'Activities',
 'MAP_NAME_EXISTS'=>'This map name already exists. \n Do you want to overwrite it?',
+'FOLDER_NAME_ALLOW_20CHARS'=> 'Folder name allowed 20 characters only',
+'SPECIAL_CHARS_NOT_ALLOWED' => 'Special characters not allowed. try again...',
 );
 
 $app_list_strings = array (

@@ -166,6 +166,13 @@ function AddFolder()
                 return false;
                 {literal}
 	}
+	else if(getObj('folder_name').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length > 20 )
+	{
+		{/literal}
+                alert('{$APP.FOLDER_NAME_ALLOW_20CHARS}');
+                return false;
+                {literal}
+	}
 	else
 	{
 		new Ajax.Request(
@@ -174,21 +181,22 @@ function AddFolder()
                                 method: 'post',
                                 postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+getObj('folder_name').value,
                                 onComplete: function(response) {
-					if((response.responseText==1) && (mode == 'Edit'))
+				var mode = getObj('fldrsave_mode').value;
+			if((response.responseText ==1 || response.responseText != 0) && (mode == 'Edit' || mode =='save') &&response.responseText != 999)
 					{
 						{/literal}
                                                 alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
                                                 return false;
                                                 {literal}
 					}
-					else if((response.responseText !=0) && (mode == 'Edit'))
+				else if(response.responseText == 999) // 999 check for special chars
 					{
-						{/literal};
-                                                alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
+                                                {/literal}
+                                                alert("{$APP.SPECIAL_CHARS_NOT_ALLOWED}");
                                                 return false;
                                                 {literal}
 					}
-					else
+				else
 					{
 						fninvsh('orgLay');
 						var foldername = getObj('folder_name').value;
@@ -197,7 +205,6 @@ function AddFolder()
 						getObj('folder_desc').value = '';
 						foldername = foldername.replace(/&/gi,'*amp*')
 						folderdesc = folderdesc.replace(/&/gi,'*amp*')
-						var mode = getObj('fldrsave_mode').value;
 						if(mode == 'save')
 						{
 							url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;

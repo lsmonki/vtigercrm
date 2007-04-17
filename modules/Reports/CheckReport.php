@@ -26,11 +26,16 @@ if($_REQUEST['check']== 'reportCheck')
 else if($_REQUEST['check']== 'folderCheck')
 {
 	$folderName = $_REQUEST['folderName'];
-	$folderName = iconv("UTF-8",$default_charset,$folderName);
-	$sSQL="select * from vtiger_reportfolder where foldername='".$folderName."'";
-	
-	$sqlresult = $adb->query($sSQL);
-	echo $adb->num_rows($sqlresult);
+	$folderName =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$folderName));
+	if($folderName == "" || !$folderName)
+	{
+		echo "999";
+	}else
+	{
+		$SQL="select * from vtiger_reportfolder where foldername='".$folderName."'";
+		$sqlresult = $adb->query($SQL);
+		echo trim($adb->num_rows($sqlresult));
+	}
 }
 
 ?>

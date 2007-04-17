@@ -24,6 +24,13 @@ $foldername = iconv("UTF-8",$default_charset,$foldername);
 $folderdesc = addslashes($_REQUEST["folderdesc"]);
 $foldername = str_replace('*amp*','&',$foldername);
 $folderdesc = str_replace('*amp*','&',$folderdesc);
+/*if($foldername =="")
+{
+	echo "Please Enter valid Name";
+//	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
+
+}
+else*/
 if($mode=="Save")
 {
 	if($rfid=="")
