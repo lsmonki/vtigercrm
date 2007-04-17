@@ -2076,3 +2076,23 @@ function upload_filter(fldName, filter)
 	
 }
 
+function validateUrl(name)
+{
+	var Url = getObj(name);
+	var wProtocol;
+
+	var oRegex = new Object();
+	oRegex.UriProtocol = new RegExp('');
+	oRegex.UriProtocol.compile( '^(((http|https|ftp|news):\/\/)|mailto:)', 'gi' );
+	oRegex.UrlOnChangeProtocol = new RegExp('') ;
+	oRegex.UrlOnChangeProtocol.compile( '^(http|https|ftp|news)://(?=.)', 'gi' );
+
+	wUrl = Url.value;
+	wProtocol=oRegex.UrlOnChangeProtocol.exec( wUrl ) ;
+	if ( wProtocol )
+	{
+		wUrl = wUrl.substr( wProtocol[0].length );
+		Url.value = wUrl;
+	}
+}
+
