@@ -2011,7 +2011,9 @@ class ReportRun extends CRMEntity
 				}
 				if($fieldlist[4] == 3)
 				{
-					$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+					//Fixed average calculation issue due to NULL values ie., when we use avg() function, NULL values will be ignored.to avoid this we use (sum/count) to find average.
+					//$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+					$stdfilterlist[$fieldcolname] = "(sum(".$fieldlist[1].".".$fieldlist[2].")/count(*)) '".$fieldlist[3]."'";
 				}
 				if($fieldlist[4] == 4)
 				{
