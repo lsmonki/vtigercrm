@@ -13,7 +13,7 @@
 &#&#&#{$ERROR}&#&#&#
 {/if}
 
-<form name="massdelete" method="POST">
+<form name="massdelete" method="POST" id="massdelete">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
