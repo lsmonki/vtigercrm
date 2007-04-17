@@ -502,7 +502,7 @@ function mandatoryCheck()
                 {/foreach}
               {/foreach}
               </select> &nbsp; <select name="fop4" id="fop4">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=criteria from=$FOPTION4}
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
