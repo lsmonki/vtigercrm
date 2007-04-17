@@ -48,5 +48,6 @@ if(isset($_REQUEST["record"]))
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }
+$report_column_tot->assign("ROWS_COUNT", count($BLOCK1[0]));
 $report_column_tot->display('ReportColumnsTotal.tpl');
 ?>

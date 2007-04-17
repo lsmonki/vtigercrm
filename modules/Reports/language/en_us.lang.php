@@ -204,7 +204,7 @@ $mod_strings = Array(
 'LBL_CUSTOM_REPORTS'=>'Custom Reports',
 
 'ticketid'=>'Ticket Id',
-
+'NO_COLUMN'=>'No Columns available to Total',
 )
 
 ?>

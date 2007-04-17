@@ -1058,13 +1058,57 @@ function getEscapedColumns($selectedfields)
 		$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 order by sequence";
+			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 ";
+		
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid  where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 and vtiger_def_org_field.visible=0 and vtiger_profile2field.visible=0 and vtiger_profile2field.profileid in ".$profileList." order by sequence";
+			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid  where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 and vtiger_def_org_field.visible=0 and vtiger_profile2field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
 		}
+
+		//Added to avoid display the Related fields (Account name,Vandor name,product name, etc) in Report Calculations(SUM,AVG..)			
+		switch($tabid)
+		{
+			case 2://Potentials
+				//ie. Campaign name will not displayed in Potential's report calcullation
+				$ssql.= "and vtiger_field.fieldname not in ('campaignid') ";
+				break;
+			case 4://Contacts
+				$ssql.= "and vtiger_field.fieldname not in ('account_id') ";
+				break;
+			case 6://Accounts
+				$ssql.= "and vtiger_field.fieldname not in ('account_id') ";
+				break;
+			case 9://Calandar
+				$ssql.= "and vtiger_field.fieldname not in ('parent_id','contact_id') ";
+				break;
+			case 13://Trouble tickets(HelpDesk)
+				$ssql.= "and vtiger_field.fieldname not in ('parent_id','product_id') ";
+				break;
+			case 14://Products
+				$ssql.= "and vtiger_field.fieldname not in ('vendor_id') ";
+				break;
+			case 20://Quotes
+				$ssql.= "and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id') ";
+				break;
+			case 21://Purchase Order
+				$ssql.= "and vtiger_field.fieldname not in ('contact_id','vendor_id') ";
+				break;
+			case 22://SalesOrder
+				$ssql.= "and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id') ";
+				break;
+			case 23://Invoice
+				$ssql.= "and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id') ";
+				break;
+			case 26://Campaings
+				$ssql.= "and vtiger_field.fieldname not in ('product_id') ";
+				break;
+
+		}
+
+		$ssql.= "order by sequence";
+
 		$result = $adb->query($ssql);
 		$columntototalrow = $adb->fetch_array($result);
 		$options_list = Array();	
