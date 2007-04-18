@@ -475,13 +475,13 @@ class HelpDesk extends CRMEntity {
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 
-		if($noofrows == 0)
+		//In ajax save we should not add this div
+		if($_REQUEST['action'] != 'HelpDeskAjax')
 		{
-			$log->debug("Exiting getCommentInformation method ...");
-			return '';
+			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
+			$enddiv = '</div>';
 		}
 
-		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			if($adb->query_result($result,$i,'comments') != '')
@@ -506,7 +506,8 @@ class HelpDesk extends CRMEntity {
 				$list .= '</font></div>';
 			}
 		}
-		$list .= '</div>';
+		
+		$list .= $enddiv;
 
 		$log->debug("Exiting getCommentInformation method ...");
 		return $list;

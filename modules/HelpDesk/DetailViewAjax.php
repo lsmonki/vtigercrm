@@ -114,7 +114,13 @@ if($ajaxaction == "DETAILVIEW")
 		
 		if($modObj->id != "")
 		{
-			echo ":#:SUCCESS";
+			if($fieldname == "comments")
+			{
+				$comments = $modObj->getCommentInformation($modObj->id);
+				echo ":#:SUCCESS".$comments;
+			}
+			else
+				echo ":#:SUCCESS";
 		}else
 		{
 			echo ":#:FAILURE";

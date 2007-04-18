@@ -217,9 +217,17 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                   					alert(alert_arr.ERROR_WHILE_EDITING);
                   				}
                   				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-                       		{
+						{
+							//For HD & FAQ - comments, we should empty the field value
+							if((module == "HelpDesk" || module == "Faq") && fieldName == "comments")
+							{
+								getObj(dtlView).innerHTML = "";
+								getObj("comments").value = "";
+								getObj("comments_div").innerHTML = response.responseText.replace(":#:SUCCESS","");
+							}
+
                   					$("vtbusy_info").style.display="none";
-                       		}
+						}
                         }
                 }
             );

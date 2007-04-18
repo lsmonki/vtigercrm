@@ -38,7 +38,13 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj->save("Faq");
 		if($modObj->id != "")
 		{
-			echo ":#:SUCCESS";
+			if($fieldname == "comments")
+			{
+				$comments = $modObj->getFAQComments($modObj->id);
+				echo ":#:SUCCESS".$comments;
+			}
+			else
+				echo ":#:SUCCESS";
 		}else
 		{
 			echo ":#:FAILURE";
