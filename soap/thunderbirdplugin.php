@@ -25,7 +25,7 @@ $server->configureWSDL('vtigersoap');
 
 $server->register(
  	    'create_session',
- 	    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+	    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
  	    array('return'=>'xsd:string'),
  	    $NAMESPACE);
 
@@ -482,10 +482,15 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 	return $Lead->id;
 }
 
-function create_session($user_name, $password)
+function create_session($user_name, $password,$version)
 {
   global $adb,$log;
-  $return_access = 'failure';
+  $return_access = 'FALSES';
+  include('vtigerversion.php');
+  if($version != $vtiger_current_version)
+  {
+	  return "VERSION";
+  }
   require_once('modules/Users/Users.php');
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
@@ -498,17 +503,22 @@ function create_session($user_name, $password)
 			$result = $adb->query($query);
 			if($adb->num_rows($result) > 0)
 			{
-				$return_access = 'success';
+				$return_access = 'TRUES';
 				$log->debug("Logged in sucessfully from thunderbirdplugin");
 			}else
 			{
-				$return_access = 'failure';
+				$return_access = 'FALSES';
 				$log->debug("Logged in failure from thunderbirdplugin");
 			}
 		}
+		else
+		{
+			$return_access = 'LOGIN';
+			$log->debug("Logged in failure from thunderbirdplugin");	
+		}
 	}else
 	{
-		$return_access = 'failure';
+		$return_access = 'FALSES';
 		$log->debug("Logged in failure from thunderbirdplugin");
 	}
 	return $return_access;
