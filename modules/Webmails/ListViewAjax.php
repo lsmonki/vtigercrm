@@ -79,12 +79,16 @@ if(!isset($_REQUEST["search"])) {
 	$numPages = ceil($numEmails/$MailBox->mails_per_page);
 	if($numPages > 1) {
 		if($start != 1){
-		$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
-		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/previous.gif' border='0'></a> &nbsp;";
+			$navigationOutput = "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',1);\" ><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
+			$navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".($start-1).");\" ><img src='modules/Webmails/images/previous.gif' border='0'></a> &nbsp;";
+		//$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
+		//$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/previous.gif' border='0'></a> &nbsp;";
 		}
 		if($start <= ($numPages-1)){
-		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/next.gif' border='0'></a>&nbsp;&nbsp;";
-		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'><img src='modules/Webmails/images/end.gif' border='0'></a>";
+			$navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".($start+1).");\" ><img src='modules/Webmails/images/next.gif' border='0'></a>&nbsp;&nbsp;";
+        	        $navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".$numPages.");\"><img src='modules/Webmails/images/end.gif' border='0'></a> &nbsp;";
+//		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'><img src='modules/Webmails/images/next.gif' border='0'></a>&nbsp;&nbsp;";
+//		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'><img src='modules/Webmails/images/end.gif' border='0'></a>";
 		}
 	}
 }
@@ -109,7 +113,9 @@ $listview_header = array("<th width='10%'>".$mod_strings['LBL_INFO']."</th>","<t
 $listview_entries = array();
 
 $displayed_msgs=0;
-$new_msgs=0;
+$info = imap_mailboxmsginfo($MailBox->mbox);
+$unread_msgs = $info->Unread;
+//$new_msgs=0;
 if(($numEmails) <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>'.$mod_strings['LBL_NO_EMAILS'].'</b></td>';
 else {
@@ -193,6 +199,8 @@ if (is_array($list)) {
 		/*	if($tmpval != "INBOX")
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 		 */
+			if(!isset($_SESSION["image_path"]))
+				$_SESSION["image_path"] = $image_path;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
@@ -213,16 +221,14 @@ if (is_array($list)) {
 	}
         $boxes .= '</select>';
 }
-$check = imap_mailboxmsginfo($MailBox->mbox);
-$unread_count = $check->Unread; 
 imap_close($MailBox->mbox);
 
 $smarty = new vtigerCRM_Smarty;
 //$smarty->assign("USERID", $current_user->id);
-//$smarty->assign("MOD", $mod_strings);
+$smarty->assign("MOD", $mod_strings);
 //$smarty->assign("APP", $app_strings);
 //$smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("UNREAD_COUNT",$unread_count);
+$smarty->assign("UNREAD_COUNT",$unread_msgs);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("LISTHEADER", $listview_header);
 //$smarty->assign("SEARCH_HTML", $search_html);
@@ -231,11 +237,11 @@ $smarty->assign("LISTHEADER", $listview_header);
 //$smarty->assign("BUTTONS",$other_text);
 //$smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
-//$smarty->assign("FOLDER_SELECT", $boxes);
+$smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $MailBox->mailbox);
-//$smarty->assign("ACCOUNT", $MailBox->display_name);
-//$smarty->assign("BOXLIST",$folders);
+$smarty->assign("ACCOUNT", $MailBox->display_name);
+$smarty->assign("BOXLIST",$folders);
 //$smarty->assign("DEGRADED_SERVICE",$degraded_service);
        $smarty->display("ListViewAjax.tpl");
 ?>

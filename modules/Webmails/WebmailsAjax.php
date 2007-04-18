@@ -30,7 +30,7 @@ if($_POST['config_chk'] == 'true')
 	exit();
 }
 if(isset($_REQUEST['file']) && $_REQUEST['file']!='' && !isset($_REQUEST['ajax'])){
-	include("modules/".$_REQUEST['module']."/".$_REQUEST['file'].".php");
+	require_once("modules/".$_REQUEST['module']."/".$_REQUEST['file'].".php");
 	exit();
 }
 $mailid = $_REQUEST["mailid"];

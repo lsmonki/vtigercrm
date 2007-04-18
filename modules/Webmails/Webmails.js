@@ -373,9 +373,10 @@ function move_messages()
 	var nid = '';
 	$("status").style.display = "block";
 	var chkname=document.getElementsByName("selected_id");
-	var mvmbox = $("mailbox_select").value;
+	mvmbox = $("mailbox_select").value;
 	var nid = Array();
 	var i=0;
+	move_mail = 1;
 	for(var m=0;m<chkname.length;m++)
 	{
 		if(chkname[m].checked)
@@ -388,8 +389,17 @@ function move_messages()
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
 					method: 'post',
-					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+gCurrentFolder+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mailbox+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
 					onComplete: function(t) {
+						sh = $("show_msg");
+						var leftSide = findPosX(sh);
+					        var topSide = findPosY(sh);
+					        sh.style.left= leftSide + 400+'px';
+					        sh.style.top= topSide + 350 +'px';
+						sh.innerHTML = "Moving mail(s) from "+mailbox+" folder to "+mvmbox+" folder";
+                                                sh.style.display = "block";
+						sh.classname = "delete_email";
+                                                new Effect.Fade(sh,{queue: {position: 'end', scope: 'effect'},duration: '50'});
 						for(i=0;i<nid.length;i++)
 						{
 							var oRow = $('row_'+nid[i]);
@@ -444,21 +454,28 @@ function search_emails() {
 function runEmailCommand(com,id) {
         command=com;
         id=id;
-	if(com=="reload")
-		var file="ListViewAjax";
-	else
-		var file="";
 	if(com == 'delete_msg')
 	{
 		if(!confirm(alert_arr.DELETE+" "+alert_arr.MAIL+" ?"))
 			return;
 	}
+	if(com=="reload")
+                var file="ListViewAjax";
+        else
+                var file="";
+	
+	if(move_mail == 1){
+		var qry_str = "&mvbox="+mvmbox;
+		move_mail = 0;
+	}
+	else
+		qry_str = "";
         $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox,
+                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox+qry_str,
                         onComplete: function(t) {
                                 resp = t.responseText;
 				id=resp;
@@ -467,6 +484,7 @@ function runEmailCommand(com,id) {
 				    case 'reload':
 					$("rssScroll").innerHTML = resp;
 					var unread_count = parseInt($(mailbox+"_tempcount").innerHTML);
+					//$("nav").innerHTML = $("navTemp").innerHTML;
 					if(unread_count > 0) {
 						$(mailbox+"_unread").innerHTML = unread_count;
 					}
@@ -474,6 +492,13 @@ function runEmailCommand(com,id) {
 						$(mailbox+"_count").innerHTML = "";
 					}
 					$("nav").innerHTML = $("navTemp").innerHTML;
+					if(change_box != 1){
+						$("box_list").innerHTML = $("temp_boxlist").innerHTML;
+						change_box = 0;
+					}
+					$("move_pane").innerHTML = $("temp_movepane").innerHTML;
+					$("temp_boxlist").innerHTML = "";
+					$("temp_movepane").innerHTML = "";
 					$("navTemp").innerHTML = '';
 					$(mailbox+"_tempcount").innerHTML = "";
 					break;
@@ -590,6 +615,11 @@ function runEmailCommand(com,id) {
                 }
         );
 }
+function cal_navigation(box,page){
+	start = page;
+	mailbox = box;
+	runEmailCommand("reload",0);
+}
 function remove(s, t) {
   /*
   **  Remove all occurrences of a token in a string
@@ -604,7 +634,10 @@ function remove(s, t) {
   return r;
 }
 function changeMbox(box) {
-        location.href = "index.php?module=Webmails&action=index&mailbox="+box;
+	mailbox=box;
+	start = 0;
+	runEmailCommand("reload",0);
+        //location.href = "index.php?module=Webmails&action=index&mailbox="+box;
 }
 // TODO: these two functions should be tied into a mailbox management panel of some kind.
 // could be a DHTML div with AJAX calls to execute the commands on the mailbox.  

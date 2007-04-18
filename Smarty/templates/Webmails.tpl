@@ -50,12 +50,12 @@
 				   </tr>
 				   <tr>
 					<td width="20%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
-					<td width="80%" class="big mailSubHeader"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right"><div id="nav">{$NAVIGATION}</div></span></td>
+					<td width="80%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></div></td>
 				   </tr>
 				   <tr>
 					<td rowspan="6" valign="top" class="hdrNameBg">
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
-
+						<div id="box_list">
 						<ul style="list-style-type:none;">
 
 							{foreach item=row from=$BOXLIST}
@@ -63,7 +63,7 @@
 									{$row_values}
 								{/foreach}
 							{/foreach}
-						</ul><br />
+						</ul></div> <br />
 
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
@@ -108,7 +108,7 @@
 			<!-- Table to display Delete, Move To and Search buttons and options - Starts -->
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
                 	   <tr>
-                        	<td width="45%">
+                        	<td width="45%" id="move_pane">
 					<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
 					{$FOLDER_SELECT}
                         	</td>
@@ -132,7 +132,8 @@
 					<!-- td style="padding:1px;" align="left" -->
 					<td  align="left" valign="top" style="height:150px;">
 						<div id="rssScroll" style="height:220px;">
-
+				<!--div added to show info while moving mails-->
+					<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-size:20;width: 400px;display:none;z-index:10000"></div>
 				<!-- Table to display the mails list -	Starts -->
 				<form name="massdelete" method="post">
 				<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
@@ -148,6 +149,7 @@
 						{/foreach}
 					{/foreach}
 				</table>
+				<div id="show_msg" align="center" style="border: 1px solid green; padding: 5px; background: rgb(25,34,23);width: 350px;display:none;z-index:10000"></div>
 				</form>
 				<!-- Table to display the mails list - Ends -->
 
