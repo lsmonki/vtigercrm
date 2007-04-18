@@ -22,12 +22,6 @@
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 
-{if $SEARCH_MODULE eq 'All'}
-<script>
-displayModuleList(document.getElementById('global_search_module'));
-</script>
-{/if}
-
 {*<!-- Contents -->*}
 
 {if $MODULE eq $SEARCH_MODULE && $SEARCH_MODULE neq ''}
@@ -114,5 +108,11 @@ displayModuleList(document.getElementById('global_search_module'));
 </table>
 
 </div>
+{if $SEARCH_MODULE eq 'All'}
+<script>
+displayModuleList(document.getElementById('global_search_module'));
+</script>
+{/if}
+
 {$SELECT_SCRIPT}
 
