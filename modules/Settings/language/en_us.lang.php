@@ -917,5 +917,9 @@ $mod_strings = Array(
 'LBL_INVOICE_NUMBER_BUTTON'=>'Update Invoice Number',
 'LBL_PROXY_AUTHENTICATION_REQUIRED'=>'Proxy Authentication Required',
 
+//Added for Role Labels
+'LBL_ADD_ROLE'=>'Add Role',
+'LBL_EDIT_ROLE'=>'Edit Role',
+'LBL_MOVE_ROLE'=>'Move Role',
 );
 ?>

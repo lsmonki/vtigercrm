@@ -2543,11 +2543,9 @@ function getRelatedToEntity($module,$list_result,$rset)
 //used in home page listTop vtiger_files
 function getRelatedTo($module,$list_result,$rset)
 {
-	global $log;
+	global $adb,$log,$app_strings;
 	$log->debug("Entering getRelatedTo(".$module.",".$list_result.",".$rset.") method ...");
 
-        global $adb;
-		global $app_strings;
 	if($module == "Notes")
         {
                 $notesid = $adb->query_result($list_result,$rset,"notesid");
@@ -2601,7 +2599,7 @@ function getRelatedTo($module,$list_result,$rset)
 	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
         {
                 global $theme;
-                $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
+                $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="'.$app_strings[$parent_module].'" title="'.$app_strings[$parent_module].'" border=0 align=center> ';
         }
 	
 	$action = "DetailView";
@@ -2709,7 +2707,7 @@ function getRelatedTo($module,$list_result,$rset)
 
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
-	global $log;
+	global $log,$app_strings;
 	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
@@ -2721,8 +2719,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	*/
 	if(($navigation_array['prev']) != 0)
 	{
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start=1\');" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['prev'].'\');" title="Previous"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start=1\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -2739,8 +2737,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	if(($navigation_array['next']) !=0)
 	{
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['next'].'\');" title="Next"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['verylast'].'\');" title="Last"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -3121,7 +3119,7 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 //Temp function to be be deleted
 function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='',$viewid='')
 {
-	global $log, $singlepane_view;
+	global $log, $singlepane_view,$app_strings;
 	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
@@ -3133,7 +3131,7 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 		$action_val = 'CallRelatedList';
 	if(($navigation_array['prev']) != 0)
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
 		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	}
