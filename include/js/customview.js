@@ -82,7 +82,7 @@ function validate() {
                         return false
         }
 	var decimallength = document.addtodb.fldDecimal.value;
-        if(fieldtype == 'Percent' || fieldtype == 'Currency' || fieldtype == 'Number')
+        if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
                         decimallength = 0;
