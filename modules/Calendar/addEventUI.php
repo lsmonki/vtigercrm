@@ -296,7 +296,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
                                         <tr><td align="left">
-					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
 								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -312,7 +312,7 @@ function getAssignedToHTML($assignedto,$toggletype)
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
 					</td></tr>
 				        <tr><td align="left">
-					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_due_date">
 					<script type="text/javascript">
                                                         Calendar.setup ({
                                                                 inputField : "jscal_field_due_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
@@ -328,7 +328,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'followup_start');?>
 					</td></tr>
 					<tr><td align="left">
-						<input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_followup_date">
+						<input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_followup_date">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "jscal_field_followup_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_followup_date", singleClick : true, step : 1
@@ -630,8 +630,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<tr>
 			<td valign=top></td>
 			<td  align=center>
-				<input title='Save [Alt+S]' accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
-	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
+				<input alt="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
+	<input alt="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
 	  </td>
 	  </tr>
 	</table>
@@ -765,7 +765,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
 						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start','','','',true); ?></td></tr>
 						<tr><td align="left">
-							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" onChange="dochange('task_date_start','task_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
+							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" onChange="dochange('task_date_start','task_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_task_date_start">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_date_start", singleClick : true, step : 1
@@ -777,7 +777,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<table border="0" cellpadding="2" cellspacing="0" width="95%" align=center>
 							<tr><td colspan=3 align="left"><b><?php echo $mod_strings['Due Date'] ?></b></td></tr>
 							<tr><td align="left">
-								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_due_date">
+								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_task_due_date">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_due_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_due_date", singleClick : true, step : 1
@@ -863,8 +863,8 @@ function getAssignedToHTML($assignedto,$toggletype)
                 <tr>
                         <td valign=top></td>
                         <td  align=center>
-                                <input title='Save [Alt+S]' accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
-		<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
+				<input alt="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
+		<input alt="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
 	</td></tr></table>
   </form>
   <script>
