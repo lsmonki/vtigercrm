@@ -886,7 +886,39 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 					}
 				break;
 			}
+			//start Birth day date validation
+			if(fieldname[i] == "birthday" && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0 )
+			{
+				var now =new Date()
+				var currtimechk="OTH"
+				var datelabel = fieldlabel[i]
+				var datefield = fieldname[i]
+				var datevalue =getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+                        	if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+				{
+		        	        getObj(datefield).focus()
+                        		return false
+				}
+				else
+				{
+					datearr=splitDateVal(datevalue);
+					dd=datearr[0]
+					mm=datearr[1]
+					yyyy=datearr[2]
+					var datecheck = new Date()
+        				datecheck.setYear(yyyy)
+				        datecheck.setMonth(mm-1)
+        				datecheck.setDate(dd)
+                			if (!compareDates(datecheck,datelabel,now,"Current Date","L"))
+					{
+		                	        getObj(datefield).focus()
+                			        return false
+                			}
+				}
+			}
+		      //End Birth day	
 		}
+		
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
 	
