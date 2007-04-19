@@ -79,8 +79,14 @@ function SaveSite(id)
                 	method: 'post',
                         postBody:'action=PortalAjax&mode=ajax&file=Save&module=Portal&portalname='+portalname+'&portalurl='+portalurl+'&record='+id,
                         onComplete: function(response) {
-                        		$("status").style.display="none";
-                                        $('portalcont').innerHTML = response.responseText;
+					if(response.responseText.indexOf(":#:FAILURE") > -1)
+					{
+						alert(alert_arr.VALID_DATA)
+					}else
+					{
+						$('portalcont').innerHTML = response.responseText;
+					}
+					$("status").style.display="none";
                         }
                 }
 	);
