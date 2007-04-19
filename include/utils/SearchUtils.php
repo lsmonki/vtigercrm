@@ -666,7 +666,7 @@ function getdashboardcondition()
 	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
 	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
 	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
-	
+	if(isset($_REQUEST['owner'])) $owner = $_REQUEST['owner'];
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
@@ -688,6 +688,13 @@ function getdashboardcondition()
 	if(isset($date_closed) && $date_closed != "") {
 		array_push($where_clauses, $adb->getDBDateString("vtiger_potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
 		$url_string .= "&date_closed=".$date_closed;
+	}
+	if(isset($owner) && $owner != ""){
+		$user_qry="select vtiger_users.id from vtiger_users where vtiger_users.user_name = '".$owner."' ";
+		$res = $adb->query($user_qry);
+		$uid = $adb->query_result($res,0,'id');
+		array_push($where_clauses, "vtiger_crmentity.smownerid = ".$uid);
+		$url_string .= "&assigned_user_id=".$uid;
 	}
 	$where = "";
 	foreach($where_clauses as $clause)

@@ -89,12 +89,6 @@ class jpgraph {
 			$where = "";
 			$first = true;
 			$current = 0;
-			/*foreach ($user_id as $the_id) {
-				if (!$first) $where .= "OR ";
-				$first = false;
-				$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
-			}
-			$where .= ") ";*/
 
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= " closingdate >= '$date_start' AND closingdate <= '$date_end'";
@@ -122,18 +116,20 @@ class jpgraph {
 						$sales_stage=$other;
 					}
 
-					if (!isset($sum[$month][$sales_stage])) {
-						$sum[$month][$sales_stage] = 0;
+					if (!isset($sum[$month][$sales_stage][$record->column_fields['assigned_user_id']]))
+				       	{
+						$sum[$month][$sales_stage][$record->column_fields['assigned_user_id']] = 0;
 					}
-					if (isset($record->column_fields['amount']))	{
+					if (isset($record->column_fields['amount']) && in_array($record->column_fields['assigned_user_id'],$user_id)) {
 						// Strip all non numbers from this string.
 						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
-						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;
-						if (isset($count[$month][$sales_stage])) {
-							$count[$month][$sales_stage]++;
-						}
-						else {
-							$count[$month][$sales_stage] = 1;
+						$sum[$month][$sales_stage][$record->column_fields['assigned_user_id']] = $sum[$month][$sales_stage][$record->column_fields['assigned_user_id']] + $amount;
+						if (isset($count[$month][$sales_stage][$record->column_fields['assigned_user_id']])) {
+						
+							$count[$month][$sales_stage][$record->column_fields['assigned_user_id']]++;
+						} else {
+
+							$count[$month][$sales_stage][$record->column_fields['assigned_user_id']] = 1;
 						}
 						$total = $total + ($amount/1000);
 					}
@@ -153,31 +149,33 @@ class jpgraph {
 				sort($months);
 			}
 			foreach($months as $month) {
-			  foreach($stages as $stage) {
-				$log->debug("stage is $stage");
-				if (!isset($datax[$stage])) {
-					$datax[$stage] = array();
-				}
-				if (!isset($aAlts[$stage])) {
-					$aAlts[$stage] = array();
-				}
-				if (!isset($aTargets[$stage])) {
-					$aTargets[$stage] = array();
-				}
+				foreach($stages as $stage) {
+					$log->debug("stage is $stage");
+					foreach ($user_id as $the_id) {
+						$the_user = get_assigned_user_name($the_id);
+						if (!isset($datax[$stage][$the_id])) {
+							$datax[$stage][$the_id] = array();
+						}
+						if (!isset($aAlts[$stage][$the_id])) {
+							$aAlts[$stage][$the_id] = array();
+						}
+						if (!isset($aTargets[$stage][$the_id])) {
+							$aTargets[$stage][$the_id] = array();
+						}
 
-				if (isset($sum[$month][$stage])) {
-					array_push($datax[$stage], $sum[$month][$stage]/1000);
-					array_push($aAlts[$stage], $count[$month][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
-				}
-				else {
-					array_push($datax[$stage], 0);
-					array_push($aAlts[$stage], "");
-				}
-				array_push($aTargets[$stage], "index.php?module=Potentials&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true&type=dbrd");
-			  }
-		  	  array_push($legend,$month);
+						if (isset($sum[$month][$stage][$the_id])) {
+							array_push($datax[$stage][$the_id], $sum[$month][$stage][$the_id]/1000);
+							array_push($aAlts[$stage][$the_id], $the_user.' - '.$count[$month][$stage][$the_id]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
+						}
+						else {
+							array_push($datax[$stage][$the_id], 0);
+							array_push($aAlts[$stage][$the_id], "");
+						}
+						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user);
+			  		}
+				}	
+		  	  	array_push($legend,$month);
 			}
-
 			$log->debug("datax is:");
 			$log->debug($datax);
 			$log->debug("aAlts is:");
@@ -190,31 +188,31 @@ class jpgraph {
 			$log->debug($count);
 
 			//now build the bar plots for each user across the sales stages
-			$color = array('Closed Lost'=>'#FF9900','Closed Won'=>'#009933', $other=>'#0066CC');
 			$index = 0;
 			$datasets = array();
 			$xlabels = array();
 			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
+			$color = array('Closed Lost'=>'#FF9900','Closed Won'=>'#009933', $other=>'#0066CC');
 			foreach($stages as $stage) {
-				// Now create a bar plot
 				$datasets[$index] = & Image_Graph::factory('dataset');
-				foreach($datax[$stage] as $i => $y) {
-				  	$x = 1+2*$i;
-				    $datasets[$index]->addPoint(
-				        $x,
-				        $y,
-				        array(
-				            'url' => $aTargets[$stage][$i],
-				            'alt' => $aAlts[$stage][$i]
-				        )
-				    );
+				foreach($datax[$stage] as $ownerid=>$owner_amt) {
+					foreach($owner_amt as $i=>$y) {
+					$x = 1+2*$i;
+					$datasets[$index]->addPoint(
+						$x,
+						$y,
+						array(
+							'url' => $aTargets[$stage][$ownerid][$i],
+							'alt' => $aAlts[$stage][$ownerid][$i]
+						)
+					);
+					}
 				}
-
 				// Set fill colors for bars
 				$fills->addColor($color[$stage]);
-
 				$index++;
 			}
+
 			for($i=0;$i<count($months); $i++)
 			{
 			  $x = 1+2*$i;
@@ -226,7 +224,9 @@ class jpgraph {
 			$maximum = 0;
 			foreach($months as $num=>$m) {
 			  	$monthSum = 0;
-			  	foreach($stages as $stage) $monthSum += $datax[$stage][$num];
+				foreach($user_id as $the_id) {
+					foreach($stages as $stage) $monthSum += $datax[$stage][$the_id][$num];
+				}	
 				if($monthSum > $maximum) $maximum = $monthSum;
 				$log->debug('maximum = '.$maximum.' month = '.$m.' sum = '.$monthSum);
 			}
@@ -411,30 +411,15 @@ class jpgraph {
 			$log->debug("cache_file_name is: $cache_file_name");
 
 			$where="";
-			//build the where clause for the query that matches $user
-			/*$count = count($user_id);
-			if ($count>0) {
-				$where = "(";
-				$first = true;
-				$current = 0;
-				foreach ($user_id as $the_id) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
-				}
-				$where .= ") ";
-			}*/
-
 			//build the where clause for the query that matches $datay
 			$count = count($datay);
 			if ($count>0) {
-				$where .= " ( ";
-				unset($first);
-				$first = true;
+				$where .= " leadsource in ( ";
+				$ls_i = 0;
 				foreach ($datay as $key=>$value) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					$where .= "leadsource ='$key' ";
+					if($ls_i != 0) $where .= ", ";
+					$where .= "'$key'";
+					$ls_i++;
 				}
 				$where .= ")";
 			}
@@ -466,57 +451,59 @@ class jpgraph {
 						$sales_stage=$other;
 					}
 
-					if (!isset($sum[$lead_source][$sales_stage])) {
-						$sum[$lead_source][$sales_stage] = 0;
+					if (!isset($sum[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']])) {
+						$sum[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']] = 0;
 					}
-					if (isset($record->column_fields['amount']))	{
+					if (isset($record->column_fields['amount']) && in_array($record->column_fields['assigned_user_id'],$user_id))	{
 						// Strip all non numbers from this string.
 						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
-						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;
-						if (isset($count[$lead_source][$sales_stage])) {
-							$count[$lead_source][$sales_stage]++;
+						$sum[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']] = $sum[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']] + $amount;
+						if (isset($count[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']])) {
+							$count[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']]++;
 						}
 						else {
-							$count[$lead_source][$sales_stage] = 1;
+							$count[$lead_source][$sales_stage][$record->column_fields['assigned_user_id']] = 1;
 						}
 						$total = $total + ($amount/1000);
 					}
 				}
 			}
-
 			$legend = array();
 			$datax = array();
 			$aTargets = array();
 			$aAlts = array();
 			$stages = array($other,'Closed Lost', 'Closed Won');
 			foreach($datay as $lead=>$translation) {
-			  if ($lead == '') {
+				if ($lead == '') {
 					$lead = $current_module_strings['NTC_NO_LEGENDS'];
 					$translation = $current_module_strings['NTC_NO_LEGENDS'];
-			  }
-			  foreach($stages as $stage) {
-				$log->debug("stage_key is $stage");
-				if (!isset($datax[$stage])) {
-					$datax[$stage] = array();
-				}
-				if (!isset($aAlts[$stage])) {
-					$aAlts[$stage] = array();
-				}
-				if (!isset($aTargets[$stage])) {
-					$aTargets[$stage] = array();
-				}
-
-				if (isset($sum[$lead][$stage])) {
-					array_push($datax[$stage], $sum[$lead][$stage]/1000);
-					array_push($aAlts[$stage], $count[$lead][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
-				}
-				else {
-					array_push($datax[$stage], 0);
-					array_push($aAlts[$stage], "");
-				}
-				array_push($aTargets[$stage], "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead)."&sales_stage=".urlencode($stage)."&query=true&type=dbrd");
-			  }
-			  array_push($legend,$translation);
+			  	}
+			  	foreach($stages as $stage) {
+					foreach ($user_id as $the_id) {
+						$the_user = get_assigned_user_name($the_id);
+						$log->debug("stage_key is $stage");
+						if (!isset($datax[$stage][$the_id])) {
+							$datax[$stage][$the_id] = array();
+						}
+						if (!isset($aAlts[$stage][$the_id])) {
+							$aAlts[$stage][$the_id] = array();
+						}
+						if (!isset($aTargets[$stage][$the_id])) {
+							$aTargets[$stage][$the_id] = array();
+						}
+	
+						if (isset($sum[$lead][$stage][$the_id])) {
+							array_push($datax[$stage][$the_id], $sum[$lead][$stage][$the_id]/1000);
+							array_push($aAlts[$stage][$the_id], $the_user.' - '.$count[$lead][$stage][$the_id]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
+						}
+						else {
+							array_push($datax[$stage][$the_id], 0);
+							array_push($aAlts[$stage][$the_id], "");
+						}
+						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead)."&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user);
+			  		}
+				}	
+			  	array_push($legend,$translation);
 			}
 
 			$log->debug("datax is:");
@@ -539,39 +526,42 @@ class jpgraph {
 			foreach($stages as $stage) {
 				// Now create a bar pot
 				$datasets[$index] = & Image_Graph::factory('dataset');
-				foreach($datax[$stage] as $i => $y) {
-				  	$x = 1+2*$i;
-				    $datasets[$index]->addPoint(
-				        //$datay[$legend[$x]],
-				        $x,
-				        $y,
-				        array(
-				            'url' => $aTargets[$stage][$i],
-				            'alt' => $aAlts[$stage][$i],
-				            'target' => ''
-				        )
-				    );
-				}
-			for($i=0;$i<count($legend); $i++)
-			{
-			  $x = 1+2*$i;
-			  $xlabels[$x] = $legend[$i];
-			  $xlabels[$x+1] = '';
-			}
-
+				foreach($datax[$stage] as $ownerid=>$owner_amt) {
+					foreach($owner_amt as $i=>$y) {
+				  		$x = 1+2*$i;
+				    		$datasets[$index]->addPoint(
+				        		//$datay[$legend[$x]],
+				        		$x,
+					        	$y,
+				        		array(
+				            			'url' => $aTargets[$stage][$ownerid][$i],
+				            			'alt' => $aAlts[$stage][$ownerid][$i],
+				      		      		'target' => ''
+				        		)
+				    		);
+					}
+				}	
 				// Set fill colors for bars
 				$fills->addColor("#".$color[$stage]);
-
 				$log->debug("datax[$stage] is: ");
 				$log->debug($datax[$stage]);
 				$index++;
 			}
 			
+			for($i=0;$i<count($legend); $i++)
+			{
+				$x = 1+2*$i;
+				$xlabels[$x] = $legend[$i];
+				$xlabels[$x+1] = '';
+			}
+
 			// compute maximum value because of grace jpGraph parameter not supported
 			$maximum = 0;
 			foreach($legend as $legendidx=>$legend_text) {
 			  	$dataxSum = 0;
-				foreach($stages as $stage) $dataxSum += $datax[$stage][$legendidx];
+				foreach($user_id as $the_id) {
+					foreach($stages as $stage) $dataxSum += $datax[$stage][$the_id][$legendidx];
+                                }
 				if($dataxSum > $maximum) $maximum = $dataxSum;
 			}
 
@@ -742,39 +732,21 @@ class jpgraph {
 			$log->debug("cache_file_name is: $cache_file_name");
 
 			$where="";
-			//build the where clause for the query that matches $user
-			/*$count = count($user_id);
-			if ($count>0) {
-				$where = "(";
-				$first = true;
-				$current = 0;
-				foreach ($user_id as $the_id) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					//reference post
-					//if I change the owner of a opportunity, the graph shown on Home does not update correctly, this is because the graph is looking for the creatorid and not for the ownerid
-					//fix incorporated based on /sak's feedback
-					$where .= "vtiger_crmentity.smownerid='$the_id' ";
-				}
-				$where .= ") ";
-			}*/
-
 			//build the where clause for the query that matches $datax
 			$count = count($datax);
 			if ($count>0) {
-				$where .= " ( ";
-				unset($first);
-				$first = true;
+				$where .= " sales_stage in ( ";
+				$ss_i = 0;
 				foreach ($datax as $key=>$value) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					$where .= "sales_stage ='$key' ";
+					if($ss_i != 0) $where .= ", ";
+					$where .= "'$key'";
+					$ss_i++;
 				}
 				$where .= ")";
 			}
 
 			//build the where clause for the query that matches $date_start and $date_end
-			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
+			$where .= " AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
 
 			//Now do the db queries
@@ -791,7 +763,7 @@ class jpgraph {
 					if (!isset($sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']])) {
 						$sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = 0;
 					}
-					if (isset($record->column_fields['amount']))	{
+					if (isset($record->column_fields['amount']) && in_array($record->column_fields['assigned_user_id'],$user_id))	{
 						// Strip all non numbers from this string.
 						$amount = convertFromMasterCurrency(ereg_replace('[^0-9]', '', floor($record->column_fields['amount'])),$current_user->conv_rate);
 						$sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = $sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] + $amount;
@@ -805,7 +777,6 @@ class jpgraph {
 					}
 				}
 			}
-
 			$legend = array();
 			$datay = array();
 			$aTargets = array();
@@ -831,7 +802,7 @@ class jpgraph {
 					array_push($datay[$the_id], 0);
 					array_push($aAlts[$the_id], "");
 				}
-				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd");
+				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd&owner=".$the_user);
 			  }
 			  array_push($legend,$stage_translation);
 			}
@@ -1018,7 +989,6 @@ class jpgraph {
 		include_once ('Image/Canvas.php');
 
 		$font = calculate_font_name($lang_crm);
-
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
 			$log =& LoggerManager::getLogger('opportunity charts');
 			$log->debug("starting pipeline chart");
@@ -1031,28 +1001,15 @@ class jpgraph {
 			//Now do the db queries
 			//query for opportunity data that matches $legends and $user
 			$where="";
-			//build the where clause for the query that matches $user
-			/*$count = count($user_id);
-			if ($count>0) {
-				$where = "(";
-				$first = true;
-				foreach ($user_id as $the_id) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					$where .= "vtiger_crmentity.smcreatorid='$the_id' ";
-				}
-				$where .= ") ";
-			}*/
-
 			//build the where clause for the query that matches $datax
 			$count = count($legends);
 			if ($count>0) {
-				$where .= " ( ";
-				$first = true;
+				$where .= " leadsource in ( ";
+				$ls_i = 0;
 				foreach ($legends as $key=>$value) {
-					if (!$first) $where .= "OR ";
-					$first = false;
-					$where .= "leadsource	='$key' ";
+					if($ls_i != 0) $where .= ", ";
+					$where .= "'$key'";
+					$ls_i++;
 				}
 				$where .= ")";
 			}
