@@ -10,13 +10,24 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
+global $default_charset;
 global $adb;
+$notifysubject =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['notifysubject']));
+$notifybody =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['notifybody']));
 
-if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+if($notifysubject != '' && $notifybody != '')
 {
-	$query="UPDATE vtiger_notificationscheduler set notificationsubject='".$_REQUEST['notifysubject']."', notificationbody='".$_REQUEST['notifybody']."', active =".$_REQUEST['active']." where schedulednotificationid=".$_REQUEST['record'];
-	$adb->query($query);	
+	if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+	{	
+		$query="UPDATE vtiger_notificationscheduler set notificationsubject='".$notifysubject."', notificationbody='".$notifybody."', active =".$_REQUEST['active']." where schedulednotificationid=".$_REQUEST['record'];
+		$adb->query($query);	
+	}
+	$loc = "Location: index.php?action=SettingsAjax&file=listnotificationschedulers&module=Settings&directmode=ajax";
+	header($loc);
 }
-$loc = "Location: index.php?action=SettingsAjax&file=listnotificationschedulers&module=Settings&directmode=ajax";
-header($loc);
+else
+{
+	echo ":#:FAILURE";
+}
+
 ?>

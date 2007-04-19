@@ -112,8 +112,14 @@ function fetchSaveNotify(id)
                         method: 'post',
                         postBody: 'action=SettingsAjax&module=Settings&file=SaveNotification&active='+active+'&notifysubject='+subject+'&notifybody='+body+'&record='+id,
                         onComplete: function(response) {
+					if(response.responseText.indexOf(":#:FAILURE") > -1)
+					{
+						alert(alert_arr.VALID_DATA);
+					}else
+					{
+						$("notifycontents").innerHTML=response.responseText;
+					}
                                 $("status").style.display="none";
-				$("notifycontents").innerHTML=response.responseText;
                         }
                 }
         );
