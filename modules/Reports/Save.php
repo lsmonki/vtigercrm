@@ -83,7 +83,7 @@ for ($i=0;$i<count($allKeys);$i++)
    $string = substr($allKeys[$i], 0, 4);
    if($string == "fval")
    {
-           $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
+           $adv_filter_value[] = addslashes($_REQUEST[$allKeys[$i]]);
    }
 }
 //<<<<<<<advancedfilter>>>>>>>>
