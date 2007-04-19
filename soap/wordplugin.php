@@ -201,7 +201,7 @@ $server->register(
 
 $server->register(
     'create_session',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -320,9 +320,14 @@ function get_user_columns($user_name, $password)
 }
 
 
-function create_session($user_name, $password)
+function create_session($user_name, $password,$version)
 { 
-  	global $adb,$log;
+	global $adb,$log;
+	include('vtigerversion.php');
+	if($version != $vtiger_current_version)
+	{
+		return "VERSION";
+	}
 	require_once('modules/Users/Users.php');
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
@@ -335,19 +340,25 @@ function create_session($user_name, $password)
 				$result = $adb->query($query);
 				if($adb->num_rows($result) > 0)
 				{
-					$return_access = "TempSessionID";
+					$return_access = "TRUE";
 					$log->debug("Logged in sucessfully from wordplugin");
 				}else
 				{
-					$return_access = "false";
+					$return_access = "FALSE";
 					$log->debug("Logged in failure from wordplugin");
 				}
 			}
+			else
+			{
+				$return_access = "LOGIN";
+				$log->debug("Logged in failure from wordplugin");	
+			}
+
 	}else
 	{
-		$return_access = "false";
+		$return_access = "FALSE";
 		$log->debug("Logged in failure from wordplugin");
-     }
+     	}
    return $return_access;
 		
 }
