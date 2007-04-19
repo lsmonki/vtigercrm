@@ -860,6 +860,18 @@ $app_strings = array (
 'LBL_ROOT'=>'Root',
 'LBL_FIRST'=>'First',
 'LBL_LAST'=>'Last',
+
+'Office Phone'=>'Office Phone',
+'Sender'=>'Sender',
+'Website'=>'Website',
+'Activity Type'=>'Activity Type',
+'Due Date'=>'Due Date',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'FAQ Id'=>'FAQ Id',
+'Lead Status'=>'Lead Status',
+'Lead Source'=>'Lead Source',
+'Quote ID'=>'Quote Id',
 );
 
 $app_list_strings = array (
