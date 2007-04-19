@@ -1371,6 +1371,7 @@ class ReportRun extends CRMEntity
 				left join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
 				left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentity.smownerid
 				left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
+				left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0";
 		}
