@@ -10,6 +10,8 @@
   ********************************************************************************/
 $ajaxaction = $_REQUEST['ajxaction'];
 global $current_user;
+global $default_charset;
+
 $crmid = $_REQUEST["recordid"];
 $module = $_REQUEST["module"];
 $userid = $current_user->id;
@@ -17,15 +19,22 @@ if($ajaxaction == "SAVETAG")
 {
 	
 	require_once('include/freetag/freetag.class.php');
-	$tagfields = $_REQUEST["tagfields"];
-    	$freetag = new freetag();
-	if (isset($_REQUEST["tagfields"]) && trim($_REQUEST["tagfields"]) != "")
+	$tagfields=$_REQUEST['tagfields'];
+	$tagfields =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['tagfields']));
+	if($tagfields != "")
 	{
-	      	$freetag->tag_object($userid,$crmid,$tagfields,$module);
-	  	$tagcloud = $freetag->get_tag_cloud_html($module,$userid,$crmid);
-	  	echo $tagcloud;
+    		$freetag = new freetag();
+		if (isset($_REQUEST["tagfields"]) && trim($_REQUEST["tagfields"]) != "")
+		{
+			$freetag->tag_object($userid,$crmid,$tagfields,$module);
+			$tagcloud = $freetag->get_tag_cloud_html($module,$userid,$crmid);
+			echo $tagcloud;
+		}
 	}
-
+	else
+	{
+		echo ":#:FAILURE";
+	}
 }
 elseif($ajaxaction == 'GETTAGCLOUD')
 {

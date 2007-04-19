@@ -414,11 +414,16 @@ function SaveTag(tagfield,crmId,module)
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +escape(tagValue),
-                        onComplete: function(response) {
-				        getObj('tagfields').innerHTML = response.responseText;
+                       postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue,
+                       onComplete: function(response) {
+					if(response.responseText.indexOf(":#:FAILURE") > -1)
+					{
+						alert(alert_arr.VALID_DATA)
+					}else{
+				        	getObj('tagfields').innerHTML = response.responseText;
+						$(tagfield).value = '';
+					}
 					$("vtbusy_info").style.display="none";
-					$(tagfield).value = '';
                         }
                 }
         );
