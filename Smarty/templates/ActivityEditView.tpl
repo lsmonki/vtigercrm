@@ -519,7 +519,16 @@ var gVTModule = '{$smarty.request.module}';
 													<table border=0 cellspacing=0 cellpadding=2>
 													<tr>
 													<td>{$MOD.LBL_REPEAT_ONCE}</td>
-													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="{$ACTIVITYDATA.repeat_frequency}" ></td>
+													<td>
+													<select name="repeat_frequency">
+                                                                                                                {section name="repeat" loop=15 start=1 step=1}
+                                                                                                                {if $smarty.section.repeat.iteration eq $ACTIVITYDATA.repeat_frequency}
+                                                                                                                        {assign var="test" value="selected"}
+                                                                                                                {else}                                                                                                                             {assign var="test" value=""}                                                                                                                                                                                                                  {/if}
+                                                                                                                <option "{$test}" value="{$smarty.section.repeat.iteration}">{$smarty.section.repeat.iteration}</option>
+                                                                                                                {/section}
+                                                                                                        </select>
+													</td>
 													<td><select name="recurringtype">
 													<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
 													<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>

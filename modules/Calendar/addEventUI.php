@@ -507,7 +507,11 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<td>
 									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
 								</td>
-								<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
+								<td><select name="repeat_frequency">
+								<?php for($i=1;$i<=14;$i++) { ?>
+									<option value="<?php echo $i ?>"><?php echo $i ?></option>	
+								<?php } ?>	
+								</select></td>
 								<td>
 									<select name="recurringtype">
 										<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
