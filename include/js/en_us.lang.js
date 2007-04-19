@@ -111,5 +111,6 @@
                                 NO_SPECIAL:'Special Characters are not allowed',
                                 VALID_TAX_PERCENT:'Enter a valid Tax percentage',
                                 VALID_SH_TAX:'Enter valid Taxes for shipping and handling ',
-				ROLE_DRAG_ERR_MSG:'You cannot move a Parent Node under a Child Node'
+				ROLE_DRAG_ERR_MSG:'You cannot move a Parent Node under a Child Node',
+				LBL_DEL:'del'
                        };

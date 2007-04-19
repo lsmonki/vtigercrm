@@ -536,7 +536,7 @@ function runEmailCommand(com,id) {
                                         	);
 
 					try {
-                                        	$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
+                                        	$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="'+alert_arr.LBL_DEL+'" title="'+alert_arr.LBL_DEL+'"></a>';
 
                                         	new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
                                         	tmp = document.getElementsByClassName("previewWindow");
@@ -573,7 +573,7 @@ function runEmailCommand(com,id) {
 						}
                                         );
 
-                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
+                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="'+alert_arr.LBL_DEL+'" title="'+alert_arr.LBL_DEL+'"></a>';
 
                                         new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
                                         tmp = document.getElementsByClassName("previewWindow");
@@ -591,7 +591,7 @@ function runEmailCommand(com,id) {
                                         node.style.display = '';
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
-                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
+                                        $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="'+alert_arr.LBL_DEL+'" title="'+alert_arr.LBL_DEL+'"></a>';
                                 	$("status").style.display="none";
                                     break;
                                     case 'clear_flag':
