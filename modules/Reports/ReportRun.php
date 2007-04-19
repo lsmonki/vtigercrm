@@ -1313,6 +1313,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentity.smownerid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
+				left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid
+				left join vtiger_recurringevents on vtiger_recurringevents.activityid = vtiger_activity.activityid
 				left join vtiger_crmentity as vtiger_crmentityRelCalendar on vtiger_crmentityRelCalendar.crmid = vtiger_seactivityrel.crmid
 				left join vtiger_account as vtiger_accountRelCalendar on vtiger_accountRelCalendar.accountid=vtiger_crmentityRelCalendar.crmid
 				left join vtiger_leaddetails as vtiger_leaddetailsRelCalendar on vtiger_leaddetailsRelCalendar.leadid = vtiger_crmentityRelCalendar.crmid
@@ -1484,33 +1486,22 @@ class ReportRun extends CRMEntity
 		$reportquery = $this->getReportsQuery($this->primarymodule);
 		if($type == 'COLUMNSTOTOTAL')
 		{
-			if(trim($groupsquery) != "")
+			if($columnstotalsql != '')
 			{
-				if($columnstotalsql != '')
-				{
-					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
-				}
-			}else
-			{
-				if($columnstotalsql != '')
-				{
-					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql;
-				}
+				$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql;
 			}
 		}else
 		{
-			if(trim($groupsquery) != "")
-			{
-				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
-			}else
-			{
-				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
-			}
+			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($this->primarymodule);
 			$reportquery .= $sec_parameter;
+		}
+		if(trim($groupsquery) != "")
+		{
+			$reportquery .= " order by ".$groupsquery;
 		}
 
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
