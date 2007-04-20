@@ -11,9 +11,9 @@
 
 class vt_DateTime
 {
-	var $second = '00';
-	var $minute = '00';
-	var $hour = '00';
+	var $second = 0;
+	var $minute = 0;
+	var $hour = 0;
 	var $z_hour = '00';
 	var $day;
 	var $z_day;
