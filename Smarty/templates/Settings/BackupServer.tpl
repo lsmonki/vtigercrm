@@ -60,6 +60,13 @@
 					</td>
 					</tr>
 					</table>
+					<table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                        <tr>
+                                        <td class="small" valign="top">
+                                                <br>{$MOD.LBL_BACKUP_DESC}
+                                        </td>
+                                        </tr>
+                                        </table>
 				</td>
 				</tr>
 				<tr>

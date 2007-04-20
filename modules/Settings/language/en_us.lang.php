@@ -921,5 +921,7 @@ $mod_strings = Array(
 'LBL_ADD_ROLE'=>'Add Role',
 'LBL_EDIT_ROLE'=>'Edit Role',
 'LBL_MOVE_ROLE'=>'Move Role',
+
+'LBL_BACKUP_DESC'=>' The CRM system allows you to make a backup of the database to your FTP server. The CRM will take backup of all data whenever an admin user logs out. Make sure you have enough disk space available on your FTP server. The created backup file will be in the following format: "backup-date-time.sql".',
 );
 ?>
