@@ -171,6 +171,7 @@ else
 var mailbox = "<?php echo $MailBox->mailbox;?>";
 var box_refresh=<?php echo $MailBox->box_refresh;?>;
 var webmail = new Array();
+var webmail2 = new Array();
 var timer;
 var command;
 var id;
@@ -262,6 +263,7 @@ $overview=$elist["overview"];
 // during the preview window load instead.
 var msgCount = "<?php echo $numEmails;?>";
 var start = "<?php echo $_REQUEST['start'];?>";
+var gselected_mail = '';
 <?php
 $mails = array();
 if (is_array($overview))

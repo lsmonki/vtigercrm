@@ -1,4 +1,4 @@
-<!-- Table to display the mails list -  Starts -->
+				<!-- Table to display the mails list -  Starts -->
 				<div id="navTemp" style="display:none">
 					<span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span>	
 				</div>
@@ -13,7 +13,7 @@
 					<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
                                         {$FOLDER_SELECT}
 				</div>
-			<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;font-size:30;width: 400px;display:none;z-index:10000"></div>	
+			<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>	
                                 <form name="massdelete" method="post">
                                 <table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
                                    <tr>

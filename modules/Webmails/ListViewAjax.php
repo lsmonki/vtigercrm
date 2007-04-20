@@ -92,7 +92,7 @@ if(!isset($_REQUEST["search"])) {
 		}
 	}
 }
-
+$js_array = "";
 $overview=$elist["overview"];
 $mails = array();
 if (is_array($overview))
@@ -101,11 +101,16 @@ if (is_array($overview))
         {
                 $mails[$val->msgno] = $val;
                 $hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);
-                //Added to get the UTF-8 string - 30-11-06 - Mickie
-                //we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
                 $val->from = utf8_decode(imap_utf8(addslashes($val->from)));
                 $val->to = utf8_decode(imap_utf8(addslashes($val->to)));
                 $val->subject = utf8_decode(imap_utf8($val->subject));
+		$list = explode("<",$val->from);
+		$js_array .= "webmail2[".$val->msgno."] = new Array();";
+		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($list[0])."';";
+		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($val->to)."';";
+		$js_array .= "webmail2[".$val->msgno."]['subject'] = '".addslashes($val->subject)."';";
+		$js_array .= "webmail2[".$val->msgno."]['date'] = '".addslashes($val->date)."';";
+		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$hdr->ccaddress."';";
 	}
 }
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");
@@ -205,8 +210,8 @@ if (is_array($list)) {
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
 			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-			if($new_msgs > 0)
-				$folders .= '(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			if($unread_msgs > 0)
+				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 
 		} else {
 			$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$tmpval, SA_ALL);
@@ -222,7 +227,7 @@ if (is_array($list)) {
         $boxes .= '</select>';
 }
 imap_close($MailBox->mbox);
-
+echo '<div id="js_arr" style="display:none">'.$js_array.'</div>';
 $smarty = new vtigerCRM_Smarty;
 //$smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
@@ -242,6 +247,7 @@ $smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $MailBox->mailbox);
 $smarty->assign("ACCOUNT", $MailBox->display_name);
 $smarty->assign("BOXLIST",$folders);
+$smarty->assign("MAIL_INFO",$js_array);
 //$smarty->assign("DEGRADED_SERVICE",$degraded_service);
        $smarty->display("ListViewAjax.tpl");
 ?>

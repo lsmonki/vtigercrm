@@ -133,7 +133,7 @@
 					<td  align="left" valign="top" style="height:150px;">
 						<div id="rssScroll" style="height:220px;">
 				<!--div added to show info while moving mails-->
-					<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-size:20;width: 400px;display:none;z-index:10000"></div>
+					<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>
 				<!-- Table to display the mails list -	Starts -->
 				<form name="massdelete" method="post">
 				<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
@@ -149,7 +149,6 @@
 						{/foreach}
 					{/foreach}
 				</table>
-				<div id="show_msg" align="center" style="border: 1px solid green; padding: 5px; background: rgb(25,34,23);width: 350px;display:none;z-index:10000"></div>
 				</form>
 				<!-- Table to display the mails list - Ends -->
 
@@ -190,7 +189,7 @@
 
 						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
 		<tr><td	align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td>
-	<tr><td align="right"><b>{$MOD.LBL_ATTACHMENT}</b></td><td id="webmail_attachment"></td>
+	<tr><td align="right"><b>{$MOD.LBL_ATTACHMENT}:</b></td><td id="webmail_attachment"></td>
 							<td id="full_view"><a href="javascript:;"> Full Email View</a></td></tr>
 						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 					</table>
@@ -217,50 +216,4 @@
    </tr>
 </table>
 
-<script>
-function OpenCompose(id,mode)
-{ldelim}
-        switch(mode)
-                {ldelim}
-                case 'edit':
-                        url = 'index.php?module=Webmails&action=EditView&record='+id;
-                        break;
-                case 'create':
-			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
-                        break;
-                case 'forward':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&forward=true&webmail=true&file=EditView&mailbox={$MAILBOX}';
-                        break;
-                case 'reply':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=single&webmail=true&file=EditView&mailbox={$MAILBOX}';
-                        break;
-                case 'replyall':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=all&webmail=true&file=EditView&mailbox={$MAILBOX}';
-                        break;
-                case 'attachments':
-                        url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id+'&mailbox={$MAILBOX}';
-                        break;
-                case 'full_view':
-                        url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox={$MAILBOX}';
-                        break;
-                {rdelim}
-        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
-{rdelim}
-var gselected_mail = '';
-{if $smarty.request.mailbox.value neq ''}
-	var gCurrentFolder = '{$smarty.request.mailbox}';
-{else}	
-	var gCurrentFolder = 'INBOX';
-{/if}
-{literal}
-function makeSelected(rowId)
-{
-	if(gselected_mail != '')
-		$(gselected_mail).className = '';
-		
-	$(rowId).className = 'mailSelected_select';
-	gselected_mail = rowId;
-}
-{/literal}
-</script>
 <!-- END -->
