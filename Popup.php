@@ -228,8 +228,11 @@ else
 		else
 			$where_relquery = getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
 	}
-	
-        $query = getListQuery($currentModule,$where_relquery);
+
+		if($currentModule == 'Products')
+        		$where_relquery .=" and discontinued <> 0 ";
+
+	        $query = getListQuery($currentModule,$where_relquery);
 }
 			
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
