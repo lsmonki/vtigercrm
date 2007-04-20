@@ -101,7 +101,7 @@ while ($tmp = array_pop($content['attachtab']))
                         {
 			echo '<hr />';
 			echo '<center>';
-			echo '<img src="index.php?module=Webmails&action=get_img&mail=' . $mailid.'&num=' . $tmp['number'] . '&mime=' . $img_type . '&transfer=' . $tmp['transfer'] . '" />';
+			echo '<img src="index.php?module=Webmails&action=get_img&mail=' . $mailid.'&mailbox='.$mailbox.'&num=' . $tmp['number'] . '&mime=' . $img_type . '&transfer=' . $tmp['transfer'] . '" />';
 			echo '</center>';
 	}                
 }                    

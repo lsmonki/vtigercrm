@@ -424,7 +424,8 @@ function GetPart(&$attach_tab, &$this_part, $part_no, &$display_rfc822)
                 for ($i = 0; $i < count($this_part->parts); $i++)
 	{
                     if ($part_no != ''){
-			if(!strpos($part_no,'.'))
+			$len = strlen($part_no);
+			if(!strpos($part_no,'.',($len-1)))
                      	   $part_no = $part_no . '.';
 		    }
                     // if it's an alternative, we skip the text part to only keep the HTML part
