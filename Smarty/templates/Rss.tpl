@@ -73,7 +73,9 @@ function SaveRssFeeds()
                                         $("status").style.display="none";
 					if(isNaN(parseInt(response.responseText)))
         				{
-				                alert(response.responseText);
+				               var rrt = response.responseText;
+						$("temp_alert").innerHTML = rrt;
+						removeHTMLTags();	
 				                $('rssurl').value = '';
 					}
 					else
@@ -92,11 +94,12 @@ function SaveRssFeeds()
 
 <!-- Contents -->
 {include file="Buttons_List1.tpl"}
+<div id="temp_alert" style="display:none"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
 	<td valign=top align=right width=8><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" valign="top" width="100%" align=center >	
-
+		
 			<!-- RSS Reader UI Starts here--><br>
 				<table width="100%"  border="0" cellspacing="0" cellpadding="5" class="mailClient mailClientBg">
 				<tr>
@@ -228,4 +231,17 @@ function getrssfolders()
                         {rdelim}
                 );
 {rdelim}
+
+
+function removeHTMLTags()
+{ldelim}
+ 	if(document.getElementById && document.getElementById("temp_alert"))
+	{ldelim}
+ 		var strInputCode = document.getElementById("temp_alert").innerHTML;
+ 		var strTagStrippedText = strInputCode.replace(/<\/?[^>]+(>|$)/g, "");
+ 		alert("Output Message:\n" + strTagStrippedText);	
+ 	{rdelim}	
+{rdelim}
+
+
 </script>
