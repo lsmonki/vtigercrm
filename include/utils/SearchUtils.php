@@ -386,33 +386,43 @@ function getAdvSearchfields($module)
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	$tabid = getTabid($module);
+        if($tabid==9)
+                $tabid="9,16";				
 
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
 		$sql = "select * from vtiger_field ";
-		$sql.= " where vtiger_field.tabid=".$tabid." and";
-		$sql.= " vtiger_field.displaytype in (1,2)";
+		$sql.= " where vtiger_field.tabid in(".$tabid.") and";
+		$sql.= " vtiger_field.displaytype in (1,2,3)";
 		if($tabid == 13 || $tabid == 15)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
 		}
-		$sql.= " order by block,sequence";
+		if($tabid == 9 || $tabid==16)
+		{
+			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
+		}
+
+		$sql.= "group by vtiger_field.fieldlabel order by block,sequence";
 	}
 	else
 	{
 		$profileList = getCurrentUserProfileList();
 		$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
-		$sql.= " where vtiger_field.tabid=".$tabid." and";
-		$sql.= " vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0";
+		$sql.= " where vtiger_field.tabid in(".$tabid.") and";
+		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0";
 		$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList;
 		if($tabid == 13 || $tabid == 15)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
 		}
-		$sql .= " order by block,sequence";
+		if($tabid == 9 || $tabid==16)
+		{
+			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
+		}
+		$sql .= " group by vtiger_field.fieldlabel order by block,sequence";
 
 	}
-
 
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
