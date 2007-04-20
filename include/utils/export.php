@@ -134,7 +134,7 @@ function export_all($type)
 			{
 				$value=br2nl_vt($value);
 			}
-			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$value);
+			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "ISO-8859-1"));
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
 		$line = implode("\",\"",$new_arr);
