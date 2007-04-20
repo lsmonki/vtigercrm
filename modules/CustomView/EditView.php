@@ -69,6 +69,7 @@ if($recordid == "")
 	}
 
 	$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
+	$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
 
@@ -126,6 +127,7 @@ else
 	}
 
 	$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
+	$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
 

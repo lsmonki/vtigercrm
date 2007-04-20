@@ -364,12 +364,19 @@ function mandatoryCheck()
 		  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 		   <tbody><tr>
 		    <td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+		     {if $STDCOLUMNSCOUNT neq 0}	
 		    <td style="width: 100px;" nowrap class="dvtSelectedCell" id="pi" onclick="fnLoadCvValues('pi','mi','mnuTab','mnuTab2')">
 		     <b>{$MOD.LBL_STEP_3_TITLE}</b>
 		    </td>
 		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onclick="fnLoadCvValues('mi','pi','mnuTab2','mnuTab')">
 		     <b>{$MOD.LBL_STEP_4_TITLE}</b>
 		    </td>
+		    {else}
+                    <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onload="alert('hiiiiiiii')">
+                     <b>{$MOD.LBL_STEP_4_TITLE}</b>
+                    </td>
+
+                    {/if}	
 		    <td class="dvtTabCache" nowrap style="width:55%;">&nbsp;</td>
 		   </tr>
 		   </tbody>
@@ -378,7 +385,14 @@ function mandatoryCheck()
 	        </tr>
 		<tr>
 		 <td align="left" valign="top">
-		  <div id="mnuTab">
+		{if $STDCOLUMNSCOUNT eq 0}
+                        {assign var=stddiv value="style=display:none"}
+                        {assign var=advdiv value="style=display:block"}
+                {else}
+                        {assign var=stddiv value="style=display:block"}
+                        {assign var=advdiv value="style=display:none"}
+                {/if}
+		  <div id="mnuTab" {$stddiv}>
 		     <table width="100%" cellspacing="0" cellpadding="5" class="dvtContentSpace">
                       <tr><td><br>
 			<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
@@ -429,7 +443,7 @@ function mandatoryCheck()
 		      <tr><td>&nbsp;</td></tr>
             </table>
    </div>
-   <div id="mnuTab2">
+   <div id="mnuTab2" {$advdiv} >
       <table width="100%" cellspacing="0" cellpadding="5" class="dvtContentSpace">
        <tr><td>&nbsp;</td></tr>
        <tr><td class="dvtCellInfo">{$MOD.LBL_AF_HDR1}<br /><br />
