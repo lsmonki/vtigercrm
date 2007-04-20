@@ -288,7 +288,20 @@ else
         $smarty->assign("FILENAME_TEXT", "(".$focus->filename.")");
         $smarty->assign("FILENAME", $focus->filename);
 }
-
+if($ret_error == 1) {
+	$smarty->assign("RET_ERROR",$ret_error);
+	if($ret_toadd != '')
+                $smarty->assign("TO_MAIL",$ret_toadd);
+	$ret_toadd = '';
+	if($ret_subject != '')
+		$smarty->assign("SUBJECT",$ret_subject);
+	if($ret_ccaddress != '')
+        	$smarty->assign("CC_MAIL",$ret_ccaddress);
+	if($ret_bccaddress != '')
+        	$smarty->assign("BCC_MAIL",$ret_bccaddress);
+	if($ret_description != '')
+        	$smarty->assign("DESCRIPTION", $ret_description);
+}
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 

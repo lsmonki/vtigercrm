@@ -169,6 +169,10 @@ $mod_strings = Array(
 'FEATURE_AVAILABLE_INFO' => 'This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait f
 or an update!',
 'DOWNLOAD_CONFIRAMATION' => 'Do you want to download the file ?',
+'LBL_PLEASE_ATTACH' => 'Please give a valid file to attach and try again!',
+'LBL_KINDLY_UPLOAD' => 'Please configure <font color="red">upload_tmp_dir</font> variable in php.ini file.',
+'LBL_EXCEED_MAX' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than ',
+'LBL_BYTES' => ' bytes',
 
 );
 

@@ -62,7 +62,7 @@
 	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<input id="parent_name" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width:99%">&nbsp;
+		<input id="parent_name" name="to_add" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width:99%">&nbsp;
 	</td>
 	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
@@ -98,7 +98,7 @@
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
-        {if $WEBMAIL eq 'true'}
+        {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
                 <td class="cellText" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$SUBJECT}" id="{$elements.2.0}" style="width:99%"></td>
         {else}
                 <td class="cellText" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
@@ -131,7 +131,7 @@
 	{elseif $elements.2.0 eq 'description'}
    <tr>
 	<td colspan="3" align="center" valign="top" height="320">
-        {if $WEBMAIL eq 'true'}
+        {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}

@@ -59,9 +59,46 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Emails();
 
-global $current_user;
+global $current_user,$mod_strings,$app_strings;
 setObjectValuesFromRequest(&$focus);
 //Check if the file is exist or not.
+//$file_name = '';
+$file_name = $_FILES['filename']['name'];//preg_replace('/\s+/', '_', $_FILES['filename']['name']);
+$errorCode =  $_FILES['filename']['error'];
+$errormessage = "";
+if($file_name != '' && $_FILES['filename']['size'] == 0){
+	if($errorCode == 4 || $errorCode == 0)
+	{
+		 if($_FILES['filename']['size'] == 0)
+			 $errormessage = "<B><font color='red'>".$mod_strings['LBL_PLEASE_ATTACH']."</font></B> <br>";
+	}
+	else if($errorCode == 2)
+	{
+		  $errormessage = "<B><font color='red'>".$mod_strings['LBL_EXCEED_MAX'].$upload_maxsize.$mod_strings['LBL_BYTES']." </font></B> <br>";
+	}
+	else if($errorCode == 6)
+	{
+	     $errormessage = "<B>".$mod_strings['LBL_KINDLY_UPLOAD']."</B> <br>" ;
+	}
+	else if($errorCode == 3 )
+	{
+	     if($_FILES['filename']['size'] == 0)
+		     $errormessage = "<b><font color='red'>".$mod_strings['LBL_PLEASE_ATTACH']."</font></b><br>";
+	}
+	else{}
+	if($errormessage != ""){
+		$ret_error = 1;
+		$ret_toadd = $_REQUEST['to_add'];
+		$ret_subject = $_REQUEST['subject'];
+		$ret_ccaddress = $_REQUEST['ccmail'];
+		$ret_bccaddress = $_REQUEST['bccmail'];
+		$ret_description = $_REQUEST['description'];
+		echo $errormessage;
+        	include("EditView.php");	
+		exit();
+	}
+}
+
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
         $file_upload_error = true;
