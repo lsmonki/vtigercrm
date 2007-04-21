@@ -239,7 +239,7 @@ function get_usersid($table_name,$column_name,$search_string)
 */
 
 
-function getValuesforColumns($column_name,$search_string)
+function getValuesforColumns($column_name,$search_string,$criteria='cts')
 {
 	global $log;
 	$log->debug("Entering getValuesforColumns(".$column_name.",".$search_string.") method ...");
@@ -253,17 +253,20 @@ function getValuesforColumns($column_name,$search_string)
 			$x=count($explode_column);	
 			if($x == 1 )
 			{
-				$where=" $val like '%".$search_string ."%'";
+				$where=getSearch_criteria($criteria,$search_string,$val);
 			}
 			else 
 			{
 				$where="(";
 				for($j=0;$j<count($explode_column);$j++)
 				{
-					$where .= $explode_column[$j]." like '%".$search_string."%'";
+					$where .=getSearch_criteria($criteria,$search_string,$explode_column[$j]);
 					if($j != $x-1)
 					{
-						$where .= " or ";
+						if($criteria == 'dcts')
+							$where .= " and ";
+						else
+							$where .= " or ";
 					}
 				}
 				$where.=")";
@@ -638,7 +641,7 @@ function getWhereCondition($currentModule)
 			}
 			elseif(in_array($column_name,$column_array))
                         {
-                                $adv_string .= getValuesforColumns($column_name,$srch_val)." ".$matchtype;
+                                $adv_string .= getValuesforColumns($column_name,$srch_val,$srch_cond)." ".$matchtype;
                         }
 			else
 			{
