@@ -1097,7 +1097,9 @@
 		<field name="cost_factor" type="I" size="11" />
 		<field name="commissionrate" type="N" size="7.3" />
 		<field name="commissionmethod" type="C" size="50" />
-		<field name="discontinued" type="I" size="1" />
+		<field name="discontinued" type="I" size="1">
+			<notnull />
+			<default value="0" />
 		<field name="usageunit" type="C" size="200" />
 		<field name="handler" type="I" size="11" />
 		<field name="currency" type="C" size="200" />
