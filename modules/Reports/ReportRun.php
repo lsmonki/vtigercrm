@@ -590,6 +590,43 @@ class ReportRun extends CRMEntity
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
+		if(date("m") <= 3)
+		{
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")-1));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+		}else if(date("m") > 3 and date("m") <= 6)
+		{
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+
+		}else if(date("m") > 6 and date("m") <= 9)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "04","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "06","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+		}
+		else if(date("m") > 9 and date("m") <= 12)
+		{
+			$nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+			$nFq1 = date("Y-m-d",mktime(0, 0, 0, "03","31",date("Y")+1));
+			$pFq = date("Y-m-d",mktime(0, 0, 0, "07","01",date("Y")));
+			$pFq1 = date("Y-m-d",mktime(0, 0, 0, "09","30",date("Y")));
+			$cFq = date("Y-m-d",mktime(0, 0, 0, "10","01",date("Y")));
+			$cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+
+		}
+
 		if($type == "today" )
 		{
 
@@ -726,19 +763,19 @@ class ReportRun extends CRMEntity
 		elseif($type == "nextfq" )
 		{
 
-			$datevalue[0] = "2005-07-01";
-			$datevalue[1] = "2005-09-30";
+			$datevalue[0] = $nFq;
+			$datevalue[1] = $nFq1;
 		}                        
 		elseif($type == "prevfq" )
 		{
 
-			$datevalue[0] = "2005-01-01";
-			$datevalue[1] = "2005-03-31";
+			$datevalue[0] = $pFq; 
+			$datevalue[1] = $pFq1;
 		}                
 		elseif($type == "thisfq" )
 		{
-			$datevalue[0] = "2005-04-01";
-			$datevalue[1] = "2005-06-30";
+			$datevalue[0] = $cFq;
+			$datevalue[1] = $cFq1;
 		}                
 		else
 		{
