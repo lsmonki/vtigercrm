@@ -40,7 +40,7 @@
 								{foreach name=emailids key=fieldid item=elements from=$MAILINFO}
 								<tr>
 									{if $smarty.foreach.emailids.iteration eq 1}	
-									<td align="center"><input type="checkbox" value="{$fieldid}" name="semail" /></td>
+									<td align="center"><input type="checkbox" checked value="{$fieldid}" name="semail" /></td>
 									{else}
 									<td align="center"><input type="checkbox" value="{$fieldid}" name="semail"  /></td>
 									{/if}
