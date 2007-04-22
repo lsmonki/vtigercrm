@@ -904,7 +904,8 @@ $mod_strings = Array(
 'LBL_FIELDS_TO_BE_SHOWN'=>'Fields to be shown',
 //Added for alerts
 'SPECIFY_FILE_TO_MERGE' => 'Please Specify a File to Merge',
-'FILESIZE_EXCEEDS_INFO' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file',
+'FILESIZE_EXCEEDS_INFO_CONFIG_INC' => 'Sorry, the uploaded file exceeds the maximum file size limit in config.inc.php. Please try a smaller file',
+'FILESIZE_EXCEEDS_INFO_PHP_INI' => 'Sorry, the uploaded file exceeds the maximum file size limit in php.ini. Please try a smaller file',
 'PROBLEMS_IN_FILEUPLOAD' => 'Problems in file upload. Please try again!',
 
 //Added fields for Invoice Number labels
