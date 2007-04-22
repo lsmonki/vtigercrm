@@ -129,7 +129,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 			if($fieldname!='parent_id')
 			{
 				$fld_name=$fieldname;
-
+				if($fieldname == 'contact_id')
+				$name = $app_strings['LBL_CONTACT_LAST_NAME'];
 				//assign the translated string
 				$search_header[$fld_name] = getTranslatedString($name);
 			}
@@ -306,6 +307,12 @@ function BasicSearch($module,$search_field,$search_string)
 		}
 		//Check ends
 		
+               if($module == "Notes" && $search_field == "contact_id")
+	       {
+	                 $module = 'Contacts';
+	                 $search_field = 'lastname';
+	       }
+			
 		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
