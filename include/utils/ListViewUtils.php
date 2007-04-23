@@ -75,6 +75,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				$fieldname = $oCv->list_fields_name[$name];
 			}
 		}
+		if($fieldname == 'accountname')
+		{	
+			$fieldname = 'account_id';
+		}
 		if($j != 0)
 		{
 			$field_list .= ', ';
@@ -123,6 +127,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			if(isset($oCv->list_fields_name))
 			{
 				$fieldname = $oCv->list_fields_name[$name];
+				if($fieldname == 'accountname')
+                		{
+                       	 		$fieldname = 'account_id';
+                		}
+	
 			}else
 			{
 				$fieldname = $focus->list_fields_name[$name];
@@ -198,13 +207,12 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				}
 			}
 																	//added to display vtiger_currency symbol in related listview header
-																	if($name =='Amount' && $relatedlist !='' )
+		if($name =='Amount' && $relatedlist !='' )
 		{
 			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 			$curr_symbol = $rate_symbol['symbol'];
 			$name .=' (in '.$curr_symbol.')';
 		}
-
 		//Added condition to hide the close column in Related Lists
 		if($name == $app_strings['Close'] && $relatedlist != '' && $relatedlist != 'global')
                 {
@@ -491,6 +499,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$fieldname = $oCv->list_fields_name[$name];
 			}
 		}
+		if($fieldname == 'accountname')
+		{
+			$fieldname = 'account_id';
+		}
+
 		if($j != 0)
 		{
 			$field_list .= ', ';
@@ -601,11 +614,14 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				if(isset($oCv->list_fields_name))
 				{
 					$fieldname = $oCv->list_fields_name[$name];
+					if($fieldname == 'accountname')
+                                	{
+                                        	$fieldname = 'account_id';
+                                	}
 				}
 			}
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 			{
-
 
 
 				if($fieldname == '')
