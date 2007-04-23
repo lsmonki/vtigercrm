@@ -899,7 +899,7 @@ var gVTModule = '{$smarty.request.module}';
         var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
 {else}
 	var fieldname = new Array('subject','date_start','time_start','due_date','eventstatus','taskpriority','sendnotification','parent_id','contact_id','reminder_time','recurringtype');
-        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_START_TIME}','{$MOD.LBL_DUE_DATE}','{$MOD.LBL_STATUS}','{$MOD.Priority}','{$MOD.LBL_SENDNOTIFICATION}','{$MOD.LBL_RELATEDTO}','{$MOD.LBL_CONTACT_NAME}','{$MOD.LBL_SENDREMINDER}','{$MOD.Recurrence}');
+        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_TIME_START}','{$MOD.LBL_DUE_DATE}','{$MOD.LBL_STATUS}','{$MOD.Priority}','{$MOD.LBL_SENDNOTIFICATION}','{$MOD.LBL_RELATEDTO}','{$MOD.LBL_CONTACT_NAME}','{$MOD.LBL_SENDREMINDER}','{$MOD.Recurrence}');
         var fielddatatype = new Array('V~M','D~M','T~O','D~M~OTH~GE~date_start~Start Date','V~O','V~O','C~O','I~O','I~O','I~O','O~O');
 {/if}
 </script>
