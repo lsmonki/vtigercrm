@@ -519,43 +519,36 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 {
 	global $log;
 	$log->debug("Entering getSearch_criteria(".$criteria.",".$searchstring.",".$searchfield.") method ...");
+	$searchstring = ltrim(rtrim($searchstring));
 	$where_string = '';
 	switch($criteria)
 	{
 		case 'cts':
 			$where_string = $searchfield." like '%".$searchstring."%' ";
 			if($searchstring == NULL)
-			$where_string = $searchfield." is NULL";
+			$where_string = $searchfield." like ''";
 			break;
 		
 		case 'dcts':
 			$where_string = $searchfield." not like '%".$searchstring."%' ";
 			if($searchstring == NULL)
-			$where_string = $searchfield." is not NULL";
+			$where_string = $searchfield." not like ''";
 			break;
 			
 		case 'is':
 			$where_string = $searchfield." = '".$searchstring."' ";
-			if($searchstring == NULL)
-			$where_string = $searchfield." is NULL";
 			break;
 			
 		case 'isn':
 			$where_string = $searchfield." <> '".$searchstring."' ";
-			if($searchstring == NULL)
-			$where_string = $searchfield." is not NULL";
 			break;
 			
 		case 'bwt':
 			$where_string = $searchfield." like '".$searchstring."%' ";
-			if($searchstring == NULL)
-			$where_string = $searchfield." is NULL";
 			break;
 
 		case 'ewt':
 			$where_string = $searchfield." like '%".$searchstring."' ";
-			if($searchstring == NULL)
-			$where_string = $searchfield." is NULL";
 			break;
 
 		case 'grt':
