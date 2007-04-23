@@ -921,19 +921,17 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
-	
         for (var j=0; j<fieldname.length; j++)
 	{
-
 		if(getObj(fieldname[j]) != null)
 		{
-			if(fieldname[j] == "date_start")
+			if(fieldname[j] == "date_start" || fieldname[j] == "task_date_start" )
 			{
 				var datelabel = fieldlabel[j]
 					var datefield = fieldname[j]
 					var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
-			if(fieldname[j] == "time_start")
+			if(fieldname[j] == "time_start" || fieldname[j] == "task_time_start")
 			{
 				var timelabel = fieldlabel[j]
 					var timefield = fieldname[j]
@@ -944,9 +942,6 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 				var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 					var statuslabel = fieldlabel[j++]
 			}
-		}else
-		{
-			return true;
 		}
 	}
 	if(statusvalue == "Planned")
@@ -974,11 +969,11 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
                chktime.setDate(dd)
                chktime.setHours(hourval)
                chktime.setMinutes(minval)
-                if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
+                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
                         getObj(datefield).focus()
                         return false
                 }
-                else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
+                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
                 {
                         getObj(timefield).focus()
                         return false

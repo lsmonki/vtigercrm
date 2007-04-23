@@ -386,11 +386,11 @@ function getFormValidate(divValidate)
                chktime.setYear(yyyy)
                chktime.setMonth(mm-1)
                chktime.setDate(dd)
-                if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
+                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
                         window.document.QcEditView[datefield].focus()
                         return false
                 }
-                else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
+                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
                 {
                         window.document.QcEditView[timefield].focus()
                         return false

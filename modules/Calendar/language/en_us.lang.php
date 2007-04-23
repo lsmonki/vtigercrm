@@ -170,6 +170,7 @@ $mod_strings = Array(
 'LBL_START_TIME' => 'Start Time',
 'LBL_END_TIME' => 'End Time',
 'LBL_START_DATE'=>'Start Date',
+'LBL_START_TIME'=>'Time Start',
 'LBL_DUE_DATE'=>'Due Date',
 'LBL_START_DATE_TIME'=>'Start Date & Time',
 'LBL_END_DATE_TIME'=>'End Date & Time',

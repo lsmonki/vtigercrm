@@ -113,5 +113,13 @@
                                 VALID_SH_TAX:'Enter valid Taxes for shipping and handling ',
 				ROLE_DRAG_ERR_MSG:'You cannot move a Parent Node under a Child Node',
 				LBL_DEL:'del',
-				VALID_DATA :' Enter Valid Data ,Please try again... '
+				VALID_DATA :' Enter Valid Data ,Please try again... ',
+                                STDFILTER : 'Standard Filters',
+                                STARTDATE : 'Start Date',
+                                ENDDATE : 'End Date',
+                                START_DATE_TIME : 'Start Date & Time',
+                                START_TIME : 'Start Time',
+                                DATE_SHOULDNOT_PAST :'Current date & time for Activities with status as Planned',
+                                TIME_SHOULDNOT_PAST :'Current Time for Activities with status as Planned'
+
                        };

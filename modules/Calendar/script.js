@@ -554,6 +554,25 @@ function check_form()
                                 document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
                         }
                         // Added for Aydin Kurt-Elli requirement END -by Minnie -->
+
+                        //added to check Start Date & Time,if Activity Status is Planned.//start
+                        if(document.EditView.eventstatus.value == "Planned")
+                        {
+                                var currdate=new Date()
+                                var chkdate=new Date()
+                                chkdate.setYear(yyyy)
+                                chkdate.setMonth(mm-1)
+                                chkdate.setDate(dd)
+
+                                if(!compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE"))
+                                {
+                                        getObj("date_start").focus();
+                                        return false;
+                                }
+                                else return true
+                        }
+                        //end
+
 		}	
 		else
 			return false;
