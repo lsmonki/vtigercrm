@@ -654,8 +654,18 @@ $log->info("in getOldFileName  ".$notesid);
       $fieldcolname = $adb->query_result($result1,$i,"columnname");
       $tablename = $adb->query_result($result1,$i,"tablename");
       $fieldname = $adb->query_result($result1,$i,"fieldname");
-	
-      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+
+      //when we don't have entry in the $tablename then we have to avoid retrieve, otherwise adodb error will occur(ex. when we don't have attachment for troubletickets, $result[vtiger_attachments] will not be set so here we should not retrieve)
+      if(isset($result[$tablename]))
+      {
+	      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+      }
+      else
+      {
+	      $adb->println("There is no entry for this entity $record ($module) in the table $tablename");
+	      $fld_value = "";
+      }
+
       $this->column_fields[$fieldname] = $fld_value;
       
 				

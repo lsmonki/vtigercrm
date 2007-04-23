@@ -46,7 +46,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_activity');
-        var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_attachments'=>'attachmentsid');
+        var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid');
 
 	// This is the list of vtiger_fields that are in the lists.
         var $list_fields = Array(
