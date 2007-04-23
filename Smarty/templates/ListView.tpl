@@ -84,7 +84,7 @@ function callSearch(searchtype)
 			{rdelim}
 	       {rdelim}
         );
-
+	return false
 {rdelim}
 function alphabetic(module,url,dataid)
 {ldelim}
@@ -134,7 +134,6 @@ function alphabetic(module,url,dataid)
 </table>
 
 {*<!-- Contents -->*}
-<form name="basicSearch" action="index.php" onsubmit="return false;">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
@@ -142,6 +141,7 @@ function alphabetic(module,url,dataid)
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
+<form name="basicSearch" method="post" action="index.php" onSubmit="return callSearch('Basic');">
 <table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
@@ -180,9 +180,11 @@ function alphabetic(module,url,dataid)
 		</td>
 	</tr>
 </table>
+</form>
 </div>
 <!-- ADVANCED SEARCH -->
 <div id="advSearch" style="display:none;">
+<form name="advSearch" method="post" action="index.php" onSubmit="totalnoofrows();return callSearch('Advanced');">
 		<table  cellspacing=0 cellpadding=5 width=80% class="searchUIAdv1 small" align="center" border=0>
 			<tr>
 					<td class="searchUIName small" nowrap align="left"><span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
@@ -229,8 +231,8 @@ function alphabetic(module,url,dataid)
 			</td>
 		</tr>
 	</table>
-</div>		
 </form>
+</div>		
 {*<!-- Searching UI -->*}
 	 
 	   <!-- PUBLIC CONTENTS STARTS-->

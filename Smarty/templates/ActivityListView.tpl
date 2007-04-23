@@ -82,6 +82,7 @@ function callSearch(searchtype)
 			{rdelim}
 	       {rdelim}
         );
+	return false;
 
 {rdelim}
 function alphabetic(module,url,dataid)
@@ -132,7 +133,6 @@ function alphabetic(module,url,dataid)
 </table>
 
 {*<!-- Contents -->*}
-<form name="basicSearch" action="index.php" onsubmit="return false;">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
