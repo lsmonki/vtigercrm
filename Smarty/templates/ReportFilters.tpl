@@ -174,4 +174,14 @@
     	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
 	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
 </script>
+
+<script>
+for(var i=1;i<=5;i++)
+{
+	var obj=document.getElementById("fcol"+i);
+	if(obj.selectedIndex != 0)
+		updatefOptions(obj, 'fop'+i);
+}
+</script>
+
 {/literal}
