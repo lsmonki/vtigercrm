@@ -536,16 +536,20 @@ class CustomView extends CRMEntity{
 				if (type!="custom")
 				{
 					document.CustomView.startdate.readOnly=true
-						document.CustomView.enddate.readOnly=true
-						getObj("jscal_trigger_date_start").style.visibility="hidden"
-						getObj("jscal_trigger_date_end").style.visibility="hidden"
+					document.CustomView.enddate.readOnly=true
+					getObj("jscal_trigger_date_start").style.visibility="hidden"
+					getObj("jscal_trigger_date_end").style.visibility="hidden"
+					getObj("jscal_trigger_start_format").style.visibility="hidden"
+					getObj("jscal_trigger_end_format").style.visibility="hidden"
 				}
 				else
 				{
 					document.CustomView.startdate.readOnly=false
-						document.CustomView.enddate.readOnly=false
-						getObj("jscal_trigger_date_start").style.visibility="visible"
-						getObj("jscal_trigger_date_end").style.visibility="visible"
+					document.CustomView.enddate.readOnly=false
+					getObj("jscal_trigger_date_start").style.visibility="visible"
+					getObj("jscal_trigger_date_end").style.visibility="visible"
+					getObj("jscal_trigger_start_format").style.visibility="visible"
+					getObj("jscal_trigger_end_format").style.visibility="visible"
 				}
 				if( type == "today" )
 				{
@@ -719,7 +723,6 @@ class CustomView extends CRMEntity{
 			$stdfilterlist["startdate"] = $datefilter[0];
 			$stdfilterlist["enddate"] = $datefilter[1];
 		}
-
 		return $stdfilterlist;
 	}
 
@@ -747,7 +750,6 @@ class CustomView extends CRMEntity{
 			$advft["value"] = $advfilterrow["value"];
 			$advfilterlist[] = $advft;
 		}
-
 		return $advfilterlist;
 	}
 

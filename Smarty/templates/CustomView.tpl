@@ -22,6 +22,7 @@
 <input type="hidden" name="return_module" value="{$RETURN_MODULE}">
 <input type="hidden" name="record" value="{$CUSTOMVIEWID}">
 <input type="hidden" name="return_action" value="{$RETURN_ACTION}">
+<input type="hidden" id="user_dateformat" name="user_dateformat" value="{$DATEFORMAT}">
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['V'] = ['e','n','s','c','k'];
@@ -82,7 +83,10 @@ function mandatoryCheck()
                                 {rdelim}
                                 if(mandatorycheck == true)
                                 {ldelim}
-                                        return true;
+					if(($("stdDateFilter").options[$("stdDateFilter").selectedIndex].value == "custom") && ($("jscal_field_date_start").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0) || ($("jscal_field_date_end").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0))
+						return stdfilterdateValidate();
+					else
+						return true;
                                 {rdelim}else
                                 {ldelim}
                                         mandatorycheck = false;
@@ -372,7 +376,7 @@ function mandatoryCheck()
 		     <b>{$MOD.LBL_STEP_4_TITLE}</b>
 		    </td>
 		    {else}
-                    <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap id="mi" onload="alert('hiiiiiiii')">
+                    <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap id="mi">
                      <b>{$MOD.LBL_STEP_4_TITLE}</b>
                     </td>
 
@@ -409,7 +413,7 @@ function mandatoryCheck()
 			  <tr>
 			     <td align="right" class="dvtCellLabel">{$MOD.Select_Duration} :</td>
 			     <td class="dvtCellInfo">
-			        <select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
+			        <select name="stdDateFilter" id="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
 				{foreach item=duration from=$STDFILTERCRITERIA}
 					<option {$duration.selected} value={$duration.value}>{$duration.text}</option>
 				{/foreach}
@@ -419,22 +423,31 @@ function mandatoryCheck()
 			  <tr>
 			     <td align="right" class="dvtCellLabel">{$MOD.Start_Date} :</td>
 			     <td width="25%" align=left class="dvtCellInfo">
-			     <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{$STARTDATE}">
-			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start">
+			     {if $STDFILTERCRITERIA.0.value eq "custom"}
+				{assign var=img_style value="visibility:visible"}
+				{assign var=msg_style value=""}
+			     {else}
+				{assign var=img_style value="visibility:hidden"}
+				{assign var=msg_style value="readonly"}
+			     {/if}	
+			     <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{$STARTDATE}" {$msg_style}>
+			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start" style={$img_style}>
+			     <span id="jscal_trigger_start_format" style={$img_style}><font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font></span>
 			     <script type="text/javascript">
 			  		Calendar.setup ({ldelim}
-			 		inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+			 		inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 					{rdelim})
 			     </script></td>
 	            	  </tr>
 			  <tr>
 			     <td align="right" class="dvtCellLabel">{$MOD.End_Date} :</td> 
   			     <td width="25%" align=left class="dvtCellInfo">
-			     <input name="enddate" id="jscal_field_date_end" type="text" size="10" class="textField" value="{$ENDDATE}">
-			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end">
+			     <input name="enddate" {$msg_style} id="jscal_field_date_end" type="text" size="10" class="textField" value="{$ENDDATE}">
+			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end" style={$img_style}>
+			     <span id="jscal_trigger_end_format" style={$img_style}><font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font></span>
 			     <script type="text/javascript">
 					Calendar.setup ({ldelim}
-					inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
+					inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
 					{rdelim})
 			     </script></td>
 			  </tr>
@@ -456,7 +469,7 @@ function mandatoryCheck()
 	  <tr><td colspan="3" class="detailedViewHeader"><b>{$MOD.LBL_RULE}</b></td></tr>
 	  
 	  <tr class="dvtCellLabel">
-          <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
+          <td><nobr><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
               <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK1}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -470,10 +483,11 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval1" id="fval1" type="text" size=30 maxlength=80 value="{$VALUE1}">
-            &nbsp;{$MOD.LBL_AND}</td>
+	      <span id="andfcol1">{$AND_TEXT1}</span></nobr>
+            </td>
         </tr>
 	<tr class="dvtCellInfo">
-          <td><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
+          <td><nobr><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
               <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK2}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -487,10 +501,11 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval2" id="fval2" type="text" size=30 maxlength=80 value="{$VALUE2}">
-            &nbsp;{$MOD.LBL_AND}</td>
+	      <span id="andfcol2">{$AND_TEXT2}</span></nobr>
+            </td>
         </tr>
 	<tr class="dvtCellLabel">
-          <td><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
+          <td><nobr><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
               <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK3}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -504,10 +519,11 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval3" id="fval3" type="text" size=30 maxlength=80 value="{$VALUE3}">
-            &nbsp;{$MOD.LBL_AND}</td>
+	      <span id="andfcol3">{$AND_TEXT3}</span></nobr>
+            </td>
         </tr>
 	<tr class="dvtCellInfo">
-          <td><select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
+          <td><nobr><select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
               <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK4}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -521,10 +537,11 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval4" id="fval4" type="text" size=30 maxlength=80 value="{$VALUE4}">
-            &nbsp;{$MOD.LBL_AND}</td>
+	      <span id="andfcol4">{$AND_TEXT4}</span></nobr>
+            </td>
         </tr>
 	<tr class="dvtCellLabel">
-          <td><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
+          <td><nobr><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
               <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK5}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -538,7 +555,8 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval5" id="fval5" type="text" size=30 maxlength=80 value="{$VALUE5}">
-            &nbsp;</td>
+	      <span id="andfcol5">{$AND_TEXT5}</span></nobr>
+            </td>
         </tr>
 
 	  {*section name=advancedFilter start=1 loop=6 step=1}
@@ -635,5 +653,25 @@ function checkDuplicate()
 		return true;
 }
 checkDuplicate();
+function stdfilterdateValidate()
+{
+	if(!dateValidate("startdate",alert_arr.STDFILTER+" - "+alert_arr.STARTDATE,"OTH"))
+	{
+		getObj("startdate").focus()
+		return false;
+	}
+	else if(!dateValidate("enddate",alert_arr.STDFILTER+" - "+alert_arr.ENDDATE,"OTH"))
+	{
+		getObj("enddate").focus()
+		return false;
+	}
+	else
+	{
+		if (!dateComparison("enddate",alert_arr.STDFILTER+" - "+alert_arr.ENDDATE,"startdate",alert_arr.STDFILTER+" - "+alert_arr.STARTDATE,"GE")) {
+                        getObj("enddate").focus()
+                        return false
+                } else return true;
+	}
+}
 {/literal}
 </script>

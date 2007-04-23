@@ -39,7 +39,8 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MODULE",$cv_module);
 $smarty->assign("CVMODULE", $cv_module);
 $smarty->assign("CUSTOMVIEWID",$recordid);
-$smarty->assign("DATAFORMAT",$current_user->date_format);
+$smarty->assign("DATEFORMAT",$current_user->date_format);
+$smarty->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 if($recordid == "")
 {
 	$oCustomView = new CustomView();
@@ -111,8 +112,14 @@ else
 
 	if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
 	{
-		$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
-		$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
+		if($stdfilterhtml[0]['value'] == 'custom')
+		{
+			$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
+			$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
+		}else{
+			$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
+			$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
+		}	
 	}
 
 	$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
@@ -123,7 +130,19 @@ else
 		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
 		$smarty->assign("FOPTION".$i,$advfilterhtml);
 		$smarty->assign("BLOCK".$i,$advcolumnhtml);
+		$col = explode(":",$advfilterlist[$i-1]["columnname"]);
+		$temp_val = explode(",",$advfilterlist[$i-1]["value"]);
+		$and_text = "&nbsp;".$mod_strings['LBL_AND'];
+		if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+		{
+			$val = Array();
+			for($x=0;$x<count($temp_val);$x++)
+				$val[$x] = getDisplayDate(trim($temp_val[$x]));
+			$advfilterlist[$i-1]["value"] = implode(", ",$val);
+			$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
+		}
 		$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
+		$smarty->assign("AND_TEXT".$i,$and_text);
 	}
 
 	$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);

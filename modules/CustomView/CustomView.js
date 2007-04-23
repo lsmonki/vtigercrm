@@ -20,6 +20,24 @@ function updatefOptions(sel, opSelName) {
 
     var currOption = selObj.options[selObj.selectedIndex];
     var currField = sel.options[sel.selectedIndex];
+    
+    var fld = currField.value.split(":");
+    var tod = fld[4];
+    if(fld[4] == 'D' || (fld[4] == 'T' && fld[1] != 'time_start' && fld[1] != 'time_end') || fld[4] == 'DT')
+    {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;";
+    }
+    else {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "&nbsp;";
+    } 	
 
     if(currField.value != null && currField.value.length != 0)
     {

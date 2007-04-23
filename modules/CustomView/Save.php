@@ -55,8 +55,13 @@ if($cvmodule != "")
 	$stdcriteria = $_REQUEST["stdDateFilter"];
 	$std_filter_list["stdfilter"] = $stdcriteria;
 	$startdate = $_REQUEST["startdate"];
-	$std_filter_list["startdate"] = $startdate;
 	$enddate = $_REQUEST["enddate"];
+	if($stdcriteria == "custom")
+	{
+		$startdate = getDBInsertDateValue($startdate);
+		$enddate = getDBInsertDateValue($enddate);
+	}
+	$std_filter_list["startdate"] = $startdate;
 	$std_filter_list["enddate"]=$enddate;
 	//<<<<<<<standardfilters>>>>>>>>>
 
@@ -69,7 +74,6 @@ if($cvmodule != "")
            	$adv_filter_col[] = $_REQUEST[$allKeys[$i]];
    	   }
 	}
-
 	for ($i=0;$i<count($allKeys);$i++)
 	{
 	   $string = substr($allKeys[$i], 0, 3);
@@ -140,6 +144,15 @@ if($cvmodule != "")
 					}
 					for($i=0;$i<count($adv_filter_col);$i++)
 					{
+						$col = explode(":",$adv_filter_col[$i]);
+						$temp_val = explode(",",$adv_filter_value[$i]);
+						if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+						{
+							$val = Array();
+							for($x=0;$x<count($temp_val);$x++)
+								$val[$x] = getDBInsertDateValue(trim($temp_val[$x]));
+							$adv_filter_value[$i] = implode(", ",$val);
+						}
 						$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,
@@ -216,6 +229,16 @@ if($cvmodule != "")
 				}
 				for($i=0;$i<count($adv_filter_col);$i++)
 				{
+					$col = explode(":",$adv_filter_col[$i]);
+					$temp_val = explode(",",$adv_filter_value[$i]);
+					if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+					{
+						$val = Array();
+						for($x=0;$x<count($temp_val);$x++){
+							$val[$x] = getDBInsertDateValue(trim($temp_val[$x]));
+						}
+						$adv_filter_value[$i] = implode(", ",$val);	
+					}
 					$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,
