@@ -47,13 +47,13 @@ function getviewId()
 	}
 	return viewid;	
 }
+var gstart='';
 function massDelete(module)
 {
 		var select_options  =  document.getElementsByName('selected_id');
 		var x = select_options.length;
 		var viewid =getviewId();		
 		idstring = "";
-
         xx = 0;
         for(i = 0; i < x ; i++)
         {
@@ -81,13 +81,12 @@ function massDelete(module)
 
 		if(confirm(alert_str))
 		{
-			
 			$("status").style.display="inline";
 			new Ajax.Request(
           	  	      'index.php',
 			      	{queue: {position: 'end', scope: 'command'},
 		                        method: 'post',
-                		        postBody:"module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring,
+                		        postBody:"module=Users&action=massdelete&return_module="+module+"&"+gstart+"&viewname="+viewid+"&idlist="+idstring,
 		                        onComplete: function(response) {
         	        	                $("status").style.display="none";
                 	        	        result = response.responseText.split('&#&#&#');
@@ -138,6 +137,8 @@ function getListViewEntries_js(module,url)
                 urlstring = $('search_url').value;
 	else
 		urlstring = '';
+
+	gstart = url;
         new Ajax.Request(
         	'index.php',
                 {queue: {position: 'end', scope: 'command'},
