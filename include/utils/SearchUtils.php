@@ -264,7 +264,7 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 					$where .=getSearch_criteria($criteria,$search_string,$explode_column[$j]);
 					if($j != $x-1)
 					{
-						if($criteria == 'dcts')
+						if($criteria == 'dcts' || $criteria == 'isn')
 							$where .= " and ";
 						else
 							$where .= " or ";
