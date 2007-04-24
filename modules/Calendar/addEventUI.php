@@ -658,7 +658,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<?php }?>		
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
 				<a href="javascript:;" id="postpone" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-				<a href="javascript:;" id="changeowner" onClick="fnvshobj(this,'act_changeowner');fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="javascript:;" id="changeowner" onClick="cal_fnvshobj(this,'act_changeowner');fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
 				<?php
 				}
 				if(isPermitted("Calendar","Delete") == "yes")	
@@ -940,7 +940,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 						
                                 <span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
                                 <a href="" id="taskpostpone" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-                                <a href="" id="taskchangeowner" onClick="fnvshobj(this,'act_changeowner'); fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+                                <a href="" id="taskchangeowner" onClick="cal_fnvshobj(this,'act_changeowner'); fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
                                 <?php
                                 }
                                 if(isPermitted("Calendar","Delete") == "yes")

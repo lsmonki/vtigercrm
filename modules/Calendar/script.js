@@ -1439,3 +1439,13 @@ function calDuedatetime(type)
         }
 }
 
+function cal_fnvshobj(obj,Lay){
+    var tagName = document.getElementById(Lay);
+    var leftSide = findPosX(obj);
+    var topSide = findPosY(obj);
+    tagName.style.left = 550 + 'px';
+    tagName.style.top= (topSide - 100) + 'px';
+    tagName.style.display = 'block';
+    tagName.style.visibility = "visible";
+}
+
