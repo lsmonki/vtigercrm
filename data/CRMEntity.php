@@ -399,11 +399,11 @@ class CRMEntity
 			  {
 				  if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
 				  {
-					  $fldvalue = 1;
+					  $fldvalue = '1';
 				  }
 				  else
 				  {
-					  $fldvalue = 0;
+					  $fldvalue = '0';
 				  }
 
 			  }
@@ -451,10 +451,6 @@ class CRMEntity
 			  $fldvalue = '';
 		  }
 		  if($fldvalue=='') $fldvalue ="NULL";
-		  
-		 if($columname == 'discontinued' && $fldvalue=='NULL')
-		 $fldvalue = '0';
-		 
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')

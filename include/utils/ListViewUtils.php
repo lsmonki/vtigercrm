@@ -1926,7 +1926,9 @@ function getListQuery($module,$where='')
 			INNER JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
 			LEFT JOIN vtiger_vendor
-				ON vtiger_vendor.vendorid = vtiger_products.vendor_id	
+				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+			LEFT JOIN vtiger_users
+                                ON vtiger_users.id = vtiger_products.handler
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Notes":
@@ -1978,6 +1980,8 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_customerdetails
+				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)

@@ -2837,5 +2837,26 @@ function getmail_contents_portalUser($request_array,$password)
 
 }
 
+/**
+ * Function to get the UItype for a field.
+ * Takes the input as $module - module name,and columnname of the field
+ * returns the uitype, integer type
+ */
+
+function getUItype($module,$columnname)
+{
+        global $log;
+        $log->debug("Entering getUItype(".$module.") method ...");
+	//To find tabid for this module
+	$tabid=getTabid($module);
+        global $adb;
+        $sql = "select uitype from vtiger_field where tabid=".$tabid." and columnname='".$columnname."'";
+        $result = $adb->query($sql);
+        $uitype =  $adb->query_result($result,0,"uitype");
+        $log->debug("Exiting getUItype method ...");
+        return $uitype;
+
+}
+
 
 ?>
