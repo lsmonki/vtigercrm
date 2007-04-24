@@ -305,7 +305,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		{
 			$entries[] = "";
 		}
-		
+		$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
 		if(strlen($row['description']) > 40)
 		{
 			$row['description'] = substr($row['description'],0,40).'...';

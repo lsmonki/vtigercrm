@@ -1082,12 +1082,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	$temp_val = $field_val;
+	$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
         if(strlen($field_val) > 40)
         {
-                $temp_val = substr($field_val,0,40).'...';
+		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,40).'...';
         }
-
 	if($uitype == 53)
 	{
 		$value = $adb->query_result($list_result,$list_result_count,'user_name');
