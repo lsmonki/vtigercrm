@@ -102,14 +102,16 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				INNER JOIN vtiger_profile2field
 					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 				INNER JOIN vtiger_def_org_field
-					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-				WHERE vtiger_field.tabid = ".$tabid."
-				AND vtiger_profile2field.visible = 0
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
+				if($module == "Calendar")
+					$query .=" WHERE vtiger_field.tabid in (9,16)";
+				else
+					$query .=" WHERE vtiger_field.tabid =".$tabid;
+			$query.=" AND vtiger_profile2field.visible = 0
 				AND vtiger_def_org_field.visible = 0
 				AND vtiger_profile2field.profileid IN ".$profileList."
 				AND vtiger_field.fieldname IN ".$field_list;
 		}
-
 		$result = $adb->query($query);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -221,7 +223,17 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 		else
 		{
-			$list_header[]=$name;
+			if($module == "Calendar" && $name == $app_strings['Close'])
+			{
+				if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+				{
+					array_push($list_header,$name);
+				}
+			}
+			else
+			{
+				$list_header[]=$name;
+			}
 		}
 	}
      }
@@ -777,7 +789,15 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				else
 				{
-					$list_header[] = $value;
+					if($module == "Calendar" && $name == $app_strings['Close'])
+					{
+						if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+						{
+							array_push($list_header,$value);
+						}
+					}
+					else
+						$list_header[] = $value;
 				}
 				if($fieldname=='filename')
 				{

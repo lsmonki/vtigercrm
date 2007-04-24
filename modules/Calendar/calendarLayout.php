@@ -1334,14 +1334,22 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
-		$element['relatedto']= getRelatedTo('Calendar',$result,$i);
+		if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0')
+		{
+			$element['relatedto']= getRelatedTo('Calendar',$result,$i);
+		}
+
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\",\"".$idShared."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
-        	$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
+		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
+		{
+			$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
+		}
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
 		else
 			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
+
 	$Entries[] = $element;
 	
 	}
@@ -1442,9 +1450,18 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$status = $adb->query_result($result,$i,"status");
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Task&viewtype=calendar&parenttab=".$category."' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
-		$element['task_relatedto'] = getRelatedTo('Calendar',$result,$i); 
-		$element['task_contact'] = "<a href=\"index.php?module=Contacts&action=DetailView&record=".$contact_id."\">".$contact_name."</a>"; 
-		$element['status'] = $adb->query_result($result,$i,"status");
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			$element['task_relatedto'] = getRelatedTo('Calendar',$result,$i);
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			$element['task_contact'] = "<a href=\"index.php?module=Contacts&action=DetailView&record=".$contact_id."\">".$contact_name."</a>";
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			$element['status'] = $adb->query_result($result,$i,"status");
+		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\",\"normal\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$assignedto = $adb->query_result($result,$i,"user_name");
@@ -1516,30 +1533,32 @@ function constructEventListView(& $cal,$entry_list)
                         '1'=>$start_datetime,
                         '2'=>$end_datetime,
                         '3'=>$mod_strings['LBL_EVENTTYPE'],
-                        '4'=>$mod_strings['LBL_EVENTDETAILS'],
-			'5'=>$mod_strings['LBL_RELATEDTO'],
-                        );
-                                if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-                                {
-                                        array_push($header,$mod_strings['LBL_ACTION']);
-                                }
-
-                                array_push($header,$mod_strings['LBL_STATUS'],$mod_strings['LBL_ASSINGEDTO']);
-        $header_width = Array('0'=>'5%',
-                              '1'=>'10%',
-                              '2'=>'10%',
-                              '3'=>'10%',
-                              '4'=>'28%',
-			      '5'=>'15%',	
-                             );
-
-                              if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-                              {
-
-                                        array_push($header_width,'10%');
-                              }
-                              array_push($header_width,'10%','15%');
-
+                        '4'=>$mod_strings['LBL_EVENTDETAILS']
+			);
+	$header_width = Array('0'=>'5%',
+			      '1'=>'10%',
+			      '2'=>'10%',
+			      '3'=>'10%',
+			      '4'=>'28%'
+		             );
+	if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0')
+	{
+		array_push($header,$mod_strings['LBL_RELATEDTO']);
+		array_push($header_width,'15%');
+	}
+	if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+	{
+		array_push($header,$mod_strings['LBL_ACTION']);
+		 array_push($header_width,'10%');
+	}
+	if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
+	{
+		array_push($header,$mod_strings['LBL_STATUS']);
+		array_push($header_width,'$10%');
+	}
+	array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+	array_push($header_width,'15%');
+	
         $list_view .="<table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         <tr>";
 	$header_rows = count($header);
@@ -1627,18 +1646,31 @@ function constructTodoListView($todo_list,$cal,$subtab)
 	{
 		$colspan = 9;
 		$header = Array('0'=>'#','1'=>$mod_strings['LBL_TIME'],'2'=>$mod_strings['LBL_LIST_DUE_DATE'],
-				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_RELATEDTO'],'5'=>$mod_strings['LBL_CONTACT_NAME'],'6'=>$mod_strings['LBL_STATUS']);
-				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-	                        {
-				array_push($header,$mod_strings['LBL_ACTION']);
-				}
-				array_push($header,$mod_strings['LBL_ASSINGEDTO']);
-		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%','4'=>'15%','5'=>'15%','6'=>'10%',);
-				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-                                {
-                                array_push($header_width,'10%');
-                                }
-                                array_push($header_width,'15%');
+				'3'=>$mod_strings['LBL_TODO']);
+		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%',);		
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_RELATEDTO']);
+			array_push($header_width,'15%');
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_CONTACT_NAME']);
+			array_push($header_width,'15%');
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			array_push($header,$mod_strings['LBL_STATUS']);
+			array_push($header_width,'10%');
+		}
+
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+		{
+			array_push($header,$mod_strings['LBL_ACTION']);
+			array_push($header_width,'10%');
+		}
+		array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+		array_push($header_width,'15%');
 	}
 	else
 	{
@@ -1647,31 +1679,36 @@ function constructTodoListView($todo_list,$cal,$subtab)
                         '1'=>$mod_strings['LBL_TIME'],
 			'2'=>$mod_strings['LBL_START_DATE'],
 			'3'=>$mod_strings['LBL_DUE_DATE'],
-                        '4'=>$mod_strings['LBL_TODO'],
-			'5'=>$mod_strings['LBL_RELATEDTO'],
-			'6'=>$mod_strings['LBL_CONTACT_NAME'],
-			'7'=>$mod_strings['LBL_STATUS'],
+                        '4'=>$mod_strings['LBL_TODO']
 			);
-			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-			{
-                        	array_push($header,$mod_strings['LBL_ACTION']);
-			}
-			array_push($header,$mod_strings['LBL_ASSINGEDTO']);
-        	$header_width = Array('0'=>'5%',
-                              '1'=>'10%',
-                              '2'=>'10%',
-                              '3'=>'10%',
-                              '4'=>'28%',
-                              '5'=>'15%',
-                              '6'=>'15%',
-			      '7'=>'10%',	
-			       );
-			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-                        {
-                        array_push($header_width,'10%');
-                        }
+		$header_width = Array('0'=>'5%',
+			'1'=>'10%',
+			'2'=>'10%',
+			'3'=>'10%',
+			'4'=>'28%'
+			);
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_RELATEDTO']);
 			array_push($header_width,'15%');
-	
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_CONTACT_NAME']);
+			array_push($header_width,'15%');
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			array_push($header,$mod_strings['LBL_STATUS']);
+			array_push($header_width,'10%');
+		}
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+		{
+			array_push($header,$mod_strings['LBL_ACTION']);
+		}
+		array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+		array_push($header_width,'15%');
+		
 	}
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
