@@ -1,13 +1,13 @@
 <?php
 
 /*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
+ *
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
@@ -19,6 +19,11 @@ $idval=$_REQUEST['user_id'];
 $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['return_module'];
 $return_action = $_REQUEST['return_action'];
+global $rstart;
+if(isset($_REQUEST['start']) && $_REQUEST['start']!='')
+	{
+	$rstart="&start=".$_REQUEST['start'];
+	}
 $module_array = array (
                           'Leads' => 'updateLeadGroupRelation',
                           'Accounts' => 'updateAccountGroupRelation',
@@ -131,7 +136,6 @@ if(count($ids_list) > 0)
 {
         $errormsg = '';
 }
-
 if($return_action == 'ActivityAjax')
 {
 	$view       = $_REQUEST['view'];
@@ -141,11 +145,12 @@ if($return_action == 'ActivityAjax')
 	$type       = $_REQUEST['type'];
 	$viewOption = $_REQUEST['viewOption'];
 	$subtab     = $_REQUEST['subtab'];
-	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
+	
+	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type.$rstart."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
 }
 else
 {
-	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate&viewname=".$viewid."&errormsg=".$errormsg);
+	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate".$rstart."&viewname=".$viewid."&errormsg=".$errormsg);
 }
 				
 

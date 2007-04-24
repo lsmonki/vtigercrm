@@ -402,10 +402,18 @@ function getNavigationValues($display, $noofrows, $limit)
 		$log->debug("Exiting getNavigationValues method ...");
 		return $navigation_array;
 	}
-	if($noofrows != 0)
-	$start = ((($display * $limit) - $limit)+1);
-	else
-	$start = 0;
+	 if($noofrows != 0)
+        {
+                if(((($display * $limit)-$limit)+1) > $noofrows)
+                {
+                        $display =floor($noofrows / $limit);
+                }
+                $start = ((($display * $limit) - $limit)+1);
+        }
+        else
+        {
+                $start = 0;
+        }
 	
 	$end = $start + ($limit-1);
 	if($end > $noofrows)
@@ -1928,7 +1936,7 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
 			LEFT JOIN vtiger_users
-                                ON vtiger_users.id = vtiger_products.handler
+				ON vtiger_users.id = vtiger_products.handler
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Notes":
@@ -3129,6 +3137,14 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 	{
 		$lv_array['start']=$_REQUEST['start'];
 		$start = $_REQUEST['start'];
+	}elseif($_SESSION['rlvs'][$module][$related]['start'] != '')
+	{
+		
+		if($related!='')
+		{
+			$lv_array['start']=$_SESSION['rlvs'][$module][$related]['start'];
+			$start = $_SESSION['rlvs'][$module][$related]['start'];
+		}
 	}
 	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
 		$lv_array['viewname']=$_REQUEST['viewname'];

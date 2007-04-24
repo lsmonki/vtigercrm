@@ -142,7 +142,8 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
 	}	
 	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
-	$url_qry .="&order_by=".$order_by;
+	
+	$url_qry .="&order_by=".$order_by."&sorder=".$sorder;
 	//Added for PHP version less than 5
 	if (!function_exists("stripos"))
 	{
