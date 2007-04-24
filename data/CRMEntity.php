@@ -451,6 +451,10 @@ class CRMEntity
 			  $fldvalue = '';
 		  }
 		  if($fldvalue=='') $fldvalue ="NULL";
+		  
+		 if($columname == 'discontinued' && $fldvalue=='NULL')
+		 $fldvalue = '0';
+		 
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
