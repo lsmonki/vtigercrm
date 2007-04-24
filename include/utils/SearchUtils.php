@@ -16,8 +16,8 @@ require_once('include/database/Postgres8.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contact_id','product_id','campaignid','quoteid','vendorid','potentialid','salesorderid','vendor_id','contactid');
-$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname','vtiger_quotes.subject','vtiger_vendor.vendorname','vtiger_potential.potentialname','vtiger_salesorder.subject','vtiger_vendor.vendorname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname');
+$column_array=array('accountid','contact_id','product_id','campaignid','quoteid','vendorid','potentialid','salesorderid','vendor_id','contactid','handler');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname','vtiger_quotes.subject','vtiger_vendor.vendorname','vtiger_potential.potentialname','vtiger_salesorder.subject','vtiger_vendor.vendorname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_users.user_name');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
@@ -610,7 +610,19 @@ function getWhereCondition($currentModule)
 			$srch_val = iconv("UTF-8",$default_charset,$srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
-			if($tab_col == "vtiger_crmentity.smownerid")
+			$uitype=getUItype($currentModule,$column_name);
+			//added to allow  search in check box type fields(ex: product active. it will contain 0 or 1) using yes or no instead of 0 or 1
+			if ($uitype == 56)
+			{
+				if(stristr($srch_val,'yes'))
+                                        $adv_string .= " ".getSearch_criteria($srch_cond,"1",$tab_name.'.'.$column_name)." ".$matchtype;
+                                if(stristr($srch_val,'no'))
+                                        $adv_string .= " ".getSearch_criteria($srch_cond,"0",$tab_name.'.'.$column_name)." ".$matchtype;
+	
+
+			}
+
+			elseif($tab_col == "vtiger_crmentity.smownerid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_users.user_name')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_groups.groupname')." )".$matchtype;	
@@ -624,20 +636,6 @@ function getWhereCondition($currentModule)
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.firstname')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_contactdetails.lastname')." )".$matchtype;	
-			}
-			elseif($tab_col == "vtiger_pricebook.active")
-			{
-				if(stristr($srch_val,'yes'))
-					$adv_string .= " ".getSearch_criteria($srch_cond,"1",'vtiger_pricebook.active')." ".$matchtype;	
-				if(stristr($srch_val,'no'))
-					$adv_string .= " ".getSearch_criteria($srch_cond,NULL,'vtiger_pricebook.active')." ".$matchtype;	
-			}
-			elseif($tab_col == "vtiger_activity.sendnotification")
-			{
-				if(stristr($srch_val,'yes'))
-					$adv_string .= " ".getSearch_criteria($srch_cond,"1",'vtiger_activity.sendnotification')." ".$matchtype;
-				if(stristr($srch_val,'no'))
-					$adv_string .= " ".getSearch_criteria($srch_cond,"0",'vtiger_activity.sendnotification')." ".$matchtype;
 			}
 			elseif(in_array($column_name,$column_array))
                         {
