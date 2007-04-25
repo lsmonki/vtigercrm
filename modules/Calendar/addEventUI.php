@@ -206,7 +206,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="dateformat" value="<?php echo $date_format ?>">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
-			<td class="layerPopupHeading" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
+			<td class="layerPopupHeading" align = "left" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
@@ -702,7 +702,7 @@ function getAssignedToHTML($assignedto,$toggletype)
   <input type="hidden" name="maintab" value="Calendar">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
-                	<td class="lvtHeaderText" id="moveTodo"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
+                	<td class="lvtHeaderText" id="moveTodo" align="left"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
 			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
