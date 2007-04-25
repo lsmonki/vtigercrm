@@ -616,167 +616,167 @@ class Reports extends CRMEntity{
 				if (type!="custom")
 				{
 					document.NewReport.startdate.readOnly=true
-						document.NewReport.enddate.readOnly=true
-						getObj("jscal_trigger_date_start").style.visibility="hidden"
-						getObj("jscal_trigger_date_end").style.visibility="hidden"
+					document.NewReport.enddate.readOnly=true
+					getObj("jscal_trigger_date_start").style.visibility="hidden"
+					getObj("jscal_trigger_date_end").style.visibility="hidden"
 				}
 				else
 				{
 					document.NewReport.startdate.readOnly=false
-						document.NewReport.enddate.readOnly=false
-						getObj("jscal_trigger_date_start").style.visibility="visible"
-						getObj("jscal_trigger_date_end").style.visibility="visible"
+					document.NewReport.enddate.readOnly=false
+					getObj("jscal_trigger_date_start").style.visibility="visible"
+					getObj("jscal_trigger_date_end").style.visibility="visible"
 				}
 				if( type == "today" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "yesterday" )
 				{
 
-					document.NewReport.startdate.value = "'.$yesterday.'";
-					document.NewReport.enddate.value = "'.$yesterday.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($yesterday).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($yesterday).'";
 				}
 				else if( type == "tomorrow" )
 				{
 
-					document.NewReport.startdate.value = "'.$tomorrow.'";
-					document.NewReport.enddate.value = "'.$tomorrow.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($tomorrow).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($tomorrow).'";
 				}        
 				else if( type == "thisweek" )
 				{
 
-					document.NewReport.startdate.value = "'.$thisweek0.'";
-					document.NewReport.enddate.value = "'.$thisweek1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($thisweek0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($thisweek1).'";
 				}                
 				else if( type == "lastweek" )
 				{
 
-					document.NewReport.startdate.value = "'.$lastweek0.'";
-					document.NewReport.enddate.value = "'.$lastweek1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($lastweek0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($lastweek1).'";
 				}                
 				else if( type == "nextweek" )
 				{
 
-					document.NewReport.startdate.value = "'.$nextweek0.'";
-					document.NewReport.enddate.value = "'.$nextweek1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($nextweek0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($nextweek1).'";
 				}                
 
 				else if( type == "thismonth" )
 				{
 
-					document.NewReport.startdate.value = "'.$currentmonth0.'";
-					document.NewReport.enddate.value = "'.$currentmonth1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($currentmonth0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($currentmonth1).'";
 				}                
 
 				else if( type == "lastmonth" )
 				{
 
-					document.NewReport.startdate.value = "'.$lastmonth0.'";
-					document.NewReport.enddate.value = "'.$lastmonth1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($lastmonth0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($lastmonth1).'";
 				}             
 				else if( type == "nextmonth" )
 				{
 
-					document.NewReport.startdate.value = "'.$nextmonth0.'";
-					document.NewReport.enddate.value = "'.$nextmonth1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($nextmonth0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($nextmonth1).'";
 				}           
 				else if( type == "next7days" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$next7days.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($next7days).'";
 				}                
 				else if( type == "next30days" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$next30days.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($next30days).'";
 				}                
 				else if( type == "next60days" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$next60days.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($next60days).'";
 				}                
 				else if( type == "next90days" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$next90days.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($next90days).'";
 				}        
 				else if( type == "next120days" )
 				{
 
-					document.NewReport.startdate.value = "'.$today.'";
-					document.NewReport.enddate.value = "'.$next120days.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($today).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($next120days).'";
 				}        
 				else if( type == "last7days" )
 				{
 
-					document.NewReport.startdate.value = "'.$last7days.'";
-					document.NewReport.enddate.value =  "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($last7days).'";
+					document.NewReport.enddate.value =  "'.getDisplayDate($today).'";
 				}                        
 				else if( type == "last30days" )
 				{
 
-					document.NewReport.startdate.value = "'.$last30days.'";
-					document.NewReport.enddate.value = "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($last30days).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($today).'";
 				}                
 				else if( type == "last60days" )
 				{
 
-					document.NewReport.startdate.value = "'.$last60days.'";
-					document.NewReport.enddate.value = "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($last60days).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($today).'";
 				}        
 				else if( type == "last90days" )
 				{
 
-					document.NewReport.startdate.value = "'.$last90days.'";
-					document.NewReport.enddate.value = "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($last90days).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($today).'";
 				}        
 				else if( type == "last120days" )
 				{
 
-					document.NewReport.startdate.value = "'.$last120days.'";
-					document.NewReport.enddate.value = "'.$today.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($last120days).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($today).'";
 				}        
 				else if( type == "thisfy" )
 				{
 
-					document.NewReport.startdate.value = "'.$currentFY0.'";
-					document.NewReport.enddate.value = "'.$currentFY1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($currentFY0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($currentFY1).'";
 				}                
 				else if( type == "prevfy" )
 				{
 
-					document.NewReport.startdate.value = "'.$lastFY0.'";
-					document.NewReport.enddate.value = "'.$lastFY1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($lastFY0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($lastFY1).'";
 				}                
 				else if( type == "nextfy" )
 				{
 
-					document.NewReport.startdate.value = "'.$nextFY0.'";
-					document.NewReport.enddate.value = "'.$nextFY1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($nextFY0).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($nextFY1).'";
 				}                
 				else if( type == "nextfq" )
 				{
 
-					document.NewReport.startdate.value = "'.$nFq.'";
-					document.NewReport.enddate.value = "'.$nFq1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($nFq).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($nFq1).'";
 				}                        
 				else if( type == "prevfq" )
 				{
 
-					document.NewReport.startdate.value = "'.$pFq.'";
-					document.NewReport.enddate.value = "'.$pFq1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($pFq).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($pFq1).'";
 				}                
 				else if( type == "thisfq" )
 				{
-					document.NewReport.startdate.value = "'.$cFq.'";
-					document.NewReport.enddate.value = "'.$cFq1.'";
+					document.NewReport.startdate.value = "'.getDisplayDate($cFq).'";
+					document.NewReport.enddate.value = "'.getDisplayDate($cFq1).'";
 				}                
 				else
 				{

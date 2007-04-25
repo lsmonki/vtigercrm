@@ -43,8 +43,8 @@ $folderid = $_REQUEST["folder"];
 //<<<<<<<standarfilters>>>>>>>>>
 $stdDateFilterField = $_REQUEST["stdDateFilterField"];
 $stdDateFilter = $_REQUEST["stdDateFilter"];
-$startdate = $_REQUEST["startdate"];
-$enddate = $_REQUEST["enddate"];
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>

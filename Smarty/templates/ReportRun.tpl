@@ -109,7 +109,14 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+							{rdelim});
+						</script>
+
+					</td>
 				</tr>
 				</table>
 			</td>
@@ -118,7 +125,13 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
+							{rdelim});
+						</script>
+					</td>
 				</tr>
 				</table>
 			</td>
@@ -163,8 +176,6 @@ var filter = getObj('stdDateFilter').options[document.NewReport.stdDateFilter.se
         showDateRange( filter );
     }
 
-Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
-    Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
 function generateReport(id)
 {
 	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;

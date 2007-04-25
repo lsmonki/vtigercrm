@@ -397,24 +397,23 @@ function changeSteps1()
 {
 	if(getObj('step5').style.display != 'none')
 	{
-	var date1=getObj("startdate")
-	var date2=getObj("enddate")
+		var date1=getObj("startdate")
+		var date2=getObj("enddate")
 
+		//# validation added for date field validation in final step of report creation
+		if ((date1.value != '') || (date2.value != ''))
+		{
 
-//# validation added for date field validation in final step of report creation
-if ((date1.value != '') || (date2.value != ''))
-{
-
-	if(!dateValidate("startdate","Start Date","D"))
-                return false
+		if(!dateValidate("startdate","Start Date","D"))
+        	        return false
 	
-	if(!dateValidate("enddate","End Date","D"))
-                return false
+		if(!dateValidate("enddate","End Date","D"))
+        	        return false
 	
-	if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
-		return false;
-}	
-	saveAndRunReport();
+		if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
+			return false;
+		}	
+		saveAndRunReport();
 
 	}else
 	{
