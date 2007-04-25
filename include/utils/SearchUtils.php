@@ -345,14 +345,8 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			elseif($table_name == "vtiger_activity" && $column_name == "status")
 			{
-				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
+				$where="($table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%')";
 			}
-			
-			elseif($table_name == "vtiger_activity" && $column_name == "status")
-			{
-				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
-			}
-
 			else if(in_array($column_name,$column_array))
 			{
 				$where = getValuesforColumns($column_name,$search_string);
