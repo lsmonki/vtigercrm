@@ -330,7 +330,17 @@ function BasicSearch($module,$search_field,$search_string)
 				
 			//Check ends
 			$table_name=$adb->query_result($result,0,'tablename');
-			if($table_name == "vtiger_crmentity" && $column_name == "smownerid")
+			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
+			$uitype=getUItype($module,$column_name);
+			if ($uitype == 56)
+			{
+				if(stristr($search_string,'yes'))
+					$where="$table_name.$column_name = '1'";
+				if(stristr($search_string,'no'))
+					$where="$table_name.$column_name = '0'";
+
+			}
+			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);
 			}
@@ -338,20 +348,7 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
 			}
-			elseif($table_name == "vtiger_activity" && $column_name == "sendnotification")
-			{
-				if(stristr($search_string,'yes'))
-					$where="$table_name.$column_name = 1";
-				if(stristr($search_string,'no'))
-					$where="$table_name.$column_name = 0";
-			}
-			elseif($table_name == "vtiger_pricebook" && $column_name == "active")
-			{
-				if(stristr($search_string,'yes'))
-					$where="$table_name.$column_name = 1";
-				if(stristr($search_string,'no'))
-					$where="$table_name.$column_name is NULL";
-			}
+			
 			elseif($table_name == "vtiger_activity" && $column_name == "status")
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
