@@ -861,6 +861,9 @@ $app_strings = array (
 'LBL_FIRST'=>'First',
 'LBL_LAST'=>'Last',
 
+'LBL_CONTACT_LAST_NAME'=>'Contact - Last Name',
+'LBL_CONTACT_FIRST_NAME'=>'Contact - First Name',
+
 'Office Phone'=>'Office Phone',
 'Sender'=>'Sender',
 'Website'=>'Website',
@@ -872,7 +875,6 @@ $app_strings = array (
 'Lead Status'=>'Lead Status',
 'Lead Source'=>'Lead Source',
 'Quote ID'=>'Quote Id',
-'LBL_CONTACT_LAST_NAME'=>'Contact - Last Name',
 );
 
 $app_list_strings = array (

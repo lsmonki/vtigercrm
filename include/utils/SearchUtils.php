@@ -306,8 +306,7 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		
-               if($module == "Notes" && $search_field == "contact_id")
+		if($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder"  && ($search_field == "contact_id"))
 	       {
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
@@ -389,7 +388,7 @@ function getAdvSearchfields($module)
         $log->debug("Entering getAdvSearchfields(".$module.") method ...");
 	global $adb;
 	global $current_user;	
-	global $mod_strings;
+	global $mod_strings,$app_strings;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	$tabid = getTabid($module);
@@ -473,6 +472,11 @@ function getAdvSearchfields($module)
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
 			elseif($fieldlabel == "Product Code")
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$mod_strings[$fieldlabel]."</option>";
+			elseif($fieldcolname == "contactid")
+			{
+				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname\'>".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
+				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
+			}
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
 		}
@@ -626,7 +630,12 @@ function getWhereCondition($currentModule)
 			}
 			elseif($tab_col == "vtiger_activity.status")
 			{
-				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." or";	
+				if($srch_cond == 'dcts' || $srch_cond == 'isn')
+					$re_cond = "and";
+				else
+					$re_cond = "or";
+
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
 			}
 			elseif($tab_col == "vtiger_cntactivityrel.contactid")
