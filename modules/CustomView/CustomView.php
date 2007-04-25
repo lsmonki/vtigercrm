@@ -539,8 +539,6 @@ class CustomView extends CRMEntity{
 					document.CustomView.enddate.readOnly=true
 					getObj("jscal_trigger_date_start").style.visibility="hidden"
 					getObj("jscal_trigger_date_end").style.visibility="hidden"
-					getObj("jscal_trigger_start_format").style.visibility="hidden"
-					getObj("jscal_trigger_end_format").style.visibility="hidden"
 				}
 				else
 				{
@@ -548,134 +546,132 @@ class CustomView extends CRMEntity{
 					document.CustomView.enddate.readOnly=false
 					getObj("jscal_trigger_date_start").style.visibility="visible"
 					getObj("jscal_trigger_date_end").style.visibility="visible"
-					getObj("jscal_trigger_start_format").style.visibility="visible"
-					getObj("jscal_trigger_end_format").style.visibility="visible"
 				}
 				if( type == "today" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "yesterday" )
 				{
-					document.CustomView.startdate.value = "'.$yesterday.'";
-					document.CustomView.enddate.value = "'.$yesterday.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($yesterday).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($yesterday).'";
 				}
 				else if( type == "tomorrow" )
 				{
 
-					document.CustomView.startdate.value = "'.$tomorrow.'";
-					document.CustomView.enddate.value = "'.$tomorrow.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($tomorrow).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($tomorrow).'";
 				}
 				else if( type == "thisweek" )
 				{
-					document.CustomView.startdate.value = "'.$thisweek0.'";
-					document.CustomView.enddate.value = "'.$thisweek1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($thisweek0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($thisweek1).'";
 				}
 				else if( type == "lastweek" )
 				{
-					document.CustomView.startdate.value = "'.$lastweek0.'";
-					document.CustomView.enddate.value = "'.$lastweek1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($lastweek0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($lastweek1).'";
 				}
 				else if( type == "nextweek" )
 				{
-					document.CustomView.startdate.value = "'.$nextweek0.'";
-					document.CustomView.enddate.value = "'.$nextweek1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($nextweek0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($nextweek1).'";
 				}
 				else if( type == "thismonth" )
 				{
-					document.CustomView.startdate.value = "'.$currentmonth0.'";
-					document.CustomView.enddate.value = "'.$currentmonth1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($currentmonth0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($currentmonth1).'";
 				}
 				else if( type == "lastmonth" )
 				{
-					document.CustomView.startdate.value = "'.$lastmonth0.'";
-					document.CustomView.enddate.value = "'.$lastmonth1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($lastmonth0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($lastmonth1).'";
 				}
 				else if( type == "nextmonth" )
 				{
-					document.CustomView.startdate.value = "'.$nextmonth0.'";
-					document.CustomView.enddate.value = "'.$nextmonth1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($nextmonth0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($nextmonth1).'";
 				}
 				else if( type == "next7days" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$next7days.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($next7days).'";
 				}
 				else if( type == "next30days" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$next30days.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($next30days).'";
 				}
 				else if( type == "next60days" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$next60days.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($next60days).'";
 				}
 				else if( type == "next90days" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$next90days.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($next90days).'";
 				}
 				else if( type == "next120days" )
 				{
-					document.CustomView.startdate.value = "'.$today.'";
-					document.CustomView.enddate.value = "'.$next120days.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($today).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($next120days).'";
 				}
 				else if( type == "last7days" )
 				{
-					document.CustomView.startdate.value = "'.$last7days.'";
-					document.CustomView.enddate.value =  "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($last7days).'";
+					document.CustomView.enddate.value =  "'.getDisplayDate($today).'";
 				}
 				else if( type == "last30days" )
 				{
-					document.CustomView.startdate.value = "'.$last30days.'";
-					document.CustomView.enddate.value = "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($last30days).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "last60days" )
 				{
-					document.CustomView.startdate.value = "'.$last60days.'";
-					document.CustomView.enddate.value = "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($last60days).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "last90days" )
 				{
-					document.CustomView.startdate.value = "'.$last90days.'";
-					document.CustomView.enddate.value = "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($last90days).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "last120days" )
 				{
-					document.CustomView.startdate.value = "'.$last120days.'";
-					document.CustomView.enddate.value = "'.$today.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($last120days).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($today).'";
 				}
 				else if( type == "thisfy" )
 				{
-					document.CustomView.startdate.value = "'.$currentFY0.'";
-					document.CustomView.enddate.value = "'.$currentFY1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($currentFY0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($currentFY1).'";
 				}
 				else if( type == "prevfy" )
 				{
-					document.CustomView.startdate.value = "'.$lastFY0.'";
-					document.CustomView.enddate.value = "'.$lastFY1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($lastFY0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($lastFY1).'";
 				}
 				else if( type == "nextfy" )
 				{
-					document.CustomView.startdate.value = "'.$nextFY0.'";
-					document.CustomView.enddate.value = "'.$nextFY1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($nextFY0).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($nextFY1).'";
 				}
 				else if( type == "nextfq" )
 				{
-					document.CustomView.startdate.value = "'.$nFq.'";
-					document.CustomView.enddate.value = "'.$nFq1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($nFq).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($nFq1).'";
 				}
 				else if( type == "prevfq" )
 				{
-					document.CustomView.startdate.value = "'.$pFq.'";
-					document.CustomView.enddate.value = "'.$pFq1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($pFq).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($pFq1).'";
 				}
 				else if( type == "thisfq" )
 				{
-					document.CustomView.startdate.value = "'.$cFq.'";
-					document.CustomView.enddate.value = "'.$cFq1.'";
+					document.CustomView.startdate.value = "'.getDisplayDate($cFq).'";
+					document.CustomView.enddate.value = "'.getDisplayDate($cFq1).'";
 				}
 				else
 				{

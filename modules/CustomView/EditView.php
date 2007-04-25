@@ -112,15 +112,12 @@ else
 
 	if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
 	{
-		if($stdfilterhtml[0]['value'] == 'custom')
-		{
-			$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
-			$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
-		}else{
-			$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
-			$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
-		}	
-	}
+		$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
+		$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
+	}else{
+		$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
+		$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
+	}	
 
 	$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
 	$log->info('CustomView :: Successfully got Advanced Filter for the Viewid'.$recordid,'info');
@@ -149,7 +146,6 @@ else
 	$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
-
 	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 

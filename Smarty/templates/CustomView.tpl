@@ -83,7 +83,7 @@ function mandatoryCheck()
                                 {rdelim}
                                 if(mandatorycheck == true)
                                 {ldelim}
-					if(($("stdDateFilter").options[$("stdDateFilter").selectedIndex].value == "custom") && ($("jscal_field_date_start").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0) || ($("jscal_field_date_end").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0))
+					if(($("jscal_field_date_start").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0) || ($("jscal_field_date_end").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0))
 						return stdfilterdateValidate();
 					else
 						return true;
@@ -423,7 +423,7 @@ function mandatoryCheck()
 			  <tr>
 			     <td align="right" class="dvtCellLabel">{$MOD.Start_Date} :</td>
 			     <td width="25%" align=left class="dvtCellInfo">
-			     {if $STDFILTERCRITERIA.0.value eq "custom"}
+			     {if $STDFILTERCRITERIA.0.selected eq "selected" || $CUSTOMVIEWID eq ""}
 				{assign var=img_style value="visibility:visible"}
 				{assign var=msg_style value=""}
 			     {else}
@@ -432,7 +432,7 @@ function mandatoryCheck()
 			     {/if}	
 			     <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{$STARTDATE}" {$msg_style}>
 			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start" style={$img_style}>
-			     <span id="jscal_trigger_start_format" style={$img_style}><font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font></span>
+			     <font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 			     <script type="text/javascript">
 			  		Calendar.setup ({ldelim}
 			 		inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -444,7 +444,7 @@ function mandatoryCheck()
   			     <td width="25%" align=left class="dvtCellInfo">
 			     <input name="enddate" {$msg_style} id="jscal_field_date_end" type="text" size="10" class="textField" value="{$ENDDATE}">
 			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end" style={$img_style}>
-			     <span id="jscal_trigger_end_format" style={$img_style}><font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font></span>
+			     <font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 			     <script type="text/javascript">
 					Calendar.setup ({ldelim}
 					inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
