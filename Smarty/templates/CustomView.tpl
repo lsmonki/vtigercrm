@@ -673,5 +673,11 @@ function stdfilterdateValidate()
                 } else return true;
 	}
 }
+for(var i=1;i<=5;i++)
+{
+	var obj=document.getElementById("fcol"+i);
+	if(obj.selectedIndex != 0)
+		updatefOptions(obj, 'fop'+i);
+}
 {/literal}
 </script>
