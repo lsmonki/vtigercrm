@@ -249,7 +249,7 @@ class jpgraph {
 			$gbplot->setBarWidth(50/count($months),"%");
 
 			// set margin
-			$plotarea->setPadding(array('top'=>0,'bottom'=>0,'left'=>10,'right'=>20));
+			$plotarea->setPadding(array('top'=>0,'bottom'=>0,'left'=>10,'right'=>30));
 
 			// Set white margin color
 			$graph->setBackgroundColor('#F5F5F5');
