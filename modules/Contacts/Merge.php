@@ -162,7 +162,7 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 				left join vtiger_account as accountAccounts on accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
-				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
+				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
 				
 
 $result = $adb->query($query);
