@@ -245,6 +245,8 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 		{
 			foreach($columnslist[$module][$key] as $field=>$fieldlabel)
 			{
+				//Here we have to change the typeofdata for special cases like Contacts - Birthdate
+				$field = changeTypeOfData($field);
 				if(!in_array($fieldlabel,$check_dup))
 				{
 					if(isset($mod_strings[$fieldlabel]))
@@ -395,5 +397,31 @@ function getAdvCriteriaHTML($selected="")
 	return $AdvCriteria;
 }
 //step4
+
+
+/**	function used to change the Type of Data for advanced filters
+	@param string $field - field details in the format of tablename:columnname:fieldname:Module_fieldlabel:typeofdata
+	return string $field - changed field details in the format of tablename:columnname:fieldname:Module_fieldlabel:typeofdata
+ */
+function changeTypeOfData($field)
+{
+	global $adb;
+	//$adb->println("Entering into function changeTypeOfData($field)");
+
+	//Add the field details in this array if you want to change the advance filter field details
+	//Array in which we have to specify as, existing value => new value
+	$new_field_details = Array(
+				"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:T",
+				  );
+
+	if(isset($new_field_details[$field]))
+	{
+		$field = $new_field_details[$field];
+	}
+
+	//$adb->println("Exit from function changeTypeOfData($field). Return => $field");
+	return $field;
+}
+
 
 ?>
