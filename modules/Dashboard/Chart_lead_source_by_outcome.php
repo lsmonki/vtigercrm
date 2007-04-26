@@ -131,7 +131,7 @@ if (isset($_REQUEST['lsbo_edit']) && $_REQUEST['lsbo_edit'] == 'true') {
 <?php if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Potentials')] == 3 or $defaultOrgSharingPermission[getTabid('Potentials')] == 0)) { ?>
 	<td valign='top'><select name="lsbo_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active", $current_user->id,'private'),$_SESSION['lsbo_ids']); ?></select></td>
 <?php } else { ?>
-	<td valign='top' ><select name="lsbo_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE),$_SESSION['lsbo_ids']); ?></select></td>
+	<td valign='top' ><select name="lsbo_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active",$current_user->id),$_SESSION['lsbo_ids']); ?></select></td>
 <?php } ?>	
 </tr><tr>
 <td align="right"><br /> <input class="button" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
