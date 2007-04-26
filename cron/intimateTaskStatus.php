@@ -10,10 +10,9 @@ global $app_strings;
 $emailresult = $adb->query("SELECT email1 from vtiger_users");
 $emailid = $adb->fetch_array($emailresult);
 $emailaddress = $emailid[0];
-$mailserveresult = $adb->query("SELECT server,server_username,server_password FROM vtiger_systems");
+$mailserveresult = $adb->query("SELECT server,server_username,server_password FROM vtiger_systems where server_type = 'email'");
 $mailrow = $adb->fetch_array($mailserveresult);
 $mailserver = $mailrow[0];
-
 $mailuname = $mailrow[1];
 $mailpwd = $mailrow[1];
 // End Email Setup
