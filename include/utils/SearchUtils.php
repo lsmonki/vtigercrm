@@ -521,7 +521,10 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 		case 'cts':
 			$where_string = $searchfield." like '%".$searchstring."%' ";
 			if($searchstring == NULL)
-			$where_string = $searchfield." like ''";
+				if($searchfield !='vtiger_products.productname')
+					$where_string = $searchfield." like ''";
+				else
+					$where_string = $searchfield." is NULL";
 			break;
 		
 		case 'dcts':
@@ -532,6 +535,8 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			
 		case 'is':
 			$where_string = $searchfield." = '".$searchstring."' ";
+			if($searchstring == NULL && $searchfield =='vtiger_products.productname')
+			$where_string = $searchfield." is NULL";
 			break;
 			
 		case 'isn':
