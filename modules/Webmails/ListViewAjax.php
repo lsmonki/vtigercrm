@@ -104,13 +104,18 @@ if (is_array($overview))
                 $val->from = utf8_decode(imap_utf8(addslashes($val->from)));
                 $val->to = utf8_decode(imap_utf8(addslashes($val->to)));
                 $val->subject = utf8_decode(imap_utf8($val->subject));
-		$list = explode("<",$val->from);
+		$to = str_replace("<",":",$val->to);
+		$to_list = str_replace(">","",$to);
+		$from = str_replace("<",":",$val->from);
+		$from_list = str_replace(">","",$from);
+		$cc = str_replace("<",":",$hdr->ccaddress);
+		$cc_list = str_replace(">","",$cc);
 		$js_array .= "webmail2[".$val->msgno."] = new Array();";
-		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($list[0])."';";
-		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($val->to)."';";
+		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($from_list)."';";
+		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($to_list)."';";
 		$js_array .= "webmail2[".$val->msgno."]['subject'] = '".addslashes($val->subject)."';";
 		$js_array .= "webmail2[".$val->msgno."]['date'] = '".addslashes($val->date)."';";
-		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$hdr->ccaddress."';";
+		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$cc_list."';";
 	}
 }
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");

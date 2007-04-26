@@ -277,15 +277,22 @@ if (is_array($overview))
 		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
 		$val->to = utf8_decode(imap_utf8(addslashes($val->to)));
 		$val->subject = utf8_decode(imap_utf8($val->subject));
+		$to = str_replace("<",":",$val->to);
+                $to_list = str_replace(">","",$to);
+                $from = str_replace("<",":",$val->from);
+                $from_list = str_replace(">","",$from);
+                $cc = str_replace("<",":",$hdr->ccaddress);
+                $cc_list = str_replace(">","",$cc);
+
 	?>
 
 		webmail[<?php echo $val->msgno;?>] = new Array();
-		webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
-		webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
+		webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($from_list);?>";
+		webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($to_list);?>";
 		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
 		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
 
-		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $hdr->ccaddress;?>";
+		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $cc_list;?>";
 
 	<?php
 	}
