@@ -393,6 +393,7 @@ function loadTaxes_Ajax(curr_row)
 				{
 					$("tax_div"+curr_row).innerHTML=response.responseText;
 					document.getElementById("taxTotal"+curr_row).innerHTML = getObj('hdnTaxTotal'+curr_row).value;
+					calcTotal();
 				}
 		}
 	);
