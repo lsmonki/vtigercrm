@@ -216,12 +216,14 @@ $cache_dir = 'cache/';
 						      	$buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
 						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
 				
-						      	/* replace the application unique key variable */
+						      	/* replace master currency variable */
 				      			$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
 
 						      	/* replace the application unique key variable */
 					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
-	
+							/* replace support email variable */
+							$buffer = str_replace( "_SUPPORT_EMAIL_", $admin_email, $buffer);
+
 					      		fwrite($includeHandle, $buffer);
 					      		}
 

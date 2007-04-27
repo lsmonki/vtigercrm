@@ -289,7 +289,7 @@ function verify_data(form) {
 	if (trim(form.admin_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.admin_email.value)) {
 		alert("The email id \'"+form.admin_email.value+"\' in the email field is invalid");
 		form.admin_email.focus();
-		exit();
+		return false;
 	}
 
 	form.submit();
@@ -454,7 +454,7 @@ function verify_data(form) {
 			</tr>
 			<tr>
 				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; else echo "admin@your-domain.com"; ?>"></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
 			</tr>
 			<tr>
 				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>

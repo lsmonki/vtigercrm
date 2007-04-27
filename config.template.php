@@ -28,11 +28,11 @@ $CHAT_DISPLAY = 'true';
 $FCKEDITOR_DISPLAY = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = 'http://your-domain.com/customerportal';
+$PORTAL_URL = 'http://vtiger.com/customerportal';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
-$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';
-$HELPDESK_SUPPORT_NAME = 'your-domain name';
+$HELPDESK_SUPPORT_EMAIL_ID = '_SUPPORT_EMAIL_';
+$HELPDESK_SUPPORT_NAME = 'your-support name';
 
 /* database configuration
       db_server
