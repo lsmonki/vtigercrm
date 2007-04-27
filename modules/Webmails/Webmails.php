@@ -646,20 +646,27 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 {
 	sort($attach_tab);
 	$link = '';
+	$ct = 0;
 	while ($tmp = array_shift($attach_tab))
 		if (!empty($tmp['name']))
 			{
 			$mime = str_replace('/', '-', $tmp['mime']);
 			if ($display_part_no == true)
-				$link .= $tmp['number']-1 . '&nbsp;&nbsp;';
+				//$link .= $tmp['number']-1 . '&nbsp;&nbsp;';
 			unset($att_name);
 			$att_name_array = imap_mime_header_decode($tmp['name']);
 			for ($i=0; $i<count($att_name_array); $i++) {
 				$att_name .= $att_name_array[$i]->text;
 			}
+			if(!preg_match("/unknown/",$att_name))
+				$this->attname[$ct] = $att_name;	
 			$att_name_dl = $att_name;
 			$att_name = $this->convertLang2Html($att_name);
-			$link .= '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
+			if(!preg_match("/unknown/",$att_name)){	
+				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
+				$this->anchor_arr[$ct] = ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+				$ct++;
+			}
 		}
 	return ($link);
 }
@@ -762,7 +769,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			if (isset($_REQUEST['user_charset']) && $_REQUEST['user_charset'] != '') {
 				$body_charset = $_REQUEST['user_charset'];
 			}
-
+			$this->charsets = $body_charset;
 			$body_converted = @iconv( $body_charset, $GLOBALS['charset'], $body);
 			$body = ($body_converted===FALSE) ? $body : $body_converted;
 			$tmpvar['charset'] = ($body_converted===FALSE) ? $body_charset : $GLOBALS['charset'];
@@ -814,7 +821,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$subject_array = $this->mime_header_decode($subject_header);
 		for ($j = 0; $j < count($subject_array); $j++)
 			$subject .= $subject_array[$j]->text;
-
+		
 		$from_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->fromaddress);
 		$from_array = $this->mime_header_decode($from_header);
 		for ($j = 0; $j < count($from_array); $j++)
@@ -825,7 +832,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		for ($j = 0; $j < count($to_array); $j++)
 			$to .= $to_array[$j]->text;
 		$to = str_replace(',', ', ', $to);
-
+		$this->to_header = $to_header;
 		$cc_header = isset($ref_contenu_message->ccaddress) ? $ref_contenu_message->ccaddress : '';
 		$cc_header = str_replace('x-unknown', $msg_charset, $cc_header);
 		$cc_array = isset($ref_contenu_message->ccaddress) ? imap_mime_header_decode($cc_header) :0;
@@ -834,7 +841,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 				$cc .= $cc_array[$j]->text;
 		}
 		$cc = str_replace(',', ', ', $cc);
-
+		$this->cc_header = $cc_header;
 		$reply_to_header = isset($ref_contenu_message->reply_toaddress) ? $ref_contenu_message->reply_toaddress : '';
 		$reply_to_header = str_replace('x-unknown', $msg_charset, $reply_to_header);
 		$reply_to_array = isset($ref_contenu_message->reply_toaddress) ? imap_mime_header_decode($reply_to_header) : 0;
@@ -846,6 +853,8 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$timestamp = chop($ref_contenu_message->udate);
 		$date = format_date($timestamp, $lang);
 		$time = format_time($timestamp, $lang);
+		$this->date = $date;
+		$this->time = $time;
 		$content = Array(
 			'from' => $from,
 			'to' => $to,

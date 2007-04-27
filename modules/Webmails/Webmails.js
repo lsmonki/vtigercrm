@@ -37,12 +37,12 @@ function load_webmail(mid) {
 
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
-                        {href: 'javascript:;', onclick: 'OpenCompose('+mid+',"reply")'},
+                        {href: 'javascript:;', onclick: 'OpenComposer('+mid+',"reply")'},
                         [Builder.node('img',{src: 'modules/Webmails/images/stock_mail-read.png', border: '0', width: '10', height: '11'})]
                 ));
 	}
         node.className='read_email';
-	if(webmail2 == null){
+	/*if(webmail2 == null){
 	        $("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
 	        $("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
 	        $("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
@@ -55,7 +55,7 @@ function load_webmail(mid) {
                 $("webmail_subject").innerHTML = "&nbsp;"+webmail2[mid]["subject"];
                 $("webmail_date").innerHTML = "&nbsp;"+webmail2[mid]["date"];
                 $("webmail_cc").innerHTML = "&nbsp;"+webmail2[mid]["cc"];
-	}
+	}*/
 	//Fix for webmails body display in IE - dartagnanlaf
 	/*
         new Ajax.Request(
@@ -85,13 +85,13 @@ function load_webmail(mid) {
         $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'crmbutton small delete', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
 
         $("reply_button_all").removeChild($("reply_button_all").firstChild);
-        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'replyall\')'}));
+        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'crmbutton small create', onclick: 'OpenComposer('+mid+',\'replyall\')'}));
 
         $("reply_button").removeChild($("reply_button").firstChild);
-        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'reply\')'}));
+        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'crmbutton small create', onclick: 'OpenComposer('+mid+',\'reply\')'}));
 
         $("forward_button").removeChild($("forward_button").firstChild);
-        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'crmbutton small create', onclick: 'OpenCompose('+mid+',\'forward\')'}));
+        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'crmbutton small create', onclick: 'OpenComposer('+mid+',\'forward\')'}));
 
         $("qualify_button").removeChild($("qualify_button").firstChild);
         $("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'crmbutton small save', onclick: 'showRelationships('+mid+')'}));
@@ -99,15 +99,15 @@ function load_webmail(mid) {
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
         $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'crmbutton small save', onclick: 'displayAttachments('+mid+')'}));
 
-        $("full_view").removeChild($("full_view").firstChild);
-        $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
+        //$("full_view").removeChild($("full_view").firstChild);
+      //  $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'full_view\')'},'Full Email View'));
 	makeSelected(node.id)
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
         window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
-function OpenCompose(id,mode)
+function OpenComposer(id,mode)
 {
         switch(mode)
                 {

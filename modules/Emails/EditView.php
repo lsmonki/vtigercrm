@@ -164,7 +164,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$smarty->assign('WEBMAIL',"true");
 	if($_REQUEST["reply"] == "all") {
 		$smarty->assign('TO_MAIL',$webmail->fromaddr);	
-		$smarty->assign('CC_MAIL',$hdr->ccaddress);
+		$smarty->assign('CC_MAIL',str_replace(" ","",$hdr->ccaddress));
 		/*if(is_array($webmail->cc_list))
 		{
 			$smarty->assign('CC_MAIL',implode(",",$webmail->cc_list).",".implode(",",$webmail->to));

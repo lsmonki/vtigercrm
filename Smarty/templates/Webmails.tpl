@@ -33,7 +33,7 @@
 							</td>
 							<td width="10%">
 								<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-								&nbsp;<a href="javascript:;" onclick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
+								&nbsp;<a href="javascript:;" onclick="OpenComposer('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
 							<td width="20%" nowrap>
 								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -180,23 +180,12 @@
 				   </tr>
 				   <tr style="visibility:hidden" class="previewWindow">
 					<td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
-
-					<!-- Table to display the Header details (From, To, Subject and date) - Starts -->
 			   		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-						<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td id="from_addy">&nbsp;</td></tr>
-						<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td id="to_addy">&nbsp;</td></tr>
-<tr><td width="20%" align="right"><b>{$MOD.LBL_CC}</b></td><td id="webmail_cc">&nbsp;</td></tr>
-
-						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
-		<tr><td	align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td>
-	<tr><td align="right"><b>{$MOD.LBL_ATTACHMENT}:</b></td><td id="webmail_attachment"></td>
-							<td id="full_view"><a href="javascript:;"> Full Email View</a></td></tr>
-						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 					</table>
 					<!-- Table to display the Header details (From, To, Subject and date) - Ends -->
-
+					<div>
 					   <span id="body_area" style="width:95%">
-						<iframe id="email_description" width="100%" height="210" frameBorder="0"></iframe>
+						<iframe id="email_description" width="100%" height="350" frameBorder="0"></iframe>
 					   </span>
 					</td>
 				   </tr>

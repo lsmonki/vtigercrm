@@ -30,8 +30,40 @@ $MailBox = new MailBox($mailbox);
 $mail = $MailBox->mbox;
 $email = new Webmails($MailBox->mbox,$mailid);
 $status=imap_setflag_full($MailBox->mbox,$mailid,"\\Seen");
+$attach_tab=array();
+$email->loadMail($attach_tab);
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$email->charsets."\">\n";
+$subject = decode_header($email->subject);
+$from = decode_header($email->from);
+$to = decode_header($email->to_header);
+$cc = decode_header($email->cc_header);
+$date = decode_header($email->date);
+/*for($i=0;$i<count($email->attname);$i++){
+	$attachment_links .= $email->anchor_arr[$i].decode_header($email->attname[$i])."</a></br>";
+}*/
+$content['body'] = '<span id="webmail_body">'.$email->body.'</span>';
+$content['attachtab'] = $email->attachtab;
+
 ?>
+<script src="modules/Webmails/Webmails.js" type="text/javascript"></script>
+<script src="include/js/general.js" type="text/javascript"></script>
+<!-- Table to display the Header details (From, To, Subject and date) - Starts -->
+					
+                                        <table style="font-size:15px"  width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_FROM'];?></b></td><td id="from_addy"><?php echo $from;?></td></tr>
+                                                <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_TO'];?></b></td><td id="to_addy"><?php echo $to;?></td></tr>
+<tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_CC'];?></b></td><td id="webmail_cc"><?php echo $cc;?></td></tr>
+
+                                                <tr><td align="right"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b></td><td id="webmail_subject"><?php echo $subject;?></td></tr>
+                <tr><td align="right"><b><?php echo $mod_strings['MOD.LBL_DATE'];?></b></td><td id="webmail_date"><?php echo $date;?></td>
+      <tr> 
+	<td>&nbsp;</td> <td id="full_view"><span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td></tr>
+                                                <tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
+                                        </table>
+                                        <!-- Table to display the Header details (From, To, Subject and date) - Ends -->
+					
 <script type="text/javascript">
+mailbox = "<?php echo $mailbox;?>";
 function show_inline(num) {
 	var el = document.getElementById("block_"+num);
 	if(el.style.display == 'block')
@@ -52,11 +84,7 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 		$str = nl2br($text);
 	return ($str);
 }
-$attach_tab=array();
-$email->loadMail($attach_tab);
-$content['body'] = '<span id="webmail_body">'.$email->body.'</span>';
-$content['attachtab'] = $email->attachtab;
-//Need to put this along with the subject block
+//Need to put this along with the subject block*/
 echo $email->att;
 echo $content['body'];
 
@@ -111,7 +139,12 @@ while ($tmp = array_pop($content['attachtab']))
 //test ended by Richie
 
 imap_close($MailBox->mbox);
-
+function decode_header($string){
+	$elements = imap_mime_header_decode($string);
+	for ($i=0; $i<count($elements); $i++) {
+    		$result .= $elements[$i]->text;
+	}
+	return $result;
+}
 
 ?>
-<script>parent.document.getElementById('webmail_attachment').innerHTML=document.getElementById('webmail_cont').innerHTML</script>
