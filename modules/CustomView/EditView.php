@@ -412,6 +412,8 @@ function changeTypeOfData($field)
 	//Array in which we have to specify as, existing value => new value
 	$new_field_details = Array(
 				"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:T",
+				"vtiger_faq:product_id:product_id:Faq_Product_Name:I"=>"vtiger_faq:product_id:product_id:Faq_Product_Name:V",
+				"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I"=>"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V",
 				  );
 
 	if(isset($new_field_details[$field]))
