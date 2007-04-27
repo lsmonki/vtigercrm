@@ -130,6 +130,7 @@ $graph_array = Array(
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 				<!--char goes here-->
 				<?php 
+				sleep(1);
 				//Charts for Lead Source
                     if($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadsource") && (getFieldVisibilityPermission('Leads',$user_id,'leadsource') == "0"))
                     {
