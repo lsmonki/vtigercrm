@@ -203,8 +203,9 @@ function setMailServerProperties($mail)
 	$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
-
-	$mail->SMTPAuth = $smtp_auth;	// turn on SMTP authentication
+	if($smtp_auth == "true"){
+		$mail->SMTPAuth = true;	// turn on SMTP authentication
+	}
 	$mail->Host = $server;		// specify main and backup server
 	$mail->Username = $username ;	// SMTP username
         $mail->Password = $password ;	// SMTP password
