@@ -355,6 +355,7 @@ function loadDashBoard(oSelect)
 			onComplete: function(response)
 			{
 				$("dashChart").innerHTML=response.responseText;
+				$("dashChart").style.display='none';
 				Effect.Appear("dashChart");
 				var dashst = document.getElementById('dash_script');
 				eval(dashst.innerHTML);
@@ -369,6 +370,8 @@ function changeView(displaytype)
 	gdash_displaytype = displaytype;
 	var oCombo = $('dashboard_combo');
 	var type = oCombo.options[oCombo.selectedIndex].value; 
+	var currenttime = new Date();
+	var time="&time="+currenttime.getTime();
 	if(type == 'DashboardHome')
 	{
 		if(displaytype == 'MATRIX')
@@ -383,7 +386,7 @@ function changeView(displaytype)
 		else
 			url = 'index.php?module=Dashboard&action=index&display_view=NORMAL&type='+type;
 	}
-	window.document.location.href = url;
+	window.document.location.href = url+time;
 
 }
 </script>

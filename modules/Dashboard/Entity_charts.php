@@ -282,7 +282,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
-						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name;
+						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&search_field=assigned_user_id&searchtype=BasicSearch&query=true&type=entchar&search_text=".$current_user->user_name;
 					else
 						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
 
@@ -383,9 +383,9 @@ function save_image_map($filename,$image_map)
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=500)
 {
 	global $user_id,$date_start,$end_date,$type,$mod_strings;
-
+	$time = time();
 	//Giving the Cached image name
-	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).".png";
+	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).$time.".png";
 	$html_imagename=$graph_by; //Html image name for the graph
 
 	$graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
