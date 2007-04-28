@@ -123,7 +123,7 @@ class SalesOrder extends CRMEntity {
 		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails(&$this, 'SalesOrder');	
+			saveInventoryProductDetails($this, 'SalesOrder');	
 		}
 	}	
 	

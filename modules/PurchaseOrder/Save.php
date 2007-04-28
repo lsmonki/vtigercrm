@@ -29,7 +29,7 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new PurchaseOrder();
 global $current_user;
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 //Added code for auto product stock updation on receiving goods
 $focus->update_prod_stock='';

@@ -104,7 +104,7 @@ class PurchaseOrder extends CRMEntity {
 		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
+			saveInventoryProductDetails($this, 'PurchaseOrder', $this->update_prod_stock);
 		}
 	}	
 

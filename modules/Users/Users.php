@@ -915,7 +915,7 @@ class Users {
 		//only images are allowed for these modules
 		if($module == 'Users')
 		{
-			$save_file = validateImageFile(&$file_details);
+			$save_file = validateImageFile($file_details);
 		}
 		if($save_file == 'true')
 		{

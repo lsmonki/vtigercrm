@@ -27,7 +27,7 @@ require_once('include/database/PearDatabase.php');
 
 $focus = new PriceBooks();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 $focus->save("PriceBooks");
 $return_id = $focus->id;

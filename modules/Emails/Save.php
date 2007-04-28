@@ -60,7 +60,7 @@ $local_log =& LoggerManager::getLogger('index');
 $focus = new Emails();
 
 global $current_user,$mod_strings,$app_strings;
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 //Check if the file is exist or not.
 //$file_name = '';
 $file_name = $_FILES['filename']['name'];//preg_replace('/\s+/', '_', $_FILES['filename']['name']);

@@ -27,7 +27,7 @@ require_once('include/database/PearDatabase.php');
 
 $focus = new HelpDesk();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 global $adb,$mod_strings;
 //Added to update the ticket history
 //Before save we have to construct the update log. 
@@ -37,7 +37,7 @@ if($mode == 'edit')
 	$usr_qry = $adb->query("select * from vtiger_crmentity where crmid='".$focus->id."'");
 	$old_user_id = $adb->query_result($usr_qry,0,"smownerid");
 }
-$fldvalue = $focus->constructUpdateLog(&$focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
+$fldvalue = $focus->constructUpdateLog($focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
 $fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($mode == 'edit')?true:false);
 
 $focus->save("HelpDesk");

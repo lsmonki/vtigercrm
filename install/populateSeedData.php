@@ -477,6 +477,7 @@ for($i=0; $i<10; $i++)
         $product->column_fields["productname"] 	= 	$product_name_array[$i];
         $product->column_fields["productcode"] 	= 	$product_code_array[$i];
         $product->column_fields["manufacturer"]	= 	$manufacturer;
+        $product->column_fields["discontinued"]	= 	1;
 
 	$product->column_fields["productcategory"] = 	$category;
         $product->column_fields["website"] 	=	$website;
@@ -640,7 +641,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$quote, 'Quotes');
+	saveInventoryProductDetails($quote, 'Quotes');
 }
 
 //Populate SalesOrder Data
@@ -714,7 +715,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$so, 'SalesOrder');
+	saveInventoryProductDetails($so, 'SalesOrder');
 
 
 }
@@ -790,7 +791,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$po, 'PurchaseOrder');
+	saveInventoryProductDetails($po, 'PurchaseOrder');
 
 
 }
@@ -875,7 +876,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$invoice, 'Invoice');
+	saveInventoryProductDetails($invoice, 'Invoice');
 
 }
 

@@ -46,15 +46,15 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid);
-	setCCAddress(&$mail,'cc',$cc);
-	setCCAddress(&$mail,'bcc',$bcc);
+	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid);
+	setCCAddress($mail,'cc',$cc);
+	setCCAddress($mail,'bcc',$bcc);
 
-	$mail_status = MailSend(&$mail);
+	$mail_status = MailSend($mail);
 
 	if($mail_status != 1)
 	{
-		$mail_error = getMailError(&$mail,$mail_status,$mailto);
+		$mail_error = getMailError($mail,$mail_status,$mailto);
 	}
 	else
 	{
@@ -144,7 +144,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->IsSMTP();		//set mailer to use SMTP
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
-	setMailServerProperties(&$mail);	
+	setMailServerProperties($mail);	
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
@@ -174,13 +174,13 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//If we want to add the currently selected file only then we will use the following function
 	if($attachment == 'current')
 	{
-		addAttachment(&$mail,$_FILES['filename']['name'],$emailid);
+		addAttachment($mail,$_FILES['filename']['name'],$emailid);
 	}
 
 	//This will add all the vtiger_files which are related to this record or email
 	if($attachment == 'all')
 	{
-		addAllAttachments(&$mail,$emailid);
+		addAllAttachments($mail,$emailid);
 	}
 
 	$mail->IsHTML(true);		// set email format to HTML

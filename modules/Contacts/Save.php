@@ -30,7 +30,7 @@ $local_log =& LoggerManager::getLogger('index');
 global $log,$adb;
 $focus = new Contacts();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
 if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
@@ -197,7 +197,7 @@ if($image_error=="false")
 
 	//Send notification mail to the assigned to owner about the contact creation
 	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-		$status = sendNotificationToOwner('Contacts',&$focus);
+		$status = sendNotificationToOwner('Contacts',$focus);
 
 	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
 

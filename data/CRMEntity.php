@@ -179,7 +179,7 @@ class CRMEntity
 		//only images are allowed for these modules
 		if($module == 'Contacts' || $module == 'Products')
 		{
-			$save_file = validateImageFile(&$file_details);
+			$save_file = validateImageFile($file_details);
 		}
 
 		if($save_file == 'true' && $upload_status == 'true')

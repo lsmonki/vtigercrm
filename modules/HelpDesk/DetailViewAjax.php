@@ -41,7 +41,7 @@ if($ajaxaction == "DETAILVIEW")
 		$assigned_group_name = $_REQUEST['assigned_group_name'];
 		$assigntype = $_REQUEST['assigntype'];
 
-		$fldvalue = $modObj->constructUpdateLog(&$modObj, $modObj->mode, $assigned_group_name, $assigntype);
+		$fldvalue = $modObj->constructUpdateLog($modObj, $modObj->mode, $assigned_group_name, $assigntype);
 		$fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($modObj->mode == 'edit')?true:false);
 		
 		$modObj->save("HelpDesk");

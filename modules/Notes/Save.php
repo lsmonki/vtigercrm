@@ -29,7 +29,7 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Notes();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')

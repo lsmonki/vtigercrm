@@ -126,7 +126,7 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 
 //Send notification mail to the assigned to owner about the vtiger_account creation
 if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-	$status = sendNotificationToOwner('Accounts',&$focus);
+	$status = sendNotificationToOwner('Accounts',$focus);
 
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
 

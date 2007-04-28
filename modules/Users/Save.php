@@ -99,7 +99,7 @@ if(! $_REQUEST['changepassword'] == 'true')
 	if (!isset($_POST['deleted'])) $_REQUEST["deleted"] = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $_REQUEST["homeorder"] = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 
-	setObjectValuesFromRequest(&$focus);
+	setObjectValuesFromRequest($focus);
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
 	$focus->saveHomeOrder($focus->id);
