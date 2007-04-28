@@ -254,10 +254,6 @@ for($i=0; $i<10; $i++)
 	$contact->column_fields["mailingstate"] = "CA";
 	$contact->column_fields["mailingzip"] = '99999';
 	$contact->column_fields["mailingcountry"] = 'USA';	
-	if ($contact->column_fields["mailingcity"] == "San Mateo") 
-		$contact->column_fields["yahooid"] = "clint_oram";
-	elseif ($contact->column_fields["mailingcity"] == "San Francisco") 
-		$contact->column_fields["yahooid"] = "not_a_real_id";
 
 //      $key = array_rand($app_list_strings['lead_source_dom']);
 //      $contact->lead_source = $app_list_strings['lead_source_dom'][$key];
@@ -360,10 +356,6 @@ for($i=0; $i<10; $i++)
 	$lead->column_fields["state"] = "CA";
 	$lead->column_fields["code"] = '99999';
 	$lead->column_fields["country"] = 'USA';	
-	if ($lead->column_fields["city"] == "San Mateo") 
-		$lead->column_fields["yahooid"] = "clint_oram";
-	elseif ($lead->column_fields["city"] == "San Francisco") 
-		$lead->column_fields["yahooid"] = "not_a_real_id";
 
 //      $key = array_rand($app_list_strings['lead_source_dom']);
 //      $lead->lead_source = $app_list_strings['lead_source_dom'][$key];
