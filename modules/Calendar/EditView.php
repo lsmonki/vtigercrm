@@ -130,6 +130,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
 		$contact_name = getContactName($_REQUEST['contact_id']);
 		$smarty->assign("CONTACTSNAME",$contact_name);
+		$account_id = $_REQUEST['account_id'];
+                $account_name = getAccountName($account_id);
 	}	
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
@@ -166,6 +168,14 @@ foreach($act_data as $header=>$blockitem)
 		}
 	}
 }
+// jread.topik. patch account_id for create contact
+if (strlen($account_name) > 0)
+{
+	$fldlabel_sel['parent_id'][1]='selected';
+	$secondvalue['parent_id'] = $account_id;
+	$value['parent_id'] = $account_name;
+}
+
 $format = ($current_user->hour_format == '')?'am/pm':$current_user->hour_format;
 $stdate = key($value['date_start']);
 $enddate = key($value['due_date']);
