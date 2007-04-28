@@ -559,6 +559,15 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a>';
 			}
+			elseif($parent_module == "Quotes")
+			{
+				$label_fld[] = $app_strings['LBL_QUOTES_NAME'];
+				$sql = "select * from  vtiger_quotes where quoteid=".$value;
+				$result = $adb->query($sql);
+				$quotename= $adb->query_result($result,0,"subject");
+
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a>';
+			}
 			elseif($parent_module == "HelpDesk")
 			{
 				$label_fld[] = $mod_strings[$fieldlabel];

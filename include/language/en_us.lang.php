@@ -489,6 +489,7 @@ $app_strings = array (
 'LBL_SORDER_NAME' => 'Sales Order',
 'COMBO_INVOICES' => 'Invoice',
 'LBL_INVOICE_NAME' => 'Invoice',
+'LBL_QUOTES_NAME' => 'Quote',
 'LBL_HELPDESK_NAME' => 'Trouble Ticket',
 'LBL_CAMPAIGN_NAME' => 'Campaign Name',
 'LBL_NEW_INVOICE_BUTTON_TITLE' => 'New Invoice [Alt+I]',

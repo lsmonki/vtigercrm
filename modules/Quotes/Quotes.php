@@ -116,7 +116,7 @@ class Quotes extends CRMEntity {
 		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails(&$this, 'Quotes');
+			saveInventoryProductDetails($this, 'Quotes');
 		}
 	}	
 	
@@ -235,6 +235,46 @@ class Quotes extends CRMEntity {
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Quotes',$query,$id);	
 	}
+
+	/**     function used to get the attachments which are related to the invoice
+	 *      @param int $id - invoice id to which we want to retrieve the attachments and notes
+	 *      @return array - return an array which will be returned from the function getAttachmentsAndNotes
+	 **/
+	function get_attachments($id)
+	{
+		 global $log;
+		 $log->debug("Entering get_attachments(".$id.") method ...");
+
+		 $query = "select vtiger_notes.title,'Notes ' as ActivityType, vtiger_notes.filename,
+		 vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
+		 vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
+		 crm2.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name
+		 from vtiger_notes
+		 inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+		 inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
+		 inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+		 left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+		 left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+		 inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		 where vtiger_crmentity.crmid=".$id;
+
+		 $query .= ' union all ';
+
+		 $query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		 vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
+		 vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
+		 crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		 from vtiger_attachments
+		 inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
+		 inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
+		 inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
+		 inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		 where vtiger_crmentity.crmid=".$id;
+
+		 $log->debug("Exiting get_attachments method ...");
+		 return getAttachmentsAndNotes('Quotes',$query,$id); 
+	}	
+
 
 
 	/**	Function used to get the Quote Stage history of the Quotes
