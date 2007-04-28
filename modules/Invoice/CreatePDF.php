@@ -39,7 +39,7 @@ if($focus->column_fields["salesorder_id"] != '')
 	$so_name = getSoName($focus->column_fields["salesorder_id"]);
 else
 	$so_name = '';
-$po_name = $focus->column_fields["purchaseorder"];
+$po_name = $focus->column_fields["vtiger_purchaseorder"];
 
 $valid_till = $focus->column_fields["duedate"];
 $valid_till = getDisplayDate($valid_till);
