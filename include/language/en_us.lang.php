@@ -102,7 +102,7 @@ $app_strings = array (
 'LBL_SELECT_BUTTON_LABEL' => 'Select',
 'LBL_SELECT_CONTACT_BUTTON_TITLE' => 'Select Contact [Alt+T]',
 'LBL_SELECT_CONTACT_BUTTON_KEY' => 'T',
-'LBL_SELECT_CONTACT_BUTTON_LABEL' => 'Select Contact',
+'LBL_SELECT_CONTACT_BUTTON_LABEL' => 'Select Contacts',
 'LBL_SELECT_CAMPAIGN_BUTTON_LABEL' => 'Select Campaign',
 'LBL_SELECT_USER_BUTTON_TITLE' => 'Select User [Alt+U]',
 'LBL_SELECT_USER_BUTTON_KEY' => 'U',
@@ -307,7 +307,7 @@ $app_strings = array (
 'LBL_USER_TITLE' => 'Users',
 'LBL_CONTACT_TITLE' => 'Contacts',
 'LBL_SHOWING' => 'Showing',
-'LBL_SELECT_PRODUCT_BUTTON_LABEL' => 'Select Product',
+'LBL_SELECT_PRODUCT_BUTTON_LABEL' => 'Select Products',
 'LBL_VIEW' => 'Filters :',
 'LBL_GROUP_VIEW' => 'Group',
 'LBL_SALES_STAGE' => 'Sales Stage',
@@ -846,7 +846,7 @@ $app_strings = array (
 // Added for display the label of Invoice no
 'invoice no'=>'invoice no',
 //Added for title to the button Select Lead
-'LBL_SELECT_LEAD_BUTTON_LABEL' => 'Select Lead',
+'LBL_SELECT_LEAD_BUTTON_LABEL' => 'Select Leads',
 //Added for the link Read License in footer
 'LNK_READ_LICENSE'=>'Read License',
 'ACTIVITIES' => 'Activities',

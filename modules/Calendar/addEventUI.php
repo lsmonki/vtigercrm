@@ -852,7 +852,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td><b><?php echo $mod_strings['LBL_CONTACT_NAME'] ?></b></td>
 			<td colspan="2">
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
-				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
+				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
 			</td>
 			  </tr>
 			<?php } ?>
