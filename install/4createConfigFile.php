@@ -222,7 +222,7 @@ $cache_dir = 'cache/';
 						      	/* replace the application unique key variable */
 					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
 							/* replace support email variable */
-							$buffer = str_replace( "_SUPPORT_EMAIL_", $admin_email, $buffer);
+							$buffer = str_replace( "_USER_SUPPORT_EMAIL_", $admin_email, $buffer);
 
 					      		fwrite($includeHandle, $buffer);
 					      		}
