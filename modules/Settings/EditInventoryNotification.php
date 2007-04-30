@@ -10,12 +10,13 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
+require_once('config.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
 global $adb;
-global $theme;
+global $theme,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -30,7 +31,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	{
 		$label = $mod_strings[$adb->query_result($result,0,'notificationname')];
 		$notification_subject = $adb->query_result($result,0,'notificationsubject');
-		$notification_body = $adb->query_result($result,0,'notificationbody');
+		$notification_body = iconv("UTF-8",$default_charset,$adb->query_result($result,0,'notificationbody'));
 		$notification_id = $adb->query_result($result,0,'notificationid');
 
 		$notification = Array();
