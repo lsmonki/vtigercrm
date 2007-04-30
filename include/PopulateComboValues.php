@@ -68,6 +68,23 @@ class PopulateComboValues
 		{
 			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 		}
+
+		//we have to decide what are all the picklist and picklist values are non editable
+		//presence = 0 means you cannot edit the picklist value
+		//presence = 1 means you can edit the picklist value
+		$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus");
+		$noneditable_values = Array(
+						"sales_stage"=>"Closed Won",
+					   );
+		foreach($noneditable_tables as $picklistname)
+		{
+			$adb->query("update vtiger_".$picklistname." set PRESENCE=0");
+		}
+		foreach($noneditable_values as $picklistname => $value)
+		{
+			$adb->query("update vtiger_".$picklistname." set PRESENCE=0 where $picklistname='".$value."'");
+		}
+
 		$log->debug("Exiting create_tables () method ...");
 	}
 }

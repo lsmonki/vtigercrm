@@ -188,6 +188,26 @@ foreach($query_array2 as $query)
 }
 
 
+//change the picklist - presence value ie., if presence = 0 then you cannot edit, if presence = 1 then you can edit
+$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus");
+$noneditable_values = Array(
+				"sales_stage"=>"Closed Won",
+			   );
+foreach($noneditable_tables as $picklistname)
+{
+	//we have to interchange 0 and 1, so change 0->2, 1->0, 2->1
+	ExecuteQuery("UPDATE vtiger_".$picklistname." SET PRESENCE=2 WHERE PRESENCE=0");
+	ExecuteQuery("UPDATE vtiger_".$picklistname." SET PRESENCE=0 WHERE PRESENCE=1");
+	ExecuteQuery("UPDATE vtiger_".$picklistname." SET PRESENCE=1 WHERE PRESENCE=2");
+}
+foreach($noneditable_values as $picklistname => $value)
+{
+	ExecuteQuery("UPDATE vtiger_".$picklistname." SET PRESENCE=0 WHERE $picklistname='".$value."'");
+}
+
+
+
+
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");
 
