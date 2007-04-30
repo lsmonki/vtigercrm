@@ -122,7 +122,13 @@ function sendmail(module,idstrings)
                         method: 'post',
                         postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings,
                         onComplete: function(response) {
-                                        getObj('sendmail_cont').innerHTML=response.responseText;
+					if(response.responseText == "Mail Ids not permitted")
+					{
+						var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
+				                openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+					}	
+					else
+						getObj('sendmail_cont').innerHTML=response.responseText;
                         }
                 }
         );

@@ -441,45 +441,51 @@ var $rel_serel_table = "vtiger_seactivityrel";
 function get_to_emailids($module)
 {
 	global $adb;
-	$query = 'select columnname,fieldid from vtiger_field where fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
-    $result = $adb->query($query);
-	$columns = Array();
-	$idlists = '';
-	$mailids = '';
-	while($row = $adb->fetch_array($result))
-    {
-		$columns[]=$row['columnname'];
-		$fieldid[]=$row['fieldid'];
-	}
-	$columnlists = implode(',',$columns);
-	$crmids = ereg_replace(':',',',$_REQUEST["idlist"]);
-	switch($module)
+	if(isset($_REQUEST["field_lists"]) && $_REQUEST["field_lists"] != "")
 	{
-		case 'Leads':
-			$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
-			break;
-		case 'Contacts':
-			$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
-			break;
-		case 'Accounts':
-			$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
-			break;
-	}	
-	$result = $adb->query($query);
-	while($row = $adb->fetch_array($result))
-	{
-		$name = $row['entityname'];
-		for($i=0;$i<count($columns);$i++)
+		$query = 'select columnname,fieldid from vtiger_field where fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
+		$result = $adb->query($query);
+		$columns = Array();
+		$idlists = '';
+		$mailids = '';
+		while($row = $adb->fetch_array($result))
+    		{
+			$columns[]=$row['columnname'];
+			$fieldid[]=$row['fieldid'];
+		}
+		$columnlists = implode(',',$columns);
+		$crmids = ereg_replace(':',',',$_REQUEST["idlist"]);
+		switch($module)
 		{
-			if($row[$columns[$i]] != NULL && $row[$columns[$i]] !='')
+			case 'Leads':
+				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
+				break;
+			case 'Contacts':
+				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
+				break;
+			case 'Accounts':
+				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_crmentity.crmid in ('.$crmids.')';
+				break;
+		}	
+		$result = $adb->query($query);
+		while($row = $adb->fetch_array($result))
+		{
+			$name = $row['entityname'];
+			for($i=0;$i<count($columns);$i++)
 			{
-				$idlists .= $row['crmid'].'@'.$fieldid[$i].'|'; 
-				$mailids .= $name.'<'.$row[$columns[$i]].'>,';	
+				if($row[$columns[$i]] != NULL && $row[$columns[$i]] !='')
+				{
+					$idlists .= $row['crmid'].'@'.$fieldid[$i].'|'; 
+					$mailids .= $name.'<'.$row[$columns[$i]].'>,';	
+				}
 			}
 		}
-	}
 
-	$return_data = Array('idlists'=>$idlists,'mailds'=>$mailids);
+		$return_data = Array('idlists'=>$idlists,'mailds'=>$mailids);
+	}else
+	{
+		$return_data = Array('idlists'=>"",'mailds'=>"");
+	}	
 	return $return_data;
 		
 }

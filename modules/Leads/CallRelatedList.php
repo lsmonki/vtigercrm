@@ -39,6 +39,7 @@ global $mod_strings;
 global $app_strings;
 global $theme;
 global $currentModule;
+global $current_user;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -58,7 +59,20 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
  {
        unset($_SESSION['rlvs']);
  }
-	
+
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+{
+	$userid = $current_user->id;
+	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 7";
+	$result = $adb->query($sql);
+	$num_fieldnames = $adb->num_rows($result);
+	for($i = 0; $i < $num_fieldnames; $i++)
+	{
+		$fieldname = $adb->query_result($result,$i,"fieldname");
+		$permit= getFieldVisibilityPermission("Leads",$userid,$fieldname);
+	}
+}
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
@@ -80,6 +94,8 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("MAIL_CHECK", is_emailId($RECORD));
+$smarty->assign("PERMIT",$permit);
 $smarty->display("RelatedLists.tpl");
 }
 ?>

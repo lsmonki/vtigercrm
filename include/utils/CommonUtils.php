@@ -2858,5 +2858,40 @@ function getUItype($module,$columnname)
 
 }
 
+function is_emailId($entity_id)
+{
+	global $log,$adb;
+	$log->debug("Entering is_EmailId(".$module.",".$entity_id.") method");
+
+	$module = getSalesEntityType($entity_id);
+	if($module == 'Contacts')
+	{
+		$sql = "select email,yahooid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where contactid = ".$entity_id;
+		$result = $adb->query($sql);
+		$email1 = $adb->query_result($result,0,"email");
+		$email2 = $adb->query_result($result,0,"yahooid");
+		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
+		{
+			$check_mailids = "true";
+		}
+		else
+			$check_mailids = "false";
+	}
+	elseif($module == 'Leads')
+	{
+		$sql = "select email,yahooid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where leadid = ".$entity_id;
+		$result = $adb->query($sql);
+		$email1 = $adb->query_result($result,0,"email");
+		$email2 = $adb->query_result($result,0,"yahooid");
+		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
+		{
+			$check_mailids = "true";
+		}
+		else
+			$check_mailids = "false";
+	}
+	$log->debug("Exiting is_EmailId() method ...");
+	return $check_mailids;
+}
 
 ?>

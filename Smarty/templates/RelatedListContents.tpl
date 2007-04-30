@@ -127,7 +127,15 @@
                         {elseif $header eq 'Emails'}
                                 <input type="hidden" name="email_directing_module">
                                 <input type="hidden" name="record">
+				{if $PERMIT eq '0'}
+                                {if $MAIL_CHECK eq 'true'}
                                 <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+				{else}
+                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="javascript:alert('{$APP.LBL_THIS}{$APP.$MODULE}{$APP.DOESNOT_HAVE_MAILIDS}');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+                                {/if}
+                                {else}
+                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+                                {/if}
 			{elseif $header eq 'Users'}
                                 {if $MODULE eq 'Calendar'}
 				<input title="Change" accessKey="" tabindex="2" type="button" class="crmbutton small edit" value="{$APP.LBL_SELECT_USER_BUTTON_LABEL}" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Calendar&return_action={$return_modname}&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&select=enable&return_id={$ID}&recordid={$ID}","test","width=640,height=525,resizable=0,scrollbars=0")';>

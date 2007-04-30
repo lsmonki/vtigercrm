@@ -24,7 +24,6 @@
 			</td>
 		</tr>
 	</table>
-{if $PERMIT eq '0'}
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 		<tr><td class="small">
 			<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
@@ -44,11 +43,15 @@
 									{else}
 									<td align="center"><input type="checkbox" value="{$fieldid}" name="semail"  /></td>
 									{/if}
+									{if $PERMIT eq '0'}
 									{if $ONE_RECORD eq 'true'}	
-									<td align="left"><b>{$elements.0} </b><br>{$MAILDATA[$smarty.foreach.emailids.iteration]}</td>
+									<td align="left"><b>{$elements.0}</b><br>{$MAILDATA[$smarty.foreach.emailids.index]}</td>
 									{else}
 									<td align="left"><b>{$elements.0}</b></td>
 									{/if}
+									{else}
+                                                                        <td align="left"><b>{$elements.0}</b><br>{$MAILDATA[$smarty.foreach.emailids.index]}</td>
+                                                                        {/if}
 								</tr>
 								{/foreach}
 							</table>
@@ -64,15 +67,4 @@
 			<input type="button" name="{$APP.LBL_CANCEL_BUTTON_LABEL}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="fninvsh('roleLay');" />
 		</td></tr>
 	</table>
-{else}
-	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center>
-                <tr><td class="small">
-			<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
-                                <tr><td align="center">
-					<b>{$MOD.LBL_MAILSELECT_INFO3}</b>
-				</td></tr>
-			</table>
-		</td></tr>
-	</table>
-{/if}
 </div>
