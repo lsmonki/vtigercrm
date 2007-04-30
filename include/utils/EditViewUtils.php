@@ -664,10 +664,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 66)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
-		{
 			$value = $_REQUEST['parent_id'];
+		if($value != '')
 			$parent_module = getSalesEntityType($value);
-		}	
 		// Check for vtiger_activity type if task orders to be added in select option
 		$act_mode = $_REQUEST['activity_mode'];
 
