@@ -25,8 +25,8 @@ if($_REQUEST['check']== 'reportCheck')
 }
 else if($_REQUEST['check']== 'folderCheck')
 {
-	$folderName = $_REQUEST['folderName'];
-	$folderName =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$folderName));
+	$folderName = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['folderName']) : $_REQUEST['folderName'];
+	$folderName =str_replace(array("'",'"'),'',$folderName);
 	if($folderName == "" || !$folderName)
 	{
 		echo "999";

@@ -161,7 +161,7 @@ function Search($module)
 
 		$search_string = $_REQUEST['search_text'];
 		
-		$stringConvert = iconv("UTF-8",$default_charset,$search_string);
+		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$search_string) : $search_string;
 
 		$search_string=addslashes(ltrim(rtrim($stringConvert)));
 
@@ -607,7 +607,7 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
-			$srch_val = iconv("UTF-8",$default_charset,$srch_val);
+			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			$uitype=getUItype($currentModule,$column_name);

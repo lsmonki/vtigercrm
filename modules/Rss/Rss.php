@@ -75,7 +75,7 @@ class vtigerRSS extends CRMEntity
 			$i = 0;
 			foreach($this->rss_object as $key=>$item)
 			{
-				$stringConvert = iconv("UTF-8",$default_charset,$item[title]);
+				$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$item[title]) : $item[title];
 				$rss_title= addslashes(ltrim(rtrim($stringConvert)));
 				
 				$i = $i + 1;	   

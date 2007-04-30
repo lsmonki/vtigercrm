@@ -12,8 +12,10 @@
 require_once('include/database/PearDatabase.php');
 global $default_charset;
 global $adb;
-$notifysubject =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['notifysubject']));
-$notifybody =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['notifybody']));
+$conv_sub = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['notifysubject']) : $_REQUEST['notifysubject'];
+$conv_body = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['notifybody']) : $_REQUEST['notifybody'];
+$notifysubject =str_replace(array("'",'"'),'',$conv_sub);
+$notifybody =str_replace(array("'",'"'),'',$conv_body);
 
 if($notifysubject != '' && $notifybody != '')
 {

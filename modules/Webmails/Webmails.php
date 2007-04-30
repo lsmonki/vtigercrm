@@ -632,7 +632,7 @@ function mime_header_decode(&$header)
 		if ($element_charset == 'x-unknown')
 			$element_charset = 'ISO-8859-1';
 
-		$element_converted = @iconv( $element_charset, $output_charset, $source[$j]->text);
+		$element_converted = function_exists(iconv) ? @iconv( $element_charset, $output_charset, $source[$j]->text): $source[$j]->text ;
 		$result[$j]->text = $element_converted;
 		$result[$j]->charset = $output_charset;
 	}
@@ -770,7 +770,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 				$body_charset = $_REQUEST['user_charset'];
 			}
 			$this->charsets = $body_charset;
-			$body_converted = @iconv( $body_charset, $GLOBALS['charset'], $body);
+			$body_converted = function_exists(iconv) ? @iconv( $body_charset, $GLOBALS['charset'], $body) : $body;
 			$body = ($body_converted===FALSE) ? $body : $body_converted;
 			$tmpvar['charset'] = ($body_converted===FALSE) ? $body_charset : $GLOBALS['charset'];
 		}

@@ -19,8 +19,8 @@ if($ajaxaction == "SAVETAG")
 {
 	
 	require_once('include/freetag/freetag.class.php');
-	$tagfields=$_REQUEST['tagfields'];
-	$tagfields =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['tagfields']));
+	$tagfields=function_exists(iconv) ? @iconv("UTF-8",$default_charset,$_REQUEST['tagfields']) : $_REQUEST['tagfields'];
+	$tagfields =str_replace(array("'",'"'),'',$tagfields);
 	if($tagfields != "")
 	{
     		$freetag = new freetag();

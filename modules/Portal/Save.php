@@ -12,8 +12,10 @@
 require_once('modules/Portal/Portal.php');
 
 global $default_charset;
-$portlname =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['portalname']));
-$portlurl =str_replace(array("'",'"'),'',iconv("UTF-8",$default_charset,$_REQUEST['portalurl']));
+$conv_pname = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalname']) : $_REQUEST['portalname'];
+$conv_purl = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalurl']) : $_REQUEST['portalurl'];
+$portlname =str_replace(array("'",'"'),'',$conv_pname);
+$portlurl =str_replace(array("'",'"'),'',$conv_purl);
 
 if($portlname != '' && $portlurl != '')
 {
