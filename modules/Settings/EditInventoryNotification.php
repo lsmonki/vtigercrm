@@ -31,7 +31,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	{
 		$label = $mod_strings[$adb->query_result($result,0,'notificationname')];
 		$notification_subject = $adb->query_result($result,0,'notificationsubject');
-		$notification_body = iconv("UTF-8",$default_charset,$adb->query_result($result,0,'notificationbody'));
+		$notification_body = function_exists(iconv) ? iconv("UTF-8",$default_charset,$adb->query_result($result,0,'notificationbody')) : $adb->query_result($result,0,'notificationbody');
 		$notification_id = $adb->query_result($result,0,'notificationid');
 
 		$notification = Array();
