@@ -2667,9 +2667,9 @@ function getrecurringObjValue()
 function getTranslatedString($str)
 {
 	global $app_strings, $mod_strings, $log;
-	$str = ($app_strings[$str] != '')?$app_strings[$str]:(($mod_strings[$str] != '')?$mod_strings[$str]:$str);
-	$log->debug("function getTranslatedString($str) - translated to ($str)");
-	return $str;
+	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($mod_strings[$str] != '')?$mod_strings[$str]:$str);
+	$log->debug("function getTranslatedString($str) - translated to ($trans_str)");
+	return $trans_str;
 }
 
 /**	function used to get the list of importable fields
