@@ -876,6 +876,7 @@ $app_strings = array (
 'Lead Status'=>'Lead Status',
 'Lead Source'=>'Lead Source',
 'Quote ID'=>'Quote Id',
+'Yahoo Id'=>'Yahoo Id',
 );
 
 $app_list_strings = array (

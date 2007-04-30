@@ -25,18 +25,9 @@ if(!strpos($idlist,':'))
 $smarty = new vtigerCRM_Smarty;
 
 $userid =  $current_user->id;
-if($pmodule=='Accounts')
-{
-	$querystr="select fieldid,fieldname,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype=13";
-}
-elseif ($pmodule=='Contacts')
-{
-	$querystr="select fieldid,fieldname,fieldlabel,columnname from vtiger_field where tabid=4 and uitype=13";
-}
-elseif ($pmodule=='Leads')
-{
-	$querystr="select fieldid,fieldname,fieldlabel,columnname from vtiger_field where tabid=7 and uitype=13";
-}
+
+$querystr = "select fieldid, fieldlabel, columnname from vtiger_field where tabid=".getTabid($pmodule)." and uitype=13";
+
 $res=$adb->query($querystr);
 $numrows = $adb->num_rows($res);
 $returnvalue = Array();
@@ -50,7 +41,8 @@ for($i = 0; $i < $numrows; $i++)
 		$temp=$adb->query_result($res,$i,'columnname');
 		$columnlists [] = $temp;
 		$fieldid=$adb->query_result($res,$i,'fieldid');
-		$value[] =$adb->query_result($res,$i,'fieldlabel');
+		$fieldlabel =$adb->query_result($res,$i,'fieldlabel');
+		$value[] = getTranslatedString($fieldlabel);
 		$returnvalue [$fieldid]= $value;
 	}
 }
