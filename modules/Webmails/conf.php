@@ -54,8 +54,8 @@ $conf->default_smtp_port = 25;
 
 $i = 0;
 
-$conf->domains[$i]->domain = 'crm-test3.india.adventnet.com';
-$conf->domains[$i]->in ='crm-test3.india.adventnet.com:143/notls' ;
+$conf->domains[$i]->domain = '';
+$conf->domains[$i]->in ='' ;
 //$conf->domains[$i]->in = '';
 $conf->domains[$i]->smtp = 'smtp';
 $conf->domains[$i]->smtp_port = 25;
@@ -124,7 +124,7 @@ $conf->allow_address_change = true;
 // Default tmp directory (where to store temporary uploaded files)
 // This should be something like '/tmp' on Unix System
 // And 'c:\\temp' on Win32 (note that we must escape "\")
-$conf->tmpdir = '/home/anusha/toDel';
+$conf->tmpdir = '/tmp';
 
 // Preferences and contacts data directory
 // IMPORTANT: This directory must exist and be writable by the user
