@@ -88,7 +88,7 @@ if($file_name != '' && $_FILES['filename']['size'] == 0){
 	else{}
 	if($errormessage != ""){
 		$ret_error = 1;
-		$ret_toadd = $_REQUEST['to_add'];
+		$ret_toadd = $_REQUEST['parent_name'];
 		$ret_subject = $_REQUEST['subject'];
 		$ret_ccaddress = $_REQUEST['ccmail'];
 		$ret_bccaddress = $_REQUEST['bccmail'];
@@ -248,9 +248,11 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_REQUEST['filename'];
 
 $local_log->debug("Saved record with id of ".$return_id);
-
-if($_REQUEST["parent_name"] != '' && isset($_REQUEST["parent_name"])) {
-	include("modules/Emails/webmailsend.php");
+$str = $_REQUEST['parent_id'];
+if($_REQUEST['parent_id'] == '' || substr($str,strlen($str)-4) == '@-1|'){
+	if($_REQUEST["parent_name"] != '' && isset($_REQUEST["parent_name"])) {
+		include("modules/Emails/webmailsend.php");
+	}
 
 } elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 	include("modules/Emails/mailsend.php");

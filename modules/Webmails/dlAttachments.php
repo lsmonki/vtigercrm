@@ -23,9 +23,26 @@ $mailid=$_REQUEST["mailid"];
 $num=$_REQUEST["num"];
 
 $email = new Webmails($MailBox->mbox,$mailid);
-$attachments=$email->downloadAttachments();
-$inline=$email->downloadInlineAttachments();
+$attach_tab = Array();
+$email->loadMail($attach_tab);
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$email->charsets."\">\n";
+echo '<script src="modules/Webmails/Webmails.js" type="text/javascript"></script>';
+echo "<table class='small' width='100%' cellspacing='1' cellpadding='0' border='0' style='font-size:18px'>";
+if(count($email->attname) <= 0)
+	echo "<tr align='center'><td nowrap>No files to download</td></tr>";
+else{
+	for($i=0;$i<count($email->attname);$i++){
+        	$attachment_links .= "&nbsp;&nbsp;&nbsp;&nbsp;".$email->anchor_arr[$i].$email->attname[$i]."</a></br>";
+	}
+	echo "<tr><td><table class='small' width='100%' cellspacing='1' cellpadding='0' border='0' style='font-size:13px'><tr><td width='90%'>There are ".count($email->attname)." attachment(s) to choose from:</td></tr>";
+	echo "<tr><td width='100%'>".$attachment_links."</div></td></tr>";
+	echo "</td></tr></table>";
+}
 
+echo "</table>";
+//$attachments=$email->downloadAttachments();
+//$inline=$email->downloadInlineAttachments();
+/*
 if($num == "" || !isset($num) && count($attachments) >0 )
 {
 	echo "<table class='small' width='100%' cellspacing='1' cellpadding='0' border='0'><tr><td width='10%'>&nbsp;</td><td width='90%'>There are ".count($attachments)." attachment(s) to choose from:</td></tr>";
@@ -82,8 +99,8 @@ else
 	<META HTTP-EQUIV="Refresh"
 	CONTENT="0; URL=<?php echo $filename;?>"
 	]"
-	<?php
-}
+	/*<?php
+}*/
 
 
 ?>
