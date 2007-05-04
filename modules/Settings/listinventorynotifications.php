@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -43,3 +42,5 @@ if($_REQUEST['directmode'] != '')
 	$smarty->display("Settings/InventoryNotifyContents.tpl");
 else
 	$smarty->display("Settings/InventoryNotify.tpl");
+
+?>
