@@ -8,6 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+ini_set('max_execution_time','1800');
 require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
 require('include/fpdf/fpdf.php');
