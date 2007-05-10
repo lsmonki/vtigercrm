@@ -155,7 +155,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	// Add some grace to y-axis so the bars doesn't go
 	// all the way to the end of the plot area
 	if($max<=10)
-		$yaxis->forceMaximum(round(($max * 1.1) + 0.5));
+		$yaxis->forceMaximum(round(($max * 1.1) + 1.5));
 	elseif($max>10 && $max<=100)
 		$yaxis->forceMaximum(round(($max * 1.1) + 1.5));
 	elseif($max>100 && $max<=1000)
