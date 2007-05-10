@@ -51,7 +51,7 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>{$MOD.LBL_MAIL_SERVER_SMTP}</strong>&nbsp;<br>{$ERROR_MSG}</td>
+						<td class="big"><strong>{$MOD.LBL_MAIL_SERVER_SMTP}</strong></td>
 						{if $EMAILCONFIG_MODE neq 'edit'}	
 						<td class="small" align=right>
 							<input class="crmButton small edit" title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='EmailConfig';this.form.emailconfig_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
@@ -63,6 +63,11 @@
 						</td>
 						{/if}
 					</tr>
+					{if $ERROR_MSG neq ''}
+					<tr>
+						{$ERROR_MSG}
+					</tr>
+					{/if}
 					</table>
 					
 					{if $EMAILCONFIG_MODE neq 'edit'}	

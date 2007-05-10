@@ -249,7 +249,7 @@ if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_RE
 
 $local_log->debug("Saved record with id of ".$return_id);
 $str = $_REQUEST['parent_id'];
-if($_REQUEST['parent_id'] == '' || substr($str,strlen($str)-4) == '@-1|'){
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] == '' || substr($str,strlen($str)-4) == '@-1|'){
 	if($_REQUEST["parent_name"] != '' && isset($_REQUEST["parent_name"])) {
 		include("modules/Emails/webmailsend.php");
 	}

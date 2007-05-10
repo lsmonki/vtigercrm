@@ -31,7 +31,7 @@ if($server_type == 'proxy')
 	$action = 'ProxyServerConfig&proxy_server_mode=edit';
 	if (!$sock =@fsockopen($server, $port, $errno, $errstr, 30))
 	{
-		$error_str = 'error=Unable connect to "'.$server.':'.$port.'"';
+		$error_str = 'error=Unable to connect "'.$server.':'.$port.'"';
 		$db_update = false;
 	}else
 	{
@@ -79,20 +79,21 @@ if($server_type == 'backup')
 		ftp_close($conn_id);
 	}
 }
-
-if($db_update)
+if($server_type == 'proxy' || $server_type == 'backup')
 {
-	if($id=='')
+	if($db_update)
 	{
-		$id = $adb->getUniqueID("vtiger_systems");
-		$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+		if($id=='')
+		{
+			$id = $adb->getUniqueID("vtiger_systems");
+			$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+		}
+		else
+			$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
+
+		$adb->query($sql);
 	}
-	else
-		$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
-
-	$adb->query($sql);
 }
-
 //Added code to send a test mail to the currently logged in user
 if($server_type != 'backup' && $server_type != 'proxy')
 {
@@ -115,10 +116,23 @@ if($server_type != 'backup' && $server_type != 'proxy')
 	$error_str = getMailErrorString($mail_status_str);
 	$action = 'EmailConfig';
 	if($mail_status != 1)
-		$action = 'EmailConfig&emailconfig_mode=edit';
+		$action = 'EmailConfig&emailconfig_mode=edit&server_name='.$_REQUEST['server'].'&server_user='.$_REQUEST['server_username'].'&auth_check='.$_REQUEST['smtp_auth'];
+	else{
+		if($db_update)
+        	{
+                	if($id=='')
+                	{
+                        	$id = $adb->getUniqueID("vtiger_systems");
+                        	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+                	}
+                	else
+                        	$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
+                $adb->query($sql);
+        	}	
+	}
 }
 //While configuring Proxy settings, the submitted values will be retained when exception is thrown - dina
-if($server_type == 'proxy' && $error_str == 'error=LBL_PROXY_AUTHENTICATION_REQUIRED')
+if($server_type == 'proxy' && $error_str != '')
 {
         header("Location: index.php?module=Settings&parenttab=Settings&action=$action&server=$server&port=$port&server_username=$server_username&$error_str");
 }

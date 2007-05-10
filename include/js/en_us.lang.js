@@ -121,6 +121,7 @@
                                 START_TIME : 'Start Time',
                                 DATE_SHOULDNOT_PAST :'Current date & time for Activities with status as Planned',
                                 TIME_SHOULDNOT_PAST :'Current Time for Activities with status as Planned',
-				LBL_AND : 'And'
+				LBL_AND : 'And',
+				LBL_ENTER_VALID_PORT: 'Please enter valid port number'
 
                        };

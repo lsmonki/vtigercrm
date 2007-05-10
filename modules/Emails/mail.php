@@ -197,9 +197,18 @@ function setMailServerProperties($mail)
 	$adb->println("Inside the function setMailServerProperties");
 
 	$res = $adb->query("select * from vtiger_systems where server_type='email'");
-	$server = $adb->query_result($res,0,'server');
-        $username = $adb->query_result($res,0,'server_username');
-        $password = $adb->query_result($res,0,'server_password');
+	if(isset($_REQUEST['server']))
+		$server = $_REQUEST['server'];
+	else
+		$server = $adb->query_result($res,0,'server');
+	if(isset($_REQUEST['server_username']))
+		$username = $_REQUEST['server_username'];
+	else
+	        $username = $adb->query_result($res,0,'server_username');
+	if(isset($_REQUEST['server_password']))
+		$password = $_REQUEST['server_password'];
+	else
+        	$password = $adb->query_result($res,0,'server_password');
 	$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");

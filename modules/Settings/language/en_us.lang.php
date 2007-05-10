@@ -895,7 +895,7 @@ $mod_strings = Array(
 //5.0.3 fixes
 'LBL_TESTMAILSTATUS'=>'Test Mail Status : ',
 'LBL_CHECK_ASSIGNEDTO_MAILID'=>'Please check the assigned-to emailid',
-'LBL_MAILSENDERROR'=>'Mail could not be sent to the admin user. Please check the admin emailid',
+'LBL_MAILSENDERROR'=>'Mail could not be sent to the admin user. Please check the admin emailid/Server settings',
 'LBL_RECORD_NOEXIST'=>'Record not present',
 'LBL_ENTER_PROFILE'=>'Enter Profile Name',
 'LBL_ENABLE'=>'Enable',
