@@ -306,7 +306,7 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		if(($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder")  && ($search_field == "contact_id"))
+		if(($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
 	       {
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
@@ -471,6 +471,10 @@ function getAdvSearchfields($module)
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname\'>".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
 			}
+			elseif($fieldcolname == "campaignid")
+			{
+				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname\'>".$mod_strings[$fieldlabel]."</option>";
+			}
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
 		}
@@ -618,10 +622,7 @@ function getWhereCondition($currentModule)
                                         $adv_string .= " ".getSearch_criteria($srch_cond,"1",$tab_name.'.'.$column_name)." ".$matchtype;
                                 if(stristr($srch_val,'no'))
                                         $adv_string .= " ".getSearch_criteria($srch_cond,"0",$tab_name.'.'.$column_name)." ".$matchtype;
-	
-
 			}
-
 			elseif($tab_col == "vtiger_crmentity.smownerid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_users.user_name')." or";	

@@ -1912,6 +1912,8 @@ function getListQuery($module,$where='')
 				ON vtiger_potential.accountid = vtiger_account.accountid
 			INNER JOIN vtiger_potentialscf
 				ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_campaign
+				ON vtiger_campaign.campaignid = vtiger_potential.campaignid
 			LEFT JOIN vtiger_potentialgrouprelation
 				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 			LEFT JOIN vtiger_groups
