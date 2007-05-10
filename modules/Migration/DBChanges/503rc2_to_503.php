@@ -235,6 +235,8 @@ ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_
 //In 4.2.3 we have assigned to group option only for Leads, HelpDesk and Activies and default None can be assigned. Now we will assign the unassigned entities to current user
 ExecuteQuery("update vtiger_crmentity set smownerid=1 where smownerid=0 and setype not in ('Leads','HelpDesk','Calendar')");
 
+//Change Emails to Webmails in main tabs - My Home Page, Marketing, Support drop down menu
+ExecuteQuery("update vtiger_parenttabrel set tabid=28 where tabid=10");
 
 
 
