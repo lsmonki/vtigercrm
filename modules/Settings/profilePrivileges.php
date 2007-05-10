@@ -420,7 +420,6 @@ for($i=0; $i<$noofrows; $i++)
 {
 	$FieldId = $adb->query_result($result,$i,'fieldid');
 	$Visible = $adb->query_result($result,$i,'visible');
-
 	$disable_field_array[$FieldId] = $Visible;
 }
 
@@ -472,15 +471,12 @@ elseif($mode=='edit')
 		{
 			$fldLabel= $fieldListResult[$module_name][$j][0];
 			$uitype = $fieldListResult[$module_name][$j][2];
+			$displaytype = $fieldListResult[$module_name][$j][5];
 			$mandatory = '';
 			$readonly = '';
 			$field=array();
-			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
-			{
-				$mandatory = '<font color="blue">*</font>';
-				$readonly = 'disabled';
-			}
-			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
+			
+			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -493,6 +489,13 @@ elseif($mode=='edit')
 			{
 				$visible = "";
 			}
+			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+			{
+				$mandatory = '<font color="blue">*</font>';
+				$readonly = 'disabled';
+				$visible = "";
+			}
+			
 			if($language_strings[$fldLabel] != '')
 				$field[]=$mandatory.' '.$language_strings[$fldLabel];
 			else
@@ -520,16 +523,13 @@ elseif($mode=='create')
 			{
 				$fldLabel= $fieldListResult[$module_name][$j][0];
 				$uitype = $fieldListResult[$module_name][$j][2];
+				$displaytype = $fieldListResult[$module_name][$j][5];
 				$mandatory = '';
 				$readonly = '';
 				$field=array();
 
-				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
-				{
-					$mandatory = '<font color="blue">*</font>';
-					$readonly = 'disabled';
-				}
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
+				
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -542,6 +542,13 @@ elseif($mode=='create')
 				{
 					$visible = "";
 				}
+				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+				{
+					$mandatory = '<font color="blue">*</font>';
+					$readonly = 'disabled';
+					$visible = "";
+				}
+				
 				if($language_strings[$fldLabel] != '')
 					$field[]=$mandatory.' '.$language_strings[$fldLabel];
 				else
@@ -566,21 +573,27 @@ elseif($mode=='create')
 			{
 				$fldLabel= $fieldListResult[$module_name][$j][0];
 				$uitype = $fieldListResult[$module_name][$j][2];
+				$displaytype = $fieldListResult[$module_name][$j][5];
 				$mandatory = '';
 				$readonly = '';
 				$field=array();
 
-				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
-				{
-					$mandatory = '<font color="blue">*</font>';
-					$readonly = 'disabled';
-				}
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53)
+				
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
 				}	
-				$visible = "checked";
+				
+				if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
+				{
+					$mandatory = '<font color="blue">*</font>';
+					$readonly = 'disabled';
+					$visible = "";
+				}else
+				{
+					$visible = "checked";
+				}
 				if($language_strings[$fldLabel] != '')
 					$field[]=$mandatory.' '.$language_strings[$fldLabel];
 				else

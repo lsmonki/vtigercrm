@@ -1286,7 +1286,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 	$return_data=array();
     for($i=0; $i<$adb->num_rows($result); $i++)
     {
-		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"));
+		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"),$adb->query_result($result,$i,"displaytype"));
 	}	
 	$log->debug("Exiting getProfile2FieldPermissionList method ...");
 	return $return_data;

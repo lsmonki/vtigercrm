@@ -27,7 +27,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 
-$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Emails','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns','Faq');
+$field_module=getFieldModuleAccessArray();
 $allfields=Array();
 foreach($field_module as $fld_module)
 {
@@ -59,7 +59,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53)
+                if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3)
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';

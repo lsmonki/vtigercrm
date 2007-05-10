@@ -14,7 +14,6 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 
-//$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Emails','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns','Faq');
 
 $field_module=getFieldModuleAccessArray();
 
@@ -38,7 +37,7 @@ foreach($field_module as $fld_module=>$fld_name)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3)
+		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
 		{
 			$visible_value = 0; 
 		}		
