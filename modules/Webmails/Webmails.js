@@ -9,12 +9,6 @@
  ********************************************************************************/
 function load_webmail(mid) {
         var node = $("row_"+mid);
-	var webmail2 = new Array();
-	if(getObj("js_arr")){
-		eval(getObj("js_arr").innerHTML);
-	}
-	else
-		webmail2 = null;
 	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
 	{
 		$('fnt_subject_'+mid).color="";
@@ -162,10 +156,10 @@ function add_to_vtiger(mid) {
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
+                        postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true'+'&mailbox='+mailbox,
                         onComplete: function(t) {
-                                $("status").style.display="block";
-				setTimeout('makeSelected("'+rowId+'");',3000);
+				setTimeout('makeSelected("'+rowId+'");',500);
+				$("status").style.display="none";
                         }
                 }
         );
@@ -423,7 +417,6 @@ function mass_delete()
 function move_messages()
 {
 	var nid = '';
-	$("status").style.display = "block";
 	var chkname=document.getElementsByName("selected_id");
 	mvmbox = $("mailbox_select").value;
 	var nid = Array();
@@ -437,6 +430,7 @@ function move_messages()
 	
 	if(nid.length > 0)
 	{
+		$("status").style.display="block";
 		new Ajax.Request(
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
@@ -592,6 +586,11 @@ function runEmailCommand(com,id) {
                                         	tmp = document.getElementsByClassName("previewWindow");
                                                 tmp[0].style.visibility="hidden";
 					}catch(g){}
+                                        for(var i=0;i<tmp.length;i++) {
+                                                if(tmp[i].style.visibility === "visible") {
+                                                        tmp[i].style.visibility="hidden";
+                                                }
+                                        }
 
                                 	$("status").style.display="none";
 						if(i == ((rows.length)-2)){ 
