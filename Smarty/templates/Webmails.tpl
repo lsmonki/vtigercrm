@@ -40,8 +40,8 @@
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<td width="30%">
-								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>
+								<!--<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>-->
 							</td>
 							<td>&nbsp;</td>
 						   </tr>
@@ -53,7 +53,7 @@
 					<td width="80%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></div></td>
 				   </tr>
 				   <tr>
-					<td rowspan="6" valign="top" class="hdrNameBg">
+					<td rowspan="6" class="hdrNameBg">
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 						<div id="box_list">
 						<ul style="list-style-type:none;">
@@ -87,12 +87,6 @@
 								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
-	<li class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'">
-								<img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a
-						href="index.php?module=Emails&action=ListView&folderid=7&parenttab=My
-						Home Page"
-						class="webMnu">{$MOD.LBL_TO_GROUPS}</a>&nbsp; </li>
 						</ul><br />
 						<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
