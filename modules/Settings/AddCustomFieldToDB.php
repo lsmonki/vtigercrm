@@ -153,7 +153,7 @@ else
 	{
 		$uitype = 13;
 		$type = "C(50)"; //adodb type
-		$uichekdata='V~O';
+		$uichekdata='E~O';
 	}
 	elseif($fldType == 'Phone')
 	{
