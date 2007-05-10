@@ -125,7 +125,8 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_products:taxclas
 $profileresult = $adb->query("select * from vtiger_profile");
 $countprofiles = $adb->num_rows($profileresult);
 
-$res = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype=3 and tabid!=29");
+$res = $adb->query("select * from vtiger_field where fieldid not in (select fieldid from vtiger_profile2field) and generatedtype=1 and displaytype=3 and tabid!=29");
+//$res = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype=3 and tabid!=29");
 $num_fields = $adb->num_rows($res);
 for($i=0;$i<$num_fields;$i++)
 {
@@ -205,7 +206,39 @@ foreach($noneditable_values as $picklistname => $value)
 	ExecuteQuery("UPDATE vtiger_".$picklistname." SET PRESENCE=0 WHERE $picklistname='".$value."'");
 }
 
+//Assigned To value is shown as empty in Accounts, Emails and PO listviews because of uitype 52
+ExecuteQuery("update vtiger_field set uitype=53 where fieldname='assigned_user_id' and tabid in (6,10,21)");
 
+//AccountName is shown as empty in SO/Quotes/Invoice listview because of account details in vtiger_cvcolumnlist.columnname
+$modules_array = Array("SalesOrder","Quotes","Invoice","Contacts","Potentials");
+foreach($modules_array as $module)
+{
+	ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname='vtiger_account:accountname:accountname:".$module."_Account_Name:V' where columnname like '%:accountid:account_id:%' and vtiger_customview.entitytype='".$module."'");
+}
+
+/*
+$res = $adb->query("select vtiger_cvcolumnlist.*, vtiger_customview.viewname from vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where columnname like '%:accountid:account_id:%' and vtiger_customview.entitytype='SalesOrder'");
+for($i=0;$i<$adb->num_rows($res);$i++)
+{
+	$cvid = $adb->query_result($res,$i,'cvid');
+	$columnindex = $adb->query_result($res,$i,'columnindex');
+	ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_account:accountname:accountname:SalesOrder_Account_Name:V' where cvid=$cvid and columnindex=$columnindex");
+}
+*/
+
+//ContactName in Calendar listview is a link but record id is empty in link so when we click the link fatal error comes
+ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:V' where columnname = 'vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V' and vtiger_customview.entitytype='Calendar'");
+
+//Related To is not displayed in Calendar Listview
+ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_To:V' and vtiger_customview.entitytype='Calendar'");
+
+//In 4.2.3 we have assigned to group option only for Leads, HelpDesk and Activies and default None can be assigned. Now we will assign the unassigned entities to current user
+ExecuteQuery("update vtiger_crmentity set smownerid=1 where smownerid=0 and setype not in ('Leads','HelpDesk','Calendar')");
+
+
+
+
+ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
 
 

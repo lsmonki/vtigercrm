@@ -101,7 +101,11 @@ function ExecuteQuery($query)
 	global $conn, $query_count, $success_query_count, $failure_query_count, $success_query_array, $failure_query_array;
         global $migrationlog;
 
-	$status = $adb->query($query);
+	//For third option migration we have to use the $conn object because the queries should be executed in 4.2.3 db
+	if($_REQUEST['migration_option'] == 'alter_db_details')
+		$status = $conn->query($query);
+	else
+		$status = $adb->query($query);
 
 	$query_count++;	
 	if(is_object($status))

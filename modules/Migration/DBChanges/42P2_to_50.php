@@ -451,6 +451,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$name = $conn->query_result($res,$i,'name');
 	$role_map_array[$roleid] = $name;
 }
+$conn->println("List of Roles (roleid => name) ==> ");$conn->println($role_map_array);
 //echo '<pre> List of vtiger_roles :';print_r($role_map_array);echo '</pre>';
 
 //Before delete the vtiger_role take a backup array for the table vtiger_user2role
@@ -463,6 +464,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$roleid = $conn->query_result($res,$i,'roleid');
 	$user2role_array[$userid] = $roleid;
 }
+$conn->println("Users 2 Roles (userid => roleid) ==> ");$conn->println($user2role_array);
 //echo '<pre> List of vtiger_user2role : (userid => vtiger_roleid)';print_r($user2role_array);echo '</pre>';
 
 //Delete the vtiger_role entries
@@ -520,6 +522,7 @@ foreach($role_map_array as $roleid => $rolename)
 	$new_role_id = localcreateRole($rolename,$parentRole,$empty_array);
 	$new_role_map_array[$roleid] = $new_role_id;
 }
+$conn->println("Roles (oldroleid => newroleid) ==> ");$conn->println($new_role_map_array);
 
 //Before insert the new entry we should remove the old entries -- added on 06-06-06
 $user2role_del = "truncate vtiger_user2role";
@@ -566,6 +569,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$desc = $conn->query_result($res,$i,'description');
 	$group_map_array[$name] = $desc;
 }
+$conn->println("List of Groups (name => description) ==> ");$conn->println($group_map_array);
 //echo '<pre>List of Groups : ';print_r($group_map_array);echo '</pre>';
 
 
@@ -579,6 +583,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$userid = $conn->query_result($res,$i,'userid');
 	$users2group_map_array[$userid] = $groupname;
 }
+$conn->println("Users 2 Groups (userid => groupname) ==> ");$conn->println($users2group_map_array);
 //echo '<pre>List of vtiger_users2group : ';print_r($users2group_map_array);echo '</pre>';
 
 //Step 3 : delete all entries from vtiger_groups table
@@ -675,6 +680,7 @@ foreach($group_map_array as $groupname => $description)
 	$groupid = createGroup($groupname,$empty_array,$description);
 	$group_name_id_mapping[$groupname] = $groupid;
 }
+$conn->println("List of Groups Created (groupname => groupid) ==> ");$conn->println($group_name_id_mapping);
 
 
 //Copy all mappings in a user2grop table in a array;
@@ -746,7 +752,7 @@ Execute($query11);
 $altersql1 = "alter table vtiger_vendor drop column company_name";
 Execute($altersql1);
 $altersql2 = "alter table vtiger_vendor change column name vendorname varchar(100) default NULL";
-Execute($altersql2);
+$conn->query($altersql2);
 Execute("update vtiger_field set fieldname='vendorname', columnname='vendorname' where tabid=18 and fieldname='name'");
 //TODO (check): Remove this company_name entry from the vtiger_field table if it already exists
 
@@ -1298,7 +1304,7 @@ $insert_query_array9 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_contactdetails:title:title:Contacts_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_contactdetails:accountid:account_id:Contacts_Account_Name:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:accountname:accountname:Contacts_Account_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_contactdetails:email:email:Contacts_Email:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Office_Phone:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
@@ -1313,7 +1319,7 @@ $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array10 = Array(
 	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_potential:potentialname:potentialname:Potentials_Potential_Name:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_potential:accountid:account_id:Potentials_Account_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_account:accountname:accountname:Potentials_Account_Name:V')",
 	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_potential:amount:amount:Potentials_Amount:N')",
 	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_potential:closingdate:closingdate:Potentials_Expected_Close_Date:D')",
 	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_crmentity:smownerid:assigned_user_id:Potentials_Assigned_To:V')"
@@ -1348,7 +1354,7 @@ $insert_query_array12 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_quotes:subject:subject:Quotes_Subject:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_quotes:accountid:account_id:Quotes_Account_Name:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_account:accountname:accountname:Quotes_Account_Name:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_quotes:total:hdnGrandTotal:Quotes_Total:I')",
 		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V')"
 			     );
@@ -1471,7 +1477,7 @@ $cvid = $conn->query_result($res,0,"cvid");
 $insert_query_array20 = Array(
 	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_crmentity:crmid::SalesOrder_Order_Id:I')",
 	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_salesorder:subject:subject:SalesOrder_Subject:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_account:accountid:account_id:SalesOrder_Account_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_account:accountname:accountname:SalesOrder_Account_Name:V')",
 	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_quotes:quoteid:quote_id:SalesOrder_Quote_Name:I')",
 	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_salesorder:total:hdnGrandTotal:SalesOrder_Total:V')",
 	"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V')"
@@ -3680,7 +3686,7 @@ for($i=0;$i<$productcount;$i++)
 $inventory_tables = Array(
 				'vtiger_poproductrel'=>'purchaseorderid',
 				'vtiger_soproductrel'=>'salesorderid',
-				'vtiger_quotesproductrel'=>'quotesid',
+				'vtiger_quotesproductrel'=>'quoteid',
 				'vtiger_invoiceproductrel'=>'invoiceid'
 			 );
 
