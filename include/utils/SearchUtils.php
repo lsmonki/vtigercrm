@@ -306,7 +306,7 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		if($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder"  && ($search_field == "contact_id"))
+		if(($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder")  && ($search_field == "contact_id"))
 	       {
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
