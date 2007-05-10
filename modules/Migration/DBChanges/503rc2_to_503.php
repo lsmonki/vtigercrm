@@ -238,6 +238,10 @@ ExecuteQuery("update vtiger_crmentity set smownerid=1 where smownerid=0 and sety
 //Change Emails to Webmails in main tabs - My Home Page, Marketing, Support drop down menu
 ExecuteQuery("update vtiger_parenttabrel set tabid=28 where tabid=10");
 
+//we have to put invoiceid as default Invoice Number for all invoices otherwise we cannot edit the invoices
+ExecuteQuery("update vtiger_invoice set invoice_no=invoiceid");
+
+
 
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
