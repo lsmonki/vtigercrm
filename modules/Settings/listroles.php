@@ -138,7 +138,7 @@ function indent($hrarray,$roleout,$role_det)
 				$roleout .=	'<a href="index.php?module=Settings&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="'.$image_path.'/RolesDelete.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_DELETE_ROLE'].'" title="'.$mod_strings['LBL_DELETE_ROLE'].'"></a>';
 			}		
 													
-		        $roleout .='<a href="#" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="'.$image_path.'/RolesMove.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_MOVE_ROLE'].'" title="'.$mod_strings['LBL_MOVE_ROLE'].'"></a>
+		        $roleout .='<a href="javascript:;" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="'.$image_path.'/RolesMove.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_MOVE_ROLE'].'" title="'.$mod_strings['LBL_MOVE_ROLE'].'"></a>
 												</div></td></tr></table>';
 //			$roleout .=	'&nbsp;<a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid='.$roleid.'">View</a>';		
 
