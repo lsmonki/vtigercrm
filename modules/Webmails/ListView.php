@@ -390,6 +390,8 @@ if (is_array($list)) {
 		/*	if($tmpval != "INBOX")
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 		 */
+			if(!isset($_SESSION["folder_image_path"]))
+                                $_SESSION["folder_image_path"] = $image_path;
 			$_SESSION["mailboxes"][$tmpval] = $unread_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}

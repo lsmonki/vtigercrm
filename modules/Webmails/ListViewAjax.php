@@ -209,12 +209,10 @@ if (is_array($list)) {
 		/*	if($tmpval != "INBOX")
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 		 */
-			if(!isset($_SESSION["image_path"]))
-				$_SESSION["image_path"] = $image_path;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
-
+			
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$_SESSION["folder_image_path"].'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($unread_msgs > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 
@@ -224,7 +222,7 @@ if (is_array($list)) {
 
 			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 			$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'"><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'"><img src="'.$_SESSION["folder_image_path"].'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($box->unseen > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 		}
