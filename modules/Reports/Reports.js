@@ -480,6 +480,7 @@ function changeSteps()
 		if (trim(document.NewRep.reportname.value) == "")
 		{
 			alert(alert_arr.MISSING_REPORT_NAME);
+			return false;
 		}else
 		{
 			new Ajax.Request(

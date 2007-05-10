@@ -23,7 +23,7 @@
 <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 <tr>
 	<td>
-		<form name="NewRep" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px">
+		<form name="NewRep" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px" onSubmit="return changeSteps();">
 		<input type="hidden" name="module" value="Reports">
 		<input type="hidden" name="primarymodule" value="{$REP_MODULE}">
 		<input type="hidden" name="file" value="NewReport1">
