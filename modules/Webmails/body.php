@@ -38,9 +38,9 @@ $from = decode_header($email->from);
 $to = decode_header($email->to_header);
 $cc = decode_header($email->cc_header);
 $date = decode_header($email->date);
-/*for($i=0;$i<count($email->attname);$i++){
+for($i=0;$i<count($email->attname);$i++){
 	$attachment_links .= $email->anchor_arr[$i].decode_header($email->attname[$i])."</a></br>";
-}*/
+}
 $content['body'] = '<span id="webmail_body">'.$email->body.'</span>';
 $content['attachtab'] = $email->attachtab;
 
@@ -55,9 +55,15 @@ $content['attachtab'] = $email->attachtab;
 <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_CC'];?></b></td><td id="webmail_cc"><?php echo $cc;?></td></tr>
 
                                                 <tr><td align="right"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b></td><td id="webmail_subject"><?php echo $subject;?></td></tr>
-                <tr><td align="right"><b><?php echo $mod_strings['MOD.LBL_DATE'];?></b></td><td id="webmail_date"><?php echo $date;?></td>
-      <tr> 
-	<td>&nbsp;</td> <td id="full_view"><span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td></tr>
+	<tr><td align="right"><b><?php echo $mod_strings['LBL_DATE'];?></b></td><td id="webmail_date"><?php echo $date;?></td>
+        <tr>
+	<?php if($_REQUEST['fullview'] && $email->has_attachments) {?>
+		<td align="right"><b><?php echo $mod_strings['LBL_ATTACHMENT'];?>:</b></td><td id="webmail_attachment"><?php echo $attachment_links;?></td>
+	<?php } ?>
+	<?php if(!$_REQUEST['fullview']) {?>
+	<td>&nbsp;</td> <td id="full_view"><span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
+	<?php } ?>
+	</tr>
                                                 <tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
                                         </table>
                                         <!-- Table to display the Header details (From, To, Subject and date) - Ends -->

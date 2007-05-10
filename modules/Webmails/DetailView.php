@@ -43,7 +43,7 @@ echo '</td></tr>';
 $array_tab = Array();
 $webmail->loadMail($array_tab);
 
-echo '<tr><td align="center"><iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&mailbox='.$mailbox.'" width="100%" height="500" frameborder="0" style="border:1px solid gray">'.$mod_strings['LBL_NO_IFRAMES_SUPPORTED'].'</iframe></td></tr>';
+echo '<tr><td align="center"><iframe src="index.php?module=Webmails&action=body&fullview=true&mailid='.$mailid.'&mailbox='.$mailbox.'" width="100%" height="600" frameborder="0" style="border:1px solid gray">'.$mod_strings['LBL_NO_IFRAMES_SUPPORTED'].'</iframe></td></tr>';
 /*if($webmail->has_attachments)
 {
 	//check for attachments
