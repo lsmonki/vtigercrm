@@ -241,6 +241,13 @@ ExecuteQuery("update vtiger_parenttabrel set tabid=28 where tabid=10");
 //we have to put invoiceid as default Invoice Number for all invoices otherwise we cannot edit the invoices
 ExecuteQuery("update vtiger_invoice set invoice_no=invoiceid");
 
+//change the typeofdata for Emails fields(Custom Fields) from V~O to E~O
+ExecuteQuery("update vtiger_field set typeofdata='E~O' where uitype=13 and typeofdata='V~O'");
+
+//set the visible to 0 for the mandatory fields for both profile2field and def_org_share_field
+ExecuteQuery("update vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid = vtiger_profile2field.fieldid set visible=0 where uitype in (2,6,22,73,24,81,50,23,16,53,20) or displaytype=3");
+ExecuteQuery("update vtiger_def_org_field inner join vtiger_field on vtiger_field.fieldid = vtiger_def_org_field.fieldid set visible=0 where uitype in (2,6,22,73,24,81,50,23,16,53,20) or displaytype=3");
+
 
 
 
