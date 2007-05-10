@@ -170,17 +170,26 @@ function email_validate(oform,mode)
 	if(document.EditView.ccmail.value.length >= 1)
 	{
 		var str = document.EditView.ccmail.value;
-		arr = new Array();
-		arr = str.split(",");
-		for(var i=0; i<=arr.length-1; i++)
-		{
-			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
-			{
-				//alert("Your CC Email Id for "+ arr[i] +" is not correct");
-				alert(cc_err_msg);
-				return false;
-			}
-		}
+                arr = new Array();
+                arr = str.split(",");
+                var tmp;
+
+                for(var i=0; i<=arr.length-1; i++)
+                {
+                        tmp = arr[i];
+                        if(tmp.match('<') && tmp.match('>')) {
+                                if(!findAngleBracket(arr[i])) {
+                                        alert(cc_err_msg+": "+arr[i]);
+                                        return false;
+                                }
+                        }
+                        else if(arr[i] != "" && !/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(arr[i]))
+                        {
+                                alert(cc_err_msg+": "+arr[i]);
+                                return false;
+                        }
+                }
+
 	}
 	
 	if(document.EditView.bccmail.value.length >= 1)
@@ -190,11 +199,9 @@ function email_validate(oform,mode)
 		arr = str.split(",");
 		for(var i=0; i<=arr.length-1; i++)
 		{
-			if(arr[i] != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(arr[i]))
+			if(arr[i] != "" && !/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(arr[i]))
 			{
-				//alert("Your BCC Email Id for "+ arr[i] +" is not correct");
-				alert(bcc_err_msg);
-
+				alert(bcc_err_msg+": "+arr[i]);
 				return false;	
 			}
 		}	
@@ -217,6 +224,32 @@ function email_validate(oform,mode)
 		oform.action.value='Save';
 		oform.submit();
 	}
+}
+//function to extract the mailaddress inside < > symbols.......for the bug fix #3752
+function findAngleBracket(mailadd)
+{
+        var strlen = mailadd.length;
+        var success = 0;
+        var gt = 0;
+        var lt = 0;
+        var ret = '';
+        for(i=0;i<strlen;i++){
+                if(mailadd[i] == '<' && gt == 0){
+                        lt = 1;
+                }
+                if(mailadd[i] == '>' && lt == 1){
+                        gt = 1;
+                }
+                if(mailadd[i] != '<' && lt == 1 && gt == 0)
+                        ret = ret + mailadd[i];
+
+        }
+        if(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(ret)){
+                return true;
+        }
+        else
+                return false;
+
 }
 function server_check()
 {
