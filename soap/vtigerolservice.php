@@ -421,7 +421,7 @@ function CheckContactPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Contacts","Delete") == "yes")
+	if(isPermitted("Contacts","Delete") == "yes" && isPermitted("Contacts","EditView") == "yes")
 	{
 		return "allowed";
 	}else
@@ -439,7 +439,7 @@ function CheckActivityPermission($username)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Calendar","Delete") == "yes")
+	if(isPermitted("Calendar","Delete") == "yes" && isPermitted("Calendar","EditView") == "yes")
 	{
 		return "allowed";
 	}else
