@@ -75,7 +75,22 @@ if($mass_merge != "")
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tablename,columnname,fieldlabel from vtiger_field where tabid=7 order by tablename";
+
+global $current_user;
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
+{
+	$query1="select tablename,columnname,fieldlabel from vtiger_field where tabid=7 order by tablename";
+}
+else
+{
+	$profileList = getCurrentUserProfileList();
+	$query1="select vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (7) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	//Postgres 8 fixes
+	if( $adb->dbType == "pgsql")
+	$sql = fixPostgresQuery( $sql, $log, 0);
+}
+
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
 	

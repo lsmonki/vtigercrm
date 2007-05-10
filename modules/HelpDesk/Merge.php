@@ -72,8 +72,21 @@ else
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and (vtiger_field.tablename <>'CustomerDetails' and block <> 6 and block <> 75) and block <> 30 order by vtiger_field.tablename";
 
+global $current_user;
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
+{
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 order by vtiger_field.tablename";
+}
+else
+{
+	$profileList = getCurrentUserProfileList();
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	//Postgres 8 fixes
+	if( $adb->dbType == "pgsql")
+	$sql = fixPostgresQuery( $sql, $log, 0);
+}
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
 	
@@ -183,6 +196,7 @@ if(count($querycolumns) > 0)
 			left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
 			left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
 			left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
+			left join vtiger_customerdetails on vtiger_contactdetails.contactid = vtiger_customerdetails.customerid 
 			left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 			left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
 			left join vtiger_users as usersContacts on usersContacts.id = crmentityContacts.smownerid
