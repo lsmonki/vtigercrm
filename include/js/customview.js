@@ -66,7 +66,7 @@ function validate() {
                 if (!intValidate("fldLength","Length"))
                         return false
 
-                if (!numConstComp("fldLength","Length","GT",0))
+                if (!numConstComp("fldLength","Length","G",0))
                         return false
 
         }
