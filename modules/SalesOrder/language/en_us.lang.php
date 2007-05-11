@@ -183,6 +183,8 @@ $mod_strings = Array(
 'Approved'=>'Approved',
 'Delivered'=>'Delivered',
 'Cancelled'=>'Cancelled',
+'Adjustment'=>'Adjustment',
+'Sub Total'=>'Sub Total',
 );
 
 ?>

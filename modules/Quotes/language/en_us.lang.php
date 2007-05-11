@@ -171,7 +171,7 @@ $mod_strings = Array(
 'USPS'=>'USPS',
 'DHL'=>'DHL',
 'BlueDart'=>'BlueDart',
-                       
+'Sales Tax'=>'Sales Tax',                       
 
 
 );

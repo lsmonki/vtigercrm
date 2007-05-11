@@ -184,6 +184,7 @@ $mod_strings = Array(
 'Paid'=>'Paid',
 //Added to Custom Invoice Number
 'Invoice No'=>'Invoice No',
+'Adjustment'=>'Adjustment',
 );
 
 ?>
