@@ -88,6 +88,7 @@ if($file_name != '' && $_FILES['filename']['size'] == 0){
 	else{}
 	if($errormessage != ""){
 		$ret_error = 1;
+		$ret_parentid = $_REQUEST['parent_id'];
 		$ret_toadd = $_REQUEST['parent_name'];
 		$ret_subject = $_REQUEST['subject'];
 		$ret_ccaddress = $_REQUEST['ccmail'];
@@ -98,7 +99,29 @@ if($file_name != '' && $_FILES['filename']['size'] == 0){
 		exit();
 	}
 }
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail']) {
+	require_once("modules/Emails/mail.php");
+	if($_REQUEST['parent_id'] == '')
+		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
+	else
+		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+		
+//if block added to fix the issue #3759
+	if($user_mail_status != 1){
+        	$error_msg = "<font color=red><strong>".$mod_strings['LBL_CHECK_USER_MAILID']."</strong></font>";
+	        $ret_error = 1;
+		$ret_parentid = $_REQUEST['parent_id'];
+	        $ret_toadd = $_REQUEST['parent_name'];
+        	$ret_subject = $_REQUEST['subject'];
+	        $ret_ccaddress = $_REQUEST['ccmail'];
+        	$ret_bccaddress = $_REQUEST['bccmail'];
+	        $ret_description = $_REQUEST['description'];
+        	echo $error_msg;
+	        include("EditView.php");
+        	exit();
+	}
 
+}
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
         $file_upload_error = true;
@@ -219,10 +242,10 @@ $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
 $userid = $current_user->id;
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$userid."@-1|".$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
+	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
 }else
 {
-	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"'.$user_email.'","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$userid."@-1|".$_REQUEST["parent_id"].'","SAVED")';
+	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"'.$user_email.'","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
 }
 $adb->query($query);
 
@@ -248,8 +271,8 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_REQUEST['filename'];
 
 $local_log->debug("Saved record with id of ".$return_id);
-$str = $_REQUEST['parent_id'];
-if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] == '' || substr($str,strlen($str)-4) == '@-1|'){
+
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] == ''){
 	if($_REQUEST["parent_name"] != '' && isset($_REQUEST["parent_name"])) {
 		include("modules/Emails/webmailsend.php");
 	}

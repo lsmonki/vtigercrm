@@ -119,7 +119,7 @@ if($_REQUEST["internal_mailer"] == "true") {
 	}
 
 	$smarty->assign('TO_MAIL',$email1);
-	$smarty->assign('BCC_MAIL',$current_user->email1);
+	//$smarty->assign('BCC_MAIL',$current_user->email1);
 }
 
 //handled for replying emails
@@ -163,7 +163,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	  $hdr = @imap_headerinfo($mbox, $mailid);
 	$smarty->assign('WEBMAIL',"true");
 	if($_REQUEST["reply"] == "all") {
-		$smarty->assign('TO_MAIL',$webmail->fromaddr);	
+		$smarty->assign('TO_MAIL',$webmail->from);	
 		$smarty->assign('CC_MAIL',str_replace(" ","",$hdr->ccaddress));
 		/*if(is_array($webmail->cc_list))
 		{
@@ -290,6 +290,8 @@ else
 }
 if($ret_error == 1) {
 	$smarty->assign("RET_ERROR",$ret_error);
+	if($ret_parentid != '')
+		$smarty->assign("IDLISTS",$ret_parentid);
 	if($ret_toadd != '')
                 $smarty->assign("TO_MAIL",$ret_toadd);
 	$ret_toadd = '';

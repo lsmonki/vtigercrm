@@ -173,6 +173,7 @@ or an update!',
 'LBL_KINDLY_UPLOAD' => 'Please configure <font color="red">upload_tmp_dir</font> variable in php.ini file.',
 'LBL_EXCEED_MAX' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than ',
 'LBL_BYTES' => ' bytes',
+'LBL_CHECK_USER_MAILID' => 'Please check the current user mailid.It should be a valid mailid to send Emails',
 
 );
 
