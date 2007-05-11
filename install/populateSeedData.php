@@ -958,7 +958,7 @@ for($i=0;$i<7;$i++)
 
 //$severity_array=array("Minor","Major","Critical","");
 $status_array=array("Open","In Progress","Wait For Response","Open","Closed");
-$category_array=array("Big Problem ","Small Problem","Other Problem","Small Problem","Other Problem");
+$category_array=array("Big Problem","Small Problem","Other Problem","Small Problem","Other Problem");
 $ticket_title_array=array("Upload Attachment problem",
 			"Individual Customization -Menu and RSS","Export Output query",
 		"Import Error CSV Leads","How to automatically add a lead from a web form to VTiger");
