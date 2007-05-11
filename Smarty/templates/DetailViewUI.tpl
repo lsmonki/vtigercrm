@@ -78,24 +78,7 @@
                     							</div>
                							</td>
 						{elseif $keyid eq '115'} <!--ComboBox Status edit only for admin Users-->
-								{if $keyadmin eq 1}
-               							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
-                                              		<div id="editarea_{$label}" style="display:none;">
-                    							   <select id="txtbox_{$label}" name="{$keyfldname}">
-                    								{foreach item=arr from=$keyoptions}
-                    									{foreach key=sel_value item=value from=$arr}
-                    										<option value="{$sel_value}" {$value}>{$sel_value}</option>
-                    									{/foreach}
-                    								{/foreach}
-                    							   </select>
-                    							   <br><input name="button_{$label}" type="button" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label|escape:'quotes'}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
-                                              		   <a href="javascript:;" onclick="hndCancel('dtlview_{$label|escape:'quotes'}','editarea_{$label|escape:'quotes'}','{$label|escape:'quotes'}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
-                    							</div>
-								{else}
-               							<td width=25% class="dvtCellInfo" align="left">{$keyval}
-								{/if}	
-								
-               							</td>
+               							<td width=25% class="dvtCellInfo" align="left">{$keyval}</td>
 						{elseif $keyid eq '116'} <!--ComboBox currency id edit only for admin Users-->
 								{if $keyadmin eq 1}
                							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
