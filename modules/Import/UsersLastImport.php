@@ -133,7 +133,7 @@ class UsersLastImport extends SugarBean
 		
 			$query = "SELECT distinct
                                 vtiger_account.accountid vtiger_account_id,
-                                vtiger_account.accountname vtiger_account_name,
+                                vtiger_account.accountname accountname,
                                 vtiger_users.user_name user_name,
 			vtiger_crmentity.crmid, smownerid,
 			vtiger_potential.*
@@ -162,15 +162,36 @@ class UsersLastImport extends SugarBean
 				left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid			       	
 				left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 				WHERE 
-			vtiger_users_last_import.assigned_user_id=
+				vtiger_users_last_import.assigned_user_id=
 					'{$current_user->id}'
 				AND vtiger_users_last_import.bean_type='Leads'
 				AND vtiger_users_last_import.deleted=0
 				AND vtiger_crmentity.deleted=0
 				AND vtiger_users.status='Active'";
 		}
+		else if($this->bean_type == 'Products')
+		{
+			$query = "SELECT vtiger_crmentity.crmid, vtiger_products.*, vtiger_productcf.*
+				FROM vtiger_products
+				INNER JOIN vtiger_crmentity
+					ON vtiger_crmentity.crmid = vtiger_products.productid
+				INNER JOIN vtiger_productcf
+					ON vtiger_products.productid = vtiger_productcf.productid
+				LEFT JOIN vtiger_vendor
+					ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+				LEFT JOIN vtiger_users_last_import 
+					ON vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
+				LEFT JOIN vtiger_users
+					ON vtiger_users.id = vtiger_products.handler
+				WHERE 
+				vtiger_users_last_import.assigned_user_id= '{$current_user->id}'
+				AND vtiger_users_last_import.bean_type='Products'
+				AND vtiger_users_last_import.deleted=0
+				AND vtiger_crmentity.deleted = 0 
+				AND vtiger_users.status='Active'";
 
-		
+		}
+
 		return $query;
 
 	}

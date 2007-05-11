@@ -40,7 +40,10 @@ class ImportProduct extends Products {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user");
+	var $special_functions =  array(
+					"assign_user",
+					"map_vendor_name",
+				       );
 
 	var $importable_fields = Array();
 
@@ -94,6 +97,37 @@ class ImportProduct extends Products {
 		
 		$this->db->println($this->importable_fields);
 	}
+
+	/**     function used to map with existing Vendor if the product is map with an vendor during import
+         */
+	function map_vendor_name()
+	{
+		global $adb;
+
+		$vendor_name = $this->column_fields['vendor_id'];
+		$adb->println("Entering map_vendor_name vendor_id=".$vendor_name);
+
+		if ((! isset($vendor_name) || $vendor_name == '') )
+		{
+			$adb->println("Exit map_vendor_name. Vendor Name not set for this entity.");
+			return; 
+		}
+
+		$vendor_name = trim(addslashes($vendor_name));
+
+		//Query to get the available Vendor which is not deleted
+		$query = "select vendorid from vtiger_vendor inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_vendor.vendorid WHERE vtiger_vendor.vendorname='{$vendor_name}' and vtiger_crmentity.deleted=0";
+
+		$vendor_id = $adb->query_result($adb->query($query),0,'vendorid');
+
+		if($vendor_id == '' || !isset($vendor_id))
+			$vendor_id = 0;
+
+		$this->column_fields['vendor_id'] = $vendor_id;
+
+		$adb->println("Exit map_vendor_name. Fetched Vendor for '".$vendor_name."' and the vendorid = $vendor_id");
+        }
+
 
 }
 ?>

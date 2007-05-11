@@ -44,6 +44,7 @@ class ImportAccount extends Accounts {
 	
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
+						"map_member_of",
 						//"add_billing_address_streets"
 						//,"add_shipping_address_streets"
 						//,"fix_website"
@@ -175,6 +176,36 @@ class ImportAccount extends Accounts {
 		
 		$this->db->println($this->importable_fields);
 	}
+
+	/**     function used to map with existing Mamber Of(Account) if the account is map with an member of during import
+         */
+	function map_member_of()
+	{
+		global $adb;
+
+		$account_name = $this->column_fields['account_id'];
+		$adb->println("Entering map_member_of account_id=".$account_name);
+
+		if ((! isset($account_name) || $account_name == '') )
+		{
+			$adb->println("Exit map_member_of. Account Name(Member Of) not set for this entity.");
+			return; 
+		}
+
+		$account_name = trim(addslashes($account_name));
+
+		//Query to get the available Account which is not deleted
+		$query = "select accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountname='{$account_name}' and vtiger_crmentity.deleted=0";
+
+		$account_id = $adb->query_result($adb->query($query),0,'accountid');
+
+		if($account_id == '' || !isset($account_id))
+			$account_id = 0;
+
+		$this->column_fields['account_id'] = $account_id;
+
+		$adb->println("Exit map_member_of. Fetched Account for '".$account_name."' and the account_id = $account_id");
+        }
 
 }
 
