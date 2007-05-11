@@ -114,11 +114,11 @@ for ($x=0; $x<$y; $x++)
 	{
 		if($modulename == "Accounts")
 		{
-			$querycolumns[$x]="concat(usersAccounts.last_name,' ',usersAccounts.first_name) as username";
+			$querycolumns[$x]="case when (usersAccounts.user_name not like '') then concat(usersAccounts.last_name,' ',usersAccounts.first_name) else groupsAccounts.groupname end as username";
 		}
 		if($modulename == "Contacts")
 		{
-			$querycolumns[$x]="concat(vtiger_users.last_name,' ',vtiger_users.first_name) as usercname,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
+			$querycolumns[$x]="case when (vtiger_users.user_name not like '') then concat(vtiger_users.last_name,' ',vtiger_users.first_name) else vtiger_groups.groupname end as usercname,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
 		}
 	}
 	if($columnname == "parentid")
@@ -169,6 +169,10 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_contactgrouprelation
+					ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
+				LEFT JOIN vtiger_groups 
+					ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
 				left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid=vtiger_account.accountid
 				left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
@@ -176,6 +180,10 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 				left join vtiger_account as accountAccounts on accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
+				LEFT JOIN vtiger_accountgrouprelation
+					ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
+				LEFT JOIN vtiger_groups as groupsAccounts
+					ON groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
 				
 
