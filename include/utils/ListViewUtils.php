@@ -2844,11 +2844,6 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 
 		elseif($relmodule == "Potentials")
 		{
-			/*$query = "select accountid from vtiger_potential where potentialid=".$relmod_recordid;
-			$result = $adb->query($query);
-			$account_id = $adb->query_result($result,0,"accountid");
-			$condition = "and vtiger_contactdetails.accountid= ".$account_id;*/
-
 			$query = "select contactid from vtiger_contpotentialrel where potentialid=".$relmod_recordid;
 			$result = $adb->query($query);
                         $contact_id = $adb->query_result($result,0,"contactid");
@@ -2922,13 +2917,15 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 			$query = "select parent_id from vtiger_troubletickets where ticketid =".$relmod_recordid;	
 			$result = $adb->query($query);
 			$parent_id = $adb->query_result($result,0,"parent_id");
-			$crmquery = "select setype from vtiger_crmentity where crmid=".$parent_id;
-			$parentmodule_id = $adb->query($crmquery);
-			$parent_modname = $adb->query_result($parentmodule_id,0,"setype");
-			if($parent_modname == "Accounts")
-				$condition = "and vtiger_contactdetails.accountid= ".$parent_id;
-			if($parent_modname == "Contacts")
-				$condition = "and vtiger_contactdetails.contactid= ".$parent_id;
+			if($parent_id != ""){
+				$crmquery = "select setype from vtiger_crmentity where crmid=".$parent_id;
+				$parentmodule_id = $adb->query($crmquery);
+				$parent_modname = $adb->query_result($parentmodule_id,0,"setype");
+				if($parent_modname == "Accounts")
+					$condition = "and vtiger_contactdetails.accountid= ".$parent_id;
+				if($parent_modname == "Contacts")
+					$condition = "and vtiger_contactdetails.contactid= ".$parent_id;
+			}		
 
 		}
 	}
