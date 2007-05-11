@@ -1060,42 +1060,49 @@ function GetClndr($username)
 	$result = $adb->query($query);
     
 	while($clndr = $adb->fetch_array($result))
-  	{
-  		if($clndr["date_start"] == "0000-00-00" || $clndr["date_start"] == NULL)
-        	{
-	        	$clndr["date_start"] = "";
+	{
+		if($clndr["date_start"] == "0000-00-00" || $clndr["date_start"] == NULL)
+		{
+			$clndr["date_start"] = "";
 		}
-	        if($clndr["due_date"] == "0000-00-00" || $clndr["due_date"] == NULL)
-        	{
-	        	$clndr["due_date"] = "";
-        	}
-		
+		if($clndr["due_date"] == "0000-00-00" || $clndr["due_date"] == NULL)
+		{
+			$clndr["due_date"] = "";
+		}
+
 		//this seperates the $$clndr["startdate"] into an array - YYYY-MM-DD
 		$expldstartdate = explode("-", $clndr["date_start"]);
-		$expldtimestart = explode(":", $clndr["time_start"]);	
+
+		$expldtimestart = Array(0,0);
+		if(strpos($clndr["time_start"],":"))
+			$expldtimestart = explode(":", $clndr["time_start"]);	
 
 		//this makes a timestamp out of the exploded date this number is in seconds
 		$startdtm = mktime($expldtimestart[0], $expldtimestart[1], 0, $expldstartdate[1], $expldstartdate[2], $expldstartdate[0]);
 
-    $expldduedate = explode("-", $clndr["due_date"]);
-    $expldtimeend = explode(":", $clndr["time_end"]);
-    //this makes a timestamp out of the exploded date this number is in seconds
+		$expldduedate = explode("-", $clndr["due_date"]);
+
+		$expldtimeend = Array(0,0);
+		if(strpos($clndr["time_end"],":"))
+			$expldtimeend = explode(":", $clndr["time_end"]);
+		//this makes a timestamp out of the exploded date this number is in seconds
 		$duedtm = mktime($expldtimeend[0], $expldtimeend[1], 0, $expldduedate[1], $expldduedate[2], $expldduedate[0]);
-		
+
 		$clndr["date_start"] = date("Y-m-d H:i:s", $startdtm);
 		$clndr["due_date"] = date("Y-m-d H:i:s", $duedtm);
 
 		$output_list[] = Array(
-						"id" => $clndr["clndrid"],
-						"subject" => $clndr["subject"],
-						"startdate" => $clndr["date_start"],
-						"duedate" => $clndr["due_date"],
-						"location" => $clndr["location"],
-						"description" => $clndr["description"],
-						"contactname" => $clndr["firstname"]." ".$clndr["lastname"],
-						"category" => "",        
-						);
-  	}
+			"id" => $clndr["clndrid"],
+			"subject" => $clndr["subject"],
+			"startdate" => $clndr["date_start"],
+			"duedate" => $clndr["due_date"],
+			"location" => $clndr["location"],
+			"description" => $clndr["description"],
+			"contactname" => $clndr["firstname"]." ".$clndr["lastname"],
+			"category" => "",        
+		);
+	}
+	//$log->fatal($output_list);
 	$seed_clndr = $seed_clndr;
 	return $output_list;
 }
