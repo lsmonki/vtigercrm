@@ -560,9 +560,9 @@ function check_form()
                         {
                                 var currdate=new Date()
                                 var chkdate=new Date()
-                                chkdate.setYear(yyyy)
-                                chkdate.setMonth(mm-1)
-                                chkdate.setDate(dd)
+                                chkdate.setYear(yyyy1)
+                                chkdate.setMonth(mm1-1)
+                                chkdate.setDate(dd1)
 
                                 if(!compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE"))
                                 {
