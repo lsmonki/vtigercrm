@@ -13,7 +13,7 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 $check=$_REQUEST['check'];
 global $default_charset;
-
+$id='';
 if($_REQUEST['check']== 'reportCheck')
 {
 	$reportName = $_REQUEST['reportName'];
@@ -32,15 +32,11 @@ else if($_REQUEST['check']== 'folderCheck')
 		echo "999";
 	}else
 	{
-		$SQL="select * from vtiger_reportfolder where foldername='".$folderName."'";
+		$SQL="select * from vtiger_reportfolder where foldername='".trim($folderName)."'";
 		$sqlresult = $adb->query($SQL);
-		echo trim($adb->num_rows($sqlresult));
+		$id = $adb->query_result($sqlresult,0,"folderid");
+		echo trim($adb->num_rows($sqlresult)."::".$id);
 	}
 }
 
 ?>
-
-
-
-
-

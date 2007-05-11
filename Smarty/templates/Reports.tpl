@@ -181,8 +181,17 @@ function AddFolder()
                                 method: 'post',
                                 postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+getObj('folder_name').value,
                                 onComplete: function(response) {
+				var folderid = getObj('folder_id').value;
+				var resresult =response.responseText.split("::");
 				var mode = getObj('fldrsave_mode').value;
-			if((response.responseText ==1 || response.responseText != 0) && (mode == 'Edit' || mode =='save') &&response.responseText != 999)
+				if(resresult[0] != 0 &&  mode =='save' && resresult[0] != 999)
+				{
+					{/literal}
+					alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
+					return false;
+					{literal}
+				}
+				else if(((resresult[0] != 1 && resresult[0] != 0) || (resresult[0] == 1 && resresult[0] != 0 && resresult[1] != folderid )) &&  mode =='Edit' && resresult[0] != 999)
 					{
 						{/literal}
                                                 alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");

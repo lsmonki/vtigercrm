@@ -37,7 +37,7 @@ if($mode=="Save")
 	{
 		$sql = "INSERT INTO vtiger_reportfolder ";
 		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-		$sql .= "VALUES ('','".$foldername."','".$folderdesc."','CUSTOMIZED')";
+		$sql .= "VALUES ('','".trim($foldername)."','".$folderdesc."','CUSTOMIZED')";
 		$result = $adb->query($sql);
 		if($result!=false)
 		{
@@ -56,7 +56,7 @@ if($mode=="Save")
 	if($rfid != "")
 	{
 		$sql = "update vtiger_reportfolder set ";
-		$sql .= "FOLDERNAME='".$foldername."', ";
+		$sql .= "FOLDERNAME='".trim($foldername)."', ";
 		$sql .= "DESCRIPTION='".$folderdesc."' ";
 		$sql .= "where folderid=".$rfid;
 		$result = $adb->query($sql);
