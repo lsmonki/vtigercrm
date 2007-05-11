@@ -1447,7 +1447,6 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			$contact_name = getContactName($contact_id);
 		}
 		
-		$status = $adb->query_result($result,$i,"status");
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Task&viewtype=calendar&parenttab=".$category."' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
@@ -1460,7 +1459,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		}
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
 		{
-			$element['status'] = $adb->query_result($result,$i,"status");
+			$element['status'] = $mod_strings[$adb->query_result($result,$i,"status")];
 		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\",\"normal\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
