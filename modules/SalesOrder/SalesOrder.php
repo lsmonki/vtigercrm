@@ -57,7 +57,7 @@ class SalesOrder extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'), 
 				'Quote Name'=>Array('quotes'=>'quoteid'), 
@@ -66,7 +66,7 @@ class SalesOrder extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Order Id'=>'',
+				        'Order No'=>'',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id',
@@ -76,14 +76,14 @@ class SalesOrder extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'),
 				'Quote Name'=>Array('salesorder'=>'quoteid') 
 				);
 	
 	var $search_fields_name = Array(
-					'Order Id'=>'',
+					'Order No'=>'',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id'
@@ -123,7 +123,7 @@ class SalesOrder extends CRMEntity {
 		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails($this, 'SalesOrder');	
+			saveInventoryProductDetails(&$this, 'SalesOrder');	
 		}
 	}	
 	
@@ -297,7 +297,7 @@ class SalesOrder extends CRMEntity {
 		$result=$adb->query($query);
 		$noofrows = $adb->num_rows($result);
 
-		$header[] = $app_strings['Order Id'];
+		$header[] = $app_strings['Order No'];
 		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_SO_STATUS'];

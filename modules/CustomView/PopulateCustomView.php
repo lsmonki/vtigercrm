@@ -263,7 +263,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V'),
 
-		   Array('vtiger_crmentity:crmid::Quotes_Quote_ID:I',
+		   Array('vtiger_crmentity:crmid::Quotes_Quote_No:I',
 			 'vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
@@ -293,10 +293,10 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_crmentity:smownerid:assigned_user_id:Calendar_Assigned_To:V'),
 
 		   Array('vtiger_activity:subject:subject:Emails_Subject:V',
-				'vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V',
-                 'vtiger_activity:date_start:date_start:Emails_Date_Sent:D'),
+       			 'vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V',
+                 	 'vtiger_activity:date_start:date_start:Emails_Date_Sent:D'),
 		
-		   Array('vtiger_invoice:invoice_no:invoice_no:Invoice_invoice_no:V',
+		   Array('vtiger_invoice:invoice_no:invoice_no:Invoice_Invoice_No:V',
                          'vtiger_invoice:subject:subject:Invoice_Subject:V',
                          'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
                          'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V',
@@ -319,13 +319,13 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                         'vtiger_products:qty_per_unit:qty_per_unit:Products_Qty/Unit:V',
                         'vtiger_products:unit_price:unit_price:Products_Unit_Price:V'),
 		  
-		  Array('vtiger_crmentity:crmid::PurchaseOrder_Order_Id:I',
+		  Array('vtiger_crmentity:crmid::PurchaseOrder_Order_No:I',
                         'vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V',
                         'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I',
                         'vtiger_purchaseorder:tracking_no:tracking_no:PurchaseOrder_Tracking_Number:V',
                         'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V'),
 		  
-	          Array('vtiger_crmentity:crmid::SalesOrder_Order_Id:I',
+	          Array('vtiger_crmentity:crmid::SalesOrder_Order_No:I',
                         'vtiger_salesorder:subject:subject:SalesOrder_Subject:V',
                        	'vtiger_account:accountname:accountname:SalesOrder_Account_Name:V',
                         'vtiger_quotes:quoteid:quote_id:SalesOrder_Quote_Name:I',
@@ -386,7 +386,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 			 'vtiger_purchaseorder:carrier:carrier:PurchaseOrder_Carrier:V',
 			 'vtiger_poshipads:ship_street:ship_street:PurchaseOrder_Shipping_Address:V'),
 		
-		 Array(  'vtiger_invoice:invoice_no:invoice_no:Invoice_invoice_no:V',
+		 Array(  'vtiger_invoice:invoice_no:invoice_no:Invoice_Invoice_No:V',
 		 	 'vtiger_invoice:subject:subject:Invoice_Subject:V',
 			 'vtiger_account:accountname:accountname:Invoice_Account_Name:V',
 			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',
@@ -394,7 +394,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 			 'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V',
 			 'vtiger_crmentity:createdtime:createdtime:Invoice_Created_Time:T'),
 		 
-		 Array(	 'vtiger_invoice:invoice_no:invoice_no:Invoice_invoice_no:V',
+		 Array(	 'vtiger_invoice:invoice_no:invoice_no:Invoice_Invoice_No:V',
 			 'vtiger_invoice:subject:subject:Invoice_Subject:V',
 			 'vtiger_account:accountname:accountname:Invoice_Account_Name:V',
 			 'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I',

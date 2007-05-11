@@ -58,7 +58,7 @@ class Quotes extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Quote Id'=>Array('crmentity'=>'crmid'),
+				'Quote No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('quotes'=>'subject'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				'Potential Name'=>Array('quotes'=>'potentialid'),
@@ -68,7 +68,7 @@ class Quotes extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Quote Id'=>'',
+				        'Quote No'=>'',
 				        'Subject'=>'subject',
 				        'Quote Stage'=>'quotestage',
 				        'Potential Name'=>'potential_id',
@@ -79,14 +79,14 @@ class Quotes extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Quote Id'=>Array('crmentity'=>'crmid'),
+				'Quote No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('quotes'=>'subject'),
 				'Account Name'=>Array('quotes'=>'accountid'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				);
 	
 	var $search_fields_name = Array(
-					'Quote Id'=>'',
+					'Quote No'=>'',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Stage'=>'quotestage',
@@ -294,7 +294,7 @@ class Quotes extends CRMEntity {
 		$result=$adb->query($query);
 		$noofrows = $adb->num_rows($result);
 
-		$header[] = $app_strings['Quote Id'];
+		$header[] = $app_strings['Quote No'];
 		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['Quote Stage'];

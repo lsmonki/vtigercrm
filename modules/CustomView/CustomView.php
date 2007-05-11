@@ -182,7 +182,7 @@ class CustomView extends CRMEntity{
 
 	function getColumnsListbyBlock($module,$block)
 	{
-		global $adb;
+		global $adb,$mod_strings,$app_strings;
 		$tabid = getTabid($module);
 		if($tabid == 9)
 			$tabid ="9,16";
@@ -231,6 +231,15 @@ class CustomView extends CRMEntity{
 		{
 			$module_columnlist['vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C'] = 'Activity Type';
 		}
+	
+		if($module == 'SalesOrder' && $block == 63)
+			$module_columnlist['vtiger_crmentity:crmid::SalesOrder_Order_No:I'] = $app_strings['Order No'];
+
+		if($module == 'PurchaseOrder' && $block == 57)
+			$module_columnlist['vtiger_crmentity:crmid::PurchaseOrder_Order_No:I'] = $app_strings['Order No'];
+		
+		if($module == 'Quotes' && $block == 51)
+                        $module_columnlist['vtiger_crmentity:crmid::Quotes_Quote_No:I'] = $app_strings['Quote No'];
 
 		for($i=0; $i<$noofrows; $i++)
 		{

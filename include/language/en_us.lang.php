@@ -467,10 +467,10 @@ $app_strings = array (
 'LBL_PORDER_BUTTON' => 'New Purchase Order',
 'LBL_PORDER_BUTTON_KEY' => 'O',
 'Tracking Number' => 'Tracking Number',
-'Order Id' => 'Order Id',
+'Order No' => 'Order No',
 'Quote Name' => 'Quote Name',
-'Invoice Id' => 'Invoice Id',
-'Quote Id' => 'Quote Id',
+'Invoice No' => 'Invoice No',
+'Quote Id' => 'Quote No',
 'Sales Order' => 'Sales Order',
 'COMBO_QUOTES' => 'Quotes',
 'End Date' => 'End Date',
@@ -875,7 +875,7 @@ $app_strings = array (
 'FAQ Id'=>'FAQ Id',
 'Lead Status'=>'Lead Status',
 'Lead Source'=>'Lead Source',
-'Quote ID'=>'Quote Id',
+'Quote No'=>'Quote No',
 'Yahoo Id'=>'Yahoo Id',
 );
 

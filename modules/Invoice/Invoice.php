@@ -41,14 +41,14 @@ class Invoice extends CRMEntity {
 				
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('subject','crmid','invoicestatus','smownerid','accountname');		
+	var $sortby_fields = Array('subject','invoice_no','invoicestatus','smownerid','accountname');		
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Invoice Id'=>Array('crmentity'=>'crmid'),
+				'Invoice No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('invoice'=>'subject'),
 				'Sales Order'=>Array('invoice'=>'salesorderid'),
 				'Status'=>Array('invoice'=>'invoicestatus'),
@@ -57,7 +57,7 @@ class Invoice extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Invoice Id'=>'',
+				        'Invoice No'=>'',
 				        'Subject'=>'subject',
 				        'Sales Order'=>'salesorder_id',
 				        'Status'=>'invoicestatus',
@@ -67,12 +67,12 @@ class Invoice extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Invoice Id'=>Array('crmentity'=>'crmid'),
+				'Invoice No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Invoice Id'=>'',
+				        'Invoice No'=>'',
 				        'Subject'=>'subject',
 				      );
 
@@ -114,7 +114,7 @@ class Invoice extends CRMEntity {
 		if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails($this, 'Invoice');
+			saveInventoryProductDetails(&$this, 'Invoice');
 		}
 		//Added For Custom Invoice Number 
 		//Here we Incrementing the new InvoiceNumber
@@ -276,7 +276,7 @@ class Invoice extends CRMEntity {
 		$result=$adb->query($query);
 		$noofrows = $adb->num_rows($result);
 
-		$header[] = $app_strings['Invoice Id'];
+		$header[] = $app_strings['Invoice No'];
 		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_INVOICE_STATUS'];

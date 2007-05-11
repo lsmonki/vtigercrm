@@ -53,7 +53,7 @@ class PurchaseOrder extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
 				'Tracking Number'=>Array('purchaseorder'=> 'tracking_no'),
@@ -61,7 +61,7 @@ class PurchaseOrder extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Order Id'=>'',
+				        'Order No'=>'',
 				        'Subject'=>'subject',
 				        'Vendor Name'=>'vendor_id',
 					'Tracking Number'=>'tracking_no',
@@ -70,12 +70,12 @@ class PurchaseOrder extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Order Id'=>'',
+				        'Order No'=>'',
 				        'Subject'=>'subject',
 				      );
 
@@ -104,7 +104,7 @@ class PurchaseOrder extends CRMEntity {
 		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails($this, 'PurchaseOrder', $this->update_prod_stock);
+			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
 		}
 	}	
 
@@ -247,7 +247,7 @@ class PurchaseOrder extends CRMEntity {
 		$result=$adb->query($query);
 		$noofrows = $adb->num_rows($result);
 
-		$header[] = $app_strings['Order Id'];
+		$header[] = $app_strings['Order No'];
 		$header[] = $app_strings['Vendor Name'];
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_PO_STATUS'];
