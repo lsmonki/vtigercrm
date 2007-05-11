@@ -427,6 +427,7 @@ function getAdvSearchfields($module)
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	$block = '';
+	$select_flag = '';
 
 	for($i=0; $i<$noofrows; $i++)
 	{
@@ -463,20 +464,19 @@ function getAdvSearchfields($module)
 		if($fieldlabel != 'Related to')
 		{
 			if ($i==0)
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
-			elseif($fieldlabel == "Product Code")
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$mod_strings[$fieldlabel]."</option>";
-			elseif($fieldcolname == "contactid")
+				$select_flag = "selected";
+
+			if($fieldlabel == "Product Code")
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
+			elseif($fieldcolname == "contactid" || $fieldcolname == "contact_id")
 			{
-				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname\'>".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
+				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
 			}
 			elseif($fieldcolname == "campaignid")
-			{
-				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname\'>".$mod_strings[$fieldlabel]."</option>";
-			}
+				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname\' ".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
 			else
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' ".$select_flag.">".$fieldlabel."</option>";
 		}
 	}
 	//Added to include Ticket ID in HelpDesk advance search
@@ -519,6 +519,11 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	global $log;
 	$log->debug("Entering getSearch_criteria(".$criteria.",".$searchstring.",".$searchfield.") method ...");
 	$searchstring = ltrim(rtrim($searchstring));
+	if($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime")
+	{
+		list($sdate,$stime) = split(" ",$searchstring);
+		$searchstring = getDBInsertDateValue($sdate)." ".$stime;
+	}
 	$where_string = '';
 	switch($criteria)
 	{
