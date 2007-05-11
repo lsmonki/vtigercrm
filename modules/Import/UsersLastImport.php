@@ -88,7 +88,7 @@ class UsersLastImport extends SugarBean
 		if ($this->bean_type == 'Contacts')
 		{
 				$query = "SELECT distinct crmid,
-			vtiger_account.accountname as vtiger_account_name,
+			vtiger_account.accountname as accountname,
 			vtiger_contactdetails.contactid,
 			vtiger_contactdetails.accountid,				
 			vtiger_contactdetails.yahooid,
@@ -132,7 +132,7 @@ class UsersLastImport extends SugarBean
 		{
 		
 			$query = "SELECT distinct
-                                vtiger_account.accountid vtiger_account_id,
+                                vtiger_account.accountid accountid,
                                 vtiger_account.accountname accountname,
                                 vtiger_users.user_name user_name,
 			vtiger_crmentity.crmid, smownerid,
