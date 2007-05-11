@@ -50,7 +50,7 @@ function check_duplicate()
         );
 	{rdelim}
 	else
-            alert(alert_arr.NO_SPECIAL+" in User Name ")
+            alert(alert_arr.NO_SPECIAL+alert_arr.IN_USERNAME)
 {rdelim}
 
 </script>
