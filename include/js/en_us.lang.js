@@ -109,6 +109,8 @@
 				SHARED_EVENT_DEL_MSG:'The User does not have permission to Delete this record.',
 				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n',
                                 NO_SPECIAL:'Special Characters are not allowed',
+				IN_PROFILENAME:' in Profile Name',
+				IN_GROUPNAME:' in Group Name',
                                 VALID_TAX_PERCENT:'Enter a valid Tax percentage',
                                 VALID_SH_TAX:'Enter valid Taxes for shipping and handling ',
 				ROLE_DRAG_ERR_MSG:'You cannot move a Parent Node under a Child Node',
