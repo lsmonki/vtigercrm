@@ -151,11 +151,11 @@ $query_array2 = Array(
 
 			"update vtiger_field set fieldlabel='Adjustment' where tabid=22 and columnname='adjustment'",
 
-			"update vtiger_field set fieldlabel='Subtotal' where tabid=22 and columnname='subtotal'",
+			"update vtiger_field set fieldlabel='Sub Total' where tabid=22 and columnname='subtotal'",
 
 			"update vtiger_field set fieldlabel='Adjustment' where tabid=23 and columnname='adjustment'",
 
-			"update vtiger_field set fieldlabel='Salestax' where tabid=20 and columnname='tax'",
+			"update vtiger_field set fieldlabel='Sales Tax' where tabid=20 and columnname='tax'",
 
 			// Changes made to make discontinued column in vtiger_products '0' during deactivation.
 
