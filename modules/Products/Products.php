@@ -524,7 +524,13 @@ class Products extends CRMEntity {
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
 			vtiger_inventoryproductrel.productid,
-			vtiger_users.user_name
+
+			case 
+				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname 
+			end 
+			as user_name
+
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
@@ -569,7 +575,13 @@ class Products extends CRMEntity {
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
 			vtiger_inventoryproductrel.productid,
-			vtiger_users.user_name
+
+			case 
+				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname 
+			end 
+			as user_name
+
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
@@ -612,7 +624,13 @@ class Products extends CRMEntity {
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
 			vtiger_account.accountname,
-			vtiger_users.user_name
+
+			case 
+				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname 
+			end 
+			as user_name
+
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -657,7 +675,13 @@ class Products extends CRMEntity {
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
 			vtiger_account.accountname,
-			vtiger_users.user_name
+
+			case 
+				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname 
+			end 
+			as user_name
+
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
