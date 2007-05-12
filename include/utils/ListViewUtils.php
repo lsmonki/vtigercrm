@@ -2300,6 +2300,8 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_products
+				ON vtiger_products.productid = vtiger_campaign.product_id
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
