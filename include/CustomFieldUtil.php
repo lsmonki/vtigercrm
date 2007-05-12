@@ -187,7 +187,7 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	{
 		$types = explode("~",$typeofdata);
 		$data_decimal = explode(",",$types[2]);
-		$data_array=array('71',$data_decimal[0],$data_decimal[1]);
+		$data_array=array('3',$data_decimal[0],$data_decimal[1]);
 		$fieldtype = implode(";",$data_array);
 	}
 	elseif($label == 'Date')
