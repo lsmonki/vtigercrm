@@ -313,7 +313,6 @@ function BasicSearch($module,$search_field,$search_string)
 	       }
 		if($search_field == "accountname")
 			$search_field = "account_id";
-
 		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
@@ -355,6 +354,7 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			else
 			{
+				
 				$where="$table_name.$column_name like '%".$search_string."%'";
 			}
 		}
@@ -400,6 +400,11 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
 		}
+		if($tabid == 14)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Product Image'";
+		}
+
 		if($tabid == 9 || $tabid==16)
 		{
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
@@ -418,6 +423,11 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
 		}
+		if($tabid == 14)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Product Image'";
+		}
+
 		if($tabid == 9 || $tabid==16)
 		{
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
