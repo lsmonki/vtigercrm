@@ -175,11 +175,11 @@ function selFieldType(id,scrollLayer,bool) {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
+        } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
                 getObj("lengthdetails").style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='number' || type=='percent' || type=='currency') {
+        } else if (type=='number' || type=='currency') {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="visible"
                 pickListLayer.style.visibility="hidden"

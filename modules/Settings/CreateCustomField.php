@@ -179,7 +179,6 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 								</tr>';
 								break;
 							case 71:
-							case 9:
 							case 7:
 								$output .= '<tr id="lengthdetails">
 									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
