@@ -333,7 +333,7 @@ $array = Array(
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>Register Globals Off</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>Max Execution Time 600</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>output_buffering= On</strong></tr>
-				<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 32M</strong></tr>
+				<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 64M</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>error_reporting = E_ALL & ~E_NOTICE</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_pass_reference = On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>

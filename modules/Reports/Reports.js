@@ -217,7 +217,7 @@ function addColumnStep1()
 		}
 	}else
 	{
-		exit();
+		return false;
 	}
 }
 //this function is done for checking,whether the user has access to edit the field :Bharath

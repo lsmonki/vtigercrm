@@ -95,7 +95,14 @@ if($saveimage=="true")
 
 //if image added then we have to set that $_FILES['name'] in imagename field then only the image will be displayed
 if($_FILES['imagename']['name'] != '')
+{
 	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+}
+else
+{
+	$result = $adb->query("select imagename from vtiger_contactdetails where contactid = ".$focus->id);
+	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
+}
 	
 //Saving the contact
 if($image_error=="false")
