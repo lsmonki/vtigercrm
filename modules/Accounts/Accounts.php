@@ -158,10 +158,13 @@ class Accounts extends CRMEntity {
 		$query = "SELECT vtiger_contactdetails.*,
 			vtiger_crmentity.crmid,
                         vtiger_crmentity.smownerid,
+			vtiger_account.accountname,
 			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
 			LEFT JOIN vtiger_contactgrouprelation
 				ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
 			LEFT JOIN vtiger_groups
@@ -200,11 +203,13 @@ class Accounts extends CRMEntity {
 		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.accountid,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
 			vtiger_potential.potentialtype, vtiger_potential.amount,
-			vtiger_potential.closingdate, vtiger_potential.potentialtype,
+			vtiger_potential.closingdate, vtiger_potential.potentialtype, vtiger_account.accountname,
 			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.smownerid
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_potential.accountid
 			LEFT JOIN vtiger_users
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 			LEFT JOIN vtiger_potentialgrouprelation
