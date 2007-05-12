@@ -172,13 +172,13 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->WordWrap = 50;
 
 	//If we want to add the currently selected file only then we will use the following function
-	if($attachment == 'current')
+	if($attachment == 'current' && $emailid != '')
 	{
 		addAttachment($mail,$_FILES['filename']['name'],$emailid);
 	}
 
 	//This will add all the vtiger_files which are related to this record or email
-	if($attachment == 'all')
+	if($attachment == 'all' && $emailid != '')
 	{
 		addAllAttachments($mail,$emailid);
 	}
@@ -246,7 +246,7 @@ function addAttachment($mail,$filename,$record)
   */
 function addAllAttachments($mail,$record)
 {
-	global $adb, $root_directory;
+	global $adb,$log, $root_directory;
         $adb->println("Inside the function addAllAttachments");
 
 	//Retrieve the vtiger_files from database where avoid the file which has been currently selected

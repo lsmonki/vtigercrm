@@ -497,7 +497,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$assigned_user_id = $current_user->id;
 		}
-		if($module_name == 'Emails')
+		if($module_name == 'Emails' && $col_fields['record_id'] != '')
 		{
 			$attach_result = $adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']);
 			for($ii=0;$ii < $adb->num_rows($attach_result);$ii++)
@@ -871,76 +871,78 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		else
 		{
-			$parent_name='';
-			$parent_id='';
-			$myemailid= $_REQUEST['record'];
-			$mysql = "select crmid from vtiger_seactivityrel where activityid=".$myemailid;
-			$myresult = $adb->query($mysql);
-			$mycount=$adb->num_rows($myresult);
-			if($mycount >0)
+			if($_REQUEST['record'] != '' && $_REQUEST['record'] != NULL)
 			{
-				for ($i=0;$i<$mycount;$i++)
-				{	
-					$mycrmid=$adb->query_result($myresult,$i,'crmid');
-					$parent_module = getSalesEntityType($mycrmid);
-					if($parent_module == "Leads")
-					{
-						$sql = "select firstname,lastname,email from vtiger_leaddetails where leadid=".$mycrmid;
-						$result = $adb->query($sql);
-						$first_name = $adb->query_result($result,0,"firstname");
-						$last_name = $adb->query_result($result,0,"lastname");
-						$myemail=$adb->query_result($result,0,"email");
-						$parent_id .=$mycrmid.'@0|' ; //make it such that the email adress sent is remebered and only that one is retrived
-						$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
-						$lead_selected = 'selected';
-					}
-					elseif($parent_module == "Contacts")
-					{
-						$sql = "select * from  vtiger_contactdetails where contactid=".$mycrmid;
-						$result = $adb->query($sql);
-						$first_name = $adb->query_result($result,0,"firstname");
-						$last_name = $adb->query_result($result,0,"lastname");
-						$myemail=$adb->query_result($result,0,"email");
-						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
-						$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
-						$contact_selected = 'selected';
-					}
-					elseif($parent_module == "Accounts")
-					{
-						$sql = "select * from  vtiger_account where accountid=".$mycrmid;
-						$result = $adb->query($sql);
-						$account_name = $adb->query_result($result,0,"accountname");
-						$myemail=$adb->query_result($result,0,"email1");
-						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
-						$parent_name .= $account_name.'<'.$myemail.'>; ';
-						$account_selected = 'selected';
-					}elseif($parent_module == "Users")
-					{
-						$sql = "select user_name,email1 from vtiger_users where id=".$mycrmid;
-						$result = $adb->query($sql);
-						$account_name = $adb->query_result($result,0,"user_name");
-						$myemail=$adb->query_result($result,0,"email1");
-						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
-						$parent_name .= $account_name.'<'.$myemail.'>; ';
-						$user_selected = 'selected';
+				$parent_name='';
+				$parent_id='';
+				$myemailid= $_REQUEST['record'];
+				$mysql = "select crmid from vtiger_seactivityrel where activityid=".$myemailid;
+				$myresult = $adb->query($mysql);
+				$mycount=$adb->num_rows($myresult);
+				if($mycount >0)
+				{
+					for ($i=0;$i<$mycount;$i++)
+					{	
+						$mycrmid=$adb->query_result($myresult,$i,'crmid');
+						$parent_module = getSalesEntityType($mycrmid);
+						if($parent_module == "Leads")
+						{
+							$sql = "select firstname,lastname,email from vtiger_leaddetails where leadid=".$mycrmid;
+							$result = $adb->query($sql);
+							$first_name = $adb->query_result($result,0,"firstname");
+							$last_name = $adb->query_result($result,0,"lastname");
+							$myemail=$adb->query_result($result,0,"email");
+							$parent_id .=$mycrmid.'@0|' ; //make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+							$lead_selected = 'selected';
+						}
+						elseif($parent_module == "Contacts")
+						{
+							$sql = "select * from  vtiger_contactdetails where contactid=".$mycrmid;
+							$result = $adb->query($sql);
+							$first_name = $adb->query_result($result,0,"firstname");
+							$last_name = $adb->query_result($result,0,"lastname");
+							$myemail=$adb->query_result($result,0,"email");
+							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+							$contact_selected = 'selected';
+						}
+						elseif($parent_module == "Accounts")
+						{
+							$sql = "select * from  vtiger_account where accountid=".$mycrmid;
+							$result = $adb->query($sql);
+							$account_name = $adb->query_result($result,0,"accountname");
+							$myemail=$adb->query_result($result,0,"email1");
+							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $account_name.'<'.$myemail.'>; ';
+							$account_selected = 'selected';
+						}elseif($parent_module == "Users")
+						{
+							$sql = "select user_name,email1 from vtiger_users where id=".$mycrmid;
+							$result = $adb->query($sql);
+							$account_name = $adb->query_result($result,0,"user_name");
+							$myemail=$adb->query_result($result,0,"email1");
+							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $account_name.'<'.$myemail.'>; ';
+							$user_selected = 'selected';
+						}
 					}
 				}
 			}
+			$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['To'].'&nbsp;</td>';
+			$custfld .= '<td width="90%" colspan="3"><input name="parent_id" type="hidden" value="'.$parent_id.'"><textarea readonly name="parent_name" cols="70" rows="2">'.$parent_name.'</textarea>&nbsp;<select name="parent_type" >';
+			$custfld .= '<OPTION value="Contacts" selected>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
+			$custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+			$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'$log->debug("Exiting getOutputHtml method ..."); return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_$log->debug("Exiting getOutputHtml method ..."); return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';$log->debug("Exiting getOutputHtml method ..."); return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+			$editview_label[] = array(	 
+					'Contacts'=>$contact_selected,
+					'Accounts'=>$account_selected,
+					'Leads'=>$lead_selected,
+					'Users'=>$user_selected
+					);
+			$fieldvalue[] =$parent_name;
+			$fieldvalue[] = $parent_id;
 		}
-		$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['To'].'&nbsp;</td>';
-		$custfld .= '<td width="90%" colspan="3"><input name="parent_id" type="hidden" value="'.$parent_id.'"><textarea readonly name="parent_name" cols="70" rows="2">'.$parent_name.'</textarea>&nbsp;<select name="parent_type" >';
-		$custfld .= '<OPTION value="Contacts" selected>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
-		$custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
-		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'$log->debug("Exiting getOutputHtml method ..."); return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_$log->debug("Exiting getOutputHtml method ..."); return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';$log->debug("Exiting getOutputHtml method ..."); return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-		$editview_label[] = array(	 
-				'Contacts'=>$contact_selected,
-				'Accounts'=>$account_selected,
-				'Leads'=>$lead_selected,
-				'Users'=>$user_selected
-				);
-		$fieldvalue[] =$parent_name;
-		$fieldvalue[] = $parent_id;
-
 	}
 	//end of rdhital/Raju
 	elseif($uitype == 68)
