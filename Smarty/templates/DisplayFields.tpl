@@ -696,9 +696,8 @@
 	
 	function fntaxValidation(txtObj)
 	{ldelim}
-			temp= /^\d+\.\d+$/.test(document.getElementById(txtObj).value);
-			if(temp == false)
-				alert("{$APP.ENTER_VALID_TAX}");
+			if (!numValidate(txtObj,"Tax","any"))
+				document.getElementById(txtObj).value = 0;
 	{rdelim}	
 
 function delimage(id)
