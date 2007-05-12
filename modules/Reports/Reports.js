@@ -215,9 +215,6 @@ function addColumnStep1()
 				addColumnStep1();
 			}
 		}
-	}else
-	{
-		return false;
 	}
 }
 //this function is done for checking,whether the user has access to edit the field :Bharath
@@ -241,9 +238,6 @@ function delColumn()
 				delColumn();
 			}
 		}
-	}else
-	{
-		exit();
 	}
 }
 
