@@ -2498,12 +2498,13 @@ function getMergedDescription($description,$id,$parent_type)
 			break;
 	}
 	//replace the unwanted tokens by null
-	$token_data_pair = explode('$',$description);
+	//commented out to fix the bug #3721
+	/*$token_data_pair = explode('$',$description);
     for($i=1;$i < count($token_data_pair);$i+=2)
 	{
 		$token_data = '$'.$token_data_pair[$i].'$';
 		$description = str_replace($token_data,'',$description);
-	}
+	}*/
     $log->debug("Exiting from getMergedDescription ...");
 	return $description;
 }
