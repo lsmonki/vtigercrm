@@ -98,7 +98,7 @@ if($_FILES['imagename']['name'] != '')
 {
 	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
 }
-else
+elseif($focus->id != '')
 {
 	$result = $adb->query("select imagename from vtiger_contactdetails where contactid = ".$focus->id);
 	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
