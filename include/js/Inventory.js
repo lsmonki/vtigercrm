@@ -135,7 +135,8 @@ function calcTotal() {
 
 		}
 	}
-	calcGrandTotal()
+	calcGroupTax();
+	calcGrandTotal();
 }
 
 function calcGrandTotal() {
@@ -712,7 +713,6 @@ function calcGroupTax()
 
 	document.getElementById("tax_final").innerHTML = roundValue(group_tax_total);
 
-	calcTotal();
 }
 
 function calcSHTax()

@@ -103,7 +103,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<b>{$APP.LBL_TAX_MODE}</b>
 	</td>
 	<td class="dvInnerHeader">
-		<select id="taxtype" name="taxtype" onchange="decideTaxDiv();">
+		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
 		</select>
@@ -330,7 +330,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 					   <tr>
 						<td align="left" class="lineOnTop">
-							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
+							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcTotal()">&nbsp;%
 						</td>
 						<td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
 						<td align="right" class="lineOnTop">
