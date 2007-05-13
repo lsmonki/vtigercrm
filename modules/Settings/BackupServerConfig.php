@@ -42,12 +42,17 @@ if(isset($_REQUEST['bkp_server_mode']) && $_REQUEST['bkp_server_mode'] != '')
 	$smarty->assign("BKP_SERVER_MODE",$_REQUEST['bkp_server_mode']);
 else
 	$smarty->assign("BKP_SERVER_MODE",'view');
-
-if (isset($server))
+if(isset($_REQUEST['server']))
+	$smarty->assign("FTPSERVER",$_REQUEST['server']);
+else if (isset($server))
 	$smarty->assign("FTPSERVER",$server);
-if (isset($server_username))
+if (isset($_REQUEST['server_user']))
+	$smarty->assign("FTPUSER",$_REQUEST['server_user']);
+else if (isset($server_username))
 	$smarty->assign("FTPUSER",$server_username);
-if (isset($server_password))
+if (isset($_REQUEST['password']))
+	$smarty->assign("FTPPASSWORD",$_REQUEST['password']);
+else if (isset($server_password))
 	$smarty->assign("FTPPASSWORD",$server_password);
 
 
