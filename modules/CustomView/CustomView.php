@@ -951,6 +951,18 @@ class CustomView extends CRMEntity{
 		{
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getProductId($value),$datatype);
 		}
+		else if($fieldname == "handler")
+		{
+			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
+		}
+		else if($fieldname == "discontinued")
+		{
+			if($value == 'yes')
+				$value=1;
+			else if($value == 'no')
+				$value=0;
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
+		}
 		else if($fieldname == "salesorderid")
 		{
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value),$datatype);
