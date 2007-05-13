@@ -97,7 +97,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			}
 
 			//Counting the number of values for a type of graph
-			if($graph_for == "productid")
+			if($graph_for == "productname")
 			{
 				if($row['qtyinstock'] =='')
 					$mod_count_array[$mod_name] = 0;
@@ -316,7 +316,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				if($period_type!="yday")
 					$mod_cnt_table.="<td>$tot</td>";
 			}
-			if($graph_for == "productid")
+			if($graph_for == "productname")
 			{
 				$cnt_total=array_sum($mod_count_array);
 			}
@@ -389,7 +389,6 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 	$html_imagename=$graph_by; //Html image name for the graph
 
 	$graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
-	
 	if($graph_details!=0)
 	{
 		$name_val=$graph_details[0];
@@ -420,7 +419,6 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 	}
 	else
 	{
-                 //echo $mod_strings['LBL_NO_DATA'];
 		 sleep(1);
                  echo '<h3>'.$mod_strings['LBL_NO_DATA'].'</h3>';
 	}

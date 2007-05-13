@@ -36,6 +36,14 @@ $leads_query="select vtiger_crmentity.crmid,vtiger_crmentity.createdtime, vtiger
 //Query for Accounts
 $account_query="select vtiger_crmentity.*, vtiger_account.*, vtiger_accountscf.* from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid inner join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid inner join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid left join vtiger_accountgrouprelation on vtiger_accountscf.accountid=vtiger_accountgrouprelation.accountid left join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
 
+//Query for Products by PO
+$probyPO = "select vtiger_purchaseorder.*,vtiger_crmentity.* from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid inner join vtiger_inventoryproductrel on vtiger_purchaseorder.purchaseorderid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_purchaseorder.purchaseorderid and vtiger_crmentity.deleted=0";
+
+//Query for Products by Quotes
+$probyQ = "select vtiger_quotes.*,vtiger_crmentity.* from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_inventoryproductrel on vtiger_quotes.quoteid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_quotes.quoteid and vtiger_crmentity.deleted=0";
+
+//Query for Products by Invoices
+$probyInv = "select vtiger_invoice.*,vtiger_crmentity.* from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_inventoryproductrel on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_invoice.invoiceid and vtiger_crmentity.deleted=0";
 
 //Query For Products qty in stock
 $products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_products.productid = vtiger_inventoryproductrel.id where vtiger_crmentity.deleted=0 ";
@@ -233,33 +241,33 @@ $graph_array = Array(
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by PO
-		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbypo"))
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbypo") && $profileTabsPermission[getTabid("PurchaseOrder")] == 0)
 		    { 
-			$graph_by="";
+			    $graph_by="purchaseorderid";
 			    $graph_title=$mod_strings['productbypo'];
 			    $module="Products";
 			    $where="";
-			    $query=$products_query." ".dashboard_check($module);
+			    $query=$probyPO." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Quotes
-		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyquotes"))
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyquotes") && $profileTabsPermission[getTabid("Quotes")] == 0)
 		    { 
-                        $graph_by="";
+                            $graph_by="quoteid";
    			    $graph_title=$mod_strings['productbyquotes'];
 			    $module="Products";
 			    $where=""; 
-			    $query=$products_query." ".dashboard_check($module);
+			    $query=$probyQ." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Invoice
-		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyinvoice"))
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyinvoice") && $profileTabsPermission[getTabid("Invoice")] == 0)
 		    {
-		        $graph_by="invoiceid";
+		            $graph_by="invoiceid";
 			    $graph_title=$mod_strings['productbyinvoice'];
 			    $module="Products";
 			    $where="";
-			    $query=$products_query." ".dashboard_check($module);
+			    $query=$probyInv." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 
@@ -396,7 +404,7 @@ $graph_array = Array(
 		    //Campaigns by Contact
 		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && $profileTabsPermission[getTabid("Campaigns")] == 0)
 		    {
-			    $graph_by="campaignname";
+			    $graph_by="campaignid";
 			    $graph_title=$mod_strings['contactbycampaign'];
 			    $module="Contacts";
 			    $where="";
