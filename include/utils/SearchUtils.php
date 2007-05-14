@@ -701,6 +701,10 @@ function getdashboardcondition()
 	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
 	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
 	if(isset($_REQUEST['owner'])) $owner = $_REQUEST['owner'];
+	if(isset($_REQUEST['campaignid'])) $campaign = $_REQUEST['campaignid'];
+	if(isset($_REQUEST['quoteid'])) $quote = $_REQUEST['quoteid'];
+	if(isset($_REQUEST['invoiceid'])) $invoice = $_REQUEST['invoiceid'];
+	if(isset($_REQUEST['purchaseorderid'])) $po = $_REQUEST['purchaseorderid'];
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
@@ -730,6 +734,27 @@ function getdashboardcondition()
 		array_push($where_clauses, "vtiger_crmentity.smownerid = ".$uid);
 		$url_string .= "&assigned_user_id=".$uid;
 	}
+	if(isset($campaign) && $campaign != "")
+	{
+		array_push($where_clauses, "vtiger_campaigncontrel.campaignid = ".$campaign);
+                $url_string .= "&campaignid=".$campaign;
+	}
+	if(isset($quote) && $quote != "")
+	{
+		array_push($where_clauses, "vtiger_inventoryproductrel.id = ".$quote);
+		$url_string .= "&quoteid=".$quote;
+	}
+	if(isset($invoice) && $invoice != "")
+	{
+		array_push($where_clauses, "vtiger_inventoryproductrel.id = ".$invoice);
+		$url_string .= "&invoiceid=".$invoice;
+	}
+	if(isset($po) && $po != "")
+	{
+		array_push($where_clauses, "vtiger_inventoryproductrel.id = ".$po);
+		$url_string .= "&purchaseorderid=".$po;
+	}
+
 	$where = "";
 	foreach($where_clauses as $clause)
 	{

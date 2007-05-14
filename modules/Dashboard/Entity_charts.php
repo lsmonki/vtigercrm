@@ -100,7 +100,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			if($graph_for == "productname")
 			{
 				if($row['qtyinstock'] =='')
-					$mod_count_array[$mod_name] = 0;
+					$mod_count_array[$mod_name] = 1;
 				else
 					$mod_count_array[$mod_name]=$row['qtyinstock'];
 
@@ -143,6 +143,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			for ($i=0;$i<count($mod_name_array); $i++)
 			{
 				$name=$mod_name_array[$i];
+				$id_name = "";
 				if($name=="")
 					$name="Un Assigned";
 
@@ -194,7 +195,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 
 				$mod_count_val=$mod_count_array[$name];
-
 				$tot_mod_cnt=array_sum($count_by_date[$name]);
 				$mod_cnt_table .= "<td align=center>$tot_mod_cnt</td></tr>";
 
@@ -223,6 +223,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
+					$id_name = $name;
 					if($name_val!="")
 						$name=$name_val;
 				}
@@ -231,6 +232,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$query = "SELECT subject FROM vtiger_quotes WHERE quoteid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
+					$id_name = $name;
 					if($name_val!="")
 						$name=$name_val;
 				}
@@ -239,6 +241,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$query = "SELECT subject FROM vtiger_invoice WHERE invoiceid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
+					$id_name = $name;
 					if($name_val!="")
 						$name=$name_val;
 				}
@@ -248,6 +251,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"campaignname");
+					$id_name = $name;
 					if($name_val!="")
 						$name=$name_val;
 				}
@@ -283,6 +287,8 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($graph_for == "accountid") $graph_for = "account_id";
 					if($module == "Home")
 						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name;
+					else if($module == "Contacts" || ($module=="Products" && ($graph_for == "quoteid" || $graph_for == "invoiceid" || $graph_for == "purchaseorderid")))
+						$link_val="index.php?module=".$module."&action=ListView&from_homepagedb=true&type=dbrd&query=true&".$graph_for."=".$id_name;
 					else
 						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
 

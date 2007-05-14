@@ -1978,8 +1978,10 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_products.handler
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
+				ON vtiger_users.id = vtiger_products.handler";
+		if(isset($_REQUEST["from_homepagedb"]) && $_REQUEST["from_homepagedb"] == true)
+                        $query .= " INNER JOIN vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid = vtiger_products.productid";
+                $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Notes":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
@@ -2049,8 +2051,10 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_customerdetails
-				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
+				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid";
+		if(isset($_REQUEST["from_homepagedb"]) && $_REQUEST["from_homepagedb"] == true)
+                        $query .= " INNER JOIN vtiger_campaigncontrel on vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid";
+                $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
