@@ -251,6 +251,20 @@ ExecuteQuery("update vtiger_def_org_field inner join vtiger_field on vtiger_fiel
 //remove http:// from the website in Accounts (In 5.x we will handle this in code instead of db)
 ExecuteQuery("update vtiger_account set website = REPLACE(website,'http://','')");
 
+//Change the invoice_no as Invoice No - fieldlabel in field table
+ExecuteQuery("update vtiger_field set fieldlabel='Invoice No' where fieldlabel='invoice_no' and tabid='23'");
+
+//Change the filter value for Account - Member Of in advance filter
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_account:parentid:account_id:Accounts_Member_Of:V' where columnname='vtiger_account:accountname:accountname:Accounts_Member_Of:V'");
+
+//Drop the salestax from Quotes/PO/SO/Invoice which is unwanted field
+ExecuteQuery("delete from vtiger_field where fieldname in ('txtTax') and tabid in (20,21,22,23)");
+ExecuteQuery("alter table vtiger_quotes drop column tax");
+ExecuteQuery("alter table vtiger_purchaseorder drop column salestax");
+ExecuteQuery("alter table vtiger_salesorder drop column salestax");
+ExecuteQuery("alter table vtiger_invoice drop column salestax");
+
+
 
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
