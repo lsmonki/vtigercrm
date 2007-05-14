@@ -711,7 +711,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 	{
 		// parse the message
 		$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
-		$struct_msg = imap_fetchstructure($this->mbox, $this->mailid);
+		$struct_msg = @imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;
 		$ev = $this->mailid;
 		$conf->display_rfc822 = true;
@@ -802,7 +802,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 				$link_att = '<span id="webmail_cont" style="display:none;"><tr><th class="mailHeaderLabel right"></th><td class="mailHeaderData"></td></tr></span>';
 			} 
 
-		$struct_msg = imap_fetchstructure($mail, $ev);
+		$struct_msg = @imap_fetchstructure($mail, $ev);
 		$msg_charset = '';
 		if ($struct_msg->ifparameters) {
 			while ($obj = array_pop($struct_msg->parameters)) {
