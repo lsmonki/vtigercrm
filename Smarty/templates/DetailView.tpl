@@ -178,7 +178,7 @@ function DeleteTag(id,recordid)
 							{if $SENDMAILBUTTON eq 'permitted'}
 								<input type="hidden" name="pri_email" value="{$EMAIL1}"/>
 								<input type="hidden" name="sec_email" value="{$EMAIL2}"/>
-								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(checkEmailid('{$MODULE}',document.DetailView.pri_email.value,document.DetailView.sec_email.value)){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}return false{rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
+								<input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="crmbutton small edit" onclick="if(document.DetailView.pri_email.value !='' || document.DetailView.sec_email.value !=''){ldelim}fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID}){rdelim}else{ldelim}OpenCompose('','create'){rdelim}" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
 								{/if}
 						{/if}
 						{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}

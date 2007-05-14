@@ -131,7 +131,7 @@
                                 {if $MAIL_CHECK eq 'true'}
                                 <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
 				{else}
-                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="javascript:alert('{$APP.LBL_THIS}{$APP.$MODULE}{$APP.DOESNOT_HAVE_MAILIDS}');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="OpenCompose('','create');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
                                 {/if}
                                 {else}
                                 <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>

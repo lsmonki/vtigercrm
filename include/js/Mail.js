@@ -122,7 +122,7 @@ function sendmail(module,idstrings)
                         method: 'post',
                         postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings,
                         onComplete: function(response) {
-					if(response.responseText == "Mail Ids not permitted")
+					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
 					{
 						var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
 				                openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');

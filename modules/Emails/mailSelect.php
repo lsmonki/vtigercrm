@@ -26,7 +26,7 @@ $smarty = new vtigerCRM_Smarty;
 
 $userid =  $current_user->id;
 
-$querystr = "select fieldid, fieldlabel, columnname from vtiger_field where tabid=".getTabid($pmodule)." and uitype=13";
+$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=".getTabid($pmodule)." and uitype=13";
 
 $res=$adb->query($querystr);
 $numrows = $adb->num_rows($res);
@@ -49,7 +49,8 @@ for($i = 0; $i < $numrows; $i++)
 
 if($single_record && count($columnlists) > 0)
 {
-	$count = 0;	
+	$count = 0;
+	$val_cnt = 0;	
 	switch($pmodule)
 	{
 		case 'Accounts':
@@ -57,7 +58,10 @@ if($single_record && count($columnlists) > 0)
 			$result=$adb->query($query);
 		        foreach($columnlists as $columnname)	
 			{
-				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+				$acc_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $acc_eval;
+				if($acc_eval != "") $val_cnt++;
+				
 			}
 			$entity_name = $adb->query_result($result,0,'accountname');
 			break;
@@ -66,7 +70,9 @@ if($single_record && count($columnlists) > 0)
 			$result=$adb->query($query);
 		        foreach($columnlists as $columnname)	
 			{
-				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+				$lead_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $lead_eval;
+				if($lead_eval != "") $val_cnt++;
 			}
 			$entity_name = $adb->query_result($result,0,'leadname');
 			break;
@@ -75,7 +81,9 @@ if($single_record && count($columnlists) > 0)
 			$result=$adb->query($query);
 		        foreach($columnlists as $columnname)	
 			{
-				$field_value[$count++] = $adb->query_result($result,0,$columnname);
+				$con_eval = $adb->query_result($result,0,$columnname);
+				$field_value[$count++] = $con_eval;
+				if($con_eval != "") $val_cnt++;
 			}	
 			$entity_name = $adb->query_result($result,0,'contactname');
 			break;	
@@ -91,9 +99,12 @@ $smarty->assign("IDLIST", $idlist);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("FROM_MODULE", $pmodule);
 $smarty->assign("IMAGE_PATH",$image_path);
-
-if(count($columnlists) > 0)
+if($single_record && count($columnlists) > 0 && $val_cnt > 0)
 	$smarty->display("SelectEmail.tpl");
+else if(!$single_record && count($columnlists) > 0)
+	$smarty->display("SelectEmail.tpl");
+else if($single_record && $val_cnt == 0)
+        echo "No Mail Ids";	
 else
 	echo "Mail Ids not permitted";	
 ?>
