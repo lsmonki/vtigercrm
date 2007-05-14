@@ -26,8 +26,7 @@
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
-<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
-<input type="hidden" name="form">
+<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
 <input type="hidden" name="send_mail">
 <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 <input type="hidden" name="user_id" value="{$USER_ID}">
@@ -38,7 +37,7 @@
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="action">
 <input type="hidden" name="popupaction" value="create">
-<input type="hidden" name="hidden_toid">
+<input type="hidden" name="hidden_toid" id="hidden_toid">
 <table class="small mailClient" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
    
@@ -60,7 +59,7 @@
    <tr>
 	<td class="mailSubHeader" align="right"><b>{$MOD.LBL_TO}</b></td>
 	<td class="cellText" style="padding: 5px;">
- 		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
+ 		<input name="{$elements.2.0}" id="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
 		<input id="parent_name" name="parent_name" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width:99%">&nbsp;
 	</td>
@@ -78,7 +77,7 @@
 		&nbsp;
 		<span  class="mailClientCSSButton">
 		<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-		</span><span class="mailClientCSSButton" ><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.hidden_toid.value='';this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+		</span><span class="mailClientCSSButton" ><img src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="$('parent_id').value=''; $('hidden_toid').value='';$('parent_name').value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>
    </tr>
@@ -132,7 +131,6 @@
    <tr>
 	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
-		<input type="hidden" name="from_add" value="{$from_add}">
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}
@@ -162,6 +160,10 @@ var conf_mail_srvr_err_msg = '{$MOD.LBL_CONF_MAILSERVER_ERROR}';
 {literal}
 function email_validate(oform,mode)
 {
+	if(trim(mode) == '')
+	{
+		return false;
+	}
 	if(oform.parent_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
 		//alert('No recipients were specified');
@@ -220,10 +222,13 @@ function email_validate(oform,mode)
 	if(mode == 'send')
 	{
 		server_check()	
-	}else
+	}else if(mode == 'save')
 	{
 		oform.action.value='Save';
 		oform.submit();
+	}else
+	{
+		return false;
 	}
 }
 //function to extract the mailaddress inside < > symbols.......for the bug fix #3752

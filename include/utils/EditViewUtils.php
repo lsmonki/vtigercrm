@@ -525,8 +525,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			if($value!='')
 				$filename=' [ '.$value. ' ]';
-			$fieldvalue[] = $filename;
-			$fieldvalue[] = $value;
+			if($filename != '')
+				$fieldvalue[] = $filename;
+			if($value != '')
+				$fieldvalue[] = $value;
 		}
 		$editview_label[]=$mod_strings[$fieldlabel];
 	}
