@@ -306,7 +306,7 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		if(($module == "Calendar" || $module == "Invoice" ||$module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
+		if(($module == "Calendar" || $module == "Invoice" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
 	       {
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
@@ -543,7 +543,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			$where_string = $searchfield." like '%".$searchstring."%' ";
 			if($searchstring == NULL)
 				if($searchfield !='vtiger_products.productname')
-					$where_string = $searchfield." like ''";
+					$where_string = $searchfield." like '%%'";
 				else
 					$where_string = $searchfield." is NULL";
 			break;
