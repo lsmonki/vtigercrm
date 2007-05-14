@@ -752,7 +752,7 @@ class CustomView extends CRMEntity{
 		{
 			$advft["columnname"] = $advfilterrow["columnname"];
 			$advft["comparator"] = $advfilterrow["comparator"];
-			$advft["value"] = $advfilterrow["value"];
+			$advft["value"] = addslashes($advfilterrow["value"]);
 			$advfilterlist[] = $advft;
 		}
 		return $advfilterlist;
