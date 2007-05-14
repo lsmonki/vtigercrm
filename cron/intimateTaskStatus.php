@@ -125,14 +125,12 @@ $result = $adb->query($sql);
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-
-$result = $adb->query("SELECT productname from vtiger_products where expiry_date like '".date('Y-m-d')."%'",$db);
-while ($myrow = $adb->fetch_array($result))
-{
-  $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending'],$app_strings['Dear_Admin'].$productname ."\n ".$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"");	
-}
-
+	$result = $adb->query("SELECT productname from vtiger_products where expiry_date like '".date('Y-m-d')."%'",$db);
+	while ($myrow = $adb->fetch_array($result))
+	{
+		$productname=$myrow[0];
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"");	
+	}
 }
 
 ?>
