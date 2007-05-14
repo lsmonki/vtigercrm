@@ -159,7 +159,13 @@ class MailBox {
 		$connectString1 = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."}".$this->mailbox; 
 
 		$this->db->println("Done Building Connection String.. Connecting to box");
-
+		//checking the imap support in php
+		if(!function_exists('imap_open'))
+		{
+			echo "<strong>".$mod_strings['LBL_ENABLE_IMAP_SUPPORT']."</strong>";
+			exit();
+		}
+			
 		if(!$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey))
 		{
 			//try second string which has no tls or validate-cert
