@@ -609,7 +609,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 		$result = $adb->query($query);
 	        if($adb->num_rows($result) > 0)
 		{
-			return "Account Name already exists";
+			return "Accounts";
 			die;
 		}
 		$account=new Accounts();
@@ -629,7 +629,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 		$account->column_fields['assigned_user_id']=$user_id;
 		$account->save('Accounts');
 		if($account->id != '')
-      return "Account added Sucessfully";
+      return "Success";
     else
       return "Error while adding Account.Try again";  
 	}
