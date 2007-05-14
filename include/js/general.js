@@ -1669,8 +1669,8 @@ function SelectAll(mod,parmod)
 	var y=0;
 	if(parmod != 'Calendar')
         {
-                var module = window.opener.document.getElementById('return_module').value
-                var entity_id = window.opener.document.getElementById('parent_id').value
+                var module = window.opener.document.getElementById('RLreturn_module').value
+                var entity_id = window.opener.document.getElementById('RLparent_id').value
         }
         idstring = "";
 	namestr = "";
