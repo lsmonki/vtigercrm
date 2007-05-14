@@ -181,7 +181,7 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
 
         $product_line[$j]["Product Code"] = $product_code[$i];
-	$product_line[$j]["Product Name"] = $product_name[$i];
+	$product_line[$j]["Product Name"] = from_html($product_name[$i]);
 	$product_line[$j]["Qty"] = $qty[$i];
 	$product_line[$j]["Price"] = $list_price[$i];
 	$product_line[$j]["Discount"] = $discount_total[$i];
