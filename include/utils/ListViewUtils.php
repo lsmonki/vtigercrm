@@ -1123,6 +1123,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{        
 		$value = getUserName($adb->query_result($list_result,$list_result_count,'handler')); 
 	}
+	elseif($uitype == 51)//Accounts - Member Of
+	{
+		$parentid = $adb->query_result($list_result,$list_result_count,"parentid");
+		$account_name = getAccountName($parentid);
+		$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>';
+
+	}
 	elseif($uitype == 77) 
 	{        
 		$value = getUserName($adb->query_result($list_result,$list_result_count,'inventorymanager')); 
@@ -1857,6 +1864,8 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_account vtiger_account2
+				ON vtiger_account.parentid = vtiger_account2.accountid
 			WHERE vtiger_crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -1985,6 +1994,22 @@ function getListQuery($module,$where='')
 				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
 			LEFT JOIN vtiger_contactdetails
 				ON vtiger_contactdetails.contactid = vtiger_notes.contact_id
+			LEFT JOIN vtiger_leaddetails
+				ON vtiger_senotesrel.crmid = vtiger_leaddetails.leadid
+			LEFT JOIN vtiger_potential
+				ON vtiger_senotesrel.crmid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_account
+				ON vtiger_senotesrel.crmid = vtiger_account.accountid
+			LEFT JOIN vtiger_products
+				ON vtiger_senotesrel.crmid = vtiger_products.productid
+			LEFT JOIN vtiger_invoice
+				ON vtiger_senotesrel.crmid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_purchaseorder
+				ON vtiger_senotesrel.crmid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_salesorder
+				ON vtiger_senotesrel.crmid = vtiger_salesorder.salesorderid
+			LEFT JOIN vtiger_quotes
+				ON vtiger_senotesrel.crmid = vtiger_quotes.quoteid
 			WHERE vtiger_crmentity.deleted = 0
 			AND ((vtiger_senotesrel.crmid IS NULL
 					AND (vtiger_notes.contact_id = 0
@@ -2015,6 +2040,8 @@ function getListQuery($module,$where='')
 				ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
 			LEFT JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
+				ON vtiger_contactdetails.reportsto = vtiger_contactdetails2.contactid
 			LEFT JOIN vtiger_contactgrouprelation
 				ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
 			LEFT JOIN vtiger_groups
@@ -2055,6 +2082,14 @@ function getListQuery($module,$where='')
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT OUTER JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT OUTER JOIN vtiger_leaddetails
+				ON vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid
+			LEFT OUTER JOIN vtiger_account vtiger_account2
+				ON vtiger_account2.accountid = vtiger_seactivityrel.crmid
+			LEFT OUTER JOIN vtiger_potential
+				ON vtiger_potential.potentialid = vtiger_seactivityrel.crmid
+			LEFT OUTER JOIN vtiger_troubletickets
+				ON vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid
 			LEFT OUTER JOIN vtiger_recurringevents
 				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 			LEFT OUTER JOIN vtiger_activity_reminder
@@ -2234,6 +2269,8 @@ function getListQuery($module,$where='')
 				ON vtiger_account.accountid = vtiger_salesorder.accountid
 			LEFT JOIN vtiger_contactdetails
 				ON vtiger_salesorder.contactid = vtiger_contactdetails.contactid	
+			LEFT JOIN vtiger_potential
+				ON vtiger_potential.potentialid = vtiger_salesorder.potentialid
 			LEFT JOIN vtiger_sogrouprelation
 				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups

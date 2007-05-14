@@ -262,7 +262,7 @@ class CustomView extends CRMEntity{
 
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
-			if($fieldname == 'account_id')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name 
+			if($fieldname == 'account_id' && $fieldtablename != 'vtiger_account')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name . But for account member of we have to avoid this
 				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else
 				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
@@ -919,6 +919,26 @@ class CustomView extends CRMEntity{
 	  */
 	function getRealValues($tablename,$fieldname,$comparator,$value,$datatype)
 	{
+		//we have to add the fieldname/tablename.fieldname and the corresponding value (which we want) we can add here. So that when these LHS field comes then RHS value will be replaced for LHS in the where condition of the query
+		global $adb;
+		$change_table_field = Array(
+
+			"product_id"=>"vtiger_products.productname",
+			"contactid"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
+			"contact_id"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
+			"accountid"=>"",//in cvadvfilter accountname is stored for Contact, Potential, Quotes, SO, Invoice
+			"account_id"=>"",//Same like accountid. No need to change
+			"vendorid"=>"vtiger_vendor.vendorname",
+			"vendor_id"=>"vtiger_vendor.vendorname",
+			"potentialid"=>"vtiger_potential.potentialname",
+
+			"vtiger_account.parentid"=>"vtiger_account2.accountname",
+			"quoteid"=>"vtiger_quotes.subject",
+			"salesorderid"=>"vtiger_salesorder.subject",
+			"campaignid"=>"vtiger_campaign.campaignname",
+			"vtiger_contactdetails.reportsto"=>"concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname)",
+			);
+
 		if($fieldname == "smownerid")
                 {
 	                $temp_value = "( vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
@@ -927,90 +947,90 @@ class CustomView extends CRMEntity{
 		}elseif( $fieldname == "inventorymanager")
                 {
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value),$datatype);
-                }else if($fieldname == "parentid")
+                }
+		elseif($change_table_field[$fieldname] != '')//Added to handle special cases
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value),$datatype);
-		}else if($fieldname == "accountid")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value),$datatype);
-		}else if($fieldname == "contactid"  || $fieldname == 'contact_id')
-		{
-			$value = "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)".$this->getAdvComparator($comparator,$value,$datatype);
-			//$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getContactId($value),$datatype);
-		}else if($fieldname == "vendor_id" || $fieldname == "vendorid")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getVendorId($value),$datatype);
-		}else if($fieldname == "potentialid")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getPotentialId($value),$datatype);
-		}else if($fieldname == "quoteid")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getQuoteId($value),$datatype);
+			$value = $change_table_field[$fieldname].$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		else if($fieldname == "product_id")
+		elseif($change_table_field[$tablename.".".$fieldname] != '')//Added to handle special cases
 		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getProductId($value),$datatype);
+			$value = $change_table_field[$tablename.".".$fieldname].$this->getAdvComparator($comparator,$value,$datatype);
 		}
 		else if($fieldname == "handler")
 		{
 			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		else if($fieldname == "discontinued")
-		{
-			if($value == 'yes')
-				$value=1;
-			else if($value == 'no')
-				$value=0;
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
-		}
-		else if($fieldname == "salesorderid")
-		{
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value),$datatype);
-		}
 		else if($fieldname == "crmid" || $fieldname == "parent_id")
 		{
-			//Added on 14-10-2005 -- for HelpDesk
-			if($this->customviewmodule == 'HelpDesk' && $fieldname == "crmid")
-			{
-				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
-			}
-			else
-			{
-				$value = $tablename.".".$fieldname." in (".$this->getSalesEntityId($value).") ";
-			}
+				$value = $this->getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname);
 		}
 		else
 		{
+			//For checkbox type values, we have to convert yes/no as 1/0 to get the values
+			if(getUItype($this->customviewmodule, $fieldname) == 56)
+			{
+				if($value == 'yes')	$value = 1;
+				elseif($value == 'no')	$value = 0;
+			}
+
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);	
 		}
 		return $value;
 	}
-	
-	/** to get the entityId for the given module   
-	  * @param $setype :: type string 
-	  * @returns  $parent_id as a string of comma seperated id 
-	  *       $id,$id1,$id2, ---- $idn
+
+	/** to get the related name for the given module   
+	  * @param $comparator :: type string, 
+	  * @param $value :: type string, 
+	  * @param $datatype :: type string, 
+	  * @returns  $value :: string 
 	  */
 
-	function getSalesEntityId($setype)
+	function getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname)
 	{
-                global $log;
-                $log->info("in getSalesEntityId ".$setype);
+	        global $log;
+                $log->info("in getSalesRelatedName ".$comparator."==".$value."==".$datatype."==".$tablename."==".$fieldname);
 		global $adb;
-		$sql = "select crmid from vtiger_crmentity where setype='".$setype."' and deleted = 0";
-		$result = $adb->query($sql);
-		while($row = $adb->fetch_array($result))
+
+		$adv_chk_value = $value;
+		$value = '(';
+		$sql = "select distinct(setype) from vtiger_crmentity where crmid in (select ".$fieldname." from ".$tablename.")";
+		$res=$adb->query($sql);
+		for($s=0;$s<$adb->num_rows($res);$s++)
 		{
-			$parent_id[] = $row["crmid"];
+			if($s != 0)
+				$value .= ' or ';
+			$modulename=$adb->query_result($res,$s,"setype");
+			if($modulename == 'Accounts')
+			{
+				if($this->customviewmodule == 'Calendar')
+					$value .= 'vtiger_account2.accountname';
+				else
+					$value .= 'vtiger_account.accountname';
+			}	
+			if($modulename == 'Leads')
+				$value .= "concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
+			if($modulename == 'Potentials')
+				$value .= 'vtiger_potential.potentialname';
+			if($modulename == 'Products')
+				$value .= 'vtiger_products.productname';
+			if($modulename == 'Invoice')
+				$value .= 'vtiger_invoice.subject';
+			if($modulename == 'PurchaseOrder')
+				$value .= 'vtiger_purchaseorder.subject';
+			if($modulename == 'SalesOrder')
+				$value .= 'vtiger_salesorder.subject';
+			if($modulename == 'Quotes')
+				$value .= 'vtiger_quotes.subject';
+			if($modulename == 'Contacts')
+				$value .= "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+			if($modulename == 'HelpDesk')
+				$value .= 'vtiger_troubletickets.title';
+
+			$value .= $this->getAdvComparator($comparator,$adv_chk_value,$datatype);
 		}
-		if(isset($parent_id))
-		{
-			$parent_id = implode(",",$parent_id);
-		}else
-		{
-			$parent_id = 0;
-		}
-		return $parent_id;
+		$value .= ")";
+                $log->info("in getSalesRelatedName ".$comparator."==".$value."==".$datatype."==".$tablename."==".$fieldname);
+		return $value;
 	}
 
 	/** to get the salesorder id for the given sales order subject   

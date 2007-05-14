@@ -421,6 +421,7 @@ function changeTypeOfData($field)
 "vtiger_contactdetails:email:email:Contacts_Email:E"=>"vtiger_contactdetails:email:email:Contacts_Email:V",
 "vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:E"=>"vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:V",
 "vtiger_account:accountname:accountname:Contacts_Account_Name:I"=>"vtiger_account:accountname:accountname:Contacts_Account_Name:V",
+"vtiger_account:parentid:account_id:Accounts_Member_Of:I"=>"vtiger_account:parentid:account_id:Accounts_Member_Of:V",
 "vtiger_leaddetails:email:email:Leads_Email:E"=>"vtiger_leaddetails:email:email:Leads_Email:V",
 "vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:E"=>"vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:V",
 "vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:I"=>"vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:C",
