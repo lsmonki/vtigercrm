@@ -311,9 +311,9 @@ function BasicSearch($module,$search_field,$search_string)
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
 	       }
-		if($search_field == "accountname")
+		if($search_field == "accountname" && $module != "Accounts")
 			$search_field = "account_id";
-		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
+		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
