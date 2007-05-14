@@ -694,7 +694,7 @@ function create_contacts($user_name,$firstname,$lastname,$phone,$mobile,$email,$
 	global $log;
 	$log->DEBUG("Entering into create_contacts");
 	$log->DEBUG($firstname."Firstisname");
-	$birthdate = "0000-00-00";
+	$birthdate = "";
 	
 	return create_contact1($user_name, $firstname, $lastname, $email,"", "","", $mobile, "",$street,$city,$state,$zipcode,$country,$city,$street,$state,$zipcode,$country,$phone,"","","","",$birthdate,"","");
 	
