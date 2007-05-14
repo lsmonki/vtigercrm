@@ -3400,7 +3400,6 @@
 		<field name="carrier" type="C" size='100' />
 		<field name="pending" type="C" size='200' />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="25.3" />
 		<field name="adjustment" type="N" size="25.3" />
 		<field name="salescommission" type="N" size="25.3" />
 		<field name="exciseduty" type="N" size="25.3" />
@@ -3723,7 +3722,6 @@
 		<field name="shipping" type="C" size="100" />
 		<field name="inventorymanager" type="I" size="19" />
 		<field name="type" type="C" size="100" />
-		<field name="tax" type="N" size="25.3" />
 		<field name="adjustment" type="N" size="25.3" />
 		<field name="total" type="N" size="25.3" />
 		<field name="taxtype" type="C" size="25" />
@@ -3853,7 +3851,6 @@
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="25.3" />
 		<field name="adjustment" type="N" size="25.3" />
 		<field name="salescommission" type="N" size="25.3" />
 		<field name="exciseduty" type="N" size="25.3" />
@@ -3987,7 +3984,6 @@
 		<field name="duedate" type="D" />
 		<field name="invoiceterms" type="C" size="100" />
 		<field name="type" type="C" size="100" />
-		<field name="salestax" type="N" size="25.3" />
 		<field name="adjustment" type="N" size="25.3" />
 		<field name="salescommission" type="N" size="25.3" />
 		<field name="exciseduty" type="N" size="25.3" />
