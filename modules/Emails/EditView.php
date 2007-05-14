@@ -162,9 +162,21 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$webmail->loadMail($array_tab);
 	  $hdr = @imap_headerinfo($mbox, $mailid);
 	$smarty->assign('WEBMAIL',"true");
+	$temp_id = $MailBox->boxinfo['mail_id'];
+	$smarty->assign('from_add',$temp_id);
 	if($_REQUEST["reply"] == "all") {
 		$smarty->assign('TO_MAIL',$webmail->from);	
-		$smarty->assign('CC_MAIL',str_replace(" ","",$hdr->ccaddress));
+		//added to remove the emailid of webmail client from cc list....to fix the issue #3818
+                $cc_address = '';
+                $cc_array = explode(',',$hdr->ccaddress);
+                for($i=0;$i<count($cc_array);$i++) {
+                        if(trim($cc_array[$i]) != trim($temp_id)) {
+                                $cc_address .= $cc_array[$i];
+                                $cc_address = ($i != (count($cc_array)-1))?($cc_address.','):$cc_address;
+                        }
+                }
+		$smarty->assign('CC_MAIL',str_replace(" ","",$cc_address));
+		// fix #3818 ends
 		/*if(is_array($webmail->cc_list))
 		{
 			$smarty->assign('CC_MAIL',implode(",",$webmail->cc_list).",".implode(",",$webmail->to));
@@ -289,6 +301,7 @@ else
         $smarty->assign("FILENAME", $focus->filename);
 }
 if($ret_error == 1) {
+	require_once('modules/Webmails/MailBox.php');
 	$smarty->assign("RET_ERROR",$ret_error);
 	if($ret_parentid != '')
 		$smarty->assign("IDLISTS",$ret_parentid);
@@ -303,6 +316,10 @@ if($ret_error == 1) {
         	$smarty->assign("BCC_MAIL",$ret_bccaddress);
 	if($ret_description != '')
         	$smarty->assign("DESCRIPTION", $ret_description);
+	$temp_obj = new MailBox($mailbox);
+	$temp_id = $temp_obj->boxinfo['mail_id'];
+	if($temp_id != '')
+		$smarty->assign('from_add',$temp_id);
 }
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

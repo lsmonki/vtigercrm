@@ -132,6 +132,7 @@
    <tr>
 	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
+		<input type="hidden" name="from_add" value="{$from_add}">
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}
