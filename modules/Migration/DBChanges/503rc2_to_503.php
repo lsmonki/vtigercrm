@@ -248,6 +248,8 @@ ExecuteQuery("update vtiger_field set typeofdata='E~O' where uitype=13 and typeo
 ExecuteQuery("update vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid = vtiger_profile2field.fieldid set visible=0 where uitype in (2,6,22,73,24,81,50,23,16,53,20) or displaytype=3");
 ExecuteQuery("update vtiger_def_org_field inner join vtiger_field on vtiger_field.fieldid = vtiger_def_org_field.fieldid set visible=0 where uitype in (2,6,22,73,24,81,50,23,16,53,20) or displaytype=3");
 
+//remove http:// from the website in Accounts (In 5.x we will handle this in code instead of db)
+ExecuteQuery("update vtiger_account set website = REPLACE(website,'http://','')");
 
 
 
