@@ -30,13 +30,18 @@ $start_message=$_REQUEST["start_message"];
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 $MailBox = new MailBox($mailbox);
+$mail = $MailBox->mbox;
 $email = new Webmails($MailBox->mbox, $_REQUEST["mailid"]);
 $subject = $email->subject;
 $date = $email->date;
 $array_tab = Array();
 $email->loadMail($array_tab);
 $msgData = $email->body;
-
+$content['attachtab'] = $email->attachtab;
+while ($tmp = array_pop($content['attachtab'])){
+	if ((!eregi('ATTACHMENT', $tmp['disposition'])) && $conf->display_text_attach && (eregi('text/plain', $tmp['mime'])))
+		$msgData .= '<hr />'.view_part_detail($mail, $mailid, $tmp['number'], $tmp['transfer'], $tmp['charset'], $charset);
+}
 $focus->column_fields['subject']=$subject;
 $focus->column_fields["activitytype"]="Emails";
 
@@ -107,6 +112,17 @@ function add_attachment_to_contact($cid,$email) {
 		fclose($fp);
 	    }
 	}
+}
+function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$charset)
+{
+        $text = imap_fetchbody($mail,$mailid,$part_no);
+        if ($transfer == 'BASE64')
+                $str = nl2br(imap_base64($text));
+        elseif($transfer == 'QUOTED-PRINTABLE')
+                $str = nl2br(quoted_printable_decode($text));
+        else
+                $str = nl2br($text);
+        return ($str);
 }
 
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
