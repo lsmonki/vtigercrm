@@ -627,6 +627,8 @@ function numValidate(fldName,fldLabel,format,neg) {
            } else {
                if (val<0)
                    invalid=true
+	       else if (format[0]==2 && splitval[0]==100 && (!splitval[1] || splitval[1]==0))
+		   invalid=false
                else if (splitval[0].length>format[0])
                    invalid=true
            }
