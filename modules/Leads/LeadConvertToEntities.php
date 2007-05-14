@@ -69,8 +69,7 @@ function getInsertValues($type,$type_id)
 		$contact_id_val=$adb->query_result($convert_result,$i,"contactfid");
 		$potential_id_val=$adb->query_result($convert_result,$i,"potentialfid");
 		
-		$sql_leads_column="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and fieldid=".$lead_id; //getting the columnname for the customfield of the lead
-
+		$sql_leads_column="select vtiger_field.uitype,vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and fieldid=".$lead_id; //getting the columnname for the customfield of the lead
 		 $log->debug("Lead's custom vtiger_field coumn name is ".$sql_leads_column);
 
 		$lead_column_result = $adb->query($sql_leads_column);
@@ -78,13 +77,14 @@ function getInsertValues($type,$type_id)
 		if($leads_no_rows>0)
 		{
 			$lead_column_name=$adb->query_result($lead_column_result,0,"columnname");
+			$lead_uitype=$adb->query_result($lead_column_result,0,"uitype");
 			$sql_leads_val="select ".$lead_column_name." from vtiger_leadscf where leadid=".$id; //custom vtiger_field value for lead
 			$lead_val_result = $adb->query($sql_leads_val);
 			$lead_value=$adb->query_result($lead_val_result,0,$lead_column_name);
 			 $log->debug("Lead's custom vtiger_field value is ".$lead_value);
 		}	
 		//Query for getting the column name for Accounts/Contacts/Potentials if custom vtiger_field for lead is mappped
-		$sql_type="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
+		$sql_type="select vtiger_field.fieldid,vtiger_field.uitype,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
 		if($type=="Accounts")
 		{
 			if($account_id_val!="" && $account_id_val!=0)	
@@ -116,23 +116,72 @@ function getInsertValues($type,$type_id)
 		if($flag=="true")
 		{ 
 			$type_result=$adb->query($sql_type);
-		
+			//To construct the cf array
+                        $colname = $adb->query_result($type_result,0,"columnname");
+			
 			if(isset($type_insert_column))
 				$type_insert_column.=",";
-                	$type_insert_column.=$adb->query_result($type_result,0,"columnname") ;
+			$type_insert_column.=$colname ;
+			$type_uitype =$adb->query_result($type_result,0,"uitype") ;
 
+			//To construct the cf array
+                        $ins_val = $adb->query_result($lead_val_result,0,$lead_column_name);
+			
 			if(isset($insert_value))
 				$insert_value.=",";
 			
-			$insert_value.="'".$adb->query_result($lead_val_result,0,$lead_column_name)."'";
+			//This array is used to store the tablename as the key and the value for that table in the custom field of the uitype only for 15 and 33(Multiselect cf)...
+			$value_cf_array[$colname]=$ins_val;
+			
+			$insert_value.="'".$ins_val."'";
 		}
+	}
+	if(($lead_uitype == 33 || 15) && ($type_uitype == 33 || 15))
+	{
+		if($type_insert_column != '')
+		{
+			foreach($value_cf_array as $key => $value)
+			{
+				$tableName = $key;
+				$tableVal = $value;
+				if($tableVal != '')
+				{
+					$tab_val = explode ("|##|",$value);
+					if(count($tab_val)>0)
+					{
+						for($k=0;$k<count($tab_val);$k++)
+						{
+							$val =$tab_val[$k];
+							$sql = "select $tableName from vtiger_$tableName";
+							$numRow = $adb->num_rows($adb->query($sql));
+							$count=0;
+							for($n=0;$n < $numRow;$n++)
+							{
+								$exist_val = $adb->query_result($adb->query($sql),$n,$tableName);
+								if(trim($exist_val) == trim($val))
+								{
+									$count++;
+								}
+							}
+							if($count == 0)
+							{
+								$cfId=$adb->getUniqueID("vtiger_$tableName");
+								$qry="insert into vtiger_$tableName values($cfId,'".$val."',$n,1)";
+								$adb->query($qry);
+							}
 
+
+						}
+					}
+
+				}
+			}
+		}
 	}
 	$log->debug("columns to be inserted are ".$type_insert_column);
         $log->debug("columns to be inserted are ".$insert_value);
 	$values = array ($type_insert_column,$insert_value);
 	$log->debug("Exiting getInsertValues method ...");
-
 	return $values;	
 }
 //function Ends
