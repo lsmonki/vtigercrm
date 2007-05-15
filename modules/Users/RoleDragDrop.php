@@ -46,7 +46,7 @@ $stdDepth=$fromRoleInfo['2'];
 //Constructing the query
 foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 {
-	$subPar=explode($replaceToString,$mvRoleInfo[1]);
+	$subPar=explode($replaceToString,$mvRoleInfo[1],2);//we have to spilit as two elements only
 	$mvParString=$replace_with.$subPar[1];
 	$subDepth=$mvRoleInfo[2];
 	$mvDepth=$orgDepth+(($subDepth-$stdDepth)+1);
