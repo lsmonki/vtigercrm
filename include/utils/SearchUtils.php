@@ -74,6 +74,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		{
 			$field_list .= ', ';
 		}
+		if($fieldname == "accountname")
+			$fieldname = "account_id";
 		$field_list .= "'".$fieldname."'";
 		$j++;
 	}
@@ -306,7 +308,9 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		if(($module == "Calendar" || $module == "Invoice" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
+		
+		//Added to search contact name by lastname
+		if(($module == "Calendar" || $module == "Invoice" || $module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
 	       {
 	                 $module = 'Contacts';
 	                 $search_field = 'lastname';
@@ -446,6 +450,7 @@ function getAdvSearchfields($module)
 		$fieldtablename = $adb->query_result($result,$i,"tablename");
 		$fieldcolname = $adb->query_result($result,$i,"columnname");
 		$block = $adb->query_result($result,$i,"block");
+		$fieldtype = $adb->query_result($result,$i,"typeofdata");
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
 		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
@@ -479,14 +484,14 @@ function getAdvSearchfields($module)
 				$select_flag = "selected";
 
 			if($fieldlabel == "Product Code")
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
 			elseif($fieldcolname == "contactid" || $fieldcolname == "contact_id")
 			{
-				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
-				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
+				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname::::".$fieldtypeofdata."\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
+				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname::::".$fieldtypeofdata."\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
 			}
 			elseif($fieldcolname == "campaignid")
-				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname\' ".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
+				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname::::".$fieldtypeofdata."\' ".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' ".$select_flag.">".$fieldlabel."</option>";
 		}
@@ -494,12 +499,12 @@ function getAdvSearchfields($module)
 	//Added to include Ticket ID in HelpDesk advance search
 	if($module == 'HelpDesk')
 	{
-		$OPTION_SET .= "<option value=\'vtiger_crmentity.crmid\'>".$mod_strings['Ticket ID']."</option>";
+		$OPTION_SET .= "<option value=\'vtiger_crmentity.crmid::::".$fieldtypeofdata."\'>".$mod_strings['Ticket ID']."</option>";
 	}
 	//Added to include activity type in activity advance search
 	if($module == 'Activities')
 	{
-		$OPTION_SET .= "<option value=\'vtiger_activity.activitytype\'>".$mod_strings['Activity Type']."</option>";
+		$OPTION_SET .= "<option value=\'vtiger_activity.activitytype::::".$fieldtypeofdata."\'>".$mod_strings['Activity Type']."</option>";
 	}
 	$log->debug("Exiting getAdvSearchfields method ...");
 	return $OPTION_SET;
@@ -514,7 +519,7 @@ function getcriteria_options()
 {
 	global $log,$app_strings;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>".$app_strings['contains']."</option><option value=\'dcts\'>".$app_strings['does not contains']."</option><option value=\'is\'>".$app_strings['is']."</option><option value=\'isn\'>".$app_strings['is not']."</option><option value=\'bwt\'>".$app_strings['begins with']."</option><option value=\'ewt\'>".$app_strings['ends with']."</option><option value=\'grt\'>".$app_strings['greater than']."</option><option value=\'lst\'>".$app_strings['less than']."</option><option value=\'grteq\'>".$app_strings['greater or equal']."</option><option value=\'lsteq\'>".$app_strings['less or equal']."</option>";
+	$CRIT_OPT = "<option value=\'cts\'>".$app_strings['contains']."</option><option value=\'dcts\'>".$app_strings['does_not_contains']."</option><option value=\'is\'>".$app_strings['is']."</option><option value=\'isn\'>".$app_strings['is_not']."</option><option value=\'bwt\'>".$app_strings['begins_with']."</option><option value=\'ewt\'>".$app_strings['ends_with']."</option><option value=\'grt\'>".$app_strings['greater_than']."</option><option value=\'lst\'>".$app_strings['less_than']."</option><option value=\'grteq\'>".$app_strings['greater_or_equal']."</option><option value=\'lsteq\'>".$app_strings['less_or_equal']."</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
@@ -543,7 +548,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			$where_string = $searchfield." like '%".$searchstring."%' ";
 			if($searchstring == NULL)
 				if($searchfield !='vtiger_products.productname')
-					$where_string = $searchfield." like '%%'";
+					$where_string = $searchfield." like ''";
 				else
 					$where_string = $searchfield." is NULL";
 			break;
@@ -625,7 +630,8 @@ function getWhereCondition($currentModule)
 			$search_condition = 'Condition'.$i;
 			$search_value = 'Srch_value'.$i;
 
-			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
+			list($tab_col_val,$typeofdata) = split("::::",$_REQUEST[$table_colname]);
+			$tab_col = str_replace('\'','',stripslashes($tab_col_val));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = addslashes($_REQUEST[$search_value]);
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;

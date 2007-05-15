@@ -646,16 +646,17 @@ $app_strings = array (
 'individual'=>'individual',
 
 //Added for values of picklist in Advanced Search filter
+//Modified for 5.0.3 GA release
 'contains'=>'contains',
-'does not contains'=>'does not contains',
+'does_not_contains'=>'does not contains',
 'is'=>'is',
-'is not'=>'is not',
-'begins with'=>'begins with',
-'ends with'=>'ends with',
-'greater than'=>'greater than',
-'less than'=>'less than',
-'greater or equal'=>'greater or equal',
-'less or equal'=>'less or equal',
+'is_not'=>'is not',
+'begins_with'=>'begins with',
+'ends_with'=>'ends with',
+'greater_than'=>'greater than',
+'less_than'=>'less than',
+'greater_or_equal'=>'greater or equal',
+'less_or_equal'=>'less or equal',
 
 //For Product Details
 'LABEL_SET_DISCOUNT_FOR_COLON'=>'Set Discount for :',
