@@ -493,7 +493,7 @@ function getAdvSearchfields($module)
 			elseif($fieldcolname == "campaignid")
 				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname::::".$fieldtypeofdata."\' ".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
 			else
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' ".$select_flag.">".$fieldlabel."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\' ".$select_flag.">".$fieldlabel."</option>";
 		}
 	}
 	//Added to include Ticket ID in HelpDesk advance search
