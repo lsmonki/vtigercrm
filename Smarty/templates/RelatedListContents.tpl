@@ -169,7 +169,7 @@
 		{/if}
 	{/foreach}
 {else}
-	<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%" class="small">
+	<table style="background-color:#eaeaea;color:#eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%" class="small">
 		<tr style="height: 25px;" bgcolor="white">
 			<td><i>{$APP.LBL_NONE_INCLUDED}</i></td>
 		</tr>
