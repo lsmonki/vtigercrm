@@ -972,8 +972,8 @@ class CustomView extends CRMEntity{
 			//For checkbox type values, we have to convert yes/no as 1/0 to get the values
 			if(getUItype($this->customviewmodule, $fieldname) == 56)
 			{
-				if($value == 'yes')	$value = 1;
-				elseif($value == 'no')	$value = 0;
+				if(strtolower($value) == 'yes')		$value = 1;
+				elseif(strtolower($value) ==  'no')	$value = 0;
 			}
 
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);	
