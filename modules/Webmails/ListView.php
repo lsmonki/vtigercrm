@@ -176,7 +176,7 @@ var timer;
 var command;
 var id;
 var move_mail,change_box,mvmbox;
-
+var theme = "<?php echo $theme;?>";
 addOnloadEvent(function() {
 		window.setTimeout("periodic_event()",box_refresh);
 	}
@@ -300,7 +300,7 @@ if (is_array($overview))
 echo "</script>";
 
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");
-$listview_header = array("<th width='10%'>".$mod_strings['LBL_INFO']."</th>","<th width='45%'>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th width='25%'>".$mod_strings['LABEL_DATE']."</th>","<th width='10%'>".$mod_strings['LABEL_FROM']."</th>","<th>".$mod_strings['LBL_DEL']."</th>");
+$listview_header = array("<th class='tableHeadBg' width='10%'>".$mod_strings['LBL_INFO']."</th>","<th class='tableHeadBg' width='45%'>".$mod_strings['LBL_LIST_SUBJECT']."</th>","<th class='tableHeadBg' width='25%'>".$mod_strings['LABEL_DATE']."</th>","<th class='tableHeadBg' width='10%'>".$mod_strings['LABEL_FROM']."</th>","<th class='tableHeadBg'>".$mod_strings['LBL_DEL']."</th>");
 $listview_entries = array();
 
 $displayed_msgs=0;
@@ -376,10 +376,10 @@ if (is_array($list)) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))
 			$img = "webmail_trash.gif";
-		elseif(preg_match("/sent/i",$tmpval))
-			$img = "emailOutFolder.gif";
+		elseif($_REQUEST["mailbox"] == $tmpval)
+			$img = "opened_folder.gif";
 		else
-			$img = "emailInFolder.gif";
+			$img = "folder.gif";
 
 		$i++;
 
@@ -395,7 +395,7 @@ if (is_array($list)) {
 			$_SESSION["mailboxes"][$tmpval] = $unread_msgs;
 
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="'.$image_path.'/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($unread_msgs > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 
@@ -405,7 +405,7 @@ if (is_array($list)) {
 
 			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 			$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'"><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($box->unseen > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 		}
@@ -435,5 +435,6 @@ $smarty->assign("MAILBOX", $MailBox->mailbox);
 $smarty->assign("ACCOUNT", $MailBox->display_name);
 $smarty->assign("BOXLIST",$folders);
 $smarty->assign("DEGRADED_SERVICE",$degraded_service);
+$smarty->assign("THEME",$theme);
 $smarty->display("Webmails.tpl");
 ?>

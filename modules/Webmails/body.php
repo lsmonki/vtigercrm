@@ -41,15 +41,20 @@ $date = decode_header($email->date);
 for($i=0;$i<count($email->attname);$i++){
 	$attachment_links .= $email->anchor_arr[$i].decode_header($email->attname[$i])."</a></br>";
 }
-$content['body'] = '<span id="webmail_body">'.$email->body.'</span>';
+$content['body'] = $email->body;
 $content['attachtab'] = $email->attachtab;
-
+if(!$_REQUEST['fullview'])
+	$class_str = 'class="tableHeadBg"';
+else
+	$class_str = 'style="font-size:15px"';
+	
 ?>
 <script src="modules/Webmails/Webmails.js" type="text/javascript"></script>
 <script src="include/js/general.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="themes/<?php echo $_REQUEST['theme'];?>/webmail.css">
 <!-- Table to display the Header details (From, To, Subject and date) - Starts -->
 					
-                                        <table style="font-size:15px"  width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <table <?php echo $class_str;?> width="100%" border="0" cellpadding="0" cellspacing="0">
                                                 <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_FROM'];?></b></td><td id="from_addy"><?php echo $from;?></td></tr>
                                                 <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_TO'];?></b></td><td id="to_addy"><?php echo $to;?></td></tr>
 <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_CC'];?></b></td><td id="webmail_cc"><?php echo $cc;?></td></tr>
@@ -57,7 +62,7 @@ $content['attachtab'] = $email->attachtab;
                                                 <tr><td align="right"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b></td><td id="webmail_subject"><?php echo $subject;?></td></tr>
 	<tr><td align="right"><b><?php echo $mod_strings['LBL_DATE'];?></b></td><td id="webmail_date"><?php echo $date;?></td>
         <?php if(!$_REQUEST['fullview']) {?>
-        <td id="full_view" nowrap><span style="float:right" colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
+        <td id="full_view" nowrap><span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
         <?php } ?>
 	<tr>
 	<?php if($_REQUEST['fullview'] && $email->has_attachments) {?>
@@ -92,6 +97,10 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 }
 //Need to put this along with the subject block*/
 echo $email->att;
+if(!$_REQUEST['fullview'])
+	echo '<div style="overflow:auto;height:410px;">';
+else
+	echo '<div style="overflow:auto;height:450px;">';
 echo $content['body'];
 
 //test added by Richie
@@ -142,6 +151,7 @@ while ($tmp = array_pop($content['attachtab']))
 }
 
 
+echo '</div>';
 //test ended by Richie
 
 imap_close($MailBox->mbox);

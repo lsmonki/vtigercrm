@@ -15,9 +15,9 @@
 				</div>
 			<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>	
                                 <form name="massdelete" method="post">
-                                <table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
+                                <table class="MatrixLayer1" cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
                                    <tr>
-                                <th><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
+                                <th class="tableHeadBg"><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
                                         {foreach item=element from=$LISTHEADER}
                                                 {$element}
                                         {/foreach}
