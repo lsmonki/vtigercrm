@@ -36,7 +36,7 @@ class Activity extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_salesmanactivityrel'=>'activityid','vtiger_activity_reminder'=>'activity_id','vtiger_recurringevents'=>'activityid');
 
 	var $column_fields = Array();
-	var $sortby_fields = Array('subject','due_date','date_start','smownerid','activitytype');	//Sorting is added for due date and start date	
+	var $sortby_fields = Array('subject','due_date','date_start','smownerid','activitytype','lastname');	//Sorting is added for due date and start date	
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
@@ -52,7 +52,8 @@ class Activity extends CRMEntity {
        'End Date'=>Array('activity'=>'due_date'),
        'End Time'=>Array('activity','time_end'),
        'Recurring Type'=>Array('recurringevents'=>'recurringtype'),
-       'Assigned To'=>Array('crmentity'=>'smownerid')
+       'Assigned To'=>Array('crmentity'=>'smownerid'),
+       'Contact Name'=>Array('contactdetails'=>'lastname')
        );
 
        var $range_fields = Array(

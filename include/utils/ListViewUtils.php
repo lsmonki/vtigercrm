@@ -79,6 +79,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{	
 			$fieldname = 'account_id';
 		}
+		if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+		{
+                  $fieldname = 'contact_id';
+		}
 		if($j != 0)
 		{
 			$field_list .= ', ';
@@ -133,6 +137,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 		{
                        	 		$fieldname = 'account_id';
                 		}
+				if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+				{
+                                        $fieldname = 'contact_id';
+				}
+
 	
 			}else
 			{
@@ -523,6 +532,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = 'account_id';
 		}
+		if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+                       $fieldname = 'contact_id';
 
 		if($j != 0)
 		{
@@ -638,6 +649,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                 	{
                                         	$fieldname = 'account_id';
                                 	}
+					if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+        	                                $fieldname = 'contact_id';
+
 				}
 			}
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
@@ -726,6 +740,27 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					{
 						$value=getRelatedTo($module,$list_result,$i-1);
 					}
+					//added for sorting by Contact Name ---------STARTS------------------
+                                        elseif($name=='Contact Name' &&($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
+                                        {
+                                                if($name == 'Contact Name')
+                                                {
+                                                        $first_name = $adb->query_result($list_result,$i-1,"firstname");
+                                                        $last_name = $adb->query_result($list_result,$i-1,"lastname");
+                                                        $contact_id = $adb->query_result($list_result,$i-1,"contactid");
+                                                        $contact_name = "";
+                                                        $value="";
+                                                        if($last_name != 'NULL')
+                                                                $contact_name .= $last_name;
+                                                        if($first_name != 'NULL')
+                                                                $contact_name .= " ".$first_name;
+
+                                                        if(($contact_name != "") && ($contact_id !='NULL'))
+                                                              $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
+                                                }
+
+                                        }
+                                        //----------------------ENDS----------------------
 					elseif($name=='Account Name')
 					{
 					

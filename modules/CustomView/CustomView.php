@@ -264,6 +264,8 @@ class CustomView extends CRMEntity{
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			if($fieldname == 'account_id' && $fieldtablename != 'vtiger_account')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name . But for account member of we have to avoid this
 				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else if($fieldname == 'contact_id')//Calendar,Notes,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
+                                $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else
 				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			//added to escape attachments fields in customview as we have multiple attachments
@@ -793,7 +795,8 @@ class CustomView extends CRMEntity{
 					{
 						$sqllist_column = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name";
 					}
-					
+					if($list[0] == "vtiger_contactdetails" && $list[1] == "lastname")
+                                                $sqllist_column = "vtiger_contactdetails.lastname,vtiger_contactdetails.firstname";	
 					$sqllist[] = $sqllist_column;
 					//Ends
 					

@@ -149,8 +149,10 @@ if(isset($order_by) && $order_by != '')
         {
 		$tablename = getTableNameForField('Calendar',$order_by);
 		$tablename = (($tablename != '')?($tablename."."):'');
-
-        	$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+		if($order_by == 'lastname')
+         		$list_query .= ' ORDER BY vtiger_contactdetails.lastname '.$sorder;
+	        else
+			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder; 
 	}
 }
 //Constructing the list view
