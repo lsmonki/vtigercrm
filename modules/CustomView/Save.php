@@ -87,7 +87,7 @@ if($cvmodule != "")
    	   $string = substr($allKeys[$i], 0, 4);
 	   if($string == "fval")
    	   {
-		   $adv_filter_value[] = htmlentities($_REQUEST[$allKeys[$i]]);
+		   $adv_filter_value[] = htmlentities(trim($_REQUEST[$allKeys[$i]]));
    	   }
 	}
 	//<<<<<<<advancedfilter>>>>>>>>
@@ -242,7 +242,14 @@ if($cvmodule != "")
 					{
 						$val = Array();
 						for($x=0;$x<count($temp_val);$x++){
-							$val[$x] = getDBInsertDateValue(trim($temp_val[$x]));
+
+								//if date and time given then we have to convert the date and leave the time as it is, if date only given then temp_time value will be empty
+								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+								$temp_date = getDBInsertDateValue(trim($temp_date));
+								if(trim($temp_time) != '')
+									$temp_date .= ' '.$temp_time;
+								$val[$x] = $temp_date;
+			
 						}
 						$adv_filter_value[$i] = implode(", ",$val);	
 					}

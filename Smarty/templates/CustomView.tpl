@@ -9,6 +9,7 @@
  ********************************************************************************/
 -->
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+{$DATE_JS}
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
@@ -650,6 +651,11 @@ function checkDuplicate()
 				}
 			}
 		}
+
+if(!checkval())
+	return false;
+
+
 		return true;
 }
 checkDuplicate();

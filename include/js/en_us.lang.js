@@ -126,6 +126,9 @@
                                 TIME_SHOULDNOT_PAST :'Current Time for Activities with status as Planned',
 				LBL_AND : 'And',
 				LBL_ENTER_VALID_PORT: 'Please enter valid port number',
-				IN_USERNAME :' in Username '
+				IN_USERNAME :' in Username ',
+				LBL_ENTER_VALID_NO: 'Please enter valid number',
+				LBL_PROVIDE_YES_NO: ' Invalid value.\n Please Provide Yes or No'
+
 
                        };

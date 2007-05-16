@@ -41,6 +41,7 @@ $smarty->assign("CVMODULE", $cv_module);
 $smarty->assign("CUSTOMVIEWID",$recordid);
 $smarty->assign("DATEFORMAT",$current_user->date_format);
 $smarty->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$smarty->assign("DATE_JS", '<script>userDateFormat = "'.$current_user->date_format.'" </script>');
 if($recordid == "")
 {
 	$oCustomView = new CustomView();
@@ -411,13 +412,12 @@ function changeTypeOfData($field)
 	//Add the field details in this array if you want to change the advance filter field details
 	//Array in which we have to specify as, existing value => new value
 	$new_field_details = Array(
-				"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:T",
+				"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:D",
 				"vtiger_faq:product_id:product_id:Faq_Product_Name:I"=>"vtiger_faq:product_id:product_id:Faq_Product_Name:V",
 				"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I"=>"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V",
 "vtiger_campaign:product_id:product_id:Campaigns_Product:I"=>"vtiger_campaign:product_id:product_id:Campaigns_Product:V",
 "vtiger_account:email1:email1:Accounts_Email:E"=>"vtiger_account:email1:email1:Accounts_Email:V",
 "vtiger_account:email2:email2:Accounts_Other_Email:E"=>"vtiger_account:email2:email2:Accounts_Other_Email:V",
-"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V "=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:T",
 "vtiger_contactdetails:email:email:Contacts_Email:E"=>"vtiger_contactdetails:email:email:Contacts_Email:V",
 "vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:E"=>"vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:V",
 "vtiger_account:accountname:accountname:Contacts_Account_Name:I"=>"vtiger_account:accountname:accountname:Contacts_Account_Name:V",
@@ -450,6 +450,13 @@ function changeTypeOfData($field)
 "vtiger_vendor:email:email:Vendors_Email:E"=>"vtiger_vendor:email:email:Vendors_Email:V",
 "vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I"=>"vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:V",
 "vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:I"=>"vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:V",
+
+
+        "vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
+
+        "vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
+        "vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
+
 
 			  );
 
