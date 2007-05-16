@@ -50,14 +50,76 @@
 					</td>
 				   </tr>
 				   <tr>
-					<td width="20%" class="big mailSubHeader"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
-					<td width="80%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></div></td>
-				   </tr>
-				   <tr>
-					<td rowspan="4" class="MatrixLayer1">
-						<img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
-						<div id="box_list">
-						<ul style="list-style-type:none;">
+					<td colspan=2> 
+						<table border=0 width="100%" cellspacing=0 cellspacing=0>
+						<tr>
+						<td width="20%" class="big mailSubHeader" style="height:30px;"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
+						<td width="1%">&nbsp;</td>
+						<td rowspan=3>
+						<table border=0 width="100%" cellspacing=0 cellspacing=0 class="MatrixLayer1">
+						<tr>
+							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></div></td>
+						</tr>
+						<tr>	
+							<td class="hdrNameBg" style="height:30px;">
+							<!-- Table to display Delete, Move To and Search buttons and options - Starts -->
+							<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+				                	   <tr>
+                				        	<td width="45%" id="move_pane">
+								<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
+								{$FOLDER_SELECT}
+				                        	</td>
+								{if $DEGRADED_SERVICE eq 'false'}
+			        	                		<td width="50%" align="right" nowrap>
+									<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;
+									<input type="text" name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
+									{$SEARCH_HTML}&nbsp;
+									</td>
+									<td width="5%">
+									<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="crmbutton small create" onclick="search_emails();" />
+									</td>
+								{/if}
+                	   				   </tr>
+                					</table>
+							</td>
+						</tr>
+						<tr>
+							<td  align="left" valign="top" style="height:150px;">
+							<div id="rssScroll" style="height:220px;">
+							<!--div added to show info while moving mails-->
+							<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>
+							<!-- Table to display the mails list -	Starts -->
+							<form name="massdelete" method="post">
+							<table cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
+							   <tr>
+								<th class='tableHeadBg'><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
+								{foreach item=element from=$LISTHEADER}
+									{$element}
+								{/foreach}
+							   </tr>	
+								{foreach item=row from=$LISTENTITY}
+									{foreach item=row_values from=$row}
+                				        			{$row_values}
+									{/foreach}
+								{/foreach}
+							</table>
+						</form>
+						</div>
+					</td>
+
+						</tr>
+
+						</table>
+						</td>
+						<td rowspan=9>
+							&nbsp;
+						</td>
+				   		</tr>
+				   		<tr>
+							<td rowspan="5" class="MatrixLayer1" valign="top">
+								<img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
+								<div id="box_list">
+								<ul style="list-style-type:none;">
 
 							{foreach item=row from=$BOXLIST}
 								{foreach item=row_values from=$row}
@@ -70,103 +132,57 @@
 						<ul style="list-style-type:none;">
 							<li >
 								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a class="link" href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
+								<a href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="small">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 							</li>
 							<li >
 								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
+								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="small">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 							</li>
 							<li >
 								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="small">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
 							</li>	
 							<li >
 								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="small">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 							</li>
 							<li >
 								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
+								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="small">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
 						</ul><br />
 						<img src="themes/images/webmail_trash.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
 							<li>
 								<img src="themes/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
-								<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
+								<a href="#" class="small">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
 							</li>
 						</ul>
 
 					</td>
-					<td class="hdrNameBg" style="height:30px;">
-
-			<!-- Table to display Delete, Move To and Search buttons and options - Starts -->
-			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-                	   <tr>
-                        	<td width="45%" id="move_pane">
-					<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="crmbutton small delete" onclick="mass_delete();"/>
-					{$FOLDER_SELECT}
-                        	</td>
-				{if $DEGRADED_SERVICE eq 'false'}
-                        	<td width="50%" align="right" nowrap>
-					<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;
-					<input type="text" name="srch" class="importBox" id="search_input"  value="{$SEARCH_VALUE}"/>&nbsp;
-					{$SEARCH_HTML}&nbsp;
-				</td>
-				<td width="5%">
-					<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="crmbutton small create" onclick="search_emails();" />
-				</td>
-				{/if}
-                	   </tr>
-                	</table>
-			<!-- Table to display Delete, Move To and Search buttons and options - Ends -->
-
-					</td>
-				   </tr>
+					<td width="1%">&nbsp;</td>
+								</tr>
 				   <tr>
 					<!-- td style="padding:1px;" align="left" -->
-					<td  align="left" valign="top" style="height:150px;">
-						<div id="rssScroll" style="height:220px;">
-				<!--div added to show info while moving mails-->
-					<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>
-				<!-- Table to display the mails list -	Starts -->
-				<form name="massdelete" method="post">
-				<table class="MatrixLayer1" cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
-				   <tr>
-				<th class='tableHeadBg'><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
-					{foreach item=element from=$LISTHEADER}
-						{$element}
-					{/foreach}
-				   </tr>
-					{foreach item=row from=$LISTENTITY}
-						{foreach item=row_values from=$row}
-                	        			{$row_values}
-						{/foreach}
-					{/foreach}
-				</table>
-				</form>
-				<!-- Table to display the mails list - Ends -->
-
-						</div>
-					</td>
-				   </tr>
-				   <!-- tr>
-					<td colspan="2">&nbsp;</td>
-				   </tr -->
+					<td width="1%">&nbsp;</td>
+									   </tr>
+				   <tr><td colspan="2" style="height:10px;">&nbsp;</td></tr>
 				   <tr style="visibility:hidden" class="previewWindow">
+					<td width="1%">&nbsp;</td>
+					<!--td class="forwardBg"-->
 					<td class="forwardBg">
 
 					<!-- Table to display the Qualify, Reply, Forward, etc buttons - Starts -->
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					   <tr>
 						<td width="75%" nowrap>
-							<span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="buttonok" /></span>&nbsp;
+							&nbsp;<span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="buttonok" /></span>&nbsp;
 							<span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="forward_button"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="crmbutton small save" /></span>
 						</td>
-						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="crmbutton small delete" /></span></td>
+						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="crmbutton small delete" /></span>&nbsp;</td>
 					   </tr>
 					</table>
 					<!-- Table to display the Qualify, Reply, Forward, etc buttons - Ends -->
@@ -174,26 +190,31 @@
 					</td>
 				   </tr>
 				   <tr style="visibility:hidden" class="previewWindow">
-					<td height="300" bgcolor="#FFFFFF" valign="top">
-			   		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					</table>
+					<td width="1%">&nbsp;</td>
+					<td height="300">
+			   		<table width="100%" class="MatrixLayer1" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+					<td bgcolor="#FFFFFF" valign="top">
 					<!-- Table to display the Header details (From, To, Subject and date) - Ends -->
-					<div class="MatrixLayer2">
 					   <span id="body_area" style="width:95%">
 						<iframe id="email_description" width="100%" height="500" scrolling="no" frameBorder="0"></iframe>
 					   </span>
-					</div>
+					</td>
+					</tr>
+					</table>
 					</td>
 				   </tr>
 				</table>
 			</td>
-			<td bgcolor="#EBEBEB" width="8"></td>
 		   </tr>
-		   <tr>
-			<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
-			<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-			<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
-		   </tr>
+				</table>
+			</td>
+			</tr>
+			</tr>
+			<td colspan=4>
+				&nbsp;
+			</td>
+		   	</tr>
 		</table>
 		<br />
 	</td>

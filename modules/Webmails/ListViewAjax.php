@@ -208,7 +208,7 @@ if (is_array($list)) {
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 			
 			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li class="tabUnSelected" style="padding-left:0px;"><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($unread_msgs > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 
@@ -218,7 +218,7 @@ if (is_array($list)) {
 
 			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 			$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+			$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 			if($box->unseen > 0)
 				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 		}
