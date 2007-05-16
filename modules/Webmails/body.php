@@ -55,21 +55,21 @@ else
 <!-- Table to display the Header details (From, To, Subject and date) - Starts -->
 					
                                         <table <?php echo $class_str;?> width="100%" border="0" cellpadding="0" cellspacing="0">
-                                                <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_FROM'];?></b></td><td id="from_addy"><?php echo $from;?></td></tr>
-                                                <tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_TO'];?></b></td><td id="to_addy"><?php echo $to;?></td></tr>
-<tr><td width="20%" align="right"><b><?php echo $mod_strings['LBL_CC'];?></b></td><td id="webmail_cc"><?php echo $cc;?></td></tr>
+                                                <tr align="left"><td width="100%" align="left"><b><?php echo $mod_strings['LBL_FROM'];?></b><?php echo $from;?></td></tr>
+                                                <tr><td  width="100%" align="left"><b><?php echo $mod_strings['LBL_TO'];?></b><?php echo $to;?></td></tr>
+<tr><td width="100%" align="left"><b><?php echo $mod_strings['LBL_CC'];?></b><?php echo $cc;?></td></tr>
 
-                                                <tr><td align="right"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b></td><td id="webmail_subject"><?php echo $subject;?></td></tr>
-	<tr><td align="right"><b><?php echo $mod_strings['LBL_DATE'];?></b></td><td id="webmail_date"><?php echo $date;?></td>
+                                                <tr><td align="left" width="100%"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b><?php echo $subject;?></td></tr>
+	<tr><td align="left" width="100%"><b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo $date;?>
         <?php if(!$_REQUEST['fullview']) {?>
-        <td id="full_view" nowrap><span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
+        <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
         <?php } ?>
 	<tr>
 	<?php if($_REQUEST['fullview'] && $email->has_attachments) {?>
-		<td align="right"><b><?php echo $mod_strings['LBL_ATTACHMENT'];?>:</b></td><td id="webmail_attachment"><?php echo $attachment_links;?></td>
+		<td align="left"><b><?php echo $mod_strings['LBL_ATTACHMENT'];?>:</b><?php echo $attachment_links;?></td>
 	<?php } ?>
 	</tr>
-                                                <tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
+                                                <tr><td align="left" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
                                         </table>
                                         <!-- Table to display the Header details (From, To, Subject and date) - Ends -->
 					

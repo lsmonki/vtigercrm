@@ -9,6 +9,7 @@
  ********************************************************************************/
 function load_webmail(mid) {
         var node = $("row_"+mid);
+	preview_id = mid;
 	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
 	{
 		$('fnt_subject_'+mid).color="";
@@ -31,7 +32,7 @@ function load_webmail(mid) {
 
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
-                        {href: 'javascript:;', onclick: 'OpenComposer('+mid+',"reply")'},
+                        {href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'reply\')'},
                         [Builder.node('img',{src: 'themes/images/openmail.jpg', border: '0', width: '12', height: '12'})]
                 ));
 	}
@@ -60,7 +61,11 @@ function load_webmail(mid) {
                         tmp[i].style.visibility="visible";
                 }
         }
-
+	if($("preview1").style.visibility === "hidden" || $("preview2").style.visibility === "hidden") {
+		$("preview1").style.visibility="visible";
+		$("preview2").style.visibility="visible";
+	}
+	
         $("delete_button").removeChild($("delete_button").firstChild);
         $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'buttonok', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
 
@@ -570,8 +575,13 @@ function runEmailCommand(com,id) {
 
                                         	new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
                                         	tmp = document.getElementsByClassName("previewWindow");
-                                                tmp[0].style.visibility="hidden";
+                                              //  tmp[0].style.visibility="hidden";
 					}catch(g){}
+					if(preview_id == id){
+					//	alert(preview_id + id);
+						$("preview1").style.visibility="hidden";
+                                                $("preview2").style.visibility="hidden";
+					}
                                         /*for(var i=0;i<tmp.length;i++) {
                                                 if(tmp[i].style.visibility === "visible") {
                                                         tmp[i].style.visibility="hidden";
@@ -609,14 +619,16 @@ function runEmailCommand(com,id) {
                                         );
 
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
-
-                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
-                                        tmp = document.getElementsByClassName("previewWindow");
-                                        for(var i=0;i<tmp.length;i++) {
-                                                if(tmp[i].style.visibility === "visible") {
-                                                        tmp[i].style.visibility="hidden";
-                                                }
+					if($("row_"+id)){
+	                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
+					}
+									
+					if(preview_id == id){
+                                        //      alert(preview_id + id);
+                                                $("preview1").style.visibility="hidden";
+                                                $("preview2").style.visibility="hidden";
                                         }
+
 					runEmailCommand("reload",0);
                                     break;
                                     case 'undelete_msg':
