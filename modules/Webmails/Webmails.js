@@ -527,7 +527,7 @@ function runEmailCommand(com,id) {
 					$("nav").innerHTML = $("navTemp").innerHTML;
 					$("box_list").innerHTML = $("temp_boxlist").innerHTML;
 					$("move_pane").innerHTML = $("temp_movepane").innerHTML;
-				//	$("temp_boxlist").innerHTML = "";
+					$("temp_boxlist").innerHTML = "";
 					$("temp_movepane").innerHTML = "";
 					$("navTemp").innerHTML = '';
 					$(mailbox+"_tempcount").innerHTML = "";
@@ -572,11 +572,11 @@ function runEmailCommand(com,id) {
                                         	tmp = document.getElementsByClassName("previewWindow");
                                                 tmp[0].style.visibility="hidden";
 					}catch(g){}
-                                        for(var i=0;i<tmp.length;i++) {
+                                        /*for(var i=0;i<tmp.length;i++) {
                                                 if(tmp[i].style.visibility === "visible") {
                                                         tmp[i].style.visibility="hidden";
                                                 }
-                                        }
+                                        }*/
 
                                 	$("status").style.display="none";
 						if(i == ((rows.length)-2)){ 
@@ -633,14 +633,14 @@ function runEmailCommand(com,id) {
                                         var nm = "clear_td_"+id;
                                         var el = $(nm);
                                         var tmp = el.innerHTML;
-                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
+                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="themes/images/important2.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
                                         el.id = "set_td_"+id;
                                     break;
                                     case 'set_flag':
                                         var nm = "set_td_"+id;
                                         var el = $(nm);
                                         var tmp = el.innerHTML;
-                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
+                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="themes/images/important1.gif" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
                                         el.id = "clear_td_"+id;
                                     break;
 

@@ -37,7 +37,7 @@
 								&nbsp;<a href="javascript:;" onclick="OpenComposer('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
 							<td width="20%" nowrap>
-								<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+								<img src="themes/images/webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<td width="30%">

@@ -69,7 +69,7 @@ function show_msg($mails,$start_message)
 	}
 	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 	{
-		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12" title="Replied" ></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="14" height="16" title="Replied" ></a>&nbsp;';
 	}
 	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
 	{
@@ -83,11 +83,11 @@ function show_msg($mails,$start_message)
         // Set IMAP flag
 	if($mails[$start_message]->flagged)
 	{
-		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
+		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="themes/images/important1.gif" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
 	}
 	else
 	{
-                $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"title="Important"></a></span>';
+                $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="themes/images/important2.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"title="Important"></a></span>';
 
 	}
 
@@ -105,7 +105,7 @@ function show_msg($mails,$start_message)
 	}
 	elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,50).'</font></a></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,40).'</font></a></td>';
 		$listview_entries[$num][] = '<td nowrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" ><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,30).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
 		$listview_entries[$num][] = '<td  nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</font></td>';
 	}
@@ -132,7 +132,7 @@ function show_msg($mails,$start_message)
 		//Option 2 - Ends
 		//Added to shown the original UTF-8 characters - Mickie - 30-11-06 - Ends
 
-		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,45).'</a></td>';
 		$listview_entries[$num][] = '<td npwrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($mails[$start_message]->date,0,30).'</td>';
 		$listview_entries[$num][] = '<td nowrap align="left" id="ndeleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</td>';
 	}

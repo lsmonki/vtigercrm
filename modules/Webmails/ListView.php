@@ -175,6 +175,7 @@ var webmail2 = new Array();
 var timer;
 var command;
 var id;
+var preview_id='';
 var move_mail,change_box,mvmbox;
 var theme = "<?php echo $theme;?>";
 addOnloadEvent(function() {
