@@ -99,7 +99,9 @@ foreach($query_array as $query)
 
 
 //Added for Custom Invoice Number, No need for security population
-ExecuteQuery("insert into vtiger_field values(23,".$adb->getUniqueID("vtiger_field").",'invoice_no','vtiger_invoice',1,'1','invoice_no','invoice_no',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
+$newfieldid = $conn->getUniqueID("vtiger_field");
+ExecuteQuery("insert into vtiger_field values(23,".$newfieldid.",'invoice_no','vtiger_invoice',1,'1','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
+populateFieldForSecurity('23',$newfieldid);
 
 ExecuteQuery("alter table vtiger_invoice add column (invoice_no varchar(50) UNIQUE default NULL)");
 
@@ -263,6 +265,15 @@ ExecuteQuery("alter table vtiger_quotes drop column tax");
 ExecuteQuery("alter table vtiger_purchaseorder drop column salestax");
 ExecuteQuery("alter table vtiger_salesorder drop column salestax");
 ExecuteQuery("alter table vtiger_invoice drop column salestax");
+
+//Contact Name is not shown in Notes ListView because of cvcolumnlist entry as now we need lastname in the query result
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactdetails:lastname:lastname:Notes_Contact_Name:V' where columnname='vtiger_notes:contact_id:contact_id:Notes_Contact_Name:I'");
+
+//Missed Activity History entry in Potential related list has been added
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",2,9,'get_history',8,'Activity History',0)");
+
+//Change the commission rate from decimal(3,3) to decimal(7,3) in products
+ExecuteQuery("alter table vtiger_products modify column commissionrate decimal(7,3)");
 
 
 
