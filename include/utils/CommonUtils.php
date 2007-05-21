@@ -1099,6 +1099,11 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
  			    $sql = fixPostgresQuery( $sql, $log, 0);
   		}
 		$result = $adb->query($sql);
+
+		// Added to unset the previous record's related listview session values
+		if(isset($_SESSION['rlvs']))
+			unset($_SESSION['rlvs']);
+
 		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
 	}
 	else
