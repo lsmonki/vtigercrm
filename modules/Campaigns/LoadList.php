@@ -14,7 +14,7 @@ require_once('modules/CustomView/CustomView.php');
 require_once('user_privileges/default_module_view.php');
 
 global $singlepane_view;
-$cvObj = new CustomView($_REQUEST["return_type"]);
+$cvObj = new CustomView($_REQUEST["list_type"]);
 
 $listquery = getListQuery($_REQUEST["list_type"]);
 $rs = $adb->query($cvObj->getModifiedCvListQuery($_REQUEST["cvid"],$listquery,$_REQUEST["list_type"]));
