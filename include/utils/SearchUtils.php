@@ -293,6 +293,7 @@ function BasicSearch($module,$search_field,$search_string)
 	 global $log;
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
+	$search_string = ltrim(rtrim($search_string));
 	global $column_array,$table_col_array;
 	if($search_field =='crmid')
 	{
@@ -322,8 +323,9 @@ function BasicSearch($module,$search_field,$search_string)
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
 		{
-			$column_name=$adb->query_result($result,0,'columnname');
-
+			$column_name=$adb->query_result($result,0,'columnname');	
+			
+			
 			//Check added for tickets by accounts/contacts in dashboard
 			if ($column_name == 'parent_id')
 		        {
@@ -334,8 +336,19 @@ function BasicSearch($module,$search_field,$search_string)
 				
 			//Check ends
 			$table_name=$adb->query_result($result,0,'tablename');
-			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
 			$uitype=getUItype($module,$column_name);
+			
+			//Added to support user date format in basic search	
+			if($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
+			{
+				list($sdate,$stime) = split(" ",$search_string);
+				if($stime !='')
+					$search_string = getDBInsertDateValue($sdate)." ".$stime;
+				else
+					$search_string = getDBInsertDateValue($sdate);
+			}
+			echo $search_string;
+			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
 			if ($uitype == 56)
 			{
 				if(stristr($search_string,'yes'))
@@ -538,10 +551,13 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	global $log;
 	$log->debug("Entering getSearch_criteria(".$criteria.",".$searchstring.",".$searchfield.") method ...");
 	$searchstring = ltrim(rtrim($searchstring));
-	if($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime")
+	if($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime" || stristr($searchfield,'date'))
 	{
 		list($sdate,$stime) = split(" ",$searchstring);
-		$searchstring = getDBInsertDateValue($sdate)." ".$stime;
+		if($stime !='')
+			$searchstring = getDBInsertDateValue($sdate)." ".$stime;
+		else
+			$searchstring = getDBInsertDateValue($sdate);
 	}
 	$where_string = '';
 	switch($criteria)

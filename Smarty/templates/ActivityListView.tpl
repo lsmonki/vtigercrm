@@ -17,6 +17,107 @@
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+<script language="javascript" type="text/javascript">
+var typeofdata = new Array();
+typeofdata['V'] = ['is','isn','bwt','ewt','cts','dcts'];
+typeofdata['N'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['T'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['I'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['C'] = ['is','isn'];
+typeofdata['DT'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['D'] = ['is','isn','lst','grt','lsteq','grteq'];
+var fLabels = new Array();
+fLabels['is'] = '{$APP.is}';
+fLabels['isn'] = '{$APP.is_not}';
+fLabels['bwt'] = '{$APP.begins_with}';
+fLabels['ewt'] = '{$APP.ends_with}';
+fLabels['cts'] = '{$APP.contains}';
+fLabels['dcts'] = '{$APP.does_not_contains}';
+fLabels['lst'] = '{$APP.less_than}';
+fLabels['grt'] = '{$APP.greater_than}';
+fLabels['lsteq'] = '{$APP.less_or_equal}';
+fLabels['grteq'] = '{$APP.greater_or_equal}';
+var noneLabel;
+{literal}
+function trimfValues(value)
+{
+    var string_array;
+    string_array = value.split(":");
+    return string_array[4];
+}
+
+function updatefOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+    
+    var fld = currField.value.split(":");
+    var tod = fld[4];
+  /*  if(fld[4] == 'D' || (fld[4] == 'T' && fld[1] != 'time_start' && fld[1] != 'time_end') || fld[4] == 'DT')
+    {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;";
+    }
+    else {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "&nbsp;";
+    } 	
+*/
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	fieldtype = fieldtype.replace(/\\'/g,'');
+	ops = typeofdata[fieldtype];
+	var off = 0;
+	if(ops != null)
+	{
+
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+	/*	selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}*/
+		for (var i = 0; i < ops.length; i++)
+		{
+			var label = fLabels[ops[i]];
+			if (label == null) continue;
+			var option = new Option (fLabels[ops[i]], ops[i]);
+			selObj.options[i] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+{/literal}
+</script>
+
 <script language="javascript">
 function checkgroup()
 {ldelim}
@@ -144,7 +245,7 @@ function alphabetic(module,url,dataid)
 <table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
-		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
+		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');updatefOptions(document.getElementById('Fields0'), 'Condition0');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
 		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
@@ -201,13 +302,9 @@ function alphabetic(module,url,dataid)
 					<td align=left>
 						<table width="100%"  border="0" cellpadding="2" cellspacing="0" id="adSrc" align="left">
 						<tr  >
-							<td width="31%"><select name="Fields0" class="detailedViewTextBox">
-							{$FIELDNAMES}
-							</select>
+							<td width="31%"><select name="Fields0" id="Fields0" class="detailedViewTextBox" onchange="updatefOptions(this, 'Condition0')">{$FIELDNAMES}</select>
 							</td>
-							<td width="32%"><select name="Condition0" class="detailedViewTextBox">
-								{$CRITERIA}
-							</select>
+							<td width="32%"><select name="Condition0" id="Condition0" class="detailedViewTextBox">{$CRITERIA}</select>
 							</td>
 							<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
 						</tr>
