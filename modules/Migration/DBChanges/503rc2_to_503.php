@@ -311,6 +311,8 @@ ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger
 //Added activity history and Invoice status history in Invoice relatedlist
 ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtiger_relatedlists').",23,9,'get_history',3,'Activity History',0), (".$adb->getUniqueID('vtiger_relatedlists').",23,0,'get_invoicestatushistory',4,'Invoice Status History',0)");
 
+//Changed the activity reminder notification as active
+ExecuteQuery("update vtiger_notificationscheduler set active=1 where schedulednotificationname='LBL_ACTIVITY_REMINDER_DESCRIPTION'");
 
 
 
