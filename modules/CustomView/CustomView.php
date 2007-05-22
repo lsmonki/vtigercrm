@@ -1500,7 +1500,7 @@ class CustomView extends CRMEntity{
 			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 			if($module == "Calendar" || $module == "Emails")
 			{
-				$query = "select ".$this->getCvColumnListSQL($viewid)." , vtiger_activity.activityid, vtiger_activity.activitytype as type, vtiger_activity.priority, case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as status, vtiger_crmentity.crmid ".$listviewquery;
+				$query = "select ".$this->getCvColumnListSQL($viewid)." , vtiger_activity.activityid, vtiger_activity.activitytype as type, vtiger_activity.priority, case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as status, vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
 			}else if($module == "Notes")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_notes.* ".$listviewquery;
@@ -1520,7 +1520,11 @@ class CustomView extends CRMEntity{
 			else if($module == "Faq")
 		       	{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;
-			}		
+			}
+			else if($module == "Quotes" || $module == "PurchaseOrder" || $module == "SalesOrder" || $module == "Invoice")
+		       	{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
+			}			
 			else
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;

@@ -741,13 +741,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$value=getRelatedTo($module,$list_result,$i-1);
 					}
 					//added for sorting by Contact Name ---------STARTS------------------
-                                        elseif($name=='Contact Name' &&($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
+                                        elseif($name=='Contact Name' && ($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
                                         {
                                                 if($name == 'Contact Name')
                                                 {
                                                         $first_name = $adb->query_result($list_result,$i-1,"firstname");
                                                         $last_name = $adb->query_result($list_result,$i-1,"lastname");
-                                                        $contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							if ($module == 'Notes')
+								$contact_id = $adb->query_result($list_result,$i-1,"contact_id");
+							else
+                                                        	$contact_id = $adb->query_result($list_result,$i-1,"contactid");
                                                         $contact_name = "";
                                                         $value="";
                                                         if($last_name != 'NULL')
