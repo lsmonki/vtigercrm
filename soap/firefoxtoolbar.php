@@ -354,7 +354,7 @@ function create_site_from_webform($username,$portalname,$portalurl)
 		$adb->println("Create New Portal from Web Form - Ends");
 
 		if($result != '')
-		  return 'URL added sucessfully';
+		  return 'URL added successfully';
 		else
 		  return "Portal creation failed. Try again";
 	}
@@ -420,7 +420,7 @@ function create_rss_from_webform($username,$url)
 			}
 			else
 			{
-					return 'RSS feed added sucessfully.';
+					return 'RSS feed added successfully.';
 			}
 
 	  }else
@@ -462,7 +462,7 @@ function create_note_from_webform($username,$subject,$desc)
 		$adb->println("Create New Note from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Note added sucessfully.';
+		return 'Note added successfully.';
 		else
 		return "Note creation failed. Try again";
 	}
@@ -496,7 +496,7 @@ function create_product_from_webform($username,$productname,$code,$website)
 		$adb->println("Create New Product from Web Form - Ends");
 
 		if($focus->id != '')
-		  return 'Product added sucessfully.';
+		  return 'Product added successfully.';
 		else
 		  return "Product creation failed. Try again";
 	}
@@ -535,7 +535,7 @@ function create_vendor_from_webform($username,$vendorname,$email,$phone,$website
 		$adb->println("Create New Vendor from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Vendor added sucessfully';
+		return 'Vendor added successfully';
 		else
 		return "Vendor creation failed. Try again";
   }		
