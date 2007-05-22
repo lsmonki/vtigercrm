@@ -103,12 +103,12 @@ function verify_data(form) {
 	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
 		alert("$the_emailid"+form.email1.value+"$email_field_is");
 		form.email1.focus();
-		exit();
+		return false;
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert("$the_emailid"+form.email1.value+"$other_email_field_is");
+		alert("$the_emailid"+form.email2.value+"$other_email_field_is");
 		form.email2.focus();
-		exit();
+		return false;
 	}
 	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (!(form.yahoo_id.value.indexOf('yahoo') > -1))) {
 		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
