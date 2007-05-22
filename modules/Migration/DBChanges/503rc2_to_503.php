@@ -302,6 +302,13 @@ ExecuteQuery("update vtiger_field set block=(select blockid from vtiger_blocks w
 //Calendar - End Time fieldlabel has one extra space so that it comes twice in columns list in customview creation
 ExecuteQuery("update vtiger_field set fieldlabel='End Time' where tabid=9 and fieldname='time_end'");
 
+//change the cntactivityrel table primary key, add relatedlist entries then only related to, contact will be displayed
+$adb->query("alter table vtiger_cntactivityrel drop primary key");
+$adb->query("alter table vtiger_cntactivityrel add primary key (contactid, activityid), ENGINE=InnoDB");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",9,0,'get_users',1,'Users',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",9,4,'get_contacts',2,'Contacts',0)");
+
+
 
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
