@@ -76,6 +76,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		}
 		if($fieldname == "accountname")
 			$fieldname = "account_id";
+		if($fieldname == "lastname" && $module !="Leads")
+			$fieldname = "contact_id";
 		$field_list .= "'".$fieldname."'";
 		$j++;
 	}
@@ -117,6 +119,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 					$fieldname = $focus->list_fields_name[$name];
 					
                         }
+			if($fieldname == "lastname" && $module != "Leads")
+				$fieldname = "contact_id";
                 }
 		else
                 {
@@ -124,6 +128,9 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				$fieldname = 'crmid';
 			else
 				$fieldname = $focus->list_fields_name[$name];
+
+			if($fieldname == "lastname" && $module != "Leads")
+                                $fieldname = "contact_id";
                 }
 
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
@@ -347,7 +354,6 @@ function BasicSearch($module,$search_field,$search_string)
 				else
 					$search_string = getDBInsertDateValue($sdate);
 			}
-			echo $search_string;
 			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
 			if ($uitype == 56)
 			{
