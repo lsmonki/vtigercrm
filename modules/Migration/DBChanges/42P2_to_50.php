@@ -3801,7 +3801,7 @@ Execute("delete from vtiger_tab where tabid=17");
 Execute("update vtiger_tab set name='Calendar',tablabel='Calendar' where tabid=9");
 
 $newfieldid = $conn->getUniqueID("vtiger_field");
-$query = "insert into vtiger_field values (9, $newfieldid, 'time_end','vtiger_activity', 1,'2','time_end','End  Time',1,0,0,100,6,19,3,'T~O',1,null,'BAS')";
+$query = "insert into vtiger_field values (9, $newfieldid, 'time_end','vtiger_activity', 1,'2','time_end','End Time',1,0,0,100,6,19,3,'T~O',1,null,'BAS')";
 Execute($query);
 populateFieldForSecurity('9',$newfieldid);
 

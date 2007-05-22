@@ -299,6 +299,8 @@ for($i=0;$i<$adb->num_rows($res);$i++)
 //Move all the Potential custom fields into corresponding block(2) as they are placed in description block
 ExecuteQuery("update vtiger_field set block=(select blockid from vtiger_blocks where tabid=2 and blocklabel='LBL_CUSTOM_INFORMATION') where tabid=2 and fieldname like 'cf_%'");
 
+//Calendar - End Time fieldlabel has one extra space so that it comes twice in columns list in customview creation
+ExecuteQuery("update vtiger_field set fieldlabel='End Time' where tabid=9 and fieldname='time_end'");
 
 
 
