@@ -314,6 +314,8 @@ ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtige
 //Changed the activity reminder notification as active
 ExecuteQuery("update vtiger_notificationscheduler set active=1 where schedulednotificationname='LBL_ACTIVITY_REMINDER_DESCRIPTION'");
 
+//Change Event Status values Planned, Held, Not Held as non editable
+ExecuteQuery("update vtiger_eventstatus set presence=0 where eventstatus in ('Planned','Held','Not Held')");
 
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
