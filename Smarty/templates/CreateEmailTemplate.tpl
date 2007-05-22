@@ -54,7 +54,7 @@
             
 	        allOpts[1] = options;
         
-            options = new Object(11);
+            options = new Object(9);
             options[0] = blankOption;
                 
                 options[1] = new Option('Contact: First Name', '$contacts-firstname$'); 
@@ -63,10 +63,8 @@
                 options[4] = new Option('Contact: Title', '$contacts-title$'); 
                 options[5] = new Option('Contact: Email', '$contacts-email$'); 
                 options[6] = new Option('Contact: Department', '$contacts-department$'); 
-                options[7] = new Option('Contact: Other Email','$contacts-otheremail$'); 
-                options[8] = new Option('Contact: Phone', '$contacts-phone$'); 
-                options[9] = new Option('Contact: Mobile', '$contacts-mobile$'); 
-                //options[10] = new Option('Contact: Currency', '$contacts-currency$'); 
+                options[7] = new Option('Contact: Phone', '$contacts-phone$'); 
+                options[8] = new Option('Contact: Mobile', '$contacts-mobile$'); 
                             
             allOpts[2] = options;
         
