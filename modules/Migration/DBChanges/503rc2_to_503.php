@@ -308,6 +308,9 @@ $adb->query("alter table vtiger_cntactivityrel add primary key (contactid, activ
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",9,0,'get_users',1,'Users',0)");
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",9,4,'get_contacts',2,'Contacts',0)");
 
+//Added activity history and Invoice status history in Invoice relatedlist
+ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtiger_relatedlists').",23,9,'get_history',3,'Activity History',0), (".$adb->getUniqueID('vtiger_relatedlists').",23,0,'get_invoicestatushistory',4,'Invoice Status History',0)");
+
 
 
 
