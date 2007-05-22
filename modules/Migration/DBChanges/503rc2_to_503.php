@@ -296,6 +296,8 @@ for($i=0;$i<$adb->num_rows($res);$i++)
 	ExecuteQuery("update vtiger_inventorynotification set notificationbody='$notificationbody' where notificationid=$notificationid");
 }
 
+//Move all the Potential custom fields into corresponding block(2) as they are placed in description block
+ExecuteQuery("update vtiger_field set block=(select blockid from vtiger_blocks where tabid=2 and blocklabel='LBL_CUSTOM_INFORMATION') where tabid=2 and fieldname like 'cf_%'");
 
 
 
