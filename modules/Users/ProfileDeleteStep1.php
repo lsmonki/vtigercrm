@@ -40,11 +40,11 @@ $output ='<div id="DeleteLay" class="layerPopup">
 	<td class="small">
 	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 	<tr>
-		<td width="50%" class="cellLabel small"><b>'.$mod_strings["LBL_TRANSFER_ROLES_TO_PROFILE"].'</b></td>
+		<td width="50%" class="cellLabel small"><b>'.$mod_strings["LBL_PROFILE_TO_BE_DELETED"].'</b></td>
 		<td width="50%" class="cellText small"><b>'.$delete_prof_name.'</b></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellLabel small" nowrap><b>'.$mod_strings["LBL_PROFILE_TO_BE_DELETED"].'</b></td>
+		<td align="left" class="cellLabel small" nowrap><b>'.$mod_strings["LBL_TRANSFER_ROLES_TO_PROFILE"].'</b></td>
 		<td align="left" class="cellText small">';
 		$output.='<select class="select" name="transfer_prof_id">';
 		global $adb;	
