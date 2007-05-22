@@ -63,7 +63,7 @@
                 options[4] = new Option('Contact: Title', '$contacts-title$'); 
                 options[5] = new Option('Contact: Email', '$contacts-email$'); 
                 options[6] = new Option('Contact: Department', '$contacts-department$'); 
-                options[7] = new Option('Contact: Phone', '$contacts-phone$'); 
+                options[7] = new Option('Contact: Office Phone', '$contacts-phone$'); 
                 options[8] = new Option('Contact: Mobile', '$contacts-mobile$'); 
                             
             allOpts[2] = options;
