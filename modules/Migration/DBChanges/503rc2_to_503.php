@@ -99,7 +99,7 @@ foreach($query_array as $query)
 
 
 //Added for Custom Invoice Number, No need for security population
-$newfieldid = $conn->getUniqueID("vtiger_field");
+$newfieldid = $adb->getUniqueID("vtiger_field");
 ExecuteQuery("insert into vtiger_field values(23,".$newfieldid.",'invoice_no','vtiger_invoice',1,'1','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
 populateFieldForSecurity('23',$newfieldid);
 
