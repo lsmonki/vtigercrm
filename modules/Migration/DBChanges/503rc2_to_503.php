@@ -101,7 +101,17 @@ foreach($query_array as $query)
 //Added for Custom Invoice Number, No need for security population
 $newfieldid = $adb->getUniqueID("vtiger_field");
 ExecuteQuery("insert into vtiger_field values(23,".$newfieldid.",'invoice_no','vtiger_invoice',1,'1','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
-populateFieldForSecurity('23',$newfieldid);
+//Populate security entries for this new field
+$profileresult = $adb->query("select * from vtiger_profile");
+$countprofiles = $adb->num_rows($profileresult);
+for($i=0;$i<$countprofiles;$i++)
+{
+	$profileid = $adb->query_result($profileresult,$i,'profileid');
+	$sqlProf2FieldInsert[$i] = 'insert into vtiger_profile2field values ('.$profileid.',23,'.$newfieldid.',0,1)';
+	ExecuteQuery($sqlProf2FieldInsert[$i]);
+}
+$def_query = "insert into vtiger_def_org_field values (23,".$newfieldid.",0,1)";
+ExecuteQuery($def_query);
 
 ExecuteQuery("alter table vtiger_invoice add column (invoice_no varchar(50) UNIQUE default NULL)");
 
@@ -274,6 +284,18 @@ ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger
 
 //Change the commission rate from decimal(3,3) to decimal(7,3) in products
 ExecuteQuery("alter table vtiger_products modify column commissionrate decimal(7,3)");
+
+//In inventory notification mails, line breaks are not propter. we have to replace \n with <br>
+$res = $adb->query("select notificationid, notificationbody from vtiger_inventorynotification");
+for($i=0;$i<$adb->num_rows($res);$i++)
+{
+	$notificationid = $adb->query_result($res,$i,'notificationid');
+	$notificationbody = $adb->query_result($res,$i,'notificationbody');
+	//Replace \n with <br>
+	$notificationbody = str_replace("\n","<br>",$notificationbody);
+	ExecuteQuery("update vtiger_inventorynotification set notificationbody='$notificationbody' where notificationid=$notificationid");
+}
+
 
 
 
