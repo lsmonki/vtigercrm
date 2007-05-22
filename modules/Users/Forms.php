@@ -133,6 +133,7 @@ function verify_data(form) {
 		check_duplicate();
 	}else
 	{
+		$('user_status').disabled = false;
 		form.submit();
 	}
 }

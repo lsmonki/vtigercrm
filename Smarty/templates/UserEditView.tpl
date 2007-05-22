@@ -42,7 +42,10 @@ function check_duplicate()
                         postBody: 'module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName='+user_name,
                         onComplete: function(response) {ldelim}
 				if(response.responseText == 'SUCCESS')
+				{ldelim}
+					$('user_status').disabled = false;
 			                document.EditView.submit();
+				{rdelim}
        				else
 			                alert(response.responseText);
                         {rdelim}

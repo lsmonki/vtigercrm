@@ -537,26 +537,16 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 			   {if $secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record}
-			   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
+			   	<select id="user_status" name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
-			   	<select disabled name="{$fldname}" class="small">
+			   	<select id="user_status" disabled name="{$fldname}" class="small">
 			   {/if} 
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>{$sel_value}</option>
-						<!-- code added to pass Status field value, if Disabled for nonadmin -->
-						{if $value eq 'selected' && $secondvalue neq 1}
-							{assign var="user_stat" value="$sel_value"}
-						{/if}
-						<!--code ends -->
 					{/foreach}
 				{/foreach}
 			   </select>
-			<!-- code added to pass Status field value, if Disabled for nonadmin -->
-			{if $user_stat neq ''}
-				<input name="{$fldname}" type="hidden" value="{$user_stat}">
-			{/if}
-			<!--code ends -->
 			</td>
 			{elseif $uitype eq 105}
 			<td width="20%" class="dvtCellLabel" align=right>
