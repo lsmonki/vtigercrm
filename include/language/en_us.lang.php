@@ -183,6 +183,7 @@ $app_strings = array (
 'ERR_CREATING_FIELDS' => 'Error filling in additional detail fields: ',
 'ERR_MISSING_REQUIRED_FIELDS' => 'Missing required fields:',
 'ERR_INVALID_EMAIL_ADDRESS' => 'not a valid email address.',
+'ERR_INVALID_YAHOO_EMAIL_ADDRESS' => 'not a valid yahoo email address.',
 'ERR_INVALID_DATE_FORMAT' => 'The date format must be: yyyy-mm-dd',
 'ERR_INVALID_MONTH' => 'Please enter a valid month.',
 'ERR_INVALID_DAY' => 'Please enter a valid day.',

@@ -40,11 +40,12 @@ $lbl_confirm_new_password = $mod_strings['LBL_LIST_CONFIRM_PASSWORD'];
 $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
+$err_invalid_yahoo_email_address = $app_strings['ERR_INVALID_YAHOO_EMAIL_ADDRESS'];
 $lbl_user_image=$mod_strings['User Image'];
 $the_emailid = $app_strings['THE_EMAILID'];
 $email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
 $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
-$yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_email_address;
+$yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_yahoo_email_address;
 
 $the_script  = <<<EOQ
 
@@ -109,10 +110,10 @@ function verify_data(form) {
 		form.email2.focus();
 		exit();
 	}
-	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value)) {
+	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (!(form.yahoo_id.value.indexOf('yahoo') > -1))) {
 		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
 		form.yahoo_id.focus();
-		exit();
+		return false;
 	}
 
 
