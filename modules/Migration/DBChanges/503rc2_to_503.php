@@ -324,6 +324,8 @@ ExecuteQuery("alter table vtiger_industry modify column industry varchar(200) NO
 $adb->query("alter table vtiger_industry drop index Industry_UK0");
 $adb->query("alter table vtiger_industry add UNIQUE index industry_industry_idx(industry)");
 
+//we have removed contactid from products so that in cvcolumnlist we have to remove this column
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_products:contactid:contact_id:Products_Contact_Name:I'");
 
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
