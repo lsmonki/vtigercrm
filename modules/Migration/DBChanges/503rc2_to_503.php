@@ -317,6 +317,13 @@ ExecuteQuery("update vtiger_notificationscheduler set active=1 where scheduledno
 //Change Event Status values Planned, Held, Not Held as non editable
 ExecuteQuery("update vtiger_eventstatus set presence=0 where eventstatus in ('Planned','Held','Not Held')");
 
+//If engine is MyISAM then order is changing regularly so we have to change the engine to InnoDB
+ExecuteQuery("alter table vtiger_industry engine=InnoDB");
+ExecuteQuery("alter table vtiger_industry modify column industry varchar(200) NOT NULL");
+$adb->query("alter table vtiger_industry drop index Industry_UK0");
+$adb->query("alter table vtiger_industry add UNIQUE index industry_industry_idx(industry)");
+
+
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
