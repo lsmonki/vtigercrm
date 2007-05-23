@@ -168,7 +168,7 @@ var invnumber=document.getElementById("invoicenumber").value;
 var invstring=document.getElementById("invoicestring").value;
 
 
-var iChars = "!@#$%^&*()+=[]\\\';,./{}|\":<>?";
+var iChars = "!@#$%^&*()+=[]\\\';,.{}|\":<>?";
 
           for (var i = 0; i < invstring.length; i++)
             {
