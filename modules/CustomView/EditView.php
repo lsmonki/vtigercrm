@@ -455,8 +455,9 @@ function changeTypeOfData($field)
         "vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
 
         "vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
-        "vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
-
+	"vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
+	"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V",
+	"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:V",
 
 			  );
 
