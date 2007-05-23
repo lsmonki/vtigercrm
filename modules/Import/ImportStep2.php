@@ -168,7 +168,23 @@ if($total_num_rows >2)
 	$thirdrow = $rows[2];
 }
 
-	
+//If the cell value is very large then UI mapping will be collpased. So we will display partial text
+foreach($firstrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$firstrow[$ind] = substr($val,0,30)." ..........";
+}
+foreach($secondrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$secondrow[$ind] = substr($val,0,30)." ..........";
+}
+foreach($thirdrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$thirdrow[$ind] = substr($val,0,30)." ..........";
+}
+
 $field_map = $outlook_contacts_field_map;
 
 $mapping_file = new ImportMap();
