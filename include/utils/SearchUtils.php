@@ -557,7 +557,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	global $log;
 	$log->debug("Entering getSearch_criteria(".$criteria.",".$searchstring.",".$searchfield.") method ...");
 	$searchstring = ltrim(rtrim($searchstring));
-	if($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime" || stristr($searchfield,'date'))
+	if(($searchfield != "vtiger_troubletickets.update_log") && ($searchfield == "vtiger_crmentity.modifiedtime" || $searchfield == "vtiger_crmentity.createdtime" || stristr($searchfield,'date')))
 	{
 		list($sdate,$stime) = split(" ",$searchstring);
 		if($stime !='')
