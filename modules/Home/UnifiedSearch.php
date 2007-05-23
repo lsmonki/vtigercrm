@@ -76,8 +76,12 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 			$oCustomView = '';
 
 			$oCustomView = new CustomView($module);
-			$viewid = $oCustomView->getViewId($module);
-                        $listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+			//Instead of getting current customview id, use cvid of All so that all entities will be found
+			//$viewid = $oCustomView->getViewId($module);
+			$cv_res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='$module'");
+			$viewid = $adb->query_result($cv_res,0,'cvid');
+			
+			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
                         if ($module == "Calendar"){
                                 if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
                                 if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
