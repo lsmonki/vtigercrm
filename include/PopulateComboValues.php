@@ -75,6 +75,7 @@ class PopulateComboValues
 		$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus");
 		$noneditable_values = Array(
 						"sales_stage"=>"Closed Won",
+						"sales_stage"=>"Closed Lost",
 					   );
 		foreach($noneditable_tables as $picklistname)
 		{
