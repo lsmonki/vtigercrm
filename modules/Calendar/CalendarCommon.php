@@ -412,10 +412,11 @@ function getEventNotification($mode,$subject,$desc)
 
 function sendInvitation($inviteesid,$mode,$subject,$desc)
 {
-	global $current_user;
+	global $current_user,$mod_strings;
 	require_once("modules/Emails/mail.php");
+	$invites=$mod_strings['INVITATION'];
 	$invitees_array = explode(';',$inviteesid);
-	$subject = $mode.' : '.$subject;
+	$subject = $mode.' : '.$invites.$subject;
 	$record = $focus->id;
 	foreach($invitees_array as $inviteeid)
 	{
