@@ -106,12 +106,12 @@ if (is_array($overview))
 		$from_list = str_replace(">","",$from);
 		$cc = str_replace("<",":",$hdr->ccaddress);
 		$cc_list = str_replace(">","",$cc);
-		$js_array .= "webmail2[".$val->msgno."] = new Array();";
+		/*$js_array .= "webmail2[".$val->msgno."] = new Array();";
 		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($from_list)."';";
 		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($to_list)."';";
 		$js_array .= "webmail2[".$val->msgno."]['subject'] = '".addslashes($val->subject)."';";
 		$js_array .= "webmail2[".$val->msgno."]['date'] = '".addslashes($val->date)."';";
-		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$cc_list."';";
+		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$cc_list."';";*/
 	}
 }
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");
@@ -206,31 +206,35 @@ if (is_array($list)) {
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 		 */
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
-			
-			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-			$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-			if($unread_msgs > 0)
-				$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
-			else
-				$folders .='</span></li>';
+			if($tmpval[0] != ".")
+			{
+				if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
+				$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				if($unread_msgs > 0)
+					$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+				else
+					$folders .='</span></li>';
+			}
 
 		} else {
 			$box = imap_status($MailBox->mbox, "{".$MailBox->imapServerAddress."}".$tmpval, SA_ALL);
 			$_SESSION["mailboxes"][$tmpval] = $box->unseen;
-
-			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
-			$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
-			if($box->unseen > 0)
-				$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
-			else
-				$folders .='</span></li>';
+			if($tmpval[0] != ".")
+			{
+				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
+				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+				$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				if($box->unseen > 0)
+					$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
+				else
+					$folders .='</span></li>';
+			}
 		}
 	}
         $boxes .= '</select>';
 }
 imap_close($MailBox->mbox);
-echo '<div id="js_arr" style="display:none">'.$js_array.'</div>';
+//echo '<div id="js_arr" style="display:none">'.$js_array.'</div>';
 $smarty = new vtigerCRM_Smarty;
 //$smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);

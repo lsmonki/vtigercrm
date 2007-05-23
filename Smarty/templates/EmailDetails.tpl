@@ -40,11 +40,11 @@
 	</td>
 </tr>
 <tr>
-	<td height="250" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
+	<td height="250" bgcolor="#FFFFFF" valign="top" class="MatrixLayer2">
 	{foreach item=row from=$BLOCKS}	
 	{foreach item=elements from=$row}	
 		{if $elements.fldname eq 'subject'}
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<table class="tableHeadBg" width="100%" border="0" cellpadding="0" cellspacing="0">
 	{if $EMAIL_FLAG neq 'WEBMAIL'}
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$FROM_MAIL}&nbsp;</td></tr>
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>

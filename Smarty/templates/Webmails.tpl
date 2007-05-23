@@ -94,13 +94,13 @@
 								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="small">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
 						</ul><br />
-						<img src="themes/images/webmail_trash.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
+						<!--<img src="themes/images/webmail_trash.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 						<ul style="list-style-type:none;">
 							<li>
 								<img src="themes/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="#" class="small">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
 							</li>
-						</ul>
+						</ul>-->
 
 						</td>
 						</tr>
@@ -110,7 +110,14 @@
 					        <td rowspan=3>
 						 <table border=0 width="100%" cellspacing=0 cellspacing=0 class="MatrixLayer1">
 					 	 <tr>
-							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span></div></td>
+							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX} {if $NUM_EMAILS neq 0}
+						 {if $NUM_EMAILS neq 1}
+							({$NUM_EMAILS} Messages)
+						 {else}
+							({$NUM_EMAILS} Message)
+						 {/if}
+					 {/if}
+						</span> <span style="float:right">{$NAVIGATION}</span></div></td>
 						 </tr>
 						 <tr>	
 							<td class="hdrNameBg" style="height:30px;">

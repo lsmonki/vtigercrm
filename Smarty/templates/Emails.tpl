@@ -68,6 +68,7 @@ function ShowFolders(folderid)
 </script>
 		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Emails.js"></script>
+<link rel="stylesheet" type="text/css" href="themes/{$theme}/webmail.css">
 <div id="mailconfchk" class="small" style="position:absolute;display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><b>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Users&action=AddMailAccount&record={$USERID}">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</b></font></div>
 <!-- Shadow starts here -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
@@ -118,42 +119,44 @@ function ShowFolders(folderid)
 							<!-- Columns -->
 							<tr>
 							<td width="18%" class="big mailSubHeader" ><b>{$MOD.LBL_EMAIL_FOLDERS}</b></td>
+							<td>&nbsp;</td>
 							<td width="82%" class="big mailSubHeader" align="left"><span id="mail_fldrname"><b>{$MOD.LBL_ALLMAILS}</b></span></td>
 							</tr>
 							
 							<tr>
-								<td rowspan="6" class="hdrNameBg" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left" >
+								<td rowspan="6" class="MatrixLayer1" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left" >
 								<!-- Mailbox Tree -->
 								<!-- Inbox -->
-								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
+								<img src="themes/images/folder_.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="{$IMAGE_PATH}emailInFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="{$IMAGE_PATH}emailInFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="gotoWebmail();" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul>
 								<!-- Sent mail -->
-								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+								<img src="themes/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(1)" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
-									<li><img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(2)" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(3)" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(4)" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 									</li>
-									<li><img src="{$IMAGE_PATH}emailOutFolder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(5)" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 									</li>
 								</ul>
 								</td>
 								<!-- All mails pane -->
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 								<td class="hdrNameBg">
 									<!-- Command Buttons and Search Email -->
 									<table width="100%"  border="0" cellspacing="0" cellpadding="2">
@@ -180,6 +183,7 @@ function ShowFolders(folderid)
 							</tr>
 							<!-- Mail Subject Headers list -->
 							<tr>
+								<td>&nbsp;</td>
 								<td align="left">
 									<div id="email_con">
 									{include file="EmailContents.tpl"}
@@ -188,8 +192,9 @@ function ShowFolders(folderid)
 							</tr>
 							
 							<tr>
+								<td>&nbsp;</td>
 								<td valign="top">
-									<div id="EmailDetails" > 
+									<div id="EmailDetails"> 
 									{include file="EmailDetails.tpl"}
 									</div>
 								</td>

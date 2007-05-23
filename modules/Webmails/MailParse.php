@@ -56,9 +56,9 @@ function show_msg($mails,$start_message)
 
         // Attachment Icons
         if($msg_ob->has_attachments)
-                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14" title="Attachment"></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="13px" title="Attachment"></a>&nbsp;';
         else
-                $flags.='<img src="themes/images/blank.gif" border="0" width="14px" height="14" alt="">&nbsp;';
+                $flags.='<img src="themes/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
 
 
 
@@ -77,7 +77,7 @@ function show_msg($mails,$start_message)
 	}
 	else
 	{
-                $flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/images/openmail.jpg" border="0" width="12" height="12" title="Read" ></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/images/openmail.gif" border="0" width="12" height="12" title="Read" ></a>&nbsp;';
 	}
 
         // Set IMAP flag

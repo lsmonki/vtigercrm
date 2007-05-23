@@ -1,6 +1,14 @@
 				<!-- Table to display the mails list -  Starts -->
 				<div id="navTemp" style="display:none">
-					<span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}</span> <span style="float:right">{$NAVIGATION}</span>	
+					<span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}
+					{if $NUM_EMAILS neq 0}
+                                                 {if $NUM_EMAILS neq 1}
+                                                        ({$NUM_EMAILS} Messages)
+                                                 {else}
+                                                        ({$NUM_EMAILS} Message)
+                                                 {/if}
+                                         {/if}
+					</span> <span style="float:right">{$NAVIGATION}</span>	
 				</div>
 				<span id="{$MAILBOX}_tempcount" style="display:none" >{$UNREAD_COUNT}</span>
 				<div id="temp_boxlist" style="display:none">
