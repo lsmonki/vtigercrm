@@ -110,7 +110,7 @@ function verify_data(form) {
 		form.email2.focus();
 		return false;
 	}
-	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (!(form.yahoo_id.value.indexOf('yahoo') > -1))) {
+	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (trim(form.yahoo_id.value) != "" && !(form.yahoo_id.value.indexOf('yahoo') > -1))) {
 		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
 		form.yahoo_id.focus();
 		return false;
