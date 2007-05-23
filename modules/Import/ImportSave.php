@@ -57,6 +57,10 @@ foreach ($rows1 as $row)
 	//MWC
 	$my_userid = $current_user->id;
 
+	//If we want to set default values for some fields for each entity then we have to set here
+	if($module == 'Products')//discontinued is not null. if we unmap active, NULL will be inserted and query will fail
+		$focus->column_fields['discontinued'] = 'on';
+
 	for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	{
 		p("col_pos[".$field_count."]=".$col_pos_to_field[$field_count]);
