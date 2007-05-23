@@ -924,6 +924,11 @@ class CustomView extends CRMEntity{
 	{
 		//we have to add the fieldname/tablename.fieldname and the corresponding value (which we want) we can add here. So that when these LHS field comes then RHS value will be replaced for LHS in the where condition of the query
 		global $adb;
+		
+		//Added for proper check of contact name in advance filter
+		if($tablename == "vtiger_contactdetails" && $fieldname == "lastname")
+			$fieldname = "contactid";
+							
 		$change_table_field = Array(
 
 			"product_id"=>"vtiger_products.productname",
