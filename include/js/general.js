@@ -700,7 +700,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount')) 
+	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount' && fldName != 'list_price')) 
 	{
 		alert(alert_arr.INVALID+fldLabel)
 		getObj(fldName).focus()
