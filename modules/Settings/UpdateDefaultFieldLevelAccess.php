@@ -16,7 +16,6 @@ global $adb;
 
 
 $field_module=getFieldModuleAccessArray();
-
 foreach($field_module as $fld_module=>$fld_name)
 {
 	$fieldListResult = getDefOrgFieldList($fld_module);
@@ -37,7 +36,8 @@ foreach($field_module as $fld_module=>$fld_name)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
+		$fieldname = $adb->query_result($fieldListResult,$i,"fieldname");
+		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15))
 		{
 			$visible_value = 0; 
 		}		

@@ -36,7 +36,6 @@ foreach($field_module as $fld_module)
 	$language_strings = return_module_language($current_language,$fld_module);
 	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $language_strings,$profileid);
 }
-
 if($_REQUEST['fld_module'] != '')
 	$smarty->assign("DEF_MODULE",$_REQUEST['fld_module']);
 else
@@ -57,15 +56,15 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
+		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3)
+                if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15))
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';
                 }
 
-		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
 		if($lang_strings[$fieldlabel] !='')
 			$standCustFld []= $mandatory.' '.$lang_strings[$fieldlabel];
 		else

@@ -303,7 +303,6 @@ if($mode == 'create')
 
 }
 $smarty->assign("TAB_PRIV",$privileges_tab);			
-
 //utilities privileges
 
 if($mode == 'view')
@@ -476,7 +475,7 @@ elseif($mode=='edit')
 			$readonly = '';
 			$field=array();
 			
-			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
+			if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -529,7 +528,7 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -579,7 +578,7 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20)
+				if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
