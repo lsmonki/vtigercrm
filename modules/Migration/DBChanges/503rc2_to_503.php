@@ -99,8 +99,9 @@ foreach($query_array as $query)
 
 
 //Added for Custom Invoice Number, No need for security population
+//Invoice Number has been set the uitype as 3 which is a new UI type. user can configure but non editable
 $newfieldid = $adb->getUniqueID("vtiger_field");
-ExecuteQuery("insert into vtiger_field values(23,".$newfieldid.",'invoice_no','vtiger_invoice',1,'1','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
+ExecuteQuery("insert into vtiger_field values(23,".$newfieldid.",'invoice_no','vtiger_invoice',1,'3','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,NULL,'BAS')");
 //Populate security entries for this new field
 $profileresult = $adb->query("select * from vtiger_profile");
 $countprofiles = $adb->num_rows($profileresult);

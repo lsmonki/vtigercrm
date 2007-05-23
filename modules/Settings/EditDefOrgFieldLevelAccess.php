@@ -59,7 +59,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15))
+                if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15))
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';
