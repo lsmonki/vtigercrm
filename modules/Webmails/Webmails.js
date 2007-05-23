@@ -33,7 +33,7 @@ function load_webmail(mid) {
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
                         {href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'reply\')'},
-                        [Builder.node('img',{src: 'themes/images/openmail.jpg', border: '0', width: '12', height: '12'})]
+                        [Builder.node('img',{src: 'themes/images/openmail.gif', border: '0', width: '12', height: '12'})]
                 ));
 	}
         node.className='read_email';
@@ -90,7 +90,7 @@ function load_webmail(mid) {
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
-        window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
+        window.open(url,"DownloadAttachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
 function OpenComposer(id,mode)
 {
