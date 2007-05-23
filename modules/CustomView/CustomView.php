@@ -714,13 +714,13 @@ class CustomView extends CRMEntity{
 		$stdfilterlist["columnname"] = $stdfilterrow["columnname"];
 		$stdfilterlist["stdfilter"] = $stdfilterrow["stdfilter"];
 
-		if($stdfilterrow["stdfilter"] == "custom")
+		if($stdfilterrow["stdfilter"] == "custom" || $stdfilterrow["stdfilter"] == "")
 		{
-			if($stdfilterrow["startdate"] != "0000-00-00")
+			if($stdfilterrow["startdate"] != "0000-00-00" && $stdfilterrow["startdate"] != "")
 			{
 				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
 			}
-			if($stdfilterrow["enddate"] != "0000-00-00")
+			if($stdfilterrow["enddate"] != "0000-00-00" && $stdfilterrow["enddate"] != "")
 			{
 				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
 			}
