@@ -29,7 +29,7 @@ for($i=0;$i < $num_rows; $i++)
 {	
   $wordtemplatearray=array();
   $wordtemplatearray['templateid'] = $adb->query_result($result,$i,'templateid');
-  $wordtemplatearray['description'] = $adb->query_result($result,$i,'description');
+  $wordtemplatearray['description'] = urldecode($adb->query_result($result,$i,'description'));
   $wordtemplatearray['module'] = $adb->query_result($result,$i,'module');
   $wordtemplatearray['filename'] = $adb->query_result($result,$i,'filename');
   $wordtemplatearray['filetype'] = $adb->query_result($result,$i,'filetype');

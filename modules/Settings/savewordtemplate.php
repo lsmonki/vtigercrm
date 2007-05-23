@@ -26,7 +26,7 @@ $binFile = $_FILES['binFile']['name'];
                 $binFile .= ".txt";
         }
 $_FILES["binFile"]["name"] = $binFile;
-$strDescription = urlencode(addslashes($_REQUEST['txtDescription']));
+$strDescription = urlencode(($_REQUEST['txtDescription']));
 // Vulnerability fix ends
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
