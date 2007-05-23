@@ -46,7 +46,7 @@
 						<td class="big"><strong>{$UMOD.LBL_NEW_TEMPLATE}</strong><br>{$ERRORFLAG}</br></td>
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" type="submit" tabindex="4" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='savewordtemplate'; this.form.parenttab.value='Settings'" class="crmButton small save" />&nbsp;
-							&nbsp;<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" tabindex="5"  onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" />
+							&nbsp;<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" tabindex="5"  onclick="javascript:document.location.href='index.php?module=Settings&action=listwordtemplates&parenttab=Settings'"  type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" />
 						</td>
 					</tr>
 					</table>
