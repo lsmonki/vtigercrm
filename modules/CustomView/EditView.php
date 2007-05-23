@@ -107,7 +107,6 @@ else
 
 	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
 	$log->info('CustomView :: Successfully got Standard Filter for the Viewid'.$recordid);
-	$stdfilterlist["stdfilter"] = ($stdfilterlist["stdfilter"] != "") ? ($stdfilterlist["stdfilter"]) : ("custom");
 	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
 	$stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
 	$stdfilterjs = $oCustomView->getCriteriaJS();
@@ -150,7 +149,7 @@ else
 	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
 	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
-
+	$smarty->assign("EXIST","true");
 	$cactionhtml = "<input name='customaction' class='button' type='button' value='Create Custom Action' onclick=goto_CustomAction('".$cv_module."');>";
 
 	if($cv_module == "Leads" || $cv_module == "Accounts" || $cv_module == "Contacts")
