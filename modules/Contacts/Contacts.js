@@ -13,17 +13,23 @@ document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"sc
 
 function copyAddressRight(form) {
 
-	form.otherstreet.value = form.mailingstreet.value;
+	if(typeof(form.otherstreet) != 'undefined' && typeof(form.mailingstreet) != 'undefined')
+		form.otherstreet.value = form.mailingstreet.value;
 
-	form.othercity.value = form.mailingcity.value;
+	if(typeof(form.othercity) != 'undefined' && typeof(form.mailingcity) != 'undefined')
+		form.othercity.value = form.mailingcity.value;
 
-	form.otherstate.value = form.mailingstate.value;
+	if(typeof(form.otherstate) != 'undefined' && typeof(form.mailingstate) != 'undefined')
+		form.otherstate.value = form.mailingstate.value;
 
-	form.otherzip.value = form.mailingzip.value;
+	if(typeof(form.otherzip) != 'undefined' && typeof(form.mailingzip) != 'undefined')
+		form.otherzip.value = form.mailingzip.value;
 
-	form.othercountry.value = form.mailingcountry.value;
+	if(typeof(form.othercountry) != 'undefined' && typeof(form.mailingcountry) != 'undefined')
+		form.othercountry.value = form.mailingcountry.value;
 
-	form.otherpobox.value = form.mailingpobox.value;
+	if(typeof(form.otherpobox) != 'undefined' && typeof(form.mailingpobox) != 'undefined')
+		form.otherpobox.value = form.mailingpobox.value;
 	
 	return true;
 
@@ -31,17 +37,23 @@ function copyAddressRight(form) {
 
 function copyAddressLeft(form) {
 
-	form.mailingstreet.value = form.otherstreet.value;
+	if(typeof(form.otherstreet) != 'undefined' && typeof(form.mailingstreet) != 'undefined')
+		form.mailingstreet.value = form.otherstreet.value;
 
-	form.mailingcity.value = form.othercity.value;
+	if(typeof(form.othercity) != 'undefined' && typeof(form.mailingcity) != 'undefined')
+		form.mailingcity.value = form.othercity.value;
 
-	form.mailingstate.value = form.otherstate.value;
+	if(typeof(form.otherstate) != 'undefined' && typeof(form.mailingstate) != 'undefined')
+		form.mailingstate.value = form.otherstate.value;
 
-	form.mailingzip.value =	form.otherzip.value;
+	if(typeof(form.otherzip) != 'undefined' && typeof(form.mailingzip) != 'undefined')
+		form.mailingzip.value =	form.otherzip.value;
 
-	form.mailingcountry.value = form.othercountry.value;
+	if(typeof(form.othercountry) != 'undefined' && typeof(form.mailingcountry) != 'undefined')
+		form.mailingcountry.value = form.othercountry.value;
 
-	form.mailingpobox.value = form.otherpobox.value;
+	if(typeof(form.otherpobox) != 'undefined' && typeof(form.mailingpobox) != 'undefined')
+		form.mailingpobox.value = form.otherpobox.value;
 	
 	return true;
 

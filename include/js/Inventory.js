@@ -10,17 +10,23 @@
 
 function copyAddressRight(form) {
 
-	form.ship_street.value = form.bill_street.value;
+	if(typeof(form.bill_street) != 'undefined' && typeof(form.ship_street) != 'undefined')
+		form.ship_street.value = form.bill_street.value;
 
-	form.ship_city.value = form.bill_city.value;
+	if(typeof(form.bill_city) != 'undefined' && typeof(form.ship_city) != 'undefined')
+		form.ship_city.value = form.bill_city.value;
 
-	form.ship_state.value = form.bill_state.value;
+	if(typeof(form.bill_state) != 'undefined' && typeof(form.ship_state) != 'undefined')
+		form.ship_state.value = form.bill_state.value;
 
-	form.ship_code.value = form.bill_code.value;
+	if(typeof(form.bill_code) != 'undefined' && typeof(form.ship_code) != 'undefined')
+		form.ship_code.value = form.bill_code.value;
 
-	form.ship_country.value = form.bill_country.value;
+	if(typeof(form.bill_country) != 'undefined' && typeof(form.ship_country) != 'undefined')
+		form.ship_country.value = form.bill_country.value;
 
-	form.ship_pobox.value = form.bill_pobox.value;
+	if(typeof(form.bill_pobox) != 'undefined' && typeof(form.ship_pobox) != 'undefined')
+		form.ship_pobox.value = form.bill_pobox.value;
 	
 	return true;
 
@@ -28,17 +34,23 @@ function copyAddressRight(form) {
 
 function copyAddressLeft(form) {
 
-	form.bill_street.value = form.ship_street.value;
+	if(typeof(form.bill_street) != 'undefined' && typeof(form.ship_street) != 'undefined')
+		form.bill_street.value = form.ship_street.value;
+	
+	if(typeof(form.bill_city) != 'undefined' && typeof(form.ship_city) != 'undefined')
+		form.bill_city.value = form.ship_city.value;
 
-	form.bill_city.value = form.ship_city.value;
+	if(typeof(form.bill_state) != 'undefined' && typeof(form.ship_state) != 'undefined')
+		form.bill_state.value = form.ship_state.value;
 
-	form.bill_state.value = form.ship_state.value;
+	if(typeof(form.bill_code) != 'undefined' && typeof(form.ship_code) != 'undefined')
+		form.bill_code.value =	form.ship_code.value;
 
-	form.bill_code.value =	form.ship_code.value;
+	if(typeof(form.bill_country) != 'undefined' && typeof(form.ship_country) != 'undefined')
+		form.bill_country.value = form.ship_country.value;
 
-	form.bill_country.value = form.ship_country.value;
-
-	form.bill_pobox.value = form.ship_pobox.value;
+	if(typeof(form.bill_pobox) != 'undefined' && typeof(form.ship_pobox) != 'undefined')
+		form.bill_pobox.value = form.ship_pobox.value;
 
 	return true;
 
