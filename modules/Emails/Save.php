@@ -221,7 +221,7 @@ $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
 $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
-$focus->column_fields["date_start"]= date('Y-m-d');
+$focus->column_fields["date_start"]= date(getNewDisplayDate());//This will be converted to db date format in save
 $focus->save("Emails");
 
 //saving the email details in vtiger_emaildetails vtiger_table
