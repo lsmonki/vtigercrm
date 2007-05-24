@@ -276,8 +276,9 @@ function getRelatedActivities($accountid,$contact_id)
 /**	Function used to save the lead related products with other entities Account, Contact and Potential
  *	$leadid - leadid
  *	$relatedid - related entity id (accountid/contactid/potentialid)
+ *	$setype - related module(Accounts/Contacts/Potentials)
  */
-function saveLeadRelatedProducts($leadid, $relatedid)
+function saveLeadRelatedProducts($leadid, $relatedid, $setype)
 {
 	global $adb, $log;
 	$log->debug("Entering into function saveLeadRelatedProducts($leadid, $relatedid)");
@@ -287,8 +288,6 @@ function saveLeadRelatedProducts($leadid, $relatedid)
 	for($i = 0; $i < $noofproducts; $i++)
 	{
 		$productid = $adb->query_result($product_result,$i,'productid');
-		$setype = $adb->query_result($product_result,$i,'setype');
-
 		$adb->query("insert into vtiger_seproductsrel values($relatedid, $productid,'".$setype."')");
 	}
 
@@ -314,7 +313,6 @@ function saveLeadRelatedCampaigns($leadid, $relatedid)
 	}
 	$log->debug("Exit from function saveLeadRelatedCampaigns.");
 }
-
 
 /*Code integrated to avoid duplicate Account creation during ConvertLead Operation  START-- by Bharathi*/
 $acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = '$accountname'";
@@ -365,7 +363,7 @@ $account_id=$crmid;
 getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
 
 //Retrieve the lead related products and relate them with this new account
-saveLeadRelatedProducts($id, $crmid);
+saveLeadRelatedProducts($id, $crmid, "Accounts");
 
 //Up to this, Account related data save finshed
 
@@ -416,7 +414,7 @@ $adb->query($sql_insert_contactcustomfield);
 getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
 
 //Retrieve the lead related products and relate them with this new contact
-saveLeadRelatedProducts($id, $contact_id);
+saveLeadRelatedProducts($id, $contact_id, "Contacts");
 
 //Retrieve the lead related Campaigns and relate them with this new contact --Minnie
 saveLeadRelatedCampaigns($id, $contact_id);
@@ -471,7 +469,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
         $adb->query($sql_insert2contpotentialrel);
 
 	//Retrieve the lead related products and relate them with this new potential
-	saveLeadRelatedProducts($id, $oppid);
+	saveLeadRelatedProducts($id, $oppid, "Potentials");
 
 }
 //Saving Potential - ends
