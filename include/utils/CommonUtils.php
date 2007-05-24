@@ -2900,4 +2900,21 @@ function is_emailId($entity_id)
 	return $check_mailids;
 }
 
+/**
+ * This function is used to get cvid of default "all" view for any module.
+ * @return a cvid of a module
+ */
+function getCvIdOfAll($module)
+{
+	global $adb,$log;
+	$log->debug("Entering getCvIdOfAll($module)");
+	$qry_res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='".$module."'");
+	$cvid = $adb->query_result($qry_res,0,"cvid");
+	$log->debug("Exiting getCvIdOfAll($module)");
+	return $cvid;
+
+
+}
+
+
 ?>

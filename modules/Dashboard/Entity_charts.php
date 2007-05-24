@@ -285,13 +285,16 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($graph_for == "ticketgroupname" || $graph_for == "groupname") $graph_for = "smownerid";
 
 					if($graph_for == "accountid") $graph_for = "account_id";
+					$cvid = getCvIdOfAll($module);
 					if($module == "Home")
-						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name;
+					{
+						$cvid = getCvIdOfAll($name);
+						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name."&viewname=".$cvid;
+					}
 					else if($module == "Contacts" || ($module=="Products" && ($graph_for == "quoteid" || $graph_for == "invoiceid" || $graph_for == "purchaseorderid")))
-						$link_val="index.php?module=".$module."&action=ListView&from_dashboard=true&type=dbrd&query=true&".$graph_for."=".$id_name;
+						$link_val="index.php?module=".$module."&action=ListView&from_dashboard=true&type=dbrd&query=true&".$graph_for."=".$id_name."&viewname=".$cvid;
 					else
-						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar";
-
+						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
 					if($graph_for == "account_id") $graph_for = "accountid";
 
 					//Adding the links to the graph	

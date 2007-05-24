@@ -171,7 +171,8 @@ class jpgraph {
 							array_push($datax[$stage][$the_id], 0);
 							array_push($aAlts[$stage][$the_id], "");
 						}
-						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user);
+						$cvid = getCvIdOfAll("Potentials");
+						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user."&viewname=".$cvid);
 			  		}
 				}	
 		  	  	array_push($legend,$month);
@@ -500,7 +501,8 @@ class jpgraph {
 							array_push($datax[$stage][$the_id], 0);
 							array_push($aAlts[$stage][$the_id], "");
 						}
-						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead)."&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user);
+						$cvid = getCvIdOfAll("Potentials");
+						array_push($aTargets[$stage][$the_id], "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead)."&sales_stage=".urlencode($stage)."&query=true&type=dbrd&owner=".$the_user."&viewname=".$cvid);
 			  		}
 				}	
 			  	array_push($legend,$translation);
@@ -802,7 +804,8 @@ class jpgraph {
 					array_push($datay[$the_id], 0);
 					array_push($aAlts[$the_id], "");
 				}
-				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd&owner=".$the_user);
+				$cvid = getCvIdOfAll("Potentials");
+				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true&type=dbrd&owner=".$the_user."&viewname=".$cvid);
 			  }
 			  array_push($legend,$stage_translation);
 			}
@@ -1052,7 +1055,8 @@ class jpgraph {
 						// put none in if the vtiger_field is blank.
 						array_push($visible_legends, $current_module_strings['NTC_NO_LEGENDS']);
 					}
-					array_push($aTargets, "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead_source_key)."&query=true&type=dbrd");
+					$cvid = getCvIdOfAll("Potentials");
+					array_push($aTargets, "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead_source_key)."&query=true&type=dbrd&viewname=".$cvid);
 					array_push($aAlts, $count[$lead_source_key]." ".$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE']." $lead_source_translation	");
 				}
 			}
