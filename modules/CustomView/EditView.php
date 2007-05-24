@@ -107,6 +107,7 @@ else
 
 	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
 	$log->info('CustomView :: Successfully got Standard Filter for the Viewid'.$recordid);
+	$stdfilterlist["stdfilter"] = ($stdfilterlist["stdfilter"] != "") ? ($stdfilterlist["stdfilter"]) : ("custom");
 	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
 	$stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
 	$stdfilterjs = $oCustomView->getCriteriaJS();
