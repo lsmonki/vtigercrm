@@ -581,7 +581,7 @@ function create_ticket_from_toolbar($username,$title,$description,$priority,$sev
 		$ticket->save("HelpDesk");
 
 		if($ticket->id != '')
-      return "Ticket Created Sucessfully";
+      return "Ticket created successfully";
     else
       return "Error while creating Ticket.Try again";  
 	}
@@ -677,7 +677,7 @@ function create_lead_from_webform($username,$lastname,$email,$phone,$company,$co
 		$focus->save("Leads");
 		$adb->println("Create New Lead from Web Form - Ends");
 		if($focus->id != '')
-		  return 'Thank you for your interest. Information has been successfully added as Lead.';
+		  return "Thank you for your interest. Information has been successfully added as Lead.";
 		else
 		  return "Lead creation failed. Try again";
   }
@@ -747,7 +747,7 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
    $contact->column_fields[description]= $description;
    $contact->save("Contacts");
    if($contact->id != '')
-      return 'Contact added Sucessfully';
+      return 'Contact added successfully';
    else
       return "Contact creation failed. Try again";
   }
