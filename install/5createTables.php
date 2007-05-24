@@ -120,7 +120,7 @@ if(!rename("install/", $renamefile."install/"))
 
 
 ?>
-		<table border=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
+		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
 			<b>vtigercrm-5.0.3 is all set to go!</b>
@@ -130,12 +130,9 @@ if(!rename("install/", $renamefile."install/"))
 			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
-			<li> Do not forget to set the outgoing emailserver setup accessible from Settings->Outgoing Server
+			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings->Outgoing Server
 			</ul>
-		
-
 			<ul>
-			<li>
 			<li><b><font color='red'>You are the most important to us!</font></b>
 <li><b> We take pride in being associated with you</li></b>
 			<p>
