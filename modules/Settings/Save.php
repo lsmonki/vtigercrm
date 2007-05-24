@@ -59,28 +59,30 @@ if($server_type == 'proxy')
 
 if($server_type == 'backup')
 {
-	if(!function_exists('ftp_connect')){
-		echo $mod_strings['LBL_ENABLE_FTP'];
-		exit();
-	}
-	$conn_id = @ftp_connect($server);
 	$action = 'BackupServerConfig&bkp_server_mode=edit&server='.$server.'&server_user='.$server_username.'&password='.$server_password;
-	if(!$conn_id)
-	{
-		$error_str = 'error=Unable to connect "'.$server.'"';
+	if(!function_exists('ftp_connect')){
+		$error_str = 'error=FTP support is not enabled.';
 		$db_update = false;
 	}else
 	{
-		if(!@ftp_login($conn_id, $server_username, $server_password))
+		$conn_id = @ftp_connect($server);
+		if(!$conn_id)
 		{
-			$error_str = 'error=Couldn\'t connect to "'.$server.'" as user "'.$server_username.'"';
+			$error_str = 'error=Unable to connect "'.$server.'"';
 			$db_update = false;
-		}
-		else
+		}else
 		{
-			$action = 'BackupServerConfig';
+			if(!@ftp_login($conn_id, $server_username, $server_password))
+			{
+				$error_str = 'error=Couldn\'t connect to "'.$server.'" as user "'.$server_username.'"';
+				$db_update = false;
+			}
+			else
+			{
+				$action = 'BackupServerConfig';
+			}
+			ftp_close($conn_id);
 		}
-		ftp_close($conn_id);
 	}
 }
 if($server_type == 'proxy' || $server_type == 'backup')
