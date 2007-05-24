@@ -58,7 +58,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         }
 	//Added to reduce the no. of queries logging for non-admin vtiger_users -- by Minnie-start
 	$field_list ='(';
-	$j=0;
+	$j=0;	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
@@ -74,10 +74,12 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		{
 			$field_list .= ', ';
 		}
-		if($fieldname == "accountname")
+		if($fieldname == "accountname" && $module !="Accounts")
 			$fieldname = "account_id";
-		if($fieldname == "lastname" && $module !="Leads")
+		if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
+		{
 			$fieldname = "contact_id";
+		}
 		$field_list .= "'".$fieldname."'";
 		$j++;
 	}
@@ -119,8 +121,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 					$fieldname = $focus->list_fields_name[$name];
 					
                         }
-			if($fieldname == "lastname" && $module != "Leads")
+			if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
 				$fieldname = "contact_id";
+			if($fieldname == "accountname" && $module !="Accounts")
+				$fieldname = "account_id";
                 }
 		else
                 {
@@ -129,10 +133,9 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 			else
 				$fieldname = $focus->list_fields_name[$name];
 
-			if($fieldname == "lastname" && $module != "Leads")
+			if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
                                 $fieldname = "contact_id";
                 }
-
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
 			if($fieldname!='parent_id')
@@ -332,7 +335,6 @@ function BasicSearch($module,$search_field,$search_string)
 		{
 			$column_name=$adb->query_result($result,0,'columnname');	
 			
-			
 			//Check added for tickets by accounts/contacts in dashboard
 			if ($column_name == 'parent_id')
 		        {
@@ -345,6 +347,13 @@ function BasicSearch($module,$search_field,$search_string)
 			$table_name=$adb->query_result($result,0,'tablename');
 			$uitype=getUItype($module,$column_name);
 			
+			//Added for Member of search in Accounts
+			if($column_name == "parentid" && $module == "Accounts")
+			{
+				$table_name = "vtiger_account2";
+				$column_name = "accountname";
+			}
+
 			//Added to support user date format in basic search	
 			if($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 			{
@@ -377,7 +386,6 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			else
 			{
-				
 				$where="$table_name.$column_name like '%".$search_string."%'";
 			}
 		}
@@ -472,7 +480,7 @@ function getAdvSearchfields($module)
 		$fieldtype = $adb->query_result($result,$i,"typeofdata");
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];
-		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid')
+		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid' || $fieldcolname == 'parentid')
 			$fieldtypeofdata = "V";
 		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
 
@@ -565,6 +573,8 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 		else
 			$searchstring = getDBInsertDateValue($sdate);
 	}
+	if($searchfield == "vtiger_account.parentid")
+		$searchfield = "vtiger_account2.accountname";
 	$where_string = '';
 	switch($criteria)
 	{
