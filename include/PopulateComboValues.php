@@ -74,8 +74,8 @@ class PopulateComboValues
 		//presence = 1 means you can edit the picklist value
 		$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus");
 		$noneditable_values = Array(
-						"sales_stage"=>"Closed Won",
-						"sales_stage"=>"Closed Lost",
+						"Closed Won"=>"sales_stage",
+						"Closed Lost"=>"sales_stage",
 					   );
 		foreach($noneditable_tables as $picklistname)
 		{
@@ -83,7 +83,7 @@ class PopulateComboValues
 		}
 		foreach($noneditable_values as $picklistname => $value)
 		{
-			$adb->query("update vtiger_".$picklistname." set PRESENCE=0 where $picklistname='".$value."'");
+			$adb->query("update vtiger_".$value." set PRESENCE=0 where $value='".$picklistname."'");
 		}
 
 		$log->debug("Exiting create_tables () method ...");
