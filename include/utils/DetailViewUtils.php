@@ -570,8 +570,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			}
 			elseif($parent_module == "HelpDesk")
 			{
-				$label_fld[] = $mod_strings[$fieldlabel];
-				$label_fld[] = '';
+				$label_fld[] = $app_strings['LBL_HELPDESK_NAME'];
+				$sql = "select * from  vtiger_troubletickets where ticketid=".$value;
+				$result = $adb->query($sql);
+				$title= $adb->query_result($result,0,"title");
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$title.'</a>';
 			}
 		}
 		else
