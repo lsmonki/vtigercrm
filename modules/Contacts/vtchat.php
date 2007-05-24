@@ -1,6 +1,7 @@
 <?php 
 global $mod_strings;
 global $app_strings;
+global $theme;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -45,11 +46,11 @@ function showPopup()
 </script>
 
 <!-- CSS classes for the popups -->
-<link rel="stylesheet" type="text/css" href="modules/Contacts/chat.css"/>
+<link rel="stylesheet" type="text/css" href="themes/<?php echo $theme;?>/chat.css"/>
 
 </head>
 
-<body onload="showPopup();" style="background-image:url(modules/Contacts/imgs/site_bg.gif);color:#ffffff;">
+<body onload="showPopup();" style="background-image:url(themes/<?php echo $theme;?>/images/site_bg.gif);color:#ffffff;">
 
 
 <!-- THIS IS NEEDED FOR THE USERS LIST TO APPEAR, -->
@@ -79,6 +80,7 @@ function showPopup()
 					<td class="pchathead"></td>
 					<td class="pchathead1"><b><?php echo $mod_strings['User List']; ?></b></td>
 					<td class="pchathead2"></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="pchatbody"></td>
@@ -88,11 +90,13 @@ function showPopup()
 						</div>
 					</td>
 					<td class="pchatbody2"></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="pchatfoot"></td>
 					<td class="pchatfoot1"></td>
 					<td class="pchatfoot2"></td>
+					<td>&nbsp;</td>
 				</tr>
 			</table>
 		</td>
