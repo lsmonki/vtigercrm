@@ -94,7 +94,7 @@ function ShowFolders(folderid)
 										<table cellpadding="5" cellspacing="0" border="0">
 											<tr>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
-												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
+												<img src="themes/images/compose.gif" align="absmiddle" />
 							&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" >{$MOD.LBL_COMPOSE}</a>
 												</td>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
