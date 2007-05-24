@@ -39,7 +39,7 @@ $to = decode_header($email->to_header);
 $cc = decode_header($email->cc_header);
 $date = decode_header($email->date);
 for($i=0;$i<count($email->attname);$i++){
-	$attachment_links .= $email->anchor_arr[$i].decode_header($email->attname[$i])."</a></br>";
+	$attachment_links .= $email->anchor_arr[$i].decode_header($email->attname[$i])."</a></br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 }
 $content['body'] = $email->body;
 $content['attachtab'] = $email->attachtab;
@@ -55,20 +55,23 @@ else
 <!-- Table to display the Header details (From, To, Subject and date) - Starts -->
 					
                                         <table <?php echo $class_str;?> width="100%" border="0" cellpadding="0" cellspacing="0">
-                                                <tr align="left"><td width="100%" align="left"><b><?php echo $mod_strings['LBL_FROM'];?></b><?php echo $from;?></td></tr>
-                                                <tr><td  width="100%" align="left"><b><?php echo $mod_strings['LBL_TO'];?></b><?php echo $to;?></td></tr>
-<tr><td width="100%" align="left"><b><?php echo $mod_strings['LBL_CC'];?></b><?php echo $cc;?></td></tr>
+                                                <tr align="left"><td width="100%" align="left">&nbsp;<b><?php echo $mod_strings['LBL_FROM'];?></b><?php echo $from;?></td></tr>
+                                                <tr><td  width="100%" align="left">&nbsp;<b><?php echo $mod_strings['LBL_TO'];?></b><?php echo $to;?></td></tr>
+<tr><td width="100%" align="left">&nbsp;<b><?php echo $mod_strings['LBL_CC'];?></b><?php echo $cc;?></td></tr>
 
-                                                <tr><td align="left" width="100%"><b><?php echo $mod_strings['LBL_SUBJECT'];?></b><?php echo $subject;?></td></tr>
-	<tr><td align="left" width="100%"><b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo $date;?>
+                                                <tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_SUBJECT'];?></b><?php echo $subject;?></td></tr>
+	<tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo $date;?>
         <?php if(!$_REQUEST['fullview']) {?>
-        <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span></td>
+        <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span>
         <?php } ?>
-	<tr>
-	<?php if($_REQUEST['fullview'] && $email->has_attachments) {?>
-		<td align="left"><b><?php echo $mod_strings['LBL_ATTACHMENT'];?>:</b><?php echo $attachment_links;?></td>
-	<?php } ?>
+	</td>
 	</tr>
+	<?php if(isset($_REQUEST['fullview']) && $attachment_links != '') {?>
+	<tr>
+		<td align="left">&nbsp;<b><?php echo $mod_strings['LBL_ATTACHMENT'];?>:</b><?php echo $attachment_links;?></td>
+	</tr>
+	<?php } ?>
+	
                                                 <tr><td align="left" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
                                         </table>
                                         <!-- Table to display the Header details (From, To, Subject and date) - Ends -->
@@ -98,9 +101,9 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 //Need to put this along with the subject block*/
 echo $email->att;
 if(!$_REQUEST['fullview'])
-	echo '<div style="overflow:auto;height:410px;">';
+	echo '<div style="overflow:auto;height:400px;padding:5;">';
 else
-	echo '<div style="overflow:auto;height:450px;">';
+	echo '<div style="overflow:auto;height:460px;padding:5;">';
 echo $content['body'];
 
 //test added by Richie

@@ -17,7 +17,8 @@ function show_msg($mails,$start_message)
 
 	$num = $mails[$start_message]->msgno;
 	$msg_ob = new Webmails($MailBox->mbox,$mails[$start_message]->msgno);
-
+	$attach_tab = Array();
+	$msg_ob->loadMail($attach_tab);
 	// TODO: scan the current db vtiger_tables to find a
 	// matching email address that will make a good
 	// candidate for record_id
@@ -55,8 +56,8 @@ function show_msg($mails,$start_message)
 
 
         // Attachment Icons
-        if($msg_ob->has_attachments)
-                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="13px" title="Attachment"></a>&nbsp;';
+        if(count($msg_ob->attname) > 0)
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="14" title="Attachment"></a>&nbsp;';
         else
                 $flags.='<img src="themes/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
 
