@@ -1237,8 +1237,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 13 || $uitype == 104)
         {
-		//if(useInternalMailer() == 1)
-		//{
+		if($fieldname == "email" || $fieldname == "email1")
+		{
 			//check added for email link in user detailview
 			if($module == "Users")
 				$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=104;";
@@ -1248,9 +1248,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 			$fieldid = $adb->query_result($queryres,0,'fieldid');
 			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$module.'\',\'record_id\')">'.$temp_val.'</a>';
-		//}
-		//else
-                //	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
+		}
+		else
+                	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
+		
         }
 	elseif($uitype == 56)
 	{

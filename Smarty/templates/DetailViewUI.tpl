@@ -33,7 +33,11 @@
                                                   </td>
                                              {elseif $keyid eq '13' || $keyid eq '104'} <!--Email-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
+								{if $keyfldname == 'email' || $keyfldname == 'email1'}
 								<a href="javascript:InternalMailer({$ID},{$FIELD_ID},'{$MODULE}','record_id')">{$keyval}</a>
+								{else}
+								<a href="mailto:{$keyval}" target="_blank" >{$keyval}</a>
+								{/if}
 							</span>
                                               		<div id="editarea_{$label}" style="display:none;">
                                               		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval|escape}"></input>
