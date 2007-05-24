@@ -248,7 +248,7 @@ class Accounts extends CRMEntity {
 			$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_activity.*,
-			vtiger_seactivityrel.*,
+			vtiger_seactivityrel.*, vtiger_cntactivityrel.*,vtiger_contactdetails.lastname,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
 			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
@@ -258,6 +258,10 @@ class Accounts extends CRMEntity {
 				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+		       		ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT OUTER JOIN vtiger_recurringevents

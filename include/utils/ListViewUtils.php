@@ -79,7 +79,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{	
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+		if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
 		{
                   $fieldname = 'contact_id';
 		}
@@ -137,7 +137,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 		{
                        	 		$fieldname = 'account_id';
                 		}
-				if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+				if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar') )
 				{
                                         $fieldname = 'contact_id';
 				}
@@ -150,6 +150,14 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}else
 		{
 			$fieldname = $focus->list_fields_name[$name];
+			if($fieldname == 'accountname')
+			{
+				$fieldname = 'account_id';
+			}
+			if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+			{
+				$fieldname = 'contact_id';
+			}
 		}
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 		{
@@ -532,7 +540,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+		if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
                        $fieldname = 'contact_id';
 
 		if($j != 0)
@@ -649,14 +657,27 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                 	{
                                         	$fieldname = 'account_id';
                                 	}
-					if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ) )
+					if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
         	                                $fieldname = 'contact_id';
 
+				}else
+				{
+					$fieldname = $focus->list_fields_name[$name];
+				}
+			}else
+			{
+				$fieldname = $focus->list_fields_name[$name];
+				if($fieldname == 'accountname')
+				{
+					$fieldname = 'account_id';
+				}
+				if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+				{
+					$fieldname = 'contact_id';
 				}
 			}
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 			{
-
 
 				if($fieldname == '')
 				{
@@ -1236,9 +1257,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
 	}
 	elseif($uitype == 13 || $uitype == 104)
-        {
+	 {
 		if($fieldname == "email" || $fieldname == "email1")
-		{
+		{	
 			//check added for email link in user detailview
 			if($module == "Users")
 				$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=104;";
@@ -1250,8 +1271,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$module.'\',\'record_id\')">'.$temp_val.'</a>';
 		}
 		else
-                	$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
-		
+			$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
+
         }
 	elseif($uitype == 56)
 	{
