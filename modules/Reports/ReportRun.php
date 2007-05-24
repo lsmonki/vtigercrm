@@ -105,6 +105,7 @@ class ReportRun extends CRMEntity
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
 					{
+						if($selectedfields[0] != 'vtiger_usersAccounts' && $this->primarymodule != 'Products')
 						$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end as ".$this->primarymodule."_Assigned_To";
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
@@ -114,6 +115,10 @@ class ReportRun extends CRMEntity
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
 						$columnslist[$fieldcolname] = "vtiger_crmentity.".$selectedfields[1]." AS '".$selectedfields[2]."'";
+					}
+				       else if($selectedfields[0] == 'vtiger_accountPotentials' && $selectedfields[4] == 'V')
+					{
+						 $selectedfields[4] == 'I';
 					}
 					else
 					{
@@ -390,7 +395,13 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				}
 				elseif($selectedfields[0] == "vtiger_users".$this->primarymodule && $selectedfields[1] == 'user_name')
 				{
-					$fieldvalue = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
+					if($this->primarymodule == 'Products')
+					{
+						$fieldvalue = ($selectedfields[0].".user_name ".$this->getAdvComparator($comparator,trim($value),$datatype));
+					}else
+					{
+						$fieldvalue = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
+					}
 				}
 				elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 				{
@@ -455,14 +466,14 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				{
 					if($startdate != "0000-00-00" && $enddate != "0000-00-00")
 					{
-						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";
+						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:59'";
 					}
 				}else
 				{
 					$startenddate = $this->getStandarFiltersStartAndEndDate($datefilter);
 					if($startenddate[0] != "" && $startenddate[1] != "")
 					{
-						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:00'";
+						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:59'";
 					}
 				}
 
@@ -491,7 +502,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 			{
 				if($startdate != "" && $enddate != "")
 				{
-					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";
+					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 				}
 			}else
 			{
@@ -800,7 +811,6 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 			$datevalue[0] = "";
 			$datevalue[1] = "";
 		}
-
 		return $datevalue;
 	}
 
