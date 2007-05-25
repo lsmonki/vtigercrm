@@ -1984,6 +1984,11 @@
 
 <table name="vtiger_leadgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_leadgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_leadgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_leadgrouprelation FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2005,6 +2010,11 @@
 
 <table name="vtiger_accountgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_accountgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2026,6 +2036,11 @@
 
 <table name="vtiger_contactgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_contactgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_contactgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2047,6 +2062,11 @@
 
 <table name="vtiger_potentialgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_potentialgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_potentialgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2068,6 +2088,11 @@
 
 <table name="vtiger_campaigngrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_campaigngrouprelation FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_campaigngrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_campaigngrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2092,6 +2117,11 @@
 
 <table name="vtiger_activitygrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_activitygrouprelation FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_activitygrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_activitygrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -2116,6 +2146,11 @@
 
 <table name="vtiger_ticketgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_ticketgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_ticketgrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_ticketgrouprelation FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -3446,6 +3481,11 @@
 
 <table name="vtiger_sogrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_sogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_sogrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -3810,6 +3850,11 @@
 
 <table name="vtiger_quotegrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_quotegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_quotegrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -3900,6 +3945,11 @@
 
 <table name="vtiger_pogrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_pogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_pogrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
@@ -4032,6 +4082,11 @@
 
 <table name="vtiger_invoicegrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_invoicegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+<opt>Type=InnoDB</opt>
+<data>
+</data>
+</table>
+<table name="vtiger_invoicegrouprelation" alter="true">
 <constraint>ADD CONSTRAINT fk_2_vtiger_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
