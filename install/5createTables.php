@@ -99,6 +99,10 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
+//Added to give permission to move install directory/file
+@chmod("install/",0777);
+@chmod("install.php",0777);
+
 //@rename("install.php", $renamefile."install.php.txt");
 if(!rename("install.php", $renamefile."install.php.txt"))
 {
