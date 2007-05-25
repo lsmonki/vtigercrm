@@ -28,7 +28,7 @@ function qcemptyCheck(fldName,fldLabel, fldType) {
             	
 		return true
 	} else {
-		if (currObj.value == "" ) {
+		if (trim(currObj.value) == "" ) {
 
 	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
 
