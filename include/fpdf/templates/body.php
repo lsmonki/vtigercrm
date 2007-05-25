@@ -166,7 +166,7 @@ else
 
 	//For alignment
 	if($final_price_discount_percent != '')
-		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent                                                 ".$price_discount."";
+		$data= $app_strings['LBL_DISCOUNT'].":   $final_price_discount_percent";//                                                 ".$price_discount."";
 	else
 		$data= $app_strings['LBL_DISCOUNT'].":";//                                                                   ".$price_discount."";
 
