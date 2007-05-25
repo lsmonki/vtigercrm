@@ -330,6 +330,82 @@ ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_products:
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
+//Make the Closed Lost as non editable in Sales Stage
+ExecuteQuery("update vtiger_sales_stage set presence=0 where sales_stage='Closed Lost'");
+
+//Added to fix the issues in group to entity relationship
+$adb->query("ALTER TABLE vtiger_leadgrouprelation DROP FOREIGN KEY fk_1_vtiger_leadgrouprelation");
+$adb->query("ALTER TABLE vtiger_leadgrouprelation DROP FOREIGN KEY fk_2_vtiger_leadgrouprelation");
+
+$adb->query("ALTER TABLE vtiger_accountgrouprelation DROP FOREIGN KEY fk_1_vtiger_accountgrouprelation");
+$adb->query("ALTER TABLE vtiger_accountgrouprelation DROP FOREIGN KEY fk_2_vtiger_accountgrouprelation");
+
+$adb->query("ALTER TABLE vtiger_contactgrouprelation DROP FOREIGN KEY fk_1_vtiger_contactgrouprelation");
+$adb->query("ALTER TABLE vtiger_contactgrouprelation DROP FOREIGN KEY fk_2_vtiger_contactgrouprelation");
+
+$adb->query("ALTER TABLE vtiger_potentialgrouprelation DROP FOREIGN KEY fk_1_vtiger_potentialgrouprelation");
+$adb->query("ALTER TABLE vtiger_potentialgrouprelation DROP FOREIGN KEY fk_2_vtiger_potentialgrouprelation");
+
+$adb->query("ALTER TABLE vtiger_campaigngrouprelation DROP FOREIGN KEY fk_1_vtiger_campaigngrouprelation");
+$adb->query("ALTER TABLE vtiger_campaigngrouprelation DROP FOREIGN KEY fk_2_vtiger_campaigngrouprelation");
+
+$adb->query("ALTER TABLE vtiger_activitygrouprelation DROP FOREIGN KEY fk_1_vtiger_activitygrouprelation");
+$adb->query("ALTER TABLE vtiger_activitygrouprelation DROP FOREIGN KEY fk_2_vtiger_activitygrouprelation");
+
+$adb->query("ALTER TABLE vtiger_ticketgrouprelation DROP FOREIGN KEY fk_1_vtiger_ticketgrouprelation");
+$adb->query("ALTER TABLE vtiger_ticketgrouprelation DROP FOREIGN KEY fk_2_vtiger_ticketgrouprelation");
+
+$adb->query("ALTER TABLE vtiger_sogrouprelation DROP FOREIGN KEY fk_1_vtiger_sogrouprelation");
+$adb->query("ALTER TABLE vtiger_sogrouprelation DROP FOREIGN KEY fk_2_vtiger_sogrouprelation");
+
+$adb->query("ALTER TABLE vtiger_quotegrouprelation DROP FOREIGN KEY fk_1_vtiger_quotegrouprelation");
+$adb->query("ALTER TABLE vtiger_quotegrouprelation DROP FOREIGN KEY fk_2_vtiger_quotegrouprelation");
+
+
+$adb->query("ALTER TABLE vtiger_pogrouprelation DROP FOREIGN KEY fk_1_vtiger_pogrouprelation");
+$adb->query("ALTER TABLE vtiger_pogrouprelation DROP FOREIGN KEY fk_2_vtiger_pogrouprelation");
+
+
+$adb->query("ALTER TABLE vtiger_invoicegrouprelation DROP FOREIGN KEY fk_1_vtiger_invoicegrouprelation");
+$adb->query("ALTER TABLE vtiger_invoicegrouprelation DROP FOREIGN KEY fk_2_vtiger_invoicegrouprelation");
+
+
+
+
+ExecuteQuery("ALTER TABLE vtiger_leadgrouprelation ADD CONSTRAINT fk_1_vtiger_leadgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_leadgrouprelation ADD CONSTRAINT fk_2_vtiger_leadgrouprelation FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_accountgrouprelation ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_accountgrouprelation ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_contactgrouprelation ADD CONSTRAINT fk_1_vtiger_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_contactgrouprelation ADD CONSTRAINT fk_2_vtiger_contactgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_potentialgrouprelation ADD CONSTRAINT fk_1_vtiger_potentialgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_potentialgrouprelation ADD CONSTRAINT fk_2_vtiger_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_campaigngrouprelation ADD CONSTRAINT fk_1_vtiger_campaigngrouprelation FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_campaigngrouprelation ADD CONSTRAINT fk_2_vtiger_campaigngrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_activitygrouprelation ADD CONSTRAINT fk_1_vtiger_activitygrouprelation FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_activitygrouprelation ADD CONSTRAINT fk_2_vtiger_activitygrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_ticketgrouprelation ADD CONSTRAINT fk_1_vtiger_ticketgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_ticketgrouprelation ADD CONSTRAINT fk_2_vtiger_ticketgrouprelation FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_sogrouprelation ADD CONSTRAINT fk_1_vtiger_sogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_sogrouprelation ADD CONSTRAINT fk_2_vtiger_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE");
+
+ExecuteQuery("ALTER TABLE vtiger_quotegrouprelation ADD CONSTRAINT fk_1_vtiger_quotegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_quotegrouprelation ADD CONSTRAINT fk_2_vtiger_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE");
+
+
+ExecuteQuery("ALTER TABLE vtiger_pogrouprelation ADD CONSTRAINT fk_1_vtiger_pogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_pogrouprelation ADD CONSTRAINT fk_2_vtiger_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE");
+
+
+ExecuteQuery("ALTER TABLE vtiger_invoicegrouprelation ADD CONSTRAINT fk_1_vtiger_invoicegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_invoicegrouprelation ADD CONSTRAINT fk_2_vtiger_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE");
 
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");
