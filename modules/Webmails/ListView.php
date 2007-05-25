@@ -323,7 +323,7 @@ else {
 			$num_searches = count($searchlist);
 			$c=$numEmails;
 		}
-
+		$search_count = $num_searches;
 		while ($i<=$c) {
 			if(is_array($searchlist)) {
 				for($l=0;$l<$num_searches;$l++) {
@@ -437,7 +437,10 @@ $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("FOLDER_SELECT", $boxes);
-$smarty->assign("NUM_EMAILS", $numEmails);
+if(isset($_REQUEST['search']))
+	$smarty->assign("NUM_EMAILS", $search_count);
+else
+	$smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $MailBox->mailbox);
 $smarty->assign("ACCOUNT", $MailBox->display_name);
 $smarty->assign("BOXLIST",$folders);
