@@ -57,7 +57,7 @@ function show_msg($mails,$start_message)
 
         // Attachment Icons
         if(count($msg_ob->attname) > 0)
-                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="14" title="Attachment"></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="13" title="Attachment"></a>&nbsp;';
         else
                 $flags.='<img src="themes/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
 
