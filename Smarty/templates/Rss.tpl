@@ -118,7 +118,7 @@ function SaveRssFeeds()
 									<!-- Feed Folders -->
 										<table border=0 cellspacing=0 cellpadding=0 width=100%>
 										<tr><td class="small mailSubHeader" height="25"><b>{$MOD.LBL_FEED_SOURCES}</b></td></tr>
-										<tr><td class="hdrNameBg" bgcolor="#fff" height=155><div id="rssfolders" style="height:100%;overflow:auto;">{$RSSFEEDS}</div></td></tr>
+										<tr><td class="hdrNameBg" bgcolor="#fff" height=225><div id="rssfolders" style="height:100%;overflow:auto;">{$RSSFEEDS}</div></td></tr>
 										</table>
 									</td>
 									<td width=1%>&nbsp;</td>
