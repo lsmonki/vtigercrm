@@ -60,7 +60,7 @@ else
 <tr><td width="100%" align="left">&nbsp;<b><?php echo $mod_strings['LBL_CC'];?></b><?php echo $cc;?></td></tr>
 
                                                 <tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_SUBJECT'];?></b><?php echo $subject;?></td></tr>
-	<tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo $date;?>
+	<tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo substr($date,0,25);?>
         <?php if(!$_REQUEST['fullview']) {?>
         <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span>
         <?php } ?>
@@ -103,7 +103,7 @@ echo $email->att;
 if(!$_REQUEST['fullview'])
 	echo '<div style="overflow:auto;height:400px;padding:5;">';
 else
-	echo '<div style="overflow:auto;height:460px;padding:5;">';
+	echo '<div style="padding:5;">';
 echo $content['body'];
 
 //test added by Richie
