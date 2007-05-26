@@ -201,6 +201,11 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+// Added to set product active when creating a new product
+$mode=$focus->mode;
+if($mode != "edit" && $_REQUEST['isDuplicate'] != "true")
+$smarty->assign("PROD_MODE", "create");
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
