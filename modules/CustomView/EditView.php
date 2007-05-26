@@ -333,10 +333,15 @@ function getStdFilterHTML($module,$selected="")
 	{
 		foreach($result as $key=>$value)
 		{
+			if($value == 'Start Date & Time')
+			{
+				$value = 'Start Date';
+			}
 			if(isset($mod_strings[$value]))
 			{
 				if($key == $selected)
 				{
+
 					$filter['value'] = $key;
 					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
 					$filter['selected'] = "selected";
@@ -347,19 +352,19 @@ function getStdFilterHTML($module,$selected="")
 					$filter['selected'] ="";
 				}
 			}else
-			{
-				if($key == $selected)
 				{
-					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-					$filter['selected'] = 'selected';
-				}else
-				{
-					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-					$filter['selected'] ='';
+					if($key == $selected)
+					{
+						$filter['value'] = $key;
+						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+						$filter['selected'] = 'selected';
+					}else
+					{
+						$filter['value'] = $key;
+						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+						$filter['selected'] ='';
+					}
 				}
-			}
 			$stdfilter[]=$filter;
 		}
 	}
