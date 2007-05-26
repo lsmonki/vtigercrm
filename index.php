@@ -651,7 +651,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
 		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.0.3</span></td>";
-		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2007 <a href='http://www.vtiger.com'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span></td></tr></table>";
+		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2007 <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
