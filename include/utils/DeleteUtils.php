@@ -201,6 +201,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "update vtiger_products set vendor_id = null where productid = $record";
 			$adb->query($sql);
 		}
+		//we have to update the product_id as null for the campaigns which are related to this product
+		$adb->query("update vtiger_campaign set product_id=NULL where product_id = $record");
 	break;
 	case PurchaseOrder:
 
@@ -434,7 +436,6 @@ function delAccRelRecords($record){
 	}*/
 	//Deleting Contact-Account Relation.
 	$con_q = "update vtiger_contactdetails set accountid = null where accountid = ".$record;
-	$con_res = $adb->query($con_q);
 	$adb->query($con_q);
 
 	//Deleting Trouble Tickets-Account Relation.
