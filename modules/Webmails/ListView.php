@@ -254,7 +254,10 @@ if(!isset($_REQUEST["search"])) {
 		}
 	}
 }
-
+if(isPermitted('Contacts','EditView','') == 'yes')
+        $show_qualify = "yes";
+else
+	$show_qualify = "no";
 $overview=$elist["overview"];
 ?>
 <!-- MAIN MSG LIST TABLE -->
@@ -265,6 +268,7 @@ $overview=$elist["overview"];
 var msgCount = "<?php echo $numEmails;?>";
 var start = "<?php echo $_REQUEST['start'];?>";
 var gselected_mail = '';
+var showQualify = "<?php echo $show_qualify;?>";
 <?php
 $mails = array();
 if (is_array($overview))

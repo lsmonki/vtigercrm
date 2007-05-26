@@ -79,7 +79,8 @@ function load_webmail(mid) {
         $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'forward\')'}));
 
         $("qualify_button").removeChild($("qualify_button").firstChild);
-        $("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
+	if(showQualify == 'yes')
+        	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
 
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
         $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
