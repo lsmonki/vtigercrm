@@ -2792,10 +2792,10 @@ foreach($customview_query_array as $query)
 $query_array2 = Array(
 				//"INSERT INTO vtiger_parenttabrel VALUES(2,4,2)",
 				//"INSERT INTO vtiger_parenttabrel VALUES(2,6,3)",
-				"update vtiger_cvcolumnlist set columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
+				"update vtiger_cvcolumnlist set columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where columnname='vtiger_crmentity:smownerid:assigned_user_id:Emails_Assigned_To:V'",
 				"update vtiger_field set sequence = 2 where columnname='filename' and tablename = 'vtiger_attachments'",
 				"delete from vtiger_cvcolumnlist where columnname = 'vtiger_seactivityrel:crmid:parent_id:Emails_Related_To:I'",
-				"update vtiger_cvcolumnlist set columnindex = 1 where cvid=20 and columnindex=3",
+				//"update vtiger_cvcolumnlist set columnindex = 1 where cvid=20 and columnindex=3",
 				"update vtiger_field set info_type='ADV' where tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
 				"update vtiger_field set info_type='ADV' where tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
 

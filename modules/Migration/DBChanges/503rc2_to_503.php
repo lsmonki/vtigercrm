@@ -11,7 +11,9 @@
 
 
 //5.0.3 RC2 to 5.0.3 database changes - added on 29-03-07
-global $adb;
+//we have to use the current object (stored in PatchApply.php) to execute the queries
+$adb = $_SESSION['adodb_current_object'];
+$conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Starts \n\n");
 
@@ -406,6 +408,39 @@ ExecuteQuery("ALTER TABLE vtiger_pogrouprelation ADD CONSTRAINT fk_2_vtiger_pogr
 
 ExecuteQuery("ALTER TABLE vtiger_invoicegrouprelation ADD CONSTRAINT fk_1_vtiger_invoicegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE");
 ExecuteQuery("ALTER TABLE vtiger_invoicegrouprelation ADD CONSTRAINT fk_2_vtiger_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE");
+
+//For emails listview, we have to update the column sender
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where columnname='vtiger_crmentity:smownerid:assigned_user_id:Emails_Assigned_To:V'");
+
+//if is_admin is set as 0 then we have to update as off and update status as Active if the status is NULL
+ExecuteQuery("update vtiger_users set is_admin='off' where is_admin='0'");
+ExecuteQuery("update vtiger_users set status='Active' where status is NULL");
+
+//Update the City, State, Zip and Country to Mailing City, State, Zip and Country
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactaddress:mailingcity:mailingcity:Contacts_Mailing_City:V' where columnname='vtiger_contactaddress:mailingcity:mailingcity:Contacts_City:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactaddress:mailingstate:mailingstate:Contacts_Mailing_State:V' where columnname='vtiger_contactaddress:mailingstate:mailingstate:Contacts_State:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactaddress:mailingzip:mailingzip:Contacts_Mailing_Zip:V' where columnname='vtiger_contactaddress:mailingzip:mailingzip:Contacts_Zip:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactaddress:mailingcountry:mailingcountry:Contacts_Mailing_Country:V' where columnname='vtiger_contactaddress:mailingcountry:mailingcountry:Contacts_Country:V'");
+
+//Added Attachments and Quote stage history in Quotes relatedlist
+ExecuteQuery("update vtiger_relatedlists set sequence=4 where tabid=20 and name='get_history'");
+ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtiger_relatedlists').",20,0,'get_attachments',3,'Attachments',0), (".$adb->getUniqueID('vtiger_relatedlists').",20,0,'get_quotestagehistory',5,'Quote Stage History',0)");
+
+//Added SalesOrder Status History in SalesOrder relatedlist
+ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtiger_relatedlists').",22,0,'get_sostatushistory',5,'SalesOrder Status History',0)");
+
+//Added PurchaseOrder Status History in PurchaseOrder relatedlist
+ExecuteQuery("insert into vtiger_relatedlists values (".$adb->getUniqueID('vtiger_relatedlists').",21,0,'get_postatushistory',4,'PurchaseOrder Status History',0)");
+
+//Update SalesOrder Id as SalesOrder No for default All SalesOrder customview (only All customview has this field)
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_crmentity:crmid::SalesOrder_Order_No:I' where columnname='vtiger_crmentity:crmid::SalesOrder_Order_Id:I'");
+
+//Update PurchaseOrder Id as Purchase No for default All PurchaseOrder customview (only All customview has this field)
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_crmentity:crmid::PurchaseOrder_Order_No:I' where columnname='vtiger_crmentity:crmid::PurchaseOrder_Order_Id:I'");
+
+
+
+
 
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");

@@ -11,7 +11,9 @@
 
 
 //5.0.2 database changes - added on 27-10-06
-global $adb;
+//we have to use the current object (stored in PatchApply.php) to execute the queries
+$adb = $_SESSION['adodb_current_object'];
+$conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.0.1 to 5.0.2 -------- Starts \n\n");
 

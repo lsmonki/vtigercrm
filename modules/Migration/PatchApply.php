@@ -49,6 +49,17 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 	echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
 }
 
+//Here we have to decide the database object to which we have to run the migration queries
+//For options 1 and 2 we need to execute the queries in current database ie., adb object
+//But for option 3, we have to run the queries in given 4.2.3 database ie., conn object
+//This session variable should be used in all patch files(which contains the queries) so that based on the option selected the queries will be executed in the corresponding database. ie., in all patch files we have to assign this session object to adb and conn objects
+global $adb;
+if($_REQUEST['migration_option'] == 'alter_db_details')
+	$_SESSION['adodb_current_object'] = $conn;
+else
+	$_SESSION['adodb_current_object'] = $adb;
+
+
 for($i=0;$i<count($temp);$i++)
 {
 	//Here we have to include all the files (all db differences for each release will be included)
