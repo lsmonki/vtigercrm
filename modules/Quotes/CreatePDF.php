@@ -63,19 +63,19 @@ $add_query = "select * from vtiger_organizationdetails";
 $result = $adb->query($add_query);
 $num_rows = $adb->num_rows($result);
 
-if($num_rows == 1)
+if($num_rows > 0)
 {
-		$org_name = $adb->query_result($result,0,"organizationname");
-		$org_address = $adb->query_result($result,0,"address");
-		$org_city = $adb->query_result($result,0,"city");
-		$org_state = $adb->query_result($result,0,"state");
-		$org_country = $adb->query_result($result,0,"country");
-		$org_code = $adb->query_result($result,0,"code");
-		$org_phone = $adb->query_result($result,0,"phone");
-		$org_fax = $adb->query_result($result,0,"fax");
-		$org_website = $adb->query_result($result,0,"website");
+	$org_name = $adb->query_result($result,0,"organizationname");
+	$org_address = $adb->query_result($result,0,"address");
+	$org_city = $adb->query_result($result,0,"city");
+	$org_state = $adb->query_result($result,0,"state");
+	$org_country = $adb->query_result($result,0,"country");
+	$org_code = $adb->query_result($result,0,"code");
+	$org_phone = $adb->query_result($result,0,"phone");
+	$org_fax = $adb->query_result($result,0,"fax");
+	$org_website = $adb->query_result($result,0,"website");
 
-		$logo_name = $adb->query_result($result,0,"logoname");
+	$logo_name = $adb->query_result($result,0,"logoname");
 }
 
 
