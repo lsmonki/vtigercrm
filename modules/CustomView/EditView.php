@@ -425,10 +425,9 @@ function changeTypeOfData($field)
 "vtiger_account:parentid:account_id:Accounts_Member_Of:I"=>"vtiger_account:parentid:account_id:Accounts_Member_Of:V",
 "vtiger_leaddetails:email:email:Leads_Email:E"=>"vtiger_leaddetails:email:email:Leads_Email:V",
 "vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:E"=>"vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:V",
-"vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:I"=>"vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:C",
+"vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:I"=>"vtiger_activity_reminder:reminder_time:reminder_time:Calendar_Send_Reminder:T",
 "vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:I"=>"vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:V",
 "vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I"=>"vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V",
-"vtiger_activity:visibility:visibility:Calendar_Visibility:V"=>"vtiger_activity:visibility:visibility:Calendar_Visibility:C",
 "vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I"=>"vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V",
 "vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:N"=>"vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:V",
 "vtiger_account:accountname:accountname:Accounts_Member_Of:I"=>"vtiger_account:accountname:accountname:Accounts_Member_Of:V",
@@ -451,15 +450,12 @@ function changeTypeOfData($field)
 "vtiger_vendor:email:email:Vendors_Email:E"=>"vtiger_vendor:email:email:Vendors_Email:V",
 "vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I"=>"vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:V",
 "vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:I"=>"vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:V",
-
-
         "vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
-
         "vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
-	"vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
+	"vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:T",
 	"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V",
 	"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:V",
-
+"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:O"=>"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V",
 			  );
 
 	if(isset($new_field_details[$field]))
