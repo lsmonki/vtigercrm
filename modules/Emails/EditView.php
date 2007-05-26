@@ -113,6 +113,8 @@ if($_REQUEST["internal_mailer"] == "true") {
 			$q = "select email as email1 from vtiger_contactdetails where contactid='".$rec_id."'";
 		elseif ($type == "Accounts")
 			$q = "select email1,email2 from vtiger_account where accountid='".$rec_id."'";
+		elseif ($type == "Vendors")
+			$q = "select email as email1 from vtiger_vendor where vendorid='".$rec_id."'";
 		$email1 = $adb->query_result($adb->query($q),0,"email1");
 	} elseif ($rec_type == "email_addy") {
 		$email1 = $_REQUEST["email_addy"];
@@ -168,7 +170,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 		$smarty->assign('TO_MAIL',$webmail->from);	
 		//added to remove the emailid of webmail client from cc list....to fix the issue #3818
                 $cc_address = '';
-                $cc_array = explode(',',$hdr->ccaddress);
+                $cc_array = explode(',',$webmail->to[0].','.$hdr->ccaddress);
                 for($i=0;$i<count($cc_array);$i++) {
                         if(trim($cc_array[$i]) != trim($temp_id)) {
                                 $cc_address .= $cc_array[$i];

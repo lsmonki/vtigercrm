@@ -105,6 +105,18 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	$realid=explode("@",$myids[$i]);
 	$nemail=count($realid);
 	$mycrmid=$realid[0];
+	if($realid[1] == -1)
+        {
+                //handle the mail send to vtiger_users
+                $emailadd = $adb->query_result($adb->query("select email1 from vtiger_users where id=$mycrmid"),0,'email1');
+                $pmodule = 'Users';
+                $description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
+                $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+                $all_to_emailids []= $emailadd;
+                $mail_status_str .= $emailadd."=".$mail_status."&&&";
+        }
+        else
+        {
 		//Send mail to vtiger_account or lead or contact based on their ids
 		$pmodule=getSalesEntityType($mycrmid);
 		for ($j=1;$j<$nemail;$j++)
@@ -130,6 +142,12 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				$myfocus = new Leads();
 				$myfocus->retrieve_entity_info($mycrmid,"Leads");
 			}
+			elseif ($pmodule=='Vendors')
+                        {
+                                require_once('modules/Vendors/Vendors.php');
+                                $myfocus = new Vendors();
+                                $myfocus->retrieve_entity_info($mycrmid,"Vendors");
+                        }
 			$fldname=$adb->query_result($fresult,0,"columnname");
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
 
@@ -152,7 +170,8 @@ for ($i=0;$i<(count($myids)-1);$i++)
 					$errorheader2 = 1;
 				}
 			}
-		}	
+		}
+	}	
 
 }
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
