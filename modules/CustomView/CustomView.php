@@ -940,7 +940,7 @@ class CustomView extends CRMEntity{
 			"vendor_id"=>"vtiger_vendor.vendorname",
 			"potentialid"=>"vtiger_potential.potentialname",
 
-			"vtiger_account.parentid"=>"vtiger_account2.accountname",
+			//"vtiger_account.parentid"=>"vtiger_account2.accountname",
 			"quoteid"=>"vtiger_quotes.subject",
 			"salesorderid"=>"vtiger_salesorder.subject",
 			"campaignid"=>"vtiger_campaign.campaignname",
@@ -968,7 +968,7 @@ class CustomView extends CRMEntity{
 		{
 			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		else if($fieldname == "crmid" || $fieldname == "parent_id")
+		else if($fieldname == "crmid" || $fieldname == "parent_id" || $fieldname == 'parentid')
 		{
 				$value = $this->getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname);
 		}
@@ -1010,29 +1010,100 @@ class CustomView extends CRMEntity{
 			$modulename=$adb->query_result($res,$s,"setype");
 			if($modulename == 'Accounts')
 			{
-				if($this->customviewmodule == 'Calendar')
+				if($this->customviewmodule == 'Accounts' || $this->customviewmodule == 'Calendar')
+				{
+					if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+					{
+						$value .= 'vtiger_account2.accountname IS NULL or ';
+					}
 					$value .= 'vtiger_account2.accountname';
+				}
 				else
+				{
+					if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+					{
+						$value .= 'vtiger_account.accountname IS NULL or ';
+					}
+
+					
 					$value .= 'vtiger_account.accountname';
-			}	
+				}
+			}
 			if($modulename == 'Leads')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= "concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) IS NULL or ";
+				}
 				$value .= "concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
+			}
 			if($modulename == 'Potentials')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+
+				$value .= 'vtiger_potential.potentialname IS NULL or ';
+				}
 				$value .= 'vtiger_potential.potentialname';
+			}
 			if($modulename == 'Products')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_products.productname IS NULL or ';
+				}
 				$value .= 'vtiger_products.productname';
+			}
 			if($modulename == 'Invoice')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_invoice.subject IS NULL or ';
+				}
 				$value .= 'vtiger_invoice.subject';
+			}
 			if($modulename == 'PurchaseOrder')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_purchaseorder.subject IS NULL or ';
+				}
 				$value .= 'vtiger_purchaseorder.subject';
+			}
 			if($modulename == 'SalesOrder')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_salesorder.subject IS NULL or ';
+				}
 				$value .= 'vtiger_salesorder.subject';
+			}
 			if($modulename == 'Quotes')
+			{
+
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_quotes.subject IS NULL or ';
+				}
 				$value .= 'vtiger_quotes.subject';
+			}
 			if($modulename == 'Contacts')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) IS NULL or ";
+				}
 				$value .= "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+			}
 			if($modulename == 'HelpDesk')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= 'vtiger_troubletickets.title IS NULL or ';
+				}
 				$value .= 'vtiger_troubletickets.title';
+
+			}
 
 			$value .= $this->getAdvComparator($comparator,$adv_chk_value,$datatype);
 		}
@@ -1194,10 +1265,7 @@ class CustomView extends CRMEntity{
 			}elseif(trim($value) != "")
 			{
 				$rtvalue = " = ".$adb->quote($value);
-			}elseif(trim($value) == "" && $datatype == "V")
-			{
-				$rtvalue = " = ".$adb->quote($value);	
-			}elseif(trim($value) == "" && $datatype == "E")
+			}elseif(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
 			{
 				$rtvalue = " = ".$adb->quote($value);	
 			}else
@@ -1226,15 +1294,33 @@ class CustomView extends CRMEntity{
 		}
 		if($comparator == "s")
 		{
-			$rtvalue = " like ".$adb->quote($value."%");
+			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
+			{
+				$rtvalue = " like ".$adb->quote($value);
+			}else
+			{
+				$rtvalue = " like ".$adb->quote($value."%");
+			}
 		}
 		if($comparator == "c")
 		{
-			$rtvalue = " like ".$adb->quote("%".$value."%");
+			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
+			{
+				$rtvalue = " like ".$adb->quote($value);
+			}else
+			{
+				$rtvalue = " like ".$adb->quote("%".$value."%");
+			}
 		}
 		if($comparator == "k")
 		{
-			$rtvalue = " not like ".$adb->quote("%".$value."%");
+			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
+			{
+				$rtvalue = " not like ''";
+			}else
+			{
+				$rtvalue = " not like ".$adb->quote("%".$value."%");
+			}
 		}
 		if($comparator == "l")
 		{
