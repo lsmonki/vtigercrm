@@ -20,9 +20,6 @@
    <a class="link"  align="right" href="javascript:;">{$APP.LBL_EDIT_BUTTON}</a>
 </span>
 
-{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
-{/if}
 
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
@@ -495,4 +492,7 @@ getTagCloud();
 
 	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 </tr></table>
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
+<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
+{/if}
 
