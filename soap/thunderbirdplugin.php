@@ -224,7 +224,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email->column_fields[subject] = $emailsubject;
 	$email->column_fields[assigned_user_id] = $user_id;
 	$email->column_fields[date_start] = $datesent;
-	$email->column_fields[description]  = htmlentities($emailbody);
+	$email->column_fields[description]  = $emailbody;
 	$email->column_fields[activitytype] = 'Emails';
 	$email->plugin_save = true;
 	$email->save("Emails");
