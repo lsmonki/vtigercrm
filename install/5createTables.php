@@ -99,26 +99,31 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
-//Added to give permission to move install directory/file
-@chmod("install/",0777);
-@chmod("install.php",0777);
-
 //@rename("install.php", $renamefile."install.php.txt");
-if(!rename("install.php", $renamefile."install.php.txt"))
+if(!@rename("install.php", $renamefile."install.php.txt"))
 {
-	if (copy ("install.php", $renamefile."install.php.txt"))
+	if (@copy ("install.php", $renamefile."install.php.txt"))
        	{
         	 unlink($renamefile."install.php.txt");
      	}
+	else
+	{
+		echo "<b><font color='red'>We strongly suggest you to rename the install.php file.</font></b>";
+	}
 }
 
 //@rename("install/", $renamefile."install/");
-if(!rename("install/", $renamefile."install/"))
+if(!@rename("install/", $renamefile."install/"))
 {
-	if (copy ("install/", $renamefile."install/"))
+	if (@copy ("install/", $renamefile."install/"))
        	{
         	 unlink($renamefile."install/");
      	}
+	else
+	{
+		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
+	}
+
 }
 //populate Calendar data
 
