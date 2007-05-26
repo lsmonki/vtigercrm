@@ -160,7 +160,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 19)
 	{
-		$col_fields[$fieldname]= make_clickable(str_replace("&lt;br /&gt;","<br>",$col_fields[$fieldname]));
+		$col_fields[$fieldname]= str_replace("&lt;br /&gt;","<br>",$col_fields[$fieldname]);
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
 	}
