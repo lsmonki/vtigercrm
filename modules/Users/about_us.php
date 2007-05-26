@@ -93,7 +93,6 @@ global $mod_strings;
 										<tr><td>Mani</td></tr>
 										<tr><td>Mickie</td></tr>
 										<tr><td>Minnie</td></tr>
-										<tr><td>Nithya</td></tr>
 										<tr><td>Philip</td></tr>
 										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
@@ -132,6 +131,7 @@ global $mod_strings;
 										<tr><td>Neil</td></tr>
 										<tr><td>Tim Smith</td></tr>
 										<tr><td>Sergio A. Kessler</td></tr>
+										<tr><td>Steve Fairchild</td></tr>
 										<tr><td>Valmir Carlos Trindade</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?> - <?php echo $mod_strings['LBL_THIRD_PARTY'];?></th></tr>
