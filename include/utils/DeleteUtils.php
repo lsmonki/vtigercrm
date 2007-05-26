@@ -99,6 +99,11 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		//remove the relationship of contacts with notes while deleting the contact
 		$adb->query("update vtiger_notes set contact_id=NULL where contact_id=".$record);
+		$adb->query("update vtiger_troubletickets set parent_id=NULL where parent_id=".$record);
+		$adb->query("update vtiger_purchaseorder set contactid=NULL where contactid=".$record);
+		$adb->query("update vtiger_salesorder set contactid=NULL where contactid=".$record);
+		$adb->query("update vtiger_quotes set contactid=NULL where contactid=".$record);
+		
 	break;
 	case Potentials:
 		if($return_module == 'Accounts')
