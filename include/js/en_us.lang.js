@@ -128,7 +128,7 @@
 				LBL_ENTER_VALID_PORT: 'Please enter valid port number',
 				IN_USERNAME :' in Username ',
 				LBL_ENTER_VALID_NO: 'Please enter valid number',
-				LBL_PROVIDE_YES_NO: ' Invalid value.\n Please Provide Yes or No'
-
+				LBL_PROVIDE_YES_NO: ' Invalid value.\n Please Provide Yes or No',
+				LBL_SELECT_CRITERIA: ' Invalid criteria.\n Please select criteria'
 
                        };

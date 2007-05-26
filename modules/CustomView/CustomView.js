@@ -137,7 +137,10 @@ function checkval()
 		if(option !="" && value !="")
 		{
 			if(getObj("fop"+i).selectedIndex == 0)
-				getObj("fop"+i).selectedIndex=1;
+			{
+				alert(alert_arr.LBL_SELECT_CRITERIA);
+				return false;
+			}
 			arr=option.split(":");
 			if(arr[4] == "N" || arr[4] == "I" || arr[4] == "NN")
 			{
