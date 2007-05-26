@@ -97,6 +97,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql_recentviewed ='delete from vtiger_tracker where user_id = '.$current_user->id.' and item_id = '.$record;
 			$adb->query($sql_recentviewed);
 		}
+		//remove the relationship of contacts with notes while deleting the contact
+		$adb->query("update vtiger_notes set contact_id=NULL where contact_id=".$record);
 	break;
 	case Potentials:
 		if($return_module == 'Accounts')
