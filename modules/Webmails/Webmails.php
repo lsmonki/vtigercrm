@@ -781,7 +781,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$link_att = '';
 		$att_links = '';//variable added to display the attachments in full email view
 		$conf->display_part_no = true;
-		if ($struct_msg->subtype != 'ALTERNATIVE' && $struct_msg->subtype != 'RELATED')
+		if ($struct_msg->subtype != 'ALTERNATIVE' || $struct_msg->subtype != 'RELATED')
 		{
 			switch (sizeof($attach_tab))
 			{

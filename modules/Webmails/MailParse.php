@@ -17,8 +17,6 @@ function show_msg($mails,$start_message)
 
 	$num = $mails[$start_message]->msgno;
 	$msg_ob = new Webmails($MailBox->mbox,$mails[$start_message]->msgno);
-	$attach_tab = Array();
-	$msg_ob->loadMail($attach_tab);
 	// TODO: scan the current db vtiger_tables to find a
 	// matching email address that will make a good
 	// candidate for record_id
@@ -56,7 +54,7 @@ function show_msg($mails,$start_message)
 
 
         // Attachment Icons
-        if(count($msg_ob->attname) > 0)
+        if($msg_ob->has_attachments)
                 $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachments.gif" border="0" width="8px" height="13" title="Attachment"></a>&nbsp;';
         else
                 $flags.='<img src="themes/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
@@ -143,7 +141,7 @@ function show_msg($mails,$start_message)
         if($mails[$start_message]->deleted)
                 $listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
         else
-                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
+                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="themes/bluelagoon/images/no.gif" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
 
 
         return $listview_entries[$num];
