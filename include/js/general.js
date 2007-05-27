@@ -241,7 +241,7 @@ function patternValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
 	if (type.toUpperCase()=="YAHOO") //Email ID validation
 	{
-		//yahoo Id validation	
+		//yahoo Id validation
 		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
 	}
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
@@ -772,7 +772,7 @@ function numConstComp(fldName,fldLabel,type,constval) {
 }
 
 function formValidate() {
-;
+
 //Validation for Portal User
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
@@ -781,6 +781,24 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		return false;
 	}
 }
+if(gVTModule == 'Contacts')
+{
+	if(getObj('imagename').value != '' )
+	{
+		var image_arr = new Array();
+		image_arr = (getObj('imagename').value).split(".");
+		if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") )
+		{
+			return true;
+		}
+		else
+		{
+			alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+			return false;
+		}
+	}
+}
+
 
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
@@ -887,11 +905,11 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 						{
 							var etype = "EMAIL"
 							if(fieldname[i] == "yahooid" || fieldname[i] == "yahoo_id")
-								{
- 								etype = "YAHOO"
-								}	
+							{
+								etype = "YAHOO";
+							}
 							if (!patternValidate(fieldname[i],fieldlabel[i],etype))
-								return false
+								return false;
 						}
 					}
 				break;
