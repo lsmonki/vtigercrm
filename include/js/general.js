@@ -239,6 +239,11 @@ function emptyCheck(fldName,fldLabel, fldType) {
 
 function patternValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
+	if (type.toUpperCase()=="YAHOO") //Email ID validation
+	{
+		//yahoo Id validation	
+		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+	}
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
@@ -769,7 +774,6 @@ function numConstComp(fldName,fldLabel,type,constval) {
 function formValidate() {
 ;
 //Validation for Portal User
-
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
 	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
@@ -882,8 +886,12 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 						if (getObj(fieldname[i]).value.length!=0)
 						{
 							var etype = "EMAIL"
-								if (!patternValidate(fieldname[i],fieldlabel[i],etype))
-									return false
+							if(fieldname[i] == "yahooid" || fieldname[i] == "yahoo_id")
+								{
+ 								etype = "YAHOO"
+								}	
+							if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+								return false
 						}
 					}
 				break;
