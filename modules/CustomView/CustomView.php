@@ -264,7 +264,7 @@ class CustomView extends CRMEntity{
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			if($fieldname == 'account_id' && $fieldtablename != 'vtiger_account')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name . But for account member of we have to avoid this
 				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'contact_id')//Calendar,Notes,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
+			else if($fieldname == 'contact_id' && $module != "Contacts")//Calendar,Notes,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
                                 $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else
 				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;

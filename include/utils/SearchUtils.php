@@ -141,8 +141,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 			if($fieldname!='parent_id')
 			{
 				$fld_name=$fieldname;
-				if($fieldname == 'contact_id')
+				if($fieldname == 'contact_id' && $module !="Contacts") 
 				$name = $app_strings['LBL_CONTACT_LAST_NAME'];
+				elseif($fieldname == 'contact_id' && $module =="Contacts") 
+				$name = $mod_strings['Reports To']." - ".$mod_strings['LBL_LIST_LAST_NAME'];
 				//assign the translated string
 				$search_header[$fld_name] = getTranslatedString($name);
 			}
@@ -353,6 +355,12 @@ function BasicSearch($module,$search_field,$search_string)
 				$table_name = "vtiger_account2";
 				$column_name = "accountname";
 			}
+			if($column_name == "reportsto" && $module == "Contacts")
+			{
+				$table_name = "vtiger_contactdetails2";
+				$column_name = "lastname";
+			}
+
 
 			//Added to support user date format in basic search	
 			if($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
@@ -368,8 +376,10 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				if(stristr($search_string,'yes'))
 					$where="$table_name.$column_name = '1'";
-				if(stristr($search_string,'no'))
+				elseif(stristr($search_string,'no'))
 					$where="$table_name.$column_name = '0'";
+				else
+					$where="$table_name.$column_name = '$search_string'";
 
 			}
 			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
@@ -389,6 +399,12 @@ function BasicSearch($module,$search_field,$search_string)
 				$where="$table_name.$column_name like '%".$search_string."%'";
 			}
 		}
+	}
+	if(stristr($where,"like '%%'"))
+	{
+		$where_cond0=str_replace("like '%%'","like ''",$where);
+		$where_cond1=str_replace("like '%%'","is NULL",$where);
+		$where = "(".$where_cond0." or ".$where_cond1.")";
 	}
 	if($_REQUEST['type'] == 'entchar')
 	{
@@ -581,22 +597,21 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 		case 'cts':
 			$where_string = $searchfield." like '%".$searchstring."%' ";
 			if($searchstring == NULL)
-				if($searchfield !='vtiger_products.productname')
-					$where_string = $searchfield." like ''";
-				else
-					$where_string = $searchfield." is NULL";
+			{
+					$where_string = "(".$searchfield." like '' or ".$searchfield." is NULL)";
+			}
 			break;
 		
 		case 'dcts':
 			$where_string = $searchfield." not like '%".$searchstring."%' ";
 			if($searchstring == NULL)
-			$where_string = $searchfield." not like ''";
+			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
 			
 		case 'is':
 			$where_string = $searchfield." = '".$searchstring."' ";
-			if($searchstring == NULL && $searchfield =='vtiger_products.productname')
-			$where_string = $searchfield." is NULL";
+			if($searchstring == NULL)
+			$where_string = "(".$searchfield." is NULL or ".$searchfield." = '')";
 			break;
 			
 		case 'isn':
@@ -677,8 +692,10 @@ function getWhereCondition($currentModule)
 			{
 				if(stristr($srch_val,'yes'))
                                         $adv_string .= " ".getSearch_criteria($srch_cond,"1",$tab_name.'.'.$column_name)." ".$matchtype;
-                                if(stristr($srch_val,'no'))
+                                elseif(stristr($srch_val,'no'))
                                         $adv_string .= " ".getSearch_criteria($srch_cond,"0",$tab_name.'.'.$column_name)." ".$matchtype;
+				else
+                                        $adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
 			}
 			elseif($tab_col == "vtiger_crmentity.smownerid")
 			{
