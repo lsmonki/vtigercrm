@@ -3450,7 +3450,7 @@ function getAccountId($account_name)
 		// for avoid single quotes error
 		$slashes_account_name = popup_from_html($account_name);
 
-		$sql = "select accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and accountname='".$slashes_account_name."'";
+		$sql = "select accountid from vtiger_account where accountname='".$slashes_account_name."'";
 		$result = $adb->query($sql);
 		$accountid = $adb->query_result($result,0,"accountid");
 	}
