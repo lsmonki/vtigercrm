@@ -81,7 +81,8 @@ function load_webmail(mid) {
         $("qualify_button").removeChild($("qualify_button").firstChild);
 	if(showQualify == 'yes')
         	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
-
+	else
+		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
         $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
 
