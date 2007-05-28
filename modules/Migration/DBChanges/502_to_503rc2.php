@@ -81,7 +81,16 @@ ExecuteQuery("ALTER TABLE vtiger_users MODIFY user_password varchar(32)");
 ExecuteQuery("delete from vtiger_field where tabid=14 and fieldname in ('parent_id','contact_id')");
 
 //Before drop the contactid from products, we have to save this product - contact relationship in seproductsrel table
-ExecuteQuery("insert into vtiger_seproductsrel (select contactid, productid from vtiger_products where contactid is not NULL)");
+//ExecuteQuery("insert into vtiger_seproductsrel (select contactid, productid from vtiger_products where contactid is not NULL)");
+//In above query, if there is any duplicate entry then execution stopped. So we will insert undeleted products one by one
+$product_contact_res = $adb->query("select contactid, productid from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid where vtiger_crmentity.deleted=0 and contactid != 0 and contactid is NOT NULL");
+for($i=0;$i<$adb->num_rows($product_contact_res);$i++)
+{
+	$crmid = $adb->query_result($product_contact_res,$i,'contactid');
+	$productid = $adb->query_result($product_contact_res,$i,'productid');
+
+	$adb->query("insert into vtiger_seproductsrel values ($crmid , $productid)");
+}
 ExecuteQuery("alter table vtiger_products drop column contactid");
 
 
