@@ -33,8 +33,7 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 }
 $sql = "select * from vtiger_emailtemplates where templateid=".$templateid;
 $result = $adb->query($sql);
-$emailtemplateResult = $adb->fetch_array($result);
-
+$emailtemplateResult = str_replace('"','&quot;',$adb->fetch_array($result));
 $smod_strings = return_module_language($current_language,'Settings');
 
 $smarty = new vtigerCRM_smarty;
