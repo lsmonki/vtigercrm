@@ -23,20 +23,36 @@ function updatefOptions(sel, opSelName) {
     
     var fld = currField.value.split(":");
     var tod = fld[4];
-    if(fld[4] == 'D' || (fld[4] == 'T' && fld[1] != 'time_start' && fld[1] != 'time_end') || fld[4] == 'DT')
+    if(fld[4] == 'D' || fld[4] == 'DT')
     {
-	$("and"+sel.id).innerHTML =  "";
-	if(sel.id != "fcol5")
-		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;"+alert_arr.LBL_AND;
-	else
-		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;";
+	    $("and"+sel.id).innerHTML =  "";
+	    if(sel.id != "fcol5")
+		    $("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;"+alert_arr.LBL_AND;
+	    else
+		    $("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;";
     }
+    else if(fld[4] == 'T' && fld[1] != 'time_start' && fld[1] != 'time_end')
+    {
+	    $("and"+sel.id).innerHTML =  "";
+	    if(sel.id != "fcol5")
+		    $("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+" hh:mm:ss)</em>&nbsp;"+alert_arr.LBL_AND;
+	    else
+		    $("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+" hh:mm:ss)</em>&nbsp;";
+    }
+    else if(fld[4] == 'C')
+    {
+	    $("and"+sel.id).innerHTML =  "";
+	    if(sel.id != "fcol5")
+		    $("and"+sel.id).innerHTML =  "( Yes / No )&nbsp;"+alert_arr.LBL_AND;
+	    else
+		    $("and"+sel.id).innerHTML =  "( Yes / No )&nbsp;";
+    } 
     else {
-	$("and"+sel.id).innerHTML =  "";
-	if(sel.id != "fcol5")
-		$("and"+sel.id).innerHTML =  "&nbsp;"+alert_arr.LBL_AND;
-	else
-		$("and"+sel.id).innerHTML =  "&nbsp;";
+	    $("and"+sel.id).innerHTML =  "";
+	    if(sel.id != "fcol5")
+		    $("and"+sel.id).innerHTML =  "&nbsp;"+alert_arr.LBL_AND;
+	    else
+		    $("and"+sel.id).innerHTML =  "&nbsp;";
     } 	
 
     if(currField.value != null && currField.value.length != 0)
@@ -129,7 +145,7 @@ function check4null(form)
 // Added for Custom View Advance Filter validation
 function checkval()
 {
-	var value,option,arr,dttime;
+	var value,option,arr,dttime,sep;
 	for(var i=1;i<=5;i++)
 	{
 		value=trim(getObj("fval"+i).value);
@@ -137,52 +153,73 @@ function checkval()
 		if(option !="" && value !="")
 		{
 			if(getObj("fop"+i).selectedIndex == 0)
-			{
-				alert(alert_arr.LBL_SELECT_CRITERIA);
-				return false;
-			}
+				{
+					alert(alert_arr.LBL_SELECT_CRITERIA);
+		        	        return false;	
+				}
 			arr=option.split(":");
 			if(arr[4] == "N" || arr[4] == "I" || arr[4] == "NN")
 			{
-				if(isNaN(value))
+				sep=value.split(",");
+				for(var j=0;j<sep.length;j++)
 				{
+					if(isNaN(sep[j]))
+					{
 					alert(alert_arr.LBL_ENTER_VALID_NO);
 					getObj("fval"+i).select();
 					return false;
+					}
+				
+	
 				}
 			}
 			if(arr[4] == "D")
 			{
-				if(!cv_dateValidate(trim(getObj("fval"+i).value),"Date","OTH"))
-				{
-					getObj("fval"+i).select();
-					return false;
+
+				sep=value.split(",");
+                                for(var j=0;j<sep.length;j++)
+                                {
+					if(!cv_dateValidate(trim(sep[j]),"Date","OTH"))
+					{
+						getObj("fval"+i).select();
+						return false;
+					}
 				}
 			}	
 			if(arr[4] == "T")
 			{
-				var dttime=value.split(" ");
-				if(!cv_dateValidate(dttime[0],"Date","OTH"))
-                                {
-                                        getObj("fval"+i).select();
-                                        return false;
-                                }
 
-
-				if(!cv_patternValidate(dttime[1],"Time","TIMESECONDS"))
+				sep=value.split(",");
+				for(var j=0;j<sep.length;j++)
 				{
-					getObj("fval"+i).select();
-					return false;
+					var dttime=sep[j].split(" ");
+					if(!cv_dateValidate(dttime[0],"Date","OTH"))
+					{
+						getObj("fval"+i).select();
+						return false;
+					}
+
+
+					if(!cv_patternValidate(dttime[1],"Time","TIMESECONDS"))
+					{
+						getObj("fval"+i).select();
+						return false;
+					}
 				}
 
 			}	
 			if(arr[4] == "C")
 			{
-				if(value.toLowerCase() != "yes") if(value.toLowerCase() != "no") 
-				{
-					alert(alert_arr.LBL_PROVIDE_YES_NO);
-					getObj("fval"+i).select();
-					return false;
+				sep=value.split(",");
+                                for(var j=0;j<sep.length;j++)
+                                {
+
+					if(sep[j].toLowerCase() != "yes") if(sep[j].toLowerCase() != "no") 
+					{
+						alert(alert_arr.LBL_PROVIDE_YES_NO);
+						getObj("fval"+i).select();
+						return false;
+					}
 				}
 			}	
 		}	
