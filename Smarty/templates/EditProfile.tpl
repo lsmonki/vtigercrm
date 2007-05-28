@@ -181,7 +181,7 @@
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
-				{if $FIELD_PRIVILEGES[$tabid] neq NULL || $modulename eq 'Emails'}
+				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
 				<img src="{$IMAGE_PATH}showDown.gif" id="img_{$tabid}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
 				{/if}
 				</div></td>

@@ -253,7 +253,7 @@ function UpdateProfile()
 					{$STANDARD_PRIV[$tabid][2]}
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
-				{if $FIELD_PRIVILEGES[$tabid] neq NULL || $modulename eq 'Emails'}
+				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
 				<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
 				{/if}
 				</div></td>

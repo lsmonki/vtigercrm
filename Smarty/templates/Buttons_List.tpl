@@ -100,7 +100,7 @@
 				{else}	
 					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
                 {/if}
-			{elseif $MODULE eq 'Notes' || $MODULE eq 'Emails'}	
+			{elseif $MODULE eq 'Notes'}	
 				
 				{if $CHECK.Export eq 'yes'}
 					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
@@ -111,7 +111,7 @@
 				{/if}
 			{else}
 				<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
-                <td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
+                		<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
 			{/if}
 			</tr>
 			</table>	
