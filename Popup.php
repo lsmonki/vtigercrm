@@ -211,7 +211,7 @@ $smarty->assign("MODULE",$currentModule);
 if($currentModule == 'PriceBooks')
 {
 	$productid=$_REQUEST['productid'];
-	$query = 'select vtiger_pricebook.*, vtiger_pricebookproductrel.productid, vtiger_pricebookproductrel.listprice, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_pricebook inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid = vtiger_pricebook.pricebookid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_pricebook.pricebookid where vtiger_pricebookproductrel.productid='.$productid.' and vtiger_crmentity.deleted=0';
+	$query = 'select vtiger_pricebook.*, vtiger_pricebookproductrel.productid, vtiger_pricebookproductrel.listprice, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_pricebook inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid = vtiger_pricebook.pricebookid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_pricebook.pricebookid where vtiger_pricebookproductrel.productid='.$productid.' and vtiger_crmentity.deleted=0 and vtiger_pricebook.active=1';
 }
 else
 {
