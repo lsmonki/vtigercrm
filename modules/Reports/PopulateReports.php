@@ -130,7 +130,6 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_products:productcode:Products_Product_Code:productcode:V',
                              'vtiger_products:discontinued:Products_Product_Active:discontinued:V',
                              'vtiger_products:productcategory:Products_Product_Category:productcategory:V',
-                             'vtiger_contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I',
                              'vtiger_products:website:Products_Website:website:V',
 			     'vtiger_vendorRel:vendorname:Products_Vendor_Name:vendor_id:I',
 			     'vtiger_products:mfr_part_no:Products_Mfr_PartNo:mfr_part_no:V'),
