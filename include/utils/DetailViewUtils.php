@@ -54,8 +54,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
-        if($col_fields[$fieldname]=='--None--')
-                $col_fields[$fieldname]='';
 	if($uitype == 99)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];

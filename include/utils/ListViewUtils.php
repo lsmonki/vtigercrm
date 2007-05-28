@@ -1844,10 +1844,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = '<span align="right">'.$value.'</div>';
 	}
-	if($value == '--None--')
-	{
-	        $value = '';
-	}
 	$log->debug("Exiting getValue method ...");
 	return $value; 
 }
