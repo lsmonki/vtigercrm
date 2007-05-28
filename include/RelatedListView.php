@@ -142,7 +142,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
 	}	
 	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
-	
+
 	$url_qry .="&order_by=".$order_by."&sorder=".$sorder;
 	//Added for PHP version less than 5
 	if (!function_exists("stripos"))
@@ -156,7 +156,10 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	//Retreiving the no of rows
 	$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
 	$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
-	$noofrows = $adb->query_result($count_result,0,"count");
+	if($relatedmodule == "Calendar" && $module != "Contacts")
+		$noofrows = $adb->num_rows($count_result);	
+	else
+		$noofrows = $adb->query_result($count_result,0,"count");
 	
 	//Setting Listview session object while sorting/pagination
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
@@ -168,7 +171,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		}
 	}
 	$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
-
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 	
 	$start_rec = $navigation_array['start'];
