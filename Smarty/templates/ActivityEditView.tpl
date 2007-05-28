@@ -529,11 +529,11 @@ var gVTModule = '{$smarty.request.module}';
                                                                                                                 {/section}
                                                                                                         </select>
 													</td>
-													<td><select name="recurringtype">
-													<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
-													<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
-												<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
-													<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"; {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
+													<td><select name="recurringtype" onChange="rptoptDisp(this)">
+													<option value="Daily" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
+													<option value="Weekly" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
+												<option value="Monthly" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
+													<option value="Yearly" {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
 													</td>
 												</tr>

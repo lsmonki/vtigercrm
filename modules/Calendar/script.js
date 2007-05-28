@@ -128,6 +128,32 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 	}
 }
 
+function rptoptDisp(Opt){
+	var currOpt = Opt.options[Opt.selectedIndex].value;
+	if(currOpt == "Daily")
+	{
+		ghide('repeatWeekUI');
+		ghide('repeatMonthUI');
+	}
+	else if(currOpt == "Weekly")
+	{
+		if(document.getElementById('repeatWeekUI').style.display == "none");
+			document.getElementById('repeatWeekUI').style.display = "block";
+		ghide('repeatMonthUI');
+	}
+	else if(currOpt == "Monthly")
+	{
+		ghide('repeatWeekUI');
+		if(document.getElementById('repeatMonthUI').style.display == "none");
+                        document.getElementById('repeatMonthUI').style.display = "block";
+	}
+	else if(currOpt == "Yearly")
+	{
+		ghide('repeatWeekUI');
+                ghide('repeatMonthUI');
+	}
+}
+
 function Taskshow(argg1,type,startdate,starthr,startmin,startfmt)
 {
 	var y=document.getElementById(argg1).style;
@@ -200,108 +226,98 @@ function maincheck_form()
 	followupformat = document.EditView.followup_startfmt.value;
         followuphour = parseInt(document.EditView.followup_starthr.value,10);
         followupmin = parseInt(document.EditView.followup_startmin.value,10);
+
+	if(startformat != '')
+	{
+		if(startformat == 'pm')
+		{
+			if(starthour == 12)
+				starthour = 12;
+			else
+				starthour = starthour + 12;
+		}
+		else
+		{
+			if(starthour == 12)
+				starthour = 0;
+			else
+				starthour = starthour;
+		}
+	}
+	if(endformat != '')
+	{
+		if(endformat == 'pm')
+		{
+			if(endhour == 12)
+				endhour = 12;
+			else
+				endhour = endhour + 12;
+		}
+		else
+		{
+			if(endhour == 12)
+				endhour = 0;
+			else
+				endhour = endhour;
+		}
+	}
+	var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+	var dateelements1=splitDateVal(dateval1);
+        var dateelements2=splitDateVal(dateval2);
+        dd1=dateelements1[0]
+       	mm1=dateelements1[1]
+        yyyy1=dateelements1[2]
+
+       	dd2=dateelements2[0]
+        mm2=dateelements2[1]
+       	yyyy2=dateelements2[2]
+
+	var date1=new Date()
+        var date2=new Date()
+
+       	date1.setYear(yyyy1)
+        date1.setMonth(mm1-1)
+       	date1.setDate(dd1)
+
+        date2.setYear(yyyy2)
+       	date2.setMonth(mm2-1)
+        date2.setDate(dd2)
+
+	durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
+       	if(durationinmin >= 60)
+       	{
+       		hour = durationinmin/60;
+       		minute = durationinmin%60;
+       	}
+       	else
+       	{
+       		hour = 0;
+       		minute = durationinmin;
+        }
+	document.EditView.duration_hours.value = hour;
+	document.EditView.duration_minutes.value = minute;
+	event_starthour = _2digit(starthour);
+	event_startmin = _2digit(startmin);
+	event_endhour = _2digit(endhour);
+	event_endmin = _2digit(endmin);
+        document.EditView.time_start.value = event_starthour+':'+event_startmin;
+        document.EditView.time_end.value = event_endhour+':'+event_endmin;
 	if(formValidate())
 	{
-		if(startformat != '')
-		{
-			if(startformat == 'pm')
-			{
-				if(starthour == 12)
-					starthour = 12;
-				else
-					starthour = starthour + 12;
-			}
-			else
-			{
-				if(starthour == 12)
-                                        starthour = 0;
-				else
-					starthour = starthour;
-			}
-		}
-		if(endformat != '')
-		{
-			if(endformat == 'pm')
-			{
-				if(endhour == 12)
-					endhour = 12;
-				else
-					endhour = endhour + 12;
-			}
-			else
-			{
-				if(endhour == 12)
-					endhour = 0;
-				else
-					endhour = endhour;
-			}
-		}
-		var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-	        var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
 		var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-		var dateelements1=splitDateVal(dateval1);
-      		var dateelements2=splitDateVal(dateval2);
 		var dateelements3=splitDateVal(dateval3);
-
-	        dd1=dateelements1[0]
-        	mm1=dateelements1[1]
-	        yyyy1=dateelements1[2]
-
-        	dd2=dateelements2[0]
-	        mm2=dateelements2[1]
-        	yyyy2=dateelements2[2]
 
 		dd3=dateelements3[0]
                 mm3=dateelements3[1]
                 yyyy3=dateelements3[2]
 
-		var date1=new Date()
-	        var date2=new Date()
 		var date3=new Date()
-
-        	date1.setYear(yyyy1)
-	        date1.setMonth(mm1-1)
-        	date1.setDate(dd1)
-
-	        date2.setYear(yyyy2)
-        	date2.setMonth(mm2-1)
-	        date2.setDate(dd2)
 		
 		date3.setYear(yyyy3)
                 date3.setMonth(mm3-1)
                 date3.setDate(dd3)
 
-		if (date2<=date1)
-		{
-			if((endhour*60+endmin) <= (starthour*60+startmin))
-			{
-				alert(alert_arr.ENDTIME_GREATER_THAN_STARTTIME);
-				document.EditView.endhr.focus();
-				return false;
-			}
-			else
-			{
-				durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
-                		if(durationinmin >= 60)
-              			{
-              				hour = durationinmin/60;
-                        		minute = durationinmin%60;
-                		}
-                		else
-                		{
-                        		hour = 0;
-                        		minute = durationinmin;
-                		}
-				document.EditView.duration_hours.value = hour;
-                		document.EditView.duration_minutes.value = minute;
-			}
-		}
-		event_starthour = _2digit(starthour);
-		event_startmin = _2digit(startmin);
-		event_endhour = _2digit(endhour);
-		event_endmin = _2digit(endmin);
-                document.EditView.time_start.value = event_starthour+':'+event_startmin;
-                document.EditView.time_end.value = event_endhour+':'+event_endmin;
 		// Added for Aydin Kurt-Elli requirement START -by Minnie
                 if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block' )
                 {
@@ -357,6 +373,18 @@ function maincheck_form()
                         document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
                 }
                 // Added for Aydin Kurt-Elli requirement END -by Minnie
+		//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
+		if(document.EditView.recurringtype.value =="Monthly")
+		{
+			if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
+			{
+				alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
+				document.EditView.repeatMonth_date.focus();
+				return false;
+			}
+		}
+		//end
+
 		return true;
 	}
 	else return false;
@@ -555,11 +583,26 @@ function check_form()
                         }
                         // Added for Aydin Kurt-Elli requirement END -by Minnie -->
 
+			//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
+                        if(document.EditView.recurringtype.value =="Monthly")
+                        {
+                                if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
+                                {
+                                        alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
+                                        document.EditView.repeatMonth_date.focus();
+                                        return false;
+                                }
+                        }
+                        //end
+
+
                         //added to check Start Date & Time,if Activity Status is Planned.//start
                         if(document.EditView.eventstatus.value == "Planned")
                         {
                                 var currdate=new Date()
                                 var chkdate=new Date()
+				chkdate.setMinutes(event_startmin)
+				chkdate.setHours(event_starthour)
                                 chkdate.setYear(yyyy1)
                                 chkdate.setMonth(mm1-1)
                                 chkdate.setDate(dd1)

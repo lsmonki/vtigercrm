@@ -513,11 +513,11 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<?php } ?>	
 								</select></td>
 								<td>
-									<select name="recurringtype">
-										<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
-										<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
-										<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
-										<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
+									<select name="recurringtype" onChange="rptoptDisp(this)">
+										<option value="Daily"><?php echo $mod_strings['LBL_DAYS']; ?></option>
+										<option value="Weekly"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
+										<option value="Monthly"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
+										<option value="Yearly"><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
 								</td>
 								</tr>

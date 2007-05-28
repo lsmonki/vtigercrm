@@ -956,19 +956,19 @@ if(gVTModule == 'Contacts')
 			if(fieldname[j] == "date_start" || fieldname[j] == "task_date_start" )
 			{
 				var datelabel = fieldlabel[j]
-					var datefield = fieldname[j]
-					var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				var datefield = fieldname[j]
+				var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
 			if(fieldname[j] == "time_start" || fieldname[j] == "task_time_start")
 			{
 				var timelabel = fieldlabel[j]
-					var timefield = fieldname[j]
-					var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				var timefield = fieldname[j]
+				var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
 			if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
 			{
 				var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-					var statuslabel = fieldlabel[j++]
+				var statuslabel = fieldlabel[j++]
 			}
 		}
 	}
@@ -992,18 +992,18 @@ if(gVTModule == 'Contacts')
 
                chktime = new Date()
 
+               chktime.setMinutes(minval)
+               chktime.setHours(hourval)
                chktime.setYear(yyyy)
                chktime.setMonth(mm-1)
                chktime.setDate(dd)
-               chktime.setHours(hourval)
-               chktime.setMinutes(minval)
                 if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
                         getObj(datefield).focus()
                         return false
                 }
                 else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
                 {
-                        getObj(timefield).focus()
+                        getObj(datefield).focus()
                         return false
                 }
                 else return true
