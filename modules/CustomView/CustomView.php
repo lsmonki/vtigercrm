@@ -1015,6 +1015,9 @@ class CustomView extends CRMEntity{
 					if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 					{
 						$value .= 'vtiger_account2.accountname IS NULL or ';
+					}elseif($comparator == 'n' || $comparator == 'k' && trim($adv_chk_value) != '')
+					{
+						$value .= 'vtiger_account2.accountname IS NULL or ';
 					}
 					$value .= 'vtiger_account2.accountname';
 				}
