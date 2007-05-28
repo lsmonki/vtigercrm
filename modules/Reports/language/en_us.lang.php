@@ -196,7 +196,7 @@ $mod_strings = Array(
 'NO_FILTER_SELECTED' => 'No filter Selected',
 
 'LBL_GENERATE_NOW'=>'Generate Now',
-'Totals'=>'Totals',
+'Totals'=>'Field Names',
 'SUM'=>'SUM',
 'AVG'=>'AVG',
 'MAX'=>'MAX',
