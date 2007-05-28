@@ -177,10 +177,10 @@ function DeleteEmail(id)
                                 postBody: "module=Users&action=massdelete&return_module=Emails&folderid="+gFolderid+"&idlist="+id,
                                 onComplete: function(response) {
                                                 $("status").style.display="none";
+						$("email_con").innerHTML=response.responseText;
+						execJS($('email_con'));
                                                 $('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
                                                 $("subjectsetter").innerHTML='';
-                                                $("email_con").innerHTML=response.responseText;
-                                                execJS($('email_con'));
                                 }
                         }
                 );
