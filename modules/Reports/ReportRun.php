@@ -77,9 +77,9 @@ class ReportRun extends CRMEntity
 			$fieldcolname = $columnslistrow["columnname"];
 			list($tablename,$fieldname,$module_field,$colname,$single) = split(":",$fieldcolname);
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			list($module,$field) = split("_",$module_field);
 			if(sizeof($permitted_fields) == 0 && $is_admin != true && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				list($module,$field) = split("_",$module_field);
 				$permitted_fields = $this->getaccesfield($module);	
 			
 			}
@@ -105,8 +105,12 @@ class ReportRun extends CRMEntity
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
 					{
-						if($selectedfields[0] != 'vtiger_usersAccounts' && $this->primarymodule != 'Products')
-						$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end as ".$this->primarymodule."_Assigned_To";
+						$temp_module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
+						if($temp_module_from_tablename == $module)
+							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups".$module.".groupname end as ".$module."_Assigned_To";
+						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
+							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$selectedfields[2]."'";
+							
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
 					{
@@ -116,9 +120,12 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "vtiger_crmentity.".$selectedfields[1]." AS '".$selectedfields[2]."'";
 					}
-				       else if($selectedfields[0] == 'vtiger_accountPotentials' && $selectedfields[4] == 'V')
+				        elseif($selectedfields[0] == 'vtiger_invoice' && $selectedfields[1] == 'salesorderid')//handled for salesorder fields in Invoice Module Reports
 					{
-						 $selectedfields[4] == 'I';
+						$columnslist[$fieldcolname] = 'vtiger_salesorderInvoice.subject	AS "'.$selectedfields[2].'"';
+					}elseif($selectedfields[0] == 'vtiger_campaign' && $selectedfields[1] == 'product_id')//handled for product fields in Campaigns Module Reports
+					{
+						$columnslist[$fieldcolname] = 'vtiger_productsCampaigns.productname AS "'.$selectedfields[2].'"';
 					}
 					else
 					{
@@ -939,18 +946,23 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Potentials")
 			{
-				$query = "left join  vtiger_potential on vtiger_potential.accountid = vtiger_contactdetails.accountid
+				$query = "left join vtiger_potential on vtiger_potential.accountid = vtiger_contactdetails.accountid
 					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
 					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+					left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
 					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
 			}
 			if($secmodule == "Quotes")
 			{
+				//CHECKK
 				$query = "left join vtiger_quotes on vtiger_quotes.contactid = vtiger_contactdetails.contactid
 					left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid 
 					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
@@ -960,6 +972,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
 					left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_quotes.potentialid
 					left join vtiger_contactdetails as vtiger_contactdetailsQuotes on vtiger_contactdetailsQuotes.contactid = vtiger_quotes.contactid
+					left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
+					left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupname = vtiger_quotegrouprelation.groupname
 					left join vtiger_account as vtiger_accountQuotes on vtiger_accountQuotes.accountid = vtiger_quotes.accountid ";
 			}
 			if($secmodule == "PurchaseOrder")
@@ -969,6 +983,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid
 					left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 					left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
+					left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
+					left join vtiger_groups vtiger_groupsPurchaseOrder on vtiger_groupsPurchaseOrder.groupname = vtiger_pogrouprelation.groupname
 					left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentityPurchaseOrder.smownerid
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_purchaseorder.vendorid
 					left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid ";
@@ -983,6 +999,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				$query = "left join vtiger_potential on vtiger_potential.accountid = vtiger_account.accountid
 					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+					left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
 					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
 
 			}
@@ -996,6 +1014,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_customerdetails on vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 			}
 			if($secmodule == "Quotes")
@@ -1009,6 +1029,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
 					left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_quotes.potentialid
 					left join vtiger_contactdetails as vtiger_contactdetailsQuotes on vtiger_contactdetailsQuotes.contactid = vtiger_quotes.contactid
+					left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
+					left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupname = vtiger_quotegrouprelation.groupname
 					left join vtiger_account as vtiger_accountQuotes on vtiger_accountQuotes.accountid = vtiger_quotes.accountid ";
 			}
 			if($secmodule == "PurchaseOrder")
@@ -1019,6 +1041,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 					left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
 					left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentityPurchaseOrder.smownerid
+					left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
+					left join vtiger_groups as vtiger_groupsPurchaseOrder on vtiger_groupsPurchaseOrder.groupname = vtiger_pogrouprelation.groupname
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_purchaseorder.vendorid
 					left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid ";
 			}
@@ -1027,8 +1051,11 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				$query = "left join vtiger_invoice on vtiger_invoice.accountid = vtiger_account.accountid
 					left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid 
 					left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid
+					left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
 					left join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid
 					left join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid
+					left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
+					left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupname = vtiger_invoicegrouprelation.groupname
 					left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentityInvoice.smownerid
 					left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_invoice.contactid = vtiger_contactdetailsInvoice.contactid
 					left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid ";
@@ -1058,6 +1085,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Potentials")
@@ -1065,6 +1094,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_quotes.potentialid
 					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid 
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
 					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
 
 			}
@@ -1079,6 +1110,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 			}
 
@@ -1093,6 +1126,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Contacts")
@@ -1106,6 +1141,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 			}
 		}
@@ -1119,6 +1156,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 		}
@@ -1135,6 +1174,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Contacts")
@@ -1148,6 +1189,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_customerdetails on vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 
 			}
@@ -1163,6 +1206,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 			}
 			if($secmodule == "Contacts")
@@ -1175,6 +1220,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 
 			}
@@ -1184,6 +1231,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
 					left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 					left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
+					left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
+					left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupname = vtiger_quotegrouprelation.groupname
 					left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentityQuotes.smownerid
 					left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
 					left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_quotes.potentialid
@@ -1218,6 +1267,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid 
 					left join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
 					left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid 
+					left join vtiger_leadgrouprelation on vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
+					left join vtiger_groups as vtiger_groupsLeads on vtiger_groupsLeads.groupname = vtiger_leadgrouprelation.groupname
 					left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentityLeads.smownerid ";
 	
 			}
@@ -1229,6 +1280,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 					left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+					left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+					left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 					left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
 
 			}
@@ -1242,6 +1295,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 					left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid
 					left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+					left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+					left join vtiger_groups as vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 					left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid ";
 			}
 			if($secmodule == "Potentials")
@@ -1249,6 +1304,8 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_seactivityrel.crmid 
                                         left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
                                         left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
                                         left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
 
                         }
@@ -1261,12 +1318,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
-					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
-					left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
-					left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid
-					left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_seproductsrel.crmid
-					left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_seproductsrel.crmid
-					left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid ";
+					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id";
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getRelatedModulesQuery".$secmodule);
@@ -1288,7 +1340,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid=vtiger_leadsubdetails.leadsubscriptionid 
 				inner join vtiger_leadscf on vtiger_leaddetails.leadid = vtiger_leadscf.leadid 
 				left join vtiger_leadgrouprelation on vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsLeads on vtiger_groupsLeads.groupname = vtiger_leadgrouprelation.groupname
 				left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted=0 and vtiger_leaddetails.converted=0";
 		}
@@ -1300,7 +1352,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid 
 				inner join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid 
 				left join vtiger_accountgrouprelation on vtiger_account.accountid = vtiger_accountgrouprelation.accountid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 				left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentity.smownerid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1316,7 +1368,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
 				inner join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
 				left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+				left join vtiger_groups vtiger_groupsContacts on vtiger_groupsContacts.groupname = vtiger_contactgrouprelation.groupname
 				left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentity.smownerid
@@ -1331,7 +1383,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid 
 				inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 				left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+				left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
 				left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentity.smownerid  
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0 ";
@@ -1361,7 +1413,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid
 				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id 
 				left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsHelpDesk on vtiger_groupsHelpDesk.groupname = vtiger_ticketgrouprelation.groupname
 															
 				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentity.smownerid=vtiger_usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1375,7 +1427,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
 				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupname = vtiger_activitygrouprelation.groupname
 				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentity.smownerid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
 				left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid
@@ -1399,7 +1451,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid  
 				left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid 
 				left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupname = vtiger_quotegrouprelation.groupname
 				left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentity.smownerid
 				left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
 				left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_quotes.potentialid
@@ -1417,7 +1469,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid 
 				left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
 				left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsPurchaseOrder on vtiger_groupsPurchaseOrder.groupname = vtiger_pogrouprelation.groupname
 				left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentity.smownerid 
 				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_purchaseorder.vendorid 
 				left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid 
@@ -1431,9 +1483,10 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
 				inner join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid 
 				inner join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid 
+				left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
 				left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid 
 				left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupname = vtiger_invoicegrouprelation.groupname
 				left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentity.smownerid
 				left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
 				left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
@@ -1452,7 +1505,7 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 				left join vtiger_account as vtiger_accountSalesOrder on vtiger_accountSalesOrder.accountid = vtiger_salesorder.accountid
 				left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_salesorder.potentialid 
 				left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsSalesOrder on vtiger_groupsSalesOrder.groupname = vtiger_sogrouprelation.groupname
 				left join vtiger_users as vtiger_usersSalesOrder on vtiger_usersSalesOrder.id = vtiger_crmentity.smownerid 
 				where vtiger_crmentity.deleted=0";
 
@@ -1463,10 +1516,11 @@ lsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($value
 		 $query = "from vtiger_campaign
 			        inner join vtiger_campaignscf as vtiger_campaignscf on vtiger_campaignscf.campaignid=vtiger_campaign.campaignid   
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid
+				left join vtiger_products as vtiger_productsCampaigns on vtiger_productsCampaigns.productid = vtiger_campaign.product_id
 				left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
-				left join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
+				left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupname = vtiger_campaigngrouprelation.groupname
 
-		             left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentity.smownerid
+		                left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentity.smownerid
                                 ".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0";
 		}
