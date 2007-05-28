@@ -2166,3 +2166,10 @@ function validateUrl(name)
 	}
 }
 
+function LTrim( value )
+{
+
+        var re = /\s*((\S+\s*)*)/;
+        return value.replace(re, "$1");
+
+}
