@@ -18,6 +18,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
+typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];
 typeofdata['V'] = ['is','isn','bwt','ewt','cts','dcts'];
 typeofdata['N'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['T'] = ['is','isn','lst','grt','lsteq','grteq'];

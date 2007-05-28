@@ -1225,11 +1225,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16)
 	{
-		if($current_module_strings[$temp_val] != '')
+		if($current_module_strings[$temp_val] != '' && $module !="Calendar")
 		{
 			$value = $current_module_strings[$temp_val];
 		}
-		elseif($app_strings[$temp_val] != '')
+		elseif($app_strings[$temp_val] != '' && $module !="Calendar")
 		{
 			$value = $app_strings[$temp_val];
 		}
