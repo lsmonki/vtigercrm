@@ -216,7 +216,7 @@ function selectReport()
 {
 	var id = document.NewReport.another_report.options  [document.NewReport.another_report.selectedIndex].value;
 	var folderid = getObj('folderid').value;
-	url ='index.php?action=ReportsAjax&file=SaveAndRun&module=Reports&record='+id+'&folderid='+folderid;
+	url ='index.php?action=SaveAndRun&module=Reports&record='+id+'&folderid='+folderid;
 	goToURL(url);
 }
 function ReportInfor()
