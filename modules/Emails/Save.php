@@ -236,6 +236,11 @@ if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
 	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
 if(isset($_REQUEST["saved_toid"]) && $_REQUEST["saved_toid"]!='')
 	$all_to_ids .= ereg_replace(",","###",$_REQUEST["saved_toid"]);
+
+
+//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
+$all_to_ids = str_replace('<','&lt;',$all_to_ids);
+$all_to_ids = str_replace('>','&gt;',$all_to_ids);
 	
 $all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
 $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);

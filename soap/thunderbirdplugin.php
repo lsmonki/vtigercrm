@@ -240,6 +240,10 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	if(isset($camodulerow))
 	{
 		$emailid = $camodulerow["email"];
+
+	    	//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
+	    	$user_emailid = str_replace('<','&lt;',$user_emailid);
+	    	$user_emailid = str_replace('>','&gt;',$user_emailid);
 		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"'.$emailid.'","'.$user_emailid.'","","","","'.$user_id.'@-1|'.$contact_ids.'@'.$field_id.'|","THUNDERBIRD")';
 		$adb->query($query);
 	}

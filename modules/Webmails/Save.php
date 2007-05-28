@@ -131,6 +131,9 @@ $focus->save("Emails");
 //saving in vtiger_emaildetails vtiger_table
 $id_lists = $focus->column_fields['parent_id'].'@'.$fieldid;
 $all_to_ids = $email->from;
+//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
+$all_to_ids = str_replace('<','&lt;',$all_to_ids);
+$all_to_ids = str_replace('>','&gt;',$all_to_ids);
 $query = 'insert into vtiger_emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
 $adb->query($query);
 
