@@ -360,8 +360,11 @@ function BasicSearch($module,$search_field,$search_string)
 				$table_name = "vtiger_contactdetails2";
 				$column_name = "lastname";
 			}
-
-
+			if($column_name == "inventorymanager" && $module = "Quotes")
+			{
+				$table_name = "vtiger_usersQuotes";
+				$column_name = "user_name";
+			}
 			//Added to support user date format in basic search	
 			if($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 			{
@@ -495,8 +498,8 @@ function getAdvSearchfields($module)
 		$block = $adb->query_result($result,$i,"block");
 		$fieldtype = $adb->query_result($result,$i,"typeofdata");
 		$fieldtype = explode("~",$fieldtype);
-		$fieldtypeofdata = $fieldtype[0];
-		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid' || $fieldcolname == 'parentid' || $fieldcolname == "recurringtype")
+		$fieldtypeofdata = $fieldtype[0];	
+		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid' || $fieldcolname == 'parentid' || $fieldcolname == "recurringtype" || $fieldcolname == "campaignid" || $fieldcolname == "inventorymanager")
 			$fieldtypeofdata = "V";
 		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
 
