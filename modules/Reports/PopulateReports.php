@@ -72,12 +72,12 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
 			     'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
 			     'vtiger_leaddetails:company:Leads_Company:company:V',
-			     'vtiger_leaddetails:email:Leads_Email:email:V'),
+			     'vtiger_leaddetails:email:Leads_Email:email:E'),
 
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
                              'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
                              'vtiger_leaddetails:company:Leads_Company:company:V',
-                             'vtiger_leaddetails:email:Leads_Email:email:V',
+                             'vtiger_leaddetails:email:Leads_Email:email:E',
 			     'vtiger_leaddetails:leadsource:Leads_Lead_Source:leadsource:V'),
 
 		       Array('vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
@@ -109,8 +109,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_products:productname:Products_Product_Name:productname:V',
                              'vtiger_products:discontinued:Products_Product_Active:discontinued:V',
                              'vtiger_products:productcategory:Products_Product_Category:productcategory:V',
-			     'vtiger_products:manufacturer:Products_Manufacturer:manufacturer:V',
-			     'vtiger_contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I'),
+			     'vtiger_products:manufacturer:Products_Manufacturer:manufacturer:V'),
 
  		       Array('vtiger_troubletickets:title:HelpDesk_Title:ticket_title:V',
                              'vtiger_troubletickets:priority:HelpDesk_Priority:ticketpriorities:V',
@@ -178,8 +177,6 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 		       Array('vtiger_invoice:subject:Invoice_Subject:subject:V',
 			     'vtiger_invoice:salesorderid:Invoice_Sales_Order:salesorder_id:I',
 			     'vtiger_invoice:customerno:Invoice_Customer_No:customerno:V',
-                             'vtiger_invoice:notes:Invoice_Notes:notes:V',
-			     'vtiger_invoice:invoiceterms:Invoice_Invoice_Terms:invoiceterms:V',
 			     'vtiger_invoice:exciseduty:Invoice_Excise_Duty:exciseduty:N',
 			     'vtiger_invoice:salescommission:Invoice_Sales_Commission:salescommission:N',
 			     'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:I'),
