@@ -552,7 +552,11 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
+				{if $MODE eq 'edit' && $IMAGENAME neq ''}
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />[{$IMAGENAME}]<br>{$APP.LBL_IMG_FORMATS}
+				{else}
 					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" /><br>{$APP.LBL_IMG_FORMATS}
+				{/if}
 					<input type="hidden" name="id" value=""/>
 					{$maindata[3].0.name}
 			</td>
