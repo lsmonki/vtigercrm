@@ -754,7 +754,7 @@ class CustomView extends CRMEntity{
 		{
 			$advft["columnname"] = $advfilterrow["columnname"];
 			$advft["comparator"] = $advfilterrow["comparator"];
-			$advft["value"] = addslashes($advfilterrow["value"]);
+			$advft["value"] = $advfilterrow["value"];
 			$advfilterlist[] = $advft;
 		}
 		return $advfilterlist;
@@ -1255,7 +1255,8 @@ class CustomView extends CRMEntity{
 
 	function getAdvComparator($comparator,$value,$datatype = '')
 	{
-			
+	
+                $value=html_entity_decode(trim($value));
 		global $adb;
 		if($comparator == "e")
 		{
