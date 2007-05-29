@@ -123,7 +123,17 @@ if($focus->mode == 'edit')
 
 //Tax handling (get the available taxes only) - starts
 if($focus->mode == 'edit')
-	$tax_details = getTaxDetailsForProduct($focus->id,'available_associated');
+{
+	$retrieve_taxes = true;
+	$productid = $focus->id;
+	$tax_details = getTaxDetailsForProduct($productid,'available_associated');
+}
+elseif($_REQUEST['isDuplicate'] == 'true')
+{
+	$retrieve_taxes = true;
+	$productid = $_REQUEST['record'];
+	$tax_details = getTaxDetailsForProduct($productid,'available_associated');
+}
 else
 	$tax_details = getAllTaxes('available');
 
@@ -133,11 +143,12 @@ for($i=0;$i<count($tax_details);$i++)
 	$tax_details[$i]['check_value'] = 0;
 }
 
-if($focus->mode == 'edit')
+//For Edit and Duplicate we have to retrieve the product associated taxes and show them
+if($retrieve_taxes)
 {
 	for($i=0;$i<count($tax_details);$i++)
 	{
-		$tax_value = getProductTaxPercentage($tax_details[$i]['taxname'],$focus->id);
+		$tax_value = getProductTaxPercentage($tax_details[$i]['taxname'],$productid);
 		$tax_details[$i]['percentage'] = $tax_value;
 		$tax_details[$i]['check_value'] = 1;
 		//if the tax is not associated with the product then we should get the default value and unchecked
