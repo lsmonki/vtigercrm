@@ -407,7 +407,10 @@ function BasicSearch($module,$search_field,$search_string)
 	{
 		$where_cond0=str_replace("like '%%'","like ''",$where);
 		$where_cond1=str_replace("like '%%'","is NULL",$where);
-		$where = "(".$where_cond0." or ".$where_cond1.")";
+		if($module == "Calendar")
+			$where = "(".$where_cond0." and ".$where_cond1.")";
+		else
+			$where = "(".$where_cond0." or ".$where_cond1.")";
 	}
 	if($_REQUEST['type'] == 'entchar')
 	{
@@ -454,17 +457,18 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Product Image'";
 		}
-
 		if($tabid == 9 || $tabid==16)
 		{
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
 		}
-
 		if($tabid == 4)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Contact Image'";
 		}
-
+		if($tabid == 13 || $tabid == 10)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Attachment'";
+		}
 		$sql.= "group by vtiger_field.fieldlabel order by block,sequence";
 	}
 	else
@@ -482,17 +486,18 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Product Image'";
 		}
-
 		if($tabid == 9 || $tabid==16)
 		{
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
 		}
-		
 		if($tabid == 4)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Contact Image'";
-		}	
-		
+		}
+		if($tabid == 13 || $tabid == 10)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Attachment'";
+		}
 		$sql .= " group by vtiger_field.fieldlabel order by block,sequence";
 
 	}
@@ -617,7 +622,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 		
 		case 'dcts':
-			$where_string = $searchfield." not like '%".$searchstring."%' or ".$searchfield." is null";
+			$where_string = "(".$searchfield." not like '%".$searchstring."%' or ".$searchfield." is null)";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
@@ -629,7 +634,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 			
 		case 'isn':
-			$where_string = $searchfield." <> '".$searchstring."' or ".$searchfield." is null";
+			$where_string = "(".$searchfield." <> '".$searchstring."' or ".$searchfield." is null)";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
@@ -720,9 +725,11 @@ function getWhereCondition($currentModule)
 			}
 			elseif($tab_col == "vtiger_activity.status")
 			{
-				if($srch_cond == 'dcts' || $srch_cond == 'isn')
+				if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
 					$re_cond = "and";
 				else
+					$re_cond = "or";
+				if($srch_cond == 'is' && $srch_val !='')
 					$re_cond = "or";
 
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
