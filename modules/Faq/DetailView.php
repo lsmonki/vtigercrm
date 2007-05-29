@@ -55,7 +55,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if(isset($focus->column_fields[question]))
-	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
+	$smarty->assign("NAME", $focus->column_fields[question]);
 
 $category = getParenttab();
 $smarty->assign("CATEGORY",$category);
