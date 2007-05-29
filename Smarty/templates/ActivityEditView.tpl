@@ -134,7 +134,7 @@ var gVTModule = '{$smarty.request.module}';
 							{/if}
 							<tr>
 								<td class="cellLabel" nowrap align="right"><b><font color="red">*</font>{$MOD.LBL_EVENTNAME}</b></td>
-								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject|escape}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
                                                                         {foreach key=sel_value item=value from=$arr}
@@ -152,13 +152,13 @@ var gVTModule = '{$smarty.request.module}';
 							{if $LABEL.description neq ''}
 							<tr>
                         					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
-								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
+								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea></td>
                 					</tr>
 							{/if}
 							{if $LABEL.location neq ''}
 							<tr>
 			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
-								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location}" style="width:50%">
+								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location|escape}" style="width:50%">
 							</tr>
 							{/if}
 
@@ -640,13 +640,13 @@ var gVTModule = '{$smarty.request.module}';
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
                         	<td class="cellLabel" width="20%" align="right"><b><font color="red">*</font>{$MOD.LBL_TODO}</b></td>
-                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
+                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject|escape}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			
 			<tr>
 				{if $LABEL.description != ''}
 				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
-				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
+				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea>
 				{/if}
 				
 			</tr>
