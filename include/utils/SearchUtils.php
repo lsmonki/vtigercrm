@@ -617,7 +617,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 		
 		case 'dcts':
-			$where_string = $searchfield." not like '%".$searchstring."%' ";
+			$where_string = $searchfield." not like '%".$searchstring."%' or ".$searchfield." is null";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
@@ -629,7 +629,9 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 			
 		case 'isn':
-			$where_string = $searchfield." <> '".$searchstring."' ";
+			$where_string = $searchfield." <> '".$searchstring."' or ".$searchfield." is null";
+			if($searchstring == NULL)
+			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
 			
 		case 'bwt':
