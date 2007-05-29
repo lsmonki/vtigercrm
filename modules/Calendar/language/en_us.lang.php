@@ -213,8 +213,9 @@ $mod_strings = Array(
 'LBL_YEAR'=>'Year',
 'LBL_NONE_SCHEDULED'=>'None Scheduled',
 
-'LBL_INVITE_INST1'=>'To share, select the users from the "Available Users" list and click the "Add" button.',
-'LBL_INVITE_INST2'=>'To remove, select the users in the "Selected Users" list and the click "Remove" button.',
+'LBL_INVITE_INST1'=>'To invite, select the users from the "Available Users" list and click the "Add" button.',
+'LBL_INVITE_SHARE'=>'To share, select the users from the "Available Users" list and click the "Add" button.',
+'LBL_INVITE_INST2'=>'To remove, select the users from the "Selected Users" list and the click "Remove" button.',
 'LBL_SELUSR_INFO'=>' Selected users will receive an email about the Event.',
 'LBL_CALSHAREMESSAGE'=>'Share my calendar with the following selected users',
 'LBL_CALSHARE'=>'Calendar Sharing',

@@ -99,7 +99,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$curr_time = date('H:i');
+				$curr_time = date('H:i',(time() + (5 * 60)));
 			}
 		}
 		if($module_name == 'Events' && $uitype == 23)
@@ -110,7 +110,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{
-				$endtime = time() + (5 * 60);
+				$endtime = time() + (10 * 60);
 				$curr_time = date('H:i',$endtime);
 			}
 		}
@@ -535,8 +535,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 69)
   	{
   		$editview_label[]=$mod_strings[$fieldlabel];
- 
- 		if( $col_fields['record_id'] != "") 
+ 		if( $col_fields['record_id'] != "" && $_REQUEST["isDuplicate"] != true) 
   		{
  		    //This query is for Products only
  		    if($module_name == 'Products')

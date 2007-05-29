@@ -102,7 +102,7 @@ require_once('modules/Calendar/CalendarCommon.php');
                                                 <tr>
                                                         <td colspan=3>
                                                                 <ul style="padding-left:20px">
-                                                                <li><?php echo $mod_strings['LBL_INVITE_INST1']?>
+                                                                <li><?php echo $mod_strings['LBL_INVITE_SHARE']?>
                                                                 <li><?php echo $mod_strings['LBL_INVITE_INST2']?>
                                                                 </ul>
                                                         </td>

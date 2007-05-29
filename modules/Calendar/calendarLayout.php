@@ -263,7 +263,7 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	global $current_user,$app_strings;
         $date_format = $current_user->date_format;
 	$format = $cal_arr['calendar']->hour_format;
-	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+	$hour_startat = timeString(array('hour'=>date('H:i',(time()+(5*60))),'minute'=>0),'24');
         $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');	
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$temp_ts = $cal_arr['calendar']->date_time->ts;
