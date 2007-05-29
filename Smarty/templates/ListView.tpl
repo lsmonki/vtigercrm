@@ -21,6 +21,7 @@ var typeofdata = new Array();
 typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];
 typeofdata['V'] = ['is','isn','bwt','ewt','cts','dcts'];
 typeofdata['N'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['NN'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['T'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['I'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['C'] = ['is','isn'];
