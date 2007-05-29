@@ -427,7 +427,6 @@
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="salutation" type="C" size="50">
-			<default value="Mr" />
 		</field>
 		<field name="firstname" type="C" size="40" />
 		<field name="lastname" type="C" size="80">
