@@ -104,7 +104,7 @@
 					   <tr>
 						<td colspan="2" style="padding:10px;" align="center">
 							<input type="submit" name="migrate" value="  {$MOD.LBL_MIGRATE_BUTTON}  "  class="crmbutton small save" onclick="return getConfirmation('{$CURRENT_VERSION}');"/>
-							&nbsp;<input type="submit" name="cancel" value=" &nbsp;{$MOD.LBL_CANCEL_BUTTON}&nbsp; "  class="crmbutton small cancel" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
+							&nbsp;<input type="button" name="cancel" value=" &nbsp;{$MOD.LBL_CANCEL_BUTTON}&nbsp; "  class="crmbutton small cancel" onClick="window.history.back();"/>
  						</td>
 					   </tr>
 					</table>
