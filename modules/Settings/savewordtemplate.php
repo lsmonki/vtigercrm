@@ -16,7 +16,7 @@ require_once('include/utils/utils.php');
 
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 // Arbitrary File Upload Vulnerability fix - Philip
-$binFile = $_FILES['binFile']['name'];
+$binFile =  preg_replace('/\s+/', '_', $_FILES['binFile']['name']);
     $ext_pos = strrpos($binFile, ".");
 
         $ext = substr($binFile, $ext_pos + 1);

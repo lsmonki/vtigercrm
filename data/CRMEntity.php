@@ -151,7 +151,7 @@ class CRMEntity
 
 	
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = $file_details['name'];
+		$binFile = preg_replace('/\s+/', '_', $file_details['name']);//replace space with _ in filename
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);
