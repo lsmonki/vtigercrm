@@ -369,8 +369,9 @@ function getFormValidate(divValidate)
 		}
 	if(statusvalue == "Planned")
         {
-                var dateelements=splitDateVal(startdatevalue)
-
+               var dateelements=splitDateVal(startdatevalue)
+	       var hourval=parseInt(timeval.substring(0,timeval.indexOf(":")))
+               var minval=parseInt(timeval.substring(timeval.indexOf(":")+1,timeval.length))
                var dd=dateelements[0]
                var mm=dateelements[1]
                var yyyy=dateelements[2]
@@ -380,9 +381,10 @@ function getFormValidate(divValidate)
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-		
-       	       chktime = new Date()
 
+       	       chktime = new Date()
+	       chktime.setMinutes(minval)
+               chktime.setHours(hourval)
                chktime.setYear(yyyy)
                chktime.setMonth(mm-1)
                chktime.setDate(dd)
