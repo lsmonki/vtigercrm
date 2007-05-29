@@ -563,7 +563,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 
 		if($mode != 'edit')//this will be updated when we create new ticket
 		{
-			$updatelog = " Ticket created. Assigned to ";
+			$updatelog = "Ticket created. Assigned to ";
 
 			if($assigned_group_name != '' && $assigntype == 'T')
 			{
