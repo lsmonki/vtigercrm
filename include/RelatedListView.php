@@ -314,7 +314,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			$row['description'] = substr($row['description'],0,40).'...';
 		}
 		$entries[] = nl2br($row['description']); 
-		$attachmentname = ltrim($row['filename'],$row['attachmentsid'].'_');//explode('_',$row['filename'],2);
+		$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
 
 		$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
 
