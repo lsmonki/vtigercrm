@@ -1903,7 +1903,7 @@ function getListQuery($module,$where='')
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_account.accountname, vtiger_account.email1,
 			vtiger_account.email2, vtiger_account.website, vtiger_account.phone,
-			vtiger_accountbillads.city,
+			vtiger_accountbillads.bill_city,
 			vtiger_accountscf.*
 			FROM vtiger_account
 			INNER JOIN vtiger_crmentity
