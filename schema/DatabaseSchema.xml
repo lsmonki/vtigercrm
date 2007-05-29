@@ -365,12 +365,12 @@
 			<key />
 			<default value="0" />
 		</field>
-		<field name="city" type="C" size="30" />
-		<field name="code" type="C" size="30" />
-		<field name="country" type="C" size="30" />
-		<field name="state" type="C" size="30" />
-		<field name="street" type="C" size="250" />
-		<field name="pobox" type="C" size="30" />
+		<field name="bill_city" type="C" size="30" />
+		<field name="bill_code" type="C" size="30" />
+		<field name="bill_country" type="C" size="30" />
+		<field name="bill_state" type="C" size="30" />
+		<field name="bill_street" type="C" size="250" />
+		<field name="bill_pobox" type="C" size="30" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -387,12 +387,12 @@
 			<key />
 			<default value="0" />
 		</field>
-		<field name="city" type="C" size="30" />
-		<field name="code" type="C" size="30" />
-		<field name="country" type="C" size="30" />
-		<field name="state" type="C" size="30" />
-		<field name="pobox" type="C" size="30" />
-		<field name="street" type="C" size="250" />
+		<field name="ship_city" type="C" size="30" />
+		<field name="ship_code" type="C" size="30" />
+		<field name="ship_country" type="C" size="30" />
+		<field name="ship_state" type="C" size="30" />
+		<field name="ship_pobox" type="C" size="30" />
+		<field name="ship_street" type="C" size="250" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
