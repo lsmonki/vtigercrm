@@ -86,7 +86,8 @@ function add_attachment_to_contact($cid,$email) {
 	    	$attachments=$email->downloadInlineAttachments();
 
 	    $upload_filepath = decideFilePath();
-	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
+	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++)
+	    {
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
 		$date_var = $adb->formatDate(date('YmdHis'));	
 
@@ -100,14 +101,16 @@ function add_attachment_to_contact($cid,$email) {
 
                 $sql = "insert into vtiger_attachments values(";
                 $sql .= $current_id.",'".$filename."','Uploaded ".$filename." from webmail','".$filetype."','".$upload_filepath."')";
-		echo $query;
                 $result = $adb->query($sql);
 
                 $sql1 = "insert into vtiger_seattachmentsrel values('";
                 $sql1 .= $cid."','".$current_id."')";
                 $result = $adb->query($sql1);
 
-		$fp = fopen($upload_filepath.'/'.$filename, "w") or die("Can't open file");
+		//we have to add attachmentsid_ as prefix for the filename
+		$move_filename = $upload_filepath.'/'.$current_id.'_'.$filename;
+
+		$fp = fopen($move_filename, "w") or die("Can't open file");
 		fputs($fp, base64_decode($attachments[$i]["filedata"]));
 		fclose($fp);
 	    }
