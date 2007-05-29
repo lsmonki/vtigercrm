@@ -97,7 +97,7 @@
 		options[5] = new Option('User: HomePhone', '$users-phone_home$'); 
 		options[6] = new Option('User: Mobile', '$users-phone_mobile$'); 
 		options[7] = new Option('User: Signature', '$users-signature$'); 
-		options[8] = new Option('User: Email', '$users-email$'); 
+		options[8] = new Option('User: Email', '$users-email1$'); 
 		options[9] = new Option('User: Street', '$users-address_street$'); 
 		options[10] = new Option('User: City', '$users-address_city$'); 
 		options[11] = new Option('User: State', '$users-address_state$'); 
