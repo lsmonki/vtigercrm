@@ -231,6 +231,16 @@ foreach($modules_array as $module)
 	ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname='vtiger_account:accountname:accountname:".$module."_Account_Name:V' where columnname like '%:accountid:account_id:%' and vtiger_customview.entitytype='".$module."'");
 }
 
+//Previously PurchaseOrder was named as Order. Now we have to change the entitytype from Orders to PurchaseOrder
+ExecuteQuery("update vtiger_customview set entitytype='PurchaseOrder' where entitytype='Orders'");
+
+//ContactName is shown as empty in SO/Quotes/Invoice listview because of contact details in vtiger_cvcolumnlist.columnname
+$modules_array = Array("SalesOrder","Quotes","Invoice","PurchaseOrder","Notes","Calendar");
+foreach($modules_array as $module)
+{
+	ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname='vtiger_contactdetails:lastname:lastname:".$module."_Contact_Name:V' where columnname like '%:contactid:contact_id:%' and vtiger_customview.entitytype='".$module."'");
+}
+
 /*
 $res = $adb->query("select vtiger_cvcolumnlist.*, vtiger_customview.viewname from vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where columnname like '%:accountid:account_id:%' and vtiger_customview.entitytype='SalesOrder'");
 for($i=0;$i<$adb->num_rows($res);$i++)
