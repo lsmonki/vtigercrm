@@ -443,6 +443,186 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_crmentity:crmid:
 
 
 
+$query = "select * from vtiger_emaildetails";
+$result = $adb->query($query);
+$find_array = Array('<','>');
+$replace_array = Array('&lt;','&gt;');
+for($i = 0; $i < $adb->num_rows($result); $i++)
+{
+	$emailID = $adb->query_result($result,$i,'emailid');
+	$from_email = $adb->query_result($result,$i,'from_email');
+	$to_email = $adb->query_result($result,$i,'to_email');
+	$cc_email = $adb->query_result($result,$i,'cc_email');
+	$bcc_email = $adb->query_result($result,$i,'bcc_email');
+	$assigned_user_email = $adb->query_result($result,$i,'assigned_user_email');
+	$replace_from_email = str_replace($find_array,$replace_array,$from_email);
+	$replace_to_email = str_replace($find_array,$replace_array,$to_email);
+	$replace_cc_email = str_replace($find_array,$replace_array,$cc_email);
+	$replace_bcc_email = str_replace($find_array,$replace_array,$bcc_email);
+	$replace_assigned_user_email = str_replace($find_array,$replace_array,$assigned_user_email);
+	$query = "update vtiger_emaildetails set from_email='".$replace_from_email."', to_email='".$replace_to_email."', cc_email='".$replace_cc_email."' ,bcc_email='".$assigned_user_email."' where emailid=".$emailID;
+	//echo $query.'<br>';
+	ExecuteQuery($query);
+}
+
+ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I'");
+ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_invoice:notes:Invoice_Notes:notes:V'");
+ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_invoice:invoiceterms:Invoice_Invoice_Terms:invoiceterms:V'");
+
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_leaddetails:email:Leads_Email:email:V' where columnname='vtiger_leaddetails:email:Leads_Email:email:E'");
+
+
+
+//to remove Export from Emails Module Under Profiles
+ExecuteQuery("delete from vtiger_profile2utility where tabid=10");
+
+
+//ALTER TABLE Queries
+
+ExecuteQuery("alter table vtiger_accountbillads change column city bill_city varchar(30)");
+ExecuteQuery("alter table vtiger_accountbillads change column code bill_code varchar(30)");
+ExecuteQuery("alter table vtiger_accountbillads change column country bill_country varchar(30)");
+ExecuteQuery("alter table vtiger_accountbillads change column state bill_state varchar(30)");
+ExecuteQuery("alter table vtiger_accountbillads change column street bill_street varchar(250)");
+ExecuteQuery("alter table vtiger_accountbillads change column pobox bill_pobox varchar(30)");
+
+ExecuteQuery("alter table vtiger_accountshipads change column city ship_city varchar(30)");
+ExecuteQuery("alter table vtiger_accountshipads change column code ship_code varchar(30)");
+ExecuteQuery("alter table vtiger_accountshipads change column country ship_country varchar(30)");
+ExecuteQuery("alter table vtiger_accountshipads change column state ship_state varchar(30)");
+ExecuteQuery("alter table vtiger_accountshipads change column street ship_street varchar(250)");
+ExecuteQuery("alter table vtiger_accountshipads change column pobox ship_pobox varchar(30)");
+
+
+//Field Table Update Queries
+ExecuteQuery("update vtiger_field set columnname='bill_city' where columnname='city' and tablename='vtiger_accountbillads'");
+ExecuteQuery("update vtiger_field set columnname='bill_code' where columnname='code' and tablename='vtiger_accountbillads'");
+ExecuteQuery("update vtiger_field set columnname='bill_country' where columnname='country' and tablename='vtiger_accountbillads'");
+ExecuteQuery("update vtiger_field set columnname='bill_state' where columnname='state' and tablename='vtiger_accountbillads'");
+ExecuteQuery("update vtiger_field set columnname='bill_street' where columnname='street' and tablename='vtiger_accountbillads'");
+ExecuteQuery("update vtiger_field set columnname='bill_pobox' where columnname='pobox' and tablename='vtiger_accountbillads'");
+
+
+ExecuteQuery("update vtiger_field set columnname='ship_city' where columnname='city' and tablename='vtiger_accountshipads'");
+ExecuteQuery("update vtiger_field set columnname='ship_code' where columnname='code' and tablename='vtiger_accountshipads'");
+ExecuteQuery("update vtiger_field set columnname='ship_country' where columnname='country' and tablename='vtiger_accountshipads'");
+ExecuteQuery("update vtiger_field set columnname='ship_state' where columnname='state' and tablename='vtiger_accountshipads'");
+ExecuteQuery("update vtiger_field set columnname='ship_street' where columnname='street' and tablename='vtiger_accountshipads'");
+ExecuteQuery("update vtiger_field set columnname='ship_pobox' where columnname='pobox' and tablename='vtiger_accountshipads'");
+
+
+//CustomView Queries
+//Available in Populate CustomView.php so migration for that particular field
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_city:bill_city:Accounts_Billing_City:V' where columnname='vtiger_accountbillads:city:bill_city:Accounts_City:V'");
+
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_city:bill_city:Accounts_Billing_City:V' where columnname='vtiger_accountbillads:city:bill_city:Accounts_Billing_City:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_code:bill_code:Accounts_Billing_Code:V' where columnname='vtiger_accountbillads:code:bill_code:Accounts_Billing_Code:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_country:bill_country:Accounts_Billing_Country:V' where  columnname='vtiger_accountbillads:country:bill_country:Accounts_Billing_Country:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_state:bill_state:Accounts_Billing_State:V' where columnname='vtiger_accountbillads:state:bill_state:Accounts_Billing_State:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_street:bill_street:Accounts_Billing_Address:V' where columnname='vtiger_accountbillads:street:bill_street:Accounts_Billing_Address:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:bill_pobox:bill_pobox:Accounts_Billing_Po_Box:V' where columnname='vtiger_accountbillads:pobox:bill_pobox:Accounts_Billing_Po_Box:V'");
+
+
+
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
+
+//CustomView Advanced Filter
+
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_city:bill_city:Accounts_Billing_City:V' where columnname='vtiger_accountbillads:city:bill_city:Accounts_Billing_City:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_code:bill_code:Accounts_Billing_Code:V' where columnname='vtiger_accountbillads:code:bill_code:Accounts_Billing_Code:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_country:bill_country:Accounts_Billing_Country:V' where  columnname='vtiger_accountbillads:country:bill_country:Accounts_Billing_Country:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_state:bill_state:Accounts_Billing_State:V' where columnname='vtiger_accountbillads:state:bill_state:Accounts_Billing_State:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_street:bill_street:Accounts_Billing_Address:V' where columnname='vtiger_accountbillads:street:bill_street:Accounts_Billing_Address:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bill_pobox:bill_pobox:Accounts_Billing_Po_Box:V' where columnname='vtiger_accountbillads:pobox:bill_pobox:Accounts_Billing_Po_Box:V'");
+
+
+
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
+
+
+//Reports Columns
+ExecuteQuery("update vtiger_selectcolumn set columnname=' vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname=' vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_city:Accounts_Billing_City:bill_city:V' where columnname='vtiger_accountbillads:city:Accounts_Billing_City:bill_city:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname=' vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname=' vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_street:Accounts_Billing_Address:bill_street:V' where columnname='vtiger_accountbillads:street:Accounts_Billing_Address:bill_street:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_code:Accounts_Billing_Code:bill_code:V' where columnname='vtiger_accountbillads:code:Accounts_Billing_Code:bill_code:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:bill_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+
+
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_city:Accounts_Shipping_City:ship_city:V' where columnname='vtiger_accountshipads:city:Accounts_Shipping_City:ship_city:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_pobox:Accounts_Shipping_Po_Box:ship_pobox:V' where columnname='vtiger_accountshipads:pobox:Accounts_Shipping_Po_Box:ship_pobox:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_street:Accounts_Shipping_Address:ship_street:V' where columnname='vtiger_accountshipads:street:Accounts_Shipping_Address:ship_street:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_country:Accounts_Shipping_Country:ship_country:V' where columnname='vtiger_accountshipads:country:Accounts_Shipping_Country:ship_country:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_code:Accounts_Shipping_Code:ship_code:V' where columnname='vtiger_accountshipads:code:Accounts_Shipping_Code:ship_code:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+
+//Reports Advanced Filter
+ExecuteQuery("update vtiger_relcriteria set columnname=' vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname=' vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_city:Accounts_Billing_City:bill_city:V' where columnname='vtiger_accountbillads:city:Accounts_Billing_City:bill_city:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname=' vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname=' vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_street:Accounts_Billing_Address:bill_street:V' where columnname='vtiger_accountbillads:street:Accounts_Billing_Address:bill_street:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_code:Accounts_Billing_Code:bill_code:V' where columnname='vtiger_accountbillads:code:Accounts_Billing_Code:bill_code:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:bill_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+
+
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_city:Accounts_Shipping_City:ship_city:V' where columnname='vtiger_accountshipads:city:Accounts_Shipping_City:ship_city:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_pobox:Accounts_Shipping_Po_Box:ship_pobox:V' where columnname='vtiger_accountshipads:pobox:Accounts_Shipping_Po_Box:ship_pobox:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_street:Accounts_Shipping_Address:ship_street:V' where columnname='vtiger_accountshipads:street:Accounts_Shipping_Address:ship_street:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_country:Accounts_Shipping_Country:ship_country:V' where columnname='vtiger_accountshipads:country:Accounts_Shipping_Country:ship_country:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_code:Accounts_Shipping_Code:ship_code:V' where columnname='vtiger_accountshipads:code:Accounts_Shipping_Code:ship_code:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+
+
+//FieldLabel of Phone Field for Contacts has been changed to Other Phone
+
+ExecuteQuery("update vtiger_field set fieldlabel = 'Other Phone' where tablename='vtiger_contactsubdetails' and columnname='otherphone'");
+
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactsubdetails:otherphone:otherphone:Contacts_Other_Phone:V' where columnname='vtiger_contactsubdetails:otherphone:otherphone:Contacts_Phone:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_contactsubdetails:otherphone:otherphone:Contacts_Other_Phone:V' where columnname='vtiger_contactsubdetails:otherphone:otherphone:Contacts_Phone:V'");
+
+
+//get the values from vtiger_selectcolumn with columnname like 'vtiger_contactdetails%' get the columnname value check for the field Phone and change the FieldLabel from Contacts_Phone to Contacts_Other_Phone -- To be done
+
+$query1 = "select columnname from vtiger_selectcolumn where columnname like 'vtiger_contactdetails%' and columnname like '%Contacts_Phone%'";
+$result = $adb->query($query1);
+for($i = 0;$i < $adb->num_rows($result);$i++)
+{
+	$columnname = $adb->query_result($result,$i,'columnname');
+	$update_columnname = str_replace('Contacts_Phone','Contacts_Other_Phone',$columnname);
+	$query = "update vtiger_selectcolumn set columnname='$update_columnname' where columnname='$columnname'";
+	$adb->query($query);
+}
+
+//get the values from vtiger_relcriteria with columnname like 'vtiger_contactdetails%' get the columnname value check for the field Phone and change the FieldLabel from Contacts_Phone to Contacts_Other_Phone-- To be done
+$query1 = "select columnname from vtiger_relcriteria where columnname like 'vtiger_contactdetails%' and columnname like '%Contacts_Phone%'";
+$result = $adb->query($query1);
+for($i = 0;$i < $adb->num_rows($result);$i++)
+{
+	$columnname = $adb->query_result($result,$i,'columnname');
+	$update_columnname = str_replace('Contacts_Phone','Contacts_Other_Phone',$columnname);
+	$query = "update vtiger_relcriteria set columnname='$update_columnname' where columnname='$columnname'";
+	$adb->query($query);
+}
+
+//Removed the default value Mr in salutation
+ExecuteQuery("alter table vtiger_contactdetails change column salutation salutation varchar(50)");
+
+
+
+
+
+
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");
 
 
