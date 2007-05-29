@@ -994,6 +994,7 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Potentials")
 			{
 				$query = "left join vtiger_potential on vtiger_potential.accountid = vtiger_account.accountid
+					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
 					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
@@ -1089,6 +1090,7 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Potentials")
 			{
 				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_quotes.potentialid
+					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
 					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid 
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
@@ -1299,6 +1301,7 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Potentials")
                         {
 				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_seactivityrel.crmid 
+					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
                                         left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
                                         left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
