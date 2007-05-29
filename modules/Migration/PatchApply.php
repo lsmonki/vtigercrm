@@ -60,10 +60,10 @@ else
 	$_SESSION['adodb_current_object'] = $adb;
 
 
-for($i=0;$i<count($temp);$i++)
+for($patch_count=0;$patch_count<count($temp);$patch_count++)
 {
 	//Here we have to include all the files (all db differences for each release will be included)
-	$filename = "modules/Migration/DBChanges/".$temp[$i]."_to_".$temp[$i+1].".php";
+	$filename = "modules/Migration/DBChanges/".$temp[$patch_count]."_to_".$temp[$patch_count+1].".php";
 
 	$empty_tag = "<tr><td colspan='3'>&nbsp;</td></tr>";
 	$start_tag = "<tr><td colspan='3'><b><font color='red'>&nbsp;";
@@ -71,15 +71,15 @@ for($i=0;$i<count($temp);$i++)
 	
 	if(is_file($filename))
 	{
-		echo $empty_tag.$start_tag.$temp[$i]." ==> ".$temp[$i+1]." Database changes -- Starts.".$end_tag;
-		
+		echo $empty_tag.$start_tag.$temp[$patch_count]." ==> ".$temp[$patch_count+1]." Database changes -- Starts.".$end_tag;
+
 		include($filename);//include the file which contains the corresponding db changes
 
-		echo $start_tag.$temp[$i]." ==> ".$temp[$i+1]." Database changes -- Ends.".$end_tag;
+		echo $start_tag.$temp[$patch_count]." ==> ".$temp[$patch_count+1]." Database changes -- Ends.".$end_tag;
 	}
-	elseif(isset($temp[$i+1]))
+	elseif(isset($temp[$patch_count+1]))
 	{
-		echo $empty_tag.$start_tag."There is no Database Changes from ".$temp[$i]." ==> ".$temp[$i+1].$end_tag;
+		echo $empty_tag.$start_tag."There is no Database Changes from ".$temp[$patch_count]." ==> ".$temp[$patch_count+1].$end_tag;
 	}
 	else
 	{
