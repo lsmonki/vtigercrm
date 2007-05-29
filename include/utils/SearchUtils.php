@@ -460,6 +460,11 @@ function getAdvSearchfields($module)
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
 		}
 
+		if($tabid == 4)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Contact Image'";
+		}
+
 		$sql.= "group by vtiger_field.fieldlabel order by block,sequence";
 	}
 	else
@@ -482,6 +487,12 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
 		}
+		
+		if($tabid == 4)
+		{
+			$sql.= " and vtiger_field.fieldlabel != 'Contact Image'";
+		}	
+		
 		$sql .= " group by vtiger_field.fieldlabel order by block,sequence";
 
 	}
