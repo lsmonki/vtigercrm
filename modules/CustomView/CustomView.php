@@ -940,7 +940,7 @@ class CustomView extends CRMEntity{
 			"vendor_id"=>"vtiger_vendor.vendorname",
 			"potentialid"=>"vtiger_potential.potentialname",
 
-			//"vtiger_account.parentid"=>"vtiger_account2.accountname",
+			"vtiger_account.parentid"=>"vtiger_account2.accountname",
 			"quoteid"=>"vtiger_quotes.subject",
 			"salesorderid"=>"vtiger_salesorder.subject",
 			"campaignid"=>"vtiger_campaign.campaignname",
@@ -962,13 +962,18 @@ class CustomView extends CRMEntity{
 		}
 		elseif($change_table_field[$tablename.".".$fieldname] != '')//Added to handle special cases
 		{
-			$value = $change_table_field[$tablename.".".$fieldname].$this->getAdvComparator($comparator,$value,$datatype);
+			$tmp_value = '';
+			if((($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($value) == '') || (($comparator == 'n' || $comparator == 'k') && trim($value) != ''))
+			{
+				$tmp_value = $change_table_field[$tablename.".".$fieldname].' IS NULL or ';
+			}
+			$value = $tmp_value.$change_table_field[$tablename.".".$fieldname].$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		else if($fieldname == "handler")
+		elseif($fieldname == "handler")
 		{
 			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		else if($fieldname == "crmid" || $fieldname == "parent_id" || $fieldname == 'parentid')
+		elseif($fieldname == "crmid" || $fieldname == "parent_id" || $fieldname == 'parentid')
 		{
 				$value = $this->getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname);
 		}
@@ -1010,27 +1015,12 @@ class CustomView extends CRMEntity{
 			$modulename=$adb->query_result($res,$s,"setype");
 			if($modulename == 'Accounts')
 			{
-				if($this->customviewmodule == 'Accounts' || $this->customviewmodule == 'Calendar')
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-					{
-						$value .= 'vtiger_account2.accountname IS NULL or ';
-					}elseif($comparator == 'n' || $comparator == 'k' && trim($adv_chk_value) != '')
-					{
-						$value .= 'vtiger_account2.accountname IS NULL or ';
-					}
-					$value .= 'vtiger_account2.accountname';
+					$value .= 'vtiger_account.accountname IS NULL or ';
 				}
-				else
-				{
-					if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
-					{
-						$value .= 'vtiger_account.accountname IS NULL or ';
-					}
 
-					
-					$value .= 'vtiger_account.accountname';
-				}
+				$value .= 'vtiger_account.accountname';
 			}
 			if($modulename == 'Leads')
 			{
