@@ -599,6 +599,8 @@ function runEmailCommand(com,id) {
                                     case 'delete_msg':
 					//id=resp;
 					eval(resp);
+				if($("row_"+id))
+				{
                                         var row = $("row_"+id);
 					if(row.className == "unread_email") {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
@@ -621,9 +623,9 @@ function runEmailCommand(com,id) {
                                         );
 
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
-					if($("row_"+id)){
 	                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
-					}
+				}
+					
 									
 					if(preview_id == id){
                                         //      alert(preview_id + id);
