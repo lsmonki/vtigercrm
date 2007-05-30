@@ -626,6 +626,7 @@ for($i = 0;$i < $adb->num_rows($result);$i++)
 
 //Removed the default value Mr in salutation
 ExecuteQuery("alter table vtiger_contactdetails change column salutation salutation varchar(50)");
+ExecuteQuery("update vtiger_campaignstatus set campaignstatus='Completed' where campaignstatus='Complete'");
 
 
 
