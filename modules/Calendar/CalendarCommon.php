@@ -416,7 +416,7 @@ function sendInvitation($inviteesid,$mode,$subject,$desc)
 	require_once("modules/Emails/mail.php");
 	$invites=$mod_strings['INVITATION'];
 	$invitees_array = explode(';',$inviteesid);
-	$subject = $mode.' : '.$invites.$subject;
+	$subject = $invites.' : '.$subject;
 	$record = $focus->id;
 	foreach($invitees_array as $inviteeid)
 	{
