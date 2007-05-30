@@ -21,12 +21,11 @@ require_once("modules/Emails/mail.php");
  require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
  $userDetails=getOtherUserName($current_user->id,true);
- //echo '<pre>';print_r($userDetails);echo '</pre>';
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
  $taskassignedto = getAssignedTo(9);
  $eventassignedto = getAssignedTo(16);
-$mysel= $_GET['view'];
+$mysel= $_REQUEST['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 if(empty($mysel))
