@@ -515,8 +515,10 @@ function getAdvSearchfields($module)
 		$fieldtype = $adb->query_result($result,$i,"typeofdata");
 		$fieldtype = explode("~",$fieldtype);
 		$fieldtypeofdata = $fieldtype[0];	
-		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid' || $fieldcolname == 'parentid' || $fieldcolname == "recurringtype" || $fieldcolname == "campaignid" || $fieldcolname == "inventorymanager")
+		if($fieldcolname == 'account_id' || $fieldcolname == 'accountid' || $fieldcolname == 'product_id' || $fieldcolname == 'vendor_id' || $fieldcolname == 'contact_id' || $fieldcolname == 'contactid' || $fieldcolname == 'vendorid' || $fieldcolname == 'potentialid' || $fieldcolname == 'salesorderid' || $fieldcolname == 'quoteid' || $fieldcolname == 'parentid' || $fieldcolname == "recurringtype" || $fieldcolname == "campaignid" || $fieldcolname == "inventorymanager" ||  $fieldcolname == "handler")
 			$fieldtypeofdata = "V";
+		if($fieldcolname == "discontinued" || $fieldcolname == "active")
+			$fieldtypeofdata = "C";
 		$fieldlabel = $mod_strings[$adb->query_result($result,$i,"fieldlabel")];
 
 		// Added to display customfield label in search options
@@ -541,7 +543,11 @@ function getAdvSearchfields($module)
                         $fieldtablename = 'vtiger_usersQuotes';
                         $fieldcolname = 'user_name';
                 }
-
+		if($fieldtablename == 'vtiger_contactdetails' && $fieldcolname == 'reportsto')
+                {
+                        $fieldtablename = 'vtiger_contactdetails2';
+                        $fieldcolname = 'lastname';
+                }
 		if($fieldlabel != 'Related to')
 		{
 			if ($i==0)
@@ -549,6 +555,8 @@ function getAdvSearchfields($module)
 
 			if($fieldlabel == "Product Code")
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
+			if($fieldlabel == "Reports To")
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_strings[$fieldlabel]." - ".$mod_strings['LBL_LIST_LAST_NAME']."</option>";
 			elseif($fieldcolname == "contactid" || $fieldcolname == "contact_id")
 			{
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname::::".$fieldtypeofdata."\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
@@ -622,7 +630,10 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 		
 		case 'dcts':
-			$where_string = "(".$searchfield." not like '%".$searchstring."%' or ".$searchfield." is null)";
+			if($searchfield == "vtiger_users.user_name" || $searchfield =="vtiger_groups.groupname")	
+				$where_string = "(".$searchfield." not like '%".$searchstring."%')";
+			else
+				$where_string = "(".$searchfield." not like '%".$searchstring."%' or ".$searchfield." is null)";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
@@ -634,7 +645,10 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 			
 		case 'isn':
-			$where_string = "(".$searchfield." <> '".$searchstring."' or ".$searchfield." is null)";
+			if($searchfield == "vtiger_users.user_name" || $searchfield =="vtiger_groups.groupname")
+				$where_string = "(".$searchfield." <> '".$searchstring."')";
+			else	
+				$where_string = "(".$searchfield." <> '".$searchstring."' or ".$searchfield." is null)";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
