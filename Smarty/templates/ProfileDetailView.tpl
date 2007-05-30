@@ -133,7 +133,7 @@ function UpdateProfile()
 						<table class="layerHeadingULine" border="0" cellpadding="3" cellspacing="0" width="100%">
 						<tr style="cursor:move;">
 						<td class="layerPopupHeading" id = "renameUI" align="left" width="60%">{$APP.LBL_RENAME_PROFILE}</td>
-						<td align="right" width="40%"><a href="javascript:hide('renameProfile');"><img src="themes/bluelagoon/images/close.gif" align="middle" border="0"></a></td>
+						<td align="right" width="40%"><a href="javascript:fnhide('renameProfile');"><img src="themes/bluelagoon/images/close.gif" align="middle" border="0"></a></td>
 						</tr>
 						</table>
 					    <table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
@@ -157,7 +157,7 @@ function UpdateProfile()
 					    <tr>
 						<td align = "center">
 							<input name="save" value="Update" class="crmbutton small save" onclick="UpdateProfile();" type="button">&nbsp;&nbsp;
-							<input name="cancel" value="Cancel" class="crmbutton small save" onclick="hide('renameProfile');" type="button">&nbsp;&nbsp;
+							<input name="cancel" value="Cancel" class="crmbutton small save" onclick="fnhide('renameProfile');" type="button">&nbsp;&nbsp;
 						</td>
 					    </tr>		
 					    </table>		
