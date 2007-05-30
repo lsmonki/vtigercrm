@@ -1638,7 +1638,7 @@ class ReportRun extends CRMEntity
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($this->primarymodule);
-			$reportquery .= $sec_parameter;
+			$reportquery .= " ".$sec_parameter;
 		}
 		if(trim($groupsquery) != "")
 		{
