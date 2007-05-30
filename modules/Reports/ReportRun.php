@@ -398,14 +398,15 @@ class ReportRun extends CRMEntity
 				{
 					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
-				elseif($selectedfields[0] == "vtiger_users".$this->primarymodule && $selectedfields[1] == 'user_name')
+				elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name')
 				{
+					$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 					if($this->primarymodule == 'Products')
 					{
 						$fieldvalue = ($selectedfields[0].".user_name ".$this->getAdvComparator($comparator,trim($value),$datatype));
 					}else
 					{
-						$fieldvalue = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups.groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
+						$fieldvalue = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups".$module_from_tablename.".groupname end ".$this->getAdvComparator($comparator,trim($value),$datatype);
 					}
 				}
 				elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
@@ -1342,6 +1343,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_leadgrouprelation on vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
 				left join vtiger_groups as vtiger_groupsLeads on vtiger_groupsLeads.groupname = vtiger_leadgrouprelation.groupname
 				left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted=0 and vtiger_leaddetails.converted=0";
 		}
 		if($module == "Accounts")
@@ -1355,6 +1358,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
 				left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0 ";
 		}
@@ -1372,6 +1377,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentity.smownerid
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)." 
 				where vtiger_crmentity.deleted=0";
 		}
@@ -1385,6 +1392,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 				left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
 				left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentity.smownerid  
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid  
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0 ";
 		}
@@ -1414,8 +1423,9 @@ class ReportRun extends CRMEntity
 				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id 
 				left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 				left join vtiger_groups as vtiger_groupsHelpDesk on vtiger_groupsHelpDesk.groupname = vtiger_ticketgrouprelation.groupname
-															
 				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentity.smownerid=vtiger_usersHelpDesk.id 
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+				left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0 ";
 		}
@@ -1429,6 +1439,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupname = vtiger_activitygrouprelation.groupname
 				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
 				left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid
 				left join vtiger_recurringevents on vtiger_recurringevents.activityid = vtiger_activity.activityid
@@ -1453,6 +1465,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
 				left join vtiger_groups as vtiger_groupsQuotes on vtiger_groupsQuotes.groupname = vtiger_quotegrouprelation.groupname
 				left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_users as vtiger_usersRel1 on vtiger_usersRel1.id = vtiger_quotes.inventorymanager
 				left join vtiger_potential as vtiger_potentialRel on vtiger_potentialRel.potentialid = vtiger_quotes.potentialid
 				left join vtiger_contactdetails as vtiger_contactdetailsQuotes on vtiger_contactdetailsQuotes.contactid = vtiger_quotes.contactid
@@ -1471,6 +1485,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 				left join vtiger_groups as vtiger_groupsPurchaseOrder on vtiger_groupsPurchaseOrder.groupname = vtiger_pogrouprelation.groupname
 				left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentity.smownerid 
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_purchaseorder.vendorid 
 				left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1488,6 +1504,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
 				left join vtiger_groups as vtiger_groupsInvoice on vtiger_groupsInvoice.groupname = vtiger_invoicegrouprelation.groupname
 				left join vtiger_users as vtiger_usersInvoice on vtiger_usersInvoice.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
 				left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1507,6 +1525,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 				left join vtiger_groups as vtiger_groupsSalesOrder on vtiger_groupsSalesOrder.groupname = vtiger_sogrouprelation.groupname
 				left join vtiger_users as vtiger_usersSalesOrder on vtiger_usersSalesOrder.id = vtiger_crmentity.smownerid 
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 				where vtiger_crmentity.deleted=0";
 
 
@@ -1519,8 +1539,9 @@ class ReportRun extends CRMEntity
 				left join vtiger_products as vtiger_productsCampaigns on vtiger_productsCampaigns.productid = vtiger_campaign.product_id
 				left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
 				left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupname = vtiger_campaigngrouprelation.groupname
-
 		                left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentity.smownerid
+				left join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
+		                left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
                                 ".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where vtiger_crmentity.deleted=0";
 		}
