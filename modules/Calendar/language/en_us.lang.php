@@ -417,7 +417,7 @@ $mod_strings = Array(
 'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Delete this record.',
 
 //added to send invitation mail Subject.
-'INVITATION'=>' Invitations ',
+'INVITATION'=>' Invitation ',
 
 );
 
