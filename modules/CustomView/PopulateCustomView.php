@@ -183,7 +183,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_leaddetails:email:email:Leads_Email:E'),
 	
 		   Array('vtiger_account:accountname:accountname:Accounts_Account_Name:V',
-                         'vtiger_accountbillads:city:bill_city:Accounts_City:V',
+                         'vtiger_accountbillads:bill_city:bill_city:Accounts_City:V',
                          'vtiger_account:website:website:Accounts_Website:V',
                          'vtiger_account:phone:phone:Accounts_Phone:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V'),
@@ -197,7 +197,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 		   Array('vtiger_account:accountname:accountname:Accounts_Account_Name:V',
                          'vtiger_account:phone:phone:Accounts_Phone:V',
                          'vtiger_account:website:website:Accounts_Website:V',
-                         'vtiger_accountbillads:city:bill_city:Accounts_City:V',
+                         'vtiger_accountbillads:bill_city:bill_city:Accounts_City:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V'),
 
 		   Array('vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
