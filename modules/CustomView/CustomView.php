@@ -973,9 +973,10 @@ class CustomView extends CRMEntity{
 		{
 			$value = "vtiger_users.user_name".$this->getAdvComparator($comparator,$value,$datatype);
 		}
-		elseif($fieldname == "crmid" || $fieldname == "parent_id" || $fieldname == 'parentid')
+		elseif(($fieldname == "crmid" && $tablename != 'vtiger_crmentity') || $fieldname == "parent_id" || $fieldname == 'parentid')
 		{
-				$value = $this->getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname);
+			//For crmentity.crmid the control should not come here. This is only to get the related to modules
+			$value = $this->getSalesRelatedName($comparator,$value,$datatype,$tablename,$fieldname);
 		}
 		else
 		{
