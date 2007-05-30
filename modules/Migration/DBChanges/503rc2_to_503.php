@@ -252,7 +252,7 @@ for($i=0;$i<$adb->num_rows($res);$i++)
 */
 
 //ContactName in Calendar listview is a link but record id is empty in link so when we click the link fatal error comes
-ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:V' where columnname = 'vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V' and vtiger_customview.entitytype='Calendar'");
+//ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:V' where columnname = 'vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V' and vtiger_customview.entitytype='Calendar'");
 
 //Related To is not displayed in Calendar Listview
 ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_To:V' and vtiger_customview.entitytype='Calendar'");
@@ -534,12 +534,12 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountbillads:b
 
 
 
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_accountshipads:ship_country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
 
 //CustomView Advanced Filter
 
@@ -552,12 +552,12 @@ ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountbillads:bi
 
 
 
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_street:ship_street:Accounts_Shipping_Address:V' where columnname='vtiger_accountshipads:street:ship_street:Accounts_Shipping_Address:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_pobox:ship_pobox:Accounts_Shipping_Po_Box:V' where columnname='vtiger_accountshipads:pobox:ship_pobox:Accounts_Shipping_Po_Box:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_city:ship_city:Accounts_Shipping_City:V' where columnname='vtiger_accountshipads:city:ship_city:Accounts_Shipping_City:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_state:ship_state:Accounts_Shipping_State:V' where columnname='vtiger_accountshipads:state:ship_state:Accounts_Shipping_State:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_code:ship_code:Accounts_Shipping_Code:V' where columnname='vtiger_accountshipads:code:ship_code:Accounts_Shipping_Code:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:ship_country:ship_country:Accounts_Shipping_Country:V' where columnname='vtiger_accountshipads:country:ship_country:Accounts_Shipping_Country:V'");
 
 
 //Reports Columns
@@ -627,6 +627,26 @@ for($i = 0;$i < $adb->num_rows($result);$i++)
 //Removed the default value Mr in salutation
 ExecuteQuery("alter table vtiger_contactdetails change column salutation salutation varchar(50)");
 ExecuteQuery("update vtiger_campaignstatus set campaignstatus='Completed' where campaignstatus='Complete'");
+ExecuteQuery("update vtiger_crmentity set setype='PurchaseOrder' where setype='Orders'");
+ExecuteQuery("update vtiger_crmentity set setype='PurchaseOrder Attachment' where setype='Orders Attachment'");
+ExecuteQuery("update vtiger_crmentity set setype='Vendors' where setype='Vendor'");
+
+//Fixed customview related changes
+//Calendar - Related To
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I'");
+
+//Notes - Related To
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V' where columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V' where columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I'");
+
+//Notes - Contact Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactdetails:lastname:lastname:Notes_Contact_Name:V' where columnname='vtiger_notes:contact_id:contact_id:Notes_Contact_Name:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_contactdetails:lastname:lastname:Notes_Contact_Name:V' where columnname='vtiger_notes:contact_id:contact_id:Notes_Contact_Name:V'");
+
+//Notes - title
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_notes:title:notes_title:Notes_Title:V' where columnname='vtiger_notes:title:title:Notes_Subject:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_notes:title:notes_title:Notes_Title:V' where columnname='vtiger_notes:title:title:Notes_Subject:V'");
 
 
 
