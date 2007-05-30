@@ -46,14 +46,14 @@ class Accounts extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('accountname','city','website','phone','smownerid');		
+	var $sortby_fields = Array('accountname','bill_city','website','phone','smownerid');		
 
 	var $groupTable = Array('vtiger_accountgrouprelation','accountid');
 	
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 			'Account Name'=>Array('vtiger_account'=>'accountname'),
-			'City'=>Array('vtiger_accountbillads'=>'city'), 
+			'City'=>Array('vtiger_accountbillads'=>'bill_city'), 
 			'Website'=>Array('vtiger_account'=>'website'),
 			'Phone'=>Array('vtiger_account'=> 'phone'),
 			'Assigned To'=>Array('vtiger_crmentity'=>'smownerid')
@@ -70,7 +70,7 @@ class Accounts extends CRMEntity {
 
 	var $search_fields = Array(
 			'Account Name'=>Array('vtiger_account'=>'accountname'),
-			'City'=>Array('vtiger_accountbillads'=>'city'), 
+			'City'=>Array('vtiger_accountbillads'=>'bill_city'), 
 			);
 
 	var $search_fields_name = Array(

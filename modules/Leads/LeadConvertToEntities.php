@@ -336,10 +336,10 @@ else
 	/* Modified by Minnie -- END*/
 	$adb->query($sql_insert_account);
 
-	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street,pobox) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."','".$row["pobox"]."')";
+	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,bill_city,bill_code,bill_country,bill_state,bill_street,bill_pobox) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."','".$row["pobox"]."')";
 	$adb->query($sql_insert_accountbillads);
 
-	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,pobox,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["pobox"]."','".$row["state"] ."','" .$row["lane"]."')";
+	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,ship_city,ship_code,ship_country,ship_pobox,ship_state,ship_street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["pobox"]."','".$row["state"] ."','" .$row["lane"]."')";
 	$adb->query($sql_insert_accountshipads);
 
 	//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar

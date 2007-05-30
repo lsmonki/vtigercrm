@@ -112,7 +112,7 @@ class UsersLastImport extends SugarBean
 		} 
 		else if ($this->bean_type == 'Accounts')
 		{
-				$query = "SELECT distinct vtiger_account.*, vtiger_accountbillads.city,
+				$query = "SELECT distinct vtiger_account.*, vtiger_accountbillads.bill_city,
                                 vtiger_users.user_name user_name,
 				crmid, smownerid 
 				FROM vtiger_account
