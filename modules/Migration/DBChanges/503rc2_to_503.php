@@ -745,6 +745,12 @@ ExecuteQuery("delete from vtiger_selectcolumn where columnname ='vtiger_seproduc
 //cvstdfilter table is in MyISAM engine so that the order of diplay will not be same in all time
 $adb->query("alter table vtiger_cvstdfilter engine=InnoDB");
 
+//we have to set set permission as 3 in vtiger_def_org_share as the Calendar is private
+ExecuteQuery("update vtiger_def_org_share set permission=3 where tabid=16");
+
+
+
+
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");
 
