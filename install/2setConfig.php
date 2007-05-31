@@ -292,7 +292,22 @@ function verify_data(form) {
 		return false;
 	}
 
-	form.submit();
+	var SiteUrl = form.site_URL.value;
+        if(SiteUrl.indexOf("localhost") > -1 && SiteUrl.indexOf("localhost") < 10)
+        {
+                if(confirm("Speicfy the exact host name instead of \"localhost\" in Site URL field, otherwise you will experience some issues while working with vtiger plug-ins. Do you wish to Continue?"))
+                {
+                        form.submit();
+                }else
+                {
+                        form.site_URL.select();
+                        return false;
+                }
+        }else
+        {
+                form.submit();
+        }
+	
 }
 // end hiding contents from old browsers  -->
 </script>
