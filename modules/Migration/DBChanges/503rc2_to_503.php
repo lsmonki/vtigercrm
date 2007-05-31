@@ -561,12 +561,12 @@ ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_accountshipads:sh
 
 
 //Reports Columns
-ExecuteQuery("update vtiger_selectcolumn set columnname=' vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname=' vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname='vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_city:Accounts_Billing_City:bill_city:V' where columnname='vtiger_accountbillads:city:Accounts_Billing_City:bill_city:V'");
-ExecuteQuery("update vtiger_selectcolumn set columnname=' vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname=' vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname='vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_street:Accounts_Billing_Address:bill_street:V' where columnname='vtiger_accountbillads:street:Accounts_Billing_Address:bill_street:V'");
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_code:Accounts_Billing_Code:bill_code:V' where columnname='vtiger_accountbillads:code:Accounts_Billing_Code:bill_code:V'");
-ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:bill_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountbillads:bill_state:Accounts_Billing_State:bill_state:V' where columnname='vtiger_accountbillads:state:Accounts_Billing_State:bill_state:V'");
 
 
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_city:Accounts_Shipping_City:ship_city:V' where columnname='vtiger_accountshipads:city:Accounts_Shipping_City:ship_city:V'");
@@ -577,12 +577,12 @@ ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:s
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountshipads:ship_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
 
 //Reports Advanced Filter
-ExecuteQuery("update vtiger_relcriteria set columnname=' vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname=' vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_country:Accounts_Billing_Country:bill_country:V' where columnname='vtiger_accountbillads:country:Accounts_Billing_Country:bill_country:V'");
 ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_city:Accounts_Billing_City:bill_city:V' where columnname='vtiger_accountbillads:city:Accounts_Billing_City:bill_city:V'");
-ExecuteQuery("update vtiger_relcriteria set columnname=' vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname=' vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_pobox:Accounts_Billing_Po_Box:bill_pobox:V' where columnname='vtiger_accountbillads:pobox:Accounts_Billing_Po_Box:bill_pobox:V'");
 ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_street:Accounts_Billing_Address:bill_street:V' where columnname='vtiger_accountbillads:street:Accounts_Billing_Address:bill_street:V'");
 ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_code:Accounts_Billing_Code:bill_code:V' where columnname='vtiger_accountbillads:code:Accounts_Billing_Code:bill_code:V'");
-ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:bill_state:Accounts_Shipping_State:ship_state:V' where columnname='vtiger_accountshipads:state:Accounts_Shipping_State:ship_state:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountbillads:bill_state:Accounts_Billing_State:bill_state:V' where columnname='vtiger_accountbillads:state:Accounts_Billing_State:bill_state:V'");
 
 
 ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountshipads:ship_city:Accounts_Shipping_City:ship_city:V' where columnname='vtiger_accountshipads:city:Accounts_Shipping_City:ship_city:V'");
@@ -739,9 +739,11 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_salesorder:quote
 ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:V' where columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:I'");
 
 
+//Products Related To field deleted from vtiger_selectcolumn
+ExecuteQuery("delete from vtiger_selectcolumn where columnname ='vtiger_seproductsrel:crmid:Products_Related_To:parent_id:I'");
 
-
-
+//cvstdfilter table is in MyISAM engine so that the order of diplay will not be same in all time
+$adb->query("alter table vtiger_cvstdfilter engine=InnoDB");
 
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3RC2 to 5.0.3 -------- Ends \n\n");
