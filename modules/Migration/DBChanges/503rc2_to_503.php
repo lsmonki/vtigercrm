@@ -630,11 +630,16 @@ ExecuteQuery("update vtiger_campaignstatus set campaignstatus='Completed' where 
 ExecuteQuery("update vtiger_crmentity set setype='PurchaseOrder' where setype='Orders'");
 ExecuteQuery("update vtiger_crmentity set setype='PurchaseOrder Attachment' where setype='Orders Attachment'");
 ExecuteQuery("update vtiger_crmentity set setype='Vendors' where setype='Vendor'");
+ExecuteQuery("update vtiger_customview set entitytype='Vendors' where entitytype='Vendor'");
 
 //Fixed customview related changes
 //Calendar - Related To
 ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I'");
 ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I'");
+
+//Calendar - Start Date (Date & Time)
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT'");
 
 //Notes - Related To
 ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V' where columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I'");
@@ -647,6 +652,91 @@ ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_contactdetails:la
 //Notes - title
 ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_notes:title:notes_title:Notes_Title:V' where columnname='vtiger_notes:title:title:Notes_Subject:V'");
 ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_notes:title:notes_title:Notes_Title:V' where columnname='vtiger_notes:title:title:Notes_Subject:V'");
+
+//In Products - Related To and Contact should be deleted
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_seproductsrel:crmid:parent_id:Products_Related_to:I'");
+ExecuteQuery("delete from vtiger_cvadvfilter where columnname='vtiger_seproductsrel:crmid:parent_id:Products_Related_to:I'");
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_products:contactid:contact_id:Products_Contact_Name:I'");
+ExecuteQuery("delete from vtiger_cvadvfilter where columnname='vtiger_products:contactid:contact_id:Products_Contact_Name:I'");
+
+//For vendors module we have to update the module name as Vendors from Vendor
+$result = $adb->query("select vtiger_cvcolumnlist.cvid, vtiger_cvcolumnlist.columnname from vtiger_customview inner join vtiger_cvcolumnlist on vtiger_customview.cvid = vtiger_cvcolumnlist.cvid where vtiger_customview.entitytype='Vendors' and columnname != ''");
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	$cvid = $adb->query_result($result,$i,'cvid');
+	$columnname = $adb->query_result($result,$i,'columnname');
+	$new_columnname = str_replace(':Vendor_',':Vendors_',$columnname);
+
+	$adb->query("update vtiger_cvcolumnlist set columnname='$new_columnname' where columnname='$columnname'");
+	$adb->query("update vtiger_cvadvfilter set columnname='$new_columnname' where columnname='$columnname'");
+}
+
+//Vendor - instead of street, treet has been saved previously
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_vendor:street:street:Vendors_Street:V' where columnname='vtiger_vendor:street:treet:Vendors_Street:V'");
+
+//Accounts - Other Email
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_account:email2:email2:Accounts_Other_Email:V' where columnname='vtiger_account:email2:email2:Accounts_Other_Email:E'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_account:email2:email2:Accounts_Other_Email:V' where columnname='vtiger_account:email2:email2:Accounts_Other_Email:E'");
+
+//Accounts - SIC Code
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_account:siccode:siccode:Accounts_SIC_Code:V' where columnname='vtiger_account:siccode:siccode:Accounts_SIC_Code:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_account:siccode:siccode:Accounts_SIC_Code:V' where columnname='vtiger_account:siccode:siccode:Accounts_SIC_Code:I'");
+
+//Account - Member Of
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_account:parentid:account_id:Accounts_Member_Of:V' where columnname='vtiger_account:parentid:account_id:Accounts_Member_Of:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_account:parentid:account_id:Accounts_Member_Of:V' where columnname='vtiger_account:parentid:account_id:Accounts_Member_Of:I'");
+
+//Account - Email
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_account:email1:email1:Accounts_Email:V' where columnname='vtiger_account:email1:email1:Accounts_Email:E'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_account:email1:email1:Accounts_Email:V' where columnname='vtiger_account:email1:email1:Accounts_Email:E'");
+
+//Contact - Email
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_contactdetails:email:email:Contacts_Email:V' where columnname='vtiger_contactdetails:email:email:Contacts_Email:E'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_contactdetails:email:email:Contacts_Email:V' where columnname='vtiger_contactdetails:email:email:Contacts_Email:E'");
+
+//Leads - Email
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_leaddetails:email:email:Leads_Email:V' where columnname='vtiger_leaddetails:email:email:Leads_Email:E'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_leaddetails:email:email:Leads_Email:V' where columnname='vtiger_leaddetails:email:email:Leads_Email:E'");
+
+//Tickect - Related To
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V' where columnname='vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V' where columnname='vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I'");
+
+//Ticket - Product Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:V' where columnname='vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:V' where columnname='vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I'");
+
+//Invoice - Sales Order
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:V' where columnname='vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:V' where columnname='vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I'");
+
+//Product - Active
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_products:discontinued:discontinued:Products_Product_Active:C' where columnname='vtiger_products:discontinued:discontinued:Products_Product_Active:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_products:discontinued:discontinued:Products_Product_Active:C' where columnname='vtiger_products:discontinued:discontinued:Products_Product_Active:V'");
+
+//Product - Vendor Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:V' where columnname='vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:V' where columnname='vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:I'");
+
+//Product - Product Code (Part Number)
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_products:productcode:productcode:Products_Part_Number:V' where columnname='vtiger_products:productcode:productcode:Products_Product_Code:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_products:productcode:productcode:Products_Part_Number:V' where columnname='vtiger_products:productcode:productcode:Products_Product_Code:V'");
+
+//Purchase Order - Vendor Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:V' where columnname='vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:V' where columnname='vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I'");
+
+//Purchase Order - Due Date
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_purchaseorder:duedate:duedate:PurchaseOrder_Due_Date:D' where columnname='vtiger_purchaseorder:duedate:duedate:PurchaseOrder_Due_Date:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_purchaseorder:duedate:duedate:PurchaseOrder_Due_Date:D' where columnname='vtiger_purchaseorder:duedate:duedate:PurchaseOrder_Due_Date:V'");
+
+//SalesOrder - Potential Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:V' where columnname='vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:V' where columnname='vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:I'");
+
+//SalesOrder - Quote Name
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:V' where columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:I'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:V' where columnname='vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:I'");
 
 
 
