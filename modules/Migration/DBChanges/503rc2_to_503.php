@@ -749,6 +749,71 @@ $adb->query("alter table vtiger_cvstdfilter engine=InnoDB");
 ExecuteQuery("update vtiger_def_org_share set permission=3 where tabid=16");
 
 
+//Query added to delete custom field entries available only in field table and not in customfield tables
+$customtables_array = Array('vtiger_accountscf','vtiger_campaignscf','vtiger_contactscf','vtiger_invoicecf','vtiger_leadscf','vtiger_potentialscf','vtiger_pricebookcf','vtiger_productcf','vtiger_purchaseordercf','vtiger_quotescf','vtiger_salesordercf','vtiger_ticketcf','vtiger_vendorcf');
+
+foreach($customtables_array as $customfieldtable)
+{
+
+	$sql = "select fieldname,tablename,columnname,fieldid from vtiger_field where tablename='$customfieldtable'";
+	$result = $adb->query($sql);
+	
+	$columns=$adb->getColumnNames($customfieldtable);
+	for($i=0;$i < $adb->num_rows($result); $i++)
+	{
+		$columnname = $adb->query_result($result,$i,'columnname');
+		if(!in_array($columnname,$columns))
+		{
+			$fieldID = $adb->query_result($result,$i,'fieldid');
+			$query = "delete from vtiger_field where fieldid=".$fieldID;
+			$result1 = $adb->query($query);
+		}
+	}
+}
+
+
+$tables_array = Array(
+			"vtiger_cvcolumnlist"=>"columnname",
+			"vtiger_cvstdfilter"=>"columnname",
+			"vtiger_cvadvfilter"=>"columnname",
+			"vtiger_selectcolumn"=>"columnname",
+			"vtiger_relcriteria"=>"columnname",
+			"vtiger_reportsortcol"=>"columnname",
+			"vtiger_reportdatefilter"=>"datecolumnname",
+			"vtiger_reportsummary"=>"columnname",
+		     );
+
+
+foreach($tables_array as $tablename => $columnname)
+{
+	$query = "select $columnname from $tablename where $columnname like '%:cf_%'";
+	$result = $adb->query($query);
+	$noofrows = $adb->num_rows($result);
+
+	for($i=0;$i<$noofrows;$i++)
+	{
+		//First get the fieldname from the result
+		$col_value = $adb->query_result($result,$i,$columnname);
+		$fieldname = substr($col_value,strpos($col_value,':cf_')+1,6);
+
+		//Now check whether this field is available in field table
+		$sql1 = "select fieldid from vtiger_field where fieldname='".$fieldname."'";
+		$result1 = $adb->query($sql1);
+		$noofrows1 = $adb->num_rows($result1);
+		$fieldid = $adb->query_result($result1,0,"fieldid");
+
+		//if there is no field then we have to delete that field entries
+		if($noofrows1 == 0 && !isset($fieldid))
+		{
+			//Now we have to delete that customfield from the $tablename
+			$adb->query("delete from $tablename where $columnname like '%:".$fieldname.":%'");
+		}
+	}
+}
+
+
+
+
 
 
 
