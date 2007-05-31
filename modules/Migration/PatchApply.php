@@ -118,7 +118,12 @@ else
 	$adb->query("insert into vtiger_version (id, old_version, current_version) values ('','".$versions[$source_version]."','".$vtiger_current_version."')");
 }
 
-
+//If currency name in config.inc.php file and currency name in vtiger_currency_info table is differ then we have to change in config.inc.php file
+$mig_currency = $adb->query_result($adb->query("select currency_name from vtiger_currency_info"),0,'currency_name');
+if($currency_name != $mig_currency)
+{
+	echo "<br><br><b><font color='red'>Note: Please change the base currency name as '$mig_currency' in config.inc.php ie., change the variable currency name as $"."currency_name = '$mig_currency' in config.inc.php file</b>";
+}
 
 //Function used to execute the query and display the success/failure of the query
 function ExecuteQuery($query)
