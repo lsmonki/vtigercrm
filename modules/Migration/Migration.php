@@ -157,7 +157,7 @@ class Migration
 	function dropDatabase($conn,$dbname)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function dropDatabase($conn,$dbname). Going to drop the database - $dbname");
+		$migrationlog->debug("Inside the function dropDatabase(".get_class($conn).",".$dbname."). Going to drop the database - $dbname");
 		$sql = "drop database ".$dbname;
 		$conn->query($sql);
 
@@ -173,7 +173,7 @@ class Migration
 	function createDatabase($conn,$dbname)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function createDatabase($conn, $dbname). Going to create the database - $dbname");
+		$migrationlog->debug("Inside the function createDatabase(".get_class($conn).",".$dbname."). Going to create the database - $dbname");
 		
 		$sql = "create database ".$dbname;
 		$conn->query($sql);
@@ -285,7 +285,7 @@ class Migration
 	function modifyDatabase($conn)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function modifyDatabase($conn)");
+		$migrationlog->debug("Inside the function modifyDatabase(".get_class($conn).")");
 		$migrationlog->debug("\n\n\nMickie ---- Starts");
 
 		$_SESSION['migration_log'] .= "<br>The current database is going to be modified by executing the following queries...<br>";

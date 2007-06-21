@@ -31,7 +31,7 @@ require_once("include/ListView/ListViewSession.php");
 function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='')
 {
 	$log = LoggerManager::getLogger('account_list');
-	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".$focus.",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
+	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".get_class($focus).",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
 
 	require_once('Smarty_setup.php');
 	require_once("data/Tracker.php");
@@ -472,7 +472,7 @@ function getHistory($parentmodule,$query,$id)
 function getPriceBookRelatedProducts($query,$focus,$returnset='')
 {
 	global $log;
-	$log->debug("Entering getPriceBookRelatedProducts(".$query.",".$focus.",".$returnset.") method ...");
+	$log->debug("Entering getPriceBookRelatedProducts(".$query.",".get_class($focus).",".$returnset.") method ...");
 
 	global $adb;
 	global $app_strings;

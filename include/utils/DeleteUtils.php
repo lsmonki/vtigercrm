@@ -17,7 +17,7 @@
 function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 {
 	global $log;
-	$log->debug("Entering DeleteEntity(".$module.",".$return_module.",".$focus.",".$record.",".$return_id.") method ...");
+	$log->debug("Entering DeleteEntity(".$module.",".$return_module.",".get_class($focus).",".$record.",".$return_id.") method ...");
 	global $adb;
 	global $current_user;
 

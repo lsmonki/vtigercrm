@@ -33,7 +33,7 @@
  */
 function is_admin($user) {
 	global $log;
-	$log->debug("Entering is_admin(".$user.") method ...");
+	$log->debug("Entering is_admin(".$user->user_name.") method ...");
 	
 	if ($user->is_admin == 'on')
 	{
@@ -746,7 +746,7 @@ function getUserFullName($userid)
 function getURLstring($focus)
 {
 	global $log;
-	$log->debug("Entering getURLstring(".$focus.") method ...");
+	$log->debug("Entering getURLstring(".get_class($focus).") method ...");
 	$qry = "";
 	foreach($focus->column_fields as $fldname=>$val)
 	{
@@ -1657,7 +1657,7 @@ function DefHomeView()
 function setObjectValuesFromRequest($focus)
 {
 	global $log;
-	$log->debug("Entering setObjectValuesFromRequest(".$focus.") method ...");
+	$log->debug("Entering setObjectValuesFromRequest(".get_class($focus).") method ...");
 	global $current_user;
 	$currencyid=fetchCurrency($current_user->id);
 	$rate_symbol = getCurrencySymbolandCRate($currencyid);
@@ -2009,7 +2009,7 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 function sendNotificationToOwner($module,$focus)
 {
 	global $log,$app_strings;
-	$log->debug("Entering sendNotificationToOwner(".$module.",".$focus.") method ...");
+	$log->debug("Entering sendNotificationToOwner(".$module.",".get_class($focus).") method ...");
 	require_once("modules/Emails/mail.php");
 	global $current_user;
 

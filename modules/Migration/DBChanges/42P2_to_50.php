@@ -4118,7 +4118,7 @@ function Execute($query)
 	{
 		echo '
 			<tr width="100%">
-				<td width="25%" nowrap>'.$status.'</td>
+				<td width="25%" nowrap>'.get_class($status).'</td>
 				<td width="5%"><font color="green"> S </font></td>
 				<td width="70%">'.$query.'</td>
 			</tr>';

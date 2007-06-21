@@ -25,7 +25,7 @@ global $log;
 function getMailServerInfo($user)
 {
 	global $log;
-	$log->debug("Entering getMailServerInfo(".$user.") method ...");
+	$log->debug("Entering getMailServerInfo(".$user->user_name.") method ...");
 	global $adb;
 	//$sql= "select vtiger_rolename from vtiger_user2role where userid='" .$userid ."'";
    $sql = "select * from vtiger_mail_accounts where status=1 and user_id=".$user->id;
@@ -526,7 +526,7 @@ function setPermittedDefaultSharingAction2Session($profileid)
 function createRole($roleName,$parentRoleId,$roleProfileArray)
 {
 	global $log;
-	$log->debug("Entering createRole(".$roleName.",".$parentRoleId.",".$roleProfileArray.") method ...");
+	$log->debug("Entering createRole(".$roleName.",".$parentRoleId.") method ...");
 	global $adb;
 	$parentRoleDetails=getRoleInformation($parentRoleId);
 	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
@@ -564,7 +564,7 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
 function updateRole($roleId,$roleName,$roleProfileArray)
 {
 	global $log;
-	$log->debug("Entering updateRole(".$roleId.",".$roleName.",".$roleProfileArray.") method ...");
+	$log->debug("Entering updateRole(".$roleId.",".$roleName.") method ...");
 	global $adb;
 	$sql1 = "update vtiger_role set rolename='".$roleName."' where roleid='".$roleId."'";
         $adb->query($sql1);

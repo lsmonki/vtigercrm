@@ -33,7 +33,7 @@ $table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.first
 function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
 	global $log;
-	$log->debug("Entering getSearchListHeaderValues(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
+	$log->debug("Entering getSearchListHeaderValues(".get_class($focus).",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".get_class($oCv).") method ...");
         global $adb;
         global $theme;
         global $app_strings;

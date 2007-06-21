@@ -1003,7 +1003,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 function getDetailAssociatedProducts($module,$focus)
 {
 	global $log;
-	$log->debug("Entering getDetailAssociatedProducts(".$module.",".$focus.") method ...");
+	$log->debug("Entering getDetailAssociatedProducts(".$module.",".get_class($focus).") method ...");
 	global $adb;
 	global $mod_strings;
 	global $theme;
@@ -1321,7 +1321,7 @@ function getDetailAssociatedProducts($module,$focus)
 function getRelatedLists($module,$focus)
 {
 	global $log;
-	$log->debug("Entering getRelatedLists(".$module.",".$focus.") method ...");
+	$log->debug("Entering getRelatedLists(".$module.",".get_class($focus).") method ...");
 	global $adb;
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');

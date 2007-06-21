@@ -766,7 +766,7 @@ $log->info("in getOldFileName  ".$notesid);
 	{
 		$this->log->debug("CRMEntity:process_full_list_query");
 		$result =& $this->db->query($query, false);
-		$this->log->debug("CRMEntity:process_full_list_query: result is ".$result);
+		//$this->log->debug("CRMEntity:process_full_list_query: result is ".$result);
 
 
 		if($this->db->getRowCount($result) > 0){

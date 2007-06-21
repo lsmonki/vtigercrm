@@ -18,7 +18,7 @@
 function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
 {
 	global $log;
-	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$focus.",".$num_of_products.",".$associated_prod.") method ...");
+	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$num_of_products.",".$associated_prod.") method ...");
 	
 	$productDetails = Array();
 	$productBlock = Array();
@@ -472,7 +472,7 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
 function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateDemand='')
 {
 	global $log, $adb;
-	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
+	$log->debug("Entering into function saveInventoryProductDetails($module).");
 
 	$ext_prod_arr = Array();
 	if($focus->mode == 'edit')
@@ -646,7 +646,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	$sh_query = "insert into vtiger_inventoryshippingrel(".$sh_query_fields.") values(".$sh_query_values.")";
 	$adb->query($sh_query);
 
-	$log->debug("Exit from function saveInventoryProductDetails($focus, $module).");
+	$log->debug("Exit from function saveInventoryProductDetails($module).");
 }
 
 /**	function used to get the tax type for the entity (PO, SO, Quotes or Invoice)

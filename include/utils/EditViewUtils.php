@@ -1238,7 +1238,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
 	global $log;
-	$log->debug("Entering getConvertSoToInvoice(".$focus.",".$so_focus.",".$soid.") method ...");
+	$log->debug("Entering getConvertSoToInvoice(".get_class($focus).",".get_class($so_focus).",".$soid.") method ...");
         $log->info("in getConvertSoToInvoice ".$soid);
 
 	$focus->column_fields['salesorder_id'] = $soid;
@@ -1281,7 +1281,7 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 {
 	global $log;
-	$log->debug("Entering getConvertQuoteToInvoice(".$focus.",".$quote_focus.",".$quoteid.") method ...");
+	$log->debug("Entering getConvertQuoteToInvoice(".get_class($focus).",".get_class($quote_focus).",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToInvoice ".$quoteid);
 
 	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
@@ -1316,7 +1316,7 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
 	global $log;
-	$log->debug("Entering getConvertQuoteToSoObject(".$focus.",".$quote_focus.",".$quoteid.") method ...");
+	$log->debug("Entering getConvertQuoteToSoObject(".get_class($focus).",".get_class($quote_focus).",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToSoObject ".$quoteid);
 
         $focus->column_fields['quote_id'] = $quoteid;
@@ -1356,7 +1356,7 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 function getAssociatedProducts($module,$focus,$seid='')
 {
 	global $log;
-	$log->debug("Entering getAssociatedProducts($module,$focus,$seid='') method ...");
+	$log->debug("Entering getAssociatedProducts(".$module.",".get_class($focus).",".$seid."='') method ...");
 	global $adb;
 	$output = '';
 	global $theme,$current_user;
@@ -1720,7 +1720,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 function getNoOfAssocProducts($module,$focus,$seid='')
 {
 	global $log;
-	$log->debug("Entering getNoOfAssocProducts($module,$focus,$seid='') method ...");
+	$log->debug("Entering getNoOfAssocProducts(".$module.",".get_class($focus).",".$seid."='') method ...");
 	global $adb;
 	$output = '';
 	if($module == 'Quotes')

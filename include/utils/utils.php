@@ -234,7 +234,7 @@ function clean($string, $maxLength)
 function safe_map($request_var, & $focus, $always_copy = false)
 {
 	global $log;
-	$log->debug("Entering safe_map(".$request_var.",".$focus.",".$always_copy.") method ...");
+	$log->debug("Entering safe_map(".$request_var.",".get_class($focus).",".$always_copy.") method ...");
 	safe_map_named($request_var, $focus, $request_var, $always_copy);
 	$log->debug("Exiting safe_map method ...");
 }
@@ -249,7 +249,7 @@ function safe_map($request_var, & $focus, $always_copy = false)
 function safe_map_named($request_var, & $focus, $member_var, $always_copy)
 {
 	global $log;
-	$log->debug("Entering safe_map_named(".$request_var.",".$focus.",".$member_var.",".$always_copy.") method ...");
+	$log->debug("Entering safe_map_named(".$request_var.",".get_class($focus).",".$member_var.",".$always_copy.") method ...");
 	if (isset($_REQUEST[$request_var]) && ($always_copy || is_null($focus->$member_var))) {
 		$log->debug("safe map named called assigning '{$_REQUEST[$request_var]}' to $member_var");
 		$focus->$member_var = $_REQUEST[$request_var];

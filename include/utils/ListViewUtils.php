@@ -38,7 +38,7 @@ require_once('user_privileges/default_module_view.php'); //new
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='')
 {
 	global $log, $singlepane_view;
-	$log->debug("Entering getListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
+	$log->debug("Entering getListViewHeader(". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".get_class($oCv).") method ...");
 	global $adb;
 	global $theme;
 	global $app_strings;
@@ -275,7 +275,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='')
 {
 	global $log;
-	$log->debug("Entering getSearchListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.") method ...");
+	$log->debug("Entering getSearchListViewHeader(".get_class($focus).",". $module.",".$sort_qry.",".$sorder.",".$order_by.") method ...");
 	global $adb;
 	global $theme;
 	global $app_strings;
@@ -501,7 +501,7 @@ function getNavigationValues($display, $noofrows, $limit)
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
 	global $log;
-	$log->debug("Entering getListViewEntries(".$focus.",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".$oCv.") method ...");
+	$log->debug("Entering getListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".get_class($oCv).") method ...");
 	$tabname = getParentTab();
 	global $adb,$current_user;
 	global $app_strings;
@@ -940,7 +940,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
 {
 	global $log;
-	$log->debug("Entering getSearchListViewEntries(".$focus.",". $module.",".$list_result.",".$navigation_array.") method ...");
+	$log->debug("Entering getSearchListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.") method ...");
 	global $adb,$theme,$current_user;
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '';
@@ -1149,7 +1149,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
 	global $log,$app_strings,$current_language;
-	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
+	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".get_class($focus).",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
