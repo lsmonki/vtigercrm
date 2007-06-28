@@ -158,12 +158,5 @@ echo '</div>';
 //test ended by Richie
 
 imap_close($MailBox->mbox);
-function decode_header($string){
-	$elements = imap_mime_header_decode($string);
-	for ($i=0; $i<count($elements); $i++) {
-    		$result .= $elements[$i]->text;
-	}
-	return $result;
-}
 
 ?>

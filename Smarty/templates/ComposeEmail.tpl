@@ -24,6 +24,7 @@
 <script src="include/js/general.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="modules/Products/multifile.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
@@ -108,12 +109,26 @@
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
 	<td class="cellText" style="padding: 5px;">
-		<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>
+		<!--<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>-->
+		<input name="del_file_list" type="hidden" value="">
+					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+						<input id="my_file_element" type="file" name="{$elements.2.0}" tabindex="7" >
+																	</div>
+					<script>
+						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						multi_selector.count = 0
+						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
+					</script>
 		<div id="attach_temp_cont" style="display:none;">
 		<table class="small" width="100% ">
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
 			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
-		{/foreach}	
+		{/foreach}
+		{if $WEBMAIL eq 'true'}
+		{foreach item="attach_files" from=$webmail_attachments}
+                        <tr ><td width="90%">{$attach_files}</td></tr>
+                {/foreach}	
+		{/if}
 		</table>	
 		</div>	
 		{$elements.3.0}
@@ -132,6 +147,9 @@
 	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
 		<input type="hidden" name="from_add" value="{$from_add}">
+		<input type="hidden" name="att_module" value="Webmails">
+		<input type="hidden" name="mailid" value="{$mailid}">
+		<input type="hidden" name="mailbox" value="{$mailbox}">
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}

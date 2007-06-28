@@ -174,11 +174,84 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
+		if($_REQUEST['att_module'] == 'Webmails')
+		{
+			require_once("modules/Webmails/Webmails.php");
+		        require_once("modules/Webmails/MailParse.php");
+		        require_once('modules/Webmails/MailBox.php');
+		        //$mailInfo = getMailServerInfo($current_user);
+			//$temprow = $adb->fetch_array($mailInfo);
 
+		        $MailBox = new MailBox($_REQUEST["mailbox"]);
+		        $mbox = $MailBox->mbox;
+		        $webmail = new Webmails($mbox,$_REQUEST['mailid']);
+		        $array_tab = Array();
+		        $webmail->loadMail($array_tab);
+			foreach($webmail->att_details as $fileindex => $files)
+			{
+				if($files['name'] != '' && $files['size'] > 0)
+				{
+					//print_r($files);
+					$file_saved = $this->saveForwardAttachments($id,$module,$files);
+				}
+			}
+		}
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}	
 	
-
+	function saveForwardAttachments($id,$module,$file_details)
+	{
+		global $log;
+                $log->debug("Entering into saveForwardAttachments($id,$module,$file_details) method.");
+                global $adb, $current_user;
+		global $upload_badext;
+		require_once('modules/Webmails/MailBox.php');
+                $mailbox=$_REQUEST["mailbox"];
+		$MailBox = new MailBox($mailbox);
+		$mail = $MailBox->mbox;
+		$binFile = preg_replace('/\s+/', '_', $file_details['name']);//replace space with _ in filename
+                $ext_pos = strrpos($binFile, ".");
+                $ext = substr($binFile, $ext_pos + 1);
+                if (in_array($ext, $upload_badext))
+                {
+                    $binFile .= ".txt";
+                }
+		$filename = basename($binFile);
+		$filetype= $file_details['type'];
+		$filesize = $file_details['size'];
+		$filepart = $file_details['part'];
+		$transfer = $file_details['transfer'];
+		$file = imap_fetchbody($mail,$_REQUEST['mailid'],$filepart);
+		if ($transfer == 'BASE64')
+			    $file = imap_base64($file);
+		elseif($transfer == 'QUOTED-PRINTABLE')
+			    $file = imap_qprint($file);
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
+		$date_var = date('YmdHis');
+		//to get the owner id
+		$ownerid = $this->column_fields['assigned_user_id'];
+		if(!isset($ownerid) || $ownerid=='')
+			$ownerid = $current_user->id;
+		$upload_file_path = decideFilePath();
+		file_put_contents ($upload_file_path.$current_id."_".$filename,$file);
+		
+                        $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".addslashes($this->column_fields['description'])."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+                        $adb->query($sql1);
+                        $sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".addslashes($this->column_fields['description'])."','".$filetype."','".$upload_file_path."')";
+                        $result=$adb->query($sql2);
+                        if($_REQUEST['mode'] == 'edit')
+                        {
+                                if($id != '' && $_REQUEST['fileid'] != '')
+                                {
+                                        $delquery = 'delete from vtiger_seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
+		                        $adb->query($delquery);
+			        }
+			}
+                        $sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+                        $adb->query($sql3);
+                        return true;
+		$log->debug("exiting from  saveforwardattachment function.");
+	}
 	/** Returns a list of the associated contacts
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..

@@ -100,6 +100,16 @@ else
 $parentid= $_REQUEST['parent_id'];
 $myids=explode("|",$parentid);
 $all_to_emailids = Array();
+if(isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails')
+{
+	$from_name = $from_arr[0];
+	$from_address = $_REQUEST['from_add'];
+}
+else
+{
+	$from_name = $current_user->user_name;
+	$from_address = '';
+}
 for ($i=0;$i<(count($myids)-1);$i++)
 {
 	$realid=explode("@",$myids[$i]);
@@ -111,7 +121,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
                 $emailadd = $adb->query_result($adb->query("select email1 from vtiger_users where id=$mycrmid"),0,'email1');
                 $pmodule = 'Users';
                 $description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$focus->column_fields['subject'],$description,'','','all',$focus->id);
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -159,7 +169,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$focus->column_fields['subject'],$description,'','','all',$focus->id);
 				}	
 
 				$all_to_emailids []= $emailadd;

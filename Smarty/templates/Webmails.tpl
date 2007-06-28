@@ -60,7 +60,7 @@
 							</tr>
 							<tr>
 							<td>
-								<img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
+								<img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;<span ><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 								<div id="box_list">
 								<ul style="list-style-type:none;">
 

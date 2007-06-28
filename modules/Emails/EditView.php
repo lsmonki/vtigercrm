@@ -164,6 +164,8 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$webmail->loadMail($array_tab);
 	  $hdr = @imap_headerinfo($mbox, $mailid);
 	$smarty->assign('WEBMAIL',"true");
+	$smarty->assign('mailid',$mailid);
+	$smarty->assign('mailbox',$mailbox);
 	$temp_id = $MailBox->boxinfo['mail_id'];
 	$smarty->assign('from_add',$temp_id);
 	if($_REQUEST["reply"] == "all") {
@@ -204,6 +206,12 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	} elseif($_REQUEST["forward"] == "true" ) {
 		//$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
 		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
+		//added for attachment handling
+		$attachment_links = Array();
+		for($i=0;$i<count($webmail->attname);$i++){
+			        $attachment_links[$i] = $webmail->anchor_arr[$i].decode_header($webmail->attname[$i])."</a></br>";
+		}
+		$smarty->assign('webmail_attachments',$attachment_links);
 		if(preg_match("/FW:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);
 		else

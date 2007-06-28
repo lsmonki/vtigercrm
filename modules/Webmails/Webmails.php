@@ -665,6 +665,11 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			if(!preg_match("/unknown/",$att_name)){	
 				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
 				$this->anchor_arr[$ct] = ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+				$this->att_details[$ct]['name'] = $att_name;
+				$this->att_details[$ct]['size'] = $tmp['size'];
+				$this->att_details[$ct]['type'] = $tmp['mime'];
+				$this->att_details[$ct]['part'] = $tmp['number'];
+				$this->att_details[$ct]['transfer'] = $tmp['transfer'];
 				$ct++;
 			}
 		}
@@ -1001,5 +1006,13 @@ function convertMailData2Html($maildata, $cutafter = 0)
 
 
     
+}
+function decode_header($string)
+{
+        $elements = imap_mime_header_decode($string);
+        for ($i=0; $i<count($elements); $i++) {
+                $result .= $elements[$i]->text;
+        }
+        return $result;
 }
 ?>

@@ -101,8 +101,11 @@ if($file_name != '' && $_FILES['filename']['size'] == 0){
 }
 if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail']) {
 	require_once("modules/Emails/mail.php");
-	if($_REQUEST['parent_id'] == '')
-		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$_REQUEST['from_add'],'',$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
+	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
+	{
+		$from_arr = explode('@',$_REQUEST['from_add']);
+		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$from_arr[0],$_REQUEST['from_add'],$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
+	}
 	else
 		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
 		
