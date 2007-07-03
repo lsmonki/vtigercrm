@@ -52,7 +52,7 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
  		if($CALCULATOR_DISPLAY == 'true') 
  		        $html_string .= '               <td style="padding-right:0px"><a href="#"><img src="'.$image_path.'btnL3Calc.gif" alt="'.$app_strings['LBL_CALCULATOR_ALT'].'" title="'.$app_strings['LBL_CALCULATOR_TITLE'].'" border=0 onClick="fnvshobj(this,\'calculator_cont\');fetch_calc();"></a></td>'; 
  		if($CHAT_DISPLAY == 'true') 
- 		        $html_string .= '               <td style="padding-right:10px"><a href="javascript:;" onClick=\'return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");\'><img src="'.$image_path.'tbarChat.gif" alt="'.$app_strings['LBL_CHAT_ALT'].'" title="'.$app_strings['LBL_CHAT_TITLE'].'" border=0></a></td>'; 
+ 		        $html_string .= '               <td style="padding-right:10px"><a href="javascript:;" onClick=\'return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");\'><img src="'.$image_path.'tbarChat.gif" alt="'.$app_strings['LBL_CHAT_ALT'].'" title="'.$app_strings['LBL_CHAT_TITLE'].'" border=0></a></td>'; 
  		 
  		$html_string .= ' 
 					<td style="padding-right:10px"><img src="'.$image_path.'btnL3Tracker.gif" alt="'.$app_strings['LBL_LAST_VIEWED'].'" title="'.$app_strings['LBL_LAST_VIEWED'].'" border=0 onClick="fnvshobj(this,\'tracker\');"></td>
