@@ -1816,7 +1816,7 @@ function create_parenttab_data_file()
 	$log->debug("Entering create_parenttab_data_file() method ...");
 	$log->info("creating parent_tabdata file");
 	global $adb;
-	$sql = "select parenttabid,parenttab_label from vtiger_parenttab order by sequence";
+	$sql = "select parenttabid,parenttab_label from vtiger_parenttab where visible=0 order by sequence";
 	$result = $adb->query($sql);
 	$num_rows=$adb->num_rows($result);
 	$result_array=Array();
