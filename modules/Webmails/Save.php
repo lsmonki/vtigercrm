@@ -139,7 +139,8 @@ $all_to_ids = str_replace('<','&lt;',$all_to_ids);
 $all_to_ids = str_replace('>','&gt;',$all_to_ids);
 $query = 'insert into vtiger_emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
 $adb->query($query);
-
+$query = 'insert into vtiger_seactivityrel values ('.$contact_focus->id.','.$focus->id.')';
+$adb->query($query);
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
 $return_action='ListView';
