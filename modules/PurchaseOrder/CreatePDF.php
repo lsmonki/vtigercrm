@@ -216,7 +216,7 @@ for($l=0;$l<$num_pages;$l++)
 	}
 
 	$pdf->AddPage();
-	include("pdf_templates/header.php");
+	include("modules/PurchaseOrder/pdf_templates/header.php");
 	include("include/fpdf/templates/body.php");
 
 	//if bottom > 145 then we skip the Description and T&C in every page and display only in lastpage
@@ -224,7 +224,7 @@ for($l=0;$l<$num_pages;$l++)
 	if($display_desc_tc == 'true')
 	if($bottom <= 145)
 	{
-		include("pdf_templates/footer.php");
+		include("modules/PurchaseOrder/pdf_templates/footer.php");
 	}
 
 	$page_num++;
@@ -232,9 +232,9 @@ for($l=0;$l<$num_pages;$l++)
 	if (($endpage) && ($lastpage))
 	{
 		$pdf->AddPage();
-		include("pdf_templates/header.php");
-		include("pdf_templates/lastpage/body.php");
-		include("pdf_templates/lastpage/footer.php");
+		include("modules/PurchaseOrder/pdf_templates/header.php");
+		include("modules/PurchaseOrder/pdf_templates/lastpage/body.php");
+		include("modules/PurchaseOrder/pdf_templates/lastpage/footer.php");
 	}
 }
 
