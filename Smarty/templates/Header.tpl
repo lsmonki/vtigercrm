@@ -142,8 +142,7 @@
 <div id="calculator_cont" style="position:absolute; z-index:10000" ></div>
 	{include file="Clock.tpl"}
 
-
-<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
+<div id="qcform" style="position:absolute;width:500px;top:80px;left:450px;z-index:5000;"></div>
 
 <script>
 var gVTModule = '{$smarty.request.module}';
