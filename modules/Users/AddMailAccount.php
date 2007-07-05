@@ -76,7 +76,16 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("INT_MAILER_USE", "CHECKED");
 			else
 				$smarty->assign("INT_MAILER_NOUSE", "CHECKED");
-
+			if(strtolower($temprow['box_refresh']) == "60000")
+	                        $smarty->assign("BOX_OPT1", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "120000")
+			        $smarty->assign("BOX_OPT2", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "180000")
+			        $smarty->assign("BOX_OPT3", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "240000")
+			        $smarty->assign("BOX_OPT4", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "300000")
+			        $smarty->assign("BOX_OPT5", " SELECTED");
 		}
 	}
 }	

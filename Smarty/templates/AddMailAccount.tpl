@@ -127,11 +127,11 @@
            <td class="dvtCellLabel" align="right">{$MOD.LBL_REFRESH_TIMEOUT}</td>
            <td class="dvtCellInfo">
 		<select value="{$BOX_REFRESH}" name="box_refresh">
-			<option value="60000">{$MOD.LBL_1_MIN}</option>
-			<option value="120000">{$MOD.LBL_2_MIN}</option>
-			<option value="240000">{$MOD.LBL_3_MIN}</option>
-			<option value="360000">{$MOD.LBL_4_MIN}</option>
-			<option value="480000">{$MOD.LBL_5_MIN}</option>
+			<option value="60000" {$BOX_OPT1}>{$MOD.LBL_1_MIN}</option>
+			<option value="120000" {$BOX_OPT2}>{$MOD.LBL_2_MIN}</option>
+			<option value="180000" {$BOX_OPT3}>{$MOD.LBL_3_MIN}</option>
+			<option value="240000" {$BOX_OPT4}>{$MOD.LBL_4_MIN}</option>
+			<option value="300000" {$BOX_OPT5}>{$MOD.LBL_5_MIN}</option>
 		</select>
 	   </td>
            <td class="dvtCellInfo">&nbsp;</td>
