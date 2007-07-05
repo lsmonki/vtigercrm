@@ -172,7 +172,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 		$smarty->assign('TO_MAIL',$webmail->from);	
 		//added to remove the emailid of webmail client from cc list....to fix the issue #3818
                 $cc_address = '';
-                $cc_array = explode(',',$webmail->to[0].','.$hdr->ccaddress);
+                $cc_array = explode(',',$webmail->to_header.','.$hdr->ccaddress);
                 for($i=0;$i<count($cc_array);$i++) {
                         if(trim($cc_array[$i]) != trim($temp_id)) {
                                 $cc_address .= $cc_array[$i];

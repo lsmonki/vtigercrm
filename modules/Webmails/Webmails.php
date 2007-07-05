@@ -831,8 +831,15 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$from_array = $this->mime_header_decode($from_header);
 		for ($j = 0; $j < count($from_array); $j++)
 			$from .= $from_array[$j]->text;
-
-		$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
+		//fixed the issue #3235
+		$toheader = imap_fetchheader($this->mbox, $this->mailid);
+	        $to_arr = explode("To:",$toheader);
+	        if(!stripos($to_arr[1],'mime')){
+	                $to_add = stripos($to_arr[1],"CC:")?explode("CC:",$to_arr[1]):explode("Subject:",$to_arr[1]);
+	                $to_header = trim($to_add[0]);
+		}
+		else
+			$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
 		$to_array = $this->mime_header_decode($to_header);
 		for ($j = 0; $j < count($to_array); $j++)
 			$to .= $to_array[$j]->text;
