@@ -36,7 +36,7 @@ $subject = $email->subject;
 $date = $email->date;
 $array_tab = Array();
 $email->loadMail($array_tab);
-$msgData = $email->body;
+$msgData = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">',"",$email->body);
 $content['attachtab'] = $email->attachtab;
 while ($tmp = array_pop($content['attachtab'])){
 	if ((!eregi('ATTACHMENT', $tmp['disposition'])) && $conf->display_text_attach && (eregi('text/plain', $tmp['mime'])))
