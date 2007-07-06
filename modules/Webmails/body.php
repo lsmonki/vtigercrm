@@ -101,7 +101,7 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 //Need to put this along with the subject block*/
 echo $email->att;
 if(!$_REQUEST['fullview'])
-	echo '<div style="overflow:auto;height:400px;padding:5;">';
+	echo '<div style="overflow:auto;height:386px;width:737px;padding:5;">';
 else
 	echo '<div style="padding:5;">';
 echo $content['body'];
