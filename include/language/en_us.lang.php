@@ -867,7 +867,8 @@ $app_strings = array (
 
 'LBL_CONTACT_LAST_NAME'=>'Contact - Last Name',
 'LBL_CONTACT_FIRST_NAME'=>'Contact - First Name',
-
+//Added for incoming mail server settings form js validation
+'ERR_INVALID_PAGE_COUNT' => "Invalid Page count",
 'Office Phone'=>'Office Phone',
 'Sender'=>'Sender',
 'Website'=>'Website',
