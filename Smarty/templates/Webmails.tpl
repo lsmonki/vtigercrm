@@ -74,23 +74,23 @@
 						<img src="themes/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="small">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="small">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="small">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
 							</li>	
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="small">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="small">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
 						</ul><br />

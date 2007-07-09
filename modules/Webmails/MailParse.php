@@ -141,7 +141,7 @@ function show_msg($mails,$start_message)
         if($mails[$start_message]->deleted)
                 $listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
         else
-                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="themes/bluelagoon/images/no.gif" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
+                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/no.gif" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
 
 
         return $listview_entries[$num];
