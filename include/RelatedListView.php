@@ -263,8 +263,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 	global $adb;
 	global $mod_strings;
-	global $app_strings;
-
+	global $app_strings, $listview_max_textlength;
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -312,9 +311,9 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			$entries[] = "";
 		}
 		$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-		if(strlen($row['description']) > 40)
+		if(strlen($row['description']) > $listview_max_textlength)
 		{
-			$row['description'] = substr($row['description'],0,40).'...';
+			$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
 		}
 		$entries[] = nl2br($row['description']); 
 		$attachmentname = $row['filename'];//explode('_',$row['filename'],2);

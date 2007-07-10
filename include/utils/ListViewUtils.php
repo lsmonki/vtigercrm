@@ -1148,7 +1148,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log,$app_strings,$current_language;
+	global $log, $listview_max_textlength, $app_strings,$current_language;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".get_class($focus).",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb,$current_user;
 	
@@ -1170,9 +1170,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
 	$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
-        if(strlen($field_val) > 40)
+        if(strlen($field_val) > $listview_max_textlength)
         {
-		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,40).'...';
+		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
         }
 	if($uitype == 53)
 	{

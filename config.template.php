@@ -194,4 +194,8 @@ $display_empty_home_blocks = false;
 
 // Generating Unique Application Key
 $application_unique_key = '_VT_APP_UNIQKEY_';
+
+// trim descriptions, titles in listviews to this value
+$listview_max_textlength = 40;
+
 ?>
