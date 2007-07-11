@@ -38,7 +38,8 @@ foreach ($pickArray as $index => $data)
         if(!empty($data))
 	{
 		$data = $adb->formatString("vtiger_$tableName",$columnName,$data);
-		$query = "insert into vtiger_$tableName values('',$data,$index,1)";
+		$current_id = $adb->getUniqueID("vtiger_".$tableName);
+		$query = "insert into vtiger_$tableName values($current_id,$data,$index,1)";
 		$adb->query($query);
         }
 } 
