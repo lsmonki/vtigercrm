@@ -36,7 +36,9 @@ if($cvmodule != "")
           $setmetrics = 0;
         }
 
- 	$allKeys = array_keys($HTTP_POST_VARS);
+ 	//$allKeys = array_keys($HTTP_POST_VARS);
+	//this is  will cause only the chosen fields to be added to the vtiger_cvcolumnlist table 
+	$allKeys = array_keys($_REQUEST); 
 
 	//<<<<<<<columns>>>>>>>>>>
 	for ($i=0;$i<count($allKeys);$i++)
@@ -44,6 +46,8 @@ if($cvmodule != "")
 	   $string = substr($allKeys[$i], 0, 6);
 	   if($string == "column")
 	   {
+		   //the contusion, will cause only the chosen fields to be added to the vtiger_cvcolumnlist table 
+		   if($_REQUEST[$allKeys[$i]] != "") 
         	   $columnslist[] = $_REQUEST[$allKeys[$i]];
    	   }
 	}
