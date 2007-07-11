@@ -229,13 +229,16 @@ function getSearchModulesComboList($search_module)
 			<?php
 			foreach($object_array as $module => $object_name)
 			{
-				?>
-				mod = "global_list_"+"<?php echo $module; ?>";
-				if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value == "All")
-					show(mod);
-				else
-					hide(mod);
+				if(isPermitted($module,"index") == "yes")
+				{
+			?>
+				   mod = "global_list_"+"<?php echo $module; ?>";
+				   if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value == "All")
+				   show(mod);
+				   else
+				   hide(mod);
 				<?php
+				}
 			}
 			?>
 			
@@ -261,9 +264,13 @@ function getSearchModulesComboList($search_module)
 							if($search_module == '' && $module == 'All')
 								$selected = 'selected';
 							?>
+							<?php if(isPermitted($module,"index") == "yes")
+							{
+							?> 
 							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $app_strings[$module]; ?></option>
 							<?php
-						}
+							}
+						}	
 						?>
 		     		</select>
 		        </td>
