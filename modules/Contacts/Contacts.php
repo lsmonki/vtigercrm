@@ -763,7 +763,12 @@ function get_searchbyemailid($username,$emailaddress)
 						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid
             LEFT JOIN vtiger_contactgrouprelation ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
 			      LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
-						where vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%".$emailaddress."%' and vtiger_contactdetails.email != ''";
+			      where vtiger_crmentity.deleted=0";
+			      if(trim($emailaddress) != '')
+			      	        $query .= " and ((vtiger_contactdetails.email like '%".$emailaddress."%') or vtiger_contactdetails.lastname REGEXP REPLACE('".$emailaddress."',' ','|') or vtiger_contactdetails.firstname REGEXP REPLACE('".$emailaddress."',' ','|'))  and vtiger_contactdetails.email != ''";
+			      else
+			      		$query .= " and (vtiger_contactdetails.email like '%".$emailaddress."%' and vtiger_contactdetails.email != '')";
+
   $tab_id = getTabid("Contacts");
   if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 	{
