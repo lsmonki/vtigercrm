@@ -1225,18 +1225,21 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16)
 	{
-		if($current_module_strings[$temp_val] != '' && $module !="Calendar")
+		$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+		if($current_module_strings[$temp_val] != '')
 		{
+
 			$value = $current_module_strings[$temp_val];
 		}
-		elseif($app_strings[$temp_val] != '' && $module !="Calendar")
+		elseif($app_strings[$temp_val] != '' )
 		{
 			$value = $app_strings[$temp_val];
 		}
 		else
 		{
 			$value = $temp_val;
-		}
+		} 
+	
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
