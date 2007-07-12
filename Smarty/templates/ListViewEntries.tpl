@@ -18,6 +18,8 @@
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
+     <input name="action" type="hidden">
+     <input name="step" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
 				<!-- List View Master Holder starts -->
 				<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
@@ -33,10 +35,12 @@
                                              <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
-                                        {elseif $button_check eq 's_cmail'}
+					{elseif $button_check eq 's_cmail'}
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					{elseif $button_check eq 'mailer_exp'}
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
 					{elseif $button_check eq 'c_owner'}
 						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
 						     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
@@ -194,6 +198,8 @@
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					 {elseif $button_check eq 'mailer_exp'}
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
 					{elseif $button_check eq 'c_owner'}
 				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
                                                      <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>

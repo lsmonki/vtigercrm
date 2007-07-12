@@ -110,7 +110,12 @@ if(isset($CActionDtls))
 {
 	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];
 }
-
+// mailer export 
+if(isPermitted('Accounts','Export','') == 'yes')
+{
+  $other_text['mailer_exp'] = $mod_strings[LBL_MAILER_EXPORT];
+}
+// end of mailer export
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');
@@ -158,7 +163,19 @@ $view_script = "<script language='javascript'>
 	}
 	set_selected();
 	</script>";
-
+// mailer_export 
+if (isset($other_text['mailer_exp']))
+{
+  $view_script .= "<script language='javascript'>
+	function mailer_export()
+	{
+    document.massdelete.action.value=\"MailerExport\";
+    document.massdelete.step.value=\"ask\";
+    window.locate=\"index.php?module=Accounts&action=MailerExport&from=Accounts&step=ask\";
+	}
+	</script>";
+}
+// end of mailer export 
 if(isset($order_by) && $order_by != '')
 {	
 	if($order_by == 'smownerid')
