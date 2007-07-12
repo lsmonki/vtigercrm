@@ -881,6 +881,7 @@ $app_strings = array (
 'Lead Source'=>'Lead Source',
 'Quote No'=>'Quote No',
 'Yahoo Id'=>'Yahoo Id',
+'LBL_CAL_LIMIT_MSG'=>'Sorry, Year must be between 1970 and 2037',
 );
 
 $app_list_strings = array (

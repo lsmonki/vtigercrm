@@ -53,7 +53,7 @@ if ( isset($_REQUEST['year']))
 {
         if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
         {
-                print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+		print("<font color='red'>".$app_strings['LBL_CAL_LIMIT_MSG']."</font>");
                 exit;
         }
         $date_data['year'] = $_REQUEST['year'];

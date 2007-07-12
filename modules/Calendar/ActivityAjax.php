@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-global $theme,$mod_strings,$current_language,$currentModule,$current_user;
+global $theme,$mod_strings,$current_language,$currentModule,$current_user,$app_strings;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
@@ -59,7 +59,7 @@ if ( isset($_REQUEST['year']))
 {
 	if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
 	{
-		print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+		print("<font color='red'>".$app_strings['LBL_CAL_LIMIT_MSG']."</font>");
 		exit;
 	}
 	$date_data['year'] = $_REQUEST['year'];
