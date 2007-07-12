@@ -107,7 +107,7 @@ $mod_strings = Array(
 //Added for 4GA
 'Date & Time Sent'=>'Date & Time Sent',
 'Sales Enity Module'=>'Sales Enity Module',
-'Activtiy Type'=>'Activtiy Type',
+'Activity Type'=>'Activity Type',
 'Related To'=>'Related To',
 'Assigned To'=>'Assigned To',
 'Subject'=>'Subject',
