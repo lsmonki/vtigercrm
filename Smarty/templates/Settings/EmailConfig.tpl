@@ -107,7 +107,7 @@
 			<tr>
 			<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
                         <tr>
-                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
+                            <td width="20%" nowrap class="small cellLabel"><font color="red">*</font>&nbsp;<strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
                             <td width="80%" class="small cellText">
 				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVER}" name="server">
 			    </td>
