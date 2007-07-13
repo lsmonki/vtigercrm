@@ -28,9 +28,16 @@ require_once("modules/Emails/mail.php");
 $mysel= $_REQUEST['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
-if(empty($mysel))
-{
-        $mysel = 'day';
+if(empty($mysel)){
+	if($current_user->activity_view == "This Year"){
+		$mysel = 'year';
+	}else if($current_user->activity_view == "This Month"){
+		$mysel = 'month';
+	}else if($current_user->activity_view == "This Week"){
+		$mysel = 'week';
+	}else{
+		$mysel = 'day';
+	}
 }
 $date_data = array();
 if ( isset($_REQUEST['day']))
