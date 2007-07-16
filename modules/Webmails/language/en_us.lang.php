@@ -161,5 +161,6 @@ $mod_strings = Array(
 //Added for 5.0.3
 'LBL_LOADING_IMAGE' => 'Loading Image',
 'LBL_ENABLE_IMAP_SUPPORT' => 'Please enable the IMAP support in php to run this module',
+'LBL_CONFIGURE_MAIL_SETTINGS'=>'Please configure your mail settings',
 );
 ?>
