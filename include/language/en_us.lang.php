@@ -592,6 +592,7 @@ $app_strings = array (
 'LBL_TRANSFER_OWNERSHIP' => 'Transfer Ownership to',
 'LBL_SELECT_STATUS' => 'Select New Status',
 'LBL_UPDATE_OWNER' => 'Update Owner',
+'LBL_UPDATE' => 'Update',
 'LBL_UPDATE_STATUS' => 'Update Status',
 'LBL_NET_PRICE' => 'Net Price',
 'LBL_TOOLS' => 'Tools',

@@ -84,11 +84,11 @@
                                                     </tr>
                                                 </tbody></table></td>
                                               <td align="right" valign="bottom">&nbsp;											 	{if $ACTION eq 'SaveProfile'}
-                                                <input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small"/>&nbsp;&nbsp;
+                                                <input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small" title="{$CMOD.LBL_FINISH_BUTTON}"/>&nbsp;&nbsp;
                                                 {else}
-                                                        <input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save"/>&nbsp;&nbsp;
+                                                        <input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_LABEL}"/>&nbsp;&nbsp;
                                                 {/if}
-                                                <input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" /> 
+                                                <input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small" title="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="window.history.back();" /> 
 						</td>
                                             </tr>
                                           </tbody></table>
@@ -261,12 +261,12 @@
 		<tbody>
 			<tr><td>
 				{if $ACTION eq 'SaveProfile'}
-					<input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small"/>&nbsp;&nbsp;
+					<input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small" title="{$CMOD.LBL_FINISH_BUTTON}"/>&nbsp;&nbsp;
 				{else}
-					<input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save"/>&nbsp;&nbsp;
+					<input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_LABEL}" />&nbsp;&nbsp;
 				{/if}
 				</td><td>
-					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" /></td>
+					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" title="{$APP.LBL_CANCEL_BUTTON_LABEL}" /></td>
 
 				<td>&nbsp;</td>
 			</tr>

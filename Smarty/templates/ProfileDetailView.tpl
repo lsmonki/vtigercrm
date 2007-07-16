@@ -124,7 +124,7 @@ function UpdateProfile()
 
                                                     </tr>
                                                 </tbody></table></td>
-                                              <td align="right" valign="bottom">&nbsp;<input type="button" value="{$APP.LBL_RENAMEPROFILE_BUTTON_LABEL}" class="crmButton small edit" name="rename_profile"  onClick = "show('renameProfile');">&nbsp;<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit" >
+					      <td align="right" valign="bottom">&nbsp;<input type="button" value="{$APP.LBL_RENAMEPROFILE_BUTTON_LABEL}" title="{$APP.LBL_RENAMEPROFILE_BUTTON_LABEL}" class="crmButton small edit" name="rename_profile"  onClick = "show('renameProfile');">&nbsp;<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" title="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit" >
                               		     </td>
 					    	
                                             </tr></tbody></table>
@@ -156,8 +156,8 @@ function UpdateProfile()
 					    <table class="layerPopupTransport" border="0" cellpadding="5" cellspacing="0" width="100%">
 					    <tr>
 						<td align = "center">
-							<input name="save" value="Update" class="crmbutton small save" onclick="UpdateProfile();" type="button">&nbsp;&nbsp;
-							<input name="cancel" value="Cancel" class="crmbutton small save" onclick="fnhide('renameProfile');" type="button">&nbsp;&nbsp;
+							<input name="save" value="{$APP.LBL_UPDATE}" class="crmbutton small save" onclick="UpdateProfile();" type="button" title="{$APP.LBL_UPDATE}">&nbsp;&nbsp;
+							<input name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmbutton small save" onclick="fnhide('renameProfile');" type="button" title="{$APP.LBL_CANCEL_BUTTON_LABEL}">&nbsp;&nbsp;
 						</td>
 					    </tr>		
 					    </table>		
@@ -332,7 +332,7 @@ function UpdateProfile()
 		<table border="0" cellpadding="2" cellspacing="0">
 		<tbody>
 			<tr>
-				<td><input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit"></td>
+				<td><input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" title="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit"></td>
 				<td>&nbsp;</td>
 			</tr>
 			

@@ -54,7 +54,7 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
 					<tr>
-						<td class=small align=right><input type="submit" value="{$CMOD.LBL_NEW_PROFILE}" class="crmButton create small"></td>
+						<td class=small align=right><input type="submit" value="{$CMOD.LBL_NEW_PROFILE}" title="{$CMOD.LBL_NEW_PROFILE}" class="crmButton create small"></td>
 					</tr>
 					</table>
 						
