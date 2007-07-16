@@ -13,7 +13,8 @@
 function getCustomFieldList(customField)
 {ldelim}
 	var modulename = customField.options[customField.options.selectedIndex].value;
-	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulename+'" {$APP.LBL_MODULE}';
+	var modulelabel = customField.options[customField.options.selectedIndex].text;
+	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulelabel+'" {$APP.LBL_MODULE}';
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
