@@ -173,7 +173,7 @@ if($image_error=="false")
 		if($insert == 'true')
 		{
 			$password = makeRandomPassword();
-			$sql = "insert into vtiger_portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
+			$sql = "insert into vtiger_portalinfo values(".$focus->id.",'".$username."','".$password."','C','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',1)";
 			$adb->query($sql);
 		}
 
