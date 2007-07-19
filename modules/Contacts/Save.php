@@ -182,13 +182,15 @@ if($image_error=="false")
 		$data_array['first_name'] = $_REQUEST['firstname'];
 		$data_array['last_name'] = $_REQUEST['lastname'];
 		$data_array['email'] = $_REQUEST['email'];
-		$data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
-		$contents = getmail_contents_portalUser($data_array,$password);
+		$data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$mod_strings['Please Login Here'].'</a>';
+	
+		$value = getmail_contents_portalUser($data_array,$password,"LoginDetails");
+		$contents=$value["body"];                                                                                      $subject=$value["subject"];
 
 		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 		if($insert == 'true' || $update == 'true')
 		{
-			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$mod_strings['Customer Portal Login Details'],$contents);
+			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
 		}
 		$log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 	}

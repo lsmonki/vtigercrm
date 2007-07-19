@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.45 2006/02/03 05:19:44 mangai Exp $
+ * $Header: /advent/projects/custprojects/vtigercrm/vtigersupport/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.2 2007/07/06 09:55:40 rajeshkannan Exp $
 
  * Description:  Defines the English language pack
 
@@ -766,7 +766,8 @@ $mod_strings = Array(
 'LBL_PENDING_TICKETS'=>'Pending Tickets Notification',
 'LBL_MANY_TICKETS'=>'Too many tickets  Notification',
 'LBL_START_NOTIFICATION'=>'Support Start Notification',
-'LBL_SUPPORT_NOTICIATION'=>'Support End Notification',
+'LBL_SUPPORT_NOTICIATION'=>'Support End Notification before a week',
+'LBL_SUPPORT_NOTICIATION_MONTH'=>'Support End Notification before a month' ,
 'LBL_ACTIVITY_NOTIFICATION'=>'Event Reminder Notification',
 
 'LBL_TASK_NOTIFICATION_DESCRITPION'=>'Notify when a task is delayed beyond 24 hrs',
@@ -774,7 +775,8 @@ $mod_strings = Array(
 'LBL_TICKETS_DESCRIPTION'=>'Notify for getting attention to status of tickets which are pending',
 'LBL_MANY_TICKETS_DESCRIPTION'=>'Notify when a particular entity is allocated too many tickets, might reflect Service Level commitments',
 'LBL_START_DESCRIPTION'=>'Notifiy stating the start of support/service',
-'LBL_SUPPORT_DESCRIPTION'=>'Notify when support is about to end',
+'LBL_SUPPORT_DESCRIPTION'=>'Notify before one week when support is about to end',
+'LBL_SUPPORT_DESCRIPTION_MONTH'=>'Notify before one month when support is about to end',
 'LBL_ACTIVITY_REMINDER_DESCRIPTION'=>'Notify before an event to occur based on the reminder set',
 //Added while moving Inventory Notifications from Users to Settings
 'QuoteNotificationDescription'=>'During quote generation if the product stock in warehouse is lesser than the  quantity mentioned in quote then this notification will be sent to the product handler',
@@ -925,5 +927,8 @@ $mod_strings = Array(
 'LBL_MOVE_ROLE'=>'Move Role',
 
 'LBL_BACKUP_DESC'=>' The CRM system allows you to make a backup of the database to your FTP server. The CRM will take backup of all data whenever an admin user logs out. Make sure you have enough disk space available on your FTP server. The created backup file will be in the following format: "backup-date-time.sql".',
+'LBL_TEMPLATE'=>'Template',
+'LBL_SELECT_EMAIL_TEMPLATE_FOR'=>'Select the Email Template for',
+
 );
 ?>

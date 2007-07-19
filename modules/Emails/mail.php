@@ -46,7 +46,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid);
+	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid,$module);
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
 
@@ -131,10 +131,12 @@ function addSignature($contents, $fromname)
   				[values = current,all] - optional
   *	$emailid	-- id of the email object which will be used to get the vtiger_attachments - optional
   */
-function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='')
+function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='',$module='')
 {
 	global $adb;
 	$adb->println("Inside the function setMailerProperties");
+	if($module == "Support" || $module == "Contacts")
+		$mail->AddEmbeddedImage('themes/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
 
 	$mail->Subject = $subject;
 	$mail->Body = $contents;
