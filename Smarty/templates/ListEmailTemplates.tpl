@@ -139,7 +139,7 @@ function massDelete()
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
 					<tr>
 						<td class=small><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="crmButton delete small"></td>
-						<td class=small align=right id="new_template"><div id = "myProfile"><input class="crmButton create small" type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"></div></td>
+						<td class=small align=right id="new_template"><div id = "myProfile"><input class="crmButton create small" type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';"></div></td>
 					</tr>
 					</table>
 					<table border="0" cellspacing="0" cellpadding="5" width="100%" class="listTable">
