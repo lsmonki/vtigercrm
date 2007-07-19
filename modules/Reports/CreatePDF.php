@@ -383,9 +383,15 @@ if($columnlength <= 420 )
 }elseif($columnlength >=601 && $columnlength <= 850)
 {
         $pdf = new Html2PDF('P','mm','A3');
-}elseif($columnlength >=851 )
+}elseif($columnlength >=851 && $columnlength <= 1500)
 {
-        $pdf = new Html2PDF('L','mm','A1');
+	$pdf = new Html2PDF('L','mm','A1');
+}elseif($columnlength >=1501 && $columnlength <= 2500)
+{
+	$pdf = new Html2PDF('L','mm','A6');
+}elseif($columnlength >= 2501)
+{
+	$pdf = new Html2PDF('L','mm','A2');
 }
 //echo '<pre>';print_r($columnlength);echo '</pre>';
 $pdf->AddPage();
