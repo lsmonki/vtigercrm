@@ -1700,7 +1700,7 @@ class CustomView extends CRMEntity{
 		if($module == "Calendar")
 			$module = "Calendar','Events";
 
-		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,6,75,35,30,54,60,66,72) and vtiger_tab.name in ('".$module."') order by block";
+		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,75,35,30,54,60,66,72) and vtiger_tab.name in ('".$module."') order by block";
 		$result = $adb->query($Sql);
 		if($module == "Calendar','Events")
 			$module = "Calendar";
