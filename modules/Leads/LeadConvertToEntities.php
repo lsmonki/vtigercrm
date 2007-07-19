@@ -325,7 +325,7 @@ else
 	$crmid = $adb->getUniqueID("vtiger_crmentity");
 
 	//Saving Account - starts
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".addslashes($row['description'])."')";
 	$adb->query($sql_crmentity);
 	/* Modified by Minnie to fix the convertlead issue -- START*/
 	if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
@@ -373,14 +373,14 @@ $date_modified = $adb->formatDate(date('YmdHis'));
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
-$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."',".$date_entered.",".$date_modified.")";
+$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".addslashes($row['description'])."',".$date_entered.",".$date_modified.")";
 
 $adb->query($sql_crmentity1);
 
 $contact_id = $crmcontactid;
 $log->debug("contact id is ".$contact_id);
 
-$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
+$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .addslashes($row["firstname"]) ."','" .addslashes($row["lastname"]) ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .addslashes($row["designation"]) ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
@@ -435,7 +435,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,".$date_entered.",".$date_modified.",'".$row['description']."')";
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,".$date_entered.",".$date_modified.",'".addslashes($row['description'])."')";
   
 	$adb->query($sql_crmentity);
 
