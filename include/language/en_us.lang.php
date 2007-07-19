@@ -514,6 +514,7 @@ $app_strings = array (
 'LBL_SALES_ORDER_ID' => 'Sales Order Id',
 'LBL_PURCHASE_ORDER_ID' => 'Purchase Order Id',
 'LBL_EXPORT_TO_PDF' => 'Export To PDF',
+'LBL_SEND_EMAIL_PDF' => 'Send Email With PDF',
 'LBL_HOME_KEY_METRICS' => 'Key Metrics',
 'LBL_HOME_METRICS' => 'Metrics',
 'LBL_HOME_COUNT' => 'Count',

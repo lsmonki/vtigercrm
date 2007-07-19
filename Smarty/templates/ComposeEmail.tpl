@@ -121,9 +121,16 @@
 					</script>
 		<div id="attach_temp_cont" style="display:none;">
 		<table class="small" width="100% ">
+		
+	{if $smarty.request.attachment != ''}
+                <tr><td width="100%" colspan="2">{$smarty.request.attachment}<input type="hidden" value="{$smarty.request.attachment}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
+
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
 			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
 		{/foreach}
+
+	{/if}
+
 		{if $WEBMAIL eq 'true'}
 		{foreach item="attach_files" from=$webmail_attachments}
                         <tr ><td width="90%">{$attach_files}</td></tr>

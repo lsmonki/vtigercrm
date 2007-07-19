@@ -164,9 +164,16 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
 		
 		$file_saved = false;
+		
+		//Added to send generated Invoice PDF with mail
+		$pdfAttached = $_REQUEST['pdf_attachment'];
+		//created Invoice pdf is attached with the mail
+			if(isset($_REQUEST['pdf_attachment']) && $_REQUEST['pdf_attachment'] !='')
+			{
+				$file_saved = pdfAttach($this,$module,$pdfAttached,$id);
+			}
 
 		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
-
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
@@ -562,4 +569,47 @@ function get_to_emailids($module)
 	return $return_data;
 		
 }
+
+//added for attach the generated pdf with email
+function pdfAttach($obj,$module,$file_name,$id)
+{
+	global $log;
+	$log->debug("Entering into pdfAttach() method.");
+
+	global $adb, $current_user;
+	global $upload_badext;
+	$date_var = date('YmdHis');
+
+	$ownerid = $obj->column_fields['assigned_user_id'];
+	if(!isset($ownerid) || $ownerid=='')
+		$ownerid = $current_user->id;
+
+	$current_id = $adb->getUniqueID("vtiger_crmentity");
+
+	$upload_file_path = decideFilePath();
+
+	//Copy the file from temporary directory into storage directory for upload
+	$status = copy("storage/".$file_name,$upload_file_path.$current_id."_".$file_name);
+	//Check wheather the copy process is completed successfully or not. if failed no need to put entry in attachment table
+	if($status)
+	{
+		$query1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$obj->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+		$adb->query($query1);
+
+		$query2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$file_name."','".$obj->column_fields['description']."','pdf','".$upload_file_path."')";
+		$result=$adb->query($query2);
+
+		$query3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+		$adb->query($query3);
+
+		return true;
+	}
+	else
+	{
+		$log->debug("pdf not attached");
+		return false;
+	}
+}
+
+
 ?>
