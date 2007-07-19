@@ -220,35 +220,64 @@
                                 <td width="85%" colspan="2" class="cellText small"><span class="small cellText">
                                   <input name="subject" type="text" value="{$SUBJECT}" class="detailedViewTextBox" tabindex="4">
                                 </span></td>
+                              </tr> 
+
+
+
+
+                             <tr>
+                              
+                                <td width="15%"  class="cellLabel small" valign="center">{$UMOD.LBL_SELECT_FIELD_TYPE}</td>
+                                <td width="85%" colspan="2" class="cellText small">
+
+		<table>
+			<tr>
+				<td>{$UMOD.LBL_STEP}1
+				<td>
+			
+				<td style="border-left:2px dotted #cccccc;">{$UMOD.LBL_STEP}2
+				<td>
+
+				<td style="border-left:2px dotted #cccccc;">{$UMOD.LBL_STEP}3
+				<td>
+			</tr>
+			
+			<tr>
+				<td>
+
+					<select style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffff;" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));" tabindex="6">
+                                        <OPTION VALUE="0" selected>{$APP.LBL_NONE}
+                                        <OPTION VALUE="1">{$UMOD.LBL_ACCOUNT_FIELDS}                           
+                                        <OPTION VALUE="2">{$UMOD.LBL_CONTACT_FIELDS}
+                                        <OPTION VALUE="3" >{$UMOD.LBL_LEAD_FIELDS}
+                                        <OPTION VALUE="4" >{$UMOD.LBL_USER_FIELDS}
+                                        </select>
+				<td>
+			
+				<td style="border-left:2px dotted #cccccc;">
+					<select style="font-family: Arial, Helvetica, sans-serif;font-size: 11p
+x;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffff;" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>{$APP.LBL_NONE}</select>	
+				<td>
+
+				<td style="border-left:2px dotted #cccccc;">	
+
+					<input type="text"  id="mergeFieldValue" name="variable" value="variable" style="font-family: Arial, Helvetica, sans-serif;font-size: 11px;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#ffffdd;" tabindex="8"/>
+				<td>
+			</tr>
+
+		</table>
+			
+
+				</td>
                               </tr>
+
+
+
+
+
                               <tr>
                                 <td valign="top" width=10% class="cellLabel small">{$UMOD.LBL_MESSAGE}</td>
-                                 <td valign="top" width=60% class="cellText small"><p><textarea name="body" style="width:90%;height:200px" class=small tabindex="5">{$BODY}</textarea></p>
-                                    </td>
-                                <td valign="top" width=30% class="cellText small" style="border-left:2px dotted #cccccc;"><table width="100%"  border="0" cellspacing="0" cellpadding="5" >
-                                  <tr>
-                                    <td class="small"><strong>{$UMOD.LBL_MERGE_FIELDS}<br>
-                                    </strong>{$UMOD.LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT}</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="small" nowrap><strong>{$UMOD.LBL_STEP} 1. {$UMOD.LBL_SELECT_FIELD_TYPE}</strong></td>
-                                  </tr>
-				<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));" tabindex="6">
-					<OPTION VALUE="0" selected>{$APP.LBL_NONE}                            
-					<OPTION VALUE="1">{$UMOD.LBL_ACCOUNT_FIELDS}                            
-                        	        <OPTION VALUE="2">{$UMOD.LBL_CONTACT_FIELDS}
-                      			<OPTION VALUE="3" >{$UMOD.LBL_LEAD_FIELDS}
-               				<OPTION VALUE="4" >{$UMOD.LBL_USER_FIELDS}
-					</select></td></tr>
-                                  <tr>
-                                    <td class="small"><strong>{$UMOD.LBL_STEP} 2. {$UMOD.LBL_SELECT_FIELD} </strong></td>
-                                  </tr>
-					<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>{$APP.LBL_NONE}</select></td></tr>
-                                  <tr>
-                                    <td class="small"><strong>{$UMOD.LBL_STEP} 3. {$UMOD.LBL_COPY_PASTE} </strong></td>
-                                  </tr>
-					<tr><td><input type="text"  id="mergeFieldValue" name="variable" value="variable" class="detailedViewTextBoxOn" tabindex="8"/></td></tr>
-                                </table></td>
+                                 <td valign="top" colspan="2" width=60% class="cellText small"><p><textarea name="body" style="width:90%;height:200px" class=small tabindex="5">{$BODY}</textarea></p>
                               </tr>
                           </table></td>
                           
@@ -264,7 +293,7 @@
 					</table>
 				</td>
 				</tr>
-				</table>
+				</table>	
 			
 			
 			
@@ -283,6 +312,19 @@
    </tr>
 </tbody>
 </table>
+
+<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+       <script type="text/javascript" defer="1">
+
+       var oFCKeditor = null;
+
+                      oFCKeditor = new FCKeditor( "body" ) ;
+       
+       oFCKeditor.BasePath   = "include/fckeditor/" ;
+       oFCKeditor.ReplaceTextarea() ;
+
+       </script>
+
 <script>
 
 function check4null(form)
