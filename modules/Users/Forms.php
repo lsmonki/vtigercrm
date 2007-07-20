@@ -118,7 +118,7 @@ function verify_data(form) {
 
 
 
-	if(! upload_filter("imagename", "jpg|gif|bmp|png") )
+	if(! upload_filter("imagename", "jpg|gif|bmp|png|JPG|GIF|BMP|PNG") )
 	{
 		form.imagename.focus();
 		return false;

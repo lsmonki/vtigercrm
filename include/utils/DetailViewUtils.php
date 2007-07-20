@@ -481,7 +481,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$image_name = $adb->query_result($image_res,0,'name');
 			$imgpath = $image_path.$image_id."_".$image_name;
 			if($image_name != '')
-				$label_fld[] ='<img src="'.$imgpath.'" alt="'.$app_strings['MSG_IMAGE_ERROR'].'" title= "'.$app_strings['MSG_IMAGE_ERROR'].'">';
+				$label_fld[] ='<img src="'.$imgpath.'" alt="'.$mod_strings['Contact Image'].'" title= "'.$mod_strings['Contact Image'].'">';
 			else
 				$label_fld[] = '';
 		}

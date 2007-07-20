@@ -535,7 +535,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 69)
   	{
   		$editview_label[]=$mod_strings[$fieldlabel];
- 		if( $col_fields['record_id'] != "" && $_REQUEST["isDuplicate"] != true) 
+ 		if( $col_fields['record_id'] != "") 
   		{
  		    //This query is for Products only
  		    if($module_name == 'Products')

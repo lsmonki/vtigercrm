@@ -472,7 +472,7 @@
 				{else}
 					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />
 					<input type="hidden" name="id" value=""/>
-					{ if $maindata[3].0.name != "" }
+					{ if $maindata[3].0.name != "" && $DUPLICATE neq 'true'}
 						
 				<div id="replaceimage">[{$maindata[3].0.name}] <a href="javascript:;" onClick="delimage({$ID})">Del</a></div>
 					{/if}
