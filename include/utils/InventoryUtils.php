@@ -511,7 +511,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	        $qty = $_REQUEST['qty'.$i];
 	        $listprice = $_REQUEST['listPrice'.$i];
 		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
-
+		$description =addslashes($description);
 		$comment = addslashes($_REQUEST['comment'.$i]);
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
