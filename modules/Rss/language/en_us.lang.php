@@ -47,6 +47,6 @@ $mod_strings = Array(
 'LBL_REGRET_MSG'=>'Sorry: It\'s not possible to reach RSS URL',
 
 'UNABLE_TO_SAVE'=>'Unable to save the RSS Feed URL',
-'NOT_A_VALID'=>'Not a valid RSS Feed URL',
+'NOT_A_VALID'=>'Not a valid RSS Feed or Your Proxy Settings is not Proper',
 );
 ?>
