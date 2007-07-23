@@ -380,12 +380,14 @@ function unSelectView(id)
 {
 	var createid = 'tab_chk_1_'+id;	
 	var deleteid = 'tab_chk_2_'+id;
+	var tab_id = 'tab_chk_com_'+id;
 	if($('tab_chk_4_'+id).checked == false)
 	{
 		unselect_view_all();
 		unselect_edit_all();
 		$(createid).checked = false;
 		$(deleteid).checked = false;
+		$(tab_id).checked = false;
 	}else
 	{
 		var imageid = 'img_'+id;
