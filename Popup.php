@@ -65,6 +65,7 @@ switch($currentModule)
 		$comboFieldNames = Array('accounttype'=>'account_type_dom'
 				,'industry'=>'industry_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$smarty->assign("SINGLE_MOD",'Account');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
@@ -97,6 +98,7 @@ switch($currentModule)
 				,'opportunity_type'=>'opportunity_type_dom'
 				,'sales_stage'=>'sales_stage_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$smarty->assign("SINGLE_MOD",'Opportunity');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
@@ -232,7 +234,7 @@ else
 		if($currentModule == 'Products')
         		$where_relquery .=" and discontinued <> 0 ";
 
-	        $query = getListQuery($currentModule,$where_relquery);
+		$query = getListQuery($currentModule,$where_relquery);
 }
 			
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')

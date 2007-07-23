@@ -1921,7 +1921,7 @@ function getListQuery($module,$where='')
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_account vtiger_account2
 				ON vtiger_account.parentid = vtiger_account2.accountid
-			WHERE vtiger_crmentity.deleted = 0 ";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
@@ -3163,9 +3163,8 @@ Return type string.
 
 function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 {
-	global $log;
+	global $log,$adb;
 	$log->debug("Entering getRelCheckquery(".$currentmodule.",".$returnmodule.",".$recordid.") method ...");
-	global $adb;
 	$skip_id = Array();
 	$where_relquery = "";
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
@@ -3221,7 +3220,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	elseif($currentmodule=="Campaigns" && $returnmodule == "Contacts")
 	{
 		$reltable = 'vtiger_campaigncontrel';
-		$condition = 'WHERE contactid = '.$recordid;;
+		$condition = 'WHERE contactid = '.$recordid;
 		$field = $selectfield = 'campaignid';
 		$table = 'vtiger_campaign';
 	}
@@ -3232,7 +3231,40 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = $selectfield ='productid';
 		$table = 'vtiger_products';
 	}
-
+	elseif(($currentmodule == "Leads" || $currentmodule == "Accounts" || $currentmodule == "Potentials" || $currentmodule == "Contacts") && $returnmodule == "Products")//added to fix the issues(ticket 4001,4002 and 4003)
+	{
+		$reltable = 'vtiger_seproductsrel';
+		$condition = 'WHERE productid = '.$recordid.' and setype = "'.$currentmodule.'"';
+		$selectfield ='crmid';
+		if($currentmodule == "Leads")
+		{
+			$field = 'leadid';
+			$table = 'vtiger_leaddetails';
+		}
+		elseif($currentmodule == "Accounts")
+		{
+			$field = 'accountid';
+			$table = 'vtiger_account';
+		}
+		elseif($currentmodule == "Contacts")
+		{
+			$field = 'contactid';
+			$table = 'vtiger_contactdetails';
+		}
+		elseif($currentmodule == "Potentials")
+		{
+			$field = 'potentialid';
+			$table = 'vtiger_potential';
+		}
+	}
+	elseif($currentmodule == "Products" && $returnmodule =="Vendors")
+	{
+		$reltable = 'vtiger_products';
+		$condition = 'WHERE vendor_id = '.$recordid;
+		$field = $selectfield ='productid';
+		$table = 'vtiger_products';
+	}
+	//end
 	if($reltable != null)
 		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
 
