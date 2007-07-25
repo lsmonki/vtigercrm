@@ -66,7 +66,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("NOTLS", "CHECKED");
 			if(strtolower($temprow['ssltype']) == "tls")
 				$smarty->assign("TLS", "CHECKED");
-
+			if(strtolower($temprow['ssltype']) == "ssl")
+				$smarty->assign("SSL", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "validate-cert")
 				$smarty->assign("VALIDATECERT", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "novalidate-cert")

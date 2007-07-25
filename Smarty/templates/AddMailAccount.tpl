@@ -104,7 +104,8 @@
            <td class="dvtCellLabel" align="right">{$MOD.LBL_SSL_OPTIONS}</td>
            <td class="dvtCellInfo">
 		<input type="radio" name="ssltype" value="notls" {$NOTLS} />&nbsp;{$MOD.LBL_NO_TLS}
-		<input type="radio" name="ssltype" value="tls" {$TLS} />&nbsp; {$MOD.LBL_TLS} </td>
+		<input type="radio" name="ssltype" value="tls" {$TLS} />&nbsp; {$MOD.LBL_TLS}
+		<input type="radio" name="ssltype" value="ssl" {$SSL} />&nbsp; {$MOD.LBL_SSL} </td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>

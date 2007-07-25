@@ -107,7 +107,7 @@ class MailBox {
 			$port = "110";
 		else
 		{
-	    		if($mods["imap"]["SSL Support"] == "enabled" && $this->ssltype == "tls")
+	    		if($mods["imap"]["SSL Support"] == "enabled" && ($this->ssltype == "tls" || $this->ssltype == "ssl"))
 				$port = "993";
 			else
 				$port = "143";
@@ -154,11 +154,12 @@ class MailBox {
 			}
 		}
 
-		$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port.$connectString."}".$this->mailbox;
+		//$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port.$connectString."}".$this->mailbox;
+		$connectString = "{".$this->imapServerAddress.":".$port."/".$this->mail_protocol.$connectString."}".$this->mailbox;
 		//Reference - http://forums.vtiger.com/viewtopic.php?p=33478#33478 - which has no tls or validate-cert
 		$connectString1 = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."}".$this->mailbox; 
 
-		$this->db->println("Done Building Connection String.. Connecting to box");
+		$this->db->println("Done Building Connection String.. $connectString  Connecting to box");
 		//checking the imap support in php
 		if(!function_exists('imap_open'))
 		{

@@ -620,6 +620,7 @@ $mod_strings = Array(
 'LBL_SSL_OPTIONS'=>'SSL Options',
 'LBL_TLS'=>'TLS',
 'LBL_NO_TLS'=>'No TLS',
+'LBL_SSL' => 'SSL',
 'LBL_CERT_VAL'=>'Certificate Validations',
 'LBL_INT_MAILER'=>'Use Internal Mailer?',
 'LBL_INT_MAILER_USE'=>'Yes',
