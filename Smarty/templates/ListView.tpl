@@ -118,9 +118,6 @@ function updatefOptions(sel, opSelName) {
 }
 {/literal}
 </script>
-{if $MODULE eq 'Contacts'}
-<div id="dynloadarea" style="z-index:100000001;float:left;position:absolute;left:350px;top:150px;"></div>
-{/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript">
 function checkgroup()
@@ -494,11 +491,56 @@ function ajaxChangeStatus(statusname)
 {if $MODULE eq 'Contacts'}
 {literal}
 <script>
-function modifyimage(divid,imagename)
+function modifyimage(imagename)
 {
-    document.getElementById('dynloadarea').innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
-    show(divid);
+	imgArea = getObj('dynloadarea');
+        if(!imgArea)
+        {
+                imgArea = document.createElement("div");
+                imgArea.id = 'dynloadarea';
+                imgArea.setAttribute("style","z-index:100000001;");
+                imgArea.style.position = 'absolute';
+                imgArea.innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
+		document.body.appendChild(imgArea);
+        }
+	PositionDialogToCenter(imgArea.id);
 }
+
+function PositionDialogToCenter(ID)
+{
+       var vpx,vpy;
+       if (self.innerHeight) // Mozilla, FF, Safari and Opera
+       {
+               vpx = self.innerWidth;
+               vpy = self.innerHeight;
+       }
+       else if (document.documentElement && document.documentElement.clientHeight) //IE
+
+       {
+               vpx = document.documentElement.clientWidth;
+               vpy = document.documentElement.clientHeight;
+       }
+       else if (document.body) // IE
+       {
+               vpx = document.body.clientWidth;
+               vpy = document.body.clientHeight;
+       }
+
+       //Calculate the length from top, left
+       dialogTop = (vpy/2 - 280/2) + document.documentElement.scrollTop;
+       dialogLeft = (vpx/2 - 280/2);
+
+       //Position the Dialog to center
+       $(ID).style.top = dialogTop+"px";
+       $(ID).style.left = dialogLeft+"px";
+       $(ID).style.display="block";
+}
+
+function removeDiv(ID){
+        var node2Rmv = getObj(ID);
+        if(node2Rmv){node2Rmv.parentNode.removeChild(node2Rmv);}
+}
+
 </script>
 {/literal}
 {/if}

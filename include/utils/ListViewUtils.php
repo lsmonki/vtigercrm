@@ -1780,7 +1780,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$imgpath = $image_path.$image_id."_".$image_name;
 						$contact_image = '';
 						if($image_name != '')
-							$contact_image ='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover="modifyimage(\'dynloadarea\',\''.$imgpath.'\');" onMouseOut="fnhide(\'dynloadarea\');" alt="'.$app_strings['MSG_IMAGE_ERROR'].'" title="'.$app_strings['Contact Image'].'">';
+							$contact_image ='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover="modifyimage(\''.$imgpath.'\');" onMouseOut="removeDiv(\'dynloadarea\');" alt="'.$app_strings['MSG_IMAGE_ERROR'].'" title="'.$app_strings['Contact Image'].'">';
 						$value =$contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 
 					}else
