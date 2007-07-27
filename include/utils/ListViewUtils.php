@@ -75,7 +75,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				$fieldname = $oCv->list_fields_name[$name];
 			}
 		}
-		if($fieldname == 'accountname')
+		if($fieldname == 'accountname' && $module != 'Accounts')
 		{	
 			$fieldname = 'account_id';
 		}
@@ -133,7 +133,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			if(isset($oCv->list_fields_name))
 			{
 				$fieldname = $oCv->list_fields_name[$name];
-				if($fieldname == 'accountname')
+				if($fieldname == 'accountname' &&  $module != 'Accounts')
                 		{
                        	 		$fieldname = 'account_id';
                 		}
@@ -150,7 +150,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}else
 		{
 			$fieldname = $focus->list_fields_name[$name];
-			if($fieldname == 'accountname')
+			if($fieldname == 'accountname' &&  $module != 'Accounts')
 			{
 				$fieldname = 'account_id';
 			}
@@ -536,7 +536,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$fieldname = $oCv->list_fields_name[$name];
 			}
 		}
-		if($fieldname == 'accountname')
+		if($fieldname == 'accountname' && $module != 'Accounts')
 		{
 			$fieldname = 'account_id';
 		}
@@ -653,7 +653,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				if(isset($oCv->list_fields_name))
 				{
 					$fieldname = $oCv->list_fields_name[$name];
-					if($fieldname == 'accountname')
+					if($fieldname == 'accountname' && $module != 'Accounts')
                                 	{
                                         	$fieldname = 'account_id';
                                 	}
@@ -667,7 +667,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			}else
 			{
 				$fieldname = $focus->list_fields_name[$name];
-				if($fieldname == 'accountname')
+				if($fieldname == 'accountname' && $module != 'Accounts')
 				{
 					$fieldname = 'account_id';
 				}

@@ -60,7 +60,7 @@ class Potentials extends CRMEntity {
 
 	var $list_fields_name = Array(
 			'Potential'=>'potentialname',
-			'Account Name'=>'accountid',	  			
+			'Account Name'=>'account_id',	  			
 			'Sales Stage'=>'sales_stage',	  			
 			'Amount'=>'amount',
 			'Expected Close Date'=>'closingdate',
@@ -70,7 +70,7 @@ class Potentials extends CRMEntity {
 
 	var $search_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
-			'Account Name'=>Array('potential'=>'accountid'),
+			'Account Name'=>Array('potential'=>'account_id'),
 			'Expected Close Date'=>Array('potential'=>'closedate')
 			);
 
