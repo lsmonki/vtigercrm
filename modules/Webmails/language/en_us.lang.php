@@ -162,5 +162,7 @@ $mod_strings = Array(
 'LBL_LOADING_IMAGE' => 'Loading Image',
 'LBL_ENABLE_IMAP_SUPPORT' => 'Please enable the IMAP support in php to run this module',
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'Please configure your mail settings',
+'LBL_PLEASE'=>'Please',
+'LBL_HERE'=>'Here',
 );
 ?>

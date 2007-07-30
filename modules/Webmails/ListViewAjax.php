@@ -48,7 +48,7 @@ $MailBox = new MailBox($mailbox);
 $mods = parsePHPModules();
 
 if(!$MailBox->mbox || !isset($mods["imap"]) || $mods["imap"] == "") {
-	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+	echo "<center><font color='red'><h3>".$mod_strings['LBL_CONFIGURE_MAIL_SETTINGS']."</h3></font></center>";
 	exit();
 }
 
