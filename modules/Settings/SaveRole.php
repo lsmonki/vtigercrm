@@ -53,6 +53,10 @@ elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	$profile_array = explode(';',$selected_col_string);
 	//Inserting into vtiger_role Table
 	$roleId = createRole($rolename,$parentRoleId,$profile_array);
+	if($roleId != '')
+	{
+		insertRole2Picklist($roleId,$parentRoleId);
+	}
 	 	
 }
 

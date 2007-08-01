@@ -131,7 +131,19 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		}
 		else
 		{
-			$roleout .= '&nbsp;<a href="javascript:loadValue(\'user_'.$roleid.'\',\''.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			$type =$_REQUEST['type'];
+			if($type == '')
+			{
+				$roleout .= '&nbsp;<a href="javascript:loadValue(\'user_'.$roleid.'\',\''.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			}
+			else
+			{
+				$picklist_module = $_REQUEST['picklistmodule'];
+				$picklist_fieldname = $_REQUEST['pick_fieldname'];
+				$picklist_uitype = $_REQUEST['pick_uitype'];
+
+				$roleout .= '&nbsp;<a href="index.php?action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='.$picklist_module.'&fieldname='.$picklist_fieldname.'&parentroleid='.$roleid.'&uitype='.$picklist_uitype.'"  class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			}
 		}
  		$roleout .=  '</li>';
 		if(sizeof($value) > 0 )

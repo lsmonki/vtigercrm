@@ -1182,15 +1182,14 @@
 		<field name="manufacturer" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="manufacturer_manufacturer_idx">
 			<unique />
 			<col>manufacturer</col>
@@ -2559,15 +2558,14 @@
 		<field name="accounttype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="accounttype_accounttype_idx">
 			<col>accounttype</col>
 			<unique />
@@ -2607,15 +2605,14 @@
 		<field name="leadsource" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="leadsource_source_idx">
 			<col>source</col>
 			<unique />
@@ -2631,15 +2628,14 @@
 		<field name="opportunity_type" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="opportunity_type_opportunity_type_idx">
 			<col>opportunity_type</col>
 			<unique />
@@ -2679,15 +2675,14 @@
 		<field name="leadstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="leadstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2703,15 +2698,14 @@
 		<field name="eventstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="eventstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2850,15 +2844,14 @@
 		<field name="industry" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="industry_industry_idx">
 			<col>industry</col>
 			<unique />
@@ -2898,14 +2891,15 @@
 		<field name="salutationtype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_taskpriority">
@@ -2914,14 +2908,15 @@
 			<autoincrement />
 		</field>
 		<field name="taskpriority" type="C" size="100" />
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_taskstatus">
@@ -2930,13 +2925,13 @@
 			<autoincrement />
 		</field>
 		<field name="taskstatus" type="C" size="100" />
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
+		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
 		</field>
 	</table>
 
@@ -2995,13 +2990,13 @@
 		</field>
 		<field name="sales_stage" type="C" size="200">
 		</field>
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
+		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
 		</field>
 	</table>
 
@@ -3011,13 +3006,13 @@
 			<autoincrement />
 		</field>
 		<field name="faqcategories" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
+		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
 		</field>
 	</table>
 
@@ -3027,13 +3022,13 @@
 			<autoincrement />
 		</field>
 		<field name="faqstatus" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
+		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
 		</field>
 	</table>
 
@@ -3043,14 +3038,15 @@
 			<autoincrement />
 		</field>
 		<field name="rating" type="C" size="200" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketcategories">
@@ -3059,14 +3055,15 @@
 			<autoincrement />
 		</field>
 		<field name="ticketcategories" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketpriorities">
@@ -3075,14 +3072,15 @@
 			<autoincrement />
 		</field>
 		<field name="ticketpriorities" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketseverities">
@@ -3091,14 +3089,15 @@
 			<autoincrement />
 		</field>
 		<field name="ticketseverities" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketstatus">
@@ -3107,14 +3106,15 @@
 			<autoincrement />
 		</field>
 		<field name="ticketstatus" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_activsubtype">
@@ -3398,15 +3398,14 @@
 		<field name="productcategory" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="productcategory_productcategory_idx">
 			<col>productcategory</col>
 			<unique />
@@ -3563,7 +3562,6 @@
 		<field name="notificationbody" type="X" />
 		<field name="label" type="C" size="50" />
 		<field name="type" type="C" size="10" />
-
 		<index name="notificationscheduler_schedulednotificationname_idx">
 			<col>schedulednotificationname</col>
 			<unique />
@@ -4567,15 +4565,14 @@
 		<field name="usageunit" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="usageunit_usageunit_idx">
 			<col>usageunit</col>
 			<unique />
@@ -4591,15 +4588,14 @@
 		<field name="glacct" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="glacct_glacct_idx">
 			<col>glacct</col>
 			<unique />
@@ -4615,15 +4611,14 @@
 		<field name="quotestage" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="quotestage_quotestage_idx">
 			<col>quotestage</col>
 			<unique />
@@ -4639,15 +4634,14 @@
 		<field name="invoicestatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="invoicestatus_invoiestatus_idx">
 			<col>invoicestatus</col>
 			<unique />
@@ -4663,15 +4657,14 @@
 		<field name="postatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="postatus_postatus_idx">
 			<col>postatus</col>
 			<unique />
@@ -4687,15 +4680,14 @@
 		<field name="sostatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="sostatus_sostatus_idx">
 			<col>sostatus</col>
 			<unique />
@@ -4712,15 +4704,14 @@
 		<field name="carrier" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="carrier_carrier_idx">
 			<col>carrier</col>
 			<unique />
@@ -5528,15 +5519,14 @@
 		<field name="campaigntype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="campaigntype_campaigntype_idx">
 			<col>campaigntype</col>
 			<unique />
@@ -5552,15 +5542,14 @@
 		<field name="campaignstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="campaignstatus_campaignstatus_idx">
 			<col>campaignstatus</col>
 		</index>
@@ -5575,22 +5564,68 @@
 		<field name="expectedresponse" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="CampaignExpRes_UK01">
 			<col>expectedresponse</col>
 			<unique />
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	<table name="vtiger_picklist">
+		<field name="picklistid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="name" type="C" size="200">
+			<notnull />
+		</field>
+		<index name="picklist_name_idx">
+			<col>name</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_role2picklist">
+		<field name="roleid" type="C" size="255">
+			<key />
+		</field>
+		<field name="picklistvalueid" type="I" size="11">
+			<key />
+		</field>
+		<field name="picklistid" type="I" size="11">
+			<key />
+		</field>
+		<field name="sortid" type="I" size="11" />
 
+		<index name="role2picklist_roleid_picklistid_idx">
+			<col>roleid</col>
+			<col>picklistid</col>
+			<col>picklistvalueid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_picklistvalues_seq">
+		<field name="id" type="I" size="11" />
+	</table>
+	<table name="vtiger_role2picklist" alter="true">
+		<constraint>ADD CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<table name="vtiger_role2picklist" alter="true">
+		<constraint>ADD CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 	<table name="vtiger_portal">
 		<field name="portalid" type="I" size="19">
 			<key />
@@ -5890,15 +5925,14 @@
 		<field name="status" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="vtiger_status_status_idx">
 			<col>source</col>
 			<unique />

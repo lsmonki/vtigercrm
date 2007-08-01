@@ -18,6 +18,15 @@ $tableName=$_REQUEST["fieldname"];
 $moduleName=$_REQUEST["fld_module"];
 $uitype=$_REQUEST["uitype"];
 
+if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']  != '')
+{
+	$roleid = $_REQUEST['parentroleid'];
+}
+else
+{
+	$roleid=$_REQUEST["roleid"];
+}
+
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -32,35 +41,65 @@ if($moduleName == 'Events')
 else
 	$temp_module_strings = return_module_language($current_language, $moduleName);
 
-//Get the Editable Picklist Values 
-$query = "select * from vtiger_".$tableName." where presence=1";
-$result = $adb->query($query);
-$fldVal='';
-
-while($row = $adb->fetch_array($result))
+//To get the Editable Picklist Values 
+if($uitype != 111)
 {
-	if($temp_module_strings[$row[$tableName]] != '')
-		$fldVal .= $temp_module_strings[$row[$tableName]];
-	else
-		$fldVal .= $row[$tableName];
-	$fldVal .= "\n";	
+	$query = "select * from vtiger_$tableName inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid='$roleid' and  presence=1 order by sortid";
+	$result = $adb->query($query);
+	$fldVal='';
+
+	while($row = $adb->fetch_array($result))
+	{
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
+		$fldVal .= "\n";	
+	}
+}
+else
+{
+	$query = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid='$roleid' and  presence=1 order by sortid"; 
+	$result = $adb->query($query);
+	$fldVal='';
+
+	while($row = $adb->fetch_array($result))
+	{
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
+		$fldVal .= "\n";	
+	}
 }
 
-//Get the Non - Editable Picklist Values 
-$qry = "select * from vtiger_".$tableName." where presence=0"; 
-$res = $adb->query($qry);
-$nonedit_fldVal='';
 
-while($row = $adb->fetch_array($res))
+if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 {
-	if($temp_module_strings[$row[$tableName]] != '')
-		$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
-	else
-		$nonedit_fldVal .= $row[$tableName];
-	$nonedit_fldVal .= "<br>";	
+	echo '<textarea id="picklist" style="display:none;">'.$fldVal.'</textarea>';
+	echo '<script>window.opener.document.getElementById("picklist_values").value = document.getElementById("picklist").innerHTML;</script>';
+
+	echo '<script>window.close();</script>';
+	$roleid = $_REQUEST['parentroleid'];
+	die;
 }
 
+//To get the Non Editable Picklist Entries
+if($uitype == 111 || $uitype == 16) 
+{
+	$qry = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid='$roleid' and presence=0 order by sortid"; 
+	$res = $adb->query($qry);
+	$nonedit_fldVal='';
 
+	while($row = $adb->fetch_array($res))
+	{
+		if($temp_module_strings[$row[$tableName]] != '')
+			$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$nonedit_fldVal .= $row[$tableName];
+		$nonedit_fldVal .= "<br>";	
+	}
+}
 $query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
 $fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
 

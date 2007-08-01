@@ -90,15 +90,9 @@
 			<td width="30%" align=left class="dvtCellInfo">
 			   <select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>
-                                                {if $MOD.$sel_value neq ''}
-                                                {$MOD.$sel_value}
-                                                {else}
-                                                        {$sel_value}
-                                                {/if}
-                                                </option>
-					{/foreach}
+					<option value="{$arr[1]}" {$arr[2]}>
+						{$arr[0]}
+					</option>
 				{/foreach}
 			   </select>
 			</td>
@@ -109,9 +103,9 @@
 			<td width="30%" align=left class="dvtCellInfo">
 			   <select MULTIPLE name="{$fldname}[]" size="4" style="width:160px;" tabindex="{$vt_tab}" class="small">
 				{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>{if $APP.$sel_value}{$APP.$sel_value}{else}{$sel_value}{/if}</option>
-					{/foreach}
+					<option value="{$arr[1]}" {$arr[2]}>
+                                                {$arr[0]}
+                                        </option>
 				{/foreach}
 			   </select>
 			</td>
@@ -426,9 +420,9 @@
 			<td width="30%" align=left class="dvtCellInfo">
 				<select name="salutationtype" class="small">
 					{foreach item=arr from=$fldvalue}
-						{foreach key=sel_value item=value from=$arr}
-							<option value="{$sel_value}" {$value}>{$sel_value}</option>
-						{/foreach}
+						<option value="{$arr[1]}" {$arr[2]}>
+                                                	{$arr[0]}
+                                                </option>
 					{/foreach}
 				</select>
 			<input type="text" name="{$fldname}" tabindex="{$vt_tab}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" style="width:58%;" value= "{$secondvalue|escape}" >

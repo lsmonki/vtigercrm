@@ -93,17 +93,44 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
 	}
-	elseif($uitype == 15 || $uitype == 16 || $uitype == 115 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
+	elseif($uitype == 15 || $uitype == 16 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
-	     $label_fld[] = $mod_strings[$fieldlabel];
-	     $label_fld[] = $col_fields[$fieldname];
-	     
-		$pick_query="select * from vtiger_".$fieldname." order by sortorderid";
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = $col_fields[$fieldname];
+		$roleid=$current_user->roleid;
+		//here we are checking whether the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table... 
+
+		$sql="select * from vtiger_$fieldname";
+		$result = $adb->query($sql);
+		$nameArray = $adb->fetch_array($result);
+		while($row = $adb->fetch_array($result))
+		{
+			$sortid = $row['sortorderid'];
+		}
+
+		$subrole = getRoleSubordinates($roleid);	
+		if(count($subrole)> 0)
+		{
+			$roleids = implode("','",$subrole);
+			$roleids = $roleids."','".$roleid;
+		}
+		else
+		{
+			$roleids = $roleid;
+		}
+		if($is_admin || $sortid != '')
+		{
+			$pick_query="select $fieldname from vtiger_$fieldname";
+		}else
+		{
+			$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in ('$roleids') and picklistid in (select picklistid from vtiger_$fieldname) order by $fieldname asc";
+		}	
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
 		//Mikecrowe fix to correctly default for custom pick lists
 		$options = array();
+		$count=0;
 		$found = false;
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
@@ -112,22 +139,74 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($col_fields[$fieldname] == $pickListValue)
 			{
 				$chk_val = "selected";	
+				$count++;
 				$found = true;
 			}
 			else
 			{	
 				$chk_val = '';
 			}
-			$options[] = array($pickListValue=>$chk_val );	
+			$options[] = array($pickListValue,$pickListValue,$chk_val );	
+		}
+		if($count == 0 && $col_fields[$fieldname] != '')
+		{
+			$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$col_fields[$fieldname],'selected');
+		}
+
+
+		$label_fld ["options"] = $options;
+	}
+	elseif($uitype == 115)
+	{
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = $col_fields[$fieldname];
+
+		$pick_query="select * from vtiger_".$fieldname;
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+		$options = array();
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
+
+			if($col_fields[$fieldname] == $pickListValue)
+			{
+				$chk_val = "selected";
+				$found = true;
+			}
+			else
+			{
+				$chk_val = '';
+			}
+			$options[] = array($pickListValue=>$chk_val );
 		}
 		$label_fld ["options"] = $options;
 	}
 	elseif($uitype == 33) //uitype 33 added for multiselector picklist - Jeri
 	{
-	     $label_fld[] = $mod_strings[$fieldlabel];
-	     $label_fld[] = str_ireplace(' |##| ',', ',$col_fields[$fieldname]);
-	     
-		$pick_query="select * from vtiger_".$fieldname;
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = implode("','",$subrole);
+			$roleids = $roleids."','".$roleid;
+		}
+		else
+		{
+			$roleids = $roleid;
+		}
+		$editview_label[]=$mod_strings[$fieldlabel];
+		if($is_admin)
+		{
+			$pick_query="select $fieldname from vtiger_$fieldname";
+		}else
+		{
+			$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in ('$roleids') and picklistid in (select picklistid from vtiger_$fieldname) order by $fieldname asc";
+		}
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = str_ireplace(' |##| ',', ',$col_fields[$fieldname]);
+
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -137,16 +216,38 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
 			$pickListValue = $adb->query_result($pickListResult,$j,strtolower($fieldname));
-      $chk_val = '';
-      foreach($selected_entries as $selected_entries_value)
-      {
-        if(trim($selected_entries_value) == trim($pickListValue))
-        {
-          $chk_val = 'selected';
-          break;
-        }
-      }
-			$options[] = array($pickListValue=>$chk_val);	
+			$chk_val = '';
+			foreach($selected_entries as $selected_entries_value)
+			{
+				if(trim($selected_entries_value) == trim($pickListValue))
+				{
+					$chk_val = 'selected';
+					break;
+				}
+				else
+				{
+					$chk_val = '';
+				}
+			}
+			$options[] = array($pickListValue,$pickListValue,$chk_val);	
+		}
+		foreach($selected_entries as $selected_entries_value)
+		{
+			$mul_count =0;
+			$options_length = count($options);
+			for($j=0;$j<$options_length;$j++)
+			{
+				if(in_array($selected_entries_value,$options[$j]))
+				{
+					$mul_count++;
+				}
+
+			}
+			if($mul_count == 0 && $options_length > 0)
+			{
+				$options[]=array($app_strings['LBL_NOT_ACCESSIBLE'],trim($selected_entries_value),'selected');
+			}
+			$mul_count=0;
 		}
 		$label_fld ["options"] = $options;
 	}
@@ -327,14 +428,58 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
            {
                    $label_fld[] =$mod_strings[$fieldlabel];
            }
-           $value = $col_fields[$fieldname];
+		$value = $col_fields[$fieldname];
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = implode("','",$subrole);
+			$roleids = $roleids."','".$roleid;
+		}
+		else
+		{
+			$roleids = $roleid;
+		}
+		if($is_admin)
+		{
+			$pick_query="select salutationtype from vtiger_salutationtype";
+		}
+		else
+		{
+			$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid='".$current_user->roleid."' order by sortid";
+		}
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+		$sal_value = $col_fields["salutationtype"];
+		$salcount =0;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
+
+			if($sal_value == $pickListValue)
+			{
+				$chk_val = "selected";
+				$salcount++;
+			}
+			else
+			{
+				$chk_val = '';
+			}
+		}
+		if($salcount == 0 && $sal_value != '')
+		{
+			$notacc =  $app_strings['LBL_NOT_ACCESSIBLE'];
+		}
            $sal_value = $col_fields["salutationtype"];
            if($sal_value == '--None--')
            {
                    $sal_value='';
-           }
-          $label_fld["salut"] = $sal_value;
-          $label_fld[] = $value;
+	   }
+	   if($notacc == '')
+	   	$label_fld["salut"] = $sal_value;
+	   else
+	   	$label_fld["salut"] = $notacc;
+	   $label_fld[] = $value;
 		//$label_fld[] =$sal_value.' '.$value;
         }
 	elseif($uitype == 56)
