@@ -387,11 +387,11 @@ $app_strings = array (
 'Todo' => 'To Do',
 'Call' => 'Call',
 'Meeting' => 'Meeting',
-'Quotes' => 'Quotes',
+'Quotes' => 'Quote',
 'PriceBook' => 'PriceBook',
-'PurchaseOrder' => 'Purchase Orders',
-'SalesOrder' => 'Sales Orders',
-'Invoice' => 'Invoices',
+'PurchaseOrder' => 'Purchase Order',
+'SalesOrder' => 'Sales Order',
+'Invoice' => 'Invoice',
 'Calendar' => 'Calendar',
 'Home' => 'Home',
 'Campaigns' => 'Campaigns',
@@ -866,8 +866,7 @@ $app_strings = array (
 'LBL_ROOT'=>'Root',
 'LBL_FIRST'=>'First',
 'LBL_LAST'=>'Last',
-//Added for role based picklist
-'LBL_NOT_ACCESSIBLE' => 'Not Accessible',
+
 'LBL_CONTACT_LAST_NAME'=>'Contact - Last Name',
 'LBL_CONTACT_FIRST_NAME'=>'Contact - First Name',
 //Added for incoming mail server settings form js validation
