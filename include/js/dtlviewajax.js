@@ -364,7 +364,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = popObj.value;
 		}
-	}else if(uitype == '33')
+	}
+	else if(uitype == '111' || uitype == '15' || uitype == '16' )
+        {
+                        var notaccess =document.getElementById(txtBox);
+                        tagValue = notaccess.options[notaccess.selectedIndex].text;
+                        getObj(dtlView).innerHTML = tagValue;
+        }
+	else if(uitype == '33')
   	{
 		/* Wordwrap a long list of multi-select combo box items at the
                  * item separator string */

@@ -73,13 +73,7 @@
                                         {/if}
 					<select name="{$fldname}" {$typejsfn}>
 					{foreach item=arr from=$fldvalue}
-						{foreach key=sel_value item=value from=$arr}
-							{if $MOD.$sel_value neq ''}
-							<option value="{$sel_value}" {$value}>{$MOD.$sel_value}</option>
-							{else}
-							<option value="{$sel_value}" {$value}>{$sel_value}</option>
-							{/if}
-						{/foreach}
+						<option value="{$arr[1]}" {$arr[2]}>{$arr[0]}</option>
 					{/foreach}
 					</select>
 				</td>
