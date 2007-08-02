@@ -208,6 +208,9 @@ $mod_strings = Array(
 'LBL_START_DATE' => 'Start Date',
 'LBL_END_DATE' => 'End Date',
 
+//added to fix the issue #4081
+'LBL_ACCOUNT_EXIST' => 'Account Name Already Exists!',
+
 // mailer export
 'LBL_MAILER_EXPORT' => 'Mailer Export',
 'LBL_MAILER_EXPORT_CONTACTS_TYPE'=>'Select Contacts:',

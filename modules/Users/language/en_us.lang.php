@@ -216,7 +216,6 @@ $mod_strings = Array(
 'LBL_MEMBER'=>'Members',
 'LBL_MEMBER_AVLBL'=>'Available Entities & Members',
 'LBL_MEMBER_SELECTED'=>'Selected Members',
-'LBL_DESCRIPTION'=>'Description',
 'LBL_GROUP_MESG1'=>'Groups are a flexible way to assign access rights, when complex access rights has to be defined. You can combine multiple entities like Roles, Users, profiles etc into a single group.',
 'LBL_GROUP_MESG2'=>'To add, select the Entity members from left and click the ">>" button.',
 'LBL_GROUP_MESG3'=>'To remove, select the group members from the right and click the "<<" button.',
@@ -643,7 +642,9 @@ $mod_strings = Array(
 'LBL_4_MIN'=>'4 minutes',
 'LBL_5_MIN'=>'5 minutes',
 'LBL_EMAILS_PER_PAGE'=>'Email per Page',
-
+//Added to fix the issue #4081
+'LBL_USERNAME_EXIST' => 'User Name Already Exists!',
+'LBL_UNAUTHORIZED_ACCESS' => 'Unauthorized access to user administration',
 // Added for 5.0.3
 
 'LBL_ENTER_PROFILE'=>'Enter The Profile Name',

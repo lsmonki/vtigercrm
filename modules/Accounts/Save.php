@@ -34,7 +34,7 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	$result = $adb->query($query);
         if($adb->num_rows($result) > 0)
 	{
-		echo 'Account Name Already Exists!';
+		echo $mod_strings['LBL_ACCOUNT_EXIST'];
 	}
 	else
 	{
