@@ -354,9 +354,13 @@ var gVTModule = '{$smarty.request.module}';
 										<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.reminder_time neq ''}
 										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.recurringtype neq ''}
 										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">{$MOD.LBL_RELATEDTO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -796,15 +800,23 @@ var gVTModule = '{$smarty.request.module}';
 					</tr>
 				</table>
 				<br><br>
+		{if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 			<tr>
 				<td>
 					<table border="0" cellpadding="3" cellspacing="0" width="100%">
 						<tr>
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-							<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
+							{if $LABEL.sendnotification neq ''}
+                                                                {assign var='class_val' value='dvtUnSelectedCell'}
+								<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
+							{else}
+                                                                {assign var='class_val' value='dvtSelectedCell'}
+                                                        {/if}
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                                        <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+							{if ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
+                                                        <td id="cellTabRelatedto" class={$class_val} align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+							{/if}
                                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
 						</tr>
 
@@ -816,6 +828,7 @@ var gVTModule = '{$smarty.request.module}';
 			<!-- Reminder UI -->
 			<div id="addTaskAlarmUI" style="display: block; width: 100%;">
 			{if $LABEL.sendnotification != ''}
+				{assign var='vision' value='none'}
                 	<table>
 				<tr><td>{$LABEL.sendnotification}</td>
 					{if $ACTIVITYDATA.sendnotification eq 1}
@@ -829,9 +842,11 @@ var gVTModule = '{$smarty.request.module}';
                                 	{/if}
 				</tr>
 			</table>
-			{/if}
+			{else}
+                                {assign var='vision' value='block'}
+                        {/if}
 			</div>
-			<div id="addTaskRelatedtoUI" style="display:none;width:100%">
+			<div id="addTaskRelatedtoUI" style="display:{$vision};width:100%">
            		     <table width="100%" cellpadding="5" cellspacing="0" border="0">
 			     {if $LABEL.parent_id neq ''}
                 	     <tr>
@@ -862,6 +877,7 @@ var gVTModule = '{$smarty.request.module}';
                              </tr>
 			     {/if}
 		</table>
+		{/if}
               	</div>
                 </td></tr></table>
 

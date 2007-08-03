@@ -196,9 +196,13 @@ function DeleteTag(id,recordid)
                                         					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 					                                        <td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');dispLayer('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.reminder_time neq ''}
 										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');dispLayer('addEventAlarmUI');ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.recurringtype neq ''}
 										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRelatedtoUI');ghide('addEventRepeatUI');">{$MOD.LBL_LIST_RELATED_TO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -344,15 +348,23 @@ function DeleteTag(id,recordid)
                                                         </tr>
                                                      </table>
 						     <br>
+						     {if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') } 
 						     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td>
 									<table border="0" cellpadding="3" cellspacing="0" width="100%">
 									<tr>
 										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                                                                <td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a>
-										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
-                                                                                <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+										{if $LABEL.sendnotification neq ''}
+                                                                                        {assign var='class_val' value='dvtUnSelectedCell'}
+	                                                                                <td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a></td>
+										{else}
+                                                                                        {assign var='class_val' value='dvtSelectedCell'}
+                                                                                {/if}
+										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
+										{if ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
+                                                                                <td id="cellTabRelatedto" class={$class_val} align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+										{/if}
 
                                                                                 <td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 									</tr>
@@ -364,27 +376,33 @@ function DeleteTag(id,recordid)
                                                                 <!-- Notification UI -->
                                                                         <DIV id="addTaskAlarmUI" style="display:block;width:100%">
 									{if $LABEL.sendnotification neq ''}
+									{assign var='vision' value='none'}
                                                                         <table width="100%" cellpadding="5" cellspacing="0" border="0">
                                                                                 <tr>
                                                                                         <td width="30%" align=right><b>{$MOD.LBL_SENDNOTIFICATION}</b></td>
                                                                                         <td width="70%" align=left>{$ACTIVITYDATA.sendnotification}</td>
                                                                                 </tr>
                                                                         </table>
-									{/if}
+									{else}
+                                                                        {assign var='vision' value='block'}
+                                                                        {/if}
                                                                         </DIV>
-									<div id="addTaskRelatedtoUI" style="display:none;width:100%">
-									{if $LABEL.parent_id neq ''}
-                                                                        <table width="100%" cellpadding="5" cellspacing="0" border="0">
+									<div id="addTaskRelatedtoUI" style="display:{$visio
+n};width:100%">
+									<table width="100%" cellpadding="5" cellspacing="0" border="0">
                                                                                 <tr>
+										{if $LABEL.parent_id neq ''}
                                                                                         <td width="30%" align=right><b>{$LABEL.parent_id}</b></td>
                                                                                         <td width="70%" align=left>{$ACTIVITYDATA.parent_name}</td>
+										{/if}
                                                                                 </tr>
                                                                                 <tr>
-                                                                                        <td align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
-											<td align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
+										{if $LABEL.contact_id neq ''}
+                                                                                        <td width="30%" align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
+											<td width="70%" align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
+										{/if}
                                                                                 </tr>
                                                                         </table>
-									{/if}
                                                                         </div>
 								</td>
 							</tr>
@@ -393,7 +411,8 @@ function DeleteTag(id,recordid)
 
                      	                      </td>
 					   </tr>
-                </tr>
+                </table>
+		{/if}
 		<tr>
 			<td style="padding:10px">
 		           <table border=0 cellspacing=0 cellpadding=0 width=100%>

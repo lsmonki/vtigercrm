@@ -198,12 +198,15 @@ function ghide(argg2)
 
 function switchClass(myModule,toStatus) {
 	var x=document.getElementById(myModule);
-	if (toStatus=="on") {
-		x.className="dvtSelectedCell";
+	if($(x))
+	{
+		if (toStatus=="on") {
+			x.className="dvtSelectedCell";
 		}
-	if (toStatus=="off") {
-		x.className="dvtUnSelectedCell";
+		if (toStatus=="off") {
+			x.className="dvtUnSelectedCell";
 		}
+	}
 		
 }
 
@@ -448,7 +451,7 @@ function check_form()
 			else
 			{
 				if(endhour == 12)
-					endhour == 0;
+					endhour = 0;
 				else
 					endhour = endhour;
 			}

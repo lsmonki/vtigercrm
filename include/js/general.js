@@ -1945,19 +1945,26 @@ function selectContact(check,type,frmName)
 	else if(($("contact_name")) && type == 'task')
 	{
 		var formName = frmName.name;
+		var task_recordid = '';
 		if(formName == 'EditView')
 		{
-			task_parent_module = frmName.parent_type.value;
-			task_recordid = frmName.parent_id.value;
-			task_module = task_parent_module.split("&");
-			popuptype="&popuptype=specific";
+			if($("parent_type"))
+                        {
+				task_parent_module = frmName.parent_type.value;
+				task_recordid = frmName.parent_id.value;
+				task_module = task_parent_module.split("&");
+				popuptype="&popuptype=specific";
+			}
 		}
 		else
 		{
-			task_parent_module = frmName.task_parent_type.value;
-			task_recordid = frmName.task_parent_id.value;
-			task_module = task_parent_module.split("&");
-			popuptype="&popuptype=toDospecific";
+			if($("task_parent_type"))
+                        {
+				task_parent_module = frmName.task_parent_type.value;
+				task_recordid = frmName.task_parent_id.value;
+				task_module = task_parent_module.split("&");
+				popuptype="&popuptype=toDospecific";
+			}
 		}
 		if(task_recordid != '' && task_module[0] == "Leads" )
 		{
@@ -1968,7 +1975,7 @@ function selectContact(check,type,frmName)
 			if(task_recordid != '')
 				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
 			else	
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 		}
 
 	}
