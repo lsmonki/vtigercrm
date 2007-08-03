@@ -312,13 +312,25 @@ class Reports extends CRMEntity{
 		//Security Check 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$sql = "select * from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) order by sequence";
+			$sql = "select * from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) ";
+
+			//fix for Ticket #4016
+			if($module == "Calendar")
+				$sql.="group by vtiger_field.fieldlabel order by sequence";
+			else
+				$sql.="order by sequence";
 		}
 		else
 		{
 			
 			$profileList = getCurrentUserProfileList();
-			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
+			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+
+			//fix for Ticket #4016
+			if($module == "Calendar")
+				$sql.="group by vtiger_field.fieldid,vtiger_field.fieldlabel order by sequence";
+			else
+				$sql.="group by vtiger_field.fieldid order by sequence";
 		}
 		
 		if($module == 'HelpDesk' && $block == 25)

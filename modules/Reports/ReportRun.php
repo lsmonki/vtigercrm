@@ -384,7 +384,7 @@ class ReportRun extends CRMEntity
         		                        {
 							$advorsql[] = "(case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname else concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 		                                }
-						elseif($selectedfields[1] == 'status')
+						elseif($selectedfields[1] == 'status')//when you use comma seperated values.
 						{
 							$advorsql[] = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 						}else	
@@ -394,9 +394,6 @@ class ReportRun extends CRMEntity
 					}
 					$advorsqls = implode(" or ",$advorsql);
 					$fieldvalue = " (".$advorsqls.") ";
-				}elseif($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')	
-				{
-					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
 				elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name')
 				{
@@ -422,6 +419,12 @@ class ReportRun extends CRMEntity
                                 {
 					$fieldvalue = "(vtiger_accountRelCalendar.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_potentialRelCalendar.potentialname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
                                 }
+				// fix for the ticket#4016 -- when you use only one value in its field.
+				elseif($selectedfields[0] == "vtiger_activity" && $selectedfields[1] == 'status')
+				{
+					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
+				}
+				//end fix
 				else
 				{
 					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
