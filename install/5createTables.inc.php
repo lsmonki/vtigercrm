@@ -260,7 +260,7 @@ foreach ($modules as $module )
 require_once('include/PopulateComboValues.php');
 $combo = new PopulateComboValues();
 $combo->create_tables();
-
+$combo->create_nonpicklist_tables();
 //Writing tab data in flat file
 create_tab_data_file();
 create_parenttab_data_file();
