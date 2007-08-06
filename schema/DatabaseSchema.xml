@@ -6,7 +6,7 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="user_name" type="C" size="20" />
+		<field name="user_name" type="C" size="100" />
 		<field name="user_password" type="C" size="30" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">

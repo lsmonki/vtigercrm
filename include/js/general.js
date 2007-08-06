@@ -2099,18 +2099,19 @@ if(confirm(alert_arr.ARE_YOU_SURE))
        }
 }
 
-
+//function modified to apply the patch ref : Ticket #4065
 function valid(c,type)
 {
 	if(type == 'name')
 	{
-		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.') || (c == '_') || (c == '-') );
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.') || (c == '_') || (c == '-') || (c == '@') );
 	}
 	else if(type == 'namespace')
 	{
 		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.')||(c==' ') || (c == '_') || (c == '-') );
 	}
 }
+//end
 
 function CharValidation(s,type)
 {
