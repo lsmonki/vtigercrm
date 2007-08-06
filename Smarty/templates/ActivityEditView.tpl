@@ -255,15 +255,9 @@ var gVTModule = '{$smarty.request.module}';
 										<br>
 										<select name="taskpriority" id="taskpriority">
                                                                                         {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-                                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                        <option value="{$sel_value}" {$value}>
-                                                                                                {if $MOD.$sel_value neq ''}
-                                                                                                {$MOD.$sel_value}
-                                                                                                {else}
-                                                                                                        {$sel_value}
-                                                                                                {/if}
-                                                                                        </option>
-                                                                                        {/foreach}
+											<option value="{$arr[1]}" {$arr[2]}>
+												{$arr[0]}
+											</option>
                                                                                         {/foreach}
                                                                                 </select>
 										</td> 
@@ -673,15 +667,9 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskstatus" id="taskstatus" class=small>
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
-                                        			{foreach key=sel_value item=value from=$arr}
-                                                			<option value="{$sel_value}" {$value}>
-                                                        		{if $MOD.$sel_value neq ''}
-                                                                		{$MOD.$sel_value}
-                                                        		{else}
-                                                                		{$sel_value}
-                                                        		{/if}
-                                                			</option>
-                                        			{/foreach}
+                                        				<option value="{$arr[1]}" {$arr[2]}>
+                                                                                {$arr[0]}
+                                                                        </option>
                                         			{/foreach}
                                 				</select>
 							</td>
@@ -690,15 +678,9 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskpriority" id="taskpriority" class=small>
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-                                			        {foreach key=sel_value item=value from=$arr}
-			                                                <option value="{$sel_value}" {$value}>
-                        		                                {if $MOD.$sel_value neq ''}
-                                        		                        {$MOD.$sel_value}
-                                                       			{else}
-                                                                		{$sel_value}
-                                                        		{/if}
-                                                			</option>
-                                        			{/foreach}
+                                        				<option value="{$arr[1]}" {$arr[2]}>
+                                                                                {$arr[0]}
+                                                                        </option>
                                         			{/foreach}
                                 				</select>
 							</td>
