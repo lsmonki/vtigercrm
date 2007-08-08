@@ -176,15 +176,9 @@ var gVTModule = '{$smarty.request.module}';
 										{if $LABEL.eventstatus neq ''}
                                                                                 <select name="eventstatus" id="eventstatus" class=small onChange = "getSelectedStatus();" >
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
-                                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                        <option value="{$sel_value}" {$value}>
-                                                                                                {if $MOD.$sel_value neq ''}
-                                                                                                {$MOD.$sel_value}
-                                                                                                {else}
-                                                                                                        {$sel_value}
-                                                                                                {/if}
+                                                                                        <option value="{$arr[1]}" {$arr[2]}>
+                                                                                                {$arr[0]}
                                                                                         </option>
-                                                                                        {/foreach}
                                                                                         {/foreach}
                                                                                 </select>
 										{/if}
