@@ -31,7 +31,12 @@ else
 $show_hidden=$_REQUEST["show_hidden"];
 
 global $current_user;
-
+//checking the imap support in php
+if(!function_exists('imap_open'))
+{
+	echo "<strong>".$mod_strings['LBL_ENABLE_IMAP_SUPPORT']."</strong>";
+	exit();
+}
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
