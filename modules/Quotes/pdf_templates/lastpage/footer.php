@@ -24,8 +24,12 @@ for ($i=10;$i<200;$i++) {
 
 
 // company addy
+if($org_phone != '')
+$phone="\nPhone:	".$org_phone;	
+if($org_fax != '')
+  $fax ="\nFax:		".$org_fax;	
 $companyBlockPositions=array( "10","220","60" );
-$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country;
+$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country." ".$phone." ".$fax."\n".$org_website ;
 $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 
 

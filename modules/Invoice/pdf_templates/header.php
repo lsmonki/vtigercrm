@@ -18,8 +18,11 @@ $imageBlock=array("10","3","0","0");
 $pdf->addImage( $logo_name, $imageBlock);
 
 // x,y,width
-$companyBlockPositions=array( "10","23","60" );
-$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country;
+if($org_phone != '')
+  $phone ="\nPhone:".$org_phone;
+	
+$companyBlockPositions=array( "10","23","62" );
+$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country." ".$phone."\n".$org_website;
 $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 
 // ************** End company information *******************
@@ -46,12 +49,12 @@ $pdf->addBubbleBlock($page_num, "Page", $pageBubble);
 
 // ************** Begin Addresses **************
 // shipping Address
-$shipLocation = array("147","40","60");
+$shipLocation = array("147","40","61");
 $shipText=$ship_street."\n".$ship_city.", ".$ship_state." ".$ship_code."\n".$ship_country;
 $pdf->addTextBlock( "Shipping Address:", $shipText, $shipLocation );
 
 // billing Address
-$billPositions = array("10","43","60");
+$billPositions = array("10","51","61");
 $billText=$bill_street."\n".$bill_city.", ".$bill_state." ".$bill_code."\n".$bill_country;
 $pdf->addTextBlock("Billing Address:",$billText, $billPositions);
 // ********** End Addresses ******************
