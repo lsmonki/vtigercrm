@@ -1361,7 +1361,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parenttype == "HelpDesk")	
 		{
-			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="crmid";
+			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="ticketid";
 		}
 		if($parenttype == "Invoice")	
 		{
@@ -1396,7 +1396,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parenttype == "HelpDesk")	
 		{
-			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="crmid";
+			$tablename = "vtiger_troubletickets";	$fieldname = "title";        	$idname="ticketid";
 		}
 		if($parentid != '')
                 {
