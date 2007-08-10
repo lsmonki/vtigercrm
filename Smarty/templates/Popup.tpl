@@ -89,8 +89,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 </body>
 <script>
 var gPopupAlphaSearchUrl = '';
+var gsorder ='';
+var gstart ='';
 function callSearch(searchtype)
 {ldelim}
+    gstart='';
     for(i=1;i<=26;i++)
     {ldelim}
         var data_td_id = 'alpha_'+ eval(i);
@@ -121,6 +124,7 @@ function callSearch(searchtype)
 {rdelim}	
 function alphabetic(module,url,dataid)
 {ldelim}
+    gstart='';
     document.basicSearch.search_text.value = '';	
     for(i=1;i<=26;i++)
     {ldelim}
@@ -144,6 +148,7 @@ function alphabetic(module,url,dataid)
 {rdelim}
 function gethiddenelements()
 {ldelim}
+	gstart='';
 	var urlstring=''	
 	if(getObj('select_enable').value != '')
 		urlstring +='&select=enable';	
@@ -163,6 +168,7 @@ function gethiddenelements()
 																									
 function getListViewEntries_js(module,url)
 {ldelim}
+	gstart="&"+url;
 	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
@@ -174,6 +180,8 @@ function getListViewEntries_js(module,url)
 		urlstring += gPopupAlphaSearchUrl;	
 	else
 		urlstring += '&popuptype='+popuptype;	
+
+	urlstring += (gsorder !='') ? gsorder : '';
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -188,7 +196,9 @@ function getListViewEntries_js(module,url)
 
 function getListViewSorted_js(module,url)
 {ldelim}
+	gsorder=url;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true"+url;
+	urlstring += (gstart !='') ? gstart : '';
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
