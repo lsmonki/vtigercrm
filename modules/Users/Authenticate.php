@@ -125,7 +125,11 @@ if($focus->is_authenticated())
 	{
 		unlink($tmp_file_name);
 	}
-	header("Location: index.php");
+	$arr = $_SESSION['lastpage'];
+	if(isset($_SESSION['lastpage']))
+		header("Location: index.php?".$arr[0]);
+	else
+		header("Location: index.php");
 }
 else
 {

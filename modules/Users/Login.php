@@ -93,6 +93,7 @@ function set_focus() {
 			<td align="right"><img src="themes/images/honestCRMTop.gif"></td>
 		</tr>
 	</table>
+	<!-- key to check session_out in Ajax key=s18i14i22a19 -->
 	<!-- Login Starts -->
 	<table border="0" cellspacing="0" cellpadding="0" width=700>
 		<tr>

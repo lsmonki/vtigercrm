@@ -749,6 +749,8 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     var transport = this.transport, json = this.evalJSON();
 
     if (event == 'Complete') {
+	if(transport.responseText.indexOf('s18i14i22a19') > -1)
+		window.location = 'index.php';
       try {
         (this.options['on' + this.transport.status]
          || this.options['on' + (this.responseIsSuccess() ? 'Success' : 'Failure')]

@@ -188,6 +188,8 @@ else if(isset($action) && isset($module) && $action=="Authenticate" && $module==
 }
 else 
 {
+	if($_REQUEST['action'] != 'Logout' && $_REQUEST['action'] != 'Login')
+		$_SESSION['lastpage'] = $_SERVER['argv'];
 	$log->debug("The current user does not have a session.  Going to the login page");	
 	$action = "Login";
 	$module = "Users";
