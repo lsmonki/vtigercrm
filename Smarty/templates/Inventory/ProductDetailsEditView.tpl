@@ -13,7 +13,6 @@
 -->*}
 
 <script type="text/javascript" src="include/js/Inventory.js"></script>
-<script type="text/javascript" src="include/js/general.js"></script>
 <!-- Added to display the Product Details -->
 <script type="text/javascript">
 if(!e)

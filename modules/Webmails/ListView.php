@@ -159,7 +159,6 @@ if($_POST["command"] == "check_mbox") {
 }
 
 ?>
-<script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/scriptaculous.js?load=effects,builder"></script>
 
 <script type="text/javascript">

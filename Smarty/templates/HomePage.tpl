@@ -9,15 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/effects.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/builder.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dragdrop.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/controls.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/slider.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
-<script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
 <script language="javascript">
 function getHomeActivities(mode,view)
 

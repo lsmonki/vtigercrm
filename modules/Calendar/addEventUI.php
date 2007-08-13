@@ -180,7 +180,6 @@ function getAssignedToHTML($assignedto,$toggletype)
 ?>
        
 	<!-- Add Event DIV starts-->
-	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<?php echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>

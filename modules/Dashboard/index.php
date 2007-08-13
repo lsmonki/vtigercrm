@@ -332,7 +332,6 @@ if($CHAT_DISPLAY == 'true') {
 </html>
 
 
-<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script>
 function loadDashBoard(oSelect)

@@ -20,7 +20,6 @@
 </style>
 {/literal}
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
-<script language="JAVASCRIPT" type="text/javascript" src="include/js/general.js"></script>
 <script language="JAVASCRIPT" type="text/javascript">
 {literal}
 function UpdateProfile()

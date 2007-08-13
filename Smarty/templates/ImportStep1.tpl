@@ -11,7 +11,6 @@
 -->*}
 
 
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script type="text/javascript" language="Javascript">
 function validateFile(form) 
 	{ldelim}

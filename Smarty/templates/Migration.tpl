@@ -12,7 +12,6 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 
 <form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
 	<input type="hidden" name="parenttab" value="Settings">

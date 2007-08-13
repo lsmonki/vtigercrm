@@ -222,7 +222,6 @@ function getSearchModulesComboList($search_module)
 	global $mod_strings;
 	
 	?>
-		<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 		<script>
 		function displayModuleList(selectmodule_view)
 		{
