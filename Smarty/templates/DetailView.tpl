@@ -406,6 +406,7 @@ function DeleteTag(id,recordid)
                 {/if}
                 <!-- Action links for Event & Todo END-by Minnie -->
 
+		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>
@@ -419,6 +420,7 @@ function DeleteTag(id,recordid)
 		</tr>
 		</table>
 		<!-- End Tag cloud display -->
+		{/if}
 			<!-- Mail Merge-->
 				<br>
 				{if $MERGEBUTTON eq 'permitted'}

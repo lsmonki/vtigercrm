@@ -655,6 +655,8 @@ $mod_strings = Array(
 'LBL_NOTIFICATION_ACTIVITY'=>'Notification Activity',
 'LBL_NOTIFICATION_EMAIL_INFO'=>'Notification Email Information',
 'LBL_GOTO_LISTVIEW_BUTTON'=>'Goto ListView',
+//Added to provide User based TagCloud
+'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
 );
 
 ?>

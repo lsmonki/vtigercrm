@@ -167,11 +167,33 @@
 									</div>
 								
 									<br>
+									<!-- Tag Cloud Display -->
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr>
+										<td class="big">
+										<strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+										</td>
+										<td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('tagcloud_disp');"></td>
+									</tr>
+									</table>
+									<div style="float: none; display: none;" id="tagcloud_disp">
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.LBL_TAG_CLOUD}</td>
+											{if $TAGCLOUDVIEW eq 'true'}
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td>
+                                                                                                {else}
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td>
+											{/if}
+										</tr>
+                                                                        </table>                                                                                                                   </div>
+                                                                                                                                                                                                   <br>
 									<!-- My Groups -->
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">	
-										<strong>6. {$UMOD.LBL_MY_GROUPS}</strong>
+										<strong>7. {$UMOD.LBL_MY_GROUPS}</strong>
 										 </td>
 										 <td class="small" align="right">
 										{if $GROUP_COUNT > 0}
@@ -192,7 +214,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 										<tr>
 										 <td class="big">	
-										<strong>7. {$UMOD.LBL_LOGIN_HISTORY}</strong>
+										<strong>8. {$UMOD.LBL_LOGIN_HISTORY}</strong>
 										 </td>
 										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
 										</tr>

@@ -16,7 +16,7 @@ class vtigerCRM_Smarty extends Smarty{
 	*/
 	function vtigerCRM_Smarty()
 	{
-		global $CALENDAR_DISPLAY, $WORLD_CLOCK_DISPLAY, $CALCULATOR_DISPLAY, $CHAT_DISPLAY;
+		global $CALENDAR_DISPLAY, $WORLD_CLOCK_DISPLAY, $CALCULATOR_DISPLAY, $CHAT_DISPLAY, $current_user;
 
 		$this->Smarty();
 		$this->template_dir = 'Smarty/templates';
@@ -30,6 +30,8 @@ class vtigerCRM_Smarty extends Smarty{
  		$this->assign('WORLD_CLOCK_DISPLAY', $WORLD_CLOCK_DISPLAY); 
  		$this->assign('CALCULATOR_DISPLAY', $CALCULATOR_DISPLAY); 
  		$this->assign('CHAT_DISPLAY', $CHAT_DISPLAY);
+		//Added to provide User based Tagcloud
+                $this->assign('TAG_CLOUD_DISPLAY',getTagCloudView($current_user->id) );
 	}
 }
 

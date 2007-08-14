@@ -2694,7 +2694,7 @@ function getImportFieldsList($module)
 
 	$fieldnames = "";
 	//For module basis we can add the list of fields for Import mapping
-	if($module == "Leads")
+	if($module == "Leads" || $module == "Contacts")
 	{
 		$fieldnames = " fieldname='salutationtype' ";
 	}
@@ -2930,6 +2930,67 @@ function getCvIdOfAll($module)
 	return $cvid;
 
 
+}
+
+/** gives the option  to display  the tagclouds or not for the current user
+ ** @param $id -- user id:: Type integer
+ ** @returns true or false in $tag_cloud_view
+ ** Added to provide User based Tagcloud
+ **/
+
+function getTagCloudView($id="")
+{
+	global $log;
+	global $adb;
+	$log->debug("Entering in function getTagCloudView($id)");
+	if($id == '')
+	{
+		$tag_cloud_status =1;
+	}else
+	{
+		$query = "select tagcloud_view from vtiger_users where id=$id";
+		$tag_cloud_status = $adb->query_result($adb->query($query),0,'tagcloud_view');
+
+	}
+
+	if($tag_cloud_status == 0)
+		$tag_cloud_view='false';
+	else
+		$tag_cloud_view='true';
+
+
+	$log->debug("Exiting from function getTagCloudView($id)");
+	return $tag_cloud_view;
+}
+
+/** Stores the option in database to display  the tagclouds or not for the current user
+ ** @param $id -- user id:: Type integer
+ ** Added to provide User based Tagcloud
+ **/
+function SaveTagCloudView($id="")
+{
+	global $log;
+	global $adb;
+	$log->debug("Entering in function SaveTagCloudView($id)");
+	$tag_cloud_status=$_REQUEST['tagcloudview'];
+
+	if($tag_cloud_status == "false")
+	$tag_cloud_view = 0;
+	else
+	$tag_cloud_view = 1;
+
+	if($id == '')
+	{
+		$tag_cloud_view =1;
+	}else
+	{
+
+		$query = "update vtiger_users set tagcloud_view =$tag_cloud_view where id=$id";
+		$adb->query($query);
+
+	}
+
+	$log->debug("Exiting from function SaveTagCloudView($id)");
 }
 
 

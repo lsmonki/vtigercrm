@@ -439,6 +439,7 @@ n};width:100%">
 	<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
 
+		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>
@@ -452,6 +453,7 @@ n};width:100%">
 		</tr>
 		</table>
 		<!-- End Tag cloud display -->
+		{/if}
 			<!-- Mail Merge-->
 				<br>
 				{if $MERGEBUTTON eq 'permitted'}

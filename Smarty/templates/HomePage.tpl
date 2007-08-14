@@ -196,6 +196,7 @@ function getHomeActivities(mode,view)
                         <div id="pendingActivities">
                                 {include file="pendingActivities.tpl"}
                         </div><br>
+{if $TAG_CLOUD_DISPLAY eq 'true'}
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 <tr>
 <td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
@@ -204,6 +205,7 @@ function getHomeActivities(mode,view)
 <td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 </tr>
 </table>
+{/if}
 
 
 
