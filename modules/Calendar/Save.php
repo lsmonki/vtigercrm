@@ -108,7 +108,7 @@ else
 	{
 		$focus->column_fields['subject'] = '[Followup] '.$focus->column_fields['subject'];
 		$focus->column_fields['date_start'] = $_REQUEST['followup_date'];
-		$focus->column_fields['due_date'] = $_REQUEST['followup_date'];
+		$focus->column_fields['due_date'] = $_REQUEST['followup_due_date'];
 		$focus->column_fields['time_start'] = $_REQUEST['followup_time_start'];
 		$focus->column_fields['time_end'] = $_REQUEST['followup_time_end'];
 		$focus->column_fields['eventstatus'] = 'Planned';

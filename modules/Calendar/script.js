@@ -360,20 +360,33 @@ function maincheck_form()
                         }
                         else
                                 return false;
-
-                        followupendhour = followuphour;
-                        followupendmin = followupmin + 5;
-                        if(followupendmin == 60)
+			 //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
+                        date3.setMinutes(followupmin);
+                        date3.setHours(followuphour);
+                        if(document.EditView.activitytype[0].checked == true)
                         {
-                                followupendmin = 0;
-                                followupendhour = followupendhour + 1;
+                                date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
                         }
+                        if(document.EditView.activitytype[1].checked == true)
+                        {
+                                date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
+                        }
+
+                        var datefmt = document.EditView.dateformat.value;
+                        var end_dd = _2digit(parseInt(date3.getDate(),10));
+                        var end_mm = _2digit(parseInt(date3.getMonth(),10)+1);
+			var end_yy = date3.getFullYear();
+
+                        var tempdate = end_yy+'-'+end_mm+'-'+end_dd;
+
 			followuphour = _2digit(followuphour);
 			followupmin = _2digit(followupmin);
-			followupendhour = _2digit(followupendhour);
-			followupendmin = _2digit(followupendmin);
+			followupendhour = _2digit(date3.getHours());
+			followupendmin = _2digit(date3.getMinutes());
+			document.EditView.followup_due_date.value = tempdate;
                         document.EditView.followup_time_start.value = followuphour+':'+followupmin;
                         document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
+			//end
                 }
                 // Added for Aydin Kurt-Elli requirement END -by Minnie
 		//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
@@ -569,20 +582,33 @@ function check_form()
                                         }
                                 }
                                 else return false;
-
-                                followupendhour = followuphour;
-                                followupendmin = followupmin + 5;
-                                if(followupendmin == 60)
+				//modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
+                                date3.setMinutes(followupmin);
+                                date3.setHours(followuphour);
+                                if(document.EditView.activitytype[0].checked == true)
                                 {
-                                        followupendmin = 0;
-                                        followupendhour = followupendhour + 1;
+                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
                                 }
+                                if(document.EditView.activitytype[1].checked == true)
+                                {
+                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
+                                }
+
+                                var datefmt = document.EditView.dateformat.value;
+                                var end_dd = _2digit(parseInt(date3.getDate(),10));
+                                var end_mm = _2digit(parseInt(date3.getMonth(),10)+1);
+                                var end_yy = date3.getFullYear();
+
+                                var tempdate = end_yy+'-'+end_mm+'-'+end_dd;
+
 				followuphour = _2digit(followuphour);
 			        followupmin = _2digit(followupmin);
-				followupendhour = _2digit(followupendhour);
-			        followupendmin = _2digit(followupendmin);
+				followupendhour = _2digit(date3.getHours());
+			        followupendmin = _2digit(date3.getMinutes());
+				document.EditView.followup_due_date.value = tempdate;
                                 document.EditView.followup_time_start.value = followuphour+':'+followupmin;
                                 document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
+				//end
                         }
                         // Added for Aydin Kurt-Elli requirement END -by Minnie -->
 

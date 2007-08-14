@@ -98,6 +98,7 @@ var gVTModule = '{$smarty.request.module}';
 						     {/foreach}
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
+							<input type="hidden" name="followup_due_date" id="followup_due_date">
 							<input type="hidden" name="followup_time_start" id="followup_time_start">
                                                         <input type="hidden" name="followup_time_end" id="followup_time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">

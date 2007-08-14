@@ -200,6 +200,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
+	<input type="hidden" name="followup_due_date" id="followup_due_date">
 	<input type="hidden" name="followup_time_start" id="followup_time_start">
 	<input type="hidden" name="followup_time_end" id="followup_time_end">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
