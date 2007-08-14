@@ -1670,13 +1670,16 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_activities',6,'Activities',0)");
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_history',7,'Activity History',0)");
+	//added for the ticket4109
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Emails").",'get_emails',7,'Emails',0)");
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",0,'get_attachments',8,'Attachments',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_history',8,'Activity History',0)");
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("HelpDesk").",'get_tickets',9,'HelpDesk',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",0,'get_attachments',9,'Attachments',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("HelpDesk").",'get_tickets',10,'HelpDesk',0)");
 	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Products").",'get_products',10,'Products',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Products").",'get_products',11,'Products',0)");
 
 	//Inserting Lead Related Lists	
 
