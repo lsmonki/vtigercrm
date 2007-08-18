@@ -892,9 +892,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		//Added for Actions ie., edit and delete links in listview 
 		$links_info = "";
 		if(isPermitted($module,"EditView","") == 'yes'){
-			$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);
-			$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
-		}
+				$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);	
+			if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1)
+				$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
+			else
+				$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
+					}
 		
 			
 		if(isPermitted($module,"Delete","") == 'yes'){

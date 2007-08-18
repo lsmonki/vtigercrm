@@ -80,6 +80,7 @@
 	<form name="EditView" method="POST" action="index.php">
 {/if}
 
+<input type="hidden" name="pagenumber" value="{$smarty.request.start}">
 <input type="hidden" name="module" value="{$MODULE}">
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">

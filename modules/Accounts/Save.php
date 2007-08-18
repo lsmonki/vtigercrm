@@ -128,8 +128,7 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
 	$status = sendNotificationToOwner('Accounts',$focus);
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
 /** Function to save Accounts custom field info into database
 * @param integer $entity_id - accountid
 */
