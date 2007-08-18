@@ -34,7 +34,7 @@ require_once('include/DatabaseUtil.php');
 global $app_strings;
 global $list_max_entries_per_page;
 
-$log = LoggerManager::getLogger('contact_list');
+$log = LoggerManager::getLogger('lead_list');
 
 global $currentModule;
 global $theme;
