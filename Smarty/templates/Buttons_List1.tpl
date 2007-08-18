@@ -9,8 +9,9 @@
   *
  ********************************************************************************/
 -->*}
+{if $MODULE neq 'Settings'}
 <script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
-
+{/if}
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>

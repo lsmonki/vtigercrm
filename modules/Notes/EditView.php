@@ -175,6 +175,8 @@ if ($focus->parent_type == "Account") $smarty->assign("DEFAULT_SEARCH", "&query=
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+
 $tabid = getTabid("Notes");
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);

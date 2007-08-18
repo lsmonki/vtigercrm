@@ -95,7 +95,7 @@
                                             <!-- privilege lists -->
                                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                               <tbody><tr>
-                                                <td style="height: 10px;" align="center"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width: 100%; height: 1px;"></td>
+                                                <td style="height: 10px;" align="center"></td>
                                               </tr>
                                             </tbody></table>
                                             <table border="0" cellpadding="10" cellspacing="0" width="100%">
