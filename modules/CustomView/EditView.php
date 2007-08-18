@@ -88,7 +88,6 @@ else
 
 	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
 	$log->info('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid);
-
 	$smarty->assign("VIEWNAME",$customviewdtls["viewname"]);
 
 	if($customviewdtls["setdefault"] == 1)
@@ -136,6 +135,7 @@ else
 		{
 			$val = Array();
 			for($x=0;$x<count($temp_val);$x++)
+			if(trim($temp_val[$x] != ""))	
 				$val[$x] = getDisplayDate(trim($temp_val[$x]));
 			$advfilterlist[$i-1]["value"] = implode(", ",$val);
 			$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
@@ -456,13 +456,13 @@ function changeTypeOfData($field)
 "vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:I"=>"vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:V",
         "vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
         "vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
-	"vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
-	"vtiger_activity:time_end:time_end:Calendar_End_Time:T"=>"vtiger_activity:time_end:time_end:Calendar_End_Time:V",
 	"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V",
 	"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:V",
 	"vtiger_contactdetails:lastname:lastname:PurchaseOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:PurchaseOrder_Contact_Name:V",
 	"vtiger_contactdetails:lastname:lastname:Invoice_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Invoice_Contact_Name:V",
 "vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:O"=>"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V",
+//Addded to avoid problems in calendar customview validation(start time and end time).Changed end_time's typeofdata to I and handled it in customview.js as hardcoaded. - shahul
+"vtiger_activity:time_end:time_end:Calendar_End_Time:T"=>"vtiger_activity:time_end:time_end:Calendar_End_Time:I",
 			  );
 
 	if(isset($new_field_details[$field]))

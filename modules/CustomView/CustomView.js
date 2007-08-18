@@ -20,7 +20,6 @@ function updatefOptions(sel, opSelName) {
 
     var currOption = selObj.options[selObj.selectedIndex];
     var currField = sel.options[sel.selectedIndex];
-    
     var fld = currField.value.split(":");
     var tod = fld[4];
     if(fld[4] == 'D' || fld[4] == 'DT')
@@ -39,6 +38,16 @@ function updatefOptions(sel, opSelName) {
 	    else
 		    $("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+" hh:mm:ss)</em>&nbsp;";
     }
+
+else if(fld[4] == 'I' && fld[1] == 'time_start' ||  fld[1] == 'time_end')
+    {
+            $("and"+sel.id).innerHTML =  "";
+            if(sel.id != "fcol5")
+                    $("and"+sel.id).innerHTML =  "hh:mm&nbsp;"+alert_arr.LBL_AND;
+            else
+                    $("and"+sel.id).innerHTML = "hh:mm";
+    }
+
     else if(fld[4] == 'C')
     {
 	    $("and"+sel.id).innerHTML =  "";
@@ -163,11 +172,19 @@ function checkval()
 				sep=value.split(",");
 				for(var j=0;j<sep.length;j++)
 				{
-					if(isNaN(sep[j]))
+					if(arr[3] == "Calendar_Start_Time" || arr[3] == "Calendar_End_Time")
 					{
-					alert(alert_arr.LBL_ENTER_VALID_NO);
-					getObj("fval"+i).select();
-					return false;
+						if(!cv_patternValidate(sep[j],"Time","TIME"))
+						{
+							getObj("fval"+i).select();
+							return false;
+						}
+					}
+					else if(isNaN(sep[j]))
+					{
+						alert(alert_arr.LBL_ENTER_VALID_NO);
+						getObj("fval"+i).select();
+						return false;
 					}
 				
 	
@@ -192,18 +209,19 @@ function checkval()
 				sep=value.split(",");
 				for(var j=0;j<sep.length;j++)
 				{
-					var dttime=sep[j].split(" ");
+					var dttime=trim(sep[j]).split(" ");
 					if(!cv_dateValidate(dttime[0],"Date","OTH"))
 					{
 						getObj("fval"+i).select();
 						return false;
 					}
-
-
-					if(!cv_patternValidate(dttime[1],"Time","TIMESECONDS"))
+					if(dttime.length > 1)
 					{
-						getObj("fval"+i).select();
-						return false;
+						if(!cv_patternValidate(dttime[1],"Time","TIMESECONDS"))
+						{
+							getObj("fval"+i).select();
+							return false;
+						}
 					}
 				}
 
@@ -296,15 +314,24 @@ function cv_patternValidate(fldval,fldLabel,type) {
 	}
 	
 
-	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
-		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
+	if (type.toUpperCase()=="TIMESECONDS") 
+	{
+		//TIME validation.optional hour, min and seconds
+		//var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
+		var re = new RegExp("^(([0-1]?[0-9])|([2][0-3]))(:([0-5]?[0-9]))?(:([0-5]?[0-9]))?$");
+	}
+	else if (type.toUpperCase()=="TIME") 
+	{
+		//TIME validation. optional hours and minutes only. dont accept second. added for calendar start and end time field.
+		var re = new RegExp("^(([0-1]?[0-9])|([2][0-3]))(:([0-5]?[0-9]))$");
 	}
 	if (!re.test(fldval)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
 		return false
 	}
 	else return true
+
+
+
+
 }
-
-
-
