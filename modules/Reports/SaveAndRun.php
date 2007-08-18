@@ -26,8 +26,10 @@ $reportid = $_REQUEST["record"];
 $folderid = $_REQUEST["folderid"];
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
-$startdate = $_REQUEST["startdate"];
-$enddate = $_REQUEST["enddate"];
+// Added to fix the issue
+
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format 
 
 global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
 
