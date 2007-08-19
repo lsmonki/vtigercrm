@@ -65,8 +65,6 @@ $smarty = new vtigerCRM_Smarty();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

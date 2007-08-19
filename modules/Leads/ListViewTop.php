@@ -43,7 +43,6 @@ function getNewLeads()
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');
 	if($_REQUEST['lead_view']=='')
 	{	
 		$query = "select lead_view from vtiger_users where id ='$current_user->id'";

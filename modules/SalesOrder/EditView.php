@@ -212,8 +212,6 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Order view");
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);

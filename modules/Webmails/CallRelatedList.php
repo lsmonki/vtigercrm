@@ -17,7 +17,6 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('data/Tracker.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
 require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailParse.php');
 
@@ -77,7 +76,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("CATEGORY","My Home Page");

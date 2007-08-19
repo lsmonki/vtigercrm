@@ -25,7 +25,6 @@ global $oCustomView;
 $error_msg = '';
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 $cv_module = $_REQUEST['module'];
@@ -135,7 +134,7 @@ else
 		{
 			$val = Array();
 			for($x=0;$x<count($temp_val);$x++)
-			if(trim($temp_val[$x] != ""))	
+			if(trim($temp_val[$x] != ""))
 				$val[$x] = getDisplayDate(trim($temp_val[$x]));
 			$advfilterlist[$i-1]["value"] = implode(", ",$val);
 			$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];

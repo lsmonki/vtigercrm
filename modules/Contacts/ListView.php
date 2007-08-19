@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Contacts/Contacts.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
@@ -178,7 +177,6 @@ if(isset($order_by) && $order_by != '')
 
 //Constructing the list view
 
-$custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);

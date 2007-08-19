@@ -18,7 +18,6 @@ require_once("modules/Emails/mail.php");
  global $theme,$mod_strings,$app_strings,$current_user;
  $theme_path="themes/".$theme."/";
  $image_path=$theme_path."images/";
- require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
  $userDetails=getOtherUserName($current_user->id,true);
  $to_email = getUserEmailId('id',$current_user->id);

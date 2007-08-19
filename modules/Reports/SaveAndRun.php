@@ -11,7 +11,6 @@
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once ($theme_path."layout_utils.php");
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
@@ -28,8 +27,8 @@ $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 // Added to fix the issue
 
-$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format
-$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format 
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format 
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format
 
 global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
 

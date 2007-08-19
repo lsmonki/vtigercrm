@@ -20,8 +20,6 @@ require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('include/ListView/ListView.php');
 require_once('modules/Faq/Faq.php');
-require_once('themes/'.$theme.'/layout_utils.php');
-require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');

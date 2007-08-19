@@ -20,7 +20,6 @@ $smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $tax_details = getAllTaxes();
 $sh_tax_details = getAllTaxes('all','sh');

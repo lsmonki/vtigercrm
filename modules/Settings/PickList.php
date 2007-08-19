@@ -11,7 +11,6 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('database/DatabaseConnection.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;

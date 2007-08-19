@@ -75,7 +75,6 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')

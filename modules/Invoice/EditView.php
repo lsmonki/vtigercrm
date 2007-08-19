@@ -248,8 +248,6 @@ $smarty->assign("SINGLE_MOD",'Invoice');
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Invoice view");
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);

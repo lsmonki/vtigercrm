@@ -80,7 +80,6 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'opportunity_type'=>'opportunity_type_dom'
                       ,'sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Potential detail view");
 $smarty->assign("MOD", $mod_strings);

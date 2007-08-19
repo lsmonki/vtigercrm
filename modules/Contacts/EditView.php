@@ -123,8 +123,6 @@ $comboFieldNames = Array('leadsource'=>'lead_source_dom'
                       ,'salutationtype'=>'salutation_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Contact detail view");
 
 $smarty->assign("MOD", $mod_strings);

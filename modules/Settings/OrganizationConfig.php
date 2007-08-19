@@ -19,19 +19,6 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-
-
-global $adb;
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
 
 $smarty = new vtigerCRM_Smarty;
 

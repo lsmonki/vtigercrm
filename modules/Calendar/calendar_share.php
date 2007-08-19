@@ -12,7 +12,6 @@ global $current_user,$mod_strings,$app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once ($theme_path."layout_utils.php");
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/CalendarCommon.php');
  $t=Date("Ymd");

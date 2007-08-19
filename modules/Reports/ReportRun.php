@@ -16,7 +16,6 @@ global $log;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
-require_once ($theme_path."layout_utils.php");
 require_once('data/CRMEntity.php');
 require_once("modules/Reports/Reports.php");
 

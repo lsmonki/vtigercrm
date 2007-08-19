@@ -91,8 +91,6 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Lead');
 
-
-$smarty->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
 //create the html select code here and assign it
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));

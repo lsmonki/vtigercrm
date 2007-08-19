@@ -21,7 +21,6 @@
  ********************************************************************************/
 $theme_path="themes/".$theme."/";
 $image_path="include/images/";
-require_once($theme_path.'layout_utils.php');
 
 global $app_language;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel

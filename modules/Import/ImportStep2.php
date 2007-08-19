@@ -65,7 +65,6 @@ if ( isset($_REQUEST['has_header']))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 if (!is_uploaded_file($_FILES['userfile']['tmp_name']) )
 {

@@ -208,7 +208,6 @@ $smarty->assign("DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT'])
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Activity detail view");
 

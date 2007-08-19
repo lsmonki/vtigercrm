@@ -60,17 +60,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	
 	$button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
-	// Added to have Purchase Order as form Title
-	if($relatedmodule == 'Orders') 
-	{
-		$smarty->assign('ADDBUTTON',get_form_header($app_strings['PurchaseOrder'],$button, false));
-	}
-	else
-	{
-		$smarty->assign('ADDBUTTON',get_form_header($app_strings[$relatedmodule],$button, false));
-	}
-
-	require_once('themes/'.$theme.'/layout_utils.php');
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$smarty->assign("MOD", $mod_strings);
@@ -259,7 +248,6 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once ($theme_path."layout_utils.php");
 
 	global $adb;
 	global $mod_strings;
@@ -360,7 +348,6 @@ function getHistory($parentmodule,$query,$id)
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once ($theme_path."layout_utils.php");
 
 	global $adb;
 	global $mod_strings;
@@ -486,7 +473,6 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	$pricebook_id = $_REQUEST['record'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');
 
 	//Retreive the list from Database
 	$list_result = $adb->query($query);

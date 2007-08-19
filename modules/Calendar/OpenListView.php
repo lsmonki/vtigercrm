@@ -48,7 +48,6 @@ function getPendingActivities($mode,$view='')
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	//code added to customize upcomming and pending activities

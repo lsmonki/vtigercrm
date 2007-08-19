@@ -224,7 +224,6 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);

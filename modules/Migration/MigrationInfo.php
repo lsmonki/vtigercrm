@@ -16,7 +16,6 @@ global $success_query_array, $failure_query_array;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 //This file is used to display the migration informations
 ?>

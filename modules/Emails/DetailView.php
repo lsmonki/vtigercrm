@@ -108,7 +108,6 @@ elseif (is_null($focus->parent_type))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Email detail view");
 

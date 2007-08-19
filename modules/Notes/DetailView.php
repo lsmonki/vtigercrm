@@ -63,7 +63,6 @@ if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Note detail view");
 

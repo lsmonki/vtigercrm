@@ -13,7 +13,6 @@ require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Settings/AuditTrail.php');
 require_once('modules/Users/Users.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');

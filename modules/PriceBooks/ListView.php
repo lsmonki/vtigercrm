@@ -21,7 +21,6 @@ global $app_strings,$mod_strings,$list_max_entries_per_page,$currentModule,$them
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);

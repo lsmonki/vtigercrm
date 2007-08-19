@@ -20,7 +20,6 @@
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Leads/Leads.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
@@ -134,7 +133,6 @@ if($viewnamedesc['viewname'] == 'All')
 }
 
 
-$custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

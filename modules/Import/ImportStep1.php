@@ -30,7 +30,6 @@ $focus = 0;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info($mod_strings['LBL_MODULE_NAME'] . " Upload Step 1");
 

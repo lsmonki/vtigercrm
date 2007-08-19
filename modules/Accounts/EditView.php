@@ -64,8 +64,6 @@ $comboFieldNames = Array('accounttype'=>'account_type_dom'
 $comboFieldArray = getComboArray($comboFieldNames);
 
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Account detail view");
 
 

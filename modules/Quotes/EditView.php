@@ -116,9 +116,6 @@ $smarty->assign("SINGLE_MOD",'Quote');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Quote view");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

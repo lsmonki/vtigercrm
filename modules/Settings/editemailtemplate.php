@@ -20,7 +20,6 @@ global $current_language;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 global $log;
 
 $mode = 'create';

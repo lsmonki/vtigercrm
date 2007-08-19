@@ -12,7 +12,6 @@
 global $theme,$current_user,$app_strings;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
-require_once($theme_path."layout_utils.php");
 require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
 $mysel= $_REQUEST['view'];

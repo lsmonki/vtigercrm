@@ -268,7 +268,6 @@ elseif($activity_mode == 'Events')
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Calendar-Activities detail view");
 $category = getParentTab();

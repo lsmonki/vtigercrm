@@ -42,7 +42,6 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $sql="select * from vtiger_organizationdetails";
 $result = $adb->query($sql);

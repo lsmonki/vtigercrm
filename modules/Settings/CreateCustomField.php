@@ -18,8 +18,6 @@ global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-require_once($theme_path.'layout_utils.php');
-
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
