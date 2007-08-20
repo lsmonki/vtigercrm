@@ -2129,8 +2129,7 @@ function getListQuery($module,$where='')
 			vtiger_activity.*,
 			vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,
 			vtiger_contactdetails.contactid,
-			vtiger_account.accountid, vtiger_account.accountname,
-			vtiger_recurringevents.recurringtype
+			vtiger_account.accountid, vtiger_account.accountname
 			FROM vtiger_activity
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_activity.activityid
