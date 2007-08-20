@@ -135,8 +135,8 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND " .$where;
 }
-
-$list_query .= ' group by vtiger_activity.activityid';
+//CHANGE : TO IMPROVE PERFORMANCE
+//$list_query .= ' group by vtiger_activity.activityid';
 
 if(isset($order_by) && $order_by != '')
 {

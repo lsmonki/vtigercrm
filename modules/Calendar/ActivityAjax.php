@@ -175,19 +175,19 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$cal_log->debug("going to get calendar Event HourView");
 					if($calendar_arr['view'] == 'day')
 					{
-						echo getDayViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
+						echo getDayViewLayout($calendar_arr)."####".getEventInfo($calendar_arr,'listcnt');
 					}
 					elseif($calendar_arr['view'] == 'week')
 					{
-						echo getWeekViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');	
+						echo getWeekViewLayout($calendar_arr)."####".getEventInfo($calendar_arr,'listcnt');	
 					}
 					elseif($calendar_arr['view'] == 'month')
 					{
-						echo getMonthViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
+						echo getMonthViewLayout($calendar_arr)."####".getEventInfo($calendar_arr,'listcnt');
 					}
 					elseif($calendar_arr['view'] == 'year')
 					{
-						echo getYearViewLayout($calendar_arr)."####".getEventTodoInfo($calendar_arr,'listcnt');
+						echo getYearViewLayout($calendar_arr)."####".getEventInfo($calendar_arr,'listcnt');
 					}
 					else
 					{
@@ -199,7 +199,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 					$cal_log->debug("going to get calendar Event ListView");
 					//To get Events List
 					$activity_list = getEventList($calendar_arr, $start_date, $end_date);
-					echo constructEventListView($calendar_arr,$activity_list)."####".getEventTodoInfo($calendar_arr,'listcnt');
+					echo constructEventListView($calendar_arr,$activity_list)."####".getEventInfo($calendar_arr,'listcnt');
 				}
 			}
 			elseif($subtab == 'todo')
@@ -207,7 +207,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 				$cal_log->debug("going to get calendar Todo ListView");
 				//To get Todos List
 				$todo_list = getTodoList($calendar_arr, $start_date, $end_date);
-				echo constructTodoListView($todo_list,$calendar_arr,$subtab)."####".getEventTodoInfo($calendar_arr,'listcnt');
+				echo constructTodoListView($todo_list,$calendar_arr,$subtab)."####".getTodoInfo($calendar_arr,'listcnt');
 			}
 		}
 		elseif($type == 'view')

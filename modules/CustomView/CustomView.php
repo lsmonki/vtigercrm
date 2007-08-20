@@ -15,6 +15,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
+require_once ($theme_path."layout_utils.php");
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
@@ -1576,7 +1577,7 @@ class CustomView extends CRMEntity{
 	  * @param $module (Module Name):: type string 
 	  * @returns  $query 
 	  */
-
+	//CHANGE : TO IMPROVE PERFORMANCE
 	function getModifiedCvListQuery($viewid,$listquery,$module)
 	{
 		if($viewid != "" && $listquery != "")
@@ -1606,10 +1607,18 @@ class CustomView extends CRMEntity{
 		       	{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;
 			}
-			else if($module == "Quotes" || $module == "PurchaseOrder" || $module == "SalesOrder" || $module == "Invoice")
-		       	{
-				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
-			}			
+			else if($module == "Potentials" || $module == "Contacts")
+                        {
+                                $query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_account.accountid ".$listviewquery;
+                        }
+                        else if($module == "Invoice" || $module == "SalesOrder" || $module == "Quotes")
+                        {
+                                $query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_contactdetails.contactid,vtiger_account.accountid ".$listviewquery;
+                        }
+                        else if($module == "PurchaseOrder")
+                        {
+                                $query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
+                        }
 			else
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;

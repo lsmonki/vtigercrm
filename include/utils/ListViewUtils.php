@@ -792,14 +792,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						if($module == 'Accounts')
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
-							$account_name = getAccountName($account_id);
+							//$account_name = getAccountName($account_id);
+							$account_name = $adb->query_result($list_result,$i-1,"accountname");
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 						elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
                                                 {
 							$accountname = $adb->query_result($list_result,$i-1,"accountname");
-							$accountid = getAccountId($accountname);
+							$accountid = $adb->query_result($list_result,$i-1,"accountid");
+							//$accountid = getAccountId($accountname);
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
      				                }
 						else
@@ -1773,7 +1775,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			{
 				if(($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname"))
 				{
-					if($module == "Contacts")
+					/*if($module == "Contacts")
 					{
 						$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$entity_id;
 						$image_res = $adb->query($sql);
@@ -1790,7 +1792,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					{
 						//Commented to give link even to the first name - Jaguar
 						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
-					}
+					}*/
+					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Calendar")
 				{
@@ -2096,17 +2099,15 @@ function getListQuery($module,$where='')
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 			INNER JOIN vtiger_contactaddress
-				ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+				ON vtiger_contactaddress.contactaddressid = vtiger_contactdetails.contactid
 			INNER JOIN vtiger_contactsubdetails
-				ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
+				ON vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid
 			INNER JOIN vtiger_contactscf
-				ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+				ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_contactdetails.accountid
-			LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
-				ON vtiger_contactdetails.reportsto = vtiger_contactdetails2.contactid
 			LEFT JOIN vtiger_contactgrouprelation
-				ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
+				ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 			LEFT JOIN vtiger_users
@@ -2155,8 +2156,6 @@ function getListQuery($module,$where='')
 				ON vtiger_potential.potentialid = vtiger_seactivityrel.crmid
 			LEFT OUTER JOIN vtiger_troubletickets
 				ON vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid
-			LEFT OUTER JOIN vtiger_recurringevents
-				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 			LEFT OUTER JOIN vtiger_activity_reminder
                         	ON vtiger_activity_reminder.activity_id = vtiger_activity.activityid
 			WHERE vtiger_crmentity.deleted = 0
