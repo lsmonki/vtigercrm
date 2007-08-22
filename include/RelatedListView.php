@@ -296,7 +296,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		}
 		elseif($module == 'uploads')
 		{
-			$entries[] = "";
+			$entries[] = $row['title'];
 		}
 		$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
 		if(strlen($row['description']) > $listview_max_textlength)

@@ -896,6 +896,7 @@
 			<default value="all" />
 		</field>
 		<field name="recurringtype" type="C" size="30" />
+
 		<index name="activity_activityid_subject_idx">
 			<col>activityid</col>
 			<col>subject</col>
@@ -939,6 +940,7 @@
 		<field name="description" type="C" size="100" />
 		<field name="type" type="C" size="100" />
 		<field name="path" type="C" size="255" />
+		<field name="subject" type="C" size="255" />
 		<index name="attachments_attachmentsid_idx">
 			<col>attachmentsid</col>
 		</index>
@@ -4804,12 +4806,13 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
 	<table name="vtiger_recurringevents" alter="true">
                <constraint>ADD CONSTRAINT fk_1_vtiger_recurringevents FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
-               <opt>Type=InnoDB</opt>
-               <data>
-               </data>
-       </table> 
+		<opt>Type=InnoDB</opt>
+		<data>
+	        </data>
+	</table>
 
 	<table name="vtiger_inventorynotification">
 		<field name="notificationid" type="I" size="19">

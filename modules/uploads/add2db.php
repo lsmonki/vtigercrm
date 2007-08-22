@@ -51,6 +51,7 @@ $log->debug("DEBUG In add2db.php");
 		if($filesize != 0)	
 		{
 			$desc = $_REQUEST['txtDescription'];
+			$subject = $_REQUEST['uploadsubject'];
 			$description = addslashes($desc);
 			$date_var = $adb->formatDate(date('YmdHis'));	
 			$current_date = getdate();
@@ -97,8 +98,8 @@ $log->debug("DEBUG In add2db.php");
 			# DG 19 June 2006
 			# Strip out single quotes from filenames
 			$filename = preg_replace('/\'/', '', $filename);
-			$sql = "insert into vtiger_attachments values(";
-			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
+			$sql = "insert into vtiger_attachments(attachmentsid, name, description, type,path,subject) values(";
+			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."','".$subject."')";
 			$result = $adb->query($sql);
 
 

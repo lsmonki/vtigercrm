@@ -396,7 +396,7 @@ class Accounts extends CRMEntity {
 				ON crm2.smcreatorid = vtiger_users.id
 			WHERE vtiger_crmentity.crmid = ".$id."
 		 UNION ALL
-			SELECT vtiger_attachments.description AS title, vtiger_attachments.description,
+			SELECT vtiger_attachments.subject AS title, vtiger_attachments.description,
 			vtiger_attachments.name AS filename,
 			vtiger_seattachmentsrel.attachmentsid AS crmid,
 				'Attachments' AS ActivityType,

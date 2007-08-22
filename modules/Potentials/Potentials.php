@@ -211,9 +211,14 @@ class Potentials extends CRMEntity {
 	                        LEFT JOIN vtiger_groups
                         	        ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
 				LEFT JOIN vtiger_campaign
-					ON vtiger_campaign.campaignid = vtiger_potential.campaignid
+					ON vtiger_campaign.campaignid = vtiger_potential.campaignid";
 
-			where vtiger_crmentity.deleted=0 ";
+		$where_auto = "  vtiger_crmentity.deleted = 0 ";
+
+                if($where != "")
+                   $query .= "  WHERE ($where) AND ".$where_auto;
+                else
+                   $query .= "  WHERE ".$where_auto;
 
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -439,7 +444,7 @@ class Potentials extends CRMEntity {
 		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		// Inserted order by createdtime desc
-		$query .= "select vtiger_attachments.description title ,'Attachments'  ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments'  ActivityType,
 		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
 		vtiger_attachments.attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name

@@ -231,7 +231,7 @@ class SalesOrder extends CRMEntity {
 
 		$query .= ' union all ';
 
-		$query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
  		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
  		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
 		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name

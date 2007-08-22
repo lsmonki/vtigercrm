@@ -237,7 +237,7 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.smcreatorid = vtiger_users.id
 			WHERE vtiger_crmentity.crmid = ".$id."
 		UNION ALL
-			SELECT vtiger_attachments.description AS title,
+			SELECT vtiger_attachments.subject AS title,
 				'Attachments' AS ActivityType,
 			vtiger_attachments.name AS filename,
 			vtiger_attachments.type AS FileType,

@@ -15,6 +15,17 @@ $theme_path="themes/".$theme."/";
 <HTML>
 <head>
 	<link type="text/css" href="<?php echo $theme_path;?>style.css" rel="stylesheet">
+	<script>
+                function subjectValidation()
+                {
+                        var val = document.getElementById('uploadsubject').value;
+                        if(val == '')
+                        {
+                                alert("Subject cannot be empty");
+                                return false;
+                        }
+                }
+        </script>
 </head>
 <BODY marginheight="0" marginwidth="0" leftmargin="0" rightmargin="0" bottommargin="0" topmargin="0">
 <FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data" style="margin:0px;">
@@ -41,15 +52,16 @@ $theme_path="themes/".$theme."/";
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 		<tr>
 			<td class=small >
-				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white class="small">
+				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white class="small">		
 					<tr>
 						<td width="30%" colspan="2" align="left">
 							<b><?php echo $mod_strings["LBL_STEP_SELECT_FILE"];?></b><br>
 							<?php echo $mod_strings["LBL_BROWSE_FILES"]; ?>
 						</td>
 					</tr>
+					<tr><td><B><font color=red>*</font>&nbsp;<?php echo $app_strings["LBL_SUBJECT"];?> </B> <input type ="text" name = "uploadsubject" id="uploadsubject"></td></tr>
 					<tr>
-						<td width="30%" colspan="2" align="left"><input type="file" name="filename"/></td>
+						<td width="30%" colspan="2" align="left">&nbsp;<input type="file" name="filename"/></td>
 					</tr>
 					<tr><td colspan="2">&nbsp;</td></tr>
 					<tr>
@@ -66,7 +78,7 @@ $theme_path="themes/".$theme."/";
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr>
 			<td colspan="2" align="center">
-					<input type="submit" name="save" value="&nbsp;<?php echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" />&nbsp;&nbsp;
+					<input type="submit" name="save" value="&nbsp;<?php echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" onclick = "return subjectValidation();" />&nbsp;&nbsp;
 					<input type="button" name="cancel" value=" <?php echo $mod_strings["LBL_CANCEL"];?> " class="crmbutton small cancel" onclick="self.close();" />
 			</td>	
 		</tr>

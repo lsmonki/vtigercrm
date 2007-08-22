@@ -459,7 +459,7 @@ class Contacts extends CRMEntity {
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
 		$query .= " union all ";
-		$query .= "select vtiger_attachments.description AS title,'Attachments' AS ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments' AS ActivityType,
 		vtiger_attachments.name AS filename, vtiger_attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
 		vtiger_attachments.attachmentsid AS attachmentsid, vtiger_seattachmentsrel.attachmentsid AS crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
@@ -685,9 +685,15 @@ class Contacts extends CRMEntity {
 	                        LEFT JOIN vtiger_groups
                         	        ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 				LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
-					ON vtiger_contactdetails2.contactid = vtiger_contactdetails.reportsto
-				where vtiger_crmentity.deleted=0";
-				//vtiger_contactdetails2 is added to get the Reports To of Contact
+					ON vtiger_contactdetails2.contactid = vtiger_contactdetails.reportsto";
+		$where_auto = "  vtiger_users.status = 'Active' AND vtiger_crmentity.deleted = 0 ";
+
+                if($where != "")
+                   $query .= "  WHERE ($where) AND ".$where_auto;
+                else
+                   $query .= "  WHERE ".$where_auto;
+		
+
 
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');

@@ -276,7 +276,7 @@ class HelpDesk extends CRMEntity {
 
 		$query .= ' union all ';
 
-		$query .= "select vtiger_attachments.description title ,'Attachments'  ActivityType,
+		$query .= "select vtiger_attachments.subject AS title ,'Attachments'  ActivityType,
 		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
 		vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
