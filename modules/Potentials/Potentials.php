@@ -444,7 +444,7 @@ class Potentials extends CRMEntity {
 		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		// Inserted order by createdtime desc
-		$query .= "select vtiger_attachments.subject as title ,'Attachments'  ActivityType,
+		$query .= "select vtiger_attachments.description title ,'Attachments'  ActivityType,
 		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
 		vtiger_attachments.attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name

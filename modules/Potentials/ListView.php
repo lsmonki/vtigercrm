@@ -141,7 +141,12 @@ if(isset($where) && $where != '')
 		$list_query .= " AND vtiger_potential.sales_stage not in( '".$mod_strings['Closed Won']."' , '".$mod_strings['Closed Lost']."' )AND ".$where;
 	else
 		$list_query .= " AND ".$where;
+
+	$_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 if(isset($order_by) && $order_by != '')
 {
@@ -163,6 +168,9 @@ if(isset($order_by) && $order_by != '')
         }
 
 }
+$_SESSION['tablename'] = $tablename;
+$_SESSION['order_by'] = $order_by;
+$_SESSION['sorder'] =$sorder;
 
 //Constructing the list view
 
@@ -201,6 +209,8 @@ if( $adb->dbType == "pgsql")
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 

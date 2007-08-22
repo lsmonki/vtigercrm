@@ -164,6 +164,11 @@ if($action == 'Export')
 {
 	include ('include/utils/export.php');
 }
+if($action == 'ExportAjax')
+{
+        include ('include/utils/ExportAjax.php');
+}
+
 
 //Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
 if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
@@ -215,7 +220,7 @@ if(isset($action) && isset($module))
 		ereg("^ChangePassword", $action) ||
 		ereg("^Authenticate", $action) ||
 		ereg("^Logout", $action) ||
-		ereg("^Export",$action) ||
+		//ereg("^Export",$action) ||
 		ereg("^add2db", $action) ||
 		ereg("^result", $action) ||
 		ereg("^LeadConvertToEntities", $action) ||
@@ -293,7 +298,7 @@ if(isset($action) && isset($module))
 		//skip headers for all these invocations as they are mostly popups
 		if(ereg("^Popup", $action) ||
 			ereg("^ChangePassword", $action) ||
-			ereg("^Export", $action) ||
+			//ereg("^Export", $action) ||
 			ereg("^downloadfile", $action) ||
 			ereg("^fieldtypes",$action) ||
 			ereg("^lookupemailtemplate",$action) ||

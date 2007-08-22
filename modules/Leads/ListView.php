@@ -33,7 +33,7 @@ require_once('include/DatabaseUtil.php');
 global $app_strings;
 global $list_max_entries_per_page;
 
-$log = LoggerManager::getLogger('lead_list');
+$log = LoggerManager::getLogger('contact_list');
 
 global $currentModule;
 global $theme;
@@ -162,7 +162,11 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
+	$_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 /*
 if(isset($order_by) && $order_by != '')
@@ -193,6 +197,10 @@ if(isset($order_by) && $order_by != '')
 		$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 	}
 }
+$_SESSION['tablename'] = $tablename;
+$_SESSION['order_by'] = $order_by;
+$_SESSION['sorder'] =$sorder;
+
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $query));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -269,6 +277,8 @@ if(isPermitted("Leads","Merge") == 'yes')
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 

@@ -25,6 +25,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
+
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -109,7 +110,11 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
         $list_query .= ' and '.$where;
+
+ $_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
 
 
 if(isset($order_by) && $order_by != '')
@@ -119,7 +124,9 @@ if(isset($order_by) && $order_by != '')
 
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-
+$_SESSION['tablename'] = $tablename;
+$_SESSION['order_by'] = $order_by;
+$_SESSION['sorder'] =$sorder;
 //Retreiving the no of rows
 $count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -139,6 +146,8 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 

@@ -916,6 +916,21 @@ $app_strings = array (
 'Mailing Po Box' => 'Mailing Po Box',
 'Other Po Box' => 'Other Po Box',
 'Contact Image' => 'Contact Image',
+
+//Export Records STARTS--->
+'LBL_EXPORT_TYPE_1'=>'Export Type1:',
+'LBL_EXPORT_TYPE_2'=>'Export Type2:',
+'LBL_SEARCH_CRITRIA_RECORDS'=>'Export Search Critria Records',
+'LBL_EXPORT_RECORDS'=>'Export Records Types',
+'LBL_WITH_SEARCH'=>'Export with search records',
+'LBL_WITHOUT_SEARCH'=>'Export without search records',
+'LBL_ALL_DATA'=>'Export all data',
+'LBL_DATA_IN_CURRENT_PAGE'=>'Export data in current page',
+'LBL_ONLY_SELECTED_RECORDS'=>'Export selected records',
+'LBL_YES'=>'Yes',
+'LBL_NO'=>'No',
+//Export Records <-----ENDS
+
 );
 
 $app_list_strings = array (

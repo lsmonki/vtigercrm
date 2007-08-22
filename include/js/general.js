@@ -2184,3 +2184,96 @@ function LTrim( value )
         return value.replace(re, "$1");
 
 }
+
+function selectedRecords(module,category)
+{
+        var select_options  =  document.getElementsByName('selected_id');
+        var x = select_options.length;
+        idstring = "";
+        xx = 0;
+        for(i = 0; i < x ; i++)
+        {
+                if(select_options[i].checked)
+                {
+                        if(select_options[i].checked == true)
+                        {
+                                idstring = select_options[i].value +","+idstring
+                                        xx++
+                        }
+                }
+        }
+        if(idstring != '')
+                window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
+        else
+                window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category;
+}
+
+function record_export(module,category,exform)
+{
+	var searchType = document.getElementsByName('search_type');
+	var exportData = document.getElementsByName('export_data');
+	for(i=0;i<2;i++){
+		if(searchType[i].checked == true)
+			var sel_type = searchType[i].value;
+	}
+	for(i=0;i<3;i++){
+		if(exportData[i].checked == true)
+			var exp_type = exportData[i].value;
+	}
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: "module="+module+"&action=ExportAjax&export_record=true&search_type="+sel_type+"&export_data="+exp_type,
+                        onComplete: function(response) {
+                                if(response.responseText == 'NOT_SEARCH_WITHSEARCH_ALL')
+				{
+                                        $('not_search').style.display = 'block';
+					$('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NOTSEARCH_WITHSEARCH_ALL+" "+module+"</b></font>";
+					setTimeout(hideErrorMsg1,6000);
+	
+					exform.submit();
+				}
+				else if(response.responseText == 'NOT_SEARCH_WITHSEARCH_CURRENTPAGE')
+                                {
+                                        $('not_search').style.display = 'block';
+                                        $('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NOTSEARCH_WITHSEARCH_CURRENTPAGE+" "+module+"</b></font>";
+                                        setTimeout(hideErrorMsg1,7000);
+
+                                        exform.submit();
+                                }
+				else if(response.responseText == 'NO_DATA_SELECTED')
+				{	
+					$('not_search').style.display = 'block';	
+					$('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NO_DATA_SELECTED+"</b></font>";
+					setTimeout(hideErrorMsg1,3000);
+				}
+				else if(response.responseText == 'SEARCH_WITHOUTSEARCH_ALL')
+                                {
+					if(confirm(alert_arr.LBL_SEARCH_WITHOUTSEARCH_ALL))
+					{
+						exform.submit();
+					}					
+                                }
+				else if(response.responseText == 'SEARCH_WITHOUTSEARCH_CURRENTPAGE')
+                                {
+                                        if(confirm(alert_arr.LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE))
+                                        {
+                                                exform.submit();
+                                        }
+                                }
+	                        else
+				{
+                                       exform.submit(); 
+				}
+                        }
+                }
+        );
+
+}
+
+
+function hideErrorMsg1()
+{
+        $('not_search').style.display = 'none';
+}

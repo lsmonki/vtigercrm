@@ -459,7 +459,7 @@ class Contacts extends CRMEntity {
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
 		$query .= " union all ";
-		$query .= "select vtiger_attachments.subject as title ,'Attachments' AS ActivityType,
+		$query .= "select vtiger_attachments.description AS title,'Attachments' AS ActivityType,
 		vtiger_attachments.name AS filename, vtiger_attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
 		vtiger_attachments.attachmentsid AS attachmentsid, vtiger_seattachmentsrel.attachmentsid AS crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name

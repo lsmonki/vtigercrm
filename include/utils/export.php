@@ -83,39 +83,96 @@ function br2nl_vt($str)
  * Param $type - module name
  * Return type text
 */
-function export_all($type)
+function export($type)
 {
-	global $log;
-	$log->debug("Entering export_all(".$type.") method ...");
-	global $adb;
+        global $log,$list_max_entries_per_page;
+        $log->debug("Entering export(".$type.") method ...");
+        global $adb;
 
-	$focus = 0;
-	$content = '';
+        $focus = 0;
+        $content = '';
 
-	if ($type != "")
-	{
-		$focus = new $type;
+        if ($type != "")
+        {
+                $focus = new $type;
+        }
+
+        $log = LoggerManager::getLogger('export_'.$type);
+        $db = new PearDatabase();
+
+        $tablename =$_SESSION['tablename'];
+        $orderby = $_SESSION['order_by'];
+        $sorder = $_SESSION['sorder'];
+        $order_by = "";
+        //$query = $focus->create_export_query($orderby,$where,$sorder,$tablename);
+        $query = $focus->create_export_query($order_by,$where);
+
+
+        $search_type = $_REQUEST['search_type'];
+        $export_data = $_REQUEST['export_data'];
+        $customview  = $_REQUEST['customview'];
+        $module = $_REQUEST['module'];
+
+        if($search_type == 'withoutsearch' && $export_data == 'all')
+        {
+                $query = $query;
+        }
+        elseif($search_type == 'withoutsearch' && $export_data == 'currentpage')
+        {
+                if($orderby != '')
+                $query .=" ORDER BY  ".$tablename.$orderby."  ".$sorder.' LIMIT  '.($_SESSION['nav_start']-1).','.$_SESSION[
+'nav_end'];
+                else
+                        $query .=' LIMIT  '.($_SESSION['nav_start']-1).','.$_SESSION['nav_end'];
+
 	}
+        elseif($search_type == 'withoutsearch' && $export_data == 'selecteddata')
+        {
+                $idstring = $_REQUEST['idstring'];
+                if($module == 'Accounts' && $idstring != '')
+                        $query .= '  and vtiger_account.accountid in ('.($idstring).')';
+                elseif($module == 'Contacts' && $idstring != '')
+                        $query .= ' and vtiger_contactdetails.contactid in ('.($idstring).')';
+                elseif($module == 'Potentials' && $idstring != '')
+                        $query .= ' and vtiger_potential.potentialid in ('.($idstring).')';
+                elseif($module == 'Leads' && $idstring != '')
+                        $query .= ' and vtiger_leaddetails.leadid in ('.($idstring).')';
+                elseif($module == 'Products' && $idstring != '')
+                        $query .= ' and vtiger_products.productid in ('.($idstring).')';
 
-	$log = LoggerManager::getLogger('export_'.$type);
-	$db = new PearDatabase();
+        }
+        elseif($search_type == 'includesearch' && $export_data == 'all')
+        {
+                if($orderby != '' && $_SESSION['export_where'] != '')
+                $query.=' and  '.$_SESSION['export_where']."  ORDER BY  ".$tablename.$orderby."  ".$sorder;
+                elseif($orderby == '' && $_SESSION['export_where'] != '')
+                $query.=' and  '.$_SESSION['export_where'];
 
-	if ( isset($_REQUEST['all']) )
-	{
-		$where = '';
-	}
-	else
-	{
-		$where = $_SESSION['export_where'];
-	}
+        }
+        elseif($search_type == 'includesearch' && $export_data == 'currentpage')
+        {
+                $nav_start_val = $_SESSION['nav_start'];
+                $nav_end_val = $_SESSION['nav_end'];
+                $query .= " ORDER BY  ".$tablename.$orderby."  ".$sorder. ' LIMIT '.$nav_start_val.','.$nav_end_val;
+        }
+        elseif($search_type == 'includesearch' && $export_data == 'selecteddata')
+        {
+                $module = $_REQUEST['module'];
+                $idstring = $_REQUEST['idstring'];
+                if($module == 'Accounts' && $idstring != '')
+                    $query .= '  and vtiger_account.accountid in ('.($idstring).')';
+                elseif($module == 'Contacts' && $idstring != '')
+                        $query .= ' and vtiger_contactdetails.contactid in ('.($idstring).')';
+                elseif($module == 'Potentials' && $idstring != '')
+                        $query .= ' and vtiger_potential.potentialid in ('.($idstring).')';
+                elseif($module == 'Leads' && $idstring != '')
+                        $query .= ' and vtiger_leaddetails.leadid in ('.($idstring).')';
+                elseif($module == 'Products' && $idstring != '')
+                        $query .= ' and vtiger_products.productid in ('.($idstring).')';
+        }
 
-	$order_by = "";
-
-	$query = $focus->create_export_query($order_by,$where);
-
-	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
-
-	$fields_array = $adb->getFieldsArray($result);
+        $result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
+        $fields_array = $adb->getFieldsArray($result);
 
 	$header = implode("\",\"",array_values($fields_array));
 	$header = "\"" .$header;
@@ -142,12 +199,12 @@ function export_all($type)
 		$line .= "\"\r\n";
 		$content .= $line;
 	}
-	$log->debug("Exiting export_all method ...");
+	$log->debug("Exiting export method ...");
 	return $content;
 	
 }
 
-$content = export_all($_REQUEST['module']);
+$content = export($_REQUEST['module']);
 
 header("Content-Disposition: attachment; filename={$_REQUEST['module']}.csv");
 header("Content-Type: text/csv; charset=UTF-8");

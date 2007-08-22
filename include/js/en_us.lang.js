@@ -131,6 +131,11 @@
 				LBL_PROVIDE_YES_NO: ' Invalid value.\n Please Provide Yes or No',
 				LBL_SELECT_CRITERIA: ' Invalid criteria.\n Please select criteria',
 				LBL_WRONG_IMAGE_TYPE: 'Allowed file types for Contacts - jpeg, png, jpg, pjpeg, x-png or gif',
-				SELECT_MAIL_MOVE: 'Please select a mail and then move..'
-
+				SELECT_MAIL_MOVE: 'Please select a mail and then move..',
+				
+				LBL_NOTSEARCH_WITHSEARCH_ALL:'You haven\'t used the search. All the records will be Exported in',
+				LBL_NOTSEARCH_WITHSEARCH_CURRENTPAGE:'You haven\'t searched any thing.But you selected with search&current page options.So the records in the current page will be Exported in ',
+				LBL_NO_DATA_SELECTED:'There is no record selected. Select at least one record to Export',
+				LBL_SEARCH_WITHOUTSEARCH_ALL:'You have used search option but you have not selected without search & all options.\n You can click [ok] to export all data or You can click [cancel] and try again with other export criteria',
+				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not selected without search & currentpage options.\nYou can click [ok]to export current page data or\n You can click [cancel] and try again with some other export criteria.'
                        };

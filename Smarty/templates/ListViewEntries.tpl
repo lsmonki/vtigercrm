@@ -19,6 +19,7 @@
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
      <input name="action" type="hidden">
+     <input name="where_export" type="hidden" value="{$smarty.session.export_where}">
      <input name="step" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
 				<!-- List View Master Holder starts -->
