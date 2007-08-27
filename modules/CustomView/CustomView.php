@@ -249,6 +249,8 @@ class CustomView extends CRMEntity{
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+			//Here we Changing the displaytype of the field. So that its criteria will be displayed Correctly in Custom view Advance Filter.	
+			$fieldtypeofdata=ChangeTypeOfData_Filter($fieldtablename,$fieldcolname,$fieldtypeofdata);
 			if($fieldlabel == "Related To")
 			{
 				$fieldlabel = "Related to";
@@ -1576,6 +1578,7 @@ class CustomView extends CRMEntity{
 	  * @param $module (Module Name):: type string 
 	  * @returns  $query 
 	  */
+
 	//CHANGE : TO IMPROVE PERFORMANCE
 	function getModifiedCvListQuery($viewid,$listquery,$module)
 	{
@@ -1618,6 +1621,7 @@ class CustomView extends CRMEntity{
                         {
                                 $query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
                         }
+
 			else
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid ".$listviewquery;

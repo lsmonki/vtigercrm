@@ -2993,5 +2993,155 @@ function SaveTagCloudView($id="")
 	$log->debug("Exiting from function SaveTagCloudView($id)");
 }
 
+/**     function used to change the Type of Data for advanced filters in custom view and Reports
+ **     @param string $table_name - tablename value from field table
+ **     @param string $column_nametable_name - columnname value from field table
+ **     @param string $type_of_data - current type of data of the field. It is to return the same TypeofData 
+ **            if the  field is not matched with the $new_field_details array.
+ **     return string $type_of_data - If the string matched with the $new_field_details array then the Changed
+ **	       typeofdata will return, else the same typeofdata will return.
+ **
+ **     EXAMPLE: If you have a field entry like this:
+ **
+ ** 		fieldlabel         | typeofdata | tablename            | columnname       |
+ **	        -------------------+------------+----------------------+------------------+
+ **		Potential Name     | I~O        | vtiger_quotes        | potentialid      |
+ **
+ **     Then put an entry in $new_field_details  like this: 
+ **	
+ **				"vtiger_quotes:potentialid"=>"V",
+ **
+ **	Now in customview and report's advance filter this field's criteria will be show like string.
+ **
+ **/
+function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
+{
+	global $adb,$log;
+	//$log->debug("Entering function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)");
+	$field=$table_name.":".$column_name;
+	//Add the field details in this array if you want to change the advance filter field details
+
+	$new_field_details = Array(
+		
+		//Contacts Related Fields
+		"vtiger_contactdetails:accountid"=>"V",
+		"vtiger_contactsubdetails:birthday"=>"D",
+		"vtiger_contactdetails:email"=>"V",
+		"vtiger_contactdetails:yahooid"=>"V",
+		
+		//Potential Related Fields
+		"vtiger_potential:campaignid"=>"V",
+
+		//Account Related Fields
+		"vtiger_account:parentid"=>"V",
+		"vtiger_account:email1"=>"V",
+		"vtiger_account:email2"=>"V",
+
+		//Lead Related Fields
+		"vtiger_leaddetails:email"=>"V",
+		"vtiger_leaddetails:yahooid"=>"V",
+
+		//Notes Related Fields
+		"vtiger_senotesrel:crmid"=>"V",
+
+		//Calendar Related Fields
+		"vtiger_seactivityrel:crmid"=>"V",
+		"vtiger_seactivityrel:contactid"=>"V",
+		"vtiger_recurringevents:recurringtype"=>"V",
+	
+		//HelpDesk Related Fields
+		"vtiger_troubletickets:parent_id"=>"V",
+		"vtiger_troubletickets:product_id"=>"V",
+		
+		//Product Related Fields
+		"vtiger_products:discontinued"=>"C",
+		"vtiger_products:vendor_id"=>"V",
+		"vtiger_products:handler"=>"V",
+		
+		//Faq Related Fields
+		"vtiger_faq:product_id"=>"V",
+		
+		//Vendor Related Fields
+		"vtiger_vendor:email"=>"V",
+
+		//Quotes Related Fields
+		"vtiger_quotes:potentialid"=>"V",
+		"vtiger_quotes:inventorymanager"=>"V",
+		"vtiger_quotes:accountid"=>"V",
+		
+		//Purchase Order Related Fields
+		"vtiger_purchaseorder:vendorid"=>"V",
+		"vtiger_purchaseorder:contactid"=>"V",
+		
+		//SalesOrder Related Fields
+		"vtiger_salesorder:potentialid"=>"V",
+		"vtiger_salesorder:quoteid"=>"V",
+		"vtiger_salesorder:contactid"=>"V",
+		"vtiger_salesorder:accountid"=>"V",
+		
+		//Invoice Related Fields
+		"vtiger_invoice:salesorderid"=>"V",
+		"vtiger_invoice:contactid"=>"V",
+		"vtiger_invoice:accountid"=>"V",
+		
+		//Campaign Related Fields
+		"vtiger_campaign:product_id"=>"V",
+
+		//Related List Entries(For Report Module)
+		"vtiger_activityproductrel:activityid"=>"V",
+		"vtiger_activityproductrel:productid"=>"V",
+
+		"vtiger_campaigncontrel:campaignid"=>"V",
+		"vtiger_campaigncontrel:contactid"=>"V",
+
+		"vtiger_campaignleadrel:campaignid"=>"V",
+		"vtiger_campaignleadrel:leadid"=>"V",
+
+		"vtiger_cntactivityrel:contactid"=>"V",
+		"vtiger_cntactivityrel:activityid"=>"V",
+
+		"vtiger_contpotentialrel:contactid"=>"V",
+		"vtiger_contpotentialrel:potentialid"=>"V",
+
+		"vtiger_crmentitynotesrel:crmid"=>"V",
+		"vtiger_crmentitynotesrel:notesid"=>"V",
+
+		"vtiger_leadacctrel:leadid"=>"V",
+		"vtiger_leadacctrel:accountid"=>"V",
+		
+		"vtiger_leadcontrel:leadid"=>"V",
+		"vtiger_leadcontrel:contactid"=>"V",
+		
+		"vtiger_leadpotrel:leadid"=>"V",
+		"vtiger_leadpotrel:potentialid"=>"V",
+		
+		"vtiger_pricebookproductrel:pricebookid"=>"V",
+		"vtiger_pricebookproductrel:productid"=>"V",
+		
+		"vtiger_seactivityrel:crmid"=>"V",
+		"vtiger_seactivityrel:activityid"=>"V",
+		
+		"vtiger_senotesrel:crmid"=>"V",
+		"vtiger_senotesrel:notesid"=>"V",
+		
+		"vtiger_seproductsrel:crmid"=>"V",
+		"vtiger_seproductsrel:productid"=>"V",
+		
+		"vtiger_seticketsrel:crmid"=>"V",
+		"vtiger_seticketsrel:ticketid"=>"V",
+		
+		"vtiger_vendorcontactrel:vendorid"=>"V",
+		"vtiger_vendorcontactrel:contactid"=>"V",
+	);
+
+	//If the Fields details does not match with the array, then we return the same typeofdata
+	if(isset($new_field_details[$field]))
+	{
+		$type_of_data = $new_field_details[$field];
+	}
+	//$log->debug("Exiting function with the typeofdata: $type_of_data ");
+	return $type_of_data;
+}
+
 
 ?>
