@@ -11,12 +11,20 @@
 
 require_once('modules/Portal/Portal.php');
 
-global $default_charset;
+global $default_charset,$adb;
 $conv_pname = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalname']) : $_REQUEST['portalname'];
 $conv_purl = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalurl']) : $_REQUEST['portalurl'];
 $portlname =str_replace(array("'",'"'),'',$conv_pname);
 $portlurl =str_replace(array("'",'"'),'',$conv_purl);
-
+//added as an enhancement to set default value
+if(isset($_REQUEST['check']) && $_REQUEST['check'] =='true')
+{
+	$updateDefalt ="UPDATE vtiger_portal SET setdefault=1 WHERE portalid=".$_REQUEST['passing_var'];
+	$set_def = $adb->query($updateDefalt);
+	$updateZero = "UPDATE vtiger_portal SET setdefault=0 WHERE portalid not in('".$_REQUEST['passing_var']."')";
+	$set_default= $adb->query($updateZero);
+	exit();
+}	
 if($portlname != '' && $portlurl != '')
 {
 	if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
