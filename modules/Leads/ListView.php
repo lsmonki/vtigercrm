@@ -160,12 +160,9 @@ if($viewid != "0")
 
 if(isset($where) && $where != '')
 {
-	$query .= ' and '.$where;
-	$_SESSION['export_where'] = $where;
-}
-else
-	unset($_SESSION['export_where']);
-	/*if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
+	//$query .= ' and '.$where;
+	//$_SESSION['export_where'] = $where;
+	if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
 	{
 		$query .= "AND vtiger_leaddetails.leadstatus = '".$mod_strings['Lost Lead']."' AND ".$where;
 	}
@@ -177,7 +174,10 @@ else
 	{	
 		$query .= " AND ".$where;
 	}
-}	
+	$_SESSION['export_where'] = $where;
+}
+else 
+	unset($_SESSION['export_where']);
 /*
 if(isset($order_by) && $order_by != '')
 {
