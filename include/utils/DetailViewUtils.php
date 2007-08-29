@@ -107,10 +107,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$sortid = $row['sortorderid'];
 		}
-		if ($uitype == 111) 
-		{
-			$pickListValue = $mod_strings[$pickListValue];
-		}	
+		 if ($uitype == 111)
+		  {
+			  $pickListValue = $mod_strings[$pickListValue];
+		    }
+
 		$subrole = getRoleSubordinates($roleid);	
 		if(count($subrole)> 0)
 		{
@@ -612,7 +613,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$label_fld[] =$image_lists;
 			}elseif(count($image_array)==1)
 			{
-				$label_fld[] ='<img src="'.$imagepath_array[0].$image_id_array[0]."_".$image_array[0].'" border="0" width="450" height="300">';
+				list($pro_image_width, $pro_image_height) = getimagesize($imagepath_array[0].$image_id_array[0]."_".$image_array[0]);
+				if($pro_image_width  > 450 ||  $pro_image_height > 300)
+					$label_fld[] ='<img src="'.$imagepath_array[0].$image_id_array[0]."_".$image_array[0].'" border="0" width="450" height="300">';
+				else
+				$label_fld[] ='<img src="'.$imagepath_array[0].$image_id_array[0]."_".$image_array[0].'" border="0" width="'.$pro_image_width.'" height="'.$pro_image_height.'">';
 			}else
 			{
 				$label_fld[] ='';
