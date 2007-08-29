@@ -68,6 +68,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->list_fields_name[$name];
+		//echo'<pre>';print_r($fieldname);echo'</pre>';
 		if($oCv)
 		{
 			if(isset($oCv->list_fields_name))
@@ -82,6 +83,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
 		{
                   $fieldname = 'contact_id';
+		}
+		if($fieldname == 'productname' && $module != 'Products')
+		{	
+			 $fieldname = 'product_id';
 		}
 		if($j != 0)
 		{
@@ -141,8 +146,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				{
                                         $fieldname = 'contact_id';
 				}
-
-	
+				if($fieldname == 'productname' && $module != 'Products')
+                		{
+                         		$fieldname = 'product_id';
+               			}
 			}else
 			{
 				$fieldname = $focus->list_fields_name[$name];
@@ -158,6 +165,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			{
 				$fieldname = 'contact_id';
 			}
+			if($fieldname == 'productname' && $module != 'Products')
+        	        {
+                	         $fieldname = 'product_id';
+                	}
+
 		}
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 		{
@@ -543,6 +555,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
                        $fieldname = 'contact_id';
 
+		if($fieldname == 'productname' && $module != 'Products')
+                {
+                         $fieldname = 'product_id';
+                }
+
 		if($j != 0)
 		{
 			$field_list .= ', ';
@@ -659,6 +676,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                 	}
 					if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
         	                                $fieldname = 'contact_id';
+					if($fieldname == 'productname' && $module != 'Products')
+			                {
+                        			 $fieldname = 'product_id';
+                			}
 
 				}else
 				{
@@ -675,6 +696,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					$fieldname = 'contact_id';
 				}
+				if($fieldname == 'productname' && $module != 'Products')
+	                	{
+        	                	 $fieldname = 'product_id';
+                		}
+
 			}
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
 			{
@@ -784,6 +810,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 }
 
                                         }
+					if($name == 'Product')
+					{
+						$product_id = $adb->query_result($list_result,$i-1,"productname");
+						$value =  $product_id;	
+					}
                                         //----------------------ENDS----------------------
 					elseif($name=='Account Name')
 					{

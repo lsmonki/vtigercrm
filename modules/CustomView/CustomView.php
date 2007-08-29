@@ -267,6 +267,8 @@ class CustomView extends CRMEntity{
 				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else if($fieldname == 'contact_id' && $module != "Contacts")//Calendar,Notes,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
                                 $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else if($fieldname == 'product_id' && $module != 'Products')//Campaign records sort by Product Name.
+				$optionvalue = "vtiger_products:productname:productname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else
 				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			//added to escape attachments fields in customview as we have multiple attachments
