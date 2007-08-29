@@ -177,7 +177,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small" id="setComment">
 				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
 				<br>
-				[<a href="javascript:;" onclick="getObj('comment1').value='';";>{$APP.LBL_CLEAR_COMMENT}</a>]
+				[<a href="javascript:;" onclick="getObj('{$comment}').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
 			</td>
 		   </tr>
 		</table>
