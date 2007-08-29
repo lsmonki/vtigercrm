@@ -318,6 +318,7 @@ $app_strings = array (
 'LBL_CALCULATOR' => 'Calculator',
 'LBL_CLOSE_WON' => 'Closed Won',
 'LBL_CLOSE_LOST' => 'Closed Lost',
+'Lost Lead' => 'Lost Lead',
 'LBL_USER' => 'User',
 'LBL_TEAM' => 'Team',
 'LBL_GROUP' => 'Group',
@@ -929,6 +930,17 @@ $app_strings = array (
 'LBL_ONLY_SELECTED_RECORDS'=>'Export selected records',
 'LBL_YES'=>'Yes',
 'LBL_NO'=>'No',
+'Planned'=>'Planned',
+'Held'=>'Held',
+'Not Held'=>'Not Held',
+'Call'=>'Call',
+'Meeting'=>'Meeting',
+'Task'=>'Task',
+'Completed'=>'Completed',
+'Deferred'=>'Deferred',
+'Not Started'=>'Not Started',
+'In Progress'=>'In Progress',
+'Pending Input'=>'Pending Input',
 //Export Records <-----ENDS
 
 );

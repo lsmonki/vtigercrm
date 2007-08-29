@@ -60,6 +60,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	
 	$button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
+	// Added to have Purchase Order as form Title
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$smarty->assign("MOD", $mod_strings);
@@ -252,6 +253,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	global $adb;
 	global $mod_strings;
 	global $app_strings, $listview_max_textlength;
+	
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -395,25 +397,29 @@ function getHistory($parentmodule,$query,$id)
 				$activitymode = 'Task';
 				$icon = 'Tasks.gif';
 				$status = $row['status'];
+				$status = $app_strings[$status];
 			}
 			elseif($row['activitytype'] == 'Call' || $row['activitytype'] == 'Meeting')
 			{
 				$activitymode = 'Events';
 				$icon = 'Activities.gif';
 				$status = $row['eventstatus'];
+				$status = $app_strings[$status]; 
 			}
-
-			$entries[] = $row['activitytype'];
+	
+	            	$typeofactivity = $row['activitytype'];
+ 	            	$typeofactivity = $app_strings[$typeofactivity];
+			$entries[] = $typeofactivity;
 
 			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
-		
-			$entries[] = $row['date_start']."   ".$row['time_start'];
-			$entries[] = $row['due_date']."   ".$row['time_end'];
 			
+		       $entries[] = getDisplayDate($row['date_start'])."   ".$row['time_start'];
+ 	               $entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];         
+		
 			//$entries[] = nl2br($row['description']);
 
 			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
