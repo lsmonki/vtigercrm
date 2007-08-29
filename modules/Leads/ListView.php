@@ -45,7 +45,6 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $category = getParentTab();
 
 if (!isset($where)) $where = "";
-
 $url_string = ''; // assigning http url string
 
 $focus = new Leads();
@@ -161,13 +160,24 @@ if($viewid != "0")
 
 if(isset($where) && $where != '')
 {
-        $query .= ' and '.$where;
+	$query .= ' and '.$where;
 	$_SESSION['export_where'] = $where;
 }
 else
-   unset($_SESSION['export_where']);
-
-
+	unset($_SESSION['export_where']);
+	/*if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
+	{
+		$query .= "AND vtiger_leaddetails.leadstatus = '".$mod_strings['Lost Lead']."' AND ".$where;
+	}
+	elseif(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+	{
+		$query .= "AND vtiger_leaddetails.leadstatus not in( '".$mod_strings['Lost Lead']."')AND ".$where;
+	}
+	else
+	{	
+		$query .= " AND ".$where;
+	}
+}	
 /*
 if(isset($order_by) && $order_by != '')
 {
