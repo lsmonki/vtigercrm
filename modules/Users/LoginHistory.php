@@ -142,7 +142,9 @@ class LoginHistory {
 	*/
 	function user_login(&$usname,&$usip,&$intime)
 	{
-		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signed in')";
+		//Kiran: Setting logout time to '0000-00-00 00:00:00' instead of null
+		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip','0000-00-00 00:00:00', ".$this->db->formatDate($intime).",'Signed in')";
+
 		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 		
