@@ -73,6 +73,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 }
 
 $category = getParentTab();
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);

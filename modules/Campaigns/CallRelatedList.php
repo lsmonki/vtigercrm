@@ -78,7 +78,8 @@ while($cvrow=$adb->fetch_array($result))
 $lhtml .= "</select>";
 $smarty->assign("LEADCVCOMBO",$lhtml);
 /* To get Leads CustomView -END */
-
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

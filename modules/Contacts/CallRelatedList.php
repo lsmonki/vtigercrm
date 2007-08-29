@@ -75,8 +75,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 		$permit= getFieldVisibilityPermission("Contacts",$userid,$fieldname);
 	}
 }
-
-$category = getparenttab();
+$category = getParentTab();
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->name);
