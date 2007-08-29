@@ -2541,7 +2541,7 @@ function getSingleFieldValue($tablename, $fieldname, $idname, $id)
 function get_announcements()
 {
 	global $adb;
-	$sql="select * from vtiger_announcement order by time";
+	$sql=" select * from vtiger_announcement inner join vtiger_users on vtiger_announcement.creatorid=vtiger_users.id";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
