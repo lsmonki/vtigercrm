@@ -61,13 +61,15 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
+		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
+		$fieldtype = explode("~",$typeofdata);
 		if($lang_strings[$fieldlabel] !='')
 			$standCustFld []= $lang_strings[$fieldlabel];
 		else
 			$standCustFld []= $fieldlabel;
 			
 		
-		if($adb->query_result($fieldListResult,$i,"visible") == 0)
+		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 111 && $fieldtype[1] == "M"))
 		{
 			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 		}

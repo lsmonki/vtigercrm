@@ -256,7 +256,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<table border=0 cellspacing=0 cellpadding=3 width=80%>
 					<tr>
 						<?php if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')	{ ?>
-						<td ><b><?php echo $mod_strings['Status'] ; ?></b></td>
+						<td ><b><font color="red">*</font><?php echo $mod_strings['Status'] ; ?></b></td>
 						<?php } ?>
 						<?php if(getFieldVisibilityPermission('Events',$current_user->id,'assigned_user_id') == '0') { ?>
 						<td ><b><?php echo $mod_strings['Assigned To']; ?></b></td>

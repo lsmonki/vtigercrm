@@ -167,7 +167,7 @@ var gVTModule = '{$smarty.request.module}';
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
-										<td >{if $LABEL.eventstatus neq ''}<b>{$LABEL.eventstatus}</b>{/if}</td>
+										<td >{if $LABEL.eventstatus neq ''}<b><font color="red">*</font>{$LABEL.eventstatus}</b>{/if}</td>
                                                                                 <td >{if $LABEL.assigned_user_id != ''}<b>
 											{$LABEL.assigned_user_id}</b>
 											{/if}</td>
