@@ -385,7 +385,10 @@ class ReportRun extends CRMEntity
 		                                }
 						elseif($selectedfields[1] == 'status')//when you use comma seperated values.
 						{
-							$advorsql[] = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
+							if($selectedfields[2] == 'Calendar_Status')
+							$advorsql[] = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);	
+							elseif($selectedfields[2] == 'HelpDesk_Status')
+							$advorsql[] = "vtiger_troubletickets.status".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 						}else	
 						{
 							$advorsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
