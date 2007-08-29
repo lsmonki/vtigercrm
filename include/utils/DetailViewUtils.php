@@ -107,7 +107,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$sortid = $row['sortorderid'];
 		}
-
+		if ($uitype == 111) 
+		{
+			$pickListValue = $mod_strings[$pickListValue];
+		}	
 		$subrole = getRoleSubordinates($roleid);	
 		if(count($subrole)> 0)
 		{
