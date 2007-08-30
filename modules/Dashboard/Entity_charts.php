@@ -52,8 +52,8 @@ function get_account_name($acc_id)
 // TO get the Values for a particular graph type 
 function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$query,$graph_for,$title,$added_qry="",$module="",$graph_type)
 {
-
-	global $adb,$current_user;
+	 
+	global $adb,$current_user,$mod_strings;
 	global $days,$date_array,$period_type;
 
 	//$where= " and vtiger_crmentity.smownerid=".$user_id." and vtiger_crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
@@ -65,6 +65,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	
 	$no_of_rows=$adb->num_rows($result);
 	$mod_count_array=array();
+	$search_str_array=array();
 	$mod_name_array=array();
 	$count_by_date[]=array();
 	$mod_tot_cnt_array=array();
@@ -79,9 +80,22 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	{
 		while($row = $adb->fetch_array($result))
 		{
-			$mod_name= $row[$graph_for];
+			if($graph_for == 'sostatus'||$graph_for == 'leadsource'||$graph_for == 'leadstatus'||$graph_for == 'industry'||$graph_for == 'productcategory'||$graph_for =='postatus'||$graph_for == 'invoicestatus'||$graph_for == 'ticketstatus'||$graph_for == 'priority'||$graph_for == 'category'||$graph_for == 'quotestage'||$graph_for == 'salesstage')
+			{
+
+                                $mod_name= $mod_strings[$row[$graph_for]];
+                                $search_str = $row[$graph_for];
+                       	}
+                      	else
+                       	{
+                               $mod_name= $row[$graph_for];
+                               $search_str = $row[$graph_for];
+                       	}
 			if($mod_name=="")
-				$mod_name="Un Assigned";
+                        {
+                                $mod_name=$mod_strings["Un Assigned"];
+                                $search_str = "Un Assigned";
+                        }
 			$crtd_time=$row['createdtime'];
 			$crtd_time_array=explode(" ",$crtd_time);
 			$crtd_date=$crtd_time_array[0];
@@ -95,6 +109,10 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			{
 				array_push($mod_name_array,$mod_name); // getting all the unique Names into the array
 			}
+			if (in_array($search_str,$search_str_array) == false)
+                       	{
+                               array_push($search_str_array,$search_str);
+                       	}
 
 			//Counting the number of values for a type of graph
 			if($graph_for == "productname")
@@ -142,6 +160,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			//For all type of the array 
 			for ($i=0;$i<count($mod_name_array); $i++)
 			{
+				$search_str = $search_str_array[$i];
 				$name=$mod_name_array[$i];
 				$id_name = "";
 				if($name=="")
@@ -293,8 +312,11 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					}
 					else if($module == "Contacts" || ($module=="Products" && ($graph_for == "quoteid" || $graph_for == "invoiceid" || $graph_for == "purchaseorderid")))
 						$link_val="index.php?module=".$module."&action=ListView&from_dashboard=true&type=dbrd&query=true&".$graph_for."=".$id_name."&viewname=".$cvid;
+					else if($graph_for == 'sostatus'||$graph_for == 'leadsource'||$graph_for == 'leadstatus'||$graph_for == 'industry'||$graph_for == 'productcategory'||$graph_for =='postatus'||$graph_for == 'invoicestatus'||$graph_for == 'ticketstatus'||$graph_for == 'priority'||$graph_for == 'category'||$graph_for == 'quotestage'||$graph_for == 'salesstage')
+						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$search_str."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
 					else
-						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
+						 $link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
+
 					if($graph_for == "account_id") $graph_for = "accountid";
 
 					//Adding the links to the graph	
