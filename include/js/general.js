@@ -277,9 +277,8 @@ function patternValidate(fldName,fldLabel,type) {
 	if (type.toUpperCase()=="TIME") {//TIME validation
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
-	
 	//Asha: Remove spaces on either side of a Email id before validating
-	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
@@ -785,7 +784,7 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 }
 if(gVTModule == 'Contacts')
 {
-	if(getObj('imagename').value != '' )
+	if(getObj('imagename'))
 	{
 		var image_arr = new Array();
 		image_arr = (getObj('imagename').value).split(".");
@@ -1554,9 +1553,8 @@ function cancelForm(frm)
 	    window.history.back();
 }
 
-
-//Asha: Function changed to trim both the leading and trailing spaces.
-function trim(str) {
+function trim(str)
+{
 	var s = str.replace(/\s+$/,'');
 	s = s.replace(/^\s+/,'');
 	return s;
