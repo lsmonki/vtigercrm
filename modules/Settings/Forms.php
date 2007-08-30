@@ -72,7 +72,8 @@ function verify_data(form) {
 		alert("$err_missing_required_fields" + errorMessage);
 		return false;
 	}
-	if (trim(form.email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+	form.email.value = trim(form.email.value);
+	if (form.email.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
 		alert('"' + form.email.value + '" $err_invalid_email_address');
 		return false;
 	}

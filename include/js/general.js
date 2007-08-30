@@ -278,6 +278,8 @@ function patternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	
+	//Asha: Remove spaces on either side of a Email id before validating
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
@@ -1552,15 +1554,11 @@ function cancelForm(frm)
 	    window.history.back();
 }
 
-function trim(s)
-{
-	while (s.substring(0,1) == " " || s.substring(0,1) == "\n")
-	{
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == " " || s.substring(s.length-1,s.length) == "\n") {
-		s = s.substring(0,s.length-1);
-	}
+
+//Asha: Function changed to trim both the leading and trailing spaces.
+function trim(str) {
+	var s = str.replace(/\s+$/,'');
+	s = s.replace(/^\s+/,'');
 	return s;
 }
 

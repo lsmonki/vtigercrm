@@ -100,9 +100,11 @@ function handleEdit()
      return false;
 }
 
-function trim(str)
-{
-	return(str.replace(/\s+$/,''));
+//Asha: Function changed to trim both leading and trailing spaces.
+function trim(str) {
+	var s = str.replace(/\s+$/,'');
+	s = s.replace(/^\s+/,'');
+	return s;
 }
 
 var genUiType = "";

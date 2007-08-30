@@ -76,6 +76,8 @@ function qcpatternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	
+	//Asha: Remove spaces on either side of a Email id before validating
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
