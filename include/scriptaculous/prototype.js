@@ -50,6 +50,7 @@ Function.prototype.bind = function() {
    if(typeof $A == 'function') { 
 	   return __method.apply(object, args.concat($A(arguments))); 
   }
+  }
 }
 Function.prototype.bindAsEventListener = function(object) {
   var __method = this;
