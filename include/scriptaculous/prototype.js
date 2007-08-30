@@ -45,10 +45,12 @@ Object.inspect = function(object) {
 Function.prototype.bind = function() {
   var __method = this, args = $A(arguments), object = args.shift();
   return function() {
-    return __method.apply(object, args.concat($A(arguments)));
+    //return __method.apply(object, args.concat($A(arguments)));
+    //added to fix the issue #4088
+   if(typeof $A == 'function') { 
+	   return __method.apply(object, args.concat($A(arguments))); 
   }
 }
-
 Function.prototype.bindAsEventListener = function(object) {
   var __method = this;
   return function(event) {
