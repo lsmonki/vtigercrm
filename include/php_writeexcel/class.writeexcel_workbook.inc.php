@@ -174,7 +174,7 @@ function &addworksheet($name="") {
     $this->_worksheets[$index] = &$worksheet;    # Store ref for iterator
     $this->_sheetnames[$index] = $name;         # Store EXTERNSHEET names
     $this->_parser->set_ext_sheet($name, $index); # Store names in Formula.pm
-    unlink($worksheet->_tmp_file_name); # deleting the temp file 
+    //unlink($worksheet->_tmp_file_name); # deleting the temp file 
     return $worksheet;
 }
 
