@@ -62,7 +62,8 @@ function sensex_info()
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
 			{if $DUPLICATE neq 'true'}
-			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$APP[$SINGLE_MOD]}</span> <br>
+			{assign var=create_new value="LBL_CREATING_NEW_"|cat:$MODULE}
+		        <span class="lvtHeaderText">{$APP[$create_new]}</span> <br>
 			{else}
 			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
 			{/if}
