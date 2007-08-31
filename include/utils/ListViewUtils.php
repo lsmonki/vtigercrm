@@ -810,7 +810,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 }
 
                                         }
-					if($name == 'Product')
+					elseif($name == 'Product')
 					{
 						$product_id = $adb->query_result($list_result,$i-1,"productname");
 						$value =  $product_id;	
