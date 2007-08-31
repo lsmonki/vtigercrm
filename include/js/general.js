@@ -786,16 +786,19 @@ if(gVTModule == 'Contacts')
 {
 	if(getObj('imagename'))
 	{
-		var image_arr = new Array();
-		image_arr = (getObj('imagename').value).split(".");
-		if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") || (image_arr[1] ==  "JPEG") || (image_arr[1] ==  "PNG") || (image_arr[1] ==  "JPG") || (image_arr[1] ==  "PJPEG") || (image_arr[1] ==  "X-PNG") || (image_arr[1] ==  "GIF"))
+		if(getObj('imagename').value != '')
 		{
-			return true;
-		}
-		else
-		{
-			alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
-			return false;
+			var image_arr = new Array();
+			image_arr = (getObj('imagename').value).split(".");
+			if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") || (image_arr[1] ==  "JPEG") || (image_arr[1] ==  "PNG") || (image_arr[1] ==  "JPG") || (image_arr[1] ==  "PJPEG") || (image_arr[1] ==  "X-PNG") || (image_arr[1] ==  "GIF"))
+			{
+				return true;
+			}
+			else
+			{
+				alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+				return false;
+			}
 		}
 	}
 }
