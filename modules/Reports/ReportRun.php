@@ -1753,9 +1753,9 @@ class ReportRun extends CRMEntity
 							{
 								$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
 							}
-						}else if(($secondvalue == $fieldvalue) && $this->reporttype == "summary")
+						}else if(($secondvalue === $fieldvalue) && $this->reporttype == "summary")
 						{
-							if($lastvalue == $newvalue)
+							if($lastvalue === $newvalue)
 							{
 								$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";	
 							}else
@@ -1763,9 +1763,9 @@ class ReportRun extends CRMEntity
 								$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
 							}
 						}
-						else if(($thirdvalue == $fieldvalue) && $this->reporttype == "summary")
+						else if(($thirdvalue === $fieldvalue) && $this->reporttype == "summary")
 						{
-							if($secondvalue == $snewvalue)
+							if($secondvalue === $snewvalue)
 							{
 								$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";
 							}else
