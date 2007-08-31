@@ -527,5 +527,25 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		return $return_data; 
 	}
 }
+function CheckFieldPermission($fieldname,$module)
+{
+	global $current_user,$adb;
 
+ require('user_privileges/user_privileges_'.$current_user->id.'.php');
+ if($fieldname == '' || $module == '')
+	 return false;
+
+
+ if(!$is_admin)
+ {
+	 $profileList = getCurrentUserProfileList();
+	 $sql1= "SELECT fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".getTabid($module)." AND fieldname='".$fieldname."' AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+	$result1= $adb->query($sql1);
+	$permission = ($adb->num_rows($result1) > 0) ? "true" : "false";
+ }else
+ {
+	$permission = "true";
+ }
+ return $permission;
+}	
 ?>
