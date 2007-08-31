@@ -393,7 +393,8 @@ $sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressi
 
 $adb->query($sql_insert_contactaddress);
 
-
+$sql_insert_customerdetails = "INSERT INTO vtiger_customerdetails (customerid) VALUES (".$contact_id.")";
+$adb->query($sql_insert_customerdetails);
 //Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped - Jaguar
 $insert_column="contactid";
 $insert_value=$contact_id;
