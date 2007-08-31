@@ -195,7 +195,7 @@ if ((date1.value != '') || (date2.value != ''))
         if(!dateValidate("enddate","End Date","D"))
                 return false
 
-        if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
+	if(!dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))
                 return false;
 }
 
