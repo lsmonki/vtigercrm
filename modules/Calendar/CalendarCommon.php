@@ -305,7 +305,9 @@ function getActivityDetails($description,$user_id,$from='')
         global $adb,$mod_strings;
         $log->debug("Entering getActivityDetails(".$description.") method ...");
 
-        $reply = (($description['mode'] == 'edit')?'updated':'created');
+	$updated = $mod_strings['LBL_UPDATED'];
+	$created = $mod_strings['LBL_CREATED'];
+        $reply = (($description['mode'] == 'edit')?"$updated":"$created");
 	if($description['activity_mode'] == "Events")
 	{
 		$end_date_lable=$mod_strings['End date and time'];
@@ -318,12 +320,12 @@ function getActivityDetails($description,$user_id,$from='')
 	$name = getUserName($user_id);
 	
 	if($from == "invite")
-		$msg = $mod_strings['LBL_ACTIVITY_INVITATION'];
+		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_INVITATION']);
 	else
-		$msg = $mod_strings['LBL_ACTIVITY_NOTIFICATION'];
+		$msg = getTranslatedString($mod_strings['LBL_ACTIVITY_NOTIFICATION']);
 
         $current_username = getUserName($current_user->id);
-        $status = $description['status'];
+        $status = getTranslatedString($description['status']);
 
         $list = $name.',';
 	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
@@ -331,8 +333,8 @@ function getActivityDetails($description,$user_id,$from='')
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Start date and time"].' : '.$description['st_date_time'];
 	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$end_date_lable.' : '.$description['end_date_time'];
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.$description['taskpriority'];
-        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.$description['relatedto'];
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.getTranslatedString($description['taskpriority']);
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.getTranslatedString($description['relatedto']);
 	if($description['activity_mode'] != 'Events')
 	{
         	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT"].' '.$description['contact_name'];
