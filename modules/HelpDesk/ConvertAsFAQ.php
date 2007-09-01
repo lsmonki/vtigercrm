@@ -21,8 +21,7 @@ $ticket_faq_mapping_fields = Array(
 			//'ticketstatus'=>'faqstatus',
 			//'ticketcategories'=>'faqcategory'
 		   );
-
-$sql = "select ticketid, title, product_id, description, solution,status, category from vtiger_troubletickets where ticketid=".$_REQUEST['record'];
+$sql = " select ticketid, title, product_id,vtiger_crmentity.description, solution,vtiger_troubletickets.status, category from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid  where ticketid=".$_REQUEST['record'];
 $res = $adb->query($sql);
 
 //set all the ticket values to FAQ

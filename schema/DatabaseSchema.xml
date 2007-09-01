@@ -1705,7 +1705,6 @@
 			<notnull />
 		</field>
 		<field name="filename" type="C" size="50" />
-		<field name="description" type="X" />
 		<field name="solution" type="X" />
 		<field name="update_log" type="X" />
 		<field name="version_id" type="I" size="11" />
