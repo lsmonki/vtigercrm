@@ -26,5 +26,7 @@ $mod_strings = Array(
 'LBL_TOOLS'=>'Tools',
 'LBL_MANAGE_SITES'=>'Manage Sites',
 'LBL_MY_SITES'=>'Sites',
+//added as an enhancement
+'LBL_SET_DEFAULT_BUTTON'=>'Set As Default',
 );
 ?>

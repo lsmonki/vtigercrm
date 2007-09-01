@@ -5651,7 +5651,10 @@
 		<field name="sequence" type="I" size="3">
 			<notnull />
 		</field>
-
+		<field name="setdefault" type="I" size="3">
+			<notnull />
+			<default value="0" />	
+		</field>
 		<index name="portal_portalname_idx">
 			<col>portalname</col>
 		</index>
