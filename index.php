@@ -129,44 +129,42 @@ if(isset($_REQUEST['action']))
 {
 	$action = $_REQUEST['action'];
 }
-
-//Code added for 'Path Traversal/File Disclosure' security fix - Philip
-$is_module = false;
-if(isset($_REQUEST['module']))
-{
-	$module = $_REQUEST['module'];	
-
-	if ($dir = @opendir($root_directory."modules")) 
-	{
-		while (($file = readdir($dir)) !== false) 
-		{
-           		if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic") 
-			{
-			   	if(is_dir($root_directory."modules/".$file)) 
-				{
-					if(!($file[0] == '.')) 
-					{
-						if($file=="$module")
-						{
-							$is_module = true;
-						}					
-					}
-				}
-			}
-		}
-	}
-	if(!$is_module)
-	{
-		die("Module name is missing. Please check the module name.");
-	}
-}
 if($action == 'Export')
 {
-	include ('include/utils/export.php');
+        include ('include/utils/export.php');
 }
 if($action == 'ExportAjax')
 {
         include ('include/utils/ExportAjax.php');
+}
+//Code added for 'Path Traversal/File Disclosure' security fix - Philip
+$is_module = false;
+$is_action = false;
+if(isset($_REQUEST['module']))
+{
+	$module = $_REQUEST['module'];	
+	$dir = @scandir($root_directory."modules");
+	$temp_arr = Array("CVS","Attic");
+	$res_arr = @array_intersect($dir,$temp_arr);
+	if(count($res_arr) == 0  && !ereg("[/.]",$module)) {
+		if(@in_array($module,$dir))
+			$is_module = true;
+	}
+	$in_dir = @scandir($root_directory."modules/".$module);
+	$res_arr = @array_intersect($in_dir,$temp_arr);
+	if(count($res_arr) == 0 && !ereg("[/.]",$module)) {
+		if(@in_array($action.".php",$in_dir))
+			$is_action = true;
+	}	
+	
+	if(!$is_module)
+	{
+		die("Module name is missing. Please check the module name.");
+	}
+	if(!$is_action)
+	{
+		die("Action name is missing. Please check the action name.");
+	}
 }
 
 
@@ -185,6 +183,9 @@ if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key
 
 if($use_current_login)
 {
+	//getting the internal_mailer flag
+	$qry_res = $adb->query("select internal_mailer from vtiger_users where id='".$_SESSION["authenticated_user_id"]."'");
+	$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
 	$log->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
 }
 else if(isset($action) && isset($module) && $action=="Authenticate" && $module=="Users")
@@ -374,6 +375,7 @@ if($use_current_login)
 	//$result = $current_user->retrieve($_SESSION['authenticated_user_id']);
 	//getting the current user info from flat file
 	$result = $current_user->retrieveCurrentUserInfoFromFile($_SESSION['authenticated_user_id']);
+
 	if($result == null)
 	{
 		session_destroy();

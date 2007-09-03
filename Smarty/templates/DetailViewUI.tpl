@@ -37,8 +37,10 @@
                                                   </td>
                                              {elseif $keyid eq '13' || $keyid eq '104'} <!--Email-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
-								{if $keyfldname == 'email' || $keyfldname == 'email1'}
-								<a href="javascript:InternalMailer({$ID},{$FIELD_ID},'{$MODULE}','record_id')">{$keyval}</a>
+								{if $smarty.session.internal_mailer eq 1}
+									{if $keyfldname == 'email' || $keyfldname == 'email1'}
+									<a href="javascript:InternalMailer({$ID},{$FIELD_ID},'{$MODULE}','record_id')">{$keyval}</a>
+									{/if}
 								{else}
 								<a href="mailto:{$keyval}" target="_blank" >{$keyval}</a>
 								{/if}

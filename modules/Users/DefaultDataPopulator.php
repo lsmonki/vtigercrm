@@ -907,6 +907,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 
 //User Image Information
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,10,83,1,'V~O',1,null,'BAS')");
+//added for internl_mailer
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'internal_mailer','vtiger_users',1,'56','internal_mailer','INTERNAL_MAIL_COMPOSER',1,0,0,50,15,80,1,'I~O',1,null,'BAS')");
  //user Details End
 
 

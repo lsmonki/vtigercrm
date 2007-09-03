@@ -1297,7 +1297,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 13 || $uitype == 104)
 	 {
-		if($fieldname == "email" || $fieldname == "email1")
+		if(($fieldname == "email" || $fieldname == "email1") && $_SESSION['internal_mailer'] == 1)
 		{	
 			//check added for email link in user detailview
 			if($module == "Users")
