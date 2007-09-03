@@ -56,6 +56,8 @@ for($i=0 ; $i<$no_of_portals; $i++)
 ?>
 </script>
 <?
+if($def_ault == '')
+	$def_ault = $adb->query_result($result,0,'portalurl');
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MOD", $mod_strings);

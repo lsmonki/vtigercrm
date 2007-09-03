@@ -1149,7 +1149,7 @@ $portalurl = array ("http://vtiger.com", "http://blogs.vtiger.com", "http://foru
 for($i=0;$i<5;$i++)
 {
 	$portalid = $adb->getUniqueId('vtiger_portal');
-	$portal_qry = "insert into vtiger_portal values (".$portalid.", '".$portalname[$i]."','".$portalurl[$i]."',0)";
+	$portal_qry = "insert into vtiger_portal values (".$portalid.", '".$portalname[$i]."','".$portalurl[$i]."',0,0)";
 	$result_qry = $adb->query($portal_qry);
 }
 
