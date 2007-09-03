@@ -82,7 +82,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 			    $cnt_namelist .= "\n";
 		    }
 		    $cnt_idlist .= $key;
-		    $cnt_namelist .= eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $contName = eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $cnt_namelist .= '<option value="'.$key.'">'.$contName.'</option>';
 		    $i++;
 	    }
     }
@@ -128,7 +129,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 {
 	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
 		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
-		$contact_name = getContactName($_REQUEST['contact_id']);
+		$contact_name = "<option value=".$_REQUEST['contact_id'].">".getContactName($_REQUEST['contact_id'])."</option>";
 		$smarty->assign("CONTACTSNAME",$contact_name);
 		$account_id = $_REQUEST['account_id'];
                 $account_name = getAccountName($account_id);

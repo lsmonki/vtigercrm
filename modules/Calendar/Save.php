@@ -211,6 +211,30 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 	}
 }
 
+//to delete contact account relation while editing event
+if(isset($_REQUEST['deletecntlist']) && $_REQUEST['deletecntlist'] != '' && $_REQUEST['mode'] == 'edit')
+{
+	//split the string and store it in an array
+	$storearray = explode (";",$_REQUEST['deletecntlist']);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$record = $focus->id;
+			$sql = "delete from vtiger_cntactivityrel where contactid=".$id." and activityid=".$record;
+			$adb->query($sql);
+		}
+	}
+
+}
+
+//to delete activity and its parent table relation
+if(isset($_REQUEST['del_actparent_rel']) && $_REQUEST['del_actparent_rel'] != '' && $_REQUEST['mode'] == 'edit')
+{
+	$parnt_id = $_REQUEST['del_actparent_rel'];
+	$sql= 'delete from vtiger_seactivityrel where crmid='.$parnt_id.' and activityid='.$record;
+	$adb->query($sql);
+}
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	$view=$_REQUEST['view'];

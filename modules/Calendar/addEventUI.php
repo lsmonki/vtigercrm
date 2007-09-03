@@ -600,9 +600,10 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<table width="100%" cellpadding="5" cellspacing="0" border="0" bgcolor="#FFFFFF">
 				<?php if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0') {  ?>
 						<tr>
-							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
+							<td width="15%"><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
+								<input name="del_actparent_rel" type="hidden" >
 								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
 									<option value="Leads"><?php echo $app_strings['Leads']?></option>
 									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
@@ -614,6 +615,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<div id="eventrelatedto" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
 							<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+							<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 								</div>
 							</td>
 						</tr>
@@ -622,8 +624,12 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<td><b><?php echo $app_strings['Contacts'] ?></b></td>
 							<td colspan="2">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
-								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'></textarea>&nbsp;
+								<input name="deletecntlist" id="deletecntlist" type="hidden">
+								<select name="contactlist" size="5" style="height: 85px;width:150px;"  id="parentid" class="small" multiple>
+								</select>
 								<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
+								<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+								
 							</td>
 						</tr>
 					</table>
@@ -840,6 +846,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 				<td>
 					<input name="task_parent_id" type="hidden" value="">
+					<input name="del_actparent_rel" type="hidden" >
 						<select name="task_parent_type" class="small" id="task_parent_type" onChange="document.createTodo.task_parent_name.value='';document.createTodo.task_parent_id.value=''">
 						<option value="Leads"><?php echo $app_strings['Leads']?></option>
 						<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
@@ -856,6 +863,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<div id="taskrelatedto" align="left">
 					<input name="task_parent_name" readonly type="text" class="calTxt small" value="">
 					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.task_parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+					<input type='button' value='del' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
 					</div>
 				</td>
 			</tr>
@@ -865,7 +873,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td><b><?php echo $mod_strings['LBL_CONTACT_NAME'] ?></b></td>
 			<td colspan="2">
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
+				<input name="deletecntlist"  id="deletecntlist" type="hidden">
 				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
+				<input type='button' value='del' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
 			</td>
 			  </tr>
 			<?php } ?>

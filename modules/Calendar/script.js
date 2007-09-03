@@ -582,7 +582,7 @@ function check_form()
                                         }
                                 }
                                 else return false;
-				//modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
+                             //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
                                 date3.setMinutes(followupmin);
                                 date3.setHours(followuphour);
                                 if(document.EditView.activitytype[0].checked == true)
@@ -604,8 +604,8 @@ function check_form()
 				followuphour = _2digit(followuphour);
 			        followupmin = _2digit(followupmin);
 				followupendhour = _2digit(date3.getHours());
-			        followupendmin = _2digit(date3.getMinutes());
-				document.EditView.followup_due_date.value = tempdate;
+			        followupendmin = _2digit(date3.getMinutes());		
+			        document.EditView.followup_due_date.value = tempdate; 
                                 document.EditView.followup_time_start.value = followuphour+':'+followupmin;
                                 document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
 				//end
@@ -786,6 +786,36 @@ function rmvUser(sel_users)
 }
 
 
+// function to delete activity related contact in calendar
+var del_ids = new Array();
+function removeActContacts()
+{
+	var avail_contacts = getObj('parentid');
+	// this block is to remove contacts and get deleted contact ids
+	if(avail_contacts.options.selectedIndex > -1)
+	{
+		for(m = 0; m < avail_contacts.options.length; m++)
+		{
+			if(avail_contacts.options[m].selected == true)
+			{
+				del_ids.push(avail_contacts.options[m].value);
+				avail_contacts.options[m] = null;
+				removeActContacts();
+			}
+		}
+	}
+	document.EditView.deletecntlist.value = del_ids.join(";");
+	
+	// this block is to get available id list
+	var avail_ids = new Array();
+	for(n=0; n<avail_contacts.options.length;n++)
+	{
+		avail_ids.push(avail_contacts.options[n].value);	
+	}
+	document.EditView.contactidlist.value = avail_ids.join(";");
+	
+}
+//end
 function formSelectColumnString(usr,col)
 {
 	
@@ -1521,3 +1551,16 @@ function cal_fnvshobj(obj,Lay){
     tagName.style.visibility = "visible";
 }
 
+/**this is for to add a option element while selecting contact in add event page
+   lvalue ==> is a contact id
+   ltext ==> is a contact name
+**/
+function addOption(lvalue,ltext)	
+{
+	var optObj = document.createElement('OPTION')
+	if (browser_ie) optObj.innerText = ltext;
+        else if(browser_nn4 || browser_nn6) optObj.text = ltext;
+	else optObj.text = ltext;
+	optObj.value = lvalue;
+	document.getElementById('parentid').appendChild(optObj);
+}

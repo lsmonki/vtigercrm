@@ -91,13 +91,23 @@ function add_data_to_relatedlist_incal(id,name)
                 else
                 {
                         window.opener.document.EditView.contactidlist.value = idval+';'+id;
-                        window.opener.document.EditView.contactlist.value = nameval+'\n'+name;
+			if(name != '')
+                	{
+				// this has been modified to provide delete option for Contacts in Calendar
+				//this function is defined in script.js ------- Jeri
+				window.opener.addOption(id,name);
+                	}
+
                 }
 	}
 	else
 	{
 		window.opener.document.EditView.contactidlist.value = id;
-		window.opener.document.EditView.contactlist.value = name;
+		if(name != '')
+		{
+			window.opener.addOption(id,name);
+		}
+		//end
 	}
 }
 function set_return_specific(product_id, product_name) {

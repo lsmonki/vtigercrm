@@ -1751,8 +1751,52 @@ function SelectAll(mod,parmod)
         {
 		if(parmod == 'Calendar')
                 {
-                        window.opener.document.EditView.contactidlist.value = idstring;
-                        window.opener.document.EditView.contactlist.value = namestr;
+			//this blcok has been modified to provide delete option for contact in Calendar
+			idval = window.opener.document.EditView.contactidlist.value;
+			if(idval != '')
+			{
+				var avalIds = new Array();
+				avalIds = idstring.split(';');
+
+				var selectedIds = new Array();	
+				selectedIds = idval.split(';');
+
+				for(i=0; i < (avalIds.length-1); i++)
+				{
+					var rowFound=false;
+					for(k=0; k < selectedIds.length; k++)
+					{
+						if (selectedIds[k]==avalIds[i])
+						{
+							rowFound=true;
+							break;
+						}
+
+					}
+					if(rowFound != true)
+					{
+						idval = idval+';'+avalIds[i];
+						window.opener.document.EditView.contactidlist.value = idval;
+                                        	var str=document.getElementById('calendarCont'+avalIds[i]).innerHTML;
+						window.opener.addOption(avalIds[i],str);
+					}
+				}
+			}
+			else
+			{
+				window.opener.document.EditView.contactidlist.value = idstring;
+				var temp = new Array();
+				temp = namestr.split('\n');
+
+				var tempids = new Array();
+				tempids = idstring.split(';');
+
+				for(k=0; k < temp.length; k++)
+				{
+					window.opener.addOption(tempids[k],temp[k]);
+				}
+			}
+			//end
                 }
                 else
                 {
