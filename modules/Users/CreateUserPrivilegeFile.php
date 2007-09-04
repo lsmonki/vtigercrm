@@ -274,14 +274,16 @@ function createUserSharingPrivilegesfile($userid)
 			$newbuf .= "\$Potentials_Quotes_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_qt_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_qt_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$Potentials_Quotes_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_qt_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_qt_share_write_per['GROUP']).");\n\n";
 
-			//Constructing the Potential Invoice Related Module Sharing Array
-			$pot_related_inv=getRelatedModuleSharingArray("Potentials","Invoice",$pot_sharingrule_members,$pot_share_read_per,$pot_share_write_per,$def_org_share);
+			//Constructing the Potential SalesOrder Related Module Sharing Array
+			$pot_related_inv=getRelatedModuleSharingArray("Potentials","SalesOrder",$pot_sharingrule_members,$pot_share_read_per,$pot_share_write_per,$def_org_share);
+ 	 
+			
 
 			$pot_inv_share_read_per=$pot_related_inv['read'];
 			$pot_inv_share_write_per=$pot_related_inv['write'];
 
-			$newbuf .= "\$Potentials_Invoice_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_inv_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Potentials_Invoice_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_inv_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$Potentials_SalesOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_inv_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Potentials_SalesOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($pot_inv_share_write_per['GROUP']).");\n\n";
 
 
 
@@ -401,7 +403,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 	$share_id_members=Array();
 	$share_id_groupmembers=Array();
 	//If Sharing of leads is Private
-	if($def_org_share[$mod_tabid] == 3 || $def_org_share[$mod_tabid] == 1)
+	if($def_org_share[$mod_tabid] == 3 || $def_org_share[$mod_tabid] == 0)
 	{
 		$role_read_per=Array();
 		$role_write_per=Array();
@@ -1048,7 +1050,7 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 	$par_mod_id=getTabid($par_mod);
 	$share_mod_id=getTabid($share_mod);
 
-	if($def_org_share[$share_mod_id] == 3 || $def_org_share[$share_mod_id] == 1)
+	if($def_org_share[$share_mod_id] == 3 || $def_org_share[$share_mod_id] == 0)
 	{
 
 		$role_read_per=Array();
