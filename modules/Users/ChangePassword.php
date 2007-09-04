@@ -32,6 +32,7 @@ global $mod_strings;
 
 $mod_strings['ERR_ENTER_OLD_PASSWORD'];
 ?>
+<script type='text/javascript' src="include/js/general.js"></script>
 <script type='text/javascript' language='JavaScript'>
 
 function set_password(form) {
