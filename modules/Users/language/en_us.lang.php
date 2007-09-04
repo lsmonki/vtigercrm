@@ -657,6 +657,7 @@ $mod_strings = Array(
 'LBL_GOTO_LISTVIEW_BUTTON'=>'Goto ListView',
 //Added to provide User based TagCloud
 'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
+'INTERNAL_MAIL_COMPOSER'=>'Internal Mail Composer',
 );
 
 ?>
