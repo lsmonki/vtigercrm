@@ -853,6 +853,9 @@ $toHtml = array(
         '>' => '&gt;',
         '& ' => '&amp; ',
         "'" =>  '&#039;',
+	'' => '\r',
+        '\r\n'=>'\n',
+
 );
 
 /** Function to convert the given string to html
