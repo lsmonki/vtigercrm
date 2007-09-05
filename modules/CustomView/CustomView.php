@@ -142,7 +142,7 @@ class CustomView extends CRMEntity{
 		global $app_strings;
 		$tabid = getTabid($this->customviewmodule);
 		$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
-		$ssql .= " where vtiger_tab.tabid=".$tabid;
+		$ssql .= " where vtiger_tab.tabid=".$tabid . " order by viewname";
 		$result = $adb->query($ssql);
 		while($cvrow=$adb->fetch_array($result))
 		{
