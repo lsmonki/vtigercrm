@@ -259,7 +259,7 @@ function validateInventory(module)
 		if (!emptyCheck("productName"+i,"Product","text")) return false
 		if (!emptyCheck("qty"+i,"Qty","text")) return false
 		if (!numValidate("qty"+i,"Qty","any")) return false
-		if (!numConstComp("qty"+i,"Qty","GE","1")) return false
+		if (!numConstComp("qty"+i,"Qty","G","0")) return false
 		if (!emptyCheck("listPrice"+i,"List Price","text")) return false
 		if (!numValidate("listPrice"+i,"List Price","any")) return false           
 	}
