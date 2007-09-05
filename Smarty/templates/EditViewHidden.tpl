@@ -43,7 +43,7 @@
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" onSubmit="settotalnoofrows()">
 	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder'}
        		 <input type="hidden" name="convertmode">
 	{/if}
