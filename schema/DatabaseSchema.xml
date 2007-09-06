@@ -3758,7 +3758,6 @@
 		</field>
 		<field name="quotestage" type="C" size="200" />
 		<field name="validtill" type="D" />
-		<field name="team" type="C" size="200" />
 		<field name="contactid" type="I" size="19">
 		</field>
 		<field name="currency" type="C" size="100" />
