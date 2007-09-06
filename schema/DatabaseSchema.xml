@@ -3732,7 +3732,7 @@
 		<field name="mail_username" type="C" size="50">
 			<notnull />
 		</field>
-		<field name="mail_password" type="C" size="20">
+		<field name="mail_password" type="C" size="250">
 			<notnull />
 		</field>
 		<field name="mail_servername" type="C" size="50" />
