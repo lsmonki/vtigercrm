@@ -172,7 +172,26 @@ $server->register(
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
-
+$server->register(
+	'GetPicklistValues',
+	array('username'=>'xsd:string'),
+	array('return'=>'tns:combo_values_array'),
+	$NAMESPACE);
+    
+$server->wsdl->addComplexType(
+        'combo_values_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'productid' => array('name'=>'productid','type'=>'tns:xsd:string'),
+                'productname' => array('name'=>'productname','type'=>'tns:xsd:string'),
+                'ticketpriorities' => array('name'=>'ticketpriorities','type'=>'tns:xsd:string'),
+                'ticketseverities' => array('name'=>'ticketseverities','type'=>'tns:xsd:string'),
+                'ticketcategories' => array('name'=>'ticketcategories','type'=>'tns:xsd:string'),
+                'moduleslist' => array('name'=>'moduleslist','type'=>'tns:xsd:string'),
+             )
+);
 function CheckLeadPermission($username)
 {
 	global $current_user;
@@ -756,6 +775,28 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 		return $accessDenied;
 	}
 
+}
+function GetPicklistValues($username,$tablename)
+{
+	global $current_user,$log,$adb;
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id,'Users');
+	require_once("include\utils\UserInfoUtil.php");
+	$roleid = fetchUserRole($user_id);
+	if(isPermitted("HelpDesk","EditView") == "yes")
+	{
+		$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid='$roleid' and picklistid in (select picklistid from vtiger_$tablename) order by sortid";	
+		$log->DEBUG($query);
+		$result1 = $adb->query($query);
+		for($i=0;$i<$adb->num_rows($result1);$i++)
+		{
+			$output[$i] = $adb->query_result($result1,$i,$tablename);
+		}			
+	}
+	return $output;
 }
 
 $server->service($HTTP_RAW_POST_DATA); 
