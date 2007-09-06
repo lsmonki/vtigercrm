@@ -959,6 +959,8 @@ $app_strings = array (
 'Pending Input'=>'Pending Input',
 //Export Records <-----ENDS
 
+'Trouble Tickets'=>'Trouble Tickets',
+
 );
 
 $app_list_strings = array (

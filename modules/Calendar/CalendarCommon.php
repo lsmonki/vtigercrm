@@ -244,7 +244,7 @@ function getActFieldCombo($fieldname,$tablename)
 	for($i = 0; $i < $noofrows; $i++)
 	{
 		$value = $adb->query_result($Res,$i,$fieldname);
-		$combo .= '<option value="'.$value.'">'.$value.'</option>';
+		$combo .= '<option value="'.$value.'">'.getTranslatedString($value).'</option>';
 	}
 
 	$combo .= '</select>';

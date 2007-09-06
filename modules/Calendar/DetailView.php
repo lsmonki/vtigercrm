@@ -157,7 +157,7 @@ if($activity_mode == 'Task')
 elseif($activity_mode == 'Events')
 {
 	$data['visibility'] = $finaldata['visibility'];
-	if($mod_strings[$finaldata['taskstatus']] != '')
+	if($mod_strings[$finaldata['eventstatus']] != '')
 		$data['eventstatus'] = $mod_strings[$finaldata['eventstatus']];
 	else
 		$data['eventstatus'] = $finaldata['eventstatus'];

@@ -59,7 +59,7 @@
 	<tr>
 	<td>
 	{foreach item=modules key=modulename from=$REPT_MODULES}
-	<a href="javascript:CreateReport('{$modulename}');" class="drop_down">- {$modules}</a>
+	<a href="javascript:CreateReport('{$modulename}');" class="drop_down">- {$APP.$modules}</a>
 	{/foreach}
 	</td>
 	</tr>

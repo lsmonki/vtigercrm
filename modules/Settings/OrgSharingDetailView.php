@@ -88,7 +88,7 @@ $smarty->assign("MODSHARING", $custom_access);
  */
 function getSharingRuleList($module)
 {
-	global $adb;
+	global $adb,$mod_strings;
 
 	$tabid=getTabid($module);
 	$dataShareTableArray=getDataShareTableandColumnArray();
@@ -121,11 +121,11 @@ function getSharingRuleList($module)
 
 			if($permission == 0)
 			{
-				$perr_out = 'Read Only';
+				$perr_out = $mod_strings['Read Only '];
 			}
 			elseif($permission == 1)
 			{
-				$perr_out = 'Read / Write';
+				$perr_out = $mod_strings['Read/Write'];
 			}
 
 			$access_permission [] = $shareid;

@@ -914,31 +914,27 @@ function getEscapedColumns($selectedfields)
 			$selectedfields = explode(":",$fieldcolname);
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 
-				$mod_strings = return_module_language($current_language,$module);
-				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
-				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));		
+			$mod_strings = return_module_language($current_language,$module);
+			$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
+	
+			//modified code to support i18n issue 
+			$fld_arr = explode(" ",$fieldlabel);
+			$mod_lbl = getTranslatedString($fld_arr[0]); //module
+			array_shift($fld_arr);
+			$fld_lbl_str = implode(" ",$fld_arr);
+			$fld_lbl = getTranslatedString($fld_lbl_str); //fieldlabel
+			$fieldlabel = $mod_lbl." ".$fld_lbl;
+
 			if(sizeof($permitted_fields) != 0 && !in_array($fieldname,$permitted_fields) && $fieldname != 'ticketid')
 			{
-				if(isset($mod_strings[$fieldlabel])) 
-				{
-					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$mod_strings[$fieldlabel]."</option>";
-				}
-				else 
-				{
 					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
-				}
 			}
 			else
 			{
-				if(isset($mod_strings[$fieldlabel])) 
-				{
-					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$mod_strings[$fieldlabel]."</option>";
-				}
-			    	else 
-				{
 					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$fieldlabel."</option>";
-				}
 			}
+			//end
 		}
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $shtml;		
