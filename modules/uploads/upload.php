@@ -59,7 +59,7 @@ $theme_path="themes/".$theme."/";
 							<?php echo $mod_strings["LBL_BROWSE_FILES"]; ?>
 						</td>
 					</tr>
-					<tr><td><B><font color=red>*</font>&nbsp;<?php echo $app_strings["LBL_SUBJECT"];?> </B> <input type ="text" name = "uploadsubject" id="uploadsubject"></td></tr>
+					<tr><td><B><font color=red>*</font>&nbsp;<?php echo $app_strings["LBL_TITLE"];?> </B> <input type ="text" name = "uploadsubject" id="uploadsubject"></td></tr>
 					<tr>
 						<td width="30%" colspan="2" align="left">&nbsp;<input type="file" name="filename"/></td>
 					</tr>

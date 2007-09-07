@@ -258,7 +258,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$noofrows = $adb->num_rows($result);
 
 	$header[] = $app_strings['LBL_CREATED'];
-	$header[] = $app_strings['LBL_SUBJECT'];
+	$header[] = $app_strings['LBL_TITLE'];
 	$header[] = $app_strings['LBL_DESCRIPTION'];
 	$header[] = $app_strings['LBL_ATTACHMENTS'];
 	$header[] = $app_strings['LBL_TYPE'];		
