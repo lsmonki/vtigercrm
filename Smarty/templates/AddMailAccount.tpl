@@ -28,7 +28,8 @@
 		        <input type="hidden" name="edit" value="{$EDIT}">
 			<input type="hidden" name="return_module" value="Settings">
 			<input type="hidden" name="return_action" value="index">
-	</tr>	
+			<input type="hidden" name="changepassword" value="">
+</tr>	
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
                   <tr>
@@ -84,7 +85,7 @@
        </tr>
        <tr>
            <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>{$MOD.LBL_LIST_PASSWORD}</td>
-           <td class="dvtCellInfo"><input type="password" name="server_password" value="{if $SERVERPASSWORD neq ''}*****{/if}"  class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
+           <td class="dvtCellInfo"> {$CHANGE_PW_BUTTON}</td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>

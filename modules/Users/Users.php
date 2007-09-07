@@ -486,6 +486,29 @@ class Users {
 		$this->db->query($query, true, "Error setting new password for $usr_name: ");	
 		return true;
 	}
+	 
+	function de_cryption($data)
+	{
+		require_once('include/utils/encryption.php');
+		$de_crypt = new Encryption();
+		if(isset($data))
+		{	
+			$decrypted_password = $de_crypt->decrypt($data);
+		}
+		return $decrypted_password;
+	}	
+	function changepassword($newpassword)
+	{
+		require_once('include/utils/encryption.php');
+		$en_crypt = new Encryption();		
+		if( isset($newpassword)) 
+		{
+			$encrypted_password = $en_crypt->encrypt($newpassword);
+		}
+
+		return $encrypted_password;
+	}
+
 
 	function is_authenticated()
 	{

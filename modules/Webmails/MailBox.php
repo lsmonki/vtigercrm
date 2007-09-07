@@ -37,6 +37,9 @@ class MailBox {
 
 	function MailBox($mailbox = '') {
 		global $current_user;
+		require_once('include/utils/encryption.php');
+		$oencrypt = new Encryption();
+	
 		$this->db = new PearDatabase();
 		$this->db->println("Entering MailBox($mailbox)");
 
@@ -51,7 +54,7 @@ class MailBox {
 		$this->boxinfo = $this->db->fetch_array($tmp);
 
 		$this->login_username=trim($this->boxinfo["mail_username"]); 
-		$this->secretkey=trim($this->boxinfo["mail_password"]); 
+		$this->secretkey=$oencrypt->decrypt(trim($this->boxinfo["mail_password"])); 
 		$this->imapServerAddress=gethostbyname(trim($this->boxinfo["mail_servername"])); 
 		$this->mail_protocol=$this->boxinfo["mail_protocol"]; 
 		$this->ssltype=$this->boxinfo["ssltype"]; 
