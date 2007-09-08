@@ -98,7 +98,10 @@ if(! $_REQUEST['changepassword'] == 'true')
 	//Code contributed by mike crowe for rearrange the home page and tab
 	if (!isset($_POST['deleted'])) $_REQUEST["deleted"] = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $_REQUEST["homeorder"] = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
-
+	if(isset($_REQUEST['internal_mailer']) && $_REQUEST['internal_mailer'] == 'on')
+		$focus->column_fields['internal_mailer'] = 1;
+	else
+		$focus->column_fields['internal_mailer'] = 0;
 	setObjectValuesFromRequest($focus);
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
