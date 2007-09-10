@@ -3510,7 +3510,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 		$del_link .= "&return_module=$module&return_action=$return_action";
 	}
 
-	$del_link .= "&parenttab=".$_REQUEST["parenttab"]."&return_viewname=".$viewname;
+	$del_link .= "&parenttab=".$_REQUEST['parenttab']."&return_viewname=".$viewname;
 	
 	return $del_link;
 }

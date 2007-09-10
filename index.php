@@ -337,7 +337,11 @@ if(isset($action) && isset($module))
           $skipSecurityCheck=true;
         }
 
-	$currentModuleFile = 'modules/'.$module.'/'.$action.'.php';
+    if($action == 'UnifiedSearch') {
+    	$currentModuleFile = 'modules/Home/'.$action.'.php';
+    } else {
+		$currentModuleFile = 'modules/'.$module.'/'.$action.'.php';
+	}
 	$currentModule = $module;
 	
       	

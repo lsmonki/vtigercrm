@@ -146,7 +146,9 @@ function callSearch(searchtype)
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
+        		var p_tab = document.getElementsByName("parenttab");
                 urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val+'&';
+                urlstring = urlstring + 'parenttab='+p_tab[0].value+ '&';
         {rdelim}
         else if(searchtype == 'Advanced')
         {ldelim}
@@ -156,9 +158,11 @@ function callSearch(searchtype)
                         var sfld_name = getObj("Fields"+jj);
                         var scndn_name= getObj("Condition"+jj);
                         var srchvalue_name = getObj("Srch_value"+jj);
+                        var p_tab = document.getElementsByName("parenttab");
                         urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+                        urlstring = urlstring + 'parenttab='+p_tab[0].value+ '&';
                 {rdelim}
                 for (i=0;i<getObj("matchtype").length;i++){ldelim}
                         if (getObj("matchtype")[i].checked==true)
