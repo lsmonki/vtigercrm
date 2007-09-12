@@ -72,6 +72,8 @@ if(isset($_SESSION["login_error"]))
 }
 
 ?>
+<!--Added to display the footer in the login page by Dina--!>
+<style type="text/css">@import url("themes/<?php echo $theme; ?>/style.css");</style>
 <script type="text/javascript" language="JavaScript">
 <!-- Begin
 function set_focus() {
