@@ -14,6 +14,8 @@ require_once('include/logging.php');
 require_once('include/nusoap/nusoap.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Emails/mail.php');
+require_once('modules/HelpDesk/language/en_us.lang.php');
+
 
 $log = &LoggerManager::getLogger('customerportal');
 
@@ -578,7 +580,7 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
  */
 function update_ticket_comment($ticketid,$ownerid,$comments)
 {
-	global $adb;
+	global $adb,$mod_strings;
 	$servercreatedtime = $adb->formatDate(date('YmdHis'));
   	if(trim($comments) != '')
   	{
@@ -599,17 +601,16 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
 		$from_email = $adb->query_result($result1,0,'email');
 
 		//send mail to the assigned to user when customer add comment
-		$subject = "Respond to Ticket ID ## $ticketid ## in Customer Portal - URGENT";
-		$contents = "Dear $owner,<br><br>
-				Customer has provided the following additional information to your reply:<br><br>
+		$subject = $mod_strings['LBL_RESPONDTO_TICKETID']."##". $ticketid."##". $mod_strings['LBL_CUSTOMER_PORTAL'];
+		$contents = $mod_strings['Dear']." ".$owner.","."<br><br>"
+				.$mod_strings['LBL_CUSTOMER_COMMENTS']."<br><br>
 
-				<b>".nl2br($comments)."</b><br><br>
+				<b>".nl2br($comments)."</b><br><br>"
 
-				Kindly respond to above ticket at the earliest.<br><br>
+				.$mod_strings['LBL_RESPOND']."<br><br>"
 
-				Regards,<br>
-				Support Administrator
-			    ";
+				.$mod_strings['LBL_REGARDS']."<br>"
+				.$mod_strings['LBL_SUPPORT_ADMIN'];
 
 		$mailstatus = send_mail('HelpDesk',$to_email,$customername,$from_email,$subject,$contents);
   	}
@@ -621,13 +622,13 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
  */
 function close_current_ticket($ticketid)
 {
-	global $adb;
-	$sql = "update vtiger_troubletickets set status='Closed' where ticketid=".$ticketid;
+	global $adb,$mod_strings;
+	$sql = "update vtiger_troubletickets set status='".$mod_strings['LBL_STATUS_CLOSED']."' where ticketid=".$ticketid;
 	$result = $adb->query($sql);
 	if($result)
-		return "<br><b>Ticket status is updated as 'Closed'.</b>";
+		return "<br><b>".$mod_strings['LBL_STATUS_UPDATE']." "."'".$mod_strings['LBL_STATUS_CLOSED']."'"."."."</b>";
 	else
-		return "<br><b>Ticket could not be closed.</br>";
+		return "<br><b>".$mod_strings['LBL_COULDNOT_CLOSED']." ".$mod_strings['LBL_STATUS_CLOSED']."."."</br>";
 }
 
 /**	function used to authenticate whether the customer has access or not
@@ -703,7 +704,7 @@ function update_login_details($id,$flag)
  */
 function send_mail_for_password($mailid)
 {
-	global $adb;
+	global $adb,$mod_strings;
 
 	$sql = "select * from vtiger_portalinfo  where user_name='".$mailid."'";
 	$user_name = $adb->query_result($adb->query($sql),0,'user_name');
@@ -714,13 +715,13 @@ function send_mail_for_password($mailid)
 	$initialfrom = $adb->query_result($adb->query($fromquery),0,'user_name');
 	$from = $adb->query_result($adb->query($fromquery),0,'email1');
 
-	$contents = "<br>Following are your Customer Portal login details :";
-	$contents .= "<br><br>User Name : ".$user_name;
-	$contents .= "<br>Password : ".$password;
+	$contents = $mod_strings['LBL_LOGIN_DETAILS'];
+	$contents .= "<br><br>".$mod_strings['LBL_USERNAME']." ".$user_name;
+	$contents .= "<br>".$mod_strings['LBL_PASSWORD']." ".$password;
 
         $mail = new PHPMailer();
 
-        $mail->Subject = "Regarding your Customer Portal login details";
+        $mail->Subject = $mod_strings['LBL_SUBJECT_PORTAL_LOGIN_DETAILS'];
         $mail->Body    = $contents;
         $mail->IsSMTP();
 
@@ -743,25 +744,25 @@ function send_mail_for_password($mailid)
 
         $mail->IsHTML(true);
 
-        $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
+        $mail->AltBody = $mod_strings['LBL_ALTBODY'];
 	if($mailid == '')
 	{
-		return "false@@@<b>Please give your email id</b>";
+		return "false@@@<b>".$mod_strings['LBL_GIVE_MAILID']."</b>";
 	}
 	elseif($user_name == '' && $password == '')
 	{
-		return "false@@@<b>Please check your email id for Customer Portal</b>";
+		return "false@@@<b>".$mod_strings['LBL_CHECK_MAILID']."</b>";
 	}
 	elseif($isactive == 0)
         {
-                return "false@@@<b>Your login is revoked. Please contact your admin.</b>";
+                return "false@@@<b>".$mod_strings['LBL_LOGIN_REVOKED']."</b>";
         }
 	elseif(!$mail->Send())
 	{
-		return "false@@@<b>Mail could not be sent</b>";
+		return "false@@@<b>".$mod_strings['LBL_MAIL_COULDNOT_SENT']."</b>";
 	}
 	else
-		return "true@@@<b>Mail has been sent to your mail id with the customer portal login details</b>";
+		return "true@@@<b>".$mod_strings['LBL_MAIL_SENT']."</b>";
 
 }
 
