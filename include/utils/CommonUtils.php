@@ -2114,7 +2114,7 @@ function sendNotificationToGroups($groupid,$crmid,$module)
 }
 
 
-function getUserslist()
+function getUserslist($setdefval=true)
 {
 	global $log,$current_user,$module,$adb,$assigned_user_id;
 	$log->debug("Entering getUserslist() method ...");
@@ -2134,7 +2134,11 @@ function getUserslist()
 
 		foreach($value as $username=>$selected)
 		{
-			$change_owner .= "<option value=$userid $selected>".$username."</option>";
+			if ($setdefval == false) {
+				$change_owner .= "<option value=$userid>".$username."</option>";
+			} else {
+				$change_owner .= "<option value=$userid $selected>".$username."</option>";
+			}
 		}
 	}
 	

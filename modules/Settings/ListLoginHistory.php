@@ -44,7 +44,7 @@ $category = getParenttab();
 $oUser = new Users($id);
 
 
-$user_list = getUserslist();
+$user_list = getUserslist(false);
 
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("MOD", $current_module_strings);

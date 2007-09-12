@@ -63,8 +63,8 @@
                             <td nowrap width="18%" class="small cellLabel"><strong>{$MOD.LBL_USER_AUDIT}</strong></td>
                             <td class="small cellText">
 				<select name="user_list" id="user_list" onchange="fetchlogin_js({$ID});">
-					<option value="none">{$APP.LBL_NONE}</option>
-					{$USERLIST}
+				<option value="none" selected="true">{$APP.LBL_NONE}</option>
+				{$USERLIST}
 				</select>	
 			    </td>
 			    
