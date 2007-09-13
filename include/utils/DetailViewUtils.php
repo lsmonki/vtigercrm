@@ -746,9 +746,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$image_path = $adb->query_result($image_res,0,'path');
 		$image_name = $adb->query_result($image_res,0,'name');
 		$imgpath = $image_path.$image_id."_".$image_name;
-		if($image_name != '')
-		$label_fld[] ='<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="450" height="300" alt="'.$col_fields['user_name'].'" title="'.$col_fields['user_name'].'" border="0"></a>';
-		else
+		if($image_name != '') {
+			// Asha: Added the following check for the image to retain its in original size.
+			list($pro_image_width, $pro_image_height) = getimagesize($imgpath);
+				$label_fld[] ='<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="'.$pro_image_width.'" height="'.$pro_image_height.'" alt="'.$col_fields['user_name'].'" title="'.$col_fields['user_name'].'" border="0"></a>';
+		} else
 			$label_fld[] = '';
 	}
 	elseif($uitype == 66)
