@@ -25,7 +25,7 @@ global $log;
 function getMailServerInfo($user)
 {
 	global $log;
-	$log->debug("Entering getMailServerInfo(".$user.") method ...");
+	$log->debug("Entering getMailServerInfo(".$user->user_name.") method ...");
 	global $adb;
 	//$sql= "select vtiger_rolename from vtiger_user2role where userid='" .$userid ."'";
    $sql = "select * from vtiger_mail_accounts where status=1 and user_id=".$user->id;
