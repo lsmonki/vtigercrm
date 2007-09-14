@@ -42,7 +42,7 @@ $decode_val=base64_decode($encode_val);
 $focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
 
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
