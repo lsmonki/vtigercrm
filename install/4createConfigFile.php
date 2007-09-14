@@ -109,11 +109,11 @@ if ($db_port == '')
 	{
 		$db_port = "3306";
 	}
-	elseif($db_type = 'pgsql')
+	elseif($db_type == 'pgsql')
 	{
 		$db_port = "5432";
 	}
-	elseif($db_type = 'oci8')
+	elseif($db_type == 'oci8')
 	{
 		$db_port = '1521';
 	}
