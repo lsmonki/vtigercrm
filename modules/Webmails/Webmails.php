@@ -625,12 +625,12 @@ function mime_header_decode(&$header)
 	$source = imap_mime_header_decode($header);
 	$result[] = new result;
 	$result[0]->text='';
-	$result[0]->charset='ISO-8859-1';
+	$result[0]->charset='UTF-8';
 	for ($j = 0; $j < count($source); $j++ )
        	{
 	$element_charset =  ($source[$j]->charset == "default") ? $this->detect_charset($source[$j]->text) : $source[$j]->charset;
 		if ($element_charset == 'x-unknown')
-			$element_charset = 'ISO-8859-1';
+			$element_charset = 'UTF-8';
 
 		$element_converted = function_exists(iconv) ? @iconv( $element_charset, $output_charset, $source[$j]->text): $source[$j]->text ;
 		$result[$j]->text = $element_converted;
@@ -760,14 +760,14 @@ function convertMailData2Html($maildata, $cutafter = 0)
 
 
 			if (strtolower($body_charset) == "us-ascii") {
-				$body_charset = "ISO-8859-1";
+				$body_charset = "UTF-8";
 			}
 
 			if ($body_charset == "" || $body_charset == null) {
 				if (isset($conf->default_charset) && $conf->default_charset != "") {
 					$body_charset = $conf->default_charset;
 				} else {
-					$body_charset = "ISO-8859-1";
+					$body_charset = "UTF-8";
 				}
 			}
 
@@ -818,7 +818,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			}
 		}
 		if ($msg_charset == '') {
-			$msg_charset = 'ISO-8859-1';
+			$msg_charset = 'UTF-8';
 		}
 
 

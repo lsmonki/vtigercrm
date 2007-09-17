@@ -19,7 +19,7 @@
 //
 // $Id: gr.php,v 1.12 2005/12/31 17:25:02 bigmichi1 Exp $
 
-$charset                = "iso-8895-7";
+$charset                = "UTF-8";
 
 $text['title']          = 'Πληροφορίες Συστήματος';
 

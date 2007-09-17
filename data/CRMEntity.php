@@ -452,8 +452,8 @@ class CRMEntity
 		  }
 		  if($fldvalue=='') 
 		  	$fldvalue ="NULL";
-		  else
-			$fldvalue = htmlentities($fldvalue);	
+		  /*else
+			$fldvalue = htmlentities($fldvalue);*/	
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')

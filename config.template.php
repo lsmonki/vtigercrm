@@ -176,7 +176,8 @@ $currency_name = '_MASTER_CURRENCY_';
 
 // default charset
 // default charset default value = ISO-8859-1
-$default_charset = 'ISO-8859-1';
+//$default_charset = 'ISO-8859-1';
+$default_charset = 'UTF-8';
 
 // default language
 // default_language default value = en_us

@@ -282,7 +282,7 @@ $conf->quota_enable=false;
 $conf->quota_type="STORAGE";
 
 // Default encoding charset to use to display email which does not include one.
-$conf->default_charset = 'ISO-8859-1';                                                                                
+$conf->default_charset = 'UTF-8';                                                                                
 /*
 ###################     End of Configuration     ####################
 */

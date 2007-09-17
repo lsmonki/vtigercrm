@@ -127,7 +127,7 @@ $cache_dir = 'cache/';
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Config File Creation</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -411,7 +411,7 @@ $cache_dir = 'cache/';
 	$config .= "// Master currency name\n";
  	$config .= "\$currency_name = '$currency_name';\n";
  	$config .= "// Default charset if the language specific character set is not found.\n";
- 	$config .= "\$default_charset = 'ISO-8859-1';\n";
+ 	$config .= "\$default_charset = 'UTF-8';\n";
  	$config .= "// Default language in case all or part of the user's language pack is not available.\n";
  	$config .= "\$default_language = 'en_us';\n";
  	$config .= "// Translation String Prefix - This will add the language pack name to every translation string in the display.\n";

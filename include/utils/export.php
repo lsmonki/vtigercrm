@@ -191,7 +191,7 @@ function export($type)
 			{
 				$value=br2nl_vt($value);
 			}
-			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "ISO-8859-1"));
+			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "UTF-8"));
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
 		$line = implode("\",\"",$new_arr);

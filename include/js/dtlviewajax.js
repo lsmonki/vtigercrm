@@ -409,12 +409,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	itsonview=false;
 }
 
-// Replace the % sign with %25 to make sure the AJAX url is going wel. 
-function escapeAll(tagValue) 
-{ 
- 	return escape(tagValue.replace(/%/g, '%25')); 
-}
- 
 function SaveTag(tagfield,crmId,module)
 {
 	var tagValue = $(tagfield).value;

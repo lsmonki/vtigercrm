@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 $app_strings = array (
-'LBL_CHARSET' => 'ISO-8859-1',
+'LBL_CHARSET' => 'UTF-8',
 'LBL_BROWSER_TITLE' => 'vtiger CRM 5 - Commercial Open Source CRM',
 'LBL_MY_ACCOUNT' => 'My Account',
 'LBL_MY_PREFERENCES' => 'My Preferences',

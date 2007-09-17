@@ -19,7 +19,7 @@
 //
 // $Id: pl.php,v 1.12 2005/12/31 17:25:02 bigmichi1 Exp $
 
-$charset                = 'iso-8859-2';
+$charset                = 'UTF-8';
 
 $text['title']          = 'Informacja o systemie';
 

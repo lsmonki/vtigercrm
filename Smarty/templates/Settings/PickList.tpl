@@ -186,7 +186,8 @@ function SavePickList(fieldname,module,uitype)
 
 	$("status").style.display = "inline";
 	Effect.Puff($('editdiv'),{duration:2});
-	var body = escape($("picklist_values").value);
+	//var body = escape($("picklist_values").value);
+	var body = escapeAll($("picklist_values").value);
 	new Ajax.Request(
         	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&roleid='+role+'&listarea='+body+'&uitype='+uitype,
 	        {queue: {position: 'end', scope: 'command'},

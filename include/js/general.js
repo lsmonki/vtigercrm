@@ -2320,3 +2320,11 @@ function hideErrorMsg1()
 {
         $('not_search').style.display = 'none';
 }
+
+// Replace the % sign with %25 to make sure the AJAX url is going wel.
+function escapeAll(tagValue)
+{
+        //return escape(tagValue.replace(/%/g, '%25'));
+        return encodeURIComponent(tagValue.replace(/%/g, '%25'));
+}
+

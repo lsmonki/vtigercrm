@@ -60,7 +60,7 @@ function inbox(&$pop, $skip = 0, &$ev)
 	    }
 	}
 	if ($msg_charset == '') {
-	  $msg_charset = 'ISO-8859-1';
+	  $msg_charset = 'UTF-8';
 	}
 
 	// Get subject
