@@ -658,6 +658,13 @@ $mod_strings = Array(
 //Added to provide User based TagCloud
 'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
 'INTERNAL_MAIL_COMPOSER'=>'Internal Mail Composer',
+
+// Added for 5.0.4 to Support Email notication on User Creation
+'User Login Details'=>'User Login Details',
+'LBL_TO_LOGIN' => 'to Login',
+'LBL_MAIL_SEND_STATUS' => 'Mail Send Status:',
+'LBL_MAIL_NOT_SENT_TO_USER' => 'Mail Could not be sent to user',
+'LBL_PLS_CHECK_EMAIL_N_SERVER' => 'Please check the user emailid/Server settings',
 );
 
 ?>
