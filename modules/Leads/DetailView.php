@@ -126,6 +126,8 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 

@@ -103,6 +103,8 @@ if($singlepane_view == 'true')
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->display("DetailView.tpl");
 ?>

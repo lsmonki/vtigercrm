@@ -88,6 +88,8 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 if($singlepane_view == 'true')

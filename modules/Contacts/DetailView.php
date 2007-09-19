@@ -145,6 +145,8 @@ $querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModul
 $queryres = $adb->query($querystr);
 $fieldid = $adb->query_result($queryres,0,'fieldid');
 $smarty->assign("FIELD_ID",$fieldid);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 
