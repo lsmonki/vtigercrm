@@ -414,9 +414,9 @@ if($use_current_login)
 	$log->debug('Current user is: '.$current_user->user_name);
 }
 
-if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
+if(isset($_SESSION['vtiger_authenticated_user_theme']) && $_SESSION['vtiger_authenticated_user_theme'] != '')
 {
-	$theme = $_SESSION['authenticated_user_theme'];
+	$theme = $_SESSION['vtiger_authenticated_user_theme'];
 }
 else 
 {
@@ -481,9 +481,9 @@ if (isset($_SESSION['authenticated_user_id'])) {
         $log->debug("setting cookie ck_login_id_vtiger to ".$_SESSION['authenticated_user_id']);
         setcookie('ck_login_id_vtiger', $_SESSION['authenticated_user_id']);
 }
-if (isset($_SESSION['authenticated_user_theme'])) {
-        $log->debug("setting cookie ck_login_theme_vtiger to ".$_SESSION['authenticated_user_theme']);
-        setcookie('ck_login_theme_vtiger', $_SESSION['authenticated_user_theme']);
+if (isset($_SESSION['vtiger_authenticated_user_theme'])) {
+        $log->debug("setting cookie ck_login_theme_vtiger to ".$_SESSION['vtiger_authenticated_user_theme']);
+        setcookie('ck_login_theme_vtiger', $_SESSION['vtiger_authenticated_user_theme']);
 }
 if (isset($_SESSION['authenticated_user_language'])) {
         $log->debug("setting cookie ck_login_language_vtiger to ".$_SESSION['authenticated_user_language']);
@@ -527,9 +527,9 @@ else {
 
 //fetch the permission set from session and search it for the requisite data
 
-if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
+if(isset($_SESSION['vtiger_authenticated_user_theme']) && $_SESSION['vtiger_authenticated_user_theme'] != '')
 {
-	$theme = $_SESSION['authenticated_user_theme'];
+	$theme = $_SESSION['vtiger_authenticated_user_theme'];
 }
 else 
 {
@@ -601,9 +601,9 @@ else
 	}
 
 //added to get the theme . This is a bad fix as we need to know where the problem lies yet
-if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
+if(isset($_SESSION['vtiger_authenticated_user_theme']) && $_SESSION['vtiger_authenticated_user_theme'] != '')
 {
-        $theme = $_SESSION['authenticated_user_theme'];
+        $theme = $_SESSION['vtiger_authenticated_user_theme'];
 }
 else
 {

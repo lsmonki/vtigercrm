@@ -106,7 +106,7 @@ if($focus->is_authenticated())
 		$authenticated_user_language = $default_language;	
 	}
 
-	$_SESSION['authenticated_user_theme'] = $authenticated_user_theme;
+	$_SESSION['vtiger_authenticated_user_theme'] = $authenticated_user_theme;
 	$_SESSION['authenticated_user_language'] = $authenticated_user_language;
 	
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
