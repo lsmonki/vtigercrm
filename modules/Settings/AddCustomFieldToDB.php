@@ -11,7 +11,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 global $current_user;
-$fldmodule=$_REQUEST['fld_module'];
+ $fldmodule=$_REQUEST['fld_module'];
  $fldlabel=$_REQUEST['fldLabel'];
  $fldType= $_REQUEST['fieldType'];
  $parenttab=$_REQUEST['parenttab'];
@@ -319,13 +319,13 @@ else
 					if($picklistcount == 0)
 					{
 						$picklist_valueid = getUniquePicklistID();
-						$query = "insert into vtiger_".$columnName." values('','".$pickArray[$i]."',1,'".$picklist_valueid."')";
+						$query = "insert into vtiger_".$columnName." values('','".addslashes($pickArray[$i])."',1,'".$picklist_valueid."')";				
 						$adb->query($query);
 						$sql="update vtiger_picklistvalues_seq set id = ".++$picklist_valueid;
 						$adb->query($sql);
 
 					}
-					$sql = "select picklist_valueid from vtiger_$columnName where $columnName='$pickArray[$i]'";
+					$sql = "select picklist_valueid from vtiger_$columnName where $columnName='".addslashes($pickArray[$i])."'";
 					$pick_valueid = $adb->query_result($adb->query($sql),0,'picklist_valueid');
 					$sql = "insert into vtiger_role2picklist select roleid,$pick_valueid,$picklistid,$i from vtiger_role";
 					$adb->query($sql);

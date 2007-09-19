@@ -78,18 +78,18 @@ $columnName = $tableName;
 		 $picklist_id = $adb->getUniqueID("vtiger_".$tableName);
 		 if($uitype == 111)
 		 {
-			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".$pickArray[$i]."',1,$picklistvalue_id)";		
+			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".addslashes($pickArray[$i])."',1,$picklistvalue_id)";		
 		 }
 		 else
 		 {
-			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".$pickArray[$i]."',1,$picklistvalue_id)";
+			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".addslashes($pickArray[$i])."',1,$picklistvalue_id)";
 		 }
 
 		 $adb->query($query);
 
 	 }
 	 $picklistcount =0;
-	 $sql = "select picklist_valueid from vtiger_$tableName where $tableName='$pickArray[$i]'";
+	 $sql = "select picklist_valueid from vtiger_$tableName where $tableName='".addslashes($pickArray[$i])."'";
 	 $pick_valueid = $adb->query_result($adb->query($sql),0,'picklist_valueid');
 	 if($uitype == 111 || $uiytpe==16)
 	 {
