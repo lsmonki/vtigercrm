@@ -268,6 +268,10 @@ else
 
         $start = 1;
 }
+$limstart=($start-1)*$list_max_entries_per_page;
+$query.=" LIMIT $limstart,$list_max_entries_per_page";
+$list_result = $adb->query($query);
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 // Setting the record count string

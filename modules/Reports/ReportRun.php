@@ -1789,6 +1789,7 @@ class ReportRun extends CRMEntity
 					$secondvalue = $snewvalue;
 					$thirdvalue = $tnewvalue;
 					$arr_val[] = $arraylists;
+					set_time_limit(0);
 				}while($custom_field_values = $adb->fetch_array($result));
 
 				$sHTML ='<table cellpadding="5" cellspacing="0" align="center" class="rptTable">
@@ -1845,6 +1846,7 @@ class ReportRun extends CRMEntity
 							$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
+					set_time_limit(0);
 				}while($custom_field_values = $adb->fetch_array($result));
 
 				return $arr_val;
@@ -2038,7 +2040,8 @@ class ReportRun extends CRMEntity
 					 $lastvalue = $newvalue;
 					 $secondvalue = $snewvalue;
 					 $thirdvalue = $tnewvalue;
-				$arr_val[] = $arraylists;
+					 $arr_val[] = $arraylists;
+				set_time_limit(0);
 				}while($custom_field_values = $adb->fetch_array($result));
 				
 				$sHTML = '<tr>'.$header.'</tr>'.$valtemplate;	

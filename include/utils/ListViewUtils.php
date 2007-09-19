@@ -977,8 +977,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 {
 	global $log;
 	$log->debug("Entering getSearchListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.") method ...");
-	global $adb,$theme,$current_user;
+	
+	global $adb,$theme,$current_user,$list_max_entries_per_page;
 	$noofrows = $adb->num_rows($list_result);
+
 	$list_header = '';
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -1054,7 +1056,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	//end
 	if($navigation_array['end_val'] > 0)
 	{
-		for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+		for ($i=1; $i<=$noofrows; $i++)
 		{
 
 			//Getting the entityid
