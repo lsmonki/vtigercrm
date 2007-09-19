@@ -250,7 +250,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	global $adb;
+	global $adb,$current_user;
 	global $mod_strings;
 	global $app_strings, $listview_max_textlength;
 	
@@ -307,11 +307,13 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		}
 		$entries[] = nl2br($row['description']); 
 		$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
-
-		$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
+		
+		if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
+			$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
+		else
+			$entries[]='';
 
 		$entries[] = $row['activitytype'];	
-
 		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"];
 
 		if($module == 'Notes')
