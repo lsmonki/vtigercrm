@@ -61,12 +61,14 @@ $focus = new Emails();
 
 global $current_user,$mod_strings,$app_strings;
 setObjectValuesFromRequest($focus);
+
 //Check if the file is exist or not.
 //$file_name = '';
 $file_name = $_FILES['filename']['name'];//preg_replace('/\s+/', '_', $_FILES['filename']['name']);
 $errorCode =  $_FILES['filename']['error'];
 $errormessage = "";
-if($file_name != '' && $_FILES['filename']['size'] == 0){
+if($file_name != '' && $_FILES['filename']['size'] == 0)
+{
 	if($errorCode == 4 || $errorCode == 0)
 	{
 		 if($_FILES['filename']['size'] == 0)
@@ -100,39 +102,13 @@ if($file_name != '' && $_FILES['filename']['size'] == 0){
 	}
 }
 
-require_once("modules/Emails/mail.php");
-//If we send mails containing Invoice pdf attachment from Invoice module, We dont need the notification mail for that. because attachments are not present in notification mails. 
-//so here we checking for that and dont send a notification mail for that mail
-if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) {
-	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
-	{
-		$from_arr = explode('@',$_REQUEST['from_add']);
-		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$from_arr[0],$_REQUEST['from_add'],$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
-	}
-	else
-		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
-		
-//if block added to fix the issue #3759
-	if($user_mail_status != 1){
-        	$error_msg = "<font color=red><strong>".$mod_strings['LBL_CHECK_USER_MAILID']."</strong></font>";
-	        $ret_error = 1;
-		$ret_parentid = $_REQUEST['parent_id'];
-	        $ret_toadd = $_REQUEST['parent_name'];
-        	$ret_subject = $_REQUEST['subject'];
-	        $ret_ccaddress = $_REQUEST['ccmail'];
-        	$ret_bccaddress = $_REQUEST['bccmail'];
-	        $ret_description = $_REQUEST['description'];
-        	echo $error_msg;
-	        include("EditView.php");
-        	exit();
-	}
 
-}
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
         $file_upload_error = true;
         $_FILES = '';
 }
+
 if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUEST['addbox'] == null)
 {
 	imap_delete($mbox,$_REQUEST['deletebox']);
@@ -140,68 +116,7 @@ if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUES
 	header("Location: index.php?module=Emails&action=index");
 	exit();
 }
-/*if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
-{
-	//get the list of data from the comma separated array
-	$emailids = explode(",",$_REQUEST['fromemail']);
-	$subjects = explode(",",$_REQUEST['subject']);
-	$ids = explode(",",$_REQUEST['idlist']);
-	$total = count($ids);
-	for($z=0;$z<$total;$z++)
-	{
-		$msgData='';
-		global $current_user;
-		require_once('include/utils/UserInfoUtil.php');
-		$mailInfo = getMailServerInfo($current_user);
-		$temprow = $adb->fetch_array($mailInfo);
 
-		$secretkey=$temprow["mail_password"];
-		$imapServerAddress=$temprow["mail_servername"];
-		$imapPort="143";
-
-		$key = OneTimePadEncrypt($secretkey, $onetimepad);
-		$imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
-		$mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
-
-		$message = sqimap_get_message($imapConnection, $ids[$z], $mailbox);
-		$header = $message->rfc822_header;
-		$ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
-		$cnt = count($ent_ar);
-		global $color;
-		for ($u = 0; $u < $cnt; $u++)
-		{
-			$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u], $ids[$z], $mailbox);
-			$msgData = $messagebody;
-		}
-
-			$ctctExists = checkIfContactExists($emailids[$z]);
-			if($ctctExists > 0)
-			{
-				$focus->column_fields['parent_id']=$ctctExists;
-			}
-			global $current_user;
-
-			$focus->column_fields['subject']=$subjects[$z];
-			$focus->column_fields["activitytype"]="Emails";
-			//this line has been added to get the related list data in the contact description
-			$focus->column_fields["assigned_user_id"]=$current_user->id;
-			$focus->column_fields["date_start"]=$_REQUEST['adddate'];
-			$focus->column_fields["time_start"]=$_REQUEST['adddate'];
-
-			$focus->column_fields["description"]=$msgData;
-			$focus->save("Emails");
-			$return_id = $focus->id;
-			$return_module='Emails';	
-			$return_action='DetailView';	
-	}
-	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
-	return;
-}*/
-
-/**	Function to check whether the contact is exist of not
- *	input  : contact id
- *	return : contact id if contact exist, else -1 will be return
- */
 function checkIfContactExists($mailid)
 {
 	global $log;
@@ -238,6 +153,7 @@ $return_id = $focus->id;
 $email_id = $return_id;
 $query = 'select emailid from vtiger_emaildetails where emailid ='.$email_id;
 $result = $adb->query($query);
+
 if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
 	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
 if(isset($_REQUEST["saved_toid"]) && $_REQUEST["saved_toid"]!='')
@@ -251,6 +167,7 @@ $all_to_ids = str_replace('>','&gt;',$all_to_ids);
 $all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
 $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
 $userid = $current_user->id;
+
 if($adb->num_rows($result) > 0)
 {
 	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
@@ -260,7 +177,55 @@ if($adb->num_rows($result) > 0)
 }
 $adb->query($query);
 
+require_once("modules/Emails/mail.php");
+//If we send mails containing Invoice pdf attachment from Invoice module, We dont need the notification mail for that. because attachments are not present in notification mails. 
+//so here we checking for that and dont send a notification mail for that mail
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) 
+{
+	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
+	{
+		$from_arr = explode('@',$_REQUEST['from_add']);
+		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$from_arr[0],$_REQUEST['from_add'],$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+	}
+	else
+		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+		
+//if block added to fix the issue #3759
+	if($user_mail_status != 1){
+		$query  = "select crmid,attachmentsid from vtiger_seattachmentsrel where crmid=".$email_id;
+		$result = $adb->query($query);
+		$numOfRows = $adb->num_rows($result);
+		for($i=0; $i<$numOfRows; $i++)
+		{
+			$attachmentsid = $adb->query_result($result,0,"attachmentsid");		
+			if($attachmentsid > 0)
+			{	
+				$query1="delete from vtiger_crmentity where crmid=".$attachmentsid;
+			 	$adb->query($query1);
+			}
 
+			$crmid=$adb->query_result($result,0,"crmid");
+			$query2="delete from vtiger_crmentity where crmid=".$crmid;
+			$adb->query($query2);
+		}
+			
+		$query = "delete from vtiger_emaildetails where emailid=".$focus->id;	
+		$adb->query($query);
+        	
+		$error_msg = "<font color=red><strong>".$mod_strings['LBL_CHECK_USER_MAILID']."</strong></font>";
+	        $ret_error = 1;
+		$ret_parentid = $_REQUEST['parent_id'];
+	        $ret_toadd = $_REQUEST['parent_name'];
+        	$ret_subject = $_REQUEST['subject'];
+	        $ret_ccaddress = $_REQUEST['ccmail'];
+        	$ret_bccaddress = $_REQUEST['bccmail'];
+	        $ret_description = $_REQUEST['description'];
+        	echo $error_msg;
+	        include("EditView.php");
+        	exit();
+	}
+
+}
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button
@@ -274,12 +239,21 @@ else
 	$module = $_REQUEST['source_module'];
 }
 
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Emails";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
-if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_REQUEST['filename'];
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") 
+	$return_module = $_REQUEST['return_module'];
+else 
+	$return_module = "Emails";
+
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") 
+	$return_action = $_REQUEST['return_action'];
+else 
+	$return_action = "DetailView";
+
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
+	$return_id = $_REQUEST['return_id'];
+
+if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") 
+	$filename = $_REQUEST['filename'];
 
 $local_log->debug("Saved record with id of ".$return_id);
 
