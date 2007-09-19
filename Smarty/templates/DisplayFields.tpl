@@ -415,16 +415,23 @@
 				<input name="product_name" readonly type="text" value="{$fldvalue|escape}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 			</td>
 
-		{elseif $uitype eq 55} 
-			<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+		{elseif $uitype eq 55 || $uitype eq 255} 
+			{if $uitype eq 55}	
+				<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+			{elseif $uitype eq 255}	
+				<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+			{/if}
+			
 			<td width="30%" align=left class="dvtCellInfo">
-				<select name="salutationtype" class="small">
-					{foreach item=arr from=$fldvalue}
+			{if $fldvalue neq ''}
+			<select name="salutationtype" class="small">
+				{foreach item=arr from=$fldvalue}
 						<option value="{$arr[1]}" {$arr[2]}>
                                                 	{$arr[0]}
                                                 </option>
-					{/foreach}
-				</select>
+				{/foreach}
+			</select>
+			{/if}
 			<input type="text" name="{$fldname}" tabindex="{$vt_tab}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" style="width:58%;" value= "{$secondvalue|escape}" >
 			</td>
 

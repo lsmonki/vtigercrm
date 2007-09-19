@@ -477,7 +477,7 @@ elseif($mode=='edit')
 			$readonly = '';
 			$field=array();
 			
-			if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+			if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -532,7 +532,7 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -584,7 +584,7 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';

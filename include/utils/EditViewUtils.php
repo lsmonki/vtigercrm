@@ -419,54 +419,64 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $options;
 
 	}
-	elseif($uitype == 55)
+	elseif($uitype == 55 || $uitype == 255)
 	{
 		$roleid=$current_user->roleid;
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$subrole = getRoleSubordinates($roleid);
-		if(count($subrole)> 0)
+		if($uitype==255)
+			$fieldpermission = getFieldVisibilityPermission($module_name, $current_user->id,'firstname');
+		if($uitype == 255 && $fieldpermission === 0)
 		{
-			$roleids = implode("','",$subrole);
-			$roleids = $roleids."','".$roleid;
-		}
-		else
-		{
-			$roleids = $roleid;
-		}
-		if($is_admin)
-		{
-			$pick_query="select salutationtype from vtiger_salutationtype";
-		}
-		else
-		{
-			$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid='".$current_user->roleid."' order by sortid";
-		}
-		$options = array();
-		$pickListResult = $adb->query($pick_query);
-		$noofpickrows = $adb->num_rows($pickListResult);
-		$salt_value = $col_fields["salutationtype"];
-		$salcount =0;
-		for($j = 0; $j < $noofpickrows; $j++)
-		{
-			$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
 
-			if($salt_value == $pickListValue)
+			$fieldvalue[] = '';
+		}
+		else
+		{
+			if(count($subrole)> 0)
 			{
-				$chk_val = "selected";
-				$salcount++;	
+				$roleids = implode("','",$subrole);
+				$roleids = $roleids."','".$roleid;
 			}
 			else
-			{	
-				$chk_val = '';	
+			{
+				$roleids = $roleid;
 			}
-			$options[] = array($pickListValue,$pickListValue,$chk_val );
+			if($is_admin)
+			{
+				$pick_query="select salutationtype from vtiger_salutationtype";
+			}
+			else
+			{
+				$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid='".$current_user->roleid."' order by sortid";
+			}
+			$options = array();
+			$pickListResult = $adb->query($pick_query);
+			$noofpickrows = $adb->num_rows($pickListResult);
+			$salt_value = $col_fields["salutationtype"];
+			$salcount =0;
+			for($j = 0; $j < $noofpickrows; $j++)
+				{
+				$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
+
+				if($salt_value == $pickListValue)
+					{
+					$chk_val = "selected";
+					$salcount++;	
+					}
+				else
+					{	
+					$chk_val = '';	
+					}
+				$options[] = array($pickListValue,$pickListValue,$chk_val );
+			}
+			if($salcount == 0 && $salt_value != '')
+			{
+				$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$salt_value,'selected');
+			}
+			$fieldvalue[] = $options;
 		}
-		if($salcount == 0 && $salt_value != '')
-		{
-			$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$salt_value,'selected');
-		}
-		$fieldvalue[] = $options;
-		$fieldvalue[] = $value;
+			$fieldvalue[] = $value;
 	}
 	elseif($uitype == 59)
 	{

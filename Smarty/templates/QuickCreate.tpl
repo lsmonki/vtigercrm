@@ -36,7 +36,7 @@
                 {assign var="fldname" value="$maindata[2][0]"}
                 {assign var="fldvalue" value="$maindata[3][0]"}
                 {assign var="secondvalue" value="$maindata[3][1]"}
-				{if $uitype eq 2}
+				{if $uitype eq 2 }
 				<td width=20% class="cellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 				<td width=30% align=left class="cellText"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 				{elseif $uitype eq 11 || $uitype eq 1 || $uitype eq 13 || $uitype eq 7 || $uitype eq 9}
@@ -316,8 +316,12 @@
 				<input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific&fromlink=qcreate","test","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 			</td>
 		
-							{elseif $uitype eq 55} 
+							{elseif $uitype eq 55 || $uitype eq 255} 
+								{if $uitype eq 55}	
                                                           <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
+								{elseif $uitype eq 255}	
+                                                          <td width="20%" class="cellLabel" align=right><font color ="red">*</font>{$fldlabel}</td>
+								{/if}
 							  <td width="30%" align=left class="cellText">
 							<input type="text" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value= "{$secondvalue}">
                                                  </td>
