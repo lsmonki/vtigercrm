@@ -422,7 +422,7 @@ $pdf->AddPage();
 $pdf->SetFillColor(224,235,255);
 $pdf->SetTextColor(0);
 $pdf->SetFont('FreeSerif','B',14);
-$pdf->Cell(($pdf->columnlength*50),10,$oReport->reportname,0,0,'C',0);
+$pdf->Cell(($pdf->columnlength*50),10,getTranslatedString($oReport->reportname),0,0,'C',0);
 //$pdf->writeHTML($oReport->reportname);
 $pdf->Ln();
 
