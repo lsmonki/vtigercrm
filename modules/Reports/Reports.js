@@ -394,6 +394,25 @@ function changeSteps1()
 		var date1=getObj("startdate")
 		var date2=getObj("enddate")
 
+		//Added to handle yes or no for checkbox fields in reports advance filters. 
+		for(var i=1;i<=5;i++)
+	        {
+	                value=trim(getObj("fval"+i).value);
+        	        option=getObj("fcol"+i).value;
+                	if(option !="" && value !="")
+			{
+				arr=option.split(":");
+                        	if(arr[4] == "C")
+                        	{
+					if(value == "1")
+						getObj("fval"+i).value='yes';
+					else if(value =="0")
+						getObj("fval"+i).value='no';
+				}
+			}
+		}
+
+
 		//# validation added for date field validation in final step of report creation
 		if ((date1.value != '') || (date2.value != ''))
 		{

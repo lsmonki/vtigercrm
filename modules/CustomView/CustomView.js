@@ -228,17 +228,22 @@ function checkval()
 			}	
 			if(arr[4] == "C")
 			{
-				sep=value.split(",");
-                                for(var j=0;j<sep.length;j++)
-                                {
-
-					if(sep[j].toLowerCase() != "yes") if(sep[j].toLowerCase() != "no") 
+					if(value == "1")
+					{
+						getObj("fval"+i).value= "yes";
+						continue;
+					}
+					else if(value == "0")
+					{
+						getObj("fval"+i).value= "no";
+						continue;						
+					}
+					if(value.toLowerCase() != "yes") if(value.toLowerCase() != "no") 
 					{
 						alert(alert_arr.LBL_PROVIDE_YES_NO);
 						getObj("fval"+i).select();
 						return false;
 					}
-				}
 			}	
 		}	
 	}

@@ -61,7 +61,6 @@ class ReportRun extends CRMEntity
 		global $adb;
 		global $modules;
 		global $log,$current_user;
-
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
 		$ssql .= " where vtiger_report.reportid =".$reportid;
@@ -363,10 +362,18 @@ class ReportRun extends CRMEntity
 			$fieldcolname = $advfilterrow["columnname"];
 			$comparator = $advfilterrow["comparator"];
 			$value = $advfilterrow["value"];
-
 			if($fieldcolname != "" && $comparator != "")
 			{
 				$selectedfields = explode(":",$fieldcolname);
+				//Added to handle yes or no for checkbox  field in reports advance filters. -shahul
+				if($selectedfields[4] == 'C')
+				{
+					if(strcasecmp(trim($value),"yes")==0)
+						$value="1";
+					if(strcasecmp(trim($value),"no")==0)
+						$value="0";
+				}
+				
 				$valuearray = explode(",",trim($value));
 				$datatype = (isset($selectedfields[4])) ? $selectedfields[4] : "";
 				if(isset($valuearray) && count($valuearray) > 1)
@@ -2041,7 +2048,7 @@ class ReportRun extends CRMEntity
 					 $secondvalue = $snewvalue;
 					 $thirdvalue = $tnewvalue;
 					 $arr_val[] = $arraylists;
-				set_time_limit(0);
+					 set_time_limit(0);
 				}while($custom_field_values = $adb->fetch_array($result));
 				
 				$sHTML = '<tr>'.$header.'</tr>'.$valtemplate;	
