@@ -113,18 +113,16 @@ var gVTModule = '{$smarty.request.module}';
 									<table>
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
-                                                                                {foreach key=sel_value item=value from=$typearr}
-                                                                                {if $value eq 'selected' && $sel_value eq 'Call'}
+                                                                                {if $typearr[2] eq 'selected' && $typearr[1] eq 'Call'}
                                                                                         {assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
-                                                                                {elseif $value eq 'selected' && $sel_value eq 'Meeting'}
+                                                                                {elseif $typearr[2] eq 'selected' && $typearr[1] eq 'Meeting'}
                                                                                         {assign var='meetcheck' value='checked'}
                                                                                         {assign var='callcheck' value=''}
                                                                                 {else}
 											{assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
                                                                                 {/if}
-                                                                                {/foreach}
                                                                                 {/foreach}
 											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck} onClick="calDuedatetime('call');" ></td><td>{$APP.Call}</td>
 											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck} onClick="calDuedatetime('meeting');" ></td><td>{$APP.Meeting}</td>
@@ -138,13 +136,11 @@ var gVTModule = '{$smarty.request.module}';
 								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject|escape}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
-                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                        {if $value eq 'selected' && $sel_value eq 'Public'}
+                                                                        {if $arr[1] eq 'Public' && $arr[2] eq 'selected'}
                                                                                 {assign var="visiblecheck" value="checked"}
                                                                         {else}
                                                                                 {assign var="visiblecheck" value=""}
                                                                         {/if}
-                                                                        {/foreach}
                                                                         {/foreach}
                                                                         <input name="visibility" value="Public" type="checkbox" {$visiblecheck}>{$MOD.LBL_PUBLIC}
 								{/if}
