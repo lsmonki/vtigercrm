@@ -211,7 +211,15 @@ function setMailServerProperties($mail)
 		$password = $_REQUEST['server_password'];
 	else
         	$password = $adb->query_result($res,0,'server_password');
-	$smtp_auth = $adb->query_result($res,0,'smtp_auth');
+	// Prasad: First time read smtp_auth from the request	
+	if(isset($_REQUEST['smtp_auth']))
+	{
+		$smtp_auth = $_REQUEST['smtp_auth'];
+		if($smtp_auth == 'on')	
+			$smtp_auth = 'true';
+	}
+	else
+		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
 	if($smtp_auth == "true"){

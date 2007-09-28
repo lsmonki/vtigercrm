@@ -535,7 +535,15 @@ class PHPMailer
         while($index < count($hosts) && $connection == false)
         {
             if(strstr($hosts[$index], ":"))
-                list($host, $port) = explode(":", $hosts[$index]);
+	    {
+		    #list($host, $port) = explode(":", $hosts[$index]);
+		    $hostA = explode(':', $hosts[$index]);
+		    if (is_numeric(end($hostA)))
+		    	$port = array_pop($hostA);
+		    else
+		    	$port = $this->Port;
+		    $host = implode(':', $hostA);
+	    }
             else
             {
                 $host = $hosts[$index];
