@@ -84,6 +84,7 @@ class Users {
 	'date_format' =>'',
 	'signature' =>'',
 	'description' =>'',
+	'internal_mailer'=>'',
 	'address_street' =>'',
 	'address_city' =>'',
 	'address_state' =>'',

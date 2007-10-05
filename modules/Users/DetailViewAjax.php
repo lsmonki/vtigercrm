@@ -27,6 +27,11 @@ if($ajaxaction == "DETAILVIEW")
 		$userObj = new Users();
 		$userObj->retrieve_entity_info($crmid,"Users");
 		$userObj->column_fields[$fieldname] = $fieldvalue;
+		if($fieldname == 'internal_mailer'){
+			
+			if(isset($_SESSION['internal_mailer']) && $_SESSION['internal_mailer'] != $userObj->column_fields['internal_mailer'])
+				$_SESSION['internal_mailer'] = $userObj->column_fields['internal_mailer'];
+		}
 		$userObj->id = $crmid;
 		$userObj->mode = "edit";
 		$userObj->save("Users");

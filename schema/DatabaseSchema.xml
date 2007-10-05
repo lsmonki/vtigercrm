@@ -85,7 +85,7 @@
 		<field name="tagcloud_view" type="I" size="1">
 			<default value="1" />
 		</field>
-		<field name="internal_mailer" type="I" size="1">
+		<field name="internal_mailer" type="C" size="3">
 			<notnull />
 			<default value="1" />
 		</field>

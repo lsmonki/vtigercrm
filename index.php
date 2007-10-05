@@ -183,8 +183,11 @@ if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key
 if($use_current_login)
 {
 	//getting the internal_mailer flag
-	$qry_res = $adb->query("select internal_mailer from vtiger_users where id='".$_SESSION["authenticated_user_id"]."'");
-	$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
+	if($_SESSION['internal_mailer'] == '')
+	{
+		$qry_res = $adb->query("select internal_mailer from vtiger_users where id='".$_SESSION["authenticated_user_id"]."'");
+		$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
+	}
 	$log->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
 }
 else if(isset($action) && isset($module) && $action=="Authenticate" && $module=="Users")

@@ -102,6 +102,8 @@ if(! $_REQUEST['changepassword'] == 'true')
 		$focus->column_fields['internal_mailer'] = 1;
 	else
 		$focus->column_fields['internal_mailer'] = 0;
+	if(isset($_SESSION['internal_mailer']) && $_SESSION['internal_mailer'] != $focus->column_fields['internal_mailer'])
+		$_SESSION['internal_mailer'] = $focus->column_fields['internal_mailer'];
 	setObjectValuesFromRequest($focus);
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
