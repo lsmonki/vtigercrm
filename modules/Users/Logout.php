@@ -27,9 +27,9 @@ require_once('include/db_backup/ftp.php');
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/enable_backup.php');
 
-global $adb, $enable_backup;
+global $adb, $enable_backup,$current_user;
 
-if($enable_backup == 'true')
+if($enable_backup == 'true' && is_admin($current_user) == true)
 {
 	$ftpserver = '';
 	$ftpuser = '';
