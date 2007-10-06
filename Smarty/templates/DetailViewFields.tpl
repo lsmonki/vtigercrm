@@ -15,12 +15,12 @@
 <!-- This file is used to display the fields based on the ui type in detailview -->
 		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
                                          		<td width=25% class="dvtCellInfo" align="left">&nbsp;
-                                         		      {if $keyid eq '55'}<!--SalutationSymbol-->
-                                                        	{foreach item=arr from=$keyoptions}                                                                                          	{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
-                                                          	      {assign var=keysalut value=$APP.LBL_NOT_ACCESSIBLE}
-                                                        	   {/if}
-                                                        	{/foreach}
-                                                  		      {$keysalut}
+                                         		        {if $keyid eq '55'}<!--SalutationSymbol-->
+									{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
+										{$APP.LBL_NOT_ACCESSIBLE}
+									{else}
+                                                                		{$keysalut}
+									{/if}
 								{*elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
                                                                     {$keycursymb*}
                                                                 {/if}
