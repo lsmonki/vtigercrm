@@ -67,9 +67,9 @@ foreach ( explode(",",$home_section_order) as $section )
 		$activities = Array();
                 include("modules/Calendar/OpenListView.php") ;
                 $activities[] = getPendingActivities(0,"today");
-                $activities[] = getPendingActivities(0,"all");
+                //$activities[] = getPendingActivities(0,"all");
                 $activities[] = getPendingActivities(1,"today");
-                $activities[] = getPendingActivities(1,"all");
+                //$activities[] = getPendingActivities(1,"all");
 	}
             break;
         case 'ALVT':
@@ -321,7 +321,7 @@ function getGroupTaskLists()
 			$query .="select vtiger_purchaseorder.purchaseorderid as id,vtiger_purchaseorder.subject as name,vtiger_pogrouprelation.groupname as groupname, 'PurchaseOrder ' as Type from vtiger_purchaseorder inner join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid= vtiger_pogrouprelation.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid inner join  vtiger_groups on vtiger_pogrouprelation.groupname =vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_pogrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 		}
 		$log->info("Here is the where clause for the list view: $query");
-		$result = $adb->query($query) or die("Couldn't get the group listing");
+		$result = $adb->limitQuery($query,0,10) or die("Couldn't get the group listing");
 
 		$title=array();
 		$title[]='myGroupAllocation.gif';
