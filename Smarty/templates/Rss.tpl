@@ -192,7 +192,7 @@ function SaveRssFeeds()
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
 	<td align="center">
-	<input type="button" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save"/>&nbsp;&nbsp;
+	<input type="submit" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save"/>&nbsp;&nbsp;
 	</td>
 	</tr>
 	</table>
