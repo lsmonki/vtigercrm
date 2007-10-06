@@ -271,6 +271,7 @@ function DeleteTag(id,recordid)
 							   {assign var=keyseclink value=$data.link}
 							   {assign var=keycursymb value=$data.cursymb}
 							   {assign var=keysalut value=$data.salut}
+							   {assign var=keyaccess value=$data.notaccess}
 							   {assign var=keycntimage value=$data.cntimage}
 							   {assign var=keyadmin value=$data.isadmin}
 							   

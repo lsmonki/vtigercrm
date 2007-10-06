@@ -960,7 +960,20 @@ $app_strings = array (
 //Export Records <-----ENDS
 
 'Trouble Tickets'=>'Trouble Tickets',
+'LBL_NOT_ACCESSIBLE'=>'Not Accessible',
 
+//Added for Existing Picklist Strings for both Lead module (convert div) and for potential module.
+
+'Prospecting'=>'Prospecting',
+'Qualification'=>'Qualification',
+'Needs Analysis'=>'Needs Analysis',
+'Value Proposition'=>'Value Proposition',
+'Id. Decision Makers'=>'Id. Decision Makers',
+'Perception Analysis'=>'Perception Analysis',
+'Proposal/Price Quote'=>'Proposal/Price Quote',
+'Negotiation/Review'=>'Negotiation/Review',
+'Closed Won'=>'Closed Won',
+'Closed Lost'=>'Closed Lost',
 );
 
 $app_list_strings = array (

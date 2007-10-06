@@ -479,10 +479,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
            {
                    $sal_value='';
 	   }
-	   if($notacc == '')
-	   	$label_fld["salut"] = $sal_value;
-	   else
-	   	$label_fld["salut"] = $notacc;
+	   $label_fld["salut"] = getTranslatedString($sal_value);
+           $label_fld["notaccess"] = $notacc;
 	   $label_fld[] = $value;
 		//$label_fld[] =$sal_value.' '.$value;
         }
@@ -1567,7 +1565,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 		if(is_array($custfld))
 		{
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		}
 		$i++;
 		if($i<$noofrows)
@@ -1585,7 +1583,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 			if(is_array($custfld))
 			{
-				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 			}
 		}
 

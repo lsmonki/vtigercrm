@@ -65,7 +65,7 @@ for($j = 0; $j < $noofsalesRows; $j++)
                 $chk_val = '';
         }
 
-        $sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.$sales_stageValue.'</OPTION>';
+        $sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.getTranslatedString($sales_stageValue).'</OPTION>';
 }
 $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Leads">

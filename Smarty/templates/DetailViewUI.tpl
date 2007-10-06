@@ -20,7 +20,7 @@
                                          		<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label|escape:'quotes'}');" onmouseout="fnhide('crmspanid');">
                                  {/if}
                                          		      {if $keyid eq '55'}<!--SalutationSymbol-->
-									{if $keyaccess[0] eq $APP.LBL_NOT_ACCESSIBLE}
+									{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
                                      					   {$APP.LBL_NOT_ACCESSIBLE}
                                 					{else}
                                         					{$keysalut}

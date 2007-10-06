@@ -468,7 +468,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					{	
 					$chk_val = '';	
 					}
-				$options[] = array($pickListValue,$pickListValue,$chk_val );
+				$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );
 			}
 			if($salcount == 0 && $salt_value != '')
 			{
