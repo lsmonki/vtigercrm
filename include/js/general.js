@@ -652,12 +652,6 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var splitval=val.split(".")
 	   var arr_len = splitval.length;
            var len = 0;
-	   //added to fix the issue4242
-	   if(fldname == 'unit_price')
-	   {
-		if(splitval[0] == '')
-			splitval[0] = '0';
-	   }
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
@@ -1513,10 +1507,27 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
-    if(Lay == 'editdiv') {
+    if(Lay == 'editdiv') 
+    {
         leftSide = leftSide - 225;
         topSide = topSide - 125;
     }
+    var IE = document.all?true:false;
+    if(IE)
+   {
+    if($("repposition1"))
+    {
+	var slct = document.getElementsByName("selectall");
+	var cnt = slct.length-2;
+	var repp = document.getElementById("repposition"+cnt);
+	var reppos = findPosY(repp);
+	if(topSide > 1200)
+	{
+		topSide = topSide-250;
+	}
+    }
+   }
+	
     var getVal = eval(leftSide) + eval(widthM);
     if(getVal  > document.body.clientWidth ){
         leftSide = eval(leftSide) - eval(widthM);
