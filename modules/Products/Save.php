@@ -45,7 +45,7 @@ foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
-		$value = $_REQUEST[$fieldname];
+		$value = trim($_REQUEST[$fieldname]);
 		$focus->column_fields[$fieldname] = $value;
 	}
 	if(isset($_REQUEST['unit_price']))
