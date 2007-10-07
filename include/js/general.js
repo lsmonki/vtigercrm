@@ -652,6 +652,12 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var splitval=val.split(".")
 	   var arr_len = splitval.length;
            var len = 0;
+	   //added to fix the issue4242 
+	   if(fldname == 'unit_price') 
+	   { 
+		if(splitval[0] == '') 
+		splitval[0] = '0'; 
+	   }	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
