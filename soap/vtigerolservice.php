@@ -325,7 +325,8 @@ function AddMessageToContact($username,$contactid,$msgdtls)
     {    
         $email = new Emails();
         //$log->debug($msgdtls['contactid']);
-        $email_body = str_replace("'", "''", $msgdtl['body']);
+	$email_body = str_replace("'", "''", $msgdtl['body']);
+	$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
         $email_subject = str_replace("'", "''",$msgdtl['subject']);
         $date_sent = getDisplayDate($msgdtl['datesent']);
         
