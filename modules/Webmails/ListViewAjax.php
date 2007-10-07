@@ -56,7 +56,7 @@ $degraded_service='false';
 if($MailBox->mail_protocol == "imap" || $MailBox->mail_protocol == "pop3")
 	$degraded_service='true';
 
-$save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
+$save_path=$root_directory.'modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
 // Get the list of mails for this mailbox

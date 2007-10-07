@@ -226,7 +226,7 @@ function SureRemoveDir($dir) {
    }
    if (@rmdir($dir)) $dir_deleted++;
 }
-$save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
+$save_path=$root_directory.'modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
 // Get the list of mails for this mailbox
