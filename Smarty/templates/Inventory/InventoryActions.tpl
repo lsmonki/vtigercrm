@@ -210,9 +210,9 @@ webMnu"><img src="{$IMAGE_PATH}actionGeneratePDF.gif" hspace="5" align="absmiddl
 <!-- Added to give link to  send Invoice PDF through mail -->
  <tr>
 	<td align="left" style="padding-left:10px;">
-		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; sendpdf_submit();" class="
 webMnu"><img src="{$IMAGE_PATH}PDFMail.gif" hspace="5" align="absmiddle" border="0"/></a>
-		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_SEND_EMAIL_PDF}</a> 
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; sendpdf_submit();" class="webMnu">{$APP.LBL_SEND_EMAIL_PDF}</a> 
 	</td>
    </tr>
 {/if}
@@ -243,6 +243,14 @@ webMnu"><img src="{$IMAGE_PATH}PDFMail.gif" hspace="5" align="absmiddle" border=
 
 
 </table>
-
+{literal}
+<script>
+function sendpdf_submit()
+{
+	document.DetailView.submit();
+	OpenCompose('','Invoice');
+}
+</script>
+{/literal}
 
 {/if}

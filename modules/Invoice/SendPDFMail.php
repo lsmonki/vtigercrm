@@ -243,6 +243,6 @@ $pdf->Output('storage/Invoice.pdf','F'); //added file name to make it work in IE
 
 // Added to fix annoying bug that includes HTML in your PDF
 //echo "<script>openPopUp('xComposeEmail',this,iurl,'createemailWin',830,662,opts);</script>";
-echo "<script>OpenCompose('','Invoice');window.history.back();</script>";
+echo "<script>window.history.back();</script>";
 exit();
 ?>
