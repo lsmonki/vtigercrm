@@ -974,6 +974,15 @@ $app_strings = array (
 'Negotiation/Review'=>'Negotiation/Review',
 'Closed Won'=>'Closed Won',
 'Closed Lost'=>'Closed Lost',
+
+'NOTE'=>'NOTE',
+//Added for Migration Alert
+'do_the_changes_in'=>'Please do the following changes in',
+'before_migration'=>'before starting migration',
+'Set_the_value_of'=>'Set the value of',
+'as'=>'as',
+'ie'=>'ie.,',
+'add_at_end_of_file'=>'and add the following lines at the end of the file.',
 );
 
 $app_list_strings = array (

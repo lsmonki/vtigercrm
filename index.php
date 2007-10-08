@@ -182,6 +182,18 @@ if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key
 
 if($use_current_login)
 {
+
+	//Added to prevent fatal error before starting migration(5.0.4. patch ).
+	//NOTE: These lines  should be removed at next release.
+	//Start
+	$arr=$adb->getColumnNames("vtiger_users");
+	if(!in_array("internal_mailer", $arr))
+	{
+		$adb->query("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'");
+		$adb->query("alter table vtiger_users add column tagcloud_view int(1) default 1");
+	}
+	//End
+
 	//getting the internal_mailer flag
 	if($_SESSION['internal_mailer'] == '')
 	{
