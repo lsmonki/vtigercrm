@@ -1523,10 +1523,11 @@ function fnvshobj(obj,Lay){
    {
     if($("repposition1"))
     {
-	var slct = document.getElementsByName("selectall");
-	var cnt = slct.length-2;
-	var repp = document.getElementById("repposition"+cnt);
-	var reppos = findPosY(repp);
+	//can be used in furture for the issue #4339 in IE
+	//var slct = document.getElementsByName("selectall");
+	//var cnt = slct.length;
+	//var repp = document.getElementById("repposition"+cnt);
+	//var reppos = findPosY(repp);
 	if(topSide > 1200)
 	{
 		topSide = topSide-250;
