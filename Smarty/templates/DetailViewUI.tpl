@@ -77,7 +77,7 @@
 					{foreach item=sel_val from=$keyoptions }
 						{if $sel_val[2] eq 'selected'}
 							{if $selected_val neq ''}
-							{assign var=selected_val value=$selected_val|cat:','}
+							{assign var=selected_val value=$selected_val|cat:', '}
 							{/if}
 							{assign var=selected_val value=$selected_val|cat:$sel_val[0]}
 						{/if}
