@@ -18,8 +18,8 @@ $charset = $app_strings['LBL_CHARSET'];
 
 <!-- NEEDED SCRIPTS  -->
 <script type="text/javascript" charset="<?php echo $charset?>" src="modules/Home/js/ajax.js"></script>
-<script type="text/javascript" charset="<?php echo $charset?>" src="modules/Home/js/dom-drag_p.js"></script>
-<script type="text/javascript" charset="<?php echo $charset?>" src="modules/Home/js/css-window_p.js"></script>
+<script type="text/javascript" charset="ISO-8859-1" src="modules/Home/js/dom-drag_p.js"></script>
+<script type="text/javascript" charset="ISO-8859-1" src="modules/Home/js/css-window_p.js"></script>
 <script type="text/javascript" charset="<?php echo $charset?>" src="modules/Home/js/chat.js"></script>
 <!-- /NEEDED SCRIPTS -->
 
