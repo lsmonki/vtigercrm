@@ -218,6 +218,11 @@ function setMailServerProperties($mail)
 		if($smtp_auth == 'on')	
 			$smtp_auth = 'true';
 	}
+	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['smtp_auth'])))
+	{
+		//added to avoid issue while editing the values in the outgoing mail server.
+		$smtp_auth = 'false';
+	}
 	else
 		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
