@@ -146,8 +146,8 @@ $queryres = $adb->query($querystr);
 $fieldid = $adb->query_result($queryres,0,'fieldid');
 $smarty->assign("FIELD_ID",$fieldid);
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
-
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");

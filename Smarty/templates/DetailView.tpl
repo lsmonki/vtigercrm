@@ -387,22 +387,35 @@ function DeleteTag(id,recordid)
                 {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads'}
                         <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr><td>&nbsp;</td></tr>
-                                <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
-                                <tr><td align="left" style="padding-left:10px;">
-				{if $MODULE eq 'Contacts'}
+{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts'}                              
+<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
+{/if}
+                                {if $MODULE eq 'Contacts'}
 					{assign var=subst value="contact_id"}
 					{assign var=acc value="&account_id=$accountid"}
 				{else}
 					{assign var=subst value="parent_id"}
 					{assign var=acc value=""}
-                                {/if} 
+                                {/if}
+			{if $MODULE eq 'Contacts' || $EVENT_PERMISSION eq 'true'}	
+				<tr><td align="left" style="padding-left:10px;"> 
 			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddEvent.gif" hspace="5" align="absmiddle"  border="0"/></a>
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
                                 </td></tr>
+			{/if}
+	{if $TODO_PERMISSION eq 'true' && ($MODULE eq 'Accounts' || $MODULE eq 'Leads')}
                                 <tr><td align="left" style="padding-left:10px;">
 			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
-                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
-                        </table>
+                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
+</td></tr>
+	{/if}
+	{if $MODULE eq 'Contacts' && $CONTACT_PERMISSION eq 'true'}
+                                <tr><td align="left" style="padding-left:10px;">
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
+                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
+</td></tr>
+	{/if}
+                  </table>
                 <br>
                 {/if}
                 <!-- Action links for Event & Todo END-by Minnie -->
