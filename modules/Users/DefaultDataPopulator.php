@@ -458,7 +458,7 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'usageunit','vtiger_products',1,'15','usageunit','Usage Unit',1,0,0,100,1,33,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qty_per_unit','vtiger_products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,2,33,1,'N~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyinstock','vtiger_products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,33,1,'I~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyinstock','vtiger_products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,33,1,'NN~O',1,null,'ADV')");
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'reorderlevel','vtiger_products',1,'1','reorderlevel','Reorder Level',1,0,0,100,4,33,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'handler','vtiger_products',1,'52','assigned_user_id','Handler',1,0,0,100,5,33,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyindemand','vtiger_products',1,'1','qtyindemand','Qty In Demand',1,0,0,100,6,33,1,'I~O',1,null,'ADV')");
