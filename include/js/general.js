@@ -655,8 +655,11 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   //added to fix the issue4242 
 	   if(fldName == 'unit_price') 
 	   { 
-		if(splitval[0] == '') 
-		splitval[0] = '0'; 
+		if(splitval[0] == '' && arr_len > 1)
+                {
+                        splitval[0] = '0';
+                        val = splitval[0]+val;
+                } 
 	   }	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
