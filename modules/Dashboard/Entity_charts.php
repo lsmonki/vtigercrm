@@ -82,8 +82,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 		{
 			if($graph_for == 'sostatus'||$graph_for == 'leadsource'||$graph_for == 'leadstatus'||$graph_for == 'industry'||$graph_for == 'productcategory'||$graph_for =='postatus'||$graph_for == 'invoicestatus'||$graph_for == 'ticketstatus'||$graph_for == 'priority'||$graph_for == 'category'||$graph_for == 'quotestage'||$graph_for == 'salesstage')
 			{
-
-                                $mod_name= $mod_strings[$row[$graph_for]];
+                                $mod_name= getTranslatedString($row[$graph_for]);
                                 $search_str = $row[$graph_for];
                        	}
                       	else
@@ -94,7 +93,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			if($mod_name=="")
                         {
                                 $mod_name=$mod_strings["Un Assigned"];
-                                $search_str = "Un Assigned";
+                                $search_str = " ";
                         }
 			$crtd_time=$row['createdtime'];
 			$crtd_time_array=explode(" ",$crtd_time);

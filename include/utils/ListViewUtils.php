@@ -934,10 +934,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		
 			
 		if(isPermitted($module,"Delete","") == 'yes'){
-			if($links_info != "")
-				$links_info .=  " | ";
 			$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
-			$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
+			if($del_link != "")
+				$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
 		}	
 		if($links_info != "")
 			$list_header[] = $links_info;

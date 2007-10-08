@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
+require_once('include/utils/CommonUtils.php');
 require_once('include/database/PearDatabase.php');
 /** Function to  returns the combo field values in array format
   * @param $combofieldNames -- combofieldNames:: Type string array
@@ -25,11 +25,18 @@ function getComboArray($combofieldNames)
 	{
 		$fldArrName= $arrayName;
 		$arrayName = Array();
-		$result = $adb->query("select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid='$roleid' and picklistid in (select picklistid from vtiger_$tableName) and presence=1 order by sortid");
+		if(is_admin($current_user))
+		{
+			$result = $adb->query("select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid and picklistid in (select picklistid from vtiger_$tableName) and presence=1 order by sortid");
+		}
+		else
+		{
+			$result = $adb->query("select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid='$roleid' and picklistid in (select picklistid from vtiger_$tableName) and presence=1 order by sortid");
+		}	
 		while($row = $adb->fetch_array($result))
 		{
 			$val = $row[$tableName];
-			$arrayName[$val] = $mod_strings[$val];
+			$arrayName[$val] = getTranslatedString($val);
 		}
 		$comboFieldArray[$fldArrName] = $arrayName;
 	}
