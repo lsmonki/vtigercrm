@@ -70,7 +70,10 @@ foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
-		$value = trim($_REQUEST[$fieldname]);
+		if(is_array($_REQUEST[$fieldname]))
+			$value = $_REQUEST[$fieldname];
+		else
+			$value = trim($_REQUEST[$fieldname]);
 		$log->DEBUG($fieldname."=Field Name &first& Value =".$value);
 		$focus->column_fields[$fieldname] = $value;
 	}

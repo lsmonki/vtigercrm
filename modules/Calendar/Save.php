@@ -85,7 +85,10 @@ else
 	{
 		if(isset($_REQUEST[$fieldname]))
 		{
-			$value = trim($_REQUEST[$fieldname]);
+			if(is_array($_REQUEST[$fieldname]))
+				$value = $_REQUEST[$fieldname];
+			else
+				$value = trim($_REQUEST[$fieldname]);
 			$focus->column_fields[$fieldname] = $value;
 			if(($fieldname == 'notime') && ($focus->column_fields[$fieldname]))
 			{	
