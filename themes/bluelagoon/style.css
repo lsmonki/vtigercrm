@@ -1006,6 +1006,12 @@ a.dash_href{
 	font-size:11px;
 }
 
+.repBox{
+	width:100px;
+	border:1px solid #666666;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
 /*  IMPORT LEADS */
 
 .leadTable{
@@ -1190,7 +1196,7 @@ a.alpha:Hover{
     z-index:1000001;
     display:none;
     padding:10px;
-    background:#ffffff url(images/layerPopupBg.gif);
+    background:#ffffff url(images/layerPopUpBg.gif);
 }
 
 
