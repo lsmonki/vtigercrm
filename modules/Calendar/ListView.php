@@ -29,6 +29,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/DatabaseUtil.php');
 
 global $app_strings;
 global $list_max_entries_per_page;
@@ -168,8 +169,11 @@ $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
-$noofrows = $adb->num_rows($count_result);
+
+//changes made to fix ticket #4372
+$count_result = $adb->query( mkCountQuery($list_query));
+$noofrows = $adb->query_result($count_result,0,"count");
+//end
 
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
