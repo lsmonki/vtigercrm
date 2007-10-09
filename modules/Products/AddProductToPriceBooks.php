@@ -97,7 +97,8 @@ $list_header = '';
 $list_header .= '<tr>';
 $list_header .='<td class="lvtCol" width="9%"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice("'.$unit_price.'") \'></td>';
 $list_header .= '<td class="lvtCol" width="45%">'.$mod_strings['LBL_PRICEBOOK'].'</td>';
-$list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
+if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+	$list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
 $list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
 $list_header .= '</tr>';
 
@@ -115,7 +116,10 @@ for($i=0; $i<$num_rows; $i++)
 		$field_name=$entity_id."_listprice";
 		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"bookname").'</td>';
-		$list_body .= '<td>'.$unit_price.'</td><td>';
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+			$list_body .= '<td>'.$unit_price.'</td>';
+
+		$list_body .='<td>';
 		if(isPermitted("PriceBooks","EditView","") == 'yes')
 			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'">';
 		else

@@ -471,7 +471,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $adb;
 	global $app_strings;
 	global $mod_strings;
-	global $current_language;
+	global $current_language,$current_user;
 	$current_module_strings = return_module_language($current_language, 'PriceBook');
 
 	global $list_max_entries_per_page;
@@ -488,8 +488,10 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 
 	$header=array();
 	$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
-	$header[]=$mod_strings['LBL_PRODUCT_CODE'];
-	$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
+		$header[]=$mod_strings['LBL_PRODUCT_CODE'];
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+		$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
 	$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
 	if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
 		$header[]=$mod_strings['LBL_ACTION'];
@@ -498,15 +500,17 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	for($i=0; $i<$num_rows; $i++)
 	{
 		$entity_id = $adb->query_result($list_result,$i,"crmid");
-
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$listprice = $adb->query_result($list_result,$i,"listprice");
 		$field_name=$entity_id."_listprice";
 		
 		$entries = Array();
 		$entries[] = $adb->query_result($list_result,$i,"productname");
-		$entries[] = $adb->query_result($list_result,$i,"productcode");
-		$entries[] = $unit_price;
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
+			$entries[] = $adb->query_result($list_result,$i,"productcode");
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+			$entries[] = $unit_price;
+
 		$entries[] = $listprice;
 		$action = "";
 		if(isPermitted("PriceBooks","EditView","") == 'yes')
