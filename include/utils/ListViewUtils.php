@@ -1316,7 +1316,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$queryres = $adb->query($querystr);
 			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 			$fieldid = $adb->query_result($queryres,0,'fieldid');
-			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$module.'\',\'record_id\')">'.$temp_val.'</a>';
+			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$module.'\',\'record_id\');window.close();">'.$temp_val.'</a>';
 		}
 		else
 			$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
@@ -3539,8 +3539,7 @@ function getAccountId($account_name)
 	{
 		// for avoid single quotes error
 		$slashes_account_name = popup_from_html($account_name);
-
-		$sql = "select accountid from vtiger_account where accountname='".$slashes_account_name."'";
+		$sql = "select accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted = 0 and vtiger_account.accountname='".$slashes_account_name."'";
 		$result = $adb->query($sql);
 		$accountid = $adb->query_result($result,0,"accountid");
 	}
