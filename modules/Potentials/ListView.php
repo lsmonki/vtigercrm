@@ -127,7 +127,7 @@ if($viewnamedesc['viewname'] == 'All')
 if($viewid != "0")
 {
 	$listquery = getListQuery("Potentials");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Accounts");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Potentials");
 }else
 {
 	$list_query = getListQuery("Potentials");
