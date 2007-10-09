@@ -243,6 +243,7 @@ class Campaigns extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 			WHERE vtiger_seactivityrel.crmid=".$id."
+			AND vtiger_crmentity.deleted = 0
 			AND (activitytype = 'Task'
 				OR activitytype = 'Call'
 				OR activitytype = 'Meeting')";
