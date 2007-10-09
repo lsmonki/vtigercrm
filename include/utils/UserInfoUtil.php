@@ -1684,14 +1684,7 @@ function isPermitted($module,$actionname,$record_id='')
 		{
 			if($module == 'Calendar')
 			{
-				if($recOwnType == 'Users')
-				{
-					$permission = isCalendarPermittedBySharing($record_id);
-				}
-				else
-				{
-					$permission='no'; 
-				}		
+				$permission='no'; 
 			}
 			else
 			{

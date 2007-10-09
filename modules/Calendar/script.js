@@ -940,7 +940,7 @@ function updateStatus(record,status,view,hour,day,month,year,type){
 	}
 }
 
-function getcalAction(obj,Lay,id,view,hour,dateVal,type,isShared){
+function getcalAction(obj,Lay,id,view,hour,dateVal,type){
     var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
@@ -996,14 +996,9 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type,isShared){
     if(pending) pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
 
     if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&return_action=index&activity_mode="+activity_mode+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&viewOption="+OptionData+"&subtab="+type+"&maintab=Calendar";
-    if(isShared == "shared")
-    {
-	if(actdelete) actdelete.href="javascript:alert('"+alert_arr.SHARED_EVENT_DEL_MSG+"')";	
-    }
-    else
-    {
-	if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    }	
+
+    if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
+
     if(changeowner) changeowner.href="javascript:dispLayer('act_changeowner');";
 
 }

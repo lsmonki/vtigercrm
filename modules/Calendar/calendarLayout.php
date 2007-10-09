@@ -1050,15 +1050,17 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";	
 			/*if($eventstatus != 'Held')
 			{*/
+			if($idShared == "normal")
+			{
 				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\',\''.$idShared.'\');" align="middle" border="0">';
-			/*}
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+			}
 			else
 			{
 				$javacript_str = '';
 				$eventlayer .= '&nbsp;';
-			}*/
+			}
 			$eventlayer .= '<td class="dvtCellInfo" rowspan="'.$rowspan.'" colspan="1" width="'.$width.'%" >';
 			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -1130,9 +1132,17 @@ function getweekEventLayer(& $cal,$slice)
 			else
 				$recurring = '&nbsp;';
                         $color = $act[$i]->color;
-			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-				$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-			$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\',\''.$idShared.'\');" align="middle" border="0">';
+			if($idShared == "normal")
+			{
+				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+			}
+			else
+			{
+				$javacript_str = '';
+				$eventlayer .= '&nbsp;';
+			}
 												 
 			$eventlayer .='<div class ="event" '.$javacript_str.' id="event_'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i.'">
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -1331,9 +1341,15 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		{
 			$element['relatedto']= getRelatedTo('Calendar',$result,$i);
 		}*/
-
-		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\",\"".$idShared."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		if($idShared == "normal")
+		{
+			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
+				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\",\"".$idShared."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		}
+		else
+		{
+			$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		}
 		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
 		{
 			$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
@@ -1453,7 +1469,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			$element['status'] = $mod_strings[$adb->query_result($result,$i,"status")];
 		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\",\"normal\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;

@@ -414,7 +414,7 @@ $mod_strings = Array(
 'End date'=>'End date',
 'LBL_SET_DATE'=>'Set date..',
 'Recurrence'=>'Recurrence',
-'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Delete this record.',
+'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Edit/Delete Shared Event.',
 
 //added to send invitation mail Subject.
 'INVITATION'=>' Invitation ',
