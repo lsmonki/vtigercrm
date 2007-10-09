@@ -900,7 +900,7 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
  	$crmquery = "insert into vtiger_crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."',".$date_var.")";
 	$crmresult = $adb->query($crmquery);
 
-	$attachmentquery = "insert into vtiger_attachments values(".$attachmentid.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
+	$attachmentquery = "insert into vtiger_attachments (attachmentsid, name, description, type, path) values(".$attachmentid.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
 	$attachmentreulst = $adb->query($attachmentquery);
 
 	$relatedquery = $sql1 = "insert into vtiger_seattachmentsrel values('".$ticketid."','".$attachmentid."')";
