@@ -168,6 +168,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$smarty->assign('mailbox',$mailbox);
 	$temp_id = $MailBox->boxinfo['mail_id'];
 	$smarty->assign('from_add',$temp_id);
+	$webmail->subject = utf8_decode(utf8_encode(imap_utf8($webmail->subject)));
 	if($_REQUEST["reply"] == "all") {
 		$smarty->assign('TO_MAIL',$webmail->from);	
 		//added to remove the emailid of webmail client from cc list....to fix the issue #3818
