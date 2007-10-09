@@ -158,7 +158,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		else
 		{
-			$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in ('$roleids') and picklistid in (select picklistid from vtiger_$fieldname) order by $fieldname asc";
+			$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in ('$roleids') and picklistid in (select picklistid from vtiger_$fieldname)";
+
+			//Query modified to fix the order of the picklist values ticket #4367
+			if($module_name != 'Events' && $module_name != 'Calendar')
+				$pick_query.=" order by $fieldname asc";
 		}
 		$editview_label[]=$mod_strings[$fieldlabel];
 		//Query modified to fix the order of the picklist values ticket #3006
