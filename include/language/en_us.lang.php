@@ -937,7 +937,7 @@ $app_strings = array (
 //Export Records STARTS--->
 'LBL_EXPORT_TYPE_1'=>'Export Type1:',
 'LBL_EXPORT_TYPE_2'=>'Export Type2:',
-'LBL_SEARCH_CRITRIA_RECORDS'=>'Export Search Critria Records',
+'LBL_SEARCH_CRITERIA_RECORDS'=>'Export Search Criteria Records',
 'LBL_EXPORT_RECORDS'=>'Export Records Types',
 'LBL_WITH_SEARCH'=>'Export with search records',
 'LBL_WITHOUT_SEARCH'=>'Export without search records',
@@ -974,7 +974,6 @@ $app_strings = array (
 'Negotiation/Review'=>'Negotiation/Review',
 'Closed Won'=>'Closed Won',
 'Closed Lost'=>'Closed Lost',
-
 'NOTE'=>'NOTE',
 //Added for Migration Alert
 'do_the_changes_in'=>'Please do the following changes in',

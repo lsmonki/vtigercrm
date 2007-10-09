@@ -655,11 +655,11 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   //added to fix the issue4242 
 	   if(fldName == 'unit_price') 
 	   { 
-		if(splitval[0] == '' && arr_len > 1)
-                {
-                        splitval[0] = '0';
-                        val = splitval[0]+val;
-                } 
+	   	if(splitval[0] == '' && arr_len > 1)
+                 {
+                         splitval[0] = '0';
+                         val = splitval[0]+val;
+                }
 	   }	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
@@ -1526,11 +1526,6 @@ function fnvshobj(obj,Lay){
    {
     if($("repposition1"))
     {
-	//can be used in furture for the issue #4339 in IE
-	//var slct = document.getElementsByName("selectall");
-	//var cnt = slct.length;
-	//var repp = document.getElementById("repposition"+cnt);
-	//var reppos = findPosY(repp);
 	if(topSide > 1200)
 	{
 		topSide = topSide-250;
@@ -2278,7 +2273,7 @@ function selectedRecords(module,category)
                 window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category;
 }
 
-function record_export(module,category,exform)
+function record_export(module,category,exform,idstring)
 {
 	var searchType = document.getElementsByName('search_type');
 	var exportData = document.getElementsByName('export_data');
@@ -2294,7 +2289,7 @@ function record_export(module,category,exform)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: "module="+module+"&action=ExportAjax&export_record=true&search_type="+sel_type+"&export_data="+exp_type,
+                        postBody: "module="+module+"&action=ExportAjax&export_record=true&search_type="+sel_type+"&export_data="+exp_type+"&idstring="+idstring,
                         onComplete: function(response) {
                                 if(response.responseText == 'NOT_SEARCH_WITHSEARCH_ALL')
 				{
