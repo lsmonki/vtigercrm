@@ -33,8 +33,8 @@ if($focus->column_fields["hdnTaxType"] == "individual")
 	$colsAlign["Total"] = "R";
 	$cols["Product Code"] = "30";
 	$cols["Product Name"] = "65";
-	$cols["Qty"] = "10";
-	$cols["Price"] = "25";
+	$cols["Qty"] = "13";
+	$cols["Price"] = "22";
 	$cols["Discount"] = "15";
 	$cols["Tax"] = "20";
 	$cols["Total"] = "25";
