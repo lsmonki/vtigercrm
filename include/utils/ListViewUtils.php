@@ -254,9 +254,12 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{
 			if($module == "Calendar" && $name == $app_strings['Close'])
 			{
-				if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+				if(isPermitted("Calendar","EditView") == 'yes')
 				{
-					array_push($list_header,$name);
+					if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+					{
+						array_push($list_header,$name);
+					}
 				}
 			}
 			else
@@ -891,9 +894,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					if($module == "Calendar" && $name == $app_strings['Close'])
 					{
-						if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+						if(isPermitted("Calendar","EditView") == 'yes')
 						{
-							array_push($list_header,$value);
+							if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
+							{
+								array_push($list_header,$value);
+							}
 						}
 					}
 					else
@@ -935,8 +941,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			
 		if(isPermitted($module,"Delete","") == 'yes'){
 			$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
+			if($links_info != "" && $del_link != "")
+				$links_info .=  " | ";
 			if($del_link != "")
-				$links_info .=	" | <a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
+				$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
 		}	
 		if($links_info != "")
 			$list_header[] = $links_info;
