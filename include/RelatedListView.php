@@ -263,70 +263,77 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$header[] = $app_strings['LBL_ATTACHMENTS'];
 	$header[] = $app_strings['LBL_TYPE'];		
 	$header[] = $app_strings['LBL_ACTION'];	
-
+	
 	while($row = $adb->fetch_array($result))
 	{
-		$entries = Array();
-		if(trim($row['activitytype']) == 'Notes')
+		if($row['activitytype'] == 'Attachments')
+			$query="select setype from vtiger_crmentity where crmid=".$row['attachmentsid'];
+		$res=$adb->query($query);
+		$setype = $adb->query_result($res,0,'setype');
+		if(($setype != "Products Image") && ($setype != "Contacts Image")) 
 		{
-			$module = 'Notes';
-			$editaction = 'EditView';
-			$deleteaction = 'Delete';
-		}
-		elseif($row['activitytype'] == 'Attachments')
-		{
-			$module = 'uploads';
-			$editaction = 'upload';
-			$deleteaction = 'deleteattachments';
-		}
-		if($row['createdtime'] != '0000-00-00 00:00:00')
-		{
-			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
-			$created_date = $created_arr[0];
-			$created_time = substr($created_arr[1],0,5);
-		}
-		else
-		{
-			$created_date = '';
-			$created_time = '';
-		}
+			$entries = Array();
+			if(trim($row['activitytype']) == 'Notes')
+			{
+				$module = 'Notes';
+				$editaction = 'EditView';
+				$deleteaction = 'Delete';
+			}
+			elseif($row['activitytype'] == 'Attachments')
+			{
+				$module = 'uploads';
+				$editaction = 'upload';
+				$deleteaction = 'deleteattachments';
+			}
+			if($row['createdtime'] != '0000-00-00 00:00:00')
+			{
+				$created_arr = explode(" ",getDisplayDate($row['createdtime']));
+				$created_date = $created_arr[0];
+				$created_time = substr($created_arr[1],0,5);
+			}
+			else
+			{
+				$created_date = '';
+				$created_time = '';
+			}
 
-		$entries[] = $created_date;
-		if($module == 'Notes')
-		{
-			$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$row['title'].'</a>';
-		}
-		elseif($module == 'uploads')
-		{
-			$entries[] = $row['title'];
-		}
-		$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-		if(strlen($row['description']) > $listview_max_textlength)
-		{
-			$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
-		}
-		$entries[] = nl2br($row['description']); 
-		$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
-		
-		if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
-			$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
-		else
-			$entries[]='';
+			$entries[] = $created_date;
+			if($module == 'Notes')
+			{
+				$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$row['title'].'</a>';
+			}
+			elseif($module == 'uploads')
+			{
+				$entries[] = $row['title'];
+			}
+			$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
+			if(strlen($row['description']) > $listview_max_textlength)
+			{
+				$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+			}
+			$entries[] = nl2br($row['description']); 
+			$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
 
-		$entries[] = $row['activitytype'];	
-		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"];
+			if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
+				$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
+			else
+				$entries[]='';
 
-		if($module == 'Notes')
-		{
-			$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"];
+			$entries[] = $row['activitytype'];	
+			$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"];
 
-			$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+			if($module == 'Notes')
+			{
+				$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"];
+
+				$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+			}
+			else
+			{
+				$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+			}
+			$entries_list[] = $entries;
 		}
-		else
-		{
-			$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
-		}
-		$entries_list[] = $entries;
 	}
 
 	if($entries_list !='')

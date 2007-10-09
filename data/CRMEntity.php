@@ -190,8 +190,14 @@ class CRMEntity
 				$sql="update vtiger_notes set filename='".$filename."' where notesid = ".$id;
 				$adb->query($sql);
 			}
-
-			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+			if($module == 'Contacts' || $module == 'Products')
+			{
+				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Image','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+			}
+			else
+			{
+				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
+			}
 			$adb->query($sql1);
 
 			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
