@@ -101,7 +101,7 @@ class Contacts extends CRMEntity {
 	'Title' => 'title',
 	'Account Name' => 'account_id',
 	'Email' => 'email',
-	'Phone' => 'phone',
+	'Office Phone' => 'phone',
 	'Assigned To' => 'assigned_user_id'
 	);
 
