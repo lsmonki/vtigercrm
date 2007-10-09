@@ -1006,12 +1006,6 @@ a.dash_href{
 	font-size:11px;
 }
 
-.repBox{
-	width:100px;
-	border:1px solid #666666;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-}
 /*  IMPORT LEADS */
 
 .leadTable{
@@ -2262,3 +2256,8 @@ a.drop_down:Hover{
    background-repeat:no-repeat;
 }
 
+/*added for the hanlder of the div in the home page */
+.headerrow{
+   cursor:move;
+}
+	

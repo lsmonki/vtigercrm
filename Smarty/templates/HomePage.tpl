@@ -120,7 +120,7 @@ function getHomeActivities(mode,view)
 							{if $tabledetail neq ''}
 								<div class="MatrixLayer" style="float:left;" id="{$tabledetail.Title.2}">
 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-								<tr style="cursor:move;height:20px;">
+								<tr class="headerrow">
 									<td align="left" class="homePageMatrixHdr" ><b>{$tabledetail.Title.1}</b></td>
 									<td align="right" class="homePageMatrixHdr" ><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 								</tr>
@@ -163,7 +163,7 @@ function getHomeActivities(mode,view)
 							{else}
 								<div class="MatrixLayer" style="float:left;width:93%;" id="homepagedb">
 									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
-										<tr style="cursor:move;">
+										<tr class="headerrow">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 										</tr>
@@ -219,7 +219,7 @@ function getHomeActivities(mode,view)
 {literal}
 <script  language="javascript">
 Sortable.create("MainMatrix",
-{constraint:false,tag:'div',overlap:'horizontal',
+{constraint:false,tag:'div',overlap:'horizontal',handle:'headerrow',
 onUpdate:function(){
 //	alert(Sortable.serialize('MainMatrix')); 
 }
