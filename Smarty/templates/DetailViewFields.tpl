@@ -13,9 +13,9 @@
 -->*}
 
 <!-- This file is used to display the fields based on the ui type in detailview -->
-		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
+		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72' || $keyid eq '255'} <!--TextBox-->
                                          		<td width=25% class="dvtCellInfo" align="left">&nbsp;
-                                         		        {if $keyid eq '55'}<!--SalutationSymbol-->
+                                         		        {if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
 									{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
 										{$APP.LBL_NOT_ACCESSIBLE}
 									{else}

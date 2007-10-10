@@ -430,7 +430,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$subrole = getRoleSubordinates($roleid);
 		if($uitype==255)
 			$fieldpermission = getFieldVisibilityPermission($module_name, $current_user->id,'firstname');
-		if($uitype == 255 && $fieldpermission === 0)
+		if($uitype == 255 && $fieldpermission == 0 && $fieldpermission != '')
 		{
 
 			$fieldvalue[] = '';

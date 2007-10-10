@@ -408,7 +408,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if(count($group_option) >0)
 				$label_fld ["options"][] = $group_option; 
 	}
-	elseif($uitype == 55)
+	elseif($uitype == 55 || $uitype == 255)
         {
 		if($tabid == 4)
            {
@@ -433,55 +433,67 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                    $label_fld[] =$mod_strings[$fieldlabel];
            }
 		$value = $col_fields[$fieldname];
-		$roleid=$current_user->roleid;
-		$subrole = getRoleSubordinates($roleid);
-		if(count($subrole)> 0)
+		if($uitype==255)
 		{
-			$roleids = implode("','",$subrole);
-			$roleids = $roleids."','".$roleid;
+			global $currentModule;
+			$fieldpermission = getFieldVisibilityPermission($currentModule, $current_user->id,'firstname');
+		}
+		if($uitype == 255 && $fieldpermission == 0 && $fieldpermission != '')
+		{
+			$fieldvalue[] = '';
 		}
 		else
 		{
-			$roleids = $roleid;
-		}
-		if($is_admin)
-		{
-			$pick_query="select salutationtype from vtiger_salutationtype";
-		}
-		else
-		{
-			$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid='".$current_user->roleid."' order by sortid";
-		}
-		$pickListResult = $adb->query($pick_query);
-		$noofpickrows = $adb->num_rows($pickListResult);
-		$sal_value = $col_fields["salutationtype"];
-		$salcount =0;
-		for($j = 0; $j < $noofpickrows; $j++)
-		{
-			$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
-
-			if($sal_value == $pickListValue)
+			$roleid=$current_user->roleid;
+			$subrole = getRoleSubordinates($roleid);
+			if(count($subrole)> 0)
 			{
-				$chk_val = "selected";
-				$salcount++;
+				$roleids = implode("','",$subrole);
+				$roleids = $roleids."','".$roleid;
 			}
 			else
 			{
-				$chk_val = '';
+				$roleids = $roleid;
 			}
-		}
-		if($salcount == 0 && $sal_value != '')
-		{
-			$notacc =  $app_strings['LBL_NOT_ACCESSIBLE'];
-		}
-           $sal_value = $col_fields["salutationtype"];
-           if($sal_value == '--None--')
-           {
-                   $sal_value='';
-	   }
-	   $label_fld["salut"] = getTranslatedString($sal_value);
-           $label_fld["notaccess"] = $notacc;
-	   $label_fld[] = $value;
+			if($is_admin)
+			{
+				$pick_query="select salutationtype from vtiger_salutationtype";
+			}
+			else
+			{
+				$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid='".$current_user->roleid."' order by sortid";
+			}
+			$pickListResult = $adb->query($pick_query);
+			$noofpickrows = $adb->num_rows($pickListResult);
+			$sal_value = $col_fields["salutationtype"];
+			$salcount =0;
+			for($j = 0; $j < $noofpickrows; $j++)
+			{
+				$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
+
+				if($sal_value == $pickListValue)
+				{
+					$chk_val = "selected";
+					$salcount++;
+				}
+				else
+				{
+					$chk_val = '';
+				}
+			}
+			if($salcount == 0 && $sal_value != '')
+			{
+				$notacc =  $app_strings['LBL_NOT_ACCESSIBLE'];
+			}
+           		$sal_value = $col_fields["salutationtype"];
+           		if($sal_value == '--None--')
+           		{
+                   		$sal_value='';
+	   		}
+	   		$label_fld["salut"] = getTranslatedString($sal_value);
+           		$label_fld["notaccess"] = $notacc;
+	   	}
+		$label_fld[] = $value;
 		//$label_fld[] =$sal_value.' '.$value;
         }
 	elseif($uitype == 56)

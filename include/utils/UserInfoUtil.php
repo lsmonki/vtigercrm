@@ -4645,7 +4645,7 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 	if($is_admin)
 	{
 		$log->debug("Exiting getFieldVisibilityPermission method ...");
-		return 0;
+		return '0';
 	}
 	else
 	{
