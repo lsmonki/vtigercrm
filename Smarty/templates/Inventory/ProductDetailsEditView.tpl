@@ -193,7 +193,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop" valign="top">
-		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/>
+		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice'}stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -490,6 +490,7 @@ so we will get that array, parse that array and fill the details
 		{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
 			<script>calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no});</script>
 	{/foreach}
+		{if $MODULE eq 'Invoice'}       <script>stock_alert('{$row_no}');</script>{/if}
 {/foreach}
 
 

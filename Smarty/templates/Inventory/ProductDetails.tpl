@@ -169,7 +169,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop">
-		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows();calcTotal(); loadTaxes_Ajax(1); setDiscount(this,'1'); calcTotal();" value=""/>
+		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows();calcTotal(); loadTaxes_Ajax(1); setDiscount(this,'1'); calcTotal();{if $MODULE eq 'Invoice'}stock_alert(1);{/if}" value=""/><br><span id="stock_alert1"></span>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
