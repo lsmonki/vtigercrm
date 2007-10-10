@@ -1155,7 +1155,7 @@ for($i=0;$i<5;$i++)
 
 //Populate RSS Data
 $rssname = array("vtiger - Forums","vtiger development - Active Tickets");
-$rssurl = array("http://forums.vtiger.com/rss.php?name=forums&file=rss","http://vtiger.fosslabs.com/cgi-bin/trac.cgi/report/1?format=rss&USER=anonymous");
+$rssurl = array("http://forums.vtiger.com/rss.php?name=forums&file=rss","http://trac.vtiger.com/cgi-bin/trac.cgi/report/8?format=rss&USER=anonymous");
 
 for($i=0;$i<2;$i++)
 {
