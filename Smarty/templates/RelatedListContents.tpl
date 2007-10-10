@@ -32,7 +32,7 @@
                 <td align=right>
 			{if $header eq 'Potentials'}
 				{if $MODULE eq 'Products'}
-					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">	
+					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">	
 				{elseif $MODULE eq 'Contacts'}
                                         <input title="{$APP.LBL_ADD_NEW} {$APP.Potential}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Potentials';this.form.return_action.value='updateRelations'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Potential}">
 				{else}
@@ -68,13 +68,13 @@
 				<input alt="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" title="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Leads}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{/if}
 				{if $MODULE eq 'Products'}
-					<input alt="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" title="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Leads}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
+					<input alt="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" title="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Leads}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{else}
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Lead}" accessyKey="F" class="crmbutton small edit" onclick="this.form.action.value='EditView';this.form.module.value='Leads'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Lead}"></td>
 				{/if}
 			{elseif $header eq 'Accounts'}
 				{if $MODULE eq 'Products'}
-					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
+					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Account}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{/if}
 			{elseif $header eq 'Contacts' }
 				{if $MODULE eq 'Calendar' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
@@ -87,7 +87,7 @@
 					<input alt="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contacts}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
 				{elseif $MODULE eq 'Products'}
-					<input alt="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contacts}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
+					<input alt="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contacts}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{else}
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
 				{/if}

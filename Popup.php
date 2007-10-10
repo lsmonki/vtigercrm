@@ -26,6 +26,10 @@ $url_string = '';
 $smarty = new vtigerCRM_Smarty;
 if (!isset($where)) $where = "";
 
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab']){
+$parent_tab=$_REQUEST['parenttab'];
+$smarty->assign("CATEGORY",$parent_tab);}
+
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
 switch($currentModule)

@@ -44,10 +44,12 @@ if($singlepane_view == 'true')
 	$return_action = "DetailView";
 else
 	$return_action = "CallRelatedList";
+if($_REQUEST['parenttab'] != '') $return_module = $_REQUEST['parenttab'];
+$parent_tab =$_REQUEST['parenttab'];
 
 if($_REQUEST['return_module'] != '') $return_module = $_REQUEST['return_module'];
 
-header("Location:index.php?action=$return_action&module=$return_module&record=".$productid);
+header("Location:index.php?action=$return_action&module=$return_module&record=".$productid."&parenttab=".$parent_tab);
 
 
 
