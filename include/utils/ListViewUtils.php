@@ -3467,7 +3467,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 		if($module == 'Calendar')
 		{
 			$return_action = "ListView";
-			$actvity_type = $adb->query_result($result,$count,'activitytype');
+			$actvity_type = $adb->query_result($result,$count,'type');
 			if($actvity_type == 'Task')
 				$edit_link .= '&activity_mode=Task';
 			else
