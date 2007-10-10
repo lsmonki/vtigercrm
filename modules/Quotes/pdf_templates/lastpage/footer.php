@@ -35,7 +35,15 @@ $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 
 // billing Address
 $billPositions = array("85","235","60");
-$billText=$bill_street."\n".$bill_city.", ".$bill_state." ".$bill_code."\n".$bill_country;
+if(trim($bill_street)!='')
+	$billText = $bill_street."\n";
+if(trim($bill_city) !='')
+	$billText .= $bill_city.", ";
+if(trim($bill_state)!='' || trim($bill_code)!= '')
+	$billText .= $bill_state." ".$bill_code."\n";
+
+	$billText .=$bill_country;
+
 $pdf->addTextBlock("Billing Address:",$billText, $billPositions);
 
 // totals

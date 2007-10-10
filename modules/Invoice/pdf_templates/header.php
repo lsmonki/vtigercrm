@@ -50,12 +50,27 @@ $pdf->addBubbleBlock($page_num, "Page", $pageBubble);
 // ************** Begin Addresses **************
 // shipping Address
 $shipLocation = array("147","40","61");
-$shipText=$ship_street."\n".$ship_city.", ".$ship_state." ".$ship_code."\n".$ship_country;
+if(trim($ship_street)!='')
+	$shipText = $ship_street."\n";
+if(trim($ship_city) !='')
+	$shipText .= $ship_city.", ";
+if(trim($ship_state)!='' || trim($ship_code)!= '')
+	$shipText .= $ship_state." ".$ship_code."\n";
+
+	$shipText .=$ship_country;
+
 $pdf->addTextBlock( "Shipping Address:", $shipText, $shipLocation );
 
 // billing Address
 $billPositions = array("10","51","61");
-$billText=$bill_street."\n".$bill_city.", ".$bill_state." ".$bill_code."\n".$bill_country;
+if(trim($bill_street)!='')
+	$billText = $bill_street."\n";
+if(trim($bill_city) !='')
+	$billText .= $bill_city.", ";
+if(trim($bill_state)!='' || trim($bill_code)!= '')
+	$billText .= $bill_state." ".$bill_code."\n";
+
+	$billText .=$bill_country;
 $pdf->addTextBlock("Billing Address:",$billText, $billPositions);
 // ********** End Addresses ******************
 
