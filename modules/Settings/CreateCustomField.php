@@ -191,7 +191,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 							case 15:
 								$output .= '<tr id="picklist">
 									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" >'.$fldVal.'</textarea></td>
+									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
 									<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
 								</tr>';
 								break;
