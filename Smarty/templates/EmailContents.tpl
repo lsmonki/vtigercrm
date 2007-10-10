@@ -25,7 +25,11 @@
 				</span></td>
 				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;"><b>{$row.0}</b></td>
 				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.1}</td>
-				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td>
+				{if $EMAILFALG.$id eq 'SAVED'}
+					<td onClick="getEmailContents('{$id}');" style="cursor:pointer;"></td>
+				{else}
+					<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td>
+				{/if}
 			        </tr>
 			{/foreach}
 		{else}

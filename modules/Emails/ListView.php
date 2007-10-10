@@ -172,6 +172,17 @@ $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+//--------------------------added to fix the ticket(4386)------------------------START
+foreach($listview_entries as $key=>$value)
+{
+	$sql="select email_flag from vtiger_emaildetails where emailid=".$key;
+	$result=$adb->query($sql);
+	$email_flag=$adb->query_result($result,0,"email_flag");
+	$emailid[$key] = $email_flag;
+}
+$smarty->assign("EMAILFALG",$emailid);
+//--------------------------added to fix the ticket(4386)------------------------END
+
 $smarty->assign("LISTENTITY", $listview_entries);                                                  
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
