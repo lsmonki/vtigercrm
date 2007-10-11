@@ -21,6 +21,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGEPATH",$image_path);
 $smarty->display("Clock.tpl");
 ?>
