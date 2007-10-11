@@ -16,12 +16,12 @@ $theme_path="themes/".$theme."/";
 <head>
 	<link type="text/css" href="<?php echo $theme_path;?>style.css" rel="stylesheet">
 	<script>
-                function subjectValidation()
+                function titleValidation()
                 {
                         var val = document.getElementById('uploadsubject').value;
                         if(val == '')
                         {
-                                alert("Subject cannot be empty");
+                                alert("Title cannot be empty");
                                 return false;
                         }
                 }
@@ -78,7 +78,7 @@ $theme_path="themes/".$theme."/";
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 		<tr>
 			<td colspan="2" align="center">
-					<input type="submit" name="save" value="&nbsp;<?php echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" onclick = "return subjectValidation();" />&nbsp;&nbsp;
+					<input type="submit" name="save" value="&nbsp;<?php echo $mod_strings["LBL_ATTACH"]; ?>&nbsp;" class="crmbutton small save" onclick = "return titleValidation();" />&nbsp;&nbsp;
 					<input type="button" name="cancel" value=" <?php echo $mod_strings["LBL_CANCEL"];?> " class="crmbutton small cancel" onclick="self.close();" />
 			</td>	
 		</tr>
