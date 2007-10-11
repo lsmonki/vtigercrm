@@ -346,6 +346,7 @@ function maincheck_form()
                                 }
                         }
 
+
                         if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
 			{
 			 	if (date3 <= date2)
