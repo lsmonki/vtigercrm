@@ -54,7 +54,6 @@ $the_script  = <<<EOQ
 function set_fieldfocus(errorMessage,oMiss_field){
 		alert("$err_missing_required_fields" + errorMessage);
 		oMiss_field.focus();	
-		exit();
 }
 
 function verify_data(form) {
@@ -99,6 +98,7 @@ function verify_data(form) {
 
 	if (isError == true) {
 		set_fieldfocus(errorMessage,oField_miss);
+		return false;
 	}
 	form.email1.value = trim(form.email1.value);
 	if (form.email1.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
