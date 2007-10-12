@@ -30,8 +30,19 @@ if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab']){
 $parent_tab=$_REQUEST['parenttab'];
 $smarty->assign("CATEGORY",$parent_tab);}
 
+$url = '';
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
+
+//added to get relatedto field value for todo, while selecting from the popup list, after done the alphabet or basic search.
+if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')
+{
+        $act_tab = $_REQUEST['maintab'];
+        $url = "&maintab=".$act_tab;
+}
+$smarty->assign("MAINTAB",$act_tab);
+			
+			
 switch($currentModule)
 {
 	case 'Contacts':
@@ -46,7 +57,7 @@ switch($currentModule)
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Campaigns':
 		require_once("modules/$currentModule/Campaigns.php");
@@ -59,7 +70,7 @@ switch($currentModule)
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','campaignname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','campaignname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Accounts':
 		require_once("modules/$currentModule/Accounts.php");
@@ -74,7 +85,7 @@ switch($currentModule)
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','accountname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','accountname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Leads':
 		require_once("modules/$currentModule/Leads.php");
@@ -91,7 +102,7 @@ switch($currentModule)
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Potentials':
 		require_once("modules/$currentModule/Potentials.php");
@@ -105,7 +116,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'Opportunity');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','potentialname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','potentialname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Quotes':
 		require_once("modules/$currentModule/Quotes.php");	
@@ -114,7 +125,7 @@ switch($currentModule)
 		$comboFieldNames = Array('quotestage'=>'quotestage_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Quote');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Invoice':
 		require_once("modules/$currentModule/Invoice.php");
@@ -122,7 +133,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'Invoice');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Products':
 		require_once("modules/$currentModule/Products.php");
@@ -137,13 +148,13 @@ switch($currentModule)
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');	
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Vendors':
 		require_once("modules/$currentModule/Vendors.php");
 		$focus = new Vendors();
 		$smarty->assign("SINGLE_MOD",'Vendor');
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','vendorname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','vendorname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'SalesOrder':
 		require_once("modules/$currentModule/SalesOrder.php");
@@ -151,7 +162,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'SalesOrder');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
 	case 'PurchaseOrder':
 		require_once("modules/$currentModule/PurchaseOrder.php");
@@ -159,7 +170,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'PurchaseOrder');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
 	case 'PriceBooks':
 		require_once("modules/$currentModule/PriceBooks.php");
@@ -177,7 +188,7 @@ switch($currentModule)
 			$smarty->assign("PRODUCTID",$_REQUEST['productid']);
 			$url_string .="&productid=".$_REQUEST['productid'];
 		}
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Users':
                 require_once("modules/$currentModule/Users.php");
@@ -185,7 +196,7 @@ switch($currentModule)
                 $smarty->assign("SINGLE_MOD",'Users');
                 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
                     $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-                $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","","");
+                $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","",$url);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
                 break;	
 	case 'HelpDesk':
@@ -194,7 +205,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'HelpDesk');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 		$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		$alphabetical = AlphabeticalSearch($currentModule,'Popup','ticket_title','true','basic',$popuptype,"","","");
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','ticket_title','true','basic',$popuptype,"","",$url);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		break;
 

@@ -58,6 +58,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 								<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
 								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
 								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
+								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
 			
 							</td>
 							<td width="20%" class="dvtCellLabel">
@@ -108,7 +109,9 @@ function callSearch(searchtype)
 	urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
     {rdelim}
 	popuptype = $('popup_type').value;
+	act_tab = $('maintab').value;
 	urlstring += '&popuptype='+popuptype;
+	urlstring += '&maintab='+act_tab;
 	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
 	urlstring +=gethiddenelements();
 	new Ajax.Request(
