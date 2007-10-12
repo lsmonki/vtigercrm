@@ -15,9 +15,9 @@ require_once('include/fpdf/pdfconfig.php');
 require_once('modules/Quotes/Quotes.php');
 require_once('include/database/PearDatabase.php');
 
-global $adb,$app_strings;
+global $adb,$app_strings,$current_user;
 
-$sql="select currency_symbol from vtiger_currency_info";
+$sql="select vtiger_currency_info.currency_symbol from vtiger_currency_info inner join vtiger_users on vtiger_users.currency_id =vtiger_currency_info.id where vtiger_users.id=".$current_user->id;
 $result = $adb->query($sql);
 $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
@@ -86,30 +86,6 @@ if($num_rows > 0)
 
 //we can also get the NetTotal, Final Discount Amount/Percent, Adjustment and GrandTotal from the array $associated_products[1]['final_details']
 
-//getting the Net Total
-$price_subtotal = number_format($focus->column_fields["hdnSubTotal"],2,'.',',');
-
-//Final discount amount/percentage
-$discount_amount = $focus->column_fields["hdnDiscountAmount"];
-$discount_percent = $focus->column_fields["hdnDiscountPercent"];
-
-if($discount_amount != "")
-	$price_discount = number_format($discount_amount,2,'.',',');
-else if($discount_percent != "")
-{
-	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
-	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
-	$price_discount = number_format((($discount_percent*$focus->column_fields["hdnSubTotal"])/100),2,'.',',');
-}
-else
-	$price_discount = "0.00";
-
-//Adjustment
-$price_adjustment = number_format($focus->column_fields["txtAdjustment"],2,'.',',');
-//Grand Total
-$price_total = number_format($focus->column_fields["hdnGrandTotal"],2,'.',',');
-
-
 //get the Associated Products for this Invoice
 $focus->id = $focus->column_fields["record_id"];
 $associated_products = getAssociatedProducts("Quotes",$focus);
@@ -117,6 +93,29 @@ $num_products = count($associated_products);
 
 //This $final_details array will contain the final total, discount, Group Tax, S&H charge, S&H taxes and adjustment
 $final_details = $associated_products[1]['final_details'];
+
+//getting the Net Total
+$price_subtotal = number_format($final_details["hdnSubTotal"],2,'.',',');
+
+//Final discount amount/percentage
+$discount_amount = $final_details["discount_amount_final"];
+$discount_percent = $final_details["discount_percentage_final"];
+
+if($discount_amount != "")
+	$price_discount = number_format($discount_amount,2,'.',',');
+else if($discount_percent != "")
+{
+	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
+	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
+	$price_discount = number_format((($discount_percent*$final_details["hdnSubTotal"])/100),2,'.',',');
+}
+else
+	$price_discount = "0.00";
+
+//Adjustment
+$price_adjustment = number_format($final_details["adjustment"],2,'.',',');
+//Grand Total
+$price_total = number_format($final_details["grandTotal"],2,'.',',');
 
 //To calculate the group tax amount
 if($final_details['taxtype'] == 'group')
