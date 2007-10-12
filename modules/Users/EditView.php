@@ -98,6 +98,7 @@ $smarty->assign("IMAGENAME",$focus->imagename);
 $smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
 $smarty->assign("MODULE", 'Settings');
 $smarty->assign("MODE",$focus->mode);
+$smarty->assign("HOUR_FORMAT",$focus->hour_format);
 if ($_REQUEST['Edit'] == ' Edit ')
 {
 	$smarty->assign("READONLY", "readonly");

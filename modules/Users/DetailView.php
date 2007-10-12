@@ -197,6 +197,7 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+$smarty->assign("HOUR_FORMAT",$focus->hour_format);
 
 //for check audittrail if it is enable or not
 $smarty->assign("AUDITTRAIL",$audit_trail);
