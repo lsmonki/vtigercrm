@@ -85,7 +85,7 @@ function create_lead_from_webform($lastname, $email, $phone, $company, $country,
 	require_once("modules/Leads/Leads.php");
 	$focus = new Leads();
 	$focus->column_fields['lastname'] = $lastname;
-	$focus->column_fields['email'] = $email;
+	$focus->column_fields['email'] = trim($email);
 	$focus->column_fields['phone'] = $phone;
 	$focus->column_fields['company'] = $company;
 	$focus->column_fields['country'] = $country;
@@ -131,7 +131,7 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 
 	$focus->column_fields['firstname'] = $first_name;
 	$focus->column_fields['lastname'] = $last_name;
-	$focus->column_fields['email'] = $email_address;
+	$focus->column_fields['email'] = trim($email_address);
 	$focus->column_fields['homephone'] = $home_phone;
 	$focus->column_fields['department'] = $department;
 	$focus->column_fields['description'] = $description;
@@ -158,6 +158,8 @@ function unsubscribe_email($emailid)
 {
 	global $adb;
 	$adb->println("Enter into the function unsubscribe_email($emailid)");
+
+	$emailid = trim($emailid);
 	
 	$contact_res = $adb->query("select emailoptout from vtiger_contactdetails where email=\"$emailid\"");
 	$contact_noofrows = $adb->num_rows($contact_res);
