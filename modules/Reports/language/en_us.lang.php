@@ -205,6 +205,7 @@ $mod_strings = Array(
 
 'ticketid'=>'Ticket Id',
 'NO_COLUMN'=>'No Columns available to Total',
+'LBL_REPORT_DELETED' => 'The report you are trying to view has been deleted.',
 )
 
 ?>
