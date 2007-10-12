@@ -111,6 +111,7 @@ function searchMapLocation(addressType)
 		if(fieldname.indexOf('code') > -1)
                         mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('code')]).innerHTML+' ';
         }
+	mapParameter = removeHTMLFormatting(mapParameter);
         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
 

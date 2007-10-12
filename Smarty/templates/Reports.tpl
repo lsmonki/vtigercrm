@@ -212,8 +212,10 @@ function AddFolder()
 						var folderdesc = getObj('folder_desc').value;
 						getObj('folder_name').value = '';
 						getObj('folder_desc').value = '';
-						foldername = foldername.replace(/&/gi,'*amp*')
-						folderdesc = folderdesc.replace(/&/gi,'*amp*')
+						foldername = foldername.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                foldername = foldername.replace(/&/gi,'*amp*');
+                                                folderdesc = folderdesc.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                folderdesc = folderdesc.replace(/&/gi,'*amp*');
 						if(mode == 'save')
 						{
 							url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;

@@ -146,7 +146,8 @@ function searchMapLocation(addressType)
                 if(fieldname.indexOf('bill_code') > -1)                                                                                            mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
 
         }
-	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
+	mapParameter = removeHTMLFormatting(mapParameter);
+	window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
 //javascript function will open new window to display traffic details for particular url using alexa.com
 function getRelatedLink()

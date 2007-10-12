@@ -2350,3 +2350,8 @@ function escapeAll(tagValue)
         return encodeURIComponent(tagValue.replace(/%/g, '%25'));
 }
 
+function removeHTMLFormatting(str) {
+        str = str.replace(/<([^<>]*)>/g, " ");
+        str = str.replace(/&nbsp;/g, " ");
+        return str;
+}
