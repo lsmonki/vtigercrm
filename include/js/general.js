@@ -1668,14 +1668,14 @@ function addOnloadEvent(fnc){
       window.onload = fnc;
   }
 }
-function InternalMailer(record_id,field_id,par_module,type) {
+function InternalMailer(record_id,field_id,field_name,par_module,type) {
         var url;
         switch(type) {
                 case 'record_id':
-                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&field_id='+field_id+'&rec_id='+record_id+'&file=EditView&par_module='+par_module;//query string field_id added for listview-compose email issue
+                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&field_id='+field_id+'&rec_id='+record_id+'&fieldname='+field_name+'&file=EditView&par_module='+par_module;//query string field_id added for listview-compose email issue
                 break;
                 case 'email_addy':
-                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&email_addy='+record_id+'&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&email_addy='+record_id+'&file=EditView';
                 break;
 
         }

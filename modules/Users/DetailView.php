@@ -197,11 +197,6 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
-//added for email link in detailv view
-$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=104;";
-$queryres = $adb->query($querystr);
-$fieldid = $adb->query_result($queryres,0,'fieldid');
-$smarty->assign("FIELD_ID",$fieldid);
 
 //for check audittrail if it is enable or not
 $smarty->assign("AUDITTRAIL",$audit_trail);

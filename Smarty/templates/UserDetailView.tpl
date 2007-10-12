@@ -118,6 +118,7 @@
 										   {assign var=keyval value=$data.value}
 										   {assign var=keytblname value=$data.tablename}
 										   {assign var=keyfldname value=$data.fldname}
+										   {assign var=keyfldid value=$data.fldid}
 										   {assign var=keyoptions value=$data.options}
 										   {assign var=keysecid value=$data.secid}
 										   {assign var=keyseclink value=$data.link}

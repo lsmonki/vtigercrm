@@ -92,6 +92,7 @@ if($_REQUEST["internal_mailer"] == "true") {
 	$smarty->assign('INT_MAILER',"true");
 	$rec_type = $_REQUEST["type"];
 	$rec_id = $_REQUEST["rec_id"];
+	$fieldname = $_REQUEST["fieldname"];
 	
 	//added for getting list-ids to compose email popup from list view(Accounts,Contacts,Leads)
 	if(isset($_REQUEST['field_id']) && strlen($_REQUEST['field_id']) != 0) {
@@ -102,20 +103,25 @@ if($_REQUEST["internal_mailer"] == "true") {
              $smarty->assign("IDLISTS", $id_list);
         }
 	if($rec_type == "record_id") {
-		$rs = $adb->query("select setype from vtiger_crmentity where crmid='".$rec_id."'");
-		$type = $adb->query_result($rs,0,'setype');
+		$type = $_REQUEST['par_module'];
 		//check added for email link in user detail view
-		if($_REQUEST['par_module'] == "Users")
-			$q = "select email1,email2 from vtiger_users where id='".$rec_id."'";	
+		$normal_tabs = Array('Users'=>'vtiger_users', 'Leads'=>'vtiger_leaddetails', 'Contacts'=>'vtiger_contactdetails', 'Accounts'=>'vtiger_account', 'Vendors'=>'vtiger_vendor');
+		$cf_tabs = Array('Accounts'=>'vtiger_accountscf', 'Campaigns'=>'vtiger_campaignscf', 'Contacts'=>'vtiger_contactscf', 'Invoice'=>'vtiger_invoicecf', 'Leads'=>'vtiger_leadscf', 'Potentials'=>'vtiger_potentialscf', 'Products'=>'vtiger_productcf',  'PurchaseOrder'=>'vtiger_purchaseordercf', 'Quotes'=>'vtiger_quotescf', 'SalesOrder'=>'vtiger_salesordercf', 'HelpDesk'=>'vtiger_ticketcf', 'Vendors'=>'vtiger_vendorcf');
+		if(substr($fieldname,0,2)=="cf")
+			$tablename = $cf_tabs[$type];
+		else
+			$tablename = $normal_tabs[$type];
+		if($type == "Users")
+			$q = "select $fieldname from $tablename where id='".$rec_id."'";	
 		elseif($type == "Leads") 
-			$q = "select email as email1 from vtiger_leaddetails where leadid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where leadid='".$rec_id."'";
 		elseif ($type == "Contacts")
-			$q = "select email as email1 from vtiger_contactdetails where contactid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where contactid='".$rec_id."'";
 		elseif ($type == "Accounts")
-			$q = "select email1,email2 from vtiger_account where accountid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where accountid='".$rec_id."'";
 		elseif ($type == "Vendors")
-			$q = "select email as email1 from vtiger_vendor where vendorid='".$rec_id."'";
-		$email1 = $adb->query_result($adb->query($q),0,"email1");
+			$q = "select $fieldname from $tablename where vendorid='".$rec_id."'";
+		$email1 = $adb->query_result($adb->query($q),0,$fieldname);
 	} elseif ($rec_type == "email_addy") {
 		$email1 = $_REQUEST["email_addy"];
 	}

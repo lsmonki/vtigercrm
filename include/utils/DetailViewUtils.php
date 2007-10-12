@@ -88,10 +88,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		$label_fld ["options"] = $options;	
 	}	
-	elseif($uitype == 13)
+	elseif($uitype == 13 || $uitype == 104)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] = $col_fields[$fieldname];
+		$label_fld[] = $col_fields[$fieldname];	
 	}
 	elseif($uitype == 15 || $uitype == 16 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
@@ -1568,7 +1568,8 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$fieldtablename = $adb->query_result($result,$i,"tablename");	
 		$fieldcolname = $adb->query_result($result,$i,"columnname");	
 		$uitype = $adb->query_result($result,$i,"uitype");	
-		$fieldname = $adb->query_result($result,$i,"fieldname");	
+		$fieldname = $adb->query_result($result,$i,"fieldname");
+		$fieldid = $adb->query_result($result,$i,"fieldid");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$block = $adb->query_result($result,$i,"block");
@@ -1577,7 +1578,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 		if(is_array($custfld))
 		{
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
 		}
 		$i++;
 		if($i<$noofrows)
@@ -1586,6 +1587,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$fieldcolname = $adb->query_result($result,$i,"columnname");	
 			$uitype = $adb->query_result($result,$i,"uitype");	
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
+			$fieldid = $adb->query_result($result,$i,"fieldid");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$block = $adb->query_result($result,$i,"block");
@@ -1595,7 +1597,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 			if(is_array($custfld))
 			{
-				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
 			}
 		}
 

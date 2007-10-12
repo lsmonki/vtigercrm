@@ -27,8 +27,14 @@
                                                        {$keyval}
                                                   </td>
                                              {elseif $keyid eq '13'} <!--Email-->
-                                                  <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="mailto:{$keyval}" target="_blank">{$keyval}</a>
-                                                  </td>
+                                                  <td width=25% class="dvtCellInfo" align="left">
+							{if $smarty.session.internal_mailer eq 1}
+                                                                <a href="javascript:InternalMailer({$ID},{$keyfldid},'{$keyfldname}','{$MODULE}','record_id');window.close();">{$keyval}</a>
+                                                        {else}
+                                                                <a href="mailto:{$keyval}" target="_blank" >{$keyval}</a>
+                                                        {/if}
+                                                        </span>
+						  </td>
                                              {elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
                					<td width=25% class="dvtCellInfo" align="left">&nbsp;
 							{foreach item=arr from=$keyoptions}
