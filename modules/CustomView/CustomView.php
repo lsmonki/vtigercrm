@@ -228,7 +228,7 @@ class CustomView extends CRMEntity{
 		//Added to include vtiger_activity type in vtiger_activity vtiger_customview list
 		if($module == 'Calendar' && $block == 19)
 		{
-			$module_columnlist['vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C'] = 'Activity Type';
+			$module_columnlist['vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V'] = 'Activity Type';
 		}
 	
 		if($module == 'SalesOrder' && $block == 63)

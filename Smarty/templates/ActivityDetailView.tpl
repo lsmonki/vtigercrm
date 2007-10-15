@@ -386,8 +386,7 @@ function DeleteTag(id,recordid)
                                                                         {assign var='vision' value='block'}
                                                                         {/if}
                                                                         </DIV>
-									<div id="addTaskRelatedtoUI" style="display:{$visio
-n};width:100%">
+									<div id="addTaskRelatedtoUI" style="display:{$vision};width:100%">
 									<table width="100%" cellpadding="5" cellspacing="0" border="0">
                                                                                 <tr>
 										{if $LABEL.parent_id neq ''}

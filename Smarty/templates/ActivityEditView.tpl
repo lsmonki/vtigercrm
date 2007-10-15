@@ -843,7 +843,7 @@ var gVTModule = '{$smarty.request.module}';
                                      </td>
                                      <td>
                               	        <div id="taskrelatedto" align="left">
-						<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id}">
+						<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id|escape}">
 						<input type="button" name="selectparent" class="crmButton small edit" value="{$APP.LBL_SELECT}" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
 						<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 					 </div>
