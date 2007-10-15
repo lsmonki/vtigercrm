@@ -83,7 +83,7 @@ function addtopricebook()
 							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
-						else if(isNaN(elem[i].value))
+						else if(isNaN(elem[i].value) || elem[i].value <= 0)
 						{
 							alert(alert_arr.INVALID_LIST_PRICE);
 			                		return false;	
