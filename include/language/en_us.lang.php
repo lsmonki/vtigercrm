@@ -927,7 +927,6 @@ $app_strings = array (
 'Other State' => 'Other State',
 'Mailing Zip' => 'Mailing Zip',
 'Other Zip' => 'Other Zip',
-'Other Zip' => 'Other Zip',
 'Mailing Country' => 'Mailing Country',
 'Other Country' => 'Other Country',
 'Mailing Po Box' => 'Mailing Po Box',

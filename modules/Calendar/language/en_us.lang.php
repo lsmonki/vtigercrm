@@ -89,7 +89,7 @@ $mod_strings = Array(
 'LBL_NEXT_MON' => 'Next Month',
 
 'LBL_YEAR_BUTTON_KEY'=>'Y',
-'LBL_MON_BUTTON_TITLE'=>'Year [Alt+Y]',
+'LBL_YEAR_BUTTON_TITLE'=>'Year [Alt+Y]',
 'LBL_PREV_YEAR'=>'Previous Year',
 'LBL_NEXT_YEAR' => 'Next Year',
 
