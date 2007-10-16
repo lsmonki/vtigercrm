@@ -75,7 +75,6 @@ function insert_charset_header()
  	{
  	        $charset = $app_strings['LBL_CHARSET'];
  	}
-	if($_REQUEST['module'] != 'Webmails')
 		header('Content-Type: text/html; charset='. $charset);
 }
  	
