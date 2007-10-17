@@ -375,28 +375,14 @@ function getFormValidate(divValidate)
                var mm=dateelements[1]
                var yyyy=dateelements[2]
 
-               var currdate=new Date()
                var chkdate=new Date()
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-
-       	       chktime = new Date()
-	       chktime.setMinutes(minval)
-               chktime.setHours(hourval)
-               chktime.setYear(yyyy)
-               chktime.setMonth(mm-1)
-               chktime.setDate(dd)
-                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
-                        window.document.QcEditView[datefield].focus()
-                        return false
-                }
-                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
-                {
-                        window.document.QcEditView[timefield].focus()
-                        return false
-                }
-                else return true
+	       chkdate.setMinutes(minval)
+               chkdate.setHours(hourval)
+		if(!comparestartdate(chkdate)) return false;
+		
 
 	 }//end
 	return true;

@@ -14,6 +14,13 @@
  * @param $id -- The user id :: Type integer
  * @returns $sharedids -- The shared vtiger_users id :: Type Array
  */
+if(isset($_REQUEST['fieldval']))
+{
+        $currtime = date("Y:m:d:H:i:s");
+        list($y,$m,$d,$h,$min,$sec) = split(':',$currtime);
+        echo "[{YEAR:'".$y."',MONTH:'".$m."',DAY:'".$d."',HOUR:'".$h."',MINUTE:'".$min."'}]";
+        die;
+}
 function getSharedUserId($id)
 {
 	global $adb;

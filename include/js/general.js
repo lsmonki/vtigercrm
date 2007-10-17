@@ -997,30 +997,13 @@ if(gVTModule == 'Contacts')
                mm=dateelements[1]
                yyyy=dateelements[2]
 
-               var currdate=new Date()
                var chkdate=new Date()
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-
-               chktime = new Date()
-
-               chktime.setMinutes(minval)
-               chktime.setHours(hourval)
-               chktime.setYear(yyyy)
-               chktime.setMonth(mm-1)
-               chktime.setDate(dd)
-                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
-                        getObj(datefield).focus()
-                        return false
-                }
-                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
-                {
-                        getObj(datefield).focus()
-                        return false
-                }
-                else return true
-
+               chkdate.setMinutes(minval)
+               chkdate.setHours(hourval)
+		if(!comparestartdate(chkdate)) return false;
 	 }//end
 
 	return true
@@ -1032,6 +1015,32 @@ function clearId(fldName) {
 
 	currObj.value=""
 
+}
+
+function comparestartdate(chkdate)
+{
+	var datObj = [];
+        var ajxdate = "test";
+        var url = "module=Calendar&action=CalendarAjax&file=CalendarCommon&fieldval="+ajxdate
+        var currdate = new Date();
+        new Ajax.Request(
+            'index.php',
+             {
+                     queue: {position: 'end', scope: 'command'},
+                     method: 'post',
+                     postBody:url,
+                     onComplete: function(response)
+                     {
+                          datObj = eval(response.responseText);
+              	          currdate.setFullYear(datObj[0].YEAR)
+             	 	  currdate.setMonth(datObj[0].MONTH-1)
+             	 	  currdate.setDate(datObj[0].DAY)
+             	 	  currdate.setHours(datObj[0].HOUR)
+             	 	  currdate.setMinutes(datObj[0].MINUTE)
+                     }
+             }
+                        );
+                return compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE");
 }
 
 function showCalc(fldName) {

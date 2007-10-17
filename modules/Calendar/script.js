@@ -629,22 +629,15 @@ function check_form()
                         //added to check Start Date & Time,if Activity Status is Planned.//start
                         if(document.EditView.eventstatus.value == "Planned")
                         {
-                                var currdate=new Date()
                                 var chkdate=new Date()
 				chkdate.setMinutes(event_startmin)
 				chkdate.setHours(event_starthour)
                                 chkdate.setYear(yyyy1)
                                 chkdate.setMonth(mm1-1)
                                 chkdate.setDate(dd1)
+				if(!comparestartdate(chkdate)) return false;
 
-                                if(!compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE"))
-                                {
-                                        getObj("date_start").focus();
-                                        return false;
-                                }
-                                else return true
                         }
-                        //end
 
 		}	
 		else
