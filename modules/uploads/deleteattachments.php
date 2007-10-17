@@ -18,7 +18,7 @@ $adb->query($sql);
 $sql = "delete from vtiger_attachments where attachmentsid ='".$id."'";
 $adb->query($sql);
 
-header("Location:index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
+header("Location:index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$_REQUEST['parenttab']);
 
 
 ?>

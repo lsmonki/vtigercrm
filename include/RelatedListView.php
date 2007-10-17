@@ -394,7 +394,7 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_START_DATE']." & ".$app_strings['LBL_TIME'];
 		$header[] = $app_strings['LBL_END_DATE']." & ".$app_strings['LBL_TIME'];
 		//$header[] = $app_strings['LBL_DESCRIPTION'];
-		$header[] = $app_strings['LBL_ACTION'];
+		$header[] = $app_strings['LBL_STATUS'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
 
 		$i=1;
@@ -420,7 +420,7 @@ function getHistory($parentmodule,$query,$id)
  	            	$typeofactivity = $app_strings[$typeofactivity];
 			$entries[] = $typeofactivity;
 
-			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
+			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'&parenttab='.$_REQUEST['parenttab'].'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
@@ -430,12 +430,6 @@ function getHistory($parentmodule,$query,$id)
  	               $entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];         
 		
 			//$entries[] = nl2br($row['description']);
-
-			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
-			{
-				$list .= '<a href="index.php?module=Calendar&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
-			
-			}
 
 			$entries[] = $status;
 
@@ -449,11 +443,6 @@ function getHistory($parentmodule,$query,$id)
 				
 			}
 			
-			if(isPermitted("Calendar",2,$row["activityid"]) == 'yes')
-			{
-				$list .= '<a href="index.php?module=Calendar&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
-			}
-
 			$i++;
 			$entries_list[] = $entries;
 		}

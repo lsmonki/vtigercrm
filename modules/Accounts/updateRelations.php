@@ -14,6 +14,7 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
+$parenttab = $_REQUEST['parenttab'];
 
 if($singlepane_view == 'true')
 	$action = "DetailView";
@@ -31,10 +32,10 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 			$adb->query("insert into vtiger_seproductsrel values(".$_REQUEST["parentid"].",".$id.",'Accounts')");
 		}
 	}	
-	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parentid"]);
+	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 }elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != ''){
 	 $adb->query("insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'Accounts')");
-	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parid"]);
+	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
 }
 
 ?>

@@ -14,6 +14,7 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $update_mod = $_REQUEST['destination_module'];
+$parenttab = $_REQUEST['parenttab'];
 if($update_mod == 'Leads')
 {
 	$rel_table = 'vtiger_campaignleadrel';
@@ -41,9 +42,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parentid"]);
+		header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 	else
- 		header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parentid"]);
+ 		header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {	
@@ -53,9 +54,9 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
                 $adb->query($sql);
 		
 		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parid"]);
+			header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
 		else
- 			header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parid"]);
+ 			header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
 }
 
 ?>

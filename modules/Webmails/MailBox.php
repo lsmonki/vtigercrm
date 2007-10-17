@@ -177,7 +177,7 @@ class MailBox {
 			{
 				global $current_user,$mod_strings;
 				$this->db->println("CONNECTION ERROR - Could not be connected to the server using imap_open function through the connection strings $connectString and $connectString1");
-				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> ".$mod_strings['LBL_HERE']."</a>. ".$mod_strings['LBL_PLEASE']." <a href='index.php?module=Emails&action=index&parenttab=My Home Page'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
+				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> ".$mod_strings['LBL_HERE']."</a>. ".$mod_strings['LBL_PLEASE']." <a href='index.php?module=Emails&action=index&parenttab=".$_REQUEST['parenttab']."'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
 				exit;
 			}
 		}

@@ -19,6 +19,7 @@ $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
 $pricebook_id=$_REQUEST['pricebook_id'];
 $productid=$_REQUEST['product_id'];
+$parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
 	//split the string and store in an array
@@ -35,9 +36,9 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?module=PriceBooks&action=DetailView&record=".$pricebook_id);
+		header("Location: index.php?module=PriceBooks&action=DetailView&record=$pricebook_id&parenttab=$parenttab");
 	else
-		header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=".$pricebook_id);
+		header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=$pricebook_id&parenttab=$parenttab");
 }
 elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 {
@@ -55,9 +56,9 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?module=Products&action=DetailView&record=".$productid);
+		header("Location: index.php?module=Products&action=DetailView&record=$productid&parenttab=$parenttab");
 	else
-		header("Location: index.php?module=Products&action=CallRelatedList&record=".$productid);
+		header("Location: index.php?module=Products&action=CallRelatedList&record=$productid&parenttab=$parenttab");
 }
 
 ?>

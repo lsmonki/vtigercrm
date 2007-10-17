@@ -14,7 +14,7 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
-
+$parenttab = $_REQUEST['parenttab'];
 if($singlepane_view == 'true') $action = "DetailView";
 else $action = "CallRelatedList";
 
@@ -43,7 +43,7 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 	$record = $_REQUEST["parid"];
 }
 
-header("Location: index.php?action=$action&module=Leads&record=".$record);
+header("Location: index.php?action=$action&module=Leads&record=$record&parenttab=$parenttab");
 
 
 

@@ -14,6 +14,7 @@ global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
 $record = $_REQUEST['record'];
+$parenttab = $_REQUEST['parenttab'];
 
 if($singlepane_view == 'true') $action = "DetailView";
 else $action = "CallRelatedList";
@@ -48,6 +49,6 @@ elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
 	$adb->query($sql);
 }
 
-header("Location: index.php?action=$action&module=Contacts&record=".$record);
+header("Location: index.php?action=$action&module=Contacts&record=$record&parenttab=$parenttab");
 
 ?>

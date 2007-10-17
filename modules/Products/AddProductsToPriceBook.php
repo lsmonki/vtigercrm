@@ -19,6 +19,7 @@ global $app_strings,$mod_strings,$current_language,$theme,$log;
 $current_module_strings = return_module_language($current_language, 'Products');
 
 $pricebook_id = $_REQUEST['pricebook_id'];
+$parenttab = $_REQUEST['parenttab'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -157,6 +158,7 @@ if($sorder !='')
 	$url_string .="&sorder=".$sorder;
 
 $smarty->assign("LISTENTITY", $list_body);
+$smarty->assign("CATEGORY", $parenttab);
 
 $smarty->display("AddProductsToPriceBook.tpl");
 

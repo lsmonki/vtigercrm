@@ -2923,7 +2923,7 @@ function getRelatedTo($module,$list_result,$rset)
 	}
 	else
 	{
-		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
+		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."&parenttab=".$_REQUEST['parenttab']."'>".$parent_name."</a>";
 	}
 	//code added by raju ends
 	$log->debug("Exiting getRelatedTo method ...");
@@ -3453,7 +3453,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 	global $adb;
 	$return_action = "index";
 	$edit_link = "index.php?module=$module&action=EditView&record=$entity_id";
-
+	$tabname = getParentTab();
 	//This is relatedlist listview
 	if($relatedlist == 'relatedlist')
 	{
@@ -3473,7 +3473,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 		$edit_link .= "&return_module=$module&return_action=$return_action";
 	}
 
-	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
+	$edit_link .= "&parenttab=".$tabname;
 	//Appending view name while editing from ListView
 	$edit_link .= "&return_viewname=".$_SESSION['lvs'][$module]["viewname"];
 	if($module == 'Emails')
@@ -3490,6 +3490,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
  */
 function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 {
+	$tabname = getParentTab();
 	$current_module = $_REQUEST['module'];
 	$viewname = $_SESSION['lvs'][$current_module]['viewname'];
 
@@ -3518,7 +3519,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 		$del_link .= "&return_module=$module&return_action=$return_action";
 	}
 
-	$del_link .= "&parenttab=".$_REQUEST['parenttab']."&return_viewname=".$viewname;
+	$del_link .= "&parenttab=".$tabname."&return_viewname=".$viewname;
 	
 	return $del_link;
 }

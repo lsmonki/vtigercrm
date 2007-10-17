@@ -100,7 +100,7 @@ function addtopricebook()
 			return false;
 		}
 	}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook&parenttab="+parenttab;
 }
 
 function updateListPrice(unitprice,fieldname,oSelect)

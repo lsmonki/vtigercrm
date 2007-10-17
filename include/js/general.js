@@ -1732,6 +1732,7 @@ function SelectAll(mod,parmod)
         {
                 var module = window.opener.document.getElementById('RLreturn_module').value
                 var entity_id = window.opener.document.getElementById('RLparent_id').value
+		 var parenttab = window.opener.document.getElementById('parenttab').value
         }
         idstring = "";
 	namestr = "";
@@ -1831,7 +1832,7 @@ function SelectAll(mod,parmod)
                 }
                 else
                 {
-			opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
+			opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring+"&parenttab="+parenttab;
 		}
                 self.close();
         }

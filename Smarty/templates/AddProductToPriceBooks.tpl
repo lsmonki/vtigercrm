@@ -100,7 +100,7 @@ function addtopricebook()
 		}
 	}
 {/literal}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}&parenttab={$CATEGORY}"
 {rdelim}
 
 
