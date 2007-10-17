@@ -38,6 +38,19 @@ $refresh = true;
 $date_start = array();
 $datax = array();
 //get the dates to display
+//added to fix the issue4307
+if(isset($_REQUEST['obm_date_start']) && $_REQUEST['obm_date_start'] == '')
+{
+	$_SESSION['obm_date_start'] = ""; 
+}
+elseif(isset($_REQUEST['obm_date_start']) && $_REQUEST['obm_date_start'] != '')
+	$_SESSION['obm_date_start'] = $_REQUEST['obm_date_start'];
+if(isset($_REQUEST['obm_date_end']) && $_REQUEST['obm_date_end'] == '')
+{
+	$_SESSION['obm_date_end'] = ""; 
+}
+elseif(isset($_REQUEST['obm_date_end']) && $_REQUEST['obm_date_end'] != '')
+	$_SESSION['obm_date_end'] = $_REQUEST['obm_date_end'];
 if (isset($_SESSION['obm_date_start']) && $_SESSION['obm_date_start'] != '' && !isset($_REQUEST['obm_date_start'])) {
 	$date_start = $_SESSION['obm_date_start'];
 	$log->debug("_SESSION['obm_date_start'] is:");
