@@ -469,4 +469,39 @@ function delVendorRelRecords($record){
 	$adb->query($vc_sql);
 }
 
+function delContactRelRecords($record)
+{
+
+	global $adb,$log;
+
+	$log->debug("Entering delContactRelRecords($record) method [Contacts Mass Delete] ...");
+
+	//Deleting Contact Potential Relation
+	$adb->query('delete from vtiger_contpotentialrel where contactid='.$record);
+	//Deleting Contact Campaign Relation
+	$adb->query('delete from vtiger_campaigncontrel where contactid='.$record);
+	//Deleting Contact Products Relation
+	$adb->query('delete from vtiger_seproductsrel where crmid='.$record);
+	//Deleting Contact Vendor Relation
+	$adb->query('delete from vtiger_vendorcontactrel where contactid='.$record);
+	//Deleting Contact Activity Relation
+	$adb->query('delete from vtiger_cntactivityrel where contactid='.$record);
+	$adb->query('delete from vtiger_seactivityrel where crmid = '.$record);
+
+
+	//removing the relationship of contacts with notes
+	$adb->query("update vtiger_notes set contact_id=NULL where contact_id=".$record);
+	//removing the relationship of contacts with Trouble Tickets
+	$adb->query("update vtiger_troubletickets set parent_id=NULL where parent_id=".$record);
+	//removing the relationship of contacts with PurchaseOrder
+	$adb->query("update vtiger_purchaseorder set contactid=NULL where contactid=".$record);
+	//removing the relationship of contacts with SalesOrder
+	$adb->query("update vtiger_salesorder set contactid=NULL where contactid=".$record);
+	//removing the relationship of contacts with Quotes
+	$adb->query("update vtiger_quotes set contactid=NULL where contactid=".$record);
+
+	$log->debug("Exiting delContactRelRecords method ...");
+
+}
+
 ?>

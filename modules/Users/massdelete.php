@@ -36,6 +36,8 @@ foreach($storearray as $id)
                 $result = $adb->query($sql);
 		if($returnmodule == 'Accounts')
 			delAccRelRecords($id);
+		if($returnmodule == 'Contacts')
+			delContactRelRecords($id);
         }
         else
         {
