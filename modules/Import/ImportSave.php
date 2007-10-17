@@ -101,7 +101,30 @@ foreach ($rows1 as $row)
 		}
 
 	}
-
+	if($focus->column_fields['notify_owner'] == '')
+	{
+		$focus->column_fields['notify_owner'] = '0';
+	}	
+	if($focus->column_fields['reference'] == '')
+	{
+		$focus->column_fields['reference'] = '0';
+	}
+	if($focus->column_fields['emailoptout'] == '')
+	{
+		$focus->column_fields['emailoptout'] = '0';
+	}
+	if($focus->column_fields['donotcall'] == '')
+	{
+		$focus->column_fields['donotcall'] = '0';
+	}
+	if($focus->column_fields['discontinued'] == '')
+	{
+		$focus->column_fields['discontinued'] = '0';
+	}
+	if($focus->column_fields['active'] == '')
+	{
+		$focus->column_fields['active'] = '0';
+	}
 	p("setting done");
 	
 	p("do save before req vtiger_fields=".$do_save);
