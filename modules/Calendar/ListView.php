@@ -29,7 +29,6 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings;
 global $list_max_entries_per_page;
@@ -79,7 +78,6 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $changeOwner = getAssignedTo(16);
 $userList = $changeOwner[0];
 $groupList = $changeOwner[1];
-//echo '<pre>';print_r($changeOwner); echo '</pre>';
 
 $smarty->assign("CHANGE_USER",$userList);
 $smarty->assign("CHANGE_GROUP",$groupList);
@@ -136,8 +134,7 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND " .$where;
 }
-//CHANGE : TO IMPROVE PERFORMANCE
-//$list_query .= ' group by vtiger_activity.activityid';
+$list_query .= ' group by vtiger_activity.activityid';
 
 if(isset($order_by) && $order_by != '')
 {
@@ -169,11 +166,8 @@ $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 
 //Retreiving the no of rows
-
-//changes made to fix ticket #4372
-$count_result = $adb->query( mkCountQuery($list_query));
-$noofrows = $adb->query_result($count_result,0,"count");
-//end
+$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
+$noofrows = $adb->num_rows($count_result); 
 
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
