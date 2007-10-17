@@ -262,8 +262,8 @@ a:hover {
 .dvInnerHeader{
 	border-bottom:2px solid #999999;
 	padding:5px;
-	background-color:#fffffff;
-
+	/*background-color:#ffffff;*/
+	background-color:#eaeacc;
 }
 
 .dvtSelectedCell {
@@ -1193,7 +1193,7 @@ a.reportMnu:Hover{
 /* WEB MAIL */
  a.webMnu{
 	font-size:11px;
-	color:#0070BA;
+	/*color:#0070BA;*/
 	text-decoration:underline;
 }
 a.webMnu:Hover{
