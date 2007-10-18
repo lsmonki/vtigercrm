@@ -2281,6 +2281,7 @@ function selectedRecords(module,category)
                 window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
         else
                 window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category;
+	return false;
 }
 
 function record_export(module,category,exform,idstring)

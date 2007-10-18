@@ -79,7 +79,7 @@
 									<td border="0" cellpadding="5" cellspacing="0" width="50%">
 										<table >
 											<tr>		
-												<td><div id="not_search" style="position:absolute;display:none;"></div></td>
+												<td><div id="not_search" style="position:absolute;display:none;width:400px;height:25px;"></div></td>
 											</tr>
 										</table>
 									</td>	
