@@ -106,7 +106,7 @@ function massDelete(module)
 
 }
 
-function showDefaultCustomView(selectView,module)
+function showDefaultCustomView(selectView,module,parenttab)
 {
 	$("status").style.display="inline";
 	var viewName = selectView.options[selectView.options.selectedIndex].value;
@@ -114,7 +114,7 @@ function showDefaultCustomView(selectView,module)
                	'index.php',
                 {queue: {position: 'end', scope: 'command'},
                        	method: 'post',
-                        postBody:"module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName,
+                        postBody:"module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName+"&parenttab="+parenttab,
                         onComplete: function(response) {
                         $("status").style.display="none";
                         result = response.responseText.split('&#&#&#');

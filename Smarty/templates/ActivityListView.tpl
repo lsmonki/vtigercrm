@@ -398,7 +398,7 @@ function alphabetic(module,url,dataid)
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
+                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
                                                     {if $ALL eq 'All'}
 							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
 							<span class="small">|</span>
