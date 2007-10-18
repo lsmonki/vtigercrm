@@ -387,28 +387,39 @@ if(isset($arr_val))
 {
 	$pdf = new TCPDF('L','mm','A2');
 }*/
+//echo $columnlength ;die;
 if($columnlength <= 420 )
 {
-                $pdf = new TCPDF('P','mm','A5',true);
+	$pdf = new TCPDF('P','mm','A5',true);
+	
 }elseif($columnlength >= 421 && $columnlength <= 1120)
 {
-                $pdf = new TCPDF('L','mm','A4',true);
+	$pdf = new TCPDF('L','mm','A4',true);
+
 }elseif($columnlength >=1121 && $columnlength <= 1600)
 {
-                $pdf = new TCPDF('L','mm','A3',true);
+	$pdf = new TCPDF('L','mm','A3',true);
+
 }elseif($columnlength >=1601 && $columnlength <= 2200)
 {
-                $pdf = new TCPDF('L','mm','A2',true);
+	$pdf = new TCPDF('L','mm','A2',true);
 }
-elseif($columnlength >=2201 && $columnlength <= 3270)
+elseif($columnlength >=2201 && $columnlength <= 3370)
 {
-                $pdf = new TCPDF('L','mm','A1',true);
+	$pdf = new TCPDF('L','mm','A1',true);
 }
-elseif($columnlength >=3271)
+elseif($columnlength >=3371 && $columnlength <= 4690)
 {
-                $pdf = new TCPDF('L','mm','A0',true);
+	$pdf = new TCPDF('L','mm','A0',true);
 }
-
+elseif($columnlength >=4691 && $columnlength <= 6490)
+{
+	$pdf = new TCPDF('L','mm','2A0',true);
+}
+else
+{
+	$pdf = new TCPDF('L','mm','4A0',true);
+}
 $pdf->SetMargins(10, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
