@@ -267,9 +267,19 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	while($row = $adb->fetch_array($result))
 	{
 		if($row['activitytype'] == 'Attachments')
-			$query="select setype from vtiger_crmentity where crmid=".$row['attachmentsid'];
-		$res=$adb->query($query);
-		$setype = $adb->query_result($res,0,'setype');
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=".$row['attachmentsid'];
+		else
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=".$row['crmid'];
+
+		$query1 .=" order by createdtime desc";
+		$res=$adb->query($query1);
+		$num_rows = $adb->num_rows($res);
+		for($i=0; $i<$num_rows; $i++)
+		{
+			$setype = $adb->query_result($res,$i,'setype');
+			$createdtime = $adb->query_result($res,$i,'createdtime');
+		}
+
 		if(($setype != "Products Image") && ($setype != "Contacts Image")) 
 		{
 			$entries = Array();
@@ -287,7 +297,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			}
 			if($row['createdtime'] != '0000-00-00 00:00:00')
 			{
-				$created_arr = explode(" ",getDisplayDate($row['createdtime']));
+				$created_arr = explode(" ",getDisplayDate($createdtime));
 				$created_date = $created_arr[0];
 				$created_time = substr($created_arr[1],0,5);
 			}

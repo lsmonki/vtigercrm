@@ -218,7 +218,7 @@ class Products extends CRMEntity {
 			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
 				crm2.modifiedtime AS lastmodified,
 			vtiger_seattachmentsrel.attachmentsid AS attachmentsid,
-			vtiger_notes.notesid AS crmid, vtiger_crmentity.createdtime,
+			vtiger_notes.notesid AS crmid, 
 			vtiger_notes.notecontent AS description,
 			vtiger_users.user_name
 			FROM vtiger_notes
@@ -244,7 +244,6 @@ class Products extends CRMEntity {
 				crm2.modifiedtime AS lastmodified,
 			vtiger_attachments.attachmentsid AS attachmentsid,
 			vtiger_seattachmentsrel.attachmentsid AS crmid,
-			vtiger_crmentity.createdtime,
 			vtiger_attachments.description, vtiger_users.user_name
 			FROM vtiger_attachments
 			INNER JOIN vtiger_seattachmentsrel

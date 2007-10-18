@@ -219,7 +219,7 @@ class SalesOrder extends CRMEntity {
 		$query = "select vtiger_notes.title,'Notes      ' as ActivityType, vtiger_notes.filename,
  		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
  		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
- 		vtiger_crmentity.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name
+ 		vtiger_notes.notecontent as description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -234,14 +234,13 @@ class SalesOrder extends CRMEntity {
 		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
  		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
  		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
 			inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id."
-		order by createdtime desc";
+		where vtiger_crmentity.crmid=".$id;
 
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid='salesorderid');

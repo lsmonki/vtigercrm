@@ -378,7 +378,7 @@ class Accounts extends CRMEntity {
 			vtiger_notes.filename, vtiger_notes.notesid AS crmid,
 				'Notes      ' AS ActivityType,
 			vtiger_attachments.type AS FileType,
-				crm2.modifiedtime AS lastmodified, crm2.createdtime,
+				crm2.modifiedtime AS lastmodified, 
 			vtiger_seattachmentsrel.attachmentsid,
 			vtiger_users.user_name
 			FROM vtiger_notes
@@ -402,7 +402,7 @@ class Accounts extends CRMEntity {
 			vtiger_seattachmentsrel.attachmentsid AS crmid,
 				'Attachments' AS ActivityType,
 			vtiger_attachments.type AS FileType,
-				crm2.modifiedtime AS lastmodified, crm2.createdtime,
+				crm2.modifiedtime AS lastmodified,
 			vtiger_attachments.attachmentsid,
 			vtiger_users.user_name
 			FROM vtiger_attachments
@@ -414,8 +414,7 @@ class Accounts extends CRMEntity {
 				ON crm2.crmid = vtiger_attachments.attachmentsid
 			INNER JOIN vtiger_users
 				ON crm2.smcreatorid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id."
-			ORDER BY createdtime DESC";
+			WHERE vtiger_crmentity.crmid = ".$id;
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Accounts',$query,$id);
 	}
