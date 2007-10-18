@@ -54,7 +54,7 @@
             
 	        allOpts[1] = options;
         
-            options = new Object(9);
+            options = new Object(11);
             options[0] = blankOption;
                 
                 options[1] = new Option('{$APP.Contact_First_Name}', '$contacts-firstname$'); 
@@ -65,7 +65,8 @@
                 options[6] = new Option('{$APP.Contact_Department}', '$contacts-department$'); 
                 options[7] = new Option('{$APP.Contact_Office_Phone}', '$contacts-phone$'); 
                 options[8] = new Option('{$APP.Contact_Mobile}', '$contacts-mobile$'); 
-                            
+                options[9] = new Option('{$APP.Contact_Support_Start_Date}', '$contacts-support_start_date$');
+		options[10] = new Option('{$APP.Contact_Support_End_Date}', '$contacts-support_end_date$');             
             allOpts[2] = options;
         
             

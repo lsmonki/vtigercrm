@@ -2459,6 +2459,7 @@ function getMergedDescription($description,$id,$parent_type)
 		case 'Contacts':
 			if(is_array($fields["contacts"]))
 			{
+
 				//Checking for salutation type and checking the table column to be queried
 				$key = array_search('salutationtype',$fields["contacts"]);
 				if(isset($key) && $key !='')
@@ -2467,7 +2468,9 @@ function getMergedDescription($description,$id,$parent_type)
 				}	
 				
 				$columnfields = implode(',',$fields["contacts"]);
-				$query = 'select '.$columnfields.' from vtiger_contactdetails where contactid='.$id;
+			
+				$query = 'select '.$columnfields.' from vtiger_contactdetails inner join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid where contactid='.$id;
+
 				$result = $adb->query($query);
 				foreach($fields["contacts"] as $columnname)
 				{

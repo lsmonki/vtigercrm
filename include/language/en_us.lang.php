@@ -1000,6 +1000,8 @@ $app_strings = array (
 'Contact_Department'=>'Contact: Department',
 'Contact_Office_Phone'=>'Contact: Office Phone',
 'Contact_Mobile'=>'Contact: Mobile',
+'Contact_Support_Start_Date'=>'Contact: Support Start Date',
+'Contact_Support_End_Date'=>'Contact: Support End Date',
 //For Leads
 'Lead_First_Name'=>'Lead: First Name',
 'Lead_Last_Name'=>'Lead: Last Name',
