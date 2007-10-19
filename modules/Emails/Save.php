@@ -180,7 +180,7 @@ $adb->query($query);
 require_once("modules/Emails/mail.php");
 //If we send mails containing Invoice pdf attachment from Invoice module, We dont need the notification mail for that. because attachments are not present in notification mails. 
 //so here we checking for that and dont send a notification mail for that mail
-if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) 
+/*if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) 
 {
 	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
 	{
@@ -225,7 +225,7 @@ if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['
         	exit();
 	}
 
-}
+}*/
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button

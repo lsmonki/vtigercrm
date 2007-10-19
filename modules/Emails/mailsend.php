@@ -102,6 +102,7 @@ $myids=explode("|",$parentid);
 $all_to_emailids = Array();
 if(isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails')
 {
+	$from_arr = explode('@',$_REQUEST['from_add']);
 	$from_name = $from_arr[0];
 	$from_address = $_REQUEST['from_add'];
 }
