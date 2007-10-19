@@ -796,11 +796,11 @@ function stock_alert(curr_row)
         var qty=getObj("qty"+curr_row).value;
         if (!isNaN(qty))
         {
-                if(qty > stock)
+                if(eval(qty) > eval(stock))
                 getObj("stock_alert"+curr_row).innerHTML='<font color="red" size="1">'+alert_arr.STOCK_IS_NOT_ENOUGH+'</font>';
                 else
                         getObj("stock_alert"+curr_row).innerHTML='';
         }
         else
-                getObj("stock_alert"+curr_row).innerHTML='';
+     getObj("stock_alert"+curr_row).innerHTML='<font color="red" size="1">'+alert_arr.INVALID_QTY+'</font>';
 }
