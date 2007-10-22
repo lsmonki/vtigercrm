@@ -207,9 +207,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							//added to display vtiger_currency symbol in listview header
 							if($lbl_name =='Amount')
 							{
-								$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-								$curr_symbol = $rate_symbol['symbol'];
-								$lbl_name .=' (in '.$curr_symbol.')';
+								$lbl_name .=' (in '.$user_info['currency_symbol'].')';
 							}
 							if($relatedlist !='' && $relatedlist != 'global')
 								if($singlepane_view == 'true')	
@@ -241,9 +239,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 																	//added to display vtiger_currency symbol in related listview header
 		if($name =='Amount' && $relatedlist !='' )
 		{
-			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-			$curr_symbol = $rate_symbol['symbol'];
-			$name .=' (in '.$curr_symbol.')';
+			$name .=' (in '.$user_info['currency_symbol'].')';
 		}
 		//Added condition to hide the close column in Related Lists
 		if($name == $app_strings['Close'] && $relatedlist != '' && $relatedlist != 'global')
@@ -1289,8 +1285,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-                $rate = $rate_symbol['rate'];
+		$rate = $user_info['conv_rate'];
 		if($temp_val != '' && $temp_val != 0)
 		{       //changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
                         $value = convertFromDollar($temp_val,$rate);
@@ -1634,8 +1629,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
 					}
 					$tax_str = trim($tax_str,',');
-					$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-					$rate = $rate_symbol['rate'];
+					$rate = $user_info['conv_rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
@@ -1657,8 +1651,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
 					}
 					$tax_str = trim($tax_str,',');
-					$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-					$rate = $rate_symbol['rate'];
+					$rate = $user_info['conv_rate'];
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$unitprice = convertFromDollar($unitprice,$rate);
 
@@ -1872,8 +1865,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		elseif($fieldname == 'hdnGrandTotal' || $fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
 		{
-			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-			$rate = $rate_symbol['rate'];
+			$rate = $user_info['conv_rate'];
 			$value = convertFromDollar($temp_val,$rate);
 		}
 		else

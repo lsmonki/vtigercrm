@@ -49,8 +49,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Contacts.php");
 		$focus = new Contacts();
 		$log = LoggerManager::getLogger('contact_list');
-		$comboFieldNames = Array('leadsource'=>'leadsource_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Contact');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
@@ -63,9 +61,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Campaigns.php");
 		$focus = new Campaigns();
 		$log = LoggerManager::getLogger('campaign_list');
-		$comboFieldNames = Array('campaignstatus'=>'campaignstatus_dom',
-					 'campaigntype'=>'campaigntype_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Campaign');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
@@ -76,9 +71,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Accounts.php");
 		$focus = new Accounts();
 		$log = LoggerManager::getLogger('account_list');
-		$comboFieldNames = Array('accounttype'=>'account_type_dom'
-				,'industry'=>'industry_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$smarty->assign("SINGLE_MOD",'Account');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
@@ -91,11 +83,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Leads.php");
 		$focus = new Leads();
 		$log = LoggerManager::getLogger('contact_list');
-		$comboFieldNames = Array('leadsource'=>'leadsource_dom'
-				,'leadstatus'=>'leadstatus_dom'
-				,'rating'=>'rating_dom'
-				,'industry'=>'industry_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Lead');
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
@@ -108,10 +95,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Potentials.php");
 		$focus = new Potentials();
 		$log = LoggerManager::getLogger('potential_list');
-		$comboFieldNames = Array('leadsource'=>'leadsource_dom'
-				,'opportunity_type'=>'opportunity_type_dom'
-				,'sales_stage'=>'sales_stage_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$smarty->assign("SINGLE_MOD",'Opportunity');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
@@ -122,8 +105,6 @@ switch($currentModule)
 		require_once("modules/$currentModule/Quotes.php");	
 		$focus = new Quotes();
 		$log = LoggerManager::getLogger('quotes_list');
-		$comboFieldNames = Array('quotestage'=>'quotestage_dom');
-		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Quote');
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
