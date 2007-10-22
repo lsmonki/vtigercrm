@@ -23,6 +23,7 @@ global $adv_filter_options;
 $adv_filter_options = array("e"=>"".$mod_strings['equals']."",
                             "n"=>"".$mod_strings['not equal to']."",
                             "s"=>"".$mod_strings['starts with']."",
+			    "ew"=>"".$mod_strings['ends with']."",
                             "c"=>"".$mod_strings['contains']."",
                             "k"=>"".$mod_strings['does not contain']."",
                             "l"=>"".$mod_strings['less than']."",
@@ -936,8 +937,10 @@ class CustomView extends CRMEntity{
 		$change_table_field = Array(
 
 			"product_id"=>"vtiger_products.productname",
-			"contactid"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
-			"contact_id"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
+			//"contactid"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
+			//"contact_id"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
+			"contactid"=>"vtiger_contactdetails.lastname",
+			"contact_id"=>"vtiger_contactdetails.lastname",
 			"accountid"=>"",//in cvadvfilter accountname is stored for Contact, Potential, Quotes, SO, Invoice
 			"account_id"=>"",//Same like accountid. No need to change
 			"vendorid"=>"vtiger_vendor.vendorname",
@@ -1299,6 +1302,16 @@ class CustomView extends CRMEntity{
 			}else
 			{
 				$rtvalue = " like ".$adb->quote($value."%");
+			}
+		}
+		if($comparator == "ew")
+		{
+			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
+			{
+				$rtvalue = " like ".$adb->quote($value);
+			}else
+			{
+				$rtvalue = " like ".$adb->quote("%".$value);
 			}
 		}
 		if($comparator == "c")

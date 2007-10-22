@@ -98,6 +98,7 @@
 				EQUALS:'equals',
 				NOT_EQUALS_TO:'not equal to',
 				STARTS_WITH:'starts with',
+				ENDS_WITH:'ends with',
 				CONTAINS:'contains',	
 				DOES_NOT_CONTAINS:'does not contains',
 				LESS_THAN:'less than',

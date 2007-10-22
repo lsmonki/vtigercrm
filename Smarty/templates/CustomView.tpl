@@ -26,7 +26,7 @@
 <input type="hidden" id="user_dateformat" name="user_dateformat" value="{$DATEFORMAT}">
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
-typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['V'] = ['e','n','s','ew','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
 typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
@@ -37,6 +37,7 @@ var fLabels = new Array();
 fLabels['e'] = alert_arr.EQUALS;
 fLabels['n'] = alert_arr.NOT_EQUALS_TO;
 fLabels['s'] = alert_arr.STARTS_WITH;
+fLabels['ew'] = alert_arr.ENDS_WITH;
 fLabels['c'] = alert_arr.CONTAINS;
 fLabels['k'] = alert_arr.DOES_NOT_CONTAINS;
 fLabels['l'] = alert_arr.LESS_THAN;

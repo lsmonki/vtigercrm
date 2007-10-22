@@ -25,6 +25,7 @@ global $related_modules;
 $adv_filter_options = array("e"=>"equals",
 		            "n"=>"not equal to",
 			    "s"=>"starts with",
+			    "ew"=>"ends with",
 			    "c"=>"contains",
 			    "k"=>"does not contain",
 			    "l"=>"less than",
