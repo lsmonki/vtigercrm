@@ -212,7 +212,7 @@ function email_validate(oform,mode)
                                         return false;
                                 }
                         }
-                        else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)?@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
+                        else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
                         {
                                 alert(cc_err_msg+": "+arr[i]);
                                 return false;
@@ -228,7 +228,7 @@ function email_validate(oform,mode)
 		arr = str.split(",");
 		for(var i=0; i<=arr.length-1; i++)
 		{
-			if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)?@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
+			if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
 			{
 				alert(bcc_err_msg+": "+arr[i]);
 				return false;	

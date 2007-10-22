@@ -248,7 +248,7 @@ function patternValidate(fldName,fldLabel,type) {
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
-		var re=new RegExp(/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)?@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/)
+		var re=new RegExp(/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/)
 	}
 
 	if (type.toUpperCase()=="DATE") {//DATE validation 
