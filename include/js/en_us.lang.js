@@ -46,6 +46,7 @@
                                 DISABLE_SHARING_CONFIRMATION:'Are you sure you want to disable sharing for selected ',
                                 USERS:' user(s) ?',
                                 ENDTIME_GREATER_THAN_STARTTIME:'End Time should be greater than Start Time ',
+				NAME_DESC:' for Folder Name & Description',
                                 FOLLOWUPTIME_GREATER_THAN_STARTTIME:'Followup Time should be greater than End Time ',
                                 MISSING_EVENT_NAME:'Missing Event Name',
                                 EVENT_TYPE_NOT_SELECTED:'Event Type is not selected',

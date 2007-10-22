@@ -173,6 +173,11 @@ function AddFolder()
                 return false;
                 {literal}
 	}
+	else if((!CharValidation(getObj('folder_name').value,'namespace')) || (!CharValidation(getObj('folder_desc').value,'namespace')))
+	{
+			alert(alert_arr.NO_SPECIAL+alert_arr.NAME_DESC);
+			return false;
+	}
 	else
 	{
 		new Ajax.Request(
