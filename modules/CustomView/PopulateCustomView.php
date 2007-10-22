@@ -507,7 +507,7 @@ $cvadvfilters = Array(
 			Array(
                           Array('columnname'=>'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
                                 'comparator'=>'e',
-                                 'value'=>'Recieved Shipment'
+                                 'value'=>'Received Shipment'
                                  )
 			 ),
 
