@@ -24,7 +24,7 @@ if(isset($_REQUEST['fld_module']) && $_REQUEST['fld_module'] != '')
 else
 {
 	$fld_module = 'Potentials';
-	$roleid='H1';
+	$roleid='H2';
 }
 
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
@@ -147,7 +147,7 @@ function getPickListModules()
 function getrole2picklist()
 {
 	global $adb;
-	$query = "select rolename,roleid from vtiger_role order by roleid";
+	$query = "select rolename,roleid from vtiger_role where roleid not in('H1') order by roleid";
 	$result = $adb->query($query);
 	while($row = $adb->fetch_array($result))
 	{
