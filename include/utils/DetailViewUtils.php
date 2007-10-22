@@ -75,7 +75,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,'currency_name');
 			$currency_id=$adb->query_result($pickListResult,$j,'id');
-			if($col_fields[$fieldname] == $pickListValue)
+			if($col_fields[$fieldname] == $currency_id)
 			{
 				$chk_val = "selected";	
 				$found = true;
