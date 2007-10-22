@@ -861,10 +861,8 @@ function get_contactsforol($user_name)
 		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
 		
 		$file_saved = false;
-
 		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
-		$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
-
+		$old_attachmentid = $adb->query_result($adb->query("select vtiger_crmentity.crmid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where  vtiger_seattachmentsrel.crmid=$id"),0,'crmid');
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
@@ -876,8 +874,15 @@ function get_contactsforol($user_name)
 		//This is to handle the delete image for contacts
 		if($module == 'Contacts' && $file_saved)
 		{
-			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
-			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+			if($old_attachmentid != '')
+			{
+				$setype = $adb->query_result($adb->query("select setype from vtiger_crmentity where crmid=$old_attachmentid"),0,'setype');
+				if($setype == 'Contacts Image')
+				{
+					$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
+					$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+				}
+			}
 		}
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");

@@ -15,11 +15,13 @@ function DelImage($id)
 {
 		
 	global $adb;
-	$query="delete from vtiger_attachments where attachmentsid=(select attachmentsid from vtiger_seattachmentsrel where crmid=".$id.")";
-	$adb->query($query);
-
-	$query="delete from vtiger_seattachmentsrel where crmid=".$id;
-	$adb->query($query);
+	$query= "select vtiger_seattachmentsrel.attachmentsid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where vtiger_crmentity.setype='Contacts Image' and vtiger_seattachmentsrel.crmid=".$id;
+	$result = $adb->query($query);
+	$attachmentsid = $adb->query_result($result,$i,"attachmentsid");
+	$rel_delquery='delete from vtiger_seattachmentsrel where crmid='.$id.'  && attachmentsid='.$attachmentsid;
+	$adb->query($rel_delquery);
+	$crm_delquery="delete from vtiger_crmentity where crmid=".$attachmentsid;
+	$adb->query($crm_delquery);
 }
 
 function DelAttachment($id)

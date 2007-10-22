@@ -596,7 +596,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==14)
 		{
 			$images=array();
-			$query = 'select productname, vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
+			$query = 'select productname, vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name,vtiger_crmentity.setype from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.setype="Products Image" and productid='.$col_fields['record_id'];
 			$result_image = $adb->query($query);
 			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 			{
@@ -637,7 +637,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==4)
 		{
 			//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
-			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid inner join vtiger_contactdetails on vtiger_contactdetails.imagename=vtiger_attachments.name where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
+			$sql = 'select vtiger_attachments.*,vtiger_crmentity.setype from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid  inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.setype="Contacts Image" and vtiger_seattachmentsrel.crmid='.$col_fields['record_id'];
 			$image_res = $adb->query($sql);
 			$image_id = $adb->query_result($image_res,0,'attachmentsid');
 			$image_path = $adb->query_result($image_res,0,'path');

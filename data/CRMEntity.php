@@ -216,8 +216,31 @@ class CRMEntity
 				$query = "delete from vtiger_seattachmentsrel where crmid = ".$id;
 				$adb->query($query);
 			}
-			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
-			$adb->query($sql3);
+			if($module == 'Contacts')
+			{
+				$att_sql="select vtiger_seattachmentsrel.attachmentsid  from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where vtiger_crmentity.setype='Contacts Image' and vtiger_seattachmentsrel.crmid=".$id;
+				$res=$adb->query($att_sql);
+				$attachmentsid= $adb->query_result($res,0,'attachmentsid');
+				if($attachmentsid !='' )
+				{
+					$delquery='delete from vtiger_seattachmentsrel where crmid='.$id.'  && attachmentsid='.$attachmentsid;
+					$adb->query($delquery);
+					$crm_delquery="delete from vtiger_crmentity where crmid=".$attachmentsid;
+					$adb->query($crm_delquery);
+					$sql5='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+					$adb->query($sql5);
+				}
+				else
+				{
+					$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+					$adb->query($sql3);
+				}
+			}
+			else
+			{
+				$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
+				$adb->query($sql3);
+			}
 
 			return true;
 		}
@@ -546,7 +569,6 @@ class CRMEntity
 		  if(trim($update) != '')
         	  {
 		  	$sql1 = "update ".$table_name." set ".$update." where ".$this->tab_name_index[$table_name]."=".$this->id;
-
 		  	$adb->query($sql1); 
 		  }
 		  
