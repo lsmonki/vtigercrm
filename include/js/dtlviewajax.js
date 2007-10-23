@@ -196,11 +196,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		tagValue = trim(document.getElementById(txtBox).value);
 		if(module == "Contacts")
                 {
-                        var port_obj = getObj('portal').checked;
-                        if(fieldName == "email" && tagValue == '' && port_obj == true)
+			if(getObj('portal'))
                         {
-                                alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                return false;
+                                var port_obj = getObj('portal').checked;
+                                if(fieldName == "email" && tagValue == '' && port_obj == true)
+                                {
+                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        return false;
+                                }
                         }
                 }
 	}
@@ -286,13 +289,17 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			if(module == "Contacts")
                         {
-                                var obj = getObj("email");
-                                if((fieldName == "portal") && (obj.value == ''))
+				if(getObj("email"))
                                 {
-                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                        return false;
-
-                                }
+                                	var obj = getObj("email");
+                                	if((fieldName == "portal") && (obj.value == ''))
+                                	{
+                                        	alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        	return false;
+                                	}
+					else
+	                                        getObj(dtlView).innerHTML = alert_arr.YES;
+				}
                                 else
                                         getObj(dtlView).innerHTML = alert_arr.YES;
 
