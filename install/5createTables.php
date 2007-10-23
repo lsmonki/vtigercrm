@@ -140,6 +140,7 @@ if(!@rename("install/", $renamefile."install/"))
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
 			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings->Outgoing Server
+			<li>Rename htaccess.txt file to .htaccess to make public file access control.
 			</ul>
 			<ul>
 			<li><b><font color='red'>You are the most important to us!</font></b>
