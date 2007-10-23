@@ -266,8 +266,12 @@ function maincheck_form()
 	}
 	var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
         var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+	var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+
 	var dateelements1=splitDateVal(dateval1);
         var dateelements2=splitDateVal(dateval2);
+	var dateelements3=splitDateVal(dateval3);
+
         dd1=dateelements1[0]
        	mm1=dateelements1[1]
         yyyy1=dateelements1[2]
@@ -276,8 +280,13 @@ function maincheck_form()
         mm2=dateelements2[1]
        	yyyy2=dateelements2[2]
 
+	dd3=dateelements3[0]
+        mm3=dateelements3[1]
+        yyyy3=dateelements3[2]
+
 	var date1=new Date()
         var date2=new Date()
+	var date3=new Date()
 
        	date1.setYear(yyyy1)
         date1.setMonth(mm1-1)
@@ -286,6 +295,10 @@ function maincheck_form()
         date2.setYear(yyyy2)
        	date2.setMonth(mm2-1)
         date2.setDate(dd2)
+
+	date3.setYear(yyyy3)
+        date3.setMonth(mm3-1)
+        date3.setDate(dd3)
 
 	durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
        	if(durationinmin >= 60)
@@ -308,19 +321,6 @@ function maincheck_form()
         document.EditView.time_end.value = event_endhour+':'+event_endmin;
 	if(formValidate())
 	{
-		var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-		var dateelements3=splitDateVal(dateval3);
-
-		dd3=dateelements3[0]
-                mm3=dateelements3[1]
-                yyyy3=dateelements3[2]
-
-		var date3=new Date()
-		
-		date3.setYear(yyyy3)
-                date3.setMonth(mm3-1)
-                date3.setDate(dd3)
-
 		// Added for Aydin Kurt-Elli requirement START -by Minnie
                 if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block' )
                 {
@@ -346,7 +346,6 @@ function maincheck_form()
                                 }
                         }
 
-
                         if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
 			{
 			 	if (date3 <= date2)
@@ -359,8 +358,8 @@ function maincheck_form()
                                         }
                                 }
                         }
-                        else
-                                return false;
+                        else return false;
+
 			 //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
                         date3.setMinutes(followupmin);
                         date3.setHours(followuphour);
@@ -373,12 +372,7 @@ function maincheck_form()
                                 date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
                         }
 
-                        var datefmt = document.EditView.dateformat.value;
-                        var end_dd = _2digit(parseInt(date3.getDate(),10));
-                        var end_mm = _2digit(parseInt(date3.getMonth(),10)+1);
-			var end_yy = date3.getFullYear();
-
-                        var tempdate = end_yy+'-'+end_mm+'-'+end_dd;
+			var tempdate = getdispDate(date3);
 
 			followuphour = _2digit(followuphour);
 			followupmin = _2digit(followupmin);
@@ -594,13 +588,7 @@ function check_form()
                                 {
                                         date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
                                 }
-
-                                var datefmt = document.EditView.dateformat.value;
-                                var end_dd = _2digit(parseInt(date3.getDate(),10));
-                                var end_mm = _2digit(parseInt(date3.getMonth(),10)+1);
-                                var end_yy = date3.getFullYear();
-
-                                var tempdate = end_yy+'-'+end_mm+'-'+end_dd;
+				var tempdate = getdispDate(date3);
 
 				followuphour = _2digit(followuphour);
 			        followupmin = _2digit(followupmin);
@@ -1345,7 +1333,6 @@ function changeEndtime_StartTime()
 
 function calDuedatetime(type)
 {
-        var datefmt = document.EditView.dateformat.value;
         var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
         var dateelements1=splitDateVal(dateval1);
         dd1=parseInt(dateelements1[0],10);
@@ -1355,25 +1342,11 @@ function calDuedatetime(type)
         //date1.setDate(dd1+1);
         date1.setYear(yyyy1);
         date1.setMonth(mm1-1,dd1+1);
-        var yy = date1.getFullYear();
-        var mm = parseInt(date1.getMonth(),10) + 1;
-        var dd = date1.getDate();
+	var tempdate = getdispDate(date1);
         var date = document.EditView.date_start.value;
         var hour = parseInt(document.EditView.starthr.value,10);
         var min = parseInt(document.EditView.startmin.value,10);
         var fmt = document.EditView.startfmt.value;
-	dd = _2digit(dd);
-        mm = _2digit(mm);	
-        if(datefmt == '%d-%m-%Y')
-        {
-                var tempdate = dd+'-'+mm+'-'+yy;
-        }else if(datefmt == '%m-%d-%Y')
-        {
-                var tempdate = mm+'-'+dd+'-'+yy;
-        }else
-        {
-                var tempdate = yy+'-'+mm+'-'+dd;
-        }
 	if(type == 'meeting')
         {
                 if(fmt == 'pm')
@@ -1552,4 +1525,15 @@ function addOption(lvalue,ltext)
 	else optObj.text = ltext;
 	optObj.value = lvalue;
 	document.getElementById('parentid').appendChild(optObj);
+}
+
+function getdispDate(tempDate)
+{
+	var datefmt = document.EditView.dateformat.value;
+        var dd = _2digit(parseInt(tempDate.getDate(),10));
+        var mm = _2digit(parseInt(tempDate.getMonth(),10)+1);
+	var yy = tempDate.getFullYear();
+	if(datefmt == '%d-%m-%Y') return dd+'-'+mm+'-'+yy;
+	else if(datefmt == '%m-%d-%Y') return mm+'-'+dd+'-'+yy;
+	else return yy+'-'+mm+'-'+dd;
 }
