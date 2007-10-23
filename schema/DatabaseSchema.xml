@@ -1622,6 +1622,9 @@
 		<index name="cntactivityrel_contactid_idx">
 			<col>contactid</col>
 		</index>
+		<index name="cntactivityrel_activityid_idx">
+			<col>activityid</col>
+		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
