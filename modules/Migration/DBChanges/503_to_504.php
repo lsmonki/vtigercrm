@@ -28,6 +28,8 @@ $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Starts \n\n");
 		ExecuteQuery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'");
  */
 
+ExecuteQuery("insert into vtiger_field values(29,".$adb->getUniqueID('vtiger_field').",'internal_mailer','vtiger_users',1,'56','internal_mailer','INTERNAL_MAIL_COMPOSER',1,0,0,50,15,80,1,'V~O',1,null,'BAS')");
+ 
 //Added when prodving FCK editor feature in Email Templates.
 //before using FCK editor we are using text area. it store next line as \n. so we change the \n to <br>when displaying the contents.
 //Now we are using FCK editor. So new line character will be automatically saved as <br>//But the contents created with text area still having \n character as next line. So we need to change it to <br>
@@ -573,6 +575,8 @@ ExecuteQuery("update vtiger_field set tablename='vtiger_crmentity' where tabid =
 ExecuteQuery("update vtiger_crmentity inner join vtiger_troubletickets on vtiger_troubletickets.ticketid=vtiger_crmentity.crmid  set vtiger_crmentity.description=vtiger_troubletickets.description");
 ExecuteQuery("alter table vtiger_troubletickets drop column description");
 
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_crmentity:description:description:HelpDesk_Description:V' where columnname='vtiger_troubletickets:description:description:HelpDesk_Description:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_crmentity:description:HelpDesk_Description:V' where columnname='vtiger_troubletickets:description:description:HelpDesk_Description:V'");
 
 //Changed the ordinary field to mandatory field for the field EventStatus??(Event Module)
 //Changing the typeofdata as "V~M" from "V~O"--added by Bharath 30-08-07
