@@ -81,6 +81,14 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	$sum = 0;
 	for($i=0;$i<count($datay); $i++)
 	{
+		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view']== 'MATRIX')
+		{
+			$datax[$i]=trim($datax[$i]);
+			if(strlen($datax[$i]) <= 10)
+				$datax[$i]=$datax[$i];
+			else
+				$datax[$i]= substr($datax[$i],0,10)."..";
+		}
 		$dataset->addPoint(
 			        $datax[$i],
 			        $datay[$i],
@@ -120,7 +128,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 			
 	// set legend
 	$legend_box =& $plotarea->addNew('legend');
-	$legend_box->setPadding(array('top'=>20,'bottom'=>0,'left'=>0,'right'=>0));
+	$legend_box->setPadding(array('top'=>4,'bottom'=>-10,'left'=>0,'right'=>0));
 	$legend_box->setFillColor('#F5F5F5');
 	$legend_box->showShadow();
 

@@ -432,7 +432,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 		
 		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
 		{
-			$width = 350;
+			$width = 450;
 			$height = 250;
 		}else
 		{
