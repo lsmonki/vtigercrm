@@ -31,8 +31,8 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting vtiger_products to price book");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
-			$adb->query($query);
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
+			$adb->pquery($query, array($pricebook_id,$id,$list_price));
 		}
 	}
 	if($singlepane_view == 'true')
@@ -51,8 +51,8 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting PriceBooks to Product");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
-			$adb->query($query);
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
+			$adb->pquery($query, array($id,$productid,$list_price));
 		}
 	}
 	if($singlepane_view == 'true')

@@ -22,8 +22,8 @@ $image_path=$theme_path."images/";
 
 if(isset($_REQUEST['opmode']) && $_REQUEST['opmode'] != '')
 {
-	$sql_del = "delete from vtiger_systems where server_type='backup'";
-	$adb->query($sql_del);
+	$sql_del = "delete from vtiger_systems where server_type=?";
+	$adb->pquery($sql_del, array('backup'));
 }
 
 $smarty = new vtigerCRM_Smarty;
@@ -31,8 +31,8 @@ if($_REQUEST['error'] != '')
 {
 		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
-$sql="select * from vtiger_systems where server_type = 'backup'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_systems where server_type = ?";
+$result = $adb->pquery($sql, array('backup'));
 $server = $adb->query_result($result,0,'server');
 $server_username = $adb->query_result($result,0,'server_username');
 $server_password = $adb->query_result($result,0,'server_password');

@@ -63,7 +63,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
-	$field_list ='(';
+	$field_list = array();
 	$j=0;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	foreach($focus->list_fields as $name=>$tableinfo)
@@ -89,40 +89,43 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{	
 			 $fieldname = 'product_id';
 		}
-		if($j != 0)
-		{
-			$field_list .= ', ';
-		}
-		$field_list .= "'".$fieldname."'";
+		array_push($field_list, $fieldname);
 		$j++;
 	}
-	$field_list .=')';
 	$field=Array();
 	if($is_admin==false)
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$params = array($tabid);
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
+			$params = array();
+			
 			$query  = "SELECT DISTINCT vtiger_field.fieldname
 				FROM vtiger_field
 				INNER JOIN vtiger_profile2field
 					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 				INNER JOIN vtiger_def_org_field
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
-				if($module == "Calendar")
+				if($module == "Calendar") {
 					$query .=" WHERE vtiger_field.tabid in (9,16)";
-				else
-					$query .=" WHERE vtiger_field.tabid =".$tabid;
+				} else {
+					$query .=" WHERE vtiger_field.tabid = ?";
+					array_push($params, $tabid);
+				}
+					
 			$query.=" AND vtiger_profile2field.visible = 0
 				AND vtiger_def_org_field.visible = 0
-				AND vtiger_profile2field.profileid IN ".$profileList."
-				AND vtiger_field.fieldname IN ".$field_list;
+				AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+					
+			array_push($params, $profileList, $field_list);
 		}
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -296,26 +299,22 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	$list_header = Array();
 	$tabid = getTabid($module);
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
-	$field_list ='(';
+	$field_list = array();
 	$j=0;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
-		if($j != 0)
-		{
-			$field_list .= ', ';
-		}
-		$field_list .= "'".$fieldname."'";
+		array_push($field_list, $fieldname);
 		$j++;
 	}
-	$field_list .=')';
 	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$params = array($tabid);
 		}
 		else
 		{
@@ -326,14 +325,16 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 				INNER JOIN vtiger_def_org_field
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-				WHERE vtiger_field.tabid = ".$tabid."
+				WHERE vtiger_field.tabid = ?
 				AND vtiger_profile2field.visible=0
 				AND vtiger_def_org_field.visible=0
-				AND vtiger_profile2field.profileid IN ".$profileList."
-				AND vtiger_field.fieldname IN ".$field_list;
+				AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+			
+			$params = array($tabid, $profileList, $field_list);
 		}
 
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -535,7 +536,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 	}
 	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
-	$field_list ='(';
+	$field_list = array();
 	$j=0;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	foreach($focus->list_fields as $name=>$tableinfo)
@@ -560,24 +561,21 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                          $fieldname = 'product_id';
                 }
 
-		if($j != 0)
-		{
-			$field_list .= ', ';
-		}
-		$field_list .= "'".$fieldname."'";
+		array_push($field_list, $fieldname);
 		$j++;
 	}
-	$field_list .=')';
 	$field=Array();
 	if($is_admin==false)
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$params = array($tabid);
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
+			$params = array();
 			$query  = "SELECT DISTINCT vtiger_field.fieldname
 				FROM vtiger_field
 				INNER JOIN vtiger_profile2field
@@ -587,17 +585,21 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 				if($module == "Calendar")
 					$query .=" WHERE vtiger_field.tabid in (9,16)";
-				else
-					$query .=" WHERE vtiger_field.tabid =".$tabid;
+				else {
+					$query .=" WHERE vtiger_field.tabid = ?";
+					array_push($params, $tabid);
+				}
 
-		                $query .=" AND vtiger_profile2field.visible = 0
-				AND vtiger_profile2field.visible = 0
-				AND vtiger_def_org_field.visible = 0
-				AND vtiger_profile2field.profileid IN ".$profileList."
-				AND vtiger_field.fieldname IN ".$field_list;
+		        $query .=" AND vtiger_profile2field.visible = 0
+							AND vtiger_profile2field.visible = 0
+							AND vtiger_def_org_field.visible = 0
+							AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+							AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+							
+				array_push($params, $profileList, $field_list);
 		}
 
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
@@ -606,14 +608,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	//constructing the uitype and columnname array
 	$ui_col_array=Array();
 
-	$query = "SELECT uitype, columnname, fieldname
-		FROM vtiger_field";
+	$params = array();
+	$query = "SELECT uitype, columnname, fieldname FROM vtiger_field";
+	
 	if($module == "Calendar")
 	        $query .=" WHERE vtiger_field.tabid in (9,16)";
-	else
-	        $query .=" WHERE vtiger_field.tabid =".$tabid;
-	$query .=" AND fieldname IN".$field_list;
-	$result = $adb->query($query);
+	else {
+	        $query .=" WHERE vtiger_field.tabid = ?";
+			array_push($params, $tabid);
+	}
+	$query .=" AND fieldname IN (". generateQuestionMarks($field_list).") ";
+	array_push($params, $field_list);
+	
+	$result = $adb->pquery($query, $params);
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
 	{
@@ -995,26 +1002,22 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
-	$field_list ='(';
+	$field_list = array();
 	$j=0;
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
-		if($j != 0)
-		{
-			$field_list .= ', ';
-		}
-		$field_list .= "'".$fieldname."'";
+		array_push($field_list, $fieldname);
 		$j++;
 	}
-	$field_list .=')';
 	
 	$field=Array();
 	if($is_admin==false && $module != 'Users')
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = $tabid";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$params = array($tabid);
 		}
 		else
 		{
@@ -1025,14 +1028,15 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 				INNER JOIN vtiger_def_org_field
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-				WHERE vtiger_field.tabid = ".$tabid."
+				WHERE vtiger_field.tabid = ?
 				AND vtiger_profile2field.visible = 0
 				AND vtiger_def_org_field.visible = 0
-				AND vtiger_profile2field.profileid IN ".$profileList."
-				AND vtiger_field.fieldname IN ".$field_list;
+				AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+			$params = array($tabid, $profileList, $field_list);
 		}
 		
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -1044,9 +1048,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 	$query = "SELECT uitype, columnname, fieldname
 		FROM vtiger_field
-		WHERE tabid=".$tabid."
-		AND fieldname IN ".$field_list;
-	$result = $adb->query($query);
+		WHERE tabid=?
+		AND fieldname IN (". generateQuestionMarks($field_list) .")";
+	$result = $adb->pquery($query, array($tabid, $field_list));
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
 	{
@@ -1305,8 +1309,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($_SESSION['internal_mailer'] == 1)
 		{	
 			//check added for email link in user detailview
-			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($module)." and fieldname='".$fieldname."'";
-			$queryres = $adb->query($querystr);
+			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=? and fieldname=?";
+			$queryres = $adb->pquery($querystr, array(getTabid($module), $fieldname));
 			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 			$fieldid = $adb->query_result($queryres,0,'fieldid');
 			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$fieldname.'\',\''.$module.'\',\'record_id\');window.close();">'.$temp_val.'</a>';
@@ -1331,8 +1335,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		global $adb;
 		if($temp_val != '')
                 {
-			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=".$temp_val;		
-			$result=$adb->query($sql);
+			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=?";		
+			$result=$adb->pquery($sql, array($temp_val));
 			$firstname=$adb->query_result($result,0,"firstname");
 			$lastname=$adb->query_result($result,0,"lastname");
 			$name=$lastname.' '.$firstname;
@@ -1348,8 +1352,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		global $adb;
 		if($temp_val != '')
 		{
-			$sql="SELECT * FROM vtiger_campaign WHERE campaignid=".$temp_val;
-			$result=$adb->query($sql);
+			$sql="SELECT * FROM vtiger_campaign WHERE campaignid=?";
+			$result=$adb->pquery($sql, array($temp_val));
 			$campaignname=$adb->query_result($result,0,"campaignname");
 			$value= '<a href=index.php?module=Campaigns&action=DetailView&record='.$temp_val.'>'.$campaignname.'</a>';
 		}
@@ -1374,7 +1378,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 			global $adb;
 
-	$attachmentid=$adb->query_result($adb->query("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ".$entity_id),0,'attachmentsid');
+	$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
 	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
 
 	}
@@ -1409,8 +1413,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parentid != '')
                 {
-			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
-			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			$sql="SELECT * FROM $tablename WHERE $idname = ?";
+			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -1438,8 +1442,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
-			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			$sql="SELECT * FROM $tablename WHERE $idname = ?";
+			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -1463,8 +1467,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
-			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			$sql="SELECT * FROM $tablename WHERE $idname = ?";
+			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -1491,8 +1495,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
-			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			$sql="SELECT * FROM $tablename WHERE $idname = ?";
+			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -1677,7 +1681,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_NOQUOTES);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
@@ -1689,7 +1693,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+                    $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
@@ -1722,8 +1726,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
 
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=13;";
-						$queryres = $adb->query($querystr);
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
@@ -1741,8 +1745,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
 
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=13;";
-						$queryres = $adb->query($querystr);
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
@@ -1983,7 +1987,7 @@ function getListQuery($module,$where='')
                               $query .= "vtiger_accountgrouprelation.groupname IN (
 				      		SELECT groupname
 						FROM vtiger_groups
-						WHERE groupid IN ".getCurrentUserGroupList().")
+						WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
 					OR ";
                         }
                          $query .= "vtiger_accountgrouprelation.groupname IN (
@@ -2712,44 +2716,44 @@ function getRelatedToEntity($module,$list_result,$rset)
 		$parent_name=$app_strings['LBL_MULTIPLE'];
         }
         //Raju -- Ends
-			$parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"accountname");
 		}
 		if($parent_module == 'Leads')
 		{
-			$parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
 		}
 		if($parent_module == 'Potentials')
 		{
-			$parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"potentialname");
 		}
 		if($parent_module == 'Products')
 		{
-			$parent_query = "SELECT productname FROM vtiger_products WHERE productid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT productname FROM vtiger_products WHERE productid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"productname");
 		}
 		if($parent_module == 'PurchaseOrder')
 		{
-			$parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 		if($parent_module == 'SalesOrder')
 		{
-			$parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 		if($parent_module == 'Invoice')
 		{
-			$parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=".$seid;
-			$parent_result = $adb->query($parent_query);
+			$parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=?";
+			$parent_result = $adb->pquery($parent_query, array($seid));
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 
@@ -2778,24 +2782,25 @@ function getRelatedTo($module,$list_result,$rset)
 	$log->debug("Entering getRelatedTo(".$module.",".$list_result.",".$rset.") method ...");
 	$tabname = getParentTab();
 	if($module == "Notes")
-        {
-                $notesid = $adb->query_result($list_result,$rset,"notesid");
-                $action = "DetailView";
-                $evt_query="SELECT vtiger_senotesrel.crmid, vtiger_crmentity.setype
-			FROM vtiger_senotesrel
-			INNER JOIN vtiger_crmentity
-				ON  vtiger_senotesrel.crmid = vtiger_crmentity.crmid
-			WHERE vtiger_senotesrel.notesid ='".$notesid."'";
+    {
+			$notesid = $adb->query_result($list_result,$rset,"notesid");
+            $action = "DetailView";
+            $evt_query="SELECT vtiger_senotesrel.crmid, vtiger_crmentity.setype
+					FROM vtiger_senotesrel
+					INNER JOIN vtiger_crmentity
+					ON  vtiger_senotesrel.crmid = vtiger_crmentity.crmid
+				WHERE vtiger_senotesrel.notesid = ?";
+			$params = array($notesid);			
 	}else if($module == "Products")
 	{
-		$productid = $adb->query_result($list_result,$rset,"productid");
-                $action = "DetailView";
-                $evt_query="SELECT vtiger_seproductsrel.crmid, vtiger_crmentity.setype
-			FROM vtiger_seproductsrel
-			INNER JOIN vtiger_crmentity
-				ON vtiger_seproductsrel.crmid = vtiger_crmentity.crmid
-			WHERE vtiger_seproductsrel.productid ='".$productid."'";
-
+			$productid = $adb->query_result($list_result,$rset,"productid");
+            $action = "DetailView";
+            $evt_query="SELECT vtiger_seproductsrel.crmid, vtiger_crmentity.setype
+					FROM vtiger_seproductsrel
+					INNER JOIN vtiger_crmentity
+					ON vtiger_seproductsrel.crmid = vtiger_crmentity.crmid
+					WHERE vtiger_seproductsrel.productid =?";
+			$params = array($productid);
 	}else
 	{
 		$activity_id = $adb->query_result($list_result,$rset,"activityid");
@@ -2804,20 +2809,22 @@ function getRelatedTo($module,$list_result,$rset)
 			FROM vtiger_seactivityrel
 			INNER JOIN vtiger_crmentity
 				ON  vtiger_seactivityrel.crmid = vtiger_crmentity.crmid
-			WHERE vtiger_seactivityrel.activityid='".$activity_id."'";
+			WHERE vtiger_seactivityrel.activityid=?";
+			$params = array($activity_id);
 
 		if($module == 'HelpDesk')
 		{
 			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
 			if($activity_id != '')
-				$evt_query = "SELECT * FROM vtiger_crmentity WHERE crmid=".$activity_id;
+				$evt_query = "SELECT * FROM vtiger_crmentity WHERE crmid=?";
+				$params = array($activity_id);
 		}
 	}
 	//added by raju to change the related to in emails inot multiple if email is for more than one contact
-        $evt_result = $adb->query($evt_query);
+        $evt_result = $adb->pquery($evt_query, $params);
 		$numrows= $adb->num_rows($evt_result);
 		
-	$parent_module = $adb->query_result($evt_result,0,'setype');
+		$parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
 
 
@@ -2836,62 +2843,62 @@ function getRelatedTo($module,$list_result,$rset)
 	$action = "DetailView";
         if($parent_module == 'Accounts')
         {
-                $parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"accountname");
         }
         if($parent_module == 'Leads')
         {
-                $parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
         if($parent_module == 'Potentials')
         {
-                $parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"potentialname");
         }
         if($parent_module == 'Products')
         {
-                $parent_query = "SELECT productname FROM vtiger_products WHERE productid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT productname FROM vtiger_products WHERE productid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"productname");
         }
 	if($parent_module == 'Quotes')
         {
-                $parent_query = "SELECT subject FROM vtiger_quotes WHERE quoteid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT subject FROM vtiger_quotes WHERE quoteid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'PurchaseOrder')
         {
-                $parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'Invoice')
         {
-                $parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
         if($parent_module == 'SalesOrder')
         {
-                $parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
-                $parent_query = "SELECT firstname,lastname FROM vtiger_contactdetails WHERE contactid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
+                $parent_query = "SELECT firstname,lastname FROM vtiger_contactdetails WHERE contactid=?";
+                $parent_result = $adb->pquery($parent_query, array($parent_id));
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
 	if($parent_module == 'HelpDesk')
 	{
-		$parent_query = "SELECT title FROM vtiger_troubletickets WHERE ticketid=".$parent_id;
-		$parent_result = $adb->query($parent_query);
+		$parent_query = "SELECT title FROM vtiger_troubletickets WHERE ticketid=?";
+        $parent_result = $adb->pquery($parent_query, array($parent_id));
 		$parent_name = $adb->query_result($parent_result,0,"title");
 		if(strlen($parent_name) > 25)
 		{
@@ -2900,8 +2907,8 @@ function getRelatedTo($module,$list_result,$rset)
 	}
 	if($parent_module == 'Campaigns')
 	{
-		$parent_query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=".$parent_id;
-		$parent_result = $adb->query($parent_query);
+		$parent_query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=?";
+        $parent_result = $adb->pquery($parent_query, array($parent_id));
 		$parent_name = $adb->query_result($parent_result,0,"campaignname");
 		if(strlen($parent_name) > 25)
 		{
@@ -2996,47 +3003,47 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 
 		elseif($relmodule == "Potentials")
 		{
-			$query = "select contactid from vtiger_contpotentialrel where potentialid=".$relmod_recordid;
-			$result = $adb->query($query);
-                        $contact_id = $adb->query_result($result,0,"contactid");
+			$query = "select contactid from vtiger_contpotentialrel where potentialid=?";
+			$result = $adb->pquery($query, array($relmod_recordid));
+            $contact_id = $adb->query_result($result,0,"contactid");
 			$condition = "and vtiger_contactdetails.contactid= ".$contact_id;
 		}
 		elseif($relmodule == "Quotes")
 		{
 
-			$query = "select contactid from vtiger_quotes where quoteid=".$relmod_recordid;
-			$result = $adb->query($query);
+			$query = "select contactid from vtiger_quotes where quoteid=?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$contactid = $adb->query_result($result,0,"contactid");
 			if($contactid != '')
 				$condition = "and vtiger_contactdetails.contactid= ".$contactid;
 			else
 			{
-				$query = "select accountid from vtiger_quotes where quoteid=".$relmod_recordid;
-				$result = $adb->query($query);
+				$query = "select accountid from vtiger_quotes where quoteid=?";
+				$result = $adb->pquery($query, array($relmod_recordid));
 				$account_id = $adb->query_result($result,0,"accountid");
 				$condition = "and vtiger_contactdetails.accountid= ".$account_id;
 			}
 		}
 		elseif($relmodule == "PurchaseOrder")
 		{
-			$query = "select contactid from vtiger_purchaseorder where purchaseorderid=".$relmod_recordid;
-			$result = $adb->query($query);
+			$query = "select contactid from vtiger_purchaseorder where purchaseorderid=?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$contact_id = $adb->query_result($result,0,"contactid");
 			$condition = "and vtiger_contactdetails.contactid= ".$contact_id;
 		}
 
 		elseif($relmodule == "SalesOrder")
 		{
-			$query = "select contactid from vtiger_salesorder where salesorderid=".$relmod_recordid;
-			$result = $adb->query($query);
+			$query = "select contactid from vtiger_salesorder where salesorderid=?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$contact_id = $adb->query_result($result,0,"contactid");
 			$condition =  "and vtiger_contactdetails.contactid=".$contact_id;
 		}
 
 		elseif($relmodule == "Invoice")
 		{
-			$query = "select accountid from vtiger_invoice where invoiceid=".$relmod_recordid;
-			$result = $adb->query($query);
+			$query = "select accountid from vtiger_invoice where invoiceid=?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$account_id = $adb->query_result($result,0,"accountid");
 			$condition =  "and vtiger_contactdetails.accountid=".$account_id;
 
@@ -3044,8 +3051,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 
 		elseif($relmodule == "Campaigns")
 		{
-			$query = "select contactid from vtiger_campaigncontrel where campaignid =".$relmod_recordid;
-			$result = $adb->query($query);
+			$query = "select contactid from vtiger_campaigncontrel where campaignid =?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$rows = $adb->num_rows($result);
 			if($rows != 0)
 			{
@@ -3066,12 +3073,12 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 
 		elseif($relmodule == "HelpDesk" || $relmodule == "Trouble Tickets")
 		{
-			$query = "select parent_id from vtiger_troubletickets where ticketid =".$relmod_recordid;	
-			$result = $adb->query($query);
+			$query = "select parent_id from vtiger_troubletickets where ticketid =?";
+			$result = $adb->pquery($query, array($relmod_recordid));
 			$parent_id = $adb->query_result($result,0,"parent_id");
 			if($parent_id != ""){
-				$crmquery = "select setype from vtiger_crmentity where crmid=".$parent_id;
-				$parentmodule_id = $adb->query($crmquery);
+				$crmquery = "select setype from vtiger_crmentity where crmid=?";
+				$parentmodule_id = $adb->pquery($crmquery, array($parent_id));
 				$parent_modname = $adb->query_result($parentmodule_id,0,"setype");
 				if($parent_modname == "Accounts")
 					$condition = "and vtiger_contactdetails.accountid= ".$parent_id;
@@ -3085,8 +3092,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.accountid=".$relmod_recordid;
-			$pot_result = $result = $adb->query($pot_query);
+			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.accountid=?";
+			$pot_result = $result = $adb->pquery($pot_query, array($relmod_recordid));
 			$rows = $adb->num_rows($pot_result);
 			$potids_comma = "";	
 			if($rows != 0)
@@ -3111,8 +3118,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$pro_query = "select productid from vtiger_seproductsrel where setype='Accounts' and crmid=".$relmod_recordid;
-			$pro_result = $result = $adb->query($pro_query);
+			$pro_query = "select productid from vtiger_seproductsrel where setype='Accounts' and crmid=?";
+			$pro_result = $result = $adb->pquery($pro_query, array($relmod_recordid));
 			$rows = $adb->num_rows($pro_result);
 			if($rows != 0)
 			{
@@ -3134,8 +3141,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$quote_query = "select quoteid from vtiger_quotes where accountid=".$relmod_recordid;
-			$quote_result = $result = $adb->query($quote_query);
+			$quote_query = "select quoteid from vtiger_quotes where accountid=?";
+			$quote_result = $result = $adb->pquery($quote_query, array($relmod_recordid));
 			$rows = $adb->num_rows($quote_result);
 			if($rows != 0)
 			{
@@ -3159,8 +3166,8 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$SO_query = "select salesorderid from vtiger_salesorder where accountid=".$relmod_recordid;
-			$SO_result = $result = $adb->query($SO_query);
+			$SO_query = "select salesorderid from vtiger_salesorder where accountid=?";
+			$SO_result = $result = $adb->pquery($SO_query, array($relmod_recordid));
 			$rows = $adb->num_rows($SO_result);
 			if($rows != 0)
 			{
@@ -3201,45 +3208,52 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	$log->debug("Entering getRelCheckquery(".$currentmodule.",".$returnmodule.",".$recordid.") method ...");
 	$skip_id = Array();
 	$where_relquery = "";
+	$params = array();
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
 	{
 		$reltable = 'vtiger_contpotentialrel';
-		$condition = 'WHERE potentialid = '.$recordid;
+		$condition = 'WHERE potentialid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Vendors")
 	{
 		$reltable = 'vtiger_vendorcontactrel';
-		$condition = 'WHERE vendorid = '.$recordid;
+		$condition = 'WHERE vendorid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Campaigns")
 	{
 		$reltable = 'vtiger_campaigncontrel';
-		$condition = 'WHERE campaignid = '.$recordid;
+		$condition = 'WHERE campaignid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Calendar")
 	{
 		$reltable = 'vtiger_cntactivityrel';
-		$condition = 'WHERE activityid = '.$recordid;
+		$condition = 'WHERE activityid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'contactid';
 		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Leads" && $returnmodule == "Campaigns")
 	{
 		$reltable = 'vtiger_campaignleadrel';
-		$condition = 'WHERE campaignid = '.$recordid;;
+		$condition = 'WHERE campaignid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'leadid';
 		$table = 'vtiger_leaddetails';
 	}
 	elseif($currentmodule=="Users" && $returnmodule == "Calendar")
 	{
 		$reltable = 'vtiger_salesmanactivityrel';
-		$condition = 'WHERE activityid = '.$recordid;;
+		$condition = 'WHERE activityid = ?';
+		array_push($params, $recordid);
 		$selectfield = 'smid';
 		$field = 'id';
 		$table = 'vtiger_users';
@@ -3247,28 +3261,32 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	elseif($currentmodule=="Campaigns" && $returnmodule == "Leads")
 	{
 		$reltable = 'vtiger_campaignleadrel';
-		$condition = 'WHERE leadid = '.$recordid;;
+		$condition = 'WHERE leadid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'campaignid';
 		$table = 'vtiger_campaign';
 	}
 	elseif($currentmodule=="Campaigns" && $returnmodule == "Contacts")
 	{
 		$reltable = 'vtiger_campaigncontrel';
-		$condition = 'WHERE contactid = '.$recordid;
+		$condition = 'WHERE contactid = ?';
+		array_push($params, $recordid);
 		$field = $selectfield = 'campaignid';
 		$table = 'vtiger_campaign';
 	}
 	elseif($currentmodule == "Products" && ($returnmodule == "Potentials" || $returnmodule == "Accounts" || $returnmodule == "Contacts" || $returnmodule == "Leads"))
 	{
 		$reltable = 'vtiger_seproductsrel';
-		$condition = 'WHERE crmid = '.$recordid.' and setype = "'.$returnmodule.'"';
+		$condition = 'WHERE crmid = ? and setype = ?';
+		array_push($params, $recordid, $returnmodule);
 		$field = $selectfield ='productid';
 		$table = 'vtiger_products';
 	}
 	elseif(($currentmodule == "Leads" || $currentmodule == "Accounts" || $currentmodule == "Potentials" || $currentmodule == "Contacts") && $returnmodule == "Products")//added to fix the issues(ticket 4001,4002 and 4003)
 	{
 		$reltable = 'vtiger_seproductsrel';
-		$condition = 'WHERE productid = '.$recordid.' and setype = "'.$currentmodule.'"';
+		$condition = 'WHERE productid = ? and setype = ?';
+		array_push($params, $recordid, $currentmodule);
 		$selectfield ='crmid';
 		if($currentmodule == "Leads")
 		{
@@ -3294,7 +3312,8 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	elseif($currentmodule == "Products" && $returnmodule =="Vendors")
 	{
 		$reltable = 'vtiger_products';
-		$condition = 'WHERE vendor_id = '.$recordid;
+		$condition = 'WHERE vendor_id = ?';
+		array_push($params, $recordid);
 		$field = $selectfield ='productid';
 		$table = 'vtiger_products';
 	}
@@ -3304,15 +3323,15 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 
 	if($query !='')
 	{
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		if($adb->num_rows($result)!=0)
 		{
 			for($k=0;$k < $adb->num_rows($result);$k++)
 			{
 				$skip_id[]=$adb->query_result($result,$k,$selectfield);
 			}
-			$skipids = constructList($skip_id,'INTEGER');
-			$where_relquery = "and ".$table.".".$field." not in ".$skipids;
+			$skipids = implode(",", constructList($skip_id,'INTEGER'));
+			$where_relquery = "and ".$table.".".$field." not in (". $skipids .")";
 		}
 	}
 	$log->debug("Exiting getRelCheckquery method ...");
@@ -3530,9 +3549,9 @@ function getAccountId($account_name)
 	if($account_name != '')
 	{
 		// for avoid single quotes error
-		$slashes_account_name = popup_from_html($account_name);
-		$sql = "select accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted = 0 and vtiger_account.accountname='".$slashes_account_name."'";
-		$result = $adb->query($sql);
+		//slashes_account_name = popup_from_html($account_name); /* Commented by Asha. Need to see if this is required as Prepared statements is used here
+		$sql = "select accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted = 0 and vtiger_account.accountname=?";
+		$result = $adb->pquery($sql, array($account_name));
 		$accountid = $adb->query_result($result,0,"accountid");
 	}
 	return $accountid;

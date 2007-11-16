@@ -38,7 +38,7 @@ $log->debug("name is ".$focus->name);
 }
 
 global $adb;
-$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+$sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 
@@ -67,7 +67,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$userid = $current_user->id;
 	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 4";
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	$num_fieldnames = $adb->num_rows($result);
 	for($i = 0; $i < $num_fieldnames; $i++)
 	{

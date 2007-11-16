@@ -24,7 +24,7 @@ $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
 $sql="select * from vtiger_inventory_tandc";
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array());
 $inventory_id = $adb->query_result($result,0,'id');
 $inventory_type = $adb->query_result($result,0,'type');
 $inventory_tandc = $adb->query_result($result,0,'tandc');

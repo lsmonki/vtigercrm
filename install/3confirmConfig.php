@@ -25,6 +25,8 @@ if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tab
 if (isset($_REQUEST['site_URL'])) $site_URL= $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
+if (isset($_REQUEST['standarduser_email'])) $standarduser_email= $_REQUEST['standarduser_email'];
+if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
 if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
@@ -248,6 +250,24 @@ else
 					</table>
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
+						<td colspan=2 ><strong>Standarduser Configuration</strong></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Username</td>
+						<td align="left"> <font class="dataInput">standarduser</font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Password</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_password)) echo ereg_replace('.', '*', $standarduser_password); ?></font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Email</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_email)) echo $standarduser_email; ?></font></td>
+					</tr>
+					</table>
+
+					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					<tr>
 						<td colspan=2 ><strong>Currency Configuration</strong></td>
 					</tr>
 					<tr bgcolor="White">
@@ -281,6 +301,8 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                        <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
@@ -318,6 +340,8 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                        <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />

@@ -115,7 +115,6 @@ else if ( $ret_value == -3 )
 	exit;
 }
 
-
 $rows = $ret_value['rows'];
 $ret_field_count = $ret_value['field_count'];
 
@@ -173,15 +172,19 @@ foreach($firstrow as $ind => $val)
 	if(strlen($val) > 30)
 		$firstrow[$ind] = substr($val,0,30)." ..........";
 }
-foreach($secondrow as $ind => $val)
-{
-	if(strlen($val) > 30)
-		$secondrow[$ind] = substr($val,0,30)." ..........";
-}
-foreach($thirdrow as $ind => $val)
-{
-	if(strlen($val) > 30)
-		$thirdrow[$ind] = substr($val,0,30)." ..........";
+if (isset($secondrow)) { //Asha: Fix for ticket #4432
+	foreach($secondrow as $ind => $val)
+	{
+		if(strlen($val) > 30)
+			$secondrow[$ind] = substr($val,0,30)." ..........";
+	}
+	if (isset($thirdrow)) { //Asha: Fix for ticket #4432
+		foreach($thirdrow as $ind => $val)
+		{
+			if(strlen($val) > 30)
+				$thirdrow[$ind] = substr($val,0,30)." ..........";
+		}
+	}
 }
 
 $field_map = $outlook_contacts_field_map;

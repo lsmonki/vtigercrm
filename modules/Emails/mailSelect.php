@@ -26,9 +26,8 @@ $smarty = new vtigerCRM_Smarty;
 
 $userid =  $current_user->id;
 
-$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=".getTabid($pmodule)." and uitype=13";
-
-$res=$adb->query($querystr);
+$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype=13";
+$res=$adb->pquery($querystr, array(getTabid($pmodule)));
 $numrows = $adb->num_rows($res);
 $returnvalue = Array();
 for($i = 0; $i < $numrows; $i++)
@@ -54,8 +53,8 @@ if($single_record && count($columnlists) > 0)
 	switch($pmodule)
 	{
 		case 'Accounts':
-			$query = 'select accountname,'.implode(",",$columnlists).' from vtiger_account left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_account.accountid = '.$idlist;
-			$result=$adb->query($query);
+			$query = 'select accountname,'.implode(",",$columnlists).' from vtiger_account left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_account.accountid = ?';
+			$result=$adb->pquery($query, array($idlist));
 		        foreach($columnlists as $columnname)	
 			{
 				$acc_eval = $adb->query_result($result,0,$columnname);
@@ -66,8 +65,8 @@ if($single_record && count($columnlists) > 0)
 			$entity_name = $adb->query_result($result,0,'accountname');
 			break;
 		case 'Leads':
-			$query = 'select concat(firstname," ",lastname) as leadname,'.implode(",",$columnlists).' from vtiger_leaddetails left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_leaddetails.leadid = '.$idlist;
-			$result=$adb->query($query);
+			$query = 'select concat(firstname," ",lastname) as leadname,'.implode(",",$columnlists).' from vtiger_leaddetails left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_leaddetails.leadid = ?';
+			$result=$adb->pquery($query, array($idlist));
 		        foreach($columnlists as $columnname)	
 			{
 				$lead_eval = $adb->query_result($result,0,$columnname);
@@ -77,8 +76,8 @@ if($single_record && count($columnlists) > 0)
 			$entity_name = $adb->query_result($result,0,'leadname');
 			break;
 		case 'Contacts':
-			$query = 'select concat(firstname," ",lastname) as contactname,'.implode(",",$columnlists).' from vtiger_contactdetails left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_contactdetails.contactid = '.$idlist;
-			$result=$adb->query($query);
+			$query = 'select concat(firstname," ",lastname) as contactname,'.implode(",",$columnlists).' from vtiger_contactdetails left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_contactdetails.contactid = ?';
+			$result=$adb->pquery($query, array($idlist));
 		        foreach($columnlists as $columnname)	
 			{
 				$con_eval = $adb->query_result($result,0,$columnname);

@@ -20,9 +20,9 @@ if(isset($_REQUEST["record"]))
 {
 	global $adb;
 	$query = 'update vtiger_rss set starred=0';
-	$adb->query($query);
-	$query = 'update vtiger_rss set starred=1 where rssid ='.$_REQUEST["record"]; 
-	$adb->query($query);
+	$adb->pquery($query, array());
+	$query = 'update vtiger_rss set starred=1 where rssid =?'; 
+	$adb->pquery($query, array($_REQUEST["record"]));
 	echo $_REQUEST["record"];
 }
 elseif(isset($_REQUEST["rssurl"]))

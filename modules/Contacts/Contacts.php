@@ -39,7 +39,7 @@ class Contacts extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $table_name = "contactdetails";
+	var $table_name = "vtiger_contactdetails";
 	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid');
 
@@ -172,9 +172,8 @@ class Contacts extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering getCount(".$user_name.") method ...");
-		$query = "select count(*) from vtiger_contactdetails  inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0";
-
-		$result = $this->db->query($query,true,"Error retrieving contacts count");
+		$query = "select count(*) from vtiger_contactdetails  inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where user_name=? and vtiger_crmentity.deleted=0";
+		$result = $this->db->pquery($query,array($user_name),true,"Error retrieving contacts count");
 		$rows_found =  $this->db->getRowCount($result);
 		$row = $this->db->fetchByAssoc($result, 0);
 
@@ -274,12 +273,18 @@ class Contacts extends CRMEntity {
           if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
           {
               $sql1 = "select columnname from vtiger_field where tabid=4 and block <> 75";
+			  $params1 = array();
           }else
           {
               $profileList = getCurrentUserProfileList();
-              $sql1 = "select columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+              $sql1 = "select columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			  $params1 = array();
+			  if (count($profileList) > 0) {
+			  	 $sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
+			  	 array_push($params1, $profileList);
+			  }
           }
-          $result1 = $this->db->query($sql1);
+          $result1 = $this->db->pquery($sql1, $params1);
           for($i=0;$i < $adb->num_rows($result1);$i++)
           {
               $permitted_field_lists[] = $adb->query_result($result1,$i,'columnname');
@@ -685,7 +690,7 @@ class Contacts extends CRMEntity {
                         	        ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 				LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
 					ON vtiger_contactdetails2.contactid = vtiger_contactdetails.reportsto";
-		$where_auto = "  vtiger_users.status = 'Active' AND vtiger_crmentity.deleted = 0 ";
+		$where_auto = " vtiger_crmentity.deleted = 0 ";
 
                 if($where != "")
                    $query .= "  WHERE ($where) AND ".$where_auto;
@@ -721,12 +726,18 @@ function getColumnNames()
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
 	 $sql1 = "select fieldlabel from vtiger_field where tabid=4 and block <> 75";
+	 $params1 = array();
 	}else
 	{
 	 $profileList = getCurrentUserProfileList();
-	 $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+	 $sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	 $params1 = array();
+	 if (count($profileList) > 0) {
+	 	$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
+  	 	array_push($params1, $profileList);
+	 }
   }
-	$result = $this->db->query($sql1);
+	$result = $this->db->pquery($sql1, $params1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)
 	{
@@ -805,12 +816,18 @@ function get_contactsforol($user_name)
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
     $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and vtiger_field.block <> 5";
+	$params1 = array();
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	$params1 = array();
+	if (count($profileList) > 0) {
+		$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
+		array_push($params1, $profileList);
+	}
   }
-  $result1 = $adb->query($sql1);
+  $result1 = $adb->pquery($sql1, $params1);
   for($i=0;$i < $adb->num_rows($result1);$i++)
   {
       $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
@@ -862,7 +879,7 @@ function get_contactsforol($user_name)
 		
 		$file_saved = false;
 		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
-		$old_attachmentid = $adb->query_result($adb->query("select vtiger_crmentity.crmid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where  vtiger_seattachmentsrel.crmid=$id"),0,'crmid');
+		$old_attachmentid = $adb->query_result($adb->pquery("select vtiger_crmentity.crmid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where  vtiger_seattachmentsrel.crmid=?", array($id)),0,'crmid');
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
@@ -876,11 +893,11 @@ function get_contactsforol($user_name)
 		{
 			if($old_attachmentid != '')
 			{
-				$setype = $adb->query_result($adb->query("select setype from vtiger_crmentity where crmid=$old_attachmentid"),0,'setype');
+				$setype = $adb->query_result($adb->pquery("select setype from vtiger_crmentity where crmid=?", array($old_attachmentid)),0,'setype');
 				if($setype == 'Contacts Image')
 				{
-					$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
-					$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+					$del_res1 = $adb->pquery("delete from vtiger_attachments where attachmentsid=?", array($old_attachmentid));
+					$del_res2 = $adb->pquery("delete from vtiger_seattachmentsrel where attachmentsid=?", array($old_attachmentid));
 				}
 			}
 		}
@@ -888,6 +905,10 @@ function get_contactsforol($user_name)
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}	
 
+	// Function to get column name - Overriding function of base class
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
+	}
 
 //End
 

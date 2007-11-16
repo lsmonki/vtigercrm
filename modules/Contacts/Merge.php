@@ -43,9 +43,8 @@ if($templateid == "")
 }
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=".$templateid;
-
-$result = $adb->query($sql);
+$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=?";
+$result = $adb->pquery($sql, array($templateid));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
@@ -68,7 +67,7 @@ if($mass_merge != "")
 	$temp_mass_merge = $mass_merge;
 	if(array_pop($temp_mass_merge)=="")
 		array_pop($mass_merge);
-	$mass_merge = implode(",",$mass_merge);
+	//$mass_merge = implode(",",$mass_merge);
 }else if($single_record != "")
 {
 	$mass_merge = $single_record;	
@@ -84,16 +83,18 @@ require('user_privileges/user_privileges_'.$current_user->id.'.php');
 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
 {
 	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 order by vtiger_field.tablename";
+	$params1 = array();
 }
 else
 {
 	$profileList = getCurrentUserProfileList();
-	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$params1 = array($profileList);
 	//Postgres 8 fixes
 	if( $adb->dbType == "pgsql")
-	$sql = fixPostgresQuery( $sql, $log, 0);
+		$query1 = fixPostgresQuery( $query1, $log, 0);
 }
-$result = $adb->query($query1);
+$result = $adb->pquery($query1, $params1);
 $y=$adb->num_rows($result);
 	
 for ($x=0; $x<$y; $x++)
@@ -160,7 +161,7 @@ if(count($querycolumns) > 0)
 	$selectcolumns = implode($querycolumns,",");
 	
 
-$query = "select ".$selectcolumns." from vtiger_contactdetails
+	$query = "select $selectcolumns from vtiger_contactdetails
 				inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid 
 				inner join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
 				inner join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
@@ -184,10 +185,10 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 					ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups as groupsAccounts
 					ON groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
-				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
+				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(". generateQuestionMarks($mass_merge) .")";
 				
 
-$result = $adb->query($query);
+	$result = $adb->pquery($query, array($mass_merge));
 
 while($columnValues = $adb->fetch_array($result))
 {

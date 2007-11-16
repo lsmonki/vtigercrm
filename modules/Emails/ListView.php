@@ -175,8 +175,8 @@ $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_
 //--------------------------added to fix the ticket(4386)------------------------START
 foreach($listview_entries as $key=>$value)
 {
-	$sql="select email_flag from vtiger_emaildetails where emailid=".$key;
-	$result=$adb->query($sql);
+	$sql="select email_flag from vtiger_emaildetails where emailid=?";
+	$result=$adb->pquery($sql, array($key));
 	$email_flag=$adb->query_result($result,0,"email_flag");
 	$emailid[$key] = $email_flag;
 }

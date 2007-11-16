@@ -78,15 +78,8 @@ if($_REQUEST['errormsg'] != '')
         $smarty->assign("ERROR","");
 }
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
-else
-	$order_by = (($_SESSION['NOTES_ORDER_BY'] != '')?($_SESSION['NOTES_ORDER_BY']):($focus->default_order_by));
-
-if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
-else
-	$sorder = (($_SESSION['NOTES_SORT_ORDER'] != '')?($_SESSION['NOTES_SORT_ORDER']):($focus->default_sort_order));
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
 
 $_SESSION['NOTES_ORDER_BY'] = $order_by;
 $_SESSION['NOTES_SORT_ORDER'] = $sorder;
@@ -156,10 +149,6 @@ if(isset($order_by) && $order_by != '')
         $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
-$_SESSION['tablename'] = $tablename;
-$_SESSION['order_by'] = $order_by;
-$_SESSION['sorder'] =$sorder;
-
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $query));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -195,9 +184,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
  if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
  else
-     $list_result = $adb->query($query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+     $list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;

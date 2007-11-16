@@ -67,8 +67,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	}
 	else
 	{
-		$query = 'select idlists,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid ='.$focus->id;
-		$result = $adb->query($query);
+		$query = 'select idlists,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid =?';
+		$result = $adb->pquery($query, array($focus->id));
 		$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 		$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
 		$smarty->assign('TO_MAIL',$to_email);	
@@ -112,16 +112,16 @@ if($_REQUEST["internal_mailer"] == "true") {
 		else
 			$tablename = $normal_tabs[$type];
 		if($type == "Users")
-			$q = "select $fieldname from $tablename where id='".$rec_id."'";	
+			$q = "select $fieldname from $tablename where id=?";	
 		elseif($type == "Leads") 
-			$q = "select $fieldname from $tablename where leadid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where leadid=?";
 		elseif ($type == "Contacts")
-			$q = "select $fieldname from $tablename where contactid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where contactid=?";
 		elseif ($type == "Accounts")
-			$q = "select $fieldname from $tablename where accountid='".$rec_id."'";
+			$q = "select $fieldname from $tablename where accountid=?";
 		elseif ($type == "Vendors")
-			$q = "select $fieldname from $tablename where vendorid='".$rec_id."'";
-		$email1 = $adb->query_result($adb->query($q),0,$fieldname);
+			$q = "select $fieldname from $tablename where vendorid=?";
+		$email1 = $adb->query_result($adb->pquery($q, array($rec_id)),0,$fieldname);
 	} elseif ($rec_type == "email_addy") {
 		$email1 = $_REQUEST["email_addy"];
 	}
@@ -134,8 +134,8 @@ if($_REQUEST["internal_mailer"] == "true") {
 if($_REQUEST['reply'] == "true")
 {
 		$fromadd = $_REQUEST['record'];	
-		$query = "select from_email,idlists,cc_email,bcc_email from vtiger_emaildetails where emailid =$fromadd";
-		$result = $adb->query($query);
+		$query = "select from_email,idlists,cc_email,bcc_email from vtiger_emaildetails where emailid =?";
+		$result = $adb->pquery($query, array($fromadd));
 		$from_mail = $adb->query_result($result,0,'from_email');	
 		$smarty->assign('TO_MAIL',$from_mail.';');
 		$smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	

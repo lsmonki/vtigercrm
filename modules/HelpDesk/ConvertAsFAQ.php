@@ -19,10 +19,10 @@ $ticket_faq_mapping_fields = Array(
 			'product_id'=>'product_id',
 			'description'=>'faq_answer',
 			//'ticketstatus'=>'faqstatus',
-			//'ticketcategories'=>'faqcategory'
+			//'ticketcategories'=>'faqcategories'
 		   );
-$sql = " select ticketid, title, product_id,vtiger_crmentity.description, solution,vtiger_troubletickets.status, category from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid  where ticketid=".$_REQUEST['record'];
-$res = $adb->query($sql);
+$sql = " select ticketid, title, product_id,vtiger_crmentity.description, solution,vtiger_troubletickets.status, category from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid  where ticketid=?";
+$res = $adb->pquery($sql, array($_REQUEST['record']));
 
 //set all the ticket values to FAQ
 foreach($ticket_faq_mapping_fields as $ticket_column => $faq_column)
@@ -45,8 +45,8 @@ if($focus->id != '')
 	}
 
 	//Retrive the ticket comments from the vtiger_ticketcomments vtiger_table and added into the vtiger_faq answer
-	$sql = "select ticketid, comments, createdtime from vtiger_ticketcomments where ticketid=".$_REQUEST['record'];
-	$res = $adb->query($sql);
+	$sql = "select ticketid, comments, createdtime from vtiger_ticketcomments where ticketid=?";
+	$res = $adb->pquery($sql, array($_REQUEST['record']));
 	$noofrows = $adb->num_rows($res);
 
 	if($noofrows > 0)
@@ -60,8 +60,8 @@ if($focus->id != '')
 		}
 	}
 
-	$sql1 = "update vtiger_faq set answer='".$answer."' where id=".$focus->id;
-	$adb->query($sql1);
+	$sql1 = "update vtiger_faq set answer=? where id=?";
+	$adb->pquery($sql1, array($answer, $focus->id));
 }
 
 header("Location:index.php?module=Faq&action=EditView&record=$focus->id&return_module=Faq&return_action=DetailView&return_id=$focus->id");

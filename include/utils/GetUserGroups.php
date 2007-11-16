@@ -29,8 +29,8 @@ class GetUserGroups {
 		global $adb,$log;
 		$log->debug("Entering getAllUserGroups(".$userid.") method...");
 		//Retreiving from the user2grouptable
-		$query="select * from vtiger_users2group where userid=".$userid;
-		$result = $adb->query($query);
+		$query="select * from vtiger_users2group where userid=?";
+        $result = $adb->pquery($query, array($userid));
 		$num_rows=$adb->num_rows($result);
 		for($i=0;$i<$num_rows;$i++)
 		{
@@ -45,8 +45,8 @@ class GetUserGroups {
 		//Setting the User Role
 		$userRole = fetchUserRole($userid);
 		//Retreiving from the vtiger_user2role
-		$query="select * from vtiger_group2role where roleid='".$userRole."'";
-                $result = $adb->query($query);
+		$query="select * from vtiger_group2role where roleid=?";
+                $result = $adb->pquery($query, array($userRole));
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)
                 {
@@ -60,25 +60,24 @@ class GetUserGroups {
 
 		//Retreiving from the user2rs
 		$parentRoles=getParentRole($userRole);
-		$parentRolelist="(";
+		$parentRolelist= array();
 		foreach($parentRoles as $par_rol_id)
 		{
-			$parentRolelist .= "'".$par_rol_id."',";		
+			array_push($parentRolelist, $par_rol_id);		
 		}
-		$parentRolelist .= "'".$userRole."')";
-		$query="select * from vtiger_group2rs where roleandsubid in".$parentRolelist;
-                $result = $adb->query($query);
-                $num_rows=$adb->num_rows($result);
-                for($i=0;$i<$num_rows;$i++)
-                {
-                        $now_group_id=$adb->query_result($result,$i,'groupid');
+		array_push($parentRolelist, $userRole);
+		$query="select * from vtiger_group2rs where roleandsubid in (". generateQuestionMarks($parentRolelist) .")";
+        $result = $adb->pquery($query, array($parentRolelist));
+        $num_rows=$adb->num_rows($result);
+        for($i=0;$i<$num_rows;$i++)
+        {
+            $now_group_id=$adb->query_result($result,$i,'groupid');
  
 			if(! in_array($now_group_id,$this->user_groups))
 			{
-				$this->user_groups[]=$now_group_id;
-					
+				$this->user_groups[]=$now_group_id;					
 			}
-                }
+        }
 		foreach($this->user_groups as $grp_id)
 		{
 			$focus = new GetParentGroups();

@@ -57,7 +57,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                 }
         }
 	//Added to reduce the no. of queries logging for non-admin vtiger_users -- by Minnie-start
-	$field_list ='(';
+	$field_list = array();
 	$j=0;	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	foreach($focus->list_fields as $name=>$tableinfo)
@@ -70,29 +70,24 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				$fieldname = $oCv->list_fields_name[$name];
 			}
 		}
-		if($j != 0)
-		{
-			$field_list .= ', ';
-		}
 		if($fieldname == "accountname" && $module !="Accounts")
 			$fieldname = "account_id";
 		if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
 		{
 			$fieldname = "contact_id";
 		}
-		$field_list .= "'".$fieldname."'";
+		array_push($field_list, $fieldname);
 		$j++;
 	}
-	$field_list .=')';
 	//Getting the Entries from Profile2 vtiger_field vtiger_table
 	if($is_admin == false)
 	{
 		$profileList = getCurrentUserProfileList();
 		//changed to get vtiger_field.fieldname
-		$query  = "SELECT vtiger_profile2field.*,vtiger_field.fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." AND vtiger_field.fieldname IN ".$field_list." GROUP BY vtiger_field.fieldid";
+		$query  = "SELECT vtiger_profile2field.*,vtiger_field.fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .") GROUP BY vtiger_field.fieldid";
  		if( $adb->dbType == "pgsql")
  		    $query = fixPostgresQuery( $query, $log, 0);
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, array($tabid, $profileList, $field_list));
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
 		{
@@ -177,7 +172,7 @@ function Search($module)
 		
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$search_string) : $search_string;
 
-		$search_string=addslashes(ltrim(rtrim($stringConvert)));
+		$search_string=ltrim(rtrim($stringConvert));
 
 		// $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
 
@@ -220,8 +215,8 @@ function get_usersid($table_name,$column_name,$search_string)
 	global $log;
         $log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like '%".$search_string."%' ";
-	$user_result=$adb->query($user_qry);
+	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like ?";
+	$user_result=$adb->pquery($user_qry, array('%'.$search_string.'%'));
 	$noofuser_rows=$adb->num_rows($user_result);
 	$x=$noofuser_rows-1;
 	if($noofuser_rows!=0)
@@ -330,8 +325,8 @@ function BasicSearch($module,$search_field,$search_string)
 	       }
 		if($search_field == "accountname" && $module != "Accounts")
 			$search_field = "account_id";
-		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name='".$module."' and (fieldname='".$search_field."' or columnname='".$search_field."')";
-		$result = $adb->query($qry);
+		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name=? and (fieldname=? or columnname=?)";
+		$result = $adb->pquery($qry, array($module, $search_field, $search_field));
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
 		{
@@ -447,7 +442,7 @@ function getAdvSearchfields($module)
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
 		$sql = "select * from vtiger_field ";
-		$sql.= " where vtiger_field.tabid in(".$tabid.") and";
+		$sql.= " where vtiger_field.tabid in(?) and";
 		$sql.= " vtiger_field.displaytype in (1,2,3)";
 		if($tabid == 13 || $tabid == 15)
 		{
@@ -470,14 +465,23 @@ function getAdvSearchfields($module)
 			$sql.= " and vtiger_field.fieldlabel != 'Attachment'";
 		}
 		$sql.= "group by vtiger_field.fieldlabel order by block,sequence";
+		
+		$params = array($tabid);
 	}
 	else
 	{
 		$profileList = getCurrentUserProfileList();
 		$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
-		$sql.= " where vtiger_field.tabid in(".$tabid.") and";
-		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0";
-		$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList;
+		$sql.= " where vtiger_field.tabid in(?) and";
+		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+		
+		$params = array($tabid);
+		
+		if (count($profileList) > 0) {
+			$sql.= "  and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";	
+			array_push($params, $profileList);		
+		}
+		
 		if($tabid == 13 || $tabid == 15)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
@@ -499,10 +503,9 @@ function getAdvSearchfields($module)
 			$sql.= " and vtiger_field.fieldlabel != 'Attachment'";
 		}
 		$sql .= " group by vtiger_field.fieldlabel order by block,sequence";
-
 	}
 
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, $params);
 	$noofrows = $adb->num_rows($result);
 	$block = '';
 	$select_flag = '';
@@ -717,7 +720,7 @@ function getWhereCondition($currentModule)
 			list($tab_col_val,$typeofdata) = split("::::",$_REQUEST[$table_colname]);
 			$tab_col = str_replace('\'','',stripslashes($tab_col_val));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
-			$srch_val = addslashes($_REQUEST[$search_value]);
+			$srch_val = $_REQUEST[$search_value];
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
@@ -822,8 +825,8 @@ function getdashboardcondition()
 		$url_string .= "&date_closed=".$date_closed;
 	}
 	if(isset($owner) && $owner != ""){
-		$user_qry="select vtiger_users.id from vtiger_users where vtiger_users.user_name = '".$owner."' ";
-		$res = $adb->query($user_qry);
+		$user_qry="select vtiger_users.id from vtiger_users where vtiger_users.user_name = ?";
+		$res = $adb->pquery($user_qry, array($owner));
 		$uid = $adb->query_result($res,0,'id');
 		array_push($where_clauses, "vtiger_crmentity.smownerid = ".$uid);
 		$url_string .= "&assigned_user_id=".$uid;

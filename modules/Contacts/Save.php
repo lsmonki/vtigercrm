@@ -99,10 +99,9 @@ if($_FILES['imagename']['name'] != '')
 }
 elseif($focus->id != '')
 {
-	$result = $adb->query("select imagename from vtiger_contactdetails where contactid = ".$focus->id);
+	$result = $adb->pquery("select imagename from vtiger_contactdetails where contactid = ?", array($focus->id));
 	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
 }
-	
 //Saving the contact
 if($image_error=="false")
 {
@@ -123,16 +122,18 @@ if($image_error=="false")
 	{
 		if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
 		{
-			$sql = "insert into vtiger_campaigncontrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-			$adb->query($sql);
+			$sql = "delete from vtiger_campaigncontrel where contactid = ?";
+			$adb->pquery($sql, array($focus->id));
+			$sql = "insert into vtiger_campaigncontrel values (?,?)";
+			$adb->pquery($sql, array($_REQUEST['return_id'], $focus->id));
 		}
 	}
 
 	//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
 	if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 	{
-		$sql = "update vtiger_portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
-		$adb->query($sql);
+		$sql = "update vtiger_portalinfo set user_name=?,isactive=0 where id=?";
+		$adb->pquery($sql, array($_REQUEST['email'], $_REQUEST['record']));
 	}
 	elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
 	{
@@ -143,7 +144,7 @@ if($image_error=="false")
 			$insert = 'true';
 
 		$sql = "select id,user_name,user_password,isactive from vtiger_portalinfo";
-		$result = $adb->query($sql);
+		$result = $adb->pquery($sql, array());
 
 		for($i=0;$i<$adb->num_rows($result);$i++)
 		{
@@ -156,8 +157,8 @@ if($image_error=="false")
 					$flag = 'true';
 				else
 				{
-					$sql = "update vtiger_portalinfo set user_name='".$username."', isactive=1 where id=".$id;
-					$adb->query($sql);
+					$sql = "update vtiger_portalinfo set user_name=?, isactive=1 where id=?";
+					$adb->pquery($sql, array($username, $id));
 					$update = 'true';
 					$flag = 'true';
 					$password = $adb->query_result($result,$i,'user_password');
@@ -172,8 +173,9 @@ if($image_error=="false")
 		if($insert == 'true')
 		{
 			$password = makeRandomPassword();
-			$sql = "insert into vtiger_portalinfo values(".$focus->id.",'".$username."','".$password."','C','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',1)";
-			$adb->query($sql);
+			$sql = "insert into vtiger_portalinfo values(?,?,?,?,?,?,?,?)";
+			$params = array($focus->id, $username, $password, 'C', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
+			$adb->pquery($sql, $params);
 		}
 
 		//changes made to send mail to portal user when we use ajax edit

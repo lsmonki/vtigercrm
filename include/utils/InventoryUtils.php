@@ -175,8 +175,8 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 		{
 			$notification_table = 'InvoiceNotification';
 		}
-		$query = "select * from vtiger_inventorynotification where notificationname='".$notification_table."'";
-		$result = $adb->query($query);
+		$query = "select * from vtiger_inventorynotification where notificationname=?";
+		$result = $adb->pquery($query, array($notification_table));
 
 		$subject = $adb->query_result($result,0,'notificationsubject');
 		$body = $adb->query_result($result,0,'notificationbody');
@@ -210,8 +210,8 @@ function getPrdQtyInStck($product_id)
 	global $log;
 	$log->debug("Entering getPrdQtyInStck(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT qtyinstock FROM vtiger_products WHERE productid = ".$product_id;
-	$result=$adb->query($query1);
+	$query1 = "SELECT qtyinstock FROM vtiger_products WHERE productid = ?";
+	$result=$adb->pquery($query1, array($product_id));
 	$qtyinstck= $adb->query_result($result,0,"qtyinstock");
 	$log->debug("Exiting getPrdQtyInStck method ...");
 	return $qtyinstck;
@@ -227,8 +227,8 @@ function getPrdReOrderLevel($product_id)
 	global $log;
 	$log->debug("Entering getPrdReOrderLevel(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT reorderlevel FROM vtiger_products WHERE productid = ".$product_id;
-	$result=$adb->query($query1);
+	$query1 = "SELECT reorderlevel FROM vtiger_products WHERE productid = ?";
+	$result=$adb->pquery($query1, array($product_id));
 	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
 	$log->debug("Exiting getPrdReOrderLevel method ...");
 	return $reorderlevel;
@@ -244,8 +244,8 @@ function getPrdHandler($product_id)
 	global $log;
 	$log->debug("Entering getPrdHandler(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT handler FROM vtiger_products WHERE productid = ".$product_id;
-	$result=$adb->query($query1);
+	$query1 = "SELECT handler FROM vtiger_products WHERE productid = ?";
+	$result=$adb->pquery($query1, array($product_id));
 	$handler= $adb->query_result($result,0,"handler");
 	$log->debug("Exiting getPrdHandler method ...");
 	return $handler;
@@ -260,7 +260,7 @@ function getTaxId($type)
 	global $adb, $log;
 	$log->debug("Entering into getTaxId($type) function.");
 
-	$res = $adb->query("SELECT taxid FROM vtiger_inventorytaxinfo WHERE taxname='$type'");
+	$res = $adb->pquery("SELECT taxid FROM vtiger_inventorytaxinfo WHERE taxname=?", array($type));
 	$taxid = $adb->query_result($res,0,'taxid');
 
 	$log->debug("Exiting from getTaxId($type) function. return value=$taxid");
@@ -278,7 +278,7 @@ function getTaxPercentage($type)
 
 	$taxpercentage = '';
 
-	$res = $adb->query("SELECT percentage FROM vtiger_inventorytaxinfo WHERE taxname = '$type'");
+	$res = $adb->pquery("SELECT percentage FROM vtiger_inventorytaxinfo WHERE taxname = ?", array($type));
 	$taxpercentage = $adb->query_result($res,0,'percentage');
 
 	$log->debug("Exiting from getTaxPercentage($type) function. return value=$taxpercentage");
@@ -298,12 +298,12 @@ function getProductTaxPercentage($type,$productid,$default='')
 
 	$taxpercentage = '';
 
-	$res = $adb->query("SELECT taxpercentage
+	$res = $adb->pquery("SELECT taxpercentage
 			FROM vtiger_inventorytaxinfo
 			INNER JOIN vtiger_producttaxrel
 				ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid
 			WHERE vtiger_producttaxrel.productid = $productid
-			AND vtiger_inventorytaxinfo.taxname = '$type'");
+			AND vtiger_inventorytaxinfo.taxname = ?", array($type));
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	//This is to retrive the default configured value if the taxpercentage related to product is empty
@@ -335,9 +335,10 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 				    );
 
 	$histid = $adb->getUniqueID($history_table_array[$module]);
- 	$modifiedtime = $adb->formatDate(date('YmdHis'));
- 	$query = "insert into $history_table_array[$module] values($histid,$id,'$relatedname','$total','$history_fldval',$modifiedtime)";	
-	$adb->query($query);
+ 	$modifiedtime = $adb->formatDate(date('YmdHis'), true);
+ 	$query = "insert into $history_table_array[$module] values(?,?,?,?,?,?)";
+	$qparams = array($histid,$id,$relatedname,$total,$history_fldval,$modifiedtime);	
+	$adb->pquery($query, $qparams);
 
 	$log->debug("Exit from function addInventoryHistory");
 }
@@ -363,7 +364,7 @@ function getAllTaxes($available='all', $sh='')
 		$where = " where $tablename.deleted=0";
 	}
 	
-	$res = $adb->query("select * from $tablename $where order by deleted");
+	$res = $adb->pquery("select * from $tablename $where order by deleted", array());
 	$noofrows = $adb->num_rows($res);
 	for($i=0;$i<$noofrows;$i++)
 	{
@@ -397,18 +398,19 @@ function getTaxDetailsForProduct($productid, $available='all')
 		}
 		if($available != 'all' && $available == 'available_associated')
 		{
-			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid or vtiger_inventorytaxinfo.deleted=0 GROUP BY vtiger_inventorytaxinfo.taxid";
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo left JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = ? or vtiger_inventorytaxinfo.deleted=0 GROUP BY vtiger_inventorytaxinfo.taxid";
 		}
 		else
 		{
-			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo INNER JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = $productid $where";
+			$query = "SELECT vtiger_producttaxrel.*, vtiger_inventorytaxinfo.* FROM vtiger_inventorytaxinfo INNER JOIN vtiger_producttaxrel ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid WHERE vtiger_producttaxrel.productid = ? $where";
 		}
+		$params = array($productid);
 
 		//Postgres 8 fixes
  		if( $adb->dbType == "pgsql")
  		    $query = fixPostgresQuery( $query, $log, 0);
 		
-		$res = $adb->query($query);
+		$res = $adb->pquery($query, $params);
 		for($i=0;$i<$adb->num_rows($res);$i++)
 		{
 			$tax_details[$i]['productid'] = $adb->query_result($res,$i,'productid');
@@ -442,8 +444,8 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
 
 	if($return_old_values == 'return_old_values')
 	{
-		$query1  = "select * from vtiger_inventoryproductrel where id=".$objectid;
-        	$result1 = $adb->query($query1);
+		$query1  = "select * from vtiger_inventoryproductrel where id=?";
+        	$result1 = $adb->pquery($query1, array($objectid));
         	$num_rows = $adb->num_rows($result1);
         	for($i=0; $i<$num_rows;$i++)
         	{
@@ -453,11 +455,11 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
         	}
 	}
 	
-        $query2 = "delete from vtiger_inventoryproductrel where id=".$objectid;
-        $adb->query($query2);
+        $query2 = "delete from vtiger_inventoryproductrel where id=?";
+        $adb->pquery($query2, array($objectid));
 
-        $query3 = "delete from vtiger_inventoryshippingrel where id=".$objectid;
-        $adb->query($query3);
+        $query3 = "delete from vtiger_inventoryshippingrel where id=?";
+        $adb->pquery($query3, array($objectid));
 
 	$log->debug("Exit from function deleteInventoryProductDetails($objectid, $return_old_values='').");
 	return $ext_prod_arr;
@@ -504,15 +506,14 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		if(isset($_REQUEST['productDescription'.$i]))
 			$description = $_REQUEST['productDescription'.$i];
 		else{
-			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=".$prod_id;
-			$desc_res = $adb->query($desc_duery);
+			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=?";
+			$desc_res = $adb->pquery($desc_duery, array($prod_id));
 			$description = $adb->query_result($desc_res,0,"product_description");
 		}	
 	        $qty = $_REQUEST['qty'.$i];
 	        $listprice = $_REQUEST['listPrice'.$i];
 		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
-		$description =addslashes($description);
-		$comment = addslashes($_REQUEST['comment'.$i]);
+		$comment = $_REQUEST['comment'.$i];
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
 		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
@@ -531,9 +532,10 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 			}
 		}
 
-		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment','$description')";
+		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values(?,?,?,?,?,?,?)";
+		$qparams = array($focus->id, $prod_id , $prod_seq, $qty, $listprice, $comment, $description);
 		$prod_seq++;
-		$adb->query($query);
+		$adb->pquery($query, $qparams);
 
 		if($module != 'PurchaseOrder')
 		{
@@ -543,16 +545,19 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 		//we should update discount and tax details
 		$updatequery = "update vtiger_inventoryproductrel set ";
+		$updateparams = array();
 
 		//set the discount percentage or discount amount in update query, then set the tax values
 		if($_REQUEST['discount_type'.$i] == 'percentage')
 		{
-			$updatequery .= " discount_percent='".$_REQUEST['discount_percentage'.$i]."',";
+			$updatequery .= " discount_percent=?,";
+			array_push($updateparams, $_REQUEST['discount_percentage'.$i]);
 		}
 		elseif($_REQUEST['discount_type'.$i] == 'amount')
 		{
+			$updatequery .= " discount_amount=?,";
 			$discount_amount = getConvertedPrice($_REQUEST['discount_amount'.$i]);//convert the amount to $
-			$updatequery .= " discount_amount='".$discount_amount."',";
+			array_push($updateparams, $discount_amount);
 		}
 
 		if($_REQUEST['taxtype'] == 'group')
@@ -562,9 +567,11 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$tax_name = $all_available_taxes[$tax_count]['taxname'];
 				$request_tax_name = $tax_name."_group_percentage";
 			
-				$updatequery .= "$tax_name = '".$_REQUEST[$request_tax_name]."',";
+				$updatequery .= "$tax_name = ?,";
+				array_push($updateparams, $_REQUEST[$request_tax_name]);
 			}
-			$updatequery = trim($updatequery,',')." where id=$focus->id and productid=$prod_id";
+			$updatequery = trim($updatequery,',')." where id=? and productid=?";
+			array_push($updateparams, $focus->id, $prod_id);
 		}
 		else
 		{
@@ -574,13 +581,15 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$tax_name = $taxes_for_product[$tax_count]['taxname'];
 				$request_tax_name = $tax_name."_percentage".$i;
 			
-				$updatequery .= "$tax_name = '".$_REQUEST[$request_tax_name]."',";
+				$updatequery .= "$tax_name = ?,";
+				array_push($updateparams, $_REQUEST[$request_tax_name]);
 			}
-			$updatequery = trim($updatequery,',')." where id=$focus->id and productid=$prod_id";
+			$updatequery = trim($updatequery,',')." where id=? and productid=?";
+			array_push($updateparams, $focus->id, $prod_id);
 		}
 		// jens 2006/08/19 - protect against empy update queries
  		if( !preg_match( '/set\s+where/i', $updatequery)) {
- 		    $adb->query($updatequery);
+ 		    $adb->pquery($updatequery, $updateparams);
  		}
 	}
 
@@ -588,25 +597,31 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	//netprice, group discount, taxtype, S&H amount, adjustment and total to entity table
 
 	$updatequery  = " update $focus->table_name set ";
+	$updateparams = array();
 
 	$subtotal = getConvertedPrice($_REQUEST['subtotal']);//get the subtotal to $
-	$updatequery .= " subtotal='".$subtotal."',";
+	$updatequery .= " subtotal=?,";
+	array_push($updateparams, $subtotal);
 
-	$updatequery .= " taxtype='".$_REQUEST['taxtype']."',";
+	$updatequery .= " taxtype=?,";
+	array_push($updateparams, $_REQUEST['taxtype']);
 
 	//for discount percentage or discount amount
 	if($_REQUEST['discount_type_final'] == 'percentage')
 	{
-		$updatequery .= " discount_percent='".$_REQUEST['discount_percentage_final']."',";
+		$updatequery .= " discount_percent=?,";
+		array_push($updateparams, $_REQUEST['discount_percentage_final']);
 	}
 	elseif($_REQUEST['discount_type_final'] == 'amount')
 	{
 		$discount_amount_final = getConvertedPrice($_REQUEST['discount_amount_final']);//convert final discount amount to $
-		$updatequery .= " discount_amount='".$discount_amount_final."',";
+		$updatequery .= " discount_amount=?,";
+		array_push($updateparams, $discount_amount_final);
 	}
 	
 	$shipping_handling_charge = getConvertedPrice($_REQUEST['shipping_handling_charge']);//convert the S&H amount to $
-	$updatequery .= " s_h_amount='".$shipping_handling_charge."',";
+	$updatequery .= " s_h_amount=?,";
+	array_push($updateparams, $shipping_handling_charge);
 
 	//if the user gave - sign in adjustment then add with the value
 	$adjustmentType = '';
@@ -615,36 +630,41 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 	$adjustment = $_REQUEST['adjustment'];
 	$adjustment = getConvertedPrice($adjustment);//convert the adjustment to $
-	$updatequery .= " adjustment='".$adjustmentType.$adjustment."',";
+	$updatequery .= " adjustment=?,";
+	array_push($updateparams, $adjustmentType.$adjustment);
 
 	$total = getConvertedPrice($_REQUEST['total']);//convert total to $
-	$updatequery .= " total='".$total."'";
+	$updatequery .= " total=?";
+	array_push($updateparams, $total);
 
 	$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
 	//Added where condition to which entity we want to update these values
 	//$updatequery .= " where ".$focus->$module_id."=$focus->id";
-	$updatequery .= " where ".$id_array[$module]."=$focus->id";
+	$updatequery .= " where ".$id_array[$module]."=?";
+	array_push($updateparams, $focus->id);
 
-	$adb->query($updatequery);
+	$adb->pquery($updatequery, $updateparams);
 
 	//to save the S&H tax details in vtiger_inventoryshippingrel table
 	$sh_tax_details = getAllTaxes('all','sh');
 	$sh_query_fields = "id,";
-	$sh_query_values = "$focus->id,";
+	$sh_query_values = "?,";
+	$sh_query_params = array($focus->id);
 	for($i=0;$i<count($sh_tax_details);$i++)
 	{
 		$tax_name = $sh_tax_details[$i]['taxname']."_sh_percent";
 		if($_REQUEST[$tax_name] != '')
 		{
 			$sh_query_fields .= $sh_tax_details[$i]['taxname'].",";
-			$sh_query_values .= $_REQUEST[$tax_name].",";
+			$sh_query_values .= "?,";
+			array_push($sh_query_params, $_REQUEST[$tax_name]);
 		}
 	}
 	$sh_query_fields = trim($sh_query_fields,',');
 	$sh_query_values = trim($sh_query_values,',');
 
-	$sh_query = "insert into vtiger_inventoryshippingrel(".$sh_query_fields.") values(".$sh_query_values.")";
-	$adb->query($sh_query);
+	$sh_query = "insert into vtiger_inventoryshippingrel($sh_query_fields) values($sh_query_values)";
+	$adb->pquery($sh_query, $sh_query_params);
 
 	$log->debug("Exit from function saveInventoryProductDetails($module).");
 }
@@ -663,7 +683,7 @@ function getInventoryTaxType($module, $id)
 	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
 	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
 	
-	$res = $adb->query("select taxtype from ".$inv_table_array[$module]." where ".$inv_id_array[$module]."=".$id);
+	$res = $adb->pquery("select taxtype from $inv_table_array[$module] where $inv_id_array[$module]=?", array($id));
 
 	$taxtype = $adb->query_result($res,0,'taxtype');
 
@@ -683,7 +703,7 @@ function getInventoryProductTaxValue($id, $productid, $taxname)
 	global $log, $adb;
 	$log->debug("Entering into function getInventoryProductTaxValue($id, $productid, $taxname).");
 	
-	$res = $adb->query("select $taxname from vtiger_inventoryproductrel where id = $id and productid = $productid");
+	$res = $adb->pquery("select $taxname from vtiger_inventoryproductrel where id = ? and productid = ?", array($id, $productid));
 	$taxvalue = $adb->query_result($res,0,$taxname);
 
 	if($taxvalue == '')
@@ -704,7 +724,7 @@ function getInventorySHTaxPercent($id, $taxname)
 	global $log, $adb;
 	$log->debug("Entering into function getInventorySHTaxPercent($id, $taxname)");
 	
-	$res = $adb->query("select $taxname from vtiger_inventoryshippingrel where id= $id");
+	$res = $adb->pquery("select $taxname from vtiger_inventoryshippingrel where id= ?", array($id));
 	$taxpercentage = $adb->query_result($res,0,$taxname);
 
 	if($taxpercentage == '')
@@ -790,7 +810,7 @@ function setInventoryInvoiceNumber($mode, $req_str='', $req_no='')
 function CheckDuplicateInvoiceNumber($invoiceno)
 {
 	global $adb;
-	$result=$adb->query("select invoice_no  from vtiger_invoice where invoice_no = '".$invoiceno."'");
+	$result=$adb->pquery("select invoice_no  from vtiger_invoice where invoice_no = ?", array($invoiceno));
 	$num_rows = $adb->num_rows($result);
 
 	if($num_rows > 0)

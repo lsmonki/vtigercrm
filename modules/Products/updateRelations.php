@@ -32,8 +32,8 @@ if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$des
 	{
 		if($crmid != '' && $productid != '')
 		{
-			$sql = "insert into vtiger_seproductsrel values ($crmid,$productid,'".$dest_mod."')";
-			$adb->query($sql);
+			$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+			$adb->pquery($sql, array($crmid,$productid,$dest_mod));
 		}
 	}
 	

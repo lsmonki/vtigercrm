@@ -112,8 +112,8 @@ class Products extends CRMEntity {
 			for($i=0;$i<count($tax_details);$i++)
 			{
 				$taxid = getTaxId($tax_details[$i]['taxname']);
-				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
-				$adb->query($sql);
+				$sql = "delete from vtiger_producttaxrel where productid=? and taxid=?";
+				$adb->pquery($sql, array($this->id,$taxid));
 			}
 		}
 		for($i=0;$i<count($tax_details);$i++)
@@ -132,8 +132,8 @@ class Products extends CRMEntity {
 				
 				$log->debug("Going to save the Product - $tax_name tax relationship");
 
-				$query = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-				$adb->query($query);
+				$query = "insert into vtiger_producttaxrel values(?,?,?)";
+				$adb->pquery($query, array($this->id,$taxid,$tax_per));
 			}
 		}
 
@@ -162,11 +162,11 @@ class Products extends CRMEntity {
 			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
 			foreach($del_file_list as $del_file_name)
 			{
-				$attach_res = $adb->query("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
+				$attach_res = $adb->pquery("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=? and name=?", array($id,$del_file_name));
 				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
 				
-				$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$attachments_id");
-				$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$attachments_id");
+				$del_res1 = $adb->pquery("delete from vtiger_attachments where attachmentsid=?", array($attachments_id));
+				$del_res2 = $adb->pquery("delete from vtiger_seattachmentsrel where attachmentsid=?", array($attachments_id));
 			}
 		}
 
@@ -747,7 +747,7 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.vendor_id is NULL";
-		$result=$this->db->query($query);
+		$result=$this->db->pquery($query, array());
 		$log->debug("Exiting product_novendor method ...");
 		return $this->db->num_rows($result);
 	}
@@ -795,15 +795,13 @@ class Products extends CRMEntity {
 
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			
-			WHERE vtiger_crmentity.deleted = 0 AND vtiger_users.status = 'Active'
+			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'
 				AND (
 					(vtiger_seproductsrel.crmid IS NULL)
 					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
 					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
 					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
 					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) 
-			group by vtiger_products.productid
 			";
 			//ProductRelatedToLead, Account and Potential tables are added to get the Related to field
 	

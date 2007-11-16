@@ -926,14 +926,21 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<td width="50%"><b><?php echo $app_strings['LBL_TRANSFER_OWNERSHIP']; ?></b></td>
 	        <td width="2%"><b>:</b></td>
         	<td width="48%">
-                	<input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
-                        <input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
-                        <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
+		<?php
+		$usersList = getUserslist();
+		$groupList = getGroupslist();
+		?>
+
+            <input type = "radio" name = "user_lead_owner"  <?php if($groupList != '') { ?> onclick=checkgroup();  <?php } ?> checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
+			<?php if( $groupList != '') {?>
+				<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
+				<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">    
+					<?php echo getGroupslist();?>  
+				</select>
+			<?php } ?>
+            <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
 				<?php echo getUserslist(); ?>
-                        </select>
-                        <select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-				<?php echo getGroupslist();?>
-                         </select>
+            </select>
         	</td>
 	</tr>
 	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>

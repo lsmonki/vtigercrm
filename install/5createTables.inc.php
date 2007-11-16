@@ -60,6 +60,8 @@ function create_default_users() {
         global $log, $db;
         global $admin_email;
         global $admin_password;
+		global $standarduser_email;
+		global $standarduser_password;
         global $create_default_user;
         global $default_user_name;
         global $default_password;
@@ -108,7 +110,7 @@ function create_default_users() {
  	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
  	$group3_id = $db->query_result($result,0,"groupid");
 
- 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
+ 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $user->id));
 
         // we need to change the admin user to a fixed id of 1.
         //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
@@ -126,8 +128,8 @@ function create_default_users() {
         $user->column_fields["last_name"] = 'StandardUser';
         $user->column_fields["user_name"] = 'standarduser';
         $user->column_fields["is_admin"] = 'off';
-        $user->column_fields["status"] = 'Active';
-        $user->column_fields["user_password"] = 'standarduser';
+        $user->column_fields["status"] = 'Active'; 
+        $user->column_fields["user_password"] = $standarduser_password; 
         $user->column_fields["tz"] = 'Europe/Berlin';
         $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
         $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
@@ -144,7 +146,7 @@ function create_default_users() {
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
 	$std_email ="standarduser@vtigeruser.com";
-        $user->column_fields["email1"] = $std_email;
+        $user->column_fields["email1"] = $standarduser_email;
 	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='Vice President'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -158,9 +160,9 @@ function create_default_users() {
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
-	$db->query("insert into vtiger_users2group values ('".$group1_id."',".$user->id.")");
- 	$db->query("insert into vtiger_users2group values ('".$group2_id."',".$user->id.")");
- 	$db->query("insert into vtiger_users2group values ('".$group3_id."',".$user->id.")");
+	$db->pquery("insert into vtiger_users2group values (?,?)", array($group1_id, $user->id));
+ 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $user->id));
+ 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group3_id, $user->id));
 
 }
 
@@ -284,7 +286,7 @@ $db->getUniqueID("vtiger_freetags");
 
 //Master currency population
 //Insert into vtiger_currency vtiger_table
-               $db->query("insert into vtiger_currency_info values(".$db->getUniqueID("vtiger_currency_info").",'$currency_name','$currency_code','$currency_symbol',1,'Active','-11')");
+               $db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11'));
 
 // populate the db with seed data
 if ($db_populate) {

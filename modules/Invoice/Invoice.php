@@ -106,8 +106,8 @@ class Invoice extends CRMEntity {
 		if($this->column_fields["salesorder_id"] != '')
 		{
         		$so_id = $this->column_fields["salesorder_id"];
-        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=".$so_id;
-        		$this->db->query($query1);
+        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=?";
+        		$this->db->pquery($query1, array($so_id));
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
@@ -272,8 +272,8 @@ class Invoice extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Invoice No'];
@@ -302,6 +302,13 @@ class Invoice extends CRMEntity {
 		return $return_data;
 	}
 
+	// Function to get column name - Overriding function of base class
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if ($columname == 'salesorderid') {
+			if ($fldvalue == '') return null;
+		}
+		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
+	}
 
 }
 

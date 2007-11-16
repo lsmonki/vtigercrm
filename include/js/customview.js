@@ -108,7 +108,7 @@ var picklistObj=getObj("fldPickList")
                         //Duplicate Values' Validation
                         for (i=0;i<pickListAry.length;i++) {
                                 for (j=i+1;j<pickListAry.length;j++) {
-                                        if (pickListAry[i]==pickListAry[j]) {
+                                        if (pickListAry[i].toUpperCase()==pickListAry[j].toUpperCase()) {
                                                 alert(alert_arr.DUPLICATE_VALUES_FOUND)
                                                 picklistObj.focus()
                                                 return false

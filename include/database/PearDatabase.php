@@ -18,10 +18,25 @@ include('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
 
 $log =& LoggerManager::getLogger('VT');
+$logsqltm =& LoggerManager::getLogger('SQLTIME');
+
+// Callback class useful to convert PreparedStatement Question Marks to SQL value
+// See function convertPS2Sql in PearDatabase below
+class PreparedQMark2SqlValue {
+	// Constructor
+	function PreparedQMark2SqlValue($vals){
+        $this->ctr = 0;
+        $this->vals = $vals;
+    }
+    function call($matches){
+		$this->ctr++;
+		return $matches[1].$this->vals[$this->ctr-1];
+    }
+}
 
 class PearDatabase{
     var $database = null;
-    var $dieOnError = false;
+    var $dieOnError = true;
     var $dbType = null;
     var $dbHostName = null;
     var $dbName = null;
@@ -33,6 +48,10 @@ class PearDatabase{
     var $lastmysqlrow = -1;
     var $enableSQLlog = false;
 
+	// If you want to avoid executing PreparedStatement, set this to true
+	// PreparedStatement will be converted to normal SQL statement for execution
+	var $avoidPreparedSql = false;
+	
     function isMySQL() { return dbType=='mysql'; }
     function isOracle() { return dbType=='oci8'; }
     
@@ -243,6 +262,89 @@ class PearDatabase{
 	return $result;		
     }
 
+	
+	/**
+	 * Covert PreparedStatement to SQL statement
+	 */
+	function convert2Sql($ps, $vals) {
+		// TODO: Checks need to be added array out of bounds situations
+		for($index = 0; $index < count($vals); $index++) {
+			if(is_string($vals[$index])) {
+				if($vals[$index] == '') {
+					$vals[$index] = $this->database->Quote($vals[$index]);
+				}
+				else {
+					$vals[$index] = "'".mysql_real_escape_string($vals[$index]). "'";
+				}
+			} else if($vals[$index] == null) {
+				$vals[$index] = "NULL";
+			}
+		}
+		$sql = preg_replace_callback("/((('[^']*')|(\"[^\"]*\")|[^?])+)(\?)/", array(new PreparedQMark2SqlValue($vals),"call"), $ps);
+		return $sql;
+	}
+
+  	/* ADODB prepared statement Execution
+   	* @param $sql -- Prepared sql statement
+   	* @param $params -- Parameters for the prepared statement
+   	* @param $dieOnError -- Set to true, when query execution fails
+   	* @param $msg -- Error message on query execution failure
+   	*/	
+	function pquery($sql, $params, $dieOnError=false, $msg='') {		
+		global $log;
+		$log->debug('Prepared sql query being executed : '.$sql . ' -> [' . implode(",", $params) . ']');
+		$this->checkConnection();
+		
+		global $logsqltm;
+
+		$sql_start_time = microtime();
+		$params = $this->flatten_array($params);
+		
+		if($this->avoidPreparedSql) {
+			$sql = $this->convert2Sql($sql, $params);
+			$result = &$this->database->Execute($sql);
+		} else {
+			$result = &$this->database->Execute($sql, $params);
+		}
+		$sql_end_time = microtime();
+
+		// Specifically for timing the SQL execution, you need to enable DEBUG in log4php.properties
+		if($logsqltm->isDebugEnabled()){
+			$sql_start_time = explode(" ", $sql_start_time);
+			$sql_end_time = explode(" ", $sql_end_time);
+			$sql_start_time = ((float)$sql_start_time[0] + (float)$sql_start_time[1]);
+			$sql_end_time = ((float)$sql_end_time[0] + (float)$sql_end_time[1]);
+			
+			$logsqltm->debug("SQL: " . $sql);
+			if($params != null && count($params) > 0) $logsqltm->debug("PARAMS: [" . implode(",", $params) . "]");
+			$logsqltm->debug("EXEC: " . ($sql_end_time - $sql_start_time) ." micros [START=$sql_start_time, END=$sql_end_time]");
+			$logsqltm->debug("");
+		}
+		
+		$this->lastmysqlrow = -1;
+		if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
+			return $result;	
+	}
+
+	/**
+	 * Flatten the composite array into single value.
+	 * Example:
+	 * $input = array(10, 20, array(30, 40), array('key1' => '50', 'key2'=>array(60), 70));
+	 * returns array(10, 20, 30, 40, 50, 60, 70);
+	 */
+	function flatten_array($input, $output=null) {
+		if($input == null) return null;
+		if($output == null) $output = array();
+		foreach($input as $value) {
+			if(is_array($value)) {	
+				$output = $this->flatten_array($value, $output);
+			} else {	
+				array_push($output, $value);
+			}
+		}
+		return $output;
+	}
+	
     function getEmptyBlob()
     {
 	//if(dbType=="oci8") return 'empty_blob()';
@@ -492,7 +594,18 @@ class PearDatabase{
 	$this->log->error('Rows Returned:'. $this->getRowCount($result) .' More than 1 row returned for '. $sql);
 	return '';
     }
-    
+/* function which extends requireSingleResult api to execute prepared statment
+ */
+
+    function requirePsSingleResult($sql, $params, $dieOnError=false,$msg='', $encode=true)
+    {
+	$result = $this->pquery($sql, $params, $dieOnError, $msg);
+
+	if($this->getRowCount($result ) == 1)				
+	    return $result;
+	$this->log->error('Rows Returned:'. $this->getRowCount($result) .' More than 1 row returned for '. $sql);
+	return '';
+    }   
 
 /* ADODB converted	
  *    function fetchByAssoc(&$result, $rowNum = -1, $encode=true)
@@ -910,13 +1023,17 @@ class PearDatabase{
 	return $str;
     }
 
-    function formatDate($datetime)
+    function formatDate($datetime, $strip_quotes=false)
     {
 	$this->checkConnection();
 	//$db = ADONewConnection($this->dbType);
 	$db = &$this->database;
 	$date = $db->DBTimeStamp($datetime);
 	//if($db->dbType=='mysql') return $this->quote($date);
+	/* Asha: Stripping single quotes to use the date as parameter for Prepared statement */
+	if($strip_quotes == true) {
+		return trim($date, "'");
+	}
 	return $date;
     }
 

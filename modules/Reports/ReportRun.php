@@ -63,9 +63,9 @@ class ReportRun extends CRMEntity
 		global $log,$current_user;
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
-		$ssql .= " where vtiger_report.reportid =".$reportid;
+		$ssql .= " where vtiger_report.reportid =?";
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
-		$result = $adb->query($ssql);
+		$result = $adb->pquery($ssql, array($reportid));
 	
 		$permitted_fields = Array();
 
@@ -152,16 +152,27 @@ class ReportRun extends CRMEntity
 		
 		$profileList = getCurrentUserProfileList();
 		$query = "select vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where";
+		$params = array();
 		if($module == "Calendar")
 		{
-			$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+			if (count($profileList) > 0) {
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				array_push($params, $profileList);
+			} else {
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+			}
 		}
 		else
 		{
-			$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in ('".$this->primarymodule."','".$this->secondarymodule."')) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
+			array_push($params, $this->primarymodule, $this->secondarymodule);
+			if (count($profileList) > 0) {
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				array_push($params, $profileList);
+			} else {
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+			}
 		}
-		
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, $params);
 		
 		while($collistrow = $adb->fetch_array($result))
 		{
@@ -215,10 +226,10 @@ class ReportRun extends CRMEntity
 		global $log;
 
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid"; 
-		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid where vtiger_report.reportid =".$reportid; 
+		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid where vtiger_report.reportid = ? "; 
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
 
-		$result = $adb->query($ssql);
+		$result = $adb->pquery($ssql, array($reportid));
 		$noofrows = $adb->num_rows($result);
 
 		if ($this->orderbylistsql != "")
@@ -353,10 +364,10 @@ class ReportRun extends CRMEntity
 		$advfiltersql =  "select vtiger_relcriteria.* from vtiger_report";
 		$advfiltersql .= " inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$advfiltersql .= " left join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_selectquery.queryid";
-		$advfiltersql .= " where vtiger_report.reportid =".$reportid;
+		$advfiltersql .= " where vtiger_report.reportid =?";
 		$advfiltersql .= " order by vtiger_relcriteria.columnindex";
 
-		$result = $adb->query($advfiltersql);
+		$result = $adb->pquery($advfiltersql, array($reportid));
 		while($advfilterrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $advfilterrow["columnname"];
@@ -401,7 +412,11 @@ class ReportRun extends CRMEntity
 							$advorsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
 						}
 					}
-					$advorsqls = implode(" or ",$advorsql);
+					//If negative logic filter ('not equal to', 'does not contain') is used, 'and' condition should be applied instead of 'or'
+					if($comparator == 'n' || $comparator == 'k')
+						$advorsqls = implode(" and ",$advorsql);
+					else
+						$advorsqls = implode(" or ",$advorsql);
 					$fieldvalue = " (".$advorsqls.") ";
 				}
 				elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name')
@@ -463,9 +478,9 @@ class ReportRun extends CRMEntity
 
 		$stdfiltersql = "select vtiger_reportdatefilter.* from vtiger_report";
 		$stdfiltersql .= " inner join vtiger_reportdatefilter on vtiger_report.reportid = vtiger_reportdatefilter.datefilterid";
-		$stdfiltersql .= " where vtiger_report.reportid = ".$reportid;
+		$stdfiltersql .= " where vtiger_report.reportid = ?";
 
-		$result = $adb->query($stdfiltersql);
+		$result = $adb->pquery($stdfiltersql, array($reportid));
 		$stdfilterrow = $adb->fetch_array($result);
 		if(isset($stdfilterrow))
 		{
@@ -551,9 +566,9 @@ class ReportRun extends CRMEntity
 
 		$sreportstdfiltersql = "select vtiger_reportdatefilter.* from vtiger_report"; 
 		$sreportstdfiltersql .= " inner join vtiger_reportdatefilter on vtiger_report.reportid = vtiger_reportdatefilter.datefilterid"; 
-		$sreportstdfiltersql .= " where vtiger_report.reportid =".$reportid;
+		$sreportstdfiltersql .= " where vtiger_report.reportid = ?";
 
-		$result = $adb->query($sreportstdfiltersql);
+		$result = $adb->pquery($sreportstdfiltersql, array($reportid));
 		$noofrows = $adb->num_rows($result);
 
 		for($i=0; $i<$noofrows; $i++)
@@ -849,9 +864,9 @@ class ReportRun extends CRMEntity
 
 		$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report";
 		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid";
-		$sreportsortsql .= " where vtiger_report.reportid =".$reportid." order by vtiger_reportsortcol.sortcolid";
+		$sreportsortsql .= " where vtiger_report.reportid =? order by vtiger_reportsortcol.sortcolid";
 
-		$result = $adb->query($sreportsortsql);
+		$result = $adb->pquery($sreportsortsql, array($reportid));
 
 		while($reportsortrow = $adb->fetch_array($result))
 		{
@@ -897,9 +912,9 @@ class ReportRun extends CRMEntity
 
 		$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report"; 
 		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid"; 
-		$sreportsortsql .= " where vtiger_report.reportid =".$reportid." order by vtiger_reportsortcol.sortcolid";
+		$sreportsortsql .= " where vtiger_report.reportid =? order by vtiger_reportsortcol.sortcolid";
 
-		$result = $adb->query($sreportsortsql);
+		$result = $adb->pquery($sreportsortsql, array($reportid));
 		$noofrows = $adb->num_rows($result);
 
 		for($i=0; $i<$noofrows; $i++)
@@ -2141,9 +2156,9 @@ class ReportRun extends CRMEntity
 
 		$coltotalsql = "select vtiger_reportsummary.* from vtiger_report";
 		$coltotalsql .= " inner join vtiger_reportsummary on vtiger_report.reportid = vtiger_reportsummary.reportsummaryid";
-		$coltotalsql .= " where vtiger_report.reportid =".$reportid;
+		$coltotalsql .= " where vtiger_report.reportid =?";
 
-		$result = $adb->query($coltotalsql);
+		$result = $adb->pquery($coltotalsql, array($reportid));
 
 		while($coltotalrow = $adb->fetch_array($result))
 		{
@@ -2191,9 +2206,9 @@ class ReportRun extends CRMEntity
 
 		$sreportstdfiltersql = "select vtiger_reportsummary.* from vtiger_report"; 
 		$sreportstdfiltersql .= " inner join vtiger_reportsummary on vtiger_report.reportid = vtiger_reportsummary.reportsummaryid"; 
-		$sreportstdfiltersql .= " where vtiger_report.reportid =".$reportid;
+		$sreportstdfiltersql .= " where vtiger_report.reportid =?";
 
-		$result = $adb->query($sreportstdfiltersql);
+		$result = $adb->pquery($sreportstdfiltersql, array($reportid));
 		$noofrows = $adb->num_rows($result);
 
 		for($i=0; $i<$noofrows; $i++)

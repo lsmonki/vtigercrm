@@ -27,7 +27,7 @@ elseif ($pmodule=='Leads')
 	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype=13;";
 }
 
-$result=$adb->query($querystr);
+$result=$adb->pquery($querystr, array());
 $numrows = $adb->num_rows($result);
 
 ?>

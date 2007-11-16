@@ -55,8 +55,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
     $focus->name=$focus->column_fields['subject'];
-    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
-    $result = $adb->query($sql);
+    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
+    $result = $adb->pquery($sql, array($focus->id));
     $num_rows=$adb->num_rows($result);
     $invited_users=Array();
     for($i=0;$i<$num_rows;$i++)
@@ -89,8 +89,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     }
     $smarty->assign("CONTACTSID",$cnt_idlist);
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
-    $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
-    $res = $adb->query($query);
+    $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
+    $res = $adb->pquery($query, array($focus->id));
     $rows = $adb->num_rows($res);
     if($rows != 0)
     {

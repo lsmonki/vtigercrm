@@ -42,25 +42,25 @@ class PopulateComboValues
 			$id = $adb->getUniqueID('vtiger_'.$tableName);
 			if($val != '')
 			{
-				$adb->query("insert into vtiger_".$tableName. " values(".$id.",'".$val."',1,".$picklist_valueid.")");
+				$params = array($id, $val, 1, $picklist_valueid);
+				$adb->pquery("insert into vtiger_$tableName values(?,?,?,?)", $params);
 			}
 			else
 			{
-				$adb->query("insert into vtiger_".$tableName. " values(".$id.",'--None--',1,".$picklist_valueid.")");
+				$params = array($id, '--None--', 1, $picklist_valueid);
+				$adb->pquery("insert into vtiger_$tableName values(?,?,?,?)", $params);
 			}
 
 			//Default entries for role2picklist relation has been inserted..
 
 			$sql="select roleid from vtiger_role";
-			$role_result = $adb->query($sql);
+			$role_result = $adb->pquery($sql, array());
 			$numrow = $adb->num_rows($role_result);
 			for($k=0; $k < $numrow; $k ++)
 			{
 				$roleid = $adb->query_result($role_result,$k,'roleid');
-				$adb->query("insert into vtiger_role2picklist values('".$roleid."',".$picklist_valueid.",$picklistid,".$i.")");
-
-
-
+				$params = array($roleid, $picklist_valueid, $picklistid, $i);
+				$adb->pquery("insert into vtiger_role2picklist values(?,?,?,?)", $params);
 			}
 
 			$i++;
@@ -87,8 +87,9 @@ class PopulateComboValues
 		foreach ($comboTables as $comTab)
 		{
 			$picklistid = $adb->getUniqueID("vtiger_picklist");
-			$picklist_qry = "insert into vtiger_picklist values(".$picklistid.",'".$comTab."')";
-			$adb->query($picklist_qry);
+			$params = array($picklistid, $comTab);
+			$picklist_qry = "insert into vtiger_picklist values(?,?)";
+			$adb->pquery($picklist_qry, $params);
 
 			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab,$picklistid);
 		}
@@ -105,11 +106,11 @@ class PopulateComboValues
 					   );
 		foreach($noneditable_tables as $picklistname)
 		{
-			$adb->query("update vtiger_".$picklistname." set PRESENCE=0");
+			$adb->pquery("update vtiger_".$picklistname." set PRESENCE=0", array());
 		}
 		foreach($noneditable_values as $picklistname => $value)
 		{
-			$adb->query("update vtiger_".$value." set PRESENCE=0 where $value='".$picklistname."'");
+			$adb->pquery("update vtiger_$value set PRESENCE=0 where $value=?", array($picklistname));
 		}
 
 		$log->debug("Exiting create_tables () method ...");
@@ -144,12 +145,13 @@ class PopulateComboValues
 				$id = $adb->getUniqueID('vtiger_'.$tableName);
 				if($val != '')
 				{
-					$adb->query("insert into vtiger_".$tableName. " values(".$id.",'".$val."',".$i.",1)");
+					$params = array($id, $val, $i ,1);
 				}
 				else
 				{
-					$adb->query("insert into vtiger_".$tableName. " values(".$id.",'--None--',".$i.",1)");
+					$params = array($id, '--None--', $i ,1);
 				}
+				$adb->pquery("insert into vtiger_$tableName values(?,?,?,?)", $params);
 				$i++;
 		}
 		$log->debug("Exiting insertNonPicklistValues method ...");

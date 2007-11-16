@@ -42,8 +42,8 @@ $category = getParenttab();
 
 $userid = $_REQUEST['record'];
 $username = getUserName($userid);
-$qry = "Select * from vtiger_loginhistory where user_name= '$username'";
-$qry_result = $adb->query($qry);
+$qry = "Select * from vtiger_loginhistory where user_name= ?";
+$qry_result = $adb->pquery($qry, array($username));
 $no_of_rows = $adb->num_rows($qry_result);
 
 //Retreiving the start value from request

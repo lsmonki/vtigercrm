@@ -166,7 +166,7 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+$list_result = $adb->pquery($query. " limit $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

@@ -171,12 +171,12 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 			$id = insert2DB($value_salutation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employeecount);
 			//Inserting Custom Field Values
 			$dbquery="select * from customfields where module='Leads'";
-			$custresult = $adb->query($dbquery);
+			$custresult = $adb->pquery($dbquery, array());
 			if($adb->num_rows($custresult) != 0)
 			{
 				$noofrows = $adb->num_rows($custresult);
 				$columns='';
-				$values='';
+				$params=array();
 				for($j=0; $j<$noofrows; $j++)
 				{
 					$fldLabel=$adb->query_result($custresult,$j,"fieldlabel");
@@ -187,16 +187,16 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 					if($j == 0)
 					{
 						$columns='leadid, '.$colName;
-						$values='"'.$id.'", "'.$value_colName.'"';
+						array_push($params, $id, $value_colName);
 					}
 					else
 					{
 						$columns .= ', '.$colName;
-						$values .= ', "'.$value_colName.'"';
+						array_push($params, $value_colName);
 					} 
 				}
-				$insert_custfld_query = 'insert into leadcf ('.$columns.') values('.$values.')';
-				$adb->query($insert_custfld_query);
+				$insert_custfld_query = 'insert into leadcf ('.$columns.') values('. generateQuestionMarks($params) .')';
+				$adb->pquery($insert_custfld_query, $params);
 			}
 
 }
@@ -214,9 +214,9 @@ function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leads
 
   $modified_user_id = $current_user->id;
   $assigned_user_id = $current_user->id;
-  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id',".$adb->formatString('leads','date_entered',$date_entered).",".$adb->formatString('leads','date_modified',$date_modified).",'$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
-
-  $result = $adb->query($sql);
+  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+  $params = array($id, $adb->formatDate($date_entered, true), $adb->formatDate($date_modified, true), $modified_user_id,$assigned_user_id,$salutation,$firstname,$lastname,$company,$designation,$leadsrc,$industry,$annualrevenue,$licensekey,$phone,$mobile,$fax,$email,$yahooid,$website,$leadstatus,$rating,$empcount);
+  $result = $adb->pquery($sql, $params);
   $log->debug("Exiting insert2DB method ...");
   return $id;	
 

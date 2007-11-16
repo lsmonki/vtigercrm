@@ -83,6 +83,9 @@ if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
+if (isset($_REQUEST['standarduser_email'])) $standarduser_email = $_REQUEST['standarduser_email'];
+
+if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 
 if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
 
@@ -449,6 +452,8 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+				 <input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                 <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />

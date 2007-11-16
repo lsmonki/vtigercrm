@@ -15,29 +15,31 @@ if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
 	$hour_format = $_REQUEST['hour_format'];
 else
 	$hour_format = 'am/pm';
-$delquery = "delete from vtiger_sharedcalendar where userid=".$_REQUEST["current_userid"];
-$adb->query($delquery);
+	
+$delquery = "delete from vtiger_sharedcalendar where userid=?";
+$adb->pquery($delquery, array($_REQUEST["current_userid"]));
+
 $selectedid = $_REQUEST['shar_userid'];
 $sharedid = explode (";",$selectedid);
 if(isset($sharedid) && $sharedid != null)
 {
         foreach($sharedid as $sid)
         {
-                if($sid != '')
-                {
-			$sql = "insert into vtiger_sharedcalendar values (".$_REQUEST["current_userid"].",".$sid.")";
-		        $adb->query($sql);
-                }
+        	if($sid != '')
+            {
+				$sql = "insert into vtiger_sharedcalendar values (?,?)";
+		        $adb->pquery($sql, array($_REQUEST["current_userid"], $sid));
+            }
         }
 }
 if(isset($_REQUEST['start_hour']) && $_REQUEST['start_hour'] != '')
 {
-	$sql = "update vtiger_users set start_hour='".$_REQUEST['start_hour']."' where id=".$current_user->id;
-        $adb->query($sql);
+	$sql = "update vtiger_users set start_hour=? where id=?";
+    $adb->pquery($sql, array($_REQUEST['start_hour'], $current_user->id));
 }
 
-$sql = "update vtiger_users set hour_format='".$hour_format."' where id=".$current_user->id;
-$adb->query($sql);
+$sql = "update vtiger_users set hour_format=? where id=?";
+$adb->pquery($sql, array($hour_format, $current_user->id));
 RecalculateSharingRules();
 header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$_REQUEST['subtab']."&parenttab=".$_REQUEST['parenttab']);
 

@@ -52,13 +52,12 @@ $log->debug("DEBUG In add2db.php");
 		{
 			$desc = $_REQUEST['txtDescription'];
 			$subject = $_REQUEST['uploadsubject'];
-			$description = addslashes($desc);
-			$date_var = $adb->formatDate(date('YmdHis'));	
+			$date_var = $adb->formatDate(date('YmdHis'), true);	
 			$current_date = getdate();
-			$current_date = $adb->formatDate(date('YmdHis'));	
-			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('";
-			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."',".$date_var.",".$current_date.")";	
-			$result = $adb->query($query);
+			$current_date = $adb->formatDate(date('YmdHis'), true);	
+			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
+			$params = array($current_id, $current_user->id, $current_user->id, $_REQUEST['return_module'].' Attachment', $desc, $date_var, $current_date);	
+			$result = $adb->pquery($query, $params);
 
 			# Added by DG 26 Oct 2005
 			# Attachments added to contacts are also added to their accounts
@@ -66,8 +65,8 @@ $log->debug("DEBUG In add2db.php");
 			if ($_REQUEST['return_module'] == 'Contacts')
 			{
 				$crmid = $_REQUEST['return_id'];
-				$query = 'select accountid from vtiger_contactdetails where contactid='.$crmid;
-				$result = $adb->query($query);
+				$query = 'select accountid from vtiger_contactdetails where contactid=?';
+				$result = $adb->pquery($query, array($crmid));
 				if($adb->num_rows($result) != 0)
 				{
 					$log->debug("DEBUG Returned a row");
@@ -75,13 +74,17 @@ $log->debug("DEBUG In add2db.php");
 					# Now make sure that we haven't already got this attachment associated to this account
 					# Hmmm... if this works, should we NOT upload the attachment again, and just set the relation for the contact too?
 					$log->debug("DEBUG Associated Account: ".$associated_account);
-					$query = "select name,attachmentsize from vtiger_attachments where name= '".$filename."'";
-					$result = $adb->query($query);
+					$query = "select attachmentsid, name, path from vtiger_attachments where name=?";
+					$result = $adb->pquery($query, array($filename));
 					if($adb->num_rows($result) != 0)
 					{
 						$log->debug("DEBUG Matched a row");
 						# Whoops! We matched the name. Is it the same size?
-						$dg_size = $adb->query_result($result,0,"attachmentsize");
+						$fname = $adb->query_result($result,0,"name");
+						$fpath = $adb->query_result($result,0,"path");
+						$fid = $adb->query_result($result,0,"attachmentsid");
+						$dg_size = filesize($fpath . "/".$fid."_". $fname);
+						//$dg_size = $adb->query_result($result,0,"attachmentsize");
 						$log->debug("DEBUG: These should be the same size: ".$dg_size." ".$filesize);
 						if ($dg_size == $filesize)
 						{
@@ -98,23 +101,23 @@ $log->debug("DEBUG In add2db.php");
 			# DG 19 June 2006
 			# Strip out single quotes from filenames
 			$filename = preg_replace('/\'/', '', $filename);
-			$sql = "insert into vtiger_attachments(attachmentsid, name, description, type,path,subject) values(";
-			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."','".$subject."')";
-			$result = $adb->query($sql);
+			$sql = "insert into vtiger_attachments(attachmentsid, name, description, type,path,subject) values(?,?,?,?,?,?)";
+			$params = array($current_id, $filename, $desc, $filetype, $upload_filepath, $subject);
+			$result = $adb->pquery($sql, $params);
 
 
-			$sql1 = "insert into vtiger_seattachmentsrel values('";
-			$sql1 .= $crmid."','".$current_id."')";
-			$result = $adb->query($sql1);
+			$sql1 = "insert into vtiger_seattachmentsrel values(?,?)";
+			$params1 = array($crmid, $current_id);
+			$result = $adb->pquery($sql1, $params1);
 
 			# Added by DG 26 Oct 2005
 			# Attachments added to contacts are also added to their accounts
 			if ($associated_account)
 			{
 				$log->debug("DEBUG: inserting into vtiger_seattachmentsrel from add2db 2");
-				$sql1 = "insert into vtiger_seattachmentsrel values('";
-				$sql1 .= $associated_account."','".$current_id."')";
-				$result = $adb->query($sql1);
+				$sql1 = "insert into vtiger_seattachmentsrel values(?,?)";
+				$params1 = array($associated_account, $current_id);
+				$result = $adb->pquery($sql1, $params1);
 			}
 
 			echo '<script>window.opener.location.href = window.opener.location.href;self.close();</script>';

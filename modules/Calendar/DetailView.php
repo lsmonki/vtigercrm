@@ -41,8 +41,8 @@ $activity_mode = $_REQUEST['activity_mode'];
 
 if($activity_mode =='' || strlen($activity_mode) < 1)
 {
-	$query = "select activitytype from vtiger_activity where activityid=".$_REQUEST['record'];
-	$result = $adb->query($query);
+	$query = "select activitytype from vtiger_activity where activityid=?";
+	$result = $adb->pquery($query, array($_REQUEST['record']));
 	$actType = $adb->query_result($result,0,'activitytype');
 	if( $actType == 'Task')
 	{
@@ -175,8 +175,8 @@ elseif($activity_mode == 'Events')
 	else
 		$data['set_reminder'] = $mod_strings['LBL_NO'];
 	//To set recurring details
-	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
-	$res = $adb->query($query);
+	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
+	$res = $adb->pquery($query, array($focus->id));
 	$rows = $adb->num_rows($res);
 	if($rows != 0)
 	{
@@ -248,8 +248,8 @@ elseif($activity_mode == 'Events')
 		$data['recurringcheck'] = $mod_strings['LBL_NO'];
 		$data['repeat_month_str'] = '';
 	}
-	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
-	$result = $adb->query($sql);
+	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
+	$result = $adb->pquery($sql, array($focus->id));
 	$num_rows=$adb->num_rows($result);
 	$invited_users=Array();
 	for($i=0;$i<$num_rows;$i++)

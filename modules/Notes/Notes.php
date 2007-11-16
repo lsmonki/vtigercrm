@@ -32,7 +32,7 @@ class Notes extends CRMEntity {
 	
 	var $log;
 	var $db;
-
+	var $table_name = "vtiger_notes";
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_notes');
@@ -63,7 +63,7 @@ class Notes extends CRMEntity {
 	var $list_link_field= 'notes_title';
 
 	//Added these variables which are used as default order by and sortorder in ListView
-	var $default_order_by = 'modifiedtime';
+	var $default_order_by = 'title';
 	var $default_sort_order = 'ASC';
 	function Notes() {
 		$this->log = LoggerManager::getLogger('notes');
@@ -115,6 +115,36 @@ class Notes extends CRMEntity {
 		}
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}
+
+	/**    Function used to get the sort order for Notes listview
+	*      @return string  $sorder - first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['NOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned.
+	*/
+	function getSortOrder()
+	{
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['NOTES_SORT_ORDER'] != '')?($_SESSION['NOTES_SORT_ORDER']):($this->default_sort_order));
+		$log->debug("Exiting getSortOrder() method ...");
+		return $sorder;
+	}
+
+	/**     Function used to get the order by value for Notes listview
+	*       @return string  $order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['NOTES_ORDER_BY'] if this session value is empty then default order by will be returned.
+	*/
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['NOTES_ORDER_BY'] != '')?($_SESSION['NOTES_ORDER_BY']):($this->default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
 	}
 
 

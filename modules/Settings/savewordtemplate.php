@@ -87,15 +87,14 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		{
 			if($result!=false && $savefile=="true")
 			{
-			$module = $_REQUEST['target_module'];
-			$sql = "INSERT INTO vtiger_wordtemplates ";
-			$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
-			$sql .= "VALUES (".$genQueryId.",'".$module."',".$adb->formatString('vtiger_wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
-			$sql .= "'$filename', '$filesize', '$filetype')";
+				$module = $_REQUEST['target_module'];
+				$sql = "INSERT INTO vtiger_wordtemplates ";
+				$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) values (?,?,?,?,?,?,?,?,?)";
+				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), '$parent_type', $adb->getEmptyBlob(), $strDescription, $filename, $filesize, $filetype);
+				$result = $adb->pquery($sql, $params);
 
-			$result = $adb->query($sql);
-			   $result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
-			   deleteFile($uploaddir,$filename);
+				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
+			   	deleteFile($uploaddir,$filename);
 			   	header("Location: index.php?action=listwordtemplates&module=Settings&parenttab=Settings");	
 			}
 		   	elseif($savefile=="false")

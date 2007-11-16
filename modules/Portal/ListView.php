@@ -22,7 +22,7 @@ $current_module_strings = return_module_language($current_language, 'Portal');
 global $adb;
 	
 $query="select * from vtiger_portal";
-$result=$adb->query($query);
+$result=$adb->pquery($query, array());
 //Getting the Default URL Value if any
 $default_url = $adb->query_result($result,0,'portalurl');
 $no_of_portals=$adb->num_rows($result);

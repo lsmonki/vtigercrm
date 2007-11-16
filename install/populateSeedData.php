@@ -183,12 +183,14 @@ for($i = 0; $i < $company_name_count; $i++)
 	if ($i > 3)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
-		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[1]', '$cloudtag[1]')";
-		$res = $adb->query($query);
+		$query = "insert into vtiger_freetags values (?,?,?)";
+		$qparams = array($freetag, $cloudtag[1], $cloudtag[1]);
+		$res = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis')); 
-		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$account->id.", $date, 'Accounts')";
-		$result = $adb->query($query_tag);
+		$date = $adb->formatDate(date('YmdHis'), true); 
+		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+		$tag_params = array($freetag, 1, $account->id, $date, Accounts);
+		$result = $adb->pquery($query_tag, $tag_params);
 	}
 
 
@@ -282,20 +284,22 @@ for($i=0; $i<10; $i++)
 	if ($i > 8)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
-		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[2]', '$cloudtag[2]')";
-		$res1 = $adb->query($query);
+		$query = "insert into vtiger_freetags values (?,?,?)";
+		$qparams = array($freetag, $cloudtag[2], $cloudtag[2]);
+		$res1 = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis')); 
-		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$contact->id.", $date, 'Contacts')";
-		$result1 = $adb->query($query_tag);
+		$date = $adb->formatDate(date('YmdHis'), true); 
+		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+		$tag_params = array($freetag, 1, $contact->id, $date, 'Contacts');
+		$result1 = $adb->pquery($query_tag, $tag_params);
 	}
 	// This assumes that there will be one opportunity per company in the seed data.
 	$opportunity_key = array_rand($opportunity_ids);
 	//$query = "insert into opportunities_contacts set id='".create_guid()."', contact_id='$contact->id', contact_role='".$app_list_strings['opportunity_relationship_type_default_key']."', opportunity_id='".$opportunity_ids[$opportunity_key]."'";
 	//$db->query($query, true, "unable to create seed links between opportunities and contacts");
 
-	$query = "insert into vtiger_contpotentialrel ( contactid, potentialid ) values (".$contact->id.",".$opportunity_ids[$opportunity_key].")";
-	$db->query($query);
+	$query = "insert into vtiger_contpotentialrel ( contactid, potentialid ) values (?,?)";
+	$db->pquery($query, array($contact->id, $opportunity_ids[$opportunity_key]));
 
 //	$adb->println("PSD Contact [".$contact->id."] - account[".$account_ids[$account_key]."] - potential[".$opportunity_ids[$opportunity_key]."]");
 
@@ -831,12 +835,14 @@ for($i=0;$i<5;$i++)
 	if ($i > 3)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
-		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[0]', '$cloudtag[0]')";
-		$res_inv = $adb->query($query);
+		$query = "insert into vtiger_freetags values (?,?,?)";
+		$qparams = array($freetag, $cloudtag[0], $cloudtag[0]);
+		$res_inv = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis')); 
-		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$invoice->id.", $date, 'Invoice')";
-		$result_inv = $adb->query($query_tag);
+		$date = $adb->formatDate(date('YmdHis'), true); 
+		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+		$tag_params = array($freetag, 1, $invoice->id, $date, 'Invoice');
+		$result_inv = $adb->pquery($query_tag, $tag_params);
 	}
 
 	$product_key = array_rand($product_ids); 
@@ -886,7 +892,7 @@ $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "wel
 $to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
 $cc_array = array("andrewa@a.com","casterb@b.com", "indomine@variancevtiger.com","becker@nosbest.com","electra@violet.com");
 $bcc_array = array("nathan@nathantests.com","jeff@karl1.com", "isotope@uranium.com","bunny@bugs.com","explosive@dud.com");
-$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com","joy@vtiger.com","success@vtiger.com");
+$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com","joy@happyday.com","success@greatjob.com");
 $body_array = array("This release has close to 500 fixes in it and has gone through almost 7 rounds of validation. We think it is a stable product that you can directly use in deployment! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
 
 for($i=0;$i<5;$i++)
@@ -905,8 +911,9 @@ for($i=0;$i<5;$i++)
 	$email->save("Emails");
 	$email_ids[] = $email->id;
 	
-	$query = "insert into vtiger_emaildetails(emailid,from_email,to_email,cc_email,bcc_email) values (".$email->id.", '".$from_array[$i]."', '".$to_array[$i]."','".$cc_array[$i]."','".$bcc_array[$i] ."')";
-		$res = $adb->query($query);
+	$query = "insert into vtiger_emaildetails(emailid,from_email,to_email,cc_email,bcc_email) values (?,?,?,?,?)";
+	$qparams = array($email->id, $from_array[$i], $to_array[$i], $cc_array[$i], $bcc_array[$i]);
+	$res = $adb->pquery($query, $qparams);
 }
 
 
@@ -946,9 +953,8 @@ for($i=0;$i<7;$i++)
 	$notes_ids[] = $notes ->id;
 	
 	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_senotesrel (crmid, notesid) values (".$product_ids[$product_key].", ".$notes->id.")";
-	$db->query($query);
-		
+    $query = "insert into vtiger_senotesrel (crmid, notesid) values (?,?)";
+	$db->pquery($query, array($product_ids[$product_key], $notes->id));	
 }
 
 
@@ -988,12 +994,14 @@ for($i=0;$i<5;$i++)
 	if ($i > 3)
 	{
 		$freetag = $adb->getUniqueId('vtiger_freetags');
-		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[3]', '$cloudtag[3]')";
-		$res_tkt = $adb->query($query);
+		$query = "insert into vtiger_freetags values (?,?,?)";
+		$qparams = array($freetag, $cloudtag[3], $cloudtag[3]);
+		$res_tkt = $adb->pquery($query, $qparams);
 
-		$date = $adb->formatDate(date('YmdHis')); 
-		$query_tag = "insert into vtiger_freetagged_objects values ($freetag, 1,".$helpdesk->id.", $date, 'HelpDesk')";
-		$result_tkt = $adb->query($query_tag);
+		$date = $adb->formatDate(date('YmdHis'), true); 
+		$query_tag = "insert into vtiger_freetagged_objects values (?,?,?,?,?)";
+		$tag_params = array($freetag, 1, $helpdesk->id, $date, 'HelpDesk');
+		$result_tkt = $adb->pquery($query_tag, $tag_params);
 	}
 
 }
@@ -1090,7 +1098,7 @@ for($i=0;$i<6;$i++)
 }
 
 
-$adb->query("update vtiger_crmentity set smcreatorid=".$assigned_user_id);
+$adb->pquery("update vtiger_crmentity set smcreatorid=?", array($assigned_user_id));
 
 $expected_revenue = Array("250000","750000","500000");
 $budget_cost = Array("25000","50000","90000");
@@ -1149,8 +1157,9 @@ $portalurl = array ("http://vtiger.com", "http://blogs.vtiger.com", "http://foru
 for($i=0;$i<5;$i++)
 {
 	$portalid = $adb->getUniqueId('vtiger_portal');
-	$portal_qry = "insert into vtiger_portal values (".$portalid.", '".$portalname[$i]."','".$portalurl[$i]."',0,0)";
-	$result_qry = $adb->query($portal_qry);
+	$portal_qry = "insert into vtiger_portal values (?,?,?,?,?)";
+	$portal_params = array($portalid, $portalname[$i], $portalurl[$i], 0, 0);
+	$result_qry = $adb->pquery($portal_qry, $portal_params);
 }
 
 //Populate RSS Data
@@ -1160,7 +1169,8 @@ $rssurl = array("http://forums.vtiger.com/rss.php?name=forums&file=rss","http://
 for($i=0;$i<2;$i++)
 {
 	$rssid = $adb->getUniqueId('vtiger_rss');
-	$rss_qry = "insert into vtiger_rss values (".$rssid.", '".$rssurl[$i]."','".$rssname[$i]."',0,0)";
-	$result_qry = $adb->query($rss_qry);
+	$rss_qry = "insert into vtiger_rss values (?,?,?,?,?)";
+	$rss_params = array($rssid, $rssurl[$i], $rssname[$i], 0, 0);
+	$result_qry = $adb->pquery($rss_qry, $rss_params);
 }
 ?>

@@ -131,7 +131,7 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
-$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+$sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 $smarty->assign("accountid",$accountid);

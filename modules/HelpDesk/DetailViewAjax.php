@@ -42,7 +42,7 @@ if($ajaxaction == "DETAILVIEW")
 		$assigntype = $_REQUEST['assigntype'];
 
 		$fldvalue = $modObj->constructUpdateLog($modObj, $modObj->mode, $assigned_group_name, $assigntype);
-		$fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($modObj->mode == 'edit')?true:false);
+		$fldvalue = from_html($fldvalue,($modObj->mode == 'edit')?true:false);
 		
 		$modObj->save("HelpDesk");
 		global $mod_strings;
@@ -58,7 +58,7 @@ if($ajaxaction == "DETAILVIEW")
 				$parent_module = getSalesEntityType($parent_id);
 				if($parent_module == 'Contacts')
 				{
-					$result = $adb->query("select * from vtiger_contactdetails where contactid=".$parent_id);
+					$result = $adb->pquery("select * from vtiger_contactdetails where contactid=?", array($parent_id));
 					$emailoptout = $adb->query_result($result,0,'emailoptout');
 					$contactname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'lastname');
 					$parentname = $contactname;
@@ -66,15 +66,15 @@ if($ajaxaction == "DETAILVIEW")
 				}
 				if($parent_module == 'Accounts')
 				{
-					$result = $adb->query("select * from vtiger_account where accountid=".$parent_id);
+					$result = $adb->pquery("select * from vtiger_account where accountid=?", array($parent_id));
 					$emailoptout = $adb->query_result($result,0,'emailoptout');
 					$parentname = $adb->query_result($result,0,'accountname');
 				}
 			}
 			if($contact_mailid != '')
 			{
-				$sql = "select * from vtiger_portalinfo where user_name='".$contact_mailid."'";
-				$isactive = $adb->query_result($adb->query($sql),0,'isactive');
+				$sql = "select * from vtiger_portalinfo where user_name=?";
+				$isactive = $adb->query_result($adb->pquery($sql, array($contact_mailid)),0,'isactive');
 			}
 			if($isactive == 1)
 			{
@@ -110,7 +110,7 @@ if($ajaxaction == "DETAILVIEW")
 
 		}
 		//update the log information for ticket history
-		$adb->query("update vtiger_troubletickets set update_log=$fldvalue where ticketid=".$modObj->id);
+		$adb->pquery("update vtiger_troubletickets set update_log=? where ticketid=?", array($fldvalue, $modObj->id));
 		
 		if($modObj->id != "")
 		{

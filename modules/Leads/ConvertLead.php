@@ -26,8 +26,8 @@ if(isset($_REQUEST['record']))
 }
 $category = getParentTab();
 //Retreive lead details from database
-$sql = "SELECT firstname, lastname, company, smownerid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.leadid =".$id;
-$result = $adb->query($sql);
+$sql = "SELECT firstname, lastname, company, smownerid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.leadid =?";
+$result = $adb->pquery($sql, array($id));
 $row = $adb->fetch_array($result);
 
 $firstname = $row["firstname"];
@@ -48,7 +48,7 @@ $log->info("Convert Lead view");
 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
 $sales_stage_query="select * from vtiger_sales_stage";
-$sales_stage_result = $adb->query($sales_stage_query);
+$sales_stage_result = $adb->pquery($sales_stage_query, array());
 $noofsalesRows = $adb->num_rows($sales_stage_result);
 $sales_stage_fld = '';
 for($j = 0; $j < $noofsalesRows; $j++)

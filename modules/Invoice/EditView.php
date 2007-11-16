@@ -257,7 +257,7 @@ else $smarty->assign("NAME", "");
 if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
 {
 	$smarty->assign("MODE", $quote_focus->mode);
-	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quote",$quote_focus);
+	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quotes",$quote_focus);
 }
 elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinvoice' || $_REQUEST['convertmode'] == 'update_so_val'))
 {

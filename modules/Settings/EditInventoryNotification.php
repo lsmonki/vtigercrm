@@ -24,8 +24,8 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') 
 {
     $id = $_REQUEST['record'];
-	$sql="select * from vtiger_inventorynotification where notificationid = ".$id;
-	$result = $adb->query($sql);
+	$sql="select * from vtiger_inventorynotification where notificationid = ?";
+	$result = $adb->pquery($sql, array($id));
 	if($adb->num_rows($result) ==1);
 	{
 		$label = $mod_strings[$adb->query_result($result,0,'notificationname')];

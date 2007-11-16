@@ -33,7 +33,7 @@ if($_REQUEST['mail_error'] != '')
 {
     require_once("modules/Emails/mail.php");
     $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
-	$error_msg = $mod_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $_REQUEST['user']. '.' .$mod_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
+	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $_REQUEST['user']. '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
 	$smarty->assign("ERROR_MSG",$mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font color=red>'.$error_msg.'</font></b>');
 }
 

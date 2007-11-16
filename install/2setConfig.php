@@ -79,7 +79,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_hostname']))
 	$db_hostname = $dbconfig['db_hostname'];
 	else
-	$db_hostname = $hostname;
+	$db_hostname = 'localhost'; //Asha: Set the datbase hostname to 'localhost' by default instead of $hostname
 
 	if (isset($_REQUEST['db_username']))
 	$db_username = $_REQUEST['db_username'];
@@ -116,22 +116,28 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	else $root_directory = $current_dir;
 	    
 	if (isset($_REQUEST['cache_dir']))
-	$cache_dir= $_REQUEST['cache_dir'];
+		$cache_dir= $_REQUEST['cache_dir'];
 
 	if (isset($_REQUEST['mail_server']))
-	$mail_server= $_REQUEST['mail_server'];
+		$mail_server= $_REQUEST['mail_server'];
 
 	if (isset($_REQUEST['mail_server_username']))
-	$mail_server_username= $_REQUEST['mail_server_username'];
+		$mail_server_username= $_REQUEST['mail_server_username'];
 
 	if (isset($_REQUEST['mail_server_password']))
-	$mail_server_password= $_REQUEST['mail_server_password'];
+		$mail_server_password= $_REQUEST['mail_server_password'];
 
 	if (isset($_REQUEST['admin_email']))
-	$admin_email = $_REQUEST['admin_email'];
+		$admin_email = $_REQUEST['admin_email'];
 
 	if (isset($_REQUEST['admin_password']))
-	$admin_password = $_REQUEST['admin_password'];
+        $admin_password = $_REQUEST['admin_password'];
+	
+	if (isset($_REQUEST['standarduser_email']))
+        $stand_email = $_REQUEST['standarduser_email'];
+
+	if (isset($_REQUEST['standarduser_password']))	
+		$stand_password = $_REQUEST['standarduser_password'];
 	
 	if (isset($_REQUEST['currency_name']))
 		$currency_name = $_REQUEST['currency_name'];
@@ -250,6 +256,16 @@ function verify_data(form) {
 		errorMessage += "\n user email";
 		form.admin_email.focus();
 	}
+	if (trim(form.standarduser_password.value) =='') {
+    	isError = true;
+        errorMessage += "\n standarduser password";
+        form.standarduser_password.focus();
+    }
+    if (trim(form.standarduser_email.value) =='') {
+        isError = true;
+        errorMessage += "\n standarduser email";
+        form.standarduser_email.focus();
+    }
 	if (trim(form.cache_dir.value) =='') {
                 isError = true;
                 errorMessage += "\n temp directory path";
@@ -291,11 +307,16 @@ function verify_data(form) {
 		form.admin_email.focus();
 		return false;
 	}
+	if (trim(form.standarduser_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.standarduser_email.value)) {
+        alert("The email id \'"+form.standarduser_email.value+"\' in the standard user email field is invalid");
+        form.standarduser_email.focus();
+        return false;
+    }
 
 	var SiteUrl = form.site_URL.value;
         if(SiteUrl.indexOf("localhost") > -1 && SiteUrl.indexOf("localhost") < 10)
         {
-                if(confirm("Speicfy the exact host name instead of \"localhost\" in Site URL field, otherwise you will experience some issues while working with vtiger plug-ins. Do you wish to Continue?"))
+                if(confirm("Specify the exact host name instead of \"localhost\" in Site URL field, otherwise you will experience some issues while working with vtiger plug-ins. Do you wish to Continue?"))
                 {
                         form.submit();
                 }else
@@ -476,7 +497,31 @@ function verify_data(form) {
 			</tr>
 			</table>
 	
-				<br><br>
+			<br><br>
+			<!-- StandardUser Configuration -->
+			<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+			<tr>
+				<td colspan=2><strong>Standarduser Configuration</strong></td>
+			</tr>
+			<tr>
+				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>User name</strong></td>
+				<td width=75% bgcolor="white" align="left">standarduser</td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Password</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
+			</tr>
+			<tr>
+				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'standarduser'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
+			</tr>
+			</table>
+
+			<br><br>
+
 		<!-- Currency Configuration -->
             <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 			<tr>

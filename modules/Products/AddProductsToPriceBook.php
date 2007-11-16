@@ -55,8 +55,8 @@ $num_rows = $adb->num_rows($list_result);
 $record_string= "Total No of Product Available : ".$num_rows;
 
 //Retreiving the array of already releated products
-$sql1 = "select productid from vtiger_pricebookproductrel where pricebookid=".$pricebook_id;
-$res1 = $adb->query($sql1);
+$sql1 = "select productid from vtiger_pricebookproductrel where pricebookid=?";
+$res1 = $adb->pquery($sql1, array($pricebook_id));
 $num_prod_rows = $adb->num_rows($res1);
 $prod_array = Array();
 for($i=0; $i<$num_prod_rows; $i++)

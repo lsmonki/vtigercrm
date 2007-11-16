@@ -14,7 +14,7 @@ require_once('include/database/PearDatabase.php');
 
    global $adb;
    $sql = "select templateid, module, description, filename, filesize, filetype from vtiger_wordtemplates order by filename ASC";
-   $result = $adb->query($sql);
+   $result = $adb->pquery($sql, array());
 
 $edit="Edit  ";
 $del="Del  ";

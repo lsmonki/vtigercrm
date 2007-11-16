@@ -336,8 +336,8 @@ function create_session($user_name, $password,$version)
 			$encrypted_password = $objuser->encrypt_password($password);
 			if($objuser->load_user($password) && $objuser->is_authenticated())
 			{
-				$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
-				$result = $adb->query($query);
+				$query = "select id from vtiger_users where user_name=? and user_password=?";
+				$result = $adb->pquery($query, array($user_name, $encrypted_password));
 				if($adb->num_rows($result) > 0)
 				{
 					$return_access = "TRUE";

@@ -78,7 +78,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 			$oCustomView = new CustomView($module);
 			//Instead of getting current customview id, use cvid of All so that all entities will be found
 			//$viewid = $oCustomView->getViewId($module);
-			$cv_res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='$module'");
+			$cv_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
 			$viewid = $adb->query_result($cv_res,0,'cvid');
 			
 			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
@@ -162,8 +162,8 @@ function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
 
-	$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ".getTabid($module);
-	$result = $adb->query($query);
+	$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ?";
+	$result = $adb->pquery($query, array(getTabid($module)));
 	$noofrows = $adb->num_rows($result);
 
 	$where = '';
@@ -286,7 +286,7 @@ function getSearchModulesComboList($search_module)
  {
 	 global $adb;
 	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	while($module_result = $adb->fetch_array($result))
 	{
 		$modulename = $module_result['name'];

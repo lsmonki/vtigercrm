@@ -124,9 +124,6 @@ if(isset($order_by) && $order_by != '')
 
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-$_SESSION['tablename'] = $tablename;
-$_SESSION['order_by'] = $order_by;
-$_SESSION['sorder'] =$sorder;
 //Retreiving the no of rows
 $count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -155,7 +152,7 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+$list_result = $adb->pquery($list_query. " limit $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

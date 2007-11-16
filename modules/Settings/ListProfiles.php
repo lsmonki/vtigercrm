@@ -23,7 +23,7 @@ $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
 $sql = "select * from vtiger_profile";
-$profileListResult = $adb->query($sql);
+$profileListResult = $adb->pquery($sql, array());
 $noofrows = $adb->num_rows($profileListResult);
 $list_entries = array($mod_strings['LBL_LIST_NO'],$mod_strings['LBL_LIST_TOOLS'],$mod_strings['LBL_NEW_PROFILE_NAME'],$mod_strings['LBL_DESCRIPTION']);
 

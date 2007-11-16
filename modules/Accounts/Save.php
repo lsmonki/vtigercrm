@@ -30,8 +30,8 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
 	//started
 	$value = $_REQUEST['accountname'];
-	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$value."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
-	$result = $adb->query($query);
+	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+	$result = $adb->pquery($query, array($value));
         if($adb->num_rows($result) > 0)
 	{
 		echo $mod_strings['LBL_ACCOUNT_EXIST'];
@@ -101,8 +101,12 @@ foreach($focus->column_fields as $fieldname => $val)
 //When changing the Account Address Information  it should also change the related contact address - dina
 if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
 {
-                $query = "update vtiger_contactaddress set mailingcity='".$focus->column_fields['bill_city']."',mailingstreet='".$focus->column_fields['bill_street']."',mailingcountry='".$focus->column_fields['bill_country']."',mailingzip='".$focus->column_fields['bill_code']."',mailingpobox='".$focus->column_fields['bill_pobox']."',mailingstate='".$focus->column_fields['bill_state']."',othercountry='".$focus->column_fields['ship_country']."',othercity='".$focus->column_fields['ship_city']."',otherstate='".$focus->column_fields['ship_state']."',otherzip='".$focus->column_fields['ship_code']."',otherstreet='".$focus->column_fields['ship_street']."',otherpobox='".$focus->column_fields['ship_pobox']."'  where contactaddressid in (select contactid from vtiger_contactdetails where accountid=".$focus->id.")" ;
-                $adb->query($query);
+	$query = "update vtiger_contactaddress set mailingcity=?,mailingstreet=?,mailingcountry=?,mailingzip=?,mailingpobox=?,mailingstate=?,othercountry=?,othercity=?,otherstate=?,otherzip=?,otherstreet=?,otherpobox=?  where contactaddressid in (select contactid from vtiger_contactdetails where accountid=?)" ;
+    $params = array($focus->column_fields['bill_city'], $focus->column_fields['bill_street'], $focus->column_fields['bill_country'], 
+				$focus->column_fields['bill_code'], $focus->column_fields['bill_pobox'], $focus->column_fields['bill_state'], $focus->column_fields['ship_country'], 
+				$focus->column_fields['ship_city'], $focus->column_fields['ship_state'], $focus->column_fields['ship_code'], $focus->column_fields['ship_street'], 
+				$focus->column_fields['ship_pobox'], $focus->id);
+	$adb->pquery($query, $params);
 }
 //Changing account address - Ends
 
@@ -142,54 +146,55 @@ function save_customfields($entity_id)
 	$log->info("save customfields invoked");
 	global $adb;
 	$dbquery = "SELECT * FROM customfields WHERE module = 'Accounts'";
+	$result = $adb->pquery($dbquery, array());
         /*
 	$result = mysql_query($dbquery);
 	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = '".$entity_id."'";
         $cust_result = mysql_query($custquery);
 	if(mysql_num_rows($result) != 0)
         */
-	$result = $adb->query($dbquery);
-	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = '".$entity_id."'";
-        $cust_result = $adb->query($custquery);
+	
+	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = ?";
+    $cust_result = $adb->pquery($custquery, array($entity_id));
 	if($adb->num_rows($result) != 0)
 	{
 		
 		$columns='';
 		$values='';
+		$ins_params = array();
 		$update='';
-                //	$noofrows = mysql_num_rows($result);
-                $noofrows = $adb->num_rows($result);
+		$upd_params = array();
+                
+        $noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-                  //$fldName=mysql_result($result,$i,"fieldlabel");
-                  //$colName=mysql_result($result,$i,"column_name");
-	$fldName=$adb->query_result($result,$i,"fieldlabel");
+			$fldName=$adb->query_result($result,$i,"fieldlabel");
 			$colName=$adb->query_result($result,$i,"column_name");
 			if(isset($_REQUEST[$colName]))
 			{
 				$fldvalue=$_REQUEST[$colName];
 				if(get_magic_quotes_gpc() == 1)
-                		{
-                        		$fldvalue = stripslashes($fldvalue);
-                		}
+                {
+                	$fldvalue = stripslashes($fldvalue);
+                }
 			}
 			else
 			{
 				$fldvalue = '';
 			}
-			//if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                          if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
+			
+            if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 			{
 				//Update Block
 				if($i == 0)
 				{
-                                  //$update = $colName.'="'.$fldvalue.'"';
-                                        $update = $colName."='".$fldvalue."'";
+               		$update = $colName."=?";
+					array_push($upd_params, $fldvalue);
 				}
 				else
 				{
-                                  //$update .= ', '.$colName.'="'.$fldvalue.'"';
-                                        $update .= ', '.$colName."='".$fldvalue."'";
+					$update .= ', '.$colName."=?";
+					array_push($upd_params, $fldvalue);
 				}
 			}
 			else
@@ -198,31 +203,27 @@ function save_customfields($entity_id)
 				if($i == 0)
 				{
 					$columns='accountid, '.$colName;
-					//$values='"'.$entity_id.'", "'.$fldvalue.'"';
-                                        $values="'".$entity_id."', '".$fldvalue."'";
+					array_push($ins_params, $entity_id, $fldvalue);
 				}
 				else
 				{
 					$columns .= ', '.$colName;
-					//$values .= ', "'.$fldvalue.'"';
-                                        $values .= ", '".$fldvalue."'";
+					array_push($ins_params, $fldvalue);
 				}
-			}
-			
-				
+			}				
 		}
-		//if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                  if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
+        if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
-                        $query = "UPDATE vtiger_accountcf SET ".$update." WHERE vtiger_accountid='".$entity_id."'"; 
-			$adb->query($query);
+            $query = "UPDATE vtiger_accountcf SET $update WHERE vtiger_accountid=?";
+			array_push($upd_params, $entity_id);			 
+			$adb->pquery($query, $upd_params);
 		}
 		else
 		{
 			//Insert Block
-			$query = "INSERT INTO vtiger_accountcf (".$columns.") VALUES(".$values.")";
-                        $adb->query($query);
+			$query = "INSERT INTO vtiger_accountcf ($columns) VALUES(" . generateQuestionMarks($ins_params) .")";
+            $adb->pquery($query, $ins_params);
 		}
 		
 	}

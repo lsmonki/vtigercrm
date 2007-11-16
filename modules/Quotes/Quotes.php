@@ -290,8 +290,8 @@ class Quotes extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.subject from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.subject from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Quote No'];
@@ -320,6 +320,13 @@ class Quotes extends CRMEntity {
 		return $return_data;
 	}
 
+	// Function to get column name - Overriding function of base class
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if ($columname == 'potentialid' || $columname == 'contactid') {
+			if ($fldvalue == '') return null;
+		}
+		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
+	}
 }
 
 ?>

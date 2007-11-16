@@ -34,22 +34,22 @@ global $adb,$mod_strings;
 $mode = $_REQUEST['mode'];
 if($mode == 'edit')
 {
-	$usr_qry = $adb->query("select * from vtiger_crmentity where crmid='".$focus->id."'");
+	$usr_qry = $adb->pquery("select * from vtiger_crmentity where crmid=?", array($focus->id));
 	$old_user_id = $adb->query_result($usr_qry,0,"smownerid");
 }
 $fldvalue = $focus->constructUpdateLog($focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
-$fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($mode == 'edit')?true:false);
+$fldvalue = from_html($fldvalue,($mode == 'edit')?true:false);
 
 $focus->save("HelpDesk");
 
 //After save the record, we should update the log
-$adb->query("update vtiger_troubletickets set update_log=$fldvalue where ticketid=".$focus->id);
+$adb->pquery("update vtiger_troubletickets set update_log=? where ticketid=?", array($fldvalue,$focus->id));
 
 //Added to retrieve the existing attachment of the ticket and save it for the new duplicated ticket
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
-        $sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ".$_REQUEST['old_id'];
-        $result = $adb->query($sql);
+        $sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ?";
+        $result = $adb->pquery($sql, array($_REQUEST['old_id']));
         if($adb->num_rows($result) != 0)
 	{
                 $attachmentid = $adb->query_result($result,0,'attachmentsid');
@@ -67,12 +67,12 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		fputs($handle, file_get_contents($filepath.$attachmentid."_".$filename));
 		fclose($handle);	
 
-		$adb->query("update vtiger_troubletickets set filename=\"$filename\" where ticketid=$focus->id");	
-		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','HelpDesk Attachment','".$date_var."')");
+		$adb->pquery("update vtiger_troubletickets set filename=? where ticketid=?", array($filename, $focus->id));	
+		$adb->pquery("insert into vtiger_crmentity (crmid,setype,createdtime) values(?,?,?)", array($new_attachmentid, 'HelpDesk Attachment', $date_var));
 
-		$adb->query("insert into vtiger_attachments values(".$new_attachmentid.",'".$filename."','','".$filetype."','".$upload_filepath."')");
+		$adb->pquery("insert into vtiger_attachments values(?,?,?,?,?)", array($new_attachmentid, $filename, '', $filetype, $upload_filepath));
 
-		$adb->query("insert into vtiger_seattachmentsrel values('".$focus->id."','".$new_attachmentid."')");
+		$adb->pquery("insert into vtiger_seattachmentsrel values(?,?)", array($focus->id, $new_attachmentid));
 	}
 }
 
@@ -102,7 +102,7 @@ if($focus->column_fields['parent_id'] != '')
 	$parent_module = getSalesEntityType($focus->column_fields['parent_id']);
 	if($parent_module == 'Contacts')
 	{
-		$result = $adb->query("select * from vtiger_contactdetails where contactid=".$focus->column_fields['parent_id']);
+		$result = $adb->pquery("select * from vtiger_contactdetails where contactid=?", array($focus->column_fields['parent_id']));
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$contactname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'lastname');
 		$parentname = $contactname;
@@ -110,7 +110,7 @@ if($focus->column_fields['parent_id'] != '')
 	}
 	if($parent_module == 'Accounts')
 	{
-		$result = $adb->query("select * from vtiger_account where accountid=".$focus->column_fields['parent_id']);
+		$result = $adb->pquery("select * from vtiger_account where accountid=?", array($focus->column_fields['parent_id']));
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$parentname = $adb->query_result($result,0,'accountname');
 	}
@@ -119,8 +119,8 @@ if($focus->column_fields['parent_id'] != '')
 //Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
 if($contact_mailid != '')
 {
-	$sql = "select * from vtiger_portalinfo where user_name='".$contact_mailid."'";
-	$isactive = $adb->query_result($adb->query($sql),0,'isactive');
+	$sql = "select * from vtiger_portalinfo where user_name=?";
+	$isactive = $adb->query_result($adb->pquery($sql, array($contact_mailid)),0,'isactive');
 }
 if($isactive == 1)
 {
@@ -144,8 +144,8 @@ $_REQUEST['return_id'] = $return_id;
 
 if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'edit')
 {
-        $sql = 'insert into vtiger_seticketsrel values('.$_REQUEST['product_id'].' , '.$focus->id.')';
-        $adb->query($sql);
+        $sql = 'insert into vtiger_seticketsrel values(?,?)';
+        $adb->pquery($sql, array($_REQUEST['product_id'] , $focus->id));
 
 	if($_REQUEST['return_module'] == 'Products')
 	        $return_id = $_REQUEST['product_id'];

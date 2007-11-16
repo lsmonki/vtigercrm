@@ -82,7 +82,7 @@ if(empty($date_data))
 	
 }
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data); 
-if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
+if ($viewBox == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year'))
 {
         $calendar_arr['calendar']->add_Activities($current_user);
 }

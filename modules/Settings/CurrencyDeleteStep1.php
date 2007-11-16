@@ -21,8 +21,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $delete_currency_id = $_REQUEST['id'];
-$sql = "select * from vtiger_currency_info where id=".$delete_currency_id;
-$result = $adb->query($sql);
+$sql = "select * from vtiger_currency_info where id=?";
+$result = $adb->pquery($sql, array($delete_currency_id));
 $delete_currencyname = $adb->query_result($result,0,"currency_name");
 
 
@@ -53,8 +53,8 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 				$output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
 						 
 						 global $adb;	
-						 $sql = "select * from vtiger_currency_info where currency_status = 'Active'";
-						 $result = $adb->query($sql);
+						 $sql = "select * from vtiger_currency_info where currency_status = ?";
+						 $result = $adb->pquery($sql, array('Active'));
 						 $temprow = $adb->fetch_array($result);
 						 do
 						 {

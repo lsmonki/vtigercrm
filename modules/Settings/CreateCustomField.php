@@ -78,8 +78,8 @@ if(isset($fieldid) && $fieldid!='')
 	$readonly = "readonly";
 	if($fieldtype == '7' || $fieldtype == '11')
 	{
-		$query = "select * from vtiger_".$customfield_columnname;
-		$result = $adb->query($query);
+		$query = "select * from vtiger_". mysql_real_escape_string($customfield_columnname);
+		$result = $adb->pquery($query, array());
 		$fldVal='';
 		while($row = $adb->fetch_array($result))
 		{

@@ -63,8 +63,8 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 	{
 		getEventNotification($activity_type,$mail_data['subject'],$mail_data);
 	}
-	$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
-	$invitee_res = $adb->query($invitee_qry);
+	$invitee_qry = "select * from vtiger_invitees where activityid=?";
+	$invitee_res = $adb->pquery($invitee_qry, array($return_id));
 	$count = $adb->num_rows($invitee_res);
 	if($count != 0)
 	{
@@ -105,10 +105,10 @@ else
 	else
 	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
-	$heldevent_id = $focus->id;
 	/* For Followup START -- by Minnie */
 	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
 	{
+		$heldevent_id = $focus->id;
 		$focus->column_fields['subject'] = '[Followup] '.$focus->column_fields['subject'];
 		$focus->column_fields['date_start'] = $_REQUEST['followup_date'];
 		$focus->column_fields['due_date'] = $_REQUEST['followup_due_date'];
@@ -117,7 +117,6 @@ else
 		$focus->column_fields['eventstatus'] = 'Planned';
 		$focus->mode = 'create';
 		$focus->save($tab_type);
-
 	}
 	/* For Followup END -- by Minnie */
 	$return_id = $focus->id;
@@ -134,30 +133,6 @@ else
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
 	$return_id = $_REQUEST['return_id'];
 
-if($_REQUEST['mode'] != 'edit' && $_REQUEST['return_module'] == 'Products')
-{
-	if($_REQUEST['product_id'] != '')
-		$crmid = $_REQUEST['product_id'];
-	if($crmid != $_REQUEST['parent_id'])
-	{
-		$sql = "insert into vtiger_seactivityrel (activityid, crmid) values('".$focus->id."','".$crmid."')";
-		$adb->query($sql);
-	}
-}
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts" && $_REQUEST['activity_mode'] == 'Events')
-{
-	        if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
-	        {
-	                $sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-	                $adb->query($sql);
-			if(!empty($heldevent_id)){
-				$sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$heldevent_id.")";
-				$adb->query($sql);
-			}
-	        }
-}
-									
-									
 $activemode = "";
 if($activity_mode != '') 
 	$activemode = "&activity_mode=".$activity_mode;
@@ -203,13 +178,19 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 {
 	//split the string and store in an array
 	$storearray = explode (";",$_REQUEST['contactidlist']);
+	$del_sql = "delete from vtiger_cntactivityrel where activityid=?";
+	$adb->pquery($del_sql, array($record));
 	foreach($storearray as $id)
 	{
 		if($id != '')
 		{
 			$record = $focus->id;
-			$sql = "insert into vtiger_cntactivityrel values (".$id.",".$record.")";
-			$adb->query($sql);
+			$sql = "insert into vtiger_cntactivityrel values (?,?)";
+			$adb->pquery($sql, array($id, $record));
+			if(!empty($heldevent_id)) {
+				$sql = "insert into vtiger_cntactivityrel values (?,?)";
+				$adb->pquery($sql, array($id, $heldevent_id));
+			}
 		}
 	}
 }
@@ -224,8 +205,8 @@ if(isset($_REQUEST['deletecntlist']) && $_REQUEST['deletecntlist'] != '' && $_RE
 		if($id != '')
 		{
 			$record = $focus->id;
-			$sql = "delete from vtiger_cntactivityrel where contactid=".$id." and activityid=".$record;
-			$adb->query($sql);
+			$sql = "delete from vtiger_cntactivityrel where contactid=? and activityid=?";
+			$adb->pquery($sql, array($id, $record));
 		}
 	}
 
@@ -235,8 +216,8 @@ if(isset($_REQUEST['deletecntlist']) && $_REQUEST['deletecntlist'] != '' && $_RE
 if(isset($_REQUEST['del_actparent_rel']) && $_REQUEST['del_actparent_rel'] != '' && $_REQUEST['mode'] == 'edit')
 {
 	$parnt_id = $_REQUEST['del_actparent_rel'];
-	$sql= 'delete from vtiger_seactivityrel where crmid='.$parnt_id.' and activityid='.$record;
-	$adb->query($sql);
+	$sql= 'delete from vtiger_seactivityrel where crmid=? and activityid=?';
+	$adb->pquery($sql, array($parnt_id, $record));
 }
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')

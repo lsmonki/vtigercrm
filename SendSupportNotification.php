@@ -38,9 +38,7 @@ $app_strings = return_application_language($current_language);
 
 //To send email notification before a week
 $query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where support_end_date=DATE_ADD(now(), INTERVAL 1 WEEK)";
-
-
-$result = $adb->query($query);
+$result = $adb->pquery($query, array());
 
 
 if($adb->num_rows($result) >= 1)
@@ -65,9 +63,7 @@ $log->debug(" Send Support Notification Befoe a week - Status: ".$status);
 
 //To send email notification before a month
 $query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where support_end_date=DATE_ADD(now(), INTERVAL 1 MONTH)";
-
-
-$result = $adb->query($query);
+$result = $adb->pquery($query, array());
 
 
 if($adb->num_rows($result) >= 1)
@@ -107,14 +103,13 @@ function getcontent_month($id)
 {
 	global $adb;
 	$query='select vtiger_emailtemplates.subject,vtiger_emailtemplates.body from vtiger_notificationscheduler inner join vtiger_emailtemplates on vtiger_emailtemplates.templateid=vtiger_notificationscheduler.notificationbody where schedulednotificationid=7';
-
-	        $result = $adb->query($query);
-	        $body=$adb->query_result($result,0,'body');
-		$body=getMergedDescription($body,$id,"Contacts");
-		$body=getMergedDescription($body,$id,"Users");
-		$res_array["subject"]=$adb->query_result($result,0,'subject');
-		$res_array["body"]=$body;
-		return $res_array;
+	$result = $adb->pquery($query, array());
+	$body=$adb->query_result($result,0,'body');
+	$body=getMergedDescription($body,$id,"Contacts");
+	$body=getMergedDescription($body,$id,"Users");
+	$res_array["subject"]=$adb->query_result($result,0,'subject');
+	$res_array["body"]=$body;
+	return $res_array;
 
 }
 
@@ -123,14 +118,13 @@ function getcontent_week($id)
 {
 	global $adb;
 	$query='select vtiger_emailtemplates.subject,vtiger_emailtemplates.body from vtiger_notificationscheduler inner join vtiger_emailtemplates on vtiger_emailtemplates.templateid=vtiger_notificationscheduler.notificationbody where schedulednotificationid=6';
-
-	        $result = $adb->query($query);
-	        $body=$adb->query_result($result,0,'body');
-		$body=getMergedDescription($body,$id,"Contacts");
-		$body=getMergedDescription($body,$id,"Users");
-		$res_array["subject"]=$adb->query_result($result,0,'subject');
-		$res_array["body"]=$body;
-		return $res_array;
+	$result = $adb->pquery($query, array());
+	$body=$adb->query_result($result,0,'body');
+	$body=getMergedDescription($body,$id,"Contacts");
+	$body=getMergedDescription($body,$id,"Users");
+	$res_array["subject"]=$adb->query_result($result,0,'subject');
+	$res_array["body"]=$body;
+	return $res_array;
 
 }
 

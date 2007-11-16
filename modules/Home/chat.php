@@ -22,7 +22,9 @@
 /**
  * MySQL server configuration
  */
-require_once('config.inc.php');
+include_once('config.php');
+require_once('include/utils/utils.php');
+
 $db = array();
 
 $db['host'] = $dbconfig['db_server']."".$dbconfig['db_port'];
@@ -70,13 +72,14 @@ class Chat
   
   function Chat()
   {
+	global $adb;
     $this->json = '';
     
     // las message id received by user
     if(!isset($_SESSION["mlid"]))
       {
-	$res = mysqlQuery("show table status like 'vtiger_chat_msg'");
-	$line = mysql_fetch_array($res,MYSQL_ASSOC);
+	$res = $adb->pquery("show table status like 'vtiger_chat_msg'", array());
+	$line = $adb->fetch_array($res);
 	if(intval($line['Auto_increment']) == 0)
 	  $_SESSION["mlid"] = 0;
 	else
@@ -96,8 +99,8 @@ class Chat
       }
     else
       {
-	$res = mysqlQuery("update vtiger_chat_users set ping=now() where session='".session_id()."'");
-	if(mysql_affected_rows() == 0)
+	$res = $adb->pquery("update vtiger_chat_users set ping=now() where session=?", array(session_id()));
+	if($adb->getAffectedRowCount($res) == 0)
 	  {
 	    $this->setUserNick();
 	  }
@@ -169,26 +172,26 @@ class Chat
    */
   function setUserNick()
   {
-	  global $current_user; 
-    $res = mysqlQuery("select id from vtiger_chat_users where session='".session_id()."'");
-    if(mysql_num_rows($res) > 0)
+	global $current_user, $adb; 
+    $res = $adb->pquery("select id from vtiger_chat_users where session=?", array(session_id()));
+    if($adb->num_rows($res) > 0)
       {
-	$line = mysql_fetch_array($res,MYSQL_ASSOC);
+	$line = $adb->fetch_array($res);
 	$_SESSION['chat_user'] = $line['id'];
 	return;
       }
     
-    $res = mysqlQuery("show table status like 'vtiger_chat_users'");
-    $line = mysql_fetch_array($res,MYSQL_ASSOC);
+    $res = $adb->pquery("show table status like 'vtiger_chat_users'", array());
+    $line = $adb->fetch_array($res);
     if(intval($line['Auto_increment']) == 0)
       $line['Auto_increment'] = 1;
     
     $_SESSION['chat_user'] = $line['Auto_increment'];
     
-    $res = mysqlQuery("insert into vtiger_chat_users set nick='".$current_user->user_name."',session='".session_id()."',ping=now(),ip='".$_SERVER['REMOTE_ADDR']."'");
-    //$res = mysqlQuery("select LAST_INSERT_ID()");
-    //$line = mysql_fetch_array($res,MYSQL_ASSOC);
-    //$_SESSION['chat_user'] = $line[0];
+	
+    $sql = "insert into vtiger_chat_users(nick,session,ping,ip) values (?,?, now(), ?)";
+    $params = array($current_user->user_name, session_id(), $_SERVER['REMOTE_ADDR']);
+	$res = $adb->pquery($sql, $params);
   }
   
   /**
@@ -196,21 +199,24 @@ class Chat
    */
   function getUserList()
   {
-    global $chat_conf;
+    global $chat_conf, $adb;
     $tmp = '';
-    $res = mysqlQuery("delete from vtiger_chat_users where ((unix_timestamp(now())-unix_timestamp(ping))>'".$chat_conf['alive_time']."')");
-    $res = mysqlQuery("select id,nick from vtiger_chat_users");
-    if(mysql_num_rows($res)==0)
+    $sql = "delete from vtiger_chat_users where ((unix_timestamp(now())-unix_timestamp(ping))>?)";
+	$params = array($chat_conf['alive_time']);
+	$res = $adb->pquery($sql, $params);
+	
+    $res = $adb->pquery("select id,nick from vtiger_chat_users", array());
+    if($adb->num_rows($res)==0)
       {
 	$this->json = '';
 	return;
       }
 
-    while($line = mysql_fetch_array($res,MYSQL_ASSOC))
-      {
-	if($line['id'] != $_SESSION['chat_user'])
-	  $tmp .= '{"uid":'.$line['id'].',"nick":"'.$line['nick'].'"},';
-      }
+    while($line = $adb->fetch_array($res))
+    {
+		if($line['id'] != $_SESSION['chat_user'])
+	  		$tmp .= '{"uid":'.$line['id'].',"nick":"'.$line['nick'].'"},';
+    }
     $tmp = trim($tmp,',');
     $this->json = sprintf($this->json,$tmp);
   }
@@ -229,17 +235,20 @@ class Chat
    */
   function getAllPVChat()
   {
-    global $chat_conf;
+    global $chat_conf, $adb;
     $format = '{"mlid":%s,"chat":%s,"from":"%s","msg":"%s"},';
-    $res = mysqlQuery("select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,pv.id id,us.nick `chat_from`,ms.msg msg from vtiger_chat_users us,vtiger_chat_pvchat pv,vtiger_chat_msg ms where pv.msg=ms.id and us.id=ms.chat_from and ms.id>'".($_SESSION['mlid'])."' and ((ms.chat_from='".$_SESSION['chat_user']."' and ms.chat_to>0) or (ms.chat_to='".$_SESSION['chat_user']."' and ms.chat_from>0)) order by ms.born limit 0,".$chat_conf['msg_limit']);
-    if(mysql_num_rows($res)==0)
+	$sql ="select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,pv.id id,us.nick `chat_from`,ms.msg msg from vtiger_chat_users us,vtiger_chat_pvchat pv,vtiger_chat_msg ms where pv.msg=ms.id and us.id=ms.chat_from and ms.id>? and ((ms.chat_from=? and ms.chat_to>0) or (ms.chat_to=? and ms.chat_from>0)) order by ms.born limit 0, " . $chat_conf['msg_limit'];
+    $params = array($_SESSION['mlid'], $_SESSION['chat_user'], $_SESSION['chat_user']);
+	$res = $adb->pquery($sql, $params);
+	
+	if($adb->num_rows($res)==0)
       {
 	$this->json = '';
 	return;
       }
 
     $tmp = '';
-    while($line = mysql_fetch_array($res,MYSQL_ASSOC))
+    while($line = $adb->fetch_array($res))
       {
 	if($line['mfrom'] == $_SESSION['chat_user'])
 	  $cid = $line['mto'];
@@ -259,17 +268,20 @@ class Chat
    */
   function getPubChat()
   {
-    global $chat_conf;
+    global $chat_conf, $adb;
     $format = '{"mlid":%s,"from":"%s","msg":"%s"},';
-    $res = mysqlQuery("select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,p.id id,us.nick `chat_from`,ms.msg msg from vtiger_chat_users us,vtiger_chat_pchat p,vtiger_chat_msg ms where p.msg=ms.id and us.id=ms.chat_from and ms.id>'".($_SESSION['mlid'])."' and ms.chat_to=0 order by ms.born limit 0,".$chat_conf['msg_limit']);
-    if(mysql_num_rows($res)==0)
+    $sql = "select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,p.id id,us.nick `chat_from`,ms.msg msg from vtiger_chat_users us,vtiger_chat_pchat p,vtiger_chat_msg ms where p.msg=ms.id and us.id=ms.chat_from and ms.id>? and ms.chat_to=0 order by ms.born limit 0," . $chat_conf['msg_limit'];
+    $params = array($_SESSION['mlid']);
+	$res = $adb->pquery($sql, $params);
+	
+	if($adb->num_rows($res)==0)
       {
 	$this->json = '';
 	return;
       }
 
     $tmp = '';
-    while($line = mysql_fetch_array($res,MYSQL_ASSOC))
+    while($line = $adb->fetch_array($res))
       {
 	$tmp .= sprintf($format,$line['mid'],$line['chat_from'],addslashes($line['msg']));
       }
@@ -282,6 +294,7 @@ class Chat
    */
   function msgParse($msg)
   {
+	global $adb;
     if(strlen($msg) == 0) return '';
     $msg = stripslashes($msg);
 
@@ -295,10 +308,10 @@ class Chat
 	  case '\nick':
 	    if(isset($words[1]) && strlen($words[1]) > 3)
 	      {
-		$res = mysqlQuery("select nick from vtiger_chat_users where id='".$_SESSION['chat_user']."'");
-		$line = mysql_fetch_array($res,MYSQL_ASSOC);
-		$res = mysqlQuery("update vtiger_chat_users set nick='".addslashes($words[1])."' where id='".$_SESSION['chat_user']."'");
-		$msg = '\sys <span class="sysb">'.$line['nick'].'</span> changed nick to <span class="sysb">'.$words[1].'</span>';
+			$res = $adb->pquery("select nick from vtiger_chat_users where id=?", array($_SESSION['chat_user']));
+			$line = $adb->fetch_array($res);
+			$res = $adb->pquery("update vtiger_chat_users set nick=? where id=?", array($words[1], $_SESSION['chat_user']));
+			$msg = '\sys <span class="sysb">'.$line['nick'].'</span> changed nick to <span class="sysb">'.$words[1].'</span>';
 	      }
 	    break;
 	    
@@ -322,7 +335,7 @@ class Chat
 	    break;
 	  }
       }
-    return addslashes($msg);    
+    return mysql_real_escape_string($msg);    
   }
 
   /**
@@ -330,18 +343,22 @@ class Chat
    */
   function submit($msg, $to=0)
   {
+	global $adb;
     //UTF-8 support added - ding
     $msg = utf8RawUrlDecode($msg);
     $msg = $this->msgParse($msg);
     if(strlen($msg) == 0) return;
-    
-    $res = mysqlQuery("insert into vtiger_chat_msg set `chat_from`='".$_SESSION['chat_user']."',`chat_to`='".$to."',born=now(),msg='".$msg."'");
-    
+	
+	//$sql = "insert into vtiger_chat_msg set chat_from=?, chat_to=?, born=now(), msg=?";
+    $sql = "insert into vtiger_chat_msg(chat_from, chat_to, born, msg) values (?,?, now(), ?)";
+    $params = array($_SESSION['chat_user'], $to, $msg);
+	$res = $adb->pquery($sql, $params);
+	
     $chat = "p";
     if($to != 0)
       $chat .= "v";
     
-    $res = mysqlQuery("insert into vtiger_chat_".$chat."chat set msg=LAST_INSERT_ID()");
+    $res = $adb->pquery("insert into vtiger_chat_".$chat."chat set msg=LAST_INSERT_ID()", array());
   }
 
   /**
@@ -349,7 +366,10 @@ class Chat
    */
   function pvClose($to)
   {
-    $res = mysqlQuery("delete from vtiger_chat_msg where (`chat_from`='".$to."' and `chat_to`='".$_SESSION['chat_user']."') or (`chat_from`='".$_SESSION['chat_user']."' and `chat_to`='".$to."')");
+	global $adb;
+    $sql = "delete from vtiger_chat_msg where (`chat_from`=? and `chat_to`=?) or (`chat_from`=? and `chat_to`=?)";
+	$params = array($to, $_SESSION['chat_user'], $_SESSION['chat_user'], $to);
+	$res = $adb->pquery($sql, $params);  
   }
 }
 

@@ -40,7 +40,7 @@ $current_user = new Users();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
-        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"users");
+        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"Users");
         if($result == null)
         {
 		session_destroy();
@@ -99,14 +99,14 @@ function export($type)
 
         $log = LoggerManager::getLogger('export_'.$type);
         $db = new PearDatabase();
-
-        $tablename =$_SESSION['tablename'];
-        $orderby = $_SESSION['order_by'];
-        $sorder = $_SESSION['sorder'];
+	$tablename = $focus->table_name;
+	//$orderby = $focus->getOrderBy();
+	$orderby = $focus->default_order_by;
+	$sorder = $focus->getSortOrder();
         $order_by = "";
         //$query = $focus->create_export_query($orderby,$where,$sorder,$tablename);
         $query = $focus->create_export_query($order_by,$where);
-
+		$params = array();
 
         $search_type = $_REQUEST['search_type'];
         $export_data = $_REQUEST['export_data'];
@@ -115,63 +115,57 @@ function export($type)
 
         if($search_type == 'withoutsearch' && $export_data == 'all')
         {
-                $query = $query;
+                $query .= " ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
         }
         elseif($search_type == 'withoutsearch' && $export_data == 'currentpage')
         {
                 if($orderby != '')
-                $query .=" ORDER BY  ".$tablename.$orderby."  ".$sorder.' LIMIT  '.($_SESSION['nav_start']-1).','.$_SESSION[
-'nav_end'];
+                	$query .=" ORDER BY  ".$tablename.".".$orderby."  ".$sorder." LIMIT  " . ($_SESSION['nav_start']-1) . "," . $list_max_entries_per_page;
                 else
-                        $query .=' LIMIT  '.($_SESSION['nav_start']-1).','.$_SESSION['nav_end'];
-
+                    $query .=" LIMIT  " . ($_SESSION['nav_start']-1) . "," . $list_max_entries_per_page;
 	}
-        elseif($search_type == 'withoutsearch' && $export_data == 'selecteddata')
+        elseif(($search_type == 'withoutsearch' || $search_type == 'includesearch')&& $export_data == 'selecteddata')
         {
-                $idstring = $_REQUEST['idstring'];
-                if($module == 'Accounts' && $idstring != '')
-                        $query .= '  and vtiger_account.accountid in ('.($idstring).')';
-                elseif($module == 'Contacts' && $idstring != '')
-                        $query .= ' and vtiger_contactdetails.contactid in ('.($idstring).')';
-                elseif($module == 'Potentials' && $idstring != '')
-                        $query .= ' and vtiger_potential.potentialid in ('.($idstring).')';
-                elseif($module == 'Leads' && $idstring != '')
-                        $query .= ' and vtiger_leaddetails.leadid in ('.($idstring).')';
-                elseif($module == 'Products' && $idstring != '')
-                        $query .= ' and vtiger_products.productid in ('.($idstring).')';
-
+                $idstring = explode(",", $_REQUEST['idstring']);
+                if($module == 'Accounts' && count($idstring) > 0) {
+                        $query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+				} elseif($module == 'Contacts' && count($idstring) > 0) {
+                        $query .= ' and vtiger_contactdetails.contactid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+				} elseif($module == 'Potentials' && count($idstring) > 0) {
+                        $query .= ' and vtiger_potential.potentialid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+				} elseif($module == 'Leads' && count($idstring) > 0) {
+                        $query .= ' and vtiger_leaddetails.leadid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+				} elseif($module == 'Products' && count($idstring) > 0) {
+                        $query .= ' and vtiger_products.productid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+				} elseif($module == 'Notes' && count($idstring) > 0) {
+		        $query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
+						array_push($params, $idstring);
+	       			}		
         }
         elseif($search_type == 'includesearch' && $export_data == 'all')
         {
-                if($orderby != '' && $_SESSION['export_where'] != '')
-                $query.=' and  '.$_SESSION['export_where']."  ORDER BY  ".$tablename.$orderby."  ".$sorder;
+                if($orderby != '' && $_SESSION['export_where'] != '') 
+                	$query.=' and  '.$_SESSION['export_where']."  ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
                 elseif($orderby == '' && $_SESSION['export_where'] != '')
-                $query.=' and  '.$_SESSION['export_where'];
+                	$query.=' and  '.$_SESSION['export_where'];
+		else
+			$query .= " ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
 
         }
         elseif($search_type == 'includesearch' && $export_data == 'currentpage')
         {
-                $nav_start_val = $_SESSION['nav_start'];
-                $nav_end_val = $_SESSION['nav_end'];
-                $query .= " ORDER BY  ".$tablename.$orderby."  ".$sorder. ' LIMIT '.$nav_start_val.','.$nav_end_val;
-        }
-        elseif($search_type == 'includesearch' && $export_data == 'selecteddata')
-        {
-                $module = $_REQUEST['module'];
-                $idstring = $_REQUEST['idstring'];
-                if($module == 'Accounts' && $idstring != '')
-                    $query .= '  and vtiger_account.accountid in ('.($idstring).')';
-                elseif($module == 'Contacts' && $idstring != '')
-                        $query .= ' and vtiger_contactdetails.contactid in ('.($idstring).')';
-                elseif($module == 'Potentials' && $idstring != '')
-                        $query .= ' and vtiger_potential.potentialid in ('.($idstring).')';
-                elseif($module == 'Leads' && $idstring != '')
-                        $query .= ' and vtiger_leaddetails.leadid in ('.($idstring).')';
-                elseif($module == 'Products' && $idstring != '')
-                        $query .= ' and vtiger_products.productid in ('.($idstring).')';
+		if($orderby != '' && $_SESSION['export_where'] != '')
+                      $query .= "  and  ".$_SESSION['export_where']." ORDER BY  ".$tablename.".".$orderby."  ".$sorder. ' LIMIT '.($_SESSION['nav_start']-1).','.$list_max_entries_per_page;
+                else
+                      $query .=" ORDER BY  ".$tablename.".".$orderby."  ".$sorder.' LIMIT  '.($_SESSION['nav_start']-1).','.$list_max_entries_per_page;
         }
 
-        $result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
+        $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
         $fields_array = $adb->getFieldsArray($result);
 
 	$header = implode("\",\"",array_values($fields_array));

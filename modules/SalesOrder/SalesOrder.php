@@ -115,8 +115,8 @@ class SalesOrder extends CRMEntity {
 		if($this->column_fields["quote_id"] != '')
 		{
         		$qt_id = $this->column_fields["quote_id"];
-        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
-        		$this->db->query($query1);
+        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=?";
+        		$this->db->pquery($query1, array($qt_id));
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
@@ -292,8 +292,8 @@ class SalesOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Order No'];

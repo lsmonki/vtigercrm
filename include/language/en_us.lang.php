@@ -722,7 +722,7 @@ $app_strings = array (
 'DELETING_ACCOUNT' => 'Deleting this account(s) will remove its related Potentials,Quotes,Sales Orders & Invoice. Are you sure you want to delete the selected ',
 'DELETING_VENDOR' => 'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected ',
 'PLEASE_SELECT_MAILID' => 'Please Select a mailid',
-'OVERWRITE_EXISTING_ACCOUNT1' => 'Overwrite the existing address with this selected account(',
+'OVERWRITE_EXISTING_ACCOUNT1' => 'Do you want to Overwrite the existing address with this selected account(',
 'OVERWRITE_EXISTING_ACCOUNT2' => ') address details?',
 'MISSING_FIELDS' => 'Missing required fields:',
 'NOT_ALLOWED_TO_EDIT' => 'you are not allowed to edit this field',
@@ -778,7 +778,7 @@ $app_strings = array (
 'FOLLOWUPTIME_GREATER_THAN_STARTTIME' => 'Followup Time should be greater than End Time ',
 'MISSING_EVENT_NAME' => 'Missing Event Name',
 'EVENT_TYPE_NOT_SELECTED' => 'Event Type is not selected',
-'OPPORTUNITYNAME_CANNOT_BE_EMPTY' => 'Opportunity Name field cannot be empty',
+'OPPORTUNITYNAME_CANNOT_BE_EMPTY' => 'Potential Name field cannot be empty',
 'CLOSEDATE_CANNOT_BE_EMPTY' => 'Close Date field cannot be empty',
 'SITEURL_CANNOT_BE_EMPTY' => 'Site Url cannot be empty',
 'SITENAME_CANNOT_BE_EMPTY' => 'Site Name cannot be empty',
@@ -1028,6 +1028,10 @@ $app_strings = array (
 'User_State'=>'User: State',
 'User_Country'=>'User: Country',
 'User_PostalCode'=>'User: PostalCode',
+// Added in 5.0.4 for Error message on Send Email failure
+'LBL_MAIL_SEND_STATUS' => 'Mail Send Status:',
+'LBL_MAIL_NOT_SENT_TO_USER' => 'Mail Could not be sent to user',
+'LBL_PLS_CHECK_EMAIL_N_SERVER' => 'Please check the user emailid/Server settings',
 
 );
 

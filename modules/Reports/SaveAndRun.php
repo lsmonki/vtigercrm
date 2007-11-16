@@ -27,8 +27,8 @@ $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 // Added to fix the issue
 
-$sql = "select * from vtiger_report where reportid=$reportid";
-$res = $adb->query($sql);
+$sql = "select * from vtiger_report where reportid=?";
+$res = $adb->pquery($sql, array($reportid));
 $Report_ID = $adb->query_result($res,0,'reportid');
 $numOfRows = $adb->num_rows($res);
 if($numOfRows > 0)
@@ -236,8 +236,8 @@ function getSecondaryStdFilterHTML($module,$selected="")
 function getReportsinFolder($folderid)
 {
 	global $adb;
-	$query = 'select reportid,reportname from vtiger_report where folderid='.$folderid;
-	$result = $adb->query($query);
+	$query = 'select reportid,reportname from vtiger_report where folderid=?';
+	$result = $adb->pquery($query, array($folderid));
 	$reports_array = Array();
 	for($i=0;$i < $adb->num_rows($result);$i++)	
 	{

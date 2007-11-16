@@ -16,8 +16,8 @@ $image_path=$theme_path."images/";
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 {
 	$portalid = $_REQUEST['record'];
-	$query="select * from vtiger_portal where portalid =$portalid";
-	$result=$adb->query($query);
+	$query="select * from vtiger_portal where portalid =?";
+	$result=$adb->pquery($query, array($portalid));
 	$portalname = $adb->query_result($result,0,'portalname');
         $portalurl = $adb->query_result($result,0,'portalurl');	
 	/* to remove http:// from portal url*/

@@ -15,8 +15,8 @@ $fromid=$_REQUEST['childId'];
 
 
 global $adb,$mod_strings;
-$query = "select * from vtiger_role where roleid='".$toid."'";
-$result=$adb->query($query);
+$query = "select * from vtiger_role where roleid=?";
+$result=$adb->pquery($query, array($toid));
 $parentRoleList=$adb->query_result($result,0,'parentrole');
 $replace_with=$parentRoleList;
 $orgDepth=$adb->query_result($result,0,'depth');
@@ -50,9 +50,9 @@ foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 	$mvParString=$replace_with.$subPar[1];
 	$subDepth=$mvRoleInfo[2];
 	$mvDepth=$orgDepth+(($subDepth-$stdDepth)+1);
-	$query="update vtiger_role set parentrole='".$mvParString."',depth=".$mvDepth." where roleid='".$mvRoleId."'";
+	$query="update vtiger_role set parentrole=?,depth=? where roleid=?";
 	//echo $query;
-	$adb->query($query);
+	$adb->pquery($query, array($mvParString, $mvDepth, $mvRoleId));
 		
 }
 

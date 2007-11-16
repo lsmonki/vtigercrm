@@ -15,7 +15,7 @@
                                 DELETE_ACCOUNT:'Deleting this account(s) will remove its related Potentials & Quotes. Are you sure you want to delete the selected ',
                                 DELETE_VENDOR:'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected ',
                                 SELECT_MAILID:'Please Select a mailid',
-                                OVERWRITE_EXISTING_ACCOUNT1:'Overwrite the existing address with this selected account(',
+                                OVERWRITE_EXISTING_ACCOUNT1:'Do you want to Overwrite the existing address with this selected account(',
                                 OVERWRITE_EXISTING_ACCOUNT2:') address details?',
                                 MISSING_FIELDS:'Missing required fields:',
                                 NOT_ALLOWED_TO_EDIT:'you are not allowed to edit this field',
@@ -50,7 +50,7 @@
                                 FOLLOWUPTIME_GREATER_THAN_STARTTIME:'Followup Time should be greater than End Time ',
                                 MISSING_EVENT_NAME:'Missing Event Name',
                                 EVENT_TYPE_NOT_SELECTED:'Event Type is not selected',
-                                OPPORTUNITYNAME_CANNOT_BE_EMPTY:'Opportunity Name field cannot be empty',
+                                OPPORTUNITYNAME_CANNOT_BE_EMPTY:'Potential Name field cannot be empty',
                                 CLOSEDATE_CANNOT_BE_EMPTY:'Close Date field cannot be empty',
                                 SITEURL_CANNOT_BE_EMPTY:'Site Url cannot be empty',
                                 SITENAME_CANNOT_BE_EMPTY:'Site Name cannot be empty',
@@ -136,10 +136,10 @@
 				SELECT_MAIL_MOVE: 'Please select a mail and then move..',
 				
 				LBL_NOTSEARCH_WITHSEARCH_ALL:'You haven\'t used the search. All the records will be Exported from ',
-				LBL_NOTSEARCH_WITHSEARCH_CURRENTPAGE:'You haven\'t searched any thing.But you selected with search & current page options.So the records in the current page will be Exported from ',
+				LBL_NOTSEARCH_WITHSEARCH_CURRENTPAGE:'You haven\'t searched any thing. But you selected with search & current page options. So the records in the current page will be Exported from ',
 				LBL_NO_DATA_SELECTED:'There is no record selected. Select at least one record to Export',
-				LBL_SEARCH_WITHOUTSEARCH_ALL:'You have used search option but you have not selected without search & all options.\n You can click [ok] to export all data or  You can click [cancel] and try again with other export criteria',
+				LBL_SEARCH_WITHOUTSEARCH_ALL:'You have used search option but you have not selected without search & all options.\nYou can click [ok] to export all data or You can click [cancel] and try again with other export criteria',
 				STOCK_IS_NOT_ENOUGH : 'Stock is not enough',
 				INVALID_QTY : 'Invalid Qty',
-				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not  selected without search & currentpage options.\n You can click [ok]to export  current page data or You can click [cancel] and try again with some other export criteria.'
+				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not selected without search & currentpage options.\nYou can click [ok] to export current page data or You can click [cancel] and try again with some other export criteria.'
                        };

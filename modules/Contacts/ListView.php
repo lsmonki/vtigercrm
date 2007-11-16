@@ -178,9 +178,6 @@ if(isset($order_by) && $order_by != '')
                 $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
 }
-$_SESSION['tablename'] = $tablename;
-$_SESSION['order_by'] = $order_by;
-$_SESSION['sorder'] =$sorder;
 
 //Constructing the list view
 
@@ -226,9 +223,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-    $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+    $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))

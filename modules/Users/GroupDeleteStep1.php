@@ -48,11 +48,11 @@ $output ='<div id="DeleteLay" class="layerPopup" style="width:400px;">
 		<td align="left" class="cellText small">';
 		global $adb;	
 		$sql = "select groupid,groupname from vtiger_groups";
-		$result = $adb->query($sql);
+		$result = $adb->pquery($sql, array());
 		$num_groups = $adb->num_rows($result);
 	
 		$sql1 = "select id,user_name from vtiger_users where deleted=0";
-		$result1= $adb->query($sql1);
+		$result1= $adb->pquery($sql1, array());
 		$num_users = $adb->num_rows($result1);
 	
 

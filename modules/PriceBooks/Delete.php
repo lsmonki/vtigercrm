@@ -34,7 +34,7 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '' && $_REQUEST['modul
 {
 	$pricebookid = $_REQUEST['record'];
 	$productid = $_REQUEST['return_id'];
-	$adb->query("delete from vtiger_pricebookproductrel where pricebookid=$pricebookid and productid=$productid");
+	$adb->pquery("delete from vtiger_pricebookproductrel where pricebookid=? and productid=?", array($pricebookid, $productid));
 }
 
 if($_REQUEST['module'] == $_REQUEST['return_module'])

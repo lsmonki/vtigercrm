@@ -26,8 +26,8 @@ include("modules/Dashboard/pie_graph.php");
 function get_account_name($acc_id)
 {
 	global $adb;
-	$acc_qry="select accountname from vtiger_account where accountid =".$acc_id;
-	$acc_result=$adb->query($acc_qry);
+	$acc_qry="select accountname from vtiger_account where accountid =?";
+	$acc_result=$adb->pquery($acc_qry, array($acc_id));
 	$no_acc_rows=$adb->num_rows($acc_result);
 
 	if($no_acc_rows!=0)
@@ -230,16 +230,16 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="product_id" || $graph_for =="productid")
 				{
-					$query = "SELECT productname FROM vtiger_products WHERE productid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT productname FROM vtiger_products WHERE productid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"productname");
 					if($name_val!="")
 						$name=$name_val;
 				}
 				if($graph_for =="purchaseorderid")
 				{
-					$query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"subject");
 					$id_name = $name;
 					if($name_val!="")
@@ -247,8 +247,8 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="quoteid")
 				{
-					$query = "SELECT subject FROM vtiger_quotes WHERE quoteid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT subject FROM vtiger_quotes WHERE quoteid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"subject");
 					$id_name = $name;
 					if($name_val!="")
@@ -256,8 +256,8 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="invoiceid")
 				{
-					$query = "SELECT subject FROM vtiger_invoice WHERE invoiceid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"subject");
 					$id_name = $name;
 					if($name_val!="")
@@ -266,8 +266,8 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	if($graph_for =="campaignid")
 				{
 					//this will return the list of the names of the campaign``:w for the y-axis
-					$query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"campaignname");
 					$id_name = $name;
 					if($name_val!="")
@@ -275,8 +275,8 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="contactid")
 				{
-					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid='".$name."'";
-					$result = $adb->query($query);
+					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid=?";
+					$result = $adb->pquery($query, array($name));
 					$name_val = $adb->query_result($result,0,"lastname");
 					if($name_val!="")
 						$name=$name_val;

@@ -17,11 +17,29 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+require_once('include/logging.php');
+$log =& LoggerManager::getLogger('PLATFORM');
+
+$info_style_start = '<div class="center"><table border="0" cellpadding="3" width="600"><tr class="h"><td><h1 class="p">';
+$info_style_end = '</h1></td></tr></table></div>';
+require_once('vtigerversion.php');
+if($patch_version !='')
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . " Patch " . $patch_version . $info_style_end);
+}
+else
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . $info_style_end);
+}
+
 //get php configuration settings.  requires elaborate parsing of phpinfo() output
 ob_start();
 phpinfo(INFO_GENERAL);
 $string = ob_get_contents();
+phpinfo();
+$php_info = ob_get_contents();
 ob_end_clean();
+$log->info($php_info);
 
 $pieces = explode("<h2", $string);
 $settings = array();

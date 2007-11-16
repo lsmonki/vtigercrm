@@ -29,13 +29,13 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-			$adb->query("insert into vtiger_seproductsrel values(".$_REQUEST["parentid"].",".$id.",'Accounts')");
+			$adb->pquery("insert into vtiger_seproductsrel values(?,?,?)", array($_REQUEST["parentid"], $id, 'Accounts'));
 		}
 	}	
 	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 }elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != ''){
-	 $adb->query("insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'Accounts')");
-	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
+	$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Accounts'));
+	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parid"]);
 }
 
 ?>

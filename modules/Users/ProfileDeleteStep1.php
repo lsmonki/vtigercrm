@@ -49,7 +49,7 @@ $output ='<div id="DeleteLay" class="layerPopup">
 		$output.='<select class="select" name="transfer_prof_id">';
 		global $adb;	
 		$sql = "select * from vtiger_profile";
-		$result = $adb->query($sql);
+		$result = $adb->pquery($sql, array());
 		$temprow = $adb->fetch_array($result);
 		do
 		{

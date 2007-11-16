@@ -83,6 +83,7 @@ global $mod_strings;
 								<tr><th><?php echo $mod_strings['LBL_TEAM'];?></th></tr>
 										<tr><td>Akilan</td></tr>
 										<tr><td>Anusha</td></tr>
+										<tr><td>Asha</td></tr>
 										<tr><td>Bharath</td></tr>
 										<tr><td>Bharathi</td></tr>
 										<tr><td>Dina</td></tr>
@@ -93,12 +94,21 @@ global $mod_strings;
 										<tr><td>Mani</td></tr>
 										<tr><td>Mickie</td></tr>
 										<tr><td>Minnie</td></tr>
+										<tr><td>Nitin</td></tr>
+										<tr><td>Pavani</td></tr>
 										<tr><td>Philip</td></tr>
+										<tr><td>Prasad</td></tr>
+										<tr><td>Preethi</td></tr>
+										<tr><td>Puneeth</td></tr>
 										<tr><td>Radiant</td></tr>
 										<tr><td>Richie</td></tr>
+										<tr><td>Sandeep</td></tr>
 										<tr><td>Shahul</td></tr>
+										<tr><td>Sreenivas</td></tr>
 										<tr><td>Srinivasan</td></tr>
 										<tr><td>Tamilmani</td></tr>
+										<tr><td>Vamsee</td></tr>
+										<tr><td>Varma</td></tr>
 										<tr><td>Vashni</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><th><?php echo $mod_strings['LBL_CREDITS'];?></th></tr>

@@ -27,9 +27,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		if($id != '')
 		{
 			if($dest_mod == 'Products')
-				$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parentid"].",".$id.",'Leads')");
+				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parentid"],$id,'Leads'));
 			elseif($dest_mod == 'Campaigns')	
-		    		$adb->query("insert into  vtiger_campaignleadrel values(".$id.",".$_REQUEST["parentid"].")");
+		    	$adb->pquery("insert into  vtiger_campaignleadrel values(?,?)", array($id,$_REQUEST["parentid"]));
 		}
 	}
 	$record = $_REQUEST["parentid"];
@@ -37,9 +37,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	if($dest_mod == 'Products')
-		$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parid"].",".$_REQUEST["entityid"].",'Leads')");	
+		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"],$_REQUEST["entityid"],'Leads'));	
 	elseif($dest_mod == 'Campaigns')
-		$adb->query("insert into vtiger_campaignleadrel values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")");
+		$adb->pquery("insert into vtiger_campaignleadrel values(?,?)", array($_REQUEST["entityid"],$_REQUEST["parid"]));
 	$record = $_REQUEST["parid"];
 }
 

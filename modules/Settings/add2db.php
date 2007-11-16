@@ -99,8 +99,8 @@ require_once('include/utils/utils.php');
 		if(!isset($organization_logoname))
 			$organization_logoname="";
 
-		$sql="SELECT * FROM vtiger_organizationdetails WHERE organizationname = ".$adb->quote($org_name);
-		$result = $adb->query($sql);
+		$sql="SELECT * FROM vtiger_organizationdetails WHERE organizationname = ?";
+		$result = $adb->pquery($sql, array($org_name));
 		$org_name = from_html($adb->query_result($result,0,'organizationname'));
 		$org_logo = $adb->query_result($result,0,'logoname'); 
 
@@ -108,18 +108,9 @@ require_once('include/utils/utils.php');
 		if($org_name=='')
 		{
 			$sql="INSERT INTO vtiger_organizationdetails
-				(organizationname, address, city, state, code, country, phone, fax, website, logoname)
-				VALUES (".$adb->quote($organization_name).
-					",".$adb->quote($organization_address).
-					",".$adb->quote($organization_city).
-					",".$adb->quote($organization_state).
-					",".$adb->quote($organization_code).
-					",".$adb->quote($organization_country).
-					",".$adb->quote($organization_phone).
-					",".$adb->quote($organization_fax).
-					",".$adb->quote($organization_website).
-					",".$adb->quote($organization_logoname).
-				")";
+				(organizationname, address, city, state, code, country, phone, fax, website, logoname) values (?,?,?,?,?,?,?,?,?,?)";
+			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
+							$organization_country, $organization_phone, $organization_fax, $organization_website, $organization_logoname);
 		}
 		else
 		{
@@ -143,19 +134,12 @@ require_once('include/utils/utils.php');
 			}
 
 			$sql = "UPDATE vtiger_organizationdetails
-				SET organizationname = ".$adb->quote($organization_name).",
-					address = ".$adb->quote($organization_address).",
-					city = ".$adb->quote($organization_city).",
-					state = ".$adb->quote($organization_state).",
-					code = ".$adb->quote($organization_code).",
-					country = ".$adb->quote($organization_country)." ,
-					phone = ".$adb->quote($organization_phone)." ,
-					fax = ".$adb->quote($organization_fax).",
-					website = ".$adb->quote($organization_website).",
-					logoname = ".$adb->quote($organization_logoname)."
-				WHERE organizationname = ".$adb->quote($org_name);
+				SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
+				phone = ?, fax = ?, website = ?, logoname = ? WHERE organizationname = ?";
+			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
+					$organization_country, $organization_phone, $organization_fax, $organization_website, $organization_logoname, $org_name);
 		}
-		$adb->query($sql);
+		$adb->pquery($sql, $params);
 
 		if($savelogo=="true")
 		{

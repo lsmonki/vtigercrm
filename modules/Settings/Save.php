@@ -23,8 +23,8 @@ if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
 else
 	$smtp_auth = 'false';
 
-$sql="select * from vtiger_systems where server_type = '".$server_type."'";
-$id=$adb->query_result($adb->query($sql),0,"id");
+$sql="select * from vtiger_systems where server_type = ?";
+$id=$adb->query_result($adb->pquery($sql, array($server_type)),0,"id");
 
 if($server_type == 'proxy')
 {
@@ -89,15 +89,16 @@ if($server_type == 'proxy' || $server_type == 'backup')
 {
 	if($db_update)
 	{
-		if($id=='')
-		{
+		if($id=='') {
 			$id = $adb->getUniqueID("vtiger_systems");
-			$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+			$sql="insert into vtiger_systems values(?,?,?,?,?,?,?)";
+			$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth);
 		}
-		else
-			$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
-
-		$adb->query($sql);
+		else {
+			$sql="update vtiger_systems set server = ?, server_username = ?, server_password = ?, smtp_auth= ?, server_type = ?, server_port= ? where id = ?";
+			$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $id);
+		}
+		$adb->pquery($sql, $params);
 	}
 }
 //Added code to send a test mail to the currently logged in user
@@ -126,14 +127,15 @@ if($server_type != 'backup' && $server_type != 'proxy')
 	else{
 		if($db_update)
         	{
-                	if($id=='')
-                	{
-                        	$id = $adb->getUniqueID("vtiger_systems");
-                        	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$port."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
-                	}
-                	else
-                        	$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."',server_port='".$port."' where id = ".$id;
-                $adb->query($sql);
+                	if($id=='') {
+                        $id = $adb->getUniqueID("vtiger_systems");
+                        $sql="insert into vtiger_systems values(?,?,?,?,?,?,?)";
+						$params = array($id, $server, $port, $server_username, $server_password, $server_type, $smtp_auth);
+                	} else {
+                        $sql="update vtiger_systems set server=?, server_username=?, server_password=?, smtp_auth=?, server_type=?, server_port=? where id=?";
+                		$params = array($server, $server_username, $server_password, $smtp_auth, $server_type, $port, $id);
+					}
+				$adb->pquery($sql, $params);
         	}	
 	}
 }

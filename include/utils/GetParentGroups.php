@@ -24,9 +24,8 @@ class GetParentGroups {
 	{
 		global $adb,$log;
 		$log->debug("Entering getAllParentGroups(".$groupid.") method...");
-		$query="select groupid from vtiger_group2grouprel where containsgroupid=".$groupId;
-		$adb->query($query);
-		$result=$adb->query($query);
+		$query="select groupid from vtiger_group2grouprel where containsgroupid=?";
+        $result = $adb->pquery($query, array($groupid));
 		$num_rows=$adb->num_rows($result);
 		if($num_rows > 0)
 		{

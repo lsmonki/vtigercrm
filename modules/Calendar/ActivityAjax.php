@@ -146,8 +146,8 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 				{
 					getEventNotification($activity_type,$mail_data['subject'],$mail_data);
 				}
-				$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
-				$invitee_res = $adb->query($invitee_qry);
+				$invitee_qry = "select * from vtiger_invitees where activityid=?";
+				$invitee_res = $adb->pquery($invitee_qry, array($return_id));
 				$count = $adb->num_rows($invitee_res);
 				if($count != 0)
 				{
@@ -163,7 +163,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			if($type == 'activity_postpone')
 			{
 			}
-			if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
+			if ($_REQUEST['viewOption'] == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year'))
                 	{
                         	$calendar_arr['calendar']->add_Activities($current_user);
                 	}

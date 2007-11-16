@@ -95,11 +95,11 @@ class AuditTrail{
 		global $adb, $current_user;
 		
 		if($sorder != '' && $order_by != '')
-			$list_query = "Select * from vtiger_audit_trial where userid =".$userid." order by ".$order_by." ".$sorder; 
+			$list_query = "Select * from vtiger_audit_trial where userid =? order by ".$order_by." ".$sorder; 
 		else
-			$list_query = "Select * from vtiger_audit_trial where userid =".$userid." order by ".$this->default_order_by." ".$this->default_sort_order;
+			$list_query = "Select * from vtiger_audit_trial where userid =? order by ".$this->default_order_by." ".$this->default_sort_order;
 	
-		$result = $adb->query($list_query);
+		$result = $adb->pquery($list_query, array($userid));
 		$entries_list = array();
 
 	if($navigation_array['end_val'] != 0)

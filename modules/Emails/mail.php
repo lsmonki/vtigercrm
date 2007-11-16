@@ -76,8 +76,8 @@ function getUserEmailId($name,$val)
 	{
 		//$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = '".$val."'";
 		//done to resolve the PHP5 specific behaviour
-		$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = ".$adb->quote($val);
-		$res = $adb->query($sql);
+		$sql = "select email1, email2, yahoo_id from vtiger_users where $name = ?";
+		$res = $adb->pquery($sql, array($val));
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')
 		{
@@ -106,7 +106,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = nl2br($adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature"));
+	$sign = nl2br($adb->query_result($adb->pquery("select signature from vtiger_users where user_name=?", array($fromname)),0,"signature"));
 	if($sign != '')
 	{
 		$contents .= '<br><br>'.$sign;
@@ -150,7 +150,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
-	$rs = $adb->query("select first_name,last_name from vtiger_users where user_name='".$from_name."'");
+	$rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
 	if($adb->num_rows($rs) > 0)
 		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
 
@@ -198,7 +198,7 @@ function setMailServerProperties($mail)
 	global $adb;
 	$adb->println("Inside the function setMailServerProperties");
 
-	$res = $adb->query("select * from vtiger_systems where server_type='email'");
+	$res = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 	if(isset($_REQUEST['server']))
 		$server = $_REQUEST['server'];
 	else
@@ -265,8 +265,8 @@ function addAllAttachments($mail,$record)
         $adb->println("Inside the function addAllAttachments");
 
 	//Retrieve the vtiger_files from database where avoid the file which has been currently selected
-	$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.deleted=0 and vtiger_seattachmentsrel.crmid=".$record;
-	$res = $adb->query($sql);
+	$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.deleted=0 and vtiger_seattachmentsrel.crmid=?";
+	$res = $adb->pquery($sql, array($record));
 	$count = $adb->num_rows($res);
 
 	for($i=0;$i<$count;$i++)
@@ -354,10 +354,11 @@ function getParentMailId($parentmodule,$parentid)
         }
 	if($parentid != '')
 	{
-	        //$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
-	        $query = 'select * from '.$tablename.' where '. $idname.' = '.$adb->quote($parentid);
-	        $mailid = $adb->query_result($adb->query($query),0,$first_email);
-		$mailid2 = $adb->query_result($adb->query($query),0,$second_email);
+	   	//$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
+	   	$query = 'select * from '.$tablename.' where '. $idname.' = ?';
+		$res = $adb->pquery($query, array($parentid));
+	    $mailid = $adb->query_result($res,0,$first_email);
+		$mailid2 = $adb->query_result($res,0,$second_email);
 	}
         if($mailid == '' && $mailid2 != '')
         	$mailid = $mailid2;

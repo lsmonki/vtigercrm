@@ -171,8 +171,8 @@ foreach ($rows1 as $row)
 			{
 				$_REQUEST['module']='contactdetails';
 			}
-			$dbquery="select * from vtiger_field where vtiger_tablename='".$_REQUEST['module']."'";
-			$custresult = $adb->query($dbquery);
+			$dbquery="select * from vtiger_field where vtiger_tablename=?";
+			$custresult = $adb->pquery($dbquery, array($_REQUEST['module']));
 			if($adb->num_rows($custresult) != 0)
 			{
 				if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
@@ -197,7 +197,8 @@ foreach ($rows1 as $row)
 					$custTabName = 'productscf';
 				}
 				$noofrows = $adb->num_rows($custresult);
-				$values='"'.$focus->id.'"';
+				$params = array($focus->id);
+				
 				for($j=0; $j<$noofrows; $j++)
 				{
 					$colName=$adb->query_result($custresult,$j,"columnname");
@@ -206,12 +207,12 @@ foreach ($rows1 as $row)
 						$value_colName = $resCustFldArray[$colName];
 
 						$columns .= ', '.$colName;
-						$values .= ', "'.$value_colName.'"';
+						array_push($params, $value_colName);
 					}
 				}
 				
-				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('.$values.')';
-				$adb->query($insert_custfld_query);
+				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('. generateQuestionMarks($params) .')';
+				$adb->pquery($insert_custfld_query, $params);
 
 			}
 		}	

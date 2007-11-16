@@ -14,8 +14,8 @@ $id_array=explode(';', $idlist);
 
 for($i=0;$i < count($id_array)-1;$i++)
 {
-		$sql = "delete from vtiger_emailtemplates where templateid =".$id_array[$i];
-		$adb->query($sql);
+		$sql = "delete from vtiger_emailtemplates where templateid =?";
+		$adb->pquery($sql, array($id_array[$i]));
 }
 
 header("Location:index.php?module=Settings&action=listemailtemplates");

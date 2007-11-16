@@ -25,8 +25,8 @@ function getSharedUserId($id)
 {
 	global $adb;
         $sharedid = Array();
-        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=".$id;
-        $result = $adb->query($query);
+        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=?";
+        $result = $adb->pquery($query, array($id));
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
         {
@@ -47,8 +47,8 @@ function getSharedUserId($id)
 function getSharedCalendarId($sharedid)
 {
 	global $adb;
-	$query = "SELECT * from vtiger_sharedcalendar where sharedid=".$sharedid;
-	$result = $adb->query($query);
+	$query = "SELECT * from vtiger_sharedcalendar where sharedid=?";
+	$result = $adb->pquery($query, array($sharedid));
 	if($adb->num_rows($result)!=0)
 	{
 		for($j=0;$j<$adb->num_rows($result);$j++)
@@ -68,8 +68,8 @@ function getOtherUserName($id)
 {
 	global $adb;
 	$user_details=Array();
-		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
-		$result = $adb->query($query);
+		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=?";
+		$result = $adb->pquery($query, array($id));
 		$num_rows=$adb->num_rows($result);
 		for($i=0;$i<$num_rows;$i++)
 		{
@@ -97,12 +97,14 @@ function getSharingUserName($id)
 	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
 	{
 		$role_seq = implode($parent_roles, "::");
-		$query = "select id as id,user_name as user_name from vtiger_users where id=".$current_user->id." and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$role_seq."::%' and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=".$current_user->id." and vtiger_tmp_write_user_sharing_per.tabid=9";
+		$query = "select id as id,user_name as user_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=9";
+		$params = array($current_user->id, $role_seq."::%", $current_user->id);
 		if (!empty($assigned_user_id)) {
-			$query .= " OR id='$assigned_user_id'";
+			$query .= " OR id=?";
+			array_push($params, $assigned_user_id);
 		}
 		$query .= " order by user_name ASC";
-		$result = $adb->query($query, true, "Error filling in user array: ");
+		$result = $adb->pquery($query, $params, true, "Error filling in user array: ");
 		while($row = $adb->fetchByAssoc($result))
 		{
 			$temp_result[$row['id']] = $row['user_name'];
@@ -275,7 +277,7 @@ function getAssignedTo($tabid)
 	{
 		$result = get_group_options();
 	}
-	$nameArray = $adb->fetch_array($result);
+	if($result) $nameArray = $adb->fetch_array($result);
 	
 	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[$tabid] == 3 or $defaultOrgSharingPermission[$tabid] == 0))
 	{
@@ -399,14 +401,14 @@ function getEventNotification($mode,$subject,$desc)
 	if($desc['assingn_type'] == "T")
 	{
 		$groupname=$desc['group_name'];
-		$resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+		$resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
 		$groupid=$adb->query_result($resultqry,0,"groupid");
 		require_once('include/utils/GetGroupUsers.php');
 		$getGroupObj=new GetGroupUsers();
 		$getGroupObj->getAllUsersInGroup($groupid);
 		$userIds=$getGroupObj->group_users;
-		$groupqry="select email1,id from vtiger_users where id in(".implode(',',$userIds).")";
-		$groupqry_res=$adb->query($groupqry);
+		$groupqry="select email1,id from vtiger_users where id in(".generateQuestionMarks($userIds).")";
+		$groupqry_res=$adb->pquery($groupqry, array($userIds));
 		$noOfRows = $adb->num_rows($groupqry_res);
 		for($z=0;$z < $noOfRows;$z++)
 		{
@@ -443,8 +445,8 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 {
 	$mail_data = Array();
 	global $adb;
-	$qry = "select * from vtiger_activity where activityid=".$return_id;
-	$ary_res = $adb->query($qry);
+	$qry = "select * from vtiger_activity where activityid=?";
+	$ary_res = $adb->pquery($qry, array($return_id));
 	$send_notification = $adb->query_result($ary_res,0,"sendnotification");
 	$subject = $adb->query_result($ary_res,0,"subject");
 	$priority = $adb->query_result($ary_res,0,"priority");
@@ -454,32 +456,31 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$end_time = $adb->query_result($ary_res,0,"time_end");
 	$location = $adb->query_result($ary_res,0,"location");
 
-	$usr_qry = "select smownerid from vtiger_crmentity where crmid=".$return_id;
-	$res = $adb->query($usr_qry);
+	$usr_qry = "select smownerid from vtiger_crmentity where crmid=?";
+	$res = $adb->pquery($usr_qry, array($return_id));
 	$usr_id = $adb->query_result($res,0,"smownerid");
 	$assignType = "U";
 	if($usr_id == 0)
 	{
 		$assignType = "T";
-		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=".$return_id;
-		$grp_res = $adb->query($group_qry);
+		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=?";
+		$grp_res = $adb->pquery($group_qry, array($return_id));
 		$grp_name = $adb->query_result($grp_res,0,"groupname");
 	}
 
 
-	$desc_qry = "select description from vtiger_crmentity where crmid=".$return_id;
-	$des_res = $adb->query($desc_qry);
+	$desc_qry = "select description from vtiger_crmentity where crmid=?";
+	$des_res = $adb->pquery($desc_qry, array($return_id));
 	$description = $adb->query_result($des_res,0,"description");
 
 		
-	$rel_qry = "select case vtiger_crmentity.setype when 'Leads' then vtiger_leaddetails.lastname when 'Accounts' then vtiger_account.accountname when 'Potentials' then vtiger_potential.potentialname when 'Quotes' then vtiger_quotes.subject when 'PurchaseOrder' then vtiger_purchaseorder.subject when 'SalesOrder' then vtiger_salesorder.subject when 'Invoice' then vtiger_invoice.subject when 'Campaigns' then vtiger_campaign.campaignname when 'HelpDesk' then vtiger_troubletickets.title  end as relname from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid  left join vtiger_account on vtiger_account.accountid=vtiger_seactivityrel.crmid left join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_quotes on vtiger_quotes.quoteid= vtiger_seactivityrel.crmid left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_seactivityrel.crmid  left join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_seactivityrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_seactivityrel.crmid  left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_seactivityrel.crmid left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid where vtiger_seactivityrel.activityid=".$return_id;
-
-	$rel_res = $adb->query($rel_qry);
+	$rel_qry = "select case vtiger_crmentity.setype when 'Leads' then vtiger_leaddetails.lastname when 'Accounts' then vtiger_account.accountname when 'Potentials' then vtiger_potential.potentialname when 'Quotes' then vtiger_quotes.subject when 'PurchaseOrder' then vtiger_purchaseorder.subject when 'SalesOrder' then vtiger_salesorder.subject when 'Invoice' then vtiger_invoice.subject when 'Campaigns' then vtiger_campaign.campaignname when 'HelpDesk' then vtiger_troubletickets.title  end as relname from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid  left join vtiger_account on vtiger_account.accountid=vtiger_seactivityrel.crmid left join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_quotes on vtiger_quotes.quoteid= vtiger_seactivityrel.crmid left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_seactivityrel.crmid  left join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_seactivityrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_seactivityrel.crmid  left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_seactivityrel.crmid left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid where vtiger_seactivityrel.activityid=?";
+	$rel_res = $adb->pquery($rel_qry, array($return_id));
 	$rel_name = $adb->query_result($rel_res,0,"relname");
 
 
-	$cont_qry = "select * from vtiger_cntactivityrel where activityid=".$return_id;
-	$cont_res = $adb->query($cont_qry);
+	$cont_qry = "select * from vtiger_cntactivityrel where activityid=?";
+	$cont_res = $adb->pquery($cont_qry, array($return_id));
 	$cont_id = $adb->query_result($cont_res,0,"contactid");
 	$cont_name = '';
 	if($cont_id != '')

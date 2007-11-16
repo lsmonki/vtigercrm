@@ -60,7 +60,7 @@ class ImportProduct extends Products {
 			$this->db->println("searching and assigning ".$ass_user);
 
 			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->query("select id from vtiger_users where id = '".$ass_user."'");
+			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -113,12 +113,11 @@ class ImportProduct extends Products {
 			return; 
 		}
 
-		$vendor_name = trim(addslashes($vendor_name));
+		$vendor_name = trim($vendor_name);
 
 		//Query to get the available Vendor which is not deleted
-		$query = "select vendorid from vtiger_vendor inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_vendor.vendorid WHERE vtiger_vendor.vendorname='{$vendor_name}' and vtiger_crmentity.deleted=0";
-
-		$vendor_id = $adb->query_result($adb->query($query),0,'vendorid');
+		$query = "select vendorid from vtiger_vendor inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_vendor.vendorid WHERE vtiger_vendor.vendorname=? and vtiger_crmentity.deleted=0";
+		$vendor_id = $adb->query_result($adb->pquery($query, array($vendor_name)),0,'vendorid');
 
 		if($vendor_id == '' || !isset($vendor_id))
 			$vendor_id = 0;

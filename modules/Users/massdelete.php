@@ -24,33 +24,34 @@ $rstart='';
 $storearray = explode(";",$idlist);
 array_filter($storearray);
 $ids_list = array();
+$errormsg = '';
 foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
-		global $current_user;
-                require_once('include/freetag/freetag.class.php');
-                $freetag=new freetag();
-                $freetag->delete_all_object_tags_for_user($current_user->id,$id);
-                $sql="update vtiger_crmentity set deleted=1 where crmid='" .$id ."'";
-                $result = $adb->query($sql);
-		if($returnmodule == 'Accounts')
-			delAccRelRecords($id);
-		if($returnmodule == 'Contacts')
-			delContactRelRecords($id);
-        }
+			global $current_user;
+            require_once('include/freetag/freetag.class.php');
+            $freetag=new freetag();
+            $freetag->delete_all_object_tags_for_user($current_user->id,$id);
+            $sql="update vtiger_crmentity set deleted=1 where crmid=?";
+            $result = $adb->pquery($sql, array($id));
+			
+			if($returnmodule == 'Accounts')
+				delAccRelRecords($id);
+			if($returnmodule == 'Contacts')
+				delContactRelRecords($id);
+        	}
         else
         {
-                $ids_list[] = $id;
+        	$ids_list[] = $id;
         }
 }
-$ret = getEntityName($returnmodule,$ids_list);
-if(count($ret) > 0)
-{
-       $errormsg = implode(',',$ret);
-}else
-{
-       $errormsg = '';
+if(count($ids_list) > 0) {
+	$ret = getEntityName($returnmodule,$ids_list);
+	if(count($ret) > 0)
+	{
+       		$errormsg = implode(',',$ret);
+	}
 }
 
 if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))

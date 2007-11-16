@@ -48,7 +48,7 @@ elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != ''
 	require_once("include/database/PearDatabase.php");
 	global $mod_strings,$adb;
 
-	$GetBackup = $adb->query("select * from vtiger_systems where server_type = 'backup'");
+	$GetBackup = $adb->pquery("select * from vtiger_systems where server_type = ?", array('backup'));
 	$BackRowsCheck = $adb->num_rows($GetBackup);
 
 	if($BackRowsCheck > 0)

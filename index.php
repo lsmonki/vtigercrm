@@ -189,15 +189,15 @@ if($use_current_login)
 	$arr=$adb->getColumnNames("vtiger_users");
 	if(!in_array("internal_mailer", $arr))
 	{
-		$adb->query("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'");
-		$adb->query("alter table vtiger_users add column tagcloud_view int(1) default 1");
+		$adb->pquery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'", array());
+		$adb->pquery("alter table vtiger_users add column tagcloud_view int(1) default 1", array());
 	}
 	//End
 
 	//getting the internal_mailer flag
 	if($_SESSION['internal_mailer'] == '')
 	{
-		$qry_res = $adb->query("select internal_mailer from vtiger_users where id='".$_SESSION["authenticated_user_id"]."'");
+		$qry_res = $adb->pquery("select internal_mailer from vtiger_users where id=?", array($_SESSION["authenticated_user_id"]));
 		$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
 	}
 	$log->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
@@ -417,11 +417,12 @@ if($use_current_login)
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'));
+		$date_var = $adb->formatDate(date('YmdHis'), true);
 		if ($action != 'chat')
 		{	
-			$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."','".$auditrecord."',$date_var)";
-			$adb->query($query);
+			$query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
+			$qparams = array($adb->getUniqueID('vtiger_audit_trial'), $current_user->id, $module, $action, $auditrecord, $date_var);
+			$adb->pquery($query, $qparams);
 		}	
 	}	
 

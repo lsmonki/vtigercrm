@@ -55,10 +55,10 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 	{
 		$tagid = $_REQUEST['tagid']; 
 		global $adb;
-		$query="delete from vtiger_freetagged_objects where tag_id=".$tagid." and object_id=".$crmid;
-		$result=$adb->query($query);
-		/*$query="delete from vtiger_freetags where id=".$tagid;
-		$result=$adb->query($query);*/
+		$query="delete from vtiger_freetagged_objects where tag_id=? and object_id=?";
+		$result=$adb->pquery($query, array($tagid, $crmid));
+		/*$query="delete from vtiger_freetags where id=?";
+		$result=$adb->pquery($query, array($tagid));*/
 		echo 'SUCESS';
 	}else
 	{

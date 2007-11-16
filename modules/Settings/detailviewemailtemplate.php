@@ -37,8 +37,8 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
 	$log->info("The templateid is set");
 	$tempid = $_REQUEST['templateid'];
-	$sql = "select * from vtiger_emailtemplates where templateid=".$tempid;
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_emailtemplates where templateid=?";
+	$result = $adb->pquery($sql, array($tempid));
 	$emailtemplateResult = $adb->fetch_array($result);
 }
 $smarty->assign("FOLDERNAME", $emailtemplateResult["foldername"]);

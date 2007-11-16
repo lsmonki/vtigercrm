@@ -29,7 +29,7 @@ if($_REQUEST['activity_type']=='Settings')
 
 $dbQuery = "SELECT * FROM vtiger_organizationdetails ";
 
-$result = $adb->query($dbQuery) or die("Couldn't get file list");
+$result = $adb->pquery($dbQuery, array()) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)
 {
 $name = @$adb->query_result($result, 0, "logoname");

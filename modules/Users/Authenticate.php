@@ -47,10 +47,10 @@ if($focus->is_authenticated())
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'));
- 	    $query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";	
-			
-		$adb->query($query);
+		$date_var = $adb->formatDate(date('YmdHis'), true);
+ 	    $query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
+		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);				
+		$adb->pquery($query, $params);
 	}
 
 	

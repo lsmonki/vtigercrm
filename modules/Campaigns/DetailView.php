@@ -75,8 +75,8 @@ if($singlepane_view == 'true')
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 	/* To get Contacts CustomView -START */
-	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Contacts');
-	$result = $adb->query($sql);
+	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
+	$result = $adb->pquery($sql, array(getTabid('Contacts')));
 	$chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
 	while($cvrow=$adb->fetch_array($result))
 	{
@@ -87,8 +87,8 @@ if($singlepane_view == 'true')
 	/* To get Contacts CustomView -END */
 	
 	/* To get Leads CustomView -START */
-	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Leads');
-	$result = $adb->query($sql);
+	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
+	$result = $adb->pquery($sql, array(getTabid('Leads')));
 	$lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
 	while($cvrow=$adb->fetch_array($result))
 	{

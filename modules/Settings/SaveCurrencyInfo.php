@@ -20,13 +20,15 @@ $currency_status= $_REQUEST['currency_status'];
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-        $sql = "update vtiger_currency_info set currency_name ='".$currency_name."', currency_code ='".$currency_code."', currency_symbol ='".$currency_symbol."', conversion_rate ='".$conversion_rate."',currency_status='".$currency_status."' where id =".$_REQUEST['record'];
+	$sql = "update vtiger_currency_info set currency_name =?, currency_code =?, currency_symbol =?, conversion_rate =?,currency_status=? where id =?";
+	$params = array($currency_name, $currency_code, $currency_symbol, $conversion_rate, $currency_status, $_REQUEST['record']);
 }
 else
 {
-        $sql = "insert into vtiger_currency_info values(".$db->getUniqueID("vtiger_currency_info").",'".$currency_name."','".$currency_code."','".$currency_symbol."','".$conversion_rate."','".$currency_status."','0')";
+    $sql = "insert into vtiger_currency_info values(?,?,?,?,?,?,?)";
+	$params = array($db->getUniqueID("vtiger_currency_info"), $currency_name, $currency_code, $currency_symbol, $conversion_rate, $currency_status,'0');
 }
-$adb->query($sql);
+$adb->pquery($sql, $params);
 $loc = "Location: index.php?module=Settings&action=CurrencyListView&parenttab=".$_REQUEST['parenttab'];
 header($loc);
 ?>

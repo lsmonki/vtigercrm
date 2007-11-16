@@ -108,8 +108,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
 					if(!$parentid) {
 						$parentid = $adb->getUniqueID('vtiger_seactivityrel');
 					}
-					$mysql='insert into vtiger_seactivityrel values('.$parentid.','.$actid.')';
-					$adb->query($mysql);
+					$mysql='insert into vtiger_seactivityrel values(?,?)';
+					$adb->pquery($mysql, array($parentid, $actid));
 				}
 				else
 				{	  
@@ -120,10 +120,15 @@ var $rel_serel_table = "vtiger_seactivityrel";
 						$mycrmid=$realid[0];
 						//added to handle the relationship of emails with vtiger_users
 						if($realid[1] == -1)
-							$mysql='insert into vtiger_salesmanactivityrel values('.$mycrmid.','.$actid.')';
-						else	
-							$mysql='insert into vtiger_seactivityrel values('.$mycrmid.','.$actid.')';
-						$adb->query($mysql);
+							$mysql='insert into vtiger_salesmanactivityrel values(?,?)';
+						else
+						{
+							$del_q = 'delete from vtiger_seactivityrel where crmid=? and activityid=?';
+							$adb->pquery($del_q,array($mycrmid, $actid));
+							$mysql='insert into vtiger_seactivityrel values(?,?)';
+						}	
+						$params = array($mycrmid, $actid);
+						$adb->pquery($mysql, $params);
 					}
 				}
 			}
@@ -242,20 +247,24 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$upload_file_path = decideFilePath();
 		file_put_contents ($upload_file_path.$current_id."_".$filename,$file);
 		
-                        $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".addslashes($this->column_fields['description'])."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
-                        $adb->query($sql1);
-                        $sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".addslashes($this->column_fields['description'])."','".$filetype."','".$upload_file_path."')";
-                        $result=$adb->query($sql2);
+                        $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
+                        $params1 = array($current_id, $current_user->id, $ownerid, $module." Attachment", $this->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+						$adb->pquery($sql1, $params1);
+						
+                        $sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?,?,?,?,?)";
+                        $params2 = array($current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path);
+						$result=$adb->pquery($sql2, $params2);
+						
                         if($_REQUEST['mode'] == 'edit')
                         {
-                                if($id != '' && $_REQUEST['fileid'] != '')
-                                {
-                                        $delquery = 'delete from vtiger_seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
-		                        $adb->query($delquery);
-			        }
-			}
-                        $sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
-                        $adb->query($sql3);
+                        	if($id != '' && $_REQUEST['fileid'] != '')
+                            {
+                                $delquery = 'delete from vtiger_seattachmentsrel where crmid = ? and attachmentsid = ?';
+		                        $adb->pquery($delquery, array($id, $_REQUEST['fileid']));
+			        		}
+						}
+                        $sql3='insert into vtiger_seattachmentsrel values(?,?)';
+                        $adb->pquery($sql3, array($id, $current_id));
                         return true;
 		$log->debug("exiting from  saveforwardattachment function.");
 	}
@@ -336,8 +345,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 		$id = $_REQUEST['record'];
 
-		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid='.$adb->quote($id);
-		$result=$adb->query($query);   
+		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
+		$result=$adb->pquery($query, array($id));   
 
 		$noofrows = $adb->num_rows($result);
 		$header [] = $app_strings['LBL_LIST_NAME'];
@@ -483,8 +492,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	{
 		global $log;
 		$log->debug("Entering set_emails_contact_invitee_relationship(".$email_id.",". $contact_id.") method ...");
-		$query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
-		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+		$query = "insert into $this->rel_contacts_table (contactid,activityid) values(?,?)";
+		$this->db->pquery($query, array($contact_id, $email_id), true,"Error setting email to contact relationship: "."<BR>$query");
 		$log->debug("Exiting set_emails_contact_invitee_relationship method ...");
 	}
      
@@ -495,8 +504,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	{
 		global $log;
 		$log->debug("Entering set_emails_se_invitee_relationship(".$email_id.",". $contact_id.") method ...");
-		$query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
-		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+		$query = "insert into $this->rel_serel_table (crmid,activityid) values(?,?)";
+		$this->db->pquery($query, array($contact_id, $email_id), true,"Error setting email to contact relationship: "."<BR>$query");
 		$log->debug("Exiting set_emails_se_invitee_relationship method ...");
 	}
      
@@ -507,8 +516,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	{
 		global $log;
 		$log->debug("Entering set_emails_user_invitee_relationship(".$email_id.",". $user_id.") method ...");
-		$query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
-		$this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
+		$query = "insert into $this->rel_users_table (smid,activityid) values (?,?)";
+		$this->db->pquery($query, array($user_id, $email_id), true,"Error setting email to user relationship: "."<BR>$query");
 		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
 	}        
 
@@ -523,8 +532,10 @@ function get_to_emailids($module)
 	global $adb;
 	if(isset($_REQUEST["field_lists"]) && $_REQUEST["field_lists"] != "")
 	{
-		$query = 'select columnname,fieldid from vtiger_field where fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
-		$result = $adb->query($query);
+		$field_lists = $_REQUEST["field_lists"];
+		if (is_string($field_lists)) $field_lists = explode(":", $field_lists);
+		$query = 'select columnname,fieldid from vtiger_field where fieldid in('. generateQuestionMarks($field_lists) .')';
+		$result = $adb->pquery($query, array($field_lists));
 		$columns = Array();
 		$idlists = '';
 		$mailids = '';
@@ -541,10 +552,11 @@ function get_to_emailids($module)
 			$single_record = true;
 		}
 		$crmids = ereg_replace(':',',',$idstring);
+		$crmids = explode(",", $crmids);
 		switch($module)
 		{
 			case 'Leads':
-				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.yahooid) != \'\')) and vtiger_crmentity.crmid in ('.$crmids.')';
+				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted=0 and ((ltrim(vtiger_leaddetails.email) != \'\') or (ltrim(vtiger_leaddetails.yahooid) != \'\')) and vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
 			case 'Contacts':
 				//email opt out funtionality works only when we do mass mailing.
@@ -552,7 +564,7 @@ function get_to_emailids($module)
 				$concat_qry = '(((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and (vtiger_contactdetails.emailoptout != 1)) and ';
 				else
 				$concat_qry = '((ltrim(vtiger_contactdetails.email) != \'\')  or (ltrim(vtiger_contactdetails.yahooid) != \'\')) and ';
-				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('.$crmids.')';
+				$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid left join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and '.$concat_qry.'  vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
 			case 'Accounts':
 				//added to work out email opt out functionality.
@@ -561,10 +573,10 @@ function get_to_emailids($module)
 				else
 					$concat_qry = '((ltrim(vtiger_account.email1) != \'\') or (ltrim(vtiger_account.email2) != \'\')) and ';
 					
-				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and '.$concat_qry.' vtiger_crmentity.crmid in ('.$crmids.')';
+				$query = 'select crmid,accountname as entityname,'.$columnlists.' from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid left join vtiger_accountscf on vtiger_accountscf.accountid = vtiger_account.accountid where vtiger_crmentity.deleted=0 and '.$concat_qry.' vtiger_crmentity.crmid in ('. generateQuestionMarks($crmids) .')';
 				break;
 		}
-		$result = $adb->query($query);
+		$result = $adb->pquery($query, array($crmids));
 		while($row = $adb->fetch_array($result))
 		{
 			$name = $row['entityname'];
@@ -610,14 +622,16 @@ function pdfAttach($obj,$module,$file_name,$id)
 	//Check wheather the copy process is completed successfully or not. if failed no need to put entry in attachment table
 	if($status)
 	{
-		$query1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$obj->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
-		$adb->query($query1);
+		$query1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
+		$params1 = array(current_id, $current_user->id, $ownerid, $module." Attachment", $obj->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$adb->pquery($query1, $params1);
 
-		$query2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$file_name."','".$obj->column_fields['description']."','pdf','".$upload_file_path."')";
-		$result=$adb->query($query2);
+		$query2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?,?,?,?,?)";
+		$params2 = array($current_id, $file_name, $obj->column_fields['description'], 'pdf', $upload_file_path);
+		$result=$adb->pquery($query2, $params2);
 
-		$query3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
-		$adb->query($query3);
+		$query3='insert into vtiger_seattachmentsrel values(?,?)';
+		$adb->pquery($query3, array($id, $current_id));
 
 		return true;
 	}

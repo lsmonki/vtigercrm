@@ -19,9 +19,9 @@ $focus = new Reports();
 
 $rfid = $_REQUEST['record'];
 $mode = $_REQUEST['savemode'];
-$foldername = addslashes($_REQUEST["foldername"]);
+$foldername = $_REQUEST["foldername"];
 $foldername = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $foldername) : $foldername;
-$folderdesc = addslashes($_REQUEST["folderdesc"]);
+$folderdesc = $_REQUEST["folderdesc"];
 $foldername = str_replace('*amp*','&',$foldername);
 $folderdesc = str_replace('*amp*','&',$folderdesc);
 /*if($foldername =="")
@@ -36,9 +36,9 @@ if($mode=="Save")
 	if($rfid=="")
 	{
 		$sql = "INSERT INTO vtiger_reportfolder ";
-		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-		$sql .= "VALUES ('','".trim($foldername)."','".$folderdesc."','CUSTOMIZED')";
-		$result = $adb->query($sql);
+		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) VALUES (?,?,?,?)";
+		$sql_params = array('', trim($foldername), $folderdesc,'CUSTOMIZED');
+		$result = $adb->pquery($sql, $sql_params);
 		if($result!=false)
 		{
 			header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
@@ -56,10 +56,9 @@ if($mode=="Save")
 	if($rfid != "")
 	{
 		$sql = "update vtiger_reportfolder set ";
-		$sql .= "FOLDERNAME='".trim($foldername)."', ";
-		$sql .= "DESCRIPTION='".$folderdesc."' ";
-		$sql .= "where folderid=".$rfid;
-		$result = $adb->query($sql);
+		$sql .= "FOLDERNAME=?, DESCRIPTION=? where folderid=?";
+		$params = array(trim($foldername), $folderdesc, $rfid);
+		$result = $adb->pquery($sql, $params);
 		if($result!=false)
 		{
 			header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");

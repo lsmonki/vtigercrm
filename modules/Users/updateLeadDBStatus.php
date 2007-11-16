@@ -82,23 +82,31 @@ if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['grou
 			if($_REQUEST['user_id'] != '' && $id != '')
 			{
 				//First we have to delete the group relationship
-				$delete_query = "delete from ". $deletegroup_array[$return_module] ." where " . $tableId_array[$return_module] . "='".$id."'";
-				$result = $adb->query($delete_query); 
+				$delete_query = "delete from ". $deletegroup_array[$return_module] ." where " . $tableId_array[$return_module] . "=?";
+				$result = $adb->pquery($delete_query, array($id)); 
 				//Inserting changed owner information to salesmanactivityrel table
-				$insert = "insert into vtiger_salesmanactivityrel values(".$idval.",".$id.")";
-				$result = $adb->query($insert);
+				if($return_module == "Calendar"){
+					$del_act = "delete from vtiger_salesmanactivityrel where smid=(select smownerid from vtiger_crmentity where crmid=?) and activityid=?";
+					$adb->pquery($del_act,array($id, $id));
+					$insert = "insert into vtiger_salesmanactivityrel values(?,?)";
+					$result = $adb->pquery($insert, array($idval, $id));
+				}	
 				//Now we have to update the smownerid
-				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
-				$result = $adb->query($sql);
+				$sql = "update vtiger_crmentity set modifiedby=?, smownerid=?, modifiedtime=? where crmid=?";
+				$result = $adb->pquery($sql, array($current_user->id, $idval, $adb->formatDate($date_var, true), $id));
 			}
 			else if($_REQUEST['group_id'] != '' && $id != '')
 			{
+				if($return_module == "Calendar"){
+	                        	$del_act = "delete from vtiger_salesmanactivityrel where smid=(select smownerid from vtiger_crmentity where crmid=?) and activityid=?";
+					$adb->pquery($del_act,array($id, $id));
+				}
 				//CHANGE HERE -- Here we have to use the getGroupName function. But that function is not correct one because they have used this function to get the assigned group name for the entity - Mickie
-				$groupname = $adb->query_result($adb->query("select groupname from vtiger_groups where groupid=".$_REQUEST['group_id']),0,'groupname');
+				$groupname = $adb->query_result($adb->pquery("select groupname from vtiger_groups where groupid=?", array($_REQUEST['group_id'])),0,'groupname');
 				//This is to update the entity - group relation
 				$module_array[$return_module]($id,$groupname); 
 				//Now we have to set the smownerid as 0 
-				$adb->query("update vtiger_crmentity set smownerid=0 where crmid=$id");
+				$adb->pquery("update vtiger_crmentity set smownerid=0 where crmid=?", array($id));
 			}
 		}
 		else
@@ -115,10 +123,10 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
 			if($id != '') {
-				$sql = "update vtiger_leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
-				$result = $adb->query($sql);
-				$query = "update vtiger_crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$id;
-				$result1 = $adb->query($query);
+				$sql = "update vtiger_leaddetails set leadstatus=? where leadid=?";
+				$result = $adb->pquery($sql, array($leadstatusval, $id));
+				$query = "update vtiger_crmentity set modifiedby=?, modifiedtime=? where crmid=?";
+				$result1 = $adb->pquery($query, array($current_user->id, $adb->formatDate($date_var, true), $id));
 			}
 		}
 		else

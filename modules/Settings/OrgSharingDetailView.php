@@ -99,8 +99,8 @@ function getSharingRuleList($module)
 	{
 
 		$colNameArr=explode("::",$colName);
-		$query = "select ".$table_name.".* from ".$table_name." inner join vtiger_datashare_module_rel on ".$table_name.".shareid=vtiger_datashare_module_rel.shareid where vtiger_datashare_module_rel.tabid=".$tabid;
-		$result=$adb->query($query);
+		$query = "select ".$table_name.".* from ".$table_name." inner join vtiger_datashare_module_rel on ".$table_name.".shareid=vtiger_datashare_module_rel.shareid where vtiger_datashare_module_rel.tabid=?";
+		$result=$adb->pquery($query, array($tabid));
 		$num_rows=$adb->num_rows($result);
 
 		$share_colName=$colNameArr[0];

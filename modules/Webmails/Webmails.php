@@ -211,22 +211,22 @@ class Webmails extends CRMEntity {
 
     function find_relationships() {
 	// leads search
-	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".trim($this->from)."' AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = ? AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql,array(trim($this->from)),true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Leads",'id'=>$this->db->query_result($res,0,"leadid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// contacts search
-	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = '".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = ?  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql,array(trim($this->from)),true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Contacts",'id'=>$this->db->query_result($res,0,"contactid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// vtiger_accounts search
-	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = '".trim($this->from)."' OR vtiger_account.email1='".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = ? OR vtiger_account.email1=?  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql, array(trim($this->from), trim($this->from)), true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Accounts",'id'=>$this->db->query_result($res,0,"accountid"),'name'=>$this->db->query_result($res,0,"accountname"));

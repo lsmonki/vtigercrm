@@ -41,8 +41,8 @@ $smarty = new vtigerCRM_Smarty;
 $category = getParenttab();
 
 $userid = $_REQUEST['userid'];
-$qry = "select * from vtiger_audit_trial where userid = $userid ";
-$qry_result = $adb->query($qry);
+$qry = "select * from vtiger_audit_trial where userid = ? ";
+$qry_result = $adb->pquery($qry, array($userid));
 $no_of_rows = $adb->num_rows($qry_result);
 
 //Retreiving the start value from request

@@ -20,15 +20,17 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
         if($mode != 'edit')
         {
-                $query = 'select groupname from vtiger_groups where groupname="'.$groupName.'"';
+                $query = 'select groupname from vtiger_groups where groupname=?';
+				$params = array($groupName);
         }
         else
         {
                 $groupid = $_REQUEST['groupid'];
-                $query = 'select groupname from vtiger_groups  where groupname="'.$groupName.'" and groupid !='.$groupid;
+                $query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
+				$params = array($groupName, $groupid);
 
         }
-        $result = $adb->query($query);
+        $result = $adb->pquery($query, $params);
         if($adb->num_rows($result) > 0)
         {
                 echo 'A Group in the specified name "'.$groupName.'" already exists';

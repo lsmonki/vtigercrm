@@ -30,8 +30,8 @@ global $adb;
 $user_name = $_REQUEST['userName'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
-        $query = "SELECT user_name FROM vtiger_users WHERE user_name ='".$user_name."'";
-        $result = $adb->query($query);
+        $query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
+        $result = $adb->pquery($query, array($user_name));
         if($adb->num_rows($result) > 0)
         {
 		echo $mod_strings['LBL_USERNAME_EXIST'];

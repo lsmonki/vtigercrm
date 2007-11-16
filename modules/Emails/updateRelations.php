@@ -24,8 +24,8 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		if($id != '')
 		{
 			$record = $_REQUEST["parentid"];
-			$sql = "insert into vtiger_seactivityrel values (". $adb->quote($id).",".$adb->quote($_REQUEST["parentid"]) .")";
-			$adb->query($sql);
+			$sql = "insert into vtiger_seactivityrel values (?,?)";
+			$adb->pquery($sql, array($id, $_REQUEST["parentid"]));
 		}
 	}
 	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
@@ -34,8 +34,8 @@ elseif (isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$record = $_REQUEST["parid"];
 	//$sql = "insert into vtiger_seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-	$sql = "insert into vtiger_seactivityrel values (". $adb->quote($_REQUEST["entityid"]).",".$adb->quote($_REQUEST["parid"]) .")";
-	$adb->query($sql);
+	$sql = "insert into vtiger_seactivityrel values (?,?)";
+	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
 	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 }
 
@@ -45,8 +45,8 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
 	//$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
-	$sql = "insert into vtiger_salesmanactivityrel values (".$adb->quote($_REQUEST["user_id"]).",".$adb->quote($_REQUEST["record"]).")";
-	$adb->query($sql);
+	$sql = "insert into vtiger_salesmanactivityrel values (?,?)";
+	$adb->pquery($sql, array($_REQUEST["user_id"], $_REQUEST["record"]));
 	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 }
 

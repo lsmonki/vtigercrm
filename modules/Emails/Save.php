@@ -23,8 +23,8 @@
  //check for mail server configuration thro ajax
 if(isset($_REQUEST['server_check']) && $_REQUEST['server_check'] == 'true')
 {
-	$sql="select * from vtiger_systems where server_type = 'email'";
-	$records=$adb->num_rows($adb->query($sql),0,"id");
+	$sql="select * from vtiger_systems where server_type = ?";
+	$records=$adb->num_rows($adb->pquery($sql, array('email')),0,"id");
 	if($records != '')
 		echo 'SUCESS';
 	else
@@ -122,8 +122,8 @@ function checkIfContactExists($mailid)
 	global $log;
 	$log->debug("Entering checkIfContactExists(".$mailid.") method ...");
 	global $adb;
-	$sql = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and email= ".$adb->quote($mailid);
-	$result = $adb->query($sql);
+	$sql = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and email= ?";
+	$result = $adb->pquery($sql, array($mailid));
 	$numRows = $adb->num_rows($result);
 	if($numRows > 0)
 	{
@@ -146,13 +146,13 @@ $focus->column_fields["date_start"]= date(getNewDisplayDate());//This will be co
 $focus->save("Emails");
 
 //saving the email details in vtiger_emaildetails vtiger_table
-$qry = 'select email1 from vtiger_users where id = '.$current_user->id;
-$res = $adb->query($qry);
+$qry = 'select email1 from vtiger_users where id = ?';
+$res = $adb->pquery($qry, array($current_user->id));
 $user_email = $adb->query_result($res,0,"email1");
 $return_id = $focus->id;
 $email_id = $return_id;
-$query = 'select emailid from vtiger_emaildetails where emailid ='.$email_id;
-$result = $adb->query($query);
+$query = 'select emailid from vtiger_emaildetails where emailid = ?';
+$result = $adb->pquery($query, array($email_id));
 
 if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
 	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
@@ -170,17 +170,19 @@ $userid = $current_user->id;
 
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
+	$query = 'update vtiger_emaildetails set to_email=?, cc_email=?, bcc_email=?, idlists=?, email_flag="SAVED" where emailid = ?';
+	$qparams = array($all_to_ids, $all_cc_ids, $all_bcc_ids, $_REQUEST["parent_id"], $email_id);
 }else
 {
-	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"'.$user_email.'","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
+	$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,"",?,"SAVED")';
+	$qparams = array($email_id, $user_email, $all_to_ids, $all_cc_ids, $all_bcc_ids, $_REQUEST["parent_id"]);
 }
-$adb->query($query);
+$adb->pquery($query, $qparams);
 
 require_once("modules/Emails/mail.php");
 //If we send mails containing Invoice pdf attachment from Invoice module, We dont need the notification mail for that. because attachments are not present in notification mails. 
 //so here we checking for that and dont send a notification mail for that mail
-/*if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) 
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && !isset($_REQUEST['pdf_attachment'])) 
 {
 	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
 	{
@@ -192,25 +194,25 @@ require_once("modules/Emails/mail.php");
 		
 //if block added to fix the issue #3759
 	if($user_mail_status != 1){
-		$query  = "select crmid,attachmentsid from vtiger_seattachmentsrel where crmid=".$email_id;
-		$result = $adb->query($query);
+		$query  = "select crmid,attachmentsid from vtiger_seattachmentsrel where crmid=?";
+		$result = $adb->pquery($query, array($email_id));
 		$numOfRows = $adb->num_rows($result);
 		for($i=0; $i<$numOfRows; $i++)
 		{
 			$attachmentsid = $adb->query_result($result,0,"attachmentsid");		
 			if($attachmentsid > 0)
 			{	
-				$query1="delete from vtiger_crmentity where crmid=".$attachmentsid;
-			 	$adb->query($query1);
+				$query1="delete from vtiger_crmentity where crmid=?";
+			 	$adb->pquery($query1, array($attachmentsid));
 			}
 
 			$crmid=$adb->query_result($result,0,"crmid");
-			$query2="delete from vtiger_crmentity where crmid=".$crmid;
-			$adb->query($query2);
+			$query2="delete from vtiger_crmentity where crmid=?";
+			$adb->pquery($query2, array($crmid));
 		}
 			
-		$query = "delete from vtiger_emaildetails where emailid=".$focus->id;	
-		$adb->query($query);
+		$query = "delete from vtiger_emaildetails where emailid=?";	
+		$adb->pquery($query, array($focus->id));
         	
 		$error_msg = "<font color=red><strong>".$mod_strings['LBL_CHECK_USER_MAILID']."</strong></font>";
 	        $ret_error = 1;
@@ -225,7 +227,7 @@ require_once("modules/Emails/mail.php");
         	exit();
 	}
 
-}*/
+}
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button

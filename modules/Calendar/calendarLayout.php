@@ -1260,19 +1260,34 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
 			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
-			AND (((vtiger_activity.date_start between '".$start_date."' AND  '".$end_date."') OR (vtiger_activity.due_date between '". $start_date."' AND '".$end_date."') OR (vtiger_activity.date_start<'".$start_date."' and vtiger_activity.due_date>'".$end_date."') AND (vtiger_recurringevents.recurringdate is NULL))
-			OR (vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')) ";
+			AND (((vtiger_activity.date_start between ? AND  ?) OR (vtiger_activity.due_date between ? AND ?) OR (vtiger_activity.date_start<? and vtiger_activity.due_date>?) AND (vtiger_recurringevents.recurringdate is NULL))
+			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?)) ";
+			
+	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
 	if($info != '')
 	{
-		$groupids = fetchUserGroupids($current_user->id);
-		$com_q = " AND (vtiger_crmentity.smownerid = ".$current_user->id."
-				OR vtiger_groups.groupid in (".$groupids."))
-			GROUP BY vtiger_activity.activityid";
+		$groupids = explode(",", fetchUserGroupids($current_user->id)); // Explode can be removed, once implode is removed from fetchUserGroupids
+		if (count($groupids) > 0) {
+			$com_q = " AND (vtiger_crmentity.smownerid = ?
+					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))
+				GROUP BY vtiger_activity.activityid";
+		} else {			
+			$com_q = " AND vtiger_crmentity.smownerid = ?
+				GROUP BY vtiger_activity.activityid";
+		}
+			
 		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')".$com_q;
 		$total_q =  $query."".$com_q;
-		$total_res = $adb->query($total_q);
+		array_push($info_params, $current_user->id);
+		
+		if (count($groupids) > 0) {
+			array_push($info_params, $groupids);
+		}
+		
+		$total_res = $adb->pquery($total_q, $info_params);
 		$total = $adb->num_rows($total_res);
-		$res = $adb->query($pending_query);
+		
+		$res = $adb->pquery($pending_query, $info_params);
 		$pending_rows = $adb->num_rows($res);
 		$cal_log->debug("Exiting getEventList() method...");
 		return Array('totalevent'=>$total,'pendingevent'=>$pending_rows);
@@ -1286,7 +1301,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$query .= "GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
  	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
-	$result = $adb->query($query);
+		
+	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
 	for($i=0;$i<$rows;$i++)
 	{
@@ -1314,8 +1330,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$idShared = "normal";
 		if(!empty($assignedto) && $userid != $current_user->id && $adb->query_result($result,$i,"visibility") == "Public")
 		{
-			$que = "select * from vtiger_sharedcalendar where sharedid=".$current_user->id." and userid=".$userid;
-			$row = $adb->query($que);
+			$que = "select * from vtiger_sharedcalendar where sharedid=? and userid=?";
+			$row = $adb->pquery($que, array($current_user->id, $userid));
 			$no = $adb->getRowCount($row);
 			if($no > 0) $idShared = "shared";
 			else  $idShared = "normal";
@@ -1397,23 +1413,30 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
                         AND vtiger_activity.activitytype = 'Task'
-                        AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."')";
+                        AND (vtiger_activity.date_start BETWEEN ? AND ?)";
+		
+		$params = $info_params = array($start_date, $end_date);
         if($info != '')
         {
-		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id;
-                $pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
-		$total_q =  $query."".$com_q;
-		if( $adb->dbType == "pgsql")
-		{
- 		    $pending_query = fixPostgresQuery( $pending_query, $log, 0);
-		    $total_q = fixPostgresQuery( $total_q, $log, 0);
-		}
-		$total_res = $adb->query($total_q);
-		$total = $adb->num_rows($total_res);
-                $res = $adb->query($pending_query);
-                $pending_rows = $adb->num_rows($res);
-		$cal_log->debug("Exiting getTodoList() method...");
-		return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
+			$com_q = " AND vtiger_crmentity.smownerid = ?";
+            
+			$pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
+			$total_q =  $query."".$com_q;
+			array_push($info_params, $current_user->id);
+		
+			if( $adb->dbType == "pgsql")
+			{
+ 		    	$pending_query = fixPostgresQuery( $pending_query, $log, 0);
+		    	$total_q = fixPostgresQuery( $total_q, $log, 0);
+			}
+			$total_res = $adb->pquery($total_q, $info_params);
+			$total = $adb->num_rows($total_res);
+                
+			$res = $adb->pquery($pending_query, $info_params);
+            $pending_rows = $adb->num_rows($res);
+		
+			$cal_log->debug("Exiting getTodoList() method...");
+			return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
         }
 	
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[9] == 3)
@@ -1422,12 +1445,12 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$query .= $sec_parameter;
 	}
 								
-        $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+    $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 
-        $result = $adb->query($query);
-        $rows = $adb->num_rows($result);
+    $result = $adb->pquery($query, $params);
+    $rows = $adb->num_rows($result);
 	for($i=0;$i<$rows;$i++)
         {
 		

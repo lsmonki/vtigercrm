@@ -16,8 +16,8 @@ require_once('include/database/PearDatabase.php');
 
 global $adb,$app_strings,$current_user;
 
-$sql="select vtiger_currency_info.currency_symbol from vtiger_currency_info inner join vtiger_users on vtiger_users.currency_id =vtiger_currency_info.id where vtiger_users.id=".$current_user->id;
-$result = $adb->query($sql);
+$sql="select vtiger_currency_info.currency_symbol from vtiger_currency_info inner join vtiger_users on vtiger_users.currency_id =vtiger_currency_info.id where vtiger_users.id=?";
+$result = $adb->pquery($sql, array($current_user->id));
 $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no

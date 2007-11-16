@@ -413,7 +413,7 @@ $smarty->assign("MODE",$mode);
 
 $disable_field_array = Array();
 $sql_disablefield = "select * from vtiger_def_org_field";
-$result = $adb->query($sql_disablefield);
+$result = $adb->pquery($sql_disablefield, array());
 $noofrows=$adb->num_rows($result);
 for($i=0; $i<$noofrows; $i++)
 {

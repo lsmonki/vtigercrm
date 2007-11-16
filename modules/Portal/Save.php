@@ -19,10 +19,10 @@ $portlurl =str_replace(array("'",'"'),'',$conv_purl);
 //added as an enhancement to set default value
 if(isset($_REQUEST['check']) && $_REQUEST['check'] =='true')
 {
-	$updateDefalt ="UPDATE vtiger_portal SET setdefault=1 WHERE portalid=".$_REQUEST['passing_var'];
-	$set_def = $adb->query($updateDefalt);
-	$updateZero = "UPDATE vtiger_portal SET setdefault=0 WHERE portalid not in('".$_REQUEST['passing_var']."')";
-	$set_default= $adb->query($updateZero);
+	$updateDefalt ="UPDATE vtiger_portal SET setdefault=1 WHERE portalid=?";
+	$set_def = $adb->pquery($updateDefalt, array($_REQUEST['passing_var']));
+	$updateZero = "UPDATE vtiger_portal SET setdefault=0 WHERE portalid not in(?)";
+	$set_default= $adb->pquery($updateZero, array($_REQUEST['passing_var']));
 	exit();
 }	
 if($portlname != '' && $portlurl != '')

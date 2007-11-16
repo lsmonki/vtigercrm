@@ -176,9 +176,9 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$limit_start_rec = $start_rec -1;
 
 	if( $adb->dbType == "pgsql")
- 	    $list_result = $adb->query($query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+ 	    $list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
  	else
- 	    $list_result = $adb->query($query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);	
+ 	    $list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());	
 
 	//Retreive the List View Table Header
 	if($noofrows == 0)
@@ -266,13 +266,16 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	
 	while($row = $adb->fetch_array($result))
 	{
-		if($row['activitytype'] == 'Attachments')
-			$query1="select setype,createdtime from vtiger_crmentity where crmid=".$row['attachmentsid'];
-		else
-			$query1="select setype,createdtime from vtiger_crmentity where crmid=".$row['crmid'];
+		if($row['activitytype'] == 'Attachments') {
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+			$params1 = array($row['attachmentsid']);
+		} else {
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+			$params1 = array($row['crmid']);
+		}
 
 		$query1 .=" order by createdtime desc";
-		$res=$adb->query($query1);
+		$res=$adb->pquery($query1, $params1);
 		$num_rows = $adb->num_rows($res);
 		for($i=0; $i<$num_rows; $i++)
 		{
@@ -551,8 +554,8 @@ function CheckFieldPermission($fieldname,$module)
  if(!$is_admin)
  {
 	 $profileList = getCurrentUserProfileList();
-	 $sql1= "SELECT fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".getTabid($module)." AND fieldname='".$fieldname."' AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
-	$result1= $adb->query($sql1);
+	 $sql1= "SELECT fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND fieldname=? AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+	$result1= $adb->pquery($sql1, array(getTabid($module), $fieldname, $profileList));
 	$permission = ($adb->num_rows($result1) > 0) ? "true" : "false";
  }else
  {

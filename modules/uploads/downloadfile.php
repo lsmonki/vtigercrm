@@ -20,9 +20,9 @@ $entityid = $_REQUEST['entityid'];
 
 $returnmodule=$_REQUEST['return_module'];
 
-$dbQuery = "SELECT * FROM vtiger_attachments WHERE attachmentsid = " .$attachmentsid ;
+$dbQuery = "SELECT * FROM vtiger_attachments WHERE attachmentsid = ?" ;
 
-$result = $adb->query($dbQuery) or die("Couldn't get file list");
+$result = $adb->pquery($dbQuery, array($attachmentsid)) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)
 {
 	$fileType = @$adb->query_result($result, 0, "type");

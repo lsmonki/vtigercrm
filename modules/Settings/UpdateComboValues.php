@@ -19,29 +19,29 @@ $fldPickList = utf8RawUrlDecode($fldPickList);
 $uitype = $_REQUEST['uitype'];
 global $adb;
 
-$sql = "select picklistid from vtiger_picklist where name='$tableName'";
-$picklistid = $adb->query_result($adb->query($sql),0,'picklistid');
+$sql = "select picklistid from vtiger_picklist where name=?";
+$picklistid = $adb->query_result($adb->pquery($sql, array($tableName)),0,'picklistid');
 
 //Deleting the already existing values
 
 if($uitype == 111 || $uitype=16)
 {
-	$qry="select roleid,picklistvalueid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid='$roleid' and picklistid=$picklistid and presence=1";
-	$res = $adb->query($qry);
+	$qry="select roleid,picklistvalueid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=? and presence=1";
+	$res = $adb->pquery($qry, array($roleid, $picklistid));
 	$num_row = $adb->num_rows($res);
 	for($s=0;$s < $num_row; $s++)
 	{
 		$valid = $adb->query_result($res,$s,'picklistvalueid');
-		$sql="delete from vtiger_role2picklist where roleid='$roleid' and picklistvalueid=$valid";
-		$adb->query($sql);
+		$sql="delete from vtiger_role2picklist where roleid=? and picklistvalueid=?";
+		$adb->pquery($sql, array($roleid, $valid));
 	}
 //$sql = "delete from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid='$roleid' and picklistid=$picklistid and presence=0";
 	//$adb->query($sql);
 }
 else
 {
-	$sql = "delete from vtiger_role2picklist  where roleid='$roleid' and picklistid=$picklistid."  ;
-	$adb->query($sql);
+	$sql = "delete from vtiger_role2picklist where roleid=? and picklistid=?";
+	$adb->pquery($sql, array($roleid, $picklistid));
 }
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
@@ -61,10 +61,11 @@ $columnName = $tableName;
 		 $picklistcount=0;
 		 //This uitype is for non-editable  picklist
 		 $sql ="select $tableName from vtiger_$tableName";
-		 $numrow = $adb->num_rows($adb->query($sql));
+		 $res = $adb->pquery($sql, array());
+		 $numrow = $adb->num_rows($res);
 		 for($x=0;$x < $numrow ; $x++)
 		 {
-			 $picklistvalues = $adb->query_result($adb->query($sql),$x,$tableName);
+			 $picklistvalues = $adb->query_result($res,$x,$tableName);
 			 if($pickArray[$i] == $picklistvalues)
 			 {
 				 $picklistcount++;	
@@ -78,32 +79,34 @@ $columnName = $tableName;
 		 $picklist_id = $adb->getUniqueID("vtiger_".$tableName);
 		 if($uitype == 111)
 		 {
-			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".addslashes($pickArray[$i])."',1,$picklistvalue_id)";		
+			 $query = "insert into vtiger_".$tableName." values(?,?,?,?)";		
+			 $params = array($picklist_id, $pickArray[$i], 1, $picklistvalue_id);
 		 }
 		 else
 		 {
-			 $query = "insert into vtiger_".$tableName." values(".$picklist_id.",'".addslashes($pickArray[$i])."',1,$picklistvalue_id)";
+			 $query = "insert into vtiger_".$tableName." values(?,?,?,?)";		
+			 $params = array($picklist_id, $pickArray[$i], 1, $picklistvalue_id);
 		 }
 
-		 $adb->query($query);
+		 $adb->pquery($query, $params);
 
 	 }
 	 $picklistcount =0;
-	 $sql = "select picklist_valueid from vtiger_$tableName where $tableName='".addslashes($pickArray[$i])."'";
-	 $pick_valueid = $adb->query_result($adb->query($sql),0,'picklist_valueid');
+	 $sql = "select picklist_valueid from vtiger_$tableName where $tableName=?";
+	 $pick_valueid = $adb->query_result($adb->pquery($sql, array($pickArray[$i])),0,'picklist_valueid');
 	 if($uitype == 111 || $uiytpe==16)
 	 {
 		 //To get the max sortid for the non editable picklist and the inserting by increasing the sortid for editable values....
-		 $sql ="select max(sortid)+1 as sortid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid='$roleid' and picklistid=$picklistid  and presence=0";
-		 $sortid = $adb->query_result($adb->query($sql),0,'sortid');
+		 $sql ="select max(sortid)+1 as sortid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=?  and presence=0";
+		 $sortid = $adb->query_result($adb->pquery($sql, array($roleid, $picklistid)),0,'sortid');
 
-		 $sql = "insert into vtiger_role2picklist values('$roleid',$pick_valueid,$picklistid,$sortid)";
-		 $adb->query($sql);
+		 $sql = "insert into vtiger_role2picklist values(?,?,?,?)";
+		 $adb->pquery($sql, array($roleid, $pick_valueid, $picklistid, $sortid));
 	 }
 	 else
 	 {		
-		 $sql = "insert into vtiger_role2picklist values('$roleid',$pick_valueid,$picklistid,$i)";
-		 $adb->query($sql);
+		 $sql = "insert into vtiger_role2picklist values(?,?,?,?)";
+		 $adb->pquery($sql, array($roleid, $pick_valueid, $picklistid, $i));
 	 }	
  }
 } 

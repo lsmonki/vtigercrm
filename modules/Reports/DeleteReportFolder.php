@@ -17,8 +17,8 @@ $local_log =& LoggerManager::getLogger('index');
 $rfid = $_REQUEST['record'];
 if($rfid != "")
 {
-	$sql .= "delete from vtiger_reportfolder where folderid=".$rfid;
-	$result = $adb->query($sql);
+	$sql .= "delete from vtiger_reportfolder where folderid=?";
+	$result = $adb->pquery($sql, array($rfid));
 	if($result!=false)
 	{
 		header("Location: index.php?action=ReportsAjax&mode=ajax&file=ListView&module=Reports");

@@ -16,7 +16,7 @@ global $adb;
 $profileid = $_REQUEST['profileid'];
 $profilename = $_REQUEST['profilename'];
 $profileDesc = $_REQUEST['description'];
-$query="UPDATE vtiger_profile set profilename='".$profilename."', description='".$profileDesc."' where profileid=".$profileid;
-$adb->query($query);
+$query="UPDATE vtiger_profile set profilename=?, description=? where profileid=?";
+$adb->pquery($query, array($profilename, $profileDesc, $profileid));
 
 ?>

@@ -39,9 +39,9 @@ if($templateid == "")
 }
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=".$templateid;
+$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=?";
 
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array($templateid));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
@@ -65,7 +65,7 @@ if($mass_merge != "")
 	$temp_mass_merge = $mass_merge;
 	if(array_pop($temp_mass_merge)=="")
 		array_pop($mass_merge);
-	$mass_merge = implode(",",$mass_merge);
+	//$mass_merge = implode(",",$mass_merge);
 }else if($single_record != "")
 {
 	$mass_merge = $single_record;	
@@ -81,17 +81,19 @@ require('user_privileges/user_privileges_'.$current_user->id.'.php');
 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
 {
 	$query1="select tablename,columnname,fieldlabel from vtiger_field where tabid=7 order by tablename";
+	$params1 = array();
 }
 else
 {
 	$profileList = getCurrentUserProfileList();
-	$query1="select vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (7) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$query1="select vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (7) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$params1 = array($profileList);
 	//Postgres 8 fixes
 	if( $adb->dbType == "pgsql")
-	$sql = fixPostgresQuery( $sql, $log, 0);
+		$query1 = fixPostgresQuery( $query1, $log, 0);
 }
 
-$result = $adb->query($query1);
+$result = $adb->pquery($query1, $params1);
 $y=$adb->num_rows($result);
 	
 for ($x=0; $x<$y; $x++)
@@ -126,9 +128,9 @@ $query = "select ".$selectcolumns." from vtiger_leaddetails
   LEFT JOIN vtiger_groups
   	ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
   left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-  where vtiger_crmentity.deleted=0 and vtiger_leaddetails.leadid in (".$mass_merge.")";
+  where vtiger_crmentity.deleted=0 and vtiger_leaddetails.leadid in (". generateQuestionMarks($mass_merge) .")";
 		
-$result = $adb->query($query);
+$result = $adb->pquery($query, array($mass_merge));
 	
 while($columnValues = $adb->fetch_array($result))
 {

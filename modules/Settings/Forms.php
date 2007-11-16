@@ -122,7 +122,7 @@ $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
 
 $qcreate_get_field="select * from vtiger_field where tabid=4 and quickcreate=0 order by quickcreatesequence";
-$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_result=$adb->pquery($qcreate_get_field, array());
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
 $fieldName_array = Array();//for validation

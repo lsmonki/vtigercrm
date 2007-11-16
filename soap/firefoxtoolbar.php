@@ -624,8 +624,8 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	require_once("modules/Accounts/Accounts.php");
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
-		$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$accountname."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
-		$result = $adb->query($query);
+		$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+		$result = $adb->pquery($query, array($accountname, ));
 	        if($adb->num_rows($result) > 0)
 		{
 			return "Accounts";
@@ -788,9 +788,9 @@ function GetPicklistValues($username,$tablename)
 	$roleid = fetchUserRole($user_id);
 	if(isPermitted("HelpDesk","EditView") == "yes")
 	{
-		$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid='$roleid' and picklistid in (select picklistid from vtiger_$tablename) order by sortid";	
+		$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_$tablename) order by sortid";	
 		$log->DEBUG($query);
-		$result1 = $adb->query($query);
+		$result1 = $adb->pquery($query, array($roleid));
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{
 			$output[$i] = $adb->query_result($result1,$i,$tablename);
