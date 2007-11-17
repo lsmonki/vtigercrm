@@ -273,7 +273,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
-		//$label_fld[] = '<a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a>';
 	}
 	elseif($uitype == 19)
 	{
@@ -435,8 +434,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                    {
                            $imgpath = "test/contact/".$imagename;
                            $label_fld[] =$mod_strings[$fieldlabel];
-			   //This is used to show the contact image as a thumbnail near First Name field
-                           //$label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
                    }
                    else
                    {
@@ -512,7 +509,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
            		$label_fld["notaccess"] = $notacc;
 	   	}
 		$label_fld[] = $value;
-		//$label_fld[] =$sal_value.' '.$value;
         }
 	elseif($uitype == 56)
 	{
@@ -1071,7 +1067,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
           	$label_fld[] = $vendor_name;
 		$label_fld["secid"] = $vendor_id;
 		$label_fld["link"] = "index.php?module=Vendors&action=DetailView&record=".$vendor_id; 
-		//$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
         }
 	elseif($uitype == 76)
         {

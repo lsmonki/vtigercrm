@@ -630,28 +630,6 @@ class Accounts extends CRMEntity {
 
 		$query .= ") )";
 		
-		/*
-		$query .= " UNION ALL
-			SELECT vtiger_users.user_name, vtiger_users.id,
-			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
-			vtiger_troubletickets.status, vtiger_troubletickets.priority,
-			vtiger_troubletickets.parent_id,
-			vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime
-			FROM vtiger_troubletickets
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-			LEFT JOIN vtiger_contactdetails
-				ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
-			LEFT JOIN vtiger_account
-				ON vtiger_account.accountid = vtiger_contactdetails.accountid
-			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			LEFT JOIN vtiger_ticketgrouprelation
-				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
-			WHERE vtiger_account.accountid = ".$id;
-		*/	
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}

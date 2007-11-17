@@ -98,7 +98,6 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
         foreach($focus->list_fields as $name=>$tableinfo)
         {
-                //$fieldname = $focus->list_fields_name[$name];  //commented for vtiger_customview 27/5
                 //added for vtiger_customview 27/5
                 if($oCv)
                 {
@@ -174,8 +173,6 @@ function Search($module)
 
 		$search_string=ltrim(rtrim($stringConvert));
 
-		// $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
-
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
         {
@@ -235,7 +232,6 @@ function get_usersid($table_name,$column_name,$search_string)
 	}
 	else
 	{
-		//$where="$table_name.$column_name =''";
 		$where="vtiger_groups.groupname like '%".$search_string."%' ";
 	}	
 	$log->debug("Exiting get_usersid method ...");

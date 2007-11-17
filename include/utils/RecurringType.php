@@ -80,7 +80,6 @@ class RecurringType
 			$this->rptmonth_datevalue = $repeat_arr['repeatmonth_date'];
 		$this->rptmonth_daytype = $repeat_arr['repeatmonth_daytype'];
 		$this->recurringdates = $this->getRecurringDates();
-		//echo '<pre>';print_r($this->recurringdates);echo '</pre>';die;	
 	}
 
 	/**

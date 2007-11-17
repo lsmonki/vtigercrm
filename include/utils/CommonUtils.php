@@ -199,7 +199,6 @@ function parse_calendardate($local_format) {
 	}
 	$log->debug("Exiting parse_calendardate method ...");
 	return $dt_popup_fmt;
-	//return "%Y-%m-%d";
 }
 
 /**
@@ -831,8 +830,6 @@ function getNewDisplayDate()
         {
                 $dat_fmt = 'dd-mm-yyyy';
         }
-	//echo $dat_fmt;
-	//echo '<BR>';
 	$display_date='';
 	if($dat_fmt == 'dd-mm-yyyy')
 	{
@@ -847,7 +844,6 @@ function getNewDisplayDate()
 		$display_date = date('Y-m-d');
 	}
 		
-	//echo $display_date;
 	$log->debug("Exiting getNewDisplayDate method ...");
 	return $display_date;
 }
@@ -1000,7 +996,7 @@ function getListPrice($productid,$pbid)
 function br2nl($str) {
    global $log;
    $log->debug("Entering br2nl(".$str.") method ...");
-   $str = preg_replace("/(\r\n)/", " ", $str);
+   $str = preg_replace("/(\r\n)/", "\\r\\n", $str);
    $str = preg_replace("/'/", " ", $str);
    $str = preg_replace("/\"/", " ", $str);
    $log->debug("Exiting br2nl method ...");
@@ -2515,15 +2511,7 @@ function getMergedDescription($description,$id,$parent_type)
 			}
 			break;
 	}
-	//replace the unwanted tokens by null
-	//commented out to fix the bug #3721
-	/*$token_data_pair = explode('$',$description);
-    for($i=1;$i < count($token_data_pair);$i+=2)
-	{
-		$token_data = '$'.$token_data_pair[$i].'$';
-		$description = str_replace($token_data,'',$description);
-	}*/
-    $log->debug("Exiting from getMergedDescription ...");
+    	$log->debug("Exiting from getMergedDescription ...");
 	return $description;
 }
 
@@ -2671,9 +2659,7 @@ function getrecurringObjValue()
 		}
 		if(isset($_REQUEST['repeat_frequency']) && $_REQUEST['repeat_frequency'] != null)
 			$recurring_data['repeat_frequency'] = $_REQUEST['repeat_frequency'];
-		//echo '<pre>';print_r($recurring_data);echo '</pre>';die;
 		$recurObj = new RecurringType($recurring_data);
-		//echo '<pre>';print_r($recurObj);echo '</pre>';die;
 		return $recurObj;
 	}
 	

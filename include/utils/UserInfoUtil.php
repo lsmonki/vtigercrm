@@ -27,9 +27,8 @@ function getMailServerInfo($user)
 	global $log;
 	$log->debug("Entering getMailServerInfo(".$user->user_name.") method ...");
 	global $adb;
-	//$sql= "select vtiger_rolename from vtiger_user2role where userid='" .$userid ."'";
-    $sql = "select * from vtiger_mail_accounts where status=1 and user_id=?";
-    $result = $adb->pquery($sql, array($user->id));
+        $sql = "select * from vtiger_mail_accounts where status=1 and user_id=?";
+        $result = $adb->pquery($sql, array($user->id));
 	$log->debug("Exiting getMailServerInfo method ...");
 	return $result;
 }
@@ -43,9 +42,8 @@ function fetchUserRole($userid)
 	global $log;
 	$log->debug("Entering fetchUserRole(".$userid.") method ...");
 	global $adb;
-	//$sql= "select vtiger_rolename from vtiger_user2role where userid='" .$userid ."'";
 	$sql = "select roleid from vtiger_user2role where userid=?";
-    $result = $adb->pquery($sql, array($userid));
+        $result = $adb->pquery($sql, array($userid));
 	$roleid=  $adb->query_result($result,0,"roleid");
 	$log->debug("Exiting fetchUserRole method ...");
 	return $roleid;
@@ -239,7 +237,6 @@ function getTabsActionPermission($profileid)
 	$check = Array();
 	$temp_tabid = Array();	
 	$sql1 = "select * from vtiger_profile2standardpermissions where profileid=? and tabid not in(16) order by(tabid)";
-	//echo $sql1.'<BR>';
 	$result1 = $adb->pquery($sql1, array($profileid));
         $num_rows1 = $adb->num_rows($result1);
         for($i=0; $i<$num_rows1; $i++)
@@ -279,7 +276,6 @@ function getTabsUtilityActionPermission($profileid)
 	$check = Array();
 	$temp_tabid = Array();	
 	$sql1 = "select * from vtiger_profile2utility where profileid=? order by(tabid)";
-	//echo $sql1.'<BR>';
 	$result1 = $adb->pquery($sql1, array($profileid));
         $num_rows1 = $adb->num_rows($result1);
         for($i=0; $i<$num_rows1; $i++)
@@ -400,121 +396,6 @@ function getAllDefaultSharingAction()
 
 }
 
-/* Deprecated Function. To be removed
- *
- *
-*/
-function setPermittedTabs2Session($profileid)
-{
-  global $log;
-  $log->debug("Entering setPermittedTabs2Session(".$profileid.") method ...");
-  global $adb;
-  $sql = "select tabid from vtiger_profile2tab where profileid=? and permissions =0" ;
-  $result = $adb->pquery($sql, array($profileid));
-  
-  $tabPermission=$adb->fetch_array($result);
-  $i=0;
-  do
-  {
-    for($j=0;$j<count($tabPermission);$j++)
-    {
-      $copy[$i]=$tabPermission["tabid"];
-    }
-    $i++;
-    
-  }while($tabPermission=$adb->fetch_array($result));
-  
-  $_SESSION['tab_permission_set']=$copy;
-  $log->debug("Exiting setPermittedTabs2Session method ...");
-}
-
-/* Deprecated Function. To be removed
- *
- *
-*/
-function setPermittedActions2Session($profileid)
-{
-  global $log;	
-  $log->debug("Entering setPermittedActions2Session(".$profileid.") method ...");
-  global $adb;
-  $check = Array(); 	
-  $sql1 = "select tabid from vtiger_profile2tab where profileid=? and permissions =0" ;
-  $result1 = $adb->pquery($sql1, array($profileid));
-  $num_rows1 = $adb->num_rows($result1);
-  for($i=0; $i<$num_rows1; $i++)
-  {
-	$access = Array();
-	$tab_id = $adb->query_result($result1,$i,'tabid');
-	
-	//echo 'tab is '.$tab_id;
-	//echo '<BR>';
-
-	//Inserting the Standard Actions into the Array	
-	$sql= "select * from vtiger_profile2standardpermissions where profileid =? and tabid=?";
-	$result = $adb->pquery($sql, array($profileid, $tab_id));
-	$num_rows = $adb->num_rows($result);
-	for($j=0; $j<$num_rows; $j++)
-	{
-		$action_id = $adb->query_result($result,$j,'operation');
-		//echo 'action is '.$action_id;
-		//echo '<BR>';
-		$per_id = $adb->query_result($result,$j,'permissions');
-		//echo 'permission is '.$per_id;
-		//echo '<BR>';
-		$access[$action_id] = $per_id;
-	}
-	
-	//Inserting the utility Actions into the Array
-	$sql2= "select * from vtiger_profile2utility where profileid =? and tabid=?";
-	$result2 = $adb->pquery($sql2, array($profileid, $tab_id));
-	$num_rows2 = $adb->num_rows($result2);
-	for($k=0; $k<$num_rows2; $k++)
-	{
-		$action_id = $adb->query_result($result2,$k,'activityid');
-		//echo 'action is '.$action_id;
-		//echo '<BR>';
-		$per_id = $adb->query_result($result2,$k,'permission');
-		//echo 'permission is '.$per_id;
-		//echo '<BR>';
-		$access[$action_id] = $per_id;
-	}
-
-	//Inserting into the global Array
-	$check[$tab_id] = $access;
-	
-  }			
-  	
- $_SESSION['action_permission_set']=$check;
- $log->debug("Entering setPermittedActions2Session method ...");
-}
-
-/* Deprecated Function. To be removed
- *
- *
-*/
-function setPermittedDefaultSharingAction2Session($profileid)
-{
-	global $log;
-	$log->debug("Entering setPermittedDefaultSharingAction2Session(".$profileid.") method ...");
-	global $adb;
-	//retreiving the standard permissions	
-	//$sql= "select default_org_sharingrule.* from default_org_sharingrule inner join vtiger_profile2tab on vtiger_profile2tab.tabid = default_org_sharingrule.tabid where vtiger_profile2tab.permissions =0 and vtiger_profile2tab.profileid=".$profileid;
-	$sql = "select * from vtiger_def_org_share";
-	$result = $adb->pquery($sql, array());
-	$permissionRow=$adb->fetch_array($result);
-	do
-	{
-		for($j=0;$j<count($permissionRow);$j++)
-		{
-			$copy[$permissionRow[1]]=$permissionRow[2];
-		}
-
-	}while($permissionRow=$adb->fetch_array($result));
-
-	$_SESSION['defaultaction_sharing_permission_set']=$copy;
-	$log->debug("Entering setPermittedDefaultSharingAction2Session method ...");
-}
-
 
 /** Function to create the vtiger_role
   * @param $roleName -- Role Name:: Type varchar
@@ -602,108 +483,6 @@ function insertRole2ProfileRelation($roleId,$profileId)
 	
 }
 
-
-/** Deprecated Function. To be removed
-  *
-  *
-  *
-*/
-function createNewGroup($groupName,$groupDescription)
-{
-	global $log;
-	$log->debug("Entering createNewGroup(".$groupName.",".$groupDescription.") method ...");
-	global $adb;
-	$sql = "insert into vtiger_groups(name,description) values(?,?)";
-	$params = array($groupName,$groupDescription);
-	$result = $adb->pquery($sql, $params); 
-	$log->debug("Exiting createNewGroup method ...");
-	header("Location: index.php?module=Settings&action=listgroups");
-	
-}
-
-
-/** Deprecated Function. To be removed
-  *
-  *
-  *
-*/
-function fetchTabId($moduleName)
-{
-	global $log;
-	$log->debug("Entering fetchTabId(".$moduleName.") method ...");
-	global $adb;
-	$sql = "select id from vtiger_tab where name = ?";
-	$result = $adb->pquery($sql, array($moduleName)); 
-	$tabid =  $adb->query_result($result,0,"id");
-	$log->debug("Exiting fetchTabId method ...");
-	return $tabid;
-
-}
-
-/** Deprecated Function. To be removed
-  *
-  *
-  *
-*/
-function populatePermissions4NewRole($parentroleName,$roleName)
-{
-	global $log;
-	$log->debug("Entering populatePermissions4NewRole(".$parentroleName.",".$roleName.") method ...");
-  global $adb;
-  //fetch the permissions for the parent vtiger_role
-  $referenceValues = fetchTabReferenceEntityValues($parentroleName);
-
-  while($permissionRow = $adb->fetch_array($referenceValues))
-  {
-    $sql_insert="insert into vtiger_role2tab(rolename,tabid,module_permission,description) values(?,?,?,?)";
-	$insert_params = array($roleName, $permissionRow['tabid'], $permissionRow['module_permission'],'');
-    $adb->pquery($sql_insert, $insert_params);
-  }
-
-  $actionreferenceValues = fetchActionReferenceEntityValues($parentroleName);
-  while($permissionRow = $adb->fetch_array($actionreferenceValues))
-  {
-    $sql_insert="insert into vtiger_role2action(rolename,tabid,actionname,action_permission,description) values(?,?,?,?,?)";
-    $insert_params = array($roleName, $permissionRow['tabid'], $permissionRow['actionname'], $permissionRow['action_permission'] ,'');
-    $adb->pquery($sql_insert, $insert_params);
-  }
-	$log->debug("Exiting populatePermissions4NewRole method ...");
-  
-}
-
-/** Deprecated Function. To be removed
-  *
-  *
-  *
-*/
-function fetchTabReferenceEntityValues($parentrolename)
-{
-	global $log;
-	$log->debug("Entering fetchTabReferenceEntityValues(".$parentrolename.") method ...");
-  	global $adb;
-  	$sql = "select tabid,module_permission,description from vtiger_role2tab where rolename=?"; 
-  	$result=$adb->pquery($sql, array($parentrolename));
-	$log->debug("Exiting fetchTabReferenceEntityValues method ...");
-  	return $result;
-
-}
-
-
-/** Deprecated Function. To be removed
-  *
-  *
-  *
-*/
-function fetchActionReferenceEntityValues($parentrolename)
-{
-	global $log;
-  	$log->debug("Entering fetchActionReferenceEntityValues(".$parentrolename.") method ...");
-  	global $adb;
-  	$sql = "select tabid,actionname,action_permission,description from vtiger_role2action where rolename=?"; 
-  	$result=$adb->pquery($sql, array($parentrolename));
-  	$log->debug("Exiting fetchActionReferenceEntityValues method ...");
-  	return $result;
-}
 
 /** Function to get the vtiger_roleid from vtiger_rolename
   * @param $rolename -- Role Name:: Type varchar
@@ -850,7 +629,6 @@ $log->debug("Entering substituteTokens(".$filename.",".$globals.") method ...");
 	$log->debug("in substituteTokens method  with filename ".$filename.' and content globals as '.$globals);
 
 	global $root_directory;
-	//$globals = implode(",\\$",$tokens);
     
 	if (!$filename)
 	 {
@@ -1330,90 +1108,6 @@ $log->debug("Entering updateActivityGroupRelation(".$activityid.",".$groupname."
 
 }
 
-
-
-/** Function to be depricated
- *
- *
- *
-*/
-function getFieldList($fld_module, $profileid)
-{
-	global $log;
-	$log->debug("Entering getFieldList(".$fld_module.",". $profileid.") method ...");
-        global $adb;
-        if($fld_module == "Accounts")
-        {
-                $tabid = 5;
-        }
-        $query = "select * from vtiger_profile2field where profileid =".$profileid." and tabid=".$tabid;
-        //echo $query;
-        $result = $adb->query($query);
-	$log->debug("Exiting getFieldList method ...");
-        return $result;
-}
-
-
-/** Function to be depricated
- *
- *
- *
-*/
-function getFieldVisibilityArray($fld_module, $profileid)
-{
-	global $log;
-	$log->debug("Entering getFieldVisibilityArray(".$fld_module.",". $profileid.") method ...");
-	global $adb;
-        if($fld_module == "Accounts")
-        {
-                $tabid = 5;
-        }
-        $query = "select * from vtiger_profile2field where profileid =".$profileid." and tabid=".$tabid;
-        //echo $query;
-        $result = $adb->query($query);
-	$fldVisbArray = Array();
-	$noofrows = $adb->num_rows($fieldListResult);
-	for($i=0; $i<$noofrows; $i++)
-	{
-		$fld_name = $adb->query_result($fieldListResult,$i,"fieldname");
-		$fldVisbArray[$fld_name] = $adb->query_result($fieldListResult,$i,"visible");	
-	}
-	$log->debug("Exiting getFieldVisibilityArray method ...");
-	return $fldVisbArray;	
-	
-}
-
-
-/** Function to be depricated
- *
- *
- *
-*/
-function getFieldReadOnlyArray($fld_module, $profileid)
-{
-	global $log;
-	$log->debug("Entering getFieldReadOnlyArray(".$fld_module.",". $profileid.") method ...");
-	global $adb;
-        if($fld_module == "Accounts")
-        {
-                $tabid = 5;
-        }
-        $query = "select * from vtiger_profile2field where profileid =".$profileid." and tabid=".$tabid;
-        //echo $query;
-        $result = $adb->query($query);
-	$fldReadOnlyArray = Array();
-	$noofrows = $adb->num_rows($fieldListResult);
-	for($i=0; $i<$noofrows; $i++)
-	{
-		$fld_name = $adb->query_result($fieldListResult,$i,"fieldname");
-		$fldReadOnlyArray[$fld_name] = $adb->query_result($fieldListResult,$i,"readonly");	
-	}
-	
-	$log->debug("Exiting getFieldReadOnlyArray method ...");
-	return $fldReadOnlyArray;	
-}
-
-
 /** Function to get the vtiger_role name from the vtiger_roleid 
   * @param $roleid -- Role Id:: Type varchar
   * @returns $rolename -- Role Name:: Type varchar
@@ -1565,9 +1259,6 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 	//Checking for Action Permission
-		//echo '<BR>';
-		//echo '******* '.$actionid.'  ***********'.$tabid.'%%%%%%%%%%%%%%%%%%%%%%%'.$profileActionPermission[$tabid][$actionid];
-		//echo '<BR>';
 	if(strlen($profileActionPermission[$tabid][$actionid]) <  1 && $profileActionPermission[$tabid][$actionid] == '')
 	{
 		$permission = "yes";
@@ -1592,7 +1283,6 @@ function isPermitted($module,$actionname,$record_id='')
 	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
-		//if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
 		if(getTabOwnedBy($module) == 1)
 		{
 			$permission = "yes";
@@ -2157,33 +1847,6 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 }
 
 
-/** Function to be depricated
-  *
-  *
- */
-function setGlobalProfilePermission2Session($profileid)
-{
-	global $log;
-	$log->debug("Entering setGlobalProfilePermission2Session(".$profileid.") method ...");
-  global $adb;
-  $sql = "select * from vtiger_profile2globalpermissions where profileid=?" ;
-  $result = $adb->pquery($sql, array($profileid));
-  $num_rows = $adb->num_rows($result);
-
-  for($i=0; $i<$num_rows; $i++)
-  {
-	$act_id = $adb->query_result($result,$i,"globalactionid");
-	$per_id = $adb->query_result($result,$i,"globalactionpermission");
-	$copy[$act_id] = $per_id;
-  }	 
-
-  $_SESSION['global_permission_set']=$copy;
-	$log->debug("Exiting setGlobalProfilePermission2Session method ...");
-  
-}
-
-
-
 /** Function to get the Profile Global Information for the specified vtiger_profileid  
   * @param $profileid -- Profile Id:: Type integer
   * @returns Profile Gloabal Permission Array in the following format:
@@ -2253,7 +1916,6 @@ $log->debug("Entering getProfileActionPermission(".$profileid.") method ...");
 	$check = Array();
 	$temp_tabid = Array();	
 	$sql1 = "select * from vtiger_profile2standardpermissions where profileid=?";
-	//echo $sql1.'<BR>';
 	$result1 = $adb->pquery($sql1, array($profileid));
         $num_rows1 = $adb->num_rows($result1);
         for($i=0; $i<$num_rows1; $i++)
@@ -2800,7 +2462,6 @@ function deleteRole($roleId,$transferRoleId)
                 //delete from vtiger_role vtiger_table;
                 $sql9 = "delete from vtiger_role where roleid=?";
                 $adb->pquery($sql9, array($roleid));
-                //echo $sql1.'            '.$sql2.'           '.$sql9;
 
 
 
@@ -3395,17 +3056,11 @@ function tranferGroupOwnership($groupId,$transferId,$transferType)
 			//Updating in the Crm Entity Table	
 			$query = "update vtiger_crmentity set smownerid=? where crmid in(select ".$colName." from ".$tableName." where groupname=?)";
 			$params = array($transferId, $toBeTransferredGroupName);
-			//echo '<BR>';
-			//echo $query;
-			//echo '<BR>';
 			$adb->pquery($query, $params);
 
 			//Deleting from the group table
 			$query1 = "delete from ".$tableName." where groupname=?";
 			$params1 = array($toBeTransferredGroupName);
-			//echo '<BR>';
-			//echo $query1;
-			//echo '<BR>';
 			$adb->pquery($query1, $params1);			
 		}	
 	}		
@@ -4751,29 +4406,6 @@ function getFieldModuleAccessArray()
 	{
 		$fldModArr[$adb->query_result($result,$i,'name')]=$adb->query_result($result,$i,'name');
 	}	
-		
-
-	/*
-	$fldModArr=Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
-                'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
-                'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
-                'Potentials'=>'LBL_OPPORTUNITY_FIELD_ACCESS',
-                'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
-                'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
-                'Notes'=>'LBL_NOTE_FIELD_ACCESS',
-                'Calendar'=>'LBL_TASK_FIELD_ACCESS',
-                'Events'=>'LBL_EVENT_FIELD_ACCESS',
-                'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
-                'PriceBooks'=>'LBL_PB_FIELD_ACCESS',
-                'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
-                'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
-                'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
-                'Invoice'=>'LBL_INVOICE_FIELD_ACCESS',
-                'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS',
-		'Faq'=>'LBL_FAQ_FIELD_ACCESS'
-              );
-	 */     
-
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
 	return $fldModArr;
 }

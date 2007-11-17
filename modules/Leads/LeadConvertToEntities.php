@@ -59,6 +59,7 @@ function getInsertValues($type,$type_id)
 	$convert_result = $adb->pquery($sql_convert_lead, array());
 	$noofrows = $adb->num_rows($convert_result);
 
+	$value_cf_array = Array();
 	for($i=0;$i<$noofrows;$i++)
 	{
 		$flag="false";
@@ -109,20 +110,18 @@ function getInsertValues($type,$type_id)
 		else if($type == "Potentials")
 		{
 			if($potential_id_val!="" && $potential_id_val!=0)
-            {
+            		{
 				$flag="true";
-                $log->info("Getting the  Potentials custom vtiger_field column name  ");
+                		$log->info("Getting the  Potentials custom vtiger_field column name  ");
 				$sql_type.="'Potentials' and fieldid=?";
 				array_push($params, $potential_id_val);				
-            }
-
+            		}
 		}
 		if($flag=="true")
 		{ 
 			$type_result=$adb->pquery($sql_type, $params);
 			//To construct the cf array
-            $colname = $adb->query_result($type_result,0,"columnname");
-			
+            		$colname = $adb->query_result($type_result,0,"columnname");
 			if(isset($type_insert_column))
 				$type_insert_column.=",";
 			$type_insert_column.=$colname ;
@@ -135,12 +134,15 @@ function getInsertValues($type,$type_id)
 				$insert_value.=",";
 			
 			//This array is used to store the tablename as the key and the value for that table in the custom field of the uitype only for 15 and 33(Multiselect cf)...
-			$value_cf_array[$colname]=$ins_val;
+			if($lead_uitype == 33 || $lead_uitype == 15)
+			{
+				$value_cf_array[$colname]=$ins_val;
+			}
 			
 			$insert_value.="'".$ins_val."'";
 		}
 	}
-	if(($lead_uitype == 33 || 15) && ($type_uitype == 33 || 15))
+	if(count($value_cf_array) > 0)
 	{
 		if($type_insert_column != '')
 		{
@@ -358,14 +360,14 @@ else
 	$insert_values=array($crmid);
 	$insert_str = "?";
 	$insert_column="accountid";	
-	$val= getInsertValues("Accounts",$insert_value);
+	$val= getInsertValues("Accounts",$crmid);
 	if($val[0]!="")
 		$insert_column.=",".$val[0];
 	if($val[1]!="") {
-		$insert_str.=",?";
-		array_push($insert_values, $val[1]);
+		$tempval = explode(",",$val[1]);
+		$insert_str .= str_repeat(",?", count($tempval));
+		array_push($insert_values, $tempval);
 	}
-	
 	$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_str.")";
 	$adb->pquery($sql_insert_accountcustomfield, $insert_values);
 	//Saving Account - ends
@@ -415,14 +417,13 @@ $insert_str = "?";
 $insert_values=array($contact_id);
 
 $val= getInsertValues("Contacts",$contact_id);
-
 if($val[0]!="")
 	$insert_column.=",".$val[0];	
 if($val[1]!="") {
-	$insert_str.=",?";	
-	array_push($insert_values, $val[1]);
+	$tempval = explode(",",$val[1]);
+	$insert_str .= str_repeat(",?", count($tempval));
+	array_push($insert_values, $tempval);
 }
-
 $sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (".$insert_column.") VALUES (".$insert_str.")";
 $adb->pquery($sql_insert_contactcustomfield, $insert_values);
 //Saving Contact - ends
@@ -473,8 +474,9 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	if($val[0]!="")
 		$insert_column.=",".$val[0];		
 	if($val[1]!="") {
-		$insert_str.=",?";		
-		array_push($insert_values, $val[1]);
+		$tempval = explode(",",$val[1]);
+		$insert_str .= str_repeat(",?", count($tempval));
+		array_push($insert_values, $tempval);
 	}
 
 	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (".$insert_column.") VALUES (".$insert_str.")";

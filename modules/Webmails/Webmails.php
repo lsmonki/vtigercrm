@@ -92,16 +92,9 @@ class Webmails extends CRMEntity {
 	function loadMail($attach_tab) {
 		
 		$this->email = $this->load_mail($attach_tab);
-		/* commented out by richie
-		$this->inline = $this->email["inline"];
-		$this->attachments = $this->email["attachments"];
-		$this->body = $this->email["content"]["body"];
-		$this->relationship = $this->find_relationships();
-		 */
 		$this->body = $this->email["body"];
 		$this->attachtab = $this->email["attachtab"];
 		$this->att= $this->email["att"];
-		//echo ' body is ssssssssssssssss '.$this->email["body"];
 	}
 
 	function replyBody() {

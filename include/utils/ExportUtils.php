@@ -121,8 +121,6 @@ function getFieldsListFromQuery($query)
 					when 'Accounts' then concat('Accounts ::: ',vtiger_ProductRelatedToAccount.accountname) 
 					when 'Potentials' then concat('Potentials ::: ',vtiger_ProductRelatedToPotential.potentialname) 
 				    End as 'Related To',";
-			//This will export as 3 seperate columns for each Leads, Accounts and Potentials
-			//$fields .= "  case vtiger_crmentityRelatedTo.setype when 'Leads' then vtiger_ProductRelatedToLead.lastname End as 'Lead Name', case vtiger_crmentityRelatedTo.setype when 'Accounts' then vtiger_ProductRelatedToAccount.accountname End as 'Account Name', case vtiger_crmentityRelatedTo.setype when 'Potentials' then vtiger_ProductRelatedToPotential.potentialname End as 'Potential Name',";
 		}
 		elseif($tablename == 'vtiger_products' && $columnName == 'contactid')//Product - Contact
 		{

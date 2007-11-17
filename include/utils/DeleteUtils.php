@@ -208,7 +208,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		$adb->pquery("update vtiger_campaign set product_id=NULL where product_id = ?", array($record));
 	break;
 	case PurchaseOrder:
-
 		if($return_module == "Vendors")
 		{
 			$sql_req ='update vtiger_crmentity set deleted = 1 where crmid= ?';
@@ -219,32 +218,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql_req ='UPDATE vtiger_purchaseorder set contactid="" where purchaseorderid = ?';
 			$adb->pquery($sql_req, array($record));
 		}
-
-		//Following condition is commented because in Product Relatedlist we have PO which should not be deleted.
-		/*
-		elseif($return_module == "Products")
-		{
-			//Removing the relation from the po product rel
-			$po_query = "select * from vtiger_poproductrel where productid=".$return_id;
-			$result = $adb->query($po_query);
-			$num_rows = $adb->num_rows($result);
-			for($i=0; $i< $num_rows; $i++)
-			{
-				$po_id = $adb->query_result($result,$i,"purchaseorderid");
-				$qty = $adb->query_result($result,$i,"quantity");
-				$listprice = $adb->query_result($result,$i,"listprice");
-				$prod_total = $qty * $listprice;
-				//Handle here -- Tax calculations
-
-				//Get the current sub total from Quotes and update it with the new subtotal
-				updateSubTotal("PurchaseOrder","vtiger_purchaseorder","subtotal","total","purchaseorderid",$po_id,$prod_total);
-			}
-			//delete the relation from po product rel
-			$del_query = "delete from vtiger_poproductrel where productid=".$return_id." and purchaseorderid=".$record;
-			$adb->query($del_query);
-
-		}
-		*/
 	break;
 	case SalesOrder:
 		if($return_module == "Accounts")
@@ -266,31 +239,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_salesorder set contactid=null where salesorderid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-		//Following condition is commented because in Product Relatedlist we have SO which should not be deleted.
-		/*
-		elseif($return_module == "Products")
-		{
-			//Removing the relation from the so product rel
-			$so_query = "select * from vtiger_soproductrel where productid=".$return_id;
-			$result = $adb->query($so_query);
-			$num_rows = $adb->num_rows($result);
-			for($i=0; $i< $num_rows; $i++)
-			{
-				$so_id = $adb->query_result($result,$i,"salesorderid");
-				$qty = $adb->query_result($result,$i,"quantity");
-				$listprice = $adb->query_result($result,$i,"listprice");
-				$prod_total = $qty * $listprice;
-				//Handle here -- Tax calculations
-
-				//Get the current sub total from Quotes and update it with the new subtotal
-				updateSubTotal("SalesOrder","vtiger_salesorder","subtotal","total","salesorderid",$so_id,$prod_total);
-			}
-			//delete the relation from so product rel
-			$del_query = "delete from vtiger_soproductrel where productid=".$return_id." and salesorderid=".$record;
-			$adb->query($del_query);
-
-		}
-		*/
 	break;
 	case Quotes:	
 		if($return_module == "Accounts" )
@@ -307,31 +255,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_quotes set contactid=null where quoteid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-		//Following condition is commented because in Product Relatedlist we have Quotes which should not be deleted.
-		/*
-		elseif($return_module == "Products")
-		{
-			//Removing the relation from the vtiger_quotes product rel
-			$qt_query = "select * from vtiger_quotesproductrel where productid=".$return_id;
-			$result = $adb->query($qt_query);
-			$num_rows = $adb->num_rows($result);
-			for($i=0; $i< $num_rows; $i++)
-			{
-				$quote_id = $adb->query_result($result,$i,"quoteid");
-				$qty = $adb->query_result($result,$i,"quantity");
-				$listprice = $adb->query_result($result,$i,"listprice");
-				$prod_total = $qty * $listprice;
-				//Handle here -- Tax calculation
-
-				//Get the current sub total from Quotes and update it with the new subtotal
-				updateSubTotal("Quotes","vtiger_quotes","subtotal","total","quoteid",$quote_id,$prod_total);
-			}
-			//delete the relation from vtiger_quotes product rel
-			$del_query = "delete from vtiger_quotesproductrel where productid=".$return_id." and quoteid=".$record;
-			$adb->query($del_query);
-
-		}
-		*/
 	break;
 	case Invoice:
 		if($return_module == "Accounts")
@@ -343,30 +266,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_invoice set salesorderid=null where invoiceid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-		//Following condition is commented because in Product Relatedlist we have Invoice which should not be deleted.
-		/*
-		elseif($return_module=="Products")
-		{
-			//Removing the relation from the vtiger_quotes product rel
-			$inv_query = "select * from vtiger_invoiceproductrel where productid=".$return_id;
-			$result = $adb->query($inv_query);
-			$num_rows = $adb->num_rows($result);
-			for($i=0; $i< $num_rows; $i++)
-			{
-				$invoice_id = $adb->query_result($result,$i,"invoiceid");
-				$qty = $adb->query_result($result,$i,"quantity");
-				$listprice = $adb->query_result($result,$i,"listprice");
-				$prod_total = $qty * $listprice;
-				//Handle here -- tax calculations should be handle here
-
-				//Get the current sub total from Quotes and update it with the new subtotal
-				updateSubTotal("Invoices","vtiger_invoice","subtotal","total","invoiceid",$invoice_id,$prod_total);
-			}
-			//delete the relation from vtiger_quotes product rel
-			$del_query = "delete from vtiger_invoiceproductrel where productid=".$return_id." and invoiceid=".$record;
-			$adb->query($del_query);
-		}
-		*/
 	break;
 	case Rss:
 		$del_query = "delete from vtiger_rss where rssid=?";
@@ -410,15 +309,6 @@ function delAccRelRecords($record){
 		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = ?';
 		$adb->pquery($sql, array($pot_id));
 	}
-	//Deleting Account related Sales Orders.
-	/*$so_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_salesorder on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid inner join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid where vtiger_crmentity.deleted=0 and vtiger_salesorder.accountid=".$record;
-	$so_res = $adb->query($so_q);
-	for($k=0;$k < $adb->num_rows($so_res);$k++)
-	{
-		$so_id = $adb->query_result($so_res,$k,"crmid");
-		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$so_id;
-		$adb->query($sql);
-	}*/
 	//Deleting Account related Quotes.
 	$quo_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_quotes on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_account on vtiger_account.accountid=vtiger_quotes.accountid where  vtiger_crmentity.deleted=0 and vtiger_quotes.accountid=?";
 	$quo_res = $adb->pquery($quo_q, array($record));
@@ -428,15 +318,6 @@ function delAccRelRecords($record){
 		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = ?';
 		$adb->pquery($sql, array($quo_id));
 	}
-	//Deleting Account related Invoices.
-	/*$inv_q = "select vtiger_crmentity.crmid from vtiger_crmentity inner join vtiger_invoice on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid where  vtiger_crmentity.deleted=0 and vtiger_invoice.accountid=".$record;
-	$inv_res = $adb->query($inv_q);
-	for($k=0;$k < $adb->num_rows($inv_res);$k++)
-	{
-		$inv_id = $adb->query_result($inv_res,$k,"crmid");
-		$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$inv_id;
-		$adb->query($sql);
-	}*/
 	//Deleting Contact-Account Relation.
 	$con_q = "update vtiger_contactdetails set accountid = null where accountid = ?";
 	$adb->pquery($con_q, array($record));

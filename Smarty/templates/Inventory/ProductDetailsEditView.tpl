@@ -31,6 +31,12 @@ function displayCoords(currObj,obj,mode,curr_row)
 			alert("{$APP.PLEASE_SELECT_PRODUCT}");
 			return false;
 		{rdelim}
+		var curr_quantity = document.getElementById("qty"+curr_row).value;
+		if(curr_quantity == '')
+		{ldelim}
+			alert("{$APP.PLEASE_FILL_QUANTITY}");
+			return false;
+		{rdelim}
 	{rdelim}
 
 	//Set the Header value for Discount
