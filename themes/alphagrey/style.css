@@ -214,8 +214,7 @@ a:hover {
 }
 
 .lvtColDataHover {
-	background-color:#ffffee;
-	
+	background-color:#ffffee;	
 }
 
 /* List View Table classes ends --------------------------------*/
@@ -291,13 +290,11 @@ a:hover {
 	border-bottom:1px solid #ddd;
 	padding:5px;
 	background-color:#efefef;
-
 }
 
 .rightMailMergeContent {
 	padding:5px;
 	background-color:#fafafa;
-
 }
 
 .detailedViewHeader{
@@ -372,8 +369,7 @@ a:hover {
 
 .calDIV {
 	width:100%;
-	border:1px solid #999999;
-	
+	border:1px solid #999999;	
 }
 
 .calDayHour {
@@ -655,8 +651,7 @@ a.submenu:Hover{
 	position:relative;
 	top:0px;
 	left:0px;
-	text-align:left;
-	
+	text-align:left;	
 }
 
 #theClockLayer{
@@ -1292,8 +1287,8 @@ a.allMnu:Hover{
 	border-right: 1px solid #a5a5a5; 
 	border-bottom: 1px solid #a5a5a5; 
 	background:#fefefe url(images/layerPopupBg.gif);
-
 }
+
 .calTopRight {
 	border-right: 1px solid #a5a5a5; 
 }
@@ -1463,13 +1458,13 @@ level2Sel{
 
 /* For Report HTML Generation*/
 .rptCellLabel {
-    	background-color:#f6f6f6;
-    	padding-right:10px;
+    background-color:#f6f6f6;
+    padding-right:10px;
 	border-right: 1px solid #DDDDDD;
 	border-bottom:1px solid #eaeaea;
-    	color:#737373;
-    	font-weight: bold;
-    	white-space:nowrap;
+    color:#737373;
+    font-weight: bold;
+    white-space:nowrap;
 }
 
 .rptTable {
@@ -1479,27 +1474,27 @@ level2Sel{
 }
 
 .rptTitle, .rptHead, .rptData, .rptGrpHead{
-    	font-family: Verdana, Arial, Helvetica, Sans-serif;
-    	font-size: 11px;
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
 	text-align:left;
-    	font-weight: normal;
+    font-weight: normal;
 	height: 20px;
 	padding: 4px;
-    	border-right: 1px solid #DDDDDD;
-    	border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
 	background: #DDDDDD;
 }
 
 .rptGrp1Total, .rptGrp2Total, .rptTotal {
-    	font-family: Verdana, Arial, Helvetica, Sans-serif;
-    	font-size: 11px;
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
 	text-align:center;
-    	font-weight: normal;
-    	background: #FFF;
+    font-weight: normal;
+    background: #FFF;
 	height: 20px;
 	padding: 4px;
-    	border-right: 1px solid #DDDDDD;
-    	border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
 }
 
 .rptGrpHead {
@@ -1510,7 +1505,7 @@ level2Sel{
 }
 
 .rptData {
-	background: #FFF;
+		background: #FFF;
         font-weight: normal;
 }
 
@@ -1544,11 +1539,11 @@ level2Sel{
 }
 
 #folderLay{
-    	width:175px;
-    	background-color:#CCCCCC;
-    	border:1px solid #DDDDDD;
-    	padding-top:5px;
-    	position:absolute;
+   	width:175px;
+    background-color:#CCCCCC;
+    border:1px solid #DDDDDD;
+    padding-top:5px;
+    position:absolute;
    	display:none;
 }
 

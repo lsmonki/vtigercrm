@@ -210,13 +210,13 @@ function parse_calendardate($local_format) {
 
 function from_html($string, $encode=true){
 	global $log;
-	$log->debug("Entering from_html(".$string.",".$encode.") method ...");
+	//$log->debug("Entering from_html(".$string.",".$encode.") method ...");
         global $toHtml;
         //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
         if($encode && is_string($string)){
                 $string = str_replace(array_values($toHtml), array_keys($toHtml), $string);
         }
-	$log->debug("Exiting from_html method ...");
+	//$log->debug("Exiting from_html method ...");
         return $string;
 }
 

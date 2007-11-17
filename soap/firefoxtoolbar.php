@@ -784,7 +784,7 @@ function GetPicklistValues($username,$tablename)
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id,'Users');
-	require_once("include\utils\UserInfoUtil.php");
+	require_once("include/utils/UserInfoUtil.php");
 	$roleid = fetchUserRole($user_id);
 	if(isPermitted("HelpDesk","EditView") == "yes")
 	{

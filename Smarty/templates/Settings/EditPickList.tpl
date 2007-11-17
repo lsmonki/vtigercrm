@@ -45,12 +45,8 @@
 			<td  colspan=2 align="center">
 			<input name="save" value="Select the parent role" class="crmButton small save"  type="button"  onclick='return window.open("index.php?module=Users&action=UsersAjax&type=picklist&pick_fieldname={$FIELDNAME}&picklistmodule={$MODULE}&pick_uitype={$UITYPE}&file=RolePopup&parenttab=Settings","roles_popup_window","height=425,width=640,toolbar=no,menubar=no,dependent=yes,resizable =no");'>	
 			<input type ="hidden" name="type" value="picklist">
-			{if $NON_EDITABLE_ENTRIES neq ''}
-				<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" onClick="SavePickList('{$FIELDNAME}','{$MODULE}', {$UITYPE});" type="button">
-			{else}
-				<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" onClick="return picklist_validate('{$EDITABLE_MODE}','{$FIELDNAME}','{$MODULE}', {$UITYPE});" type="button">
-			{/if}	
-				<input name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmButton small cancel" onClick="hide('editdiv');" type="button">
+			<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" onClick="return picklist_validate('{$EDITABLE_MODE}','{$FIELDNAME}','{$MODULE}', {$UITYPE});" type="button">
+			<input name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmButton small cancel" onClick="hide('editdiv');" type="button">
 			</td>
 		</tr>
 	</table>

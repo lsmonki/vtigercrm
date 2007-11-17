@@ -186,7 +186,6 @@ function SavePickList(fieldname,module,uitype)
 
 	$("status").style.display = "inline";
 	Effect.Puff($('editdiv'),{duration:2});
-	//var body = escape($("picklist_values").value);
 	var body = escapeAll($("picklist_values").value);
 	new Ajax.Request(
         	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&roleid='+role+'&listarea='+body+'&uitype='+uitype,
@@ -244,10 +243,13 @@ function fetchEditPickList(module,fieldname,uitype)
 function picklist_validate(mode,fieldname,module,uitype)
 {
 	
-	//alert(trim($("picklist_values").value));
-	
 	var pick_arr=new Array();
 	pick_arr=trim($("picklist_values").value).split('\n');	
+	var noneditpick_arr=new Array();
+	if($('nonedit_pl')){
+	 	noneditpick_arr = trim($("nonedit_pl").innerHTML).split('<br>');
+	}
+	pick_arr = pick_arr.concat(noneditpick_arr)
 	var len=pick_arr.length;
 	for(i=0;i<len;i++)
 	{
@@ -258,7 +260,7 @@ function picklist_validate(mode,fieldname,module,uitype)
 		{
 			var valnext;
 			valnext=pick_arr[j];
-			if(trim(valone) == trim(valnext))
+			if(trim(valone).toUpperCase() == trim(valnext).toUpperCase())
 			{
 				alert("Duplicate entries found for the value '"+valone+"'");
 				return false;
@@ -267,7 +269,7 @@ function picklist_validate(mode,fieldname,module,uitype)
 		i = curr_iter		
 
 	}
-	if(mode == 'edit')
+	if(mode != 'nonedit')
 	{
 		if(trim($("picklist_values").value) == '')
 		{

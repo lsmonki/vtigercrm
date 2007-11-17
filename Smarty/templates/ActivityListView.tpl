@@ -536,16 +536,18 @@ function alphabetic(module,url,dataid)
 	<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
-	         <form name="change_ownerform_name">
-	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
-					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
-					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-						{$CHANGE_OWNER}
-					</select>
-					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-						{$CHANGE_GROUP_OWNER}
-					</select>
-					</form>
+	        <form name="change_ownerform_name">
+		        <input type = "radio" name = "user_lead_owner"  {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup();{/if}  checked>{$APP.LBL_USER}&nbsp;
+			{if $CHANGE_GROUP_OWNER neq ''}
+			<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
+			<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+                                {$CHANGE_GROUP_OWNER}
+                        </select>
+			{/if}
+			<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
+				{$CHANGE_OWNER}
+			</select>
+		</form>
 	</td>
 </tr>
 <tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>

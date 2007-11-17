@@ -8,6 +8,9 @@
  * All Rights Reserved.
  ********************************************************************************/
 
+
+/* WOOD SPICE  - COLOR THEME*/
+
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -136,8 +139,7 @@
 	padding-left:20px;
 	padding-right:20px;
 	padding-top:5px;
-	padding-bottom:5px;
-	
+	padding-bottom:5px;	
 }
 	
 .level2UnSelTab{
@@ -513,6 +515,7 @@ a:hover {
 	background-image:url(images/dashSelectBg.gif);
 	background-repeat:repeat-x;
 }
+
 .dash_top{
 	background-image:url(images/dashTopBg.gif);
 	background-repeat:repeat-x;
@@ -829,7 +832,7 @@ a.submenu:Hover{
 }
 
 #rssScroll{
-	font-family:Arial, Helvetica, sans-serif	;
+	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	background-color:#FFFFFF;
 	width:100%;
@@ -1240,8 +1243,8 @@ a.alpha:Hover{
 }
 
 a.allMnu{
-    	font-family:Verdana, Arial, Helvetica, sans-serif;
-    	font-size:10px;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size:10px;
 	text-decoration:none;
 	font-weight:normal;
 	display:block;
@@ -1257,7 +1260,7 @@ a.allMnu{
 }
 
 a.allMnu:Hover{
-    	font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:10px;
 	text-decoration:none;
 	font-weight:normal;
@@ -1276,8 +1279,7 @@ a.allMnu:Hover{
 .calHdr{
 	background-image:url(images/mailSubHeaderBg.gif); 
 	background-repeat:repeat-x;
-	background-position:left top;
-	
+	background-position:left top;	
 }
 
 .calSel{
@@ -1497,26 +1499,26 @@ level2Sel{
 
 .rptTitle, .rptHead, .rptData, .rptGrpHead{
 	font-family: Verdana, Arial, Helvetica, Sans-serif;
-        font-size: 11px;
+    font-size: 11px;
 	text-align:left;
-        font-weight: normal;
+    font-weight: normal;
 	height: 20px;
 	padding: 4px;
-        border-right: 1px solid #DDDDDD;
-        border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
 	background: #DDDDDD;
 }
 
 .rptGrp1Total, .rptGrp2Total, .rptTotal {
 	font-family: Verdana, Arial, Helvetica, Sans-serif;
-        font-size: 11px;
+    font-size: 11px;
 	text-align:center;
-        font-weight: normal;
-        background: #FFF;
+    font-weight: normal;
+    background: #FFF;
 	height: 20px;
 	padding: 4px;
-        border-right: 1px solid #DDDDDD;
-        border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
 }
 
 .rptGrpHead {
@@ -1527,47 +1529,46 @@ level2Sel{
 }
 
 .rptData {
-	background: #FFF;
+		background: #FFF;
         font-weight: normal;
 }
 
 .rptEmptyGrp {
-	background: #FFF;
+		background: #FFF;
         border-right: 1px solid #DDDDDD;
 }
 
-.statechange
-{
+.statechange {
 	position:absolute;
 	visibility:hidden;
 	left:10px;
-        top:20px;
-        width:300px;
-        border:3px solid #CCCCCC;
-        background-color:#FFFFFF;
+    top:20px;
+    width:300px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
 }
 
 #PopupLay{
 	position:absolute;
 	font-family:Arial, Helvetica, sans-serif;
-    	font-size:11px;
-    	text-align:left;
-    	width:500px;
-    	border:3px solid #CCCCCC;
-    	background-color:#FFFFFF;
-    	padding:5px;
-    	display:none;
-    	left:100px;
-    	top:100px;
+    font-size:11px;
+    text-align:left;
+    width:500px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+    padding:5px;
+    display:none;
+    left:100px;
+    top:100px;
 }
 
 #folderLay{
-    	width:175px;
-    	background-color:#CCCCCC;
-    	border:1px solid #DDDDDD;
-    	padding-top:5px;
-    	position:absolute;
-    	display:none;
+    width:175px;
+    background-color:#CCCCCC;
+    border:1px solid #DDDDDD;
+    padding-top:5px;
+    position:absolute;
+   	display:none;
 }
 
 /* Css for quick Create */
@@ -1643,10 +1644,10 @@ level2Sel{
 .tagCloudDisplay {
 	background-color:#e5e5e5;
 	padding:10px;
-    	font-family: Arial, Helvetica, sans-serif;
-    	font-size: 11px;
-    	line-height: 14px;
-    	color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 14px;
+    color: #000000;
 }
 
 .h2 {
@@ -2134,16 +2135,16 @@ a.drop_down:Hover{
 }
 
 .options{
-    	vertical-align: middle;   
+    vertical-align: middle;   
 	margin-left: 25%;
 	margin-top: 16%;
 	color: #FFFFFF;
 	width:650px;
 	background-color: Black;
 	border: 2px solid #222;	
-    	position: relative;
+    position: relative;
 	text-align: left;
-    	z-index: 80000;   
+    z-index: 80000;   
 }
 
 .options h2{

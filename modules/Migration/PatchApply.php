@@ -108,18 +108,18 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 //HANDLE HERE - Mickie
 //Here we have to update the version in table. so that when we do migration next time we will get the version
 global $adb, $vtiger_current_version;
-$res = $adb->query("select * from vtiger_version");
+$res = $adb->pquery("select * from vtiger_version", array());
 if($adb->num_rows($res))
 {
-	$res = $adb->query("update vtiger_version set old_version='".$versions[$source_version]."',current_version='".$vtiger_current_version."'");
+	$res = $adb->pquery("update vtiger_version set old_version=?,current_version=?", array($versions[$source_version], $vtiger_current_version));
 }
 else
 {
-	$adb->query("insert into vtiger_version (id, old_version, current_version) values ('','".$versions[$source_version]."','".$vtiger_current_version."')");
+	$adb->pquery("insert into vtiger_version (id, old_version, current_version) values ('', ?, ?);", array($versions[$source_version], $vtiger_current_version));
 }
 
 //If currency name in config.inc.php file and currency name in vtiger_currency_info table is differ then we have to change in config.inc.php file
-$mig_currency = $adb->query_result($adb->query("select currency_name from vtiger_currency_info"),0,'currency_name');
+$mig_currency = $adb->query_result($adb->pquery("select currency_name from vtiger_currency_info", array()),0,'currency_name');
 if($currency_name != $mig_currency)
 {
 	echo "<br><br><b><font color='red'>Note: Please change the base currency name as '$mig_currency' in config.inc.php ie., change the variable currency name as $"."currency_name = '$mig_currency' in config.inc.php file</b>";
