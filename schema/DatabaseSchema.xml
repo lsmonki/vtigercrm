@@ -6,7 +6,7 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="user_name" type="C" size="100" />
+		<field name="user_name" type="C" size="255" />
 		<field name="user_password" type="C" size="30" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">
@@ -5663,6 +5663,19 @@
 		<index name="portal_portalname_idx">
 			<col>portalname</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_soapservice">
+		<field name="id" type="I" size="19">
+			<default value="NULL" />
+		</field>
+		<field name="type" type="C" size="25">
+			<default value="NULL" />
+		</field>
+		<field name="sessionid" type="C" size="100">
+			<default value="NULL" />
+		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
