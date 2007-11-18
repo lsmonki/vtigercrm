@@ -69,15 +69,24 @@ function getKeyMetrics()
 		foreach ($metriclists as $key => $metriclist)
 		{
 			$listquery = getListQuery($metriclist['module']);
+
+			if($metriclist['module'] == "Calendar")
+				$listquery.=" group by vtiger_activity.activityid";
+				
 			$oCustomView = new CustomView($metriclist['module']);
 			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
 			$metricresult = $adb->query($metricsql);
 			if($metricresult)
 			{
-				$rowcount = $adb->fetch_array($metricresult);
-				if(isset($rowcount))
+				if($metriclist['module'] == "Calendar")
+					$metriclists[$key]['count'] = $adb->num_rows($metricresult);
+				else
 				{
-					$metriclists[$key]['count'] = $rowcount['count'];
+					$rowcount = $adb->fetch_array($metricresult);
+					if(isset($rowcount))
+					{
+						$metriclists[$key]['count'] = $rowcount['count'];
+					}
 				}
 			}
 		}
