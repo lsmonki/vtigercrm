@@ -311,7 +311,8 @@ class Accounts extends CRMEntity {
 				OR vtiger_activity.status = 'Deferred'
 				OR (vtiger_activity.eventstatus = 'Held'
 					AND vtiger_activity.eventstatus != ''))
-			AND vtiger_seactivityrel.crmid = ".$id;
+			AND vtiger_seactivityrel.crmid = ".$id."
+			AND vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Accounts',$query,$id);

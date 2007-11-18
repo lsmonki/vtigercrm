@@ -157,6 +157,11 @@ function verify_data(form,company_name)
                 return false;
                 {literal}
 	}
+	else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG"))
+        {
+                form.binFile.focus();
+                return false;
+        }
 	else
 	{
 		return true;

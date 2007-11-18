@@ -229,7 +229,8 @@ class Quotes extends CRMEntity {
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where vtiger_activity.activitytype='Task'
   				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
-	 	        	and vtiger_seactivityrel.crmid=".$id;
+	 	        	and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
