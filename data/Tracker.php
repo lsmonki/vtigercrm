@@ -79,10 +79,16 @@ $log->info("in  track view method ".$current_module);
 		 $entityidfield = $adb->query_result($result,0,'entityidfield'); 
 		 if(!(strpos($fieldsname,',') === false))
 		 {
+			 // concatenate multiple fields with an whitespace between them
 			 $fieldlists = explode(',',$fieldsname);
-			 $fieldsname = "concat(";
-			 $fieldsname = $fieldsname.implode(",' ',",$fieldlists);
-			 $fieldsname = $fieldsname.")";
+			 $fl = array();
+			 foreach($fieldlists as $w => $c)
+			 {
+				 if (count($fl))
+				 	$fl[] = "' '";
+				 $fl[] = $c;
+			 }
+			 $fieldsname = $adb->sql_concat($fl);
 		 }	
 		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield = ?"; 
 		 $result = $adb->pquery($query1, array($item_id));

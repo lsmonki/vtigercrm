@@ -123,47 +123,6 @@ class PearDatabase{
 	$this->println("TRANS  Completed");
     }
 
-/* ADODB converted	
- *    function checkError($msg='', $dieOnError=false)
- *    {
- *	if($this->dbType == "mysql")
- *	{
- *	    if (mysql_errno())
- *	    {
- *		if($this->dieOnError || $dieOnError)
- *		{
- *		    $this->log->fatal("MySQL error ".mysql_errno().": ".mysql_error());	
- *		    die ($msg."MySQL error ".mysql_errno().": ".mysql_error());
- *		} else {
- *		    $this->log->error("MySQL error ".mysql_errno().": ".mysql_error());	
- *		}
- *		return true;
- *	    }
- *	    return false;
- *	}	
- *	else
- *	{
- *	    if(!isset($this->database))
- *	    {
- *		$this->log->error("Database Is Not Connected");
- *		return true;
- *	    }
- *	    if(DB::isError($this->database))
- *	    {
- *		if($this->dieOnError || $dieOnError)
- *		{
- *		    $this->log->fatal($msg.$this->database->getMessage());
- *		    die ($msg.$this->database->getMessage());	
- *		} else {
- *		    $this->log->error($msg.$this->database->getMessage());		
- *		}
- *		return true;
- *	    }
- *	}
- *	return false;
- *   }
- */
-    
     function checkError($msg='', $dieOnError=false)
     {
 /*
@@ -228,27 +187,6 @@ class PearDatabase{
 	    //$this->println("checkconnect using old connection");
 	}
     }
-
-/* ADODB converted	
- *    function query($sql, $dieOnError=false, $msg='')
- *    {
- *	$this->println("query ".$sql);
- *	$this->log->info('Query:' . $sql);
- *	$this->checkConnection();
- *	$this->query_time = microtime();
- *	if($this->dbType == "mysql")
- *	{
- *	    $result =& mysql_query($sql);
- *	    $this->lastmysqlrow = -1; 	
- *	} else {
- *	    $result =& $this->database->query($sql);
- *	}
- *	$this->query_time = microtime() - $this->query_time;
- *	$this->log->info('Query Execution Time:'.$this->query_time);
- *	$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);	
- *	return $result;
- *    }
- */
 
     function query($sql, $dieOnError=false, $msg='')
     {
@@ -370,24 +308,6 @@ class PearDatabase{
 	return $result;
     }
 
-/* ADODB converted
- *    function limitQuery($sql,$start,$count, $dieOnError=false, $msg='')
- *    {
- *	if($this->dbType == "mysql")
- *	    return $this->query("$sql LIMIT $start,$count", $dieOnError, $msg);
- *	$this->log->info('Limit Query:' . $sql. ' Start: ' .$start . ' count: ' . $count);
- *	$this->lastsql = $sql;
- *	
- *	$this->checkConnection();
- *	$this->query_time = microtime();
- *	$result =& $this->database->limitQuery($sql,$start, $count);
- *	$this->query_time = microtime() - $this->query_time;
- *	$this->log->info('Query Execution Time:'.$this->query_time);
- *	$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);	
- *	return $result;
- *    }
- */
-    
     function limitQuery($sql,$start,$count, $dieOnError=false, $msg='')
     {
 	global $log;
@@ -399,22 +319,6 @@ class PearDatabase{
 	return $result;		
     }
     
-/* ADODB converted
- *   function getOne($sql, $dieOnError=false, $msg='')
- *   {
- *	$this->log->info('Get One:' . $sql);
- *	$this->checkConnection();
- *	if($this->dbType == "mysql"){
- *	    $queryresult =& $this->query($sql, $dieOnError, $msg);
- *	    $result =& mysql_result($queryresult,0);
- *	} else {
- *	    $result =& $this->database->getOne($sql);
- *	}
- *	$this->checkError($msg.' Get One Failed:' . $sql . '::', $dieOnError);	
- *	return $result;
- *    }
- */
-
     function getOne($sql, $dieOnError=false, $msg='')
     {
 	$this->println("ADODB getOne sql=".$sql);
@@ -423,46 +327,6 @@ class PearDatabase{
 	if(!$result) $this->checkError($msg.' Get one Query Failed:' . $sql . '::', $dieOnError);
 	return $result;		
     }
-
-/* ADODB converted
- *    function getFieldsArray(&$result)
- *    {
- *	$field_array = array();
- *
- *	if(! isset($result) || empty($result))
- *	{
- *	    return 0;
- *	}
- *
- *	if($this->dbType == "mysql")
- *	{
- *	    $i = 0;
- *	    while ($i < mysql_num_fields($result)) 
- *	    {
- *		$meta = mysql_fetch_field($result, $i);
- *
- *		if (!$meta) 
- *		{
- *		    return 0;
- *		}
- *			
- *		array_push($field_array,$meta->name);
- *
- *		$i++;
- *	    }
- *	}
- *	else
- *	{
- *	    $arr = tableInfo($result);
- *	    foreach ($arr as $index=>$subarr)
- *	    {
- *		array_push($field_array,$subarr['name']);	
- *	    }
- *	}
- *
- *	return $field_array;
- *    }
- */
 
     function getFieldsArray(&$result)
     {
@@ -489,19 +353,6 @@ class PearDatabase{
 	//$this->println($field_array);
 	return $field_array;			
     }
-    
-/* ADODB Converted
- *    function getRowCount(&$result)
- *    {
- *	if(isset($result) && !empty($result))
- *	    if($this->dbType == "mysql"){
- *		return mysql_numrows($result);
- *	    } else {
- *		 return $result->numRows();
- *	    }
- *	return 0;
- *    }
- */
     
     function getRowCount(&$result){
 	global $log;
@@ -536,10 +387,166 @@ class PearDatabase{
 	return $this->change_key_case($result->FetchRow());
     }
 
+    ## adds new functions to the PearDatabase class to come around the whole
+    ## broken query_result() idea
+    ## Code-Contribution given by weigelt@metux.de - Starts
+    function run_query_record_html($query)
+    {
+	    if (!is_array($rec = $this->run_query_record($query)))
+	    //         throw new Exception("no rec: $query");
+	    	return $rec;
+	    foreach ($rec as $walk => $cur)
+	    	$r[$walk] = to_html($cur);
+	    return $r;
+    }
+
+    function sql_quote($data)
+    {
+	if (is_array($data))
+	{
+		switch($data{'type'})
+		{
+			case 'text':
+			case 'numeric':
+			case 'integer':
+			case 'oid':
+				return $this->quote($data{'value'});
+				break;
+			case 'timestamp':
+				return $this->formatDate($data{'value'});
+				break;
+			default:
+				throw new Exception("unhandled type: ".serialize($cur));
+		}
+	} else
+		return $this->quote($data);
+    }
+
+    function sql_insert_data($table, $data)
+    {
+	if (!$table)
+		throw new Exception("missing table name");
+	if (!is_array($data))
+		throw new Exception("data must be an array");
+	if (!count($table))
+	    	throw new Exception("no data given");
+
+	$sql_fields = '';
+	$sql_data = '';
+	foreach($data as $walk => $cur)
+	{
+		$sql_fields .= ($sql_fields?',':'').$walk;
+		$sql_data   .= ($sql_data?',':'').$this->sql_quote($cur);
+	}
+
+	return 'INSERT INTO '.$table.' ('.$sql_fields.') VALUES ('.$sql_data.')';
+    }
+
+    function run_insert_data($table,$data)
+    {
+	    $query = $this->sql_insert_data($table,$data);
+	    $res = $this->query($query);
+	    $this->query("commit;");
+    }
+
+    function run_query_record($query)
+    {
+	    $result = $this->query($query);
+	    if (!$result)
+	    	return;
+	    //         throw new Exception("empty result !");
+	    if (!is_object($result))
+	    	throw new Exception("query \"$query\" failed: ".serialize($result));
+	    $res = $result->FetchRow();
+	    $rowdata = $this->change_key_case($res);
+	    return $rowdata;
+    }
+
+    function run_query_allrecords($query)
+    {
+	    $result = $this->query($query);
+	    $records = array();
+	    $sz = $this->num_rows($result);
+	    for ($i=0; $i<$sz; $i++)
+		$records[$i] = $this->change_key_case($result->FetchRow());
+	    return $records;
+    }
+
+    function run_query_field($query,$field='')
+    {
+	    $rowdata = $this->run_query_record($query);
+	    if(isset($field) && $field != '')
+	    	return $rowdata{$field};
+	    else
+	    	return array_shift($rowdata);
+    }
+
+    function run_query_list($query,$field)
+    {
+	    $records = $this->run_query_allrecords($query);
+	    foreach($records as $walk => $cur)
+		$list[] = $cur{$field};
+    }
+
+    function run_query_field_html($query,$field)
+    {
+	    return to_html($this->run_query_field($query,$field));
+    }
+
+    function result_get_next_record($result)
+    {
+	    return $this->change_key_case($result->FetchRow());
+    }
+
+    // create an IN expression from an array/list
+    function sql_expr_datalist($a)
+    {
+	    if (!is_array($a))
+	    	throw new Exception("not an array");
+	    if (!count($a))
+	    	throw new Exception("empty arrays not allowed");
+
+	    foreach($a as $walk => $cur)
+	    	$l .= ($l?',':'').$this->quote($cur);
+	    return ' ( '.$l.' ) ';
+    }
+
+    // create an IN expression from an record list, take $field within each record
+    function sql_expr_datalist_from_records($a,$field)
+    {
+	    if (!is_array($a))
+	    	throw new Exception("not an array");
+	    if (!$field)
+	    	throw new Exception("missing field");
+	    if (!count($a))
+	    	throw new Exception("empty arrays not allowed");
+	    
+	    foreach($a as $walk => $cur)
+	    	$l .= ($l?',':'').$this->quote($cur{$field});
+
+	    return ' ( '.$l.' ) ';
+    }
+
+    function sql_concat($list)
+    {
+	    switch ($this->dbType)
+	    {
+		    case 'mysql':
+			    return 'concat('.implode(',',$list).')';
+		    case 'pgsql':
+			    return '('.implode('||',$list).')';
+		    default:
+			    throw new Exception("unsupported dbtype \"".$this->dbType."\"");
+	    }
+    }
+    ## Code-Contribution given by weigelt@metux.de - Ends
+
     /* ADODB newly added. replacement for mysql_result() */
     function query_result(&$result, $row, $col=0)
     {		
 	//$this->println("ADODB query_result r=".$row." c=".$col);
+	if (!is_object($result))
+                throw new Exception("result is not an object");
 	$result->Move($row);
 	$rowdata = $this->change_key_case($result->FetchRow());
 	//$this->println($rowdata);
@@ -549,19 +556,6 @@ class PearDatabase{
 	//$this->println("ADODB query_result ". $coldata);
 	return $coldata;
     }
-
-/* ADODB Converted	
- *    function getAffectedRowCount(&$result)
- *    {
- *	if($this->dbType == "mysql"){
- *		return mysql_affected_rows();
- *	}
- *	else {
- *		return $result->affectedRows();
- *	}
- *	return 0;
- *    }
- */
 
     function getAffectedRowCount(&$result)
     {
@@ -573,17 +567,6 @@ class PearDatabase{
 	$log->debug('getAffectedRowCount rows = '.$rows);
 	return $rows;
     }
-
-/* ADODB converted
- *    function requireSingleResult($sql, $dieOnError=false,$msg='', $encode=true){
- *	$result = $this->query($sql, $dieOnError, $msg);
- *
- *	if($this->getRowCount($result ) == 1)
- *	    return to_html($result, $encode);
- *	$this->log->error('Rows Returned:'. $this->getRowCount($result) .' More than 1 row returned for '. $sql);
- *	return '';
- *    }
- */
 
     function requireSingleResult($sql, $dieOnError=false,$msg='', $encode=true)
     {
@@ -607,38 +590,7 @@ class PearDatabase{
 	return '';
     }   
 
-/* ADODB converted	
- *    function fetchByAssoc(&$result, $rowNum = -1, $encode=true)
- *    {
- *	if(isset($result) && $rowNum < 0)
- *	{
- *	    if($this->dbType == "mysql"){
- *		$row = mysql_fetch_assoc($result);
- *		
- *		if($encode&& is_array($row))
- *		    return array_map('to_html', $row);	
- *		return $row;
- *	    }
- *	    $row = $result->fetchRow(DB_FETCHMODE_ASSOC);	
- *	}
- *	if($this->dbType == "mysql"){
- *	    if($this->getRowCount($result) > $rowNum){
- *		mysql_data_seek($result, $rowNum);	
- *	    }
- *	    $this->lastmysqlrow = $rowNum;
- *    
- *	    $row = mysql_fetch_assoc($result);
- *	    
- *	    if($encode&& is_array($row))
- *		return array_map('to_html', $row);	
- *	    return $row;
- *	}
- *	$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $rowNum);
- *	if($encode)
- *	    return array_map('to_html', $row);	
- *	return $row;
- *    }
- */
+
 
     function fetchByAssoc(&$result, $rowNum = -1, $encode=true)
     {
@@ -679,19 +631,6 @@ class PearDatabase{
 	return $row;
     }
     
-/* ADODB converted
- *    function getNextRow(&$result, $encode=true)
- *    {
- *	if(isset($result)){
- *	    $row = $result->fetchRow();
- *	    if($encode&& is_array($row))
- *		return array_map('to_html', $row);	
- *	    return $row;
- *	}
- *	return null;
- *    }
- */
-    
     function getNextRow(&$result, $encode=true){
 	global $log;
 
@@ -720,69 +659,12 @@ class PearDatabase{
 	return $this->query_time;	
     }
 
-/*
- *    function execute($stmt, $data, $dieOnError=false, $msg=''){
- *	$this->log->info('Executing:'.$stmt);
- *	$this->checkConnection();
- *	$this->query_time = microtime();
- *	$prepared	= $this->database->prepare($stmt);
- *	$result = execute($stmt, $data);
- *	$this->query_time = microtime() - $this->query_time;
- *	//$this->log->info('Query Execution Time:'.$this->query_time);
- *	$this->checkError('Execute Failed:' . $stmt. '::', $dieOnError);
- *	return $result;	
- *    }
- */
-	    
-    
-/* adodb converted
- *    function connect($dieOnError = false){
- *	$this->println("connect");
- *	global $dbconfigoption;
- *	if($this->dbType == "mysql" && $dbconfigoption['persistent'] == true){
- *	    $this->database =@mysql_pconnect($this->dbHostName,$this->userName,$this->userPassword);
- *	    @mysql_select_db($this->dbName) or die( "Unable to select database");				
- *	    if(!$this->database){
- *		$this->connection = mysql_connect($this->dbHostName,$this->userName,$this->userPassword) or die("Could not connect to server ".$this->dbHostName." as ".$this->userName.".".mysql_error());
- *		if($this->connection == false && $dbconfigoption['persistent'] == true){
- *		    $_SESSION['administrator_error'] = "<B>Severe Performance Degradation: Persistent Database Connections not working.  Please set \$dbconfigoption['persistent'] to false in your config.php file</B>";  			
- *		}	
- *	    }
- *	}
- *	else $this->database = DB::connect($this->getDataSourceName(), $this->dbOptions);
- *	if($this->checkError('Could Not Connect:', $dieOnError))
- *		$this->log->info("connected to db");
- *		
- *    }
- */
-    
     function connect($dieOnError = false)
     {
 	//$this->println("ADODB connect");
 	global $dbconfigoption,$dbconfig;
 	//$this->println("ADODB type=".$this->dbType." host=".$this->dbHostName." dbname=".$this->dbName." user=".$this->userName." password=".$this->userPassword);
 
-/*
- *	$driver='mysql';
- *	$server='srinivasan';
- *	$user='root';
- *	$password='';
- *	$database='vtigercrm3_2';
- *
- *	$this->database = ADONewConnection($driver);
- *
- *	#$this->database->debug = true;
- *	$this->println("ADODB status=".$this->database->PConnect($server, $user, $password, $database));
- */
-
-/*
- *	$this->dbHostName="srinivasan:1521";
- *	$this->userName="vt4";
- *	$this->userPassword="vt4";
- *	$this->dbName="srini";
- *	$this->dbType="oci8";
- */
-	
 	if(!isset($this->dbType))
 	{
 	    $this->println("ADODB Connect : DBType not specified");
@@ -797,32 +679,6 @@ class PearDatabase{
 	//$this->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	//$this->println("ADODB type=".$this->dbType." host=".$this->dbHostName." dbname=".$this->dbName." user=".$this->userName." password=".$this->userPassword);		
     }
-
-/*
- *    function PearDatabase(){			
- *	//$this->println("PearDatabase");
- *	global $currentModule;
- *	$this->log =& LoggerManager::getLogger('PearDatabase_'. $currentModule);
- *	$this->resetSettings();
- *   }
- *
- *   function resetSettings(){
- *	global $dbconfig, $dbconfigoption;
- *	$this->disconnect();
- *	$this->setDatabaseType($dbconfig['db_type']);
- *	$this->setUserName($dbconfig['db_username']);
- *	$this->setUserPassword($dbconfig['db_password']);
- *	$this->setDatabaseHost( $dbconfig['db_hostname']);
- *	$this->setDatabaseName($dbconfig['db_name']);
- *	$this->dbOptions = $dbconfigoption;
- *	$this->enableSQLlog = ($dbconfig['log_sql'] == true);
- *	//$this->println("resetSettings log=".$this->enableSQLlog);
- *	//$this->println($dbconfig);
- *	//if($this->dbType != "mysql"){
- *	//	require_once( 'DB.php' );	
- *	//}
- *   }
- */
 
     function PearDatabase($dbtype='',$host='',$dbname='',$username='',$passwd='')
     {
@@ -867,21 +723,6 @@ class PearDatabase{
     function quote($string){
 	return $this->database->qstr($string);	
     }
-
-
-/* ADODB converted
- *    function disconnect() {
- *	$this->println("disconnect");
- *	if(isset($this->database)){
- *	    if($this->dbType == "mysql"){
- *		mysql_close($this->database);
- *	    } else {
- *		$this->database->disconnect();
- *	    }
- *	    unset($this->database);
- *	}
- *    }
- */
 
     function disconnect() {
 	$this->println("ADODB disconnect");
@@ -1062,6 +903,5 @@ class PearDatabase{
 $adb = new PearDatabase();
 $adb->connect();
 //$adb->database->setFetchMode(ADODB_FETCH_NUM);
-
 
 ?>
