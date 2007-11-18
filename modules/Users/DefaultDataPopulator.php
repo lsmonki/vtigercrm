@@ -2092,7 +2092,6 @@ Should any need arise,please do give us a call.';
 //Added for HTML Eemail templates..
 //for Customer Portal Login details
 $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
-    <tbody>
         <tr>
             <td> </td>
             <td> </td>
@@ -2112,11 +2111,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td width="50"> </td>
             <td>
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tbody>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
-                            <tbody>
                                 <tr>
                                     <td align="center" rowspan="4">$logo$</td>
                                     <td align="center"> </td>
@@ -2130,18 +2127,15 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
-                            <tbody>
                                 <tr>
                                     <td valign="top">
                                     <table width="100%" cellspacing="0" cellpadding="5" border="0">
-                                        <tbody>
                                             <tr>
                                                 <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
                                             </tr>
@@ -2157,7 +2151,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                             <tr>
                                                 <td align="center">
                                                 <table width="75%" cellspacing="0" cellpadding="10" border="0" style="border: 2px solid rgb(180, 180, 179); background-color: rgb(226, 226, 225); font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(0, 0, 0); font-weight: normal;">
-                                                    <tbody>
                                                         <tr>
                                                             <td><br />User ID     : <font color="#990000"><strong> $login_name$</strong></font> </td>
                                                         </tr>
@@ -2167,7 +2160,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                                         <tr>
                                                             <td align="center"> <strong>  $URL$<br /> </strong> </td>
                                                         </tr>
-                                                    </tbody>
                                                 </table>
                                                 </td>
                                             </tr>
@@ -2197,19 +2189,16 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                             <tr>
                                                 <td> </td>
                                             </tr>
-                                        </tbody>
                                     </table>
                                     </td>
                                     <td width="1%" valign="top"> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="5" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(255, 255, 255); font-weight: normal; line-height: 15px; background-color: rgb(51, 51, 51);">
-                            <tbody>
                                 <tr>
                                     <td align="center">Shree Narayana Complex, No 11 Sarathy Nagar, Vijaya Nagar , Velachery, Chennai - 600 042 India </td>
                                 </tr>
@@ -2219,11 +2208,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td align="center">Email Id: <a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(255, 255, 255);" href="mailto:support@vtiger.com">support@vtiger.com</a></td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
-                </tbody>
             </table>
             </td>
             <td width="50"> </td>
@@ -2243,7 +2230,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td> </td>
             <td> </td>
         </tr>
-    </tbody>
 </table>';
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Customer Login Details','Customer Portal Login Details','Send Portal login details to customer','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
@@ -2251,7 +2237,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 //for Support end notification before a week	       
 $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
-    <tbody>
         <tr>
             <td> </td>
             <td> </td>
@@ -2271,11 +2256,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td width="50"> </td>
             <td>
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tbody>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
-                            <tbody>
                                 <tr>
                                     <td align="center" rowspan="4">$logo$</td>
                                     <td align="center"> </td>
@@ -2289,18 +2272,15 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
-                            <tbody>
                                 <tr>
                                     <td valign="top">
                                     <table width="100%" cellspacing="0" cellpadding="5" border="0">
-                                        <tbody>
                                             <tr>
                                                 <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
                                             </tr>
@@ -2328,19 +2308,16 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                             <tr>
                                                 <td> </td>
                                             </tr>
-                                        </tbody>
                                     </table>
                                     </td>
                                     <td width="1%" valign="top"> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="5" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(255, 255, 255); font-weight: normal; line-height: 15px; background-color: rgb(51, 51, 51);">
-                            <tbody>
                                 <tr>
                                     <td align="center">Shree Narayana Complex, No 11 Sarathy Nagar, Vijaya Nagar , Velachery, Chennai - 600 042 India </td>
                                 </tr>
@@ -2350,11 +2327,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td align="center">Email Id: <a style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(255, 255, 255);" href="mailto:info@vtiger.com">info@vtiger.com</a></td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
-                </tbody>
             </table>
             </td>
             <td width="50"> </td>
@@ -2374,14 +2349,12 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td> </td>
             <td> </td>
         </tr>
-    </tbody>
 </table>';
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Support end notification before a week','VtigerCRM Support Notification','Send Notification mail to customer before a week of support end date','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 	       
 	       
 //for Support end notification before a month	       
 $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="center" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; text-decoration: none; background-color: rgb(122, 122, 254);">
-    <tbody>
         <tr>
             <td> </td>
             <td> </td>
@@ -2401,11 +2374,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td width="50"> </td>
             <td>
             <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tbody>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: rgb(27, 77, 140); font-family: Arial,Helvetica,sans-serif; font-size: 14px; color: rgb(255, 255, 255); font-weight: normal; line-height: 25px;">
-                            <tbody>
                                 <tr>
                                     <td align="center" rowspan="4">$logo$</td>
                                     <td align="center"> </td>
@@ -2419,18 +2390,15 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: normal; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
-                            <tbody>
                                 <tr>
                                     <td valign="top">
                                     <table width="100%" cellspacing="0" cellpadding="5" border="0">
-                                        <tbody>
                                             <tr>
                                                 <td align="right" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(66, 66, 253);"> </td>
                                             </tr>
@@ -2458,19 +2426,16 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                             <tr>
                                                 <td> </td>
                                             </tr>
-                                        </tbody>
                                     </table>
                                     </td>
                                     <td width="1%" valign="top"> </td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
                     <tr>
                         <td>
                         <table width="100%" cellspacing="0" cellpadding="5" border="0" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; color: rgb(255, 255, 255); font-weight: normal; line-height: 15px; background-color: rgb(51, 51, 51);">
-                            <tbody>
                                 <tr>
                                     <td align="center">Shree Narayana Complex, No 11 Sarathy Nagar, Vijaya Nagar , Velachery, Chennai - 600 042 India </td>
                                 </tr>
@@ -2480,11 +2445,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
                                 <tr>
                                     <td align="center">Email Id: <a href="mailto:info@vtiger.com" style="font-family: Arial,Helvetica,sans-serif; font-size: 12px; font-weight: bolder; text-decoration: none; color: rgb(255, 255, 255);">info@vtiger.com</a></td>
                                 </tr>
-                            </tbody>
                         </table>
                         </td>
                     </tr>
-                </tbody>
             </table>
             </td>
             <td width="50"> </td>
@@ -2504,7 +2467,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
             <td> </td>
             <td> </td>
         </tr>
-    </tbody>
 </table>';
 	       $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Support end notification before a month','VtigerCRM Support Notification','Send Notification mail to customer before a month of support end date','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
