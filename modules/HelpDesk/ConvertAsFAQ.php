@@ -41,7 +41,7 @@ if($focus->id != '')
 	$answer = $description;
 	if($solution != '')
 	{
-		$answer .= '\r\n\r\nSOLUTION:\r\n'.$solution;
+		$answer .= "\r\n\r\n".$app_strings['LBL_SOLUTION'].":\r\n".$solution;
 	}
 
 	//Retrive the ticket comments from the vtiger_ticketcomments vtiger_table and added into the vtiger_faq answer
@@ -50,13 +50,13 @@ if($focus->id != '')
 	$noofrows = $adb->num_rows($res);
 
 	if($noofrows > 0)
-		$answer .= '\r\n\r\nCOMMENTS:';
+		$answer .= "\r\n\r\n".$app_strings['LBL_COMMENTS'].":";
 	for($i=0; $i < $noofrows; $i++)
 	{
 		$comments = $adb->query_result($res,$i,'comments');
 		if($comments != '')
 		{
-			$answer .= '\r\n'.$comments;
+			$answer .= "\r\n".$comments;
 		}
 	}
 

@@ -1033,6 +1033,8 @@ $app_strings = array (
 'LBL_MAIL_NOT_SENT_TO_USER' => 'Mail Could not be sent to user',
 'LBL_PLS_CHECK_EMAIL_N_SERVER' => 'Please check the user emailid/Server settings',
 'PLEASE_FILL_QUANTITY' => 'Please fill in the quantity',
+'LBL_SOLUTION'=>'SOLUTION',
+'LBL_COMMENTS'=>'COMMENTS',
 );
 
 $app_list_strings = array (
