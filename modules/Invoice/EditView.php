@@ -55,6 +55,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -76,6 +77,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -175,6 +177,7 @@ else
 	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$INVOICE_associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -325,17 +328,20 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-
 //in create new Invoice, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+	$sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
 

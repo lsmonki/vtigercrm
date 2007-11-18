@@ -1770,7 +1770,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	
 	$taxtotal = '0.00';
 	//First we should get all available taxes and then retrieve the corresponding tax values
-	$tax_details = getAllTaxes('available');
+	$tax_details = getAllTaxes('available','','edit',$focus->id);
 
 	for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
 	{
@@ -1804,7 +1804,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	//calculate S&H tax
 	$shtaxtotal = '0.00';
 	//First we should get all available taxes and then retrieve the corresponding tax values
-	$shtax_details = getAllTaxes('available','sh');
+	$shtax_details = getAllTaxes('available','sh','edit',$focus->id);
 	
 	//if taxtype is group then the tax should be same for all products in vtiger_inventoryproductrel table
 	for($shtax_count=0;$shtax_count<count($shtax_details);$shtax_count++)

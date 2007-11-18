@@ -47,6 +47,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
         $QUOTE_associated_prod = getAssociatedProducts("Quotes",$focus);
 	$log->debug("Mode is Duplicate. Quoteid to be duplicated is ".$focus->id);
 	$focus->id = "";
@@ -183,24 +184,27 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 //in create new Quote, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
+}	
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+        $sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}	
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
-}
-
-
-
- $tabid = getTabid("Quotes");
- $validationData = getDBValidationData($focus->tab_name,$tabid);
- $data = split_validationdataArray($validationData);
+$tabid = getTabid("Quotes");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$data = split_validationdataArray($validationData);
  
- $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
- $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
- $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE", $module);
 

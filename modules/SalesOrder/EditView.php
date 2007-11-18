@@ -52,6 +52,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView 
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("QUOTE_ID", $quoteid);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
@@ -137,6 +138,7 @@ else
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$SO_associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -283,16 +285,21 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
+
 //if create SO, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+	$sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
  $tabid = getTabid("SalesOrder");
