@@ -191,7 +191,7 @@ if($image_error=="false")
 		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 		if($insert == 'true' || $update == 'true')
 		{
-			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
+			$mail_status = send_mail('Support',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
 		}
 		$log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 	}
