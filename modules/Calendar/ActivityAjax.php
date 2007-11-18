@@ -79,6 +79,8 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 	        $calendar_arr['calendar'] = new Calendar('month',$date_data);
         	$calendar_arr['view'] = 'month';
 	        $calendar_arr['size'] = 'small';
+		if($current_user->hour_format != '')
+		        $calendar_arr['calendar']->hour_format=$current_user->hour_format;
 		$calendar_arr['calendar']->add_Activities($current_user);
         	calendar_layout($calendar_arr);
 	        $mod_strings = return_module_language($current_language,$temp_module);
@@ -127,6 +129,9 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 		
 		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'change_status' || $type == 'activity_postpone')
 		{
+			if($current_user->hour_format != '')
+			        $calendar_arr['calendar']->hour_format=$current_user->hour_format;
+
 			if($type == 'change_status')
 			{
 				$return_id = $_REQUEST['record'];

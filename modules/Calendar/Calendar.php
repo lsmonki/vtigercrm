@@ -177,10 +177,6 @@ class Calendar
 	 */
 	function add_Activities($current_user,$free_busy='')
 	{
-		if($current_user->hour_format == '')
-			$this->hour_format = 'am/pm';
-		else
-			$this->hour_format = $current_user->hour_format;
 		if(isset($current_user->start_hour) && $current_user->start_hour !='')
 		{
 			list($sthour,$stmin)= explode(":",$current_user->start_hour);

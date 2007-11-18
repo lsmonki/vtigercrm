@@ -81,7 +81,9 @@ if(empty($date_data))
 	);
 	
 }
-$calendar_arr['calendar'] = new Calendar($mysel,$date_data); 
+$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
+if($current_user->hour_format != '') 
+	$calendar_arr['calendar']->hour_format=$current_user->hour_format;
 if ($viewBox == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year'))
 {
         $calendar_arr['calendar']->add_Activities($current_user);
