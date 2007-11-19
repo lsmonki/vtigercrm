@@ -348,7 +348,7 @@ function insertIntoRecurringTable(& $recurObj)
       			$adb->pquery($sql, array($this->id));
     		}
 		$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(?,?)";
-    	$adb->pquery($sql_qry, array($this->column_fields['assigned_user_id'], $this->id));
+    		$adb->pquery($sql_qry, array($this->column_fields['assigned_user_id'], $this->id));
 		
 		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 		{
@@ -358,8 +358,11 @@ function insertIntoRecurringTable(& $recurObj)
 			{
 				if($inviteeid != '')
 				{
-					$query="insert into vtiger_salesmanactivityrel values(?,?)";
-					$adb->pquery($query, array($inviteeid, $this->id));
+					$resultcheck = $adb->pquery("select * from vtiger_salesmanactivityrel where activityid=? and smid=?",array($this->id,$inviteeid));
+					if($adb->num_rows($resultcheck) != 1){
+						$query="insert into vtiger_salesmanactivityrel values(?,?)";
+						$adb->pquery($query, array($inviteeid, $this->id));
+					}	
 				}
 			}
 		}	

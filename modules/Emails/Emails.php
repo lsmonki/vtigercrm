@@ -623,7 +623,7 @@ function pdfAttach($obj,$module,$file_name,$id)
 	if($status)
 	{
 		$query1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
-		$params1 = array(current_id, $current_user->id, $ownerid, $module." Attachment", $obj->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$params1 = array($current_id, $current_user->id, $ownerid, $module." Attachment", $obj->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
 		$adb->pquery($query1, $params1);
 
 		$query2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?,?,?,?,?)";
