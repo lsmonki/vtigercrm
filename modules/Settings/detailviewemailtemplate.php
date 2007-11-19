@@ -48,7 +48,7 @@ $smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
 $smarty->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
 
 $smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
-$smarty->assign("BODY", $emailtemplateResult["body"]);
+$smarty->assign("BODY", nl2br($emailtemplateResult["body"]));
 
 $smarty->display("DetailViewEmailTemplate.tpl");
 
