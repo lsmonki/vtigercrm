@@ -62,14 +62,8 @@ class DatabaseDump {
 			$this->writeln("");
 	
 			// Meta information which helps to import into mysql database.
-			$this->writeln("/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;");
-			$this->writeln("/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;");
-			$this->writeln("/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;");
-			$this->writeln("/*!40101 SET NAMES utf8 */;");
-			$this->writeln("/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;");
-			$this->writeln("/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;");
-			$this->writeln("/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
-			$this->writeln("/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;");
+			$this->writeln("SET FOREIGN_KEY_CHECKS=0;");
+			$this->writeln("SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
 			$this->writeln("");
 
 			// Get all table names from database
@@ -109,10 +103,6 @@ class DatabaseDump {
 				$this->writeln("--");
 				$this->writeln("");
 
-				// Meta information required while importing data into table.
-				$this->writeln("/*!40000 ALTER TABLE `$table` DISABLE KEYS */;");
-				$this->writeln("LOCK TABLES `$table` WRITE;");
-				
 				$table_query = mysql_query("SELECT * FROM `$table`");
 				$num_fields = mysql_num_fields($table_query);
 				while($fetch_row = mysql_fetch_array($table_query)) {
@@ -130,10 +120,10 @@ class DatabaseDump {
 						$this->writeln($insert_sql);
 					}
 				}
-				// Meta information requried while importing data into table.
-				$this->writeln("UNLOCK TABLES;");
-				$this->writeln("/*!40000 ALTER TABLE `$table` ENABLE KEYS */;");
 			}
+			// Meta information reset to original state.
+			$this->writeln("SET FOREIGN_KEY_CHECKS=0;");
+
 			$this->file_close();
 	}
 	function file_open($filename) {	$this->fhandle = fopen($filename, "w+"); }

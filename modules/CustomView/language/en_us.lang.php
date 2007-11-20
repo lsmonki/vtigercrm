@@ -77,9 +77,6 @@ following values "Call","Meeting" or "Task".',
 'Next 120 Days'=>'Next 120 Days', 
  
 'equals'=>'equals', 
-'not equal to'=>'Not equal to',
-'starts with'=>'Starts with',
-'ends with'=>'Ends with',
 'contains'=>'Contains', 
 'does not contain'=>'does not contain', 
 'less than'=>'less than', 
@@ -210,7 +207,6 @@ following values "Call","Meeting" or "Task".',
 'Invoice Date'=>'Invoice Date', 
  
 //Strings added for Product module fields 
-//'Product Code'=>'Product Code', 
 'Product Active'=>'Product Active', 
 'Product Category'=>'Product Category', 
 'Sales Start Date'=>'Sales Start Date', 
@@ -269,6 +265,13 @@ following values "Call","Meeting" or "Task".',
 'Simple_Time_Filter'=>'Simple Time Filter', 
 'Start_Date'=>'Start Date', 
 'End_Date'=>'End Date', 
-'LBL_RULE'=>'RULE' 
+'LBL_RULE'=>'RULE',
+
+// Added/Updated for vtiger CRM 5.0.4
+'not equal to'=>'Not equal to',
+'starts with'=>'Starts with',
+'ends with'=>'Ends with',
+//'Product Code'=>'Product Code',
+ 
 ); 
 ?>

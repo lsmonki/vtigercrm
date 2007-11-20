@@ -208,6 +208,8 @@ $mod_strings = Array(
 'LBL_START_DATE' => 'Start Date',
 'LBL_END_DATE' => 'End Date',
 
+// Added/Updated for vtiger CRM 5.0.4
+
 //added to fix the issue #4081
 'LBL_ACCOUNT_EXIST' => 'Account Name Already Exists!',
 

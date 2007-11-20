@@ -619,7 +619,6 @@ $mod_strings = Array(
 'LBL_SSL_OPTIONS'=>'SSL Options',
 'LBL_TLS'=>'TLS',
 'LBL_NO_TLS'=>'No TLS',
-'LBL_SSL' => 'SSL',
 'LBL_CERT_VAL'=>'Certificate Validations',
 'LBL_INT_MAILER'=>'Use Internal Mailer?',
 'LBL_INT_MAILER_USE'=>'Yes',
@@ -642,9 +641,6 @@ $mod_strings = Array(
 'LBL_4_MIN'=>'4 minutes',
 'LBL_5_MIN'=>'5 minutes',
 'LBL_EMAILS_PER_PAGE'=>'Email per Page',
-//Added to fix the issue #4081
-'LBL_USERNAME_EXIST' => 'User Name Already Exists!',
-'LBL_UNAUTHORIZED_ACCESS' => 'Unauthorized access to user administration',
 // Added for 5.0.3
 
 'LBL_ENTER_PROFILE'=>'Enter The Profile Name',
@@ -655,6 +651,13 @@ $mod_strings = Array(
 'LBL_NOTIFICATION_ACTIVITY'=>'Notification Activity',
 'LBL_NOTIFICATION_EMAIL_INFO'=>'Notification Email Information',
 'LBL_GOTO_LISTVIEW_BUTTON'=>'Goto ListView',
+
+// Added/Updated for vtiger CRM 5.0.4
+
+'LBL_SSL' => 'SSL',
+//Added to fix the issue #4081
+'LBL_USERNAME_EXIST' => 'User Name Already Exists!',
+'LBL_UNAUTHORIZED_ACCESS' => 'Unauthorized access to user administration',
 //Added to provide User based TagCloud
 'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
 'INTERNAL_MAIL_COMPOSER'=>'Internal Mail Composer',

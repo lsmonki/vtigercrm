@@ -15,7 +15,6 @@
                                 DELETE_ACCOUNT:'Deleting this account(s) will remove its related Potentials & Quotes. Are you sure you want to delete the selected ',
                                 DELETE_VENDOR:'Deleting this vendor(s) will remove its related Purchase Orders. Are you sure you want to delete the selected ',
                                 SELECT_MAILID:'Please Select a mailid',
-                                OVERWRITE_EXISTING_ACCOUNT1:'Do you want to Overwrite the existing address with this selected account(',
                                 OVERWRITE_EXISTING_ACCOUNT2:') address details?',
                                 MISSING_FIELDS:'Missing required fields:',
                                 NOT_ALLOWED_TO_EDIT:'you are not allowed to edit this field',
@@ -46,11 +45,9 @@
                                 DISABLE_SHARING_CONFIRMATION:'Are you sure you want to disable sharing for selected ',
                                 USERS:' user(s) ?',
                                 ENDTIME_GREATER_THAN_STARTTIME:'End Time should be greater than Start Time ',
-				NAME_DESC:' for Folder Name & Description',
                                 FOLLOWUPTIME_GREATER_THAN_STARTTIME:'Followup Time should be greater than End Time ',
                                 MISSING_EVENT_NAME:'Missing Event Name',
                                 EVENT_TYPE_NOT_SELECTED:'Event Type is not selected',
-                                OPPORTUNITYNAME_CANNOT_BE_EMPTY:'Potential Name field cannot be empty',
                                 CLOSEDATE_CANNOT_BE_EMPTY:'Close Date field cannot be empty',
                                 SITEURL_CANNOT_BE_EMPTY:'Site Url cannot be empty',
                                 SITENAME_CANNOT_BE_EMPTY:'Site Name cannot be empty',
@@ -99,7 +96,6 @@
 				EQUALS:'equals',
 				NOT_EQUALS_TO:'not equal to',
 				STARTS_WITH:'starts with',
-				ENDS_WITH:'ends with',
 				CONTAINS:'contains',	
 				DOES_NOT_CONTAINS:'does not contains',
 				LESS_THAN:'less than',
@@ -108,7 +104,6 @@
 				GREATER_OR_EQUALS:'greater or equal',
 
 				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String',
-				SHARED_EVENT_DEL_MSG:'The User does not have permission to Edit/Delete Shared Event.',
 				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n',
                                 NO_SPECIAL:'Special Characters are not allowed',
 				IN_PROFILENAME:' in Profile Name',
@@ -132,6 +127,14 @@
 				LBL_ENTER_VALID_NO: 'Please enter valid number',
 				LBL_PROVIDE_YES_NO: ' Invalid value.\n Please Provide Yes or No',
 				LBL_SELECT_CRITERIA: ' Invalid criteria.\n Please select criteria',
+				// Added/Updated for vtiger CRM 5.0.4
+				OPPORTUNITYNAME_CANNOT_BE_EMPTY:'Potential Name field cannot be empty',
+                		OVERWRITE_EXISTING_ACCOUNT1:'Do you want to Overwrite the existing address with this selected account(',
+                		NAME_DESC:' for Folder Name & Description',
+                		ENDS_WITH:'ends with',
+                		SHARED_EVENT_DEL_MSG:'The User does not have permission to Edit/Delete Shared Event.',
+                                                                                                                             
+
 				LBL_WRONG_IMAGE_TYPE: 'Allowed file types for Contacts - jpeg, png, jpg, pjpeg, x-png or gif',
 				SELECT_MAIL_MOVE: 'Please select a mail and then move..',
 				

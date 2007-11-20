@@ -83,6 +83,19 @@ $mod_strings = Array(
 "contactbycampaign"=>"Contacts by Campaign",
 "ticketsbyaccount"=>"Tickets by Account",
 "ticketsbycontact"=>"Tickets by Contact",
+
+'LBL_DASHBRD_HOME'=>'Dashboard Home',
+'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
+'LBL_VERT_BAR_CHART'=>'Vertical Bar Chart',
+'LBL_PIE_CHART'=>'Pie Chart',
+'LBL_NO_DATA'=>'No data available',
+'DashboardHome'=>'Dashboard Home',
+'GRIDVIEW'=>'Grid view',
+'NORMALVIEW'=>'Normal view',
+'VIEWCHART'=>'View Chart',
+'LBL_DASHBOARD'=>'Dashboard',
+
+// Added/Updated for vtiger CRM 5.0.4
 "Approved"=>"Approved",
 "Created"=>"Created",
 "Cancelled"=>"Cancelled",
@@ -149,7 +162,7 @@ $mod_strings = Array(
 "Hardware"=>"Hardware",
 "Software"=>"Software",
 "CRM Applications"=>"CRM Applications",
-"Open"=>"Opene",
+"Open"=>"Open",
 "In Progress"=>"In Progress",
 "Wait For Response"=>"Wait For Response",
 "Closed"=>"Closed",
@@ -173,17 +186,6 @@ $mod_strings = Array(
 "Closed Won"=>"Closed Won",
 "Closed Lost"=>"Closed Lost",
 
-
-'LBL_DASHBRD_HOME'=>'Dashboard Home',
-'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
-'LBL_VERT_BAR_CHART'=>'Vertical Bar Chart',
-'LBL_PIE_CHART'=>'Pie Chart',
-'LBL_NO_DATA'=>'No data available',
-'DashboardHome'=>'Dashboard Home',
-'GRIDVIEW'=>'Grid view',
-'NORMALVIEW'=>'Normal view',
-'VIEWCHART'=>'View Chart',
-'LBL_DASHBOARD'=>'Dashboard',
 );
 
 ?>
