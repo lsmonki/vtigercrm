@@ -791,6 +791,27 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		return false;
 	}
 }
+if(gVTModule == 'Contacts')
+{
+	if(getObj('imagename'))
+	{
+		if(getObj('imagename').value != '')
+		{
+			var image_arr = new Array();
+			image_arr = (getObj('imagename').value).split(".");
+			if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") || (image_arr[1] ==  "JPEG") || (image_arr[1] ==  "PNG") || (image_arr[1] ==  "JPG") || (image_arr[1] ==  "PJPEG") || (image_arr[1] ==  "X-PNG") || (image_arr[1] ==  "GIF"))
+			{
+				return true;
+			}
+			else
+			{
+				alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+				return false;
+			}
+		}
+	}
+}
+
 
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
@@ -939,27 +960,6 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		      //End Birth day	
 		}
 		
-	}
-	if(gVTModule == 'Contacts')
-	{
-		if(getObj('imagename'))
-		{
-			if(getObj('imagename').value != '')
-			{
-				var image_arr = new Array();
-				image_arr = (getObj('imagename').value).split(".");
-				var len=image_arr.length;
-				if((image_arr[len-1] ==  "jpeg") || (image_arr[len-1] ==  "png") || (image_arr[len-1] ==  "jpg") || (image_arr[len-1] ==  "pjpeg") || (image_arr[len-1] ==  "x-png") || (image_arr[len-1] ==  "gif") || (image_arr[len-1] ==  "JPEG") || (image_arr[len-1] ==  "PNG") || (image_arr[len-1] ==  "JPG") || (image_arr[len-1] ==  "PJPEG") || (image_arr[len-1] ==  "X-PNG") || (image_arr[len-1] ==  "GIF"))
-				{
-					return true;
-				}
-				else
-				{
-					alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
-					return false;
-				}
-			}
-		}
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
@@ -2365,4 +2365,22 @@ function removeHTMLFormatting(str) {
         str = str.replace(/<([^<>]*)>/g, " ");
         str = str.replace(/&nbsp;/g, " ");
         return str;
+}
+function get_converted_html(str)
+{
+        var temp = str.toLowerCase();
+        if(temp.indexOf('<') != '-1' || temp.indexOf('>') != '-1')
+        {
+                str = str.replace(/</g,'&lt;');
+                str = str.replace(/>/g,'&gt;');
+        }
+        if(temp.indexOf('script') != '-1' && temp.indexOf('/script') != '-1')
+        {
+                str = str.replace(/&/g,'&amp;');
+        }
+        else if(temp.indexOf('&') != '-1')
+        {
+                str = str.replace(/&/g,'&amp;');
+	}
+	return str;
 }

@@ -870,10 +870,13 @@ $toHtml = array(
 function to_html($string, $encode=true){
 	global $log;
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
-        global $toHtml;
-        if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
-		if (is_array($toHtml))
-			$string =strip_tags($string, '<span><br /><div><a><br><b><u><i><table><td><tr><style><p><command><h1><h2><h3><h4><h5><h6><li><ol><ul><th><tbody><font><center><big><hr><format> <strong><html><small>');
+	global $toHtml;
+	$action = $_REQUEST['action'];
+	if($_REQUEST['module'] != 'Settings')// && $_REQUEST['module'] != 'Emails')
+		$ajax_action = $_REQUEST['module'].'Ajax';
+	if($encode && is_string($string)){
+		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'detailviewemailtemplate' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
+			$string = htmlentities($string, ENT_QUOTES);
         }
 	//$log->debug("Exiting to_html method ...");
         return $string;

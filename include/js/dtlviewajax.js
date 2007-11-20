@@ -236,6 +236,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         }
                 }
             );
+	tagValue = get_converted_html(tagValue);
 	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
@@ -465,4 +466,3 @@ function setSelectValue(fieldLabel)
 
 	oHdTxtBox.value = oSelCombo.options[oSelCombo.selectedIndex].text;
 }
-

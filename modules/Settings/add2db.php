@@ -83,17 +83,17 @@ require_once('include/utils/utils.php');
 
 	if($saveflag=="true")
 	{
-		$organization_name=$_REQUEST['organization_name'];
+		$organization_name=from_html($_REQUEST['organization_name']);
 		$org_name=$_REQUEST['org_name'];
-		$organization_address=$_REQUEST['organization_address'];
-		$organization_city=$_REQUEST['organization_city'];
-		$organization_state=$_REQUEST['organization_state'];
-		$organization_code=$_REQUEST['organization_code'];
-		$organization_country=$_REQUEST['organization_country'];
-		$organization_phone=$_REQUEST['organization_phone'];
-		$organization_fax=$_REQUEST['organization_fax'];
-		$organization_website=$_REQUEST['organization_website'];
-		$organization_logo=$_REQUEST['organization_logo'];
+		$organization_address=from_html($_REQUEST['organization_address']);
+		$organization_city=from_html($_REQUEST['organization_city']);
+		$organization_state=from_html($_REQUEST['organization_state']);
+		$organization_code=from_html($_REQUEST['organization_code']);
+		$organization_country=from_html($_REQUEST['organization_country']);
+		$organization_phone=from_html($_REQUEST['organization_phone']);
+		$organization_fax=from_html($_REQUEST['organization_fax']);
+		$organization_website=from_html($_REQUEST['organization_website']);
+		$organization_logo=from_html($_REQUEST['organization_logo']);
 
 		$organization_logoname=$filename;
 		if(!isset($organization_logoname))
@@ -101,7 +101,7 @@ require_once('include/utils/utils.php');
 
 		$sql="SELECT * FROM vtiger_organizationdetails WHERE organizationname = ?";
 		$result = $adb->pquery($sql, array($org_name));
-		$org_name = from_html($adb->query_result($result,0,'organizationname'));
+		$org_name = decode_html($adb->query_result($result,0,'organizationname'));
 		$org_logo = $adb->query_result($result,0,'logoname'); 
 
 

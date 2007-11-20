@@ -260,6 +260,12 @@ function picklist_validate(mode,fieldname,module,uitype)
 		{
 			var valnext;
 			valnext=pick_arr[j];
+			var temp = valnext.toLowerCase();
+			if(temp.match('(script).*(/script)'))
+                        {
+				valnext = temp.replace(/</g,'&lt;');
+		                valnext = valnext.replace(/>/g,'&gt;');
+                        }
 			if(trim(valone).toUpperCase() == trim(valnext).toUpperCase())
 			{
 				alert("Duplicate entries found for the value '"+valone+"'");

@@ -383,8 +383,12 @@ class PearDatabase{
 	{
 	    //$this->println("ADODB fetch_array return null");
 	    return NULL;
-	}		
-	return $this->change_key_case($result->FetchRow());
+	}
+	$arr = $result->FetchRow();
+        if(is_array($arr))
+                $arr = array_map('to_html', $arr);
+        return $this->change_key_case($arr);	
+	//return $this->change_key_case($result->FetchRow());
     }
 
     ## adds new functions to the PearDatabase class to come around the whole
@@ -552,7 +556,10 @@ class PearDatabase{
 	//$this->println($rowdata);
 	//Commented strip_selected_tags and added to_html function for HTML tags vulnerability
 	//$coldata = strip_selected_tags($rowdata[$col],'script');
-	$coldata = to_html($rowdata[$col]);
+	if($col == 'fieldlabel')
+		$coldata = $rowdata[$col];
+	else
+		$coldata = to_html($rowdata[$col]);
 	//$this->println("ADODB query_result ". $coldata);
 	return $coldata;
     }

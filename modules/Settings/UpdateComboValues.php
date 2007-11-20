@@ -55,7 +55,7 @@ if($tabname[1]!='')
 $columnName = $tableName;
  for($i = 0; $i < $count; $i++)
  {
-	 $pickArray[$i] = trim($pickArray[$i]);
+	 $pickArray[$i] = from_html(trim($pickArray[$i]));
 	 if($pickArray[$i] != '')
 	 {
 		 $picklistcount=0;
