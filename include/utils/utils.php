@@ -872,7 +872,7 @@ function to_html($string, $encode=true){
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
 	global $toHtml;
 	$action = $_REQUEST['action'];
-	if($_REQUEST['module'] != 'Settings')// && $_REQUEST['module'] != 'Emails')
+	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView')// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
 	if(is_string($string)){
 		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))

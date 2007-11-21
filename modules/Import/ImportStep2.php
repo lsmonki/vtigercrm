@@ -29,6 +29,9 @@ require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/CommonUtils.php');
@@ -141,7 +144,9 @@ $import_object_array = Array(
 				"Accounts"=>"ImportAccount",
 				"Contacts"=>"ImportContact",
 				"Potentials"=>"ImportOpportunity",
-				"Products"=>"ImportProduct"
+				"Products"=>"ImportProduct",
+				"HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -293,6 +298,13 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
  		$tablename='products';
  		$focus1=new Products();
  	}
+	//Pavani: checking for HelpDesk
+        if($_REQUEST['module']=='HelpDesk')
+        {
+                $tablename='troubletickets';
+                $focus1=new HelpDesk();
+        }
+        //end checking
 
 	
 	$smarty->assign("FIRSTROW",$firstrow);

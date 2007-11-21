@@ -23,10 +23,12 @@ require_once('user_privileges/default_module_view.php');
 class HelpDesk extends CRMEntity {
 	var $log;
 	var $db;
-
-	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
+	var $table_name = "vtiger_troubletickets";
+	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf','vtiger_seticketsrel');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
 	var $column_fields = Array();
+	//Pavani: Assign value to entity_table
+        var $entity_table = "vtiger_crmentity";
 
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
 
@@ -75,10 +77,12 @@ class HelpDesk extends CRMEntity {
 		'Ticket ID' => '',
 		'Title'=>'ticket_title',
 		);
-
-	//Added these variables which are used as default order by and sortorder in ListView
-	var $default_order_by = 'crmid';
-	var $default_sort_order = 'DESC';
+	
+	//By Pavani...Specify Required fields
+        var $required_fields =  array('ticket_title'=>1);
+        //Added these variables which are used as default order by and sortorder in ListView
+        var $default_order_by = 'title';
+        var $default_sort_order = 'DESC';
 
 	var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
 
@@ -533,6 +537,83 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Exiting getCustomerName method ...");
         	return $customername;
 	}
+	//Pavani: Function to create, export query for helpdesk module
+        /** Function to export the ticket records in CSV Format
+        * @param reference variable - order by is passed when the query is executed
+        * @param reference variable - where condition is passed when the query is executed
+        * Returns Export Tickets Query.
+        */
+        function create_export_query(&$order_by, &$where)
+        {
+                global $log;
+                global $current_user;
+                $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+
+                include("include/utils/ExportUtils.php");
+
+                //To get the Permitted fields query and the permitted fields list
+                $sql = getPermittedFieldsQuery("HelpDesk", "detail_view");
+                $fields_list = getFieldsListFromQuery($sql);
+
+                $query = "SELECT $fields_list,vtiger_ticketgrouprelation.groupname as 'Assigned To Group'
+                       FROM ".$this->entity_table."
+                                INNER JOIN vtiger_troubletickets
+                                        ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+
+                                LEFT JOIN vtiger_seticketsrel
+                                        ON vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid
+                                LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
+                                        ON vtiger_crmentityRelatedTo.crmid = vtiger_seticketsrel.crmid
+                                LEFT JOIN vtiger_account vtiger_TicketRelatedToAccount
+                                        ON vtiger_TicketRelatedToAccount.accountid = vtiger_seticketsrel.crmid
+                                LEFT JOIN vtiger_contactdetails vtiger_TicketRelatedToContact
+                                        ON vtiger_TicketRelatedToContact.contactid = vtiger_seticketsrel.crmid
+
+                                LEFT JOIN vtiger_ticketcomments
+                                        ON vtiger_troubletickets.ticketid = vtiger_ticketcomments.ticketid
+                                LEFT JOIN vtiger_ticketcf
+                                        ON vtiger_ticketcf.ticketid=vtiger_troubletickets.ticketid
+                LEFT JOIN vtiger_ticketgrouprelation
+                                    ON vtiger_ticketcf.ticketid = vtiger_ticketgrouprelation.ticketid
+                            LEFT JOIN vtiger_groups
+                                    ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+                                LEFT JOIN vtiger_users
+			   ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'
+                                LEFT JOIN vtiger_seattachmentsrel
+                                        ON vtiger_troubletickets.ticketid=vtiger_seattachmentsrel.crmid
+                                LEFT JOIN vtiger_attachments
+                                ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+                                LEFT JOIN vtiger_products
+                                ON vtiger_troubletickets.product_id = vtiger_products.productid
+                                ";
+                        $where_auto = " vtiger_crmentity.deleted = 0
+                                                        AND ((vtiger_seticketsrel.crmid IS NULL
+                                                                OR (vtiger_troubletickets.parent_id = 0
+                                                                OR vtiger_troubletickets.product_id IS NULL))
+                                                                OR vtiger_seticketsrel.crmid IN (".getReadEntityIds('Accounts').")
+                                                                OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Contacts')."))
+                                                        ";
+
+                if($where != "")
+                        $query .= "WHERE ($where) AND ".$where_auto;
+                else
+                        $query .= "WHERE ".$where_auto;
+                require('user_privileges/user_privileges_'.$current_user->id.'.php');
+                require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+                //we should add security check when the user has Private Access
+                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[13] == 3)
+                {
+                        //Added security check to get the permitted records only
+                        $query = $query." ".getListViewSecurityParameter("HelpDesk");
+                }
+
+                if(!empty($order_by))
+                        $query .= " ORDER BY $order_by";
+
+                $log->debug("Exiting create_export_query method ...");
+                return $query;
+        }
+
 	
 	/**	Function used to get the Activity History
 	 *	@param	int	$id - ticket id to which we want to display the activity history

@@ -125,7 +125,11 @@ if(isset($where) && $where != '')
 	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
                 $list_query .= ' and (vtiger_troubletickets.status!="Closed" or vtiger_troubletickets.status is null) and '.$where;
 	$list_query .= ' and '.$where;
+ $_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 //sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')
@@ -181,6 +185,9 @@ $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
 
+//By Pavani
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 //limiting the query
 if ($start_rec ==0) 
 	$limit_start_rec = 0;

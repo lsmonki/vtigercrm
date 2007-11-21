@@ -30,6 +30,9 @@ require_once('modules/Notes/Notes.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
+//Pavani...adding HelpDesk and Vendors modules
+require_once('modules/HelpDesk/HelpDesk.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
 
 global $allow_exports,$app_strings;
@@ -145,8 +148,16 @@ function export($type)
 				} elseif($module == 'Notes' && count($idstring) > 0) {
 		        $query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
 						array_push($params, $idstring);
-	       			}		
-        }
+	       			}
+				//Pavani..adding HelpDesk and Vendors modules
+                                  elseif($module == 'HelpDesk' && count($idstring) > 0) {
+                        $query .= ' and vtiger_troubletickets.ticketid in ('. generateQuestionMarks($idstring) .')';
+                                                array_push($params, $idstring);
+                                } elseif($module == 'Vendors' && count($idstring) > 0) {
+                        $query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
+                                                array_push($params, $idstring);
+                                }
+	}
         elseif($search_type == 'includesearch' && $export_data == 'all')
         {
                 if($orderby != '' && $_SESSION['export_where'] != '') 
