@@ -205,7 +205,7 @@ class vtigerRSS extends CRMEntity
 
 		if($rssid != "")
 		{
-			$sSQL = "select * from vtiger_rss where rssid=$rssid";
+			$sSQL = "select * from vtiger_rss where rssid=?";
 			$result = $adb->pquery($sSQL, array($rssid));
 			$rssrow = $adb->fetch_array($result);
 

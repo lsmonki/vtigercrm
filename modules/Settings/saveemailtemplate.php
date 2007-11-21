@@ -15,21 +15,16 @@ global $log;
 $db = new PearDatabase();
 	$log->debug("the foldername is ".$folderName);
 $folderName = $_REQUEST["foldername"];
-$templateName = $_REQUEST["templatename"];
+$templateName = from_html($_REQUEST["templatename"]);
 	  $log->debug("the templatename is ".$templateName);
 $templateid = $_REQUEST["templateid"];
 	  $log->debug("the templateid is ".$templateid);
-$description = $_REQUEST["description"];
+$description = from_html($_REQUEST["description"]);
 	  $log->debug("the description is ".$description);
-$subject = $_REQUEST["subject"];
+$subject = from_html($_REQUEST["subject"]);
 	  $log->debug("the subject is ".$subject);  
 $body = $_REQUEST["body"];
 	  $log->debug("the body is ".$body);  
-if ($body !='')
-{
-	$body = to_html($body);
-	  $log->info("the body value is set ");  
-}
 if(isset($templateid) && $templateid !='')
 {
 	$log->info("the templateid is set");  

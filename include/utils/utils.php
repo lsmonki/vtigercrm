@@ -874,8 +874,8 @@ function to_html($string, $encode=true){
 	$action = $_REQUEST['action'];
 	if($_REQUEST['module'] != 'Settings')// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
-	if($encode && is_string($string)){
-		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'detailviewemailtemplate' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
+	if(is_string($string)){
+		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
 			$string = htmlentities($string, ENT_QUOTES);
         }
 	//$log->debug("Exiting to_html method ...");

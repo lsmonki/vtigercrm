@@ -283,11 +283,12 @@ class PearDatabase{
 		return $output;
 	}
 	
-    function getEmptyBlob()
+    function getEmptyBlob($is_string=true)
     {
 	//if(dbType=="oci8") return 'empty_blob()';
 	//else return 'null';
-	return 'null';
+	if (is_string) return 'null';
+	return null;
     }
 
     function updateBlob($tablename, $colname, $id, $data)	

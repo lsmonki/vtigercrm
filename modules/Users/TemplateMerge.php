@@ -12,14 +12,12 @@ require_once('include/utils/CommonUtils.php');
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 {
 	$templatedetails = getTemplateDetails($_REQUEST['templateid']);
-	//$details['Email Information'][2][0][3][0] = $templatedetails[2]; //Subject
-	//$details['Email Information'][3][0][3][0] = nl2br($templatedetails[1]); //Body
 }
 ?>
 <form name="frmrepstr">
 <input type="hidden" name="subject" value="<?php echo $templatedetails[2];?>"></input>
 <textarea name="repstr" style="visibility:hidden">
-<?php echo $templatedetails[1]; ?>
+<?php echo htmlentities($templatedetails[1]); ?>
 </textarea>
 </form>
 <script language="javascript">

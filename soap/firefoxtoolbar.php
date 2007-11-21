@@ -625,7 +625,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	if(isPermitted("Accounts","EditView") == "yes")
 	{
 		$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
-		$result = $adb->pquery($query, array($accountname, ));
+		$result = $adb->pquery($query, array($accountname));
 	        if($adb->num_rows($result) > 0)
 		{
 			return "Accounts";
@@ -663,7 +663,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 
 function get_version($user_name, $password)
 {
-    return "5.0.0";
+    return "5.0.4";
 }
 
 

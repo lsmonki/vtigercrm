@@ -83,7 +83,8 @@ function productPickList(currObj,module, row_no) {
 function priceBookPickList(currObj, row_no) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=row_no;//parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+getObj("hdnProductId"+rowId).value,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
+	var productId=getObj("hdnProductId"+rowId).value || -1;
+	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+productId,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
 }
 
 

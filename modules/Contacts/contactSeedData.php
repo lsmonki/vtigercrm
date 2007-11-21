@@ -21173,8 +21173,8 @@ $campaign_type_array = Array(
 );
 
 $campaign_status_array = Array(
-"Planned",
-"Planned",
+"Planning",
+"Planning",
 "Completed",
 );
  

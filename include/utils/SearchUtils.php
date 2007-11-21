@@ -171,7 +171,7 @@ function Search($module)
 		
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$search_string) : $search_string;
 
-		$search_string=ltrim(rtrim($stringConvert));
+		$search_string=trim($stringConvert);
 
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")

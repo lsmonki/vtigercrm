@@ -90,7 +90,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 				$module = $_REQUEST['target_module'];
 				$sql = "INSERT INTO vtiger_wordtemplates ";
 				$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) values (?,?,?,?,?,?,?,?,?)";
-				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), '$parent_type', $adb->getEmptyBlob(), $strDescription, $filename, $filesize, $filetype);
+				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), '$parent_type', $adb->getEmptyBlob(false), $strDescription, $filename, $filesize, $filetype);
 				$result = $adb->pquery($sql, $params);
 
 				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);

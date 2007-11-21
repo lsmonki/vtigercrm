@@ -881,7 +881,7 @@ $app_strings = array (
 //Added for incoming mail server settings form js validation
 'ERR_INVALID_PAGE_COUNT' => "Invalid Page count",
 //'Product Code' => 'Part Number',
-'Quotes' => 'Quote',
+'Quotes' => 'Quotes',
 'PurchaseOrder' => 'Purchase Order',
 'SalesOrder' => 'Sales Order',
 'Invoice' => 'Invoice',

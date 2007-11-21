@@ -783,7 +783,7 @@ function send_mail_for_password($mailid)
         $mail->Body    = $contents;
         $mail->IsSMTP();
 
-        $mailserverresult = $adb->pquery("select * from vtiger_systems where server_type=?", array(email));
+        $mailserverresult = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
         $mail_server = $adb->query_result($mailserverresult,0,'server');
         $mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
         $mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
