@@ -133,6 +133,7 @@ function verify_data(form) {
 		if(trim(form.user_password.value) != trim(form.confirm_password.value))
 		{
 			set_fieldfocus("The password does't match",form.user_password);
+			return false;
 		}
 		check_duplicate();
 	}else
