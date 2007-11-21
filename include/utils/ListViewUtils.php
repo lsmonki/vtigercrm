@@ -3528,7 +3528,7 @@ function getAccountId($account_name)
 	if($account_name != '')
 	{
 		// for avoid single quotes error
-		//slashes_account_name = popup_from_html($account_name); /* Commented by Asha. Need to see if this is required as Prepared statements is used here
+		//slashes_account_name = popup_from_html($account_name); /* Commented by Asha. Need to see if this is required as Prepared statements is used here*/
 		$sql = "select accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted = 0 and vtiger_account.accountname=?";
 		$result = $adb->pquery($sql, array($account_name));
 		$accountid = $adb->query_result($result,0,"accountid");
