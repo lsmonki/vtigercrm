@@ -51,7 +51,6 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
-$smarty->assign("BASE_ACCOUNT",getAccountName($focus->column_fields[account_id]));
 $category = getParentTab();
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
@@ -64,6 +63,7 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

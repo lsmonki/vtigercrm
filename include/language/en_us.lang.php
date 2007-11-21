@@ -1040,6 +1040,9 @@ $app_strings = array (
 'PLEASE_FILL_QUANTITY' => 'Please fill in the quantity',
 'LBL_SOLUTION'=>'SOLUTION',
 'LBL_COMMENTS'=>'COMMENTS',
+'RELATED'=>'Related',
+'SHOW_ALL'=>'Show All',
+'RELATED_PARENT'=>'Related to Parent Module',
 );
 
 $app_list_strings = array (

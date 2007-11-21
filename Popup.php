@@ -212,24 +212,43 @@ if($currentModule == 'PriceBooks')
 }
 else
 {
-		if(isset($_REQUEST['recordid']) && $_REQUEST['recordid'] != '')
-		{		
-			$smarty->assign("RECORDID",$_REQUEST['recordid']);
-			$url_string .='&recordid='.$_REQUEST['recordid'];
-        		$where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
-		}
-	if($where_relquery == '')
-	{
-		if(isset($_REQUEST['relmod_id']))
-			$where_relquery = getPopupCheckquery($currentModule,$_REQUEST['parent_module'],$_REQUEST['relmod_id']);
-		else
-			$where_relquery = getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
+	if(isset($_REQUEST['recordid']) && $_REQUEST['recordid'] != '')
+	{		
+		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+		$url_string .='&recordid='.$_REQUEST['recordid'];
+        	$where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
 	}
+	if(isset($_REQUEST['relmod_id']) || isset($_REQUEST['fromPotential']))
+	{
+		if($_REQUEST['relmod_id'] !='')
+		{
+			$mod = $_REQUEST['parent_module'];
+			$id = $_REQUEST['relmod_id'];
+		}
+		else if($_REQUEST['fromPotential'] != '')
+		{
+			$mod = "Accounts";
+			$id= $_REQUEST['acc_id'];
+		}
 
-		if($currentModule == 'Products')
-        		$where_relquery .=" and discontinued <> 0 ";
+		$smarty->assign("mod_var_name", "parent_module");
+		$smarty->assign("mod_var_value", $mod);
+		$smarty->assign("recid_var_name", "relmod_id");
+		$smarty->assign("recid_var_value",$id);
+		$where_relquery.= getPopupCheckquery($currentModule,$mod,$id);
+	}
+	else if(isset($_REQUEST['task_relmod_id']))
+	{
+		$smarty->assign("mod_var_name", "task_parent_module");
+		$smarty->assign("mod_var_value", $_REQUEST['task_parent_module']);
+		$smarty->assign("recid_var_name", "task_relmod_id");
+		$smarty->assign("recid_var_value",$_REQUEST['task_relmod_id']);
+		$where_relquery.= getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
+	}
+	if($currentModule == 'Products')
+       		$where_relquery .=" and discontinued <> 0 ";
 
-		$query = getListQuery($currentModule,$where_relquery);
+	$query = getListQuery($currentModule,$where_relquery);
 }
 			
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
@@ -271,37 +290,6 @@ $list_result = $adb->query($query);
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 // Setting the record count string
-/*
-if ($navigation_array['start'] == 1)
-{
-        if($noofrows != 0)
-        $start_rec = $navigation_array['start'];
-        else
-        $start_rec = 0;
-        if($noofrows > $list_max_entries_per_page)
-        {
-                $end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-        }
-        else
-        {
-                $end_rec = $noofrows;
-        }
-
-}
-else
-{
-        if($navigation_array['next'] > $list_max_entries_per_page)
-        {
-                $start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-                $end_rec = $navigation_array['next'] - 1;
-        }
-        else
-        {
-                $start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-                $end_rec = $noofrows;
-        }
-}*/
-
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 if($navigation_array['start'] != 0)
@@ -324,7 +312,7 @@ $smarty->assign("ALPHABETICAL", $alphabetical);
 
 $listview_header = getSearchListViewHeader($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
-
+$smarty->assign("HEADERCOUNT",count($listview_header)+1);
 
 $listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);

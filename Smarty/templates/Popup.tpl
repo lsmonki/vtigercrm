@@ -30,7 +30,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 		<td>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+					{if $recid_var_value neq ''}
+                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.RELATED_PARENT}</td>
+                                        {else}
+                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+                                        {/if}
 					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
@@ -59,7 +63,8 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
 								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
 								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
-			
+								<input type="hidden" id="relmod" name="{$mod_var_name}" value="{$mod_var_value}">
+                                                                <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
 							</td>
 							<td width="20%" class="dvtCellLabel">
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
@@ -78,6 +83,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 						</form>
 					</td>
 				</tr>
+				{if $recid_var_value neq ''}
+                                <tr>
+                                        <td style="padding-left:10px;" align="left"><a href="javascript:;" id="all_contacts" onClick="showAllRecords();" >{$APP.SHOW_ALL}&nbsp;{$MODULE}</a></td>
+                                </tr>
+                                {/if}
 			</table>
 
 			<div id="ListViewContents">
@@ -162,7 +172,12 @@ function gethiddenelements()
 	if(getObj('productid_pb').value != '')
 		urlstring +='&productid='+getObj('productid_pb').value;	
 	if(getObj('recordid').value != '')
-		urlstring +='&recordid='+getObj('recordid').value;	
+		urlstring +='&recordid='+getObj('recordid').value;
+	if(getObj('relmod').value != '')
+                urlstring +='&'+getObj('relmod').name+'='+getObj('relmod').value;
+        if(getObj('relrecord_id').value != '')
+                urlstring +='&'+getObj('relrecord_id').name+'='+getObj('relrecord_id').value;
+	
 	var return_module = document.getElementById('return_module').value;
 	if(return_module != '')
 		urlstring += '&return_module='+return_module;
@@ -213,4 +228,28 @@ function getListViewSorted_js(module,url)
 			{rdelim}
 		);
 {rdelim}
+
+function showAllRecords()
+{ldelim}
+        modname = document.getElementById("relmod").name;
+        idname= document.getElementById("relrecord_id").name;
+        var locate = location.href;
+        url_arr = locate.split("?");
+        emp_url = url_arr[1].split("&");
+        for(i=0;i< emp_url.length;i++)
+        {ldelim}
+                if(emp_url[i] != '')
+                {ldelim}
+                        split_value = emp_url[i].split("=");
+                        if(split_value[0] == modname || split_value[0] == idname )
+                                emp_url[i]='';
+                        else if(split_value[0] == "fromPotential" || split_value[0] == "acc_id")
+                                emp_url[i]='';
+
+                {rdelim}
+        {rdelim}
+        correctUrl =emp_url.join("&");
+        document.getElementById("all_contacts").href="index.php?"+correctUrl;
+{rdelim}
+
 </script>
