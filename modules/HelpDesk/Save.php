@@ -141,14 +141,8 @@ else
 }
 $_REQUEST['return_id'] = $return_id;
 
-if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'edit')
-{
-        $sql = 'insert into vtiger_seticketsrel values(?,?)';
-        $adb->pquery($sql, array($_REQUEST['product_id'] , $focus->id));
-
-	if($_REQUEST['return_module'] == 'Products')
-	        $return_id = $_REQUEST['product_id'];
-}
+if($_REQUEST['return_module'] == 'Products' & $_REQUEST['product_id'] != '' &&  $focus->id != '')
+	$return_id = $_REQUEST['product_id'];
 
 //send mail to the assigned to user and the parent to whom this ticket is assigned
 require_once('modules/Emails/mail.php');

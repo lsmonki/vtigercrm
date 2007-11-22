@@ -24,8 +24,8 @@ class HelpDesk extends CRMEntity {
 	var $log;
 	var $db;
 	var $table_name = "vtiger_troubletickets";
-	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf','vtiger_seticketsrel');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
 	var $column_fields = Array();
 	//Pavani: Assign value to entity_table
         var $entity_table = "vtiger_crmentity";
@@ -102,17 +102,6 @@ class HelpDesk extends CRMEntity {
 	{
 		//Inserting into Ticket Comment Table
 		$this->insertIntoTicketCommentTable("vtiger_ticketcomments",'HelpDesk');
-
-		//Inserting into vtiger_seticketsrel table
-		
-		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_seticketsrel', 'HelpDesk');
-		}
-		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_seticketsrel');
-		}
 
 		//Inserting into vtiger_attachments
 		$this->insertIntoAttachment($this->id,'HelpDesk');
