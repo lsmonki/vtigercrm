@@ -868,7 +868,7 @@ $toHtml = array(
       *
        */
 function to_html($string, $encode=true){
-	global $log;
+	global $log,$default_charset;
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
 	global $toHtml;
 	$action = $_REQUEST['action'];
@@ -876,7 +876,7 @@ function to_html($string, $encode=true){
 		$ajax_action = $_REQUEST['module'].'Ajax';
 	if(is_string($string)){
 		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
-			$string = htmlentities($string, ENT_QUOTES);
+			$string = htmlentities($string, ENT_QUOTES, $default_charset);
         }
 	//$log->debug("Exiting to_html method ...");
         return $string;

@@ -16,11 +16,16 @@ if($current_user->is_admin != 'on')
 }
 
 include("modules/Migration/versions.php");
-
 require_once('Smarty_setup.php');
-
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
-
+include("vtigerversion.php");
+$result = $adb->query("select * from vtiger_version");
+$dbversion = $adb->query_result($result, 0, 'current_version');
+if($dbversion == $vtiger_current_version)
+{
+	echo "<br>&nbsp;<font color='red'><b>".$app_strings['LBL_MIGRATION_CHECK']."</b></font>";
+	exit;
+}
 $smarty = new vtigerCRM_Smarty();
 
 $theme_path="themes/".$theme."/";

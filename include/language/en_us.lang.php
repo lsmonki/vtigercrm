@@ -1045,6 +1045,8 @@ $app_strings = array (
 'RELATED_PARENT'=>'Related to Parent Module',
 //Added for select parent role button in picklist
 'LBL_SELECT_PARENTROLE' => 'Select the parent role',
+//Added for migration check
+'LBL_MIGRATION_CHECK'=>'Versions in database and file are same. You cannot do the migration. Please check the db and then do necessary steps.',
 );
 
 $app_list_strings = array (

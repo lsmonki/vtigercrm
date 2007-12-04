@@ -205,6 +205,7 @@ class PearDatabase{
 	 * Covert PreparedStatement to SQL statement
 	 */
 	function convert2Sql($ps, $vals) {
+		if(empty($vals)) { return $ps; }
 		// TODO: Checks need to be added array out of bounds situations
 		for($index = 0; $index < count($vals); $index++) {
 			if(is_string($vals[$index])) {
@@ -238,7 +239,7 @@ class PearDatabase{
 		$sql_start_time = microtime();
 		$params = $this->flatten_array($params);
 		
-		if($this->avoidPreparedSql) {
+		if($this->avoidPreparedSql || empty($params)) {
 			$sql = $this->convert2Sql($sql, $params);
 			$result = &$this->database->Execute($sql);
 		} else {
