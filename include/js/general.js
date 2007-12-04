@@ -671,7 +671,7 @@ function numValidate(fldName,fldLabel,format,neg) {
                         getObj(fldName).focus()
                         return false
                    }
-                   else if(splitval[0] > 100 || len > 3)
+                   else if(splitval[0] > 100 || len > 3 || (splitval[0] >= 100 && splitval[1] > 0))
                    {
                         alert( fldLabel + alert_arr.EXCEEDS_MAX);
                         return false;

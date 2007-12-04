@@ -1043,6 +1043,8 @@ $app_strings = array (
 'RELATED'=>'Related',
 'SHOW_ALL'=>'Show All',
 'RELATED_PARENT'=>'Related to Parent Module',
+//Added for select parent role button in picklist
+'LBL_SELECT_PARENTROLE' => 'Select the parent role',
 );
 
 $app_list_strings = array (
