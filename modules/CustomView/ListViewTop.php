@@ -70,11 +70,11 @@ function getKeyMetrics()
 		{
 			$listquery = getListQuery($metriclist['module']);
 
-			if($metriclist['module'] == "Calendar")
-				$listquery.=" group by vtiger_activity.activityid";
-				
 			$oCustomView = new CustomView($metriclist['module']);
 			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
+			if($metriclist['module'] == "Calendar")
+				$metricsql.=" group by vtiger_activity.activityid ";
+				
 			$metricresult = $adb->query($metricsql);
 			if($metricresult)
 			{

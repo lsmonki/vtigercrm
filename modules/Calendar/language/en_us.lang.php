@@ -420,7 +420,9 @@ $mod_strings = Array(
 'LBL_YEAR_BUTTON_TITLE'=>'Year [Alt+Y]',
 'LBL_SELECT_CONTACT'=>'Select Contacts',
 'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Edit/Delete Shared Event.',
-
+//added to fix ticket#4525
+'LBL_CREATED'=>'created',
+'LBL_UPDATED'=>'updated',
 
 );
 

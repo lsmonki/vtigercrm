@@ -1255,6 +1255,7 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Quotes")
 			{
 				$query = "left join vtiger_quotes on vtiger_quotes.potentialid = vtiger_potential.potentialid
+					left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
 					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
 					left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 					left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
