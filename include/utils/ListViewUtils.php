@@ -1162,9 +1162,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
-	global $log, $listview_max_textlength, $app_strings,$current_language;
+	global $log, $listview_max_textlength, $app_strings, $current_language;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".get_class($focus).",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
-	global $adb,$current_user;
+	global $adb, $current_user, $default_charset;
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$tabname = getParentTab();
@@ -1287,7 +1287,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}	
 	elseif($uitype == 57)
 	{
-		global $adb;
 		if($temp_val != '')
                 {
 			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=?";		
@@ -1304,7 +1303,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	//Added by Minnie to get Campaign Source
 	elseif($uitype == 58)
 	{
-		global $adb;
 		if($temp_val != '')
 		{
 			$sql="SELECT * FROM vtiger_campaign WHERE campaignid=?";
@@ -1331,16 +1329,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	//End
 	elseif($uitype == 61)
 	{
-			global $adb;
 
-	$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
-	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
+		$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
+		$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
 
 	}
 	elseif($uitype == 62)
 	{
-		global $adb;
-
 		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
 		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
 
@@ -1378,8 +1373,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 66)
 	{
-		global $adb;
-
 		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
 		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
 
@@ -1407,8 +1400,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 67)
 	{
-		global $adb;
-
 		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
 		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
 
@@ -1432,8 +1423,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 68)
 	{
-		global $adb;
-
 		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
 		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
 
@@ -1460,8 +1449,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 78)
         {
-
-		global $adb;
 		if($temp_val != '')
                 {
 			
@@ -1473,8 +1460,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
         }
 	elseif($uitype == 79)
         {
-
-		global $adb;
 		if($temp_val != '')
                 {
 			
@@ -1486,8 +1471,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
         }
 	elseif($uitype == 80)
         {
-
-		global $adb;
 		if($temp_val != '')
                 {
 			
@@ -1500,7 +1483,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 75 || $uitype == 81)
         {
 
-		global $adb;
 		if($temp_val != '')
                 {
 			
@@ -1538,7 +1520,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 
 					//Added to avoid the error when select SO from Invoice through AjaxEdit
 					if($module == 'SalesOrder')
@@ -1558,7 +1540,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val =$temp_val.' '.$firstname;
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
 					$focus->record_id = $_REQUEST['recordid'];
 					if($_REQUEST['return_module'] == "Calendar")
@@ -1571,7 +1553,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				elseif($popuptype == "formname_specific")
 				{
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
 				}
@@ -1593,7 +1575,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
 				}
@@ -1614,7 +1596,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$unitprice = convertFromDollar($unitprice,$rate);
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); \'>'.$temp_val.'</a>';
 				}
@@ -1633,11 +1615,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					require_once('modules/Accounts/Accounts.php');
 					$acct_focus = new Accounts();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
-
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_NOQUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($acct_focus->column_fields['bill_street']).'", "'.popup_decode_html($acct_focus->column_fields['ship_street']).'", "'.popup_decode_html($acct_focus->column_fields['bill_city']).'", "'.popup_decode_html($acct_focus->column_fields['ship_city']).'", "'.popup_decode_html($acct_focus->column_fields['bill_state']).'", "'.popup_decode_html($acct_focus->column_fields['ship_state']).'", "'.popup_decode_html($acct_focus->column_fields['bill_code']).'", "'.popup_decode_html($acct_focus->column_fields['ship_code']).'", "'.popup_decode_html($acct_focus->column_fields['bill_country']).'", "'.popup_decode_html($acct_focus->column_fields['ship_country']).'","'.popup_decode_html($acct_focus->column_fields['bill_pobox']).'", "'.popup_decode_html($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_contact_account_address")
@@ -1647,9 +1628,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                    $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
-					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
+                    			$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($acct_focus->column_fields['bill_street']).'", "'.popup_decode_html($acct_focus->column_fields['ship_street']).'", "'.popup_decode_html($acct_focus->column_fields['bill_city']).'", "'.popup_decode_html($acct_focus->column_fields['ship_city']).'", "'.popup_decode_html($acct_focus->column_fields['bill_state']).'", "'.popup_decode_html($acct_focus->column_fields['ship_state']).'", "'.popup_decode_html($acct_focus->column_fields['bill_code']).'", "'.popup_decode_html($acct_focus->column_fields['ship_code']).'", "'.popup_decode_html($acct_focus->column_fields['bill_country']).'", "'.popup_decode_html($acct_focus->column_fields['ship_country']).'","'.popup_decode_html($acct_focus->column_fields['bill_pobox']).'", "'.popup_decode_html($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_potential_account_address")
@@ -1661,12 +1641,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$account_name = getAccountName($acntid);
 
 					$slashes_account_name = popup_from_html($account_name);
-					$slashes_account_name = htmlspecialchars($slashes_account_name,ENT_QUOTES);
+					$slashes_account_name = htmlspecialchars($slashes_account_name,ENT_QUOTES,$default_charset);
 
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$acntid.'", "'.nl2br(decode_html($slashes_account_name)).'", "'.br2nl(decode_html($acct_focus->column_fields['bill_street'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_street'])).'", "'.br2nl(decode_html($acct_focus->column_fields['bill_city'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_city'])).'", "'.br2nl(decode_html($acct_focus->column_fields['bill_state'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_state'])).'", "'.br2nl(decode_html($acct_focus->column_fields['bill_code'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_code'])).'", "'.br2nl(decode_html($acct_focus->column_fields['bill_country'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_country'])).'","'.br2nl(decode_html($acct_focus->column_fields['bill_pobox'])).'", "'.br2nl(decode_html($acct_focus->column_fields['ship_pobox'])).'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$acntid.'", "'.nl2br(decode_html($slashes_account_name)).'", "'.popup_decode_html($acct_focus->column_fields['bill_street']).'", "'.popup_decode_html($acct_focus->column_fields['ship_street']).'", "'.popup_decode_html($acct_focus->column_fields['bill_city']).'", "'.popup_decode_html($acct_focus->column_fields['ship_city']).'", "'.popup_decode_html($acct_focus->column_fields['bill_state']).'", "'.popup_decode_html($acct_focus->column_fields['ship_state']).'", "'.popup_decode_html($acct_focus->column_fields['bill_code']).'", "'.popup_decode_html($acct_focus->column_fields['ship_code']).'", "'.popup_decode_html($acct_focus->column_fields['bill_country']).'", "'.popup_decode_html($acct_focus->column_fields['ship_country']).'","'.popup_decode_html($acct_focus->column_fields['bill_pobox']).'", "'.popup_decode_html($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				//added by rdhital/Raju for better emails 
@@ -1686,7 +1666,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						$slashes_name = popup_from_html($name);
-						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES);
+						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
 						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
@@ -1705,7 +1685,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						$slashes_name = popup_from_html($name);
-						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES);
+						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
 						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$slashes_name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
@@ -1717,7 +1697,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
 
 						$slashes_name = popup_from_html($name);
-						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES);
+						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 
 						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
 						
@@ -1731,15 +1711,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($entity_id,"Vendors");
 
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.br2nl(decode_html($acct_focus->column_fields['street'])).'", "'.br2nl(decode_html($acct_focus->column_fields['city'])).'", "'.br2nl(decode_html($acct_focus->column_fields['state'])).'", "'.br2nl(decode_html($acct_focus->column_fields['postalcode'])).'", "'.br2nl(decode_html($acct_focus->column_fields['country'])).'","'.br2nl(decode_html($acct_focus->column_fields['pobox'])).'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($acct_focus->column_fields['street']).'", "'.popup_decode_html($acct_focus->column_fields['city']).'", "'.popup_decode_html($acct_focus->column_fields['state']).'", "'.popup_decode_html($acct_focus->column_fields['postalcode']).'", "'.popup_decode_html($acct_focus->column_fields['country']).'","'.popup_decode_html($acct_focus->column_fields['pobox']).'");\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_campaign")
 				{
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'");\'>'.$temp_val.'</a>';
 				}
@@ -1750,7 +1730,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val =$temp_val.' '.$firstname;
 
 					$slashes_temp_val = popup_from_html($temp_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 
 					$log->debug("Exiting getValue method ...");
 					if($_REQUEST['maintab'] == 'Calendar')
@@ -3539,4 +3519,13 @@ function decode_html($str)
 {
 	return html_entity_decode($str);
 }
+
+function popup_decode_html($str)
+{
+	global $default_charset;
+	$slashes_str = popup_from_html($str);
+	$slashes_str = htmlspecialchars($slashes_str,ENT_QUOTES,$default_charset);
+	return decode_html(br2nl($slashes_str));
+}
+	
 ?>
