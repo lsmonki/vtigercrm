@@ -47,6 +47,9 @@ $mod_strings = array(
 '307-Service-Hardware Labor'=>'307-Service-Hardware Labor',
 '308-Sales-Books'=>'308-Sales-Books',
 
+// Added/Updated for vtiger CRM 5.0.4
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
 
 );
 ?>
