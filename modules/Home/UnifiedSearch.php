@@ -30,7 +30,7 @@ global $mod_strings;
 
 $total_record_count = 0;
 
-$query_string = trim($_REQUEST['query_string']);
+$query_string = trim(str_replace('<','&lt;',$_REQUEST['query_string']));//changed by sandeep
 if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST['query_string'])) 
 {
 

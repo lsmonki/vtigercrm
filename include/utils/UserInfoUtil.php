@@ -4356,7 +4356,8 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 
 	require('user_privileges/user_privileges_'.$userid.'.php');
 
-	if($is_admin)
+	/* Asha: Fix for ticket #4508. Users with View all and Edit all permission will also have visibility permission for all fields */
+	if($is_admin || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 	{
 		$log->debug("Exiting getFieldVisibilityPermission method ...");
 		return '0';
