@@ -63,29 +63,38 @@ class ReportRun extends CRMEntity
 		global $log,$current_user;
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
-		$ssql .= " where vtiger_report.reportid =?";
+		$ssql .= " where vtiger_report.reportid = ?";
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
 		$result = $adb->pquery($ssql, array($reportid));
-	
 		$permitted_fields = Array();
 
 		while($columnslistrow = $adb->fetch_array($result))
 		{
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
-			list($tablename,$fieldname,$module_field,$colname,$single) = split(":",$fieldcolname);
+			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
-			list($module,$field) = split("_",$module_field);
-			if(sizeof($permitted_fields) == 0 && $is_admin != true && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				$permitted_fields = $this->getaccesfield($module);	
-			
+				list($module,$field) = split("_",$module_field);
+				$permitted_fields = $this->getaccesfield($module);
 			}
 			$selectedfields = explode(":",$fieldcolname);
-
 			$querycolumns = $this->getEscapedColumns($selectedfields);
-					
-			if(sizeof($permitted_fields) != 0 && !in_array($colname,$permitted_fields))
+			
+			$mod_strings = return_module_language($current_language,$module);
+			$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+			$mod_arr=explode('_',$fieldlabel);
+			$mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
+			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
+			//modified code to support i18n issue
+			$fld_arr = explode(" ",$fieldlabel);
+			$mod_lbl = getTranslatedString($fld_arr[0]); //module
+			array_shift($fld_arr);
+			$fld_lbl_str = implode(" ",$fld_arr);
+			$fld_lbl = getTranslatedString($fld_lbl_str); //fieldlabel
+			$fieldlabel = $mod_lbl." ".$fld_lbl;
+			if(CheckFieldPermission($fieldname,$mod) != 'true')
 			{
 				continue;
 			}
@@ -871,6 +880,7 @@ class ReportRun extends CRMEntity
 		while($reportsortrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $reportsortrow["columnname"];
+			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			$sortorder = $reportsortrow["sortorder"];
 
 			if($sortorder == "Ascending")
@@ -889,7 +899,13 @@ class ReportRun extends CRMEntity
 					$selectedfields[0] = "vtiger_crmentity";	
 				$sqlvalue = $selectedfields[0].".".$selectedfields[1]." ".$sortorder;
 				$grouplist[$fieldcolname] = $sqlvalue;
-				$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
+				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+				$mod_arr=explode('_',$fieldlabel);
+				$mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
+				if(CheckFieldPermission($fieldname,$mod) == 'true')
+				{
+					$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
+				}
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getGroupingList".$reportid);

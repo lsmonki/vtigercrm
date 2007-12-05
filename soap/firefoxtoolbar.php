@@ -786,7 +786,7 @@ function GetPicklistValues($username,$tablename)
 	$current_user->retrieve_entity_info($user_id,'Users');
 	require_once("include/utils/UserInfoUtil.php");
 	$roleid = fetchUserRole($user_id);
-	if(isPermitted("HelpDesk","EditView") == "yes")
+	if((isPermitted("HelpDesk","EditView") == "yes") && (CheckFieldPermission($tablename,'HelpDesk') == 'true'))
 	{
 		$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_$tablename) order by sortid";	
 		$log->DEBUG($query);
@@ -796,6 +796,11 @@ function GetPicklistValues($username,$tablename)
 			$output[$i] = $adb->query_result($result1,$i,$tablename);
 		}			
 	}
+	else
+	{
+		$output[] = 'Not Accessible';
+	}
+		
 	return $output;
 }
 
