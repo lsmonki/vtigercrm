@@ -36,7 +36,7 @@ $focus = new PriceBooks();
 //Retreive the list of PriceBooks
 $list_query = getListQuery("PriceBooks");
 
-$list_query .= ' ORDER BY pricebookid DESC ';
+$list_query .= ' and vtiger_pricebook.active<>0  ORDER BY pricebookid DESC ';
 
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);

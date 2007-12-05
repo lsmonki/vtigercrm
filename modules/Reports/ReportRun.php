@@ -534,7 +534,7 @@ class ReportRun extends CRMEntity
 			{
 				if($startdate != "" && $enddate != "")
 				{
-					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".getDBInsertDateValue($startdate)." 00:00:00' and '".getDBInsertDateValue($enddate)." 23:59:00'";
+					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 				}
 			}else
 			{

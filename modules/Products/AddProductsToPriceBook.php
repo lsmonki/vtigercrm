@@ -45,10 +45,10 @@ $list_query = getListQuery("Products");
 
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$list_query .= ' and vtiger_products.discontinued<>0  ORDER BY '.$order_by.' '.$sorder;
 }
 
-$list_query .= " group by vtiger_crmentity.crmid";
+$list_query .=  " and vtiger_products.discontinued<>0 group by vtiger_crmentity.crmid";
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
 
