@@ -212,7 +212,9 @@ function email_validate(oform,mode)
                                         return false;
                                 }
                         }
-                        else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
+			//Changes made to fix ticket# 4633 to accomodate all possible email formats
+
+                        else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
                         {
                                 alert(cc_err_msg+": "+arr[i]);
                                 return false;
