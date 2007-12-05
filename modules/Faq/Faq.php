@@ -114,7 +114,7 @@ class Faq extends CRMEntity {
 
 		if($comment != '')
 		{
-			$params = array('', $this->id, $comment, $current_time);
+			$params = array('', $this->id, from_html($comment), $current_time);
 			$sql = "insert into vtiger_faqcomments values(?, ?, ?, ?)";	
 			$adb->pquery($sql, $params);
 		}
@@ -127,7 +127,7 @@ class Faq extends CRMEntity {
         **/	
 	function getFAQComments($faqid)
 	{
-		global $log;
+		global $log, $default_charset;
 		$log->debug("Entering getFAQComments(".$faqid.") method ...");
 		global $mod_strings;
 		$sql = "select * from vtiger_faqcomments where faqid=?";
@@ -148,6 +148,9 @@ class Faq extends CRMEntity {
 			if($comment != '')
 			{
 				//this div is to display the comment
+				if($_REQUEST['action'] == 'FaqAjax') {
+					$comment = htmlentities($comment, ENT_QUOTES, $default_charset);
+				}
 				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">'.make_clickable(nl2br($comment)).'</div>';
 				
 				//this div is to display the created time

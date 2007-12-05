@@ -129,11 +129,11 @@ class HelpDesk extends CRMEntity {
 			$comment = $this->column_fields['comments'];
 		else
 			$comment = $_REQUEST['comments'];
-
+		
 		if($comment != '')
 		{
 			$sql = "insert into vtiger_ticketcomments values(?,?,?,?,?,?)";	
-	        $params = array('', $this->id, $comment, $current_user->id, $ownertype, $current_time);
+	        	$params = array('', $this->id, from_html($comment), $current_user->id, $ownertype, $current_time);
 			$adb->pquery($sql, $params);
 		}
 	}
@@ -468,7 +468,7 @@ class HelpDesk extends CRMEntity {
 		global $log;
 		$log->debug("Entering getCommentInformation(".$ticketid.") method ...");
 		global $adb;
-		global $mod_strings;
+		global $mod_strings, $default_charset;
 		$sql = "select * from vtiger_ticketcomments where ticketid=?";
 		$result = $adb->pquery($sql, array($ticketid));
 		$noofrows = $adb->num_rows($result);
@@ -479,14 +479,18 @@ class HelpDesk extends CRMEntity {
 			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
 			$enddiv = '</div>';
 		}
-
 		for($i=0;$i<$noofrows;$i++)
 		{
 			if($adb->query_result($result,$i,'comments') != '')
 			{
 				//this div is to display the comment
+				$comment = $adb->query_result($result,$i,'comments');
+				// Asha: Fix for ticket #4478 . Need to escape html tags during ajax save.
+				if($_REQUEST['action'] == 'HelpDeskAjax') {
+					$comment = htmlentities($comment, ENT_QUOTES, $default_charset);
+				}
 				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">';
-				$list .= make_clickable(nl2br($adb->query_result($result,$i,'comments')));
+				$list .= make_clickable(nl2br($comment));
 
 				$list .= '</div>';
 
