@@ -662,6 +662,16 @@ ExecuteQuery("update vtiger_field set sequence=5 where columnname='purchaseorder
 ////Changed type of data for Price Book's active field.
 ExecuteQuery("update vtiger_field set typeofdata='C~O' where tabid=19 and fieldname='active'");
 
+//Added by shaul for the fix 4615
+ExecuteQuery("update vtiger_field set typeofdata='N~O' where fieldname='expectedrevenue' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='N~O' where fieldname='budgetcost' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='N~O' where fieldname='actualcost' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='targetsize' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='expectedresponsecount' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='expectedsalescount' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualresponsecount' and tabid=26");
+ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualsalescount' and tabid=26");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 
