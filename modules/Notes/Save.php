@@ -68,7 +68,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		$adb->pquery("update vtiger_notes set filename=? where notesid=?", array($filename,$focus->id));	
 		$adb->pquery("insert into vtiger_crmentity (crmid,setype,createdtime) values(?,?,?)", array($new_attachmentid,'Notes Attachment',$date_var));
 
-		$adb->pquery("insert into vtiger_attachments(attachmentsid, name, description, type) values(?,?,?,?)", array($new_attachmentid, $filename, $filetype, $upload_filepath));
+		$adb->pquery("insert into vtiger_attachments(attachmentsid, name, type, path) values(?,?,?,?)", array($new_attachmentid, $filename, $filetype, $upload_filepath));
 
 		$adb->pquery("insert into vtiger_seattachmentsrel values(?,?)", array($focus->id, $new_attachmentid));
 	}
