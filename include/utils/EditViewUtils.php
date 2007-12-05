@@ -167,7 +167,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$params = array();
 			}
 			//Query modified to fix the order of the picklist values ticket #4367
-			if($module_name != 'Events' && $module_name != 'Calendar')
+			if($module_name == 'HelpDesk' && $fieldname == 'ticketstatus')
+			{
+				$pick_query.=" order by ".$fieldname."_id asc";
+			}
+			else if($module_name != 'Events' && $module_name != 'Calendar')
 				$pick_query.=" order by $fieldname asc";
 		}
 		$editview_label[]=$mod_strings[$fieldlabel];
