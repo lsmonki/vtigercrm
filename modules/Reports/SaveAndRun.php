@@ -11,6 +11,7 @@
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+require_once('modules/CustomView/CustomView.php');
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
@@ -142,14 +143,13 @@ else
 	 */
 function getPrimaryStdFilterHTML($module,$selected="")
 {
+
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
-	
+	$ogReport->oCustomView=new CustomView();
+	$result = $ogReport->oCustomView->getStdCriteriaByModule($module);
 	$mod_strings = return_module_language($current_language,$module);
-
-	$result = $ogReport->getStdCriteriaByModule($module);
-
 	if(isset($result))
 	{
 		foreach($result as $key=>$value)
@@ -190,13 +190,14 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
+	$ogReport->oCustomView=new CustomView();
 
 	if($module != "")
         {
         	$secmodule = explode(":",$module);
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
-			$result = $ogReport->getStdCriteriaByModule($secmodule[$i]);
+			$result =  $ogReport->oCustomView->getStdCriteriaByModule($secmodule[$i]);
 			$mod_strings = return_module_language($current_language,$secmodule[$i]);
         		if(isset($result))
         		{

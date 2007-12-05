@@ -168,6 +168,9 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['record']=='' && $_REQUEST['accou
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
+	//added to fix the issue 4526
+	$focus->column_fields['bill_pobox']=$acct_focus->column_fields['bill_pobox'];
+	$focus->column_fields['ship_pobox']=$acct_focus->column_fields['ship_pobox'];
 	$focus->column_fields['bill_street']=$acct_focus->column_fields['bill_street'];
 	$focus->column_fields['ship_street']=$acct_focus->column_fields['ship_street'];
 	$focus->column_fields['bill_state']=$acct_focus->column_fields['bill_state'];
