@@ -30,7 +30,7 @@ $Bubble=array("10","131","12");
 /* ************* Begin Totals ************************** */
 $totalBlock=array("59","135");
 $names=array("Subtotal","Tax","Adjustment","Total");
-$totals=array($price_subtotal,$price_tax,$price_adjustment,$price_total);
+$totals=array($price_subtotal,$price_salestax,$price_adjustment,$price_total);
 $pdf->addTotalsRec($names,$totals,$totalBlock);
 /* ************* End Totals *************************** */
 

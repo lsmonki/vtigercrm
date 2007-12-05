@@ -654,6 +654,14 @@ ExecuteQuery("CREATE TABLE  vtiger_soapservice (id int(19) default NULL, type va
 ////User Name field size increased into 255 chars in vtiger_users table
 ExecuteQuery("alter table vtiger_users change user_name user_name varchar(255)");
 
+//And by dina to change sequence for purchaseorder
+ExecuteQuery("update vtiger_field set sequence=5 where columnname='purchaseorder' and tabid=22");
+
+
+//Added by shahul for #4574
+////Changed type of data for Price Book's active field.
+ExecuteQuery("update vtiger_field set typeofdata='C~O' where tabid=19 and fieldname='active'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 
