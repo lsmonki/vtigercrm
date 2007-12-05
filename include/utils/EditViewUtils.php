@@ -187,7 +187,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
 
-			if($value == $pickListValue)
+			if($value == trim($pickListValue))
 			{
 				$chk_val = "selected";
 				$pickcount++;	
@@ -252,7 +252,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		for($j = 0; $j < $noofoptions; $j++)
 		{
 			$multiselect_combo = $adb->query_result($multiselect_result,$j,strtolower($fieldname));
-			if(in_array($multiselect_combo,$valur_arr))
+			if(in_array(trim($multiselect_combo),$valur_arr))
 			{
 				$chk_val = "selected";
 				$pickcount++;

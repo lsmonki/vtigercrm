@@ -11,6 +11,7 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('modules/Leads/Leads.php');
+require_once('include/ComboUtil.php');
 //Getting the Parameters from the ConvertLead Form
 $id = $_REQUEST["record"];
 
@@ -139,9 +140,10 @@ function getInsertValues($type,$type_id)
 				$value_cf_array[$colname]=$ins_val;
 			}
 			
-			$insert_value.="'".$ins_val."'";
+			$insert_value.=$ins_val;
 		}
 	}
+
 	if(count($value_cf_array) > 0)
 	{
 		if($type_insert_column != '')
@@ -172,8 +174,26 @@ function getInsertValues($type,$type_id)
 							if($count == 0)
 							{
 								$cfId=$adb->getUniqueID("vtiger_$tableName");
+								$unique_picklist_value = getUniquePicklistID();
+
 								$qry="insert into vtiger_$tableName values(?,?,?,?)";
-								$adb->pquery($qry, array($cfId,$val,$n,1));
+								$adb->pquery($qry, array($cfId,trim($val),1,$unique_picklist_value));
+								//added to fix ticket#4492
+								$picklistId_qry = "select picklistid from vtiger_picklist where name=?";
+								$picklistId_res = $adb->pquery($picklistId_qry,array($tableName));
+								$picklist_Id = $adb->query_result($picklistId_res,0,'picklistid');
+								$role_qry = "select roleid from vtiger_role";
+								$numOFRole=$adb->num_rows($adb->query($role_qry));
+								for($l=0;$l<$numOFRole;$l++)
+								{
+									$role_id = $adb->query_result($adb->query($role_qry),$l,'roleid');
+									$sort_qry = "select max(sortid)+1 as sortid from vtiger_role2picklist where picklistid=? and roleid=?";
+									$sort_qry_res = $adb->pquery($sort_qry,array($picklist_Id,$role_id));
+									$sort_id = $adb->query_result($sort_qry_res,0,'sortid');
+									$role_picklist = "insert into vtiger_role2picklist values (?,?,?,?)";
+									$adb->pquery($role_picklist,array($role_id,$unique_picklist_value,$picklist_Id,$sort_id));
+								}
+								//end
 							}
 
 
