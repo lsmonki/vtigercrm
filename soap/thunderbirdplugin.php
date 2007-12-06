@@ -116,7 +116,7 @@ $server->register(
 
 $server->register(
 	'track_email',
-    array('user_name'=>'xsd:string', 'contact_ids'=>'xsd:string', 'date_sent'=>'xsd:date', 'email_subject'=>'xsd:string', 'email_body'=>'xsd:string'),
+    array('user_name'=>'xsd:string', 'contact_ids'=>'xsd:string', 'date_sent'=>'xsd:string', 'email_subject'=>'xsd:string', 'email_body'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -219,11 +219,11 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	//$log->debug($msgdtls['contactid']);
 	$emailbody = str_replace("'", "''", $email_body);
 	$emailsubject = str_replace("'", "''",$email_subject);
-	$datesent = getDisplayDate($date_sent);
-
+	$datesent = substr($date_sent,1,10);
+        $mydate = date('d-m-Y',$datesent);
 	$email->column_fields[subject] = $emailsubject;
 	$email->column_fields[assigned_user_id] = $user_id;
-	$email->column_fields[date_start] = $datesent;
+	$email->column_fields[date_start] = $mydate;
 	$email->column_fields[description]  = $emailbody;
 	$email->column_fields[activitytype] = 'Emails';
 	$email->plugin_save = true;
