@@ -672,6 +672,27 @@ ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='expected
 ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualresponsecount' and tabid=26");
 ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualsalescount' and tabid=26");
 
+//Added by Pavani 4th December
+//To add check boxes for import/export for Trouble Tickets and Vendors
+ExecuteQuery("insert into vtiger_profile2utility values(1,13,5,0)");
+ExecuteQuery("insert into vtiger_profile2utility values(1,13,6,0)");
+ExecuteQuery("insert into vtiger_profile2utility values(2,13,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(2,13,6,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(3,13,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(3,13,6,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(4,13,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(4,13,6,1)");
+//Vendors
+ExecuteQuery("insert into vtiger_profile2utility values(1,18,5,0)");
+ExecuteQuery("insert into vtiger_profile2utility values(1,18,6,0)");
+ExecuteQuery("insert into vtiger_profile2utility values(2,18,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(2,18,6,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(3,18,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(3,18,6,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(4,18,5,1)");
+ExecuteQuery("insert into vtiger_profile2utility values(4,18,6,1)");
+
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 

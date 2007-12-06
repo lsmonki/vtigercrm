@@ -1481,7 +1481,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,4,0)");	
 
 
-        $this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,0,1)");
+        	$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,0,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,1,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,2,1)");
 		$this->db->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,3,0)");
@@ -1490,7 +1490,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 		//Insert into vtiger_role2profile
 		$this->db->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
 		$this->db->query("insert into vtiger_role2profile values ('H".$role3_id."',".$profile2_id.")");
-	  $this->db->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
+	  	$this->db->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
 		$this->db->query("insert into vtiger_role2profile values ('H".$role5_id."',".$profile2_id.")"); 
 	   
 		//Insert into vtiger_profile2field
@@ -1518,10 +1518,14 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",4,8,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",13,5,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",13,6,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",13,8,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",14,5,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",14,6,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,9,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",18,5,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",18,6,0)");
 
 		//Inserting into vtiger_profile2utility Sales Profile
 		//Import Export Not Allowed.	
@@ -1539,10 +1543,14 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",4,8,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",13,5,1)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",13,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",13,8,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",14,5,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",14,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,9,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",18,5,1)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",18,6,1)");
 
 		//Inserting into vtiger_profile2utility Support Profile
 		//Import Export Not Allowed.	
@@ -1560,10 +1568,14 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",4,8,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",13,5,1)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",13,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",13,8,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",14,5,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",14,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,9,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",18,5,1)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",18,6,1)");
 
 		//Inserting into vtiger_profile2utility Guest Profile Read-Only
 		//Import Export BusinessCar Not Allowed.	
@@ -1580,11 +1592,15 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",10,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,8,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",6,8,1)");
-                $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",4,8,1)");		
+                $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",4,8,1)");	
+		$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",13,5,1)");
+	        $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",13,6,1)");	 
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",13,8,1)");		
 		$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",14,5,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",14,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,9,0)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",18,5,1)");
+		$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",18,6,1)");
 
 		//Inserting values into org share action mapping
                 $this->db->query("insert into vtiger_org_share_action_mapping values(0,'Public: Read Only')");
