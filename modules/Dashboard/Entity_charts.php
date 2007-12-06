@@ -160,18 +160,20 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			for ($i=0;$i<count($mod_name_array); $i++)
 			{
 				$search_str = $search_str_array[$i];
-				$name=$mod_name_array[$i];
+				$mod_name=$mod_name_array[$i];
 				$id_name = "";
-				if($name=="")
-					$name="Un Assigned";
+				if($mod_name=="Un Assigned"){
+					$mod_name=$mod_strings["Un Assigned"];
+					$search_str = " ";
+			        }	
 
 				if($graph_for =="accountid")
 				{
-					$name_val_table=get_account_name($name);
+					$name_val_table=get_account_name($mod_name);
 				}
 				else
 				{
-					$name_val_table=$name;
+					$name_val_table=$mod_name;
 				}
 
 
@@ -182,11 +184,11 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				{
 					$tdate=$date_array[$j];
 
-					if (!isset($count_by_date[$name][$tdate]))
+					if (!isset($count_by_date[$mod_name][$tdate]))
 					{
-						$count_by_date[$name][$tdate]="0";
+						$count_by_date[$mod_name][$tdate]="0";
 					}
-					$cnt_by_date=$count_by_date[$name][$tdate];
+					$cnt_by_date=$count_by_date[$mod_name][$tdate];
 					$mod_cnt_table .= "<td>$cnt_by_date </td>";
 
 					if($i==0)
@@ -212,85 +214,108 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 				}
 
-				$mod_count_val=$mod_count_array[$name];
-				$tot_mod_cnt=array_sum($count_by_date[$name]);
+				$mod_count_val=$mod_count_array[$mod_name];
+				$tot_mod_cnt=array_sum($count_by_date[$mod_name]);
 				$mod_cnt_table .= "<td align=center>$tot_mod_cnt</td></tr>";
 
 				if($graph_for =="accountid")
 				{
-					$name_val=get_account_name($name);
+					$name_val=get_account_name($mod_name);
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}
 				}
 				if($graph_for =="smownerid")
 				{
-					$name_val=get_assigned_user_name($name);
+					$name_val=get_assigned_user_name($mod_name);
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 				if($graph_for =="product_id" || $graph_for =="productid")
 				{
 					$query = "SELECT productname FROM vtiger_products WHERE productid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"productname");
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 				if($graph_for =="purchaseorderid")
 				{
 					$query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"subject");
-					$id_name = $name;
+					$id_name = $mod_name;
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 				if($graph_for =="quoteid")
 				{
 					$query = "SELECT subject FROM vtiger_quotes WHERE quoteid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"subject");
-					$id_name = $name;
+					$id_name = $mod_name;
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 				if($graph_for =="invoiceid")
 				{
 					$query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"subject");
-					$id_name = $name;
+					$id_name = $mod_name;
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
-	if($graph_for =="campaignid")
+				if($graph_for =="campaignid")
 				{
 					//this will return the list of the names of the campaign``:w for the y-axis
 					$query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"campaignname");
-					$id_name = $name;
+					$id_name = $mod_name;
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 				if($graph_for =="contactid")
 				{
 					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid=?";
-					$result = $adb->pquery($query, array($name));
+					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"lastname");
 					if($name_val!="")
-						$name=$name_val;
+					{
+						$mod_name=$name_val;
+						$search_str=$name_val;
+					}	
 				}
 
 				//Passing name to graph
-				if($mod_name_val!="") $mod_name_val.="::$name";
-				else $mod_name_val="$name";
+				if($mod_name_val!="") $mod_name_val.="::$mod_name";
+				else $mod_name_val="$mod_name";
 
 
 				//Passing count to graph
 				if($mod_cnt_val!="") $mod_cnt_val.="::$mod_count_val";
 				else $mod_cnt_val="$mod_count_val";	
-
 				if($module!="")
 				{
 					//Check for Ticket Priority 
@@ -306,15 +331,14 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$cvid = getCvIdOfAll($module);
 					if($module == "Home")
 					{
-						$cvid = getCvIdOfAll($name);
-						$link_val="index.php?module=".$name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name."&viewname=".$cvid;
+						$cvid = getCvIdOfAll($mod_name);
+						$link_val="index.php?module=".$mod_name."&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=".$current_user->user_name."&viewname=".$cvid;
 					}
 					else if($module == "Contacts" || ($module=="Products" && ($graph_for == "quoteid" || $graph_for == "invoiceid" || $graph_for == "purchaseorderid")))
 						$link_val="index.php?module=".$module."&action=ListView&from_dashboard=true&type=dbrd&query=true&".$graph_for."=".$id_name."&viewname=".$cvid;
-					else if($graph_for == 'sostatus'||$graph_for == 'leadsource'||$graph_for == 'leadstatus'||$graph_for == 'industry'||$graph_for == 'productcategory'||$graph_for =='postatus'||$graph_for == 'invoicestatus'||$graph_for == 'ticketstatus'||$graph_for == 'priority'||$graph_for == 'category'||$graph_for == 'quotestage'||$graph_for == 'salesstage')
+					else {
 						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$search_str."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
-					else
-						 $link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
+					     }	
 
 					if($graph_for == "account_id") $graph_for = "accountid";
 
