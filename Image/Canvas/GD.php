@@ -1210,11 +1210,15 @@ class Image_Canvas_GD extends Image_Canvas_WithMap
         }
 
         if (($fill = $this->_getFillStyle($fillColor, $x - $rx - 1, $y - $ry - 1, $x + $rx + 1, $y + $ry + 1)) !== false) {
-            ImageFilledPolygon($this->_canvas, $polygon, count($polygon) / 2, $fill);
+            //http://www.php.net/manual/en/function.imagefilledpolygon.php
+            if(count($polygon)/2 > 3)
+                ImageFilledPolygon($this->_canvas, $polygon, count($polygon) / 2, $fill);
         }
 
         if (($line = $this->_getLineStyle($lineColor)) !== false) {
-            ImagePolygon($this->_canvas, $polygon, count($polygon) / 2, $line);
+            //http://www.php.net/manual/en/function.imagefilledpolygon.php
+            if(count($polygon)/2 > 3)
+                ImagePolygon($this->_canvas, $polygon, count($polygon) / 2, $line);
         }
 
         parent::pieSlice($params);

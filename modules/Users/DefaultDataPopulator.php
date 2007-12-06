@@ -1935,49 +1935,49 @@ Thanks,<br>
 
 //insert into email template vtiger_table
 
-	$body='
-	Hello!
-
-	On behalf of the vtiger team,  I am pleased to announce the release of vtiger crm4.2 . This is a feature packed release including the mass email template handling, custom view feature, vtiger_reports feature and a host of other utilities. vtiger runs on all platforms.
-
-	Notable Features of vtiger are :
-	-Email Client Integration
-	-Trouble Ticket Integration
-	-Invoice Management Integration
-	-Reports Integration
-	-Portal Integration
-	-Enhanced Word Plugin Support
-	-Custom View Integration
-
-	Known Issues:
-	-ABCD
-	-EFGH
-	-IJKL
-	-MNOP
+	$body='Hello!   <br />
+	<br />
+	On behalf of the vtiger team,  I am pleased to announce the release of vtiger crm4.2 . This is a feature packed release including the mass email template handling, custom view feature, vtiger_reports feature and a host of other utilities. vtiger runs on all platforms.    <br />
+        <br />
+	Notable Features of vtiger are :   <br />
+	<br />
+	-Email Client Integration    <br />
+	-Trouble Ticket Integration   <br />
+	-Invoice Management Integration   <br />
+	-Reports Integration   <br />
+	-Portal Integration   <br />
+	-Enhanced Word Plugin Support   <br />
+	-Custom View Integration   <br />
+	<br />
+	Known Issues:   <br />
+	-ABCD   <br />
+	-EFGH   <br />
+	-IJKL   <br />
+	-MNOP   <br />
 	-QRST';
 
           $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Announcement for Release','Announcement for Release','Announcement of a release','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 	
 
 
-$body='name
-street,
-city,
-state,
- zip)
- 
- Dear
- 
- Please check the following invoices that are yet to be paid by you:
- 
- No. Date      Amount
- 1   1/1/01    $4000
- 2   2/2//01   $5000
- 3   3/3/01    $10000
- 4   7/4/01    $23560
- 
- Kindly let us know if there are any issues that you feel are pending to be discussed.
- We will be more than happy to give you a call.
+$body='name <br />
+street, <br />
+city, <br />
+state, <br />
+ zip) <br />
+  <br />
+ Dear <br />
+ <br />
+ Please check the following invoices that are yet to be paid by you: <br />
+ <br />
+ No. Date      Amount <br />
+ 1   1/1/01    $4000 <br />
+ 2   2/2//01   $5000 <br />
+ 3   3/3/01    $10000 <br />
+ 4   7/4/01    $23560 <br />
+ <br />
+ Kindly let us know if there are any issues that you feel are pending to be discussed. <br />
+ We will be more than happy to give you a call. <br />
  We would like to continue our business with you.';
 
 
@@ -1987,44 +1987,43 @@ state,
 
 
 
-$body=' Dear
-
-Your proposal on the project XYZW has been reviewed by us
-and is acceptable in its entirety.
-
-We are eagerly looking forward to this project
-and are pleased about having the opportunity to work
-together. We look forward to a long standing relationship
-with your esteemed firm.
-
-I would like to take this opportunity to invite you
-to a game of golf on Wednesday morning 9am at the
-Cuff Links Ground. We will be waiting for you in the
-Executive Lounge.
-
+$body=' Dear <br />
+ <br />
+Your proposal on the project XYZW has been reviewed by us <br />
+and is acceptable in its entirety. <br />
+ <br />
+We are eagerly looking forward to this project <br />
+and are pleased about having the opportunity to work <br />
+together. We look forward to a long standing relationship <br />
+with your esteemed firm. <br />
+<br />
+I would like to take this opportunity to invite you <br />
+to a game of golf on Wednesday morning 9am at the <br />
+Cuff Links Ground. We will be waiting for you in the <br />
+Executive Lounge. <br />
+<br />
 Looking forward to seeing you there.';
 
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Acceptance Proposal','Acceptance Proposal','Acceptance of Proposal','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
 
-$body= ' The undersigned hereby acknowledges receipt and delivery
-of the goods.
-The undersigned will release the payment subject to the goods being discovered not satisfactory.
-
+$body= ' The undersigned hereby acknowledges receipt and delivery of the goods. <br />
+The undersigned will release the payment subject to the goods being discovered not satisfactory. <br />
+<br />
 Signed under seal this <date>';
 
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Goods received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
 
-	       $body= ' Dear
-	 We are in receipt of your order as contained in the
-   purchase order form.We consider this to be final and binding on both sides.
-If there be any exceptions noted, we shall consider them
-only if the objection is received within ten days of receipt of
-this notice.
-
+	       $body= ' Dear <br />
+         We are in receipt of your order as contained in the <br />
+   purchase order form.We consider this to be final and binding on both sides. <br />
+If there be any exceptions noted, we shall consider them <br />
+only if the objection is received within ten days of receipt of <br />
+this notice. <br />
+ <br />
 Thank you for your patronage.';
 
 
@@ -2035,17 +2034,17 @@ Thank you for your patronage.';
 
 
 
-$body='Dear
-
-We are relocating our office to
-11111,XYZDEF Cross,
-UVWWX Circle
-The telephone number for this new location is (101) 1212-1328.
-
-Our Manufacturing Division will continue operations
-at 3250 Lovedale Square Avenue, in Frankfurt.
-
-We hope to keep in touch with you all.
+$body='Dear <br />
+ <br />
+We are relocating our office to <br />
+11111,XYZDEF Cross, <br />
+UVWWX Circle <br />
+The telephone number for this new location is (101) 1212-1328. <br />
+<br />
+Our Manufacturing Division will continue operations <br />
+at 3250 Lovedale Square Avenue, in Frankfurt. <br />
+<br />
+We hope to keep in touch with you all. <br />
 Please update your addressbooks.';
 
 	       
@@ -2053,20 +2052,20 @@ Please update your addressbooks.';
 
 
 
-$body='Dear
-
-Thank you for extending us the opportunity to meet with
-you and members of your staff.
-
-I know that John Doe serviced your account
-for many years and made many friends at your firm. He has personally
-discussed with me the deep relationship that he had with your firm.
-While his presence will be missed, I can promise that we will
-continue to provide the fine service that was accorded by
-John to your firm.
-
-I was genuinely touched to receive such fine hospitality.
-
+$body='Dear <br />
+<br />
+Thank you for extending us the opportunity to meet with <br />
+you and members of your staff. <br />
+<br />
+I know that John Doe serviced your account <br />
+for many years and made many friends at your firm. He has personally <br />
+discussed with me the deep relationship that he had with your firm. <br />
+While his presence will be missed, I can promise that we will <br />
+continue to provide the fine service that was accorded by <br />
+John to your firm. <br />
+<br />
+I was genuinely touched to receive such fine hospitality. <br />
+<br />
 Thank you once again.';
 
 
@@ -2075,16 +2074,16 @@ Thank you once again.';
 
 
 
-$body='Congratulations!
-
-The numbers are in and I am proud to inform you that our
-total sales for the previous quarter
-amounts to $100,000,00.00!. This is the first time
-we have exceeded the target by almost 30%.
-We have also beat the previous quarter record by a
-whopping 75%!
-
-Let us meet at Smoking Joe for a drink in the evening!
+$body='Congratulations! <br />
+<br />
+The numbers are in and I am proud to inform you that our <br />
+total sales for the previous quarter <br />
+amounts to $100,000,00.00!. This is the first time <br />
+we have exceeded the target by almost 30%. <br />
+We have also beat the previous quarter record by a <br />
+whopping 75%! <br />
+<br />
+Let us meet at Smoking Joe for a drink in the evening! <br />
 
 C you all there guys!';
 
@@ -2092,13 +2091,12 @@ C you all there guys!';
 	       
                $this->db->query("insert into vtiger_emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Target Crossed!','Target Crossed!','Fantastic Sales Spree!','".$body."',0,".$this->db->getUniqueID('vtiger_emailtemplates').")");
 
-$body='
-Dear
-
-Thank you for your confidence in our ability to serve you.
-We are glad to be given the chance to serve you.I look
-forward to establishing a long term partnership with you.
-Consider me as a friend.
+$body='Dear <br />
+<br />
+Thank you for your confidence in our ability to serve you. <br />
+We are glad to be given the chance to serve you.I look <br />
+forward to establishing a long term partnership with you. <br />
+Consider me as a friend. <br />
 Should any need arise,please do give us a call.';
 
 
