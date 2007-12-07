@@ -296,7 +296,7 @@ function BasicSearch($module,$search_field,$search_string)
 	 global $log;
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
-	$search_string = ltrim(rtrim($search_string));
+	$search_string = ltrim(rtrim(mysql_real_escape_string($search_string)));
 	global $column_array,$table_col_array;
 	if($search_field =='crmid')
 	{
@@ -718,6 +718,7 @@ function getWhereCondition($currentModule)
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
+			$srch_val = mysql_real_escape_string($srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			$uitype=getUItype($currentModule,$column_name);
