@@ -166,6 +166,7 @@
 		<field name="sharedid" type="I" size="19">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_tab">
@@ -235,6 +236,7 @@
 		<index name="block_tabid_idx">
 			<col>tabid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_blocks" alter="true">
@@ -563,6 +565,7 @@
 			<notnull />
 		</field>
 		<field name="isactive" type="I" size="1" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_portalinfo" alter="true">
@@ -579,6 +582,7 @@
 		<field name="portal" type="C" size="3" />
 		<field name="support_start_date" type="D" />
 		<field name="support_end_date" type="D" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_customerdetails" alter="true">
@@ -1299,6 +1303,7 @@
 			<col>groupid</col>
 			<col>userid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_users2group" alter="true">
@@ -1335,6 +1340,7 @@
 		<field name="roleid" type="C" size="255">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_group2role" alter="true">
@@ -1352,6 +1358,7 @@
 		<field name="roleandsubid" type="C" size="255">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_group2rs" alter="true">
@@ -1932,6 +1939,7 @@
 		<field name="headernames" type="C" size="30">
 			<notnull />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_import_maps">
@@ -1973,6 +1981,7 @@
 			<col>name</col>
 			<col>deleted</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_leadgrouprelation">
@@ -2176,6 +2185,7 @@
 		<field name="server_password" type="C" size="30" />
 		<field name="server_type" type="C" size="20" />
 		<field name="smtp_auth" type="C" size="5" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_currency_info">
@@ -2193,6 +2203,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_defaultcv">
@@ -2203,6 +2214,7 @@
 			<notnull />
 		</field>
 		<field name="query" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_defaultcv" alter="true">
@@ -2232,6 +2244,7 @@
 			<col>templatename</col>
 			<col>subject</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faq">
@@ -2310,6 +2323,7 @@
 			<col>name</col>
 			<col>deleted</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_loginhistory">
@@ -2330,6 +2344,7 @@
 			<deftimestamp />
 		</field>
 		<field name="status" type="C" size="25" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_senotesrel">
@@ -2380,6 +2395,7 @@
 		<index name="ticketstracktime_ticket_id_idx">
 			<col>ticket_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketcf">
@@ -2430,6 +2446,7 @@
 		<index name="idx_user_id">
 			<col>assigned_user_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_wordtemplates">
@@ -2463,6 +2480,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_accountdepstatus">
@@ -2944,6 +2962,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_activitytype">
@@ -3009,6 +3028,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faqcategories">
@@ -3025,6 +3045,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faqstatus">
@@ -3041,6 +3062,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_rating">
@@ -3142,6 +3164,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_downloadpurpose">
@@ -3182,6 +3205,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_durationmins">
@@ -3198,6 +3222,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_evaluationstatus">
@@ -3272,6 +3297,7 @@
 			<col>profileid</col>
 			<col>tabid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2standardpermissions">
@@ -3291,6 +3317,7 @@
 			<col>tabid</col>
 			<col>Operation</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2field">
@@ -3317,6 +3344,7 @@
 			<col>visible</col>
 			<col>profileid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_role2profile">
@@ -3330,6 +3358,7 @@
 			<col>roleid</col>
 			<col>profileid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_org_share_action_mapping">
@@ -3352,6 +3381,7 @@
 		<field name="permission" type="I" size="19">
 		</field>
 		<field name="editstatus" type="I" size="19" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_def_org_share" alter="true">
@@ -3380,6 +3410,7 @@
 			<col>visible</col>
 			<col>fieldid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2utility">
@@ -3399,6 +3430,7 @@
 			<col>tabid</col>
 			<col>activityid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_productcategory">
@@ -3624,6 +3656,7 @@
 		<index name="relatedlists_relation_id_idx">
 			<col>relation_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_rss">
@@ -3641,6 +3674,7 @@
 		<field name="starred" type="I" size="1">
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_vendorcf">
@@ -3748,6 +3782,7 @@
 		</field>
 		<field name="status" type="C" size="10" />
 		<field name="set_default" type="I" size="2" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_quotes">
@@ -4177,6 +4212,7 @@
 			<key />
 			<notnull />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_customview">
@@ -4839,6 +4875,7 @@
 			<notnull />
 		</field>
 		<field name="tandc" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_convertleadmapping">
@@ -5827,6 +5864,7 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_freetagged_objects">
@@ -5892,6 +5930,7 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_invitees">
@@ -5901,6 +5940,7 @@
 		<field name="inviteeid" type="I" size="19">
 			<KEY/>
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_inventorytaxinfo">
@@ -6276,6 +6316,7 @@
 		</field>
 		<field name="old_version" type="C" size="30" />
 		<field name="current_version" type="C" size="30" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 

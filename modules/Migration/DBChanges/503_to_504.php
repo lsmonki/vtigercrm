@@ -692,6 +692,48 @@ ExecuteQuery("insert into vtiger_profile2utility values(3,18,6,1)");
 ExecuteQuery("insert into vtiger_profile2utility values(4,18,5,1)");
 ExecuteQuery("insert into vtiger_profile2utility values(4,18,6,1)");
 
+//Added by Minnie to set the TABLE - storage_engine type - InnoDB
+ExecuteQuery("ALTER TABLE vtiger_blocks Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_activity_reminder Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_currency_info Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_customerdetails Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_defaultcv Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_def_org_field Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_def_org_share Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_durationhrs Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_durationmins Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_emaildetails Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_emailtemplates Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_faqcategories Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_faqstatus Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_files Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_freetags Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_group2role Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_group2rs Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_headers Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_import_maps Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_inventory_tandc Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_invitees Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_loginhistory Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_mail_accounts Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_portalinfo Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_profile2field Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_profile2standardpermissions Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_profile2tab Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_profile2utility Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_relatedlists Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_role2profile Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_rss Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_sales_stage Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_sharedcalendar Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_systems Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_taskstatus Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_ticketstracktime Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_users2group Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_users_last_import Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_wordtemplates Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_activsubtype Type=InnoDB");
+ExecuteQuery("ALTER TABLE vtiger_version Type=InnoDB");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
