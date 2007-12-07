@@ -128,7 +128,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
                 $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
                 $pmodule = 'Users';
 		$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$focus->column_fields['subject'],$description,'','','all',$focus->id);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -169,7 +169,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
 
 //This is to convert the html encoded string to original html entities so that in mail description contents will be displayed correctly
-	$focus->column_fields['description'] = from_html($focus->column_fields['description']);
+	//$focus->column_fields['description'] = from_html($focus->column_fields['description']);
 
 			if($emailadd != '')
 			{
@@ -183,7 +183,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$focus->column_fields['subject'],$description,'','','all',$focus->id,$logo);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
 				}	
 
 				$all_to_emailids []= $emailadd;
