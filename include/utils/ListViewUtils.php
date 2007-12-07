@@ -3371,6 +3371,9 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
+	$tabid = getTabid($module);
+	$tabname = getParentTab();
+	$url_qry .= '&parenttab='.$tabname;
 	$output = '<td align="right" style="padding="5px;">';
 	if($singlepane_view == 'true')
 		$action_val = 'DetailView';
