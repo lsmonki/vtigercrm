@@ -198,7 +198,9 @@ else
 	$adb->println("'".$parentname."' is not want to get the email about the ticket details as emailoptout is selected");
 }
 
-$mail_error_status = getMailErrorString($mail_status_str);
+if ($mail_status != '') {
+	$mail_error_status = getMailErrorString($mail_status_str);
+}
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';

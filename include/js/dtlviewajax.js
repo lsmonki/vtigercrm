@@ -31,7 +31,7 @@ function hndCancel(valuespanid,textareapanid,fieldlabel)
 	  else		
 	  	getObj(globaltxtboxid).checked = false; 
   }
-  else if(globaluitype != '53')	  
+  else if(globaluitype != '53' && globaluitype != '33')	  
 	  getObj(globaltxtboxid).value = globaltempvalue; 
   globaltempvalue = '';
   itsonview=false;
