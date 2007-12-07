@@ -298,13 +298,18 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
  		$tablename='products';
  		$focus1=new Products();
  	}
-	//Pavani: checking for HelpDesk
+	//Pavani: checking for HelpDesk and Vendors
         if($_REQUEST['module']=='HelpDesk')
         {
                 $tablename='troubletickets';
                 $focus1=new HelpDesk();
         }
-        //end checking
+	if($_REQUEST['module']=='Vendors')
+	{
+		$tablename='Vendors';
+		$focus1=new Vendors();
+	}
+	//end checking
 
 	
 	$smarty->assign("FIRSTROW",$firstrow);

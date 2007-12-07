@@ -263,7 +263,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			}
 			if($mul_count == 0 && $options_length > 0)
 			{
-				$options[]=array($app_strings['LBL_NOT_ACCESSIBLE'],trim($selected_entries_value),'selected');
+				$not_access_lbl = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+				$options[]=array($not_access_lbl,trim($selected_entries_value),'selected');
 			}
 			$mul_count=0;
 		}
@@ -599,7 +600,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				}
 
 				//This is added to strip the crmid and _ from the file name and show the original filename
-				$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
+				//$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
+				/*Above line is not required as the filename in the database is stored as it is and doesn't have crmid attached to it.
+				This was the cause for the issue reported in ticket #4645 */
+				$org_filename = $col_fields[$fieldname];
+
 				if($org_filename != '')
 					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
 				else

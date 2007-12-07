@@ -21,7 +21,7 @@
                                  {/if}
                                          		      {if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
 									{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
-                                     					   {$APP.LBL_NOT_ACCESSIBLE}
+									   <font color='red'>{$APP.LBL_NOT_ACCESSIBLE}</font>	
                                 					{else}
                                         					{$keysalut}
                                 					{/if}
@@ -54,9 +54,12 @@
 						{foreach item=arr from=$keyoptions}
 							{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE && $arr[2] eq 'selected'}
 								{assign var=keyval value=$APP.LBL_NOT_ACCESSIBLE}
+								{assign var=fontval value='red'}
+							{else}
+                                                                {assign var=fontval value=''}
 							{/if}
 						{/foreach}               
-							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}</span>
+							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}"><font color="{$fontval}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}</font></span>
                                               		<div id="editarea_{$label}" style="display:none;">
                     							   <select id="txtbox_{$label}" name="{$keyfldname}">
                     								{foreach item=arr from=$keyoptions}
@@ -69,8 +72,8 @@
                							</td>
                                           {elseif $keyid eq '33'}<!--Multi Select Combo box-->
 						<!--code given by Neil start Ref:http://forums.vtiger.com/viewtopic.php?p=31096#31096-->
-						{assign var="MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING" value=", "}  {* Separates Multi-Select Combo Box items *}
-						{assign var="DETAILVIEW_WORDWRAP_WIDTH" value="70"} {* No. of chars for word wrapping long lines of Multi-Select Combo Box items *}
+						<!--{assign var="MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING" value=", "}  {* Separates Multi-Select Combo Box items *}
+						{assign var="DETAILVIEW_WORDWRAP_WIDTH" value="70"} {* No. of chars for word wrapping long lines of Multi-Select Combo Box items *}-->
                                           <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
 					{foreach item=sel_val from=$keyoptions }
 						{if $sel_val[2] eq 'selected'}
@@ -80,7 +83,9 @@
 							{assign var=selected_val value=$selected_val|cat:$sel_val[0]}
 						{/if}
 					{/foreach}
-						{$selected_val|replace:$MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING:"\x1"|replace:" ":"\x0"|replace:"\x1":$MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING|wordwrap:$DETAILVIEW_WORDWRAP_WIDTH:"<br>&nbsp;"|replace:"\x0":"&nbsp;"}
+						{$selected_val|replace:"\n":"<br>&nbsp;&nbsp;"}
+						<!-- commented to fix ticket4631 -using wordwrap will affect Not Accessible font color -->
+						<!--{$selected_val|replace:$MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING:"\x1"|replace:" ":"\x0"|replace:"\x1":$MULTISELECT_COMBO_BOX_ITEM_SEPARATOR_STRING|wordwrap:$DETAILVIEW_WORDWRAP_WIDTH:"<br>&nbsp;"|replace:"\x0":"&nbsp;"}-->
 						</span>
 						<!--code given by Neil End-->
                                           <div id="editarea_{$label}" style="display:none;">

@@ -379,7 +379,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
         {
                         var notaccess =document.getElementById(txtBox);
                         tagValue = notaccess.options[notaccess.selectedIndex].text;
-                        getObj(dtlView).innerHTML = tagValue;
+			if(tagValue == alert_arr.LBL_NOT_ACCESSIBLE)
+				getObj(dtlView).innerHTML = "<font color='red'>"+tagValue+"</font>";
+			else
+				getObj(dtlView).innerHTML = tagValue;
         }
 	else if(uitype == '33')
   	{

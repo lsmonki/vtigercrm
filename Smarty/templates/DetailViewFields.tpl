@@ -17,7 +17,7 @@
                                          		<td width=25% class="dvtCellInfo" align="left">&nbsp;
                                          		        {if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
 									{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
-										{$APP.LBL_NOT_ACCESSIBLE}
+										<font color='red'>{$APP.LBL_NOT_ACCESSIBLE}</font>
 									{else}
                                                                 		{$keysalut}
 									{/if}
@@ -40,10 +40,25 @@
 							{foreach item=arr from=$keyoptions}
                                                         {if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
                                                                 {assign var=keyval value=$APP.LBL_NOT_ACCESSIBLE}
+								{assign var=fontval value='red'}
+							{else}
+								{assign var=fontval value=''}
                                                         {/if}
 							{/foreach}
-							{$keyval}
+							<font color="{$fontval}">{$keyval}</font>
                					</td>
+					     {elseif $keyid eq '33'}
+						<td width=25% class="dvtCellInfo" align="left">&nbsp;
+						{foreach item=sel_val from=$keyoptions }
+                                                {if $sel_val[2] eq 'selected'}
+                                                        {if $selected_val neq ''}
+                                                        {assign var=selected_val value=$selected_val|cat:', '}
+                                                        {/if}
+                                                        {assign var=selected_val value=$selected_val|cat:$sel_val[0]}
+                                                {/if}
+                                        	{/foreach}
+                                                {$selected_val|replace:"\n":"<br>&nbsp;&nbsp;"}
+						</td>
                                              {elseif $keyid eq '17'} <!--WebSite-->
                                                   <td width=25% class="dvtCellInfo" align="left">&nbsp;<a href="http://{$keyval}" target="_blank">{$keyval}</a>
                                                   </td>
