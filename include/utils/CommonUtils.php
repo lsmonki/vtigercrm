@@ -2471,7 +2471,7 @@ function getMergedDescription($description,$id,$parent_type)
 				}	
 				
 				$columnfields = implode(',',$fields["contacts"]);
-				$query = "select $columnfields from vtiger_contactdetails where contactid=?";
+				$query = "select $columnfields from vtiger_contactdetails inner join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid  where contactid=?";
 				$result = $adb->pquery($query, array($id));
 				foreach($fields["contacts"] as $columnname)
 				{
