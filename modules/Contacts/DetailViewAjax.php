@@ -31,7 +31,10 @@ if($ajaxaction == "DETAILVIEW")
 		 $cntObj->id = $crmid;
 		 $cntObj->mode = "edit";
 		 $cntObj->save("Contacts");
-
+		 if($cntObj->column_fields['notify_owner'] == 1 )
+		 {
+			 sendNotificationToOwner('Contacts',&$cntObj);
+		 }
 		 $email_res = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($cntObj->id));
 		 $email = $adb->query_result($email_res,0,'email');
 
