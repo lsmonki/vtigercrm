@@ -48,6 +48,16 @@ else if(fld[4] == 'I' && fld[1] == 'time_start' ||  fld[1] == 'time_end')
                     $("and"+sel.id).innerHTML = "hh:mm";
     }
 
+    else if(fld[4] == 'T' && fld[1] == 'time_start' ||  fld[1] == 'time_end')
+    {
+            $("and"+sel.id).innerHTML =  "";
+            if(sel.id != "fcol5")
+                    $("and"+sel.id).innerHTML =  "hh:mm&nbsp;"+alert_arr.LBL_AND;
+            else
+                    $("and"+sel.id).innerHTML = "hh:mm";
+    }
+
+
     else if(fld[4] == 'C')
     {
 	    $("and"+sel.id).innerHTML =  "";
@@ -210,7 +220,16 @@ function checkval()
 				for(var j=0;j<sep.length;j++)
 				{
 					var dttime=trim(sep[j]).split(" ");
-					if(!cv_dateValidate(dttime[0],"Date","OTH"))
+
+					if(arr[3] == "Calendar_Time_Start" || arr[3] == "Calendar_End_Time")
+                                        {
+                                                if(!cv_patternValidate(sep[j],"Time","TIME"))
+                                                {
+                                                        getObj("fval"+i).select();
+                                                        return false;
+                                                }
+                                        }
+                                        else if(!cv_dateValidate(dttime[0],"Date","OTH"))
 					{
 						getObj("fval"+i).select();
 						return false;
