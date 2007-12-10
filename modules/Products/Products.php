@@ -152,6 +152,7 @@ class Products extends CRMEntity {
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
+				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}

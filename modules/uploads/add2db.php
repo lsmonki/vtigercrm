@@ -20,10 +20,13 @@ $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtiger
 $crmid = $_REQUEST['return_id'];
 $log->debug("DEBUG In add2db.php");
 
-	//fix for space in file name.
-	$_FILES['filename']['name'] = preg_replace('/\s+/', '_', $_FILES['filename']['name']);
+	if(isset($_REQUEST['filename_hidden'])) {
+		$file = $_REQUEST['filename_hidden'];
+	} else {
+		$file = $_FILES['filename']['name'];
+	}
 	// Arbitrary File Upload Vulnerability fix - Philip
-	$binFile = $_FILES['filename']['name'];
+	$binFile = preg_replace('/\s+/', '_', $file);
 
 	$ext_pos = strrpos($binFile, ".");
 
@@ -100,7 +103,11 @@ $log->debug("DEBUG In add2db.php");
 			}
 			# DG 19 June 2006
 			# Strip out single quotes from filenames
-			$filename = preg_replace('/\'/', '', $filename);
+			// Prasad: 08 Dec 2007
+			// We should allow single quotes in filenames
+			
+			//$filename = preg_replace('/\'/', '', $filename);
+
 			$sql = "insert into vtiger_attachments(attachmentsid, name, description, type,path,subject) values(?,?,?,?,?,?)";
 			$params = array($current_id, $filename, $desc, $filetype, $upload_filepath, $subject);
 			$result = $adb->pquery($sql, $params);

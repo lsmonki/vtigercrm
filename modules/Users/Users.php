@@ -827,6 +827,7 @@ class Users {
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
+				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
 				$this->uploadAndSaveFile($id,$module,$files);
 			}
 		}

@@ -20,7 +20,11 @@ require_once('include/utils/utils.php');
 	$error_flag ="";
 	$nologo_specified="false";
 	$binFile = $_FILES['binFile']['name'];
-	$filename = basename($binFile);
+	if(isset($_REQUEST['binFile_hidden'])) {
+		$filename = $_REQUEST['binFile_hidden'];
+	} else {
+		$filename = basename($binFile);
+	}
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
 	

@@ -12,7 +12,7 @@
 require_once('config.php');
 require_once('include/database/PearDatabase.php');
 
-global $fileId;
+global $fileId, $default_charset;
 
 $templateid = $_REQUEST['record'];
 $dbQuery = "SELECT filename,filetype, data ";
@@ -27,6 +27,7 @@ $name = $adb->query_result($result, 0, "filename");
 //echo 'filetype is ' .$fileType;
 $fileContent = $adb->query_result($result, 0, "data");
 $size = $adb->query_result($result, 0, "filesize");
+$name = html_entity_decode($name, ENT_QUOTES, $default_charset);
 header("Content-type: $fileType");
 //header("Content-length: $size");
 header("Cache-Control: private");

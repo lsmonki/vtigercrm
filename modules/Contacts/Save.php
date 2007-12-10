@@ -95,7 +95,11 @@ if($saveimage=="true")
 //if image added then we have to set that $_FILES['name'] in imagename field then only the image will be displayed
 if($_FILES['imagename']['name'] != '')
 {
-	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+	if(isset($_REQUEST['imagename_hidden'])) {
+		$focus->column_fields['imagename'] = $_REQUEST['imagename_hidden'];
+	} else {
+		$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+	}
 }
 elseif($focus->id != '')
 {

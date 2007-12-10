@@ -64,7 +64,11 @@ setObjectValuesFromRequest($focus);
 
 //Check if the file is exist or not.
 //$file_name = '';
-$file_name = $_FILES['filename']['name'];//preg_replace('/\s+/', '_', $_FILES['filename']['name']);
+if(isset($_REQUEST['filename_hidden'])) {
+	$file_name = $_REQUEST['filename_hidden'];
+} else {
+	$file_name = $_FILES['filename']['name'];
+}
 $errorCode =  $_FILES['filename']['error'];
 $errormessage = "";
 if($file_name != '' && $_FILES['filename']['size'] == 0)

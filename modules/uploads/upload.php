@@ -25,6 +25,46 @@ $theme_path="themes/".$theme."/";
                                 return false;
                         }
                 }
+
+		function getFileNameOnly(filename) {
+			var onlyfilename = filename;
+			// Normalize the path (to make sure we use the same path separator)
+			var filename_normalized = filename.replace(/\\/g, '/');
+			if(filename_normalized.lastIndexOf("/") != -1) {
+				onlyfilename = filename_normalized.substring(filename_normalized.lastIndexOf("/") + 1);
+			}
+			return onlyfilename;
+		}
+
+		/* Function to validate the filename */
+		function validateFilename(form_ele) {
+			if (form_ele.value == '') return true;
+			var value = getFileNameOnly(form_ele.value);
+
+			// Color highlighting logic
+			var err_bg_color = "#FFAA22";
+
+			if (typeof(form_ele.bgcolor) == "undefined") {
+				form_ele.bgcolor = form_ele.style.backgroundColor;
+			}
+
+			// Validation starts here
+			var valid = true;
+
+			/* Filename length is constrained to 255 at database level */
+			if (value.length > 255) {
+				alert(alert_arr.LBL_FILENAME_LENGTH_EXCEED_ERR);
+				valid = false;
+			}
+
+			if (!valid) {
+				form_ele.style.backgroundColor = err_bg_color;
+				return false;
+			}
+			form_ele.style.backgroundColor = form_ele.bgcolor;
+			form_ele.form[form_ele.name + '_hidden'].value = value;
+			return true;
+		}
         </script>
 </head>
 <BODY marginheight="0" marginwidth="0" leftmargin="0" rightmargin="0" bottommargin="0" topmargin="0">
@@ -61,7 +101,9 @@ $theme_path="themes/".$theme."/";
 					</tr>
 					<tr><td><B><font color=red>*</font>&nbsp;<?php echo $app_strings["LBL_TITLE"];?> </B> <input type ="text" name = "uploadsubject" id="uploadsubject"></td></tr>
 					<tr>
-						<td width="30%" colspan="2" align="left">&nbsp;<input type="file" name="filename"/></td>
+						<td width="30%" colspan="2" align="left">
+							&nbsp;<input type="file" name="filename" onchange="validateFilename(this)" /><input type="hidden" name="filename_hidden"/>
+						</td>
 					</tr>
 					<tr><td colspan="2">&nbsp;</td></tr>
 					<tr>

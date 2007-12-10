@@ -451,7 +451,8 @@
 				{if $MODULE eq 'Products'}
 					<input name="del_file_list" type="hidden" value="">
 					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
-						<input id="my_file_element" type="file" name="file_1" tabindex="{$vt_tab}" >
+						<input id="my_file_element" type="file" name="file_1" tabindex="{$vt_tab}"  onchange="validateFilename(this)"/>
+						<input type="hidden" name="file_1_hidden" value=""/>
 						{assign var=image_count value=0}
 						{if $maindata[3].0.name neq '' && $DUPLICATE neq 'true'}
 						   {foreach name=image_loop key=num item=image_details from=$maindata[3]}
@@ -486,7 +487,8 @@
 				{$fldlabel}
 			</td>
 			<td colspan="3" width="30%" align=left class="dvtCellInfo">
-				<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" />
+				<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)"/>
+				<input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}"/>
 				<input type="hidden" name="id" value=""/>{$fldvalue}
 			</td>
 		{elseif $uitype eq 156}

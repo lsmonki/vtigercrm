@@ -735,6 +735,12 @@ ExecuteQuery("ALTER TABLE vtiger_wordtemplates Type=InnoDB");
 ExecuteQuery("ALTER TABLE vtiger_activsubtype Type=InnoDB");
 ExecuteQuery("ALTER TABLE vtiger_version Type=InnoDB");
 
+//Added by Asha for tickets #4513
+////File Name field size increased into 255 chars in vtiger_attachments table
+ExecuteQuery("alter table vtiger_attachments change name name varchar(255)");
+////Data type for File Path field changed to TEXT in vtiger_attachments table
+ExecuteQuery("alter table vtiger_attachments change path path TEXT");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 

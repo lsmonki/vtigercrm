@@ -1428,9 +1428,13 @@ function SaveImage($_FILES,$module,$id,$mode)
 	$uploaddir = $root_directory."test/".$module."/" ;//set this to which location you need to give the contact image
 	$log->info("The Location to Save the Contact Image is ".$uploaddir);
 	$file_path_name = $_FILES['imagename']['name'];
+	if (isset($_REQUEST['imagename_hidden'])) {
+		$file_name = $_REQUEST['imagename_hidden'];
+	} else {
+		$file_name = basename($file_path_name);
+	}
 	$image_error="false";
 	$saveimage="true";
-	$file_name = basename($file_path_name);
 	if($file_name!="")
 	{
 

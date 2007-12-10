@@ -176,7 +176,12 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//If we want to add the currently selected file only then we will use the following function
 	if($attachment == 'current' && $emailid != '')
 	{
-		addAttachment($mail,$_FILES['filename']['name'],$emailid);
+		if (isset($_REQUEST['filename_hidden'])) {
+			$file_name = $_REQUEST['filename_hidden'];
+		} else {
+			$file_name = $_FILES['filename']['name'];
+		}
+		addAttachment($mail,$file_name,$emailid);
 	}
 
 	//This will add all the vtiger_files which are related to this record or email

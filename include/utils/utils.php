@@ -1477,7 +1477,11 @@ function upload_product_image_file($mode,$id)
 	$uploaddir = $root_directory ."/test/product/";
 
 	$file_path_name = $_FILES['imagename']['name'];
-	$file_name = basename($file_path_name);
+	if (isset($_REQUEST['imagename_hidden'])) {
+		$file_name = $_REQUEST['imagename_hidden'];
+	} else {
+		$file_name = basename($file_path_name);
+	}
 	$file_name = $id.'_'.$file_name;
 	$filetype= $_FILES['imagename']['type'];
 	$filesize = $_FILES['imagename']['size'];

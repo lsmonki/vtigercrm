@@ -153,9 +153,14 @@ class CRMEntity
 		if(!isset($ownerid) || $ownerid=='')
 			$ownerid = $current_user->id;
 
-	
+		if(isset($file_details['original_name']) && $file_details['original_name'] != null) {
+			$file_name = $file_details['original_name'];
+		} else {
+			$file_name = $file_details['name'];
+		}
+
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = preg_replace('/\s+/', '_', $file_details['name']);//replace space with _ in filename
+		$binFile = preg_replace('/\s+/', '_', $file_name);//replace space with _ in filename
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);

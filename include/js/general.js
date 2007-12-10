@@ -782,6 +782,47 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	} else return true;
 }
 
+/* To get only filename from a given complete file path */
+function getFileNameOnly(filename) {
+  var onlyfilename = filename;
+  // Normalize the path (to make sure we use the same path separator)
+  var filename_normalized = filename.replace(/\\/g, '/');
+  if(filename_normalized.lastIndexOf("/") != -1) {
+    onlyfilename = filename_normalized.substring(filename_normalized.lastIndexOf("/") + 1);
+  }
+  return onlyfilename;
+}
+
+/* Function to validate the filename */
+function validateFilename(form_ele) {
+        if (form_ele.value == '') return true;
+        var value = getFileNameOnly(form_ele.value);
+
+        // Color highlighting logic
+        var err_bg_color = "#FFAA22";
+
+        if (typeof(form_ele.bgcolor) == "undefined") {
+                form_ele.bgcolor = form_ele.style.backgroundColor;
+        }
+
+        // Validation starts here
+        var valid = true;
+
+        /* Filename length is constrained to 255 at database level */
+        if (value.length > 255) {
+                alert(alert_arr.LBL_FILENAME_LENGTH_EXCEED_ERR);
+                valid = false;
+        }
+
+        if (!valid) {
+                form_ele.style.backgroundColor = err_bg_color;
+                return false;
+        }
+        form_ele.style.backgroundColor = form_ele.bgcolor;
+        form_ele.form[form_ele.name + '_hidden'].value = value;
+        return true;
+}
+
 function formValidate() {
 
 //Validation for Portal User
@@ -800,7 +841,8 @@ if(gVTModule == 'Contacts')
 		{
 			var image_arr = new Array();
 			image_arr = (getObj('imagename').value).split(".");
-			if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") || (image_arr[1] ==  "JPEG") || (image_arr[1] ==  "PNG") || (image_arr[1] ==  "JPG") || (image_arr[1] ==  "PJPEG") || (image_arr[1] ==  "X-PNG") || (image_arr[1] ==  "GIF"))
+			var image_ext = image_arr[1].toLowerCase();
+                        if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
 			{
 				return true;
 			}
