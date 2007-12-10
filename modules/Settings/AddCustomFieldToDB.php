@@ -16,6 +16,7 @@ global $current_user;
  $fldType= $_REQUEST['fieldType'];
  $parenttab=$_REQUEST['parenttab'];
  $mode=$_REQUEST['mode'];
+
 $tabid = getTabid($fldmodule);
 
 if(get_magic_quotes_gpc() == 1)
@@ -120,7 +121,7 @@ else
 	{
 	$uichekdata='V~O~LE~'.$fldlength;
 		$uitype = 1;
-		$type = "C(".$fldlength.")"; // adodb type
+		$type = "C(".$fldlength.") default ()"; // adodb type
 	}
 	elseif($fldType == 'Number')
 	{
@@ -155,26 +156,26 @@ else
 	elseif($fldType == 'Email')
 	{
 		$uitype = 13;
-		$type = "C(50)"; //adodb type
+		$type = "C(50) default () "; //adodb type
 		$uichekdata='E~O';
 	}
 	elseif($fldType == 'Phone')
 	{
 		$uitype = 11;
-		$type = "C(30)"; //adodb type
+		$type = "C(30) default () "; //adodb type
 		
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Picklist')
 	{
 		$uitype = 15;
-		$type = "C(255)"; //adodb type
+		$type = "C(255) default () "; //adodb type
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'URL')
 	{
 		$uitype = 17;
-		$type = "C(255)"; //adodb type
+		$type = "C(255) default () "; //adodb type
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Checkbox')	 
@@ -198,7 +199,7 @@ else
 	elseif($fldType == 'Skype')
 	{
 		$uitype = 85;
-		$type = "C(255)"; //adodb type
+		$type = "C(255) default () "; //adodb type
 		$uichekdata='V~O';
 	}
 	// No Decimal Pleaces Handling

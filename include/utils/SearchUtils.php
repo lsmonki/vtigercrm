@@ -760,6 +760,14 @@ function getWhereCondition($currentModule)
                         }
 			else
 			{
+				if($i != $tot_no_criteria-1) {
+					if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
+						$matchtype = "and";
+					else
+						$matchtype = "or";
+					if($srch_cond == 'is' && $srch_val !='')
+						$matchtype = "or";				
+				}
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
 			}
 		}
