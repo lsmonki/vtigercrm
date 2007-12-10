@@ -167,6 +167,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['check_createdb']) ? $check_createdb = "" : $check_createdb = $_REQUEST['check_createdb'];
 		!isset($_REQUEST['root_user']) ? $root_user = "" : $root_user = $_REQUEST['root_user'];
 		!isset($_REQUEST['root_password']) ? $root_password = "" : $root_password = $_REQUEST['root_password'];
+		!isset($_REQUEST['create_utf8_db'])? $create_utf8_db = "true" : $create_utf8_db = $_REQUEST['create_utf8_db'];
 		// determine database options
 		$db_options = array();
 		if(function_exists('mysql_connect')) {
@@ -198,11 +199,13 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		if(sourceTag){
 			document.getElementById('root_user').className = 'show_tab';
 			document.getElementById('root_pass').className = 'show_tab';
+			document.getElementById('create_db_config').className = 'show_tab';
 			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
 			document.getElementById('root_user').className = 'hide_tab';
 			document.getElementById('root_pass').className = 'hide_tab';
+			document.getElementById('create_db_config').className = 'hide_tab';
 		}
 	}
 
@@ -439,7 +442,7 @@ function verify_data(form) {
 			       <?php }else{?>
 				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/>
 			       <?php } ?>
-			       &nbsp;Create Database(will drop the database if exists)</td>
+			       &nbsp;Create Database (will drop the database if exists)</td>
               </tr>
 	      <tr id="root_user" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap" width="25%"><strong>Root Username</strong> <sup><font color="red">*</font></sup></td>
@@ -448,6 +451,10 @@ function verify_data(form) {
 	      <tr id="root_pass" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>Root Password</strong></td>
 			   <td align="left" bgcolor="white"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
+		  </tr>
+          <tr id="create_db_config" class="hide_tab">
+			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>UTF-8 Support</strong></td>
+			   <td align="left" bgcolor="white"><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
 	      </tr>
               </table>
 			

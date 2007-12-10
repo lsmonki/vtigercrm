@@ -141,18 +141,18 @@ if(!@rename("install/", $renamefile."install/"))
 			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
-			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings->Outgoing Server
-			<li>Rename htaccess.txt file to .htaccess to make public file access control.
+			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server
+			<li>Rename htaccess.txt file to .htaccess to control public file access.
 			</ul>
 			<ul>
-			<li><b><font color='#0000FF'>You are the most important to us!</font></b>
+			<li><b><font color='#0000FF'>You are very important to us!</font></b>
 <li><b> We take pride in being associated with you</li></b>
 			<p>
 			<b>Talk to us at <a href='http://forums.vtiger.com' target="_blank">forums</a></b>
 			<p>
 			<b>Discuss with us at <a href='http://blogs.vtiger.com' target="_blank">blogs</a></b>
 			<p>
-			<b>We aim to be - simply the best. Come on over,there is space for you too!</b>
+			<b>We aim to be - simply the best. Come on over, there is space for you too!</b>
 			</ul>
 			</div>
 

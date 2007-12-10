@@ -42,11 +42,13 @@ if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 if (isset($_REQUEST['check_createdb'])) $check_createdb = $_REQUEST['check_createdb'];
 if (isset($_REQUEST['root_user'])) $root_user = $_REQUEST['root_user'];
 if (isset($_REQUEST['root_password'])) $root_password = $_REQUEST['root_password'];
+if (isset($_REQUEST['create_utf8_db'])) $create_utf8_db = 'true';
 
 $db_type_status = false; // is there a db type?
 $db_server_status = false; // does the db server connection exist?
 $db_creation_failed = false; // did we try to create a database and fail?
 $db_exist_status = false; // does the database exist?
+$db_utf8_support = false; // does the database support utf8?
 $next = false; // allow installation to continue
 
 //Checking for database connection parameters
@@ -84,6 +86,11 @@ if($db_type)
 			$createdb_conn = &NewADOConnection($db_type);
 			if(@$createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
 				$query = "create database ".$db_name;
+				// TODO: MySQL version less than 4.1.2 does not suppot UTF-8, a check here is required for it.
+				if($create_utf8_db == 'true') { 
+					$query .= " default character set utf8 default collate utf8_general_ci"; 
+					$db_utf8_support = true;
+				}
 				if($createdb_conn->Execute($query)) {
 					$db_creation_failed = false;
 				}
@@ -95,9 +102,31 @@ if($db_type)
 		if(@$conn->Connect($db_hostname, $db_username, $db_password, $db_name))
 		{
 			$db_exist_status = true;
+			if(!$db_utf8_support) {
+				// Check if the database that we are going to use supports UTF-8
+				$db_utf8_support = check_db_utf8_support($conn);
+			}
 		}
 		$conn->Close();
 	}
+}
+// Check if the database suggested to be used has UTF-8 support
+// Prasad, 05 Dec 2007
+function check_db_utf8_support($conn) {
+	$dbvarRS = &$conn->Execute("show variables like '%_database' ");
+	$db_character_set = null;
+   	$db_collation_type = null;
+	while(!$dbvarRS->EOF) {
+		$arr = $dbvarRS->FetchRow();
+		$arr = array_change_key_case($arr);
+		switch($arr['variable_name']) {
+			case 'character_set_database' : $db_character_set = $arr['value']; break;
+			case 'collation_database'     : $db_collation_type = $arr['value']; break;
+		}
+		// If we have all the required information break the loop.
+		if($db_character_set != null && $db_collation_type != null) break;
+	}
+	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
 }
 
 $error_msg = '';
@@ -213,6 +242,10 @@ else
 						<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
 						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
 					</tr>
+					<tr bgcolor="White">
+						<td noWrap bgcolor="#F5F5F5" width="40%">Database UTF-8 Support</td>
+						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font></td>
+					</tr>
 					</table>
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
@@ -316,6 +349,7 @@ else
 						<input type="hidden" class="dataInput" name="check_createdb" value="<?php if (isset($check_createdb)) echo "$check_createdb"; ?>" />
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
+						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
 						<input type="image" name="Change" value="Change" title="Change" src="include/install/images/cwBtnChange.gif"/>
 					</form>
 					</td>
@@ -355,6 +389,7 @@ else
 						<input type="hidden" class="dataInput" name="check_createdb" value="<?php if (isset($check_createdb)) echo "$check_createdb"; ?>" />
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
+						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
 						<input type="image" src="include/install/images/cwBtnNext.gif" name="next" title="Next" value="Create" onClick="window.location=('install.php')"/>
 					</form>
 					</td>
