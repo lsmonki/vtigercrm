@@ -11,7 +11,38 @@
  ********************************************************************************/
 
 -->*}
+<script>
+function showAllRecords()
+{ldelim}
+        modname = document.getElementById("relmod").name;
+        idname= document.getElementById("relrecord_id").name;
+        var locate = location.href;
+        url_arr = locate.split("?");
+        emp_url = url_arr[1].split("&");
+        for(i=0;i< emp_url.length;i++)
+        {ldelim}
+                if(emp_url[i] != '')
+                {ldelim}
+                        split_value = emp_url[i].split("=");
+                        if(split_value[0] == modname || split_value[0] == idname )
+                                emp_url[i]='';
+                        else if(split_value[0] == "fromPotential" || split_value[0] == "acc_id")
+                                emp_url[i]='';
 
+                {rdelim}
+        {rdelim}
+        correctUrl =emp_url.join("&");
+        Url = "index.php?"+correctUrl;
+        return Url;
+{rdelim}
+
+//function added to get all the records when parent record doesn't relate with the selection module records while opening/loading popup.
+function redirectWhenNoRelatedRecordsFound()
+{ldelim}
+        var loadUrl = showAllRecords();
+        window.location.href = loadUrl;
+{rdelim}
+</script>
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
@@ -85,7 +116,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 				</tr>
 				{if $recid_var_value neq ''}
                                 <tr>
-                                        <td style="padding-left:10px;" align="left"><a href="javascript:;" id="all_contacts" onClick="showAllRecords();" >{$APP.SHOW_ALL}&nbsp;{$MODULE}</a></td>
+                                        <td align="right"><input id="all_contacts" alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" accessKey="" class="crmbutton small edit" value="{$APP.SHOW_ALL}&nbsp;{$MODULE}" LANGUAGE=javascript onclick="window.location.href=showAllRecords();" type="button"  name="button"></td>
                                 </tr>
                                 {/if}
 			</table>
@@ -227,29 +258,6 @@ function getListViewSorted_js(module,url)
 				{rdelim}
 			{rdelim}
 		);
-{rdelim}
-
-function showAllRecords()
-{ldelim}
-        modname = document.getElementById("relmod").name;
-        idname= document.getElementById("relrecord_id").name;
-        var locate = location.href;
-        url_arr = locate.split("?");
-        emp_url = url_arr[1].split("&");
-        for(i=0;i< emp_url.length;i++)
-        {ldelim}
-                if(emp_url[i] != '')
-                {ldelim}
-                        split_value = emp_url[i].split("=");
-                        if(split_value[0] == modname || split_value[0] == idname )
-                                emp_url[i]='';
-                        else if(split_value[0] == "fromPotential" || split_value[0] == "acc_id")
-                                emp_url[i]='';
-
-                {rdelim}
-        {rdelim}
-        correctUrl =emp_url.join("&");
-        document.getElementById("all_contacts").href="index.php?"+correctUrl;
 {rdelim}
 
 </script>
