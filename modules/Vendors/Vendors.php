@@ -129,15 +129,14 @@ class Vendors extends CRMEntity {
 	}
 	//Pavani: Function to create, export query for vendors module
         /** Function to export the vendors in CSV Format
-        * @param reference variable - order by is passed when the query is executed
         * @param reference variable - where condition is passed when the query is executed
         * Returns Export Vendors Query.
         */
-        function create_export_query(&$order_by, &$where)
+        function create_export_query($where)
         {
                 global $log;
                 global $current_user;
-                $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+                $log->debug("Entering create_export_query(".$where.") method ...");
 
                 include("include/utils/ExportUtils.php");
 
@@ -173,9 +172,6 @@ class Vendors extends CRMEntity {
                         $query = $query." ".getListViewSecurityParameter("Vendors");
                 }
 
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
-
                 $log->debug("Exiting create_export_query method ...");
                 return $query;
         }
@@ -203,6 +199,7 @@ class Vendors extends CRMEntity {
 		return GetRelatedList('Vendors','Contacts',$focus,$query,$button,$returnset);
 
 	}
+	
 	function getSortOrder()
         {
                 global $log;
@@ -214,6 +211,18 @@ class Vendors extends CRMEntity {
                 $log->debug("Exiting getSortOrder() method ...");
                 return $sorder;
         }
+
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['VENDORS_ORDER_BY'] != '')?($_SESSION['VENDORS_ORDER_BY']):($this->default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}
 
 }
 ?>

@@ -149,14 +149,13 @@ class Notes extends CRMEntity {
 
 
 	/** Function to export the notes in CSV Format
-	* @param reference variable - order by is passed when the query is executed
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Export Notes Query.
 	*/
-	function create_export_query(&$order_by, &$where)
+	function create_export_query($where)
 	{
 		global $log;
-		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
+		$log->debug("Entering create_export_query(". $where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -187,8 +186,12 @@ class Notes extends CRMEntity {
 					ON vtiger_NoteRelatedToInvoice.invoiceid = vtiger_senotesrel.crmid
 				LEFT JOIN vtiger_purchaseorder vtiger_NoteRelatedToPO
 					ON vtiger_NoteRelatedToPO.purchaseorderid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_quotes  vtiger_NoteRelatedQuote
+					ON vtiger_NoteRelatedQuote.quoteid = vtiger_senotesrel.crmid
 				LEFT JOIN vtiger_salesorder vtiger_NoteRelatedToSO
 					ON vtiger_NoteRelatedToSO.salesorderid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_troubletickets vtiger_NoteRelatedToTicket
+					ON vtiger_NoteRelatedToTicket.ticketid = vtiger_senotesrel.crmid
 
 				WHERE vtiger_crmentity.deleted=0 
 
@@ -202,6 +205,8 @@ class Notes extends CRMEntity {
 					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Invoice').")
 					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
 					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Quotes').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('HelpDesk').")
 					OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) 
 
 					";

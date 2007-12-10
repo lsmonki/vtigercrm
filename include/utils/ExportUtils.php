@@ -147,7 +147,9 @@ function getFieldsListFromQuery($query)
 					when 'Products' then concat('Products ::: ',vtiger_NoteRelatedToProduct.productname) 
 					when 'Invoice' then concat('Invoice ::: ',vtiger_NoteRelatedToInvoice.subject) 
 					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_NoteRelatedToPO.subject) 
+					when 'Quotes' then concat('Quotes ::: ',vtiger_NoteRelatedQuote.subject)
 					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_NoteRelatedToSO.subject) 
+					when 'HelpDesk' then concat('HelpDesk ::: ',vtiger_NoteRelatedToTicket.title)
 				     End as 'Related To',";
 		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename

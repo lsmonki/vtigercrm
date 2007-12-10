@@ -753,14 +753,13 @@ class Products extends CRMEntity {
 	}
 	
 	/**	function used to get the export query for product
-	 *	@param reference &$order_by - reference of the order by variable which will be added with the query
-	 *	@param reference &$where - reference of the where variable which will be added with the query
+	 *	@param reference $where - reference of the where variable which will be added with the query
 	 *	@return string $query - return the query which will give the list of products to export
 	 */	
-	function create_export_query(&$order_by, &$where)
+	function create_export_query($where)
 	{
 		global $log;
-		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+		$log->debug("Entering create_export_query(".$where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -808,9 +807,6 @@ class Products extends CRMEntity {
 
 		if($where != "")
                         $query .= " AND ($where) ";
-
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
 
 		$log->debug("Exiting create_export_query method ...");
                 return $query;

@@ -136,15 +136,14 @@ class Leads extends CRMEntity {
 
 
 	/** Function to export the lead records in CSV Format
-	* @param reference variable - order by is passed when the query is executed
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Export Leads Query.
 	*/
-	function create_export_query(&$order_by, &$where)
+	function create_export_query($where)
 	{
 		global $log;
 		global $current_user;
-		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+		$log->debug("Entering create_export_query(".$where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -152,7 +151,7 @@ class Leads extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Leads", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_leadgrouprelation.groupname as 'Assigned To Group' 
+		$query = "SELECT $fields_list, vtiger_leadgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
 	      			FROM ".$this->entity_table."
 				INNER JOIN vtiger_leaddetails
 					ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
@@ -186,9 +185,6 @@ class Leads extends CRMEntity {
 			//Added security check to get the permitted records only
 			$query = $query." ".getListViewSecurityParameter("Leads");
 		}
-
-		if(!empty($order_by))
-			$query .= " ORDER BY $order_by";
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;

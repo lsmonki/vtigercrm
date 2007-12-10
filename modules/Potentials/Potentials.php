@@ -137,7 +137,6 @@ class Potentials extends CRMEntity {
 	}	
 
 	/** Function to create list query 
-	* @param reference variable - order by is passed when the query is executed
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Query.
 	*/
@@ -189,11 +188,11 @@ class Potentials extends CRMEntity {
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Export Potentials Query.
 	*/
-	function create_export_query($order_by, $where)
+	function create_export_query($where)
 	{
 		global $log;
 		global $current_user;
-		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
+		$log->debug("Entering create_export_query(". $where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -201,7 +200,7 @@ class Potentials extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Potentials", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_potentialgrouprelation.groupname as 'Assigned To Group'
+		$query = "SELECT $fields_list, vtiger_potentialgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 				FROM vtiger_potential 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id

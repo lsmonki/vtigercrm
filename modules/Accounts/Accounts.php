@@ -676,15 +676,14 @@ class Accounts extends CRMEntity {
 	}
 
 	/** Function to export the account records in CSV Format
-	* @param reference variable - order by is passed when the query is executed
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Export Accounts Query.
 	*/
-	function create_export_query(&$order_by, &$where)
+	function create_export_query($where)
 	{
 		global $log;
 		global $current_user;
-                $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+                $log->debug("Entering create_export_query(".$where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -692,22 +691,22 @@ class Accounts extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Accounts", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_accountgrouprelation.groupname as 'Assigned To Group' 
+		$query = "SELECT $fields_list, vtiger_accountgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
 	       			FROM ".$this->entity_table."
 				INNER JOIN vtiger_account
-					ON vtiger_crmentity.crmid = vtiger_account.accountid
+					ON vtiger_account.accountid = vtiger_crmentity.crmid
 				LEFT JOIN vtiger_accountbillads
-					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+					ON vtiger_accountbillads.accountaddressid = vtiger_account.accountid
 				LEFT JOIN vtiger_accountshipads
-					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+					ON vtiger_accountshipads.accountaddressid = vtiger_account.accountid
 				LEFT JOIN vtiger_accountscf
 					ON vtiger_accountscf.accountid = vtiger_account.accountid
 				LEFT JOIN vtiger_accountgrouprelation
-                	                ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
+                	                ON vtiger_accountgrouprelation.accountid = vtiger_account.accountid
 	                        LEFT JOIN vtiger_groups
                         	        ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
 				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status = 'Active'
+					ON vtiger_users.id = vtiger_crmentity.smownerid and vtiger_users.status = 'Active'
 				LEFT JOIN vtiger_account vtiger_account2 
 					ON vtiger_account2.accountid = vtiger_account.parentid
 				";//vtiger_account2 is added to get the Member of account
@@ -728,9 +727,6 @@ class Accounts extends CRMEntity {
 			//Added security check to get the permitted records only
 			$query = $query." ".getListViewSecurityParameter("Accounts");
 		}
-
-		if(!empty($order_by))
-			$query .= " ORDER BY $order_by";
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;

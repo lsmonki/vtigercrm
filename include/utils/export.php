@@ -34,6 +34,7 @@ require_once('modules/Products/Products.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $allow_exports,$app_strings;
 
@@ -99,86 +100,99 @@ function export($type)
         {
                 $focus = new $type;
         }
-
         $log = LoggerManager::getLogger('export_'.$type);
         $db = new PearDatabase();
-	$tablename = $focus->table_name;
-	//$orderby = $focus->getOrderBy();
-	$orderby = $focus->default_order_by;
+
+	$oCustomView = new CustomView("$type");
+	$viewid = $oCustomView->getViewId("$type");
 	$sorder = $focus->getSortOrder();
-        $order_by = "";
-        //$query = $focus->create_export_query($orderby,$where,$sorder,$tablename);
-        $query = $focus->create_export_query($order_by,$where);
-		$params = array();
+	$order_by = $focus->getOrderBy();
 
         $search_type = $_REQUEST['search_type'];
         $export_data = $_REQUEST['export_data'];
-        $customview  = $_REQUEST['customview'];
-        $module = $_REQUEST['module'];
+	
+	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch')
+                $where =$_SESSION['export_where'];
 
-        if($search_type == 'withoutsearch' && $export_data == 'all')
-        {
-                $query .= " ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
-        }
-        elseif($search_type == 'withoutsearch' && $export_data == 'currentpage')
-        {
-                if($orderby != '')
-                	$query .=" ORDER BY  ".$tablename.".".$orderby."  ".$sorder." LIMIT  " . ($_SESSION['nav_start']-1) . "," . $list_max_entries_per_page;
-                else
-                    $query .=" LIMIT  " . ($_SESSION['nav_start']-1) . "," . $list_max_entries_per_page;
+	$query = $focus->create_export_query($where);
+	$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
+	$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
+	if(isset($stdfiltersql) && $stdfiltersql != '')
+	{
+		$query .= ' and '.$stdfiltersql;
 	}
-        elseif(($search_type == 'withoutsearch' || $search_type == 'includesearch')&& $export_data == 'selecteddata')
-        {
-                $idstring = explode(",", $_REQUEST['idstring']);
-                if($module == 'Accounts' && count($idstring) > 0) {
-                        $query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-				} elseif($module == 'Contacts' && count($idstring) > 0) {
-                        $query .= ' and vtiger_contactdetails.contactid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-				} elseif($module == 'Potentials' && count($idstring) > 0) {
-                        $query .= ' and vtiger_potential.potentialid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-				} elseif($module == 'Leads' && count($idstring) > 0) {
-                        $query .= ' and vtiger_leaddetails.leadid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-				} elseif($module == 'Products' && count($idstring) > 0) {
-                        $query .= ' and vtiger_products.productid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-				} elseif($module == 'Notes' && count($idstring) > 0) {
-		        $query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
-						array_push($params, $idstring);
-	       			}
-				//Pavani..adding HelpDesk and Vendors modules
-                                  elseif($module == 'HelpDesk' && count($idstring) > 0) {
-                        $query .= ' and vtiger_troubletickets.ticketid in ('. generateQuestionMarks($idstring) .')';
-                                                array_push($params, $idstring);
-                                } elseif($module == 'Vendors' && count($idstring) > 0) {
-                        $query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
-                                                array_push($params, $idstring);
-                                }
+	if(isset($advfiltersql) && $advfiltersql != '')
+	{
+		$query .= ' and '.$advfiltersql;
 	}
-        elseif($search_type == 'includesearch' && $export_data == 'all')
-        {
-                if($orderby != '' && $_SESSION['export_where'] != '') 
-                	$query.=' and  '.$_SESSION['export_where']."  ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
-                elseif($orderby == '' && $_SESSION['export_where'] != '')
-                	$query.=' and  '.$_SESSION['export_where'];
+	$params = array();
+
+	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata')
+	{
+		$idstring = explode(",", $_REQUEST['idstring']);
+		if($type == 'Accounts' && count($idstring) > 0) {
+			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Contacts' && count($idstring) > 0) {
+			$query .= ' and vtiger_contactdetails.contactid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Potentials' && count($idstring) > 0) {
+			$query .= ' and vtiger_potential.potentialid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Leads' && count($idstring) > 0) {
+			$query .= ' and vtiger_leaddetails.leadid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Products' && count($idstring) > 0) {
+			$query .= ' and vtiger_products.productid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Notes' && count($idstring) > 0) {
+			$query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		}
+		//Pavani..adding HelpDesk and Vendors modules
+		elseif($type == 'HelpDesk' && count($idstring) > 0) {
+			$query .= ' and vtiger_troubletickets.ticketid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Vendors' && count($idstring) > 0) {
+			$query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		}
+	}
+	
+	if(isset($order_by) && $order_by != '')
+	{
+		if($order_by == 'smownerid')
+		{
+			$query .= ' ORDER BY user_name '.$sorder;
+		}
+		elseif($order_by == 'lastname' && $type == 'Notes')
+		{
+			$query .= ' ORDER BY vtiger_contactdetails.lastname  '. $sorder;
+		}
+		elseif($order_by == 'crmid' && $type == 'HelpDesk')
+		{
+			$query .= ' ORDER BY vtiger_troubletickets.ticketid  '. $sorder;
+		}
 		else
-			$query .= " ORDER BY  ".$tablename.".".$orderby."  ".$sorder;
-
-        }
-        elseif($search_type == 'includesearch' && $export_data == 'currentpage')
-        {
-		if($orderby != '' && $_SESSION['export_where'] != '')
-                      $query .= "  and  ".$_SESSION['export_where']." ORDER BY  ".$tablename.".".$orderby."  ".$sorder. ' LIMIT '.($_SESSION['nav_start']-1).','.$list_max_entries_per_page;
-                else
-                      $query .=" ORDER BY  ".$tablename.".".$orderby."  ".$sorder.' LIMIT  '.($_SESSION['nav_start']-1).','.$list_max_entries_per_page;
-        }
+		{
+			$tablename = getTableNameForField($type,$order_by);
+			$tablename = (($tablename != '')?($tablename."."):'');
+			if( $adb->dbType == "pgsql")
+				$query .= ' GROUP BY '.$tablename.$order_by;
+			$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+		}
+	}
+	
+	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage')
+	{
+		$start_rec = $_SESSION['nav_start'];
+		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
+		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
+	}
 
         $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
         $fields_array = $adb->getFieldsArray($result);
-
+	$fields_array = array_diff($fields_array,array("user_name"));
 	$header = implode("\",\"",array_values($fields_array));
 	$header = "\"" .$header;
 	$header .= "\"\r\n";
@@ -192,12 +206,15 @@ function export($type)
 
 		foreach ($val as $key => $value)
 		{
-			if($key=="description" || $key=="note")
+			if($key != "user_name")
 			{
-				$value=br2nl_vt($value);
-			}
-			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "UTF-8"));
-			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
+				if($key=="description" || $key=="note")
+				{
+					$value=br2nl_vt($value);
+				}
+				$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "UTF-8"));
+				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
+			}	
 		}
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;

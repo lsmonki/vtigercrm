@@ -2035,6 +2035,7 @@ function getListQuery($module,$where='')
 				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Invoice').")
 				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
 				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Quotes').")
 				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('HelpDesk').")
 				OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) ";
 			break;
@@ -2537,6 +2538,23 @@ function getReadEntityIds($module)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;	
+		}
+	}
+	if($module == "Quotes")
+	{
+		$query = "SELECT vtiger_crmentity.crmid
+		        FROM vtiger_quotes
+			INNER JOIN vtiger_crmentity
+			        ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
+			LEFT JOIN vtiger_quotegrouprelation
+			        ON vtiger_quotes.quoteid  = vtiger_quotegrouprelation.quoteid
+			LEFT JOIN vtiger_groups
+			        ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;
 		}
 	}
 	if($module == "HelpDesk")
