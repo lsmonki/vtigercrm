@@ -231,13 +231,16 @@ class PearDatabase{
    	*/	
 	function pquery($sql, $params, $dieOnError=false, $msg='') {		
 		global $log;
-		$log->debug('Prepared sql query being executed : '.$sql . ' -> [' . implode(",", $params) . ']');
+		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
 		
 		global $logsqltm;
 
 		$sql_start_time = microtime();
 		$params = $this->flatten_array($params);
+		if (count($params) > 0) {
+			$log->debug('Prepared sql query parameters : [' . implode(",", $params) . ']'); 
+		}
 		
 		if($this->avoidPreparedSql || empty($params)) {
 			$sql = $this->convert2Sql($sql, $params);
