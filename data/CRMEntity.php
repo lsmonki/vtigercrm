@@ -708,6 +708,12 @@ $log->info("in getOldFileName  ".$notesid);
 	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1)
 	    die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
     }
+
+    /* Prasad: Fix for ticket #4595 */
+    $mod_index_col = $this->tab_name_index[$this->table_name];
+    if($adb->query_result($result[$this->table_name],0,$mod_index_col) == '')
+    	die("<br><br><center>".$app_strings['LBL_RECORD_NOT_FOUND'].
+			". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
     $tabid = getTabid($module);
     $sql1 =  "select * from vtiger_field where tabid=?";
     $result1 = $adb->pquery($sql1, array($tabid));

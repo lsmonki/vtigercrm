@@ -2824,11 +2824,15 @@ function generateQuestionMarks($items_list) {
 * Function to find the UI type of a field based on the uitype id
 */
 function is_uitype($uitype, $reqtype) {
-	if ($uitype == '5' || $uitype == '6' || $uitype == '23' || $utitype == '70') {
-		$ui_type = "_date_";
-	}
-	if ($ui_type == $reqtype) {
-		return true;
+	$ui_type_arr = array(
+		'_date_' => array(5, 6, 23, 70),
+		'_picklist_' => array(15, 16, 52, 53, 54, 55, 59, 62, 63, 66, 68, 76, 77, 78, 80, 98, 101, 111, 115, 357)
+	);
+
+	if ($ui_type_arr[$reqtype] != null) {
+		if (in_array($uitype, $ui_type_arr[$reqtype])) {
+			return true;
+		}
 	}
 	return false;
 }

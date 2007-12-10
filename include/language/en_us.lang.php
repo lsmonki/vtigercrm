@@ -1047,6 +1047,8 @@ $app_strings = array (
 'LBL_SELECT_PARENTROLE' => 'Select the parent role',
 //Added for migration check
 'LBL_MIGRATION_CHECK'=>'Versions in database and file are same. You cannot do the migration. Please check the db and then do necessary steps.',
+//Added for ticket #4595
+'LBL_RECORD_NOT_FOUND'=>'Record you are trying to access is not found',
 );
 
 $app_list_strings = array (

@@ -948,7 +948,7 @@ class CustomView extends CRMEntity{
 	function getRealValues($tablename,$fieldname,$comparator,$value,$datatype)
 	{
 		//we have to add the fieldname/tablename.fieldname and the corresponding value (which we want) we can add here. So that when these LHS field comes then RHS value will be replaced for LHS in the where condition of the query
-		global $adb;
+		global $adb, $mod_strings;
 		
 		//Added for proper check of contact name in advance filter
 		if($tablename == "vtiger_contactdetails" && $fieldname == "lastname")
@@ -1008,10 +1008,24 @@ class CustomView extends CRMEntity{
 		else
 		{
 			//For checkbox type values, we have to convert yes/no as 1/0 to get the values
-			if(getUItype($this->customviewmodule, $fieldname) == 56)
+			$field_uitype = getUItype($this->customviewmodule, $fieldname);
+			if($field_uitype == 56)
 			{
-				if(strtolower($value) == 'yes')		$value = 1;
-				elseif(strtolower($value) ==  'no')	$value = 0;
+				if(strtolower($value) == 'yes')         $value = 1;
+				elseif(strtolower($value) ==  'no')     $value = 0;
+			} else if(is_uitype($field_uitype, '_picklist_')) { /* Fix for tickets 4465 and 4629 */
+				// Get all the keys for the for the Picklist value
+				$mod_keys = array_keys($mod_strings, $value);
+
+				// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
+				foreach($mod_keys as $mod_idx=>$mod_key) {
+					$stridx = strpos($mod_key, 'LBL_');
+				// Use strict type comparision, refer strpos for more details
+				if ($stridx !== 0) {
+					$value = $mod_key;
+					break;
+					}
+				}
 			}
 
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);	
