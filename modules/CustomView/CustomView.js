@@ -169,6 +169,7 @@ function checkval()
 	{
 		value=trim(getObj("fval"+i).value);
 		option=getObj("fcol"+i).value;
+		fopvalue=trim(getObj("fop"+i).value);
 		if(option !="" && value !="")
 		{
 			if(getObj("fop"+i).selectedIndex == 0)
@@ -264,7 +265,20 @@ function checkval()
 						return false;
 					}
 			}	
-		}	
+		}
+		else if (!(option =="" && fopvalue == "" && value == "")) 
+		{
+			if(option =="")
+			{
+				alert(alert_arr.LBL_SELECT_COLUMN);
+				return false;
+			}
+			if(fopvalue == "")
+			{
+				alert(alert_arr.LBL_SELECT_CRITERIA);
+				return false;
+			}
+		}
 	}
 return true;
 }

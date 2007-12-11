@@ -68,6 +68,8 @@ if($cvmodule != "")
 	}
 	$std_filter_list["startdate"] = $startdate;
 	$std_filter_list["enddate"]=$enddate;
+	if(empty($startdate) && empty($enddate))
+		unset($std_filter_list);
 	//<<<<<<<standardfilters>>>>>>>>>
 
 	//<<<<<<<advancedfilter>>>>>>>>>
