@@ -151,7 +151,7 @@ function validate()
 
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
-<tbody><tr>
+<tr>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
@@ -159,8 +159,8 @@ function validate()
 	<div align=center>
 		{include file='SetMenu.tpl'}
 		<!-- DISPLAY -->
-		<form name="newGroupForm" action="index.php" method="post" onSubmit="return validate()">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+		<form name="newGroupForm" action="index.php" method="post" onSubmit="return validate()">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="action" value="SaveGroup">
 		<input type="hidden" name="mode" value="{$MODE}">
@@ -280,18 +280,17 @@ function validate()
 					<table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
 					</table>
+				</td></tr></table>
+				</td></tr></table>
 				</td>
 			</tr>
-			<tr>
-				<td valign=top>&nbsp;</td>
-			</tr>
-		</table>
 		</form>
+		</table>
 	</div>
 
 	</td>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
-</tr></tbody>
+</tr>
 </table>
 <script language="JavaScript" type="text/JavaScript">    
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;

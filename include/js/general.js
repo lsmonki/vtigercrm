@@ -654,14 +654,14 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var arr_len = splitval.length;
            var len = 0;
 	   //added to fix the issue4242 
-	   if(fldName == 'unit_price') 
+	   /*if(fldName == 'unit_price') 
 	   { 
 	   	if(splitval[0] == '' && arr_len > 1)
                  {
                          splitval[0] = '0';
                          val = splitval[0]+val;
                 }
-	   }	
+	   }*/	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
@@ -688,7 +688,7 @@ function numValidate(fldName,fldLabel,format,neg) {
        if (neg==true)
            var re=/^(-|)\d+(\.\d\d*)*$/
        else
-           var re=/^\d+(\.\d\d*)*$/
+	   var re=/^(\d)*(\.)?\d+(\.\d\d*)*$/
    }
 
 	//for precision check. ie.number must contains only one "."	
@@ -939,14 +939,8 @@ if(gVTModule == 'Contacts')
 							if (typeof(type[2])=="undefined") var numformat="any"
 							else var numformat=type[2]
 
-								if (type[0]=="NN") {
-
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
-										return false
-								} else {
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat))
-										return false
-								}
+							if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+								return false
 							if (type[3]) {
 								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
 									return false

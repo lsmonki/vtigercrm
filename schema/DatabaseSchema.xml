@@ -1122,7 +1122,7 @@
 		<field name="mfr_part_no" type="C" size="200" />
 		<field name="vendor_part_no" type="C" size="200" />
 		<field name="serialno" type="C" size="200" />
-		<field name="qtyinstock" type="I" size="11" />
+		<field name="qtyinstock" type="N" size="25.3" />
 		<field name="productsheet" type="C" size="200" />
 		<field name="qtyindemand" type="I" size="11" />
 		<field name="glacct" type="C" size="200" />

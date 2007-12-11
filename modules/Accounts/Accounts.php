@@ -77,7 +77,8 @@ class Accounts extends CRMEntity {
 			'Account Name'=>'accountname',
 			'City'=>'bill_city',
 			);
-
+	// This is the list of vtiger_fields that are required
+	var $required_fields =  array("accountname"=>1);
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'accountname';
