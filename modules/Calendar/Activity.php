@@ -30,6 +30,7 @@ require_once('data/CRMEntity.php');
 class Activity extends CRMEntity {
 	var $log;
 	var $db;
+	var $table_name = "vtiger_activity";
 	var $reminder_table = 'vtiger_activity_reminder';
 	var $tab_name = Array('vtiger_crmentity','vtiger_activity');
 

@@ -715,10 +715,10 @@ $log->info("in getOldFileName  ".$notesid);
     }
 
     /* Prasad: Fix for ticket #4595 */
-    /*$mod_index_col = $this->tab_name_index[$this->table_name];
+    $mod_index_col = $this->tab_name_index[$this->table_name];
     if($adb->query_result($result[$this->table_name],0,$mod_index_col) == '')
     	die("<br><br><center>".$app_strings['LBL_RECORD_NOT_FOUND'].
-			". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");*/
+			". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
     $tabid = getTabid($module);
     $sql1 =  "select * from vtiger_field where tabid=?";
     $result1 = $adb->pquery($sql1, array($tabid));

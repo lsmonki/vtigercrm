@@ -25,6 +25,7 @@ require_once('user_privileges/default_module_view.php');
 class Campaigns extends CRMEntity {
 	var $log;
 	var $db;
+	var $table_name = "vtiger_campaign";
 
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_campaign','vtiger_campaignscf');
