@@ -21,9 +21,9 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
-	var status = CharValidation(groupname,'namespace');
-	if(status)
-	{ldelim}
+	//var status = CharValidation(groupname,'namespace');
+	//if(status)
+	//{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -37,9 +37,9 @@ function dup_validation()
 			{rdelim}
 		{rdelim}
 		);
-	{rdelim}
-	else
-		alert(alert_arr.NO_SPECIAL+alert_arr.IN_GROUPNAME)
+	//{rdelim}
+	//else
+	//	alert(alert_arr.NO_SPECIAL+alert_arr.IN_GROUPNAME)
 {rdelim}
 var constructedOptionValue;
 var constructedOptionName;

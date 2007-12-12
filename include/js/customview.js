@@ -52,12 +52,12 @@ function validate() {
         if (!emptyCheck("fldLabel","Label","text"))
                 return false
 
-        var re1=/^[a-z\d\_ ]+$/i
-        if (!re1.test(str))
+        //var re1=/^[a-z\d\_ ]+$/i
+        /*if (!re1.test(str))
         {
                 alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
                 return false;
-        }
+        }*/
 
         if (lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))

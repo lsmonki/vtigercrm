@@ -141,6 +141,7 @@
 				{if $secondvalue neq ''}
 					<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;{$APP.LBL_GROUP}
 				{/if}
+				
 				<span id="assign_user" style="{$style_user}">
 					<select name="assigned_user_id" class="small">
 						{foreach key=key_one item=arr from=$fldvalue}
@@ -156,7 +157,7 @@
 						<select name="assigned_group_name" class="small">';
 							{foreach key=key_one item=arr from=$secondvalue}
 								{foreach key=sel_value item=value from=$arr}
-									<option value="{$sel_value}" {$value}>{$sel_value|truncate:20:'...'}</option>
+									<option value="{$sel_value}" {$value}>{$sel_value}</option>
 								{/foreach}
 							{/foreach}
 						</select>
