@@ -153,7 +153,7 @@ function callSearch(searchtype)
 	act_tab = $('maintab').value;
 	urlstring += '&popuptype='+popuptype;
 	urlstring += '&maintab='+act_tab;
-	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
+	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true';
 	urlstring +=gethiddenelements();
 	new Ajax.Request(
 		'index.php',
@@ -177,7 +177,7 @@ function alphabetic(module,url,dataid)
     {rdelim}
     getObj(dataid).className = 'searchAlphselected';
     gPopupAlphaSearchUrl = '&'+url;	
-    var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
+    var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&search=true&"+url;
     urlstring +=gethiddenelements();
     new Ajax.Request(
                 'index.php',

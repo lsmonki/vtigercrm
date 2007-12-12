@@ -175,10 +175,11 @@ function callSearch(searchtype)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true',
+			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
+				console.log(result[2]);
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                        alert(result[1]);
@@ -202,7 +203,7 @@ function alphabetic(module,url,dataid)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody: 'module='+module+'&action='+module+'Ajax&file=index&ajax=true&'+url,
+			postBody: 'module='+module+'&action='+module+'Ajax&file=index&ajax=true&search=true&'+url,
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
 				result = response.responseText.split('&#&#&#');

@@ -872,11 +872,21 @@ function to_html($string, $encode=true){
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
 	global $toHtml;
 	$action = $_REQUEST['action'];
+	$search = $_REQUEST['search'];
+
+	$doconvert = false;
+
 	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView')// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
 	if(is_string($string)){
-		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' )// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
-			$string = htmlentities($string, ENT_QUOTES, $default_charset);
+		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' ) {// && ($action != 'EditView' && $_REQUEST['module'] != 'Emails'))
+			$doconvert = true;
+	} else if($search == true) { // Fix for tickets #4647, #4648. Conversion required in case of search results also.
+		$doconvert = true;
+	}
+		if ($doconvert == true) {
+                        $string = htmlentities($string, ENT_QUOTES, $default_charset);
+                }			
         }
 	//$log->debug("Exiting to_html method ...");
         return $string;
