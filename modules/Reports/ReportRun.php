@@ -1770,7 +1770,7 @@ class ReportRun extends CRMEntity
 						if ($fld->name == "Potentials_Amount")
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
-							$fieldvalue = $custom_field_values[$i];
+							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
@@ -1919,7 +1919,7 @@ class ReportRun extends CRMEntity
 					foreach($totclmnflds as $key=>$value)
 					{
 
-						$coltotalhtml .= '<tr class="rptGrpHead" valign=top><td class="rptData">'.str_replace($modules," ",$value).'</td>';
+						$coltotalhtml .= '<tr class="rptGrpHead" valign=top><td class="rptData">'.getTranslatedString(trim(str_replace($modules," ",$value))).'</td>';
 						$arraykey = trim($value).'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
@@ -2022,7 +2022,7 @@ class ReportRun extends CRMEntity
 						if ($fld->name == "Potentials_Amount")
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
-							$fieldvalue = $custom_field_values[$i];
+							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 
 						if($fieldvalue == "" )
 						{

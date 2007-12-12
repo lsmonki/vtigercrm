@@ -687,7 +687,6 @@ $app_strings = array (
 'Big_Deal_Closed_Successfully' => 'Big Deal Closed Successfully',
 'Dear_Team_Time_to_Party' => 'Dear Team,<br>Congratulations!Time to Party! <br>We closed a deal worth more than 10000!!!!<br> Time to hit the dance floor!<br>',
 'Task_Not_completed' => 'Task Not completed',
-'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br> Thank You<br>HelpDesk Team<br>',
 'Too_many_pending_tickets' => 'Too many pending tickets',
 'Dear_Admin_too_ many_tickets_pending' => 'Dear Admin,<br> This is to bring to your notice that there are too many tickets pending. Kindly take the necessary action required for addressing the same<br><br> Thanks and Regards,<br> HelpDesk Team<br>',
 
@@ -1049,6 +1048,33 @@ $app_strings = array (
 'LBL_MIGRATION_CHECK'=>'Versions in database and file are same. You cannot do the migration. Please check the db and then do necessary steps.',
 //Added for ticket #4595
 'LBL_RECORD_NOT_FOUND'=>'Record you are trying to access is not found',
+//Added for i18n issue (report 06/12/2007)
+'Reorder Level' => 'Reorder Level',
+'Handler' => 'Handler',
+'Qty In Demand' => 'Qty In Demand',
+'Annual Revenue' => 'Annual Revenue',
+'No Of Employees' => 'No Of Employees',
+'Employees' =>'Employees',
+'Probability' => 'Probability',
+'Sales Commission' =>'Sales Commission',
+'Excise Duty' => 'Excise Duty',
+'Budget Cost' => 'Budget Cost',
+'Actual Cost' => 'Actual Cost',
+'Expected Revenue' => 'Expected Revenue',
+'Expected Sales Count' => 'Expected Sales Count',
+'Actual Sales Count' => 'Actual Sales Count',
+'Expected Response Count' => 'Expected Response Count',
+'Actual Response Count' => 'Actual Response Count',
+'TargetSize' => 'TargetSize',
+'Expected ROI' => 'Expected ROI',
+'Num Sent' => 'Num Sent',
+'Actual ROI' => 'Actual ROI',
+'Ascending' => 'Ascending',
+'Descending' => 'Descending',
+//Added for Notification
+'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
+'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
+
 );
 
 $app_list_strings = array (

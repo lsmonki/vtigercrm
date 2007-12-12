@@ -83,7 +83,7 @@ function getPrimaryColumns_AdvFilterHTML($module,$selected="")
 		$mod_strings = return_module_language($current_language,$module);
         foreach($ogReport->module_list[$module] as $key=>$value)
         {
-            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
+            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 	    	if(isset($ogReport->pri_module_columnslist[$module][$key]))
 	    	{
 				foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
@@ -135,7 +135,7 @@ function getSecondaryColumns_AdvFilterHTML($module,$selected="")
                 $mod_strings = return_module_language($current_language,$secmodule[$i]);
 				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
                 {
-                	$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
+                	$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 					{
 					  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)

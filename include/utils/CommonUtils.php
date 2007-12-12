@@ -2684,10 +2684,11 @@ function getrecurringObjValue()
  *	@param string $str - input string which we want to translate
  *	@return string $str - translated string, if the translated string is available then the translated string other wise original string will be returned
  */
-function getTranslatedString($str)
+function getTranslatedString($str,$module='')
 {
-	global $app_strings, $mod_strings, $log;
-	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($mod_strings[$str] != '')?$mod_strings[$str]:$str);
+	global $app_strings, $mod_strings, $log,$current_language;
+	$temp_mod_strings = ($module != '' )?return_module_language($current_language,$module):$mod_strings;
+	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($temp_mod_strings[$str] != '')?$temp_mod_strings[$str]:$str);
 	$log->debug("function getTranslatedString($str) - translated to ($trans_str)");
 	return $trans_str;
 }

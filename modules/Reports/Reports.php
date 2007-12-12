@@ -925,25 +925,19 @@ function getEscapedColumns($selectedfields)
 			$fieldcolname = $columnslistrow["columnname"];
 			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			list($module,$field) = split("_",$module_field);
 			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
-				list($module,$field) = split("_",$module_field);
 				$permitted_fields = $this->getaccesfield($module);	
 			}
-			$selectedfields = explode(":",$fieldcolname);
 			$querycolumns = $this->getEscapedColumns($selectedfields);
-
-			$mod_strings = return_module_language($current_language,$module);
-			$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
+			$fieldlabel = trim(str_replace($module," ",$module_field));
 			$mod_arr=explode('_',$fieldlabel);
                         $mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
 			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
 			//modified code to support i18n issue 
-			$fld_arr = explode(" ",$fieldlabel);
-			$mod_lbl = getTranslatedString($fld_arr[0]); //module
-			array_shift($fld_arr);
-			$fld_lbl_str = implode(" ",$fld_arr);
-			$fld_lbl = getTranslatedString($fld_lbl_str); //fieldlabel
+			$mod_lbl = getTranslatedString($mod,$module); //module
+			$fld_lbl = getTranslatedString($fieldlabel,$module); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
 			if(CheckFieldPermission($fieldname,$mod) != 'true')
 			{
@@ -1190,6 +1184,10 @@ function getEscapedColumns($selectedfields)
 						}
 
 					}
+					if(isset($_REQUEST["record"]) && $_REQUEST["record"] != '')
+					{
+						$options['label'][] = getTranslatedString($columntototalrow['tablabel']).' -'.getTranslatedString($columntototalrow['fieldlabel']);
+					}	
 
 					$columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
 					$options []= getTranslatedString($columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel']);

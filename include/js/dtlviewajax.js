@@ -142,11 +142,15 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	  var txtBox= "txtbox_"+ fieldLabel;
 	  var oMulSelect = $(txtBox);
 	  var r = new Array();
+	  var notaccess_label = new Array();
 	  for (iter=0;iter < oMulSelect.options.length ; iter++)
 	  {
-      if (oMulSelect.options[iter].selected)
-        r[r.length] = oMulSelect.options[iter].value;
-      }
+      	      if (oMulSelect.options[iter].selected)
+		{
+			r[r.length] = oMulSelect.options[iter].value;
+			notaccess_label[notaccess_label.length] = oMulSelect.options[iter].text;
+		}
+      	  }
 	}else
 	{
 		var txtBox= "txtbox_"+ fieldLabel;
@@ -391,19 +395,20 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                 var DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
 
                 var lineLength = 0;
-                for(var i=0; i < r.length; i++) {
-                        lineLength += r[i].length + 2; // + 2 for item separator string
+                for(var i=0; i < notaccess_label.length; i++) {
+                        lineLength += notaccess_label[i].length + 2; // + 2 for item separator string
                         if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
-                                lineLength = r[i].length + 2; // reset.
-                            r[i] = '<br/>&nbsp;' + r[i]; // prepend newline.
+                                lineLength = notaccess_label[i].length + 2; // reset.
+                            	notaccess_label[i] = '<br/>&nbsp;' + notaccess_label[i]; // prepend newline.
                         }
                         // Prevent a browser splitting multiword items:
-                        r[i] = r[i].replace(/ /g, '&nbsp;');
+                        //notaccess_label[i] = notaccess_label[i].replace(/ /g, '&nbsp;');
+                        notaccess_label[i] = notaccess_label[i].replace(alert_arr.LBL_NOT_ACCESSIBLE,"<font color='red'>"+alert_arr.LBL_NOT_ACCESSIBLE+"</font>"); // for Not accessible label.
                 }
                 /* Join items with item separator string (which must match string in DetailViewUI.tpl,
                  * EditViewUtils.php and CRMEntity.php)!!
                  */
-       		getObj(dtlView).innerHTML = r.join(", ");
+       		getObj(dtlView).innerHTML = notaccess_label.join(", ");
 	}else if(uitype == '19'){
 		var desc = tagValue.replace(/(^|[\n ])([\w]+?:\/\/.*?[^ \"\n\r\t<]*)/g, "$1<a href=\"$2\" target=\"_blank\">$2</a>");
 		desc = desc.replace(/(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:\/[^ \"\t\n\r<]*)?)/g, "$1<a href=\"http://$2\" target=\"_blank\">$2</a>");

@@ -39,6 +39,7 @@ if(isset($_REQUEST["record"]))
         $oReport = new Reports($recordid);
         $BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
+		$report_column_tot->assign("RECORDID",$recordid);
 }else
 {
         $primarymodule = $_REQUEST["primarymodule"];

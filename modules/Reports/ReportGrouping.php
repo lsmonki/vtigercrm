@@ -83,7 +83,7 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
 
         foreach($ogReport->module_list[$module] as $key=>$value)
         {
-            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
+            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 	    if(isset($ogReport->pri_module_columnslist[$module][$key]))
 	    {
 		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
@@ -134,7 +134,7 @@ function getSecondaryColumns_GroupingHTML($module,$selected="")
                 $mod_strings = return_module_language($current_language,$secmodule[$i]);
 		foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
                 {
-                        $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
+                        $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 			{
 				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
@@ -170,34 +170,34 @@ function getSecondaryColumns_GroupingHTML($module,$selected="")
 
 if($sortorder[0] != "Descending")
 {
-$shtml = "<option selected value='Ascending'>Ascending</option>
-	 <option value='Descending'>Descending</option>";
+$shtml = "<option selected value='Ascending'>".$app_strings['Ascending']."</option>
+	 <option value='Descending'>".$app_strings['Descending']."</option>";
 }else
 {
-$shtml = "<option value='Ascending'>Ascending</option>
-	  <option selected value='Descending'>Descending</option>";
+$shtml = "<option value='Ascending'>".$app_strings['Ascending']."</option>
+	  <option selected value='Descending'>".$app_strings['Descending']."</option>";
 }
 $report_group->assign("ASCDESC1",$shtml);
 
 if($sortorder[1] != "Descending")
 {
-$shtml = "<option selected value='Ascending'>Ascending</option>
-          <option value='Descending'>Descending</option>";
+$shtml = "<option selected value='Ascending'>".$app_strings['Ascending']."</option>
+          <option value='Descending'>".$app_strings['Descending']."</option>";
 }else
 {
-$shtml = "<option value='Ascending'>Ascending</option>
-          <option selected value='Descending'>Descending</option>";
+$shtml = "<option value='Ascending'>".$app_strings['Ascending']."</option>
+          <option selected value='Descending'>".$app_strings['Descending']."</option>";
 }
 $report_group->assign("ASCDESC2",$shtml);
 
 if($sortorder[2] != "Descending")
 {
-$shtml = "<option selected value='Ascending'>Ascending</option>
-	  <option value='Descending'>Descending</option>";
+$shtml = "<option selected value='Ascending'>".$app_strings['Ascending']."</option>
+	  <option value='Descending'>".$app_strings['Descending']."</option>";
 }else
 {
-$shtml =  "<option value='Ascending'>Ascending</option>
-	   <option selected value='Descending'>Descending</option>";
+$shtml =  "<option value='Ascending'>".$app_strings['Ascending']."</option>
+	   <option selected value='Descending'>".$app_strings['Descending']."</option>";
 }
 $report_group->assign("ASCDESC3",$shtml);
 $report_group->display("ReportGrouping.tpl");
