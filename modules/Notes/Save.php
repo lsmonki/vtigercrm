@@ -28,7 +28,9 @@ require_once('include/upload_file.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Notes();
-
+if(isset($_REQUEST['notecontent']) && $_REQUEST['notecontent'] != "")
+	$_REQUEST['notecontent'] = fck_from_html($_REQUEST['notecontent']);
+	
 setObjectValuesFromRequest($focus);
 
 //Check if the file is exist or not.

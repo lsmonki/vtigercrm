@@ -288,7 +288,7 @@ else
 				$count = count($pickArray);
 				for($i = 0; $i < $count; $i++)
 				{
-					$pickArray[$i] = trim($pickArray[$i]);
+					$pickArray[$i] = trim(from_html($pickArray[$i]));
 					if($pickArray[$i] != '')
 					{
 						$picklistcount=0;

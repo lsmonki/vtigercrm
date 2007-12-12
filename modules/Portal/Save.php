@@ -16,6 +16,8 @@ $conv_pname = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUES
 $conv_purl = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalurl']) : $_REQUEST['portalurl'];
 $portlname =str_replace(array("'",'"'),'',$conv_pname);
 $portlurl =str_replace(array("'",'"'),'',$conv_purl);
+$portlname = from_html($portlname);
+$portlurl = from_html($portlurl);
 //added as an enhancement to set default value
 if(isset($_REQUEST['check']) && $_REQUEST['check'] =='true')
 {

@@ -1884,41 +1884,41 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
  		$this->db->query("insert into vtiger_notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_notificationscheduler").",'LBL_ACTIVITY_REMINDER_DESCRIPTION' ,1,'Activity Reminder Notification','This is a reminder notification for the Activity','LBL_ACTIVITY_NOTIFICATION')");
 
 		//Inserting Inventory Notifications
-	$invoice_body = 'Dear {HANDLER},<br>
-<br>
+	$invoice_body = 'Dear {HANDLER},
+
 The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. Kindly procure required number of units as the stock level is below reorder level {REORDERLEVELVALUE}.
-<br><br>
+
 Please treat this information as Urgent as the invoice is already sent  to the customer.
-<br><br>
+
 Severity: Critical
-<br>
-Thanks,<br>
+
+Thanks,
 {CURRENTUSER}';
 
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'InvoiceNotification','{PRODUCTNAME} Stock Level is Low','".$invoice_body." ','InvoiceNotificationDescription')");
 
-		$quote_body = 'Dear {HANDLER},<br><br>
+		$quote_body = 'Dear {HANDLER},
 
 Quote is generated for {QUOTEQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-<br><br>
+
 Severity: Minor
-<br><br>
-Thanks,<br>
+
+Thanks,
 {CURRENTUSER}';	
 		
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'QuoteNotification','Quote given for {PRODUCTNAME}','".$quote_body." ','QuoteNotificationDescription')");
 
 		$so_body = 'Dear {HANDLER},
-<br><br>
+
 SalesOrder is generated for {SOQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-<br><br>
+
 Please treat this information  with priority as the sales order is already generated.
-<br><br>
+
 Severity: Major
-<br><br>
-Thanks,<br>
+
+Thanks,
 {CURRENTUSER}';
 
 		

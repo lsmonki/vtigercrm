@@ -221,6 +221,15 @@ function from_html($string, $encode=true){
         return $string;
 }
 
+function fck_from_html($string)
+{
+	if(is_string($string)){
+		if(eregi('(script).*(/script)',$string))
+			$string=str_replace('script', '', $string);
+	}
+	return $string;
+}
+
 /**
  *	Function used to decodes the given single quote and double quote only. This function used for popup selection 
  *	@param string $string - string to be converted, $encode - flag to decode

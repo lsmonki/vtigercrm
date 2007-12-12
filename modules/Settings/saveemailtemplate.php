@@ -23,7 +23,7 @@ $description = from_html($_REQUEST["description"]);
 	  $log->debug("the description is ".$description);
 $subject = from_html($_REQUEST["subject"]);
 	  $log->debug("the subject is ".$subject);  
-$body = $_REQUEST["body"];
+$body = fck_from_html($_REQUEST["body"]);
 	  $log->debug("the body is ".$body);  
 if(isset($templateid) && $templateid !='')
 {
