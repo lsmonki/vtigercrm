@@ -1143,7 +1143,10 @@ function toggleSelect(state,relCheckName) {
 			getObj(relCheckName).checked=state
 		} else {
 			for (var i=0;i<getObj(relCheckName).length;i++)
+			{
 				getObj(relCheckName)[i].checked=state
+				check_object(getObj(relCheckName)[i])
+			}
 		}
 	}
 }
@@ -2299,21 +2302,7 @@ function LTrim( value )
 
 function selectedRecords(module,category)
 {
-        var select_options  =  document.getElementsByName('selected_id');
-        var x = select_options.length;
-        idstring = "";
-        xx = 0;
-        for(i = 0; i < x ; i++)
-        {
-                if(select_options[i].checked)
-                {
-                        if(select_options[i].checked == true)
-                        {
-                                idstring = select_options[i].value +","+idstring
-                                        xx++
-                        }
-                }
-        }
+	var idstring  =  document.getElementById("allselectedboxes").value;
         if(idstring != '')
                 window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
         else
@@ -2420,4 +2409,20 @@ function get_converted_html(str)
                 str = str.replace(/&/g,'&amp;');
 	}
 	return str;
+}
+//To select the select all check box(if all the items are selected) when the form loads.
+function default_togglestate()
+{
+       var all_state=true;
+       for (var i=0;i<(getObj("selected_id").length);i++)
+       {
+               var state=getObj("selected_id")[i].checked;
+                      if (state == false)
+                      {
+                              all_state=false;
+                              break;
+                      }
+       }
+                      getObj("selectall").checked=all_state;
+
 }

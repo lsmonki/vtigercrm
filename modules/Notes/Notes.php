@@ -192,9 +192,9 @@ class Notes extends CRMEntity {
 				LEFT JOIN vtiger_salesorder vtiger_NoteRelatedToSO
 					ON vtiger_NoteRelatedToSO.salesorderid = vtiger_senotesrel.crmid
 				LEFT JOIN vtiger_troubletickets vtiger_NoteRelatedToTicket
-					ON vtiger_NoteRelatedToTicket.ticketid = vtiger_senotesrel.crmid
-
-				WHERE vtiger_crmentity.deleted=0 
+					ON vtiger_NoteRelatedToTicket.ticketid = vtiger_senotesrel.crmid";
+	
+				$where_auto=" vtiger_crmentity.deleted=0 
 
 				AND ((vtiger_senotesrel.crmid IS NULL
 					AND (vtiger_notes.contact_id = 0
@@ -211,6 +211,10 @@ class Notes extends CRMEntity {
 					OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) 
 
 					";
+		if($where != "")
+			$query .= "  WHERE ($where) AND ".$where_auto;
+		else
+			$query .= "  WHERE ".$where_auto;
 
 		$log->debug("Exiting create_export_query method ...");
                 return $query;

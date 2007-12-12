@@ -129,7 +129,7 @@ function export($type)
 
 	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata')
 	{
-		$idstring = explode(",", $_REQUEST['idstring']);
+		$idstring = explode(";", $_REQUEST['idstring']);
 		if($type == 'Accounts' && count($idstring) > 0) {
 			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);

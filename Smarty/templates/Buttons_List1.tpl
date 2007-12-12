@@ -97,7 +97,7 @@
 					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>	
 				{/if}	
 				{if $CHECK.Export eq 'yes'}
-				<td style="padding-right:10px"><a name='export_link' href="javascript:;" onclick="selectedRecords('{$MODULE}','{$CATEGORY}')"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>			
+				<td style="padding-right:10px"><a name='export_link' href="javascript:void(0)" onclick="return selectedRecords('{$MODULE}','{$CATEGORY}')"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>			
 			
 				{else}	
 					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
@@ -106,7 +106,7 @@
 				
 				{if $CHECK.Export eq 'yes'}
 					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>	
-				<td style="padding-right:10px"><a name='export_link' href="javascript:;" onclick="selectedRecords('{$MODULE}','{$CATEGORY}')"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>
+				<td style="padding-right:10px"><a name='export_link' href="javascript:void(0)" onclick="return selectedRecords('{$MODULE}','{$CATEGORY}')"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>
 				{else}	 
 					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
 					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>

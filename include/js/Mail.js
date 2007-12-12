@@ -11,24 +11,19 @@
 
 function eMail(module,oButton)
 {
-	var select_options  =  document.getElementsByName('selected_id');
-	var x = select_options.length;
-	var viewid =getviewId();		
-	var idstring= new Array();
+	var select_options  =  document.getElementById('allselectedboxes').value;
+        //Added to remove the semi colen ';' at the end of the string.done to avoid error.
+        var x = select_options.split(";");
+        var count=x.length
+        var viewid =getviewId();
+        var idstring = "";
+        select_options=select_options.slice(0,(select_options.length-1));
 
-	xx = 0;
-	for(i = 0; i < x ; i++)
-	{
-		if(select_options[i].checked)
-		{
-			idstring[xx] = select_options[i].value;
-				xx++
-		}
-	}
-	if (xx != 0)
-	{
-                document.getElementById('idlist').value=idstring.join(':');
-	}
+        if (count > 1)
+        {
+                idstring=select_options.replace(/;/g,':')
+                document.getElementById('idlist').value=idstring;
+        }
 	else
 	{
 		alert(alert_arr.SELECT);

@@ -162,6 +162,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigation_array,'','&return_module=PriceBooks&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','bookname','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

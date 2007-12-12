@@ -41,16 +41,30 @@
 												</td>
 			   								</tr>
 		  	   								<tr>
+												{ if $SESSION_WHERE neq ''}
 												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_WITH_SEARCH}</td>
 												<td  align="left" valign="top" width="5%" class=small>
 													<input type="radio" name="search_type" checked value="includesearch">
 												</td>
+												{else}
+												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_WITH_SEARCH}</td>
+												<td  align="left" valign="top" width="5%" class=small>
+													<input type="radio" name="search_type"  value="includesearch">
+												</td>
+												{/if}
 			   								</tr>
 											<tr>
+												{if $SESSION_WHERE eq ''}
+												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_WITHOUT_SEARCH}</td>	
+												<td align="left" valign="top" width="5%" class=small>
+	                 										<input type="radio" name="search_type" checked value="withoutsearch">
+												</td>
+												{else}
 												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_WITHOUT_SEARCH}</td>	
 												<td align="left" valign="top" width="5%" class=small>
 	                 										<input type="radio" name="search_type" value="withoutsearch">
 												</td>
+												{/if}
 			   								</tr>
 			   								<tr>
 												<td colspan="2" align="left" valign="top" style="padding-left:40px;">
@@ -58,10 +72,17 @@
 												</td>
 			   								</tr>
 			   								<tr>
+												{if   $IDSTRING eq ''}
 												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_ALL_DATA}</td>
 												<td align="left" valign="top" width="5%" class=small>
 													<input type="radio" name="export_data" checked value="all">
 												</td>
+												{else}
+												<td align="right" valign="top" width="50%" class=small>{$APP.LBL_ALL_DATA}</td>
+												<td align="left" valign="top" width="5%" class=small>
+													<input type="radio" name="export_data"  value="all">
+												</td>
+												{/if}
 			   								</tr>
 			   								<tr>
 			        								<td align="right" valign="top" width="50%" class=small >{$APP.LBL_DATA_IN_CURRENT_PAGE}</td>
@@ -70,10 +91,17 @@
 												</td>
 			   								</tr>
 			   								<tr>
+												{if  $IDSTRING neq ''}
 		   	       									<td align="right" valign="top" width="50%" class=small >{$APP.LBL_ONLY_SELECTED_RECORDS}</td>
 		   										<td align="left" valign="top" width="5%" class=small>
-		   											<input type="radio" name="export_data" value="selecteddata">
+		   											<input type="radio" name="export_data" checked value="selecteddata">
 												</td>
+												{else}
+												<td align="right" valign="top" width="50%" class=small >{$APP.LBL_ONLY_SELECTED_RECORDS}</td>
+		   										<td align="left" valign="top" width="5%" class=small>
+		   											<input type="radio" name="export_data"  value="selecteddata">
+												</td>
+												{/if}
 		   									</tr>
 										</table>
 									</td>

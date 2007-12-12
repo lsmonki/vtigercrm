@@ -9,7 +9,7 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-$idstring = rtrim($_REQUEST['idstring'],",");
+$idstring = rtrim($_REQUEST['idstring'],";");
 
 if($_REQUEST['export_record'] == true)
 {

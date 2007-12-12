@@ -2414,12 +2414,11 @@ function getReadEntityIds($module)
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_account.accountid
 			LEFT JOIN vtiger_accountgrouprelation
-				ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+				ON vtiger_accountgrouprelation.accountid = vtiger_account.accountid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+                               	ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
 			WHERE vtiger_crmentity.deleted = 0 ";
-
-	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;
@@ -2454,13 +2453,12 @@ function getReadEntityIds($module)
         {
 		//Query modified to sort by assigned to
 
-		
-		$query = "SELECT vtiger_crmentity.crmid
+		$query="SELECT vtiger_crmentity.crmid
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_contactgrouprelation
-				ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+				ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_groups
                                 ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 			WHERE vtiger_crmentity.deleted = 0 ";

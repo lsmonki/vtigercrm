@@ -165,7 +165,7 @@ function getFieldsListFromQuery($query)
                 {
                          $fields .= "case vtiger_crmentityRelatedTo.setype
                                         when 'Accounts' then concat('Accounts ::: ',vtiger_TicketRelatedToAccount.accountname)
-                                        when 'Contacts' then concat('Contacts ::: ',vtiger_TicketRelatedToContact.firstname)
+					when 'Contacts' then concat('Contacts ::: ',vtiger_TicketRelatedToContact.lastname,' ',vtiger_TicketRelatedToContact.firstname)
                                      End as 'Related To',";
                 }
 

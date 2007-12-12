@@ -364,6 +364,9 @@ function alphabetic(module,url,dataid)
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
+     <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
+     <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
+     <input name="current_page_boxes" id="current_page_boxes" type="hidden" value="{$CURRENT_PAGE_BOXES}">
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr >
 		      <td>
@@ -427,7 +430,7 @@ function alphabetic(module,url,dataid)
 			      </tr>
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
 			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-				 <td width="2%"><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+				 <td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick=check_object(this); toggleSelectAll(this.name,"selectall")></td>
 				 {foreach item=data from=$entity}	
 				 <td>{$data}</td>
 	                         {/foreach}

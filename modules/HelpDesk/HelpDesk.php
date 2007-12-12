@@ -549,49 +549,44 @@ class HelpDesk extends CRMEntity {
                 $fields_list = getFieldsListFromQuery($sql);
 
                 $query = "SELECT $fields_list,vtiger_ticketgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
-                       FROM ".$this->entity_table."
-                                INNER JOIN vtiger_troubletickets
-                                        ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+                       FROM ".$this->entity_table. "
+				INNER JOIN vtiger_troubletickets 
+					ON vtiger_troubletickets.ticketid =vtiger_crmentity.crmid 
+				LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo 
+					ON vtiger_crmentityRelatedTo.crmid = vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_account vtiger_TicketRelatedToAccount 
+					ON vtiger_TicketRelatedToAccount.accountid = vtiger_troubletickets.parent_id 
+				LEFT JOIN vtiger_contactdetails vtiger_TicketRelatedToContact 
+					ON vtiger_TicketRelatedToContact.contactid = vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_ticketcomments 
+					ON vtiger_ticketcomments.ticketid = vtiger_troubletickets.ticketid 
+				LEFT JOIN vtiger_ticketcf 
+					ON vtiger_ticketcf.ticketid=vtiger_troubletickets.ticketid 
+				LEFT JOIN vtiger_ticketgrouprelation 
+					ON vtiger_ticketgrouprelation.ticketid=vtiger_ticketcf.ticketid
+				LEFT JOIN vtiger_groups 
+					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname 
+				LEFT JOIN vtiger_users 
+					ON vtiger_users.id=vtiger_crmentity.smownerid and vtiger_users.status='Active' 
+				LEFT JOIN vtiger_seattachmentsrel 
+					ON vtiger_seattachmentsrel.crmid =vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_attachments 
+					ON vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid 
+				LEFT JOIN vtiger_products 
+					ON vtiger_products.productid=vtiger_troubletickets.product_id";
 
-                                LEFT JOIN vtiger_seticketsrel
-                                        ON vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid
-                                LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
-                                        ON vtiger_crmentityRelatedTo.crmid = vtiger_seticketsrel.crmid
-                                LEFT JOIN vtiger_account vtiger_TicketRelatedToAccount
-                                        ON vtiger_TicketRelatedToAccount.accountid = vtiger_seticketsrel.crmid
-                                LEFT JOIN vtiger_contactdetails vtiger_TicketRelatedToContact
-                                        ON vtiger_TicketRelatedToContact.contactid = vtiger_seticketsrel.crmid
-
-                                LEFT JOIN vtiger_ticketcomments
-                                        ON vtiger_troubletickets.ticketid = vtiger_ticketcomments.ticketid
-                                LEFT JOIN vtiger_ticketcf
-                                        ON vtiger_ticketcf.ticketid=vtiger_troubletickets.ticketid
-                LEFT JOIN vtiger_ticketgrouprelation
-                                    ON vtiger_ticketcf.ticketid = vtiger_ticketgrouprelation.ticketid
-                            LEFT JOIN vtiger_groups
-                                    ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
-                                LEFT JOIN vtiger_users
-			   ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'
-                                LEFT JOIN vtiger_seattachmentsrel
-                                        ON vtiger_troubletickets.ticketid=vtiger_seattachmentsrel.crmid
-                                LEFT JOIN vtiger_attachments
-                                ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-                                LEFT JOIN vtiger_products
-                                ON vtiger_troubletickets.product_id = vtiger_products.productid
-                                ";
-                        $where_auto = " vtiger_crmentity.deleted = 0
-                                                        AND ((vtiger_seticketsrel.crmid IS NULL
-                                                                OR (vtiger_troubletickets.parent_id = 0
-                                                                OR vtiger_troubletickets.product_id IS NULL))
-                                                                OR vtiger_seticketsrel.crmid IN (".getReadEntityIds('Accounts').")
-                                                                OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Contacts')."))
-                                                        ";
-
-                if($where != "")
-                        $query .= "WHERE ($where) AND ".$where_auto;
-                else
-                        $query .= "WHERE ".$where_auto;
-                require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			$where_auto="   vtiger_crmentity.deleted = 0
+                               	AND ((vtiger_troubletickets.parent_id IS NULL    
+					 AND(vtiger_troubletickets.parent_id = 0
+						OR vtiger_troubletickets.parent_id IS NULL))
+						OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Accounts').")
+						OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Contacts')."))";
+				
+				if($where != "")
+					$query .= "  WHERE ($where) AND ".$where_auto;
+				else
+					$query .= "  WHERE ".$where_auto;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
                 require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
                 //we should add security check when the user has Private Access
                 if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[13] == 3)

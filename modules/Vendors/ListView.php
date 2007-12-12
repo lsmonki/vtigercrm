@@ -180,6 +180,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Vendors",$list_result,$navigation_array,'','&return_module=Vendors&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendors","index",$viewid);

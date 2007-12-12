@@ -208,6 +208,11 @@ $listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_arr
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','question','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

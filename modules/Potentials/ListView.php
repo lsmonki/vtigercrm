@@ -236,6 +236,10 @@ $listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigat
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','potentialname','true','basic',"","","","",$viewid);

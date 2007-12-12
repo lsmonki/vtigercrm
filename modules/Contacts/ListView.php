@@ -281,6 +281,11 @@ $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigatio
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

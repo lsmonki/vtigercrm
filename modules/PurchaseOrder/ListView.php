@@ -198,6 +198,11 @@ $listview_entries = getListViewEntries($focus,"PurchaseOrder",$list_result,$navi
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PurchaseOrder","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

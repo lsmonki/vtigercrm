@@ -11,6 +11,7 @@
 -->*}
 {*//Hidden fields for modules DetailView//  *}
 <input type="hidden" name="parenttab" value="{$CATEGORY}">
+<input type="hidden"  name="allselectedboxes" id="allselectedboxes">
 {if $MODULE eq 'Accounts'}
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="record" value="{$ID}">

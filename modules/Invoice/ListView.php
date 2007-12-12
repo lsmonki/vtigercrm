@@ -198,6 +198,10 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Invoice","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);

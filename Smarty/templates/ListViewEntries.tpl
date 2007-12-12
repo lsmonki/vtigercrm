@@ -21,7 +21,10 @@
      <input name="action" type="hidden">
      <input name="where_export" type="hidden" value="{$smarty.session.export_where}">
      <input name="step" type="hidden">
-     <input name="allids" type="hidden" value="{$ALLIDS}">
+     <input name="allids" type="hidden" id="allids" value="{$ALLIDS}">
+     <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
+     <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
+     <input name="current_page_boxes" id="current_page_boxes" type="hidden" value="{$CURRENT_PAGE_BOXES}">
 				<!-- List View Master Holder starts -->
 				<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 				<tr>
@@ -101,7 +104,7 @@
 			<!-- Table Contents -->
 			{foreach item=entity key=entity_id from=$LISTENTITY}
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-			<td width="2%"><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick=check_object(this); toggleSelectAll(this.name,"selectall")></td>
 			{foreach item=data from=$entity}	
 			<td>{$data}</td>
 	        {/foreach}

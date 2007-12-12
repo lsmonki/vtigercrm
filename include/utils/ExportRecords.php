@@ -23,6 +23,7 @@ require_once($theme_path.'layout_utils.php');
 
 $idstring = rtrim($_REQUEST['idstring'],",");
 
+$smarty->assign("SESSION_WHERE",$_SESSION['export_where']);
 
 $smarty->assign('APP',$app_strings);
 $smarty->assign('MOD',$mod_strings);
