@@ -25,7 +25,7 @@
 require("class.smtp.php");
 require("class.phpmailer.php");
 
-function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$filename)
+function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$filename,$smtp_auth='')
 {
   $mail = new PHPMailer();
   $mail->Subject = $subject;
@@ -36,7 +36,10 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	$mail->IsSMTP();                                      // set mailer to use SMTP
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 	$mail->Host = $mail_server;  // specify main and backup server
-	$mail->SMTPAuth = true;     // turn on SMTP authentication
+	if($smtp_auth == 'true')
+		$mail->SMTPAuth = true;
+	else
+		$mail->SMTPAuth = false;
 	$mail->Username = $mail_server_username ;//$smtp_username;  // SMTP username
 	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
 	$mail->From = $from;

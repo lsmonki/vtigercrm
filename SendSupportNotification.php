@@ -37,7 +37,7 @@ $app_strings = return_application_language($current_language);
 
 
 //To send email notification before a week
-$query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where support_end_date=DATE_ADD(now(), INTERVAL 1 WEEK)";
+$query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_customerdetails.customerid inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where vtiger_crmentity.deleted=0 and support_end_date=DATE_ADD(now(), INTERVAL 1 WEEK)";
 $result = $adb->pquery($query, array());
 
 
@@ -62,7 +62,7 @@ if($adb->num_rows($result) >= 1)
 $log->debug(" Send Support Notification Befoe a week - Status: ".$status);
 
 //To send email notification before a month
-$query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where support_end_date=DATE_ADD(now(), INTERVAL 1 MONTH)";
+$query="select vtiger_contactdetails.contactid,vtiger_contactdetails.email,vtiger_contactdetails.firstname,vtiger_contactdetails.lastname,contactid  from vtiger_customerdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_customerdetails.customerid inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_customerdetails.customerid  where vtiger_crmentity.deleted=0 and support_end_date=DATE_ADD(now(), INTERVAL 1 MONTH)";
 $result = $adb->pquery($query, array());
 
 

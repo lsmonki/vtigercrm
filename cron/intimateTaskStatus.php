@@ -18,11 +18,12 @@ global $app_strings;
 $emailresult = $adb->pquery("SELECT email1 from vtiger_users", array());
 $emailid = $adb->fetch_array($emailresult);
 $emailaddress = $emailid[0];
-$mailserveresult = $adb->pquery("SELECT server,server_username,server_password FROM vtiger_systems where server_type = ?", array('email'));
+$mailserveresult = $adb->pquery("SELECT server,server_username,server_password,smtp_auth FROM vtiger_systems where server_type = ?", array('email'));
 $mailrow = $adb->fetch_array($mailserveresult);
 $mailserver = $mailrow[0];
 $mailuname = $mailrow[1];
 $mailpwd = $mailrow[1];
+$smtp_auth = $mailrow[3];
 // End Email Setup
 
 
@@ -34,20 +35,25 @@ $activevalue = $adb->fetch_array($result);
 
 if($activevalue[0] == 1)
 {
-//Delayed Tasks Notification
+	//Delayed Tasks Notification
 
-//get all those activities where the status is not completed even after the passing of 24 hours
-$today = date("Ymd"); 
-$result = $adb->pquery("select (vtiger_activity.date_start +1) from vtiger_activity where vtiger_activity.status <> 'Completed' and ".$today." > (vtiger_activity.date_start+1)", array());
+	//get all those activities where the status is not completed even after the passing of 24 hours
+	$today = date("Ymd"); 
+	$result = $adb->pquery("select vtiger_activity.status,vtiger_activity.activityid,subject,(vtiger_activity.date_start +1),vtiger_crmentity.smownerid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where vtiger_crmentity.deleted=0 and vtiger_activity.status <> 'Completed' and activitytype='Task' and ".$today." > (vtiger_activity.date_start+1)", array());
 
-while ($myrow = $adb->fetch_array($result))
-{
-  $status=$myrow[0];
-  if($status != 'Completed')
-  {
-	 sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'],$app_strings['Dear_Admin_tasks_not_been_completed'],$mailserver,$mailuname,$mailpwd,"");	
-  }
-}
+	while ($myrow = $adb->fetch_array($result))
+	{
+		$status=$myrow[0];
+		$subject = (strlen($myrow[2]) > 30)?substr($myrow[2],0,27).'...':$myrow[2];
+		$user_id = $myrow[4];
+		if($user_id != '')
+		{
+			$user_res = $adb->pquery('select user_name from vtiger_users where id=?',array($user_id));
+			$assigned_user = $adb->query_result($user_res,0,'user_name');
+		}
+		$mail_body = $app_strings['Dear_Admin_tasks_not_been_completed']." ".$app_strings['LBL_SUBJECT'].": ".$subject."<br> ".$app_strings['LBL_ASSIGNED_TO'].": ".$assigned_user."<br><br>".$app_strings['Task_sign'];
+	 	sendmail($emailaddress,$emailaddress,$app_strings['Task_Not_completed'].': '.$subject,$mail_body,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+	}
 }
 
 //Big Deal Alert
@@ -57,19 +63,12 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-$result = $adb->query("SELECT sales_stage,amount FROM vtiger_potential",$db);
-while ($myrow = $adb->fetch_array($result))
-{
-  $amount=$myrow[1];
-  $stage = $myrow[0];
-  if($stage == 'Closed Won' &&  $amount > 10000)
-  {
-    sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"");	
-  }
+	$result = $adb->pquery("SELECT sales_stage,amount FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid where vtiger_crmentity.deleted=0 and sales_stage='Closed Won' and amount > 10000",array());
+	while ($myrow = $adb->fetch_array($result))
+	{
+		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"");
+	}
 }
-
-}
-
 //Pending tickets
 $sql = "select active from vtiger_notificationscheduler where schedulednotificationid=3";
 $result = $adb->pquery($sql, array());
@@ -77,19 +76,12 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-$result = $adb->pquery("SELECT vtiger_troubletickets.status,ticketid FROM vtiger_troubletickets INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid WHERE vtiger_crmentity.deleted='0' AND vtiger_troubletickets.status <> 'Completed' AND vtiger_troubletickets.status <> 'Closed' ", array());
+	$result = $adb->pquery("SELECT vtiger_troubletickets.status,ticketid FROM vtiger_troubletickets INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid WHERE vtiger_crmentity.deleted='0' AND vtiger_troubletickets.status <> 'Completed' AND vtiger_troubletickets.status <> 'Closed'", array());
 
-while ($myrow = $adb->fetch_array($result))
-{
-  $status=$myrow[0];
-  $ticketid = $myrow[1];
-  if($status != "Completed" || $status != "Closed")
-  {
-    sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"");	
-  }
-}
-
-
+	while ($myrow = $adb->fetch_array($result))
+	{
+		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"");	
+	}
 }
 
 //Too many tickets related to a particular vtiger_account/company causing concern
@@ -99,15 +91,13 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-
-$result = $adb->pquery("SELECT status,vtiger_troubletickets.ticketid FROM vtiger_troubletickets where status <> 'Completed' AND status <> 'Closed'", array());
-while ($myrow = $adb->fetch_array($result))
-{
-  $status=$myrow[0];
-  $ticketid = $myrow[1];
-  sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"");	
-}
-
+	$result = $adb->pquery("SELECT count(*) as count FROM vtiger_troubletickets INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid WHERE vtiger_crmentity.deleted='0' AND vtiger_troubletickets.status <> 'Completed' AND vtiger_troubletickets.status <> 'Closed'", array());
+$count = $adb->query_result($result,0,'count');
+//changes made to get too many tickets notification only when tickets count is greater than or equal to 5
+	if($count >= 5)
+	{
+		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"");
+	}
 }
 
 //Support Starting
@@ -117,13 +107,12 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-$result = $adb->pquery("SELECT productname FROM vtiger_products where start_date like ?", array(date('Y-m-d'). "%"));
-while ($myrow = $adb->fetch_array($result))
-{
-  $productname=$myrow[0];
-  sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"");	
-}
-
+	$result = $adb->pquery("SELECT vtiger_products.productname FROM vtiger_products inner join vtiger_crmentity on vtiger_products.productid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and start_date like ?", array(date('Y-m-d'). "%"));
+	while ($myrow = $adb->fetch_array($result))
+	{
+		$productname=$myrow[0];
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"");	
+	}
 }
 
 //Support ending
@@ -133,7 +122,7 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-	$result = $adb->pquery("SELECT productname from vtiger_products where expiry_date like ?", array(date('Y-m-d') ."%"));
+	$result = $adb->pquery("SELECT vtiger_products.productname from vtiger_products inner join vtiger_crmentity on vtiger_products.productid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and expiry_date like ?", array(date('Y-m-d') ."%"));
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];

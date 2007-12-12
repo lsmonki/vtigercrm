@@ -93,13 +93,13 @@ if($adb->num_rows($result) >= 1)
 			$from ="reminders@localserver.com";
 			
 			// Retriving the Subject and message from reminder table		
-			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=7";
+			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=8";
 			$result_main = $adb->pquery($sql, array());
 
 			$subject = $app_strings['Reminder'].$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." : ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." : ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
 
 			if(count($to_addr) >=1)
 			{
@@ -147,7 +147,7 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 
 
 	$mail->IsSMTP();                                      // set mailer to use SMTP
-
+	
 	if($mail_server=='')
 	{
 		$mailserverresult=$adb->pquery("select * from vtiger_systems where server_type='email'", array());
@@ -159,10 +159,13 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 		$_REQUEST['server']=$mail_server;
 		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
 
-	}	
-
+	}
+	
 	$mail->Host = $mail_server;			// specify main and backup server
-	$mail->SMTPAuth = $smtp_auth;			// turn on SMTP authentication
+	if($smtp_auth == 'true')
+		$mail->SMTPAuth = true;
+	else
+		$mail->SMTPAuth = false;
 	$mail->Username = $mail_server_username ;	// SMTP username
 	$mail->Password = $mail_server_password ;	// SMTP password
 	$mail->From = $from;
