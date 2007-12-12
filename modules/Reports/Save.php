@@ -12,7 +12,7 @@ require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
-global $log;
+global $log,$current_user;
 $reportid = $_REQUEST["record"];
 
 //<<<<<<<selectcolumn>>>>>>>>>
@@ -162,6 +162,20 @@ if($reportid == "")
 					//<<<<step5 advancedfilter>>>>>>>
 					for ($i=0;$i<count($adv_filter_col);$i++)
 					{
+						$col = explode(":",$adv_filter_col[$i]);
+						$temp_val = explode(",",$adv_filter_value[$i]);
+						if(($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) && ($col[4] != '' && $adv_filter_value[$i] != '' ))
+						{
+							$val = Array();
+							for($x=0;$x<count($temp_val);$x++)
+							{
+								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+								$temp_date = getDBInsertDateValue(trim($temp_date));
+								$val[$x] =$temp_date;
+								$adv_filter_value[$i] = $val[$x];
+							}
+						}
+
 						$irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (?,?,?,?,?)";
 						$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($genQueryId, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]));
 					}
@@ -265,6 +279,25 @@ if($reportid == "")
 
 			for ($i=0;$i<count($adv_filter_col);$i++)
 			{
+				$col = explode(":",$adv_filter_col[$i]);
+				$temp_val = explode(",",$adv_filter_value[$i]);
+				if(($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) && ($col[4] != '' && $adv_filter_value[$i] != '' ))
+				{
+					$val = Array();
+					for($x=0;$x<count($temp_val);$x++)
+					{
+						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+						$temp_date = getDBInsertDateValue(trim($temp_date));
+						if(trim($temp_time) != '')
+							$temp_date .= ' '.$temp_time;
+						$val[$x] = $temp_date;
+						$adv_filter_value[$i] = $val[$x];
+					}
+				}
+				//since we are using pquery, we don't need to add quote to the values
+				//else
+				//      $adv_filter_value[$i] = $adb->quote($adv_filter_value[$i]);
+
 				$irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (?,?,?,?,?)";
 				$irelcriteriaresult = $adb->pquery($irelcriteriasql, array($reportid, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]));
 			}

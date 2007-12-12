@@ -208,11 +208,7 @@ function export($type)
 		{
 			if($key != "user_name")
 			{
-				if($key=="description" || $key=="note")
-				{
-					$value=br2nl_vt($value);
-				}
-				$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "UTF-8"));
+				// No conversions are required here. We need to send the data to csv file as it comes from database.
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 			}	
 		}

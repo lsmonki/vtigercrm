@@ -972,9 +972,29 @@ function getEscapedColumns($selectedfields)
 		{
 			$this->advft_column[] = $relcriteriarow["columnname"];
 			$this->advft_option[] = $relcriteriarow["comparator"];
-			$this->advft_value[] = $relcriteriarow["value"];
-		}
+			$advfilterval = $relcriteriarow["value"];
+			$col = explode(":",$relcriteriarow["columnname"]);
+			$temp_val = explode(",",$relcriteriarow["value"]);
+			if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) 
+			{
+					$val = Array();
+					for($x=0;$x<count($temp_val);$x++)
+					{
+						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+						$temp_date = getDisplayDate(trim($temp_date));
+						if(trim($temp_time) != '')
+							$temp_date .= ' '.$temp_time;
+						$val[$x]=$temp_date;
+						if($x == 0)
+							$advfilterval = $val[$x];
+						else
+							$advfilterval = ','.$val[$x];
+					}
 
+			}
+
+			$this->advft_value[] = $advfilterval;
+		}
 		$log->info("Reports :: Successfully returned getAdvancedFilterList");
 		return true;
 	}
