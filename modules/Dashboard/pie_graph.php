@@ -38,7 +38,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	{
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=$name."=%d";
+		$alts[]=htmlentities($name)."=%d";
 	}
 
 	if($theme == "blue")
@@ -72,7 +72,11 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 			$plotarea,
         	5
 	    	)
-	);   
+	); 
+
+	// To create unique lables we need to keep track of lable name and its count
+	$uniquex = array();
+
 
 	// Generate colours
 	$colors = color_generator(count($datay),'#33DDFF','#3322FF');
@@ -89,8 +93,17 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 			else
 				$datax[$i]= substr($datax[$i],0,10)."..";
 		}
+		// To have unique names even in case of duplicates let us add the id
+		$datalabel = $datax[$i];
+		$datax_appearance = $uniquex[$datax[$i]];
+		if($datax_appearance == null) {
+				$uniquex[$datax[$i]] = 1;			
+		} else {
+			$datalabel = $datax[$i] . ' ['.$datax_appearance.']';
+			$uniquex[$datax[$i]] = $datax_appearance + 1;			
+		}
 		$dataset->addPoint(
-			        $datax[$i],
+			        $datalabel,
 			        $datay[$i],
 			        array(
 			            'url' => $target[$i],

@@ -233,7 +233,7 @@ $smarty->display("CustomView.tpl");
 
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
-	global $oCustomView;
+	global $oCustomView, $current_language;
 	global $app_list_strings;
 	$advfilter = array();
 	$mod_strings = return_specified_module_language($current_language,$module);
@@ -321,7 +321,7 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	*/	
 function getStdFilterHTML($module,$selected="")
 {
-	global $app_list_strings;
+	global $app_list_strings, $current_language;
 	global $oCustomView;
 	$stdfilter = array();
 	$result = $oCustomView->getStdCriteriaByModule($module);
