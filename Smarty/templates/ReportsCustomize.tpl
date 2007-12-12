@@ -25,7 +25,7 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
 		<td  id="repposition{$poscount}" width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="gcurrepfolderid={$reportfolder.id};fnvshobj(this,'reportLay')" type="button"></td>
 		<td  width="75%" align="right">
-			<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick="EditFolder('{$reportfolder.id}','{$reportfolder.name|addslashes|escape}','{$reportfolder.description|addslashes|escape}'),fnvshobj(this,'orgLay');">&nbsp;
+			<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick='EditFolder("{$reportfolder.id}","{$reportfolder.fname}","{$reportfolder.fdescription}"),fnvshobj(this,"orgLay");'>&nbsp;
 		</td>
 		<td align="right">
 			<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
@@ -79,7 +79,7 @@
 	<tr>
 	<td align="left">
 	{foreach item=folder from=$REPT_FOLDERS}
-	<a href="javascript:;" onClick="MoveReport('{$folder.id}','{$folder.name}');" class="drop_down">- {$folder.name}</a>
+	<a href="javascript:;" onClick='MoveReport("{$folder.id}","{$folder.fname}");' class="drop_down">- {$folder.name}</a>
 	{/foreach}
 	</td>
 	</tr>
