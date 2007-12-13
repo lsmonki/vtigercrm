@@ -116,7 +116,11 @@ foreach($act_data as $block=>$entry)
 				}
 			}
 			else
-				$finaldata[$field['fldname']] = $field['value'];
+			{
+				$fldvalue = $field['value'];
+				if($field['fldname'] == 'description') { $fldvalue = nl2br($fldvalue); }
+				$finaldata[$field['fldname']] = $fldvalue;
+			}	
 			
 			$finaldata[$field['fldname'].'link'] = $field['link'];
 		}
