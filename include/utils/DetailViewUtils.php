@@ -604,7 +604,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				/*Above line is not required as the filename in the database is stored as it is and doesn't have crmid attached to it.
 				This was the cause for the issue reported in ticket #4645 */
 				$org_filename = $col_fields[$fieldname];
-
+                                // For Backward Compatibility version < 5.0.4
+                                $filename_pos = strpos($org_filename, $col_fields['record_id'].'_');
+                                if ($filename_pos === 0) {
+	                                        $start_idx = $filename_pos+strlen($col_fields['record_id'].'_');
+	                                        $org_filename = substr($org_filename, $start_idx);
+	                                }
+	
 				if($org_filename != '')
 					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
 				else

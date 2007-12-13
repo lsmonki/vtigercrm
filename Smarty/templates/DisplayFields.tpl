@@ -473,7 +473,8 @@
 						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
 					</script>
 				{else}
-					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" onchange="validateFilename(this);" />
+					<input name="{$fldname}_hidden"  type="hidden" value="{$maindata[3].0.name}" />
 					<input type="hidden" name="id" value=""/>
 					{ if $maindata[3].0.name != "" && $DUPLICATE neq 'true'}
 						
@@ -557,9 +558,11 @@
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 				{if $MODE eq 'edit' && $IMAGENAME neq ''}
-					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />[{$IMAGENAME}]<br>{$APP.LBL_IMG_FORMATS}
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" onchange="validateFilename(this);" />[{$IMAGENAME}]<br>{$APP.LBL_IMG_FORMATS}
+					<input name="{$fldname}_hidden"  type="hidden" value="{$maindata[3].0.name}" />
 				{else}
-					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" /><br>{$APP.LBL_IMG_FORMATS}
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" onchange="validateFilename(this);" /><br>{$APP.LBL_IMG_FORMATS}
+					<input name="{$fldname}_hidden"  type="hidden" value="{$maindata[3].0.name}" />
 				{/if}
 					<input type="hidden" name="id" value=""/>
 					{$maindata[3].0.name}

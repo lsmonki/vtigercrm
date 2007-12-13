@@ -79,7 +79,8 @@ function validateFile(form)
 				   <tr >
 					<td align="right" valign="top" width="25%" class=small><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
-						<input type="file" name="userfile"  size="40"   class=small/>&nbsp;
+						<input type="file" name="userfile"  size="40"   class=small onchange="validateFilename(this);" />&nbsp;
+						<input type="hidden" name="userfile_hidden" value=""/>
                 		<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
 					</td>
 				   </tr>

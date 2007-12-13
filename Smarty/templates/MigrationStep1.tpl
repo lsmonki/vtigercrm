@@ -130,7 +130,8 @@
 								<td width="10%">&nbsp;</td>
 								<td width="90%">
 									{$MOD.LBL_DUMP_FILE_LOCATION}
-									<input type="file" name="old_dump_filename" class="txtBox" />
+									<input type="file" name="old_dump_filename" class="txtBox"  onchange="validateFilename(this);" />
+									<input type="hidden" name="old_dump_filename_hidden" value="" />
 								</td>
 							   </tr>
 							   <tr><td colspan="2" height="10"></td></tr>

@@ -338,7 +338,8 @@
 						{if $MODULE eq 'Products'}
 							<input name="imagelist" type="hidden" value="">
 						    <div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
-						    <input id="my_file_element" type="file" name="file_1" >
+						    <input id="my_file_element" type="file" name="file_1"  onchange="validateFilename(this);" />
+						    <input type="hidden" name="file_1_hidden" value="" />
                             </div>
                             <script>
                             {*<!-- Create an instance of the multiSelector class, pass it the output target and the max number of files -->*}
@@ -348,12 +349,17 @@
                             </script>
 	                     </td>
                          {else}
-                         <input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+                         <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
+			 <input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}" />
+			 <input type="hidden" name="id" value=""/>{$fldvalue}</td>
                          {/if}
 				
                          {elseif $uitype eq 61}
                          <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-						 <td colspan="3" width="30%" align=left class="cellText"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+						 <td colspan="3" width="30%" align=left class="cellText">
+						 <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
+						 <input name="{$fldname}_hidden"  type="hidden" value="{$secondvalue}"/>
+						 <input type="hidden" name="id" value=""/>{$fldvalue}</td>
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
                                                 <td colspan="3" width="30%" align=left class="cellText">
