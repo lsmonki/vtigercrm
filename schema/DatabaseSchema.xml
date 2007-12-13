@@ -953,7 +953,6 @@
 		</index>
 		<index name="attachments_description_name_type_attachmentsid_idx">
 			<col>description</col>
-			<col>name</col>
 			<col>type</col>
 			<col>attachmentsid</col>
 		</index>
