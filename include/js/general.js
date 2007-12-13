@@ -1143,10 +1143,7 @@ function toggleSelect(state,relCheckName) {
 			getObj(relCheckName).checked=state
 		} else {
 			for (var i=0;i<getObj(relCheckName).length;i++)
-			{
 				getObj(relCheckName)[i].checked=state
-				check_object(getObj(relCheckName)[i])
-			}
 		}
 	}
 }
@@ -2417,12 +2414,125 @@ function default_togglestate()
        for (var i=0;i<(getObj("selected_id").length);i++)
        {
                var state=getObj("selected_id")[i].checked;
-                      if (state == false)
-                      {
-                              all_state=false;
-                              break;
-                      }
+			if (state == false)
+			{
+				all_state=false;
+				break;
+			}
        }
-                      getObj("selectall").checked=all_state;
+			getObj("selectall").checked=all_state;
 
 }
+
+//for select  multiple check box in multiple pages for Campaigns related list:
+
+function rel_check_object(sel_id,module)
+{
+        var selected;
+        var select_global=new Array();
+        var cookie_val=get_cookie(module+"_all");
+        if(cookie_val == null)
+                selected=sel_id.value+";";
+        else
+                selected=trim(cookie_val);
+        select_global=selected.split(";");
+        var box_value=sel_id.checked;
+        var id= sel_id.value;
+        var duplicate=select_global.indexOf(id);
+        var size=select_global.length-1;
+        var result="";
+        if(box_value == true)
+        {
+                if(duplicate == "-1")
+                {
+                        select_global[size]=id;
+                }
+
+                size=select_global.length-1;
+                var i=0;
+                for(i=0;i<=size;i++)
+                {
+                        if(trim(select_global[i])!='')
+                                result=select_global[i]+";"+result;
+                }
+                rel_default_togglestate(module);
+
+        }
+        else
+        {
+                if(duplicate != "-1")
+		 
+			select_global.splice(duplicate,1)
+
+                size=select_global.length-1;
+                var i=0;
+                for(i=size;i>=0;i--)
+                {
+                        if(trim(select_global[i])!='')
+                                result=select_global[i]+";"+result;
+                }
+                        getObj(module+"_selectall").checked=false;
+
+        }
+        set_cookie(module+"_all",result);
+}
+
+//Function to select all the items in the current page for Campaigns related list:.
+function rel_toggleSelect(state,relCheckName,module) {
+        if (getObj(relCheckName)) {
+                if (typeof(getObj(relCheckName).length)=="undefined") {
+                        getObj(relCheckName).checked=state
+                } else
+                {
+                        for (var i=0;i<getObj(relCheckName).length;i++)
+                        {
+                                getObj(relCheckName)[i].checked=state
+                                        rel_check_object(getObj(relCheckName)[i],module)
+                        }
+                }
+        }
+}
+//To select the select all check box(if all the items are selected) when the form loads for Campaigns related list:.
+function rel_default_togglestate(module)
+{
+        var all_state=true;
+        if(getObj(module+"_selected_id"))
+        {
+                for (var i=0;i<(getObj(module+"_selected_id").length);i++)
+                {
+                        var state=getObj(module+"_selected_id")[i].checked;
+                        if (state == false)
+                                all_state=false;
+ 		}
+                getObj(module+"_selectall").checked=all_state;
+        }
+}
+//To clear all the checked items in all the pages for Campaigns related list:
+function clear_checked_all(module)
+{
+        var cookie_val=get_cookie(module+"_all");
+        if(cookie_val != null)
+                delete_cookie(module+"_all");
+        //Uncheck all the boxes in current page..
+        for (var i=0;i<(getObj(module+"_selected_id").length);i++)
+        {
+                getObj(module+"_selected_id")[i].checked=false;
+        }
+                getObj(module+"_selectall").checked=false;
+
+}
+
+function toggleSelect_ListView(state,relCheckName) {
+        if (getObj(relCheckName)) {
+                if (typeof(getObj(relCheckName).length)=="undefined") {
+                        getObj(relCheckName).checked=state
+                } else {
+                        for (var i=0;i<getObj(relCheckName).length;i++)
+                        {
+                                getObj(relCheckName)[i].checked=state
+                                check_object(getObj(relCheckName)[i])
+                        }
+                }
+        }
+}
+

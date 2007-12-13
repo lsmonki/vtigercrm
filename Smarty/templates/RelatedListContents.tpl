@@ -12,6 +12,7 @@
 
 -->*}
 
+<script type='text/javascript' src='include/js/Mail.js'></script>
 {if $SinglePane_View eq 'true'}
 	{assign var = return_modname value='DetailView'}
 {else}
@@ -22,9 +23,10 @@
 {/if}
 {foreach key=header item=detail from=$RELATEDLISTS}
 
+{assign var=rel_mod value=$header}
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
         <tr>
-                <td  valign=bottom><b>{$APP.$header}</b></td>
+                <td  valign=bottom><b>{$APP.$header}</b> {if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}<br><br>{$APP.LBL_SELECT_BUTTON_LABEL}: <a href="javascript:;" onclick="clear_checked_all('{$rel_mod}');">{$APP.LBL_NONE_NO_LINE}</a>{/if} </td>
                 {if $detail ne ''}
                 <td align=center>{$detail.navigation.0}</td>
                 {$detail.navigation.1}
@@ -64,6 +66,7 @@
 				{/if}
 			{elseif $header eq 'Leads'}
 				{if $MODULE eq 'Campaigns'}
+				<input title="{$APP.LBL_SEND_MAIL_BUTTON}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SEND_MAIL_BUTTON}" type="button"  name="button" onclick="rel_eMail('{$MODULE}',this,'{$rel_mod}')">
 				{$LEADCVCOMBO}<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="loadCvList('Leads','{$ID}')">
 				<input alt="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" title="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Leads}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{/if}
@@ -83,6 +86,7 @@
 					<input title="{$APP.LBL_BULK_MAILS}" accessykey="F" class="crmbutton small create" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="{$APP.LBL_BULK_MAILS}" type="submit">&nbsp;
 					<input alt="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" accessKey="" class="crmbutton small create" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contact}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 				{elseif $MODULE eq 'Campaigns'}
+					<input title="{$APP.LBL_SEND_MAIL_BUTTON}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SEND_MAIL_BUTTON}" type="button"  name="button" onclick="rel_eMail('{$MODULE}',this,'{$rel_mod}')">
 					{$CONTCVCOMBO}<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="loadCvList('Contacts','{$ID}')">
 					<input alt="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Contacts}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 					<input title="{$APP.LBL_ADD_NEW} {$APP.Contact}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Contact}"></td>
@@ -160,11 +164,15 @@
                         {/if}
         </tr>
 </table>
+{assign var=check_status value=$detail}
 {if $detail ne ''}
 	{foreach key=header item=detail from=$detail}
 		{if $header eq 'header'}
 			<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;" class="small">
 				<tr style="height:25px" bgcolor=white>
+                                {if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}
+                                        <td class="lvtCol"><input name ="{$rel_mod}_selectall" onclick="rel_toggleSelect(this.checked,'{$rel_mod}_selected_id','{$rel_mod}');"  type="checkbox"></td>
+                                {/if}
 				{foreach key=header item=headerfields from=$detail}
 					<td class="lvtCol">{$headerfields}</td>
 				{/foreach}
@@ -172,6 +180,9 @@
 		{elseif $header eq 'entries'}
 			{foreach key=header item=detail from=$detail}
 				<tr bgcolor=white>
+                                {if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}
+                                        <td><input name="{$rel_mod}_selected_id" id="{$header}" value="{$header}" onclick="rel_check_object(this,'{$rel_mod}');" toggleselectall(this.name,="" selectall="" )="" type="checkbox"  {$check_status.checked.$header}></td>
+                                {/if}
 				{foreach key=header item=listfields from=$detail}
 	                                 <td>{$listfields}</td>
 				{/foreach}
@@ -188,4 +199,9 @@
 	</table>
 {/if}
 <br><br>
+{ if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}
+<script>
+rel_default_togglestate('{$rel_mod}');
+</script>
+{/if}
 {/foreach}

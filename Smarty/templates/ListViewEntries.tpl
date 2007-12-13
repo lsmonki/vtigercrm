@@ -96,7 +96,7 @@
 			<table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small">
 			<!-- Table Headers -->
 			<tr>
-            <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+            <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
  			<td class="lvtCol">{$header}</td>
 				{/foreach}

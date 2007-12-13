@@ -129,4 +129,30 @@ function sendmail(module,idstrings)
         );
 }
 
-	
+function rel_eMail(module,oButton,relmod)
+{
+	var select_options='';
+	var allids='';
+	var cookie_val=get_cookie(relmod+"_all");
+	if(cookie_val != null)
+		select_options=cookie_val;
+	//Added to remove the semi colen ';' at the end of the string.done to avoid error.
+	var x = select_options.split(";");
+	var viewid ='';
+	var count=x.length
+		var idstring = "";
+	select_options=select_options.slice(0,(select_options.length-1));
+
+	if (count > 1)
+	{
+		idstring=select_options.replace(/;/g,':')
+			allids=idstring;
+	}
+	else
+	{
+		alert(alert_arr.SELECT);
+		return false;
+	}
+	fnvshobj(oButton,'sendmail_cont');
+	sendmail(relmod,allids);
+}
