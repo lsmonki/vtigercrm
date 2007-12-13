@@ -244,7 +244,7 @@ else
 					</tr>
 					<tr bgcolor="White">
 						<td noWrap bgcolor="#F5F5F5" width="40%">Database UTF-8 Support</td>
-						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font></td>
+						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font>&nbsp;<a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_blank">More Information</a></td>
 					</tr>
 					</table>
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">

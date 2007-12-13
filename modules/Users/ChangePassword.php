@@ -31,6 +31,8 @@ global $app_strings;
 global $mod_strings;
 
 $mod_strings['ERR_ENTER_OLD_PASSWORD'];
+
+insert_popup_header($theme);
 ?>
 <script type='text/javascript' src="include/js/general.js"></script>
 <script type='text/javascript' language='JavaScript'>
@@ -66,7 +68,6 @@ function set_password(form) {
 	}
 }
 </script>
-<?php insert_popup_header($theme); ?>
 
 <form name="ChangePassword">
 <?php echo get_form_header($mod_strings['LBL_CHANGE_PASSWORD'], "", false); ?>

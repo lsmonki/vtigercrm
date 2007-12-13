@@ -147,5 +147,5 @@
 				LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE:'You have used search option but you have not selected without search & currentpage options.\nYou can click [ok] to export current page data or You can click [cancel] and try again with some other export criteria.',
 				LBL_SELECT_COLUMN: ' Invalid column.\n Please select column',
 				LBL_NOT_ACCESSIBLE : 'Not Accessible',
-				LBL_FILENAME_LENGTH_EXCEED_ERR: 'Filename cannot exceed 100 characters'
+				LBL_FILENAME_LENGTH_EXCEED_ERR: 'Filename cannot exceed 255 characters'
                        };

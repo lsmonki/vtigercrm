@@ -47,10 +47,11 @@ class PearDatabase{
     var $log = null;
     var $lastmysqlrow = -1;
     var $enableSQLlog = false;
+    var $continueInstallOnError = true;
 
-	// If you want to avoid executing PreparedStatement, set this to true
-	// PreparedStatement will be converted to normal SQL statement for execution
-	var $avoidPreparedSql = false;
+    // If you want to avoid executing PreparedStatement, set this to true
+    // PreparedStatement will be converted to normal SQL statement for execution
+    var $avoidPreparedSql = false;
 	
     function isMySQL() { return dbType=='mysql'; }
     function isOracle() { return dbType=='oci8'; }
@@ -781,7 +782,7 @@ class PearDatabase{
 	//$this->println($sql);
 
 	//integer ExecuteSchema ([array $sqlArray = NULL], [boolean $continueOnErr = NULL])
-	$result = $schema->ExecuteSchema( $sql, true );
+	$result = $schema->ExecuteSchema( $sql, $this->continueInstallOnError );
 	if($result)
 	print $db->errorMsg();
 	// needs to return in a decent way

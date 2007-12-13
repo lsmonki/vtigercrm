@@ -117,6 +117,7 @@ function MultiSelector( list_target, max ){
 		var new_row_button = document.createElement( 'input' );
 		new_row_button.type = 'button';
 		new_row_button.value = 'Delete';
+		new_row_button.className = 'crmbutton small delete';
 
 		// References
 		new_row.element = element;
