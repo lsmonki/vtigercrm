@@ -143,7 +143,13 @@ function DeleteTag(id,recordid)
 							 <tr>
 								{if $LABEL.eventstatus neq ''}
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.eventstatus}</b></td>
-								<td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.eventstatus}</td>
+								<td class="cellInfo" align="left" nowrap valign="top">
+									{if $ACTIVITYDATA.eventstatus eq $APP.LBL_NOT_ACCESSIBLE}
+										<font color="red">{$ACTIVITYDATA.eventstatus}</font>
+										{else}
+											{$ACTIVITYDATA.eventstatus}
+									{/if}
+								</td>
 								{/if}
 								{if $LABEL.assigned_user_id neq ''}
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.assigned_user_id}</b></td>
@@ -154,7 +160,13 @@ function DeleteTag(id,recordid)
 							 <tr>
 								{if $LABEL.taskpriority neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.taskpriority}</b></td>
-                                                                <td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.taskpriority}</td>
+                                                                <td class="cellInfo" align="left" nowrap valign="top">
+									{if $ACTIVITYDATA.taskpriority eq $APP.LBL_NOT_ACCESSIBLE}
+										<font color="red" >{$ACTIVITYDATA.taskpriority}</font>
+									{else}
+										{$ACTIVITYDATA.taskpriority}
+									{/if}
+								</td>
 								{/if}
 								{if $LABEL.sendnotification neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.sendnotification}</b></td>
@@ -311,10 +323,18 @@ function DeleteTag(id,recordid)
 									</tr>
 									<tr>
 										{if $LABEL.taskstatus neq ''}
-                                                					<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskstatus}</td>
+											<td class="cellInfo" align="left" valign="top">
+											{if $ACTIVITYDATA.taskstatus eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                	<font color="red">{$ACTIVITYDATA.taskstatus}</font>
+											{else} {$ACTIVITYDATA.taskstatus}{/if}
+                                                					</td>
 										{/if}
 										{if $LABEL.taskpriority neq ''}		
-											<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskpriority}</td>
+											<td class="cellInfo" align="left" valign="top">
+											{if $ACTIVITYDATA.taskpriority eq $APP.LBL_NOT_ACCESSIBLE}
+											<font color="red">{$ACTIVITYDATA.taskpriority}</font>
+											{else}{$ACTIVITYDATA.taskpriority}{/if}
+											</td>
 										{/if}
 										<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 									</tr>

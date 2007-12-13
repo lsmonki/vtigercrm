@@ -1708,14 +1708,17 @@ class ReportRun extends CRMEntity
 	function GenerateReport($outputformat,$filterlist)
 	{
 		global $adb,$current_user;
-		global $modules;
+		global $modules,$app_strings;
 		global $mod_strings,$current_language;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
 
+			if(!$is_admin)
+				$picklistarray = $this->getAccessPickListValues();
 			if($result)
 			{
 				$y=$adb->num_fields($result);
@@ -1771,6 +1774,32 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+					//check for Roll based pick list
+						$temp_val= $fld->name;
+						if(is_array($picklistarray))
+							if(array_key_exists($temp_val,$picklistarray))
+							{
+								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
+									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
+
+							}
+						if(is_array($picklistarray[1]))
+							if(array_key_exists($temp_val,$picklistarray[1]))
+							{
+								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
+								$temp_val = Array();
+								foreach($temp as $key =>$val)
+								{
+										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
+										{
+											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
+										}
+										else
+											$temp_val[]=$val;
+								}
+								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
+							}
+
 						if($fieldvalue == "" )
 						{
 							$fieldvalue = "-";
@@ -1850,6 +1879,8 @@ class ReportRun extends CRMEntity
 
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
+			if(!$is_admin)
+			$picklistarray = $this->getAccessPickListValues();
 
 			if($result)
 			{
@@ -1867,6 +1898,32 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = $custom_field_values[$i];
+						// Check for roled based pick list
+						$temp_val= $fld->name;
+						if(is_array($picklistarray))
+							if(array_key_exists($temp_val,$picklistarray))
+							{
+								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
+								{
+									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
+								}
+							}
+						if(is_array($picklistarray[1]))
+							if(array_key_exists($temp_val,$picklistarray[1]))
+							{
+								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
+								$temp_val = Array();
+								foreach($temp as $key =>$val)
+								{
+										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
+										{
+											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
+										}
+										else
+											$temp_val[]=$val;
+								}
+								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
+							}
 
 						if($fieldvalue == "" )
 						{
@@ -1967,6 +2024,8 @@ class ReportRun extends CRMEntity
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
+			if(!$is_admin)
+			$picklistarray = $this->getAccessPickListValues();
 
 			if($result)
 			{
@@ -2023,6 +2082,34 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+						//Check For Role based pick list 
+						$temp_val= $fld->name;
+						if(is_array($picklistarray))
+							if(array_key_exists($temp_val,$picklistarray))
+							{
+								if(!in_array($custom_field_values[$i],$picklistarray[$fld->name]) && $custom_field_values[$i] != '')
+								{
+									$fieldvalue =$app_strings['LBL_NOT_ACCESSIBLE'];
+								}
+							}
+						if(is_array($picklistarray[1]))
+							if(array_key_exists($temp_val,$picklistarray[1]))
+							{
+
+								$temp =explode(",",str_ireplace(' |##| ',',',$fieldvalue));
+								$temp_val = Array();
+								foreach($temp as $key =>$val)
+								{
+										if(!in_array(trim($val),$picklistarray[1][$fld->name]) && trim($val) != '')
+										{
+											$temp_val[]=$app_strings['LBL_NOT_ACCESSIBLE'];
+										}
+										else
+											$temp_val[]=$val;
+								}
+								$fieldvalue =(is_array($temp_val))?implode(", ",$temp_val):'';
+							}
+
 
 						if($fieldvalue == "" )
 						{
@@ -2281,6 +2368,64 @@ class ReportRun extends CRMEntity
                 }
 		return $rep_header;  
 	}
+
+	/** Function to get picklist value array based on profile
+	 *          *  returns permitted fields in array format
+	 **/
+
+
+	function getAccessPickListValues()
+	{
+		global $adb;
+		global $current_user;
+		$id =getTabid($this->primarymodule);
+		if($this->secondarymodule != '')
+			$id .= ','.getTabid($this->secondarymodule);
+
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in(?) and uitype in (15,16,111,33)'; //and columnname in (?)';
+		$result = $adb->pquery($query,array($id));//,$select_column));
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $roleid);
+		}
+		else
+		{
+			$roleids = $roleid;
+		}
+
+
+		for($i=0;$i < $adb->num_rows($result);$i++)
+		{
+			$fieldname = $adb->query_result($result,$i,"fieldname");
+			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+			$tabid = $adb->query_result($result,$i,"tabid");
+			$uitype = $adb->query_result($result,$i,"uitype");
+			if($this->primarymodule == 'Calendar' && ($fieldname == 'activitytype' || $fieldname == 'visibility' || $fieldname == 'duration_minutes' || $fieldname == 'recurringtype'))
+				continue;
+			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+			$keyvalue = getTabModuleName($tabid)."_".$fieldlabel1;
+			$fieldvalues = Array();
+			if (count($roleids) > 1) {
+				$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
+			} else {
+				$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid ='".$roleid."' and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
+			}
+			$mulselresult = $adb->query($mulsel);
+			for($j=0;$j < $adb->num_rows($mulselresult);$j++)
+			{
+				$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
+			}
+			if($uitype == 33)
+				$fieldlists[1][$keyvalue] = $fieldvalues;
+			else 
+				$fieldlists[$keyvalue] = $fieldvalues;
+		}
+		return $fieldlists;
+	}
+
 
 }
 ?>

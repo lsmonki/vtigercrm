@@ -107,7 +107,17 @@ foreach($act_data as $block=>$entry)
 		foreach($value as $label=>$field)
 		{
 			$fldlabel[$field['fldname']] = $label;
-			$finaldata[$field['fldname']] = $field['value'];
+			if($field['ui'] == 15 || $field['ui'] == 16 || $field['ui'] == 111)
+			{
+				foreach($field['options'] as $index=>$arr_val)
+				{
+					if($arr_val[2] == "selected")
+					$finaldata[$field['fldname']] = $arr_val[0];
+				}
+			}
+			else
+				$finaldata[$field['fldname']] = $field['value'];
+			
 			$finaldata[$field['fldname'].'link'] = $field['link'];
 		}
 	}
