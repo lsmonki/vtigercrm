@@ -560,15 +560,21 @@ function getEventListView(& $cal,$mode='')
 		die("view:".$cal['calendar']->view." is not defined");
         }
 	//if $mode value is empty means get Events list in array format else get the count of total events and pending events in array format.
-	$activity_list = getEventList($cal, $start_date, $end_date,$mode);
 	if($mode != '')
 	{
+		$activity_list = getEventList($cal, $start_date, $end_date,$mode);
 		$cal_log->debug("Exiting getEventListView() method...");
 		return $activity_list;
 	}
+	else
+	{
+		$ret_arr = getEventList($cal, $start_date, $end_date,$mode);
+	        $activity_list = $ret_arr[0];
+	        $navigation_array = $ret_arr[1];
+	}
 	//To get Events listView
 	$list_view .="<br><div id='listView'>";
-	$list_view .=constructEventListView($cal,$activity_list);
+	$list_view .=constructEventListView($cal,$activity_list,$navigation_array);
 	$list_view .="<br></div>
 		</div>";
 	$list_view .="<br></td></tr></table></td></tr></table>
@@ -625,16 +631,22 @@ function getTodosListView($cal, $check='',$subtab='')
                 die("view:".$cal['calendar']->view." is not defined");
         }
 	//if $check value is empty means get Todos list in array format else get the count of total todos and pending todos in array format.
-	$todo_list = getTodoList($cal, $start_date, $end_date,$check);
 	if($check != '')
 	{
+		$todo_list = getTodoList($cal, $start_date, $end_date,$check);
 		$cal_log->debug("Exiting getTodosListView() method...");
 		return $todo_list;
+	}
+	else
+	{
+		$ret_arr = getTodoList($cal, $start_date, $end_date,$check);
+		$todo_list = $ret_arr[0];
+		$navigation_arr = $ret_arr[1];
 	}
 	$cal_log->debug("Exiting getTodosListView() method...");
 	$list_view .="<div id='mnuTab2' style='background-color: rgb(255, 255, 215); display:block;'>";
 	//To get Todos listView
-	$list_view .= constructTodoListView($todo_list,$cal,$subtab);
+	$list_view .= constructTodoListView($todo_list,$cal,$subtab,$navigation_arr);
 	$list_view .="</div></div></td></tr></table></td></tr></table>
 		</td></tr></table>
 		</td></tr></table>
@@ -1012,7 +1024,6 @@ function getdayEventLayer(& $cal,$slice,$rows)
 	$last_colwidth = 100 / $rows;
 	$width = 100 / $rows ;
 	$act = $cal['calendar']->day_slice[$slice]->activities;
-	//echo '<pre>';print_r($act);echo '</pre>';
 	if(!empty($act))
 	{
 		for($i=0;$i<count($act);$i++)
@@ -1246,6 +1257,22 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
+	$count_qry = "SELECT count(*) as count FROM vtiger_activity
+		INNER JOIN vtiger_crmentity
+		ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_activitygrouprelation
+		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+		LEFT JOIN vtiger_groups
+		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		LEFT JOIN vtiger_users
+		ON vtiger_users.id = vtiger_crmentity.smownerid
+		LEFT OUTER JOIN vtiger_recurringevents
+		ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+		WHERE vtiger_crmentity.deleted = 0
+		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
+		AND (((vtiger_activity.date_start between ? AND  ?) OR (vtiger_activity.due_date between ? AND ?) OR (vtiger_activity.date_start<? and vtiger_activity.due_date>?) AND (vtiger_recurringevents.recurringdate is NULL))
+		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?)) ";
+		
 	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
@@ -1296,18 +1323,44 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$sec_parameter=getListViewSecurityParameter('Calendar');
 		$query .= $sec_parameter;
+		$count_qry .= $sec_parameter;
 	}
-		
-	$query .= "GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'search')
+	{
+		$search_where = calendar_search_where($_REQUEST['field_name'],$_REQUEST['search_option'],$_REQUEST['search_text']);
+		$group_cond .= $search_where; 
+		$count_qry .= $search_where;
+	}		
+	$group_cond .= " GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$count_qry .= ' GROUP BY vtiger_activity.activityid ';
+	$count_res = $adb->pquery($count_qry, $params);
+	$total_rec_count = $adb->num_rows($count_res);
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		$start = $_REQUEST['start'];
+	else
+		$start = 1;
+	global $list_max_entries_per_page;
+	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
+	$start_rec = $navigation_array['start'];
+	$end_rec = $navigation_array['end_val'];
+	if($start_rec <= 1)
+		$start_rec = 0;
+	else
+		$start_rec = $start_rec-1;
+	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+
  	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 		
 	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
+	$c = 0;
+	if($start > 1)
+		$c = ($start-1) * $list_max_entries_per_page;
 	for($i=0;$i<$rows;$i++)
 	{
 		$element = Array();
-		$element['no'] = $i+1;
+		$element['no'] = $c+1;
 		$image_tag = "";
 		$contact_data = "";
 		$more_link = "";
@@ -1360,7 +1413,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		if($idShared == "normal")
 		{
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
-				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\",\"".$idShared."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		}
 		else
 		{
@@ -1374,12 +1427,13 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$element['assignedto'] = $assignedto;
 		else
 			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
-
-	$Entries[] = $element;
-	
+		$c++;
+		$Entries[] = $element;
 	}
+	$ret_arr[0] = $Entries;
+        $ret_arr[1] = $navigation_array;
 	$cal_log->debug("Exiting getEventList() method...");
-	return $Entries;
+	return $ret_arr;
 }
 
 /**
@@ -1399,6 +1453,20 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	$cal_log->debug("Entering getTodoList() method...");
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	$count_qry = "SELECT count(*) as count FROM vtiger_activity
+		INNER JOIN vtiger_crmentity
+		ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_cntactivityrel
+		ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+		LEFT JOIN vtiger_activitygrouprelation
+		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+		LEFT JOIN vtiger_groups
+		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		LEFT JOIN vtiger_users
+		ON vtiger_users.id = vtiger_crmentity.smownerid
+		WHERE vtiger_crmentity.deleted = 0
+		AND vtiger_activity.activitytype = 'Task'
+		AND (vtiger_activity.date_start BETWEEN ? AND ?)";
         $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_cntactivityrel.contactid, 
 		vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
@@ -1430,7 +1498,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		    	$total_q = fixPostgresQuery( $total_q, $log, 0);
 			}
 			$total_res = $adb->pquery($total_q, $info_params);
-			$total = $adb->num_rows($total_res);
+			$total = ($adb->num_rows($total_res)>0)?($adb->num_rows($total_res)-1):$adb->num_rows($total_res);
                 
 			$res = $adb->pquery($pending_query, $info_params);
             $pending_rows = $adb->num_rows($res);
@@ -1443,20 +1511,41 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$sec_parameter=getListViewSecurityParameter('Calendar');
 		$query .= $sec_parameter;
+		$count_qry .= $sec_parameter;
 	}
-								
-    $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$group_cond = '';
+	$count_res = $adb->pquery($count_qry, $params);
+        $total_rec_count = $adb->query_result($count_res,0,'count');
+	$group_cond .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')     
+		$start = $_REQUEST['start'];
+	else 
+		$start = 1;
+	global $list_max_entries_per_page;
+	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
+	
+	$start_rec = $navigation_array['start']; 
+	$end_rec = $navigation_array['end_val'];
+	if($start_rec <= 1)
+		$start_rec = 0;
+	else
+		$start_rec = $start_rec-1;
+	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+		
 	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 
     $result = $adb->pquery($query, $params);
     $rows = $adb->num_rows($result);
+	$c=0;
+	if($start > 1)
+		$c = ($start-1) * $list_max_entries_per_page;
 	for($i=0;$i<$rows;$i++)
         {
 		
                 $element = Array();
 		$contact_name = '';
-                $element['no'] = $i+1;
+                $element['no'] = $c+1;
                 $more_link = "";
                 $start_time = $adb->query_result($result,$i,"time_start");
                 $format = $calendar['calendar']->hour_format;
@@ -1498,10 +1587,13 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			$element['assignedto'] = $assignedto;
 		else
 			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
+		$c++;
 		$Entries[] = $element;
 	}
+	$ret_arr[0] = $Entries;
+        $ret_arr[1] = $navigation_array;
 	$cal_log->debug("Exiting getTodoList() method...");
-	return $Entries;
+	return $ret_arr;
 }
 
 /**
@@ -1546,7 +1638,7 @@ function getTodoInfo(& $cal, $mode)
  * @param array  $entry_list    - collection of strings(Event Information)
  * return string $list_view     - html tags in string format
  */
-function constructEventListView(& $cal,$entry_list)
+function constructEventListView(& $cal,$entry_list,$navigation_array='')
 {
 	global $mod_strings,$app_strings,$cal_log,$current_user;
 	$cal_log->debug("Entering constructEventListView() method...");
@@ -1602,6 +1694,13 @@ function constructEventListView(& $cal,$entry_list)
         $list_view .="<table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         <tr>";
 	$header_rows = count($header);
+	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Calendar","index");
+	if($navigationOutput != '')
+	{
+		$list_view .= "<tr width=100% bgcolor=white><td align=center colspan=$header_rows>";
+		$list_view .= "<table align=center width='98%'><tr>".$navigationOutput."</tr></table></td></tr>";
+	}
+	$list_view .= "<tr>";
         for($i=0;$i<$header_rows;$i++)
         {
                 $list_view .="<td nowrap='nowrap' class='lvtCol' width='".$header_width[$i]."'>".$header[$i]."</td>";
@@ -1660,7 +1759,7 @@ function constructEventListView(& $cal,$entry_list)
  * @param array  $cal           - collection of objects and strings 
  * return string $list_view     - html tags in string format
  */
-function constructTodoListView($todo_list,$cal,$subtab)
+function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 {
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering constructTodoListView() method...");
@@ -1770,8 +1869,15 @@ function constructTodoListView($todo_list,$cal,$subtab)
 		</table>
 
 			<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
-                        <tr>";
-        $header_rows = count($header);
+                        ";
+	$header_rows = count($header);
+	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Calendar","index");
+	if($navigationOutput != '')
+	{
+		$list_view .= "<tr width=100% bgcolor=white><td align=center colspan=$header_rows>";
+		$list_view .= "<table align=center width='98%'><tr>".$navigationOutput."</tr></table></td></tr>";
+	}
+	$list_view .= "<tr>";
         for($i=0;$i<$header_rows;$i++)
         {
                 $list_view .="<td class='lvtCol' width='".$header_width[$i]."' nowrap='nowrap'>".$header[$i]."</td>";

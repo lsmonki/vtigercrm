@@ -102,7 +102,11 @@ class ReportRun extends CRMEntity
 			{
 				if($querycolumns == "")
 				{
-					if($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')
+					if($selectedfields[4] == 'C')
+					{
+						$columnslist[$fieldcolname] = "case when (".$selectedfields[0].".".$selectedfields[1]."='1')then 'yes' else 'no' end as $selectedfields[1]";
+					}
+					elseif($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')
 					{
 						$columnslist[$fieldcolname] = " case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as Calendar_Status";
 					}
@@ -1684,6 +1688,10 @@ class ReportRun extends CRMEntity
 			$sec_parameter=getListViewSecurityParameter($this->primarymodule);
 			$reportquery .= " ".$sec_parameter;
 		}
+		
+		if($tab_id == 9 || $tab_id == 16)
+        	$reportquery.=" group by vtiger_activity.activityid ";
+
 		if(trim($groupsquery) != "")
 		{
 			$reportquery .= " order by ".$groupsquery;

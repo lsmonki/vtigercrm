@@ -35,8 +35,8 @@ $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST['stdDateFilterField'];
 $filter = $_REQUEST['stdDateFilter'];
-$startdate = $_REQUEST['startdate'];
-$enddate = $_REQUEST['enddate'];
+$startdate = getDBInsertDateValue($_REQUEST['startdate']);
+$enddate = getDBInsertDateValue($_REQUEST['enddate']);
 
 $oReportRun = new ReportRun($reportid);
 $filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);

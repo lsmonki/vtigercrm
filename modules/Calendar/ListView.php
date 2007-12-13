@@ -134,7 +134,7 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND " .$where;
 }
-$list_query .= ' group by vtiger_activity.activityid';
+$list_query .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
 
 if(isset($order_by) && $order_by != '')
 {
@@ -166,7 +166,7 @@ $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
+$count_result = $adb->query("select count(*) count,vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
 $noofrows = $adb->num_rows($count_result); 
 
 //Storing Listview session object

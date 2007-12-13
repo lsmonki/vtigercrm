@@ -922,6 +922,56 @@ function updateStatus(record,status,view,hour,day,month,year,type){
 	}
 }
 
+function cal_navigation(type,urlstring,start)
+{
+	var url = urlstring;
+	$("status").style.display="inline";
+	if(type == 'event')
+        {
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav&viewOption='+OptionData+url+start+'&subtab='+type,
+                                onComplete: function(response) {
+					//alert(response.responseText);
+                                        if(OptionData == 'listview')
+                                        {
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("listView").innerHTML=result[0];
+						$("status").style.display="none";
+                                        }
+                                        if(OptionData == 'hourview')
+					{
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("hrView").innerHTML=result[0];
+						$("status").style.display="none";
+                                        }
+                                }
+                        }
+                );
+        }
+	if(type == 'todo')
+        {
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav'+url+start+'&subtab=todo',
+                                onComplete: function(response) {
+                                        result = response.responseText.split('####');
+                                        $("total_activities").innerHTML = result[1];
+                                        $("mnuTab2").innerHTML=result[0];
+					$("status").style.display="none";
+                                }
+                        }
+                );
+        }	
+}
+
 function getcalAction(obj,Lay,id,view,hour,dateVal,type){
     var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);

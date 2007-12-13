@@ -143,7 +143,7 @@ function callSearch(searchtype)
     {rdelim}
     gPopupAlphaSearchUrl = '';
     search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-    search_txt_val=document.basicSearch.search_text.value;
+    search_txt_val= encodeURIComponent(document.basicSearch.search_text.value.replace(/\'/,"\\'"));
     var urlstring = '';
     if(searchtype == 'Basic')
     {ldelim}

@@ -2176,42 +2176,28 @@ function getListQuery($module,$where='')
 		}
 			break;
 	Case "Calendar":
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype,
-			vtiger_activity.*,
-			vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,
-			vtiger_contactdetails.contactid,
-			vtiger_account.accountid, vtiger_account.accountname
-			FROM vtiger_activity
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_activity.activityid
-			LEFT JOIN vtiger_cntactivityrel
-				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
-			LEFT JOIN vtiger_contactdetails
-				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
-			LEFT JOIN vtiger_seactivityrel
-				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
-			LEFT JOIN vtiger_activitygrouprelation
-				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
-			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			LEFT OUTER JOIN vtiger_account
-				ON vtiger_account.accountid = vtiger_contactdetails.accountid
-			LEFT OUTER JOIN vtiger_leaddetails
-				ON vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid
-			LEFT OUTER JOIN vtiger_account vtiger_account2
-				ON vtiger_account2.accountid = vtiger_seactivityrel.crmid
-			LEFT OUTER JOIN vtiger_potential
-				ON vtiger_potential.potentialid = vtiger_seactivityrel.crmid
-			LEFT OUTER JOIN vtiger_troubletickets
-				ON vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid
-			LEFT OUTER JOIN vtiger_activity_reminder
-                        	ON vtiger_activity_reminder.activity_id = vtiger_activity.activityid
-			WHERE vtiger_crmentity.deleted = 0
-			AND (vtiger_activity.activitytype = 'Meeting'
-				OR vtiger_activity.activitytype = 'Call'
-				OR vtiger_activity.activitytype = 'Task') ".$where;
+		
+		$query="SELECT vtiger_activity.activityid as act_id,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype,
+		vtiger_activity.*,
+		vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,
+		vtiger_contactdetails.contactid,
+		vtiger_account.accountid, vtiger_account.accountname
+		FROM vtiger_activity
+		LEFT JOIN vtiger_cntactivityrel
+			ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+		LEFT JOIN vtiger_contactdetails
+			ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+		LEFT JOIN vtiger_activitygrouprelation
+			ON vtiger_activitygrouprelation.activityid = vtiger_activity.activityid
+		LEFT JOIN vtiger_groups
+			ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		LEFT OUTER JOIN vtiger_activity_reminder
+			ON vtiger_activity_reminder.activity_id = vtiger_activity.activityid
+		LEFT JOIN vtiger_crmentity
+			ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_users
+			ON vtiger_users.id = vtiger_crmentity.smownerid
+		WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2975,16 +2961,63 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 {
 	global $log,$app_strings;
 	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
-	global $theme;
+	global $theme,$current_user;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td align="right" style="padding="5px;">';
 	$tabname = getParentTab();
 
+	//echo '<pre>';print_r($_REQUEST);echo '</pre>';
+	/*    //commented due to usablity conflict -- Philip
+	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
+	 */
+	if($module == 'Calendar' && $action_val == 'index')
+	{
+		$url_string = '';
+		if($_REQUEST['view'] == ''){
+			if($current_user->activity_view == "This Year"){
+				$mysel = 'year';
+			}else if($current_user->activity_view == "This Month"){
+				$mysel = 'month';
+			}else if($current_user->activity_view == "This Week"){
+				$mysel = 'week';
+			}else{
+				$mysel = 'day';
+			}
+		}
+		$data_value=date('Y-m-d H:i:s');
+		preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$data_value,$value);
+		$date_data = Array(
+			'day'=>$value[3],
+			'month'=>$value[2],
+			'year'=>$value[1],
+			'hour'=>$value[4],
+			'min'=>$value[5],
+		);	
+		$tab_type = ($_REQUEST['subtab'] == '')?'event':$_REQUEST['subtab'];
+		$url_string .= isset($_REQUEST['view'])?"&view=".$_REQUEST['view']:"&view=".$mysel;
+		$url_string .= isset($_REQUEST['subtab'])?"&subtab=".$_REQUEST['subtab']:'';
+		$url_string .= isset($_REQUEST['viewOption'])?"&viewOption=".$_REQUEST['viewOption']:'&viewOption=listview';
+		$url_string .= isset($_REQUEST['day'])?"&day=".$_REQUEST['day']:'&day='.$date_data['day'];
+		$url_string .= isset($_REQUEST['week'])?"&week=".$_REQUEST['week']:'';
+		$url_string .= isset($_REQUEST['month'])?"&month=".$_REQUEST['month']:'&month='.$date_data['month'];
+		$url_string .= isset($_REQUEST['year'])?"&year=".$_REQUEST['year']:"&year=".$date_data['year'];
+		$url_string .= isset($_REQUEST['n_type'])?"&n_type=".$_REQUEST['n_type']:'';
+		$url_string .= isset($_REQUEST['search_option'])?"&search_option=".$_REQUEST['search_option']:'';
+	}
 	if(($navigation_array['prev']) != 0)
 	{
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		if($module == 'Calendar' && $action_val == 'index')
+		{
+			//$output .= '<a href="index.php?module=Calendar&action=index&start=1'.$url_string.'" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start=1\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+			//$output .= '<a href="index.php?module=Calendar&action=index&start='.$navigation_array['prev'].$url_string.'" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
+		else{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
 	}
 	else
 	{
@@ -2996,13 +3029,29 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .='<b>'.$i.'</b>&nbsp;';
 		}
 		else{
-			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.'\');" >'.$i.'</a>&nbsp;';
+			if($module == 'Calendar' && $action_val == 'index')
+			{
+				//$output .= '<a href="index.php?module=Calendar&action=index&start='.$i.$url_string.'">'.$i.'</a>&nbsp;';
+				$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$i.'\');" >'.$i.'</a>&nbsp;';
+			}
+			else
+				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.'\');" >'.$i.'</a>&nbsp;';
 		}
 	}
 	if(($navigation_array['next']) !=0)
 	{
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		if($module == 'Calendar' && $action_val == 'index')
+                {
+			//$output .= '<a href="index.php?module=Calendar&action=index&start='.$navigation_array['next'].$url_string.'" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;'; 
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+			//$output .= '<a href="index.php?module=Calendar&action=index&start='.$navigation_array['verylast'].$url_string.'" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
+		else
+		{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
 	}
 	else
 	{

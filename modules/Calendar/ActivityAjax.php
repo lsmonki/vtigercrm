@@ -65,9 +65,10 @@ if ( isset($_REQUEST['year']))
 }
 
 		
-if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
+if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_type']) && $_REQUEST['n_type'] !='')) 
 {
 	$type = $_REQUEST['type'];
+	$n_type = $_REQUEST['n_type'];
 	$cal_log->debug("type value is:".$type);
 	if($type == 'minical')
 	{
@@ -127,7 +128,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			die("view:".$calendar_arr['calendar']->view." is not defined");
 		}
 		
-		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'change_status' || $type == 'activity_postpone')
+		if($type == 'change_owner' || $type == 'activity_delete' || $type == 'change_status' || $type == 'activity_postpone' || $n_type == 'nav')
 		{
 			if($current_user->hour_format != '')
 			        $calendar_arr['calendar']->hour_format=$current_user->hour_format;
@@ -203,16 +204,20 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 				{
 					$cal_log->debug("going to get calendar Event ListView");
 					//To get Events List
-					$activity_list = getEventList($calendar_arr, $start_date, $end_date);
-					echo constructEventListView($calendar_arr,$activity_list)."####".getEventInfo($calendar_arr,'listcnt');
+					$activity_arr = getEventList($calendar_arr, $start_date, $end_date);
+					$activity_list = $activity_arr[0];
+					$navigation_arr = $activity_arr[1];
+					echo constructEventListView($calendar_arr,$activity_list,$navigation_arr)."####".getEventInfo($calendar_arr,'listcnt');
 				}
 			}
 			elseif($subtab == 'todo')
 			{
 				$cal_log->debug("going to get calendar Todo ListView");
 				//To get Todos List
-				$todo_list = getTodoList($calendar_arr, $start_date, $end_date);
-				echo constructTodoListView($todo_list,$calendar_arr,$subtab)."####".getTodoInfo($calendar_arr,'listcnt');
+				$todo_arr = getTodoList($calendar_arr, $start_date, $end_date);
+				$todo_list = $todo_arr[0];
+                $navigation_arr = $todo_arr[1];
+				echo constructTodoListView($todo_list,$calendar_arr,$subtab,$navigation_arr)."####".getTodoInfo($calendar_arr,'listcnt');
 			}
 		}
 		elseif($type == 'view')

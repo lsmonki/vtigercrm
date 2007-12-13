@@ -119,31 +119,68 @@ function searchMapLocation(addressType)
         if (addressType == 'Main')
         {
 		if(fieldname.indexOf('bill_street') > -1)
-                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]))
+	                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_pobox') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_city') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('bill_state') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_country') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_code') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]).innerHTML+' ';
+		}
         }
         else if (addressType == 'Other')
         {
 		if(fieldname.indexOf('ship_street') > -1)
-                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]))
+                        	mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_pobox') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_city') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_state') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('ship_country') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]).innerHTML+' ';
-                if(fieldname.indexOf('bill_code') > -1)                                                                                            mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]).innerHTML+' ';
+		}
+                if(fieldname.indexOf('ship_code') > -1)
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
+		}
 
         }
 	mapParameter = removeHTMLFormatting(mapParameter);
