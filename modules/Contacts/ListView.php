@@ -258,7 +258,7 @@ if(isPermitted("Contacts","Merge") == 'yes')
                 require("user_privileges/user_privileges_".$current_user->id.".php");
 		if($is_admin == true)
 		{
-			$smarty->assign("MERGEBUTTON","<td><a href=index.php?module=Settings&action=upload&tempModule=".$currentModule.">". $app_strings['LBL_CREATE_MERGE_TEMPLATE']."</td>");
+			$smarty->assign("MERGEBUTTON","<td><a href=index.php?module=Settings&action=upload&tempModule=".$currentModule."&parenttab=Settings>". $app_strings['LBL_CREATE_MERGE_TEMPLATE']."</td>");
 		}
 	}
 }

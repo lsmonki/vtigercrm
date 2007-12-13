@@ -99,7 +99,11 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 
 if(isPermitted("Leads","Merge",'') == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
+        if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);

@@ -3684,7 +3684,8 @@ function getAccountId($account_name)
 }
 function decode_html($str)
 {
-	return html_entity_decode($str);
+	global $default_charset;
+	return html_entity_decode($str,ENT_QUOTES,$default_charset);
 }
 
 function popup_decode_html($str)

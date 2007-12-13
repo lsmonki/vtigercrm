@@ -473,21 +473,7 @@ function DeleteTag(id,recordid)
 		</table>
 		<!-- End Tag cloud display -->
 		{/if}
-			<!-- Mail Merge-->
 				<br>
-				{if $MERGEBUTTON eq 'permitted'}
-  				<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
-      				<tr>
-      					   <td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
-      				</tr>
-      				<tr style="height:25px">
-      						<td class="rightMailMergeContent">
-          						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
-          						<input class="crmbutton small create" value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input>
-      					  </td>
-      				</tr>
-  				</table>
-				{/if}
 			</td>
 		</tr>
 		</table>

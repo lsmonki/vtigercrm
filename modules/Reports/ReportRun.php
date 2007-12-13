@@ -2366,6 +2366,8 @@ class ReportRun extends CRMEntity
 		$rep_header_temp = ereg_replace(" ","_",$rep_header);
 		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
 		$temp_mod_strings = return_module_language($current_language,$rep_module);	
+		// htmlentities should be decoded in field names (eg. &). Noticed for fields like 'Terms & Conditions', 'S&H Amount'
+		$rep_header = decode_html($rep_header);
 		$curr_symb = "";
                 if($rep_header == 'Amount')
                         $curr_symb = "(in ".$current_user->currency_symbol.")";

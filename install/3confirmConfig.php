@@ -16,6 +16,8 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.14 2005/04/25 09:41:26 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+require_once('include/logging.php');
+$log =& LoggerManager::getLogger('PLATFORM');
 
 if (isset($_REQUEST['db_hostname'])) $db_hostname= $_REQUEST['db_hostname'];
 if (isset($_REQUEST['db_username'])) $db_username= $_REQUEST['db_username'];
@@ -156,6 +158,34 @@ else
 {
 	$next = true;
 }
+
+// Write the necessary information to platform.log
+
+require_once('include/logging.php');
+$log =& LoggerManager::getLogger('PLATFORM');
+
+$info_style_start = '<div class="center"><table border="0" cellpadding="3" width="600"><tr class="h"><td><h1 class="p">';
+$info_style_end = '</h1></td></tr></table></div>';
+require_once('vtigerversion.php');
+
+// Log Vtiger Version
+if($patch_version !='')
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . " Patch " . $patch_version . $info_style_end);
+}
+else
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . $info_style_end);
+}
+// Log Mysql Server Version
+$log->info($info_style_start . "Mysql Server Version: " . $mysql_server_version . $info_style_end);
+
+ob_start();
+phpinfo();
+$php_info = ob_get_contents();
+ob_end_clean();
+// Log php_info
+$log->info($php_info);
 
 ?>
 

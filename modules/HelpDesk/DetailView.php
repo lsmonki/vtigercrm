@@ -77,7 +77,11 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("HelpDesk","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
+        if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+
         require_once('include/utils/UserInfoUtil.php');
         $wordTemplateResult = fetchWordTemplateList("HelpDesk");
         $tempCount = $adb->num_rows($wordTemplateResult);
