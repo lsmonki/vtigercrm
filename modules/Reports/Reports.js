@@ -14,6 +14,8 @@ typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
 typeofdata['D'] = ['e','n','l','g','m','h'];
+typeofdata['NN'] = ['e','n','l','g','m','h'];
+typeofdata['E'] = ['e','n','s','ew','c','k'];
 
 var fLabels = new Array();
 fLabels['e'] = alert_arr.EQUALS;

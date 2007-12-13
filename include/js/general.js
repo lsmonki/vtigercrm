@@ -2397,7 +2397,7 @@ function get_converted_html(str)
                 str = str.replace(/</g,'&lt;');
                 str = str.replace(/>/g,'&gt;');
         }
-        if(temp.indexOf('script') != '-1' && temp.indexOf('/script') != '-1')
+	if( temp.match(/(script).*(\/script)/))
         {
                 str = str.replace(/&/g,'&amp;');
         }
