@@ -200,6 +200,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		        $webmail = new Webmails($mbox,$_REQUEST['mailid']);
 		        $array_tab = Array();
 		        $webmail->loadMail($array_tab);
+			if(isset($webmail->att_details)){
 			foreach($webmail->att_details as $fileindex => $files)
 			{
 				if($files['name'] != '' && $files['size'] > 0)
@@ -207,6 +208,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 					//print_r($files);
 					$file_saved = $this->saveForwardAttachments($id,$module,$files);
 				}
+			}
 			}
 		}
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");

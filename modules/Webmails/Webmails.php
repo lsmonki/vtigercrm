@@ -709,7 +709,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 	function load_mail($attach_tab)
 	{
 		// parse the message
-		$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
+		$ref_contenu_message =  @imap_headerinfo($this->mbox, $this->mailid);
 		$struct_msg = @imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;
 		$ev = $this->mailid;
@@ -720,8 +720,8 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		}
 		else
 		{
-			$pop_fetchheader_mail_ev = imap_fetchheader($mail, $ev);
-			$pop_body_mail_ev = imap_body($mail, $ev);
+			$pop_fetchheader_mail_ev = @imap_fetchheader($mail, $ev);
+			$pop_body_mail_ev = @imap_body($mail, $ev);
 			GetSinglePart($attach_tab, $struct_msg, $pop_fetchheader_mail_ev, $pop_body_mail_ev);
 		}
 		$conf->use_verbose = true;
@@ -737,7 +737,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		}
 		else
 		{
-			$body = imap_fetchbody($mail,$ev,$tmpvar['number']);
+			$body = @imap_fetchbody($mail,$ev,$tmpvar['number']);
 
 		}
 
@@ -827,7 +827,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		for ($j = 0; $j < count($from_array); $j++)
 			$from .= $from_array[$j]->text;
 		//fixed the issue #3235
-		$toheader = imap_fetchheader($this->mbox, $this->mailid);
+		$toheader = @imap_fetchheader($this->mbox, $this->mailid);
 	        $to_arr = explode("To:",$toheader);
 	        if(!stripos($to_arr[1],'mime')){
 	                $to_add = stripos($to_arr[1],"CC:")?explode("CC:",$to_arr[1]):explode("Subject:",$to_arr[1]);
