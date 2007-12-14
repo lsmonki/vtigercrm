@@ -3984,7 +3984,7 @@ Execute("alter table vtiger_users drop column tagcloud");
 //we have missed to add the Received Shipment in postatus table
 $sortorderid = $conn->query_result($conn->query("select max(sortorderid) as id from vtiger_postatus"),0,'id')+1;
 Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,1)");
-
+Execute("alter table vtiger_attachments add index attachments_description_name_type_attachmentsid_idx (`description`,`type`,`attachmentsid`)");
 
 //Added after 5.0 GA release
 //CALCULATE Activity End Time (time_end)

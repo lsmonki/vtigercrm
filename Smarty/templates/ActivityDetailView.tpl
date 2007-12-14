@@ -453,6 +453,7 @@ function DeleteTag(id,recordid)
 			   </table>
 			</td>
 		</tr>
+		</form>
 	</table>
 	</td>
 	<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
@@ -465,7 +466,7 @@ function DeleteTag(id,recordid)
 			<td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
 		</tr>
 		<tr>
-                      	<td><div id="tagdiv" style="display:visible;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/></div></td>
+                      	<td><div id="tagdiv" style="display:visible;"><form method="POST" action="javascript:void(0);" onsubmit="return tagvalidate();"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="submit" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" /></form></div></td>
                 </tr>
 		<tr>
 			<td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
@@ -517,7 +518,7 @@ getTagCloud();
 </script>
 </td>
 
-</tr></table></form>
+</tr></table>
 </td></tr></table>
 </td></tr></table>
 </td></tr></table>

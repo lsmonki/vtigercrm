@@ -69,7 +69,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		
 		$ret_module = $_REQUEST['return_module'];
 		//$ret_module = $_REQUEST['target_module'];
-		$parent_type;		
+		$parent_type = '';		
 		if($_REQUEST['return_module'] == 'Leads')
 		{
 			$parent_type = 'Lead';
@@ -95,10 +95,10 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 				$module = $_REQUEST['target_module'];
 				$sql = "INSERT INTO vtiger_wordtemplates ";
 				$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) values (?,?,?,?,?,?,?,?,?)";
-				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), '$parent_type', $adb->getEmptyBlob(false), $strDescription, $filename, $filesize, $filetype);
+				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), $parent_type, $adb->getEmptyBlob(false), $strDescription, $filename, $filesize, $filetype);
 				$result = $adb->pquery($sql, $params);
 
-				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
+				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='". mysql_real_escape_string($filename) ."'",$data);
 			   	deleteFile($uploaddir,$filename);
 			   	header("Location: index.php?action=listwordtemplates&module=Settings&parenttab=Settings");	
 			}

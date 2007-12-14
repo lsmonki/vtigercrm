@@ -11,6 +11,7 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
+global $default_charset;
 //echo 'id is ....... ' .$_REQUEST['record'];
 
 //echo 'merge file name is ...' .$_REQUEST['mergefile'];
@@ -23,12 +24,12 @@ $result = $adb->pquery($sql, array($mergeFileName));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
-$filename=$temparray['filename'];
+$filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$_SERVER['DOCUMENT_ROOT'] ."/test/wordtemplatedownload/";
 
 //echo '<br> file name and size is ..'.$filename .'...'.$filesize;
-$handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb") ;
+$handle = fopen($wordtemplatedownloadpath .$filename,"wb") ;
 //chmod("/home/mickie/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);

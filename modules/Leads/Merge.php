@@ -32,6 +32,8 @@ else if(document.all)
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
 
+global $default_charset;
+
 $templateid = $_REQUEST['mergefile'];
 if($templateid == "")
 {
@@ -45,12 +47,12 @@ $result = $adb->pquery($sql, array($templateid));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
-$filename=$temparray['filename'];
+$filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
 
-$handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
+$handle = fopen($wordtemplatedownloadpath .$filename,"wb");
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 

@@ -672,25 +672,42 @@ ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='expected
 ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualresponsecount' and tabid=26");
 ExecuteQuery("update vtiger_field set typeofdata='I~O' where fieldname='actualsalescount' and tabid=26");
 
+
+//Added by Akilan to fix the issue #4544
+ExecuteQuery("alter table vtiger_attachments change column name name varchar(255)");
+
+// Added by akilan to fix the issue #4568
+// Custom field default value is null that should be replace to Empty value.
+$cfresult = $adb->query("select columnname,tablename,uitype,fieldname,fieldlabel,typeofdata from vtiger_field where columnname like 'cf_%' and uitype in (1,13,11,15,17,85) order by columnname");
+$countcf = $adb->num_rows($cfresult);
+for($i=0;$i<$countcf;$i++)
+{
+	$column = $adb->query_result($cfresult,$i,'columnname');
+	$table = $adb->query_result($cfresult,$i,'tablename');
+	$adb->query("alter table $table alter $column set default ''");
+	$adb->query("update $table set $column = '' where $column is NULL");
+}
+
+//Added by liza for 4242 ticket
+ExecuteQuery("alter table vtiger_products modify column qtyinstock decimal(25,3)");
+
+
 //Added by Pavani 4th December
 //To add check boxes for import/export for Trouble Tickets and Vendors
-ExecuteQuery("insert into vtiger_profile2utility values(1,13,5,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,13,6,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,13,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,13,6,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,13,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,13,6,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,13,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,13,6,1)");
-//Vendors
-ExecuteQuery("insert into vtiger_profile2utility values(1,18,5,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,18,6,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,18,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,18,6,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,18,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,18,6,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,18,5,1)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,18,6,1)");
+$profileresult = $adb->query("select * from vtiger_profile");
+$countprofiles = $adb->num_rows($profileresult);
+for($i=0;$i<$countprofiles;$i++)
+{
+	$profileid = $adb->query_result($profileresult,$i,'profileid');
+
+	//For Trouble Tickets
+	ExecuteQuery("insert into vtiger_profile2utility values(".$profileid.",13,5,0)");
+	ExecuteQuery("insert into vtiger_profile2utility values(".$profileid.",13,6,0)");
+	//For Vendors
+	ExecuteQuery("insert into vtiger_profile2utility values(".$profileid.",18,5,0)");
+	ExecuteQuery("insert into vtiger_profile2utility values(".$profileid.",18,6,0)");
+
+}
 
 //Added by Minnie to set the TABLE - storage_engine type - InnoDB
 ExecuteQuery("ALTER TABLE vtiger_blocks Type=InnoDB");
@@ -740,6 +757,10 @@ ExecuteQuery("ALTER TABLE vtiger_version Type=InnoDB");
 ExecuteQuery("alter table vtiger_attachments change name name varchar(255)");
 ////Data type for File Path field changed to TEXT in vtiger_attachments table
 ExecuteQuery("alter table vtiger_attachments change path path TEXT");
+
+//Added by bharathi #4657
+ExecuteQuery("alter table vtiger_attachments drop index attachments_description_name_type_attachmentsid_idx");
+ExecuteQuery("alter table vtiger_attachments add index attachments_description_name_type_attachmentsid_idx (`description`,`type`,`attachmentsid`)");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 

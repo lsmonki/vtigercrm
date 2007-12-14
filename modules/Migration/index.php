@@ -19,15 +19,23 @@ include("modules/Migration/versions.php");
 require_once('Smarty_setup.php');
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 include("vtigerversion.php");
-$result = $adb->query("select * from vtiger_version");
-$dbversion = $adb->query_result($result, 0, 'current_version');
-if($dbversion == $vtiger_current_version)
+//Check the current version before starting migration. If the current versin is latest, then we wont allow to do 5.x migration. But here we must allow for 4.x migration. Because 4.x migration can be done with out changing the current database. -Shahul
+$status=true;
+$exists=$adb->query("show create table vtiger_version");
+if($exists)
 {
-	echo "<br>&nbsp;<font color='red'><b>".$app_strings['LBL_MIGRATION_CHECK']."</b></font>";
-	exit;
+	$result = $adb->query("select * from vtiger_version");
+	$dbversion = $adb->query_result($result, 0, 'current_version');
+	if($dbversion == $vtiger_current_version)
+	{
+		$status=false;
+	}
+
 }
+
 $smarty = new vtigerCRM_Smarty();
 
+$smarty->assign("MIG_CHECK", $status);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
