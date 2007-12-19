@@ -1417,7 +1417,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		}
 		else
 		{
-			$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
+				$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		}
 		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
 		{
