@@ -60,7 +60,9 @@ function getMyTickets()
 		{
 			$value=array();
 			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.substr($adb->query_result($tktresult,$i,"title"),0,20).'...'.'</a>';
+			$tickettitle = $adb->query_result($tktresult,$i,"title");
+			$Top_Tickets = (strlen($tickettitle) > 20) ? (substr($tickettitle,0,20).'...') : $tickettitle;
+			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$ticketid.'">'.$Top_Tickets.'</a>';
 			$value[]=$ticketid;
 
 			$parent_id = $adb->query_result($tktresult,$i,"parent_id");

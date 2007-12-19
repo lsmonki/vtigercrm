@@ -112,7 +112,8 @@ function getNewLeads()
 				'LEAD_ID' => $lead['id'],
 				);
 
-		$value[]= '<a href="index.php?action=DetailView&module=Leads&record='.$lead_fields['LEAD_ID'].'">'.substr($lead_fields['LEAD_NAME'],0,20).'...'.'</a>';
+		$Top_Leads = (strlen($lead['leadname']) > 20) ? (substr($lead['leadname'],0,20).'...') : $lead['leadname'];
+		$value[]= '<a href="index.php?action=DetailView&module=Leads&record='.$lead_fields['LEAD_ID'].'">'.$Top_Leads.'</a>';
 		$value[]=$lead_fields['COMPANY'];
 		$value[]=$lead_fields['ANNUAL_REVENUE'];
 		$value[]=$lead_fields['LEAD_STATUS'];
