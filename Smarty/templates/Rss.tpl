@@ -56,6 +56,8 @@ function DeleteRssFeeds(id)
         	);
 	}
    }
+   else
+	alert(alert_arr.LBL_NO_FEEDS_SELECTED);	     	
 }
 function SaveRssFeeds()
 {
