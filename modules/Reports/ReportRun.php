@@ -986,8 +986,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_contactdetails.accountid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid 
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -998,8 +999,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Potentials")
 			{
-				$query = "left join vtiger_potential on vtiger_potential.accountid = vtiger_contactdetails.accountid
-					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
+				$query = "left join vtiger_potential as vtiger_potentialtmp on vtiger_potentialtmp.accountid = vtiger_contactdetails.accountid
+					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potentialtmp.potentialid and vtiger_crmentityPotentials.deleted=0
+					left join vtiger_potential on vtiger_potential.potentialid = vtiger_crmentityPotentials.crmid 
 					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
@@ -1009,9 +1011,10 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Quotes")
 			{
 				//CHECKK
-				$query = "left join vtiger_quotes on vtiger_quotes.contactid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_quotes  as vtiger_quotestmp on vtiger_quotestmp.contactid = vtiger_contactdetails.contactid
+					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotestmp.quoteid and vtiger_crmentityQuotes.deleted=0
+					left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_crmentityQuotes.crmid
 					left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid 
-					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
 					left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 					left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
 					left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentityQuotes.smownerid
@@ -1024,9 +1027,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "PurchaseOrder")
 			{
-				$query = "left join vtiger_purchaseorder on vtiger_purchaseorder.contactid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_purchaseorder as vtiger_purchaseordertmp on vtiger_purchaseordertmp.contactid = vtiger_contactdetails.contactid
+					left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseordertmp.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
+					left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_crmentityPurchaseOrder.crmid
 					left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
-					left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid
 					left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 					left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
 					left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
@@ -1042,9 +1046,10 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Potentials")
 			{
-				$query = "left join vtiger_potential on vtiger_potential.accountid = vtiger_account.accountid
+				$query = "left join vtiger_potential as vtiger_potentialtmp on vtiger_potentialtmp.accountid = vtiger_account.accountid
+					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potentialtmp.potentialid and vtiger_crmentityPotentials.deleted=0
+					left join vtiger_potential on vtiger_potential.potentialid = vtiger_crmentityPotentials.crmid
 					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
-					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
@@ -1053,8 +1058,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.accountid = vtiger_account.accountid
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_contactdetails as vtiger_contactdetailstmp  on vtiger_contactdetailstmp.accountid = vtiger_account.accountid
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
@@ -1067,9 +1073,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Quotes")
 			{
-				$query = "left join vtiger_quotes on vtiger_quotes.accountid = vtiger_account.accountid
+				$query = "left join vtiger_quotes as vtiger_quotestmp on vtiger_quotestmp.accountid = vtiger_account.accountid
+					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotestmp.quoteid and vtiger_crmentityQuotes.deleted=0
+					left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_crmentityQuotes.crmid
 					left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid 
-					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
 					left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 					left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
 					left join vtiger_users as vtiger_usersQuotes on vtiger_usersQuotes.id = vtiger_crmentityQuotes.smownerid
@@ -1082,9 +1089,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "PurchaseOrder")
 			{
-				$query = "left join vtiger_purchaseorder on vtiger_purchaseorder.accountid = vtiger_account.accountid
+				$query = "left join vtiger_purchaseorder as vtiger_purchaseordertmp  on vtiger_purchaseordertmp.accountid = vtiger_account.accountid
+					left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseordertmp.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
+					left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_crmentityPurchaseOrder.crmid
 					left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
-					left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid
 					left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 					left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
 					left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentityPurchaseOrder.smownerid
@@ -1095,9 +1103,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Invoice")
 			{
-				$query = "left join vtiger_invoice on vtiger_invoice.accountid = vtiger_account.accountid
+				$query = "left join vtiger_invoice as vtiger_invoicetmp on vtiger_invoicetmp.accountid = vtiger_account.accountid
+					left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoicetmp.invoiceid and vtiger_crmentityInvoice.deleted=0
+					left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_crmentityInvoice.crmid
 					left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid 
-					left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid
 					left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
 					left join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid
 					left join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid
@@ -1110,8 +1119,9 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Products")
 			{
 				$query = "left join vtiger_seproductsrel on vtiger_seproductsrel.crmid = vtiger_account.accountid and vtiger_seproductsrel.setype = 'Accounts'
-					left join vtiger_products on vtiger_products.productid = vtiger_seproductsrel.productid
-					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
+					left join vtiger_products  as  vtiger_productstmp  on vtiger_productstmp.productid = vtiger_seproductsrel.productid
+					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
+					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_contactdetails as vtiger_contactdetailsProducts on vtiger_contactdetailsProducts.contactid = vtiger_seproductsrel.crmid
@@ -1126,8 +1136,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_quotes.accountid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_quotes.accountid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0 
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1138,9 +1149,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Potentials")
 			{
-				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_quotes.potentialid
+				$query = "left join vtiger_potential as vtiger_potentialtmp on vtiger_potentialtmp.potentialid = vtiger_quotes.potentialid
+					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potentialtmp.potentialid  and vtiger_crmentityPotentials.deleted=0
+					left join vtiger_potential on vtiger_potential.potentialid = vtiger_crmentityPotentials.crmid
 					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
-					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid 
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
@@ -1149,8 +1161,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_quotes.contactid
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_contactdetails as vtiger_contactdetailstmp on vtiger_contactdetailstmp.contactid = vtiger_quotes.contactid
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
@@ -1168,8 +1181,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_purchaseorder.accountid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_purchaseorder.accountid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1180,8 +1194,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_purchaseorder.contactid
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_contactdetails as vtiger_contactdetailstmp on vtiger_contactdetailstmp.contactid = vtiger_purchaseorder.contactid
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
@@ -1198,8 +1213,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_invoice.accountid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_invoice.accountid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1216,8 +1232,9 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Accounts")
 			{
 				$query = "
-					left join vtiger_account on vtiger_account.accountid = vtiger_seproductsrel.crmid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+					left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_seproductsrel.crmid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1229,8 +1246,9 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Contacts")
 			{
 				$query = "
-					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_seproductsrel.crmid
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+					left join vtiger_contactdetails as vtiger_contactdetailstmp on vtiger_contactdetailstmp.contactid = vtiger_seproductsrel.crmid
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
 					left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
@@ -1248,8 +1266,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_potential.accountid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_potential.accountid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account  on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1260,8 +1279,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.accountid = vtiger_potential.accountid
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_contactdetails as vtiger_contactdetailstmp on vtiger_contactdetailstmp.accountid = vtiger_potential.accountid
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid  and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_customerdetails on vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
@@ -1275,9 +1295,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Quotes")
 			{
-				$query = "left join vtiger_quotes on vtiger_quotes.potentialid = vtiger_potential.potentialid
+				$query = "left join vtiger_quotes as  vtiger_quotestmp on vtiger_quotestmp.potentialid = vtiger_potential.potentialid
+					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotestmp.quoteid and vtiger_crmentityQuotes.deleted=0
+ 					left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_crmentityQuotes.crmid
 					left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
-					left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid
 					left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 					left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid
 					left join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
@@ -1293,8 +1314,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == "Products")
 			{
-				$query = "left join vtiger_products on vtiger_products.productid = vtiger_troubletickets.product_id
-					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
+				$query = "left join vtiger_products as vtiger_productstmp  on vtiger_productstmp.productid = vtiger_troubletickets.product_id
+					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
+					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id
@@ -1311,8 +1333,9 @@ class ReportRun extends CRMEntity
 
 			if($secmodule == "Leads")
 			{
-				$query = "left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid 
-					left join vtiger_crmentity as vtiger_crmentityLeads on vtiger_crmentityLeads.crmid = vtiger_leaddetails.leadid 
+				$query = "left join vtiger_leaddetails as vtiger_leaddetailstmp  on vtiger_leaddetailstmp.leadid = vtiger_seactivityrel.crmid 
+					left join vtiger_crmentity as vtiger_crmentityLeads on vtiger_crmentityLeads.crmid = vtiger_leaddetailstmp.leadid and vtiger_crmentityLeads.deleted=0 
+					left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_crmentityLeads.crmid
 					left join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid 
 					left join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
 					left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid 
@@ -1323,8 +1346,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Accounts")
 			{
-				$query = "left join vtiger_account on vtiger_account.accountid = vtiger_seactivityrel.crmid
-					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				$query = "left join vtiger_account as vtiger_accounttmp on vtiger_accounttmp.accountid = vtiger_seactivityrel.crmid
+					left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accounttmp.accountid and vtiger_crmentityAccounts.deleted=0
+					left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
 					left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 					left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 					left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
@@ -1336,8 +1360,9 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Contacts")
 			{
-				$query = "left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid 
-					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid
+				$query = "left join vtiger_contactdetails as vtiger_contactdetailstmp on vtiger_contactdetailstmp.contactid = vtiger_cntactivityrel.contactid 
+					left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetailstmp.contactid  and vtiger_crmentityContacts.deleted=0
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_crmentityContacts.crmid 
 					left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 					left join vtiger_customerdetails on vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
 					left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid
@@ -1350,9 +1375,10 @@ class ReportRun extends CRMEntity
 			}
 			if($secmodule == "Potentials")
                         {
-				$query = "left join vtiger_potential on vtiger_potential.potentialid = vtiger_seactivityrel.crmid 
+				$query = "left join vtiger_potential  as vtiger_potentialtmp on vtiger_potentialtmp.potentialid = vtiger_seactivityrel.crmid 
+					left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potentialtmp.potentialid and vtiger_crmentityPotentials.deleted=0
+					left join vtiger_potential on vtiger_potential.potentialid = vtiger_crmentityPotentials.crmid 
 					left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
-                                        left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid
                                         left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
@@ -1364,8 +1390,9 @@ class ReportRun extends CRMEntity
 		{
 			if($secmodule == 'Products')
 			{
-				$query = "left join vtiger_products on vtiger_products.productid = vtiger_campaign.product_id  
-					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid
+				$query = "left join vtiger_products as vtiger_productstmp on vtiger_productstmp.productid = vtiger_campaign.product_id  
+					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
+					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid  
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 					left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 					left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id";
