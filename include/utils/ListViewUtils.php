@@ -1224,78 +1224,38 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			
 	
 	}
-	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16)
+	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16 || ($uitype == 55 && $fieldname =="salutationtype"))
 	{
-		$temp_acttype = $adb->query_result($list_result,$list_result_count,'activitytype');
-		if(($temp_acttype == 'Meeting' || $temp_acttype == 'Call') && $fieldname =="taskstatus")
-			$temptable = "eventstatus";
-		else
-			$temptable = $fieldname;
-		$roleid=$current_user->roleid;
-		$subrole = getRoleSubordinates($roleid);
-		if(count($subrole)> 0)
-		{
-			$roleids = implode("','",$subrole);
-			$roleids = $roleids."','".$roleid;
-		}
-		else
-			$roleids = $roleid;
-		//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
-
-		$sql="select * from vtiger_$temptable";
-		$result = $adb->query($sql);
-		$nameArray = $adb->fetch_array($result);
-		while($row = $adb->fetch_array($result))
-		{
-			$sortid = $row['sortorderid'];
-		}
-
-		if($is_admin || $sortid != '')
-		{
-			if($current_module_strings[$temp_val] != '' && $module !="Calendar")
+		$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+		if(!$is_admin && $temp_val != ''  && !in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
+		{	
+			$temp_acttype = $adb->query_result($list_result,$list_result_count,'type');
+			if(($temp_acttype == 'Meeting' || $temp_acttype == 'Call') && $fieldname =="taskstatus")
+				$temptable = "eventstatus";
+			else
+				$temptable = $fieldname;
+			$roleid=$current_user->roleid;
+			$subrole = getRoleSubordinates($roleid);
+			if(count($subrole)> 0)
 			{
-				$value = $current_module_strings[$temp_val];
-			}
-			elseif($app_strings[$temp_val] != '' && $module !="Calendar")
-			{
-				$value = $app_strings[$temp_val];
+				$roleids = implode("','",$subrole);
+				$roleids = $roleids."','".$roleid;
 			}
 			else
-				$value = $temp_val;
-		}
-		else{
+				$roleids = $roleid;
+			//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+	
 			$sql="select * from vtiger_$temptable where $temptable='$temp_val'";
 			$picklistvalueid = $adb->query_result($adb->query($sql),0,'picklist_valueid');
 			$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in ('$roleids')";
 			$res_val=$adb->query($pick_query);
 			$num_val = $adb->num_rows($res_val);
 			if($num_val > 0)
-			{
-				if($current_module_strings[$temp_val] != '' && $module !="Calendar")
-				{
-					$value = $current_module_strings[$temp_val];
-				}
-				elseif($app_strings[$temp_val] != '' && $module !="Calendar")
-				{
-					$value = $app_strings[$temp_val];
-				}
-				else
-				{
-					$value = $temp_val;
-				}
-			}
-			else if($temp_val != '')
-			{
-				$value = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
-			}
+				$temp_val = $temp_val;
 			else
-				$value = $temp_val;
+				$temp_val = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
 		}
-
-		if($fieldname == $focus->list_link_field && $value != $app_strings['LBL_NOT_ACCESSIBLE'])
-			{
-				$value = '<a href="index.php?module='.$module.'&action=DetailView&record='.$entity_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$value.'</a>';
-			}
+		$value = ($current_module_strings[$temp_val] != '') ? $current_module_strings[$temp_val] : (($app_strings[$temp_val] != '') ? ($app_strings[$temp_val]) : $temp_val);
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
@@ -1554,27 +1514,24 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 33)
 	{
 		$value = ($temp_val != "") ? str_ireplace(' |##| ',', ',$temp_val) : "";
-		if($value != '')
-		{	
-			$value_arr=explode(',',trim($value));
-			$roleid=$current_user->roleid;
-			$subrole = getRoleSubordinates($roleid);
-			if(count($subrole)> 0)
-			{
-				$roleids = $subrole;
-				array_push($roleids, $roleid);
-			}
-			else
-			{
-				$roleids = $roleid;
-			}
+		if(!$is_admin && $value != '')
+		{
+			$value = ($field_val != "") ? str_ireplace(' |##| ',', ',$field_val) : "";
+			if($value != '')
+			{	
+				$value_arr=explode(',',trim($value));
+				$roleid=$current_user->roleid;
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				{
+					$roleids = $subrole;
+					array_push($roleids, $roleid);
+				}
+				else
+				{
+					$roleids = $roleid;
+				}
 
-			if($is_admin)
-			{
-				$pick_query="select $fieldname from vtiger_$fieldname";
-				$params = array();
-			}else
-			{
 				if (count($roleids) > 0) {
 					$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_$fieldname) order by $fieldname asc";
 					$params = array($roleids);
@@ -1582,20 +1539,32 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$pick_query="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where picklistid in (select picklistid from vtiger_$fieldname) order by $fieldname asc";
 					$params = array();
 				}
+				$pickListResult = $adb->pquery($pick_query, $params);
+				$picklistval = Array();
+				for($i=0;$i<$adb->num_rows($pickListResult);$i++)
+				{
+					$picklistarr[]=$adb->query_result($pickListResult,$i,$fieldname);
+				}
+				$value_temp = Array();
+				$string_temp = '';
+				$str_c = 0;
+				foreach($value_arr as $ind => $val)
+				{
+					$notaccess = '<font color="red">'.$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+					if(!(strlen(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$string_temp)) > $listview_max_textlength))
+					{
+						$value_temp1 = (in_array(trim($val),$picklistarr))?$val:$notaccess; 
+						if($str_c!=0)
+							$string_temp .= ' , ';
+						$string_temp .= $value_temp1;
+						$str_c++;
+					}
+					else
+						$string_temp .='...'; 
+					 
+				}
+				$value=$string_temp;	 
 			}
-			$pickListResult = $adb->pquery($pick_query, $params);
-			$picklistval = Array();
-			for($i=0;$i<$adb->num_rows($pickListResult);$i++)
-			{
-				$picklistarr[]=$adb->query_result($pickListResult,$i,$fieldname);
-			}
-			$value_temp = Array();
-			foreach($value_arr as $ind => $val)
-			{
-				$notaccess = '<font color="red">'.$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
-				$value_temp[] .= (in_array(trim($val),$picklistarr))?$val:$notaccess; 
-			}
-			$value = implode(' , ',$value_temp);
 		}
 	}
 	elseif($uitype == 85)
