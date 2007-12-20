@@ -208,7 +208,6 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	global $log;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Emails/Emails.php');
-
 	$current_user = new Users();
 	$user_id = $current_user->retrieve_user_id($user_name);
 	$query = "select email1 from vtiger_users where id =?";
@@ -220,7 +219,8 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$emailbody = str_replace("'", "''", $email_body);
 	$emailsubject = str_replace("'", "''",$email_subject);
 	$datesent = substr($date_sent,1,10);
-        $mydate = date('d-m-Y',$datesent);
+	$mydate = date('Y-m-d',$datesent);
+	$mydate = getDBInsertDateValue($mydate);
 	$email->column_fields[subject] = $emailsubject;
 	$email->column_fields[assigned_user_id] = $user_id;
 	$email->column_fields[date_start] = $mydate;
