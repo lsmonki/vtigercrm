@@ -73,6 +73,7 @@ class ReportRun extends CRMEntity
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
 			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+			list($module,$field) = split("_",$module_field);
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');
 			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 			{
@@ -2265,7 +2266,12 @@ class ReportRun extends CRMEntity
 		global $adb;
 		global $modules;
 		global $log;
-
+		
+		$query = "select * from vtiger_reportmodules where reportmodulesid =?";
+		$res = $adb->pquery($query , array($reportid));
+		$modrow = $adb->fetch_array($res);
+		$premod = $modrow["primarymodule"];
+		$secmod = $modrow["secondarymodules"];
 		$coltotalsql = "select vtiger_reportsummary.* from vtiger_report";
 		$coltotalsql .= " inner join vtiger_reportsummary on vtiger_report.reportid = vtiger_reportsummary.reportsummaryid";
 		$coltotalsql .= " where vtiger_report.reportid =?";
@@ -2279,6 +2285,8 @@ class ReportRun extends CRMEntity
 			if($fieldcolname != "none")
 			{
 				$fieldlist = explode(":",$fieldcolname);
+			if((CheckFieldPermission($fieldlist[2],$premod) != "false") || (CheckFieldPermission($fieldlist[2],$secmod)) != "false")
+			{
 				if($fieldlist[4] == 2)
 				{
 					$stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
@@ -2297,6 +2305,7 @@ class ReportRun extends CRMEntity
 				{
 					$stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
 				}
+			}
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getColumnsTotal".$reportid);
