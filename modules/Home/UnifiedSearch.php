@@ -30,7 +30,8 @@ global $mod_strings;
 
 $total_record_count = 0;
 
-$query_string = trim(str_replace('<','&lt;',$_REQUEST['query_string']));//changed by sandeep
+$query_string = trim($_REQUEST['query_string']);
+
 if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST['query_string'])) 
 {
 
@@ -92,13 +93,13 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 		
 				$where = getTagWhere($search_val,$current_user->id);
 				$search_msg =  $app_strings['LBL_TAG_SEARCH'];
-				$search_msg .=	"<b>".$search_val."</b>";
+				$search_msg .=	"<b>".str_replace("<","&lt;",$search_val)."</b>";
 			}
 			else			//This is for Global search
 			{
 				$where = getUnifiedWhere($listquery,$module,$search_val);
 				$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
-				$search_msg .=	"<b>".$search_val."</b>";
+				$search_msg .=	"<b>".str_replace("<","&lt;",$search_val)."</b>";
 			}
 
 			if($where != '')
