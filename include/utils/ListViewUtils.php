@@ -1785,7 +1785,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$slashes_name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
 					}else
 					{
