@@ -198,7 +198,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
 } 
  
  
-if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice")){
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice") && ($_REQUEST['convertmode'] != 'update_so_val') ){
 	require_once('modules/Accounts/Accounts.php');
 	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
