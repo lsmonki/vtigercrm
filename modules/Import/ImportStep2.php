@@ -175,19 +175,26 @@ if($total_num_rows >2)
 foreach($firstrow as $ind => $val)
 {
 	if(strlen($val) > 30)
-		$firstrow[$ind] = substr($val,0,30)." ..........";
+		$firstrow[$ind] = substr(to_html($val),0,30)." ..........";
+	else
+		$firstrow[$ind] = to_html($val);
 }
 if (isset($secondrow)) { //Asha: Fix for ticket #4432
 	foreach($secondrow as $ind => $val)
 	{
 		if(strlen($val) > 30)
-			$secondrow[$ind] = substr($val,0,30)." ..........";
+			$secondrow[$ind] = substr(to_html($val),0,30)." ..........";
+		else
+			$secondrow[$ind] = to_html($val);
+
 	}
 	if (isset($thirdrow)) { //Asha: Fix for ticket #4432
 		foreach($thirdrow as $ind => $val)
 		{
 			if(strlen($val) > 30)
-				$thirdrow[$ind] = substr($val,0,30)." ..........";
+				$thirdrow[$ind] = substr(to_html($val),0,30)." ..........";
+			else
+                        	$thirdrow[$ind] = to_html($val);
 		}
 	}
 }
@@ -310,8 +317,6 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 		$focus1=new Vendors();
 	}
 	//end checking
-
-	
 	$smarty->assign("FIRSTROW",$firstrow);
 	$smarty->assign("SECONDROW",$secondrow);
 	$smarty->assign("THIRDROW",$thirdrow);
