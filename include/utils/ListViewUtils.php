@@ -1859,8 +1859,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($module == "Calendar")
 				{
-					//$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
-					$actvity_type = $adb->query_result($list_result,$list_result_count,'type');
+					$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
+					$actvity_type = ($actvity_type != '') ? $actvity_type : $adb->query_result($list_result,$list_result_count,'type');
 					if($actvity_type == "Task")
 					{
 						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task&parenttab='.$tabname.'">'.$temp_val.'</a>';
