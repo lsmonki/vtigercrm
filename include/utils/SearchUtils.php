@@ -142,6 +142,11 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				//assign the translated string
 				$search_header[$fld_name] = getTranslatedString($name);
 			}
+		}
+		if($module == 'HelpDesk' && $fieldname == 'crmid')
+		{
+                        $fld_name=$fieldname;
+                        $search_header[$fld_name] = getTranslatedString($name);
                 }
         }
 	$log->debug("Exiting getSearchListHeaderValues method ...");	
