@@ -56,6 +56,7 @@ if(isset($arr_val))
 		foreach($array_value as $hdr=>$value)
 		{
 			//$worksheet->write($key+1, $dcount, iconv("UTF-8", "ISO-8859-1", $value));
+			$value = decode_html($value);
 			$worksheet->write($key+1, $dcount, utf8_decode($value));
 			$dcount = $dcount + 1;
 		}
