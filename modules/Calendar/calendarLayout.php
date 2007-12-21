@@ -1853,7 +1853,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
 			//checking permission for Create/Edit Operation
-			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+			if(isPermitted("Calendar","EditView") == "yes")
 			{
 			$list_view .="<tr>
 				<td class='calAddButton' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"\",\"".$subtab."\");'style='border: 1px solid #666666;cursor:pointer;height:30px' align='center' width='10%'>
