@@ -575,12 +575,7 @@ class HelpDesk extends CRMEntity {
 				LEFT JOIN vtiger_products 
 					ON vtiger_products.productid=vtiger_troubletickets.product_id";
 
-			$where_auto="   vtiger_crmentity.deleted = 0
-                               	AND ((vtiger_troubletickets.parent_id IS NULL    
-					 AND(vtiger_troubletickets.parent_id = 0
-						OR vtiger_troubletickets.parent_id IS NULL))
-						OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Accounts').")
-						OR vtiger_troubletickets.parent_id IN (".getReadEntityIds('Contacts')."))";
+			$where_auto="   vtiger_crmentity.deleted = 0 ";
 				
 				if($where != "")
 					$query .= "  WHERE ($where) AND ".$where_auto;

@@ -780,30 +780,9 @@ class Products extends CRMEntity {
 			INNER JOIN vtiger_users
 				ON vtiger_users.id=vtiger_crmentity.smownerid 
 
-			LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
-				ON vtiger_crmentityRelatedTo.crmid = vtiger_seproductsrel.crmid
-				
-			LEFT JOIN vtiger_leaddetails vtiger_ProductRelatedToLead
-				ON vtiger_ProductRelatedToLead.leadid = vtiger_seproductsrel.crmid
-			LEFT JOIN vtiger_account vtiger_ProductRelatedToAccount
-				ON vtiger_ProductRelatedToAccount.accountid = vtiger_seproductsrel.crmid
-			LEFT JOIN vtiger_potential vtiger_ProductRelatedToPotential
-				ON vtiger_ProductRelatedToPotential.potentialid = vtiger_seproductsrel.crmid
-	
-			LEFT JOIN vtiger_contactdetails vtiger_ProductRelatedToContact 
-				ON vtiger_ProductRelatedToContact.contactid = vtiger_seproductsrel.crmid
-
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'
-				AND (
-					(vtiger_seproductsrel.crmid IS NULL)
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) 
-			";
-			//ProductRelatedToLead, Account and Potential tables are added to get the Related to field
+			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'";
 	
 
 		if($where != "")
