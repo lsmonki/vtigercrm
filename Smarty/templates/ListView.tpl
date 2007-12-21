@@ -179,7 +179,6 @@ function callSearch(searchtype)
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
-				console.log(result[2]);
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                        alert(result[1]);
