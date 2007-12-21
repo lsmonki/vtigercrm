@@ -174,7 +174,26 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	{
 		if(document.getElementById(txtBox).checked == true)
 		{
-			tagValue = "1";
+			if(module == "Contacts")
+                        {
+				if(getObj("email"))
+                                {
+                                	var obj = getObj("email");
+                                	if((fieldName == "portal") && (obj.value == ''))
+                                	{
+						tagValue = "0";
+                                        	alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        	return false;
+                                	}
+					else
+	                                        tagValue = "1";
+				}
+                                else
+                                       tagValue = "1";
+
+                        }
+			else
+				tagValue = "1";
 		}else
 		{
 			tagValue = "0";
@@ -292,25 +311,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	{
 		if(tagValue == '1')
 		{
-			if(module == "Contacts")
-                        {
-				if(getObj("email"))
-                                {
-                                	var obj = getObj("email");
-                                	if((fieldName == "portal") && (obj.value == ''))
-                                	{
-                                        	alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                        	return false;
-                                	}
-					else
-	                                        getObj(dtlView).innerHTML = alert_arr.YES;
-				}
-                                else
-                                        getObj(dtlView).innerHTML = alert_arr.YES;
-
-                        }
-                        else
-                                getObj(dtlView).innerHTML = alert_arr.YES;
+			getObj(dtlView).innerHTML = alert_arr.YES;
 		}else
 		{
 			getObj(dtlView).innerHTML = alert_arr.NO;
