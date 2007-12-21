@@ -876,7 +876,7 @@ function to_html($string, $encode=true){
 
 	$doconvert = false;
 
-	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView')// && $_REQUEST['module'] != 'Emails')
+	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView' && $_REQUEST['module'] != 'Portal')// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
 	if(is_string($string)){
 		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail'){ // && $_REQUEST['module'] != 'Emails'))
