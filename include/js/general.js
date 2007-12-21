@@ -833,29 +833,6 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		return false;
 	}
 }
-if(gVTModule == 'Contacts')
-{
-	if(getObj('imagename'))
-	{
-		if(getObj('imagename').value != '')
-		{
-			var image_arr = new Array();
-			image_arr = (getObj('imagename').value).split(".");
-			var image_ext = image_arr[1].toLowerCase();
-                        if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
-			{
-				return true;
-			}
-			else
-			{
-				alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
-				return false;
-			}
-		}
-	}
-}
-
-
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
 		{
@@ -997,6 +974,27 @@ if(gVTModule == 'Contacts')
 		      //End Birth day	
 		}
 		
+	}
+	if(gVTModule == 'Contacts')
+	{
+		if(getObj('imagename'))
+		{
+			if(getObj('imagename').value != '')
+			{
+				var image_arr = new Array();
+				image_arr = (getObj('imagename').value).split(".");
+				var image_ext = image_arr[1].toLowerCase();
+				if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
+				{
+					return true;
+				}
+				else
+				{
+					alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+					return false;
+				}
+			}
+		}
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
