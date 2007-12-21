@@ -21,7 +21,7 @@ class ImportTicket extends HelpDesk {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user");
+	var $special_functions =  array("assign_user","add_product","empty_relatedto");
 
 	var $importable_fields = Array();
 
@@ -61,7 +61,41 @@ class ImportTicket extends HelpDesk {
 			}
 		}
 	}
+	function add_product()
+        {
+                global $adb,$imported_ids,$current_user;
 
+                $pro_name = $this->column_fields['product_id'];
+                if((! isset($pro_name) || $pro_name == '') )
+                        return;
+
+                //check if it already exists
+                $focus = new Products();
+                $query = '';
+
+                //Modified to remove the spaces at first and last in vtiger_product name
+                $pro_name = trim($pro_name);
+
+                //Modified the query to get the available product only ie., which is not deleted
+                $query = "select vtiger_products.* ,vtiger_crmentity.deleted from vtiger_products,vtiger_crmentity  WHERE productname=? and vtiger_crmentity.crmid = vtiger_products.productid and vtiger_crmentity.deleted=0";
+                $result = $adb->pquery($query, array($pro_name));
+                $row = $this->db->fetchByAssoc($result, -1, false);
+                $adb->println($row);
+
+                // we found a row with that id
+                if (isset($row['productid']) && $row['productid'] != -1)
+                        $focus->id = $row['productid'];
+
+                $this->column_fields["product_id"] = $focus->id;
+        }
+	function empty_relatedto()
+	{
+		$parent_id = $this->column_fields["parent_id"];
+		if($parent_id == '' || $parent_id != '')
+                        $parent_id = 0;
+
+                $this->column_fields['parent_id'] = $parent_id;
+	}
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportTicket() {

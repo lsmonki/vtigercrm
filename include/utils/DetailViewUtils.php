@@ -1003,6 +1003,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a>';
 			}
+			else
+			{
+				$value ='';			
+				$label_fld[] = $mod_strings[$fieldlabel];
+				$label_fld[] = $value;
+			}
+				
 
 		}
 		else
