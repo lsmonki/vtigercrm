@@ -33,7 +33,7 @@ $status=imap_setflag_full($MailBox->mbox,$mailid,"\\Seen");
 $attach_tab=array();
 $email->loadMail($attach_tab);
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$email->charsets."\">\n";
-$subject = decode_header($email->subject);
+$subject = utf8_decode(utf8_encode(imap_utf8($email->subject)));
 $from = decode_header($email->from);
 $to = decode_header($email->to_header);
 $cc = decode_header($email->cc_header);
