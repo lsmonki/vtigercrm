@@ -875,12 +875,21 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$potential_name = getPotentialName($potential_id);
 						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.$potential_name.'</a>';
 					}
-					elseif($module =='Emails' && $relatedlist != '' && $name=='Subject')
+					elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent'))
 					{
 						$list_result_count = $i-1;
 						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.$tmp_value.'</a>';
-
+						if($name == 'Date Sent')
+						{
+							$sql="select email_flag from vtiger_emaildetails where emailid=?";
+							$result=$adb->pquery($sql, array($entity_id));
+							$email_flag=$adb->query_result($result,0,"email_flag");
+							if($email_flag == 'SENT')
+								$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+							else
+								$value = '';
+						}
 					}
 					else
 					{
