@@ -566,8 +566,6 @@ function getAdvSearchfields($module)
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname::::".$fieldtypeofdata."\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname::::".$fieldtypeofdata."\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
 			}
-			elseif($fieldcolname == "campaignid")
-				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname::::".$fieldtypeofdata."\' ".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\' ".$select_flag.">".$fieldlabel."</option>";
 		}
