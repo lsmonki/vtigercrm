@@ -68,6 +68,11 @@ if($fld_module=="Leads")
 {
 	$deletequery = 'delete from vtiger_convertleadmapping where leadfid=?';
 	$adb->pquery($deletequery, array($id));
+}elseif($fld_module=="Accounts" || $fld_module=="Contacts" || $fld_module=="Potentials")
+{
+	$map_del_id = array("Accounts"=>"accountfid","Contacts"=>"contactfid","Potentials"=>"potentialfid");
+	$map_del_q = "update vtiger_convertleadmapping set ".$map_del_id[$fld_module]."=0 where ".$map_del_id[$fld_module]."=?";
+	$adb->pquery($map_del_q, array($id));
 }
 
 //HANDLE HERE - we have to remove the table for other picklist type values which are text area and multiselect combo box 

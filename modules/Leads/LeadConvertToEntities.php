@@ -381,9 +381,8 @@ else
 	$insert_str = "?";
 	$insert_column="accountid";	
 	$val= getInsertValues("Accounts",$crmid);
-	if($val[0]!="")
+	if($val[0]!="" && $val[1]!="") {
 		$insert_column.=",".$val[0];
-	if($val[1]!="") {
 		$tempval = explode(",",$val[1]);
 		$insert_str .= str_repeat(",?", count($tempval));
 		array_push($insert_values, $tempval);
@@ -437,9 +436,8 @@ $insert_str = "?";
 $insert_values=array($contact_id);
 
 $val= getInsertValues("Contacts",$contact_id);
-if($val[0]!="")
+if($val[0]!="" && $val[1]!="") {
 	$insert_column.=",".$val[0];	
-if($val[1]!="") {
 	$tempval = explode(",",$val[1]);
 	$insert_str .= str_repeat(",?", count($tempval));
 	array_push($insert_values, $tempval);
@@ -491,9 +489,8 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$insert_str="?";
 	$insert_values=array($oppid);
 	$val= getInsertValues("Potentials",$oppid);
-	if($val[0]!="")
+	if($val[0]!="" && $val[1]!="") {
 		$insert_column.=",".$val[0];		
-	if($val[1]!="") {
 		$tempval = explode(",",$val[1]);
 		$insert_str .= str_repeat(",?", count($tempval));
 		array_push($insert_values, $tempval);
