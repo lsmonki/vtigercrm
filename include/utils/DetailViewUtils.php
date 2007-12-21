@@ -286,7 +286,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 20 || $uitype == 21 || $uitype == 22 || $uitype == 24) // Armando LC<scher 11.08.2005 -> B'descriptionSpan -> Desc: removed $uitype == 19 and made an aditional elseif above
 	{
-		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
+		if($uitype == 20)//Fix the issue #4680
+	                $col_fields[$fieldname]=$col_fields[$fieldname];
+	        else
+	                $col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
 	}
