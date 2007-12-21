@@ -65,7 +65,22 @@ function massMail(module)
 }
 
 //added by rdhital for better emails
-function set_return_emails(entity_id,email_id,parentname,emailadd){
+function set_return_emails(entity_id,email_id,parentname,emailadd,emailadd2,perm){
+	if(perm == 0 || perm == 3)
+	{
+		if(emailadd2 == '')
+		{			
+			alert(alert_arr.LBL_DONT_HAVE_EMAIL_PERMISSION);
+			return false;
+		}
+		else
+			emailadd = emailadd2;
+	}
+	else
+	{
+		if(emailadd == '')
+			emailadd = emailadd2;
+	}	
 	if(emailadd != '')
 	{
 		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';

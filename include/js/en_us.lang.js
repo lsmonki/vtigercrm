@@ -148,5 +148,6 @@
 				LBL_SELECT_COLUMN: ' Invalid column.\n Please select column',
 				LBL_NOT_ACCESSIBLE : 'Not Accessible',
 				LBL_FILENAME_LENGTH_EXCEED_ERR: 'Filename cannot exceed 255 characters',
+				LBL_DONT_HAVE_EMAIL_PERMISSION : "You don't have permission for Email field so you can't choose the email id",
 				LBL_NO_FEEDS_SELECTED: 'No Feeds Selected'
                        };

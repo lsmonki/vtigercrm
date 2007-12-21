@@ -1732,10 +1732,28 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					{
 						$name = $adb->query_result($list_result,$list_result_count,'accountname');
 						$accid =$adb->query_result($list_result,$list_result_count,'accountid');
-						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
+						if(CheckFieldPermission('email1',$module) == "true")
+						{
+							$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
+							$email_check = 1;
+						}
+						else
+							$email_check = 0;
 						if($emailaddress == '')
-							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
-
+						{
+							if(CheckFieldPermission('email2',$module) == 'true')
+							{
+								$emailaddress2=$adb->query_result($list_result,$list_result_count,"email2");
+								$email_check = 2;
+							}
+							else
+							{
+								if($email_check == 1)
+									$email_check = 4;
+								else
+									$email_check = 3;
+							}
+						}
 						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
@@ -1744,16 +1762,34 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
 						$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
 						$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
 						$name=$lastname.' '.$firstname;
-						$emailaddress=$adb->query_result($list_result,$list_result_count,"email");
+						if(CheckFieldPermission('email',$module) == "true")
+						{
+							$emailaddress=$adb->query_result($list_result,$list_result_count,"email");
+							$email_check = 1;
+						}
+						else
+							$email_check = 0;
 						if($emailaddress == '')
-							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
+						{
+							if(CheckFieldPermission('yahooid',$module) == 'true')
+							{
+								$emailaddress2=$adb->query_result($list_result,$list_result_count,"yahooid");
+								$email_check = 2;
+							}
+							else{
+								if($email_check == 1)
+									$email_check = 4;
+								else
+									$email_check = 3;
+							}
+						}
 
 						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
@@ -1763,7 +1799,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$slashes_name.'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
 
 					}else
 					{
@@ -1774,8 +1810,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
-
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						$email_check = 1;
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
 						
 					}
 						
