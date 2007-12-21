@@ -833,6 +833,7 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		return false;
 	}
 }
+
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
 		{
@@ -976,26 +977,27 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 		
 	}
 	if(gVTModule == 'Contacts')
-	{
-		if(getObj('imagename'))
-		{
-			if(getObj('imagename').value != '')
-			{
-				var image_arr = new Array();
-				image_arr = (getObj('imagename').value).split(".");
-				var image_ext = image_arr[1].toLowerCase();
-				if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
-				{
-					return true;
-				}
-				else
-				{
-					alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
-					return false;
-				}
-			}
-		}
-	}
+        {
+                if(getObj('imagename'))
+                {
+                        if(getObj('imagename').value != '')
+                        {
+                                var image_arr = new Array();
+                                image_arr = (getObj('imagename').value).split(".");
+                                var image_ext = image_arr[1].toLowerCase();
+                                if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
+                                {
+                                        return true;
+                                }
+                                else
+                                {
+                                        alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+                                        return false;
+                                }
+                        }
+                }
+        }
+
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
 	{
@@ -2408,17 +2410,30 @@ function get_converted_html(str)
 //To select the select all check box(if all the items are selected) when the form loads.
 function default_togglestate()
 {
-       var all_state=true;
-       for (var i=0;i<(getObj("selected_id").length);i++)
-       {
-               var state=getObj("selected_id")[i].checked;
+	var all_state=true;
+	if (typeof(getObj("selected_id").length)=="undefined") 
+	{
+		var state=getObj("selected_id").checked;
+		if (state == false)
+		{
+			all_state=false;
+		}
+
+
+	} 
+	else
+	{
+		for (var i=0;i<(getObj("selected_id").length);i++)
+		{
+			var state=getObj("selected_id")[i].checked;
 			if (state == false)
 			{
 				all_state=false;
 				break;
 			}
-       }
-			getObj("selectall").checked=all_state;
+		}
+	}
+	getObj("selectall").checked=all_state;
 
 }
 
@@ -2493,37 +2508,53 @@ function rel_toggleSelect(state,relCheckName,module) {
 //To select the select all check box(if all the items are selected) when the form loads for Campaigns related list:.
 function rel_default_togglestate(module)
 {
-        var all_state=true;
-        if(getObj(module+"_selected_id"))
-        {
-                for (var i=0;i<(getObj(module+"_selected_id").length);i++)
-                {
-                        var state=getObj(module+"_selected_id")[i].checked;
-                        if (state == false)
-                                all_state=false;
- 		}
-                getObj(module+"_selectall").checked=all_state;
-        }
+	var all_state=true;
+	if(getObj(module+"_selected_id"))
+	{
+		if (typeof(getObj(module+"_selected_id").length)=="undefined")
+		{		     
+			var state=getObj(module+"_selected_id").checked;
+			if (state == false)
+				all_state=false;
+
+		}
+		else{
+
+			for (var i=0;i<(getObj(module+"_selected_id").length);i++)
+			{
+				var state=getObj(module+"_selected_id")[i].checked;
+				if (state == false)
+					all_state=false;
+			}
+		}
+		getObj(module+"_selectall").checked=all_state;
+	}
 }
 //To clear all the checked items in all the pages for Campaigns related list:
 function clear_checked_all(module)
 {
-        var cookie_val=get_cookie(module+"_all");
-        if(cookie_val != null)
-                delete_cookie(module+"_all");
-        //Uncheck all the boxes in current page..
-        for (var i=0;i<(getObj(module+"_selected_id").length);i++)
-        {
-                getObj(module+"_selected_id")[i].checked=false;
-        }
-                getObj(module+"_selectall").checked=false;
+	var cookie_val=get_cookie(module+"_all");
+	if(cookie_val != null)
+		delete_cookie(module+"_all");
+	//Uncheck all the boxes in current page..
+	if (typeof(getObj(module+"_selected_id").length)=="undefined")
+		getObj(module+"_selected_id").checked=false;
+	else{
+
+		for (var i=0;i<getObj(module+"_selected_id").length;i++)
+		{
+			getObj(module+"_selected_id")[i].checked=false;
+		}
+	}
+	getObj(module+"_selectall").checked=false;
 
 }
 
 function toggleSelect_ListView(state,relCheckName) {
         if (getObj(relCheckName)) {
                 if (typeof(getObj(relCheckName).length)=="undefined") {
-                        getObj(relCheckName).checked=state
+                        getObj(relCheckName).checked=state;
+                        check_object(getObj(relCheckName))
                 } else {
                         for (var i=0;i<getObj(relCheckName).length;i++)
                         {

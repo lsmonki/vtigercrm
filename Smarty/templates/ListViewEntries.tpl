@@ -104,7 +104,7 @@
 			<!-- Table Contents -->
 			{foreach item=entity key=entity_id from=$LISTENTITY}
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick=check_object(this); toggleSelectAll(this.name,"selectall")></td>
+			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick="check_object(this)"></td>
 			{foreach item=data from=$entity}	
 			<td>{$data}</td>
 	        {/foreach}
