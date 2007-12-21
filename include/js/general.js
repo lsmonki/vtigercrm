@@ -1762,7 +1762,8 @@ function OpenCompose(id,mode)
 //Function added for Mass select in Popup - Philip
 function SelectAll(mod,parmod)
 {
-
+    if(document.selectall.selected_id != undefined)
+    {
         x = document.selectall.selected_id.length;
 	var y=0;
 	if(parmod != 'Calendar')
@@ -1877,6 +1878,7 @@ function SelectAll(mod,parmod)
         {
                 return false;
         }
+    }
 }
 function ShowEmail(id)
 {
