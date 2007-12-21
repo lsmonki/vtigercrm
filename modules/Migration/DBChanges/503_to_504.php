@@ -479,7 +479,7 @@ $adb->query("insert into vtiger_notificationscheduler(schedulednotificationid,sc
 
 
 //creating the new tables vtiger_picklist,vtiger_picklist_seq and vtiger_role2picklist
-$adb->query("CREATE TABLE `vtiger_picklist` (`picklistid` int(19) NOT NULL auto_increment,`name` varchar(200) NOT NULL,PRIMARY KEY (`picklistid`),UNIQUE KEY `picklist_name_idx` (`name`)) ENGINE=InnoDB ");
+$adb->query("CREATE TABLE `vtiger_picklist` (`picklistid` int(19) NOT NULL auto_increment,`name` varchar(200) NOT NULL,PRIMARY KEY (`picklistid`),UNIQUE KEY `picklist_name_idx` (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
 $adb->query("CREATE TABLE `vtiger_role2picklist` (
 `roleid` varchar(255) NOT NULL,
@@ -490,7 +490,7 @@ PRIMARY KEY (`roleid`,`picklistvalueid`,`picklistid`),
 KEY `role2picklist_roleid_picklistid_idx` (`roleid`,`picklistid`,`picklistvalueid`),
 KEY `fk_2_vtiger_role2picklist` (`picklistid`),
 CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE,
-CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE) ENGINE=InnoDB ");
+CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
 $adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
 $adb->query("insert into vtiger_picklistvalues_seq values(1)");
@@ -649,7 +649,7 @@ ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_quotescf:".$new_c
 ExecuteQuery("ALTER TABLE vtiger_quotes drop team");
 
 //Added by Akilan on 18th November
-ExecuteQuery("CREATE TABLE  vtiger_soapservice (id int(19) default NULL, type varchar(25) default NULL,sessionid varchar(100) default NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+ExecuteQuery("CREATE TABLE  vtiger_soapservice (id int(19) default NULL, type varchar(25) default NULL,sessionid varchar(100) default NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 //Added by dinakaran. 18th November
 ////User Name field size increased into 255 chars in vtiger_users table
 ExecuteQuery("alter table vtiger_users change user_name user_name varchar(255)");
