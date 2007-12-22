@@ -71,7 +71,13 @@ $_SESSION['ACTIVITIES_SORT_ORDER'] = $sorder;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView($currentModule);
-$viewid = $oCustomView->getViewId($currentModule);
+//Pavani
+if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] == 'All'){
+        $viewid = $oCustomView->getViewIdByName('All', $currentModule);
+}
+else{
+        $viewid = $oCustomView->getViewId($currentModule);
+}
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
