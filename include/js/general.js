@@ -2566,4 +2566,7 @@ function toggleSelect_ListView(state,relCheckName) {
                 }
         }
 }
-
+function gotourl(url)
+{
+                document.location.href=url;
+}
