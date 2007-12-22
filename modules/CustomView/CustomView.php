@@ -105,6 +105,20 @@ class CustomView extends CRMEntity{
 		return $viewid;
 
 	}
+	//Return id of a view : Added by Pavani
+        function getViewIdByName($viewname, $module)
+        {
+                global $adb;
+                if(isset($viewname)){
+                        $query="select cvid from vtiger_customview where viewname=? and entitytype=?";
+                                        $cvresult=$adb->pquery($query, array($viewname,$module));
+                                        $viewid = $adb->query_result($cvresult,0,'cvid');;
+                                        return $viewid;
+                }
+                else{
+                        return 0;
+                }
+        }
 	
 	// return type array
 	/** to get the details of a customview
