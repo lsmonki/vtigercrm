@@ -76,6 +76,8 @@ if($recordid == "")
 
 	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
+        $data_type[] = $oCustomView->data_type;
+        $smarty->assign("DATATYPE",$data_type);
 }
 else
 {
@@ -157,6 +159,8 @@ else
 	{
 		$smarty->assign("CUSTOMACTIONBUTTON",$cactionhtml);
 	}
+        $data_type[] = $oCustomView->data_type;
+        $smarty->assign("DATATYPE",$data_type);
 }
 
 $smarty->assign("RETURN_MODULE", $cv_module);

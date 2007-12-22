@@ -51,7 +51,8 @@ class CustomView extends CRMEntity{
 	var $mandatoryvalues;
 	
 	var $showvalues;
-	
+
+	var $data_type;
 	
 	/** This function sets the currentuser id to the class variable smownerid,  
 	  * modulename to the class variable customviewmodule
@@ -104,20 +105,6 @@ class CustomView extends CRMEntity{
 		return $viewid;
 
 	}
-	//Return id of a view : Added by Pavani
-        function getViewIdByName($viewname, $module)
-        {
-                global $adb;
-                if(isset($viewname)){
-                        $query="select cvid from vtiger_customview where viewname=? and entitytype=?";
-                                        $cvresult=$adb->pquery($query, array($viewname,$module));
-                                        $viewid = $adb->query_result($cvresult,0,'cvid');;
-                                        return $viewid;
-                }
-                else{
-                        return 0;
-                }
-        }
 	
 	// return type array
 	/** to get the details of a customview
@@ -304,7 +291,7 @@ class CustomView extends CRMEntity{
 			{
 				$this->mandatoryvalues[] = "'".$optionvalue."'";
 				$this->showvalues[] = $fieldlabel;
-
+				$this->data_type[$fieldlabel] = $fieldtype[1];
 			}
 		}
 		return $module_columnlist;
