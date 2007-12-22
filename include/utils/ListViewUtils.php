@@ -1993,7 +1993,7 @@ function getListQuery($module,$where='')
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
-                    $query .= "AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
+                    $query .= " AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
 		   		 OR vtiger_crmentity.smownerid IN (
 					 SELECT vtiger_user2role.userid
 					 FROM vtiger_user2role
@@ -2012,13 +2012,13 @@ function getListQuery($module,$where='')
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= "vtiger_accountgrouprelation.groupname IN (
+                              $query .= " vtiger_accountgrouprelation.groupname IN (
 				      		SELECT groupname
 						FROM vtiger_groups
 						WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
 					OR ";
                         }
-                         $query .= "vtiger_accountgrouprelation.groupname IN (
+                         $query .= " vtiger_accountgrouprelation.groupname IN (
 				 	SELECT vtiger_groups.groupname
 					FROM vtiger_tmp_read_group_sharing_per
 					INNER JOIN vtiger_groups

@@ -158,13 +158,13 @@ class Potentials extends CRMEntity {
 		else
 		{
 			$query = 'SELECT vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_crmentity.smcreatorid, vtiger_potential.closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid LEFT JOIN vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid LEFT JOIN vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid ';
-			$where_auto = 'AND vtiger_crmentity.deleted=0 ';
+			$where_auto = ' AND vtiger_crmentity.deleted=0';
 		}
 
 		if($where != "")
-			$query .= "where $where ".$where_auto;
+			$query .= " where $where ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= " where ".$where_auto;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
                                 $sec_parameter=getListViewSecurityParameter("Potentials");

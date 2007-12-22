@@ -156,13 +156,13 @@ class Potential extends CRMEntity {
 		else
 		{
 			$query = 'SELECT potentialid, potentialname, smcreatorid, closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid ';
-			$where_auto = 'AND vtiger_crmentity.deleted=0';
+			$where_auto = ' AND vtiger_crmentity.deleted=0';
 		}
 
 		if($where != "")
-			$query .= "where $where ".$where_auto;
+			$query .= " where $where ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= " where ".$where_auto;
 
 		if($order_by != "")
 			$query .= " ORDER BY vtiger_potential.$order_by";

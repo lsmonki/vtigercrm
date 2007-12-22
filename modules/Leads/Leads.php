@@ -173,9 +173,9 @@ class Leads extends CRMEntity {
 		$where_auto = " vtiger_crmentity.deleted=0 AND vtiger_leaddetails.converted =0";
 
 		if($where != "")
-			$query .= "where ($where) AND ".$where_auto;
+			$query .= " where ($where) AND ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= " where ".$where_auto;
 
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');

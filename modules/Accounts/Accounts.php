@@ -604,7 +604,7 @@ class Accounts extends CRMEntity {
 				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
 			WHERE  vtiger_crmentity.deleted = 0 and ( vtiger_troubletickets.parent_id=".$id." or " ;
 
-		$query .= "vtiger_troubletickets.parent_id in(SELECT vtiger_contactdetails.contactid
+		$query .= " vtiger_troubletickets.parent_id in(SELECT vtiger_contactdetails.contactid
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
@@ -716,9 +716,9 @@ class Accounts extends CRMEntity {
 		$where_auto = " vtiger_crmentity.deleted = 0 ";
 
 		if($where != "")
-			$query .= "WHERE ($where) AND ".$where_auto;
+			$query .= " WHERE ($where) AND ".$where_auto;
 		else
-			$query .= "WHERE ".$where_auto;
+			$query .= " WHERE ".$where_auto;
 
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');

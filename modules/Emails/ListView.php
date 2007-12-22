@@ -117,23 +117,23 @@ if(isset($where) && $where != '')
 }
 if($_REQUEST['folderid'] =='2')
 {
-	$list_query .= "AND vtiger_seactivityrel.crmid in (select contactid from vtiger_contactdetails) AND vtiger_emaildetails.email_flag !='WEBMAIL'";
+	$list_query .= " AND vtiger_seactivityrel.crmid in (select contactid from vtiger_contactdetails) AND vtiger_emaildetails.email_flag !='WEBMAIL'";
 }
 if($_REQUEST['folderid'] =='3')
 {
-	$list_query .= "AND vtiger_seactivityrel.crmid in (select accountid from vtiger_account)";	
+	$list_query .= " AND vtiger_seactivityrel.crmid in (select accountid from vtiger_account)";	
 }
 if($_REQUEST['folderid'] =='4')
 {
-	$list_query .= "AND vtiger_seactivityrel.crmid in (select leadid from vtiger_leaddetails)";	
+	$list_query .= " AND vtiger_seactivityrel.crmid in (select leadid from vtiger_leaddetails)";	
 }
 if($_REQUEST['folderid'] =='5')
 {
-	$list_query .= "AND vtiger_salesmanactivityrel.smid in (select id from vtiger_users)";	
+	$list_query .= " AND vtiger_salesmanactivityrel.smid in (select id from vtiger_users)";	
 }
 if($_REQUEST['folderid'] =='6')
 {
-	$list_query .= "AND vtiger_emaildetails.email_flag ='WEBMAIL'";	
+	$list_query .= " AND vtiger_emaildetails.email_flag ='WEBMAIL'";	
 }
 if(isset($order_by) && $order_by != '')
 {

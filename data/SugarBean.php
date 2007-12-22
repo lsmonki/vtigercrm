@@ -220,9 +220,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$query = "SELECT * FROM $this->table_name ";
 		
 		if($where != "")
-			$query .= "where ($where) AND deleted=0";
+			$query .= " where ($where) AND deleted=0";
 		else
-			$query .= "where deleted=0";
+			$query .= " where deleted=0";
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
@@ -260,9 +260,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$query = "SELECT * FROM $this->table_name ";
 		
 		if($where != "")
-			$query .= "where ($where) AND deleted=0";
+			$query .= " where ($where) AND deleted=0";
 		else
-			$query .= "where deleted=0";
+			$query .= " where deleted=0";
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";

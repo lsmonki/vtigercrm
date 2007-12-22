@@ -237,7 +237,7 @@ function get_usersid($table_name,$column_name,$search_string)
 	}
 	else
 	{
-		$where="vtiger_groups.groupname like '%".$search_string."%' ";
+		$where=" vtiger_groups.groupname like '%".$search_string."%' ";
 	}	
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
@@ -465,7 +465,7 @@ function getAdvSearchfields($module)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Attachment'";
 		}
-		$sql.= "group by vtiger_field.fieldlabel order by block,sequence";
+		$sql.= " group by vtiger_field.fieldlabel order by block,sequence";
 		
 		$params = array($tabid);
 	}

@@ -322,9 +322,9 @@ class Reports extends CRMEntity{
 
 			//fix for Ticket #4016
 			if($module == "Calendar")
-				$sql.="group by vtiger_field.fieldlabel order by sequence";
+				$sql.=" group by vtiger_field.fieldlabel order by sequence";
 			else
-				$sql.="order by sequence";
+				$sql.=" order by sequence";
 		}
 		else
 		{
@@ -338,9 +338,9 @@ class Reports extends CRMEntity{
 
 			//fix for Ticket #4016
 			if($module == "Calendar")
-				$sql.="group by vtiger_field.fieldid,vtiger_field.fieldlabel order by sequence";
+				$sql.=" group by vtiger_field.fieldid,vtiger_field.fieldlabel order by sequence";
 			else
-				$sql.="group by vtiger_field.fieldid order by sequence";			
+				$sql.=" group by vtiger_field.fieldid order by sequence";			
 		}
 		
 		if($module == 'HelpDesk' && $block == 25)
@@ -1121,42 +1121,42 @@ function getEscapedColumns($selectedfields)
 		{
 			case 2://Potentials
 				//ie. Campaign name will not displayed in Potential's report calcullation
-				$ssql.= "and vtiger_field.fieldname not in ('campaignid') ";
+				$ssql.= " and vtiger_field.fieldname not in ('campaignid')";
 				break;
 			case 4://Contacts
-				$ssql.= "and vtiger_field.fieldname not in ('account_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('account_id')";
 				break;
 			case 6://Accounts
-				$ssql.= "and vtiger_field.fieldname not in ('account_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('account_id')";
 				break;
 			case 9://Calandar
-				$ssql.= "and vtiger_field.fieldname not in ('parent_id','contact_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('parent_id','contact_id')";
 				break;
 			case 13://Trouble tickets(HelpDesk)
-				$ssql.= "and vtiger_field.fieldname not in ('parent_id','product_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('parent_id','product_id')";
 				break;
 			case 14://Products
-				$ssql.= "and vtiger_field.fieldname not in ('vendor_id','assigned_user_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('vendor_id')";
 				break;
 			case 20://Quotes
-				$ssql.= "and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id')";
 				break;
 			case 21://Purchase Order
-				$ssql.= "and vtiger_field.fieldname not in ('contact_id','vendor_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('contact_id','vendor_id')";
 				break;
 			case 22://SalesOrder
-				$ssql.= "and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id')";
 				break;
 			case 23://Invoice
-				$ssql.= "and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id')";
 				break;
 			case 26://Campaings
-				$ssql.= "and vtiger_field.fieldname not in ('product_id') ";
+				$ssql.= " and vtiger_field.fieldname not in ('product_id')";
 				break;
 
 		}
 
-		$ssql.= "order by sequence";
+		$ssql.= " order by sequence";
 
 		$result = $adb->pquery($ssql, $sparams);
 		$columntototalrow = $adb->fetch_array($result);

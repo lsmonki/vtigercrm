@@ -629,7 +629,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$request_tax_name = $tax_name."_group_percentage";
 				if(isset($_REQUEST[$request_tax_name]))
                                         $tax_val =$_REQUEST[$request_tax_name];
-				$updatequery .= "$tax_name = ?,";
+				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams,$tax_val);
 			}
 				$updatequery = trim($updatequery,',')." where id=? and productid=?";
@@ -643,7 +643,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$tax_name = $taxes_for_product[$tax_count]['taxname'];
 				$request_tax_name = $tax_name."_percentage".$i;
 			
-				$updatequery .= "$tax_name = ?,";
+				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams, $_REQUEST[$request_tax_name]);
 			}
 				$updatequery = trim($updatequery,',')." where id=? and productid=?";
