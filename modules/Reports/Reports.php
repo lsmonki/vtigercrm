@@ -416,6 +416,11 @@ class Reports extends CRMEntity{
 				$fieldtablename = "vtiger_productsRel";
 				$fieldcolname = "productname";
 			}
+			if($fieldname == 'campaignid')
+			{
+				$fieldtablename = "vtiger_campaign";
+				$fieldcolname = "campaignname";
+			}
 
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);

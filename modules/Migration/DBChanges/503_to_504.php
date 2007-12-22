@@ -762,6 +762,9 @@ ExecuteQuery("alter table vtiger_attachments change path path TEXT");
 ExecuteQuery("alter table vtiger_attachments drop index attachments_description_name_type_attachmentsid_idx");
 ExecuteQuery("alter table vtiger_attachments add index attachments_description_name_type_attachmentsid_idx (`description`,`type`,`attachmentsid`)");
 
+//Added by Asha for ticket #4724
+ExecuteQuery("update vtiger_selectcolumn set columnname = 'vtiger_campaign:campaignname:Potentials_Campaign_Source:campaignid:V' where columnname = 'vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 
