@@ -1256,9 +1256,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	
 			$sql="select * from vtiger_$temptable where $temptable='$temp_val'";
 			$picklistvalueid = $adb->query_result($adb->query($sql),0,'picklist_valueid');
-			$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in ('$roleids')";
-			$res_val=$adb->query($pick_query);
-			$num_val = $adb->num_rows($res_val);
+			if ($picklistvalueid != null) {
+				$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in ('$roleids')";
+				$res_val=$adb->query($pick_query);
+				$num_val = $adb->num_rows($res_val);
+			}
 			if($num_val > 0)
 				$temp_val = $temp_val;
 			else
