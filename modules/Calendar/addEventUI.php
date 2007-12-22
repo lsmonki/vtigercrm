@@ -481,14 +481,16 @@ function getAssignedToHTML($assignedto,$toggletype)
 						</table>
 					</td>
 				</tr>
-				<tr>
+				<!-- This is now required as of now, as we aree not allowing to change the email id
+                                        and it is showing logged in User's email id, instead of Assigned to user's email id -->
+				<!--<tr>
 					<td nowrap align=right>
 					<?php echo $mod_strings['LBL_SDRMD'] ?> :
 					</td>
 					<td >
 					<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="<?php echo $to_email ?>">
 					</td>
-				</tr>
+				</tr>-->
 				</table>
 				<?php } ?>
 				</DIV>
