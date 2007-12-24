@@ -2100,7 +2100,7 @@ $log->debug("Entering deleteProfile(".$prof_id.",".$transfer_profileid.") method
         {
 
                 $sql8 = "select roleid from vtiger_role2profile where profileid=?";
-				$adb->pquery($sql8, array($prof_id));
+				$result = $adb->pquery($sql8, array($prof_id));
                 $num_rows=$adb->num_rows($result);
 
                 for($i=0;$i<$num_rows;$i++)
