@@ -240,13 +240,35 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 
 function getActFieldCombo($fieldname,$tablename)
 {
-	global $adb, $mod_strings;
+	global $adb, $mod_strings,$current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$combo = '';
 	$js_fn = '';
 	if($fieldname == 'eventstatus')
 		$js_fn = 'onChange = "getSelectedStatus();"';
 	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small '.$js_fn.'>';
-	$q = "select * from ".$tablename;
+	if($is_admin)
+		$q = "select * from ".$tablename;
+	else
+	{
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $roleid);
+		}
+		else
+		{	
+			$roleids = $roleid;
+		}
+
+		if (count($roleids) > 1) {
+			$q="select distinct $fieldname from  $tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = $tablename.picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") and picklistid in (select picklistid from $tablename) order by sortid asc";
+		} else {
+			$q="select distinct $fieldname from $tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = $tablename.picklist_valueid where roleid ='".$roleid."' and picklistid in (select picklistid from $tablename) order by sortid asc";
+		}
+	}
 	$Res = $adb->query($q);
 	$noofrows = $adb->num_rows($Res);
 
