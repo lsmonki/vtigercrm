@@ -51,7 +51,7 @@ class CustomView extends CRMEntity{
 	var $mandatoryvalues;
 	
 	var $showvalues;
-
+	
 	var $data_type;
 	
 	/** This function sets the currentuser id to the class variable smownerid,  
@@ -240,7 +240,7 @@ class CustomView extends CRMEntity{
 				$sql.= " and vtiger_field.fieldname not in('notime','duration_minutes','duration_hours')";
 			}
 
-			$sql.= "group by columnname order by sequence";
+			$sql.= " group by columnname order by sequence";
 		}	
 		if($tabid == '9,16')
              $tabid = "9";
@@ -1085,75 +1085,75 @@ class CustomView extends CRMEntity{
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= "concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) IS NULL or ";
+					$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) IS NULL or ";
 				}
-				$value .= "concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
+				$value .= " concat(vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname)";
 			}
 			if($modulename == 'Potentials')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
 
-				$value .= 'vtiger_potential.potentialname IS NULL or ';
+				$value .= ' vtiger_potential.potentialname IS NULL or ';
 				}
-				$value .= 'vtiger_potential.potentialname';
+				$value .= ' vtiger_potential.potentialname';
 			}
 			if($modulename == 'Products')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_products.productname IS NULL or ';
+					$value .= ' vtiger_products.productname IS NULL or ';
 				}
-				$value .= 'vtiger_products.productname';
+				$value .= ' vtiger_products.productname';
 			}
 			if($modulename == 'Invoice')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_invoice.subject IS NULL or ';
+					$value .= ' vtiger_invoice.subject IS NULL or ';
 				}
-				$value .= 'vtiger_invoice.subject';
+				$value .= ' vtiger_invoice.subject';
 			}
 			if($modulename == 'PurchaseOrder')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_purchaseorder.subject IS NULL or ';
+					$value .= ' vtiger_purchaseorder.subject IS NULL or ';
 				}
-				$value .= 'vtiger_purchaseorder.subject';
+				$value .= ' vtiger_purchaseorder.subject';
 			}
 			if($modulename == 'SalesOrder')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_salesorder.subject IS NULL or ';
+					$value .= ' vtiger_salesorder.subject IS NULL or ';
 				}
-				$value .= 'vtiger_salesorder.subject';
+				$value .= ' vtiger_salesorder.subject';
 			}
 			if($modulename == 'Quotes')
 			{
 
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_quotes.subject IS NULL or ';
+					$value .= ' vtiger_quotes.subject IS NULL or ';
 				}
-				$value .= 'vtiger_quotes.subject';
+				$value .= ' vtiger_quotes.subject';
 			}
 			if($modulename == 'Contacts')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) IS NULL or ";
+					$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) IS NULL or ";
 				}
-				$value .= "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
+				$value .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";
 			}
 			if($modulename == 'HelpDesk')
 			{
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_troubletickets.title IS NULL or ';
+					$value .= ' vtiger_troubletickets.title IS NULL or ';
 				}
-				$value .= 'vtiger_troubletickets.title';
+				$value .= ' vtiger_troubletickets.title';
 
 			}
 
