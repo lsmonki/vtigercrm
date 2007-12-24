@@ -1145,74 +1145,77 @@ function getRecordOwnerId($record)
 
 	global $adb;
 	$ownerArr=Array();
-	$query="select * from vtiger_crmentity where crmid = ?";
-	$result=$adb->pquery($query, array($record));
-	$user_id=$adb->query_result($result,0,'smownerid');
-	if($user_id != 0)
+	if($record != '')
 	{
-		$ownerArr['Users']=$user_id;
+		$query="select * from vtiger_crmentity where crmid = ?";
+		$result=$adb->pquery($query, array($record));
+		$user_id=$adb->query_result($result,0,'smownerid');
+		if($user_id != 0)
+		{
+			$ownerArr['Users']=$user_id;
 
+		}
+		elseif($user_id == 0)
+		{
+			$module=$adb->query_result($result,0,'setype');
+			if($module == 'Leads')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname where leadid=?";
+			}
+			elseif($module == 'Calendar' || $module == 'Emails')
+			{
+
+				$query1="select vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where activityid=?";
+			}
+			elseif($module == 'HelpDesk')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_ticketgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname where ticketid=?";
+			}
+			elseif($module == 'Accounts')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_accountgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_accountgrouprelation.groupname where accountid=?";
+			}
+			elseif($module == 'Contacts')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_contactgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_contactgrouprelation.groupname where contactid=?";
+			}
+			elseif($module == 'Potentials')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_potentialgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname where potentialid=?";
+			}
+			elseif($module == 'Quotes')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_quotegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_quotegrouprelation.groupname where quoteid=?";
+			}
+			elseif($module == 'PurchaseOrder')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_pogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_pogrouprelation.groupname where purchaseorderid=?";
+			}
+			elseif($module == 'SalesOrder')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_sogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_sogrouprelation.groupname where salesorderid=?";
+			}
+			elseif($module == 'Invoice')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_invoicegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname where invoiceid=?";
+			}
+			elseif($module == 'Campaigns')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname where campaignid=?";
+			}
+			else
+			{
+				require_once("modules/$module/$module.php");
+				$modObj = new $module();
+				$query1="select vtiger_groups.groupid from vtiger_".$module."grouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_".$module."grouprelation.groupname where ".$modObj->groupTable[1]."=?";
+			}
+
+			$result1=$adb->pquery($query1, array($record));
+			$groupid=$adb->query_result($result1,0,'groupid');
+			$ownerArr['Groups']=$groupid;
+
+		}	
 	}
-	elseif($user_id == 0)
-	{
-		$module=$adb->query_result($result,0,'setype');
-		if($module == 'Leads')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname where leadid=?";
-		}
-		elseif($module == 'Calendar' || $module == 'Emails')
-		{
-
-			$query1="select vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where activityid=?";
-		}
-		elseif($module == 'HelpDesk')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_ticketgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname where ticketid=?";
-		}
-		elseif($module == 'Accounts')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_accountgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_accountgrouprelation.groupname where accountid=?";
-		}
-		elseif($module == 'Contacts')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_contactgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_contactgrouprelation.groupname where contactid=?";
-		}
-		elseif($module == 'Potentials')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_potentialgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname where potentialid=?";
-		}
-		elseif($module == 'Quotes')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_quotegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_quotegrouprelation.groupname where quoteid=?";
-		}
-		elseif($module == 'PurchaseOrder')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_pogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_pogrouprelation.groupname where purchaseorderid=?";
-		}
-		elseif($module == 'SalesOrder')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_sogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_sogrouprelation.groupname where salesorderid=?";
-		}
-		elseif($module == 'Invoice')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_invoicegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname where invoiceid=?";
-		}
-		elseif($module == 'Campaigns')
-		{
-			$query1="select vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname where campaignid=?";
-		}
-		else
-		{
-			require_once("modules/$module/$module.php");
-			$modObj = new $module();
-			$query1="select vtiger_groups.groupid from vtiger_".$module."grouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_".$module."grouprelation.groupname where ".$modObj->groupTable[1]."=?";
-		}
-
-		$result1=$adb->pquery($query1, array($record));
-		$groupid=$adb->query_result($result1,0,'groupid');
-		$ownerArr['Groups']=$groupid;
-
-	}	
 	$log->debug("Exiting getRecordOwnerId method ...");
 	return $ownerArr;
 
