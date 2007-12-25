@@ -452,6 +452,9 @@ var gVTModule = '{$smarty.request.module}';
 													</table>
 												</td>
 											</tr>
+											<!--This is now required as of now, as we aree not allowing to change the email id
+                                        and it is showing logged in User's email id, instead of Assigned to user's email id
+														
 											<tr>
 												<td nowrap align=right>
 													{$MOD.LBL_SDRMD}
@@ -459,7 +462,7 @@ var gVTModule = '{$smarty.request.module}';
 												<td >
 													<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="{$USEREMAILID}">
 												</td>
-											</tr>
+											</tr> -->
 										</table>
 									{/if}
 									</DIV>
