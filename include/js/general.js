@@ -686,7 +686,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 
        if (neg==true)
-           var re=/^(-|)\d+(\.\d\d*)*$/
+           var re=/^(-|)(\d)*(\.)?\d+(\.\d\d*)*$/
        else
 	   var re=/^(\d)*(\.)?\d+(\.\d\d*)*$/
    }
@@ -916,8 +916,12 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 						{
 							if (typeof(type[2])=="undefined") var numformat="any"
 							else var numformat=type[2]
-
-							if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+							if(type[0]=="NN")
+							{
+								if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+								return false
+							}
+							else if (!numValidate(fieldname[i],fieldlabel[i],numformat))
 								return false
 							if (type[3]) {
 								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
