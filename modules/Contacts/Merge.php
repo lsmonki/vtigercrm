@@ -59,7 +59,7 @@ fclose($handle);
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>
-$mass_merge = $_REQUEST['idlist'];
+$mass_merge = $_REQUEST['allselectedboxes'];
 $single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
@@ -198,10 +198,6 @@ while($columnValues = $adb->fetch_array($result))
   {
   	$value = $columnValues[$x];
   	//<<<<<<<<<<<<<<< For blank Fields >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  	if($value == "0")
-  	{
-  		$value = "";
-  	}
   	if(trim($value) == "--None--" || trim($value) == "--none--")
   	{
   		$value = "";

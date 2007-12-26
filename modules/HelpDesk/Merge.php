@@ -52,7 +52,7 @@ fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>>>>
-$mass_merge = $_REQUEST['idlist'];
+$mass_merge = $_REQUEST['allselectedboxes'];
 $single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
@@ -227,10 +227,6 @@ if(count($querycolumns) > 0)
 		{
 			$value = $columnValues[$x];
 			//<<<<<<<<<<<<<<<for blank vtiger_fields>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			if($value == "0")
-			{
-				$value = "";
-			}
 			if(trim($value) == "--None--" || trim($value) == "--none--")
 			{
 				$value = "";
