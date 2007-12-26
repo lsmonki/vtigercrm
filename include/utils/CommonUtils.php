@@ -2064,7 +2064,7 @@ function sendNotificationToOwner($module,$focus)
 						'potentialname'=>'Potential Name',
 						'amount'=>'Amount',
 						'closingdate'=>'Expected Close Date',
-						'opportunity_type'=>'Opportunity Type',
+						'opportunity_type'=>'Type',
 						'description'=>'Description',
 			      		     );
 	}	
