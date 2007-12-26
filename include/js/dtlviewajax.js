@@ -429,6 +429,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 function SaveTag(tagfield,crmId,module)
 {
 	var tagValue = $(tagfield).value;
+	tagValue = encodeURIComponent(tagValue);
 	$("vtbusy_info").style.display="inline";
 	new Ajax.Request(
 		'index.php',
