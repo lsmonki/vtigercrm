@@ -1015,7 +1015,7 @@ function getYearViewLayout(& $cal)
  */
 function getdayEventLayer(& $cal,$slice,$rows)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$listview_max_textlength;
 	$category = getParentTab();
 	$cal_log->debug("Entering getdayEventLayer() method...");
 	$eventlayer = '';
@@ -1032,8 +1032,8 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
 			$id = $act[$i]->record;
-			if(strlen($subject)>25)
-				$subject = substr($subject,0,25)."...";
+			if(strlen($subject)>$listview_max_textlength)
+				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
 			$duration_min =$act[$i]->duration_minute;
@@ -1112,7 +1112,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
  */
 function getweekEventLayer(& $cal,$slice)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$listview_max_textlength;
 	$category = getParentTab();
 	$cal_log->debug("Entering getweekEventLayer() method...");
         $eventlayer = '';
@@ -1127,8 +1127,8 @@ function getweekEventLayer(& $cal,$slice)
 			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
-			if(strlen($subject)>25)
-				$subject = substr($subject,0,25)."...";
+			if(strlen($subject)>$listview_max_textlength)
+				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
 			$start_hour = timeString($act[$i]->start_time,$format);
                         $end_hour = timeString($act[$i]->end_time,$format);
@@ -1253,7 +1253,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	global $log;
 	$Entries = Array();
 	$category = getParentTab();
-	global $adb,$current_user,$mod_strings,$app_strings,$cal_log;
+	global $adb,$current_user,$mod_strings,$app_strings,$cal_log,$listview_max_textlength,$list_max_entries_per_page;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
@@ -1339,7 +1339,6 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$start = $_REQUEST['start'];
 	else
 		$start = 1;
-	global $list_max_entries_per_page;
 	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
 	$start_rec = $navigation_array['start'];
 	$end_rec = $navigation_array['end_val'];
@@ -1391,8 +1390,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 				
 
 		}
-                if(strlen($subject)>25)
-	                $subject = substr($subject,0,25)."...";
+                if(strlen($subject)>$listview_max_textlength)
+	                $subject = substr($subject,0,$listview_max_textlength)."...";
 		if($contact_id != '')
 		{
 			$contactname = getContactName($contact_id);
@@ -1450,7 +1449,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	global $log;
         $Entries = Array();
 	$category = getParentTab();
-	global $adb,$current_user,$mod_strings,$cal_log;
+	global $adb,$current_user,$mod_strings,$cal_log,$list_max_entries_per_page;
 	$cal_log->debug("Entering getTodoList() method...");
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -1522,7 +1521,6 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$start = $_REQUEST['start'];
 	else 
 		$start = 1;
-	global $list_max_entries_per_page;
 	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
 	
 	$start_rec = $navigation_array['start']; 
