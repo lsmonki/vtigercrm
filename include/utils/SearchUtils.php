@@ -540,7 +540,7 @@ function getAdvSearchfields($module)
 				$module_columnlist['vtiger_activity:time_start::Activities_Start Time:I'] = 'Start Time';
 
 		}
-		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+		//$fieldlabel1 = str_replace(" ","_",$fieldlabel); // Is not used anywhere
 		//Check added to search the lists by Inventory manager
                 if($fieldtablename == 'vtiger_quotes' && $fieldcolname == 'inventorymanager')
                 {
@@ -557,15 +557,20 @@ function getAdvSearchfields($module)
 			if ($i==0)
 				$select_flag = "selected";
 
+			$mod_fieldlabel = $mod_strings[$fieldlabel];
+			if($mod_fieldlabel =="") $mod_fieldlabel = $fieldlabel;	
+
 			if($fieldlabel == "Product Code")
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_strings[$fieldlabel]."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_fieldlabel."</option>";
 			if($fieldlabel == "Reports To")
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_strings[$fieldlabel]." - ".$mod_strings['LBL_LIST_LAST_NAME']."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\'".$select_flag.">".$mod_fieldlabel." - ".$mod_strings['LBL_LIST_LAST_NAME']."</option>";
 			elseif($fieldcolname == "contactid" || $fieldcolname == "contact_id")
 			{
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.lastname::::".$fieldtypeofdata."\' ".$select_flag.">".$app_strings['LBL_CONTACT_LAST_NAME']."</option>";
 				$OPTION_SET .= "<option value=\'vtiger_contactdetails.firstname::::".$fieldtypeofdata."\'>".$app_strings['LBL_CONTACT_FIRST_NAME']."</option>";
 			}
+			elseif($fieldcolname == "campaignid")
+				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname::::".$fieldtypeofdata."\' ".$select_flag.">".$mod_fieldlabel."</option>";
 			else
 				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\' ".$select_flag.">".$fieldlabel."</option>";
 		}
@@ -573,12 +578,18 @@ function getAdvSearchfields($module)
 	//Added to include Ticket ID in HelpDesk advance search
 	if($module == 'HelpDesk')
 	{
-		$OPTION_SET .= "<option value=\'vtiger_crmentity.crmid::::".$fieldtypeofdata."\'>".$mod_strings['Ticket ID']."</option>";
+		$mod_fieldlabel = $mod_strings['Ticket ID'];
+                if($mod_fieldlabel =="") $mod_fieldlabel = 'Ticket ID';
+
+		$OPTION_SET .= "<option value=\'vtiger_crmentity.crmid::::".$fieldtypeofdata."\'>".$mod_fieldlabel."</option>";
 	}
 	//Added to include activity type in activity advance search
 	if($module == 'Activities')
 	{
-		$OPTION_SET .= "<option value=\'vtiger_activity.activitytype::::".$fieldtypeofdata."\'>".$mod_strings['Activity Type']."</option>";
+		$mod_fieldlabel = $mod_strings['Activity Type'];
+                if($mod_fieldlabel =="") $mod_fieldlabel = 'Activity Type';
+				
+		$OPTION_SET .= "<option value=\'vtiger_activity.activitytype::::".$fieldtypeofdata."\'>".$mod_fieldlabel."</option>";
 	}
 	$log->debug("Exiting getAdvSearchfields method ...");
 	return $OPTION_SET;
