@@ -951,7 +951,7 @@
 		<index name="attachments_attachmentsid_idx">
 			<col>attachmentsid</col>
 		</index>
-		<index name="attachments_description_name_type_attachmentsid_idx">
+		<index name="attachments_description_type_attachmentsid_idx">
 			<col>description</col>
 			<col>type</col>
 			<col>attachmentsid</col>
