@@ -88,8 +88,11 @@ if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['grou
 				if($return_module == "Calendar"){
 					$del_act = "delete from vtiger_salesmanactivityrel where smid=(select smownerid from vtiger_crmentity where crmid=?) and activityid=?";
 					$adb->pquery($del_act,array($id, $id));
-					$insert = "insert into vtiger_salesmanactivityrel values(?,?)";
-					$result = $adb->pquery($insert, array($idval, $id));
+					$count_r = $adb->pquery("select * from vtiger_salesmanactivityrel where smid=? and activityid=?",array($idval, $id));
+					if($adb->num_rows($count_r) == 0) {
+						$insert = "insert into vtiger_salesmanactivityrel values(?,?)";
+						$result = $adb->pquery($insert, array($idval, $id));
+					}
 				}	
 				//Now we have to update the smownerid
 				$sql = "update vtiger_crmentity set modifiedby=?, smownerid=?, modifiedtime=? where crmid=?";

@@ -217,191 +217,6 @@ function enableCalstarttime()
 	else	
 		document.SharingForm.start_hour.disabled = true;
 }
-function maincheck_form()
-{
-	formSelectColumnString('inviteesid','selectedusers');
-	starthour = parseInt(document.EditView.starthr.value,10);
-        startmin  = parseInt(document.EditView.startmin.value,10);
-        startformat = document.EditView.startfmt.value;
-        endhour = parseInt(document.EditView.endhr.value,10);
-        endmin  = parseInt(document.EditView.endmin.value,10);
-        endformat = document.EditView.endfmt.value;
-	followupformat = document.EditView.followup_startfmt.value;
-        followuphour = parseInt(document.EditView.followup_starthr.value,10);
-        followupmin = parseInt(document.EditView.followup_startmin.value,10);
-
-	if(startformat != '')
-	{
-		if(startformat == 'pm')
-		{
-			if(starthour == 12)
-				starthour = 12;
-			else
-				starthour = starthour + 12;
-		}
-		else
-		{
-			if(starthour == 12)
-				starthour = 0;
-			else
-				starthour = starthour;
-		}
-	}
-	if(endformat != '')
-	{
-		if(endformat == 'pm')
-		{
-			if(endhour == 12)
-				endhour = 12;
-			else
-				endhour = endhour + 12;
-		}
-		else
-		{
-			if(endhour == 12)
-				endhour = 0;
-			else
-				endhour = endhour;
-		}
-	}
-	var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-        var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-	var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-
-	var dateelements1=splitDateVal(dateval1);
-        var dateelements2=splitDateVal(dateval2);
-	var dateelements3=splitDateVal(dateval3);
-
-        dd1=dateelements1[0]
-       	mm1=dateelements1[1]
-        yyyy1=dateelements1[2]
-
-       	dd2=dateelements2[0]
-        mm2=dateelements2[1]
-       	yyyy2=dateelements2[2]
-
-	dd3=dateelements3[0]
-        mm3=dateelements3[1]
-        yyyy3=dateelements3[2]
-
-	var date1=new Date()
-        var date2=new Date()
-	var date3=new Date()
-
-       	date1.setYear(yyyy1)
-        date1.setMonth(mm1-1)
-       	date1.setDate(dd1)
-
-        date2.setYear(yyyy2)
-       	date2.setMonth(mm2-1)
-        date2.setDate(dd2)
-
-	date3.setYear(yyyy3)
-        date3.setMonth(mm3-1)
-        date3.setDate(dd3)
-
-	durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
-       	if(durationinmin >= 60)
-       	{
-       		hour = durationinmin/60;
-       		minute = durationinmin%60;
-       	}
-       	else
-       	{
-       		hour = 0;
-       		minute = durationinmin;
-        }
-	document.EditView.duration_hours.value = hour;
-	document.EditView.duration_minutes.value = minute;
-	event_starthour = _2digit(starthour);
-	event_startmin = _2digit(startmin);
-	event_endhour = _2digit(endhour);
-	event_endmin = _2digit(endmin);
-        document.EditView.time_start.value = event_starthour+':'+event_startmin;
-        document.EditView.time_end.value = event_endhour+':'+event_endmin;
-	if(formValidate())
-	{
-		// Added for Aydin Kurt-Elli requirement START -by Minnie
-                if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block' )
-                {
-                        if(!dateValidate('followup_date','Followup Date','OTH'))
-                        {
-                                return false;
-                        }
-                        if(followupformat != '')
-                        {
-                                if(followupformat == 'pm')
-                                {
-                                        if(followuphour == 12)
-                                                followuphour = 12;
-                                        else
-                                                followuphour = followuphour + 12;
-                                }
-                                else
-                                {
-                                        if(followuphour == 12)
-                                                followuphour = 0;
-                                        else
-                                                followuphour = followuphour;
-                                }
-                        }
-
-                        if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
-			{
-			 	if (date3 <= date2)
-                                {
-                                        if((followuphour*60+followupmin) <= (endhour*60+endmin))
-                                        {
-                                                alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
-                                                document.EditView.followup_starthr.focus();
-                                                return false;
-                                        }
-                                }
-                        }
-                        else return false;
-
-			 //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
-                        date3.setMinutes(followupmin);
-                        date3.setHours(followuphour);
-                        if(document.EditView.activitytype[0].checked == true)
-                        {
-                                date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
-                        }
-                        if(document.EditView.activitytype[1].checked == true)
-                        {
-                                date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
-                        }
-
-			var tempdate = getdispDate(date3);
-
-			followuphour = _2digit(followuphour);
-			followupmin = _2digit(followupmin);
-			followupendhour = _2digit(date3.getHours());
-			followupendmin = _2digit(date3.getMinutes());
-			document.EditView.followup_due_date.value = tempdate;
-                        document.EditView.followup_time_start.value = followuphour+':'+followupmin;
-                        document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
-			//end
-                }
-                // Added for Aydin Kurt-Elli requirement END -by Minnie
-		//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
-		if(document.EditView.recurringtype.value =="Monthly")
-		{
-			if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
-			{
-				alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
-				document.EditView.repeatMonth_date.focus();
-				return false;
-			}
-		}
-		//end
-
-		return true;
-	}
-	else return false;
-
-
-}
 function check_form()
 {
 	formSelectColumnString('inviteesid','selectedusers');
@@ -509,6 +324,7 @@ function check_form()
 			date3.setYear(yyyy3)
                         date3.setMonth(mm3-1)
                         date3.setDate(dd3)
+
                 	if (date2<=date1)
                 	{
                         	if((endhour*60+endmin) <= (starthour*60+startmin))
@@ -604,7 +420,7 @@ function check_form()
 			//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
                         if(document.EditView.recurringtype.value =="Monthly")
                         {
-                                if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
+				if((document.EditView.repeatMonth[0].checked == true) && ((parseInt(parseFloat(document.EditView.repeatMonth_date.value))!=document.EditView.repeatMonth_date.value) || document.EditView.repeatMonth_date.value=='' || parseInt(document.EditView.repeatMonth_date.value)>'31' || document.EditView.repeatMonth_date.value<='0'))
                                 {
                                         alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
                                         document.EditView.repeatMonth_date.focus();

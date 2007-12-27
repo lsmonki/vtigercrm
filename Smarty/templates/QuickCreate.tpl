@@ -419,9 +419,9 @@
 </table>
 {if $QCMODULE eq 'Event'}
 <SCRIPT id="qcvalidate">
-        var qcfieldname = new Array('subject','date_start','time_start','eventstatus','activitytype','due_date','time_end');
-        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Activity Type','End Date & Time','End Date & Time');
-        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M');
+        var qcfieldname = new Array('subject','date_start','time_start','eventstatus','activitytype','due_date','time_end','due_date','time_end');
+        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Status','Activity Type','End Date & Time','End Date & Time','End Date & Time','End Date & Time');
+        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M','DT~M~time_end','T~O~OTH~GE~time_start~Start Date & Time');
 </SCRIPT>
 {elseif $QCMODULE eq 'Todo'}
 <SCRIPT id="qcvalidate">

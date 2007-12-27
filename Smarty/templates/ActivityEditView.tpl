@@ -24,7 +24,7 @@ var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}
-<form name="EditView" method="POST" action="index.php">
+<form name="EditView" method="POST" action="index.php" {if $ACTIVITY_MODE neq 'Task'} onsubmit="return check_form();" {else} onsubmit="maintask_check_form();return formValidate();" {/if} >
 <input type="hidden" name="time_start" id="time_start">
 <input type="hidden" name="view" value="{$view}">
 <input type="hidden" name="hour" value="{$hour}">
@@ -80,7 +80,7 @@ var gVTModule = '{$smarty.request.module}';
 						     <tr>
 							<td  colspan=4 style="padding:5px">
 								<div align="center">
-								<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" {if $ACTIVITY_MODE neq 'Task'} onclick="this.form.action.value='Save';  displaydeleted();return maincheck_form();"{else} onclick="this.form.action.value='Save';  displaydeleted(); maintask_check_form();return formValidate();" {/if} type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+								<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';"  type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 								<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 								</div>
 							</td>
@@ -874,7 +874,7 @@ var gVTModule = '{$smarty.request.module}';
 			<tr>
 				<td  colspan=4 style="padding:5px">
 					<div align="center">
-                        	        	<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" {if $ACTIVITY_MODE neq 'Task'} onclick="this.form.action.value='Save';  displaydeleted();return maincheck_form();"{else} onclick="this.form.action.value='Save';  displaydeleted(); maintask_check_form();return formValidate();" {/if} type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                        	        	<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; " type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 						<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 					</div>
 				</td>
