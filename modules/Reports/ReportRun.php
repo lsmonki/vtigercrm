@@ -218,7 +218,7 @@ class ReportRun extends CRMEntity
 			}
 			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
 			{
-				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
+				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject when 'SalesOrder' then vtiger_salesorderRelCalendar.subject when 'HelpDesk' then vtiger_troubleticketsRelCalendar.title when 'Campaigns' then vtiger_campaignRelCalendar.campaignname End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
 			}
 		}elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name"))
 		{
@@ -329,6 +329,10 @@ class ReportRun extends CRMEntity
 		{
 			$rtvalue = " like ".$adb->quote($value."%");
 		}
+		if($comparator == "ew")
+		{
+			$rtvalue = " like ".$adb->quote("%".$value);
+		}			
 		if($comparator == "c")
 		{
 			$rtvalue = " like ".$adb->quote("%".$value."%");
@@ -455,7 +459,7 @@ class ReportRun extends CRMEntity
                                 }
                                 elseif($selectedfields[0] == 'vtiger_crmentityRelCalendar' && $selectedfields[1]=='setype')
                                 {
-					$fieldvalue = "(vtiger_accountRelCalendar.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_potentialRelCalendar.potentialname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
+					$fieldvalue = "(vtiger_accountRelCalendar.accountname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_potentialRelCalendar.potentialname ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_invoiceRelCalendar.subject ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_quotesRelCalendar.subject ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_purchaseorderRelCalendar.subject ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_salesorderRelCalendar.subject ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_troubleticketsRelCalendar.title ".$this->getAdvComparator($comparator,trim($value),$datatype)." or vtiger_campaignRelCalendar.campaignname ".$this->getAdvComparator($comparator,trim($value),$datatype).")";
                                 }
 				// fix for the ticket#4016 -- when you use only one value in its field.
 				elseif($selectedfields[0] == "vtiger_activity" && $selectedfields[1] == 'status')
@@ -1526,6 +1530,9 @@ class ReportRun extends CRMEntity
 				left join vtiger_quotes as vtiger_quotesRelCalendar on vtiger_quotesRelCalendar.quoteid = vtiger_crmentityRelCalendar.crmid
 				left join vtiger_purchaseorder as vtiger_purchaseorderRelCalendar on vtiger_purchaseorderRelCalendar.purchaseorderid = vtiger_crmentityRelCalendar.crmid
 				left join vtiger_invoice as vtiger_invoiceRelCalendar on vtiger_invoiceRelCalendar.invoiceid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_salesorder as vtiger_salesorderRelCalendar on vtiger_salesorderRelCalendar.salesorderid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_troubletickets as vtiger_troubleticketsRelCalendar on vtiger_troubleticketsRelCalendar.ticketid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')";
 		}
@@ -1723,7 +1730,6 @@ class ReportRun extends CRMEntity
 		{
 			$reportquery .= " order by ".$groupsquery;
 		}
-
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;
 

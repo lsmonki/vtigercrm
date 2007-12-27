@@ -1074,12 +1074,24 @@ class CustomView extends CRMEntity{
 			$modulename=$adb->query_result($res,$s,"setype");
 			if($modulename == 'Accounts')
 			{
+				//By Pavani : Related to problem in calender, Ticket: 4284 and 4675
 				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
 				{
-					$value .= 'vtiger_account.accountname IS NULL or ';
+					if($tablename == 'vtiger_seactivityrel' && $fieldname == 'crmid')
+					{
+						$value .= 'vtiger_account2.accountname IS NULL or ';
+					}
+					else{
+						$value .= 'vtiger_account.accountname IS NULL or ';
+					}
 				}
-
-				$value .= 'vtiger_account.accountname';
+				if($tablename == 'vtiger_seactivityrel' && $fieldname == 'crmid')
+					{
+						$value .= 'vtiger_account2.accountname';
+					}
+					else{
+						$value .= 'vtiger_account.accountname';
+					}
 			}
 			if($modulename == 'Leads')
 			{
@@ -1155,6 +1167,14 @@ class CustomView extends CRMEntity{
 				}
 				$value .= ' vtiger_troubletickets.title';
 
+			}
+			if($modulename == 'Campaigns')
+			{
+				if(($comparator == 'e' || $comparator == 's' || $comparator == 'c') && trim($adv_chk_value) == '')
+				{
+					$value .= ' vtiger_campaign.campaignname IS NULL or ';
+				}
+				$value .= ' vtiger_campaign.campaignname';
 			}
 
 			$value .= $this->getAdvComparator($comparator,$adv_chk_value,$datatype);
