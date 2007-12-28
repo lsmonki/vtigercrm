@@ -765,6 +765,12 @@ ExecuteQuery("alter table vtiger_attachments add index attachments_description_t
 //Added by Asha for ticket #4724
 ExecuteQuery("update vtiger_selectcolumn set columnname = 'vtiger_campaign:campaignname:Potentials_Campaign_Source:campaignid:V' where columnname = 'vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V'");
 
+//Added by bharathi for #4590 on dec 21-2007
+ExecuteQuery("alter table vtiger_potential change column amount amount decimal(14,2) default '0.00'");
+
+//Added by Srini for #4684 on dec 21-2007
+ExecuteQuery("update vtiger_field set uitype=19 where fieldname='update_log' and tablename='vtiger_troubletickets'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 
