@@ -66,6 +66,7 @@ foreach ( explode(",",$home_section_order) as $section )
 	{
 		$activities = Array();
                 include("modules/Calendar/OpenListView.php") ;
+		$smarty->assign("VIEWID", getCvIdOfAll("Calendar"));
                 $activities[] = getPendingActivities(0,"today");
                 //$activities[] = getPendingActivities(0,"all");
                 $activities[] = getPendingActivities(1,"today");

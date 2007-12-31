@@ -211,7 +211,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$comboSalesStageArray = Array ("Closed Won","Needs Analysis","Value Proposition","Qualification","Prospecting","Id.Decision Makers");
+	$comboSalesStageArray = Array ("Closed Won","Needs Analysis","Value Proposition","Qualification","Prospecting","Id. Decision Makers");
 	$key = array_rand($comboSalesStageArray);
 	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
@@ -464,7 +464,7 @@ for($i=0; $i<10; $i++)
 		$qty_in_stock	=	rand(10000, 99999);
 		$category 	= 	"Software";	
 		$website 	=	"www.vtiger.com";
-		$manufacturer	= 	"vtiger";
+		$manufacturer	= 	"LexPon Inc.";
 		$commission_rate=	rand(1,10);
 		$unit_price	=	$subscription_rate[$i];
 		$product_image_name = $product_image_array[$i];
@@ -720,7 +720,7 @@ for($i=0;$i<5;$i++)
 //Populate PurchaseOrder Data
 
 $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk", "PO_vendtl");
-$pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
+$pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Received Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
 $duedate_array = array ("2007-04-21", "2007-05-29", "2007-07-11", "2007-04-09", "2006-08-18");

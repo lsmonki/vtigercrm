@@ -1142,18 +1142,16 @@ function getRecordOwnerId($record)
 {
 	global $log;
 	$log->debug("Entering getRecordOwnerId(".$record.") method ...");
-
 	global $adb;
 	$ownerArr=Array();
-	if($record != '')
+	$query="select * from vtiger_crmentity where crmid = ?";
+	$result=$adb->pquery($query, array($record));
+	if($adb->num_rows($result) > 0)
 	{
-		$query="select * from vtiger_crmentity where crmid = ?";
-		$result=$adb->pquery($query, array($record));
 		$user_id=$adb->query_result($result,0,'smownerid');
 		if($user_id != 0)
 		{
 			$ownerArr['Users']=$user_id;
-
 		}
 		elseif($user_id == 0)
 		{
@@ -1164,7 +1162,6 @@ function getRecordOwnerId($record)
 			}
 			elseif($module == 'Calendar' || $module == 'Emails')
 			{
-
 				$query1="select vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where activityid=?";
 			}
 			elseif($module == 'HelpDesk')
@@ -1213,9 +1210,8 @@ function getRecordOwnerId($record)
 			$result1=$adb->pquery($query1, array($record));
 			$groupid=$adb->query_result($result1,0,'groupid');
 			$ownerArr['Groups']=$groupid;
-
-		}	
-	}
+		}
+	}	
 	$log->debug("Exiting getRecordOwnerId method ...");
 	return $ownerArr;
 

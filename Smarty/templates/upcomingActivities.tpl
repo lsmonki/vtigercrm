@@ -22,7 +22,7 @@
                         <td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;padding-left:10px;">
                 	        <b class="fontBold">{$APP.$label}&nbsp;{$APP.LBL_UPCOMING_EVENTS}&nbsp;({$ACTIVITIES.0.noofactivities})</b><br />
                                 <b>{$APP.LBL_SHOW}</b>
-				{$APP.LBL_TODAY}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?action=ListView&module=Calendar&parenttab=My%20Home%20Page&viewname=All">{$APP.LBL_ALL}</a>	
+				{$APP.LBL_TODAY}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?action=ListView&module=Calendar&parenttab=My%20Home%20Page&viewname={$VIEWID}">{$APP.LBL_ALL}</a>	
 			</td>
 		</tr>
 		<tr>
