@@ -84,10 +84,6 @@ $query_array = Array(
 
 			"alter table vtiger_potential change probability probability decimal(5,2)",
 			"alter table vtiger_potential change amount amount decimal(12,2)",
-			"alter table vtiger_opportunitystage change probability probability decimal(5,2)",
-			"alter table vtiger_dealintimation change dealprobability dealprobability decimal(5,2)",
-			"alter table vtiger_potstagehistory change probability probability decimal(5,2)",
-			"alter table vtiger_potstagehistory change amount amount decimal(12,2)",
 
 			//Homepage order has been changed 
 			"update vtiger_users set homeorder = 'HDB,ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL,OLTPO,LTFAQ'",
@@ -99,6 +95,27 @@ foreach($query_array as $query)
 	ExecuteQuery($query);
 }
 
+//Added to avoid migration error.
+//Check for the table availability before alter.
+$exists1=$adb->query("show create table vtiger_opportunitystage");
+if($exists1)
+{
+        ExecuteQuery("alter table vtiger_opportunitystage change probability probability decimal(5,2)");
+}
+
+$exists2=$adb->query("show create table vtiger_dealintimation");
+if($exists2)
+{
+        ExecuteQuery("alter table vtiger_dealintimation change dealprobability dealprobability decimal(5,2)");
+}
+
+$exists3=$adb->query("show create table vtiger_potstagehistory");
+if($exists3)
+{
+        ExecuteQuery("alter table vtiger_potstagehistory change probability probability decimal(5,2)");
+        ExecuteQuery("alter table vtiger_potstagehistory change amount amount decimal(12,2)");
+}
+//Check ends
 
 //Added for Custom Invoice Number, No need for security population
 //Invoice Number has been set the uitype as 3 which is a new UI type. user can configure but non editable
@@ -338,9 +355,6 @@ $adb->query("alter table vtiger_industry add UNIQUE index industry_industry_idx(
 
 //we have removed contactid from products so that in cvcolumnlist we have to remove this column
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_products:contactid:contact_id:Products_Contact_Name:I'");
-
-
-ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
 //Make the Closed Lost as non editable in Sales Stage
 ExecuteQuery("update vtiger_sales_stage set presence=0 where sales_stage='Closed Lost'");
