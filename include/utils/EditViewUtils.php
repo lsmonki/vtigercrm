@@ -697,10 +697,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
 			$value = $_REQUEST['parent_id'];
-
 		if($value != '')
-		{
 			$parent_module = getSalesEntityType($value);
+		if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
+		{
+			$parent_module = "Accounts";
+			$value = $_REQUEST['account_id'];
+		}
+		if($parent_module != 'Contacts')
+		{
 			if($parent_module == "Leads")
 			{
 				$sql = "select * from vtiger_leaddetails where leadid=?";
@@ -771,8 +776,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$parent_name= $adb->query_result($result,0,"title");
 				$ticket_selected = "selected";
 			}
-
-
 		}
 		$editview_label[] = array($app_strings['COMBO_LEADS'],
                                           $app_strings['COMBO_ACCOUNTS'],

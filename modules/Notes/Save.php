@@ -87,30 +87,6 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-// Notes added to Contacts should also update Accounts
-// Added by DG 16 Nov 2005
-if($_REQUEST['mode'] != 'edit' && ($_REQUEST['return_module']=='Contacts'))
-{
-	$crmid = $_REQUEST['return_id'];
-	$noteid = $focus->id;
-	$query = 'select accountid from vtiger_contactdetails where contactid=?';
-	$result = $adb->pquery($query, array($crmid));
-	if($adb->num_rows($result) != 0)
-	{
-		$associated_account = $adb->query_result($result,0,"accountid");
-	}
-	else
-	{
-		$associated_account = '';
-	}
-	if ($associated_account)
-	{
-		$sql1 = "insert into vtiger_senotesrel (notesid, crmid) values(?,?)";
-		$params1 = array($noteid, $associated_account);
-		$result = $adb->pquery($sql1, $params1);
-	}
-}
-
 if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_REQUEST['return_module']=='HelpDesk') ))
 {
 	if($_REQUEST['email_id'] != '')

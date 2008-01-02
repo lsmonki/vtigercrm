@@ -105,6 +105,9 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 			if($where != '')
 				$listquery .= ' and ('.$where.')';
 			
+			if($module == "Calendar")
+				$listquery .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
+				
 			$list_result = $adb->query($listquery);
 			$noofrows = $adb->num_rows($list_result);
 
