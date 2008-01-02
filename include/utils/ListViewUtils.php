@@ -1801,7 +1801,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$slashes_name.'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
 
 					}else
 					{
@@ -3723,7 +3723,10 @@ function getAccountId($account_name)
 function decode_html($str)
 {
 	global $default_charset;
-	return html_entity_decode($str,ENT_QUOTES,$default_charset);
+	if($_REQUEST['action'] == 'Popup')
+		return html_entity_decode($str);
+	else
+		return html_entity_decode($str,ENT_QUOTES,$default_charset);
 }
 
 function popup_decode_html($str)

@@ -125,7 +125,11 @@ function validate() {
 				    <td width="28%" class="cellText" >
 						<select name="pickrole" id="pickid" class="detailedViewTextBox" onChange="changeModule();">
 						{foreach key=roleid item=role from=$ROLE_LISTS}
+							{if $SEL_ROLEID eq $roleid}
+							<option value="{$roleid}" selected>{$role}</option>
+							{else}
 							<option value="{$roleid}">{$role}</option>
+							{/if}
 						{/foreach}
 						</select>
 				</td>
@@ -134,7 +138,11 @@ function validate() {
 	                        <td width="32%" class="cellText" >
 					<select name="pickmodule" id="pickmodule" class="detailedViewTextBox" onChange="changeModule();">
 					{foreach key=tabid item=module from=$MODULE_LISTS}
+						{if $SEL_MODULE eq $module}
+						<option value="{$module}" selected>{$APP.$module}</option>
+						{else}
 						<option value="{$module}">{$APP.$module}</option>
+						{/if}
 					{/foreach}
 					</select>
 				</td>
