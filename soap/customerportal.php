@@ -582,6 +582,7 @@ function update_ticket_comment($input_array)
 		//To get the contact name
 		$result1 = $adb->pquery("select lastname, firstname, email from vtiger_contactdetails where contactid=?", array($ownerid));
 		$customername = $adb->query_result($result1,0,'firstname').' '.$adb->query_result($result1,0,'lastname');
+		$customername = decode_html($customername);//Fix to display the original UTF-8 characters in sendername instead of ascii characters 
 		$from_email = $adb->query_result($result1,0,'email');
 
 		//send mail to the assigned to user when customer add comment
