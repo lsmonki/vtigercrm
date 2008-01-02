@@ -98,20 +98,35 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			$crtd_time=$row['createdtime'];
 			$crtd_time_array=explode(" ",$crtd_time);
 			$crtd_date=$crtd_time_array[0];
-
 			if(!isset($mod_tot_cnt_array[$crtd_date]))
 				$mod_tot_cnt_array[$crtd_date]=0;
 
 			$mod_tot_cnt_array[$crtd_date]+=1;
 
 			if (in_array($mod_name,$mod_name_array) == false)
-			{
-				array_push($mod_name_array,$mod_name); // getting all the unique Names into the array
+			{       $uniqueid[$mod_name]='0';
+			        array_push($mod_name_array,$mod_name); // getting all the unique Names into the array
+			        if($graph_for == "productname")
+				{
+					if($row['qtyinstock'] =='')
+						$mod_count_array[$mod_name] = 1;
+					else
+					        $mod_count_array[$mod_name]=$row['qtyinstock'];
+				}
 			}
-			if (in_array($search_str,$search_str_array) == false)
-                       	{
-                               array_push($search_str_array,$search_str);
-                       	}
+			else
+			{		
+				if($graph_for == "productname")
+			        {
+					$uniqueid[$mod_name]=$uniqueid[$mod_name]+1;					                                     	     $mod_name=$mod_name.'['.$uniqueid[$mod_name].']';					                                          array_push($mod_name_array,$mod_name); // getting all the unique Names into the array
+					
+					if($row['qtyinstock'] =='')
+						$mod_count_array[$mod_name] = 1;
+					else
+					        $mod_count_array[$mod_name]=$row['qtyinstock'];
+				}
+			}
+			array_push($search_str_array,$search_str); 
 
 			//Counting the number of values for a type of graph
 			if($graph_for == "productname")
@@ -152,7 +167,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				$graph_format=$values[0];
 				$table_format=$values[1];
 				$mod_cnt_table.= "<th>$table_format</th>";
-
 			}
 			$mod_cnt_table .= "<th>Total</th></tr>" ;
 
@@ -307,7 +321,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						$search_str=$name_val;
 					}	
 				}
-
 				//Passing name to graph
 				if($mod_name_val!="") $mod_name_val.="::$mod_name";
 				else $mod_name_val="$mod_name";
