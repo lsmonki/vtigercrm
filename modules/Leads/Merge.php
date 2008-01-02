@@ -153,7 +153,7 @@ while($columnValues = $adb->fetch_array($result))
 		{
 			$actual_values[$x] = '"'.$actual_values[$x].'"';
 		}
-		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
+		$actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
   }
 	$mergevalue[] = implode($actual_values,",");  	
 }
