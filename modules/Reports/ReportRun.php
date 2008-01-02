@@ -1707,6 +1707,11 @@ class ReportRun extends CRMEntity
 		}
 
 		$reportquery = $this->getReportsQuery($this->primarymodule);
+
+		// If we don't have access to any columns, let us select one column and limit result to shown we have not results
+                // Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4758 - Prasad
+		$allColumnsRestricted = false;
+
 		if($type == 'COLUMNSTOTOTAL')
 		{
 			if($columnstotalsql != '')
@@ -1715,6 +1720,13 @@ class ReportRun extends CRMEntity
 			}
 		}else
 		{
+			if($selectedcolumns == '') {
+                                // Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4758 - Prasad
+                                
+				$selectedcolumns = "''"; // "''" to get blank column name
+                                $allColumnsRestricted = true;
+                        }
+			
 			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -1730,6 +1742,12 @@ class ReportRun extends CRMEntity
 		{
 			$reportquery .= " order by ".$groupsquery;
 		}
+		
+		// Prasad: No columns selected so limit the number of rows directly.
+                if($allColumnsRestricted) {
+                        $reportquery .= " limit 0";
+                }
+
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;
 
@@ -2429,12 +2447,12 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $current_user;
-		$id =getTabid($this->primarymodule);
+		$id = array(getTabid($this->primarymodule));
 		if($this->secondarymodule != '')
-			$id .= ', '.getTabid($this->secondarymodule);
+			array_push($id,  getTabid($this->secondarymodule));
 
-		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in(?) and uitype in (15,16,111,33,55)'; //and columnname in (?)';
-		$result = $adb->pquery($query,array($id));//,$select_column));
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,16,111,33,55)'; //and columnname in (?)';
+		$result = $adb->pquery($query, $id);//,$select_column));
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);
 		if(count($subrole)> 0)
