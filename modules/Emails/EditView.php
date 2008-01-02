@@ -126,7 +126,7 @@ if($_REQUEST["internal_mailer"] == "true") {
 		$email1 = $_REQUEST["email_addy"];
 	}
 
-	$smarty->assign('TO_MAIL',$email1);
+	$smarty->assign('TO_MAIL',$email1.";");
 	//$smarty->assign('BCC_MAIL',$current_user->email1);
 }
 
