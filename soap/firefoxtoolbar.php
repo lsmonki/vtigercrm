@@ -793,7 +793,7 @@ function GetPicklistValues($username,$tablename)
 		$result1 = $adb->pquery($query, array($roleid));
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{
-			$output[$i] = $adb->query_result($result1,$i,$tablename);
+			$output[$i] = decode_html($adb->query_result($result1,$i,$tablename));
 		}			
 	}
 	else

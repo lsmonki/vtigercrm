@@ -188,11 +188,11 @@ function SearchContactsByEmail($username,$emailaddress)
      foreach($contactList as $contact)
      {
           $output_list[] = Array(
-               "id" => $contact[contactid],
-               "firstname" => $contact[firstname],
-               "lastname" => $contact[lastname],
-               "emailaddress" => $contact[email],
-               "accountname" => $contact[accountname],
+               "id" => decode_html($contact[contactid]),
+               "firstname" => decode_html($contact[firstname]),
+               "lastname" => decode_html($contact[lastname]),
+               "emailaddress" => decode_html($contact[email]),
+               "accountname" => decode_html($contact[accountname]),
           );
      }
 
@@ -275,7 +275,7 @@ function GetContacts($username)
 			$contact["salutation"] = "";
 		}
 
-		$namelist = explode(" ", $contact["lastname"]);
+/*		$namelist = explode(" ", $contact["lastname"]);
 		if(isset($namelist))
 		{
 			if(count($namelist) >= 2)
@@ -290,37 +290,37 @@ function GetContacts($username)
 					$middlename = implode(" ",$middlename);
 				}
 			}
-		}
+		}*/
 
 		$output_list[] = Array(
-				"id" => $contact["id"],
-				"title" => $contact["salutation"],
-				"firstname" => $contact["firstname"],
-				"middlename" => trim($middlename),
-				"lastname" => trim($contact["lastname"]),
+				"id" => decode_html($contact["id"]),
+				"title" => decode_html($contact["salutation"]),
+				"firstname" => decode_html($contact["firstname"]),
+				"middlename" => decode_html(trim($middlename)),
+				"lastname" => decode_html(trim($contact["lastname"])),
 				"birthdate" => $contact["birthday"],
-				"emailaddress" => $contact["email"],
-				"jobtitle" => $contact["title"],
-				"department" => $contact["department"],
-				"accountname" => $contact["accountname"],
-				"officephone" => $contact["phone"],
-				"homephone" => $contact["homephone"],
-				"otherphone" => $contact["otherphone"],
-				"fax" => $contact["fax"],
-				"mobile" => $contact["mobile"],
-				"asstname" => $contact["assistant"],
-				"asstphone" => $contact["assistantphone"],
-				"reportsto" => $contact["reports_to_name"],
-				"mailingstreet" => $contact["mailingstreet"],
-				"mailingcity" => $contact["mailingcity"],
-				"mailingstate" => $contact["mailingstate"],
-				"mailingzip" => $contact["mailingzip"],
-				"mailingcountry" => $contact["mailingcountry"],
-				"otherstreet" => $contact["otherstreet"],
-				"othercity" => $contact["othercity"],
-				"otherstate" => $contact["otherstate"],
-				"otherzip" => $contact["otherzip"],
-				"othercountry" => $contact["othercountry"],
+				"emailaddress" => decode_html($contact["email"]),
+				"jobtitle" => decode_html($contact["title"]),
+				"department" => decode_html($contact["department"]),
+				"accountname" => decode_html($contact["accountname"]),
+				"officephone" => decode_html($contact["phone"]),
+				"homephone" => decode_html($contact["homephone"]),
+				"otherphone" => decode_html($contact["otherphone"]),
+				"fax" => decode_html($contact["fax"]),
+				"mobile" => decode_html($contact["mobile"]),
+				"asstname" => decode_html($contact["assistant"]),
+				"asstphone" => decode_html($contact["assistantphone"]),
+				"reportsto" => decode_html($contact["reports_to_name"]),
+				"mailingstreet" => decode_html($contact["mailingstreet"]),
+				"mailingcity" => decode_html($contact["mailingcity"]),
+				"mailingstate" => decode_html($contact["mailingstate"]),
+				"mailingzip" => decode_html($contact["mailingzip"]),
+				"mailingcountry" => decode_html($contact["mailingcountry"]),
+				"otherstreet" => decode_html($contact["otherstreet"]),
+				"othercity" => decode_html($contact["othercity"]),
+				"otherstate" => decode_html($contact["otherstate"]),
+				"otherzip" => decode_html($contact["otherzip"]),
+				"othercountry" => decode_html($contact["othercountry"]),
 				"description" => "",
 				"category" => "",
 			  );
