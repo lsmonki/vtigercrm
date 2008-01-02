@@ -19,7 +19,7 @@ $theme_path="themes/".$theme."/";
                 function titleValidation()
                 {
                         var val = document.getElementById('uploadsubject').value;
-                        if(val == '')
+                        if(trim(val) == '')
                         {
                                 alert("Title cannot be empty");
                                 return false;
@@ -64,6 +64,11 @@ $theme_path="themes/".$theme."/";
 			form_ele.style.backgroundColor = form_ele.bgcolor;
 			form_ele.form[form_ele.name + '_hidden'].value = value;
 			return true;
+		}
+		function trim(str)
+		{
+			// str. remove whitespaces from left. remove whitespaces from right
+			return str.replace(/^\s+/g, "").replace(/\s+$/g, "");
 		}
         </script>
 </head>
