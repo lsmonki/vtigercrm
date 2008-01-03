@@ -388,8 +388,7 @@ function getMailError($mail,$mail_status,$to)
 	global $adb;
 	$adb->println("Inside the function getMailError");
 
-	$error_info = explode(":",$mail_status);
-	$msg = trim($error_info[1]);
+	$msg = array_search($mail_status,$mail->language);
 	$adb->println("Error message ==> ".$msg);
 
 	if($msg == 'connect_host')
