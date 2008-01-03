@@ -521,7 +521,7 @@ class ReportRun extends CRMEntity
 				}else
 				{
 					$startenddate = $this->getStandarFiltersStartAndEndDate($datefilter);
-					if($startenddate[0] != "" && $startenddate[1] != "")
+					if($startenddate[0] != "" && $startenddate[1] != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
 					{
 						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:59'";
 					}
@@ -559,7 +559,7 @@ class ReportRun extends CRMEntity
 				if($startdate != "" && $enddate != "")
 				{
 					$startenddate = $this->getStandarFiltersStartAndEndDate($filter);
-					if($startenddate[0] != "" && $startenddate[1] != "")
+					if($startenddate[0] != "" && $startenddate[1] != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
 					{
 						$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:00'";
 					}

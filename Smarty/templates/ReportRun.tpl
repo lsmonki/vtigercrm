@@ -162,7 +162,15 @@
 
 <SCRIPT LANGUAGE=JavaScript>
 function CrearEnlace(tipo,id){
-	return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+
+	return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterField="+stdDateFilterFieldvalue+"&stdDateFilter="+stdDateFiltervalue+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;
 
 }
 function goToURL( url )
@@ -176,10 +184,26 @@ var filter = getObj('stdDateFilter').options[document.NewReport.stdDateFilter.se
         showDateRange( filter );
     }
 
+// If current user has no access to date fields, we should disable selection
+// Fix for: #4670
+if(getObj('stdDateFilterField').options.length <= 0) {
+	getObj('stdDateFilterField').disabled = true;
+	getObj('stdDateFilter').disabled = true;
+	getObj('startdate').disabled = true;
+	getObj('enddate').disabled = true;
+	document.getElementById('jscal_trigger_date_start').onclick = function() { }
+	document.getElementById('jscal_trigger_date_end').onclick = function() { }
+}
+
 function generateReport(id)
 {
-	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
-	var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
 
@@ -221,11 +245,17 @@ function selectReport()
 }
 function ReportInfor()
 {
-	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].text;
-    var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].text;
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+	if(document.NewReport.stdDateFilter.selectedIndex != -1)
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
-	
+
 	if(startdatevalue != '' && enddatevalue=='')
 	{
 		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (from  '+startdatevalue+' )';
@@ -248,6 +278,15 @@ ReportInfor();
 {/literal}
 function goToPrintReport(id) 
 {ldelim}
-	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value,"{$MOD.LBL_Print_REPORT}","width=800,height=650,resizable=1,scrollbars=1,left=100");
+	var stdDateFilterFieldvalue = '';
+	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
+	stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+
+	var stdDateFiltervalue = '';
+if(document.NewReport.stdDateFilter.selectedIndex != -1)
+	stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+
+	window.open("index.php?module=Reports&action=ReportsAjax&file=PrintReport&record="+id+"&stdDateFilterField="+stdDateFilterFieldvalue+"&stdDateFilter="+stdDateFiltervalue+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value,"{$MOD.LBL_Print_REPORT}","width=800,height=650,resizable=1,scrollbars=1,left=100");
+
 {rdelim}
 </SCRIPT>
