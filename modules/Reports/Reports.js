@@ -412,9 +412,15 @@ function changeSteps1()
 			{
 				if (!emptyCheck(comp_name,collabel+" Option","text"))
 					return false
-				if (!emptyCheck(data_name,collabel+" Value","text"))
+			}
+			else if(trim(data_value) != '')
+			{
+				if (!emptyCheck(option_name," Column ","text"))
+					return false
+				if (!emptyCheck(comp_name,collabel+" Option","text"))
 					return false
 			}
+
 			if(trim(data_value) != '' && option_value != '' && comp_value != '')
 			{
 				var col=option_value.split(":");
