@@ -55,16 +55,18 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
 
 
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
-{	
+{
 	$profileName=$_REQUEST['profile_name'];
+	$smarty->assign("PROFILE_NAME", to_html($profileName));
 }
 else
 {
 	$profileName=getProfileName($profileId);
+	$smarty->assign("PROFILE_NAME", $profileName);
 
 }
 
-$smarty->assign("PROFILE_NAME", $profileName);
+//$smarty->assign("PROFILE_NAME", to_html($profileName));
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
 	

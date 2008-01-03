@@ -101,7 +101,7 @@ $roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
  */
 function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 {
-	global $theme,$app_strings;
+	global $theme,$app_strings,$default_charset;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	foreach($hrarray as $roleid => $value)
@@ -110,7 +110,7 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		//retreiving the vtiger_role details
 		$role_det_arr=$role_det[$roleid];
 		$roleid_arr=$role_det_arr[2];
-		$rolename = $role_det_arr[0];
+		$rolename = htmlentities($role_det_arr[0],ENT_QUOTES,$default_charset);
 		$roledepth = $role_det_arr[1]; 
 		$roleout .= '<ul class="uil" id="'.$roleid.'" style="display:block;list-style-type:none;">';
 		$roleout .=  '<li >';

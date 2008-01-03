@@ -105,7 +105,7 @@ foreach($grpDetails as $grpId=>$grpName)
 		}
 
 		$grpIdStr .= "'".$grpId."'";
-		$grpNameStr .= "'".$grpName."'";
+		$grpNameStr .= "'".decode_html($grpName)."'";
 	
 	$m++;
 	}	
