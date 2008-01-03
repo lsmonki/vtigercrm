@@ -80,7 +80,8 @@ if($activevalue[0] == 1)
 
 	while ($myrow = $adb->fetch_array($result))
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"");	
+		$ticketid = $myrow['ticketid'];
+		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].": #".$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"");	
 	}
 }
 
