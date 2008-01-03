@@ -335,7 +335,7 @@ class Chat
 	    break;
 	  }
       }
-    return mysql_real_escape_string($msg);    
+    return $msg;    
   }
 
   /**
