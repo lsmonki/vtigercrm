@@ -293,10 +293,10 @@ function SearchContactsByEmail($username,$emailaddress)
      {
           $output_list[] = Array(
                "id" => $contact[contactid],
-               "firstname" => $contact[firstname],
-               "lastname" => $contact[lastname],
-               "accountname" => $contact[accountname],
-               "emailaddress" => $contact[email],
+               "firstname" => decode_html($contact[firstname]),
+               "lastname" => decode_html($contact[lastname]),
+               "accountname" => decode_html($contact[accountname]),
+               "emailaddress" => decode_html($contact[email]),
           );
      }
      
@@ -540,33 +540,33 @@ function GetContacts($username)
 
 		$output_list[] = Array(
 				"id" => $contact["id"],
-				"title" => $contact["salutation"],
-				"firstname" => $contact["firstname"],
-				"middlename" => trim($middlename),
-				"lastname" => trim($contact["lastname"]),
+				"title" => decode_html($contact["salutation"]),
+				"firstname" => decode_html($contact["firstname"]),
+				"middlename" => decode_html(trim($middlename)),
+				"lastname" => decode_html(trim($contact["lastname"])),
 				"birthdate" => $contact["birthday"],
-				"emailaddress" => $contact["email"],
-				"jobtitle" => $contact["title"],
-				"department" => $contact["department"],
-				"accountname" => $contact["accountname"],                         
-				"officephone" => $contact["phone"],
-				"homephone" => $contact["homephone"],
-				"otherphone" => $contact["otherphone"],           
-				"fax" => $contact["fax"],
-				"mobile" => $contact["mobile"],
-				"asstname" => $contact["assistant"],
-				"asstphone" => $contact["assistantphone"],             
-				"reportsto" => $contact["reports_to_name"],
-				"mailingstreet" => $contact["mailingstreet"],
-				"mailingcity" => $contact["mailingcity"],
-				"mailingstate" => $contact["mailingstate"],
-				"mailingzip" => $contact["mailingzip"],
-				"mailingcountry" => $contact["mailingcountry"],              
-				"otherstreet" => $contact["otherstreet"],
-				"othercity" => $contact["othercity"],
-				"otherstate" => $contact["otherstate"],
-				"otherzip" => $contact["otherzip"],
-				"othercountry" => $contact["othercountry"],
+				"emailaddress" => decode_html($contact["email"]),
+				"jobtitle" => decode_html($contact["title"]),
+				"department" => decode_html($contact["department"]),
+				"accountname" => decode_html($contact["accountname"]),  
+				"officephone" => decode_html($contact["phone"]),
+				"homephone" => decode_html($contact["homephone"]),
+				"otherphone" => decode_html($contact["otherphone"]), 
+				"fax" => decode_html($contact["fax"]),
+				"mobile" => decode_html($contact["mobile"]),
+				"asstname" => decode_html($contact["assistant"]),
+				"asstphone" => decode_html($contact["assistantphone"]),             
+				"reportsto" => decode_html($contact["reports_to_name"]),
+				"mailingstreet" => decode_html($contact["mailingstreet"]),
+				"mailingcity" => decode_html($contact["mailingcity"]),
+				"mailingstate" => decode_html($contact["mailingstate"]),
+				"mailingzip" => decode_html($contact["mailingzip"]),
+				"mailingcountry" => decode_html($contact["mailingcountry"]),              
+				"otherstreet" => decode_html($contact["otherstreet"]),
+				"othercity" => decode_html($contact["othercity"]),
+				"otherstate" => decode_html($contact["otherstate"]),
+				"otherzip" => decode_html($contact["otherzip"]),
+				"othercountry" => decode_html($contact["othercountry"]),
 				"description" => "",
 				"category" => "",        
 			  );
@@ -864,13 +864,13 @@ function GetTasks($username)
         
 		$output_list[] = Array(
 						"id" => $task["taskid"],
-						"subject" => $task["subject"],
+						"subject" => decode_html($task["subject"]),
 						"startdate" => $task["date_start"],
 						"duedate" => $task["due_date"],
-						"status" => $task["status"],
-						"priority" => $task["priority"],
-						"description" => $task["description"],
-						"contactname" => $task["firstname"]." ".$task["lastname"],
+						"status" => decode_html($task["status"]),
+						"priority" => decode_html($task["priority"]),
+						"description" => decode_html($task["description"]),
+						"contactname" => decode_html($task["firstname"])." ".decode_html($task["lastname"]),
 						"category" => "",        
 						);
 	}
@@ -1115,12 +1115,12 @@ function GetClndr($username)
 
 		$output_list[] = Array(
 			"id" => $clndr["clndrid"],
-			"subject" => $clndr["subject"],
+			"subject" => decode_html($clndr["subject"]),
 			"startdate" => $clndr["date_start"],
 			"duedate" => $clndr["due_date"],
-			"location" => $clndr["location"],
-			"description" => $clndr["description"],
-			"contactname" => $clndr["firstname"]." ".$clndr["lastname"],
+			"location" => decode_html($clndr["location"]),
+			"description" => decode_html($clndr["description"]),
+			"contactname" => decode_html($clndr["firstname"])." ".decode_html($clndr["lastname"]),
 			"category" => "",        
 		);
 	}
@@ -1316,6 +1316,6 @@ function get_time_difference( $start, $end )
 	return( false );
 }
 
-$server->service(utf8_encode($HTTP_RAW_POST_DATA)); 
+$server->service($HTTP_RAW_POST_DATA); 
 exit();
 ?>
