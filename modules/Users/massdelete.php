@@ -20,6 +20,9 @@ $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 $return_action = $_REQUEST['return_action'];
 $rstart='';
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
+
 //split the string and store in an array
 $storearray = explode(";",$idlist);
 array_filter($storearray);
@@ -71,21 +74,21 @@ if($returnmodule == 'Emails')
 	{
 		$folderid = 1;
 	}
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete".$rstart."&file=ListView&errormsg=".$errormsg);
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete".$rstart."&file=ListView&errormsg=".$errormsg.$url);
 }
 elseif($return_action == 'ActivityAjax')
 {
 	$subtab = $_REQUEST['subtab'];
-	header("Location: index.php?module=".$returnmodule."&action=".$return_action."".$rstart."&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab);
+	header("Location: index.php?module=".$returnmodule."&action=".$return_action."".$rstart."&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab.$url);
 }
 			
 elseif($returnmodule!='Faq')
 {
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete".$rstart."&file=ListView&viewname=".$viewid."&errormsg=".$errormsg);
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete".$rstart."&file=ListView&viewname=".$viewid."&errormsg=".$errormsg.$url);
 }
 else
 {
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete".$rstart."&file=ListView&errormsg=".$errormsg);
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete".$rstart."&file=ListView&errormsg=".$errormsg.$url);
 }
 ?>
 

@@ -570,6 +570,20 @@ class PearDatabase{
 	return $coldata;
     }
 
+	// Function to get particular row from the query result
+	function query_result_rowdata(&$result, $row=0) {
+		if (!is_object($result))
+                throw new Exception("result is not an object");
+		$result->Move($row);
+		$rowdata = $this->change_key_case($result->FetchRow());
+		
+		foreach($rowdata as $col => $coldata) {
+			if($col != 'fieldlabel')
+				$rowdata[$col] = to_html($coldata);
+		}
+		return $rowdata;
+	}
+
     function getAffectedRowCount(&$result)
     {
 	global $log;

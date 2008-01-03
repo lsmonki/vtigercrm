@@ -708,11 +708,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			if($parent_module == "Leads")
 			{
-				$sql = "select * from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $last_name.' '.$first_name;
+				$parent_name = getLeadName($value);
 				$lead_selected = "selected";
 
 			}
@@ -815,11 +811,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			if($parent_module == "Leads")
 			{
-				$sql = "select * from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $last_name.' '.$first_name;
+				$parent_name = getLeadName($value);
 				$lead_selected = "selected";
 
 			}
@@ -1030,22 +1022,20 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 						{
 							$sql = "select firstname,lastname,email from vtiger_leaddetails where leadid=?";
 							$result = $adb->pquery($sql, array($mycrmid));
-							$first_name = $adb->query_result($result,0,"firstname");
-							$last_name = $adb->query_result($result,0,"lastname");
+							$full_name = getFullNameFromQResult($result,0,"Leads");
 							$myemail=$adb->query_result($result,0,"email");
 							$parent_id .=$mycrmid.'@0|' ; //make it such that the email adress sent is remebered and only that one is retrived
-							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+							$parent_name .= $full_name.'<'.$myemail.'>; ';
 							$lead_selected = 'selected';
 						}
 						elseif($parent_module == "Contacts")
 						{
 							$sql = "select * from  vtiger_contactdetails where contactid=?";
 							$result = $adb->pquery($sql, array($mycrmid));
-							$first_name = $adb->query_result($result,0,"firstname");
-							$last_name = $adb->query_result($result,0,"lastname");
+							$full_name = getFullNameFromQResult($result,0,"Contacts");
 							$myemail=$adb->query_result($result,0,"email");
 							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
-							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+							$parent_name .= $full_name.'<'.$myemail.'>; ';
 							$contact_selected = 'selected';
 						}
 						elseif($parent_module == "Accounts")
@@ -1096,11 +1086,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Contacts")
 			{
-				$sql = "select * from  vtiger_contactdetails where contactid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $last_name.' '.$first_name;
+				$parent_name = getContactName($value);
 				$contact_selected = "selected";
 
 			}

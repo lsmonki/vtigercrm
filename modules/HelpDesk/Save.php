@@ -27,6 +27,9 @@ require_once('include/database/PearDatabase.php');
 
 $focus = new HelpDesk();
 
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 setObjectValuesFromRequest($focus);
 global $adb,$mod_strings;
 //Added to update the ticket history
@@ -205,5 +208,5 @@ if ($mail_status != '') {
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

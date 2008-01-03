@@ -28,7 +28,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $log,$mod_strings,$app_strings,$theme,$currentModule;
+global $log,$mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 //added for contact image
 $encode_val=$_REQUEST['encode_val'];
@@ -41,6 +41,11 @@ $decode_val=base64_decode($encode_val);
 
 $focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
+
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
@@ -127,7 +132,11 @@ $log->info("Contact detail view");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("NAME",$focus->lastname." ".$focus->firstname);
+$contact_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$contact_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$contact_name);
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);

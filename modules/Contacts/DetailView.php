@@ -53,7 +53,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
 
-global $theme;
+global $theme, $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -71,7 +71,11 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if(useInternalMailer() == 1) 
 	$smarty->assign("INT_MAILER","true");
 
-$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$contact_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$contact_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$contact_name);
 
 $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));

@@ -211,6 +211,8 @@ function AddressSync(Addform,id)
 	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
+<!--added to fix 4600-->
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form>
 
 

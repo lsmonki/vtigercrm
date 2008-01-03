@@ -18,6 +18,10 @@ global $app_strings,$mod_strings,$theme,$currentModule;
 
 $focus = new PriceBooks();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {

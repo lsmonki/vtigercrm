@@ -689,13 +689,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
+				$label_fld[] =$app_strings['LBL_LEAD_NAME'];				
+				$lead_name = getLeadName($value);
 
-				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$lead_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{
@@ -802,13 +799,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
-
-				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+				$label_fld[] =$app_strings['LBL_LEAD_NAME'];				
+				$lead_name = getLeadName($value);
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$lead_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{
@@ -901,22 +894,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Leads")
 			{
 				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-				$last_name = $adb->query_result($result,0,"lastname");
-
-				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+				$lead_name = getLeadName($value);
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$lead_name.'</a>';
 			}
 			elseif($parent_module == "Contacts")
 			{
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$sql = "select * from  vtiger_contactdetails where contactid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-                $last_name = $adb->query_result($result,0,"lastname");
-
-				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+				$contact_name = getContactName($value);
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$contact_name.'</a>';
 			}
 		}
 		else
@@ -948,20 +933,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				if($parent_module == "Leads")
 				{
 					$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-					$sql = "select * from vtiger_leaddetails where leadid=?";
-					$result = $adb->pquery($sql, array($value));
-					$first_name = $adb->query_result($result,0,"firstname");
-					$last_name = $adb->query_result($result,0,"lastname");
-					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+					$lead_name = getLeadName($value);
+					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$lead_name.'</a>';
 				}
 				elseif($parent_module == "Contacts")
 				{
 					$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-					$sql = "select * from  vtiger_contactdetails where contactid=?";
-					$result = $adb->pquery($sql, array($value));
-					$first_name = $adb->query_result($result,0,"firstname");
-					$last_name = $adb->query_result($result,0,"lastname");
-					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+					$contact_name = getContactName($value);
+					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$contact_name.'</a>';
 				}
 				elseif($parent_module == "Accounts")
 				{
@@ -990,12 +969,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Contacts")
 			{
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$sql = "select * from  vtiger_contactdetails where contactid=?";
-				$result = $adb->pquery($sql, array($value));
-				$first_name = $adb->query_result($result,0,"firstname");
-                                $last_name = $adb->query_result($result,0,"lastname");
-
-				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
+				$contact_name = getContactName($value);
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$contact_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{

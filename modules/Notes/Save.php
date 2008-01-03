@@ -28,6 +28,9 @@ require_once('include/upload_file.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Notes();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 if(isset($_REQUEST['notecontent']) && $_REQUEST['notecontent'] != "")
 	$_REQUEST['notecontent'] = fck_from_html($_REQUEST['notecontent']);
 	
@@ -113,5 +116,5 @@ if($file_upload_error)
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

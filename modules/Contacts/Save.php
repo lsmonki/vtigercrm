@@ -29,6 +29,8 @@ $local_log =& LoggerManager::getLogger('index');
 
 global $log,$adb;
 $focus = new Contacts();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
 setObjectValuesFromRequest($focus);
 
@@ -84,7 +86,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
         {
                 $return_id=$_REQUEST['record'];
         }
-        header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
+        header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname".$search."&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 }
 if($saveimage=="true")
 {

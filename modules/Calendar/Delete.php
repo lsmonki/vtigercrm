@@ -24,11 +24,14 @@ $log = LoggerManager::getLogger('task_delete');
 
 $focus = new Activity();
 
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
+
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
 if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab."&relmodule=".$_REQUEST['module']);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab."&relmodule=".$_REQUEST['module'].$url);
 ?>

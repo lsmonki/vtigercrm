@@ -36,6 +36,11 @@ global $mod_strings,$current_user;
 // Unimplemented until jscalendar language vtiger_files are fixed
 $focus = new Activity();
 $smarty =  new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
@@ -69,6 +74,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $related_array = getRelatedLists("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
+	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');
     $cnt_idlist = '';
     $cnt_namelist = '';
     if($cntlist != '')
@@ -82,7 +88,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 			    $cnt_namelist .= "\n";
 		    }
 		    $cnt_idlist .= $key;
-		    $contName = eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $contName = eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]);
+			if ($is_fname_permitted == '0') $contName .= ' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
 		    $cnt_namelist .= '<option value="'.$key.'">'.$contName.'</option>';
 		    $i++;
 	    }

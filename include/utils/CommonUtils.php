@@ -496,7 +496,7 @@ function getContactName($contact_id)
 	$log->debug("Entering getContactName(".$contact_id.") method ...");
 	$log->info("in getContactName ".$contact_id);
 
-        global $adb;
+	global $adb, $current_user;
 	$contact_name = '';
 	if($contact_id != '')
 	{
@@ -504,10 +504,71 @@ function getContactName($contact_id)
         	$result = $adb->pquery($sql, array($contact_id));
         	$firstname = $adb->query_result($result,0,"firstname");
         	$lastname = $adb->query_result($result,0,"lastname");
-        	$contact_name = $lastname.' '.$firstname;
+        	$contact_name = $lastname;
+			// Asha: Check added for ticket 4788
+			if (getFieldVisibilityPermission("Contacts", $current_user->id,'firstname') == '0') {
+				$contact_name .= ' '.$firstname;
+			}
 	}
 	$log->debug("Exiting getContactName method ...");
         return $contact_name;
+}
+
+/**
+ * Function to get the Contact Name when a contact id is given 
+ * Takes the input as $contact_id - contact id
+ * returns the Contact Name in string format.
+ */
+
+function getLeadName($lead_id)
+{
+	global $log;
+	$log->debug("Entering getLeadName(".$lead_id.") method ...");
+	$log->info("in getLeadName ".$lead_id);
+
+    	global $adb, $current_user;
+	$lead_name = '';
+	if($lead_id != '')
+	{
+        	$sql = "select * from vtiger_leaddetails where leadid=?";
+        	$result = $adb->pquery($sql, array($lead_id));
+        	$firstname = $adb->query_result($result,0,"firstname");
+        	$lastname = $adb->query_result($result,0,"lastname");
+        	$lead_name = $lastname;
+			// Asha: Check added for ticket 4788
+			if (getFieldVisibilityPermission("Leads", $current_user->id,'firstname') == '0') {
+				$lead_name .= ' '.$firstname;
+			}
+	}
+	$log->debug("Exiting getLeadName method ...");
+        return $lead_name;
+}
+
+/**
+ * Function to get the Full Name of a Contact/Lead when a query result and the row count are given 
+ * Takes the input as $result - Query Result, $row_count - Count of the Row, $module - module name
+ * returns the Contact Name in string format.
+ */
+
+function getFullNameFromQResult($result, $row_count, $module)
+{
+	global $log, $adb, $current_user;
+	$log->info("In getFullNameFromQResult(". print_r($result, true) . " - " . $row_count . "-".$module.") method ...");
+    
+	$rowdata = $adb->query_result_rowdata($result,$row_count);
+	
+	$name = '';
+	if($rowdata != '' && count($rowdata) > 0)
+	{
+        	$firstname = $rowdata["firstname"];
+        	$lastname = $rowdata["lastname"];
+        	$name = $lastname;
+			// Asha: Check added for ticket 4788
+			if (getFieldVisibilityPermission($module, $current_user->id,'firstname') == '0') {
+				$name .= ' '.$firstname;
+			}
+	}
+    return $name;
 }
 
 /**
@@ -3160,4 +3221,36 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 }
 
 
+/** Returns the URL for Basic and Advance Search
+ ** Added to fix the issue 4600
+ **/
+function getBasic_Advance_SearchURL()
+{
+
+	$url = '';
+	if($_REQUEST['searchtype'] == 'BasicSearch')
+	{
+		$url .= (isset($_REQUEST['query']))?'&query='.$_REQUEST['query']:'';
+		$url .= (isset($_REQUEST['search_field']))?'&search_field='.$_REQUEST['search_field']:'';
+		$url .= (isset($_REQUEST['search_text']))?'&search_text='.$_REQUEST['search_text']:'';
+		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
+		$url .= (isset($_REQUEST['type']))?'&type='.$_REQUEST['type']:'';
+	}
+	if ($_REQUEST['searchtype'] == 'advance')
+	{
+		$url .= (isset($_REQUEST['query']))?'&query='.$_REQUEST['query']:'';
+		$count=$_REQUEST['search_cnt'];
+		for($i=0;$i<$count;$i++)
+		{
+			$url .= (isset($_REQUEST['Fields'.$i]))?'&Fields'.$i.'='.stripslashes(str_replace("'","",$_REQUEST['Fields'.$i])):'';
+			$url .= (isset($_REQUEST['Condition'.$i]))?'&Condition'.$i.'='.$_REQUEST['Condition'.$i]:'';
+			$url .= (isset($_REQUEST['Srch_value'.$i]))?'&Srch_value'.$i.'='.$_REQUEST['Srch_value'.$i]:'';
+		}
+		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
+		$url .= (isset($_REQUEST['search_cnt']))?'&search_cnt='.$_REQUEST['search_cnt']:'';
+		$url .= (isset($_REQUEST['matchtype']))?'&matchtype='.$_REQUEST['matchtype']:'';
+	}
+	return $url;
+
+}
 ?>

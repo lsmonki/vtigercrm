@@ -164,6 +164,7 @@ function sensex_info()
 	</td>
    </tr>
 </table>
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form>
 
 <!-- This div is added to get the left and top values to show the tax details-->

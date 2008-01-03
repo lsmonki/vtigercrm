@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/calendarLayout.php');
 include_once 'modules/Calendar/header.php';
-global $mod_strings, $currentModule,$adb;
+global $mod_strings, $currentModule,$adb, $current_user;
 if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
@@ -275,6 +275,9 @@ elseif($activity_mode == 'Events')
 	$smarty->assign("INVITEDUSERS",$invited_users);
 	$related_array = getRelatedLists("Calendar", $focus);
 	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
+	
+	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');
+	$smarty->assign("IS_PERMITTED_CNT_FNAME",$is_fname_permitted);
 
 
 }

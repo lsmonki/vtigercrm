@@ -33,6 +33,11 @@ global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
 $focus = new PurchaseOrder();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);

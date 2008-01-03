@@ -280,7 +280,8 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 else {
 	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	//Added for 4600
+	$inputs="<script>window.self.close();</script>";
 	echo $inputs;
 }
 ?>

@@ -738,17 +738,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$value=getRelatedTo($module,$list_result,$i-1);
 						if($name=='Contact Name')
 						{
-							$first_name = $adb->query_result($list_result,$i-1,"firstname");
-							$last_name = $adb->query_result($list_result,$i-1,"lastname");
 							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-							$contact_name = "";
+							$contact_name = getFullNameFromQResult($list_result,$i-1,"Contacts");
 							$value="";
-							if($last_name != 'NULL')
-								$contact_name .= $last_name;
-							if($first_name != 'NULL')
-								$contact_name .= " ".$first_name;
 							//Added to get the contactname for activities custom view - t=2190
-							if($contact_id != '' && $last_name == '')
+							if($contact_id != '' && $contact_name == '')
 							{
 								$contact_name = getContactName($contact_id);
 							}
@@ -804,19 +798,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                         {
                                                 if($name == 'Contact Name')
                                                 {
-                                                        $first_name = $adb->query_result($list_result,$i-1,"firstname");
-                                                        $last_name = $adb->query_result($list_result,$i-1,"lastname");
-							if ($module == 'Notes')
+                                                        if ($module == 'Notes')
 								$contact_id = $adb->query_result($list_result,$i-1,"contact_id");
 							else
-                                                        	$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-                                                        $contact_name = "";
+                	                                       	$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+                                                        $contact_name = getFullNameFromQResult($list_result, $i-1,"Contacts");
                                                         $value="";
-                                                        if($last_name != 'NULL')
-                                                                $contact_name .= $last_name;
-                                                        if($first_name != 'NULL')
-                                                                $contact_name .= " ".$first_name;
-
                                                         if(($contact_name != "") && ($contact_id !='NULL'))
                                                               $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
                                                 }
@@ -1100,15 +1087,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 								$value=getRelatedTo($module,$list_result,$i-1);
 							if($name=='Contact Name')
 							{
-								$first_name = $adb->query_result($list_result,$i-1,"firstname");
-								$last_name = $adb->query_result($list_result,$i-1,"lastname");
 								$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-								$contact_name = "";
+								$contact_name = getFullNameFromQResult($list_result,$i-1,"Contacts");
 								$value="";
-								if($last_name != 'NULL')
-									$contact_name .= $last_name;
-								if($first_name != 'NULL')
-									$contact_name .= " ".$first_name;
 								if(($contact_name != "") && ($contact_id !='NULL'))
 									$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 							}
@@ -1317,9 +1298,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=?";		
 			$result=$adb->pquery($sql, array($temp_val));
-			$firstname=$adb->query_result($result,0,"firstname");
-			$lastname=$adb->query_result($result,0,"lastname");
-			$name=$lastname.' '.$firstname;
+			$name=getFullNameFromQResult($result,0,"Contacts");
 
 			$value= '<a href=index.php?module=Contacts&action=DetailView&record='.$temp_val.'>'.$name.'</a>';
 		}
@@ -1593,8 +1572,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					// Added for get the first name of contact in Popup window
 					if($colname == "lastname" && $module == 'Contacts')
 					{
-						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-						$temp_val =$temp_val.' '.$firstname;
+						$temp_val = getFullNameFromQResult($list_result,$list_result_count,"Contacts");
 					}
 
 					$slashes_temp_val = popup_from_html($temp_val);
@@ -1611,11 +1589,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "detailview")
 				{
-					if($colname == "lastname" && $module == 'Contacts')
-						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-					elseif($colname == "lastname" && $module == 'Leads')
-						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-					$temp_val =$temp_val.' '.$firstname;
+					if($colname == "lastname" && ($module == 'Contacts' || $module == 'Leads')) {
+						$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
+					}
 
 					$slashes_temp_val = popup_from_html($temp_val);
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
@@ -1768,9 +1744,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
-						$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
-						$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
-						$name=$lastname.' '.$firstname;
+						$name=getFullNameFromQResult($list_result,$list_result_count,$module);
 						if(CheckFieldPermission('email',$module) == "true")
 						{
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email");
@@ -1840,8 +1814,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				else
 				{
 					if($colname == "lastname")
-						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-					$temp_val =$temp_val.' '.$firstname;
+						$temp_val = getFullNameFromQResult($list_result,$list_result_count,$module);
 
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
@@ -2776,7 +2749,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 		{
 			$parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=?";
 			$parent_result = $adb->pquery($parent_query, array($seid));
-			$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+			$parent_name = getFullNameFromQResult($parent_result,0,"Leads");
 		}
 		if($parent_module == 'Potentials')
 		{
@@ -2903,7 +2876,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=?";
                 $parent_result = $adb->pquery($parent_query, array($parent_id));
-                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+                $parent_name = getFullNameFromQResult($parent_result,0,"Leads");
         }
         if($parent_module == 'Potentials')
         {
@@ -2945,7 +2918,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT firstname,lastname FROM vtiger_contactdetails WHERE contactid=?";
                 $parent_result = $adb->pquery($parent_query, array($parent_id));
-                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+                $parent_name = getFullNameFromQResult($parent_result,0,"Contacts");
         }
 	if($parent_module == 'HelpDesk')
 	{
@@ -3631,6 +3604,9 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 	$return_action = "index";
 	$edit_link = "index.php?module=$module&action=EditView&record=$entity_id";
 	$tabname = getParentTab();
+	//Added to fix 4600
+	$url = getBasic_Advance_SearchURL();
+
 	//This is relatedlist listview
 	if($relatedlist == 'relatedlist')
 	{
@@ -3650,7 +3626,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 		$edit_link .= "&return_module=$module&return_action=$return_action";
 	}
 
-	$edit_link .= "&parenttab=".$tabname;
+	$edit_link .= "&parenttab=".$tabname.$url;
 	//Appending view name while editing from ListView
 	$edit_link .= "&return_viewname=".$_SESSION['lvs'][$module]["viewname"];
 	if($module == 'Emails')
@@ -3670,6 +3646,9 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	$tabname = getParentTab();
 	$current_module = $_REQUEST['module'];
 	$viewname = $_SESSION['lvs'][$current_module]['viewname'];
+
+	//Added to fix 4600
+	$url = getBasic_Advance_SearchURL();
 
 	if($module == "Calendar")
 		$return_action = "ListView";
@@ -3696,7 +3675,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 		$del_link .= "&return_module=$module&return_action=$return_action";
 	}
 
-	$del_link .= "&parenttab=".$tabname."&return_viewname=".$viewname;
+	$del_link .= "&parenttab=".$tabname."&return_viewname=".$viewname.$url;
 	
 	return $del_link;
 }

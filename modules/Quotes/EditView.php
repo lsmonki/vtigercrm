@@ -34,6 +34,11 @@ $log->debug("Inside Quote EditView");
 
 $focus = new Quotes();
 $smarty = new vtigerCRM_Smarty;
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];

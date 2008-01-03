@@ -449,6 +449,7 @@ function ajaxChangeStatus(statusname)
 	$("status").style.display="inline";
 	var viewid = document.getElementById('viewname').options[document.getElementById('viewname').options.selectedIndex].value;
 	var idstring = document.getElementById('idlist').value;
+	var searchurl= document.getElementById('search_url').value;
 	var tplstart='&';
 	if(gstart!='')
 	{
@@ -458,7 +459,7 @@ function ajaxChangeStatus(statusname)
 	{
 		fninvsh('changestatus');
 		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
-		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
 	}
 	else if(statusname == 'owner')
 	{
@@ -467,7 +468,7 @@ function ajaxChangeStatus(statusname)
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
 		    {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
 		    {literal}
      }
     else
@@ -475,7 +476,7 @@ function ajaxChangeStatus(statusname)
         fninvsh('changeowner');
 		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
 	       {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
         {literal}
     }
 	}

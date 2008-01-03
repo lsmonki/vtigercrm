@@ -46,6 +46,7 @@ function massDelete(module)
 {
         var select_options  =  document.getElementById('allselectedboxes').value;
         var x = select_options.split(";");
+	var searchurl= document.getElementById('search_url').value;
         var count=x.length
         var viewid =getviewId();
         var idstring = "";
@@ -78,7 +79,7 @@ function massDelete(module)
           	      'index.php',
 		      	{queue: {position: 'end', scope: 'command'},
 	                        method: 'post',
-               		        postBody:"module=Users&action=massdelete&return_module="+module+"&"+gstart+"&viewname="+viewid+"&idlist="+idstring,
+               		        postBody:"module=Users&action=massdelete&return_module="+module+"&"+gstart+"&viewname="+viewid+"&idlist="+idstring+searchurl,
 	                        onComplete: function(response) {
                 	                $("status").style.display="none";
                	        	        result = response.responseText.split('&#&#&#');

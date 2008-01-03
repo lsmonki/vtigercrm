@@ -42,7 +42,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 } 
 
-global $theme;
+global $theme,$current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -58,7 +58,11 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $focus->id);
 $smarty->assign("SINGLE_MOD", 'Lead');
 
-$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$lead_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$lead_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$lead_name );
 
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));

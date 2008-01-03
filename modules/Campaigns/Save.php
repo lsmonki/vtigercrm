@@ -30,6 +30,8 @@ $focus = new Campaigns();
  $currencyid=fetchCurrency($current_user->id);
  $rate_symbol = getCurrencySymbolandCRate($currencyid);
  $rate = $rate_symbol['rate'];
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 setObjectValuesFromRequest($focus);
 
 if(isset($_REQUEST['expectedrevenue']))
@@ -69,5 +71,5 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber']);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
 ?>

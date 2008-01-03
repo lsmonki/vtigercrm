@@ -26,6 +26,8 @@ $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
 $curr_symbol=$rate_symbol['symbol'];
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
 if(isset($_REQUEST['record']))
 {
@@ -82,7 +84,7 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns
 		 $adb->pquery($sql, array($_REQUEST['return_id'], $focus->id));
 	}
 }
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 /** Function to save the Lead custom fields info into database
  *  @param integer $entity_id - leadid
 */

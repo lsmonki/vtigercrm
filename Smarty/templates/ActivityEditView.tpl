@@ -885,6 +885,7 @@ var gVTModule = '{$smarty.request.module}';
 		</td></tr></table>
 		</td></tr></table>
 </td></tr>
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form></table>
 </td></tr></table>
 </td></tr></table>

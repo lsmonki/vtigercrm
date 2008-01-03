@@ -31,6 +31,11 @@ $decode_val=base64_decode($encode_val);
 $focus = new Products();
 $smarty = new vtigerCRM_Smarty();
 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 if($_REQUEST['record']!="") 
 {
     $focus->id = $_REQUEST['record'];

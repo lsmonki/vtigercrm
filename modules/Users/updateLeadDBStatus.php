@@ -20,6 +20,9 @@ $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['return_module'];
 $return_action = $_REQUEST['return_action'];
 global $rstart;
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
+
 if(isset($_REQUEST['start']) && $_REQUEST['start']!='')
 	{
 	$rstart="&start=".$_REQUEST['start'];
@@ -157,11 +160,11 @@ if($return_action == 'ActivityAjax')
 	$viewOption = $_REQUEST['viewOption'];
 	$subtab     = $_REQUEST['subtab'];
 	
-	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type.$rstart."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab);
+	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type.$rstart."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab.$url);
 }
 else
 {
-	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate".$rstart."&viewname=".$viewid."&errormsg=".$errormsg);
+	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate".$rstart."&viewname=".$viewid."&errormsg=".$errormsg.$url);
 }
 				
 

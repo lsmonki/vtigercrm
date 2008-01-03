@@ -30,6 +30,11 @@ global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 $focus = new Notes();
 $smarty = new vtigerCRM_Smarty();
 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 if($_REQUEST['upload_error'] == true)
 {
 	echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
