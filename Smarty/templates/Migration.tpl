@@ -143,7 +143,7 @@ NOTE&nbsp;:&nbsp;{$APP.do_the_changes_in} <i>config.inc.php</i> {$APP.before_mig
 			var tagName = document.getElementById('source_version');
 			var source_version = tagName.options[tagName.selectedIndex].text;
 			{/literal}
-                        if(confirm("{$APP.DATABASE_CHANGE_CONFIRMATION}"+source_version+"{$APP.TO}"+current_version))
+                        if(confirm("{$APP.DATABASE_CHANGE_CONFIRMATION}"+source_version+"{$APP.TO}"+current_version+"?"))
                         {literal}
 				return true;
 			else
