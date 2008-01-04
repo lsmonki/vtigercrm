@@ -253,7 +253,7 @@ function chatInput(to)
   td2.onclick = function()
   {
     var ajax = new Ajax(me.callback);
-    ajax.process("index.php?mode=chat&module=Home&action=chat","submode=submit&msg="+escape(me.input.value,1)+(me.to?"&to="+me.to:""));
+    ajax.process("index.php?mode=chat&module=Home&action=chat","submode=submit&msg="+escapeAll(me.input.value)+(me.to?"&to="+me.to:""));
 
     me.input.value = "";
     me.input.focus();
@@ -267,7 +267,7 @@ function chatInput(to)
   this.form.onsubmit = function()
   {
     var ajax = new Ajax(me.callback);
-    ajax.process("index.php?mode=chat&module=Home&action=chat","submode=submit&msg="+escape(me.input.value,1)+(me.to?"&to="+me.to:""));
+    ajax.process("index.php?mode=chat&module=Home&action=chat","submode=submit&msg="+escapeAll(me.input.value)+(me.to?"&to="+me.to:""));
     me.input.value = "";
     me.input.focus();
     return false;
