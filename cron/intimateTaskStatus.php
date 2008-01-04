@@ -66,7 +66,7 @@ if($activevalue[0] == 1)
 	$result = $adb->pquery("SELECT sales_stage,amount FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid where vtiger_crmentity.deleted=0 and sales_stage='Closed Won' and amount > 10000",array());
 	while ($myrow = $adb->fetch_array($result))
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"");
+		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 //Pending tickets
@@ -80,8 +80,7 @@ if($activevalue[0] == 1)
 
 	while ($myrow = $adb->fetch_array($result))
 	{
-		$ticketid = $myrow['ticketid'];
-		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].": #".$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"");	
+		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
 	}
 }
 
@@ -97,7 +96,7 @@ $count = $adb->query_result($result,0,'count');
 //changes made to get too many tickets notification only when tickets count is greater than or equal to 5
 	if($count >= 5)
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"");
+		sendmail($emailaddress,$emailaddress,$app_strings['Too_many_pending_tickets'],$app_strings['Dear_Admin_too_ many_tickets_pending'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
@@ -112,7 +111,7 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"");	
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_starting'],$app_strings['Hello_Support'].$productname ."\n ".$app_strings['Congratulations'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
 	}
 }
 
@@ -127,7 +126,7 @@ if($activevalue[0] == 1)
 	while ($myrow = $adb->fetch_array($result))
 	{
 		$productname=$myrow[0];
-		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"");	
+		sendmail($emailaddress,$emailaddress,$app_strings['Support_Ending_Subject'],$app_strings['Support_Ending_Content'].$productname.$app_strings['kindly_renew'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 
