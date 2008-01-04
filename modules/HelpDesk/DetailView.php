@@ -35,7 +35,7 @@ if($_REQUEST['mail_error'] != '')
 	$ticket_owner = getUserName($focus->column_fields['assigned_user_id']);
     $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
 	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $ticket_owner. '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
-	echo $mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font color=red>'.$error_msg.'</font></b>';
+	echo $mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font class="warning">'.$error_msg.'</font></b>';
 }
 
 global $app_strings;

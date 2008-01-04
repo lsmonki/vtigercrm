@@ -22,7 +22,7 @@ if($_REQUEST['mail_error'] != '')
 	//if(strstr($error_msg,"Please check the assigned to user email id"))
 	//if(strstr($error_msg,$mod_strings['LBL_CHECK_ASSIGNEDTO_MAILID']))
 	$error_msg = $mod_strings['LBL_MAILSENDERROR'];
-	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font color=red>'.$error_msg.'</font></b>');
+	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font class="warning">'.$error_msg.'</font></b>');
 }
 
 global $adb;

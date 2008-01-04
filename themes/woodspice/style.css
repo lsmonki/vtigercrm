@@ -2175,3 +2175,7 @@ a.drop_down:Hover{
         font-family:Arial, Helvetica, sans-serif;
         font-size:11px;
 }
+.warning {
+        color: #776643; /* Same as the background-color of .create Class */
+}
+
