@@ -133,7 +133,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		else if(assign_type_G == true)
 		{
 			var txtBox= 'txtbox_G'+fieldLabel;
-			var group_name = $(txtBox).options[$(txtBox).selectedIndex].text; 
+			var group_name = encodeURIComponent($(txtBox).options[$(txtBox).selectedIndex].text); 
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 

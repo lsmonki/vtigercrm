@@ -110,7 +110,7 @@ if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['grou
 				//CHANGE HERE -- Here we have to use the getGroupName function. But that function is not correct one because they have used this function to get the assigned group name for the entity - Mickie
 				$groupname = $adb->query_result($adb->pquery("select groupname from vtiger_groups where groupid=?", array($_REQUEST['group_id'])),0,'groupname');
 				//This is to update the entity - group relation
-				$module_array[$return_module]($id,$groupname); 
+				$module_array[$return_module]($id,decode_html($groupname)); 
 				//Now we have to set the smownerid as 0 
 				$adb->pquery("update vtiger_crmentity set smownerid=0 where crmid=?", array($id));
 			}
