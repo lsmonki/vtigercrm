@@ -1010,7 +1010,8 @@ class ReportRun extends CRMEntity
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
-					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
+					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
+					left join vtiger_campaign on vtiger_potential.campaignid = vtiger_campaign.campaignid";
 			}
 			if($secmodule == "Quotes")
 			{
@@ -1057,7 +1058,8 @@ class ReportRun extends CRMEntity
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
-					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
+					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
+					left join vtiger_campaign on vtiger_potential.campaignid = vtiger_campaign.campaignid";
 
 			}
 			if($secmodule == "Contacts")
@@ -1160,7 +1162,8 @@ class ReportRun extends CRMEntity
 					left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
-					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
+					left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
+					left join vtiger_campaign on vtiger_potential.campaignid = vtiger_campaign.campaignid";
 
 			}
 			if($secmodule == "Contacts")
@@ -1384,7 +1387,8 @@ class ReportRun extends CRMEntity
                                         left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 					left join vtiger_potentialgrouprelation on vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 					left join vtiger_groups as vtiger_groupsPotentials on vtiger_groupsPotentials.groupname = vtiger_potentialgrouprelation.groupname
-                                        left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid ";
+                                        left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
+					left join vtiger_campaign on vtiger_potential.campaignid = vtiger_campaign.campaignid";
 
                         }
 		}
