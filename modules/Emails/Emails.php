@@ -120,7 +120,11 @@ var $rel_serel_table = "vtiger_seactivityrel";
 						$mycrmid=$realid[0];
 						//added to handle the relationship of emails with vtiger_users
 						if($realid[1] == -1)
+						{
+							$del_q = 'delete from vtiger_salesmanactivityrel where smid=? and activityid=?';
+							$adb->pquery($del_q,array($mycrmid, $actid));
 							$mysql='insert into vtiger_salesmanactivityrel values(?,?)';
+						}	
 						else
 						{
 							$del_q = 'delete from vtiger_seactivityrel where crmid=? and activityid=?';
