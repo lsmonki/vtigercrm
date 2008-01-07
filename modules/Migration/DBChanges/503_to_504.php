@@ -482,15 +482,21 @@ $adb->query("insert into vtiger_notificationscheduler(schedulednotificationid,sc
 $adb->query("CREATE TABLE `vtiger_picklist` (`picklistid` int(19) NOT NULL auto_increment,`name` varchar(200) NOT NULL,PRIMARY KEY (`picklistid`),UNIQUE KEY `picklist_name_idx` (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
 $adb->query("CREATE TABLE `vtiger_role2picklist` (
-`roleid` varchar(255) NOT NULL,
-`picklistvalueid` int(11) NOT NULL,
-`picklistid` int(11) NOT NULL,
-`sortid` int(11) default NULL,
-PRIMARY KEY (`roleid`,`picklistvalueid`,`picklistid`),
-KEY `role2picklist_roleid_picklistid_idx` (`roleid`,`picklistid`,`picklistvalueid`),
-KEY `fk_2_vtiger_role2picklist` (`picklistid`),
-CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE,
-CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+	`roleid` varchar(255) NOT NULL,
+	`picklistvalueid` int(11) NOT NULL,
+	`picklistid` int(11) NOT NULL,
+	`sortid` int(11) default NULL,
+	PRIMARY KEY (`roleid`,`picklistvalueid`,`picklistid`),
+	KEY `role2picklist_roleid_picklistid_idx` (`roleid`,`picklistid`,`picklistvalueid`),
+	KEY `fk_2_vtiger_role2picklist` (`picklistid`))");
+
+$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE");
+
+$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE");
+
+$adb->query("alter table vtiger_role2picklist CHARSET ='utf8'");
+$adb->query("alter table vtiger_role2picklist type='InnoDB'");
+
 
 $adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
 $adb->query("insert into vtiger_picklistvalues_seq values(1)");
@@ -690,6 +696,7 @@ for($i=0;$i<$countcf;$i++)
 
 //Added by liza for 4242 ticket
 ExecuteQuery("alter table vtiger_products modify column qtyinstock decimal(25,3)");
+ExecuteQuery("update vtiger_field set typeofdata='NN~O' where tabid=14 and fieldname='qtyinstock'");
 
 
 //Added by Pavani 4th December
