@@ -43,7 +43,7 @@ function check_duplicate()
                         onComplete: function(response) {ldelim}
 				if(response.responseText == 'SUCCESS')
 				{ldelim}
-					$('user_status').disabled = false;
+				//	$('user_status').disabled = false;
 			                document.EditView.submit();
 				{rdelim}
        				else

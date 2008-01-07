@@ -28,6 +28,11 @@ $log =& LoggerManager::getLogger('index');
 
 global $adb;
 $user_name = $_REQUEST['userName'];
+if(isset($_REQUEST['status']) && $_REQUEST['status'] != '')
+	$_REQUEST['status']=$_REQUEST['status'];
+else
+	$_REQUEST['status']='Active';
+
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
         $query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
@@ -105,6 +110,7 @@ if(! $_REQUEST['changepassword'] == 'true')
 	if(isset($_SESSION['internal_mailer']) && $_SESSION['internal_mailer'] != $focus->column_fields['internal_mailer'])
 		$_SESSION['internal_mailer'] = $focus->column_fields['internal_mailer'];
 	setObjectValuesFromRequest($focus);
+
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
 	$focus->saveHomeOrder($focus->id);
