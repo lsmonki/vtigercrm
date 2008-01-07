@@ -2806,7 +2806,7 @@ function fetchGroupName($groupId)
 	//Retreving the group Info
 	$query="select * from vtiger_groups where groupid=?";
 	$result = $adb->pquery($query, array($groupId));
-	$groupName=$adb->query_result($result,0,'groupname');
+	$groupName=decode_html($adb->query_result($result,0,'groupname'));
 	$log->debug("Exiting fetchGroupName method ...");
 	return $groupName;
 	
