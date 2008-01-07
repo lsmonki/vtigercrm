@@ -1392,19 +1392,22 @@ function getDetailAssociatedProducts($module,$focus)
 
 	//Decide discount
 	$finalDiscount = '0.00';
-	if($focus->column_fields['hdnDiscountPercent'] != '')
+	$final_discount_info = '0';
+	//if($focus->column_fields['hdnDiscountPercent'] != '') - previously (before changing to prepared statement) the selected option (either percent or amount) will have value and the other remains empty. So we can find the non selected item by empty check. But now with prepared statement, the non selected option stored as 0
+	if($focus->column_fields['hdnDiscountPercent'] != '0')
 	{
 		$finalDiscount = ($netTotal*$focus->column_fields['hdnDiscountPercent']/100);
 		$final_discount_info = $focus->column_fields['hdnDiscountPercent']." % of $netTotal = $finalDiscount";
 	}
-	elseif($focus->column_fields['hdnDiscountAmount'] != '')
+	elseif($focus->column_fields['hdnDiscountAmount'] != '0')
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
 		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
+		$final_discount_info = $finalDiscount;
 	}
 
 	//Alert the Final Discount amount even it is zero
-	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT']." = $finalDiscount";
+	$final_discount_info = $app_strings['LBL_FINAL_DISCOUNT_AMOUNT']." = $final_discount_info";
 	$final_discount_info = 'onclick="alert(\''.$final_discount_info.'\');"';
 
 	$output .= '<tr>'; 

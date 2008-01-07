@@ -1731,11 +1731,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
 	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
 
-//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(For Final Discount)
-		$product_Detail[1]['final_details']['discount_percentage_final'] = 0;
-		$product_Detail[1]['final_details']['discount_amount_final'] = 0;
+	//To avoid NaN javascript error, here we assign 0 initially to' %of price' and 'Direct Price reduction'(For Final Discount)
+	$product_Detail[1]['final_details']['discount_percentage_final'] = 0;
+	$product_Detail[1]['final_details']['discount_amount_final'] = 0;
 
-	if($focus->column_fields['hdnDiscountPercent'] != '')
+	if($focus->column_fields['hdnDiscountPercent'] != '0')
 	{
 		$finalDiscount = ($subTotal*$discountPercent/100);
 		$product_Detail[1]['final_details']['discount_type_final'] = 'percentage';
@@ -1744,7 +1744,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[1]['final_details']['style_discount_percentage_final'] = ' style="visibility:visible"';
 		$product_Detail[1]['final_details']['style_discount_amount_final'] = ' style="visibility:hidden"';
 	}
-	elseif($focus->column_fields['hdnDiscountAmount'] != '')
+	elseif($focus->column_fields['hdnDiscountAmount'] != '0')
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
 		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
