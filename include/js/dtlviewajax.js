@@ -175,23 +175,18 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		if(document.getElementById(txtBox).checked == true)
 		{
 			if(module == "Contacts")
-                        {
-				if(getObj("email"))
-                                {
-                                	var obj = getObj("email");
-                                	if((fieldName == "portal") && (obj.value == ''))
-                                	{
-						tagValue = "0";
-                                        	alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                        	return false;
-                                	}
-					else
-	                                        tagValue = "1";
+			{
+				var obj = getObj("email");
+				if((fieldName == "portal") && (obj == null || obj.value == ''))
+				{
+					tagValue = "0";
+					alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+					return false;
 				}
-                                else
-                                       tagValue = "1";
+				else
+					tagValue = "1";
 
-                        }
+			}
 			else
 				tagValue = "1";
 		}else

@@ -828,7 +828,7 @@ function formValidate() {
 //Validation for Portal User
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
-	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
+	if(getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == ''))   {
 		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
 		return false;
 	}
