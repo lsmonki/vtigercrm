@@ -778,6 +778,18 @@ ExecuteQuery("alter table vtiger_potential change column amount amount decimal(1
 //Added by Srini for #4684 on dec 21-2007
 ExecuteQuery("update vtiger_field set uitype=19 where fieldname='update_log' and tablename='vtiger_troubletickets'");
 
+//In 503 we are using <br> tags for line breaks in Inventory Notification mails. In 504 it is not necessary.
+//this code will get the contents from db and then convert all <br> character with \n and again update in db.
+$result=$adb->query("select notificationid,notificationbody from vtiger_inventorynotification");
+
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	$body=decode_html($adb->query_result($result,$i,'notificationbody'));
+	$body=str_replace('<br>','\n', $body);
+	$notificationid=$adb->query_result($result,$i,'notificationid');
+	$adb->query("update vtiger_inventorynotification set notificationbody='".$body."' where notificationid=".$notificationid);
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
 
 
