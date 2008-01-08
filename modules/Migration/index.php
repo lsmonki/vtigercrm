@@ -33,8 +33,50 @@ if($exists)
 
 }
 
+//Added to check database charset and $default_charset are set to UTF8.
+//If both are not set to be UTF-8, Then we will show an alert message.
+function check_db_utf8_support($conn) 
+{ 
+	$dbvarRS = &$conn->query("show variables like '%_database' "); 
+	$db_character_set = null; 
+	$db_collation_type = null; 
+	while(!$dbvarRS->EOF) { 
+		$arr = $dbvarRS->FetchRow(); 
+		$arr = array_change_key_case($arr); 
+		switch($arr['variable_name']) { 
+		case 'character_set_database' : $db_character_set = $arr['value']; break; 
+		case 'collation_database'     : $db_collation_type = $arr['value']; break; 
+		}
+		// If we have all the required information break the loop. 
+		if($db_character_set != null && $db_collation_type != null) break; 
+	} 
+	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8')); 
+}
+
+	global $adb,$default_charset;
+	$db_status=check_db_utf8_support($adb);
+	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
+	else						$config_status=0;
+
+	if(!$db_status && !$config_status)
+	{
+		$msg='<font color="red"><b>Your database charset and $default_charset variable in config.inc.php are not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the above to UTF-8</b></font>';
+	}
+	else if($db_status && !$config_status)
+	{
+		$msg='<font color="red"><b>Your database charset is set as UTF-8. But $default_charset variable in config.inc.php is not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the $default_charset variable to UTF-8</b></font>';
+
+	}
+	else if(!$db_status && $config_status)
+	{
+		$msg='<font color="red"><b>Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set your database charset to UTF-8</b></font>';
+
+	}
+
+
 $smarty = new vtigerCRM_Smarty();
 
+$smarty->assign("CHARSET_CHECK", $msg);
 $smarty->assign("MIG_CHECK", $status);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

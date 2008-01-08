@@ -61,8 +61,9 @@
 					   <tr bgcolor="#FFFFFF">
 				
 						<td></td>
-						<td>{if !$MIG_CHECK}&nbsp;<font color='red'><b>Versions in database and source file are same. You cannot do 5.x migration. Please check the db and then do necessary steps.</b></font><br><br></td>{/if}
+						<td>{if !$MIG_CHECK}&nbsp;<font color='red'><b>Versions in database and source file are same. You cannot do 5.x migration. Please check the db and then do necessary steps.</b></font><br><br>{$CHARSET_CHECK}</td>{/if}
 				           </tr>
+					   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
 					   <tr bgcolor="#FFFFFF">
 						<td align="right" valign="top">
 							<input type="radio" name="radio" id="patch" value="patch"  {if !$MIG_CHECK} disabled {/if} onclick="this.form.action.value='PatchApply'; showSource();"/>
