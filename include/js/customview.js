@@ -58,7 +58,13 @@ function validate() {
                 alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
                 return false;
         }*/
-
+	//tested for special characters <,>,&,'," and :
+        var re2=/[&\<\>\:\'\"\,]/
+        if (re2.test(str))
+        {
+                alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , "+alert_arr.NOT_ALLOWED)
+                return false;
+        }
         if (lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))
                         return false

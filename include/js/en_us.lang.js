@@ -60,6 +60,8 @@
                                 ERROR:'Error',
                                 FIELD_TYPE_NOT_SELECTED:'Field Type is not selected',
                                 SPECIAL_CHARACTERS_NOT_ALLOWED:'Special characters are not allowed in Label field',
+				SPECIAL_CHARACTERS:'Special characters',
+                                NOT_ALLOWED:'are not allowed. Please try with some other values',
                                 PICKLIST_CANNOT_BE_EMPTY:'Picklist value cannot be empty',
                                 DUPLICATE_VALUES_FOUND:'Duplicate Values found',
                                 DUPLICATE_MAPPING_ACCOUNTS:'Duplicate mapping for accounts!!',
