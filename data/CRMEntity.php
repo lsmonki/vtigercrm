@@ -561,7 +561,7 @@ class CRMEntity
 				  $date_var = date('YmdHis');
 				  $closingdate = getDBInsertDateValue($this->column_fields['closingdate']);
 				  $sql = "insert into vtiger_potstagehistory values(?,?,?,?,?,?,?,?)";
-				  $params = array('', $this->id, $this->column_fields['amount'], $sales_stage, $this->column_fields['probability'], 0, $adb->formatDate($closingdate, true), $adb->formatDate($date_var, true));
+				  $params = array('', $this->id, $this->column_fields['amount'], decode_html($sales_stage), $this->column_fields['probability'], 0, $adb->formatDate($closingdate, true), $adb->formatDate($date_var, true));
 				  $adb->pquery($sql, $params);
 			  }
 		  }
