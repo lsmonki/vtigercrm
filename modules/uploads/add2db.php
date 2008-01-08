@@ -47,7 +47,7 @@ $log->debug("DEBUG In add2db.php");
 	
 	if(move_uploaded_file($_FILES["filename"]["tmp_name"],$upload_filepath.$current_id."_".$_FILES["filename"]["name"])) 
 	{
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $_FILES['filename']['type'];
 		$filesize = $_FILES['filename']['size'];
 

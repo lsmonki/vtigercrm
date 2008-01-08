@@ -1489,7 +1489,8 @@ function upload_product_image_file($mode,$id)
 	if (isset($_REQUEST['imagename_hidden'])) {
 		$file_name = $_REQUEST['imagename_hidden'];
 	} else {
-		$file_name = basename($file_path_name);
+		//allowed file pathname like UTF-8 Character 
+		$file_name = ltrim(basename(" ".$file_path_name)); // basename($file_path_name);
 	}
 	$file_name = $id.'_'.$file_name;
 	$filetype= $_FILES['imagename']['type'];

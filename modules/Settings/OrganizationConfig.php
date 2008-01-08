@@ -33,8 +33,9 @@ $organization_country = $adb->query_result($result,0,'country');
 $organization_phone = $adb->query_result($result,0,'phone');
 $organization_fax = $adb->query_result($result,0,'fax');
 $organization_website = $adb->query_result($result,0,'website');
-$organization_logo = $adb->query_result($result,0,'logo');
-$organization_logoname = $adb->query_result($result,0,'logoname');
+//Handle for allowed organation logo/logoname likes UTF-8 Character
+$organization_logo = decode_html($adb->query_result($result,0,'logo'));
+$organization_logoname = decode_html($adb->query_result($result,0,'logoname'));
 
 if (isset($organization_name))
 	$smarty->assign("ORGANIZATIONNAME",$organization_name);

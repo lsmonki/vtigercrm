@@ -631,8 +631,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
             $result_image = $adb->pquery($query, array($col_fields['record_id']));
 			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 			{
-				$image_id_array[] = $adb->query_result($result_image,$image_iter,'attachmentsid');	
-				$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+				$image_id_array[] = $adb->query_result($result_image,$image_iter,'attachmentsid');
+				//Handle for allowed name like UTF-8 Character
+				$image_array[] = decode_html($adb->query_result($result_image,$image_iter,'name'));	
 				$imagepath_array[] = $adb->query_result($result_image,$image_iter,'path');	
 			}
 			if(count($image_array)>1)
@@ -785,8 +786,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$image_name = $adb->query_result($image_res,0,'name');
 		$imgpath = $image_path.$image_id."_".$image_name;
 		if($image_name != '') {
-			// Asha: Added the following check for the image to retain its in original size.
-			list($pro_image_width, $pro_image_height) = getimagesize($imgpath);
+			//Added the following check for the image to retain its in original size.
+			list($pro_image_width, $pro_image_height) = getimagesize(decode_html($imgpath));
 				$label_fld[] ='<a href="'.$imgpath.'" target="_blank"><img src="'.$imgpath.'" width="'.$pro_image_width.'" height="'.$pro_image_height.'" alt="'.$col_fields['user_name'].'" title="'.$col_fields['user_name'].'" border="0"></a>';
 		} else
 			$label_fld[] = '';

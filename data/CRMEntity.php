@@ -173,7 +173,7 @@ class CRMEntity
 
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
 
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];

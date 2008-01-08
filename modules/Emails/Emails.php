@@ -248,7 +248,8 @@ var $rel_serel_table = "vtiger_seactivityrel";
                 {
                     $binFile .= ".txt";
                 }
-		$filename = basename($binFile);
+		//$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filepart = $file_details['part'];

@@ -1501,7 +1501,8 @@ function SaveImage($_FILES,$module,$id,$mode)
 	if (isset($_REQUEST['imagename_hidden'])) {
 		$file_name = $_REQUEST['imagename_hidden'];
 	} else {
-		$file_name = basename($file_path_name);
+		//allowed filename like UTF-8 Character 
+		$file_name = ltrim(basename(" ".$file_path_name)); // basename($file_path_name);
 	}
 	$image_error="false";
 	$saveimage="true";
