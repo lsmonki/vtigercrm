@@ -194,8 +194,8 @@ function Search($module)
                 }
                 else //Global Search
                 {
-                }
-		$url_string = "&search_field=".$search_column."&search_text=".$search_string."&searchtype=BasicSearch";
+		}
+		$url_string = "&search_field=".$search_column."&search_text=".urlencode($search_string)."&searchtype=BasicSearch";
 		if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 			$url_string .= "&type=".$_REQUEST['type'];
 		return $where."#@@#".$url_string;
@@ -734,7 +734,7 @@ function getWhereCondition($currentModule)
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
 			$srch_val = mysql_real_escape_string($srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
-			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
+			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".urlencode($srch_val);
 			$uitype=getUItype($currentModule,$column_name);
 			//added to allow  search in check box type fields(ex: product active. it will contain 0 or 1) using yes or no instead of 0 or 1
 			if ($uitype == 56)
