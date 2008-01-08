@@ -86,7 +86,7 @@ function create_default_users() {
 	$user->column_fields["end_hour"] = '23:00';
 	$user->column_fields["imagename"] = '';
 	$user->column_fields["internal_mailer"] = '1';
-        $user->column_fields["activity_view"] = 'This Year';	
+        $user->column_fields["activity_view"] = 'This Week';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default admin emailid
@@ -142,7 +142,7 @@ function create_default_users() {
 	$user->column_fields["end_hour"] = '23:00';
 	$user->column_fields["imagename"] = '';
 	$user->column_fields["internal_mailer"] = '1';
-        $user->column_fields["activity_view"] = 'This Year';	
+        $user->column_fields["activity_view"] = 'This Week';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
 	$std_email ="standarduser@vtigeruser.com";
