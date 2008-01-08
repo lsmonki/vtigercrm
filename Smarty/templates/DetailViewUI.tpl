@@ -245,7 +245,7 @@
                    	<select id="txtbox_G{$label}" onchange="setSelectValue('{$label}')" name="assigned_group_name" class="groupname">
                     {foreach item=arr key=id from=$keyoptions.2}
                     	{foreach key=sel_value item=value from=$arr}
-                       		 <option value="{$sel_value}" {$value}>{$sel_value}</option>
+                       		 <option value="{$id}" {$value}>{$sel_value}</option>
                         {/foreach}
                     {/foreach}
                     </select>
