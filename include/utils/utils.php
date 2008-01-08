@@ -2849,5 +2849,11 @@ function is_uitype($uitype, $reqtype) {
 	}
 	return false;
 }
-
+/**
+	* * Function to escape quotes
+	* */
+function escape_single_quotes($value) {
+	if (isset($value)) $value = str_replace("'", "\'", $value);
+		return $value;
+}
 ?>

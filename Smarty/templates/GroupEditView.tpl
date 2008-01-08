@@ -138,7 +138,15 @@ function validate()
 	formSelectColumnString();
 	if( !emptyCheck( "groupName", "Group Name","text" ) )
 		return false;
-
+	//check to restrict the & < > , characters
+	var str = $("groupName").value;
+	var re1=/[&\<\>\,]/
+        if (re1.test(str))
+        {ldelim}
+                alert(alert_arr.SPECIAL_CHARACTERS+" & < > , "+alert_arr.NOT_ALLOWED)
+                return false;
+        {rdelim}
+	
 	if(document.newGroupForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 

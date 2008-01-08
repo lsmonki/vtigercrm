@@ -105,7 +105,7 @@ foreach($grpDetails as $grpId=>$grpName)
 		}
 
 		$grpIdStr .= "'".$grpId."'";
-		$grpNameStr .= "'".decode_html($grpName)."'";
+		$grpNameStr .= "'".escape_single_quotes(decode_html($grpName))."'";
 	
 	$m++;
 	}	
