@@ -59,10 +59,10 @@ function validate() {
                 return false;
         }*/
 	//tested for special characters <,>,&,'," and :
-        var re2=/[&\<\>\:\'\"\,]/
+        var re2=/[&\<\>\:\'\"\,\_]/
         if (re2.test(str))
         {
-                alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , "+alert_arr.NOT_ALLOWED)
+                alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , _ "+alert_arr.NOT_ALLOWED)
                 return false;
         }
         if (lengthLayer.style.visibility=="visible") {
