@@ -93,6 +93,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		{
 			$field[]=$adb->query_result($result,$k,"fieldname");
 		}
+
+		//if this field array is empty and the user don't have any one of the admin, view all, edit all permissions then the search picklist options will be empty and we cannot navigate the users list - js error will thrown in function getListViewEntries_js in Smarty\templates\Popup.tpl
+		if($module == 'Users' && empty($field))
+			$field = Array("last_name","email1");
 	}
 
         //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
