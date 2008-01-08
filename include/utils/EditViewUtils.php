@@ -629,6 +629,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($module_name == 'Emails' && $col_fields['record_id'] != '')
 		{
 			$attach_result = $adb->pquery("select * from vtiger_seattachmentsrel where crmid = ?", array($col_fields['record_id']));
+			//to fix the issue in mail attachment on forwarding mails
+			if(isset($_REQUEST['forward']) && $_REQUEST['forward'] != '')
+				global $att_id_list;
 			for($ii=0;$ii < $adb->num_rows($attach_result);$ii++)
 			{
 				$attachmentid = $adb->query_result($attach_result,$ii,'attachmentsid');
@@ -638,6 +641,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$attachmentsname = $adb->query_result($adb->pquery($attachquery, array($attachmentid)),0,'name');
 					if($attachmentsname != '')	
 						$fieldvalue[$attachmentid] = '[ '.$attachmentsname.' ]';
+					if(isset($_REQUEST['forward']) && $_REQUEST['forward'] != '')
+						$att_id_list .= $attachmentid.';';
 				}
 
 			}

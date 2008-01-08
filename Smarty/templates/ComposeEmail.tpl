@@ -28,7 +28,7 @@
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
-<input type="hidden" name="send_mail">
+<input type="hidden" name="send_mail" value='true'>
 <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 <input type="hidden" name="user_id" value="{$USER_ID}">
 <input type="hidden" name="filename" value="{$FILENAME}">
@@ -129,7 +129,7 @@
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
 			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
 		{/foreach}
-
+		<input type='hidden' name='att_id_list' value='{$ATT_ID_LIST}' />
 	{/if}
 
 		{if $WEBMAIL eq 'true'}

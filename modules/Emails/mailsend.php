@@ -226,10 +226,9 @@ $mail_error_str = getMailErrorString($mail_status_str);
 $adb->println("Mail Sending Process has been finished.\n\n");
 if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
 {
-	/*this will fix #1211
-	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";*/
-	//Added for 4600
-	$inputs="<script>window.self.close();</script>";
+	/*this will fix #1211*/
+	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	//$inputs="<script>window.self.close();</script>";
 	echo $inputs;
 }
 //header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");

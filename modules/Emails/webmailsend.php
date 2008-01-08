@@ -46,7 +46,7 @@ $adb->println("Mail Sending Process has been finished.\n\n");
 
 if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
 {
-	$inputs="<script>window.self.close();</script>";
+	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
 	echo $inputs;
 }
 ?>

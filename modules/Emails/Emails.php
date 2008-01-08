@@ -122,9 +122,9 @@ var $rel_serel_table = "vtiger_seactivityrel";
 						if($realid[1] == -1)
 						{
 							$del_q = 'delete from vtiger_salesmanactivityrel where smid=? and activityid=?';
-							$adb->pquery($del_q,array($mycrmid, $actid));
+                                                        $adb->pquery($del_q,array($mycrmid, $actid));
 							$mysql='insert into vtiger_salesmanactivityrel values(?,?)';
-						}	
+						}
 						else
 						{
 							$del_q = 'delete from vtiger_seactivityrel where crmid=? and activityid=?';
@@ -190,6 +190,19 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
+		}
+		if($module == 'Emails' && isset($_REQUEST['att_id_list']) && $_REQUEST['att_id_list'] != '')
+		{
+			$att_lists = explode(";",$_REQUEST['att_id_list'],-1);
+			$id_cnt = count($att_lists);
+			if($id_cnt != 0)
+			{
+				for($i=0;$i<$id_cnt;$i++)
+				{
+					$sql_rel='insert into vtiger_seattachmentsrel values(?,?)';
+		                        $adb->pquery($sql_rel, array($id, $att_lists[$i]));
+				}
+			}			
 		}
 		if($_REQUEST['att_module'] == 'Webmails')
 		{

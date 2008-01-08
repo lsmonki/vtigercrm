@@ -63,6 +63,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	if(isset($_REQUEST['forward']) && $_REQUEST['forward'] != '')
 	{
+		$att_id_list = '';//used in getBlockInformation funtion as global variable to get the attachment id list for forwarding mail with attachment 
 		$focus->mode = '';
 	}
 	else
@@ -238,6 +239,8 @@ $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
 $smarty->assign("BLOCKS",$details[$mod_strings['LBL_EMAIL_INFORMATION']]); 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
+//id list of attachments while forwarding
+$smarty->assign("ATT_ID_LIST",$att_id_list);
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
