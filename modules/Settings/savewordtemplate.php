@@ -31,7 +31,7 @@ $binFile =  preg_replace('/\s+/', '_', $file);
                 $binFile .= ".txt";
         }
 $_FILES["binFile"]["name"] = $binFile;
-$strDescription = urlencode(($_REQUEST['txtDescription']));
+$strDescription = $_REQUEST['txtDescription'];
 // Vulnerability fix ends
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
