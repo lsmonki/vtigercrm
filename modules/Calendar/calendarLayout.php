@@ -1087,7 +1087,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '</td><td>('.$user.' | '.$mod_strings[$eventstatus].' | '.$mod_strings[$priority].')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.$mod_strings[$priority].')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 			</table>
 			
 			</div>';
@@ -1172,7 +1172,7 @@ function getweekEventLayer(& $cal,$slice)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td></tr>
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.$priority.')</td></tr>
 			<tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 
 			</table>
@@ -1376,7 +1376,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
-		$eventstatus = $adb->query_result($result,$i,"eventstatus");
+		$eventstatus = getTranslatedString($adb->query_result($result,$i,"eventstatus"));
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		$userid = $adb->query_result($result,$i,"smownerid");
 		$idShared = "normal";
@@ -1421,7 +1421,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		}
 		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
 		{
-			$element['status'] = $mod_strings[$adb->query_result($result,$i,"eventstatus")];
+			$element['status'] = $eventstatus;
 		}
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
@@ -1577,7 +1577,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		}*/
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
 		{
-			$element['status'] = $mod_strings[$adb->query_result($result,$i,"status")];
+			$element['status'] = getTranslatedString($adb->query_result($result,$i,"status"));
 		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";

@@ -55,7 +55,7 @@ if($tabname[1]!='')
 $columnName = $tableName;
  for($i = 0; $i < $count; $i++)
  {
-	 $pickArray[$i] = from_html(trim($pickArray[$i]));
+	 $pickArray[$i] = trim(from_html($pickArray[$i]));
 	 if($pickArray[$i] != '')
 	 {
 		 $picklistcount=0;
@@ -65,7 +65,7 @@ $columnName = $tableName;
 		 $numrow = $adb->num_rows($res);
 		 for($x=0;$x < $numrow ; $x++)
 		 {
-			 $picklistvalues = $adb->query_result($res,$x,$tableName);
+			 $picklistvalues = decode_html($adb->query_result($res,$x,$tableName));
 			 if($pickArray[$i] == $picklistvalues)
 			 {
 				 $picklistcount++;	
