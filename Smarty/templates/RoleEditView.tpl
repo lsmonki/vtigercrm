@@ -218,13 +218,15 @@ function validate()
             for (i=0;i<availListObj.length;i++) 
             {ldelim}
                 if (availListObj.options[i].selected==true) 
-                {ldelim}
+                {ldelim}            	
+                	var rowFound=false;
+                	var existingObj=null;
                     for (j=0;j<selectedColumnsObj.length;j++) 
                     {ldelim}
                         if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
                         {ldelim}
-                            var rowFound=true
-                            var existingObj=selectedColumnsObj.options[j]
+                            rowFound=true
+                            existingObj=selectedColumnsObj.options[j]
                             break
                         {rdelim}
                     {rdelim}
@@ -242,7 +244,7 @@ function validate()
                     {rdelim} 
                     else 
                     {ldelim}
-                        existingObj.selected=true
+                        if(existingObj != null) existingObj.selected=true
                     {rdelim}
                 {rdelim}
             {rdelim}
@@ -250,7 +252,7 @@ function validate()
 
         function delColumn() 
         {ldelim}
-            for (i=0;i<=selectedColumnsObj.options.length;i++) 
+            for (i<=selectedColumnsObj.options.length;i>0;i--) 
             {ldelim}
                 if (selectedColumnsObj.options.selectedIndex>=0)
                 selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
