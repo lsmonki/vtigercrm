@@ -507,6 +507,7 @@ getTagCloud();
 
 	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 </tr></table>
-{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
+
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts' or $MODULE eq 'Campaigns'}
+	<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}
