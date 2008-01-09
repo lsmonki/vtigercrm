@@ -20,6 +20,6 @@ $versions = Array(
 			"503"=>"5.0.3",
 		 );
 
-$current_version = '504';
+$current_version = '504rc';
 
 ?>
