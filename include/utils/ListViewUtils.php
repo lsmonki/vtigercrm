@@ -1225,14 +1225,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			else
 				$temptable = $fieldname;
 			$roleid=$current_user->roleid;
+			$roleids = Array();
 			$subrole = getRoleSubordinates($roleid);
 			if(count($subrole)> 0)
-			{
 				$roleids = $subrole;
-				$roleids = array_push($roleids, $roleid);
-			}
-			else
-				$roleids = $roleid;
+			array_push($roleids, $roleid);
+		
 			//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
 	
 			$sql="select * from vtiger_$temptable where $temptable=?";
