@@ -8,8 +8,17 @@
  * All Rights Reserved.
  ********************************************************************************/
 require_once("modules/Emails/mail.php");
-$from_arr = explode('@',$_REQUEST['from_add']);
-$mail_status = send_mail('Emails',$_REQUEST["parent_name"],$from_arr[0],$_REQUEST['from_add'],$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST["ccmail"],$_REQUEST["bccmail"],'all',$focus->id);
+	if($_REQUEST['from_add'] == '')
+	{
+		$from_name = $current_user->user_name;
+		$from_add = $current_user->column_fields['email1'];
+	}
+	else{
+		$from_arr = explode('@',$_REQUEST['from_add']);
+		$from_name = $from_arr[0];
+		$from_add = $_REQUEST['from_add'];
+	}
+$mail_status = send_mail('Emails',$_REQUEST["parent_name"],$from_name,$from_add,$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST["ccmail"],$_REQUEST["bccmail"],'all',$focus->id);
 	
 $query = 'update vtiger_emaildetails set email_flag ="SENT" where emailid=?';
 $adb->pquery($query, array($focus->id));

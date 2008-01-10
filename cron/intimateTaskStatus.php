@@ -63,10 +63,14 @@ $result = $adb->pquery($sql, array());
 $activevalue = $adb->fetch_array($result);
 if($activevalue[0] == 1)
 {
-	$result = $adb->pquery("SELECT sales_stage,amount FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid where vtiger_crmentity.deleted=0 and sales_stage='Closed Won' and amount > 10000",array());
+	$result = $adb->pquery("SELECT sales_stage,amount,potentialid,potentialname FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid where vtiger_crmentity.deleted=0 and sales_stage='Closed Won' and amount > 10000",array());
 	while ($myrow = $adb->fetch_array($result))
 	{
-		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$app_strings['Dear_Team_Time_to_Party'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
+		$pot_id = $myrow['potentialid'];
+		$pot_name = $myrow['potentialname'];
+		$body_content = $app_strings['Dear_Team'].$app_strings['Dear_Team_Time_to_Party']."<br><br>".$app_strings['Potential_Id']." ".$pot_id;
+		$body_content .= $app_strings['Potential_Name']." ".$pot_name."<br><br>";
+		sendmail($emailaddress,$emailaddress,$app_strings['Big_Deal_Closed_Successfully'],$body_content,$mailserver,$mailuname,$mailpwd,"",$smtp_auth);
 	}
 }
 //Pending tickets
@@ -80,6 +84,7 @@ if($activevalue[0] == 1)
 
 	while ($myrow = $adb->fetch_array($result))
 	{
+		$ticketid = $myrow['ticketid'];
 		sendmail($emailaddress,$emailaddress,$app_strings['Pending_Ticket_notification'],$app_strings['Kind_Attention'].$ticketid .$app_strings['Thank_You_HelpDesk'],$mailserver,$mailuname,$mailpwd,"",$smtp_auth);	
 	}
 }
