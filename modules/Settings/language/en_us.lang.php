@@ -932,5 +932,8 @@ $mod_strings = Array(
 'LBL_TEMPLATE'=>'Template',
 'LBL_SELECT_EMAIL_TEMPLATE_FOR'=>'Select the Email Template for',
 
+'ERR_CUSTOM_FIELD_WITH_NAME'=>'Custom Field with the Name ',
+'ERR_ALREADY_EXISTS'=>' already exists.',
+'ERR_SPECIFY_DIFFERENT_LABEL'=>'Please specify a different Label',
 );
 ?>

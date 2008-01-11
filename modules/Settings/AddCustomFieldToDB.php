@@ -26,15 +26,16 @@ if(get_magic_quotes_gpc() == 1)
 
 
 //checking if the user is trying to create a custom vtiger_field which already exists  
-if($mode != 'edit')
+$checkquery="select * from vtiger_field where tabid=? and fieldlabel=?";
+$params =  array($tabid, $fldlabel);
+if($mode == 'edit' && isset($_REQUEST['fieldid']) && $_REQUEST['fieldid'] != '')
 {
-	$checkquery="select * from vtiger_field where tabid=? and fieldlabel=?";
-	$checkresult=$adb->pquery($checkquery, array($tabid, $fldlabel));
+	$checkquery .= " and fieldid !=?";
+	array_push($params, $_REQUEST['fieldid']);
 }
-else
-	$checkresult=0;
+$checkresult=$adb->pquery($checkquery,$params);
 
-if($adb->num_rows($checkresult) != 0)
+if($adb->num_rows($checkresult) > 0)
 {
 	
 	if(isset($_REQUEST['fldLength']))

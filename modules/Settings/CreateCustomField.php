@@ -95,7 +95,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
+	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
 	$smarty->assign("DUPLICATE_ERROR", $error);
 	$customfield_fieldlabel=$_REQUEST["fldlabel"];
 	$fieldlength=$_REQUEST["fldlength"];

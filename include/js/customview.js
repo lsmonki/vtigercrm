@@ -65,7 +65,7 @@ function validate() {
                 alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , _ "+alert_arr.NOT_ALLOWED)
                 return false;
         }
-        if (lengthLayer.style.visibility=="visible") {
+        if (lengthLayer != null && lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))
                         return false
 
@@ -77,7 +77,7 @@ function validate() {
 
         }
 
-        if (decimalLayer.style.visibility=="visible") {
+        if (decimalLayer != null && decimalLayer.style.visibility=="visible") {
                 if (getObj("fldDecimal").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
                         if (!intValidate("fldDecimal","Decimal"))
                                 return false
@@ -87,17 +87,19 @@ function validate() {
                 if (!numConstComp("fldDecimal","Decimal","LE",30))
                         return false
         }
-	var decimallength = document.addtodb.fldDecimal.value;
+	var decimallength = '';
+	if (typeof(document.addtodb) != 'undefined' && typeof(document.addtodb.fldDecimal) != 'undefined')
+	      decimallength = document.addtodb.fldDecimal.value;
         if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
                         decimallength = 0;
                 nummaxlength = 65 - (eval(decimallength) + 1);
         }
-        if (!numConstComp("fldLength","Length","LE",nummaxlength))
+        if (getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
                 return false
 var picklistObj=getObj("fldPickList")
-        if (pickListLayer.style.visibility=="visible") {
+        if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
                 if (emptyCheck("fldPickList","Picklist values"))        {
                         var pickListAry=new Array()
                         pickListAry=splitValues()
