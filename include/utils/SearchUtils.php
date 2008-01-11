@@ -221,8 +221,8 @@ function get_usersid($table_name,$column_name,$search_string)
 	global $log;
         $log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like ?";
-	$user_result=$adb->pquery($user_qry, array('%'.$search_string.'%'));
+	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like '" . formatForSqlLike($search_string) . "'";
+	$user_result=$adb->pquery($user_qry, array());
 	$noofuser_rows=$adb->num_rows($user_result);
 	$x=$noofuser_rows-1;
 	if($noofuser_rows!=0)
@@ -237,11 +237,11 @@ function get_usersid($table_name,$column_name,$search_string)
 				$where .= " or ";
 			}
 		}
-		$where.=" or vtiger_groups.groupname like '%".$search_string."%')";
+		$where.=" or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
 	}
 	else
 	{
-		$where=" vtiger_groups.groupname like '%".$search_string."%' ";
+		$where=" vtiger_groups.groupname like '". formatForSqlLike($search_string) ."' ";
 	}	
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
@@ -311,7 +311,7 @@ function BasicSearch($module,$search_field,$search_string)
 	{
 		$column_name='crmid';
 		$table_name='vtiger_crmentity';
-		$where="$table_name.$column_name like '%".$search_string."%'";
+		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 	}else
 	{	
 		//Check added for tickets by accounts/contacts in dashboard
@@ -377,12 +377,12 @@ function BasicSearch($module,$search_field,$search_string)
 			// Added to fix errors while searching check box type fields(like product active. ie. they store 0 or 1. we search them as yes or no) in basic search.
 			if ($uitype == 56)
 			{
-				if(stristr($search_string,'yes'))
+				if(strtolower($search_string) == 'yes')
 					$where="$table_name.$column_name = '1'";
-				elseif(stristr($search_string,'no'))
+				elseif(strtolower($search_string) == 'no')
 					$where="$table_name.$column_name = '0'";
 				else
-					$where="$table_name.$column_name = '$search_string'";
+					$where="$table_name.$column_name = '-1'";
 
 			}
 			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
@@ -391,7 +391,7 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			elseif($table_name == "vtiger_activity" && $column_name == "status")
 			{
-				$where="($table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%')";
+				$where="($table_name.$column_name like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
 			}
 			else if(in_array($column_name,$column_array))
 			{
@@ -399,7 +399,7 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			else
 			{
-				$where="$table_name.$column_name like '%".$search_string."%'";
+				$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 			}
 		}
 	}
@@ -639,7 +639,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	switch($criteria)
 	{
 		case 'cts':
-			$where_string = $searchfield." like '%".$searchstring."%' ";
+			$where_string = $searchfield." like '". formatForSqlLike($searchstring) ."' ";
 			if($searchstring == NULL)
 			{
 					$where_string = "(".$searchfield." like '' or ".$searchfield." is NULL)";
@@ -648,9 +648,9 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 		
 		case 'dcts':
 			if($searchfield == "vtiger_users.user_name" || $searchfield =="vtiger_groups.groupname")	
-				$where_string = "(".$searchfield." not like '%".$searchstring."%')";
+				$where_string = "(".$searchfield." not like '". formatForSqlLike($searchstring) ."')";
 			else
-				$where_string = "(".$searchfield." not like '%".$searchstring."%' or ".$searchfield." is null)";
+				$where_string = "(".$searchfield." not like '". formatForSqlLike($searchstring) ."' or ".$searchfield." is null)";
 			if($searchstring == NULL)
 			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
 			break;
@@ -671,11 +671,11 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 			
 		case 'bwt':
-			$where_string = $searchfield." like '".$searchstring."%' ";
+			$where_string = $searchfield." like '". formatForSqlLike($searchstring, 2) ."' ";
 			break;
 
 		case 'ewt':
-			$where_string = $searchfield." like '%".$searchstring."' ";
+			$where_string = $searchfield." like '". formatForSqlLike($searchstring, 1) ."' ";
 			break;
 
 		case 'grt':
@@ -743,12 +743,12 @@ function getWhereCondition($currentModule)
 			//added to allow  search in check box type fields(ex: product active. it will contain 0 or 1) using yes or no instead of 0 or 1
 			if ($uitype == 56)
 			{
-				if(stristr($srch_val,'yes'))
-                                        $adv_string .= " ".getSearch_criteria($srch_cond,"1",$tab_name.'.'.$column_name)." ".$matchtype;
-                                elseif(stristr($srch_val,'no'))
-                                        $adv_string .= " ".getSearch_criteria($srch_cond,"0",$tab_name.'.'.$column_name)." ".$matchtype;
+				if(strtolower($srch_val) == 'yes')
+                	$adv_string .= " ".getSearch_criteria($srch_cond,"1",$tab_name.'.'.$column_name)." ".$matchtype;
+				elseif(strtolower($srch_val) == 'no')
+                	$adv_string .= " ".getSearch_criteria($srch_cond,"0",$tab_name.'.'.$column_name)." ".$matchtype;
 				else
-                                        $adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
+					$adv_string .= " ".getSearch_criteria($srch_cond,"-1",$tab_name.'.'.$column_name)." ".$matchtype;
 			}
 			elseif($tab_col == "vtiger_crmentity.smownerid")
 			{

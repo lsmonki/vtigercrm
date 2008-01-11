@@ -181,7 +181,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		{
 			if($where != '')
 				$where .= " OR ";
-			$where .= $tablename.".".$columnname." LIKE ".$adb->quote("%$search_val%");
+			$where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
 		}
 	}
 

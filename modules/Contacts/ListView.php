@@ -96,7 +96,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2 
 			$str = " vtiger_contactscf.".$column[$i]." = '".$customfield[$i]."'";
 		else
-	        	$str = " vtiger_contactscf.".$column[$i]." like '$customfield[$i]%'";
+	        	$str = " vtiger_contactscf.".$column[$i]." like '". formatForSqlLike($customfield[$i], 2) ."'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }

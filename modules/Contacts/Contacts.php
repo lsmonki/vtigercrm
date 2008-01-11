@@ -190,7 +190,7 @@ class Contacts extends CRMEntity {
 	{   
 		global $log;
 		$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
-		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,vtiger_account.accountid as account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '%" .$email_address ."%' limit 50";
+		$query = "select vtiger_users.user_name, vtiger_contactdetails.lastname last_name,vtiger_contactdetails.firstname first_name,vtiger_contactdetails.contactid as id, vtiger_contactdetails.salutation as salutation, vtiger_contactdetails.email as email1,vtiger_contactdetails.title as title,vtiger_contactdetails.mobile as phone_mobile,vtiger_account.accountname as account_name,vtiger_account.accountid as account_id   from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid  left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0  and vtiger_contactdetails.email like '". formatForSqlLike($email_address) ."' limit 50";
 
 		$log->debug("Exiting get_contacts1 method ...");
 		return $this->process_list_query1($query);
@@ -781,9 +781,9 @@ function get_searchbyemailid($username,$emailaddress)
 			      LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 			      where vtiger_crmentity.deleted=0";
 			      if(trim($emailaddress) != '')
-			      	        $query .= " and ((vtiger_contactdetails.email like '%".$emailaddress."%') or vtiger_contactdetails.lastname REGEXP REPLACE('".$emailaddress."',' ','|') or vtiger_contactdetails.firstname REGEXP REPLACE('".$emailaddress."',' ','|'))  and vtiger_contactdetails.email != ''";
+			      	        $query .= " and ((vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) ."') or vtiger_contactdetails.lastname REGEXP REPLACE('".$emailaddress."',' ','|') or vtiger_contactdetails.firstname REGEXP REPLACE('".$emailaddress."',' ','|'))  and vtiger_contactdetails.email != ''";
 			      else
-			      		$query .= " and (vtiger_contactdetails.email like '%".$emailaddress."%' and vtiger_contactdetails.email != '')";
+			      		$query .= " and (vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) ."' and vtiger_contactdetails.email != '')";
 
   $tab_id = getTabid("Contacts");
   if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)

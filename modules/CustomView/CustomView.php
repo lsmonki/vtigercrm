@@ -965,19 +965,20 @@ class CustomView extends CRMEntity{
 	function getRealValues($tablename,$fieldname,$comparator,$value,$datatype)
 	{
 		//we have to add the fieldname/tablename.fieldname and the corresponding value (which we want) we can add here. So that when these LHS field comes then RHS value will be replaced for LHS in the where condition of the query
-		global $adb, $mod_strings;
-		
+		global $adb, $mod_strings, $currentModule, $current_user;
 		//Added for proper check of contact name in advance filter
 		if($tablename == "vtiger_contactdetails" && $fieldname == "lastname")
 			$fieldname = "contactid";
-							
+		
+		$contactid = "vtiger_contactdetails.lastname";						
+		if ($currentModule != "Contacts" && $currentModule != "Leads" && getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname') == '0') {
+			$contactid = "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";			
+		}
 		$change_table_field = Array(
 
 			"product_id"=>"vtiger_products.productname",
-			//"contactid"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
-			//"contact_id"=>"concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)",
-			"contactid"=>"vtiger_contactdetails.lastname",
-			"contact_id"=>"vtiger_contactdetails.lastname",
+			"contactid"=>$contactid,
+			"contact_id"=>$contactid,
 			"accountid"=>"",//in cvadvfilter accountname is stored for Contact, Potential, Quotes, SO, Invoice
 			"account_id"=>"",//Same like accountid. No need to change
 			"vendorid"=>"vtiger_vendor.vendorname",
@@ -1369,30 +1370,30 @@ class CustomView extends CRMEntity{
 		{
 			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
 			{
-				$rtvalue = " like ".$adb->quote($value);
+				$rtvalue = " like '". formatForSqlLike($value, 3) ."'";
 			}else
 			{
-				$rtvalue = " like ".$adb->quote($value."%");
+				$rtvalue = " like '". formatForSqlLike($value, 2) ."'";
 			}
 		}
 		if($comparator == "ew")
 		{
 			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
 			{
-				$rtvalue = " like ".$adb->quote($value);
+				$rtvalue = " like '". formatForSqlLike($value, 3) ."'";
 			}else
 			{
-				$rtvalue = " like ".$adb->quote("%".$value);
+				$rtvalue = " like '". formatForSqlLike($value, 1) ."'";
 			}
 		}
 		if($comparator == "c")
 		{
 			if(trim($value) == "" && ($datatype == "V" || $datatype == "E"))
 			{
-				$rtvalue = " like ".$adb->quote($value);
+				$rtvalue = " like '". formatForSqlLike($value, 3) ."'";
 			}else
 			{
-				$rtvalue = " like ".$adb->quote("%".$value."%");
+				$rtvalue = " like '". formatForSqlLike($value) ."'";
 			}
 		}
 		if($comparator == "k")
@@ -1402,7 +1403,7 @@ class CustomView extends CRMEntity{
 				$rtvalue = " not like ''";
 			}else
 			{
-				$rtvalue = " not like ".$adb->quote("%".$value."%");
+				$rtvalue = " not like '". formatForSqlLike($value) ."'";
 			}
 		}
 		if($comparator == "l")

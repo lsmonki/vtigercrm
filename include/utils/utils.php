@@ -2851,10 +2851,36 @@ function is_uitype($uitype, $reqtype) {
 	return false;
 }
 /**
-	* * Function to escape quotes
-	* */
+ * Function to escape quotes
+ * @param $value - String in which single quotes have to be replaced.
+ * @return Input string with single quotes escaped.
+ */
 function escape_single_quotes($value) {
-	if (isset($value)) $value = str_replace("'", "\'", $value);
-		return $value;
+	if (isset($value)) $value = str_replace("'", "\'", $value);	
+	return $value;
+}
+
+/**
+ * Function to format the input value for SQL like clause.
+ * @param $str - Input string value to be formatted.
+ * @param $flag - By default set to 0 (Will look for cases %string%). 
+ *                If set to 1 - Will look for cases %string.
+ *                If set to 2 - Will look for cases string%.
+ * @return String formatted as per the SQL like clause requirement
+ */
+function formatForSqlLike($str, $flag=0) {
+	if (isset($str)) {
+		$str = str_replace('%', '\%', $str);
+		$str = str_replace('_', '\_', $str);
+		
+		if ($flag == 0) {
+			$str = '%'. $str .'%';			
+		} elseif ($flag == 1) {
+			$str = '%'. $str;
+		} elseif ($flag == 2) {
+			$str = $str .'%';
+		} 
+	}
+	return mysql_real_escape_string($str);
 }
 ?>

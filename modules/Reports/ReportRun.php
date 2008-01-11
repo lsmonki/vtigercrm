@@ -327,19 +327,19 @@ class ReportRun extends CRMEntity
 		}
 		if($comparator == "s")
 		{
-			$rtvalue = " like ".$adb->quote($value."%");
+			$rtvalue = " like '". formatForSqlLike($value, 2) ."'";
 		}
 		if($comparator == "ew")
 		{
-			$rtvalue = " like ".$adb->quote("%".$value);
+			$rtvalue = " like '". formatForSqlLike($value, 1) ."'";
 		}			
 		if($comparator == "c")
 		{
-			$rtvalue = " like ".$adb->quote("%".$value."%");
+			$rtvalue = " like '". formatForSqlLike($value) ."'";
 		}
 		if($comparator == "k")
 		{
-			$rtvalue = " not like ".$adb->quote("%".$value."%");
+			$rtvalue = " not like '". formatForSqlLike($value) ."'";
 		}
 		if($comparator == "l")
 		{

@@ -91,7 +91,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
 				$str = " vtiger_potentialscf.".$column[$i]." = '".$customfield[$i]."'";
 			else
-				$str = " vtiger_potentialscf.".$column[$i]." like '$customfield[$i]%'";
+				$str = " vtiger_potentialscf.".$column[$i]." like '". formatForSqlLike($customfield[$i], 2) ."'";
 			array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 		}

@@ -92,9 +92,9 @@ if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_
 {
 	$url_string .= "&search=".$_REQUEST['search']."&search_field=".$_REQUEST['search_field']."&search_text=".$_REQUEST['search_text'];
 	if($_REQUEST['search_field'] != 'join')
-		$where = $_REQUEST['search_field']." like '%".$_REQUEST['search_text']."%'";	
+		$where = $_REQUEST['search_field']." like '". formatForSqlLike($_REQUEST['search_text']) ."'";	
 	else
-		$where = "(subject like '%".$_REQUEST['search_text']."%' OR vtiger_users.user_name like '%".$_REQUEST['search_text']."%')";	
+		$where = "(subject like '". formatForSqlLike($_REQUEST['search_text']) ."' OR vtiger_users.user_name like '". formatForSqlLike($_REQUEST['search_text']) ."')";	
 }
 
 
