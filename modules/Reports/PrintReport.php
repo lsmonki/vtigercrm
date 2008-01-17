@@ -20,7 +20,10 @@ $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 $oReportRun = new ReportRun($reportid);
-$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$_REQUEST["startdate"],$_REQUEST["enddate"]);
+
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format 
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format
+$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 
 $arr_values = $oReportRun->GenerateReport("PRINT",$filterlist);
 $total_report = $oReportRun->GenerateReport("PRINT_TOTAL",$filterlist);
