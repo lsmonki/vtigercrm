@@ -548,7 +548,7 @@ function CheckFieldPermission($fieldname,$module)
 
  require('user_privileges/user_privileges_'.$current_user->id.'.php');
  if($fieldname == '' || $module == '')
-	 return false;
+	 return "false";
 
 
  if(!$is_admin)
