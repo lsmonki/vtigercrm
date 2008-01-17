@@ -1657,20 +1657,8 @@ class ReportRun extends CRMEntity
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 		$tab_id = getTabid($this->primarymodule);
-		if($this->reporttype == "summary")
-		{
-			if(isset($this->groupbylist))
-			{
-				$newcolumnlist = array_diff($columnlist, $this->groupbylist);
-				$selectlist = array_merge($this->groupbylist,$newcolumnlist);
-			}else
-			{
-				$selectlist = $columnlist;
-			}
-		}else
-		{
-			$selectlist = $columnlist;
-		}
+		//Fix for ticket #4915.
+		$selectlist = $columnlist;
 		//columns list
 		if(isset($selectlist))
 		{
