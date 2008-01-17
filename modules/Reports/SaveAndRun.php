@@ -57,6 +57,11 @@ if($numOfRows > 0)
 
 		$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
 		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
+		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
+		$selectedcolumnvalue = '"'. $ogReport->stdselectedcolumn . '"';
+		if (strpos($BLOCK1, $selectedcolumnvalue) === false) {
+			$BLOCK1 .= "<option selected value=''>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+		}
 		$list_report_form->assign("BLOCK1",$BLOCK1);
 		$BLOCKJS = $ogReport->getCriteriaJS();
 		$list_report_form->assign("BLOCKJS",$BLOCKJS);
