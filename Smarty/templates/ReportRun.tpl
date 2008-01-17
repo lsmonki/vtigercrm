@@ -247,11 +247,11 @@ function ReportInfor()
 {
 	var stdDateFilterFieldvalue = '';
 	if(document.NewReport.stdDateFilterField.selectedIndex != -1)
-		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
+		stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].text;
 
 	var stdDateFiltervalue = '';
 	if(document.NewReport.stdDateFilter.selectedIndex != -1)
-		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
+		stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].text;
 
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
