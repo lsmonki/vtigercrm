@@ -56,7 +56,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
         if($adb->num_rows($result) != 0)
 	{
                 $attachmentid = $adb->query_result($result,0,'attachmentsid');
-		$filename = $adb->query_result($result,0,'name');
+		$filename = decode_html($adb->query_result($result,0,'name'));
 		$filetype = $adb->query_result($result,0,'type');
 		$filepath = $adb->query_result($result,0,'path');
 
