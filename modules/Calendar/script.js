@@ -418,7 +418,7 @@ function check_form()
                         // Added for Aydin Kurt-Elli requirement END -by Minnie -->
 
 			//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
-                        if(document.EditView.recurringtype.value =="Monthly")
+                        if((getObj("recurringcheck")) && (document.EditView.recurringcheck.checked == true) && (document.EditView.recurringtype.value =="Monthly"))
                         {
 				if((document.EditView.repeatMonth[0].checked == true) && ((parseInt(parseFloat(document.EditView.repeatMonth_date.value))!=document.EditView.repeatMonth_date.value) || document.EditView.repeatMonth_date.value=='' || parseInt(document.EditView.repeatMonth_date.value)>'31' || document.EditView.repeatMonth_date.value<='0'))
                                 {
@@ -446,7 +446,7 @@ function check_form()
 		}	
 		else
 			return false;
-		if(document.EditView.recurringcheck.checked == false)
+		if(getObj("recurringcheck") && document.EditView.recurringcheck.checked == false)
                 {
                         document.EditView.recurringtype.value = '--None--';
                 }
