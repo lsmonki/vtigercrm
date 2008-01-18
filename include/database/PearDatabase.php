@@ -334,6 +334,32 @@ class PearDatabase{
 	return $result;		
     }
 
+    function getFieldsDefinition(&$result)
+    {
+	//$this->println("ADODB getFieldsArray");
+	$field_array = array();
+	if(! isset($result) || empty($result))
+	{
+		return 0;
+	}
+
+	$i = 0;
+	$n = $result->FieldCount();
+	while ($i < $n) 
+	{
+		$meta = $result->FetchField($i);
+		if (!$meta) 
+		{
+			return 0;
+		}
+		array_push($field_array,$meta);
+		$i++;
+	}
+
+	//$this->println($field_array);
+	return $field_array;			
+    }
+
     function getFieldsArray(&$result)
     {
 	//$this->println("ADODB getFieldsArray");

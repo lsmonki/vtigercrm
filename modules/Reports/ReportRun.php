@@ -101,11 +101,28 @@ class ReportRun extends CRMEntity
 			}
 			else
 			{
+				$header_label = $selectedfields[2]; // Header label to be displayed in the reports table
+				// To check if the field in the report is a custom field
+				// and if yes, get the label of this custom field freshly from the vtiger_field as it would have been changed.
+				// Asha - Reference ticket : #4906
+				if (stripos($selectedfields[1], 'cf_') === 0) {
+					$tbl_name = $selectedfields[0];
+					$cf_col_name = $selectedfields[1];
+					$cf_columns = $adb->getColumnNames($tbl_name);
+					if (array_search($cf_col_name, $cf_columns) != null) {
+						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ?";
+						$cf_res = $adb->pquery($pquery, array($tbl_name, $cf_col_name));
+						if (count($cf_res) > 0){
+							$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
+							$header_label = $cf_fld_label;
+						}
+					}
+				}
 				if($querycolumns == "")
 				{
 					if($selectedfields[4] == 'C')
 					{
-						$columnslist[$fieldcolname] = "case when (".$selectedfields[0].".".$selectedfields[1]."='1')then 'yes' else 'no' end as $selectedfields[2]";
+						$columnslist[$fieldcolname] = "case when (".$selectedfields[0].".".$selectedfields[1]."='1')then 'yes' else 'no' end as '$selectedfields[2]'";
 					}
 					elseif($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'status')
 					{
@@ -121,7 +138,7 @@ class ReportRun extends CRMEntity
 						if($temp_module_from_tablename == $module)
 							$columnslist[$fieldcolname] = " case when (".$selectedfields[0].".user_name not like '') then ".$selectedfields[0].".user_name else vtiger_groups".$module.".groupname end as ".$module."_Assigned_To";
 						else//Some Fields can't assigned to groups so case avoided (fields like inventory manager)
-							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$selectedfields[2]."'";
+							$columnslist[$fieldcolname] = $selectedfields[0].".user_name as '".$header_label."'";
 							
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
@@ -130,18 +147,18 @@ class ReportRun extends CRMEntity
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
-						$columnslist[$fieldcolname] = "vtiger_crmentity.".$selectedfields[1]." AS '".$selectedfields[2]."'";
+						$columnslist[$fieldcolname] = "vtiger_crmentity.".$selectedfields[1]." AS '".$header_label."'";
 					}
 				        elseif($selectedfields[0] == 'vtiger_invoice' && $selectedfields[1] == 'salesorderid')//handled for salesorder fields in Invoice Module Reports
 					{
 						$columnslist[$fieldcolname] = 'vtiger_salesorderInvoice.subject	AS "'.$selectedfields[2].'"';
 					}elseif($selectedfields[0] == 'vtiger_campaign' && $selectedfields[1] == 'product_id')//handled for product fields in Campaigns Module Reports
 					{
-						$columnslist[$fieldcolname] = 'vtiger_productsCampaigns.productname AS "'.$selectedfields[2].'"';
+						$columnslist[$fieldcolname] = 'vtiger_productsCampaigns.productname AS "'.$header_label.'"';
 					}
 					else
 					{
-						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
+						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$header_label.'"';
 					}
 				}
 				else
@@ -204,6 +221,7 @@ class ReportRun extends CRMEntity
 	 */
 	function getEscapedColumns($selectedfields)
 	{
+		global $current_user;
 		$fieldname = $selectedfields[3];
 		if($fieldname == "parent_id")
 		{
@@ -222,8 +240,18 @@ class ReportRun extends CRMEntity
 			}
 		}elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name"))
 		{
-			if($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar')
-				$querycolumn = "concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) as ".$selectedfields[2];
+			if($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar') {
+				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
+					$querycolumn = "concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) as ".$selectedfields[2];
+				else
+					$querycolumn = "vtiger_contactdetails".$this->primarymodule.".lastname as ".$selectedfields[2];
+			}		
+			if($this->secondarymodule == 'Quotes' || $this->secondarymodule == 'Invoice') {
+				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
+					$querycolumn = "concat(vtiger_contactdetails".$this->secondarymodule.".lastname,' ',vtiger_contactdetails".$this->secondarymodule.".firstname) as ".$selectedfields[2];
+				else
+					$querycolumn = "vtiger_contactdetails".$this->secondarymodule.".lastname as ".$selectedfields[2];
+			}
 		}
 		return $querycolumn;
 	}
@@ -467,6 +495,13 @@ class ReportRun extends CRMEntity
 					$fieldvalue = "(case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
 				//end fix
+				elseif($selectedfields[3] == "contact_id" && strpos($selectedfields[2],"Contact_Name"))
+				{
+					if($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar')
+						$fieldvalue = "concat(vtiger_contactdetails". $this->primarymodule .".lastname,' ',vtiger_contactdetails". $this->primarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
+					if($this->secondarymodule == 'Quotes' || $this->secondarymodule == 'Invoice')
+						$fieldvalue = "concat(vtiger_contactdetails". $this->secondarymodule .".lastname,' ',vtiger_contactdetails". $this->secondarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
+				}
 				else
 				{
 					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
@@ -1793,6 +1828,9 @@ class ReportRun extends CRMEntity
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 				$groupslist = $this->getGroupingList($this->reportid);
+
+				$column_definitions = $adb->getFieldsDefinition($result);
+
 				do
 				{
 					$arraylists = Array();
@@ -1821,6 +1859,8 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
+						$fld_type = $column_definitions[$i]->type;
+
 						if ($fld->name == "Potentials_Amount")
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
@@ -1859,7 +1899,7 @@ class ReportRun extends CRMEntity
 						{
 							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
 						}
-						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
+						else if($fld_type == "date" || $fld_type == "datetime") {
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
 																				
@@ -1939,6 +1979,8 @@ class ReportRun extends CRMEntity
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 
+				$column_definitions = $adb->getFieldsDefinition($result);
+
 				do
 				{
 					$arraylists = Array();
@@ -1984,7 +2026,7 @@ class ReportRun extends CRMEntity
 						{
 							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
 						}
-						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
+						else if($fld_type == "date" || $fld_type == "datetime") {
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
 						if(array_key_exists($this->getLstringforReportHeaders($fld->name), $arraylists))
@@ -2101,6 +2143,8 @@ class ReportRun extends CRMEntity
 				$custom_field_values = $adb->fetch_array($result);
 				$groupslist = $this->getGroupingList($this->reportid);
 
+				$column_definitions = $adb->getFieldsDefinition($result);
+
 				do
 				{
 					$arraylists = Array();
@@ -2170,7 +2214,7 @@ class ReportRun extends CRMEntity
 						{
 							$fieldvalue = str_ireplace(' |##| ',', ',$fieldvalue);
 						}
-						else if(stristr($fld->name, "_Date") || stristr($fld->name, "_Created_Time") || stristr($fld->name, "_Modified_Time")){
+						else if($fld_type == "date" || $fld_type == "datetime") {
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
 						if(($lastvalue == $fieldvalue) && $this->reporttype == "summary")
