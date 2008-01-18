@@ -2883,4 +2883,65 @@ function formatForSqlLike($str, $flag=0) {
 	}
 	return mysql_real_escape_string($str);
 }
+
+/**
+ * Get Current Module (global variable or from request)
+ */
+function getCurrentModule($perform_set=false) {
+	global $currentModule;
+	if(isset($currentModule)) return $currentModule;
+
+	// Do some security check and return the module information
+	if(isset($_REQUEST['module']))
+	{
+		$is_module = false;
+		$module = $_REQUEST['module'];
+		$dir = @scandir($root_directory."modules");
+		$temp_arr = Array("CVS","Attic");
+		$res_arr = @array_intersect($dir,$temp_arr);
+		if(count($res_arr) == 0  && !ereg("[/.]",$module)) {
+			if(@in_array($module,$dir))
+				$is_module = true;
+		}
+
+		if($is_module) {
+			if($perform_set) $currentModule = $module;
+			return $module;
+		}
+	}
+	return null;
+}
+
+
+/**
+ * Set the language strings.
+ */
+function setCurrentLanguage($active_module=null) {
+	global $current_language, $default_language, $app_strings, $app_list_strings, $mod_strings, $currentModule;
+
+	if($active_module==null) {
+		if (!isset($currentModule))
+			$active_module = getCurrentModule();
+		else
+			$active_module = $currentModule;
+	}
+
+	if(isset($_SESSION['authenticated_user_language']) && $_SESSION['authenticated_user_language'] != '')
+	{
+		$current_language = $_SESSION['authenticated_user_language'];
+	}
+	else
+	{
+		$current_language = $default_language;
+	}
+
+	//set module and application string arrays based upon selected language
+	if (!isset($app_strings))
+		$app_strings = return_application_language($current_language);
+	if (!isset($app_list_strings))
+		$app_list_strings = return_app_list_strings_language($current_language);
+	if (!isset($mod_strings) && isset($active_module))
+		$mod_strings = return_module_language($current_language, $active_module);
+}
+
 ?>

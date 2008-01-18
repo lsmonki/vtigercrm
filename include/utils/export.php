@@ -36,6 +36,9 @@ require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/CustomView/CustomView.php');
 
+// Set the current language and the language strings, if not already set.
+setCurrentLanguage();
+
 global $allow_exports,$app_strings;
 
 session_start();
