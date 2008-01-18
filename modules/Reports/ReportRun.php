@@ -1865,6 +1865,10 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+
+						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
+						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
+
 					//check for Roll based pick list
 						$temp_val= $fld->name;
 						if(is_array($picklistarray))
@@ -1991,7 +1995,11 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = $custom_field_values[$i];
-						// Check for roled based pick list
+
+						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
+						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
+
+						// Check for role based pick list
 						$temp_val= $fld->name;
 						if(is_array($picklistarray))
 							if(array_key_exists($temp_val,$picklistarray))
@@ -2177,6 +2185,10 @@ class ReportRun extends CRMEntity
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						else
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+
+						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
+						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);	
+
 						//Check For Role based pick list 
 						$temp_val= $fld->name;
 						if(is_array($picklistarray))
