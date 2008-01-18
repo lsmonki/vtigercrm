@@ -18,7 +18,7 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Reports');
-global $list_max_entries_per_page;
+global $list_max_entries_per_page, $default_charset;
 global $urlPrefix;
 $log = LoggerManager::getLogger('report_list');
 global $currentModule;
@@ -65,7 +65,9 @@ $list_report_form->assign('DATE_FORMAT',$date_format);
 
 $list_report_form->assign('PRI_MODULE',$primarymodule);
 $list_report_form->assign('SEC_MODULE',$secondarymodule);
+$reportname = htmlentities($reportname, ENT_QUOTES, $default_charset);
 $list_report_form->assign('REPORT_NAME',$reportname);
+$reportdescription = htmlentities($reportdescription, ENT_QUOTES, $default_charset);
 $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);
