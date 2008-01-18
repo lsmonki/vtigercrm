@@ -250,6 +250,7 @@ class Accounts extends CRMEntity {
 
 		$query = "SELECT vtiger_activity.*, vtiger_cntactivityrel.*,
 			vtiger_seactivityrel.*, vtiger_contactdetails.lastname,
+			vtiger_contactdetails.firstname,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_crmentity.modifiedtime,
 			case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
