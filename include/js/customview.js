@@ -96,7 +96,7 @@ function validate() {
                         decimallength = 0;
                 nummaxlength = 65 - (eval(decimallength) + 1);
         }
-        if (getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
+        if (getObj("lengthdetails") != null && getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
                 return false
 var picklistObj=getObj("fldPickList")
         if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
