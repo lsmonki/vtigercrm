@@ -9,6 +9,8 @@
 *
  ********************************************************************************/
 require_once('include/utils/CommonUtils.php');
+global $default_charset;
+
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 {
 	$templatedetails = getTemplateDetails($_REQUEST['templateid']);
@@ -17,7 +19,7 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 <form name="frmrepstr">
 <input type="hidden" name="subject" value="<?php echo $templatedetails[2];?>"></input>
 <textarea name="repstr" style="visibility:hidden">
-<?php echo htmlentities($templatedetails[1]); ?>
+<?php echo htmlentities($templatedetails[1], ENT_NOQUOTES, $default_charset); ?>
 </textarea>
 </form>
 <script language="javascript">
