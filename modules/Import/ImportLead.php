@@ -87,9 +87,7 @@ class ImportLead extends Leads {
 		$this->log = LoggerManager::getLogger('import_lead');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportLead");
-		$colf = getColumnFields("Leads");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Leads");
 		
 		$this->db->println($this->importable_fields);
 	}

@@ -69,9 +69,7 @@ class ImportVendors extends Vendors {
 		$this->log = LoggerManager::getLogger('import_vendors');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportVendors");
-		$colf = getColumnFields("Vendors");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Vendors");
 		
 		$this->db->println($this->importable_fields);
 	}

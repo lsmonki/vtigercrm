@@ -290,9 +290,7 @@ class ImportContact extends Contacts {
 		$this->log = LoggerManager::getLogger('import_contact');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportContact");
-		$colf = getColumnFields("Contacts");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Contacts");
 		//unset($this->importable_fields['account_id']);
 		//$this->importable_fields['account_name']=1;
 		

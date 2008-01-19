@@ -91,9 +91,7 @@ class ImportProduct extends Products {
 		$this->log = LoggerManager::getLogger('import_product');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportProduct");
-		$colf = getColumnFields("Products");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Products");
 		
 		$this->db->println($this->importable_fields);
 	}

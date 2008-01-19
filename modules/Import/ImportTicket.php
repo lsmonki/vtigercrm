@@ -103,9 +103,7 @@ class ImportTicket extends HelpDesk {
 		$this->log = LoggerManager::getLogger('import_ticket');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportTicket");
-		$colf = getColumnFields("HelpDesk");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("HelpDesk");
 		
 		$this->db->println($this->importable_fields);
 	}

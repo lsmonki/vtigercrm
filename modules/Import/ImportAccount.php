@@ -170,9 +170,7 @@ class ImportAccount extends Accounts {
 		$this->log = LoggerManager::getLogger('import_account');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportAccount");
-		$colf = getColumnFields("Accounts");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Accounts");
 		
 		$this->db->println($this->importable_fields);
 	}

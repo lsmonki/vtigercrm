@@ -1066,6 +1066,47 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		return $fldvalue;
 	}
-
+	
+	/**
+	* Function to make change to column fields, depending on the current user's accessibility for the fields
+	*//*
+	function apply_field_security() {
+		global $current_user, $currentModule;
+		
+		require_once('include/utils/UserInfoUtil.php');
+		foreach($this->column_fields as $fieldname=>$fieldvalue) {
+			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') {
+				$this->column_fields[$fieldname] = "";
+			}
+		}
+	}*/
+	
+	/**
+	* Function to make change to column fields, depending on the current user's accessibility for the fields
+	*/
+	function apply_field_security() {
+		global $current_user, $currentModule;
+		
+		require_once('include/utils/UserInfoUtil.php');
+		foreach($this->column_fields as $fieldname=>$fieldvalue) {
+			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') {
+				$this->column_fields[$fieldname] = "";
+			}
+		}
+	}
+	
+	/**
+	* Function to initialize the importable fields array, based on the User's accessibility to the fields
+	*/
+	function initImportableFields($module) {		
+		global $current_user;
+		require_once('include/utils/UserInfoUtil.php');
+		
+		$colf = getColumnFields($module);
+		foreach($colf as $key=>$value) {
+			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
+				$this->importable_fields[$key]=1;
+		}
+	}
 }
 ?>

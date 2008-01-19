@@ -259,10 +259,7 @@ class ImportOpportunity extends Potentials {
 		$this->db = new PearDatabase();
 
 		$this->db->println("IMP ImportOpportunity");
-		$colf = getColumnFields("Potentials");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
-		
+		$this->initImportableFields("Potentials");		
 		
 		$this->db->println($this->importable_fields);
 	}
