@@ -15,19 +15,14 @@ require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
 require_once('include/database/PearDatabase.php');
 
-global $app_strings;
-global $app_list_strings;
-global $mod_strings;
+global $app_strings, $app_list_strings, $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Reports');
 
-global $list_max_entries_per_page;
-global $urlPrefix;
+global $list_max_entries_per_page, $urlPrefix;
 
 $log = LoggerManager::getLogger('report_type');
 
-global $currentModule;
-global $image_path;
-global $theme;
+global $currentModule, $image_path, $theme;
 $report_group=new vtigerCRM_Smarty;
 $report_group->assign("MOD", $mod_strings);
 $report_group->assign("APP", $app_strings);
@@ -74,18 +69,15 @@ if(isset($_REQUEST["record"]))
 
 function getPrimaryColumns_GroupingHTML($module,$selected="")
 {
-        global $ogReport;
-	
-	global $app_list_strings;
-        global $current_language;
+        global $ogReport, $app_list_strings, $current_language;
 
         $mod_strings = return_module_language($current_language,$module);
 
         foreach($ogReport->module_list[$module] as $key=>$value)
         {
-            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-	    if(isset($ogReport->pri_module_columnslist[$module][$key]))
-	    {
+            if(isset($ogReport->pri_module_columnslist[$module][$key]))
+            {
+		$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 		{
 			if(isset($mod_strings[$fieldlabel]))
@@ -134,9 +126,10 @@ function getSecondaryColumns_GroupingHTML($module,$selected="")
                 $mod_strings = return_module_language($current_language,$secmodule[$i]);
 		foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
                 {
-                        $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+                        
 			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
-			{
+                        {
+                        	$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 				{
 					if(isset($mod_strings[$fieldlabel]))
