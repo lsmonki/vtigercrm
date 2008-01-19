@@ -47,8 +47,32 @@ $log->info("Convert Lead view");
 
 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
-$sales_stage_query="select * from vtiger_sales_stage";
-$sales_stage_result = $adb->pquery($sales_stage_query, array());
+$roleid=$current_user->roleid;
+$subrole = getRoleSubordinates($roleid);
+if(count($subrole)> 0)
+{
+	$roleids = $subrole;
+	array_push($roleids, $roleid);
+}
+else
+{
+	$roleids = $roleid;
+}
+if($is_admin || $sortid != '')
+{
+	$sales_stage_query="select distinct sales_stage from vtiger_sales_stage";
+	$params = array();
+}else
+{
+	if (count($roleids) > 0) {
+		$sales_stage_query="select distinct sales_stage from vtiger_sales_stage inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_sales_stage.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_sales_stage)";
+		$params = array($roleids);
+	} else {
+		$sales_stage_query="select distinct sales_stage from vtiger_sales_stage inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_sales_stage.picklist_valueid where picklistid in (select picklistid from vtiger_sales_stage)";
+		$params = array();
+	}
+}
+$sales_stage_result = $adb->pquery($sales_stage_query, $params);
 $noofsalesRows = $adb->num_rows($sales_stage_result);
 $sales_stage_fld = '';
 for($j = 0; $j < $noofsalesRows; $j++)
