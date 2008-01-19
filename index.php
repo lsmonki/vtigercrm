@@ -23,8 +23,13 @@ global $entityDel;
 global $display;
 global $category;
 
-require_once('include/utils/utils.php');
+if(version_compare(phpversion(), '5.0') < 0) {
+        insert_charset_header();
+        require_once('phpversionfail.php');
+        die();
+}
 
+require_once('include/utils/utils.php');
 
 if (version_compare(phpversion(), '5.0') < 0) {
     eval('
