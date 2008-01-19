@@ -81,7 +81,7 @@ function getInsertValues($type,$type_id)
 			$lead_column_name=$adb->query_result($lead_column_result,0,"columnname");
 			$lead_uitype=$adb->query_result($lead_column_result,0,"uitype");
 			$sql_leads_val="select $lead_column_name from vtiger_leadscf where leadid=?"; //custom vtiger_field value for lead
-			$lead_val_result = $adb->pquery($sql_leads_val, array($id));
+			$lead_val_result = $adb->pquery($sql_leads_val,array($id));
 			$lead_value=$adb->query_result($lead_val_result,0,$lead_column_name);
 			 $log->debug("Lead's custom vtiger_field value is ".$lead_value);
 		}	
@@ -130,7 +130,6 @@ function getInsertValues($type,$type_id)
 
 			//To construct the cf array
                         $ins_val = $adb->query_result($lead_val_result,0,$lead_column_name);
-			
 			if(isset($insert_value))
 				$insert_value.=",";
 			
@@ -182,7 +181,8 @@ function getInsertValues($type,$type_id)
 								$picklistId_qry = "select picklistid from vtiger_picklist where name=?";
 								$picklistId_res = $adb->pquery($picklistId_qry,array($tableName));
 								$picklist_Id = $adb->query_result($picklistId_res,0,'picklistid');
-								$role_qry = "select roleid from vtiger_role";
+								//While adding a new value into the picklist table, the roleid's which has permission for the lead cf will only given permission for contacts,potentials and account module while converting. -- refer ticket #4885 ---
+								$role_qry = "select roleid from vtiger_role2picklist where picklistvalueid in (select picklist_valueid from vtiger_$lead_column_name where $lead_column_name='".trim($val)."')";
 								$numOFRole=$adb->num_rows($adb->query($role_qry));
 								for($l=0;$l<$numOFRole;$l++)
 								{
