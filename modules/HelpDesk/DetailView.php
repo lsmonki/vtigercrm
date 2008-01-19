@@ -79,9 +79,6 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
 {
 	global $current_user;
         require("user_privileges/user_privileges_".$current_user->id.".php");
-        if($is_admin)
-                $smarty->assign("MERGEBUTTON","permitted");
-
         require_once('include/utils/UserInfoUtil.php');
         $wordTemplateResult = fetchWordTemplateList("HelpDesk");
         $tempCount = $adb->num_rows($wordTemplateResult);
@@ -91,6 +88,10 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
                 $optionString[$tempVal["templateid"]]=$tempVal["filename"];
                 $tempVal = $adb->fetch_array($wordTemplateResult);
         }
+	 if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
 	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
