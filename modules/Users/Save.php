@@ -171,7 +171,7 @@ $log->debug("Saved record with id of ".$return_id);
 
 //Asha: Added Check to see if the mode is User Creation and if yes, then sending the email notification to the User with Login details.
 if($_REQUEST['mode'] == 'create') {
-	global $app_strings, $mod_strings;
+	global $app_strings, $mod_strings, $default_charset;
 	require_once('modules/Emails/mail.php');
     $user_emailid = $focus->column_fields['email1'];	
 	
@@ -184,6 +184,7 @@ if($_REQUEST['mode'] == 'create') {
     $email_body .= $mod_strings['LBL_ROLE_NAME'] . " : " . getRoleName($_POST['user_role']) . "<br>";	
 	
 	$email_body .= "<br>" . $app_strings['MSG_THANKS'] . "<br>" . $current_user->user_name;
+	$email_body = htmlentities($email_body, ENT_QUOTES, $default_charset);
 	
 	$mail_status = send_mail('Users',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 	
