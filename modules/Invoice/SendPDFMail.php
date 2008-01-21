@@ -10,8 +10,8 @@
  ********************************************************************************/
 
 
-require_once('include/fpdf/pdf.php');
-require_once('include/fpdf/pdfconfig.php');
+require_once('include/tcpdf/pdf.php');
+require_once('include/tcpdf/pdfconfig.php');
 require_once('modules/Invoice/Invoice.php');
 require_once('include/database/PearDatabase.php');
 

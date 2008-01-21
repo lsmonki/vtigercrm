@@ -1732,9 +1732,11 @@ if(!class_exists('TCPDF', false)) {
 			global $fpdf_charwidths;
 
 			$family=strtolower($family);
-			if($family=='') {
+			if($family =='' && $this->FontFamily != '') {
 				$family=$this->FontFamily;
 			}
+			else
+				$family='freeserif';
 			if((!$this->isunicode) AND ($family == 'arial')) {
 				$family = 'helvetica';
 			}
