@@ -1253,7 +1253,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{	
 				$chk_val = '';
 			}
-			$options[] = array($pickListValue=>$chk_val );	
+			$options[] = array(getTranslatedString($pickListValue)=>$chk_val );	
 		}
 		$fieldvalue [] = $options;
 		$fieldvalue [] = $is_admin;
