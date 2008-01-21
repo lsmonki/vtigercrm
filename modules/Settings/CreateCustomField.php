@@ -64,6 +64,7 @@ $typeVal = Array(
 	'6'=>'Phone',
 	'7'=>'Picklist',
 	'8'=>'URL',
+	'9'=>'Checkbox',
 	'11'=>'MultiSelectCombo',
 	'12'=>'Skype');
 if(isset($fieldid) && $fieldid!='')
