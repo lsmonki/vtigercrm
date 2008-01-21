@@ -48,6 +48,7 @@
 							<input type="hidden" name="return_id" style="margin:0px">
 							<input type="hidden" name="forumDisplay" style="margin:0px">
                                                         <input type="hidden" name="hour_format" id="hour_format" value="{$HOUR_FORMAT}" style="margin:0px">
+                                                        <input type="hidden" name="start_hour" id="start_hour" value="{$START_HOUR}" style="margin:0px">
 							{if $CATEGORY eq 'Settings'}
 							<input type="hidden" name="parenttab" value="{$PARENTTAB}" style="margin:0px">
 							{/if}	

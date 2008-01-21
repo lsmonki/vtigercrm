@@ -86,6 +86,7 @@ function check_duplicate()
 		<input type="hidden" name="namedays" value="">			
 		<input type="hidden" name="weekstart" value="1">
 		<input type="hidden" name="hour_format" value="{$HOUR_FORMAT}">
+		<input type="hidden" name="start_hour" value="{$START_HOUR}">
 
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="settingsSelUITopLine">
 	<tr><td align="left">

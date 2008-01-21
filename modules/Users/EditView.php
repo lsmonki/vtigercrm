@@ -99,6 +99,7 @@ $smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->colum
 $smarty->assign("MODULE", 'Settings');
 $smarty->assign("MODE",$focus->mode);
 $smarty->assign("HOUR_FORMAT",$focus->hour_format);
+$smarty->assign("START_HOUR",$focus->start_hour);
 if ($_REQUEST['Edit'] == ' Edit ')
 {
 	$smarty->assign("READONLY", "readonly");
