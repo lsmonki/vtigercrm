@@ -34,6 +34,9 @@ require_once('config.php');
 
 global $default_charset;
 
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$randomfilename = "vt_" . str_replace(array("."," "), "", microtime());
+
 $templateid = $_REQUEST['mergefile'];
 
 if($templateid == "")
@@ -49,9 +52,11 @@ $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
 $filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$filename= $randomfilename . "_word.doc";
+
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
-
 
 $handle = fopen($wordtemplatedownloadpath.$filename,"wb");
 fwrite($handle,base64_decode($fileContent),$filesize);
@@ -234,7 +239,10 @@ $csvdata = implode($mergevalue,"###");
 	die("No fields to do Merge");
 }
 
-$handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
+// Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$datafilename = $randomfilename . "_data.csv";
+
+$handle = fopen($wordtemplatedownloadpath.$datafilename,"wb");
 fwrite($handle,$csvheader."\r\n");
 fwrite($handle,str_replace("###","\r\n",$csvdata));
 fclose($handle);
@@ -256,7 +264,7 @@ if (window.ActiveXObject){
         				if(objMMPage.Init())
         				{
         					objMMPage.vLTemplateDoc();
-        					objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/datasrc.csv");
+							objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/<?php echo $datafilename ?>");
         					objMMPage.vBulkOpenDoc();
         					objMMPage.UnInit()
         					window.history.back();

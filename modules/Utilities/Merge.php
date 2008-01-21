@@ -12,9 +12,9 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 global $default_charset;
-//echo 'id is ....... ' .$_REQUEST['record'];
 
-//echo 'merge file name is ...' .$_REQUEST['mergefile'];
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$randomfilename = "vt_" . str_replace(array("."," "), "", microtime());
 
 $mergeFileName = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
@@ -25,6 +25,9 @@ $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
 $filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$filename= $randomfilename . "_word.doc";
+
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$_SERVER['DOCUMENT_ROOT'] ."/test/wordtemplatedownload/";
 
