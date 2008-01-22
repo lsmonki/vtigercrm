@@ -828,7 +828,11 @@ function formValidate() {
 //Validation for Portal User
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
-	if(getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == ''))   {
+	//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
+	//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
+	if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
+	    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+	{
 		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
 		return false;
 	}
