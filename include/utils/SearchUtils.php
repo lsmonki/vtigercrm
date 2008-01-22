@@ -667,7 +667,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			else	
 				$where_string = "(".$searchfield." <> '".$searchstring."' or ".$searchfield." is null)";
 			if($searchstring == NULL)
-			$where_string = "(".$searchfield." not like '' or ".$searchfield." is not NULL)";
+			$where_string = "(".$searchfield." not like '' and ".$searchfield." is not NULL)";
 			break;
 			
 		case 'bwt':
