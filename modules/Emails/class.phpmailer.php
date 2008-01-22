@@ -1467,8 +1467,10 @@ class PHPMailer
      * @return string
      */
     function Lang($key) {
+    	require_once('config.inc.php');
+		global $default_language;
         if(count($this->language) < 1)
-            $this->SetLanguage("en"); // set the default language
+            $this->SetLanguage($default_language);
     
         if(isset($this->language[$key]))
             return $this->language[$key];
