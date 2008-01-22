@@ -115,7 +115,7 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 //Added to provide User based Tagcloud
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
-
+$smarty->assign("USER_MODE",$mode);
 $smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
 
 $smarty->display('UserEditView.tpl');

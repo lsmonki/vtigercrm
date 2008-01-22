@@ -719,7 +719,7 @@ class Users {
 			{
 				if($uitype == 56)
 				{
-					if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
+					if($this->column_fields[$fieldname] === 'on' || $this->column_fields[$fieldname] == 1)
 					{
 						$fldvalue = 1;
 					}

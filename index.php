@@ -200,7 +200,7 @@ if($use_current_login)
 	//End
 
 	//getting the internal_mailer flag
-	if($_SESSION['internal_mailer'] == '')
+	if(!isset($_SESSION['internal_mailer']))
 	{
 		$qry_res = $adb->pquery("select internal_mailer from vtiger_users where id=?", array($_SESSION["authenticated_user_id"]));
 		$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
