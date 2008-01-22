@@ -663,7 +663,7 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 
 function get_version($user_name, $password)
 {
-    return "5.0.4-rc";
+    return "5.0.4";
 }
 
 
