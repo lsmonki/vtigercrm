@@ -106,23 +106,15 @@ class ReportRun extends CRMEntity
 				// and if yes, get the label of this custom field freshly from the vtiger_field as it would have been changed.
 				// Asha - Reference ticket : #4906
 				if (stripos($selectedfields[1], 'cf_') === 0) {
-					$cf_columns = $adb->getColumnNames($tablename);
-					if (array_search($colname, $cf_columns) != null) {
+					$tbl_name = $selectedfields[0];
+					$cf_col_name = $selectedfields[1];
+					$cf_columns = $adb->getColumnNames($tbl_name);
+					if (array_search($cf_col_name, $cf_columns) != null) {
 						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ?";
-						$cf_res = $adb->pquery($pquery, array($tablename, $colname));
+						$cf_res = $adb->pquery($pquery, array($tbl_name, $cf_col_name));
 						if (count($cf_res) > 0){
 							$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
-							$new_field_label = $module. "_" . str_replace(" ","_",$cf_fld_label);
 							$header_label = $cf_fld_label;
-
-							if ($selectedfields[2] != $new_field_label) { 
-								$selectedfields[2] = $field = $new_field_label;
-								// Update the existing field name in the database with new field name.
-								$module_field = implode(":", $selectedfields);
-								$upd_query = "update vtiger_selectcolumn set columnname = ? where queryid=? and columnindex=?";
-								$upd_params = array($module_field, $columnslistrow["queryid"], $columnslistrow["columnindex"]);
-								$adb->pquery($upd_query, $upd_params);
-							}
 						}
 					}
 				}
@@ -2391,7 +2383,7 @@ class ReportRun extends CRMEntity
 			if($fieldcolname != "none")
 			{
 				$fieldlist = explode(":",$fieldcolname);
-			if((CheckFieldPermission($fieldlist[2],$premod) != "false") || (CheckFieldPermission($fieldlist[2],$secmod)) != "false")
+			if((CheckColumnPermission($fieldlist[1],$fieldlist[2],$premod) != "false") || (CheckColumnPermission($fieldlist[1],$fieldlist[2],$secmod)) != "false")
 			{
 				if($fieldlist[4] == 2)
 				{

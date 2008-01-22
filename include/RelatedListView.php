@@ -562,5 +562,14 @@ function CheckFieldPermission($fieldname,$module)
 	$permission = "true";
  }
  return $permission;
+}
+
+function CheckColumnPermission($tablename, $columnname, $module)
+{
+	global $adb;
+	
+	$res = $adb->pquery("select fieldname from vtiger_field where tablename=? and columnname=?", array($tablename, $columnname));
+	$fieldname = $adb->query_result($res, 0, 'fieldname');
+	return CheckFieldPermission($fieldname, $module);
 }	
 ?>
