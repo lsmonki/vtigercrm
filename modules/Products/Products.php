@@ -773,10 +773,6 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_products.productid 
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
-			LEFT JOIN vtiger_seproductsrel
-				ON vtiger_seproductsrel.productid = vtiger_products.productid
-			LEFT JOIN vtiger_producttaxrel
-				ON vtiger_producttaxrel.productid = vtiger_products.productid
 			INNER JOIN vtiger_users
 				ON vtiger_users.id=vtiger_crmentity.smownerid 
 
