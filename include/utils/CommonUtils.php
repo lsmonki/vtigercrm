@@ -568,7 +568,8 @@ function getFullNameFromQResult($result, $row_count, $module)
 				$name .= ' '.$firstname;
 			}
 	}
-    return $name;
+	$nam = textlength_check($name);
+    return $nam;
 }
 
 /**

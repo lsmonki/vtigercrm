@@ -313,7 +313,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			$entries[] = $created_date;
 			if($module == 'Notes')
 			{
-				$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.$row['title'].'</a>';
+				$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
 			}
 			elseif($module == 'uploads')
 			{
@@ -328,7 +328,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
 
 			if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
-				$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
+				$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.textlength_check($attachmentname).'</a>';
 			else
 				$entries[]='';
 
@@ -514,7 +514,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$field_name=$entity_id."_listprice";
 		
 		$entries = Array();
-		$entries[] = $adb->query_result($list_result,$i,"productname");
+		$entries[] = textlength_check($adb->query_result($list_result,$i,"productname"));
 		if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
 			$entries[] = $adb->query_result($list_result,$i,"productcode");
 		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')

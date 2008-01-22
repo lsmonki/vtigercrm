@@ -748,12 +748,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							}
 
 							if(($contact_name != "") && ($contact_id !='NULL'))
+							{
+							
 								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+							}
 						}
 						if($name == "First Name")
 						{
-							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$first_name = textlength_check($adb->query_result($list_result,$i-1,"firstname"));
+							
 							$value = '<a href="index.php?action=DetailView&module='.$module.'&parenttab='.$tabname.'&record='.$entity_id.'">'.$first_name.'</a>';
 
 						}
@@ -791,7 +795,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($module == 'Notes' && $name=='Related to')
 					{
-						$value=getRelatedTo($module,$list_result,$i-1);
+						$text_val = getRelatedTo($module,$list_result,$i-1);
+						$value=textlength_check($text_val);
 					}
 					//added for sorting by Contact Name ---------STARTS------------------
                                         elseif($name=='Contact Name' && ($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
@@ -811,7 +816,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                         }
 					elseif($name == 'Product')
 					{
-						$product_id = $adb->query_result($list_result,$i-1,"productname");
+						$product_id = textlength_check($adb->query_result($list_result,$i-1,"productname"));
 						$value =  $product_id;	
 					}
                                         //----------------------ENDS----------------------
@@ -823,13 +828,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
 							//$account_name = getAccountName($account_id);
-							$account_name = $adb->query_result($list_result,$i-1,"accountname");
+							$account_name = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 						elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
                                                 {
-							$accountname = $adb->query_result($list_result,$i-1,"accountname");
+							$accountname = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							$accountid = $adb->query_result($list_result,$i-1,"accountid");
 							//$accountid = getAccountId($accountname);
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
@@ -838,8 +843,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
+							$acc_name = textlength_check($account_name);
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$acc_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 					}
 					elseif(( $module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
@@ -854,19 +860,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						else
 							$product_name = '';
 
-						$value = '<a href="index.php?module=Products&action=DetailView&parenttab='.$tabname.'&record='.$product_id.'">'.$product_name.'</a>';
+						$value = '<a href="index.php?module=Products&action=DetailView&parenttab='.$tabname.'&record='.$product_id.'">'.textlength_check($product_name).'</a>';
 					}
 					elseif(($module == 'Quotes' && $name == 'Potential Name') || ($module == 'SalesOrder' && $name == 'Potential Name'))
 					{
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
 						$potential_name = getPotentialName($potential_id);
-						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.$potential_name.'</a>';
+						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.textlength_check($potential_name).'</a>';
 					}
 					elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent'))
 					{
 						$list_result_count = $i-1;
 						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
-						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.$tmp_value.'</a>';
+						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.textlength_check($tmp_value).'</a>';
 						if($name == 'Date Sent')
 						{
 							$sql="select email_flag from vtiger_emaildetails where emailid=?";
@@ -1102,19 +1108,19 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
-							$value = $account_name;
+							$value = textlength_check($account_name);
 						}
 						elseif($name=='Quote Name' && $module == 'SalesOrder')
 						{
 							$quote_id = $adb->query_result($list_result,$i-1,"quoteid");
 							$quotename = getQuoteName($quote_id);
-							$value = $quotename;
+							$value = textlength_check($quotename);
 						}
 						elseif($name == 'Account Name' && $module=='Contacts' )
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
-							$value = $account_name;
+							$value = textlength_check($account_name);
 						}
 						else
 						{
@@ -1173,14 +1179,16 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
-        if(strlen($field_val) > $listview_max_textlength)
-        {
+	$temp_val = textlength_check($field_val);
+
+	/*preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
+	if(strlen($field_val) > $listview_max_textlength)
+	{
 		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
-        }
+	}*/
 	if($uitype == 53)
 	{
-		$value = $adb->query_result($list_result,$list_result_count,'user_name');
+		$value = textlength_check($adb->query_result($list_result,$list_result_count,'user_name'));
 	}
 	elseif($uitype == 52) 
 	{        
@@ -1189,7 +1197,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 51)//Accounts - Member Of
 	{
 		$parentid = $adb->query_result($list_result,$list_result_count,"parentid");
-		$account_name = getAccountName($parentid);
+		$account_name = textlength_check(getAccountName($parentid));
 		$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>';
 
 	}
@@ -1247,6 +1255,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				$temp_val = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
 		}
 		$value = ($current_module_strings[$temp_val] != '') ? $current_module_strings[$temp_val] : (($app_strings[$temp_val] != '') ? ($app_strings[$temp_val]) : $temp_val);
+		if($value != "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>")
+		{
+			$value = textlength_check($value);
+		}
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
@@ -1457,7 +1469,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $quote_name = getQuoteName($temp_val);
-			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$quote_name.'</a>';
+			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($quote_name).'</a>';
 		}
 		else
 			$value='';
@@ -1468,7 +1480,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $purchaseorder_name = getPoName($temp_val);
-			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$purchaseorder_name.'</a>';
+			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($purchaseorder_name).'</a>';
 		}
 		else
 			$value='';
@@ -1479,7 +1491,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $salesorder_name = getSoName($temp_val);
-			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$salesorder_name.'</a>';
+			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($salesorder_name).'</a>';
 		}
 		else
 			$value='';
@@ -1491,14 +1503,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $vendor_name = getVendorName($temp_val);
-			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$vendor_name.'</a>';
+			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($vendor_name).'</a>';
 		}
 		else
 			$value='';
         }
 	elseif($uitype == 98)
 	{
-		$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab=Settings&roleid='.$temp_val.'">'.getRoleName($temp_val).'</a>';  
+		$value = '<a href="index.php?action=RoleDetailView&module=Settings&parenttab=Settings&roleid='.$temp_val.'">'.textlength_check(getRoleName($temp_val)).'</a>';  
 	}
 	elseif($uitype == 33)
 	{
@@ -1739,7 +1751,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
@@ -1786,7 +1798,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$slashes_name = popup_from_html($name);
 						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
 						$email_check = 1;
-						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.$name.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.',-1,"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name)	.'</a>';
 						
 					}
 						
@@ -2869,7 +2881,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=?";
                 $parent_result = $adb->pquery($parent_query, array($parent_id));
-                $parent_name = $adb->query_result($parent_result,0,"accountname");
+                $parent_name = textlength_check($adb->query_result($parent_result,0,"accountname"));
         }
         if($parent_module == 'Leads')
         {
@@ -2881,7 +2893,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=?";
                 $parent_result = $adb->pquery($parent_query, array($parent_id));
-                $parent_name = $adb->query_result($parent_result,0,"potentialname");
+                $parent_name = textlength_check($adb->query_result($parent_result,0,"potentialname"));
         }
         if($parent_module == 'Products')
         {
@@ -2924,20 +2936,20 @@ function getRelatedTo($module,$list_result,$rset)
 		$parent_query = "SELECT title FROM vtiger_troubletickets WHERE ticketid=?";
         $parent_result = $adb->pquery($parent_query, array($parent_id));
 		$parent_name = $adb->query_result($parent_result,0,"title");
-		if(strlen($parent_name) > 25)
-		{
-			$parent_name = substr($parent_name,0,25).'...';
-		}
+		//if(strlen($parent_name) > 25)
+		//{
+			$parent_name = textlength_check($parent_name);
+		//}
 	}
 	if($parent_module == 'Campaigns')
 	{
 		$parent_query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid=?";
         $parent_result = $adb->pquery($parent_query, array($parent_id));
 		$parent_name = $adb->query_result($parent_result,0,"campaignname");
-		if(strlen($parent_name) > 25)
-		{
-			$parent_name = substr($parent_name,0,25).'...';
-		}
+		//if(strlen($parent_name) > 25)
+		//{
+			$parent_name = textlength_check($parent_name);
+		//}
 	}
 
 	//added by rdhital for better emails - Raju
@@ -3714,5 +3726,16 @@ function popup_decode_html($str)
 	$slashes_str = htmlspecialchars($slashes_str,ENT_QUOTES,$default_charset);
 	return decode_html(br2nl($slashes_str));
 }
-	
+
+//function added to check the text length in the listview.
+function textlength_check($field_val)
+{
+	global $listview_max_textlength;
+	$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
+        if(strlen($field_val) > $listview_max_textlength)
+        {
+		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
+        }
+	return $temp_val;
+}
 ?>
