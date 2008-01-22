@@ -180,6 +180,8 @@ echo '<table width="95%"  border="0" align="center">
 		</tr>
 	</table>';
 
+//After applying all the DB Changes,Here we clear the Smarty cache files
+	clear_smarty_cache();
 
 //Function used to execute the query and display the success/failure of the query
 function ExecuteQuery($query)

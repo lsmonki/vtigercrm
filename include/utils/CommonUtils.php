@@ -569,7 +569,8 @@ function getFullNameFromQResult($result, $row_count, $module)
 			}
 	}
 	$nam = textlength_check($name);
-    return $nam;
+	
+	return $nam;
 }
 
 /**
@@ -3254,5 +3255,28 @@ function getBasic_Advance_SearchURL()
 	}
 	return $url;
 
+}
+
+/** Clear the Smarty cache files(in Smarty/smarty_c)
+ ** This function will called after migration.
+ **/
+function clear_smarty_cache() {
+
+	global $root_directory;
+	$path=$root_directory.'Smarty/templates_c/';
+	$mydir = opendir($path);
+	while(false !== ($file = readdir($mydir))) {
+		if($file != "." && $file != "..") {
+			//chmod($path.$file, 0777);
+			if(is_dir($path.$file)) {
+				chdir('.');
+				clear_smarty_cache($path.$file.'/');
+				rmdir($path.$file) or DIE("couldn't delete $path$file<br />");
+			}
+			else
+				unlink($path.$file) or DIE("couldn't delete $path$file<br />");
+		}
+	}
+	closedir($mydir);
 }
 ?>
