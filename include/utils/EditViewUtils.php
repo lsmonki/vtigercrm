@@ -39,7 +39,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 {
 	global $log,$app_strings;
 	$log->debug("Entering getOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $maxlength.",". $col_fields.",".$generatedtype.",".$module_name.") method ...");
-	global $adb,$log;
+	global $adb,$log,$default_charset;
 	global $theme;
 	global $mod_strings;
 	global $app_strings;
@@ -197,7 +197,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{	
 				$chk_val = '';
 			}
-			$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );	
+			if(isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate')
+				$options[] = array(htmlentities(getTranslatedString($pickListValue),ENT_QUOTES,$default_charset),$pickListValue,$chk_val );	
+			else
+				$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );
 		}
 		if($pickcount == 0 && $value != '')
 		{
