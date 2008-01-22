@@ -106,6 +106,23 @@ class PurchaseOrder extends CRMEntity {
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
 		}
+
+		//In Ajax edit, if the status changed to Received Shipment then we have to update the product stock
+		if($_REQUEST['action'] == 'PurchaseOrderAjax' && $this->update_prod_stock == 'true')
+		{
+			$inventory_res = $this->db->query("select productid, quantity from vtiger_inventoryproductrel where id=$this->id");
+			$noofproducts = $this->db->num_rows($inventory_res);
+
+			//We have to update the stock for all the products in this PO
+			for($prod_count=0;$prod_count<$noofproducts;$prod_count++)
+			{
+				$productid = $this->db->query_result($inventory_res,$prod_count,'productid');
+				$quantity = $this->db->query_result($inventory_res,$prod_count,'quantity');
+				$this->db->println("Stock is going to be updated for the productid - $productid with quantity - $quantity");
+
+				addToProductStock($productid,$quantity);
+			}
+		}
 	}	
 
 
