@@ -28,6 +28,7 @@ $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
 $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
+$focus->apply_field_security();
 $account_name = getAccountName($focus->column_fields[account_id]);
 
 // **************** BEGIN POPULATE DATA ********************

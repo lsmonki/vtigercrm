@@ -26,6 +26,7 @@ $endpage="1";
 
 $focus = new Quotes();
 $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
+$focus->apply_field_security();
 $account_name = getAccountName($focus->column_fields[account_id]);
 
 if($focus->column_fields["hdnTaxType"] == "individual") {

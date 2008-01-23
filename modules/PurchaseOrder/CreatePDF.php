@@ -27,6 +27,7 @@ $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
 $focus = new PurchaseOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"PurchaseOrder");
+$focus->apply_field_security();
 $vendor_name = getVendorName($focus->column_fields[vendor_id]);
 
 if($focus->column_fields["hdnTaxType"] == "individual") {

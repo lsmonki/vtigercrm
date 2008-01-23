@@ -29,6 +29,7 @@ $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
 $focus = new Invoice();
 $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");
+$focus->apply_field_security();
 $account_name = getAccountName($focus->column_fields[account_id]);
 $invoice_no = $focus->column_fields[invoice_no];
 
