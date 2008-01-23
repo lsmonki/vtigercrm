@@ -38,6 +38,17 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>vtiger CRM 5 - Configuration Wizard - Finish</title>
 
+<script type="text/javascript">
+function showhidediv()
+{
+	var div_style = document.getElementById("htaccess_div").style.display;
+	if(div_style == "inline")
+		document.getElementById("htaccess_div").style.display = "none";
+	else
+		document.getElementById("htaccess_div").style.display = "inline";
+		
+}
+</script>
 
 <link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -142,7 +153,17 @@ if(!@rename("install/", $renamefile."install/"))
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
 			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server
-			<li>Rename htaccess.txt file to .htaccess to control public file access.
+			</ul>
+			<ul>
+			<li>Rename htaccess.txt file to .htaccess to control public file access. &nbsp;
+			   <a href="javascript:;" onclick="showhidediv();">More Info</a>
+			   <div id='htaccess_div' style="display:none">
+				<br><br>This .htaccess file will work if "<b>AllowOverride All</b>" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.
+			       	<br>If this AllowOverride is set as None ie., "<b>AllowOverride None</b>" then .htaccess file will not take into effect. 
+				<br><br>If AllowOverride is None then add the following configuration in the apache server configuration file (httpd.conf) 
+				<br><b>&lt;Directory "C:/Program Files/vtigercrm/apache/htdocs/vtigerCRM"&gt;<br>Options -Indexes<br>&lt;/Directory&gt;</b>
+				<br>So that without .htaccess file we can restrict the directory listing
+			   </div>
 			</ul>
 			<ul>
 			<li><b><font color='#0000FF'>You are very important to us!</font></b>
