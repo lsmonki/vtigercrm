@@ -184,6 +184,7 @@ function addColumnStep1()
 {
 	//the below line is added for report not woking properly in browser IE7 --bharath
 	document.getElementById("selectedColumns").style.width="164px";
+	
 	if (availListObj.options.selectedIndex > -1)
 	{
 		for (i=0;i<availListObj.length;i++) 
@@ -223,11 +224,25 @@ function addColumnStep1()
 //this function is done for checking,whether the user has access to edit the field :Bharath
 function selectedColumnClick(oSel)
 {
-	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
+	var error_msg = '';
+	var error_str = false;
+	if(oSel.selectedIndex > -1) {
+                for(var i = 0; i < oSel.options.length; ++i) {
+                        if(oSel.options[i].selected == true && oSel.options[i].disabled == true) {
+                                error_msg = error_msg + oSel.options[i].text+',';
+				error_str = true;
+                                oSel.options[i].selected = false;
+                        }
+                }
+        }
+	if(error_str)
 	{
-		alert(alert_arr.NOT_ALLOWED_TO_EDIT);
-		oSel.options[oSel.selectedIndex].selected = false;	
+		error_msg = error_msg.substr(0,error_msg.length-1);
+		alert(alert_arr.NOT_ALLOWED_TO_EDIT_FIELDS+"\n"+error_msg);
+		return false;
 	}
+	else
+		return true;
 }
 function delColumn() 
 {

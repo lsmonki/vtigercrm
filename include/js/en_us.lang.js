@@ -18,6 +18,7 @@
                                 OVERWRITE_EXISTING_ACCOUNT2:') address details?',
                                 MISSING_FIELDS:'Missing required fields:',
                                 NOT_ALLOWED_TO_EDIT:'you are not allowed to edit this field',
+                                NOT_ALLOWED_TO_EDIT_FIELDS:'you are not allowed to edit the field(s)',
                                 COLUMNS_CANNOT_BE_EMPTY:'Selected Columns cannot be empty',
                                 CANNOT_BE_EMPTY:' cannot be empty',
                                 CANNOT_BE_NONE:' cannot be none',
