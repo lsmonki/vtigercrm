@@ -22,12 +22,6 @@ $accessDenied = "You are not authorized for performing this action";
 $server->configureWSDL('vtigersoap');
 
 $server->register(
-    'get_version',
-      array('user_name'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'xsd:string'),
-       $NAMESPACE);
-
-$server->register(
 	'create_lead_from_webform',
 	array('username'=>'xsd:string', 
 		'lastname'=>'xsd:string',
@@ -658,15 +652,6 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 	}
 
 }
-
-
-
-function get_version($user_name, $password)
-{
-    return "5.0.4";
-}
-
-
 
 function create_lead_from_webform($username,$lastname,$email,$phone,$company,$country,$description,$firstname)
 {
