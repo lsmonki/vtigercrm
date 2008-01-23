@@ -10,15 +10,20 @@
 ********************************************************************************/
 
 
-//5.0.3 to 5.0.4 database changes - added on 16-01-08
+//5.0.4 RC to 5.0.4 database changes
+
 //we have to use the current object (stored in PatchApply.php) to execute the queries
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Starts \n\n");
 
-//Added by Asha for #4889 - Increased the size of salution field for Leads module
+//Increased the size of salution field for Leads module
 ExecuteQuery("alter table vtiger_leaddetails modify column salutation varchar(50)");
+
+//Added to handle the crypt_type in users table. From 5.0.4 onwards the default crypt type will be MD5. But for existing users crypt type will be empty untill they change their password. Once the existing users change the password then their crypt type will be set as MD5
+ExecuteQuery("alter table vtiger_users add column crypt_type varchar(20) not null default 'MD5'");
+ExecuteQuery("update vtiger_users set crypt_type=''");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 

@@ -151,6 +151,8 @@ class Users {
 	var $record_id;
 	var $new_schema = true;
 
+	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'MD5';
+
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
   	  *
@@ -261,10 +263,24 @@ class Users {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function encrypt_password($user_password)
+	function encrypt_password($user_password, $crypt_type='')
 	{
 		// encrypt the password.
 		$salt = substr($this->column_fields["user_name"], 0, 2);
+
+		// Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4923
+		if($crypt_type == '') {
+			// Try to get the crypt_type which is in database for the user
+			$crypt_type = $this->get_user_crypt_type();
+		}
+
+		// For more details on salt format look at: http://in.php.net/crypt
+		if($crypt_type == 'MD5') {
+			$salt = '$1$' . $salt . '$';
+		} else if($crypt_type == 'BLOWFISH') {
+			$salt = '$2$' . $salt . '$';
+		}
+
 		$encrypted_password = crypt($user_password, $salt);	
 
 		return $encrypted_password;
@@ -399,7 +415,6 @@ class Users {
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f', '866bba5ae0a15180e8613d33b0acc6bd') == -1)$validation = -1;
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvcG93ZXJlZF9ieV9zdWdhcmNybS5naWY=' , '3d49c9768de467925daabf242fe93cce') == -1)$validation = -1;
 		if($this->authorization_check('aW5kZXgucGhw' , 'PEEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nIHRhcmdldD0nX2JsYW5rJz48aW1nIGJvcmRlcj0nMCcgc3JjPSdpbmNsdWRlL2ltYWdlcy9wb3dlcmVkX2J5X3N1Z2FyY3JtLmdpZicgYWx0PSdQb3dlcmVkIEJ5IFN1Z2FyQ1JNJz48L2E+', 1) == -1)$validation = -1;
-		$encrypted_password = $this->encrypt_password($user_password);
 
 		$authCheck = false;
 		$authCheck = $this->doLogin($user_password);
@@ -410,10 +425,10 @@ class Users {
 			return null;
 		}
 
+		// Get the fields for the user
 		$query = "SELECT * from $this->table_name where user_name='$usr_name'";
 		$result = $this->db->requireSingleResult($query, false);
 
-		// Get the fields for the user
 		$row = $this->db->fetchByAssoc($result);
 		$this->id = $row['id'];	
 
@@ -433,8 +448,41 @@ class Users {
 
 		unset($_SESSION['loginattempts']);
 		return $this;
-	}		
+	}
 
+	/**
+	 * Get crypt type to use for password for the user.
+	 * Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4923
+	 */
+	function get_user_crypt_type() {
+		
+		$crypt_res = null;
+		$crypt_type = '';
+
+		// For backward compatability, we need to make sure to handle this case.
+		global $adb;
+		$table_cols = $adb->getColumnNames("vtiger_users");
+		if(!in_array("crypt_type", $table_cols)) {
+			return $crypt_type;
+		}
+
+		if(isset($this->id)) {
+			// Get the type of crypt used on password before actual comparision
+			$qcrypt_sql = "SELECT crypt_type from $this->table_name where id=?";
+			$crypt_res = $this->db->pquery($qcrypt_sql, array($this->id), true);		
+		} else if(isset($this->column_fields["user_name"])) {
+			$qcrypt_sql = "SELECT crypt_type from $this->table_name where user_name=?";
+			$crypt_res = $this->db->pquery($qcrypt_sql, array($this->column_fields["user_name"]));
+		} else {
+			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
+		}
+
+		if($crypt_res) {
+			$crypt_row = $this->db->fetchByAssoc($crypt_res);
+			$crypt_type = $crypt_row['crypt_type'];
+		}
+		return $crypt_type;
+	}
 
 	/**
 	 * @param string $user name - Must be non null and at least 1 character.
@@ -460,7 +508,6 @@ class Users {
 		}
 
 		$encrypted_password = $this->encrypt_password($user_password);
-		$encrypted_new_password = $this->encrypt_password($new_password);
 
 		if (!is_admin($current_user)) {
 			//check old password first
@@ -482,8 +529,11 @@ class Users {
 		$user_hash = strtolower(md5($new_password));
 
 		//set new password
-		$query = "UPDATE $this->table_name SET user_password=?, user_hash=? where id=?";
-		$this->db->pquery($query, array($encrypted_new_password, $user_hash, $this->id), true, "Error setting new password for $usr_name: ");	
+		$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
+		$encrypted_new_password = $this->encrypt_password($new_password, $crypt_type);
+
+		$query = "UPDATE $this->table_name SET user_password=?, user_hash=?, crypt_type=? where id=?";
+		$this->db->pquery($query, array($encrypted_new_password, $user_hash, $crypt_type, $this->id), true, "Error setting new password for $usr_name: ");	
 		return true;
 	}
 	 
@@ -628,10 +678,7 @@ class Users {
 		}
 		$this->id = $userid;
 		return $this;
-
 	}
-
-
 
 	/** Function to save the user information into the database
   	  * @param $module -- module name:: Type varchar
@@ -671,7 +718,7 @@ class Users {
 		$log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 		global $adb;
 		$insertion_mode = $this->mode;
-
+		
 		//Checkin whether an entry is already is present in the vtiger_table to update
 		if($insertion_mode == 'edit')
 		{
@@ -683,8 +730,11 @@ class Users {
 			if($num_rows <= 0)
 			{
 				$insertion_mode = '';
-			}	 
+			}
 		}
+
+		// We will set the crypt_type based on the insertion_mode
+		$crypt_type = '';
 
 		if($insertion_mode == 'edit')
 		{
@@ -706,6 +756,8 @@ class Users {
 			$tabid= getTabid($module);	
 			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
 			$params = array($tabid, $table_name);
+
+			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
 		}
 
 		$result = $this->db->pquery($sql, $params);
@@ -749,7 +801,7 @@ class Users {
 				}
 				elseif($uitype == 99)
 				{
-					$fldvalue = $this->encrypt_password($this->column_fields[$fieldname]);
+					$fldvalue = $this->encrypt_password($this->column_fields[$fieldname], $crypt_type);
 				}
 				else
 				{
@@ -788,10 +840,6 @@ class Users {
 			}
 
 		}
-
-
-
-
 
 		if($insertion_mode == 'edit')
 		{

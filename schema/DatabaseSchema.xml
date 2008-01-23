@@ -89,6 +89,12 @@
 			<notnull />
 			<default value="1" />
 		</field>
+
+		<field name="crypt_type" type="C" size="20">
+			<notnull />
+			<default value="MD5" />
+		</field>
+
 		<index name="user_user_name_idx">
 			<col>user_name</col>
 		</index>
