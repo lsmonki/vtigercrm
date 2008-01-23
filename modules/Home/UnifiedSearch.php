@@ -165,7 +165,7 @@ else {
 function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
-
+	$search_val = mysql_real_escape_string($search_val);
 	$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ?";
 	$result = $adb->pquery($query, array(getTabid($module)));
 	$noofrows = $adb->num_rows($result);

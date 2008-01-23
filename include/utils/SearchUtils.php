@@ -259,6 +259,10 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 	global $log;
 	$log->debug("Entering getValuesforColumns(".$column_name.",".$search_string.") method ...");
 	global $column_array,$table_col_array;
+
+	if($_REQUEST['type'] == "entchar")
+		$criteria = "is";
+
 	for($i=0; $i<count($column_array);$i++)
 	{
 		if($column_name == $column_array[$i])
@@ -412,12 +416,13 @@ function BasicSearch($module,$search_field,$search_string)
 		else
 			$where = "(".$where_cond0." or ".$where_cond1.")";
 	}
-	if($_REQUEST['type'] == 'entchar')
+	// commented to support searching "%" with the search string.
+	/*if($_REQUEST['type'] == 'entchar')
 	{
 		$search = array('Un Assigned','%','like');
 		$replace = array('','','=');
 		$where= str_replace($search,$replace,$where);
-	}
+	}*/
 	if($_REQUEST['type'] == 'alpbt')
 	{
 	        $where = str_replace_once("%", "", $where);

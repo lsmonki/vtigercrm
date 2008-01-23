@@ -142,7 +142,7 @@ function callSearch(searchtype)
     	{rdelim}
     	gPopupAlphaSearchUrl = '';
 	search_fld_val= $('bas_searchfield').options[$('bas_searchfield').selectedIndex].value;
-	search_txt_val= encodeURIComponent((document.basicSearch.search_text.value.replace(/\\/,"\\\\")).replace(/\'/,"\\'"))
+	search_txt_val= encodeURIComponent(document.basicSearch.search_text.value);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
@@ -161,15 +161,7 @@ function callSearch(searchtype)
                         var p_tab = document.getElementsByName("parenttab");
                         urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-			urlstring = urlstring+'Srch_value'+jj+'=';
-			if(scndn_name[scndn_name.selectedIndex].value != 'is')
-                        {ldelim}
-                        urlstring+=encodeURIComponent((srchvalue_name.value.replace(/\\/,"\\\\")).replace(/\'/,"\\'"))+'&';
-                        {rdelim}
-                        else
-                        {ldelim}
-                        urlstring+=encodeURIComponent(srchvalue_name.value)+'&';
-                        {rdelim}
+			urlstring = urlstring+'Srch_value'+jj+'='+encodeURIComponent(srchvalue_name.value)+'&';
                         urlstring = urlstring + 'parenttab='+p_tab[0].value+ '&';
                 {rdelim}
                 for (i=0;i<getObj("matchtype").length;i++){ldelim}

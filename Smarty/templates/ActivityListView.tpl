@@ -142,7 +142,7 @@ function callSearch(searchtype)
     	{rdelim}
    	gPopupAlphaSearchUrl = '';
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-	search_txt_val=encodeURIComponent((document.basicSearch.search_text.value.replace(/\\/,"\\"+"\\")).replace(/\'/,"\\'"));
+	search_txt_val=encodeURIComponent(document.basicSearch.search_text.value);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
@@ -158,15 +158,7 @@ function callSearch(searchtype)
                         var srchvalue_name = getObj("Srch_value"+jj);
                         urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-                        urlstring = urlstring+'Srch_value'+jj+'=';
-			if(scndn_name[scndn_name.selectedIndex].value != 'is')
-                        {ldelim}
-                        urlstring+=encodeURIComponent((srchvalue_name.value.replace(/\\/,"\\\\")).replace(/\'/,"\\'"))+'&';
-                        {rdelim}
-                        else
-                        {ldelim}
-                        urlstring+=encodeURIComponent(srchvalue_name.value)+'&';
-                        {rdelim}
+                        urlstring = urlstring+'Srch_value'+jj+'='+encodeURIComponent(srchvalue_name.value)+'&';
 
                 {rdelim}
                 for (i=0;i<getObj("matchtype").length;i++){ldelim}

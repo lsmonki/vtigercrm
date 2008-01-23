@@ -126,7 +126,10 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					        $mod_count_array[$mod_name]=$row['qtyinstock'];
 				}
 			}
-			array_push($search_str_array,$search_str); 
+			if (in_array($search_str,$search_str_array) == false)
+			{
+				array_push($search_str_array,$search_str); 
+			}	
 
 			//Counting the number of values for a type of graph
 			if($graph_for == "productname")
@@ -322,6 +325,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					}	
 				}
 				//Passing name to graph
+				$mod_name = str_replace(":", "&#58;", $mod_name);
 				if($mod_name_val!="") $mod_name_val.="::$mod_name";
 				else $mod_name_val="$mod_name";
 
@@ -350,13 +354,15 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					else if($module == "Contacts" || ($module=="Products" && ($graph_for == "quoteid" || $graph_for == "invoiceid" || $graph_for == "purchaseorderid")))
 						$link_val="index.php?module=".$module."&action=ListView&from_dashboard=true&type=dbrd&query=true&".$graph_for."=".$id_name."&viewname=".$cvid;
 					else {
-						$esc_search_str = htmlentities($search_str, ENT_QUOTES, $default_charset);
+						$esc_search_str = urlencode($search_str);
+						//$esc_search_str = htmlentities($search_str, ENT_QUOTES, $default_charset);
 						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$esc_search_str."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
 					     }	
 
 					if($graph_for == "account_id") $graph_for = "accountid";
 
 					//Adding the links to the graph	
+					$link_val = str_replace(':', '&#58;', $link_val);
 					if($i==0)
 						$bar_target_val .=$link_val;
 					else

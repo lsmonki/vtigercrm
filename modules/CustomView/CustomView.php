@@ -1331,6 +1331,7 @@ class CustomView extends CRMEntity{
 	
 		global $adb, $default_charset;
                 $value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
+		$value = mysql_real_escape_string($value);
 		if($comparator == "e")
 		{
 			if(trim($value) == "NULL")

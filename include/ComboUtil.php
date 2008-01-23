@@ -25,14 +25,25 @@ function getComboArray($combofieldNames)
 	{
 		$fldArrName= $arrayName;
 		$arrayName = Array();
-		if(is_admin($current_user))
+		
+		$sql = "select $tableName from vtiger_$tableName";
+		$params = array();
+		if(!$is_admin)
 		{
-			$result = $adb->pquery("select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid and picklistid in (select picklistid from vtiger_$tableName) and presence=1 order by sortid", array());
+			$subrole = getRoleSubordinates($roleid);
+			if(count($subrole)> 0)
+			{
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+			}
+			else
+			{
+				$roleids = $roleid;
+			}
+			$sql = "select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid in(". generateQuestionMarks($roleids) .") order by sortid";
+			$params = array($roleids);
 		}
-		else
-		{
-			$result = $adb->pquery("select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_$tableName) and presence=1 order by sortid", array($roleid));
-		}	
+		$result = $adb->pquery($sql, $params);	
 		while($row = $adb->fetch_array($result))
 		{
 			$val = $row[$tableName];
