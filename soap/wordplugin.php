@@ -370,7 +370,6 @@ function end_session($user_name)
  
 
 
-
-$server->service(utf8_encode($HTTP_RAW_POST_DATA)); 
+$server->service($HTTP_RAW_POST_DATA);
 exit(); 
 ?>
