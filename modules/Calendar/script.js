@@ -543,13 +543,15 @@ function incUser(avail_users,sel_users)
 	{
 		if (availListObj.options[i].selected==true) 
 		{
+			var rowFound = false;
+			var existingObj = null;
 			for (j=0;j<selectedColumnsObj.length;j++) 
 			{
 				if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
 				{
-					var rowFound=true
-						var existingObj=selectedColumnsObj.options[j]
-						break
+					rowFound=true;
+					existingObj=selectedColumnsObj.options[j]
+					break
 				}
 			}
 			if (rowFound!=true) 
@@ -565,7 +567,7 @@ function incUser(avail_users,sel_users)
 			}
 			else 
 			{
-				existingObj.selected=true
+				if (existingObj != null) existingObj.selected=true
 			}
 		}
 	}
