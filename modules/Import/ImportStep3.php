@@ -196,6 +196,13 @@ $datarows = $ret_value['rows'];
 
 $ret_field_count = $ret_value['field_count'];
 
+//we have to get all picklist entries and add with the corresponding picklist table
+if(isset($datarows) && is_array($datarows))
+{
+        //This file will be included only once at the first time. Will not be included when we redirect from ImportSave
+        include("modules/Import/picklist_addition.php");
+}
+
 $saved_ids = array();
 
 $firstrow = 0;

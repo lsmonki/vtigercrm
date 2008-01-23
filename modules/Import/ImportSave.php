@@ -78,7 +78,15 @@ foreach ($rows1 as $row)
 			// TODO: add check for user input
 			// addslashes, striptags, etc..
 			$field = $col_pos_to_field[$field_count];
-			if (substr(trim($field), 0, 3) == "CF_") 
+
+			//picklist function is added to avoid duplicate picklist entries
+			$pick_orginal_val = getPicklist($field,$row[$field_count]);
+
+			if($pick_orginal_val != null)
+			{
+				$focus->column_fields[$field]=$pick_orginal_val;
+			}
+			elseif (substr(trim($field), 0, 3) == "CF_") 
         		{
 				p("setting custfld".$field."=".$row[$field_count]);
 				$resCustFldArray[$field] = $row[$field_count]; 
