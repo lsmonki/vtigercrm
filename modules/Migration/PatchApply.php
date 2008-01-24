@@ -9,6 +9,9 @@
  *
 ********************************************************************************/
 
+ini_set("memory_limit","32M");
+set_time_limit(600);
+
 global $current_user;
 if($current_user->is_admin != 'on')
 {
