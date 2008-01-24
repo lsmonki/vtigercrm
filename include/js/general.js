@@ -1985,7 +1985,7 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
-      var fieldvalue = getObj(fieldname).value;
+      var fieldvalue = encodeURIComponent(getObj(fieldname).value);
 	if(fieldvalue == '')
 	{
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
