@@ -36,7 +36,8 @@ $strDescription = $_REQUEST['txtDescription'];
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
-  $filename = basename($binFile);
+  //$filename = basename($binFile);
+  $filename = ltrim(basename(" ".$binFile)); //allowed filenames start with UTF-8 characters 
   $filetype= $_FILES['binFile']['type'];
   $filesize = $_FILES['binFile']['size'];
 
