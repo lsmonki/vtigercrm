@@ -151,8 +151,12 @@ class Products extends CRMEntity {
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
-			{
-				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+			{       
+			      if($_REQUEST[$fileindex.'_hidden'] != '')	
+				      $files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+			      else
+				      $files['original_name'] = stripslashes($files['name']);
+			      $files['original_name'] = str_replace('"','',$files['original_name']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}

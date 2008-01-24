@@ -460,12 +460,12 @@
 					<input name="del_file_list" type="hidden" value="">
 					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						<input id="my_file_element" type="file" name="file_1" tabindex="{$vt_tab}"  onchange="validateFilename(this)"/>
-						<input type="hidden" name="file_1_hidden" value=""/>
+						<!--input type="hidden" name="file_1_hidden" value=""/-->
 						{assign var=image_count value=0}
 						{if $maindata[3].0.name neq '' && $DUPLICATE neq 'true'}
 						   {foreach name=image_loop key=num item=image_details from=$maindata[3]}
 							<div align="center">
-								<img src="{$image_details.path}{$image_details.name}" height="50">&nbsp;&nbsp;[{$image_details.name}]<input id="file_{$num}" value="Delete" type="button" class="crmbutton small delete" onclick='this.parentNode.parentNode.removeChild(this.parentNode);delRowEmt("{$image_details.name}")'>
+								<img src="{$image_details.path}{$image_details.name}" height="50">&nbsp;&nbsp;[{$image_details.orgname}]<input id="file_{$num}" value="Delete" type="button" class="crmbutton small delete" onclick='this.parentNode.parentNode.removeChild(this.parentNode);delRowEmt("{$image_details.orgname}")'>
 							</div>
 					   	   {assign var=image_count value=$smarty.foreach.image_loop.iteration}
 					   	   {/foreach}
@@ -485,7 +485,7 @@
 					<input type="hidden" name="id" value=""/>
 					{ if $maindata[3].0.name != "" && $DUPLICATE neq 'true'}
 						
-				<div id="replaceimage">[{$maindata[3].0.name}] <a href="javascript:;" onClick="delimage({$ID})">Del</a></div>
+				<div id="replaceimage">[{$maindata[3].0.orgname}] <a href="javascript:;" onClick="delimage({$ID})">Del</a></div>
 					{/if}
 					
 				{/if}

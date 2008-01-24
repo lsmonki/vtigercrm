@@ -628,12 +628,16 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$images=array();
 			$query = 'select productname, vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name,vtiger_crmentity.setype from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.setype="Products Image" and productid=?';
-            $result_image = $adb->pquery($query, array($col_fields['record_id']));
+			$result_image = $adb->pquery($query, array($col_fields['record_id']));
 			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 			{
 				$image_id_array[] = $adb->query_result($result_image,$image_iter,'attachmentsid');
-				//Handle for allowed name like UTF-8 Character
-				$image_array[] = decode_html($adb->query_result($result_image,$image_iter,'name'));	
+
+				//decode_html  - added to handle UTF-8   characters in file names
+				//urlencode    - added to handle special characters like #, %, etc.,
+				$image_array[] = urlencode(decode_html($adb->query_result($result_image,$image_iter,'name')));	
+				$image_orgname_array[] = decode_html($adb->query_result($result_image,$image_iter,'name'));	
+
 				$imagepath_array[] = $adb->query_result($result_image,$image_iter,'path');	
 			}
 			if(count($image_array)>1)
@@ -655,7 +659,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$label_fld[] =$image_lists;
 			}elseif(count($image_array)==1)
 			{
-				list($pro_image_width, $pro_image_height) = getimagesize($imagepath_array[0].$image_id_array[0]."_".$image_array[0]);
+				list($pro_image_width, $pro_image_height) = getimagesize($imagepath_array[0].$image_id_array[0]."_".$image_orgname_array[0]);
 				if($pro_image_width  > 450 ||  $pro_image_height > 300)
 					$label_fld[] ='<img src="'.$imagepath_array[0].$image_id_array[0]."_".$image_array[0].'" border="0" width="450" height="300">';
 				else
@@ -673,7 +677,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$image_res = $adb->pquery($sql, array($col_fields['record_id']));
 			$image_id = $adb->query_result($image_res,0,'attachmentsid');
 			$image_path = $adb->query_result($image_res,0,'path');
-			$image_name = $adb->query_result($image_res,0,'name');
+
+
+			//decode_html  - added to handle UTF-8   characters in file names
+			//urlencode    - added to handle special characters like #, %, etc.,
+			$image_name = urlencode(decode_html($adb->query_result($image_res,0,'name')));
+
 			$imgpath = $image_path.$image_id."_".$image_name;
 			if($image_name != '')
 				$label_fld[] ='<img src="'.$imgpath.'" alt="'.$mod_strings['Contact Image'].'" title= "'.$mod_strings['Contact Image'].'">';
