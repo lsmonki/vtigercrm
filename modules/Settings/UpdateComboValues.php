@@ -24,7 +24,7 @@ $picklistid = $adb->query_result($adb->pquery($sql, array($tableName)),0,'pickli
 
 //Deleting the already existing values
 
-if($uitype == 111 || $uitype=16)
+if($uitype == 111 || $uitype == 16)
 {
 	$qry="select roleid,picklistvalueid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=? and presence=1";
 	$res = $adb->pquery($qry, array($roleid, $picklistid));
