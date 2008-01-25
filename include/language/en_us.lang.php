@@ -1077,7 +1077,7 @@ $app_strings = array (
 //Added for Notification
 'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
 'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
-
+'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
 );
 
 $app_list_strings = array (

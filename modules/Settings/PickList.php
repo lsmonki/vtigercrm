@@ -35,6 +35,11 @@ $smarty->assign("MODULE_LISTS",getPickListModules());
 $smarty->assign("ROLE_LISTS",getrole2picklist());
 
 $picklists_entries = getUserFldArray($fld_module,$roleid);
+
+$available_module_picklist = get_available_module_picklist($picklists_entries);
+$smarty->assign("ALL_LISTS",$available_module_picklist);
+
+
 if((sizeof($picklists_entries) %3) != 0)
 	$value = (sizeof($picklists_entries) + 3 - (sizeof($picklists_entries))%3); 
 else
@@ -123,7 +128,7 @@ function getUserFldArray($fld_module,$roleid)
 function getPickListValues($tablename,$roleid)
 {
 	global $adb;
-	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_$tablename) order by sortid";
+	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";
 	$result = $adb->pquery($query, array($roleid));
 	$fldVal = Array();
 	while($row = $adb->fetch_array($result))
@@ -158,5 +163,14 @@ function getrole2picklist()
 	}
 	return $role;
 
+}
+function get_available_module_picklist($picklist_details)
+{
+	$avail_pick_values = $picklist_details;
+	foreach($avail_pick_values as $key => $val)
+	{
+		$module_pick[$avail_pick_values[$key]['fieldname']] = $avail_pick_values[$key]['fieldlabel'];
+	}
+	return $module_pick;	
 }
 ?>

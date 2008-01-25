@@ -152,5 +152,7 @@
 				LBL_NOT_ACCESSIBLE : 'Not Accessible',
 				LBL_FILENAME_LENGTH_EXCEED_ERR: 'Filename cannot exceed 255 characters',
 				LBL_DONT_HAVE_EMAIL_PERMISSION : "You don't have permission for Email field so you can't choose the email id",
-				LBL_NO_FEEDS_SELECTED: 'No Feeds Selected'
+				LBL_NO_FEEDS_SELECTED: 'No Feeds Selected',
+				LBL_SELECT_PICKLIST:'Please select atleast one value to delete',
+				LBL_CANT_REMOVE:'You can\'t remove all the values'
                        };

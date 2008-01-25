@@ -148,6 +148,7 @@ function validate() {
 				</td>
 
                       </tr>
+		      
 					</table>
 					<br>
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
@@ -185,8 +186,12 @@ function validate() {
 </tbody>
 </table>
 <div id="editdiv" style="display:block;position:absolute;width:510px;"></div>
+<div id="deletediv"  style="display:block;position:absolute;"></div>
+<div id="transferdiv"  style="display:block;position:absolute;width:300px;z-index:50000000"></div>
 {literal}
 <script>
+
+var selected_values='';
 function SavePickList(fieldname,module,uitype)
 {
 	var oRolePick = $('pickid');
@@ -293,6 +298,126 @@ function picklist_validate(mode,fieldname,module,uitype)
 		}
 	}
 	SavePickList(fieldname,module,uitype)	
+}
+function pickListDelete(mod)
+{
+
+	var oDelPick = $('allpick');
+	var fld_name=oDelPick.options[oDelPick.selectedIndex].value;
+	var fld_label=oDelPick.options[oDelPick.selectedIndex].text;
+	
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=delete&file=DeletePickList&fld_module='+mod+'&fieldname='+fld_name+'&fieldlabel='+fld_label,
+			onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("deletediv").style.display ='block';
+                                        $("deletediv").innerHTML=response.responseText;
+					//Effect.Grow('deletediv');
+                	}
+                }
+        );
+
+
+}
+function delPickList(obj,module)
+{
+	var oDelPick = $('allpick');
+	var fld_name=oDelPick.options[oDelPick.selectedIndex].value;
+	var fld_label=oDelPick.options[oDelPick.selectedIndex].text;
+	var oAvlPick = $('availPickList');
+	var selectedColStr = "";
+	var val_count=0;
+	var xPos = findPosX(obj);
+	var yPos = findPosX 	
+	
+	if (oAvlPick.options.selectedIndex > -1)
+	{
+		
+		for (var k=0;k < oAvlPick.options.length;k++) 
+		{
+			
+			if(oAvlPick.options[k].selected == true)
+			{
+				selectedColStr += "'"+escapeAll(oAvlPick.options[k].value)+ "',";
+				val_count++;
+			}
+		}
+		if(val_count == oAvlPick.options.length)
+		{
+			alert(alert_arr.LBL_CANT_REMOVE);
+			return false;
+		}
+
+			str_length=selectedColStr.length;
+			selected_values  = (selectedColStr.substr(0,str_length-1));
+			
+
+			$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=transfer&file=DeletePickList&fld_module='+module+'&fieldname='+fld_name+'&fieldlabel='+fld_label+'&selectedFields='+selected_values,
+			onComplete: function(response) {
+                                        $("status").style.display="none";
+					$("transferdiv").style.display ='block';
+                                        $("transferdiv").innerHTML=response.responseText;
+					$("transferdiv").style.display='block';
+					fnvshobj(obj,"transferdiv");
+							
+					
+                	}
+                }
+        );
+
+
+		
+	}
+	else
+	{
+		alert(alert_arr.LBL_SELECT_PICKLIST);
+	}
+		
+}
+function pickReplace(module,fld_name)
+{
+	
+	var replaceObj = $('replacePick');
+	var relplaceValue =replaceObj.options[replaceObj.selectedIndex].value;
+
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=replace&file=DeletePickList&fld_module='+module+'&fieldname='+fld_name+'&replaceFields='+relplaceValue+'&selectedFields='+selected_values,
+			onComplete: function(response) {
+						 var str = response.responseText
+                                              if(str.indexOf('SUCCESS') > -1)
+                                              {
+							changeModule();
+							Myhide('deletediv');
+
+                                              }else
+                                              {
+                                                      alert(str);
+                                              }
+					
+                                        $("status").style.display="none";
+					
+                	}
+                }
+        );
+	
+}
+function Myhide(lay)
+{
+	$(lay).style.display='None';
+	$('transferdiv').style.display='None';
 }
 </script>
 {/literal}
