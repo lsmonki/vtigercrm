@@ -191,10 +191,13 @@ class PearDatabase{
 
     function query($sql, $dieOnError=false, $msg='')
     {
-	global $log;
+	global $log, $default_charset;
 	//$this->println("ADODB query ".$sql);		
 	$log->debug('query being executed : '.$sql);
 	$this->checkConnection();
+	if($default_charset == 'UTF-8')
+		$this->database->Execute("SET NAMES utf8");
+		
 	$result = & $this->database->Execute($sql);
 	$this->lastmysqlrow = -1;
 	if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
@@ -231,9 +234,11 @@ class PearDatabase{
    	* @param $msg -- Error message on query execution failure
    	*/	
 	function pquery($sql, $params, $dieOnError=false, $msg='') {		
-		global $log;
+		global $log, $default_charset;
 		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
+		if($default_charset == 'UTF-8')
+			$this->database->Execute("SET NAMES utf8");
 		
 		global $logsqltm;
 
