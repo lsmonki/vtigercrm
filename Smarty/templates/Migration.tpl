@@ -12,6 +12,17 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
+<script type="text/javascript">
+function showhidediv()
+{ldelim}
+	var div_style = document.getElementById("mig_info_div").style.display;
+	if(div_style == "inline")
+		document.getElementById("mig_info_div").style.display = "none";
+	else
+		document.getElementById("mig_info_div").style.display = "inline";
+		
+{rdelim}
+</script>
 
 <form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
 	<input type="hidden" name="parenttab" value="Settings">
@@ -41,6 +52,48 @@
 							({$MOD.LBL_UPGRADE_FROM_VTIGER_5X})
 						</td>
 					   </tr>
+
+					   <!-- Migration Notes - STARTS -->
+					   <tr>
+						<td colspan="2" class="hdrNameBg">
+						   <span class="genHeaderGray"><font color="red">Important Note </font>: </span>&nbsp;<a href="javascript:;" onclick="showhidediv();"> Must Read </a>
+			   			   <div id='mig_info_div' style="display:none">
+					  	   <ul>
+							<li><font color="red">Before do the migration please take database dump. If we continue the migration without taking a database dump, then we cannot recover the data later if we face any problems. So we highly recommend to take database dump of the current working database. </font>
+							<li>To take database dump do the following<br />
+								1. Go inside mysql/bin directory from konsole (linux) or command prompt (windows)<br />
+								2. Execute the following command to take database dump<br />&nbsp;&nbsp;
+									mysqldump --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port" "database_name" > dump_filename<br />&nbsp;&nbsp;
+									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file<br />
+							<li>To create a database do the following<br />
+								1. Go inside mysql/bin directory from konsole (linux) or command prompt (windows)<br />
+								2. Execute the following command to enter into mysql prompt<br />&nbsp;&nbsp;
+									mysql --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port"<br />&nbsp;&nbsp;
+									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file. Now we will be entered into the mysql prompt.<br />
+								3. Execute the following command to create a new database<br />&nbsp;&nbsp;
+									create database new_db_name;<br />&nbsp;&nbsp;
+									We can set utf8 as default character set for the database on creation time by the following command<br />&nbsp;&nbsp;
+									create database new_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
+									To change the default character set for the existing database we can use<br />&nbsp;&nbsp;
+									alter database old_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
+									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"> here </a><br />
+							<li>To store the data from database dump to a new database do the following<br />
+								1. Edit the database dump file<br />&nbsp;&nbsp;
+									SET FOREIGN_KEY_CHECKS = 0; => add this line at the start of the dump file<br />&nbsp;&nbsp;
+									SET FOREIGN_KEY_CHECKS = 1; => add this line at the end of the dump file<br />
+								2. Go inside mysql/bin directory from konsole (linux) or command prompt (windows) and ensure that the database dump file is available here<br />
+								3. Execute the following command to store the database dump to new database<br />&nbsp;&nbsp;
+									mysql --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port" "database_name" < dump_filename <br />&nbsp;&nbsp;
+									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file<br />
+						   </ul>
+						   </div
+
+						</td>
+					   </tr>
+					   <!-- Migration Notes - ENDS -->
+
+
+
 					   <tr>
 						<td colspan="2" class="hdrNameBg">
 							<span class="genHeaderGray">{$MOD.LBL_STEP} 1 : </span>
