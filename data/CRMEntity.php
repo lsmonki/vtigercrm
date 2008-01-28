@@ -1105,17 +1105,16 @@ $log->info("in getOldFileName  ".$notesid);
 		global $current_user, $currentModule;
 		
 		require_once('include/utils/UserInfoUtil.php');
+		$reset_value = false;
 		foreach($this->column_fields as $fieldname=>$fieldvalue) {
-			$reset_value = false;
-
 			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') 
 				$reset_value = true;
 			
 			if ($fieldname == "record_id" || $fieldname == "record_module") 
 				$reset_value = false;
-			// commented as we haven't use this additional_column_fields array any where other than the declaration place(ex : in every module.php file)
-			/*if (isset($this->additional_column_fields) && in_array($fieldname, $this->additional_column_fields) == true)
-				$reset_value = false;*/
+
+			if (isset($this->additional_column_fields) && in_array($fieldname, $this->additional_column_fields) == true)
+				$reset_value = false;
 			
 			if ($reset_value == true)
 				$this->column_fields[$fieldname] = "";
