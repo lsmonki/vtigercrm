@@ -541,7 +541,7 @@ function insert_values($picklist,$picklistid)
 	$numrow = $adb->num_rows($result);
 	for($i=0; $i < $numrow; $i++)
 	{
-		$picklist_name = $adb->query_result($result,$i,$picklist);
+		$picklist_name = decode_html($adb->query_result($result,$i,$picklist));
 		$picklist_valueid = getUniquePicklistID();
 		$adb->query("update vtiger_$picklist set picklist_valueid='$picklist_valueid' where $picklist='$picklist_name'");
 		$sql="select roleid from vtiger_role";
