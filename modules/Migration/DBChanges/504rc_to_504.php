@@ -44,6 +44,23 @@ foreach($picklist_arr as $picklistname => $picklistidname)
 	ExecuteQuery("update vtiger_".$picklistname."_seq set id=".$max_count);
 }
 
+//When we change the ticket description from troubletickets table to crmentity table we have handled in customview but missed in reports - #4968
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_crmentity:description:HelpDesk_Description:description:V' where columnname='vtiger_troubletickets:description:HelpDesk_Description:description:V'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_crmentityHelpDesk:description:HelpDesk_Description:description:V' where columnname='vtiger_troubletickets:description:HelpDesk_Description:description:V'");
+ExecuteQuery("update vtiger_reportsortcol set columnname='vtiger_crmentityHelpDesk:description:HelpDesk_Description:description:V' where columnname='vtiger_troubletickets:description:HelpDesk_Description:description:V'");
+
+//Changed column recurringtype from recurringevents to activity table - cvcolumnlist, cvadvfilter && selectcolumn, relcriteria, reportsortcol - #4969
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_activity:recurringtype:recurringtype:Calendar_Recurrence:O' where columnname='vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_activity:recurringtype:recurringtype:Calendar_Recurrence:O' where columnname='vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V'");
+ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_activity:recurringtype:Calendar_Recurrence:recurringtype:O' where columnname='vtiger_recurringevents:recurringtype:Calendar_Recurrence:recurringtype:O'");
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_activity:recurringtype:Calendar_Recurrence:recurringtype:O' where columnname='vtiger_recurringevents:recurringtype:Calendar_Recurrence:recurringtype:O'");
+ExecuteQuery("update vtiger_reportsortcol set columnname='vtiger_activity:recurringtype:Calendar_Recurrence:recurringtype:O' where columnname='vtiger_recurringevents:recurringtype:Calendar_Recurrence:recurringtype:O'");
+
+//we have removed the Team field in quotes and added a new custom field for Team. So we can remove that field from reports (we have changed this field name in customview related tables in 503 - 504rc migration)
+ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+ExecuteQuery("delete from vtiger_relcriteria where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+ExecuteQuery("delete from vtiger_reportsortcol where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 
