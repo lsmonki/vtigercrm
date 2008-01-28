@@ -541,9 +541,9 @@ function alphabetic(module,url,dataid)
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
 	        <form name="change_ownerform_name">
-		        <input type = "radio" name = "user_lead_owner"  {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup();{/if}  checked>{$APP.LBL_USER}&nbsp;
+		        <input type = "radio" id= "user_checkbox" name = "user_lead_owner"  {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup();{/if}  checked>{$APP.LBL_USER}&nbsp;
 			{if $CHANGE_GROUP_OWNER neq ''}
-			<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
+			<input type = "radio" id = "group_checkbox" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 			<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
                                 {$CHANGE_GROUP_OWNER}
                         </select>
@@ -583,7 +583,7 @@ function ajaxChangeStatus(statusname)
 	else if(statusname == 'owner')
 	{
 		
-	   if(document.change_ownerform_name.user_lead_owner[0].checked)
+	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;

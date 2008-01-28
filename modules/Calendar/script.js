@@ -862,7 +862,7 @@ function dispLayer(lay)
 //check whether user form selected or group form selected
 function checkgroup()
 {
-	if(document.change_owner.user_lead_owner[1].checked)
+	if($("group_checkbox").checked)
 	{
 		  document.change_owner.lead_group_owner.style.display = "block";
 	          document.change_owner.lead_owner.style.display = "none";
@@ -884,8 +884,8 @@ function calendarChangeOwner()
         var hour   = document.change_owner.hour.value;
         var subtab = document.change_owner.subtab.value;
 
-	var checked = document.change_owner.user_lead_owner[0].checked;
-	if(checked==true)
+	//var checked = document.change_owner.user_lead_owner[0].checked;
+	if($("user_checkbox").checked)
 	{
 		var user_id = document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
 		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';

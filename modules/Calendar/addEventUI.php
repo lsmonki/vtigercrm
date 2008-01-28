@@ -933,9 +933,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 		$groupList = getGroupslist();
 		?>
 
-            <input type = "radio" name = "user_lead_owner"  <?php if($groupList != '') { ?> onclick=checkgroup();  <?php } ?> checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
+            <input type = "radio" id= "user_checkbox" name = "user_lead_owner"  <?php if($groupList != '') { ?> onclick=checkgroup();  <?php } ?> checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
 			<?php if( $groupList != '') {?>
-				<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
+				<input type = "radio" id = "group_checkbox" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
 				<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">    
 					<?php echo getGroupslist();?>  
 				</select>

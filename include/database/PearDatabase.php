@@ -36,7 +36,7 @@ class PreparedQMark2SqlValue {
 
 class PearDatabase{
     var $database = null;
-    var $dieOnError = false;
+    var $dieOnError = true;
     var $dbType = null;
     var $dbHostName = null;
     var $dbName = null;
@@ -195,7 +195,7 @@ class PearDatabase{
 	//$this->println("ADODB query ".$sql);		
 	$log->debug('query being executed : '.$sql);
 	$this->checkConnection();
-	if($default_charset == 'UTF-8')
+	if(strtoupper($default_charset) == 'UTF-8')
 		$this->database->Execute("SET NAMES utf8");
 		
 	$result = & $this->database->Execute($sql);
@@ -237,7 +237,7 @@ class PearDatabase{
 		global $log, $default_charset;
 		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
-		if($default_charset == 'UTF-8')
+		if(strtoupper($default_charset) == 'UTF-8')
 			$this->database->Execute("SET NAMES utf8");
 		
 		global $logsqltm;
