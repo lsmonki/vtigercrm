@@ -581,7 +581,7 @@ function getAdvSearchfields($module)
 			elseif($fieldcolname == "campaignid")
 				$OPTION_SET .= "<option value=\'vtiger_campaign.campaignname::::".$fieldtypeofdata."\' ".$select_flag.">".$mod_fieldlabel."</option>";
 			else
-				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\' ".$select_flag.">".$fieldlabel."</option>";
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."::::".$fieldtypeofdata."\' ".$select_flag.">".str_replace("'","`",$fieldlabel)."</option>";
 		}
 	}
 	//Added to include Ticket ID in HelpDesk advance search
@@ -613,7 +613,7 @@ function getcriteria_options()
 {
 	global $log,$app_strings;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>".$app_strings['contains']."</option><option value=\'dcts\'>".$app_strings['does_not_contains']."</option><option value=\'is\'>".$app_strings['is']."</option><option value=\'isn\'>".$app_strings['is_not']."</option><option value=\'bwt\'>".$app_strings['begins_with']."</option><option value=\'ewt\'>".$app_strings['ends_with']."</option><option value=\'grt\'>".$app_strings['greater_than']."</option><option value=\'lst\'>".$app_strings['less_than']."</option><option value=\'grteq\'>".$app_strings['greater_or_equal']."</option><option value=\'lsteq\'>".$app_strings['less_or_equal']."</option>";
+	$CRIT_OPT = "<option value=\'cts\'>".str_replace("'","`",$app_strings['contains'])."</option><option value=\'dcts\'>".str_replace("'","`",$app_strings['does_not_contains'])."</option><option value=\'is\'>".str_replace("'","`",$app_strings['is'])."</option><option value=\'isn\'>".str_replace("'","`",$app_strings['is_not'])."</option><option value=\'bwt\'>".str_replace("'","`",$app_strings['begins_with'])."</option><option value=\'ewt\'>".str_replace("'","`",$app_strings['ends_with'])."</option><option value=\'grt\'>".str_replace("'","`",$app_strings['greater_than'])."</option><option value=\'lst\'>".str_replace("'","`",$app_strings['less_than'])."</option><option value=\'grteq\'>".str_replace("'","`",$app_strings['greater_or_equal'])."</option><option value=\'lsteq\'>".str_replace("'","`",$app_strings['less_or_equal'])."</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }

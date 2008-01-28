@@ -193,9 +193,9 @@
 						{if $FIELD_PRIVILEGES[$tabid] neq ''}
 						<tr>
 							{if $modulename eq 'Calendar'}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN} ({$APP.Tasks})</td>
 							{else}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN}</td>
 							{/if}
 					        </tr>
 						{/if}
@@ -209,7 +209,7 @@
 						{/foreach}
 						{if $modulename eq 'Calendar'}
 						<tr>
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Events})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN} ({$APP.Events})</td>
 					        </tr>
 						{foreach item=row_values from=$FIELD_PRIVILEGES[16]}
 				            	<tr>

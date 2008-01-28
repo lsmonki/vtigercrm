@@ -49,12 +49,13 @@ function gotoUpdateListPrice(id,pbid,proid)
 }
 {/literal}
 
-function loadCvList(type,id) {ldelim}
-	$("status").style.display="inline";
-        if(type === 'Leads')
+function loadCvList(type,id)
+{ldelim}
+        if($("lead_cv_list").value != 'None' || $("cont_cv_list").value != 'None')
         {ldelim}
-                if($("lead_cv_list").value != 'None')
-                {ldelim}
+		$("status").style.display="inline";
+        	if(type === 'Leads')
+        	{ldelim}
                         new Ajax.Request(
                         'index.php',
                         {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -65,13 +66,11 @@ function loadCvList(type,id) {ldelim}
                                         $("RLContents").innerHTML= response.responseText;
                                 {rdelim}
                         {rdelim}
-                );
-                {rdelim}
-        {rdelim}
-        if(type === 'Contacts')
-        {ldelim}
-        if($("cont_cv_list").value != 'None')
-                {ldelim}
+                	);
+        	{rdelim}
+
+        	if(type === 'Contacts')
+        	{ldelim}
                         new Ajax.Request(
                         'index.php',
                         {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -82,7 +81,7 @@ function loadCvList(type,id) {ldelim}
                                         $("RLContents").innerHTML= response.responseText;
                                 {rdelim}
                         {rdelim}
-                );
+                	);
 		{rdelim}
         {rdelim}
 {rdelim}

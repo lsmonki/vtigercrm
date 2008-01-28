@@ -26,16 +26,16 @@ typeofdata['C'] = ['is','isn'];
 typeofdata['DT'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['D'] = ['is','isn','lst','grt','lsteq','grteq'];
 var fLabels = new Array();
-fLabels['is'] = '{$APP.is}';
-fLabels['isn'] = '{$APP.is_not}';
-fLabels['bwt'] = '{$APP.begins_with}';
-fLabels['ewt'] = '{$APP.ends_with}';
-fLabels['cts'] = '{$APP.contains}';
-fLabels['dcts'] = '{$APP.does_not_contains}';
-fLabels['lst'] = '{$APP.less_than}';
-fLabels['grt'] = '{$APP.greater_than}';
-fLabels['lsteq'] = '{$APP.less_or_equal}';
-fLabels['grteq'] = '{$APP.greater_or_equal}';
+fLabels['is'] = "{$APP.is}";
+fLabels['isn'] = "{$APP.is_not}";
+fLabels['bwt'] = "{$APP.begins_with}";
+fLabels['ewt'] = "{$APP.ends_with}";
+fLabels['cts'] = "{$APP.contains}";
+fLabels['dcts'] = "{$APP.does_not_contains}";
+fLabels['lst'] = "{$APP.less_than}";
+fLabels['grt'] = "{$APP.greater_than}";
+fLabels['lsteq'] = "{$APP.less_or_equal}";
+fLabels['grteq'] = "{$APP.greater_or_equal}";
 var noneLabel;
 {literal}
 function trimfValues(value)

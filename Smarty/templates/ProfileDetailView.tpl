@@ -139,7 +139,7 @@ function UpdateProfile()
 
 						<tr>
 						<td class="small">
-							<table celspacing="0" align="center" bgcolor="white" border="0" cellpadding="5" width="100%">
+							<table cellspacing="0" align="center" bgcolor="white" border="0" cellpadding="5" width="100%">
 								<tr>
 								<td align="right" width="25%" style="padding-right:10px;" nowrap><b>{$APP.LBL_PROFILE_NAME} :</b></td>
 								<td align="left" width="75%" style="padding-right:10px;"><input id = "profile_name" name="profile_name" class="txtBox" value="{$PROFILE_NAME}" type="text"></td>
@@ -161,7 +161,7 @@ function UpdateProfile()
 					    </tr>		
 					    </table>		
 					    </div>		
-				             <!- RenameProfile Div end -->		
+				             <!-- RenameProfile Div end -->		
 
                                          
                                             <!-- privilege lists -->
@@ -264,9 +264,9 @@ function UpdateProfile()
 						{if $FIELD_PRIVILEGES[$tabid] neq ''}
 						<tr>
 							{if $modulename eq 'Calendar'}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN} ({$APP.Tasks})</td>
 							{else}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN}</td>
 							{/if}
 					        </tr>
 						{/if}
@@ -280,7 +280,7 @@ function UpdateProfile()
 						{/foreach}
 						{if $modulename eq 'Calendar'}
 						<tr>
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}  ({$APP.Events})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN}  ({$APP.Events})</td>
 					        </tr>
 						{foreach item=row_values from=$FIELD_PRIVILEGES[16]}
 				            	<tr>
