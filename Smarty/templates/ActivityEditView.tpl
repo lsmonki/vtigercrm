@@ -173,7 +173,7 @@ var gVTModule = '{$smarty.request.module}';
 										{if $LABEL.eventstatus neq ''}
                                                                                 <select name="eventstatus" id="eventstatus" class=small onChange = "getSelectedStatus();" >
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
-                                                                                        <option value="{$arr[1]}" {$arr[2]}>
+                                                                                        <option value="{$arr[0]}" {$arr[2]}>
                                                                                                 {$arr[0]}
                                                                                         </option>
                                                                                         {/foreach} 
@@ -246,7 +246,7 @@ var gVTModule = '{$smarty.request.module}';
 										<br>
 										<select name="taskpriority" id="taskpriority">
                                                                                         {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-											<option value="{$arr[1]}" {$arr[2]}>
+											<option value="{$arr[0]}" {$arr[2]}>
 												{$arr[0]}
 											</option>
                                                                                         {/foreach}
@@ -669,7 +669,7 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskstatus" id="taskstatus" class=small>
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
-                                        				<option value="{$arr[1]}" {$arr[2]}>
+                                        				<option value="{$arr[0]}" {$arr[2]}>
                                                                                 {$arr[0]}
                                                                         </option>
                                         			{/foreach}
@@ -680,7 +680,7 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskpriority" id="taskpriority" class=small>
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-                                        				<option value="{$arr[1]}" {$arr[2]}>
+                                        				<option value="{$arr[0]}" {$arr[2]}>
                                                                                 {$arr[0]}
                                                                         </option>
                                         			{/foreach}

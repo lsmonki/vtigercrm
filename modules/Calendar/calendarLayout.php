@@ -1087,7 +1087,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.$mod_strings[$priority].')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 			</table>
 			
 			</div>';
@@ -1172,7 +1172,7 @@ function getweekEventLayer(& $cal,$slice)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.$priority.')</td></tr>
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr>
 			<tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 
 			</table>
@@ -1421,6 +1421,32 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		}
 		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
 		{
+			if(!$is_admin && $eventstatus != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_eventstatus where eventstatus=?";
+				$res = $adb->pquery($sql,array(decode_html($eventstatus)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$element['status'] = $eventstatus;
+				else
+				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+
+			}else
 			$element['status'] = $eventstatus;
 		}
 		if(!empty($assignedto))
@@ -1446,7 +1472,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  */
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
-	global $log;
+	global $log,$app_strings;
         $Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log,$list_max_entries_per_page;
@@ -1577,7 +1603,37 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		}*/
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
 		{
-			$element['status'] = getTranslatedString($adb->query_result($result,$i,"status"));
+			$taskstatus = getTranslatedString($adb->query_result($result,$i,"status"));
+
+			if(!$is_admin && $taskstatus != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_taskstatus where taskstatus=?";
+				$res = $adb->pquery($sql,array(decode_html($taskstatus)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$element['status'] = $taskstatus;
+				else
+				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+
+			}else
+			$element['status'] = $taskstatus;
+			
+			
 		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";

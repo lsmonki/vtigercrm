@@ -157,12 +157,12 @@ class Appointment
          */
 	function readResult($act_array, $view)
 	{
-		global $adb,$current_user;
+		global $adb,$current_user,$app_strings;
 		$format_sthour='';
                 $format_stmin='';
 		$this->description       = $act_array["description"];
-		$this->eventstatus       = $act_array["eventstatus"];
-		$this->priority		 = $act_array["priority"];
+		$this->eventstatus       = getRoleBasesdPickList('eventstatus',$act_array["eventstatus"]);
+		$this->priority		 = getRoleBasesdPickList('taskpriority',$act_array["priority"]);
 		$this->subject           = $act_array["subject"];
 		$this->activity_type     = $act_array["activitytype"];
 		$this->duration_hour     = $act_array["duration_hours"];
@@ -245,5 +245,41 @@ function compare($a,$b)
 		return 0;
    	}
 	return ($a->start_time->ts < $b->start_time->ts) ? -1 : 1;
+}
+function getRoleBasesdPickList($fldname,$exist_val)
+{
+	global $adb,$app_strings,$current_user;
+	$is_Admin = $current_user->is_admin;
+		if($is_Admin == 'off' && $fldname != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_$fldname where $fldname=?";
+				$res = $adb->pquery($sql,array(decode_html($exist_val)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$pick_val = $exist_val;
+				else
+				$pick_val = $app_strings['LBL_NOT_ACCESSIBLE'];
+
+
+			}else
+			$pick_val = $exist_val;
+
+			return $pick_val;
+			
 }
 ?>

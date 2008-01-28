@@ -137,7 +137,21 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 
-	}else if(globaluitype == 33)
+	}
+	else if(uitype == 15 || uitype == 16 || uitype == 111)
+	{	
+		var txtBox= "txtbox_"+ fieldLabel;
+		var not_access =document.getElementById(txtBox);
+                 pickval = not_access.options[not_access.selectedIndex].value;
+			if(pickval == alert_arr.LBL_NOT_ACCESSIBLE)
+			{
+				document.getElementById(editArea).style.display='none';
+				document.getElementById(dtlView).style.display='block';
+     				itsonview=false; //to show the edit link again after hiding the editdiv.
+				return false;
+			}
+	}
+	else if(globaluitype == 33)
 	{
 	  var txtBox= "txtbox_"+ fieldLabel;
 	  var oMulSelect = $(txtBox);

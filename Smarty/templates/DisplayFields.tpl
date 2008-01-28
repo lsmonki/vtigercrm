@@ -90,7 +90,7 @@
 			<td width="30%" align=left class="dvtCellInfo">
 			   <select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{foreach item=arr from=$fldvalue}
-					<option value="{$arr[1]}" {$arr[2]}>
+					<option value="{$arr[0]}" {$arr[2]}>
 						{$arr[0]}
 					</option>
 				{/foreach}

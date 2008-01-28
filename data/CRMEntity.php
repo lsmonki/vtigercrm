@@ -369,7 +369,7 @@ class CRMEntity
   function insertIntoEntityTable($table_name, $module)
   {
 	  global $log;
-  	  global $current_user;	  
+  	  global $current_user,$app_strings;
 	   $log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
@@ -456,7 +456,7 @@ class CRMEntity
 		  $fieldname=$adb->query_result($result,$i,"fieldname");
 		  $columname=$adb->query_result($result,$i,"columnname");
 		  $uitype=$adb->query_result($result,$i,"uitype");
-		  
+
 		  if(isset($this->column_fields[$fieldname]))
 		  {
 			  if($uitype == 56)
@@ -470,6 +470,23 @@ class CRMEntity
 					  $fldvalue = '0';
 				  }
 
+			  }
+			  elseif($uitype == 15 || $uitype == 16 || $uitype == 111)
+			  {
+
+				  if($this->column_fields[$fieldname] == $app_strings['LBL_NOT_ACCESSIBLE'])
+				  {
+					 
+					//If the value in the request is Not Accessible for a picklist, the existing value will be replaced instead of Not Accessible value.
+					 $sql="select $columname from  $table_name where ".$this->tab_name_index[$table_name]."=?";
+					 $res = $adb->pquery($sql,array($this->id));
+					 $pick_val = $adb->query_result($res,0,$columname);
+					 $fldvalue = $pick_val;
+				  }
+				  else
+				  {
+					  $fldvalue = $this->column_fields[$fieldname];
+				   }
 			  }
 			  elseif($uitype == 33)
 			  {
