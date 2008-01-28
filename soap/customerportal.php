@@ -209,7 +209,7 @@ function get_combo_values($input_array)
 	for($i=0;$i<$noofrows;$i++)
 	{
 		$output['productid']['productid'][$i] = $adb->query_result($result,$i,"productid");
-		$output['productname']['productname'][$i] = $adb->query_result($result,$i,"productname");
+		$output['productname']['productname'][$i] = decode_html($adb->query_result($result,$i,"productname"));
 	}
 
         //We are going to display the picklist entries associated with admin user (role is H2)
