@@ -170,7 +170,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 115)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] = $col_fields[$fieldname];
+		$label_fld[] = getTranslatedString($col_fields[$fieldname]);
 
 		$pick_query="select * from vtiger_" . mysql_real_escape_string($fieldname);
 		$pickListResult = $adb->pquery($pick_query, array());

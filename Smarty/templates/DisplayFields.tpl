@@ -553,9 +553,9 @@
 			   	<select id="user_status" disabled name="{$fldname}" class="small">
 			   {/if} 
 				{foreach item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>{$sel_value}</option>
-					{/foreach}
+                                        <option value="{$arr[1]}" {$arr[2]} >
+                                                {$arr[0]}
+                                        </option>
 				{/foreach}
 			   </select>
 			</td>
