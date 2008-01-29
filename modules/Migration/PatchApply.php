@@ -156,20 +156,34 @@ function check_db_utf8_charset($conn)
 
 	if(!$db_status && !$config_status)
 	{
-		$msg='<font color="red"><b>Your database charset and $default_charset variable in config.inc.php are not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the above to UTF-8</b></font>';
+		$msg='<br><font color="red"><b>Your database charset and $default_charset variable in config.inc.php are not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the above to UTF-8</b></font>';
 	}
 	else if($db_status && !$config_status)
 	{
-		$msg='<font color="red"><b>Your database charset is set as UTF-8. But $default_charset variable in config.inc.php is not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the $default_charset variable to UTF-8</b></font>';
+		$msg='<br><font color="red"><b>Your database charset is set as UTF-8. But $default_charset variable in config.inc.php is not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the $default_charset variable to UTF-8</b></font>';
 
 	}
 	else if(!$db_status && $config_status)
 	{
-		$msg='<font color="red"><b>Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set your database charset to UTF-8</b></font>';
+		$msg='<br><font color="red"><b>Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set your database charset to UTF-8</b></font>';
 
 	}
 echo $msg;
+if(!$continue_42P2)
+{
+echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
+		<tr>
+		<td colspan="2" align="center"><br>If you migrated from 503 or its below version the special characters like other language characters are stored as ascii values. These ascii values are not properly displaying in the latest version. So that you need to chage your ascii values into utf8 characters. Click on the Convert Now button to convert your ascii characters into utf8 type characters.<br><br> 
+					<form name="ascii_to_utf" method="post" action="index.php">
+					<input type="hidden" name="module" value="Migration">
+					<input type="hidden" name="action" value="ASCIItoUTF8Conversion">
+					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small cancel" />
+				</form><br>
+			</td>
+		</tr>
+	</table><br><br>';
 
+}
 echo '<table width="95%"  border="0" align="center">
 	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
 		<tr>
@@ -181,7 +195,7 @@ echo '<table width="95%"  border="0" align="center">
 				</form>
 			</td>
 		</tr>
-	</table>';
+	</table><br><br>';
 
 //After applying all the DB Changes,Here we clear the Smarty cache files
 	clear_smarty_cache();

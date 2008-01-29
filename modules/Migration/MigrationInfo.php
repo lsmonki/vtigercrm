@@ -330,6 +330,26 @@ echo $msg;
 					</td>
 				   </tr>
 				   <tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
+				   <tr bgcolor="#FFFFFF"><td colspan="2">
+<?php
+if($continue_42P2)
+{
+ echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
+		<tr>
+		<td colspan="2" align="center"><br>If you migrated from 503 or its below version the special characters like other language characters are stored as ascii values. These ascii values are not properly displaying in the latest version. So that you need to chage your ascii values into utf8 characters. Click on the Convert Now button to convert your ascii characters into utf8 type characters.<br><br> 
+					<form name="ascii_to_utf" method="post" action="index.php">
+					<input type="hidden" name="module" value="Migration">
+					<input type="hidden" name="action" value="ASCIItoUTF8Conversion">
+					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small cancel" />
+				</form><br>
+			</td>
+		</tr>
+		</table>
+		<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>';
+
+}
+?>
+</td></tr>
 				   <tr>
 					<td colspan="2" align="center">
 					   <form name="close_migration" method="post" action="index.php">
