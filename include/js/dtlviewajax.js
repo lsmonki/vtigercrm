@@ -271,9 +271,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	tagValue = get_converted_html(tagValue);
 	if(uitype == '13' || uitype == '104')
 	{
-		if($(fieldName))
+		var temp_fieldname = 'internal_mailer_'+fieldName;
+		if($(temp_fieldname))
 		{
-			var mail_chk_arr = $(fieldName).innerHTML.split("####");
+			var mail_chk_arr = $(temp_fieldname).innerHTML.split("####");
 			var fieldId = mail_chk_arr[0];
 			var internal_mailer_flag = mail_chk_arr[1];
 			if(internal_mailer_flag == 1)
