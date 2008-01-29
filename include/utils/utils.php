@@ -879,7 +879,7 @@ function to_html($string, $encode=true){
 	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView' && $_REQUEST['module'] != 'Portal')// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
 	if(is_string($string)){
-		if($action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) ){ 
+		if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) ){ 
 			$doconvert = true;
 	} else if($search == true) { // Fix for tickets #4647, #4648. Conversion required in case of search results also.
 		$doconvert = true;
