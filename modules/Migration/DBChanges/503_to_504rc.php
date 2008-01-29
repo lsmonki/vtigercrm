@@ -15,7 +15,7 @@
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
-$migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Starts \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 RC-------- Starts \n\n");
 
 
 
@@ -792,7 +792,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //Added by Asha for #4826
 ExecuteQuery("update vtiger_pricebook set active=0 where active is null");
 
-$migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 -------- Ends \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 RC-------- Ends \n\n");
 
 
 ?>
