@@ -136,13 +136,13 @@ function getInsertValues($type,$type_id)
 			//This array is used to store the tablename as the key and the value for that table in the custom field of the uitype only for 15 and 33(Multiselect cf)...
 			if($lead_uitype == 33 || $lead_uitype == 15)
 			{
-				$value_cf_array[$colname]=$ins_val;
+                                $lead_val_arr[$colname] = $lead_column_name;
+                                $value_cf_array[$colname]=$ins_val;	
 			}
 			
 			$insert_value.=$ins_val;
 		}
 	}
-
 	if(count($value_cf_array) > 0)
 	{
 		if($type_insert_column != '')
@@ -182,7 +182,7 @@ function getInsertValues($type,$type_id)
 								$picklistId_res = $adb->pquery($picklistId_qry,array($tableName));
 								$picklist_Id = $adb->query_result($picklistId_res,0,'picklistid');
 								//While adding a new value into the picklist table, the roleid's which has permission for the lead cf will only given permission for contacts,potentials and account module while converting. -- refer ticket #4885 ---
-								$role_qry = "select roleid from vtiger_role2picklist where picklistvalueid in (select picklist_valueid from vtiger_$lead_column_name where $lead_column_name='".trim($val)."')";
+								$role_qry = "select roleid from vtiger_role2picklist where picklistvalueid in (select picklist_valueid from vtiger_".$lead_val_arr[$tableName]."  where ".$lead_val_arr[$tableName]."='".trim($val)."')";
 								$numOFRole=$adb->num_rows($adb->query($role_qry));
 								for($l=0;$l<$numOFRole;$l++)
 								{
