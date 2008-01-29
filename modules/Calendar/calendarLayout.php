@@ -1295,9 +1295,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$groupids = explode(",", fetchUserGroupids($current_user->id)); // Explode can be removed, once implode is removed from fetchUserGroupids
 		if (count($groupids) > 0) {
+
 			$com_q = " AND (vtiger_crmentity.smownerid = ?
 					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))
-				GROUP BY vtiger_activity.activityid";
+					GROUP BY vtiger_activity.activityid";
 		} else {			
 			$com_q = " AND vtiger_crmentity.smownerid = ?
 				GROUP BY vtiger_activity.activityid";
@@ -1511,23 +1512,35 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		
 		$params = $info_params = array($start_date, $end_date);
         if($info != '')
-        {
-			$com_q = " AND vtiger_crmentity.smownerid = ?";
-            
+	{
+			//added to fix #4816
+			$groupids = explode(",", fetchUserGroupids($current_user->id));
+			if (count($groupids) > 0) {
+				$com_q = " AND (vtiger_crmentity.smownerid = ?
+					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))";
+			} else {			
+				$com_q = " AND vtiger_crmentity.smownerid = ?";
+			}
+			//end
+
 			$pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
 			$total_q =  $query."".$com_q;
 			array_push($info_params, $current_user->id);
-		
+
+			if (count($groupids) > 0) {
+				array_push($info_params, $groupids);
+			}	
+
 			if( $adb->dbType == "pgsql")
 			{
  		    	$pending_query = fixPostgresQuery( $pending_query, $log, 0);
 		    	$total_q = fixPostgresQuery( $total_q, $log, 0);
 			}
 			$total_res = $adb->pquery($total_q, $info_params);
-			$total = ($adb->num_rows($total_res)>0)?($adb->num_rows($total_res)-1):$adb->num_rows($total_res);
+			$total = $adb->num_rows($total_res);
                 
 			$res = $adb->pquery($pending_query, $info_params);
-            $pending_rows = $adb->num_rows($res);
+		        $pending_rows = $adb->num_rows($res);
 		
 			$cal_log->debug("Exiting getTodoList() method...");
 			return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
