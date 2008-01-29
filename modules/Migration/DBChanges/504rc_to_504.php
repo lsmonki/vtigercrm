@@ -61,6 +61,27 @@ ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_quotes:te
 ExecuteQuery("delete from vtiger_relcriteria where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
 ExecuteQuery("delete from vtiger_reportsortcol where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
 
+//Update the webmail password with encryption
+update_webmail_password();
+function update_webmail_password()
+{
+	global $adb,$migrationlog;
+	$migrationlog->debug("\nInside update_webmail_password() function starts\n\n");
+	require_once("modules/Users/Users.php");
+	$res_set = $adb->query('select * from vtiger_mail_accounts');
+	$user_obj = new Users();
+	while($row = $adb->fetchByAssoc($res_set))
+	{
+		$adb->query("update vtiger_mail_accounts set mail_password = '".$user_obj->changepassword($row['mail_password'])."' where mail_username='".$row['mail_username']."'");
+	}
+	$migrationlog->debug("\nInside update_webmail_password() function ends\n");
+}
+
+//Modified to increase the length of the outgoinfg server(smtp) servername, username and password
+ExecuteQuery("alter table vtiger_systems change  column server_username server_username varchar(100)");
+ExecuteQuery("alter table vtiger_systems change  column server server varchar(100)");
+ExecuteQuery("alter table vtiger_systems change  column server_password server_password varchar(100)");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 
