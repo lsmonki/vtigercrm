@@ -101,9 +101,9 @@ foreach($report_fields_list as $oldval => $newval)
 
 
 //we have removed the Team field in quotes and added a new custom field for Team. So we can remove that field from reports (we have changed this field name in customview related tables in 503 - 504rc migration)
-ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
-ExecuteQuery("delete from vtiger_relcriteria where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
-ExecuteQuery("delete from vtiger_reportsortcol where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+ExecuteQuery("delete from vtiger_selectcolumn where columnname='vtiger_quotes:team:Quotes_Team:team:V'");
+ExecuteQuery("delete from vtiger_relcriteria where columnname='vtiger_quotes:team:Quotes_Team:team:V'");
+ExecuteQuery("delete from vtiger_reportsortcol where columnname='vtiger_quotes:team:Quotes_Team:team:V'");
 
 //Update the webmail password with encryption
 update_webmail_password();
