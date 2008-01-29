@@ -741,9 +741,9 @@ function getWhereCondition($currentModule)
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
+			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".urlencode($srch_val);
 			$srch_val = mysql_real_escape_string($srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
-			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".urlencode($srch_val);
 			$uitype=getUItype($currentModule,$column_name);
 			//added to allow  search in check box type fields(ex: product active. it will contain 0 or 1) using yes or no instead of 0 or 1
 			if ($uitype == 56)
