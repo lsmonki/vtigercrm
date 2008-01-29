@@ -136,10 +136,10 @@ else
 			
 			
 			$output="<table border=0 cellspacing=0 cellpadding=5 width=100%>
-					<tr><td colspan=2 align='center'><strong>Transfering the values Of \"".$fieldLabel."\"</strong></td><td align='right'><img src='".$image_path."close.gif' align='middle' border='0' onclick=hide('transferdiv');></td></tr>
+					<tr><td colspan=2 align='center'><strong> ".$mod_strings['LBL_PICKLIST_TRANSFER']."\"".$fieldLabel."\"</strong></td><td align='right'><img src='".$image_path."close.gif' align='middle' border='0' onclick=hide('transferdiv');></td></tr>
 					<tr><td></td><td></td><td></td></tr>
-					<tr><td class='small' align='right'><b>Replace the value with :</b></td><td align='left'><select style='width:200px' id='replacePick'>$option</select></td><td></td></tr>
-					<tr><td colspan=3 align='center'><input type='button' name='replaceText' value='Replace' onClick=pickReplace('".$moduleName."','".$fieldName."'); class='crmButton small save'></td></tr>
+					<tr><td class='small' align='right'><b>".$mod_strings['LBL_REPLACE_VALUE_WITH'].":</b></td><td align='left'><select style='width:180px;font-size:normal;' class='small detailedViewTextBox' id='replacePick'>$option</select></td><td></td></tr>
+					<tr><td colspan=3 align='center'><input type='button' name='replaceText' value='".$app_strings['LBL_REPLACE_LABEL']."' onClick=pickReplace('".$moduleName."','".$fieldName."'); class='crmButton small save'>&nbsp;<input type='button' value='".$app_strings['LBL_CANCEL_BUTTON_LABEL']."' name='cancel' class='crmButton small cancel' onclick=\"hide('transferdiv');\"></td></tr>
 				</table>";
 				
 			$smarty->assign("OUTPUT",$output);

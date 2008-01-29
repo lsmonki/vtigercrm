@@ -20,15 +20,17 @@
 	</table>
 	
 			<table border=0 cellspacing=0 cellpadding=5 width=100%>
-			<tr><td  width=50% >
+			<tr><td valign=top align=left width=200px;>
 			<select id="availPickList" multiple="multiple" wrap size="20" name="availList" style="width:200px;border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px;">
 				{foreach item=pick_val from=$PICKVAL}
 					<option value="{$pick_val}">{$pick_val}</option>
 				{/foreach}
 			</select>
 			</td>
-			<td >
-				<img src="{$IMAGE_PATH}movecol_del.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_del_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_del.gif'" onclick="delPickList(this,'{$MODULE}');" onmousedown="this.src='{$IMAGE_PATH}movecol_del_down.gif'" align="absmiddle" border="0">
+			<td valign=top align=left>
+				<!--img src="{$IMAGE_PATH}movecol_del.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_del_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_del.gif'" onclick="" onmousedown="this.src='{$IMAGE_PATH}movecol_del_down.gif'" align="absmiddle" border="0" -->
+				<input type="button" value="{$APP.LBL_APPLY_LABEL}" name="del" class="crmButton small edit" onclick="delPickList(this,'{$MODULE}');">
+				<input type="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" name="cancel" class="crmButton small cancel" onclick="Myhide('deletediv');">
 			</td>
 			
 			</tr>
