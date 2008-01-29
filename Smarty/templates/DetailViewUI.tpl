@@ -60,7 +60,14 @@
                                               		<div id="editarea_{$label}" style="display:none;">
                     							   <select id="txtbox_{$label}" name="{$keyfldname}">
                     								{foreach item=arr from=$keyoptions}
+											{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
                     									<option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
+											{else}
+        							                                <option value="{$arr[1]}" {$arr[2]}>
+							                                                {$arr[0]}
+								                                </option>
+							                                {/if}
+
 										{/foreach}
                     							   </select>
                     							   <br><input name="button_{$label}" type="button" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}

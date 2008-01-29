@@ -90,9 +90,15 @@
 			<td width="30%" align=left class="dvtCellInfo">
 			   <select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{foreach item=arr from=$fldvalue}
+					{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
 					<option value="{$arr[0]}" {$arr[2]}>
 						{$arr[0]}
 					</option>
+					{else}
+					<option value="{$arr[1]}" {$arr[2]}>
+                                                {$arr[0]}
+                                        </option>
+					{/if}
 				{/foreach}
 			   </select>
 			</td>
