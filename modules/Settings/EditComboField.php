@@ -76,7 +76,7 @@ else
 if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 {
 	echo '<textarea id="picklist" style="display:none;">'.$fldVal.'</textarea>';
-	echo '<script>window.opener.document.getElementById("picklist_values").value = document.getElementById("picklist").innerHTML;</script>';
+	echo '<script>window.opener.document.getElementById("picklist_values").value = document.getElementById("picklist").value;</script>';
 
 	echo '<script>window.close();</script>';
 	$roleid = $_REQUEST['parentroleid'];

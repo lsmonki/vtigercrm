@@ -521,7 +521,8 @@ class CRMEntity
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 
 			  }
-			  $fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
+			  if($uitype != 33)
+				  $fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
 
 
 

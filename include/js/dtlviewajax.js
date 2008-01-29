@@ -406,9 +406,9 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         var notaccess =document.getElementById(txtBox);
                         tagValue = notaccess.options[notaccess.selectedIndex].text;
 			if(tagValue == alert_arr.LBL_NOT_ACCESSIBLE)
-				getObj(dtlView).innerHTML = "<font color='red'>"+tagValue+"</font>";
+				getObj(dtlView).innerHTML = "<font color='red'>"+get_converted_html(tagValue)+"</font>";
 			else
-				getObj(dtlView).innerHTML = tagValue;
+				getObj(dtlView).innerHTML = get_converted_html(tagValue);
         }
 	else if(uitype == '33')
   	{
@@ -419,10 +419,11 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                 var lineLength = 0;
                 for(var i=0; i < notaccess_label.length; i++) {
                         lineLength += notaccess_label[i].length + 2; // + 2 for item separator string
-                        if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
+                        /*if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
                                 lineLength = notaccess_label[i].length + 2; // reset.
                             	notaccess_label[i] = '<br/>&nbsp;' + notaccess_label[i]; // prepend newline.
-                        }
+                        }*/
+			notaccess_label[i] = get_converted_html(notaccess_label[i]);
                         // Prevent a browser splitting multiword items:
                         //notaccess_label[i] = notaccess_label[i].replace(/ /g, '&nbsp;');
                         notaccess_label[i] = notaccess_label[i].replace(alert_arr.LBL_NOT_ACCESSIBLE,"<font color='red'>"+alert_arr.LBL_NOT_ACCESSIBLE+"</font>"); // for Not accessible label.
