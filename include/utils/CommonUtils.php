@@ -3264,9 +3264,9 @@ function clear_smarty_cache() {
 
 	global $root_directory;
 	$path=$root_directory.'Smarty/templates_c/';
-	$mydir = opendir($path);
+	$mydir = @opendir($path);
 	while(false !== ($file = readdir($mydir))) {
-		if($file != "." && $file != "..") {
+		if($file != "." && $file != ".." && $file != ".svn") {
 			//chmod($path.$file, 0777);
 			if(is_dir($path.$file)) {
 				chdir('.');
@@ -3277,6 +3277,6 @@ function clear_smarty_cache() {
 				unlink($path.$file) or DIE("couldn't delete $path$file<br />");
 		}
 	}
-	closedir($mydir);
+	@closedir($mydir);
 }
 ?>
