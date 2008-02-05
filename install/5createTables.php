@@ -156,7 +156,7 @@ if(!@rename("install/", $renamefile."install/"))
 			</ul>
 			<ul>
 			<li>Rename htaccess.txt file to .htaccess to control public file access. &nbsp;
-			   <a href="javascript:;" onclick="showhidediv();">More Info</a>
+			   <a href="javascript:;" onclick="showhidediv();">More Information</a>
 			   <div id='htaccess_div' style="display:none">
 				<br><br>This .htaccess file will work if "<b>AllowOverride All</b>" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.
 			       	<br>If this AllowOverride is set as None ie., "<b>AllowOverride None</b>" then .htaccess file will not take into effect. 

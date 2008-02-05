@@ -138,7 +138,7 @@ if(!$db_type_status || !$db_server_status)
 {
 	$error_msg = 'Unable to connect to database Server. Invalid mySQL Connection Parameters specified';
 	$error_msg_info = 'This may be due to the following reasons:<br>
-			-  specified database user, password, hostname, database type, or port is invalid.<BR>
+			-  specified database user, password, hostname, database type, or port is invalid. <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a><BR>
 			-  specified database user does not have access to connect to the database server from the host';
 }
 elseif($db_type == 'mysql' && $mysql_server_version < '4.1')
