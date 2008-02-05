@@ -41,7 +41,9 @@ foreach($picklist_arr as $picklistname => $picklistidname)
 {
 	$result = $adb->query("select max(".$picklistidname.") as id from vtiger_".$picklistname);
 	$max_count = $adb->query_result($result,0,'id');
-	ExecuteQuery("update vtiger_".$picklistname."_seq set id=".$max_count);
+	//ExecuteQuery("update vtiger_".$picklistname."_seq set id=".$max_count);
+	ExecuteQuery("delete from vtiger_".$picklistname."_seq");
+	ExecuteQuery("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
 }
 
 //When we change the ticket description from troubletickets table to crmentity table we have handled in customview but missed in reports - #4968
