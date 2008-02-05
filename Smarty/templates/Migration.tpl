@@ -85,6 +85,10 @@ function showhidediv()
 								3. Execute the following command to store the database dump to new database<br />&nbsp;&nbsp;
 									mysql --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port" "database_name" < dump_filename <br />&nbsp;&nbsp;
 									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file<br />
+							<li>When we restore the database dump, we have to provide this restored database details in config.inc.php file so that vtiger will work with the previous data. Also one more thing we have to do is restore the following folders from old vtiger installation to new installation<br />&nbsp;&nbsp;
+									storage/ - which contains the attachment files<br />&nbsp;&nbsp;
+									test/ - which contains some image files<br />&nbsp;&nbsp;
+									user_privileges/ - which contains the access privileges for the users
 						   </ul>
 						   </div
 
