@@ -56,42 +56,43 @@ function showhidediv()
 					   <!-- Migration Notes - STARTS -->
 					   <tr>
 						<td colspan="2" class="hdrNameBg">
-						   <span class="genHeaderGray">Please read <a href="javascript:;" onclick="showhidediv();"> this migration notes</a> before you proceed further.
+							<span class="genHeaderGray">Please read <a href="javascript:;" onclick="showhidediv();"><u>this migration notes</u></a>
+                            				<span class="genHeaderSmall">before you proceed further.</span>
+							<br />
 			   			   <div id='mig_info_div' style="display:none">
 					  	   <ul>
-							<li><font color="red">Before do the migration please take database dump. If we continue the migration without taking a database dump, then we cannot recover the data later if we face any problems. So we highly recommend to take database dump of the current working database. </font>
+							<li><font color="red">Changes made to database during migration cannot be reverted back. So we highly recommend to take database dump of the current working database before migration. </font>
 							<li>To take database dump do the following<br />
-								1. Go inside mysql/bin directory from konsole (linux) or command prompt (windows)<br />
+								1. Go inside mysql/bin directory from terminal (linux) or command prompt (windows)<br />
 								2. Execute the following command to take database dump<br />&nbsp;&nbsp;
-									mysqldump --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port" "database_name" > dump_filename<br />&nbsp;&nbsp;
-									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file<br />
+									mysqldump --user=mysql_username --password=mysql-password -h hostname --port=mysql_port database_name &gt; dump_filename<br />&nbsp;&nbsp;
+									You can find the MySQL credentials in config.inc.php file.<br />
 							<li>To create a database do the following<br />
-								1. Go inside mysql/bin directory from konsole (linux) or command prompt (windows)<br />
+								1. Go inside mysql/bin directory from terminal (linux) or command prompt (windows)<br />
 								2. Execute the following command to enter into mysql prompt<br />&nbsp;&nbsp;
-									mysql --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port"<br />&nbsp;&nbsp;
-									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file. Now we will be entered into the mysql prompt.<br />
+									mysql --user=mysql_username --password=mysql-password -h hostname --port=mysql_port<br />&nbsp;&nbsp;
+									You can find the MySQL credentials in config.inc.php file.<br />
 								3. Execute the following command to create a new database<br />&nbsp;&nbsp;
 									create database new_db_name;<br />&nbsp;&nbsp;
-									We can set utf8 as default character set for the database on creation time by the following command<br />&nbsp;&nbsp;
+									You can set utf8 as default character set for the database on creation time through the following command:<br />&nbsp;&nbsp;
 									create database new_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
-									To change the default character set for the existing database we can use<br />&nbsp;&nbsp;
+									To change the default character set for an existing database use<br />&nbsp;&nbsp;
 									alter database old_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
-									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"> here </a><br />
+									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
 							<li>To store the data from database dump to a new database do the following<br />
 								1. Edit the database dump file<br />&nbsp;&nbsp;
-									SET FOREIGN_KEY_CHECKS = 0; => add this line at the start of the dump file<br />&nbsp;&nbsp;
-									SET FOREIGN_KEY_CHECKS = 1; => add this line at the end of the dump file<br />
-								2. Go inside mysql/bin directory from konsole (linux) or command prompt (windows) and ensure that the database dump file is available here<br />
+									SET FOREIGN_KEY_CHECKS = 0; =&gt; add this line at the start of the dump file.<br />&nbsp;&nbsp;
+									SET FOREIGN_KEY_CHECKS = 1; =&gt; add this line at the end of the dump file.<br />
+								2. Go inside mysql/bin directory from terminal (linux) or command prompt (windows) and ensure that the database dump file is available here.<br />
 								3. Execute the following command to store the database dump to new database<br />&nbsp;&nbsp;
-									mysql --user="mysql_username" --password="mysql-password" -h "hostname" --port="mysql_port" "database_name" < dump_filename <br />&nbsp;&nbsp;
-									where as avoid double quotes("") in this command. We can find the MySQL credentials in config.inc.php file<br />
-							<li>When we restore the database dump, we have to provide this restored database details in config.inc.php file so that vtiger will work with the previous data. Also one more thing we have to do is restore the following folders from old vtiger installation to new installation<br />&nbsp;&nbsp;
-									storage/ - which contains the attachment files<br />&nbsp;&nbsp;
-									test/ - which contains some image files<br />&nbsp;&nbsp;
-									user_privileges/ - which contains the access privileges for the users
+									mysql --user=mysql_username --password=mysql-password -h hostname --port=mysql_port database_name &lt; dump_filename <br />&nbsp;&nbsp;
+                                    You can find the MySQL credentials in config.inc.php file<br />
+									NOTE: If database dump was taken with CHARSET latin1 and you want the new tables to be created in utf8 character set, <br />
+                                    you should first edit dump_filename and replace all CHARSET=latin1 with CHARSET=utf8 that appears along with the CREATE sql statement.
 						   </ul>
-						   </div
-
+						   </div>
+						   </span>
+						   <br/>
 						</td>
 					   </tr>
 					   <!-- Migration Notes - ENDS -->
