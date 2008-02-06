@@ -128,7 +128,58 @@ ExecuteQuery("alter table vtiger_systems change  column server_username server_u
 ExecuteQuery("alter table vtiger_systems change  column server server varchar(100)");
 ExecuteQuery("alter table vtiger_systems change  column server_password server_password varchar(100)");
 
-
+//In our whole product, the picklist table columns and the corresponding picklists storage column in entity tables are changed to varchar(200)
+$picklist_query_array = Array(
+				"alter table vtiger_account modify account_type varchar(200) default NULL",
+				"alter table vtiger_activity modify activitytype varchar(200) default NULL",
+				"alter table vtiger_users modify activity_view varchar(200) default NULL",
+				"alter table vtiger_campaign modify campaignstatus varchar(200) default NULL",
+				"alter table vtiger_campaign modify campaigntype varchar(200) default NULL",
+				"alter table vtiger_quotes modify carrier varchar(200) default NULL",
+				"alter table vtiger_purchaseorder modify carrier varchar(200) default NULL",
+				"alter table vtiger_salesorder modify carrier varchar(200) default NULL",
+				"alter table vtiger_users modify date_format varchar(200) default NULL",
+				"alter table vtiger_activity modify duration_minutes varchar(200) default NULL",
+				"alter table vtiger_activity drop key activity_status_eventstatus_idx, add key activity_status_idx(status)",
+				"alter table vtiger_activity modify eventstatus varchar(200) default NULL",
+				"alter table vtiger_campaign modify expectedresponse varchar(200) default NULL",
+				"alter table vtiger_faqcategories modify faqcategories varchar(200) default NULL",
+				"alter table vtiger_faq modify category varchar(200) default NULL",
+				"alter table vtiger_faqstatus modify faqstatus varchar(200) default NULL",
+				"alter table vtiger_faq modify status varchar(200) default NULL",
+				"alter table vtiger_vendor modify glacct varchar(200) default NULL",
+				"alter table vtiger_account modify industry varchar(200) default NULL",
+				"alter table vtiger_leaddetails modify industry varchar(200) default NULL",
+				"alter table vtiger_leaddetails modify leadsource varchar(200) default NULL",
+				"alter table vtiger_contactsubdetails modify leadsource varchar(200) default NULL",
+				"alter table vtiger_potential modify leadsource varchar(200) default NULL",
+				"alter table vtiger_users modify lead_view varchar(200) default NULL",
+				"alter table vtiger_products modify manufacturer varchar(200) default NULL",
+				"alter table vtiger_potential modify potentialtype varchar(200) default NULL",
+				"alter table vtiger_products modify productcategory varchar(200) default NULL",
+				"alter table vtiger_account modify rating varchar(200) default NULL",
+				"alter table vtiger_leaddetails modify rating varchar(200) default NULL",
+				"alter table vtiger_activity modify recurringtype varchar(200) default NULL",
+				"alter table vtiger_potential modify sales_stage varchar(200) default NULL",
+				"alter table vtiger_leaddetails modify salutation varchar(200) default NULL",
+				"alter table vtiger_contactdetails modify salutation varchar(200) default NULL",
+				"alter table vtiger_taskpriority modify taskpriority varchar(200) default NULL",
+				"alter table vtiger_activity modify priority varchar(200) default NULL",
+				"alter table vtiger_taskstatus modify taskstatus varchar(200) default NULL",
+				"alter table vtiger_activity modify status varchar(200) default NULL",
+				"alter table vtiger_ticketcategories modify ticketcategories varchar(200) default NULL",
+				"alter table vtiger_troubletickets modify category varchar(200) default NULL",
+				"alter table vtiger_ticketpriorities modify ticketpriorities varchar(200) default NULL",
+				"alter table vtiger_troubletickets modify priority varchar(200) default NULL",
+				"alter table vtiger_ticketseverities modify ticketseverities varchar(200) default NULL",
+				"alter table vtiger_troubletickets modify severity varchar(200) default NULL",
+				"alter table vtiger_ticketstatus modify ticketstatus varchar(200) default NULL",
+				"alter table vtiger_troubletickets modify status varchar(200) default NULL",
+			     );
+foreach($picklist_query_array as $query)
+{
+	ExecuteQuery($query);
+}
 
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
