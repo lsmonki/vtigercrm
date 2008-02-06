@@ -85,8 +85,7 @@ class Potentials extends CRMEntity {
 			"potentialname"=>1,
 			"account_id"=>1,
 			"closingdate"=>1,
-			"sales_stage"=>1,
-			"amount"=>1
+			"sales_stage"=>1
 			);
 
 	//Added these variables which are used as default order by and sortorder in ListView
