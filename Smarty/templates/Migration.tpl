@@ -56,7 +56,7 @@ function showhidediv()
 					   <!-- Migration Notes - STARTS -->
 					   <tr>
 						<td colspan="2" class="hdrNameBg">
-						   <span class="genHeaderGray"><font color="red">Important Note </font>: </span>&nbsp;<a href="javascript:;" onclick="showhidediv();"> Must Read </a>
+						   <span class="genHeaderGray">Please read <a href="javascript:;" onclick="showhidediv();"> this migration notes</a> before you proceed further.
 			   			   <div id='mig_info_div' style="display:none">
 					  	   <ul>
 							<li><font color="red">Before do the migration please take database dump. If we continue the migration without taking a database dump, then we cannot recover the data later if we face any problems. So we highly recommend to take database dump of the current working database. </font>
