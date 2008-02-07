@@ -1257,6 +1257,14 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
+
+	//modified query to fix the ticket 5014
+	$and = "AND (((vtiger_activity.date_start between ? AND ?)
+		OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
+		OR (vtiger_activity.due_date between ? AND ?)
+		AND (vtiger_recurringevents.activityid is NULL))
+		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?))";
+
 	$count_qry = "SELECT count(*) as count FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 		ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1269,9 +1277,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT OUTER JOIN vtiger_recurringevents
 		ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
-		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
-		AND (((vtiger_activity.date_start between ? AND  ?) OR (vtiger_activity.due_date between ? AND ?) OR (vtiger_activity.date_start<? and vtiger_activity.due_date>?) AND (vtiger_recurringevents.recurringdate is NULL))
-		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?)) ";
+		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
 		
 	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid,
        		vtiger_activity.* FROM vtiger_activity
@@ -1286,9 +1292,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT OUTER JOIN vtiger_recurringevents
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
-			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
-			AND (((vtiger_activity.date_start between ? AND  ?) OR (vtiger_activity.due_date between ? AND ?) OR (vtiger_activity.date_start<? and vtiger_activity.due_date>?) AND (vtiger_recurringevents.recurringdate is NULL))
-			OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?)) ";
+			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
 			
 	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
 	if($info != '')
@@ -1314,7 +1318,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		
 		$total_res = $adb->pquery($total_q, $info_params);
 		$total = $adb->num_rows($total_res);
-		
+
 		$res = $adb->pquery($pending_query, $info_params);
 		$pending_rows = $adb->num_rows($res);
 		$cal_log->debug("Exiting getEventList() method...");
