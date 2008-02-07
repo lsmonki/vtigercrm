@@ -47,6 +47,18 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->retrieve_entity_info($_REQUEST['record'],"Notes");
         $focus->name=$focus->column_fields['notes_title'];
 }
+
+if($focus->mode != 'edit')
+{
+	if(isset($_REQUEST['contact_id']) || isset($_REQUEST['parent_id']))
+	{
+		$cont_id = $_REQUEST['contact_id'];
+		$par_id = $_REQUEST['parent_id'];
+		if($cont_id == $par_id)
+			$_REQUEST['parent_id'] = '';
+	}
+}
+
 if(isset($_REQUEST['parent_id']))
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
