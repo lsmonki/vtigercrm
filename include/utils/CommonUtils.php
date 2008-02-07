@@ -2019,62 +2019,62 @@ function QuickCreate($module)
 {
 	global $log;
 	$log->debug("Entering QuickCreate(".$module.") method ...");
-    global $adb;
-    global $current_user;
-    global $mod_strings;
+	global $adb;
+	global $current_user;
+	global $mod_strings;
 
 	$tabid = getTabid($module);
 
 	//Adding Security Check
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-           if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
-           {
-                 $quickcreate_query = "select * from vtiger_field where quickcreate=0 and tabid = ? order by quickcreatesequence";
-				 $params = array($tabid);
-           }
-           else
-           {
-                $profileList = getCurrentUserProfileList();
- 				$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate=0 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") ORDER BY quickcreatesequence";
- 				$params = array($tabid, $profileList);
-				//Postgres 8 fixes
- 				if( $adb->dbType == "pgsql")
- 		    		$quickcreate_query = fixPostgresQuery( $quickcreate_query, $log, 0); 
-           	}
-																					     
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+	{
+		$quickcreate_query = "select * from vtiger_field where quickcreate=0 and tabid = ? order by quickcreatesequence";
+		$params = array($tabid);
+	}
+	else
+	{
+		$profileList = getCurrentUserProfileList();
+		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate=0 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
+		$params = array($tabid, $profileList);
+		//Postgres 8 fixes
+		if( $adb->dbType == "pgsql")
+			$quickcreate_query = fixPostgresQuery( $quickcreate_query, $log, 0); 
+	}
+
 	$category = getParentTab();
 	$result = $adb->pquery($quickcreate_query, $params);
 	$noofrows = $adb->num_rows($result);
 	$fieldName_array = Array();
 	for($i=0; $i<$noofrows; $i++)
 	{
-      $fieldtablename = $adb->query_result($result,$i,'tablename');
-      $uitype = $adb->query_result($result,$i,"uitype");
-      $fieldname = $adb->query_result($result,$i,"fieldname");
-      $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-      $maxlength = $adb->query_result($result,$i,"maximumlength");
-      $generatedtype = $adb->query_result($result,$i,"generatedtype");
-      $typeofdata = $adb->query_result($result,$i,"typeofdata");
+		$fieldtablename = $adb->query_result($result,$i,'tablename');
+		$uitype = $adb->query_result($result,$i,"uitype");
+		$fieldname = $adb->query_result($result,$i,"fieldname");
+		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+		$maxlength = $adb->query_result($result,$i,"maximumlength");
+		$generatedtype = $adb->query_result($result,$i,"generatedtype");
+		$typeofdata = $adb->query_result($result,$i,"typeofdata");
 
-      //to get validationdata
-      $fldLabel_array = Array();
-      $fldLabel_array[$fieldlabel] = $typeofdata;
-      $fieldName_array[$fieldname] = $fldLabel_array;
-      $custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-      $qcreate_arr[]=$custfld;
+		//to get validationdata
+		$fldLabel_array = Array();
+		$fldLabel_array[$fieldlabel] = $typeofdata;
+		$fieldName_array[$fieldname] = $fldLabel_array;
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
+		$qcreate_arr[]=$custfld;
 	}
 	for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 	{
-       $key1=$qcreate_arr[$i];
-       if(is_array($qcreate_arr[$i+1]))
-       {
-               $key2=$qcreate_arr[$i+1];
-       }
-       else
-       {
-                $key2 =array();
-       }
-                $return_data[$j]=array(0 => $key1,1 => $key2);
+		$key1=$qcreate_arr[$i];
+		if(is_array($qcreate_arr[$i+1]))
+		{
+			$key2=$qcreate_arr[$i+1];
+		}
+		else
+		{
+			$key2 =array();
+		}
+		$return_data[$j]=array(0 => $key1,1 => $key2);
 	}
 	$form_data['form'] = $return_data;
 	$form_data['data'] = $fieldName_array;
