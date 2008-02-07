@@ -939,5 +939,6 @@ $mod_strings = Array(
 'LBL_PICKLIST_GLOBAL_DELETE'=>'Global Delete',
 'LBL_PICKLIST_TRANSFER'=>'Transfering the values Of ',
 'LBL_REPLACE_VALUE_WITH'=>'Replace value with ',
+'LBL_EDIT_CUSTOM_RULE'=>'Edit Custom Privilege Rule',
 );
 ?>
