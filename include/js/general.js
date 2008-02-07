@@ -600,13 +600,39 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 
 	var time1=new Date()
 	var time2=new Date()		
-	
+
+	//added to fix the ticket #5028
+	if(fldName1 == "time_end" && (getObj("due_date") && getObj("date_start")))
+	{
+		var due_date=getObj("due_date").value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+		var start_date=getObj("date_start").value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+		dateval1 = splitDateVal(due_date);
+		dateval2 = splitDateVal(start_date);
+		
+		dd1 = dateval1[0];
+		mm1 = dateval1[1];
+		yyyy1 = dateval1[2];
+
+		dd2 = dateval2[0];
+		mm2 = dateval2[1];
+		yyyy2 = dateval2[2];
+		
+		time1.setYear(yyyy1)
+		time1.setMonth(mm1-1)
+		time1.setDate(dd1)
+		
+		time2.setYear(yyyy2)
+		time2.setMonth(mm2-1)
+		time2.setDate(dd2)
+		
+	}
+	//end
+
 	time1.setHours(hh1)
 	time1.setMinutes(min1)
 	
 	time2.setHours(hh2)
 	time2.setMinutes(min2)
-
 	if (type!="OTH") {	
 		if (!compareDates(time1,fldLabel1,time2,fldLabel2,type)) {
 			getObj(fldName1).focus()
