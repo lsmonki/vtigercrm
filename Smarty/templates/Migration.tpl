@@ -86,9 +86,13 @@ function showhidediv()
 								2. Go inside mysql/bin directory from terminal (linux) or command prompt (windows) and ensure that the database dump file is available here.<br />
 								3. Execute the following command to store the database dump to new database<br />&nbsp;&nbsp;
 									mysql --user=mysql_username --password=mysql-password -h hostname --port=mysql_port database_name &lt; dump_filename <br />&nbsp;&nbsp;
-                                    You can find the MySQL credentials in config.inc.php file<br />
+									You can find the MySQL credentials in config.inc.php file<br />
 									NOTE: If database dump was taken with CHARSET latin1 and you want the new tables to be created in utf8 character set, <br />
-                                    you should first edit dump_filename and replace all CHARSET=latin1 with CHARSET=utf8 that appears along with the CREATE sql statement.
+									you should first edit dump_filename and replace all CHARSET=latin1 with CHARSET=utf8 that appears along with the CREATE sql statement.
+							<li>When we restore the database dump, we have to provide this restored database details in config.inc.php file so that vtiger will work with the previous data. Also one more thing we have to do is restore the following folders from old vtiger installation to new installation<br />&nbsp;&nbsp;
+									storage/ - which contains the attachment files<br />&nbsp;&nbsp;
+									test/ - which contains some image files<br />&nbsp;&nbsp;
+									user_privileges/ - which contains the access privileges for the users and some more files
 						   </ul>
 						   </div>
 						   </span>
