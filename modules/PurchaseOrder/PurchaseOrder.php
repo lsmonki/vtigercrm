@@ -269,6 +269,19 @@ class PurchaseOrder extends CRMEntity {
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_PO_STATUS'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+		
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Vendor, Total are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$postatus_access = (getFieldVisibilityPermission('PurchaseOrder', $current_user->id, 'postatus') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('PurchaseOrder');
+
+		$postatus_array = ($postatus_access != 1)? $picklistarray['postatus']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($postatus_access != 1)? 'Not Accessible': '-';
 
 		while($row = $adb->fetch_array($result))
 		{
@@ -277,7 +290,7 @@ class PurchaseOrder extends CRMEntity {
 			$entries[] = $row['purchaseorderid'];
 			$entries[] = $row['vendorname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['postatus'];
+			$entries[] = (in_array($row['postatus'], $postatus_array))? $row['postatus']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;

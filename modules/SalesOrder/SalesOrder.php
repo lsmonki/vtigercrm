@@ -303,6 +303,19 @@ class SalesOrder extends CRMEntity {
 		$header[] = $app_strings['LBL_SO_STATUS'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
 
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Account Name , Total are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$sostatus_access = (getFieldVisibilityPermission('SalesOrder', $current_user->id, 'sostatus') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('SalesOrder');
+
+		$sostatus_array = ($sostatus_access != 1)? $picklistarray['sostatus']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($sostatus_access != 1)? 'Not Accessible': '-';
+
 		while($row = $adb->fetch_array($result))
 		{
 			$entries = Array();
@@ -310,7 +323,7 @@ class SalesOrder extends CRMEntity {
 			$entries[] = $row['salesorderid'];
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['sostatus'];
+			$entries[] = (in_array($row['sostatus'], $sostatus_array))? $row['sostatus']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;

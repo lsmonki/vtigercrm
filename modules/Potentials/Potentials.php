@@ -365,13 +365,21 @@ class Potentials extends CRMEntity {
 		$header[] = $app_strings['LBL_CLOSE_DATE'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
 
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Sales Stage, Expected Close Dates are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$amount_access = (getFieldVisibilityPermission('Potentials', $current_user->id, 'amount') != '0')? 1 : 0;
+		$probability_access = (getFieldVisibilityPermission('Potentials', $current_user->id, 'probability') != '0')? 1 : 0;
+
 		while($row = $adb->fetch_array($result))
 		{
 			$entries = Array();
 
-			$entries[] = $row['amount'];
+			$entries[] = ($amount_access != 1)? $row['amount'] : 0;
 			$entries[] = $row['stage'];
-			$entries[] = $row['probability'];
+			$entries[] = ($probability_access != 1) ? $row['probability'] : 0;
 			$entries[] = getDisplayDate($row['closedate']);
 			$entries[] = getDisplayDate($row['lastmodified']);
 
