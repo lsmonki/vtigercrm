@@ -905,6 +905,7 @@ class CustomView extends CRMEntity{
 	  */	
 	function getCVAdvFilterSQL($cvid)
 	{
+		global $current_user;
 		$advfilter = $this->getAdvFilterByCvid($cvid);
 		if(isset($advfilter))
 		{
@@ -936,7 +937,12 @@ class CustomView extends CRMEntity{
 							//Added for getting vtiger_activity Status -Jaguar
 							if($this->customviewmodule == "Calendar" && ($columns[1] == "status" || $columns[1] == "eventstatus"))
 							{
-								$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+								{
+									$advfiltersql[] = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+								}
+								else
+									$advfiltersql[] = "vtiger_activity.eventstatus".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
 							}
 							else
 							{
@@ -1045,8 +1051,19 @@ class CustomView extends CRMEntity{
 					}
 				}
 			}
-
-			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);	
+			//added to fix the ticket 
+			if($this->customviewmodule == "Calendar" && ($fieldname=="status" || $fieldname=="taskstatus" || $fieldname=="eventstatus"))
+			{
+				if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+				{
+					$value = " (case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end)".$this->getAdvComparator($comparator,$value,$datatype);
+				}
+				else
+					$value = " vtiger_activity.eventstatus ".$this->getAdvComparator($comparator,$value,$datatype);
+			} 
+			else
+				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
+			//end
 		}
 		return $value;
 	}
