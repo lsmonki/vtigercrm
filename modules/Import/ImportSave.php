@@ -141,7 +141,7 @@ foreach ($rows1 as $row)
 
 	foreach ($focus->required_fields as $field=>$notused) 
 	{ 
-		$fv = $focus->column_fields[$field];
+		$fv = trim($focus->column_fields[$field]);
 		if (! isset($fv) || $fv == '') 
 		{
 		       p("fv ".$field." not set");	
