@@ -225,27 +225,40 @@ if(count($querycolumns) > 0)
 			and vtiger_troubletickets.ticketid in (". generateQuestionMarks($mass_merge) .")";
 
 	$result = $adb->pquery($query, array($mass_merge));
-
+	$avail_pick_arr = getAccessPickListValues('HelpDesk');
 	while($columnValues = $adb->fetch_array($result))
 	{
 		$y=$adb->num_fields($result);
 		for($x=0; $x<$y; $x++)
 		{
 			$value = $columnValues[$x];
-			//<<<<<<<<<<<<<<<for blank vtiger_fields>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			if(trim($value) == "--None--" || trim($value) == "--none--")
+		  foreach($columnValues as $key=>$val)
+		  {
+			if($val == $value && $value != '')
 			{
-				$value = "";
-			}
-			//<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			$actual_values[$x] = $value;
-			$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
-			//if value contains any line feed or carriage return replace the value with ".value."
-			if (preg_match ("/(\r\n)/", $actual_values[$x])) 
-			{
-				$actual_values[$x] = '"'.$actual_values[$x].'"';
-			}
-			$actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
+			  if(array_key_exists($key,$avail_pick_arr))
+			  {
+	 			if(!in_array($val,$avail_pick_arr[$key]))
+				{
+		 			$value = "Not Accessible";
+		 		}
+		 	  }
+		  	}
+	 	  }
+		  //<<<<<<<<<<<<<<<for blank vtiger_fields>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		  if(trim($value) == "--None--" || trim($value) == "--none--")
+		  {
+		 	$value = "";
+		  }
+		  //<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		  $actual_values[$x] = $value;
+		  $actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
+		  //if value contains any line feed or carriage return replace the value with ".value."
+		  if (preg_match ("/(\r\n)/", $actual_values[$x])) 
+		  {
+		  	$actual_values[$x] = '"'.$actual_values[$x].'"';
+		  }
+		  $actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
 		}
 		$mergevalue[] = implode($actual_values,",");  	
 	}

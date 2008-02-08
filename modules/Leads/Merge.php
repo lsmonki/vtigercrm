@@ -140,13 +140,26 @@ $query = "select ".$selectcolumns." from vtiger_leaddetails
   where vtiger_crmentity.deleted=0 and vtiger_leaddetails.leadid in (". generateQuestionMarks($mass_merge) .")";
 		
 $result = $adb->pquery($query, array($mass_merge));
-	
+$avail_pick_arr = getAccessPickListValues('Leads');	
 while($columnValues = $adb->fetch_array($result))
 {
-	$y=$adb->num_fields($result);
+  $y=$adb->num_fields($result);
   for($x=0; $x<$y; $x++)
   {
-		$value = $columnValues[$x];
+	  $value = $columnValues[$x];
+	 foreach($columnValues as $key=>$val)
+	 {
+		if($val == $value && $value != '')
+		{
+		  if(array_key_exists($key,$avail_pick_arr))
+		  {
+			if(!in_array($val,$avail_pick_arr[$key]))
+			{
+				$value = "Not Accessible";
+			}
+		  }
+		}
+	 }
   	//<<<<<<<<<<<<<<< For Blank Fields >>>>>>>>>>>>>>>>>>>>>>>>>>>>
   	if(trim($value) == "--None--" || trim($value) == "--none--")
   	{

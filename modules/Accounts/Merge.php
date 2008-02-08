@@ -209,13 +209,26 @@ if(count($querycolumns) > 0)
 	//echo $query;
 	//die;	
 	$result = $adb->pquery($query, array($mass_merge));
-	
+$avail_pick_arr = getAccessPickListValues('Accounts');	
 while($columnValues = $adb->fetch_array($result))
 {
-	$y=$adb->num_fields($result);
+  $y=$adb->num_fields($result);
   for($x=0; $x<$y; $x++)
   {
-  	$value = $columnValues[$x];
+	  $value = $columnValues[$x];
+  	  foreach($columnValues as $key=>$val)
+	  {
+		if($val == $value && $value != '')
+		{
+		  if(array_key_exists($key,$avail_pick_arr))
+		  {
+ 			if(!in_array($val,$avail_pick_arr[$key]))
+			{
+	 			$value = "Not Accessible";
+	 		}
+	 	  }
+	  	}
+ 	  }
   	//<<<<<<<<<<<<<<<for modifing default values>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   	if(trim($value) == "--None--" || trim($value) == "--none--")
   	{
