@@ -23,7 +23,7 @@ require_once('include/utils/utils.php');
 	if(isset($_REQUEST['binFile_hidden'])) {
 		$filename = $_REQUEST['binFile_hidden'];
 	} else {
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile));
 	}
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
@@ -141,7 +141,7 @@ require_once('include/utils/utils.php');
 				SET organizationname = ?, address = ?, city = ?, state = ?, code = ?, country = ?, 
 				phone = ?, fax = ?, website = ?, logoname = ? WHERE organizationname = ?";
 			$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, 
-					$organization_country, $organization_phone, $organization_fax, $organization_website, $organization_logoname, $org_name);
+					$organization_country, $organization_phone, $organization_fax, $organization_website, decode_html($organization_logoname), $org_name);
 		}
 		$adb->pquery($sql, $params);
 
