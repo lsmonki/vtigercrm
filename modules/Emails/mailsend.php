@@ -128,7 +128,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
                 $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
                 $pmodule = 'Users';
 		$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -183,7 +183,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id,$logo);
 				}	
 
 				$all_to_emailids []= $emailadd;
