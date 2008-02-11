@@ -372,13 +372,19 @@ class Potentials extends CRMEntity {
 		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
 		$amount_access = (getFieldVisibilityPermission('Potentials', $current_user->id, 'amount') != '0')? 1 : 0;
 		$probability_access = (getFieldVisibilityPermission('Potentials', $current_user->id, 'probability') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('Potentials');
+
+		$potential_stage_array = $picklistarray['sales_stage'];
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = 'Not Accessible';
 
 		while($row = $adb->fetch_array($result))
 		{
 			$entries = Array();
 
 			$entries[] = ($amount_access != 1)? $row['amount'] : 0;
-			$entries[] = $row['stage'];
+			$entries[] = (in_array($row['stage'], $potential_stage_array))? $row['stage']: $error_msg;
 			$entries[] = ($probability_access != 1) ? $row['probability'] : 0;
 			$entries[] = getDisplayDate($row['closedate']);
 			$entries[] = getDisplayDate($row['lastmodified']);
