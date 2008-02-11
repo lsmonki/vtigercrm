@@ -154,7 +154,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	if($adb->num_rows($rs) > 0)
 		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
 
-	$mail->FromName = $from_name;
+	$mail->FromName = decode_html($from_name);
 
 	if($to_email != '')
 	{
