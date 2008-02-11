@@ -51,20 +51,20 @@ $reportmodules = Array(Array('primarymodule'=>'Contacts','secondarymodule'=>'Acc
 $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
 			     'vtiger_account:industry:Accounts_industry:industry:V',
 			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                              'vtiger_account:industry:Accounts_industry:industry:V',
                              'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                              'vtiger_contactdetails:email:Contacts_Email:email:E',
                              'vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
                              'vtiger_potential:sales_stage:Potentials_Sales_Stage:sales_stage:V'),
@@ -367,13 +367,13 @@ $stdfilters = Array(Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:C
 
 $advfilters = Array(
                       Array(
-                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                                   'comparator'=>'n',
                                   'value'=>''
                                  )
                            ),
 		      Array(
-                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                                   'comparator'=>'e',
                                   'value'=>''
                                  )

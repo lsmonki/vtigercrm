@@ -181,6 +181,8 @@ foreach($picklist_query_array as $query)
 	ExecuteQuery($query);
 }
 
+// Modified to change the comparison datatype from Integer to Varchar for Account name
+ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V' where columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I'");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
