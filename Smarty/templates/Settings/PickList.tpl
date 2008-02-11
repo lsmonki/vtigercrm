@@ -342,7 +342,7 @@ function delPickList(obj,module)
 			
 			if(oAvlPick.options[k].selected == true)
 			{
-				selectedColStr += "'"+escapeAll(oAvlPick.options[k].value)+ "',";
+				selectedColStr += escapeAll(oAvlPick.options[k].value)+ ",";
 				val_count++;
 			}
 		}

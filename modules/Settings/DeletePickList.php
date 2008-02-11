@@ -37,7 +37,7 @@ else
 
 	if($mode == 'replace')
 	{
-		$replaceWith = $_REQUEST['replaceFields'];
+		$replaceWith = addslashes($_REQUEST['replaceFields']);
 		$selectedFields = $_REQUEST['selectedFields'];
 		$unwantedPicklist = explode(',',$selectedFields);
 		foreach($unwantedPicklist as $key => $val)
@@ -45,6 +45,7 @@ else
 			$qry="select tablename,columnname,uitype from vtiger_field where fieldname='$fieldName'";
 			$result = $adb->query($qry);
 			$num = $adb->num_rows($result);
+			$val = "'".addslashes($val)."'";
 			if($num > 0)
 			{
 				for($n=0;$n<$num;$n++)
@@ -116,7 +117,13 @@ else
 		{
 			$option='';
 			$selectedFields = $_REQUEST['selectedFields'];
-			$sql="select $fieldName from vtiger_$fieldName where $fieldName not in ($selectedFields)";
+			$pick_arr = explode(",",$_REQUEST['selectedFields']);
+			foreach($pick_arr as $v)
+			{
+				$pick_arr2[] = "'".addslashes($v)."'";
+			}
+			$pick_str = implode(",",$pick_arr2);
+			$sql="select $fieldName from vtiger_$fieldName where $fieldName not in ($pick_str)";
 			
 			$res=$adb->query($sql);
 			$num_Rows = $adb->num_rows($res);
