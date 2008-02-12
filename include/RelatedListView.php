@@ -319,12 +319,18 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			{
 				$entries[] = $row['title'];
 			}
-			$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-			if(strlen($row['description']) > $listview_max_textlength)
+			if((getFieldVisibilityPermission('Notes', $current_user->id, 'notecontent') == '0') || $row['activitytype'] == 'Attachments')
 			{
-				$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+				$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
+				if(strlen($row['description']) > $listview_max_textlength)
+				{
+					$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+				}
+				$entries[] = nl2br($row['description']); 
 			}
-			$entries[] = nl2br($row['description']); 
+			else
+				$entries[]=" <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
 			$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
 
 			if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
