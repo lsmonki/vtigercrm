@@ -282,8 +282,8 @@ if (is_array($overview))
 		$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
 		//Added to get the UTF-8 string - 30-11-06 - Mickie
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
-		$val->from = utf8_decode(imap_utf8(addslashes($val->from)));
-		$val->to = utf8_decode(imap_utf8(addslashes($val->to)));
+		$val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
+		$val->to = utf8_decode(utf8_encode(imap_utf8(addslashes($val->to))));
 		$val->subject = utf8_decode(utf8_encode(imap_utf8($val->subject)));
 		$to = str_replace("<",":",$val->to);
                 $to_list = str_replace(">","",$to);
