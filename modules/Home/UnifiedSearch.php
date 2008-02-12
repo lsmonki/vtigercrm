@@ -164,10 +164,22 @@ else {
   */
 function getUnifiedWhere($listquery,$module,$search_val)
 {
-	global $adb;
+	global $adb, $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		
 	$search_val = mysql_real_escape_string($search_val);
-	$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ?";
-	$result = $adb->pquery($query, array(getTabid($module)));
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	{
+		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ?";
+		$qparams = array(getTabid($module));
+	}
+	else
+	{
+		$profileList = getCurrentUserProfileList();
+		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 GROUP BY vtiger_field.fieldid";
+		$qparams = array(getTabid($module), $profileList);
+	}
+	$result = $adb->pquery($query, $qparams);
 	$noofrows = $adb->num_rows($result);
 
 	$where = '';
