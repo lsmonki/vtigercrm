@@ -315,11 +315,19 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="contactid")
 				{
-					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid=?";
+					$query = "SELECT lastname, firstname FROM vtiger_contactdetails WHERE contactid=?";
 					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"lastname");
 					if($name_val!="")
 					{
+						if(getFieldVisibilityPermission('Contacts', $current_user->id,'firstname') == '0')
+						{
+							$first_name = '';
+							$first_name = $adb->query_result($result,0,"firstname");
+							if($first_name != '')
+								$name_val .= " ".$first_name;
+						}
+
 						$mod_name=$name_val;
 						$search_str=$name_val;
 					}	
