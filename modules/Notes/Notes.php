@@ -175,24 +175,24 @@ class Notes extends CRMEntity {
 				LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
 					ON vtiger_crmentityRelatedTo.crmid = vtiger_senotesrel.crmid
 				
-				LEFT JOIN vtiger_leaddetails vtiger_NoteRelatedToLead
-					ON vtiger_NoteRelatedToLead.leadid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_account vtiger_NoteRelatedToAccount
-					ON vtiger_NoteRelatedToAccount.accountid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_potential vtiger_NoteRelatedToPotential
-					ON vtiger_NoteRelatedToPotential.potentialid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_products vtiger_NoteRelatedToProduct
-					ON vtiger_NoteRelatedToProduct.productid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_invoice vtiger_NoteRelatedToInvoice
-					ON vtiger_NoteRelatedToInvoice.invoiceid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_purchaseorder vtiger_NoteRelatedToPO
-					ON vtiger_NoteRelatedToPO.purchaseorderid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_quotes  vtiger_NoteRelatedQuote
-					ON vtiger_NoteRelatedQuote.quoteid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_salesorder vtiger_NoteRelatedToSO
-					ON vtiger_NoteRelatedToSO.salesorderid = vtiger_senotesrel.crmid
-				LEFT JOIN vtiger_troubletickets vtiger_NoteRelatedToTicket
-					ON vtiger_NoteRelatedToTicket.ticketid = vtiger_senotesrel.crmid";
+				LEFT JOIN vtiger_leaddetails
+					ON vtiger_leaddetails.leadid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_account
+					ON vtiger_account.accountid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_potential
+					ON vtiger_potential.potentialid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_products
+					ON vtiger_products.productid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_invoice
+					ON vtiger_invoice.invoiceid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_purchaseorder
+					ON vtiger_purchaseorder.purchaseorderid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_quotes
+					ON vtiger_quotes.quoteid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_salesorder vtiger_salesorder
+					ON vtiger_salesorder.salesorderid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_troubletickets
+					ON vtiger_troubletickets.ticketid = vtiger_senotesrel.crmid";
 	
 				$where_auto=" vtiger_crmentity.deleted=0 
 

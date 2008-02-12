@@ -554,10 +554,10 @@ class HelpDesk extends CRMEntity {
 					ON vtiger_troubletickets.ticketid =vtiger_crmentity.crmid 
 				LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo 
 					ON vtiger_crmentityRelatedTo.crmid = vtiger_troubletickets.parent_id
-				LEFT JOIN vtiger_account vtiger_TicketRelatedToAccount 
-					ON vtiger_TicketRelatedToAccount.accountid = vtiger_troubletickets.parent_id 
-				LEFT JOIN vtiger_contactdetails vtiger_TicketRelatedToContact 
-					ON vtiger_TicketRelatedToContact.contactid = vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_account 
+					ON vtiger_account.accountid = vtiger_troubletickets.parent_id 
+				LEFT JOIN vtiger_contactdetails 
+					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
 				LEFT JOIN vtiger_ticketcomments 
 					ON vtiger_ticketcomments.ticketid = vtiger_troubletickets.ticketid 
 				LEFT JOIN vtiger_ticketcf 

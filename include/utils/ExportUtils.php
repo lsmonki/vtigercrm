@@ -141,15 +141,15 @@ function getFieldsListFromQuery($query)
 		elseif($tablename == 'vtiger_senotesrel' && $columnName == 'crmid')//Notes - Related To
 		{
 			$fields .= "case vtiger_crmentityRelatedTo.setype 
-					when 'Leads' then concat('Leads ::: ',vtiger_NoteRelatedToLead.lastname,' ',vtiger_NoteRelatedToLead.firstname) 
-					when 'Accounts' then concat('Accounts ::: ',vtiger_NoteRelatedToAccount.accountname) 
-					when 'Potentials' then concat('Potentials ::: ',vtiger_NoteRelatedToPotential.potentialname) 
-					when 'Products' then concat('Products ::: ',vtiger_NoteRelatedToProduct.productname) 
-					when 'Invoice' then concat('Invoice ::: ',vtiger_NoteRelatedToInvoice.subject) 
-					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_NoteRelatedToPO.subject) 
-					when 'Quotes' then concat('Quotes ::: ',vtiger_NoteRelatedQuote.subject)
-					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_NoteRelatedToSO.subject) 
-					when 'HelpDesk' then concat('HelpDesk ::: ',vtiger_NoteRelatedToTicket.title)
+					when 'Leads' then concat('Leads ::: ',vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) 
+					when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname) 
+					when 'Potentials' then concat('Potentials ::: ',vtiger_potential.potentialname) 
+					when 'Products' then concat('Products ::: ',vtiger_products.productname) 
+					when 'Invoice' then concat('Invoice ::: ',vtiger_invoice.subject) 
+					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_purchaseorder.subject) 
+					when 'Quotes' then concat('Quotes ::: ',vtiger_quotes.subject)
+					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_salesorder.subject) 
+					when 'HelpDesk' then concat('HelpDesk ::: ',vtiger_troubletickets.title)
 				     End as 'Related To',";
 		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
@@ -164,8 +164,8 @@ function getFieldsListFromQuery($query)
                 elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
                 {
                          $fields .= "case vtiger_crmentityRelatedTo.setype
-                                        when 'Accounts' then concat('Accounts ::: ',vtiger_TicketRelatedToAccount.accountname)
-					when 'Contacts' then concat('Contacts ::: ',vtiger_TicketRelatedToContact.lastname,' ',vtiger_TicketRelatedToContact.firstname)
+                                        when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname)
+					when 'Contacts' then concat('Contacts ::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
                                      End as 'Related To',";
                 }
 
