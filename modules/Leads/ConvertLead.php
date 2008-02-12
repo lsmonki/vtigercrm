@@ -91,6 +91,7 @@ for($j = 0; $j < $noofsalesRows; $j++)
 
         $sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.getTranslatedString($sales_stageValue).'</OPTION>';
 }
+
 $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Leads">
 	<input type="hidden" name="record" value="'.$id.'">
@@ -124,6 +125,18 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 					<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
 			</tr>';
 
+// An array which as module => fields mapping, to check for field permissions
+$fields_list = array( 'Potentials'=> array('potentialname', 'closingdate', 'amount', 'sales_stage'));
+$fields_permission = array();
+foreach($fields_list as $mod=>$fields){
+	foreach($fields as $key=>$field) {
+		if(getFieldVisibilityPermission($mod, $current_user->id, $field)=='0')
+			$fields_permission[$field] = '0';
+		else
+			$fields_permission[$field] = '1';
+	}
+}
+
 if(isPermitted("Potentials",'EditView') == 'yes')
 {
 $convertlead .='<tr>
@@ -133,14 +146,18 @@ $convertlead .='<tr>
 		<tr>
 			<td colspan="2" id="ch" height="100" style="padding:0px;" >
 				<div style="display:block;" id="cc"  >
-					<table width="100%" border="0" cellpadding="5" cellspacing="0" >
-						<tr>
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" >';
+					if($fields_permission['potentialname']=='0') {
+						
+						$convertlead .= '<tr>
 							<td align="right" class="dvtCellLabel" width="53%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="47%">
 							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
                                                         </td>
-						</tr>
-						<tr>
+						</tr>';
+					}
+					if($fields_permission['closingdate']=='0') {
+					$convertlead .= '<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
 								<input name="closedate" style="border: 1px solid rgb(186, 186, 186);" id="jscal_field_closedate" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
@@ -150,16 +167,21 @@ $convertlead .='<tr>
 								getCalendarPopup(\'jscal_trigger_closedate\',\'jscal_field_closedate\',\''.$date_format.'\')
 							</script>
 							</td>
-						</tr>
-						<tr>
+						</tr>';
+					}
+					if($fields_permission['amount']=='0') {
+						$convertlead .= '<tr>
 							<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_POTENTIAL_AMOUNT'].'</td>
 							<td class="dvtCellInfo"><input type="text" name="potential_amount" class="detailedViewTextBox">'.$potential_amount.'</td>
-						</tr>
-						<tr>
+						</tr>';
+					}
+					if($fields_permission['sales_stage']=='0') {	
+						$convertlead .='<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_SALES_STAGE'].'</td>
 							<td class="dvtCellInfo"><select name="potential_sales_stage" class="detailedViewTextBox">'.$sales_stage_fld.'</select></td>
-						</tr>
-					</table>
+						</tr>';
+					}
+					$convertlead .='</table>
 				</div>
 			</td>
 		</tr>';
