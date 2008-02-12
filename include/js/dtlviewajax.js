@@ -278,7 +278,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var fieldId = mail_chk_arr[0];
 			var internal_mailer_flag = mail_chk_arr[1];
 			if(internal_mailer_flag == 1)
-				var email_link = "<a href=\"javascript:InternalMailer("+crmId+","+fieldId+",'"+fieldName+"','"+module+"','record_id');window.close();\">"+tagValue+"&nbsp;</a>";
+				var email_link = "<a href=\"javascript:InternalMailer("+crmId+","+fieldId+",'"+fieldName+"','"+module+"','record_id');\">"+tagValue+"&nbsp;</a>";
 			else
 				var email_link = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
 		}
