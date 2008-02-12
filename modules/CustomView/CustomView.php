@@ -1089,9 +1089,13 @@ class CustomView extends CRMEntity{
 		$res=$adb->pquery($sql, array());
 		for($s=0;$s<$adb->num_rows($res);$s++)
 		{
-			if($s != 0)
-				$value .= ' or ';
 			$modulename=$adb->query_result($res,$s,"setype");
+			if($modulename == 'Vendors')
+			{
+				continue;
+			}
+			if($s != 0)
+                 $value .= ' or ';	
 			if($modulename == 'Accounts')
 			{
 				//By Pavani : Related to problem in calender, Ticket: 4284 and 4675
