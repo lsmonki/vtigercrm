@@ -185,6 +185,9 @@ foreach($picklist_query_array as $query)
 ExecuteQuery("update vtiger_relcriteria set columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V' where columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I'");
 ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V' where columnname='vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I'");
 
+// Modified to change the typeofdata for hour_format, start_hour and end_hour to 'V~O' instead of 'I~O'
+ExecuteQuery("update vtiger_field set typeofdata = 'V~O' where tablename='vtiger_users' and fieldname in ('hour_format','start_hour','end_hour')");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 
