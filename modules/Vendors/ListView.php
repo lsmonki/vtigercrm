@@ -111,7 +111,7 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
         $list_query .= ' and '.$where;
-        $_SESSION['export_where'] = to_html($where);
+        $_SESSION['export_where'] = $where;
 }
 else
    unset($_SESSION['export_where']);
