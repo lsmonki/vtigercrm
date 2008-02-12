@@ -3235,7 +3235,7 @@ function getBasic_Advance_SearchURL()
 	{
 		$url .= (isset($_REQUEST['query']))?'&query='.$_REQUEST['query']:'';
 		$url .= (isset($_REQUEST['search_field']))?'&search_field='.$_REQUEST['search_field']:'';
-		$url .= (isset($_REQUEST['search_text']))?'&search_text='.$_REQUEST['search_text']:'';
+		$url .= (isset($_REQUEST['search_text']))?'&search_text='.to_html($_REQUEST['search_text']):'';
 		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
 		$url .= (isset($_REQUEST['type']))?'&type='.$_REQUEST['type']:'';
 	}
@@ -3247,7 +3247,7 @@ function getBasic_Advance_SearchURL()
 		{
 			$url .= (isset($_REQUEST['Fields'.$i]))?'&Fields'.$i.'='.stripslashes(str_replace("'","",$_REQUEST['Fields'.$i])):'';
 			$url .= (isset($_REQUEST['Condition'.$i]))?'&Condition'.$i.'='.$_REQUEST['Condition'.$i]:'';
-			$url .= (isset($_REQUEST['Srch_value'.$i]))?'&Srch_value'.$i.'='.$_REQUEST['Srch_value'.$i]:'';
+			$url .= (isset($_REQUEST['Srch_value'.$i]))?'&Srch_value'.$i.'='.to_html($_REQUEST['Srch_value'.$i]):'';
 		}
 		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
 		$url .= (isset($_REQUEST['search_cnt']))?'&search_cnt='.$_REQUEST['search_cnt']:'';

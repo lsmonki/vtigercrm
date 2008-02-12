@@ -142,7 +142,7 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND ".$where;
 
-	$_SESSION['export_where'] = $where;
+	$_SESSION['export_where'] = to_html($where);
 }
 else
    unset($_SESSION['export_where']);

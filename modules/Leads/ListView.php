@@ -161,7 +161,7 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
 	$query .= ' and '.$where;
-	$_SESSION['export_where'] = $where;
+	$_SESSION['export_where'] = to_html($where);
 }
 else
 	unset($_SESSION['export_where']);

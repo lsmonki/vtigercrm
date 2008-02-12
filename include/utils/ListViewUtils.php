@@ -949,7 +949,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			if($links_info != "" && $del_link != "")
 				$links_info .=  " | ";
 			if($del_link != "")
-				$links_info .=	"<a href='javascript:confirmdelete(\"$del_link\")'>".$app_strings["LNK_DELETE"]."</a>";
+				$links_info .=	"<a href='javascript:confirmdelete(\"".addslashes(urlencode($del_link))."\")'>".$app_strings["LNK_DELETE"]."</a>";
 		}	
 		if($links_info != "")
 			$list_header[] = $links_info;
