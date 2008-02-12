@@ -101,6 +101,8 @@ class CustomView extends CRMEntity{
 		{
 			$viewid =  $_REQUEST['viewname'];
 		}
+		if(is_string($viewid) && strtolower($viewid) == 'all')
+        		$viewid = $this->getViewIdByName('All', $module);
 		$_SESSION['lvs'][$module]["viewname"] = $viewid;
 		return $viewid;
 

@@ -151,7 +151,7 @@ function getHomeActivities(mode,view)
 								<tr>
 									<td colspan="2" align="right" valign="bottom">
 									{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
-									 <a href="index.php?module={$modulename}&action=index&search_field=assigned_user_id&searchtype=BasicSearch&search_text={$CURRENTUSER}&query=true">{$APP.LBL_MORE}..</a>
+									 <a href="index.php?module={$modulename}&action=index&search_field=assigned_user_id&searchtype=BasicSearch&search_text={$CURRENTUSER}&query=true&viewname=all">{$APP.LBL_MORE}..</a>
 									{else}
 										&nbsp;	
 									{/if}
