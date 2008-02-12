@@ -256,7 +256,7 @@ function get_usersid($table_name,$column_name,$search_string)
 
 function getValuesforColumns($column_name,$search_string,$criteria='cts')
 {
-	global $log;
+	global $log, $current_user;
 	$log->debug("Entering getValuesforColumns(".$column_name.",".$search_string.") method ...");
 	global $column_array,$table_col_array;
 
@@ -276,19 +276,28 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 			}
 			else 
 			{
-				$where="(";
-				for($j=0;$j<count($explode_column);$j++)
-				{
-					$where .=getSearch_criteria($criteria,$search_string,$explode_column[$j]);
-					if($j != $x-1)
-					{
-						if($criteria == 'dcts' || $criteria == 'isn')
-							$where .= " and ";
-						else
-							$where .= " or ";
+				if($column_name == "contact_id" && $_REQUEST['type'] == "entchar") {
+					if (getFieldVisibilityPermission('Contacts', $current_user->id,'firstname') == '0') {
+						$where = "concat(vtiger_contactdetails.lastname, ' ', vtiger_contactdetails.firstname) = '$search_string'";
+					} else {
+						$where = "vtiger_contactdetails.lastname = '$search_string'";					
 					}
 				}
-				$where.=")";
+				else {
+					$where="(";
+					for($j=0;$j<count($explode_column);$j++)
+					{
+						$where .=getSearch_criteria($criteria,$search_string,$explode_column[$j]);
+						if($j != $x-1)
+						{
+							if($criteria == 'dcts' || $criteria == 'isn')
+								$where .= " and ";
+							else
+								$where .= " or ";
+						}
+					}
+					$where.=")";
+				}
 			}
 			break 1;
 		}
@@ -779,7 +788,7 @@ function getWhereCondition($currentModule)
 			}
 			elseif(in_array($column_name,$column_array))
                         {
-                                $adv_string .= getValuesforColumns($column_name,$srch_val,$srch_cond)." ".$matchtype;
+                                $adv_string .= " ".getValuesforColumns($column_name,$srch_val,$srch_cond)." ".$matchtype;
                         }
 			else
 			{
