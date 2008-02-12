@@ -64,7 +64,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
                 $label_fld[] = getCurrencyName($col_fields[$fieldname]);
-		$pick_query="select * from vtiger_currency_info";
+		$pick_query="select * from vtiger_currency_info where currency_status = 'Active'";
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
 
