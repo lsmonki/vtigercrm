@@ -127,8 +127,8 @@ for ($i=0;$i<(count($myids)-1);$i++)
                 //handle the mail send to vtiger_users
                 $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
                 $pmodule = 'Users';
-		$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
+		$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -173,7 +173,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 
 			if($emailadd != '')
 			{
-				$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
+				$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
 				$pos = strpos($description, '$logo$');
 				if ($pos !== false)
 				{
@@ -183,7 +183,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id,$logo);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
 				}	
 
 				$all_to_emailids []= $emailadd;
