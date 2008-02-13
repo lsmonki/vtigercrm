@@ -488,7 +488,7 @@ if($action == "DetailView")
 			break;
 		}
 	
-	if(isset($_REQUEST['record']) && $_REQUEST['record']!='' && $_REQUEST["module"] != "Webmails") 
+	if(isset($_REQUEST['record']) && $_REQUEST['record']!='' && $_REQUEST["module"] != "Webmails" && $current_user->id != '')
         {
                 // Only track a viewing if the record was retrieved.
                 $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
