@@ -235,7 +235,7 @@ $graph_array = Array(
                             $graph_by="leadsource";
                             $graph_title=$mod_strings['salesbyleadsource'];
                             $module="Potentials";
-                            $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                            $where=" and vtiger_potential.sales_stage like 'Closed Won' ";
                             $query=$potential_query." ".dashboard_check($module);
 			    if(!$is_admin)
 			    	$query .= ' and vtiger_potential.leadsource '.picklist_check($module,$graph_by);
@@ -247,7 +247,7 @@ $graph_array = Array(
                     	 $graph_by="accountid";
                          $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
-                         $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                         $where=" and vtiger_potential.sales_stage like 'Closed Won' ";
                          $query=$potential_query." ".dashboard_check($module);
                          echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
@@ -257,7 +257,7 @@ $graph_array = Array(
 			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
 			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -267,7 +267,7 @@ $graph_array = Array(
 			$graph_by="groupname";
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
+			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
 			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
