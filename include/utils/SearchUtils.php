@@ -410,6 +410,10 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				$where = getValuesforColumns($column_name,$search_string);
 			}
+			else if($_REQUEST['type'] == 'entchar')
+			{
+				$where="$table_name.$column_name = '". $search_string ."'";
+			}
 			else
 			{
 				$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
