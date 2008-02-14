@@ -795,8 +795,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($module == 'Notes' && $name=='Related to')
 					{
-						$text_val = getRelatedTo($module,$list_result,$i-1);
-						$value=textlength_check($text_val);
+						$value = getRelatedTo($module,$list_result,$i-1);
 					}
 					//added for sorting by Contact Name ---------STARTS------------------
                                         elseif($name=='Contact Name' && ($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
@@ -2959,7 +2958,7 @@ function getRelatedTo($module,$list_result,$rset)
 	}
 	else
 	{
-		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."&parenttab=".$tabname."'>".$parent_name."</a>";
+		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."&parenttab=".$tabname."'>".textlength_check($parent_name)."</a>";
 	}
 	//code added by raju ends
 	$log->debug("Exiting getRelatedTo method ...");
