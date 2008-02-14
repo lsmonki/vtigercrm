@@ -109,10 +109,10 @@ class AuditTrail{
 			$entries = array();
 			$userid = $adb->query_result($result, $i-1, 'userid');
 		
-			$entries[] = $adb->query_result($result, $i-1, 'module');
+			$entries[] = getTranslatedString($adb->query_result($result, $i-1, 'module'));
 			$entries[] = $adb->query_result($result, $i-1, 'action');
 			$entries[] = $adb->query_result($result, $i-1, 'recordid');
-			$entries[] = $adb->query_result($result, $i-1, 'actiondate');
+			$entries[] = getDisplayDate($adb->query_result($result, $i-1, 'actiondate'));
 			
 			$entries_list[] = $entries;
 		}
