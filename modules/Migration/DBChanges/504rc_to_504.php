@@ -41,9 +41,9 @@ foreach($picklist_arr as $picklistname => $picklistidname)
 {
 	$result = $adb->query("select max(".$picklistidname.") as id from vtiger_".$picklistname);
 	$max_count = $adb->query_result($result,0,'id');
-	//ExecuteQuery("update vtiger_".$picklistname."_seq set id=".$max_count);
-	ExecuteQuery("delete from vtiger_".$picklistname."_seq");
-	ExecuteQuery("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
+	$adb->query("drop table if exists vtiger_".$picklistname."_seq");
+	$adb->query("create table vtiger_".$picklistname."_seq (id integer(11))");
+	$adb->query("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
 }
 
 //When we change the ticket description from troubletickets table to crmentity table we have handled in customview but missed in reports - #4968
@@ -187,6 +187,10 @@ ExecuteQuery("update vtiger_selectcolumn set columnname='vtiger_accountContacts:
 
 // Modified to change the typeofdata for hour_format, start_hour and end_hour to 'V~O' instead of 'I~O'
 ExecuteQuery("update vtiger_field set typeofdata = 'V~O' where tablename='vtiger_users' and fieldname in ('hour_format','start_hour','end_hour')");
+
+//Since we don't have field level access for Users and RSS modules we have to delete if there is any entry for these modules in vtiger_profile2field table
+$adb->query("delete from vtiger_profile2field where tabid=29");
+$adb->query("delete from vtiger_profile2field where tabid=24");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 

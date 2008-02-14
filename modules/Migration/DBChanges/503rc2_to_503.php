@@ -652,8 +652,8 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_seactivityrel:cr
 ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname='vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I'");
 
 //Calendar - Start Date (Date & Time)
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT' or columnname = 'activity:date_start:date_start:Activities_Start_Date_&_Time:DT'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date:DT' where columnname='vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT'  or columnname = 'activity:date_start:date_start:Activities_Start_Date_&_Time:DT'");
 
 //Notes - Related To
 ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V' where columnname='vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I'");
