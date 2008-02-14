@@ -106,15 +106,9 @@ else if(fld[4] == 'I' && fld[1] == 'time_start' ||  fld[1] == 'time_end')
 	}
     }else
     {
-	var nMaxVal = selObj.length;
-	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
-	{
-		selObj.remove(0);
-	}
-	selObj.options[0] = new Option ('None', '');
-	if (currField.value == '') {
-		selObj.options[0].selected = true;
-	}
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
     }
 
 }
