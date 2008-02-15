@@ -17,7 +17,7 @@ $roleid =  $_REQUEST['roleid'];
 //changed by dingjianting on 2006-10-1 for picklist editor
 $fldPickList = utf8RawUrlDecode($fldPickList); 
 $uitype = $_REQUEST['uitype'];
-global $adb;
+global $adb, $default_charset;
 
 $sql = "select picklistid from vtiger_picklist where name=?";
 $picklistid = $adb->query_result($adb->pquery($sql, array($tableName)),0,'picklistid');
@@ -56,6 +56,11 @@ $columnName = $tableName;
  for($i = 0; $i < $count; $i++)
  {
 	 $pickArray[$i] = trim(from_html($pickArray[$i]));
+
+	 //if UTF-8 character input given, when configuration is latin1, then avoid the entry which will cause mysql empty object exception in line 101
+	 $stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$pickArray[$i]) : $pickArray[$i];
+	 $pickArray[$i] = trim($stringConvert);
+	 
 	 if($pickArray[$i] != '')
 	 {
 		 $picklistcount=0;
