@@ -804,7 +804,7 @@ if(!class_exists('TCPDF', false)) {
 					case 'A1': {$format = array(1683.78,2383.94); break;}
 					case 'A2': {$format = array(1190.55,1683.78); break;}
 					case 'A3': {$format = array(841.89,1190.55); break;}
-					case 'A4': default: {$format = array(595.28,841.89); break;}
+					case 'A4': {$format = array(595.28,841.89); break;}
 					case 'A5': {$format = array(419.53,595.28); break;}
 					case 'A6': {$format = array(297.64,419.53); break;}
 					case 'A7': {$format = array(209.76,297.64); break;}
@@ -847,7 +847,13 @@ if(!class_exists('TCPDF', false)) {
 					case 'LEGAL': {$format = array(612.00,1008.00); break;}
 					case 'EXECUTIVE': {$format = array(521.86,756.00); break;}
 					case 'FOLIO': {$format = array(612.00,936.00); break;}
-					// default: {$this->Error('Unknown page format: '.$format); break;}
+					default: {
+						$format_arr = explode("-", $format);
+						$wth = $format_arr[0];
+						$htg= $format_arr[0];
+						$format = array($wth,$htg); 
+						break;
+					}
 				}
 				$this->fwPt=$format[0];
 				$this->fhPt=$format[1];

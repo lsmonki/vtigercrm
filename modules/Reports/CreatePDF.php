@@ -13,6 +13,8 @@ require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
 //require('include/fpdf/fpdf.php');
 require('include/tcpdf/tcpdf.php');
+$language = $_SESSION['authenticated_user_language'].'.lang.php';
+require_once("include/language/$language");
 //a hex html code (e.g. #3FE5AA)
 /*function hex2dec($couleur = "#000000"){
     $R = substr($couleur, 1, 2);
@@ -364,32 +366,11 @@ if(isset($arr_val))
 }
 
 $html='<table border="1"><tr><b>'.$headerHTML.'</b></tr>'.$dataHTML.'</table>';
-
-if(isset($arr_val))
+$columnlength = array_sum($col_width);
+if($columnlength > 14400)
 {
-	$columnlength = array_sum($col_width);
+	die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 }
-
-/*if($columnlength <= 420 )
-{
-        $pdf = new TCPDF('P','mm','A5');
-}elseif($columnlength >= 421 && $columnlength <= 600)
-{
-        $pdf = new TCPDF('L','mm','A4');
-}elseif($columnlength >=601 && $columnlength <= 850)
-{
-        $pdf = new TCPDF('P','mm','A3');
-}elseif($columnlength >=851 && $columnlength <= 1500)
-{
-	$pdf = new TCPDF('L','mm','A1');
-}elseif($columnlength >=1501 && $columnlength <= 2500)
-{
-	$pdf = new TCPDF('L','mm','A6');
-}elseif($columnlength >= 2501)
-{
-	$pdf = new TCPDF('L','mm','A2');
-}*/
-//echo $columnlength ;die;
 if($columnlength <= 420 )
 {
 	$pdf = new TCPDF('P','mm','A5',true);
@@ -420,7 +401,9 @@ elseif($columnlength >=4691 && $columnlength <= 6490)
 }
 else
 {
-	$pdf = new TCPDF('L','mm','4A0',true);
+	$columnhight = count($arr_val);
+        $format = $columnlength."-".$columnhight;
+	$pdf = new TCPDF('L','mm',$format,true);
 }
 $pdf->SetMargins(10, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
