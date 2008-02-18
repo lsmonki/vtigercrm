@@ -3260,10 +3260,12 @@ function getBasic_Advance_SearchURL()
 /** Clear the Smarty cache files(in Smarty/smarty_c)
  ** This function will called after migration.
  **/
-function clear_smarty_cache() {
+function clear_smarty_cache($path=null) {
 
 	global $root_directory;
-	$path=$root_directory.'Smarty/templates_c/';
+	if($path == null) {
+		$path=$root_directory.'Smarty/templates_c/';
+	}
 	$mydir = @opendir($path);
 	while(false !== ($file = readdir($mydir))) {
 		if($file != "." && $file != ".." && $file != ".svn") {
@@ -3271,10 +3273,14 @@ function clear_smarty_cache() {
 			if(is_dir($path.$file)) {
 				chdir('.');
 				clear_smarty_cache($path.$file.'/');
-				rmdir($path.$file) or DIE("couldn't delete $path$file<br />");
+				//rmdir($path.$file) or DIE("couldn't delete $path$file<br />"); // No need to delete the directories.
 			}
-			else
-				unlink($path.$file) or DIE("couldn't delete $path$file<br />");
+			else {
+				// Delete only files ending with .tpl.php
+				if(strripos($file, '.tpl.php') == (strlen($file)-strlen('.tpl.php'))) {
+					unlink($path.$file) or DIE("couldn't delete $path$file<br />");
+				}
+			}
 		}
 	}
 	@closedir($mydir);
@@ -3310,6 +3316,15 @@ function get_smarty_compiled_file($template_file, $path=null) {
 	}
 	@closedir($mydir);	
 	return $compiled_file;
+}
+
+/** Function to carry out all the necessary actions after migration */
+function perform_post_migration_activities() {
+	//After applying all the DB Changes,Here we clear the Smarty cache files
+	clear_smarty_cache();
+	//Writing tab data in flat file
+	create_tab_data_file();
+	create_parenttab_data_file();
 }
 
 ?>
