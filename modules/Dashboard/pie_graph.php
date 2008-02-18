@@ -34,12 +34,38 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	$target=explode("::",$target_val);
 
 	$alts=array();
+	$temp=array();
 	for($i=0;$i<count($datax); $i++)
 	{
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
 		$alts[]=htmlentities($name)."=%d";
+		//If the datax value of a string is greater, adding '\n' to it so that it'll come in 2nd line
+		if(strlen($name)>=14)
+			$name=substr($name, 0, 34);
+		if($pos>=2)
+		{
+			$val=explode(" ",$name);
+			$n=count($val)-1;
+
+			$x="";
+			for($j=0;$j<count($val);$j++)
+			{
+				if($j != $n)
+				{
+					$x  .=" ". $val[$j];
+				}
+				else
+				{
+					$x .= "@#".$val[$j];
+				}
+			}
+			$name = $x;
+		}
+		$name=str_replace("@#", "\n",$name);
+		$temp[]=$name; 
 	}
+	$datax=$temp;
 
 	if($theme == "blue")
 	{
