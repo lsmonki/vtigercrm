@@ -3279,4 +3279,37 @@ function clear_smarty_cache() {
 	}
 	@closedir($mydir);
 }
+
+/** Get Smarty compiled file for the specified template filename.
+ ** @param $template_file Template filename for which the compiled file has to be returned.
+ ** @return Compiled file for the specified template file.
+ **/
+function get_smarty_compiled_file($template_file, $path=null) {
+
+	global $root_directory;
+	if($path == null) {
+		$path=$root_directory.'Smarty/templates_c/';
+	}
+	$mydir = @opendir($path);
+	$compiled_file = null;
+	while(false !== ($file = readdir($mydir)) && $compiled_file == null) {
+		if($file != "." && $file != ".." && $file != ".svn") {
+			//chmod($path.$file, 0777);
+			if(is_dir($path.$file)) {
+				chdir('.');
+				$compiled_file = get_smarty_compiled_file($template_file, $path.$file.'/');
+				//rmdir($path.$file) or DIE("couldn't delete $path$file<br />"); // No need to delete the directories.
+			}
+			else {
+				// Check if the file name matches the required template fiel name
+				if(strripos($file, $template_file.'.php') == (strlen($file)-strlen($template_file.'.php'))) {
+					$compiled_file = $path.$file;
+				}
+			}
+		}
+	}
+	@closedir($mydir);	
+	return $compiled_file;
+}
+
 ?>

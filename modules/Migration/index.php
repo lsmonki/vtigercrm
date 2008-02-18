@@ -15,6 +15,10 @@ if($current_user->is_admin != 'on')
 	die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 }
 
+// Remove the Migration.tpl file from Smarty cache
+$migration_tpl_file = get_smarty_compiled_file('Migration.tpl');
+if ($migration_tpl_file != null) unlink($migration_tpl_file);
+
 include("modules/Migration/versions.php");
 require_once('Smarty_setup.php');
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
