@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+********************************************************************************/
+
 ini_set("memory_limit","32M");
 set_time_limit(-1);
 
@@ -6,6 +15,32 @@ echo '<div align = "center"><br><b>Started HTML to UTF8 conversion</b><br></div>
 @ob_flush();
 
 //This function will convert all the html values in the database into utf-8 values
+echo "<br><br> <b>Following queries are executed to set the character set as utf8 and collation as utf8_general_ci for all tables and Databases.</b><br>";
+$query = " alter database ".$dbconfig['db_name']." DEFAULT CHARACTER SET utf8";
+echo "<br><br> ===> ".$query."<br><br>";
+$adb->query($query);
+$query = "SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0";
+echo "<br><br> ===> ".$query."<br><br>";
+$adb->query($query);
+$tables_res = $adb->query("show tables");
+while($row = $adb->fetch_array($tables_res))
+{
+	$query =" LOCK TABLES `".$row[0]."` WRITE ";
+	echo "<br> ==> $query";
+	$adb->query($query);
+	$query =" alter table ".$row[0]." CONVERT TO CHARACTER SET  utf8 ";
+	echo "<br> ==> $query";
+	$adb->query($query);
+	$query =" UNLOCK TABLES ";
+	echo "<br> ==> $query";
+	$adb->query($query);
+	@ob_flush();
+	flush();
+}
+$query = " SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS  ";
+echo "<br><br> ===> ".$query."<br><br>";
+$adb->query($query);
+
 convert_html2utf8_db();
 
 //Displaying the close button at the end of the conversion.
