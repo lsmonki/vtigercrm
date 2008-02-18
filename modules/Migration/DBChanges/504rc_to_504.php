@@ -67,6 +67,32 @@ $cv_fields_list = Array(
 			"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V"=>"vtiger_activity:recurringtype:recurringtype:Calendar_Recurrence:O",
 			"vtiger_activity:time_start::Calendar_Start_Time:V"=>"vtiger_activity:time_start::Calendar_Start_Time:I",
 			"vtiger_activity:time_end:time_end:Calendar_End_Time:V"=>"vtiger_activity:time_end:time_end:Calendar_End_Time:T",
+			"activity:date_start:date_start:Activities_Start_Date_&_Time:DT"=>"vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT",
+			//Calendar Module
+			"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
+			"vtiger_activity:status:taskstatus:Calendar_Status:V"=>"vtiger_activity:eventstatus:eventstatus:Calendar_Status:V",
+			//Campaign Module
+			"vtiger_campaign:product_id:product_id:Campaigns_Product:I"=>"vtiger_products:productname:productname:Campaigns_Product:V",
+			"vtiger_campaign:expectedresponsecount:expectedresponsecount:Campaigns_Expected_Response_Count:N"=>"vtiger_campaign:expectedresponsecount:expectedresponsecount:Campaigns_Expected_Response_Count:I",
+			"vtiger_campaign:actualresponsecount:actualresponsecount:Campaigns_Actual_Response_Count:N"=>"vtiger_campaign:actualresponsecount:actualresponsecount:Campaigns_Actual_Response_Count:I",
+			//Contacts Module
+			"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:D",
+			//Leads Module
+			"vtiger_leaddetails:noofemployees:noofemployees:Leads_No_Of_Employees:V"=>"vtiger_leaddetails:noofemployees:noofemployees:Leads_No_Of_Employees:I",
+			//Potentials Module
+			"vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:N"=>"vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:V",
+			//FAQ Module
+			"vtiger_faq:product_id:product_id:Faq_Product_Name:I"=>"vtiger_faq:product_id:product_id:Faq_Product_Name:V",
+			//Products Module
+			"vtiger_products:qtyinstock:qtyinstock:Products_Qty_In_Stock:I"=>"vtiger_products:qtyinstock:qtyinstock:Products_Qty_In_Stock:NN",
+			"vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
+			//Vendors Module
+			"vtiger_vendor:email:email:Vendors_Email:E"=>"vtiger_vendor:email:email:Vendors_Email:V",
+			//Price Books Module
+			"vtiger_pricebook:active:active:PriceBooks_Active:V"=>"vtiger_pricebook:active:active:PriceBooks_Active:C",
+			//Quotes Module
+			"vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I"=>"vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:V",
+			"vtiger_quotes:inventorymanager:assigned_user_id1:Quotes_Inventory_Manager:I"=>"vtiger_quotes:inventorymanager:assigned_user_id1:Quotes_Inventory_Manager:V",
 		  );
 
 foreach($cv_fields_list as $oldval => $newval)
@@ -92,6 +118,28 @@ $report_fields_list = Array(
 			"vtiger_campaign:actualresponsecount:Campaigns_Actual_Response_Count:actualresponsecount:N"=>"vtiger_campaign:actualresponsecount:Campaigns_Actual_Response_Count:actualresponsecount:I",
 			"vtiger_crmentityRelCalendar:setype:Calendar_Related_To:parent_id:I"=>"vtiger_crmentityRelCalendar:setype:Calendar_Related_To:parent_id:V",
 			"vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:I"=>"vtiger_contactdetailsCalendar:lastname:Calendar_Contact_Name:contact_id:V",
+			//Calendar Module
+			"activity:date_start:Activities_Start_Date_&_Time:date_start:DT"=>"vtiger_activity:date_start:Calendar_Start_Date_&_Time:date_start:DT",
+			"vtiger_activity:activitytype:Calendar_Activity_Type:activitytype:C"=>"vtiger_activity:activitytype:Calendar_Activity_Type:activitytype:V",
+			//"vtiger_activity:status:Calendar_Status:taskstatus:V"=>"vtiger_activity:status:Calendar_Status:taskstatus:V",
+			//Campaign Module
+			"vtiger_campaign:product_id:Campaigns_Product:product_id:I"=>"vtiger_products:productname:Campaigns_Product:productname:V",
+			"vtiger_campaign:expectedresponsecount:Campaigns_Expected_Response_Count:expectedresponsecount:N"=>"vtiger_campaign:expectedresponsecount:Campaigns_Expected_Response_Count:expectedresponsecount:I",
+			"vtiger_campaign:actualresponsecount:Campaigns_Actual_Response_Count:actualresponsecount:N"=>"vtiger_campaign:actualresponsecount:Campaigns_Actual_Response_Count:actualresponsecount:I",
+			//Contacts Module
+			"vtiger_contactsubdetails:birthday:Contacts_Birthdate:birthday:V"=>"vtiger_contactsubdetails:birthday:Contacts_Birthdate:birthday:D",
+			//Leads Module
+			"vtiger_leaddetails:noofemployees:Leads_No_Of_Employees:noofemployees:V"=>"vtiger_leaddetails:noofemployees:Leads_No_Of_Employees:noofemployees:I",
+			//Potentials Module
+			"vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:N"=>"vtiger_potential:campaignid:Potentials_Campaign_Source:campaignid:V",
+			//FAQ Module
+			"vtiger_faq:product_id:Faq_Product_Name:product_id:I"=>"vtiger_faq:product_id:Faq_Product_Name:product_id:V",
+			//Products Module
+			"vtiger_products:qtyinstock:Products_Qty_In_Stock:qtyinstock:I"=>"vtiger_products:qtyinstock:Products_Qty_In_Stock:qtyinstock:NN",
+			"vtiger_products:handler:Products_Handler:assigned_user_id:I"=>"vtiger_products:handler:Products_Handler:assigned_user_id:V",
+			//Quotes Module
+			"vtiger_quotes:potentialid:Quotes_Potential_Name:potential_id:I"=>"vtiger_quotes:potentialid:Quotes_Potential_Name:potential_id:V",
+			"vtiger_quotes:inventorymanager:Quotes_Inventory_Manager:assigned_user_id1:I"=>"vtiger_quotes:inventorymanager:Quotes_Inventory_Manager:assigned_user_id1:V",
 			   );
 
 foreach($report_fields_list as $oldval => $newval)
@@ -191,6 +239,44 @@ ExecuteQuery("update vtiger_field set typeofdata = 'V~O' where tablename='vtiger
 //Since we don't have field level access for Users and RSS modules we have to delete if there is any entry for these modules in vtiger_profile2field table
 $adb->query("delete from vtiger_profile2field where tabid=29");
 $adb->query("delete from vtiger_profile2field where tabid=24");
+
+// Modified  the typeofdata for all module email field & custom email field in Custom View & Reports.
+typeOfDataChanges();
+function typeOfDataChanges()
+{
+    global $adb,$migrationlog;
+    $migrationlog->debug("\nInside typeOfDataChanges() function Starts\n\n");
+    
+    $field_table_sql="select columnname,fieldname from vtiger_field where uitype=13";
+    $result=$adb->query($field_table_sql);        
+    $num_rows = $adb->num_rows($result);
+    for($k=0; $k < $num_rows; $k++)
+    {
+	$columnname=$adb->query_result($result,$k,'columnname');
+	$fieldname=$adb->query_result($result,$k,'fieldname');
+	$tablename_array = array('vtiger_cvcolumnlist','vtiger_cvadvfilter','vtiger_selectcolumn','vtiger_relcriteria','vtiger_reportsortcol');
+	foreach($tablename_array as $tablename)
+	{
+	    $custom_sql="select columnname from  ".$tablename."  where columnname like '%cf%' or columnname like '%email%'";
+	    $custom_result = $adb->query($custom_sql);
+	    $num_rows2 = $adb->num_rows($custom_result);
+ 	    for($l=0; $l < $num_rows2; $l++)
+ 	    {	
+		$table_columnname=$adb->query_result($custom_result,$l,'columnname');
+		$values = explode(':',$table_columnname);
+		if($columnname == $values[1] && $fieldname == $values[2])
+		{
+			ExecuteQuery("update ".$tablename." set columnname='".$values[0].":".$values[1].":".$values[2].":".$values[3].":E'   where columnname='".$values[0].":".$values[1].":".$values[2].":".$values[3].":V'");
+		}
+		if($columnname == $values[1] && $fieldname == $values[3])
+		{
+			ExecuteQuery("update ".$tablename." set columnname='".$values[0].":".$values[1].":".$values[2].":".$values[3].":E'   where columnname='".$values[0].":".$values[1].":".$values[2].":".$values[3].":V'");
+		}
+	    }
+	}
+    }
+    $migrationlog->debug("\nInside typeOfDataChanges() function Ends\n\n");
+}
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
