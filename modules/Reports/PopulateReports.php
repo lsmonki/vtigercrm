@@ -354,12 +354,12 @@ $sortorder = Array(
                         )
                   );
 
-$stdfilters = Array(Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
+$stdfilters = Array(Array('columnname'=>'vtiger_crmentity:modifiedtime:modifiedtime:Calendar_Modified_Time',
 			  'datefilter'=>'lastmonth',
 			  'startdate'=>'2005-05-01',
 			  'enddate'=>'2005-05-31'),
 
-		    Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
+		    Array('columnname'=>'vtiger_crmentity:modifiedtime:modifiedtime:Calendar_Modified_Time',
                           'datefilter'=>'thismonth',
                           'startdate'=>'2005-06-01',
                           'enddate'=>'2005-06-30')
