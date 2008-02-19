@@ -59,7 +59,7 @@ function showhidediv()
 							<span class="genHeaderGray">Please read <a href="javascript:;" onclick="showhidediv();"><u>this migration notes</u></a>
                             				<span class="genHeaderSmall">before you proceed further.</span>
 							<br />
-			   			   <div id='mig_info_div' style="display:none">
+			   			   <div id='mig_info_div' class='small' style="display:none;">
 					  	   <ul>
 							<li><font color="red">Changes made to database during migration cannot be reverted back. So we highly recommend to take database dump of the current working database before migration. </font>
 

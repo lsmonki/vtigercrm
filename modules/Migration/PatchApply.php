@@ -173,11 +173,11 @@ if(!$continue_42P2)
 {
 echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
 		<tr>
-		<td colspan="2" align="center"><br>If you migrated from 503 or its below version the special characters like other language characters are stored as html values. These html values are not getting displayed properly in the latest version, it will display as html symbols without conversion. So that you need to change your html values into utf8 characters. If you are going to use ISO charset in config file and in DataBase, then you need not do conversion. Click on the Convert Now button to convert your html characters into utf8 characters.<br><br> 
+		<td colspan="2" align="center"><br>If you are migrating from 5.0.3 or earlier versions, which had partial unicode (UTF-8) support, the unicode characters got saved as HTML entities. <br>If you are going to use ISO charset in config file and in database, then you need not do conversion.<br> Click on "Convert Now" button to convert html entities into utf8 characters.<br><br> 
 					<form name="html_to_utf" method="post" action="index.php">
 					<input type="hidden" name="module" value="Migration">
 					<input type="hidden" name="action" value="HTMLtoUTF8Conversion">
-					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small cancel" />
+					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small save" />
 				</form><br>
 			</td>
 		</tr>
