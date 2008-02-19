@@ -44,6 +44,49 @@ foreach($picklist_arr as $picklistname => $picklistidname)
 	$adb->query("drop table if exists vtiger_".$picklistname."_seq");
 	$adb->query("create table vtiger_".$picklistname."_seq (id integer(11))");
 	$adb->query("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
+
+	//In 5.0.3 to 5.0.4 RC migration, for some utf8 character picklist values, picklist_valueid is set as 0 because of query instead of pquery
+	$result = $adb->query("select * from vtiger_$picklistname where picklist_valueid=0");
+	$numrow = $adb->num_rows($result);
+	for($i=0; $i < $numrow; $i++)
+	{
+		$picklist_array_values[$picklistname][] = decode_html($adb->query_result($result,$i,$picklistname));
+	}
+
+	//we have retrieved the picklist values to which the picklist_valueid is 0. So we can delete those entries
+	$adb->query("delete from vtiger_$picklistname where picklist_valueid=0");
+
+	$temp_array = $picklist_array_values[$picklistname];
+	if(is_array($temp_array))
+	foreach($temp_array as $ind => $picklist_value)
+	{
+		$picklist_autoincrementid = $adb->getUniqueID($picklistname);//auto increment for each picklist table
+		$picklist_valueid = getUniquePicklistID();//unique value id for each picklist value
+
+		$picklistquery = "insert into vtiger_$picklistname values(?,?,?,?) ";
+		$adb->pquery($picklistquery, array($picklist_autoincrementid, $picklist_value, 1, $picklist_valueid));
+
+		//get the picklist's unique id from vtiger_picklist table
+		$res = $adb->query("select * from vtiger_picklist where name='$picklistname'");
+		$picklistid = $adb->query_result($res, 0, 'picklistid');
+
+		//we have to insert the picklist value in vtiger_role2picklist table for each available roles
+		$sql="select roleid from vtiger_role";
+		$role_result = $adb->query($sql);
+		$numrows = $adb->num_rows($role_result);
+
+		for($k=0; $k < $numrows; $k++)
+		{
+			$roleid = $adb->query_result($role_result,$k,'roleid');
+
+			//get the max sortid for each picklist
+			$res = $adb->query("select max(sortid)+1 sortid from vtiger_role2picklist where roleid = '$roleid' and picklistid ='$picklistid'");
+			$sortid = $adb->query_result($res, 0, 'sortid');
+
+			$query = "insert into vtiger_role2picklist values(?,?,?,?)";
+			$adb->pquery($query, array($roleid, $picklist_valueid, $picklistid, $sortid));
+		}
+	}
 }
 
 //When we change the ticket description from troubletickets table to crmentity table we have handled in customview but missed in reports - #4968
