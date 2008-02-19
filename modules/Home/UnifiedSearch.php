@@ -21,12 +21,13 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
 
 require_once('Smarty_setup.php');
-global $mod_strings;
+global $mod_strings, $current_language;
+
+require_once('modules/Home/language/'.$current_language.'.lang.php');
 
 $total_record_count = 0;
 
@@ -61,7 +62,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 
 			$smarty = new vtigerCRM_Smarty;
 
-			require_once("modules/$module/language/en_us.lang.php");
+			require_once("modules/$module/language/".$current_language.".lang.php");
 			global $mod_strings;
 			global $app_strings;
 
