@@ -178,6 +178,11 @@ function searchMapLocation(addressType)
 			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]))
 				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]).innerHTML+' ';
 		}
+		if(fieldname.indexOf('othercity') > -1)
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercity')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercity')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('otherstate') > -1)
 		{
 			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstate')]))
