@@ -1080,6 +1080,8 @@ $app_strings = array (
 'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
 'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
 'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
+//Added for PDF notification
+'LBL_PDF'=>'PDF Cannot be generated as the width exceeds the maximum limit, Kindly ',
 );
 
 $app_list_strings = array (
