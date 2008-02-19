@@ -79,7 +79,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
 	$imagemap = $canvas->getImageMap();
 	$graph =& Image_Graph::factory('graph', $canvas);
-	$font =& $graph->addNew('font', calculate_font_name('en_en'));
+	$font =& $graph->addNew('font', calculate_font_name($lang_crm));
 	// set the font size to 11 pixels
 	$font->setSize(8);
 	$font->setColor($font_color);
