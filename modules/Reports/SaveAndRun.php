@@ -38,6 +38,9 @@ if($numOfRows > 0)
 	$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format
 
 	global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
+	//added to fix the ticket #5117
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	$ogReport = new Reports($reportid);
 	$primarymodule = $ogReport->primodule;
@@ -59,8 +62,8 @@ if($numOfRows > 0)
 		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
 		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
 		$selectedcolumnvalue = '"'. $ogReport->stdselectedcolumn . '"';
-		if (isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
-			$BLOCK1 .= "<option selected value=''>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+		if (!$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
+			$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
 		}
 		$list_report_form->assign("BLOCK1",$BLOCK1);
 		$BLOCKJS = $ogReport->getCriteriaJS();

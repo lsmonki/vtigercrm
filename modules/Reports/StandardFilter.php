@@ -17,7 +17,6 @@ if(isset($_REQUEST["record"]) == false)
 
 	$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
 	$BLOCK1 .= getSecondaryStdFilterHTML($secondarymodule);
-
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
         $BLOCKJS = $oReport->getCriteriaJS();
 		$report_std_filter->assign("BLOCKJS_STD",$BLOCKJS);
@@ -26,12 +25,21 @@ if(isset($_REQUEST["record"]) == false)
 
 }elseif(isset($_REQUEST["record"]) == true)
 {
+	//added to fix the ticket #5117
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
         $reportid = $_REQUEST["record"];
         $oReport = new Reports($reportid);
         $oReport->getSelectedStandardCriteria($reportid);
 	
-		$BLOCK1 = getPrimaryStdFilterHTML($oReport->primodule,$oReport->stdselectedcolumn);
-        $BLOCK1 .= getSecondaryStdFilterHTML($oReport->secmodule,$oReport->stdselectedcolumn);
+	$BLOCK1 = getPrimaryStdFilterHTML($oReport->primodule,$oReport->stdselectedcolumn);
+	$BLOCK1 .= getSecondaryStdFilterHTML($oReport->secmodule,$oReport->stdselectedcolumn);
+	//added to fix the ticket #5117
+	$selectedcolumnvalue = '"'. $oReport->stdselectedcolumn . '"';
+	if (!$is_admin && isset($oReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false)
+		$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
 
         $BLOCKJS = $oReport->getCriteriaJS();
@@ -143,4 +151,3 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	return $shtml;
 }
 ?>
-

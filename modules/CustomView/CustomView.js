@@ -367,3 +367,27 @@ function cv_patternValidate(fldval,fldLabel,type) {
 
 
 }
+//added to hide date selection option, if a user doesn't have permission for not permitter standard filter column
+//added to fix the ticket #5117
+function standardFilterDisplay()
+{
+	if(getObj("stdDateFilterField"))
+	{
+		if(document.CustomView.stdDateFilterField.selectedIndex > -1 && document.CustomView.stdDateFilterField.options[document.CustomView.stdDateFilterField.selectedIndex].value == "not_accessible")
+		{
+			getObj('stdDateFilter').disabled = true;
+			getObj('startdate').disabled = true;                                                                                         getObj('enddate').disabled = true;
+			getObj('jscal_trigger_date_start').style.visibility="hidden";
+			getObj('jscal_trigger_date_end').style.visibility="hidden";
+		}
+		else
+		{
+			getObj('stdDateFilter').disabled = false;
+			getObj('startdate').disabled = false;
+			getObj('enddate').disabled = false;
+			getObj('jscal_trigger_date_start').style.visibility="visible";
+			getObj('jscal_trigger_date_end').style.visibility="visible";
+		}
+	}
+}
+

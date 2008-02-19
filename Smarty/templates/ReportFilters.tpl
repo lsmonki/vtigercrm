@@ -41,7 +41,7 @@
 		</tr>
 		<tr>
 		<td class="dvtCellInfo" width="60%">
-		<select name="stdDateFilterField" class="detailedViewTextBox">
+		<select name="stdDateFilterField" class="detailedViewTextBox" onchange='standardFilterDisplay();'>
 		{$BLOCK1_STD}
 		</select>
 		</td>
@@ -196,14 +196,7 @@ for(var i=1;i<=5;i++)
 <script>
 // If current user has no access to date fields, we should disable selection
 // Fix for: #4670
-if(getObj('stdDateFilterField').options.length <= 0) {
-        getObj('stdDateFilterField').disabled = true;
-        getObj('stdDateFilter').disabled = true;
-        getObj('startdate').disabled = true;
-        getObj('enddate').disabled = true;
-        document.getElementById('jscal_trigger_date_start').onclick = function() { }
-        document.getElementById('jscal_trigger_date_end').onclick = function() { }
-}
+standardFilterDisplay();
 </script>
 
 {/literal}

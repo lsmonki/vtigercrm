@@ -557,7 +557,7 @@ class ReportRun extends CRMEntity
 					$selectedfields[0] = "vtiger_crmentity";
 				if($datefilter == "custom")
 				{
-					if($startdate != "0000-00-00" && $enddate != "0000-00-00")
+					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != "")
 					{
 						$stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:59'";
 					}
@@ -593,7 +593,7 @@ class ReportRun extends CRMEntity
 				$selectedfields[0] = "vtiger_crmentity";
 			if($filter == "custom")
 			{
-				if($startdate != "" && $enddate != "")
+				if($startdate != "" && $enddate != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
 				{
 					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 				}
@@ -646,14 +646,14 @@ class ReportRun extends CRMEntity
 					$selectedfields[0] = "vtiger_crmentity";
 				if($datefilter == "custom")
 				{
-					if($startdate != "0000-00-00" && $enddate != "0000-00-00")
+					if($startdate != "0000-00-00" && $enddate != "0000-00-00" && $selectedfields[0] != "" && $selectedfields[1] != "")
 					{
 						$sSQL .= $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";
 					}
 				}else
 				{
 					$startenddate = $this->getStandarFiltersStartAndEndDate($datefilter);
-					if($startenddate[0] != "" && $startenddate[1] != "")
+					if($startenddate[0] != "" && $startenddate[1] != "" && $selectedfields[0] != "" && $selectedfields[1] != "")
 					{
 						$sSQL .= $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]."' and '".$startenddate[1]."'";
 					}

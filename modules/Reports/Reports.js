@@ -704,3 +704,22 @@ function re_patternValidate(fldval,fldLabel,type) {
 	else return true
 }
 
+//added to fix the ticket #5117
+function standardFilterDisplay()
+{
+	if(document.NewReport.stdDateFilterField.options.length <= 0 || (document.NewReport.stdDateFilterField.selectedIndex > -1 && document.NewReport.stdDateFilterField.options[document.NewReport.stdDateFilterField.selectedIndex].value == "Not Accessible")) 
+	{
+		getObj('stdDateFilter').disabled = true;
+		getObj('startdate').disabled = true;                                                                                         getObj('enddate').disabled = true;
+		getObj('jscal_trigger_date_start').style.visibility="hidden";
+		getObj('jscal_trigger_date_end').style.visibility="hidden";
+	}
+	else
+	{
+		getObj('stdDateFilter').disabled = false;
+		getObj('startdate').disabled = false;
+		getObj('enddate').disabled = false;
+		getObj('jscal_trigger_date_start').style.visibility="visible";
+		getObj('jscal_trigger_date_end').style.visibility="visible";
+	}
+}

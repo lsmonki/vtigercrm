@@ -504,7 +504,7 @@ function mandatoryCheck()
 			  <tr>
 			     <td width="75%" align="right" class="dvtCellLabel">{$MOD.LBL_Select_a_Column} :</td>
 			     <td width="25%" class="dvtCellInfo">
-				<select name="stdDateFilterField" class="select">
+				<select name="stdDateFilterField" class="select" onchange="standardFilterDisplay();">
 				{foreach item=stdfilter from=$STDFILTERCOLUMNS}
 					<option {$stdfilter.selected} value={$stdfilter.value}>{$stdfilter.text}</option>	
 				{/foreach}
@@ -784,5 +784,6 @@ for(var i=1;i<=5;i++)
 	if(obj.selectedIndex != 0)
 		updatefOptions(obj, 'fop'+i);
 }
+standardFilterDisplay();
 {/literal}
 </script>
