@@ -1224,7 +1224,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16 || ($uitype == 55 && $fieldname =="salutationtype"))
 	{
 		$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
-		if(!$is_admin && $temp_val != ''  && !in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
+		if(($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1) && $temp_val != ''  && !in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
 		{	
 			$temp_acttype = $adb->query_result($list_result,$list_result_count,'type');
 			if(($temp_acttype == 'Meeting' || $temp_acttype == 'Call') && $fieldname =="taskstatus")

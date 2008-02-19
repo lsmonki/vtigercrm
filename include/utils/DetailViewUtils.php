@@ -122,7 +122,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$roleids = $roleid;
 		}
-		if($is_admin || $sortid != '')
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $sortid != '')
 		{
 			$pick_query="select $fieldname from vtiger_$fieldname";
 			$params = array();
@@ -208,7 +208,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$roleids = $roleid;
 		}
 		$editview_label[]=$mod_strings[$fieldlabel];
-		if($is_admin)
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
 			$pick_query="select $fieldname from vtiger_$fieldname";
 			$params = array();
@@ -475,7 +475,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			{
 				$roleids = $roleid;
 			}
-			if($is_admin)
+			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 			{
 				$pick_query="select salutationtype from vtiger_salutationtype";
 				$params = array();
