@@ -3987,6 +3987,10 @@ Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,
 Execute("alter table vtiger_attachments add index attachments_description_name_type_attachmentsid_idx (`description`,`type`,`attachmentsid`)");
 
 //Added after 5.0 GA release
+
+//In 4.2.3 we have assigned to group option only for Leads, HelpDesk and Activies and default None can be assigned. Now we will assign the unassigned entities to current user
+Execute("update vtiger_crmentity set smownerid=1 where smownerid=0 and setype not in ('Leads','HelpDesk','Calendar')");
+
 //CALCULATE Activity End Time (time_end)
 //we have to calculate activity end time (time_end) based on start time (time_start) and duration (duration_hours, duration_minutes)
 $sql = "select * from vtiger_activity";

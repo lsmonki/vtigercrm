@@ -274,9 +274,14 @@ for($i=0;$i<$adb->num_rows($res);$i++)
 //Related To is not displayed in Calendar Listview
 ExecuteQuery("update vtiger_cvcolumnlist inner join vtiger_customview on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid set columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V' where columnname = 'vtiger_seactivityrel:crmid:parent_id:Calendar_Related_To:V' and vtiger_customview.entitytype='Calendar'");
 
-//In 4.2.3 we have assigned to group option only for Leads, HelpDesk and Activies and default None can be assigned. Now we will assign the unassigned entities to current user
-ExecuteQuery("update vtiger_crmentity set smownerid=1 where smownerid=0 and setype not in ('Leads','HelpDesk','Calendar')");
-
+/* Owner id is set to 1 for modules other than Leads, Helpdesk and Calendar irrespective of whether it is assigned to a group 
+	[ This is done to fix an issue with 4.2.x versions. So resetting the owner id to 0 for other modules if it is assigned to a group */
+ExecuteQuery("update vtiger_crmentity set smownerid=0 where crmid in 
+	(select accountid from vtiger_accountgrouprelation union select campaignid from vtiger_campaigngrouprelation 
+	union select contactid from vtiger_contactgrouprelation union select invoiceid from vtiger_invoicegrouprelation 
+	union select purchaseorderid from vtiger_pogrouprelation union select potentialid from vtiger_potentialgrouprelation 
+	union select quoteid from vtiger_quotegrouprelation union select salesorderid from vtiger_sogrouprelation)");
+	
 //Change Emails to Webmails in main tabs - My Home Page, Marketing, Support drop down menu
 ExecuteQuery("update vtiger_parenttabrel set tabid=28 where tabid=10");
 
@@ -360,38 +365,47 @@ ExecuteQuery("delete from vtiger_cvcolumnlist where columnname='vtiger_products:
 ExecuteQuery("update vtiger_sales_stage set presence=0 where sales_stage='Closed Lost'");
 
 //Added to fix the issues in group to entity relationship
+$adb->query("DELETE FROM vtiger_leadgrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_leadgrouprelation DROP FOREIGN KEY fk_1_vtiger_leadgrouprelation");
 $adb->query("ALTER TABLE vtiger_leadgrouprelation DROP FOREIGN KEY fk_2_vtiger_leadgrouprelation");
 
+$adb->query("DELETE FROM vtiger_accountgrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_accountgrouprelation DROP FOREIGN KEY fk_1_vtiger_accountgrouprelation");
 $adb->query("ALTER TABLE vtiger_accountgrouprelation DROP FOREIGN KEY fk_2_vtiger_accountgrouprelation");
 
+$adb->query("DELETE FROM vtiger_contactgrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_contactgrouprelation DROP FOREIGN KEY fk_1_vtiger_contactgrouprelation");
 $adb->query("ALTER TABLE vtiger_contactgrouprelation DROP FOREIGN KEY fk_2_vtiger_contactgrouprelation");
 
+$adb->query("DELETE FROM vtiger_potentialgrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_potentialgrouprelation DROP FOREIGN KEY fk_1_vtiger_potentialgrouprelation");
 $adb->query("ALTER TABLE vtiger_potentialgrouprelation DROP FOREIGN KEY fk_2_vtiger_potentialgrouprelation");
 
+$adb->query("DELETE FROM vtiger_campaigngrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_campaigngrouprelation DROP FOREIGN KEY fk_1_vtiger_campaigngrouprelation");
 $adb->query("ALTER TABLE vtiger_campaigngrouprelation DROP FOREIGN KEY fk_2_vtiger_campaigngrouprelation");
 
+$adb->query("DELETE FROM vtiger_activitygrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_activitygrouprelation DROP FOREIGN KEY fk_1_vtiger_activitygrouprelation");
 $adb->query("ALTER TABLE vtiger_activitygrouprelation DROP FOREIGN KEY fk_2_vtiger_activitygrouprelation");
 
+$adb->query("DELETE FROM vtiger_ticketgrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_ticketgrouprelation DROP FOREIGN KEY fk_1_vtiger_ticketgrouprelation");
 $adb->query("ALTER TABLE vtiger_ticketgrouprelation DROP FOREIGN KEY fk_2_vtiger_ticketgrouprelation");
 
+$adb->query("DELETE FROM vtiger_sogrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_sogrouprelation DROP FOREIGN KEY fk_1_vtiger_sogrouprelation");
 $adb->query("ALTER TABLE vtiger_sogrouprelation DROP FOREIGN KEY fk_2_vtiger_sogrouprelation");
 
+$adb->query("DELETE FROM vtiger_quotegrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_quotegrouprelation DROP FOREIGN KEY fk_1_vtiger_quotegrouprelation");
 $adb->query("ALTER TABLE vtiger_quotegrouprelation DROP FOREIGN KEY fk_2_vtiger_quotegrouprelation");
 
-
+$adb->query("DELETE FROM vtiger_pogrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_pogrouprelation DROP FOREIGN KEY fk_1_vtiger_pogrouprelation");
 $adb->query("ALTER TABLE vtiger_pogrouprelation DROP FOREIGN KEY fk_2_vtiger_pogrouprelation");
 
-
+$adb->query("DELETE FROM vtiger_invoicegrouprelation where groupname is NULL or groupname = ''");
 $adb->query("ALTER TABLE vtiger_invoicegrouprelation DROP FOREIGN KEY fk_1_vtiger_invoicegrouprelation");
 $adb->query("ALTER TABLE vtiger_invoicegrouprelation DROP FOREIGN KEY fk_2_vtiger_invoicegrouprelation");
 

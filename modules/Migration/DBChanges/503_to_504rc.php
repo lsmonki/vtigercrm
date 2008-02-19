@@ -42,7 +42,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 $body=addslashes(nl2br($adb->query_result($result,$i,'body')));
 $templateid=$adb->query_result($result,$i,'templateid');
 
-$adb->query("update vtiger_emailtemplates set body='".$body."' where templateid=".$templateid);
+$adb->pquery("update vtiger_emailtemplates set body=? where templateid=?", array($body, $templateid));
 }
 
 
@@ -646,11 +646,11 @@ ExecuteQuery($def_query);
 ExecuteQuery("ALTER TABLE vtiger_quotescf ADD ".$new_cf_name." VARCHAR(100)");
 
 //Copying all the existing values for team field in vtiger_quotes table into vtiger_quotescf table. ie, moving values from team field into a new custom field.
-ExecuteQuery("update vtiger_quotescf inner join vtiger_quotes on vtiger_quotescf.quoteid=vtiger_quotes.quoteid set ".$new_cf_name."=vtiger_quotes.team");
+ExecuteQuery("update vtiger_quotescf inner join vtiger_quotes on vtiger_quotescf.quoteid=vtiger_quotes.quoteid set $new_cf_name=vtiger_quotes.team");
 
 //If any custom view referring to the deleted field 'team' then we need to update it to point the newly created custom field.
-ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_quotescf:".$new_cf_name.":".$new_cf_name.":Quotes_Team:V' where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
-ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_quotescf:".$new_cf_name.":".$new_cf_name.":Quotes_Team:V' where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_quotescf:$new_cf_name:$new_cf_name:Quotes_Team:V' where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
+ExecuteQuery("update vtiger_cvadvfilter set columnname='vtiger_quotescf:$new_cf_name:$new_cf_name:Quotes_Team:V' where columnname='vtiger_quotes:team:team:Quotes_Team:V'");
 //Removing the team column from the vtiger_quotes table
 ExecuteQuery("ALTER TABLE vtiger_quotes drop team");
 
@@ -787,7 +787,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	$body=decode_html($adb->query_result($result,$i,'notificationbody'));
 	$body=str_replace('<br>','\n', $body);
 	$notificationid=$adb->query_result($result,$i,'notificationid');
-	$adb->query("update vtiger_inventorynotification set notificationbody='".$body."' where notificationid=".$notificationid);
+	$adb->pquery("update vtiger_inventorynotification set notificationbody=? where notificationid=?", array($body, $notificationid));
 }
 //Added by Asha for #4826
 ExecuteQuery("update vtiger_pricebook set active=0 where active is null");
