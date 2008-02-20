@@ -867,7 +867,8 @@ $toHtml = array(
     * @returns $string -- string:: Type string 
       *
        */
-function to_html($string, $encode=true){
+function to_html($string, $encode=true)
+{
 	global $log,$default_charset;
 	//$log->debug("Entering to_html(".$string.",".$encode.") method ...");
 	global $toHtml;
@@ -878,18 +879,29 @@ function to_html($string, $encode=true){
 
 	if($_REQUEST['module'] != 'Settings' && $_REQUEST['file'] != 'ListView' && $_REQUEST['module'] != 'Portal' && $_REQUEST['module'] != "Reports")// && $_REQUEST['module'] != 'Emails')
 		$ajax_action = $_REQUEST['module'].'Ajax';
-	if(is_string($string)){
-		if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) ){ 
+
+	if(is_string($string))
+	{
+		if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) )
+		{
 			$doconvert = true;
-	} else if($search == true) { // Fix for tickets #4647, #4648. Conversion required in case of search results also.
-		$doconvert = true;
+		}
+		else if($search == true)
+		{
+			// Fix for tickets #4647, #4648. Conversion required in case of search results also.
+			$doconvert = true;
+		}
+		if ($doconvert == true)
+		{
+			if(strtolower($default_charset) == 'utf-8') 
+				$string = htmlentities($string, ENT_QUOTES, $default_charset);
+			else
+				$string = preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
+		}
 	}
-		if ($doconvert == true) {
-                        $string = htmlentities($string, ENT_QUOTES, $default_charset);
-                }			
-        }
+
 	//$log->debug("Exiting to_html method ...");
-        return $string;
+	return $string;
 }
 
 /** Function to get the assigned user name or group name
