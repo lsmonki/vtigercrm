@@ -158,24 +158,24 @@ $server->wsdl->addComplexType(
 $server->register(
     'LoginToVtiger',
     array('userid'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'xsd:string'),
+    array('return'=>'xsd:string','session'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
     'CheckEmailPermission',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
     'CheckContactPermission',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
     'CheckActivityPermission',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -183,13 +183,13 @@ $server->register(
 
 $server->register(
     'SearchContactsByEmail',
-    array('username'=>'xsd:string','emailaddress'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string','emailaddress'=>'xsd:string'),
     array('return'=>'tns:contactdetails'),
     $NAMESPACE);
 
 $server->register(
     'AddMessageToContact',
-    array('username'=>'xsd:string','contactid'=>'xsd:string','msgdtls'=>'tns:emailmsgdetail'),
+    array('username'=>'xsd:string','session'=>'xsd:string','contactid'=>'xsd:string','msgdtls'=>'tns:emailmsgdetail'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -197,32 +197,32 @@ $server->register(
     'AddEmailAttachment',
     array('emailid'=>'xsd:string','filedata'=>'xsd:string',
 	  'filename'=>'xsd:string','filesize'=>'xsd:string','filetype'=>'xsd:string',
-	  'username'=>'xsd:string'),
+	  'username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 //For Contacts Sync
 $server->register(
 		'GetContacts',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:contactdetails'),
     $NAMESPACE);
 
 $server->register(
    'AddContacts',
-    array('username'=>'xsd:string','cntdtls'=>'tns:contactdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','cntdtls'=>'tns:contactdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'UpdateContacts',
-    array('username'=>'xsd:string','cntdtls'=>'tns:contactdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','cntdtls'=>'tns:contactdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'DeleteContacts',
-    array('username'=>'xsd:string','crmid'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);   
 //End for Contacts Sync
@@ -230,25 +230,25 @@ $server->register(
 //For Tasks Sync
 $server->register(
 		'GetTasks',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:taskdetails'),
     $NAMESPACE);
 
 $server->register(
    'AddTasks',
-    array('username'=>'xsd:string','taskdtls'=>'tns:taskdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','taskdtls'=>'tns:taskdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'UpdateTasks',
-    array('username'=>'xsd:string','taskdtls'=>'tns:taskdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','taskdtls'=>'tns:taskdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'DeleteTasks',
-    array('username'=>'xsd:string','crmid'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE); 
 //End for Tasks Sync
@@ -256,32 +256,34 @@ $server->register(
 //For Calendar Sync
 $server->register(
 		'GetClndr',
-    array('username'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:clndrdetails'),
     $NAMESPACE);
 
 $server->register(
    'AddClndr',
-    array('username'=>'xsd:string','clndrdtls'=>'tns:clndrdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','clndrdtls'=>'tns:clndrdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'UpdateClndr',
-    array('username'=>'xsd:string','clndrdtls'=>'tns:clndrdetails'),
+    array('username'=>'xsd:string','session'=>'xsd:string','clndrdtls'=>'tns:clndrdetails'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
    'DeleteClndr',
-    array('username'=>'xsd:string','crmid'=>'xsd:string'),
+    array('username'=>'xsd:string','session'=>'xsd:string','crmid'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE); 
 //End for Calendar Sync
 
-function SearchContactsByEmail($username,$emailaddress)
+function SearchContactsByEmail($username,$session,$emailaddress)
 {
-     require_once('modules/Contacts/Contacts.php');
+	if(!validateSession($username,$session))
+	return null;
+	require_once('modules/Contacts/Contacts.php');
      
      $seed_contact = new Contacts();
      $output_list = Array();
@@ -306,8 +308,10 @@ function SearchContactsByEmail($username,$emailaddress)
      return $output_list;
 }    
 
-function AddMessageToContact($username,$contactid,$msgdtls)
+function AddMessageToContact($username,$session,$contactid,$msgdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	global $adb;
 	require_once('modules/Users/Users.php');
@@ -367,42 +371,47 @@ function AddMessageToContact($username,$contactid,$msgdtls)
 	}
 }
 
-function LoginToVtiger($userid,$password,$version)
+function LoginToVtiger($user_name,$password,$version)
 {
-	global $log;
-	global $adb;
-	$log->DEBUG("Entered into vtigerCRM with userid".$userid." and Version".$version);
-	include('vtigerversion.php');	
+  	global $log,$adb;
+	require_once('modules/Users/Users.php');
+	include('vtigerversion.php');
 	if($version != $vtiger_current_version)
 	{
-		return "VERSION";
+		return array("VERSION",'00');
 	}
-	require_once('modules/Users/Users.php');
-	$return_access = "FALSE";
+	$return_access = array("FALSES",'00');
+	
 	$objuser = new Users();
+	
 	if($password != "")
 	{
-		$objuser->column_fields['user_name'] = $userid;
+		$objuser->column_fields['user_name'] = $user_name;
 		$objuser->load_user($password);
 		if($objuser->is_authenticated())
 		{
-			$return_access = "TRUES";
+			$userid =  $objuser->retrieve_user_id($user_name);
+			$sessionid = makeRandomPassword();
+			unsetServerSessionId($userid);
+			$sql="insert into vtiger_soapservice values(?,?,?)";
+			$result = $adb->pquery($sql, array($userid,'Outlook' ,$sessionid));
+			$return_access = array("TRUES",$sessionid);
 		}else
 		{
-			$return_access = "LOGIN";
+			$return_access = array("FALSES",'00');
 		}
 	}else
 	{
 			//$server->setError("Invalid username and/or password");
-			$return_access = "FALSE";
+			$return_access = array("LOGIN",'00');
 	}
-$log->DEBUG("The return access to outlook was ".$return_access." from vtigerCRM");
 	$objuser = $objuser;
-	return $return_access;
+	return $return_access;	
 }
-
-function CheckEmailPermission($username)
+function CheckEmailPermission($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user,$log;
 	require_once("modules/Users/Users.php");
 	$seed_user=new Users();
@@ -419,8 +428,10 @@ function CheckEmailPermission($username)
 	}
 }
 
-function CheckContactPermission($username)
+function CheckContactPermission($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	require_once("modules/Users/Users.php");
 	$seed_user=new Users();
@@ -437,8 +448,10 @@ function CheckContactPermission($username)
 	}
 }
 
-function CheckActivityPermission($username)
+function CheckActivityPermission($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	require_once("modules/Users/Users.php");
 	$seed_user=new Users();
@@ -455,8 +468,10 @@ function CheckActivityPermission($username)
 	}
 }
 
-function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username)
+function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb;
 	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');
@@ -498,8 +513,10 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 	}
 }
 
-function GetContacts($username)
+function GetContacts($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb;
 	require_once('modules/Contacts/Contacts.php');
 
@@ -578,8 +595,10 @@ function GetContacts($username)
 	return $output_list;
 }
 
-function AddContacts($username,$cntdtls)
+function AddContacts($username,$session,$cntdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb;
 	global $current_user;
 	require_once('modules/Users/Users.php');
@@ -665,8 +684,10 @@ function AddContacts($username,$cntdtls)
 	return $contact->id;
 }
 
-function UpdateContacts($username,$cntdtls)
+function UpdateContacts($username,$session,$cntdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb;
 	global $current_user;
 	require_once('modules/Users/Users.php');
@@ -752,8 +773,10 @@ function UpdateContacts($username,$cntdtls)
 	return $contact->id;
 }
 
-function DeleteContacts($username,$crmid)
+function DeleteContacts($username,$session,$crmid)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Contacts/Contacts.php');
@@ -810,8 +833,10 @@ function retrieve_account_id($account_name,$user_id)
 
 }
 
-function GetTasks($username)
+function GetTasks($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb,$log;
 	require_once('modules/Calendar/Activity.php');
 		
@@ -879,8 +904,10 @@ function GetTasks($username)
 	return $output_list;
 }
 
-function AddTasks($username,$taskdtls)
+function AddTasks($username,$session,$taskdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
@@ -965,8 +992,10 @@ function AddTasks($username,$taskdtls)
 	return $task->id;
 }
 
-function UpdateTasks($username,$taskdtls)
+function UpdateTasks($username,$session,$taskdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
@@ -1054,8 +1083,10 @@ function UpdateTasks($username,$taskdtls)
 	return $task->id;
 }
 
-function DeleteTasks($username,$crmid)
+function DeleteTasks($username,$session,$crmid)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
@@ -1071,8 +1102,10 @@ function DeleteTasks($username,$crmid)
 	return $task->id;     
 }
 
-function GetClndr($username)
+function GetClndr($username,$session)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $adb,$log;
 	require_once('modules/Calendar/Activity.php');
 
@@ -1130,8 +1163,10 @@ function GetClndr($username)
 	return $output_list;
 }
 
-function AddClndr($username,$clndrdtls)
+function AddClndr($username,$session,$clndrdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user,$adb;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
@@ -1202,8 +1237,10 @@ function AddClndr($username,$clndrdtls)
 	return $clndr->id;
 }
 
-function UpdateClndr($username,$clndrdtls)
+function UpdateClndr($username,$session,$clndrdtls)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	global $adb,$log;
 	require_once('modules/Users/Users.php');
@@ -1277,8 +1314,10 @@ function UpdateClndr($username,$clndrdtls)
 	return $clndr->id;
 }
 
-function DeleteClndr($username,$crmid)
+function DeleteClndr($username,$session,$crmid)
 {
+	if(!validateSession($username,$session))
+	return null;
 	global $current_user;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Calendar/Activity.php');
@@ -1316,7 +1355,54 @@ function get_time_difference( $start, $end )
 	}
 	return( false );
 }
+ 
+function unsetServerSessionId($id)
+{
+	global $adb;
+	$adb->println("Inside the function unsetServerSessionId");
 
+	$id = (int) $id;
+
+	$adb->query("delete from vtiger_soapservice where type='Outlook' and id=$id");
+
+	return;
+}
+function validateSession($username, $sessionid)
+{
+	global $adb,$current_user;
+	$adb->println("Inside function validateSession($username, $sessionid)");
+	require_once("modules/Users/Users.php");
+	$seed_user = new Users();
+	$id = $seed_user->retrieve_user_id($username);
+
+	$server_sessionid = getServerSessionId($id);
+
+	$adb->println("Checking Server session id and customer input session id ==> $server_sessionid == $sessionid");
+
+	if($server_sessionid == $sessionid)
+	{
+		$adb->println("Session id match. Authenticated to do the current operation.");
+		return true;
+	}
+	else
+	{
+		$adb->println("Session id does not match. Not authenticated to do the current operation.");
+		return false;
+	}
+}
+function getServerSessionId($id)
+{
+	global $adb;
+	$adb->println("Inside the function getServerSessionId($id)");
+
+	//To avoid SQL injection we are type casting as well as bound the id variable. In each and every function we will call this function
+	$id = (int) $id;
+
+	$query = "select * from vtiger_soapservice where type='Outlook' and id={$id}";
+	$sessionid = $adb->query_result($adb->query($query),0,'sessionid');
+
+	return $sessionid;
+}
 $server->service($HTTP_RAW_POST_DATA); 
 exit();
 ?>
