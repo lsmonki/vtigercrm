@@ -1640,7 +1640,12 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 				$keys=array_keys($value_array[$i+1]);
 				$key2=$keys[0];
 			}
-			$detailview_data[$j]=array($key1 => $value_array[$i][$key1],$key2 => $value_array[$i+1][$key2]);
+			// Added to avoid the unique keys
+			$use_key1 = $key1;
+			if($key1 == $key2) {
+				$use_key1 = " " . $key1;
+			}
+			$detailview_data[$j]=array($use_key1 => $value_array[$i][$key1],$key2 => $value_array[$i+1][$key2]);
 		}
 		$label_data[$headerid] = $detailview_data;
 	}
