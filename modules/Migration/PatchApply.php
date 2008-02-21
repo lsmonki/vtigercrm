@@ -90,7 +90,19 @@ for($patch_count=0;$patch_count<count($temp);$patch_count++)
 		//echo '<br>No Migration / No File ==> '.$filename;
 	}
 }
+	global $adb,$default_charset;
+	$db_change_conformation = true;
+	$db_status=check_db_utf8_charset($adb);
+	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
+	else						$config_status=0;
 
+	if($db_status && $config_status)
+	{
+		$db_change_conformation = false;
+		echo '</table><br><br>';
+		include("modules/Migration/HTMLtoUTF8Conversion.php");
+	}
+	
 if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid display the table tag
 {
 	echo '</table>';
@@ -149,10 +161,11 @@ function check_db_utf8_charset($conn)
 	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8')); 
 }
 
-	global $adb,$default_charset;
+/*	global $adb,$default_charset;
 	$db_status=check_db_utf8_charset($adb);
 	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
 	else						$config_status=0;
+ */	
 
 	if(!$db_status && !$config_status)
 	{
@@ -168,8 +181,8 @@ function check_db_utf8_charset($conn)
 		$msg='<br><font color="red"><b>Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set your database charset to UTF-8</b></font>';
 
 	}
-echo $msg;
-if(!$continue_42P2)
+	echo $msg;
+if(!$continue_42P2 && $db_change_conformation == true)
 {
 echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
 		<tr>
@@ -177,6 +190,7 @@ echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width=
 					<form name="html_to_utf" method="post" action="index.php">
 					<input type="hidden" name="module" value="Migration">
 					<input type="hidden" name="action" value="HTMLtoUTF8Conversion">
+
 					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small save" />
 				</form><br>
 			</td>
@@ -184,6 +198,8 @@ echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width=
 	</table><br><br>';
 
 }
+if($db_change_conformation == true)
+{
 echo '<table width="95%"  border="0" align="center">
 	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
 		<tr>
@@ -196,7 +212,7 @@ echo '<table width="95%"  border="0" align="center">
 			</td>
 		</tr>
 	</table><br><br>';
-
+}
 perform_post_migration_activities();
 
 //Function used to execute the query and display the success/failure of the query
