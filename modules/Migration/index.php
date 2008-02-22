@@ -63,7 +63,6 @@ function check_db_utf8_support($conn)
 	} 
 	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8')); 
 }
-
 	global $adb,$default_charset;
 	$db_status=check_db_utf8_support($adb);
 	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
@@ -71,20 +70,29 @@ function check_db_utf8_support($conn)
 
 	$db_migration_status =true;
 
+	if(!isset($db_character_set))
+	{
+	$result = $adb->query("show variables like 'character_set_database'"); 	
+	$row = $adb->fetch_array($result);
+	$db_character_set = $row['value'];
+	}
 	if(!$db_status && !$config_status)
 	{
-		$msg='<font color="red"><b>Your database charset and $default_charset variable in config.inc.php are not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the above to UTF-8</b></font>';
+		$db_migration_status = false;
+		if($db_character_set =='latin1' && strtolower($default_charset) == 'iso-8859-1')
+		$db_migration_status = true;
+		$msg='<br/>';
 	}
 	else if($db_status && !$config_status)
 	{
 	       	$db_migration_status = false;
-		$msg='<font color="red"><b>&nbsp;&nbsp; Your database charset is set as UTF-8. But $default_charset variable in config.inc.php is not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM.<br>If you want use UTF-8 charset , please set the $default_charset variable to UTF-8 in config.inc.php file. </b></font>';
+		$msg='<br> If you want to use UTF-8 charset for both vtigerCRM server and database , please change the $default_charset variable to UTF-8 in config.inc.php file and click on the "Continue" button.<br/><b> Otherwise ';
 
 	}
 	else if(!$db_status && $config_status)
 	{
 	       	$db_migration_status = false;
-		$msg='<font color="red"><b> &nbsp;&nbsp; Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. <br/> If you want use UTF-8 charset , please click convert database button.<br/> Otherwise continue your migration , both $default_charset variable in config.inc.php and database charset are must same.</b></font>';
+		$msg='<br> If you want to use UTF-8 charset for both vtigerCRM server and database , please click on the <b> "Use UTF-8 charset" </b> button. <br/><b> Otherwise  ';
 
 	}
 	
@@ -116,17 +124,29 @@ $smarty->assign("CURRENT_VERSION", $vtiger_current_version);
 if($db_migration_status == false)
 {
 	echo '<br><br>
-	<font color ="red"> <ul><li>Changes made to database during migration cannot be reverted back. So we highly recommend to take database dump of the current working database before migration.</ul></font><br/> <br/></table><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
+		<font color ="red"> <ul><li>Changes made to database during migration cannot be reverted back. So we highly recommend to take database dump of the current working database before migration.</ul></font><br/> <br/></table>';
+		
+	echo '	<table border="1" cellpadding ="2" cellspacing="0" height="100%" width="50%" align="center">
+		<tr><td>vtigerCRM Database Characterset </td><td>';
+        	if(isset($db_character_set))
+			echo $db_character_set;
+	echo '  </td></tr>
+		<tr><td>vtigerCRM Server Characterset </td><td>'.$default_charset.' </td></tr>
+		</table>';
+	echo '<br><br>
+		<table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
 		<tr>
 		<td colspan="2" align="center"><br>';
+	echo '<font color ="red"> <br/> There is a conflict between the vtigerCRM server characterset and database characterset. ';
 	echo $msg;
+	echo '<b> Specify the same character set both in vtigerCRM server & database and click on the "Continue" button to proceed with Migration.</b> </font> ';
 	echo '<br><br><form name="html_to_utf" method="post" action="index.php">
 					<input type="hidden" name="module" value="Migration">
 					<input type="hidden" name="action" value="index">
 				      	<input type="hidden" name="dbconversionutf8" value = "">
 					<input type="hidden" name="parenttab" value="Settings">';
 				if(!$db_status && $config_status){	
-			echo	'<input type="button" name="close" value=" &nbsp;Convert Database &nbsp; " onclick ="dbcovert();" class="crmbutton small save" />';
+			echo	'<input type="button" name="close" value=" &nbsp; Use UTF-8 Charset &nbsp; " onclick ="dbcovert();" class="crmbutton small save" />';
 }
 		echo  '	<input type="submit" name="close" value=" &nbsp;Continue &nbsp; " class="crmbutton small save" />
 			</form>
