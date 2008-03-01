@@ -269,28 +269,28 @@ class sysinfo {
     $results = array();
 
     if( !$results = $this->parser->parse_lspci() ) {
-      $bufr = rfts( '/proc/pci' );
-
-    //Pinaki : Fix for ticket #4462
-	if(!is_null($bufr)) {
-
-      foreach( $bufr as $buf ) {
-        if (preg_match('/Bus/', $buf)) {
-          $device = true;
-          continue;
-        } 
-
-        if ($device) {
-          list($key, $value) = split(': ', $buf, 2);
-
-          if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
-            $results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
-          } 
-          $device = false;
-        } 
-      } 
-    } 
-    asort($results);
+		$bufr = rfts( '/proc/pci' );
+	
+	    //Pinaki : Fix for ticket #4462 and #5147
+		if(!is_null($bufr) && is_array($bufr)) {
+	
+			foreach( $bufr as $buf ) {
+	        	if (preg_match('/Bus/', $buf)) {
+	          		$device = true;
+	          		continue;
+	        	} 
+	
+	        	if ($device) {
+	          		list($key, $value) = split(': ', $buf, 2);
+	
+	          		if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
+	            		$results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
+	          		} 
+	          		$device = false;
+	        	} 
+			}  
+	    	asort($results);
+    	}
 	}
     return $results;
   } 
