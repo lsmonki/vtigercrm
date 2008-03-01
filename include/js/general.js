@@ -2339,7 +2339,8 @@ function LTrim( value )
 
 function selectedRecords(module,category)
 {
-	var idstring  =  document.getElementById("allselectedboxes").value;
+    var allselectedboxes = document.getElementById("allselectedboxes");
+	var idstring  =  (allselectedboxes == null)? '' : allselectedboxes.value;
         if(idstring != '')
                 window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
         else
