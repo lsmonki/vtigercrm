@@ -1258,10 +1258,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
 
-	//modified query to fix the ticket 5014
-	$and = "AND (((vtiger_activity.date_start between ? AND ?)
+	//modified query to fix the ticket #5014 & #5180
+	$and = "AND ((((vtiger_activity.date_start between ? AND ?)
 		OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
-		OR (vtiger_activity.due_date between ? AND ?)
+		OR (vtiger_activity.due_date between ? AND ?))
 		AND (vtiger_recurringevents.activityid is NULL))
 		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?))";
 
