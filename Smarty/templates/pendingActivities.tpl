@@ -18,7 +18,7 @@
                 <td width="100%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
                         <b class="fontBold">{$APP.$label}&nbsp;{$APP.LBL_PENDING_EVENTS}&nbsp;({$ACTIVITIES.1.noofactivities})</b><br />
                         <b>{$APP.LBL_SHOW}</b>
-	                       {$APP.LBL_TODAY}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?action=ListView&module=Calendar&parenttab=My%20Home%20Page&viewname={$VIEWID}">{$APP.LBL_ALL}</a> 
+	                       {$APP.LBL_TODAY}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?action=ListView&module=Calendar&parenttab=My%20Home%20Page&viewname={$VIEWID}&from_homepage=pending_activities">{$APP.LBL_ALL}</a> 
 		</td>
 
                 <td><img src="{$IMAGE_PATH}pending_right.gif"></td>

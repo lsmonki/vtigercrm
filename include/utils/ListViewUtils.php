@@ -2217,8 +2217,17 @@ function getListQuery($module,$where='')
 		LEFT OUTER JOIN vtiger_invoice
 	                ON vtiger_invoice.invoiceid = vtiger_seactivityrel.crmid
 		LEFT OUTER JOIN vtiger_campaign
-			ON vtiger_campaign.campaignid = vtiger_seactivityrel.crmid	
-		WHERE vtiger_crmentity.deleted = 0 ".$where;
+		ON vtiger_campaign.campaignid = vtiger_seactivityrel.crmid";
+
+		//added to fix #5135
+		if(isset($_REQUEST['from_homepage']) && ($_REQUEST['from_homepage'] == "upcoming_activities" || $_REQUEST['from_homepage'] == "pending_activities"))
+		{
+			$query.=" LEFT OUTER JOIN vtiger_recurringevents
+			             ON vtiger_recurringevents.activityid=vtiger_activity.activityid";
+		}
+		//end
+
+		$query.=" WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);

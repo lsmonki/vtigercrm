@@ -134,6 +134,14 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND " .$where;
 }
+if (isset($_REQUEST['from_homepage'])) {
+	$today = date("Y-m-d", time());
+	if ($_REQUEST['from_homepage'] == 'upcoming_activities')
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (date_start >= '$today' OR vtiger_recurringevents.recurringdate >= '$today')";
+	elseif ($_REQUEST['from_homepage'] == 'pending_activities') 
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (due_date <= '$today' OR vtiger_recurringevents.recurringdate <= '$today')";
+}
+
 $list_query .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
 
 if(isset($order_by) && $order_by != '')
