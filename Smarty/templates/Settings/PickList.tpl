@@ -323,7 +323,7 @@ function pickListDelete(mod)
 
 
 }
-function delPickList(obj,module)
+function delPickList(obj,module,nonedit_flag)
 {
 	var oDelPick = $('allpick');
 	var fld_name=oDelPick.options[oDelPick.selectedIndex].value;
@@ -346,7 +346,7 @@ function delPickList(obj,module)
 				val_count++;
 			}
 		}
-		if(val_count == oAvlPick.options.length)
+		if(val_count == oAvlPick.options.length && nonedit_flag == false)
 		{
 			alert(alert_arr.LBL_CANT_REMOVE);
 			return false;

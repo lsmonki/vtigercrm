@@ -110,6 +110,12 @@ else
 				}
 			}
 		}
+		if(is_array($non_pick))
+		$smarty->assign('NONEDIT_FLAG','true');
+		else
+		$smarty->assign('NONEDIT_FLAG','false');
+				
+
 		$smarty->assign('NONEDITPICKLIST',$non_pick);
 		
 

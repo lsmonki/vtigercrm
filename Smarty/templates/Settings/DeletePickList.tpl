@@ -29,7 +29,7 @@
 			</td>
 			<td valign=top align=left>
 				<!--img src="{$IMAGE_PATH}movecol_del.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_del_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_del.gif'" onclick="" onmousedown="this.src='{$IMAGE_PATH}movecol_del_down.gif'" align="absmiddle" border="0" -->
-				<input type="button" value="{$APP.LBL_APPLY_LABEL}" name="del" class="crmButton small edit" onclick="delPickList(this,'{$MODULE}');">
+				<input type="button" value="{$APP.LBL_APPLY_LABEL}" name="del" class="crmButton small edit" onclick="delPickList(this,'{$MODULE}',{$NONEDIT_FLAG});">
 				<input type="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" name="cancel" class="crmButton small cancel" onclick="Myhide('deletediv');">
 			</td>
 			
