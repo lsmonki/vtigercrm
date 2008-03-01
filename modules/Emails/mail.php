@@ -309,9 +309,13 @@ function setCCAddress($mail,$cc_mod,$cc_val)
 		$ccmail = explode(",",$cc_val);
 		for($i=0;$i<count($ccmail);$i++)
 		{
-			$name_addr_pair = explode("<",$ccmail[$i]);
-			$cc_name = $name_addr_pair[0];
-			$addr = trim($name_addr_pair[1],">");
+			$addr = $ccmail[$i];
+			$cc_name = preg_replace('/([^@]+)@(.*)/', '$1', $addr); // First Part Of Email
+			if(stripos($addr, '<')) {
+				$name_addr_pair = explode("<",$ccmail[$i]);
+				$cc_name = $name_addr_pair[0];
+				$addr = trim($name_addr_pair[1],">");
+			}
 			if($ccmail[$i] != '')
 				$mail->$method($addr,$cc_name);
 		}
