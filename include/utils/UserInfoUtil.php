@@ -1188,7 +1188,7 @@ function isPermitted($module,$actionname,$record_id='')
 	}
 	
 	//Checking the Access for the Settings Module
-	if($module == 'Settings' || $module == 'Administration')
+	if($module == 'Settings' || $module == 'Administration' || $module == 'System')
 	{
 		if(! $is_admin)
 		{
