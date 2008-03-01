@@ -1276,8 +1276,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = '<a href="http://'.$field_val.'" target="_blank">'.$temp_val.'</a>';
 	}
-	elseif($uitype == 13 || $uitype == 104 && $_REQUEST['module'] != 'Users')
-	 {
+	elseif($uitype == 13 || $uitype == 104 && ($_REQUEST['action'] != 'Popup' && $_REQUEST['file'] != 'Popup'))
+	{
 		if($_SESSION['internal_mailer'] == 1)
 		{	
 			//check added for email link in user detailview
