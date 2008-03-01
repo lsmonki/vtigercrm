@@ -113,7 +113,6 @@ $cv_fields_list = Array(
 			"activity:date_start:date_start:Activities_Start_Date_&_Time:DT"=>"vtiger_activity:date_start:date_start:Calendar_Start_Date_&_Time:DT",
 			//Calendar Module
 			"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
-			"vtiger_activity:status:taskstatus:Calendar_Status:V"=>"vtiger_activity:eventstatus:eventstatus:Calendar_Status:V",
 			//Campaign Module
 			"vtiger_campaign:product_id:product_id:Campaigns_Product:I"=>"vtiger_products:productname:productname:Campaigns_Product:V",
 			"vtiger_campaign:expectedresponsecount:expectedresponsecount:Campaigns_Expected_Response_Count:N"=>"vtiger_campaign:expectedresponsecount:expectedresponsecount:Campaigns_Expected_Response_Count:I",
