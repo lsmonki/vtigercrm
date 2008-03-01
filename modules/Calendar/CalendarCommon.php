@@ -429,16 +429,18 @@ function getEventNotification($mode,$subject,$desc)
 		$getGroupObj=new GetGroupUsers();
 		$getGroupObj->getAllUsersInGroup($groupid);
 		$userIds=$getGroupObj->group_users;
-		$groupqry="select email1,id from vtiger_users where id in(".generateQuestionMarks($userIds).")";
-		$groupqry_res=$adb->pquery($groupqry, array($userIds));
-		$noOfRows = $adb->num_rows($groupqry_res);
-		for($z=0;$z < $noOfRows;$z++)
-		{
-			$emailadd = $adb->query_result($groupqry_res,$z,'email1');
-			$curr_userid = $adb->query_result($groupqry_res,$z,'id');
-			$description = getActivityDetails($desc,$curr_userid);
-			$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
-
+		if (count($userIds) > 0) {
+			$groupqry="select email1,id from vtiger_users where id in(".generateQuestionMarks($userIds).")";
+			$groupqry_res=$adb->pquery($groupqry, array($userIds));
+			$noOfRows = $adb->num_rows($groupqry_res);
+			for($z=0;$z < $noOfRows;$z++)
+			{
+				$emailadd = $adb->query_result($groupqry_res,$z,'email1');
+				$curr_userid = $adb->query_result($groupqry_res,$z,'id');
+				$description = getActivityDetails($desc,$curr_userid);
+				$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
+	
+			}
 		}
 	}
 }

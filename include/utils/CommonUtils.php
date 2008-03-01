@@ -2176,21 +2176,23 @@ function sendNotificationToGroups($groupid,$crmid,$module)
        $getGroupObj=new GetGroupUsers();
        $getGroupObj->getAllUsersInGroup($mycrmid);
        $userIds=$getGroupObj->group_users;
-       $groupqry="select email1,id,user_name from vtiger_users where id in(". generateQuestionMarks($userIds) .")";
-       $groupqry_res=$adb->pquery($groupqry, array($userIds));
-       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
-       {
-               //handle the mail send to vtiger_users
-               $emailadd = $adb->query_result($groupqry_res,$z,'email1');
-               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
-               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
-               $pmodule = 'Users';
-	       $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
-               require_once('modules/Emails/mail.php');
-               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$focus->id);
-               $all_to_emailids []= $emailadd;
-                $mail_status_str .= $emailadd."=".$mail_status."&&&";
-        }
+	   if (count($userIds) > 0) {
+	       $groupqry="select email1,id,user_name from vtiger_users where id in(". generateQuestionMarks($userIds) .")";
+	       $groupqry_res=$adb->pquery($groupqry, array($userIds));
+	       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
+	       {
+	               //handle the mail send to vtiger_users
+	               $emailadd = $adb->query_result($groupqry_res,$z,'email1');
+	               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
+	               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
+	               $pmodule = 'Users';
+		       $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
+	               require_once('modules/Emails/mail.php');
+	               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$focus->id);
+	               $all_to_emailids []= $emailadd;
+	                $mail_status_str .= $emailadd."=".$mail_status."&&&";
+	        }
+		}
 }
 
 
