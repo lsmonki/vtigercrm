@@ -65,9 +65,9 @@ $list_report_form->assign('DATE_FORMAT',$date_format);
 
 $list_report_form->assign('PRI_MODULE',$primarymodule);
 $list_report_form->assign('SEC_MODULE',$secondarymodule);
-$reportname = htmlentities($reportname, ENT_QUOTES, $default_charset);
+$reportname = htmlspecialchars($reportname, ENT_COMPAT, $default_charset);
 $list_report_form->assign('REPORT_NAME',$reportname);
-$reportdescription = htmlentities($reportdescription, ENT_QUOTES, $default_charset);
+$reportdescription = htmlspecialchars($reportdescription, ENT_COMPAT, $default_charset);
 $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);

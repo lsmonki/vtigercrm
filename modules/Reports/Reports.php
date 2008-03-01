@@ -143,8 +143,8 @@ class Reports extends CRMEntity{
 				$this->primodule = $reportmodulesrow["primarymodule"];
 				$this->secmodule = $reportmodulesrow["secondarymodules"];
 				$this->reporttype = $reportmodulesrow["reporttype"];
-				$this->reportname = $reportmodulesrow["reportname"];
-				$this->reportdescription = $reportmodulesrow["description"];
+				$this->reportname = decode_html($reportmodulesrow["reportname"]);
+				$this->reportdescription = decode_html($reportmodulesrow["description"]);
 				$this->folderid = $reportmodulesrow["folderid"];
 			}
 		}
