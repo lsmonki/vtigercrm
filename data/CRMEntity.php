@@ -614,13 +614,26 @@ class CRMEntity
 				$total = $_REQUEST['total'];
 			  }
 
+				if($this->column_fields["$history_field_array[$inventory_module]"] == $app_strings['LBL_NOT_ACCESSIBLE'])
+				  {
+					 
+					  //If the value in the request is Not Accessible for a picklist, the existing value will be replaced instead of Not Accessible value.
+					  $his_col = $history_field_array[$inventory_module];
+					  $his_sql="select $his_col from  $this->table_name where ".$this->module_id."=?";
+					 $his_res = $adb->pquery($his_sql,array($this->id));
+					  $status_value = $adb->query_result($his_res,0,$his_col);
+					 $stat_value = $status_value;
+				  }
+				  else
+				  {
+					  $stat_value  = $this->column_fields["$history_field_array[$inventory_module]"];
+				  }
 			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
-			  if($oldvalue != $this->column_fields["$history_field_array[$inventory_module]"])
+			  if($this->column_fields["$history_field_array[$inventory_module]"]!= '' &&  $oldvalue != $stat_value )
 			  {
-				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$this->column_fields["$history_field_array[$inventory_module]"]);
+				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$stat_value);
 			  }
 		  }
-
 		  //Check done by Don. If update is empty the the query fails
 		  if(trim($update) != '')
         	  {
@@ -629,7 +642,6 @@ class CRMEntity
 		  	$adb->pquery($sql1, $update_params); 
 		  }
 		  
-
 	  }
 	  else
 	  {
