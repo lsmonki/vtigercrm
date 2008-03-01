@@ -758,7 +758,7 @@ function getGroupName($id, $module)
 		}
 		
 		$result = $adb->pquery($sql, array($id));
-        $group_info[] = $adb->query_result($result,0,"groupname");
+        $group_info[] = decode_html($adb->query_result($result,0,"groupname"));
         $group_info[] = $adb->query_result($result,0,"groupid");
 		$log->debug("Exiting getGroupName method ...");
         return $group_info;

@@ -388,7 +388,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			do
 			{
-				$groupname=$nameArray["groupname"];
+				$groupname=decode_html($nameArray["groupname"]);
 				$selected = '';	
 				if($groupname == $selected_groupname[0])
 				{

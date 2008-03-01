@@ -416,7 +416,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($noof_group_rows!=0)
                 {
 			do{
-				$groupname=$nameArray["groupname"];
+				$groupname= decode_html($nameArray["groupname"]);
 				$group_id=$nameArray["groupid"];
 				$selected = '';	
 				if($groupname == $selected_groupname[0])

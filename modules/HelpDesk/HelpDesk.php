@@ -658,7 +658,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 			$tktresult = $adb->pquery("select * from vtiger_troubletickets where ticketid=?", array($ticketid));
 			$crmresult = $adb->pquery("select * from vtiger_crmentity where crmid=?", array($ticketid));
 
-			$updatelog = $adb->query_result($tktresult,0,"update_log");
+			$updatelog = decode_html($adb->query_result($tktresult,0,"update_log"));
 
 			$old_user_id = $adb->query_result($crmresult,0,"smownerid");
 			$old_status = $adb->query_result($tktresult,0,"status");
@@ -677,7 +677,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 			elseif($focus->column_fields['assigned_user_id'] != $old_user_id)
 			{
 				$user_name = getUserName($focus->column_fields['assigned_user_id']);
-				$updatelog .= ' Transferred to user '.$user_name.'\.';
+				$updatelog .= ' Transferred to user '.decode_html($user_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
 			}
 			//Status change log
 			if($old_status != $focus->column_fields['ticketstatus'])
