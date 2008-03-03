@@ -107,7 +107,7 @@
 						</table>
 						</td>	
 						<td width="1%">&nbsp;</td>
-					        <td rowspan=3>
+					        <td rowspan=3 valign="top">
 						 <table border=0 width="100%" cellspacing=0 cellspacing=0 class="MatrixLayer1">
 					 	 <tr>
 							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX} {if $NUM_EMAILS neq 0}
