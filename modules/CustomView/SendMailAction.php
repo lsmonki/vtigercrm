@@ -133,8 +133,6 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 		$from = $adb->query_result($result,0,'email1');
 		$initialfrom = $adb->query_result($result,0,'user_name');
 	}
-	if($mail_server=='')
-	{
 		global $adb;
 		$mailserverresult=$adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 		$mail_server = $adb->query_result($mailserverresult,0,'server');
@@ -144,7 +142,7 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 
 		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
 		$_REQUEST['server']=$mail_server;
-	}
+
 	$mail->Host = $mail_server;
 	$mail->SMTPAuth = $smtp_auth;
 	$mail->Username = $mail_server_username;

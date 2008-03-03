@@ -93,12 +93,6 @@ if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code
 
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
 
-if (isset($_REQUEST['mail_server'])) $mail_server = $_REQUEST['mail_server'];
-
-if (isset($_REQUEST['mail_server_username'])) $mail_server_username = $_REQUEST['mail_server_username'];
-
-if (isset($_REQUEST['mail_server_password'])) $mail_server_password = $_REQUEST['mail_server_password'];
-
 if (isset($_REQUEST['ftpserver'])) $ftpserver = $_REQUEST['ftpserver'];
 
 if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
@@ -213,10 +207,6 @@ $cache_dir = 'cache/';
 				      			$buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
 				      			$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
 				      			$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
-				      			/* replace mail variable */
-				      			$buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
-				      			$buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
-						      	$buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
 						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
 				
 						      	/* replace master currency variable */
@@ -336,11 +326,6 @@ $cache_dir = 'cache/';
 	$config .= "// upload_dir default value prepended by cache_dir = upload/\n";
 	$config .= "\$tmp_dir = '$cache_dir"."upload/';\n\n";
 
-	$config .= "// mail server parameters\n";
-	$config .= "\$mail_server = '$mail_server';\n";
-	$config .= "\$mail_server_username = '$mail_server_username';\n";
-	$config .= "\$mail_server_password = '$mail_server_password';\n\n";
-	
 	$config .= "// maximum file size for uploaded files in bytes also used when uploading import files\n";
 	$config .= "// upload_maxsize default value = 3000000\n";
 	$config .= "\$upload_maxsize = 3000000;\n\n";
