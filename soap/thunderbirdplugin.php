@@ -56,6 +56,10 @@ $server->register(
 	array('return'=>'xsd:string'),$NAMESPACE);
 
 $server->register(
+	'CheckContactEmailPerm',array('user_name'=>'xsd:string','password'=>'xsd:string'),
+	array('return'=>'xsd:string'),$NAMESPACE);
+
+$server->register(
 	'CheckLeadViewPerm',array('user_name'=>'xsd:string','password'=>'xsd:string'),
 	array('return'=>'xsd:string'),$NAMESPACE);
 
@@ -481,7 +485,7 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 		$Lead->column_fields[mailingstate]=in_array('mailingstate',$permitted_lists) ? $primary_address_state : "";
 		$Lead->column_fields[mailingzip]=in_array('mailingzip',$permitted_lists) ? $primary_address_postalcode : "";
 		$Lead->column_fields[workCountry]=in_array('mailingcountry',$permitted_lists) ? $workCountry : "";
-		$Lead->column_fields[street]=in_array('street',$permitted_lists) ? $alt_address_street : "";
+		$Lead->column_fields[lane]=in_array('lane',$permitted_lists) ? $alt_address_street : "";
 		$Lead->column_fields[city]=in_array('city',$permitted_lists) ? $alt_address_city : "";
 		$Lead->column_fields[state]=in_array('state',$permitted_lists) ? $alt_address_state : "";
 		$Lead->column_fields[code]=in_array('code',$permitted_lists) ? $alt_address_postalcode : "";
@@ -542,10 +546,8 @@ function authentication($user_name,$password)
 	global $adb,$log;
 	require_once('modules/Users/Users.php');
 	$objuser = new Users();
-	$log->DEBUG($user_name." === ".$password);
 	if($password != "" && $user_name != '')
 	{
-	$log->DEBUG($user_name." ==In If condition= ".$password);
 		$objuser->column_fields['user_name'] = $user_name;
 		$encrypted_password = $objuser->encrypt_password($password);
 		if($objuser->load_user($password) && $objuser->is_authenticated())
@@ -596,6 +598,25 @@ function CheckContactPerm($user_name,$password)
 	}
 }
 
+function CheckContactEmailPerm($user_name,$password)
+{
+	if(authentication($user_name,$password))
+	{
+		global $current_user,$log;
+		require_once('modules/Users/Users.php');
+		$seed_user = new Users();
+		$user_id = $seed_user->retrieve_user_id($user_name);
+		$current_user = $seed_user;
+		$current_user->retrieve_entity_info($user_id,"Users");
+		if((isPermitted("Contacts","index") == "yes") && (isPermitted("Emails","index") == "yes"))
+		{	
+			return "allowed";
+		}else
+		{
+			return "notallowed";
+		}
+	}
+}	
 function CheckContactViewPerm($user_name,$password)
 {
 	if(authentication($user_name,$password))
