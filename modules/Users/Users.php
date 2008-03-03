@@ -966,7 +966,8 @@ class Users {
 
 	
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = $file_details['name'];
+		$file = $file_details['name'];
+		$binFile = preg_replace('/\s+/', '_', $file);
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);
@@ -977,7 +978,7 @@ class Users {
 		}
 		// Vulnerability fix ends
 
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
