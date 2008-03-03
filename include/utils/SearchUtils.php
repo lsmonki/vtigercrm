@@ -72,6 +72,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		}
 		if($fieldname == "accountname" && $module !="Accounts")
 			$fieldname = "account_id";
+
+		if($fieldname == "productname" && $module =="Campaigns")
+			$fieldname = "product_id";
+
 		if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
 		{
 			$fieldname = "contact_id";
@@ -106,11 +110,12 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                 if($oCv)
                 {
                         if(isset($oCv->list_fields_name))
-                        {
+			{
 				if( $oCv->list_fields_name[$name] == '')
 					$fieldname = 'crmid';
 				else
 					$fieldname = $oCv->list_fields_name[$name];
+
                         }else
                         {
 				if( $focus->list_fields_name[$name] == '')
@@ -123,6 +128,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				$fieldname = "contact_id";
 			if($fieldname == "accountname" && $module !="Accounts")
 				$fieldname = "account_id";
+			if($fieldname == "productname" && $module =="Campaigns")
+				$fieldname = "product_id";
+
+
                 }
 		else
                 {
@@ -133,7 +142,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 			if($fieldname == "lastname" && $module !="Leads" && $module !="Contacts")
                                 $fieldname = "contact_id";
-                }
+		}
                 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
 			if($fieldname!='parent_id')
@@ -142,7 +151,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				if($fieldname == 'contact_id' && $module !="Contacts") 
 				$name = $app_strings['LBL_CONTACT_LAST_NAME'];
 				elseif($fieldname == 'contact_id' && $module =="Contacts") 
-				$name = $mod_strings['Reports To']." - ".$mod_strings['LBL_LIST_LAST_NAME'];
+					$name = $mod_strings['Reports To']." - ".$mod_strings['LBL_LIST_LAST_NAME'];
 				//assign the translated string
 				$search_header[$fld_name] = getTranslatedString($name);
 			}
@@ -152,7 +161,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         $fld_name=$fieldname;
                         $search_header[$fld_name] = getTranslatedString($name);
                 }
-        }
+	}
 	$log->debug("Exiting getSearchListHeaderValues method ...");	
         return $search_header;
 
@@ -343,6 +352,8 @@ function BasicSearch($module,$search_field,$search_string)
 	       }
 		if($search_field == "accountname" && $module != "Accounts")
 			$search_field = "account_id";
+		if($search_field == 'productname' && $module == 'Campaigns')
+			$search_field = "product_id";
 		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name=? and (fieldname=? or columnname=?)";
 		$result = $adb->pquery($qry, array($module, $search_field, $search_field));
 		$noofrows = $adb->num_rows($result);

@@ -416,6 +416,11 @@ class Reports extends CRMEntity{
 				$fieldtablename = "vtiger_productsRel";
 				$fieldcolname = "productname";
 			}
+			if($fieldname == 'product_id' && $fieldtablename == 'vtiger_campaign') 
+			{
+				$fieldtablename = "vtiger_productsCampaigns";
+				$fieldcolname = "productname";
+			}
 			if($fieldname == 'campaignid')
 			{
 				$fieldtablename = "vtiger_campaign";
