@@ -185,7 +185,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$found = false;
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
-			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
+			$value = decode_html($value);
+			$pickListValue=decode_html($adb->query_result($pickListResult,$j,strtolower($fieldname)));
 
 			if($value == trim($pickListValue))
 			{

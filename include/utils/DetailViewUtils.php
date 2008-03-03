@@ -145,7 +145,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$found = false;
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
-			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
+			$pickListValue=decode_html($adb->query_result($pickListResult,$j,strtolower($fieldname)));
+			$col_fields[$fieldname] = decode_html($col_fields[$fieldname]);
 
 			if($col_fields[$fieldname] == $pickListValue)
 			{

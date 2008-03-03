@@ -1452,7 +1452,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 
 
 			}else
-			$element['status'] = $eventstatus;
+			$element['status'] = decode_html($eventstatus);
 		}
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
@@ -1620,7 +1620,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		}*/
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
 		{
-			$taskstatus = getTranslatedString($adb->query_result($result,$i,"status"));
+			$taskstatus = getTranslatedString(decode_html($adb->query_result($result,$i,"status")));
 
 			if(!$is_admin && $taskstatus != '')
 			{
@@ -1648,7 +1648,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 
 
 			}else
-			$element['status'] = $taskstatus;
+			$element['status'] = decode_html($taskstatus);
 			
 			
 		}
