@@ -72,9 +72,15 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 		$result = $adb->pquery($query, array($focus->id));
 		$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 		$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
-		$smarty->assign('TO_MAIL',$to_email);	
-		$smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
-		$smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
+		$smarty->assign('TO_MAIL',trim($to_email,",").",");
+		$cc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'cc_email')),",");
+		if($cc_add != '')
+			$cc_add .= ','; 	
+		$smarty->assign('CC_MAIL',$cc_add);
+		$bcc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')),",");
+		if($bcc_add != '')
+			$bcc_add .= ',';	
+		$smarty->assign('BCC_MAIL',$bcc_add);	
 		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
 	}
     $log->info("Entity info successfully retrieved for EditView.");
@@ -83,7 +89,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 elseif(isset($_REQUEST['sendmail']) && $_REQUEST['sendmail'] !='')
 {
 	$mailids = get_to_emailids($_REQUEST['pmodule']);
-	$smarty->assign('TO_MAIL',$mailids['mailds']);
+	if($mailids['mailds'] != '')
+		$to_add = trim($mailids['mailds'],",").",";
+	$smarty->assign('TO_MAIL',$to_add);
 	$smarty->assign('IDLISTS',$mailids['idlists']);	
 	$focus->mode = '';
 }
@@ -127,7 +135,7 @@ if($_REQUEST["internal_mailer"] == "true") {
 		$email1 = $_REQUEST["email_addy"];
 	}
 
-	$smarty->assign('TO_MAIL',$email1.";");
+	$smarty->assign('TO_MAIL',trim($email1,",").",");
 	//$smarty->assign('BCC_MAIL',$current_user->email1);
 }
 
@@ -138,9 +146,15 @@ if($_REQUEST['reply'] == "true")
 		$query = "select from_email,idlists,cc_email,bcc_email from vtiger_emaildetails where emailid =?";
 		$result = $adb->pquery($query, array($fromadd));
 		$from_mail = $adb->query_result($result,0,'from_email');	
-		$smarty->assign('TO_MAIL',$from_mail.';');
-		$smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
-		$smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
+		$smarty->assign('TO_MAIL',trim($from_mail,",").',');
+		$cc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'cc_email')),",");
+		if($cc_add != '')
+			$cc_add .= ',';
+		$smarty->assign('CC_MAIL',$cc_add);
+		$bcc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')),",");
+		if($bcc_add != '')
+			$bcc_add .= ',';
+		$smarty->assign('BCC_MAIL',$bcc_add);
 		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
 }
 
@@ -186,8 +200,10 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
                                 $cc_address .= $cc_array[$i];
                                 $cc_address = ($i != (count($cc_array)-1))?($cc_address.','):$cc_address;
                         }
-                }
-		$smarty->assign('CC_MAIL',str_replace(" ","",$cc_address));
+		}
+		if(trim($cc_address) != '')
+			$cc_address = trim($cc_address,",").",";
+		$smarty->assign('CC_MAIL',$cc_address);
 		// fix #3818 ends
 		/*if(is_array($webmail->cc_list))
 		{
@@ -204,7 +220,7 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["reply"] == "single"){
-		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
+		$smarty->assign('TO_MAIL',$webmail->reply_to[0].",");	
 		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		if(preg_match("/RE:/i", $webmail->subject))
 			$smarty->assign('SUBJECT',$webmail->subject);

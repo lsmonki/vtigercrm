@@ -46,7 +46,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid,$module,$logo);
+	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,trim($to_email,","),$attachment,$emailid,$module,$logo);
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
 
@@ -306,7 +306,7 @@ function setCCAddress($mail,$cc_mod,$cc_val)
 		$method = 'AddBCC';
 	if($cc_val != '')
 	{
-		$ccmail = explode(",",$cc_val);
+		$ccmail = explode(",",trim($cc_val,","));
 		for($i=0;$i<count($ccmail);$i++)
 		{
 			$addr = $ccmail[$i];
