@@ -319,6 +319,17 @@ function typeOfDataChanges()
     }
     $migrationlog->debug("\nInside typeOfDataChanges() function Ends\n\n");
 }
+//Added to remove the unwanted \n characters from inventory notification schedulers
+$result=$adb->query("select notificationid,notificationbody from vtiger_inventorynotification");
+
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	$body=decode_html($adb->query_result($result,$i,'notificationbody'));
+	$body=str_replace('\n','', $body);
+	$notificationid=$adb->query_result($result,$i,'notificationid');
+	$adb->pquery("update vtiger_inventorynotification set notificationbody=? where notificationid=?", array($body, $notificationid));
+}
+
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
