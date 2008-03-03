@@ -88,6 +88,10 @@ function getPrimaryColumns_AdvFilterHTML($module,$selected="")
 				{
 					if(isset($mod_strings[$fieldlabel]))
 					{
+						//fix for ticket 5191
+						$selected = decode_html($selected);
+						$field = decode_html($field);
+						//fix ends
 						if($selected == $field)
 						{
 							$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
