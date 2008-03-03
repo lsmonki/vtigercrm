@@ -167,7 +167,7 @@ function showhidediv()
 								<td width="10%">&nbsp;</td>
 								<td width="90%">
 								<b><font color="red">
-NOTE&nbsp;:&nbsp;{$APP.do_the_changes_in} <i>config.inc.php</i> {$APP.before_migration}</font></b><br><b>{$APP.Set_the_value_of}</b>&nbsp;&nbsp;$default_charset<b>&nbsp;&nbsp;{$APP.as}&nbsp;&nbsp;</b>'UTF-8'.&nbsp; {$APP.ie} &nbsp;$default_charset = 'UTF-8';&nbsp;<br><b>{$APP.add_at_end_of_file}</b><br>// trim descriptions, titles in listviews to this value<br>$listview_max_textlength = 40;<br><br>
+NOTE&nbsp;:&nbsp;{$APP.add_at_end_of_file} {$APP.before_migration}</font></b><br>// trim descriptions, titles in listviews to this value<br>$listview_max_textlength = 40;<br><br>
 									Source vtiger Version
 									{$SOURCE_VERSION}
 								</td>

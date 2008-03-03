@@ -10,7 +10,7 @@
 ********************************************************************************/
 
 ini_set("memory_limit","32M");
-set_time_limit(600);
+set_time_limit(-1);
 
 global $current_user;
 if($current_user->is_admin != 'on')
@@ -90,15 +90,9 @@ for($patch_count=0;$patch_count<count($temp);$patch_count++)
 		//echo '<br>No Migration / No File ==> '.$filename;
 	}
 }
-	global $adb,$default_charset;
-	$db_change_conformation = true;
-	$db_status=check_db_utf8_charset($adb);
-	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
-	else						$config_status=0;
-
-	if($db_status && $config_status)
+	
+	if(getMigrationCharsetFlag() == MIG_CHARSET_PHP_UTF8_DB_UTF8)
 	{
-		$db_change_conformation = false;
 		echo '</table><br><br>';
 		include("modules/Migration/HTMLtoUTF8Conversion.php");
 	}
@@ -142,7 +136,7 @@ if($currency_name != $mig_currency)
 
 //Added to check database charset and $default_charset are set to UTF8.
 //If both are not set to be UTF-8, Then we will show an alert message.
-
+/*
 function check_db_utf8_charset($conn) 
 { 
 	$dbvarRS = &$conn->query("show variables like '%_database' "); 
@@ -165,7 +159,6 @@ function check_db_utf8_charset($conn)
 	$db_status=check_db_utf8_charset($adb);
 	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
 	else						$config_status=0;
- */	
 
 	if(!$db_status && !$config_status)
 	{
@@ -198,8 +191,8 @@ echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width=
 	</table><br><br>';
 
 }
-if($db_change_conformation == true)
-{
+//if($db_change_conformation == true)
+//{ */
 echo '<table width="95%"  border="0" align="center">
 	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
 		<tr>
@@ -212,7 +205,7 @@ echo '<table width="95%"  border="0" align="center">
 			</td>
 		</tr>
 	</table><br><br>';
-}
+//}
 perform_post_migration_activities();
 
 //Function used to execute the query and display the success/failure of the query

@@ -285,7 +285,7 @@ $image_path=$theme_path."images/";
 						Note :  Please copy and archive the failed queries log. This may help in future references.<br><br><?php
 //Added to check database charset and $default_charset are set to UTF8.
 //If both are not set to be UTF-8, Then we will show an alert message.
-function check_db_utf8_support($conn) 
+/*function check_db_utf8_support($conn) 
 { 
 	$dbvarRS = &$conn->query("show variables like '%_database' "); 
 	$db_character_set = null; 
@@ -324,14 +324,14 @@ function check_db_utf8_support($conn)
 	}
 echo $msg;
 
-
+ */
 
 ?>
 					</td>
 				   </tr>
 				   <tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
-				   <tr bgcolor="#FFFFFF"><td colspan="2">
-<?php
+	<!--			   <tr bgcolor="#FFFFFF"><td colspan="2"> -->
+<?php/*
 if($continue_42P2)
 {
  echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
@@ -347,9 +347,9 @@ if($continue_42P2)
 		</table>
 		<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>';
 
-}
+}*/
 ?>
-</td></tr>
+<!-- </td></tr> -->
 				   <tr>
 					<td colspan="2" align="center">
 					   <form name="close_migration" method="post" action="index.php">
@@ -370,11 +370,3 @@ if($continue_42P2)
 	<td>&nbsp;</td>
    </tr>
 </table>
-
-
-
-
-<?php
-
- 
-?>

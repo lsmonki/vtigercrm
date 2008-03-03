@@ -51,7 +51,7 @@ echo '</table>';
 convert_html2utf8_db();
 
 //Displaying the close button at the end of the conversion.
-echo '<table width="95%"  border="0" align="center">
+/*echo '<table width="95%"  border="0" align="center">
 	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
@@ -63,6 +63,7 @@ echo '<table width="95%"  border="0" align="center">
 	</td>
 	</tr>
 	</table>';
+*/
 
 
 /**

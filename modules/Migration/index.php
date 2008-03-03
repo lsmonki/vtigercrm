@@ -19,6 +19,12 @@ if($current_user->is_admin != 'on')
 $migration_tpl_file = get_smarty_compiled_file('Migration.tpl');
 if ($migration_tpl_file != null) unlink($migration_tpl_file);
 
+if(getMigrationCharsetFlag() != MIG_CHARSET_PHP_UTF8_DB_UTF8 && !isset($_REQUEST['migration_charstcheck'])) 
+{
+	include('modules/Migration/MigrationStep0.php');
+	exit;	
+}
+
 include("modules/Migration/versions.php");
 require_once('Smarty_setup.php');
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
@@ -46,7 +52,7 @@ if(isset($_REQUEST['dbconversionutf8']))
 }	
 //Added to check database charset and $default_charset are set to UTF8.
 //If both are not set to be UTF-8, Then we will show an alert message.
-function check_db_utf8_support($conn) 
+/*function check_db_utf8_support($conn) 
 { 
 	$dbvarRS = &$conn->query("show variables like '%_database' "); 
 	$db_character_set = null; 
@@ -95,10 +101,10 @@ function check_db_utf8_support($conn)
 		$msg='<br> If you want to use UTF-8 charset for both vtigerCRM server and database , please click on the <b> "Use UTF-8 charset" </b> button. <br/><b> Otherwise  ';
 
 	}
-	
+ */	
 $smarty = new vtigerCRM_Smarty();
 
-$smarty->assign("CHARSET_CHECK", $msg);
+//$smarty->assign("CHARSET_CHECK", $msg);
 $smarty->assign("MIG_CHECK", $status);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -113,14 +119,16 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $source_versions = "<select id='source_version' name='source_version'>";
 foreach($versions as $ver => $label)
 {
-	$source_versions .= "<option value='".$ver."'> $label </option>";
+	$ver_selected = '';
+	if($label == $dbversion) $ver_selected = "selected";
+	$source_versions .= "<option value='$ver' $ver_selected>$label</option>";
 }
 $source_versions .= "</select>";
 
 $smarty->assign("SOURCE_VERSION", $source_versions);
 global $vtiger_current_version;
 $smarty->assign("CURRENT_VERSION", $vtiger_current_version);
-
+/*
 if($db_migration_status == false)
 {
 	echo '<br><br>
@@ -159,7 +167,7 @@ if($db_migration_status == false)
 	//echo "<a href='index.php?action=index&module=".$_REQUEST['module']."&parenttab=".$_REQUEST['parenttab']."'>Continue</a>";
 	exit;	
 }
-else
+else */
 	$smarty->display("Migration.tpl");
 
 //include("modules/Migration/DBChanges/501_to_502.php");

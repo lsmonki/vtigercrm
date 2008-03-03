@@ -984,12 +984,11 @@ $app_strings = array (
 'Closed Lost'=>'Closed Lost',
 'NOTE'=>'NOTE',
 //Added for Migration Alert
-'do_the_changes_in'=>'Please do the following changes in',
 'before_migration'=>'before starting migration',
 'Set_the_value_of'=>'Set the value of',
 'as'=>'as',
 'ie'=>'ie.,',
-'add_at_end_of_file'=>'and add the following lines at the end of the file.',
+'add_at_end_of_file'=>'Please add the following lines at the end of the file config.inc.php',
 //Added to Fix i18N issue in Email Template
 'Account_Account_Name'=>'Account: Account Name',
 'Account_Account_Type'=>'Account: Account Type',

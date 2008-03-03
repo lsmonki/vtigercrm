@@ -3037,4 +3037,73 @@ function getAccessPickListValues($module)
 
 	return $fieldlists;
 }
+define("MIG_CHARSET_PHP_UTF8_DB_UTF8", 1);
+define("MIG_CHARSET_PHP_NONUTF8_DB_NONUTF8", 2);
+define("MIG_CHARSET_PHP_NONUTF8_DB_UTF8", 3);
+define("MIG_CHARSET_PHP_UTF8_DB_NONUTF8", 4);
+
+//Added to check database charset and $default_charset are set to UTF8.
+//If both are not set to be UTF-8, Then we will show an alert message.
+function check_db_utf8_support($conn) 
+{ 
+	$dbvarRS = &$conn->query("show variables like '%_database' "); 
+	$db_character_set = null; 
+	$db_collation_type = null; 
+	while(!$dbvarRS->EOF) { 
+		$arr = $dbvarRS->FetchRow(); 
+		$arr = array_change_key_case($arr); 
+		switch($arr['variable_name']) { 
+		case 'character_set_database' : $db_character_set = $arr['value']; break; 
+		case 'collation_database'     : $db_collation_type = $arr['value']; break; 
+		}
+		// If we have all the required information break the loop. 
+		if($db_character_set != null && $db_collation_type != null) break; 
+	} 
+	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8')); 
+}
+
+function get_db_charset($conn) {
+	$dbvarRS = &$conn->query("show variables like '%_database' "); 
+	$db_character_set = null; 
+	while(!$dbvarRS->EOF) { 
+		$arr = $dbvarRS->FetchRow(); 
+		$arr = array_change_key_case($arr); 
+		if($arr['variable_name'] == 'character_set_database') {
+			$db_character_set = $arr['value']; 
+			break;
+		}
+	}	
+	return $db_character_set;
+}
+
+function get_config_status() {
+	global $default_charset;
+	if(strtolower($default_charset) == 'utf-8')	
+		$config_status=1;
+	else
+		$config_status=0;
+	return $config_status;
+}
+
+function getMigrationCharsetFlag() {
+	global $adb;
+	
+	$db_status=check_db_utf8_support($adb);
+	$config_status=get_config_status();	
+	
+	if ($db_status == $config_status) {
+		if ($db_status == 1) { // Both are UTF-8
+			$db_migration_status = MIG_CHARSET_PHP_UTF8_DB_UTF8;
+		} else { // Both are Non UTF-8
+			$db_migration_status = MIG_CHARSET_PHP_NONUTF8_DB_NONUTF8;		
+		}
+		} else {
+			if ($db_status == 1) { // Database charset is UTF-8 and CRM charset is Non UTF-8
+				$db_migration_status = MIG_CHARSET_PHP_NONUTF8_DB_UTF8;
+		} else { // Database charset is Non UTF-8 and CRM charset is UTF-8
+			$db_migration_status = MIG_CHARSET_PHP_UTF8_DB_NONUTF8;		
+		}	
+	}
+	return $db_migration_status;
+}
 ?>
