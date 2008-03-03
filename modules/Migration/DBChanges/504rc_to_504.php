@@ -329,7 +329,8 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	$notificationid=$adb->query_result($result,$i,'notificationid');
 	$adb->pquery("update vtiger_inventorynotification set notificationbody=? where notificationid=?", array($body, $notificationid));
 }
-
+//In 5.0.4, support start and end date notification scheduler should be defaultly active. If it is inactive previouly then we have to change them as active
+ExecuteQuery("update vtiger_notificationscheduler set active=1 where schedulednotificationid in (5,6)");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
