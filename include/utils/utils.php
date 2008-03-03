@@ -2768,6 +2768,7 @@ function useInternalMailer() {
 * added by dingjianting on 2006-10-1 for picklist editor
 */
 function utf8RawUrlDecode ($source) {
+    global $default_charset;
     $decodedStr = "";
     $pos = 0;
     $len = strlen ($source);
@@ -2796,8 +2797,11 @@ function utf8RawUrlDecode ($source) {
             $pos++;
         }
     }
-    //return $decodedStr;
-    return html_to_utf8($decodedStr);
+    if(strtolower($default_charset) == 'utf-8')
+	    return html_to_utf8($decodedStr);
+    else
+	    return $decodedStr;
+    //return html_to_utf8($decodedStr);
 }
 
 /**

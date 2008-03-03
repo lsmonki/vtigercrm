@@ -703,6 +703,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	?>
 		<script>
 			var userDateFormat = "<?php echo $current_user->date_format ?>";
+			var default_charset = "<?php echo $default_charset; ?>";
 		</script>
 <?php
 	}

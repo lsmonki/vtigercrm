@@ -2422,7 +2422,10 @@ function hideErrorMsg1()
 function escapeAll(tagValue)
 {
         //return escape(tagValue.replace(/%/g, '%25'));
-        return encodeURIComponent(tagValue.replace(/%/g, '%25'));
+	if(default_charset.toLowerCase() == 'utf-8')
+        	return encodeURIComponent(tagValue.replace(/%/g, '%25'));
+	else
+		return escape(tagValue.replace(/%/g, '%25'));
 }
 
 function removeHTMLFormatting(str) {

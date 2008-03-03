@@ -12,15 +12,16 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 global $log;
-
 $cvid = (int) $_REQUEST["record"];
 $cvmodule = $_REQUEST["cvmodule"];
 $parenttab = $_REQUEST["parenttab"];
 $return_action = $_REQUEST["return_action"];
 if($cvmodule != "")
 {
-	//$viewname = htmlentities($_REQUEST["viewName"]);
-	$viewname = $_REQUEST["viewName"];
+	if(strtolower($default_charset) == 'utf-8')
+		$viewname = $_REQUEST["viewName"];
+	else
+		$viewname = htmlentities($_REQUEST["viewName"]);
 	if(isset($_REQUEST["setDefault"]))
 	{
 	  $setdefault = 1;

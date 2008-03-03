@@ -14,8 +14,16 @@ require_once('include/database/PearDatabase.php');
 global $adb;
 
 $profileid = $_REQUEST['profileid'];
-$profilename = $_REQUEST['profilename'];
-$profileDesc = $_REQUEST['description'];
+if(strtolower($default_charset) == 'utf-8')
+{	
+	$profilename = $_REQUEST['profilename'];
+	$profileDesc = $_REQUEST['description'];
+}
+else
+{
+	$profilename = utf8RawUrlDecode($_REQUEST['profilename']);
+	$profileDesc = utf8RawUrlDecode($_REQUEST['description']);
+}
 $query="UPDATE vtiger_profile set profilename=?, description=? where profileid=?";
 $adb->pquery($query, array($profilename, $profileDesc, $profileid));
 

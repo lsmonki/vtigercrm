@@ -24,8 +24,16 @@
 {literal}
 function UpdateProfile()
 {
-	var prof_name = $('profile_name').value;
-	var prof_desc = $('description').value;
+	if(default_charset.toLowerCase() == 'utf-8')
+	{
+		var prof_name = $('profile_name').value;
+		var prof_desc = $('description').value;
+	}
+	else
+	{
+		var prof_name = escapeAll($('profile_name').value);
+		var prof_desc = escapeAll($('description').value);
+	}
 	if(prof_name == '')
 	{
 		
