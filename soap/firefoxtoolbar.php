@@ -555,6 +555,9 @@ function create_product_from_webform($username,$sessionid,$productname,$code,$we
 		$focus->column_fields['productname'] = $productname;
 		$focus->column_fields['productcode'] = $code;
 		$focus->column_fields['website'] = $website;
+		$focus->column_fields['assigned_user_id'] = $user_id;
+		$focus->column_fields['discontinued'] = "1";
+
 		$focus->save("Products");
 		$adb->println("Create New Product from Web Form - Ends");
 
