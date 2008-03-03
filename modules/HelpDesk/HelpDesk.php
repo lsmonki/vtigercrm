@@ -680,22 +680,22 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 				$updatelog .= ' Transferred to user '.decode_html($user_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
 			}
 			//Status change log
-			if($old_status != $focus->column_fields['ticketstatus'])
+			if($old_status != $focus->column_fields['ticketstatus'] && $focus->column_fields['ticketstatus'] != '')
 			{
 				$updatelog .= ' Status Changed to '.$focus->column_fields['ticketstatus'].'\.';
 			}
 			//Priority change log
-			if($old_priority != $focus->column_fields['ticketpriorities'])
+			if($old_priority != $focus->column_fields['ticketpriorities'] && $focus->column_fields['ticketpriorities'] != '')
 			{
 				$updatelog .= ' Priority Changed to '.$focus->column_fields['ticketpriorities'].'\.';
 			}
 			//Severity change log
-			if($old_severity != $focus->column_fields['ticketseverities'])
+			if($old_severity != $focus->column_fields['ticketseverities'] && $focus->column_fields['ticketseverities'] != '')
 			{
 				$updatelog .= ' Severity Changed to '.$focus->column_fields['ticketseverities'].'\.';
 			}
 			//Category change log
-			if($old_category != $focus->column_fields['ticketcategories'])
+			if($old_category != $focus->column_fields['ticketcategories'] && $focus->column_fields['ticketcategories'] != '')
 			{
 				$updatelog .= ' Category Changed to '.$focus->column_fields['ticketcategories'].'\.';
 			}
