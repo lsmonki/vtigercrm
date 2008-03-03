@@ -220,7 +220,7 @@ for($l=0;$l<$num_pages;$l++)
 
 	$pdf->AddPage();
 	include("modules/SalesOrder/pdf_templates/header.php");
-	include("include/fpdf/templates/body.php");
+	include("include/tcpdf/templates/body.php");
 
 	//if bottom > 145 then we skip the Description and T&C in every page and display only in lastpage
 	//if you want to display the description and T&C in each page then set the display_desc_tc='true' and bottom <= 145 in pdfconfig.php

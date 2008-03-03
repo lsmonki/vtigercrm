@@ -19,7 +19,7 @@ $pdf->addImage( $logo_name, $imageBlock);
 
 // x,y,width
 if($org_phone != '')
-  $phone ="\nPhone:".$org_phone;
+  $phone ="\n".$app_strings['Phone'].":".$org_phone;
 $companyBlockPositions=array( "10","23","62" );
 $companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country." ".$phone."\n".$org_website;
 $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
@@ -31,17 +31,17 @@ $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 // ************* Begin Top-Right Header ***************
 // title
 $titleBlock=array("140","7");
-$pdf->title( "SalesOrder","", $titleBlock );
+$pdf->title( $app_strings['SalesOrder'],"", $titleBlock );
 
 $soBubble=array("161","17","20");
-$pdf->addBubbleBlock($quote_name, "Quote Name", $soBubble);
+$pdf->addBubbleBlock($quote_name,$app_strings["Quote Name"], $soBubble);
 
 $poBubble=array("99","17","20");
-$pdf->addBubbleBlock($subject, "Subject", $poBubble);
+$pdf->addBubbleBlock($subject, $app_strings["Subject"], $poBubble);
 
 // page number
 $pageBubble=array("140","17",0);
-$pdf->addBubbleBlock($page_num, "Page", $pageBubble);
+$pdf->addBubbleBlock($page_num, $app_strings["Page"], $pageBubble);
 // ************** End Top-Right Header *****************
 
 
@@ -57,7 +57,7 @@ if(trim($ship_state)!='' || trim($ship_code)!= '')
 	$shipText .= $ship_state." ".$ship_code."\n";
 
 	$shipText .=$ship_country;
-$pdf->addTextBlock( "Shipping Address:", $shipText, $shipLocation );
+$pdf->addTextBlock( $app_strings["Shipping Address"].':', $shipText, $shipLocation );
 
 // billing Address
 $billPositions = array("10","51","61");
@@ -69,7 +69,7 @@ if(trim($bill_state)!='' || trim($bill_code)!= '')
 	$billText .= $bill_state." ".$bill_code."\n";
 
 	$billText .=$bill_country;
-$pdf->addTextBlock("Billing Address:",$billText, $billPositions);
+$pdf->addTextBlock($app_strings["Billing Address"].':',$billText, $billPositions);
 // ********** End Addresses ******************
 
 
@@ -78,25 +78,25 @@ $pdf->addTextBlock("Billing Address:",$billText, $billPositions);
 
 // issue date block
 $issueBlock=array("80","37");
-$pdf->addRecBlock(getDisplayDate(date("Y-m-d")), "Issue Date",$issueBlock);
+$pdf->addRecBlock(getDisplayDate(date("Y-m-d")), $app_strings["Issue Date"],$issueBlock);
 
 // due date block
 $dueBlock=array("81","52");
-$pdf->addRecBlock($valid_till, "Due Date",$dueBlock);
+$pdf->addRecBlock($valid_till, $app_strings["Due Date"],$dueBlock);
 
 // terms block
 $termBlock=array("10","67");
-$pdf->addRecBlock($account_name, "Customer Name", $termBlock);
+$pdf->addRecBlock($account_name, $app_strings["Customer Name"], $termBlock);
 
 // Contact Name block
 $conBlock=array("79","67");
-$pdf->addRecBlock($contact_name, "Contact Name",$conBlock);
+$pdf->addRecBlock($contact_name, $app_strings["Contact Name"],$conBlock);
 
 
 
 // vtiger_invoice number block
 $invBlock=array("145","67");
-$pdf->addRecBlock($id, "SO Number",$invBlock);
+$pdf->addRecBlock($id, $app_strings["SO Number"],$invBlock);
 
 /* ************ End Invoice Data ************************ */
 

@@ -283,7 +283,7 @@ function drawLine($positions)
 // add columns to table
 function addCols( $tab ,$positions ,$bottom, $taxtype = 'group')
 {
-	global $columns;
+	global $columns,$app_strings;
 
 	$r1  = 10;
 	$r2  = $this->w - ($r1 * 2) ;
@@ -298,7 +298,7 @@ function addCols( $tab ,$positions ,$bottom, $taxtype = 'group')
 	while ( list( $lib, $pos ) = each ($tab) )
 	{
 		$this->SetXY( $colX, $y1+3 );
-		$this->Cell( $pos, 1, $lib, 0, 0, "C");
+		$this->Cell( $pos, 1, $app_strings[$lib], 0, 0, "C");
 		$colX += $pos;
 		switch($lib) {
 	  		case 'Total':

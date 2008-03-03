@@ -24,7 +24,7 @@ for ($i=10;$i<200;$i++) {
 
 // company addy
 if($org_phone != '')
-$phone="\nPhone:    ".$org_phone;	
+$phone="\n".$app_strings["Phone"].":    ".$org_phone;	
 if($org_fax != '')
   $fax ="\nFax:        ".$org_fax;	
 $companyBlockPositions=array( "10","220","60" );
@@ -42,18 +42,18 @@ if(trim($bill_state)!='' || trim($bill_code)!= '')
 	$billText .= $bill_state." ".$bill_code."\n";
 
 	$billText .=$bill_country;
-$pdf->addTextBlock("Billing Address:",$billText, $billPositions);
+$pdf->addTextBlock($app_strings["Billing Address"].":",$billText, $billPositions);
 
 // totals
 $totalBlock=array("145","235","10", "110");
-$totalText="SubTotal:      ".$price_subtotal."\n".
-	   "Tax:              ".$price_salestax."\n".
-	   "Adjustment:  ".$price_adjustment."\n".
-	   "Total:            ".$price_total;
-$pdf->addDescBlock($totalText, "Total Due", $totalBlock);
+$totalText=$app_strings["Subtotal"].":      ".$price_subtotal."\n".
+	   $app_strings["Tax"].":              ".$price_salestax."\n".
+	   $app_strings["Adjustment"].":  ".$price_adjustment."\n".
+	   $app_strings["Total"].":            ".$price_total;
+$pdf->addDescBlock($totalText, $app_strings["Total Due"], $totalBlock);
 
 $blurbBlock=array("10","265","150", "60");
-$blockText="Detach on above line and send a check, money order or cashiers check in the provided envelope";
-$pdf->addDescBlock($blockText, "Instructions", $blurbBlock);
+$blockText=$app_strings["Detach_Info"];
+$pdf->addDescBlock($blockText, $app_strings["Instructions"], $blurbBlock);
 
 ?>

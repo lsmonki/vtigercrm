@@ -1082,6 +1082,40 @@ $app_strings = array (
 'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
 //Added for PDF notification
 'LBL_PDF'=>'PDF Cannot be generated as the width exceeds the maximum limit, Kindly ',
+//Added for pdf internalization in 5.0.4
+'Thank You'=>'Thank You',
+'For Your Business'=>'For Your Business',
+'Subtotal'=>'Subtotal',
+'Tax'=>'Tax',
+'Adjustment'=>'Adjustment',
+'Total'=>'Total',
+'Description'=>'Description',
+'Terms & Conditions'=>'Terms & Conditions',
+'Instructions'=>'Instructions',
+'Total Due'=>'Total Due',
+'Detach_Info'=>'Detach on above line and send a check, money order or cashiers check in the provided envelope',
+'Billing Address'=>'Billing Address',
+'Order Number'=>'Order Number',
+'Contact Name'=>'Contact Name',
+'Vendor Name'=>'Vendor Name',
+'Due Date'=>'Due Date',
+'Issue Date'=>'Issue Date',
+'Shipping Address'=>'Shipping Address',
+'Page'=>'Page',
+'Tracking No.'=>'Tracking No.',
+'Req. No.'=>'Req. No.',
+'Customer Name'=>'Customer Name',
+'SO Number'=>'SO Number',
+'Account Number'=>'Account Number',
+'Valid Till'=>'Valid Till',
+'Quote Number'=>'Quote Number',
+'Invoice Number'=>'Invoice Number',
+'Product Code'=>'Product Code',
+'Qty'=>'Qty',
+'Price'=>'Price',
+'Discount'=>'Discount'
+
+
 );
 
 $app_list_strings = array (
