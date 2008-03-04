@@ -20,12 +20,12 @@ class GetParentGroups {
 	 * @params $groupId --> Group Id :: Type Integer
          * @returns updates the parent group in the varibale $parent_groups of the class
          */
-	function getAllParentGroups($groupId)
+	function getAllParentGroups($groupid)
 	{
 		global $adb,$log;
 		$log->debug("Entering getAllParentGroups(".$groupid.") method...");
 		$query="select groupid from vtiger_group2grouprel where containsgroupid=?";
-        $result = $adb->pquery($query, array($groupid));
+		$result = $adb->pquery($query, array($groupid));
 		$num_rows=$adb->num_rows($result);
 		if($num_rows > 0)
 		{
