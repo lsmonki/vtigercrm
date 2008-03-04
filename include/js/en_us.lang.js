@@ -109,6 +109,7 @@
 				NO_SPECIAL_CHARS:'Special Characters are not allowed in Invoice String',
 				PLS_SELECT_VALID_FILE:'Please select a file with the following extension:\n',
                                 NO_SPECIAL:'Special Characters are not allowed',
+				NO_QUOTES:'Quotes (\' ") and + symbol are not allowed ',
 				IN_PROFILENAME:' in Profile Name',
 				IN_GROUPNAME:' in Group Name',
 				IN_ROLENAME:' in Role Name',
