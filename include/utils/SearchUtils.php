@@ -324,7 +324,7 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 
 function BasicSearch($module,$search_field,$search_string)
 {
-	 global $log;
+	 global $log,$mod_strings;
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	$search_string = ltrim(rtrim(mysql_real_escape_string($search_string)));
@@ -343,13 +343,13 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "parent_id";
 		}
 		//Check ends
-		
+
 		//Added to search contact name by lastname
 		if(($module == "Calendar" || $module == "Invoice" || $module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
-	       {
-	                 $module = 'Contacts';
-	                 $search_field = 'lastname';
-	       }
+		{
+			$module = 'Contacts';
+			$search_field = 'lastname';
+		}
 		if($search_field == "accountname" && $module != "Accounts")
 			$search_field = "account_id";
 		if($search_field == 'productname' && $module == 'Campaigns')
@@ -360,19 +360,19 @@ function BasicSearch($module,$search_field,$search_string)
 		if($noofrows!=0)
 		{
 			$column_name=$adb->query_result($result,0,'columnname');	
-			
+
 			//Check added for tickets by accounts/contacts in dashboard
 			if ($column_name == 'parent_id')
-		        {
+			{
 				if ($search_field_first	== 'account_id') $search_field_first = 'accountid';
 				if ($search_field_first	== 'contactid') $search_field_first = 'contact_id';
 				$column_name = $search_field_first;
 			}
-				
+
 			//Check ends
 			$table_name=$adb->query_result($result,0,'tablename');
 			$uitype=getUItype($module,$column_name);
-			
+
 			//Added for Member of search in Accounts
 			if($column_name == "parentid" && $module == "Accounts")
 			{
@@ -408,6 +408,33 @@ function BasicSearch($module,$search_field,$search_string)
 				else
 					$where="$table_name.$column_name = '-1'";
 
+			}
+			elseif ($uitype == 111 || $uitype == 15 || $uitype == 16)
+			{
+				if(is_uitype($uitype, '_picklist_')) 
+				{ 
+					// Get all the keys for the for the Picklist value
+					$mod_keys = array_keys($mod_strings, $search_string);
+					if(sizeof($mod_keys) >= 1)
+					{
+						// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
+						foreach($mod_keys as $mod_idx=>$mod_key) 
+						{
+							$stridx = strpos($mod_key, 'LBL_');
+							// Use strict type comparision, refer strpos for more details
+							if ($stridx !== 0) 
+							{
+								$search_string = $mod_key;
+								$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
+								break;
+							}
+						}
+					}
+					else
+					{
+						$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
+					}
+				}
 			}
 			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
@@ -737,7 +764,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 function getWhereCondition($currentModule)
 {
 	global $log,$default_charset;
-	global $column_array,$table_col_array;
+	global $column_array,$table_col_array,$mod_strings;
 
         $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
 	
@@ -779,6 +806,32 @@ function getWhereCondition($currentModule)
 				else
 					$adv_string .= " ".getSearch_criteria($srch_cond,"-1",$tab_name.'.'.$column_name)." ".$matchtype;
 			}
+			elseif ($uitype == 111 || $uitype == 15 || $uitype == 16)
+			{
+				if(is_uitype($uitype, '_picklist_')) { 
+					// Get all the keys for the for the Picklist value
+					$mod_keys = array_keys($mod_strings, $srch_val);
+					if(sizeof($mod_keys) >= 1)
+					{
+						// Iterate on the keys, to get the first key which doesn't start with LBL_      (assuming it is not used in PickList)
+						foreach($mod_keys as $mod_idx=>$mod_key) {
+							$stridx = strpos($mod_key, 'LBL_');
+							// Use strict type comparision, refer strpos for more details
+							if ($stridx !== 0) {
+								$srch_val = $mod_key;
+								$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
+								break;
+							}
+						}
+
+					}
+					else
+					{
+					$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;
+					}
+				}
+			}
+
 			elseif($tab_col == "vtiger_crmentity.smownerid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_users.user_name')." or";	
