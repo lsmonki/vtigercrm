@@ -186,7 +186,7 @@ if($adb->num_rows($result) > 0)
 $adb->pquery($query, $qparams);
 
 require_once("modules/Emails/mail.php");
-if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] != '' && $_REQUEST['att_module'] != 'Webmails' && $_REQUEST['parent_id'] != '') 
+if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] != '') 
 {
 	/* commented out to avoid the duplicate mail when replying mails from webmail module
 	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))

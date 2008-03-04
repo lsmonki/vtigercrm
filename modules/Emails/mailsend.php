@@ -106,17 +106,9 @@ else
 $parentid= $_REQUEST['parent_id'];
 $myids=explode("|",$parentid);
 $all_to_emailids = Array();
-if(isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails')
-{
-	$from_arr = explode('@',$_REQUEST['from_add']);
-	$from_name = $from_arr[0];
-	$from_address = $_REQUEST['from_add'];
-}
-else
-{
-	$from_name = $current_user->user_name;
-	$from_address = '';
-}
+$from_name = $current_user->user_name;
+$from_address = $current_user->column_fields['email1'];
+
 for ($i=0;$i<(count($myids)-1);$i++)
 {
 	$realid=explode("@",$myids[$i]);
