@@ -1162,11 +1162,55 @@ function toggleTaskAssignType(currType)
                 getObj("task_assign_team").style.display="block"
         }
 }
-
 function dochange(start,end)
 {
         var startdate = document.getElementById(start);
-        document.getElementById(end).value = startdate.value;
+	var startdate = document.getElementById(start);
+                if (document.EditView.activity_mode != null && document.EditView.activity_mode.value == "Events") {
+                	var dateval1=startdate.value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                	var dateelements1=splitDateVal(dateval1);
+                	var dd1=parseInt(dateelements1[0],10);
+	                var mm1=dateelements1[1];
+        	        var yyyy1=dateelements1[2];
+                        var increment_date = false;
+                                                                                                                             
+                	var start_fmt = document.EditView.startfmt.value;
+	                var start_hour = parseInt(document.EditView.starthr.value,10);
+        	        var start_min = parseInt(document.EditView.startmin.value,10);
+                                                                                                                             
+                	var end_fmt = document.EditView.endfmt.value;
+	                var end_hour = parseInt(document.EditView.endhr.value,10);
+         	        var end_min = parseInt(document.EditView.endmin.value,10);
+	
+			if(start_fmt != '' && end_fmt != '') {
+                                if (start_fmt == end_fmt) {
+                                        if ((start_hour == end_hour && start_min >= end_min) ||
+                                                (start_hour > end_hour && start_hour != 12) ||
+                                                (start_hour < end_hour && start_hour == 11)) {
+                                                        increment_date = true;
+                                        }
+                                } else {
+                                        if (start_fmt == 'pm') {
+                                                increment_date = true;
+                                        }
+                                }
+                        } else {
+                                if (start_hour > end_hour || (start_hour == end_hour && start_min >= end_min)) {
+                                                increment_date = true;
+                                }
+                        }
+                                                                                                                             
+                        if (increment_date == true) {
+                                dd1 = dd1+1;
+                        }
+                        var enddate = new Date();
+	                enddate.setYear(yyyy1);
+        	        enddate.setMonth(mm1-1, dd1);
+                                                                                                                             
+                	document.getElementById(end).value = getdispDate(enddate);
+		} else {
+                	document.getElementById(end).value = startdate.value;
+                }
 }
 
 function getSelectedStatus()
