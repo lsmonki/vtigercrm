@@ -51,6 +51,7 @@ $db_server_status = false; // does the db server connection exist?
 $db_creation_failed = false; // did we try to create a database and fail?
 $db_exist_status = false; // does the database exist?
 $db_utf8_support = false; // does the database support utf8?
+$vt_charset = ''; // set it based on the database charset support
 $next = false; // allow installation to continue
 
 //Checking for database connection parameters
@@ -112,6 +113,10 @@ if($db_type)
 		$conn->Close();
 	}
 }
+
+// Update vtiger charset to use
+$vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
+
 // Check if the database suggested to be used has UTF-8 support
 // Prasad, 05 Dec 2007
 function check_db_utf8_support($conn) {
@@ -293,6 +298,10 @@ $log->info($php_info);
 						<td bgcolor="#F5F5F5" width="40%">Cache Path</td>
 						<td align="left"> <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
 					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Default Charset</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($vt_charset)) echo $vt_charset; ?></font></td>
+					</tr>
 					</table>	
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
@@ -380,6 +389,7 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
 						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
+						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
 						<input type="image" name="Change" value="Change" title="Change" src="include/install/images/cwBtnChange.gif"/>
 					</form>
 					</td>
@@ -420,6 +430,7 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
 						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
+						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
 						<input type="image" src="include/install/images/cwBtnNext.gif" name="next" title="Next" value="Create" onClick="window.location=('install.php')"/>
 					</form>
 					</td>

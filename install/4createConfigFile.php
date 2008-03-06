@@ -99,6 +99,10 @@ if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
 
 if (isset($_REQUEST['ftppassword'])) $ftppassword = $_REQUEST['ftppassword'];
 
+// If vtiger charset is set (based on database charset check from last page) use it
+if (isset($_REQUEST['vt_charset'])) $vt_charset = $_REQUEST['vt_charset'];
+else $vt_charset = 'UTF-8';
+
 // update default port
 if ($db_port == '')
 {
@@ -208,7 +212,10 @@ $cache_dir = 'cache/';
 				      			$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
 				      			$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
 						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
-				
+
+								/* replace charset variable */
+								$buffer = str_replace( "_VT_CHARSET_", $vt_charset, $buffer);
+
 						      	/* replace master currency variable */
 				      			$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
 
