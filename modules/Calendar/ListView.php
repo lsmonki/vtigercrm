@@ -222,7 +222,6 @@ $listview_header = getListViewHeader($focus,"Calendar",$url_string,$sorder,$orde
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Calendar",$url_string,$sorder,$order_by,"",$oCustomView);
-unset($listview_header_search["eventstatus"]);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Calendar",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);

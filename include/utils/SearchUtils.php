@@ -153,7 +153,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 				elseif($fieldname == 'contact_id' && $module =="Contacts") 
 					$name = $mod_strings['Reports To']." - ".$mod_strings['LBL_LIST_LAST_NAME'];
 				//assign the translated string
-				$search_header[$fld_name] = getTranslatedString($name);
+				//added to fix #5205
+				//Added condition to hide the close column in calendar search header
+				if($name != $app_strings['Close'])
+					$search_header[$fld_name] = getTranslatedString($name);
 			}
 		}
 		if($module == 'HelpDesk' && $fieldname == 'crmid')
@@ -324,7 +327,7 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 
 function BasicSearch($module,$search_field,$search_string)
 {
-	 global $log,$mod_strings;
+	 global $log,$mod_strings,$current_user;
          $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	$search_string = ltrim(rtrim(mysql_real_escape_string($search_string)));
@@ -425,24 +428,36 @@ function BasicSearch($module,$search_field,$search_string)
 							if ($stridx !== 0) 
 							{
 								$search_string = $mod_key;
-								$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+								{
+									if($table_name == "vtiger_activity" && ($column_name == "status" || $column_name == "eventstatus"))
+									{
+										$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
+									}
+								}
+								else
+									$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 								break;
 							}
 						}
 					}
 					else
 					{
-						$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
+						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+						{
+							if($table_name == "vtiger_activity" && ($column_name == "status" || $column_name == "eventstatus"))
+							{
+								$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
+							}
+						}
+						else
+							$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 					}
 				}
 			}
 			elseif($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);
-			}
-			elseif($table_name == "vtiger_activity" && $column_name == "status")
-			{
-				$where="($table_name.$column_name like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
 			}
 			else if(in_array($column_name,$column_array))
 			{
@@ -764,7 +779,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 function getWhereCondition($currentModule)
 {
 	global $log,$default_charset;
-	global $column_array,$table_col_array,$mod_strings;
+	global $column_array,$table_col_array,$mod_strings,$current_user;
 
         $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
 	
@@ -817,9 +832,26 @@ function getWhereCondition($currentModule)
 						foreach($mod_keys as $mod_idx=>$mod_key) {
 							$stridx = strpos($mod_key, 'LBL_');
 							// Use strict type comparision, refer strpos for more details
-							if ($stridx !== 0) {
+							if ($stridx !== 0) 
+							{	
 								$srch_val = $mod_key;
-								$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+								{
+									if($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus")
+									{
+										if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
+											$re_cond = "and";
+										else
+											$re_cond = "or";
+										if($srch_cond == 'is' && $srch_val !='')
+											$re_cond = "or";
+
+										$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
+										$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
+									}
+								}
+								else
+									$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
 								break;
 							}
 						}
@@ -827,7 +859,23 @@ function getWhereCondition($currentModule)
 					}
 					else
 					{
-					$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;
+						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+						{
+							if($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus")
+							{
+								if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
+									$re_cond = "and";
+								else
+									$re_cond = "or";
+								if($srch_cond == 'is' && $srch_val !='')
+									$re_cond = "or";
+
+								$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
+								$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
+							}
+						}
+						else
+							$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;
 					}
 				}
 			}
@@ -836,18 +884,6 @@ function getWhereCondition($currentModule)
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_users.user_name')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_groups.groupname')." )".$matchtype;	
-			}
-			elseif($tab_col == "vtiger_activity.status")
-			{
-				if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
-					$re_cond = "and";
-				else
-					$re_cond = "or";
-				if($srch_cond == 'is' && $srch_val !='')
-					$re_cond = "or";
-
-				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
-				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
 			}
 			elseif($tab_col == "vtiger_cntactivityrel.contactid")
 			{
