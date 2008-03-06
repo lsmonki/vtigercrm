@@ -69,7 +69,8 @@ function getKeyMetrics()
 		foreach ($metriclists as $key => $metriclist)
 		{
 			$listquery = getListQuery($metriclist['module']);
-
+			if($metriclist['module'] == 'Calendar')
+				$listquery .= " AND vtiger_activity.activitytype != 'Emails' ";
 			$oCustomView = new CustomView($metriclist['module']);
 			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
 			if($metriclist['module'] == "Calendar")
