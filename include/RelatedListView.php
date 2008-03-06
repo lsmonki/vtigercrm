@@ -147,13 +147,23 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	
 	//Retreiving the no of rows
-	$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
-	$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
-	if($adb->num_rows($count_result) > 1)
-		$noofrows = $adb->num_rows($count_result);
+	if($relatedmodule == "Calendar")//for calendar related list, count will increase when we have multiple contacts relationship for single activity
+	{
+		$count_query = "select count(*) as count, vtiger_activity.activitytype ".substr($query, stripos($query,'from'),strlen($query));
+		$count_result = $adb->query($count_query);
+		$noofrows = $adb->num_rows($count_result); 
+	}
 	else
-		$noofrows =$adb->query_result($count_result,0,"count");
-	
+	{
+		$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
+		$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
+
+		if($adb->num_rows($count_result) > 1)
+			$noofrows = $adb->num_rows($count_result);
+		else
+			$noofrows =$adb->query_result($count_result,0,"count");
+	}
+
 	//Setting Listview session object while sorting/pagination
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
 	{
