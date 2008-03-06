@@ -187,9 +187,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$value = decode_html($value);
 			$pickListValue=decode_html($adb->query_result($pickListResult,$j,strtolower($fieldname)));
-
 			if($value == trim($pickListValue))
 			{
+
 				$chk_val = "selected";
 				$pickcount++;	
 				$found = true;
@@ -198,6 +198,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{	
 				$chk_val = '';
 			}
+			$pickListValue = to_html($pickListValue);
 			if(isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate')
 				$options[] = array(htmlentities(getTranslatedString($pickListValue),ENT_QUOTES,$default_charset),$pickListValue,$chk_val );	
 			else

@@ -158,6 +158,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			{	
 				$chk_val = '';
 			}
+			$pickListValue = to_html($pickListValue);
 			$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );	
 		}
 		if($count == 0 && $col_fields[$fieldname] != '')
