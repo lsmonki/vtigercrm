@@ -277,7 +277,7 @@ function addAllAttachments($mail,$record)
 	for($i=0;$i<$count;$i++)
 	{
 		$fileid = $adb->query_result($res,$i,'attachmentsid');
-		$filename = $adb->query_result($res,$i,'name');
+		$filename = decode_html($adb->query_result($res,$i,'name'));
 		$filepath = $adb->query_result($res,$i,'path');
 		$filewithpath = $root_directory.$filepath.$fileid."_".$filename;
 
