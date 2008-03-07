@@ -332,6 +332,10 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //In 5.0.4, support start and end date notification scheduler should be defaultly active. If it is inactive previouly then we have to change them as active
 ExecuteQuery("update vtiger_notificationscheduler set active=1 where schedulednotificationid in (5,6)");
 
+//Query added to modify the date_format field length in vtiger_users table
+ExecuteQuery("alter table vtiger_users modify date_format varchar(200) default NULL");
+// Updated the sequence number of taskstatus for the ticket #5027
+ExecuteQuery("update vtiger_field set sequence = 8 where columnname = 'status' and tablename = 'vtiger_activity' and fieldname = 'taskstatus' and uitype = 111");
 $migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 
