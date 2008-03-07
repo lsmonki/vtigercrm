@@ -1166,6 +1166,8 @@ function dochange(start,end)
 {
         var startdate = document.getElementById(start);
 	var startdate = document.getElementById(start);
+	if($("EditView"))
+	{
                 if (document.EditView.activity_mode != null && document.EditView.activity_mode.value == "Events") {
                 	var dateval1=startdate.value.replace(/^\s+/g, '').replace(/\s+$/g, '');
                 	var dateelements1=splitDateVal(dateval1);
@@ -1208,9 +1210,12 @@ function dochange(start,end)
         	        enddate.setMonth(mm1-1, dd1);
                                                                                                                              
                 	document.getElementById(end).value = getdispDate(enddate);
-		} else {
-                	document.getElementById(end).value = startdate.value;
-                }
+		}
+	}	
+	else {
+               	document.getElementById(end).value = startdate.value;
+        }
+	
 }
 
 function getSelectedStatus()
