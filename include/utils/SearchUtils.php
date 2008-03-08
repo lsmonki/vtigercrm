@@ -428,27 +428,23 @@ function BasicSearch($module,$search_field,$search_string)
 							if ($stridx !== 0) 
 							{
 								$search_string = $mod_key;
-								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus"))
 								{
-									if($table_name == "vtiger_activity" && ($column_name == "status" || $column_name == "eventstatus"))
-									{
 										$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
-									}
 								}
 								else
 									$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 								break;
 							}
+							else //if the mod strings cointains LBL , just return the original search string. Not the key
+								$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
 						}
 					}
 					else
 					{
-						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($table_name == "vtiger_activity" && ($column_name == "status" || $column_name == "eventstatus")))
 						{
-							if($table_name == "vtiger_activity" && ($column_name == "status" || $column_name == "eventstatus"))
-							{
 								$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
-							}
 						}
 						else
 							$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
@@ -835,10 +831,8 @@ function getWhereCondition($currentModule)
 							if ($stridx !== 0) 
 							{	
 								$srch_val = $mod_key;
-								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus"))
 								{
-									if($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus")
-									{
 										if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
 											$re_cond = "and";
 										else
@@ -848,21 +842,21 @@ function getWhereCondition($currentModule)
 
 										$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
 										$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
-									}
 								}
 								else
 									$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
 								break;
 							}
+							else //if the key contains the LBL, then return the original srch_val.
+								$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_name.'.'.$column_name)." ".$matchtype;
+
 						}
 
 					}
 					else
 					{
-						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0')
+						if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus"))
 						{
-							if($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus")
-							{
 								if($srch_cond == 'dcts' || $srch_cond == 'isn' || $srch_cond == 'is')
 									$re_cond = "and";
 								else
@@ -872,7 +866,6 @@ function getWhereCondition($currentModule)
 
 								$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.status')." ".$re_cond;
 								$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'vtiger_activity.eventstatus')." )".$matchtype;	
-							}
 						}
 						else
 							$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;
