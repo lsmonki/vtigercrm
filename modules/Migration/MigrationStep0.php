@@ -44,7 +44,7 @@ $smarty->assign("CONFIG_STATUS", $config_status);
 $data_conversion_msg = array(
 						/* php: utf8, d: utf8 */
 						'1' => array('msg1'=> '', 'msg2' => '', 'checked' => 'true'), 
-						'2' => array('msg1'=> "To have complete UTF-8 support:- <ol><li>Set \$default_charset='UTF-8'; in confic.inc.php </li><li>Select the check box below for database charset handling and data conversion.</li></ol>", 
+						'2' => array('msg1'=> "To have complete UTF-8 support:- <ol><li>Set \$default_charset='UTF-8'; in config.inc.php </li><li>Select the check box below for database charset handling and data conversion.</li></ol>", 
 								'msg2' => 'To continue without UTF-8 support, keep the above option unchecked.', 'checked' => 'false'), 
 						'3' => array('msg1'=> "To have complete UTF-8 support, we recommend you to set \$default_charset='UTF-8'; in config.inc.php.", 
 									'msg2' => "Select the above check box after changing the config file, if you need UTF-8 data conversion (Unicode support).", 
