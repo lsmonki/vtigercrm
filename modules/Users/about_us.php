@@ -181,6 +181,8 @@ global $mod_strings;
 										<tr><td><a href="javascript:;" onClick=" newpopup('http://script.aculo.us')">script.oculo.us</a></td></tr>
 										<tr><td><a href="javascript:;" onClick=" newpopup('http://smarty.php.net/')">Smarty Template Engine</a></td></tr>
 										<tr><td><a href="javascript:;" onClick=" newpopup('http://www.sugarcrm.com')">SugarCRM</a> (SPL 1.1.2)</td></tr>
+
+<tr><td><a href="javascript:;" onClick=" newpopup('http://tcpdf.sourceforge.net')">TCPDF</a></td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td><b><?php echo $mod_strings['LBL_COMMUNITY'];?></b></td></tr>
 										<tr><td>&nbsp;</td></tr>
