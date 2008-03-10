@@ -57,7 +57,7 @@ $next = false; // allow installation to continue
 //Checking for database connection parameters
 if($db_type)
 {
-	include('adodb/adodb.inc.php');
+	include_once('adodb/adodb.inc.php');
 	$conn = &NewADOConnection($db_type);
 	$db_type_status = true;
 	if(@$conn->Connect($db_hostname,$db_username,$db_password))
