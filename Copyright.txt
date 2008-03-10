@@ -1601,4 +1601,6 @@ http://www.linuxscope.net/articles/mailAttachmentsPHP.html
 
 9. Calculator for enabling calculations in vtiger CRM. We have downloaded package from http://www.hmhd.com/steve
 
+10. TCPDF package to create PDF reports and documents. We have downloaded package from http://tcpdf.sourceforge.net
+
 We are grateful to the creators of the respective products for providing such a beautiful utilities.
