@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Calendar/Activity.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
@@ -79,7 +78,6 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $changeOwner = getAssignedTo(16);
 $userList = $changeOwner[0];
 $groupList = $changeOwner[1];
-//echo '<pre>';print_r($changeOwner); echo '</pre>';
 
 $smarty->assign("CHANGE_USER",$userList);
 $smarty->assign("CHANGE_GROUP",$groupList);
@@ -136,8 +134,15 @@ if(isset($where) && $where != '')
 	else
 		$list_query .= " AND " .$where;
 }
+if (isset($_REQUEST['from_homepage'])) {
+	$today = date("Y-m-d", time());
+	if ($_REQUEST['from_homepage'] == 'upcoming_activities')
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (date_start >= '$today' OR vtiger_recurringevents.recurringdate >= '$today')";
+	elseif ($_REQUEST['from_homepage'] == 'pending_activities') 
+		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (due_date <= '$today' OR vtiger_recurringevents.recurringdate <= '$today')";
+}
 
-$list_query .= ' group by vtiger_activity.activityid';
+$list_query .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
 
 if(isset($order_by) && $order_by != '')
 {
@@ -169,8 +174,8 @@ $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
-$noofrows = $adb->num_rows($count_result);
+$count_result = $adb->query("select count(*) count,vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
+$noofrows = $adb->num_rows($count_result); 
 
 //Storing Listview session object
 if($_SESSION['lvs'][$currentModule])
@@ -178,6 +183,11 @@ if($_SESSION['lvs'][$currentModule])
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
 
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
 //Retreive the Navigation array
@@ -212,12 +222,16 @@ $listview_header = getListViewHeader($focus,"Calendar",$url_string,$sorder,$orde
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Calendar",$url_string,$sorder,$order_by,"",$oCustomView);
-unset($listview_header_search["eventstatus"]);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Calendar",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Calendar","ListView",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'ListView','subject','true','basic',"","","","",$viewid);

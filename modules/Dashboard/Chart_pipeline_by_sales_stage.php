@@ -40,7 +40,19 @@ $refresh = true;
 // Get _dom Arrays from Database
 $comboFieldNames = Array('sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-
+//added to fix the issue 4307
+if(isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_start'] == '')
+{
+	$_SESSION['pbss_date_start'] = ""; 
+}
+elseif(isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_start'] != '')
+	$_SESSION['pbss_date_start']=$_REQUEST['pbss_date_start'];
+if(isset($_REQUEST['pbss_date_end']) && $_REQUEST['pbss_date_end'] == '')
+{
+	$_SESSION['pbss_date_end'] = ""; 
+}
+elseif(isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_end'] != '')
+	$_SESSION['pbss_date_end'] = $_REQUEST['pbss_date_end'];
 //get the dates to display
 if (isset($_SESSION['pbss_date_start']) && $_SESSION['pbss_date_start'] != '' && !isset($_REQUEST['pbss_date_start'])) {
 	$date_start = $_SESSION['pbss_date_start'];
@@ -187,7 +199,7 @@ if (isset($_REQUEST['pbss_edit']) && $_REQUEST['pbss_edit'] == 'true') {
 	<td valign='top'><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE,"Active",$current_user->id),$_SESSION['pbss_ids']); ?></select></td>	
 <?php } ?>		
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return verify_chart_data(pipeline_by_sales_stage);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return chk_form(pipeline_by_sales_stage);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">

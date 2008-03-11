@@ -37,16 +37,16 @@ $leads_query="select vtiger_crmentity.crmid,vtiger_crmentity.createdtime, vtiger
 $account_query="select vtiger_crmentity.*, vtiger_account.*, vtiger_accountscf.* from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid inner join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid inner join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid left join vtiger_accountgrouprelation on vtiger_accountscf.accountid=vtiger_accountgrouprelation.accountid left join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
 
 //Query for Products by PO
-$probyPO = "select vtiger_purchaseorder.*,vtiger_crmentity.* from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid inner join vtiger_inventoryproductrel on vtiger_purchaseorder.purchaseorderid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_purchaseorder.purchaseorderid and vtiger_crmentity.deleted=0";
+$probyPO = "select vtiger_purchaseorder.*,vtiger_crmentity.* from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid inner join vtiger_inventoryproductrel on vtiger_purchaseorder.purchaseorderid = vtiger_inventoryproductrel.id LEFT JOIN vtiger_pogrouprelation ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid where vtiger_inventoryproductrel.id=vtiger_purchaseorder.purchaseorderid and vtiger_crmentity.deleted=0";
 
 //Query for Products by Quotes
-$probyQ = "select vtiger_quotes.*,vtiger_crmentity.* from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_inventoryproductrel on vtiger_quotes.quoteid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_quotes.quoteid and vtiger_crmentity.deleted=0";
+$probyQ = "select vtiger_quotes.*,vtiger_crmentity.* from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid inner join vtiger_inventoryproductrel on vtiger_quotes.quoteid = vtiger_inventoryproductrel.id LEFT JOIN vtiger_quotegrouprelation ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid where vtiger_inventoryproductrel.id=vtiger_quotes.quoteid and vtiger_crmentity.deleted=0";
 
 //Query for Products by Invoices
-$probyInv = "select vtiger_invoice.*,vtiger_crmentity.* from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_inventoryproductrel on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id where vtiger_inventoryproductrel.id=vtiger_invoice.invoiceid and vtiger_crmentity.deleted=0";
+$probyInv = "select vtiger_invoice.*,vtiger_crmentity.* from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_inventoryproductrel on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id LEFT JOIN vtiger_invoicegrouprelation ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid where vtiger_inventoryproductrel.id=vtiger_invoice.invoiceid and vtiger_crmentity.deleted=0";
 
 //Query For Products qty in stock
-$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_products.productid = vtiger_inventoryproductrel.id where vtiger_crmentity.deleted=0 ";
+$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_products.productid = vtiger_inventoryproductrel.id where vtiger_crmentity.deleted=0 and vtiger_products.qtyinstock > 0";
 
 //Query for Potential
 $potential_query= "select  vtiger_crmentity.*,vtiger_account.accountname, vtiger_potential.*, vtiger_potentialscf.*, vtiger_potentialgrouprelation.groupname from vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_potential.accountid = vtiger_account.accountid inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
@@ -68,8 +68,24 @@ $invoice_query="select vtiger_crmentity.*,vtiger_invoice.* from vtiger_invoice i
 //Query for tickets
 $helpdesk_query=" select vtiger_troubletickets.status AS ticketstatus, vtiger_ticketgrouprelation.groupname AS ticketgroupname, vtiger_troubletickets.*,vtiger_crmentity.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_account on vtiger_account.accountid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id and vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid where vtiger_crmentity.deleted=0";
 
-//Query for campaigns
-$campaign_query="select vtiger_campaign.*,vtiger_crmentity.* from vtiger_campaign inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid inner join vtiger_campaigncontrel on vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_campaigncontrel.contactid left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid where vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid and vtiger_crmentity.deleted=0 and vtiger_crmentityContacts.deleted=0";
+
+//Query for Contacts by Campaign
+$cont_Q = "select crmid from vtiger_contactdetails inner join vtiger_campaigncontrel on vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_crmentity.deleted=0 ".dashboard_check("Contacts");
+
+$result = $adb->pquery($cont_Q, array());
+$num_conts = $adb->num_rows($result);
+$cont_Array = array();
+for($z=0;$z<$num_conts;$z++)
+{
+	$cont_ID=$adb->query_result($result,$z,'crmid');
+	if(!in_array($cont_ID, $cont_Array))
+		array_push($cont_Array, $cont_ID);
+}
+$cont_checkQ = " and vtiger_crmentityContacts.crmid in(0)";
+if(count($cont_Array) > 0)
+	$cont_checkQ = " and vtiger_crmentityContacts.crmid in(".implode(", ", $cont_Array).")";
+	
+$campaign_query="select vtiger_campaign.*,vtiger_crmentity.* from vtiger_campaign inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid inner join vtiger_campaigncontrel on vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_campaigncontrel.contactid left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid where vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid and vtiger_crmentity.deleted=0 and vtiger_crmentityContacts.deleted=0".$cont_checkQ;
 
 
 //Query for tickets by account
@@ -99,6 +115,43 @@ function dashboard_check($module)
 		$sec_parameter=getListViewSecurityParameter($module);
 	}
 	return $sec_parameter;
+}
+
+/**This function generates the security parameters for a given user base picklist values
+*Param $graph - name of the graph
+*Returns an string value
+*/
+
+function picklist_check($module,$graph_by)
+{
+	global $current_user,$adb;
+	$pick_query = '';
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	$roleid=$current_user->roleid;
+	$subrole = getRoleSubordinates($roleid);
+	if(count($subrole)> 0)
+	{
+		$roleids = $subrole;
+		array_push($roleids, $roleid);
+	}
+	else
+	{
+		$roleids = $roleid;
+	}
+	if($graph_by == 'sostatus' || $graph_by == 'leadsource' || $graph_by == 'leadstatus' ||$graph_by == 'industry' || $graph_by == 'productcategory' || $graph_by == 'postatus' || $graph_by == 'invoicestatus' || $graph_by == 'ticketstatus' || $graph_by == 'priority' || $graph_by == 'category' || $graph_by == 'quotestage')
+	{
+		$temp_fieldname = $graph_by;
+		if($graph_by == 'priority')
+			$temp_fieldname = 'ticketpriorities';
+		if($graph_by == 'category')
+			$temp_fieldname = 'ticketcategories';
+
+		if(count($roleids) > 1)
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") order by sortid asc ) ";
+		else
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in ('$roleids') order by sortid asc ) ";
+	}
+	return $pick_query;
 }
 
 $graph_array = Array(
@@ -146,7 +199,9 @@ $graph_array = Array(
                     	$graph_title= $mod_strings['leadsource'];
                     	$module="Leads";
                     	$where="";
-                    	$query=$leads_query." ".dashboard_check($module);                   
+                    	$query=$leads_query." ".dashboard_check($module);
+			if(!$is_admin)
+				$query .= ' and vtiger_leaddetails.leadsource '.picklist_check($module,$graph_by);
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     
                     }
@@ -158,6 +213,8 @@ $graph_array = Array(
                     	$module="Leads";
                     	$where="";
                     	$query=$leads_query." ".dashboard_check($module);
+			if(!$is_admin)
+				$query .= ' and vtiger_leaddetails.leadstatus '.picklist_check($module,$graph_by);
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Lead Industry
@@ -168,6 +225,8 @@ $graph_array = Array(
                             $module="Leads";
                             $where="";
                             $query=$leads_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_leaddetails.industry '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Lead Source
@@ -176,8 +235,10 @@ $graph_array = Array(
                             $graph_by="leadsource";
                             $graph_title=$mod_strings['salesbyleadsource'];
                             $module="Potentials";
-                            $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                            $where=" and vtiger_potential.sales_stage like 'Closed Won' ";
                             $query=$potential_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_potential.leadsource '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Account
@@ -186,7 +247,7 @@ $graph_array = Array(
                     	 $graph_by="accountid";
                          $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
-                         $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                         $where=" and vtiger_potential.sales_stage like 'Closed Won' ";
                          $query=$potential_query." ".dashboard_check($module);
                          echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
@@ -196,7 +257,7 @@ $graph_array = Array(
 			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
 			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -206,7 +267,7 @@ $graph_array = Array(
 			$graph_by="groupname";
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
-			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
+			$where=" and vtiger_potential.sales_stage like 'Closed Won' and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
 			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -218,6 +279,8 @@ $graph_array = Array(
                             $module="Accounts";
                             $where="";
                             $query=$account_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_account.industry '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Products by Category
@@ -228,6 +291,8 @@ $graph_array = Array(
                             $module="Products";
                             $where="";
                             $query=$product_category." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_products.productcategory '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Charts for Products by Quantity in stock
@@ -247,7 +312,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['productbypo'];
 			    $module="Products";
 			    $where="";
-			    $query=$probyPO." ".dashboard_check($module);
+			    $query=$probyPO." ".dashboard_check("PurchaseOrder");
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Quotes
@@ -257,7 +322,7 @@ $graph_array = Array(
    			    $graph_title=$mod_strings['productbyquotes'];
 			    $module="Products";
 			    $where=""; 
-			    $query=$probyQ." ".dashboard_check($module);
+			    $query=$probyQ." ".dashboard_check("Quotes");
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Invoice
@@ -267,7 +332,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['productbyinvoice'];
 			    $module="Products";
 			    $where="";
-			    $query=$probyInv." ".dashboard_check($module);
+			    $query=$probyInv." ".dashboard_check("Invoice");
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 
@@ -289,6 +354,8 @@ $graph_array = Array(
                             $module="SalesOrder";
                             $where="";
                             $query=$so_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_salesorder.sostatus '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Purchase Order by Status
@@ -299,6 +366,8 @@ $graph_array = Array(
                             $module="PurchaseOrder";
                             $where="";
                             $query=$po_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_purchaseorder.postatus '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Quotes by Accounts
@@ -319,6 +388,8 @@ $graph_array = Array(
                             $module="Quotes";
                             $where="";
                             $query=$quotes_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_quotes.quotestage '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Invoice by Accounts
@@ -339,6 +410,8 @@ $graph_array = Array(
                             $module="Invoice";
                             $where="";
                             $query=$invoice_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_invoice.invoicestatus '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Status
@@ -348,7 +421,9 @@ $graph_array = Array(
                             $graph_title=$mod_strings['ticketsbystatus'];
                             $module="HelpDesk";
                             $where="";
-                            $query=$helpdesk_query." ".dashboard_check($module);
+			    $query=$helpdesk_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_troubletickets.status '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Priority
@@ -359,6 +434,8 @@ $graph_array = Array(
                             $module="HelpDesk";
                             $where="";
                             $query=$helpdesk_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_troubletickets.priority '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Tickets by Category
@@ -369,6 +446,8 @@ $graph_array = Array(
 			    $module="HelpDesk";
 			    $where="";
 			    $query=$helpdesk_query." ".dashboard_check($module);
+			    if(!$is_admin)
+			    	$query .= ' and vtiger_troubletickets.category '.picklist_check($module,$graph_by);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by User   
@@ -401,14 +480,14 @@ $graph_array = Array(
 			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
-		    //Campaigns by Contact
+		    //Contacts by Campaign
 		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && $profileTabsPermission[getTabid("Campaigns")] == 0)
 		    {
 			    $graph_by="campaignid";
 			    $graph_title=$mod_strings['contactbycampaign'];
 			    $module="Contacts";
 			    $where="";
-			    $query=$campaign_query." ".dashboard_check($module);
+			    $query=$campaign_query." ".dashboard_check("Campaigns");
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by Account
@@ -423,14 +502,14 @@ $graph_array = Array(
 		    }
 		    //Tickets by Contact
 		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbycontact") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
-			    {
+		    {
 				    $graph_by="contactid";
 				    $graph_title=$mod_strings['ticketsbycontact'];
 				    $module="HelpDesk";
 				    $where="";
 				    $query=$tickets_by_contact." ".dashboard_check($module);
 				    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-				    }
+		    }
 		    else
                     {
                         //echo $mod_strings['LBL_NO_PERMISSION_FIELD'];

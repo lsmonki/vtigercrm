@@ -125,7 +125,7 @@
 					<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 					<tr>
 						<td colspan="2" align="right">
-						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
+						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " title="{$APP.LNK_LIST_NEXT}" name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 						<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back();" class="crmButton small cancel"/>
 						</td>
 					</tr>
@@ -192,9 +192,9 @@ function rolevalidate()
 
 function dup_validation(profilename)
 {ldelim}
-	var status = CharValidation(profilename,'namespace');
-	if(status)
-	{ldelim}
+	//var status = CharValidation(profilename,'namespace');
+	//if(status)
+	//{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -208,8 +208,8 @@ function dup_validation(profilename)
 				{rdelim}
 		{rdelim}
 	);
-	{rdelim}
-	else
-		alert(alert_arr.NO_SPECIAL+alert_arr.IN_PROFILENAME)
+	//{rdelim}
+	//else
+	//	alert(alert_arr.NO_SPECIAL+alert_arr.IN_PROFILENAME)
 {rdelim}
 </script>

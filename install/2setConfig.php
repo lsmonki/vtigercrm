@@ -79,7 +79,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_hostname']))
 	$db_hostname = $dbconfig['db_hostname'];
 	else
-	$db_hostname = $hostname;
+	$db_hostname = 'localhost'; //Asha: Set the datbase hostname to 'localhost' by default instead of $hostname
 
 	if (isset($_REQUEST['db_username']))
 	$db_username = $_REQUEST['db_username'];
@@ -101,7 +101,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
 	$db_name = $dbconfig['db_name'];
 	else
-	$db_name = 'vtigercrm503';
+	$db_name = 'vtigercrm504';
 
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
@@ -116,22 +116,28 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	else $root_directory = $current_dir;
 	    
 	if (isset($_REQUEST['cache_dir']))
-	$cache_dir= $_REQUEST['cache_dir'];
+		$cache_dir= $_REQUEST['cache_dir'];
 
 	if (isset($_REQUEST['mail_server']))
-	$mail_server= $_REQUEST['mail_server'];
+		$mail_server= $_REQUEST['mail_server'];
 
 	if (isset($_REQUEST['mail_server_username']))
-	$mail_server_username= $_REQUEST['mail_server_username'];
+		$mail_server_username= $_REQUEST['mail_server_username'];
 
 	if (isset($_REQUEST['mail_server_password']))
-	$mail_server_password= $_REQUEST['mail_server_password'];
+		$mail_server_password= $_REQUEST['mail_server_password'];
 
 	if (isset($_REQUEST['admin_email']))
-	$admin_email = $_REQUEST['admin_email'];
+		$admin_email = $_REQUEST['admin_email'];
 
 	if (isset($_REQUEST['admin_password']))
-	$admin_password = $_REQUEST['admin_password'];
+        $admin_password = $_REQUEST['admin_password'];
+	
+	if (isset($_REQUEST['standarduser_email']))
+        $stand_email = $_REQUEST['standarduser_email'];
+
+	if (isset($_REQUEST['standarduser_password']))	
+		$stand_password = $_REQUEST['standarduser_password'];
 	
 	if (isset($_REQUEST['currency_name']))
 		$currency_name = $_REQUEST['currency_name'];
@@ -147,7 +153,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
-		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm503" : $db_name = $_REQUEST['db_name'];
+		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm504" : $db_name = $_REQUEST['db_name'];
 		!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 		!isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
 		!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
@@ -161,6 +167,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['check_createdb']) ? $check_createdb = "" : $check_createdb = $_REQUEST['check_createdb'];
 		!isset($_REQUEST['root_user']) ? $root_user = "" : $root_user = $_REQUEST['root_user'];
 		!isset($_REQUEST['root_password']) ? $root_password = "" : $root_password = $_REQUEST['root_password'];
+		!isset($_REQUEST['create_utf8_db'])? $create_utf8_db = "true" : $create_utf8_db = $_REQUEST['create_utf8_db'];
 		// determine database options
 		$db_options = array();
 		if(function_exists('mysql_connect')) {
@@ -174,7 +181,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - System Configuration</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -192,11 +199,13 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		if(sourceTag){
 			document.getElementById('root_user').className = 'show_tab';
 			document.getElementById('root_pass').className = 'show_tab';
+			document.getElementById('create_db_config').className = 'show_tab';
 			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
 			document.getElementById('root_user').className = 'hide_tab';
 			document.getElementById('root_pass').className = 'hide_tab';
+			document.getElementById('create_db_config').className = 'hide_tab';
 		}
 	}
 
@@ -250,6 +259,16 @@ function verify_data(form) {
 		errorMessage += "\n user email";
 		form.admin_email.focus();
 	}
+	if (trim(form.standarduser_password.value) =='') {
+    	isError = true;
+        errorMessage += "\n standarduser password";
+        form.standarduser_password.focus();
+    }
+    if (trim(form.standarduser_email.value) =='') {
+        isError = true;
+        errorMessage += "\n standarduser email";
+        form.standarduser_email.focus();
+    }
 	if (trim(form.cache_dir.value) =='') {
                 isError = true;
                 errorMessage += "\n temp directory path";
@@ -291,11 +310,16 @@ function verify_data(form) {
 		form.admin_email.focus();
 		return false;
 	}
+	if (trim(form.standarduser_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.standarduser_email.value)) {
+        alert("The email id \'"+form.standarduser_email.value+"\' in the standard user email field is invalid");
+        form.standarduser_email.focus();
+        return false;
+    }
 
 	var SiteUrl = form.site_URL.value;
         if(SiteUrl.indexOf("localhost") > -1 && SiteUrl.indexOf("localhost") < 10)
         {
-                if(confirm("Speicfy the exact host name instead of \"localhost\" in Site URL field, otherwise you will experience some issues while working with vtiger plug-ins. Do you wish to Continue?"))
+                if(confirm("Specify the exact host name instead of \"localhost\" in Site URL field, otherwise you will experience some issues while working with vtiger plug-ins. Do you wish to Continue?"))
                 {
                         form.submit();
                 }else
@@ -399,7 +423,8 @@ function verify_data(form) {
             </tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" /></td>
+               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+			   &nbsp;<a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
@@ -418,7 +443,7 @@ function verify_data(form) {
 			       <?php }else{?>
 				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/>
 			       <?php } ?>
-			       &nbsp;Create Database(will drop the database if exists)</td>
+			       &nbsp;Create Database (will drop the database if exists)</td>
               </tr>
 	      <tr id="root_user" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap" width="25%"><strong>Root Username</strong> <sup><font color="red">*</font></sup></td>
@@ -427,6 +452,10 @@ function verify_data(form) {
 	      <tr id="root_pass" class="hide_tab">
 			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>Root Password</strong></td>
 			   <td align="left" bgcolor="white"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
+		  </tr>
+          <tr id="create_db_config" class="hide_tab">
+			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>UTF-8 Support</strong></td>
+			   <td align="left" bgcolor="white"><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
 	      </tr>
               </table>
 			
@@ -476,7 +505,31 @@ function verify_data(form) {
 			</tr>
 			</table>
 	
-				<br><br>
+			<br><br>
+			<!-- StandardUser Configuration -->
+			<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+			<tr>
+				<td colspan=2><strong>Standarduser Configuration</strong></td>
+			</tr>
+			<tr>
+				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>User name</strong></td>
+				<td width=75% bgcolor="white" align="left">standarduser</td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Password</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
+			</tr>
+			<tr>
+				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
+				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
+			</tr>
+			<tr>
+				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'standarduser'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
+			</tr>
+			</table>
+
+			<br><br>
+
 		<!-- Currency Configuration -->
             <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 			<tr>

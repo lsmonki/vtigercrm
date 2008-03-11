@@ -20,7 +20,6 @@ global $current_language;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 global $log;
 
 $mode = 'create';
@@ -31,8 +30,8 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 	$templateid = $_REQUEST['templateid'];
 	 $log->debug("the templateid is set to the value ".$templateid);
 }
-$sql = "select * from vtiger_emailtemplates where templateid=".$templateid;
-$result = $adb->query($sql);
+$sql = "select * from vtiger_emailtemplates where templateid=?";
+$result = $adb->pquery($sql, array($templateid));
 $emailtemplateResult = str_replace('"','&quot;',$adb->fetch_array($result));
 $smod_strings = return_module_language($current_language,'Settings');
 

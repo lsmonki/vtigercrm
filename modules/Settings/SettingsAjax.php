@@ -20,18 +20,21 @@ if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
 elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
 {
         $date_var = date('YmdHis');
-        $announcement = $_REQUEST['announcement'];
+        $announcement = from_html($_REQUEST['announcement']);
 	//Change ##$## to & (reverse process has done in Smarty/templates/Settings/Announcements.tpl)
 	$announcement = str_replace("##$##","&",$announcement);
 
         $title = $_REQUEST['title_announcement'];
-        $sql="select * from vtiger_announcement where creatorid=".$current_user->id;
-        $is_announce=$adb->query($sql);
-        if($adb->num_rows($is_announce) > 0)
-                $query="update vtiger_announcement set announcement=".$adb->formatString("vtiger_announcement","announcement",$announcement).",time=".$adb->formatString("vtiger_announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
-        else
-                $query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("vtiger_announcement","announcement",$announcement).",'announcement',".$adb->formatString("vtiger_announcement","time",$date_var).")";
-        $result=$adb->query($query);
+        $sql="select * from vtiger_announcement where creatorid=?";
+        $is_announce=$adb->pquery($sql, array($current_user->id));
+        if($adb->num_rows($is_announce) > 0) {
+            $query="update vtiger_announcement set announcement=?,time=?,title=? where creatorid=?";
+			$params = array($announcement, $adb->formatDate($date_var, true), 'announcement', $current_user->id);
+		} else {
+            $query="insert into vtiger_announcement values (?,?,?,?)";
+			$params = array($current_user->id,$announcement,'announcement',$adb->formatDate($date_var, true));
+		}
+        $result=$adb->pquery($query, $params);
         echo $announcement;
 }
 ?>

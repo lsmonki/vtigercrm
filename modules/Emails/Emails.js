@@ -73,44 +73,26 @@ function getListViewEntries_js(module,url)
 function massDelete()
 {
 		var delete_selected_row = false;
-        x = document.massdelete.selected_id.length;
-        idstring = "";
-        if ( x == undefined)
-        {
+		//added to fix the issue 4295
+		var select_options  =  document.getElementsByName('selected_id');
+		var x = select_options.length;
 
-                if (document.massdelete.selected_id.checked)
-                {
-					if(document.massdelete.selected_id.value == gselectedrowid)
-					{
-						gselectedrowid = 0;
-						delete_selected_row = true;						
-					}
-                        idstring = document.massdelete.selected_id.value;
-						xx = 1;
-                }
-                else
-                {
-                        alert(alert_arr.SELECT);
-                        return false;
-                }
-        }
-        else
+	idstring = "";
+        xx = 0;
+        for(i = 0; i < x ; i++)
         {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-						{
-							if(document.massdelete.selected_id[i].value == gselectedrowid)
-							{
-								gselectedrowid = 0;
-								delete_selected_row = true;						
-							}
-							idstring = document.massdelete.selected_id[i].value +";"+idstring
-							xx++
-						}
-                }
-                if (xx != 0)
+            if(select_options[i].checked)
+            {
+            	idstring = select_options[i].value +";"+idstring
+		if(select_options[i].value == gselectedrowid)
+		{
+			gselectedrowid = 0;
+			delete_selected_row = true;						
+		}
+                xx++
+            }
+        }
+                if (xx > 0)
                 {
                         document.massdelete.idlist.value=idstring;
                 }
@@ -119,7 +101,6 @@ function massDelete()
                         alert(alert_arr.SELECT);
                         return false;
                 }
-        }
 		if(confirm(alert_arr.DELETE + xx + alert_arr.RECORDS))
 		{	
 			getObj('search_text').value = '';

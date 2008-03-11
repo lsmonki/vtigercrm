@@ -47,36 +47,64 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
 	//Ask the user to overwite the address or not - Modified on 06-01-2007
 	if(confirm(alert_arr.OVERWRITE_EXISTING_ACCOUNT1+account_name+alert_arr.OVERWRITE_EXISTING_ACCOUNT2))
 	{
-		window.opener.document.EditView.bill_street.value = bill_street;
-		window.opener.document.EditView.ship_street.value = ship_street;
-		window.opener.document.EditView.bill_city.value = bill_city;
-		window.opener.document.EditView.ship_city.value = ship_city;
-		window.opener.document.EditView.bill_state.value = bill_state;
-		window.opener.document.EditView.ship_state.value = ship_state;
-		window.opener.document.EditView.bill_code.value = bill_code;
-		window.opener.document.EditView.ship_code.value = ship_code;
-		window.opener.document.EditView.bill_country.value = bill_country;
-		window.opener.document.EditView.ship_country.value = ship_country;
-		window.opener.document.EditView.bill_pobox.value = bill_pobox;
-		window.opener.document.EditView.ship_pobox.value = ship_pobox;
+		//made changes to avoid js error -- ref : hidding fields causes js error(ticket#4017)
+                if(typeof(window.opener.document.EditView.bill_street) != 'undefined')
+                        window.opener.document.EditView.bill_street.value = bill_street;
+                if(typeof(window.opener.document.EditView.ship_street) != 'undefined')
+                        window.opener.document.EditView.ship_street.value = ship_street;
+                if(typeof(window.opener.document.EditView.bill_city) != 'undefined')
+                        window.opener.document.EditView.bill_city.value = bill_city;
+                if(typeof(window.opener.document.EditView.ship_city) != 'undefined')
+                        window.opener.document.EditView.ship_city.value = ship_city;
+                if(typeof(window.opener.document.EditView.bill_state) != 'undefined')
+                        window.opener.document.EditView.bill_state.value = bill_state;
+                if(typeof(window.opener.document.EditView.ship_state) != 'undefined')
+                        window.opener.document.EditView.ship_state.value = ship_state;
+                if(typeof(window.opener.document.EditView.bill_code) != 'undefined')
+                        window.opener.document.EditView.bill_code.value = bill_code;
+                if(typeof(window.opener.document.EditView.ship_code) != 'undefined')
+                        window.opener.document.EditView.ship_code.value = ship_code;
+		if(typeof(window.opener.document.EditView.bill_country) != 'undefined')
+                        window.opener.document.EditView.bill_country.value = bill_country;
+                if(typeof(window.opener.document.EditView.ship_country) != 'undefined')
+                        window.opener.document.EditView.ship_country.value = ship_country;
+                if(typeof(window.opener.document.EditView.bill_pobox) != 'undefined')
+                        window.opener.document.EditView.bill_pobox.value = bill_pobox;
+                if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
+                        window.opener.document.EditView.ship_pobox.value = ship_pobox;
+		//end
 	}
 }
 //added to populate address
 function set_return_contact_address(account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox ) {
-        window.opener.document.EditView.account_name.value = account_name;
-        window.opener.document.EditView.account_id.value = account_id;
-        window.opener.document.EditView.mailingstreet.value = bill_street;
-        window.opener.document.EditView.otherstreet.value = ship_street;
-        window.opener.document.EditView.mailingcity.value = bill_city;
-        window.opener.document.EditView.othercity.value = ship_city;
-        window.opener.document.EditView.mailingstate.value = bill_state;
-        window.opener.document.EditView.otherstate.value = ship_state;
-        window.opener.document.EditView.mailingzip.value = bill_code;
-        window.opener.document.EditView.otherzip.value = ship_code;
-        window.opener.document.EditView.mailingcountry.value = bill_country;
-        window.opener.document.EditView.othercountry.value = ship_country;
-        window.opener.document.EditView.mailingpobox.value = bill_pobox;
-        window.opener.document.EditView.otherpobox.value = ship_pobox;
+	if(typeof(window.opener.document.EditView.account_name) != 'undefined')
+                window.opener.document.EditView.account_name.value = account_name;
+        if(typeof(window.opener.document.EditView.account_id) != 'undefined')
+                window.opener.document.EditView.account_id.value = account_id;
+        if(typeof(window.opener.document.EditView.mailingstreet) != 'undefined')
+                window.opener.document.EditView.mailingstreet.value = bill_street;
+        if(typeof(window.opener.document.EditView.otherstreet) != 'undefined')
+                window.opener.document.EditView.otherstreet.value = ship_street;
+        if(typeof(window.opener.document.EditView.mailingcity) != 'undefined')
+                window.opener.document.EditView.mailingcity.value = bill_city;
+        if(typeof(window.opener.document.EditView.othercity) != 'undefined')
+                window.opener.document.EditView.othercity.value = ship_city;
+        if(typeof(window.opener.document.EditView.mailingstate) != 'undefined')
+                window.opener.document.EditView.mailingstate.value = bill_state;
+        if(typeof(window.opener.document.EditView.otherstate) != 'undefined')
+                window.opener.document.EditView.otherstate.value = ship_state;
+        if(typeof(window.opener.document.EditView.mailingzip) != 'undefined')
+                window.opener.document.EditView.mailingzip.value = bill_code;
+        if(typeof(window.opener.document.EditView.otherzip) != 'undefined')
+                window.opener.document.EditView.otherzip.value = ship_code;
+        if(typeof(window.opener.document.EditView.mailingcountry) != 'undefined')
+                window.opener.document.EditView.mailingcountry.value = bill_country;
+        if(typeof(window.opener.document.EditView.othercountry) != 'undefined')
+                window.opener.document.EditView.othercountry.value = ship_country;
+        if(typeof(window.opener.document.EditView.mailingpobox) != 'undefined')
+                window.opener.document.EditView.mailingpobox.value = bill_pobox;
+        if(typeof(window.opener.document.EditView.otherpobox) != 'undefined')
+                window.opener.document.EditView.otherpobox.value = ship_pobox;
 }
 
 //added by rdhital/Raju for emails
@@ -91,34 +119,72 @@ function searchMapLocation(addressType)
         if (addressType == 'Main')
         {
 		if(fieldname.indexOf('bill_street') > -1)
-                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]))
+	                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_street')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_pobox') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_pobox')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_city') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_city')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('bill_state') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_state')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_country') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_country')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('bill_code') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('bill_code')]).innerHTML+' ';
+		}
         }
         else if (addressType == 'Other')
         {
 		if(fieldname.indexOf('ship_street') > -1)
-                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]))
+                        	mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_street')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_pobox') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_pobox')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_city') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_city')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('ship_state') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_state')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('ship_country') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]).innerHTML+' ';
-                if(fieldname.indexOf('bill_code') > -1)                                                                                            mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_country')]).innerHTML+' ';
+		}
+                if(fieldname.indexOf('ship_code') > -1)
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('ship_code')]).innerHTML+' ';
+		}
 
         }
-	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
+	mapParameter = removeHTMLFormatting(mapParameter);
+	window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
 //javascript function will open new window to display traffic details for particular url using alexa.com
 function getRelatedLink()

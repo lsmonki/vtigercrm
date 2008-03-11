@@ -33,6 +33,10 @@ $smarty=new vtigerCRM_Smarty;
 
 $focus = new Accounts();
 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//ends 4600
 if(isset($_REQUEST['record'])) 
 {
     $focus->id = $_REQUEST['record'];
@@ -63,8 +67,6 @@ $comboFieldNames = Array('accounttype'=>'account_type_dom'
                       ,'industry'=>'industry_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Account detail view");
 

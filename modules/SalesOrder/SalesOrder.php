@@ -115,8 +115,8 @@ class SalesOrder extends CRMEntity {
 		if($this->column_fields["quote_id"] != '')
 		{
         		$qt_id = $this->column_fields["quote_id"];
-        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
-        		$this->db->query($query1);
+        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=?";
+        		$this->db->pquery($query1, array($qt_id));
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
@@ -200,7 +200,8 @@ class SalesOrder extends CRMEntity {
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 			where activitytype='Task'
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
-				and vtiger_seactivityrel.crmid=".$id;
+				and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
@@ -219,7 +220,7 @@ class SalesOrder extends CRMEntity {
 		$query = "select vtiger_notes.title,'Notes      ' as ActivityType, vtiger_notes.filename,
  		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
  		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
- 		vtiger_crmentity.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name
+ 		vtiger_notes.notecontent as description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -231,17 +232,16 @@ class SalesOrder extends CRMEntity {
 
 		$query .= ' union all ';
 
-		$query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
  		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
  		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
 			inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id."
-		order by createdtime desc";
+		where vtiger_crmentity.crmid=".$id;
 
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid='salesorderid');
@@ -293,8 +293,8 @@ class SalesOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Order No'];
@@ -303,6 +303,19 @@ class SalesOrder extends CRMEntity {
 		$header[] = $app_strings['LBL_SO_STATUS'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
 
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Account Name , Total are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$sostatus_access = (getFieldVisibilityPermission('SalesOrder', $current_user->id, 'sostatus') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('SalesOrder');
+
+		$sostatus_array = ($sostatus_access != 1)? $picklistarray['sostatus']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($sostatus_access != 1)? 'Not Accessible': '-';
+
 		while($row = $adb->fetch_array($result))
 		{
 			$entries = Array();
@@ -310,7 +323,7 @@ class SalesOrder extends CRMEntity {
 			$entries[] = $row['salesorderid'];
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['sostatus'];
+			$entries[] = (in_array($row['sostatus'], $sostatus_array))? $row['sostatus']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;

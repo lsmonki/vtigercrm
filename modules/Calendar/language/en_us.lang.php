@@ -89,7 +89,6 @@ $mod_strings = Array(
 'LBL_NEXT_MON' => 'Next Month',
 
 'LBL_YEAR_BUTTON_KEY'=>'Y',
-'LBL_MON_BUTTON_TITLE'=>'Year [Alt+Y]',
 'LBL_PREV_YEAR'=>'Previous Year',
 'LBL_NEXT_YEAR' => 'Next Year',
 
@@ -382,7 +381,6 @@ $mod_strings = Array(
 'Medium'=>'Medium',
 'Low'=>'Low',
 'LBL_SELECT'=>'Select',
-'LBL_SELECT_CONTACT'=>'Select Contact',
 'LBL_ALL_EVENTS_TODOS'=>'All Events & Todos',
 'First'=>'First', 
 'Last'=>'Last', 
@@ -414,10 +412,17 @@ $mod_strings = Array(
 'End date'=>'End date',
 'LBL_SET_DATE'=>'Set date..',
 'Recurrence'=>'Recurrence',
-'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Delete this record.',
 
 //added to send invitation mail Subject.
 'INVITATION'=>' Invitation ',
+
+// Added/Updated for vtiger CRM 5.0.4
+'LBL_YEAR_BUTTON_TITLE'=>'Year [Alt+Y]',
+'LBL_SELECT_CONTACT'=>'Select Contacts',
+'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Edit/Delete Shared Event.',
+//added to fix ticket#4525
+'LBL_CREATED'=>'created',
+'LBL_UPDATED'=>'updated',
 
 );
 

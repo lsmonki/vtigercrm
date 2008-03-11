@@ -98,11 +98,17 @@ function showhide(argg,imgId)
 
 function loadValue(currObj,roleid)
 {ldelim}
-		window.opener.document.getElementById('role_name').value = document.getElementById(currObj).innerHTML;
+		window.opener.document.getElementById('role_name').value = convert_lt_gt(document.getElementById(currObj).innerHTML);
 		window.opener.document.getElementById('user_role').value = roleid;
 		window.close();
 {rdelim}
-
+function convert_lt_gt(str)
+{ldelim}
+	str = str.replace(/(&lt;)/g,'<');
+	str = str.replace(/(&gt;)/g,'>');
+	str = str.replace(/(&amp;)/g,'&');
+	return str;
+{rdelim}		
 </script>
 </body>
 </html>

@@ -20,7 +20,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/thumbnail.js"></script>
 <div id="dynloadarea" style=float:left;position:absolute;left:350px;top:150px;></div>
 {/if}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 
 {*<!-- Contents -->*}
 

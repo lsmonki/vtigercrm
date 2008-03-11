@@ -56,7 +56,7 @@ class ImportLead extends Leads {
 			$this->db->println("searching and assigning ".$ass_user);
 
 			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->query("select id from vtiger_users where id = '".$ass_user."'");
+			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -87,9 +87,7 @@ class ImportLead extends Leads {
 		$this->log = LoggerManager::getLogger('import_lead');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportLead");
-		$colf = getColumnFields("Leads");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Leads");
 		
 		$this->db->println($this->importable_fields);
 	}

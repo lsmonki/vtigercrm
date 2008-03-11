@@ -154,7 +154,7 @@ $out  = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
 $out .=	'<HTML><HEAD>';
 $out .=	'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">';
 $out .=	'<title>'.$app_strings['LBL_BROWSER_TITLE'].'</title>';
-$out .=	'<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
+$out .= '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 $out .=	'</HEAD><BODY leftMargin="5" topMargin="5" MARGINHEIGHT="0" MARGINWIDTH="0">';
 
 echo $out;

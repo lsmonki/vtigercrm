@@ -29,6 +29,9 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Faq();
 
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 setObjectValuesFromRequest($focus);
 
 $focus->save("Faq");
@@ -42,5 +45,5 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&start=".$_REQUEST['pagenumber'].$search);
 ?>

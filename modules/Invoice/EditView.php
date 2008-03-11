@@ -37,6 +37,11 @@ global $app_strings,$mod_strings,$currentModule,$log,$current_user;
 
 $focus = new Invoice();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -55,6 +60,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -76,6 +82,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -175,6 +182,7 @@ else
 	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$INVOICE_associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -195,7 +203,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
 } 
  
  
-if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice")){
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice") && ($_REQUEST['convertmode'] != 'update_so_val') ){
 	require_once('modules/Accounts/Accounts.php');
 	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
@@ -248,8 +256,6 @@ $smarty->assign("SINGLE_MOD",'Invoice');
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Invoice view");
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
@@ -259,7 +265,7 @@ else $smarty->assign("NAME", "");
 if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
 {
 	$smarty->assign("MODE", $quote_focus->mode);
-	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quote",$quote_focus);
+	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quotes",$quote_focus);
 }
 elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinvoice' || $_REQUEST['convertmode'] == 'update_so_val'))
 {
@@ -327,17 +333,20 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-
 //in create new Invoice, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+	$sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
 

@@ -14,7 +14,7 @@ require_once('include/database/PearDatabase.php');
 
 global $adb;
 global $fileId;
-global $mod_strings;
+global $mod_strings, $default_charset;
 
 $fileid = $_REQUEST['fileid'];
 
@@ -29,12 +29,12 @@ if($_REQUEST['activity_type']=='Settings')
 
 $dbQuery = "SELECT * FROM vtiger_organizationdetails ";
 
-$result = $adb->query($dbQuery) or die("Couldn't get file list");
+$result = $adb->pquery($dbQuery, array()) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)
 {
 $name = @$adb->query_result($result, 0, "logoname");
-	//echo 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ' .$fileType;
 $fileContent = @$adb->query_result($result, 0, "logo");
+$name = html_entity_decode($name, ENT_QUOTES, $default_charset);
 header("Cache-Control: private");
 header("Content-Disposition: attachment; filename=$name");
 header("Content-Description: PHP Generated Data");

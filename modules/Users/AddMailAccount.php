@@ -21,7 +21,6 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -30,8 +29,8 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$sql = "select * from vtiger_mail_accounts where user_id=".$_REQUEST['record'];
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_mail_accounts where user_id=?";
+	$result = $adb->pquery($sql, array($_REQUEST['record']));
 	$rowcount = $adb->num_rows($result);
 	
 	if ($rowcount!=0)
@@ -66,7 +65,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("NOTLS", "CHECKED");
 			if(strtolower($temprow['ssltype']) == "tls")
 				$smarty->assign("TLS", "CHECKED");
-
+			if(strtolower($temprow['ssltype']) == "ssl")
+				$smarty->assign("SSL", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "validate-cert")
 				$smarty->assign("VALIDATECERT", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "novalidate-cert")
@@ -76,11 +76,26 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("INT_MAILER_USE", "CHECKED");
 			else
 				$smarty->assign("INT_MAILER_NOUSE", "CHECKED");
-
+			if(strtolower($temprow['box_refresh']) == "60000")
+	                        $smarty->assign("BOX_OPT1", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "120000")
+			        $smarty->assign("BOX_OPT2", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "180000")
+			        $smarty->assign("BOX_OPT3", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "240000")
+			        $smarty->assign("BOX_OPT4", " SELECTED");
+			if(strtolower($temprow['box_refresh']) == "300000")
+			        $smarty->assign("BOX_OPT5", " SELECTED");
 		}
 	}
-}	
-
+}
+$qry_res = $adb->pquery("select * from vtiger_mail_accounts where user_id=?", array($current_user->id));
+$count = $adb->num_rows($qry_res);
+if($count > 0)
+	$field = '<input name="server_password" value="*****" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';//"<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='crmButton password small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=EditView&mail_accounts=true\",\"test\",\"width=320,height=200,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=200, top=226, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
+else
+	$field = '<input name="server_password" value="" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';
+$smarty->assign('CHANGE_PW_BUTTON',$field);	
 $smarty->assign("RETURN_MODULE","Settings");
 $smarty->assign("RETURN_ACTION","index");
 $smarty->assign("JAVASCRIPT", get_validate_record_js());

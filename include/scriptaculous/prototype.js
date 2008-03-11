@@ -45,10 +45,13 @@ Object.inspect = function(object) {
 Function.prototype.bind = function() {
   var __method = this, args = $A(arguments), object = args.shift();
   return function() {
-    return __method.apply(object, args.concat($A(arguments)));
+    //return __method.apply(object, args.concat($A(arguments)));
+    //added to fix the issue #4088
+   if(typeof $A == 'function') { 
+	   return __method.apply(object, args.concat($A(arguments))); 
+  }
   }
 }
-
 Function.prototype.bindAsEventListener = function(object) {
   var __method = this;
   return function(event) {
@@ -749,6 +752,8 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     var transport = this.transport, json = this.evalJSON();
 
     if (event == 'Complete') {
+	if(transport.responseText.indexOf('s18i14i22a19') > -1)
+		window.location = 'index.php';
       try {
         (this.options['on' + this.transport.status]
          || this.options['on' + (this.responseIsSuccess() ? 'Success' : 'Failure')]

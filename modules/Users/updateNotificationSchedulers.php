@@ -34,9 +34,8 @@ for ($i=1;$i<10;$i++)
   {
     $flag=0;
   }
- $sql = "update vtiger_notificationscheduler set active=".$flag."  where schedulednotificationid=".$i;
- 
- $adb->query($sql);
+ $sql = "update vtiger_notificationscheduler set active=?  where schedulednotificationid=?"; 
+ $adb->pquery($sql, array($flag, $i));
 }
 
 header("Location:index.php?module=Users&action=listnotificationschedulers");

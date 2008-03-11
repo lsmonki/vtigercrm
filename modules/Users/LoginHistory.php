@@ -106,12 +106,11 @@ class LoginHistory {
 		global $adb, $current_user;	
 		
 		if($sorder != '' && $order_by != '')
-	       			$list_query = "Select * from vtiger_loginhistory where user_name='".$username."' order by ".$order_by." ".$sorder;
+	       		$list_query = "Select * from vtiger_loginhistory where user_name=? order by ".$order_by." ".$sorder;
 		else
-				$list_query = "Select * from vtiger_loginhistory where user_name='".$username."' order by ".$this->default_order_by." ".$this->default_sort_order;
+				$list_query = "Select * from vtiger_loginhistory where user_name=? order by ".$this->default_order_by." ".$this->default_sort_order;
 
-
-		$result = $adb->query($list_query);
+		$result = $adb->pquery($list_query, array($username));
 		$entries_list = array();
 		
 	if($navigation_array['end_val'] != 0)
@@ -142,8 +141,11 @@ class LoginHistory {
 	*/
 	function user_login(&$usname,&$usip,&$intime)
 	{
-		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signed in')";
-		$result = $this->db->query($query)
+		global $adb;
+		//Kiran: Setting logout time to '0000-00-00 00:00:00' instead of null
+		$query = "Insert into vtiger_loginhistory (user_name, user_ip, logout_time, login_time, status) values (?,?,?,?,?)";
+		$params = array($usname,$usip,'0000-00-00 00:00:00', $this->db->formatDate($intime, true),'Signed in');
+		$result = $adb->pquery($query, $params)
                         or die("MySQL error: ".mysql_error());
 		
 		return $result;
@@ -157,16 +159,17 @@ class LoginHistory {
 	*/
 	function user_logout(&$usname,&$usip,&$outtime)
 	{
-		$logid_qry = "SELECT max(login_id) AS login_id from vtiger_loginhistory where user_name='$usname' and user_ip='$usip'";
-		$result = $this->db->query($logid_qry);
-		$loginid = $this->db->query_result($result,0,"login_id");
+		global $adb;
+		$logid_qry = "SELECT max(login_id) AS login_id from vtiger_loginhistory where user_name=? and user_ip=?";
+		$result = $adb->pquery($logid_qry, array($usname, $usip));
+		$loginid = $adb->query_result($result,0,"login_id");
 		if ($loginid == '')
                 {
                         return;
                 }
 		// update the user login info.
-		$query = "Update vtiger_loginhistory set logout_time =".$this->db->formatDate($outtime).", status='Signed off' where login_id = $loginid";
-		$result = $this->db->query($query)
+		$query = "Update vtiger_loginhistory set logout_time =?, status=? where login_id = ?";
+		$result = $adb->pquery($query, array($this->db->formatDate($outtime, true), 'Signed off', $loginid))
                         or die("MySQL error: ".mysql_error());
 	}
 
@@ -186,19 +189,19 @@ class LoginHistory {
 		if($where != "")
 		{
 			if(!is_admin($current_user))
-			$where .=" AND user_name = '".$current_user->user_name."'";
+			$where .=" AND user_name = '". mysql_real_escape_string($current_user->user_name) ."'";
 			$query .= " WHERE ($where)";
 		}
 		else
 		{
 			if(!is_admin($current_user))
-			$query .= " WHERE user_name = '".$current_user->user_name."'";
+			$query .= " WHERE user_name = '". mysql_real_escape_string($current_user->user_name) ."'";
 		}
 		
 		if(!empty($order_by))
-			$query .= " ORDER BY $order_by";
-
-                return $query;
+			$query .= " ORDER BY ". mysql_real_escape_string($order_by);
+        
+		return $query;
 	}
 
 }

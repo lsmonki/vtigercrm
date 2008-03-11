@@ -40,8 +40,6 @@ function show_error_import($message)
 
 	$image_path=$theme_path."images/";
 
-	require_once($theme_path.'layout_utils.php');
-
 	$log->info("Upload Error");
 
 	$smarty =  new vtigerCRM_Smarty;

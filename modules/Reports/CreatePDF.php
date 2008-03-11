@@ -11,10 +11,12 @@
 ini_set('max_execution_time','1800');
 require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
-require('include/fpdf/fpdf.php');
-
+//require('include/fpdf/fpdf.php');
+require('include/tcpdf/tcpdf.php');
+$language = $_SESSION['authenticated_user_language'].'.lang.php';
+require_once("include/language/$language");
 //a hex html code (e.g. #3FE5AA)
-function hex2dec($couleur = "#000000"){
+/*function hex2dec($couleur = "#000000"){
     $R = substr($couleur, 1, 2);
     $rouge = hexdec($R);
     $V = substr($couleur, 3, 2);
@@ -287,15 +289,17 @@ function PutLink($URL,$txt)
 }
 
 }//end of class
-
+*/
 $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
 //Code given by C‚sar Rodr¡guez for Rwport Filter
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 $oReportRun = new ReportRun($reportid);
-$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$_REQUEST["startdate"],$_REQUEST["enddate"]);
 
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format 
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format
+$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 $arr_val = $oReportRun->GenerateReport("PDF",$filterlist);
 
 if(isset($arr_val))
@@ -361,44 +365,66 @@ if(isset($arr_val))
 
 }
 
-$html='<table border="1">
-<tr><b>
-	'.$headerHTML.'
-</b>
-</tr>
-'.$dataHTML.'
-</table>';
-
-if(isset($arr_val))
+$html='<table border="1"><tr><b>'.$headerHTML.'</b></tr>'.$dataHTML.'</table>';
+$columnlength = array_sum($col_width);
+if($columnlength > 14400)
 {
-	$columnlength = array_sum($col_width);
+	die("<br><br><center>".$app_strings['LBL_PDF']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 }
-
 if($columnlength <= 420 )
 {
-        $pdf = new Html2PDF('P','mm','A5');
-}elseif($columnlength >= 421 && $columnlength <= 600)
+	$pdf = new TCPDF('P','mm','A5',true);
+	
+}elseif($columnlength >= 421 && $columnlength <= 1120)
 {
-        $pdf = new Html2PDF('L','mm','A4');
-}elseif($columnlength >=601 && $columnlength <= 850)
+	$pdf = new TCPDF('L','mm','A4',true);
+
+}elseif($columnlength >=1121 && $columnlength <= 1600)
 {
-        $pdf = new Html2PDF('P','mm','A3');
-}elseif($columnlength >=851 )
+	$pdf = new TCPDF('L','mm','A3',true);
+
+}elseif($columnlength >=1601 && $columnlength <= 2200)
 {
-        $pdf = new Html2PDF('L','mm','A1');
+	$pdf = new TCPDF('L','mm','A2',true);
 }
+elseif($columnlength >=2201 && $columnlength <= 3370)
+{
+	$pdf = new TCPDF('L','mm','A1',true);
+}
+elseif($columnlength >=3371 && $columnlength <= 4690)
+{
+	$pdf = new TCPDF('L','mm','A0',true);
+}
+elseif($columnlength >=4691 && $columnlength <= 6490)
+{
+	$pdf = new TCPDF('L','mm','2A0',true);
+}
+else
+{
+	$columnhight = count($arr_val);
+        $format = $columnlength."-".$columnhight;
+	$pdf = new TCPDF('L','mm',$format,true);
+}
+$pdf->SetMargins(10, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf->setLanguageArray($l);
 //echo '<pre>';print_r($columnlength);echo '</pre>';
 $pdf->AddPage();
 
 $pdf->SetFillColor(224,235,255);
 $pdf->SetTextColor(0);
-$pdf->SetFont('Arial','B',14);
-$pdf->Cell(($pdf->columnlength*50),10,$oReport->reportname,0,0,'C',0);
+$pdf->SetFont('FreeSerif','B',14);
+$pdf->Cell(($pdf->columnlength*50),10,getTranslatedString($oReport->reportname),0,0,'C',0);
+//$pdf->writeHTML($oReport->reportname);
 $pdf->Ln();
 
-$pdf->SetFont('Arial','',10);
+$pdf->SetFont('FreeSerif','',10);
 
-$pdf->WriteHTML($html);
+$pdf->writeHTML($html);
 $pdf->Output('Reports.pdf','D');
 exit();
 ?>

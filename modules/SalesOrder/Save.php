@@ -29,6 +29,8 @@ include("modules/Emails/mail.php");
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new SalesOrder();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 setObjectValuesFromRequest($focus);
 
 $focus->save("SalesOrder");
@@ -48,6 +50,5 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&smodule=SO");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&smodule=SO&start=".$_REQUEST['pagenumber'].$search);
 ?>

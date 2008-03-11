@@ -95,11 +95,6 @@ $import_dir = 'cache/import/';
 // upload_dir default value prepended by cache_dir = upload/
 $upload_dir = '_VT_UPLOADDIR_';
 
-// mail server parameters
-$mail_server = '_MAIL_SERVER_';
-$mail_server_username = '_MAIL_USERNAME_';
-$mail_server_password = '_MAIL_PASSWORD_';
-
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
 $upload_maxsize = 3000000;
@@ -143,7 +138,7 @@ $default_action = 'index';
 
 // set default theme
 // default_theme default value = blue
-$default_theme = 'bluelagoon';
+$default_theme = 'softed';
 
 // show or hide time to compose each page
 // calculate_response_time default value = true
@@ -175,8 +170,8 @@ $languages = Array('en_us'=>'US English',);
 $currency_name = '_MASTER_CURRENCY_';
 
 // default charset
-// default charset default value = ISO-8859-1
-$default_charset = 'ISO-8859-1';
+// default charset default value = 'UTF-8' or 'ISO-8859-1'
+$default_charset = '_VT_CHARSET_';
 
 // default language
 // default_language default value = en_us
@@ -194,4 +189,8 @@ $display_empty_home_blocks = false;
 
 // Generating Unique Application Key
 $application_unique_key = '_VT_APP_UNIQKEY_';
+
+// trim descriptions, titles in listviews to this value
+$listview_max_textlength = 40;
+
 ?>

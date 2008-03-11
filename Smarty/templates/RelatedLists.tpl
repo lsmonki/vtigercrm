@@ -12,7 +12,6 @@
 
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBooks.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 {literal}
 <script>
 function editProductListPrice(id,pbid,price)
@@ -50,12 +49,13 @@ function gotoUpdateListPrice(id,pbid,proid)
 }
 {/literal}
 
-function loadCvList(type,id) {ldelim}
-	$("status").style.display="inline";
-        if(type === 'Leads')
+function loadCvList(type,id)
+{ldelim}
+        if($("lead_cv_list").value != 'None' || $("cont_cv_list").value != 'None')
         {ldelim}
-                if($("lead_cv_list").value != 'None')
-                {ldelim}
+		$("status").style.display="inline";
+        	if(type === 'Leads')
+        	{ldelim}
                         new Ajax.Request(
                         'index.php',
                         {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -66,13 +66,11 @@ function loadCvList(type,id) {ldelim}
                                         $("RLContents").innerHTML= response.responseText;
                                 {rdelim}
                         {rdelim}
-                );
-                {rdelim}
-        {rdelim}
-        if(type === 'Contacts')
-        {ldelim}
-        if($("cont_cv_list").value != 'None')
-                {ldelim}
+                	);
+        	{rdelim}
+
+        	if(type === 'Contacts')
+        	{ldelim}
                         new Ajax.Request(
                         'index.php',
                         {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -83,7 +81,7 @@ function loadCvList(type,id) {ldelim}
                                         $("RLContents").innerHTML= response.responseText;
                                 {rdelim}
                         {rdelim}
-                );
+                	);
 		{rdelim}
         {rdelim}
 {rdelim}
@@ -160,7 +158,7 @@ function loadCvList(type,id) {ldelim}
 </tr>
 </table>
 
-{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts' or $MODULE eq 'Campaigns'}
 <form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;width:300px;"></div></form>
 {/if}
 

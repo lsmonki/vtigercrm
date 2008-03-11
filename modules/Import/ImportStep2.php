@@ -29,6 +29,9 @@ require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/CommonUtils.php');
@@ -65,7 +68,6 @@ if ( isset($_REQUEST['has_header']))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 if (!is_uploaded_file($_FILES['userfile']['tmp_name']) )
 {
@@ -116,7 +118,6 @@ else if ( $ret_value == -3 )
 	exit;
 }
 
-
 $rows = $ret_value['rows'];
 $ret_field_count = $ret_value['field_count'];
 
@@ -143,7 +144,9 @@ $import_object_array = Array(
 				"Accounts"=>"ImportAccount",
 				"Contacts"=>"ImportContact",
 				"Potentials"=>"ImportOpportunity",
-				"Products"=>"ImportProduct"
+				"Products"=>"ImportProduct",
+				"HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -172,17 +175,28 @@ if($total_num_rows >2)
 foreach($firstrow as $ind => $val)
 {
 	if(strlen($val) > 30)
-		$firstrow[$ind] = substr($val,0,30)." ..........";
+		$firstrow[$ind] = substr(to_html($val),0,30)." ..........";
+	else
+		$firstrow[$ind] = to_html($val);
 }
-foreach($secondrow as $ind => $val)
-{
-	if(strlen($val) > 30)
-		$secondrow[$ind] = substr($val,0,30)." ..........";
-}
-foreach($thirdrow as $ind => $val)
-{
-	if(strlen($val) > 30)
-		$thirdrow[$ind] = substr($val,0,30)." ..........";
+if (isset($secondrow)) { //Asha: Fix for ticket #4432
+	foreach($secondrow as $ind => $val)
+	{
+		if(strlen($val) > 30)
+			$secondrow[$ind] = substr(to_html($val),0,30)." ..........";
+		else
+			$secondrow[$ind] = to_html($val);
+
+	}
+	if (isset($thirdrow)) { //Asha: Fix for ticket #4432
+		foreach($thirdrow as $ind => $val)
+		{
+			if(strlen($val) > 30)
+				$thirdrow[$ind] = substr(to_html($val),0,30)." ..........";
+			else
+                        	$thirdrow[$ind] = to_html($val);
+		}
+	}
 }
 
 $field_map = $outlook_contacts_field_map;
@@ -291,8 +305,18 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
  		$tablename='products';
  		$focus1=new Products();
  	}
-
-	
+	//Pavani: checking for HelpDesk and Vendors
+        if($_REQUEST['module']=='HelpDesk')
+        {
+                $tablename='troubletickets';
+                $focus1=new HelpDesk();
+        }
+	if($_REQUEST['module']=='Vendors')
+	{
+		$tablename='Vendors';
+		$focus1=new Vendors();
+	}
+	//end checking
 	$smarty->assign("FIRSTROW",$firstrow);
 	$smarty->assign("SECONDROW",$secondrow);
 	$smarty->assign("THIRDROW",$thirdrow);

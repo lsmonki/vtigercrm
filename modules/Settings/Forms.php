@@ -42,7 +42,7 @@ $lbl_password = $mod_strings['LBL_LIST_PASSWORD'];
 $lbl_servername = $mod_strings['LBL_MAIL_SERVER_NAME'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
-
+$err_invalid_page_count = $app_strings['ERR_INVALID_PAGE_COUNT'];
 $the_script  = <<<EOQ
 
 <script type="text/javascript" language="Javascript">
@@ -72,10 +72,16 @@ function verify_data(form) {
 		alert("$err_missing_required_fields" + errorMessage);
 		return false;
 	}
-	if (trim(form.email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+	form.email.value = trim(form.email.value);
+	if (form.email.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
 		alert('"' + form.email.value + '" $err_invalid_email_address');
 		return false;
 	}
+	if(form.mails_per_page.value != "" && isNaN(form.mails_per_page.value)){
+		alert('"' + form.mails_per_page.value + '" $err_invalid_page_count');
+		return false;
+	}
+		
 	return true;
 }
 
@@ -116,7 +122,7 @@ $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
 
 $qcreate_get_field="select * from vtiger_field where tabid=4 and quickcreate=0 order by quickcreatesequence";
-$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_result=$adb->pquery($qcreate_get_field, array());
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
 $fieldName_array = Array();//for validation

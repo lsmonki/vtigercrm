@@ -12,7 +12,17 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script type="text/javascript">
+function showhidediv()
+{ldelim}
+	var div_style = document.getElementById("mig_info_div").style.display;
+	if(div_style == "inline")
+		document.getElementById("mig_info_div").style.display = "none";
+	else
+		document.getElementById("mig_info_div").style.display = "inline";
+		
+{rdelim}
+</script>
 
 <form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
 	<input type="hidden" name="parenttab" value="Settings">
@@ -42,6 +52,69 @@
 							({$MOD.LBL_UPGRADE_FROM_VTIGER_5X})
 						</td>
 					   </tr>
+
+					   <!-- Migration Notes - STARTS -->
+					   <tr>
+						<td colspan="2" class="hdrNameBg">
+							<span class="genHeaderGray">Please read <a href="javascript:;" onclick="showhidediv();"><u>this migration notes</u></a>
+                            				<span class="genHeaderSmall">before you proceed further.</span>
+							<br />
+			   			   <div id='mig_info_div' class='small' style="display:none;">
+					  	   <ul>
+							<li><font color="red">Changes made to database during migration cannot be reverted back. So we highly recommend to take database dump of the current working database before migration. </font>
+
+							<li><font color="red"> Also we recommend to do the migration in the following way </font>
+							<br>
+								1. Take the dump of currect database (old database which we want to migrate). <a href='#take_db_dump'><b>Help</b></a><br />
+								2. Edit the dump file, find and replace the string "latin1" with "utf8" in all places of the dump file ie., we have to find CHARSET=latin1 and replace with CHARSET=utf8 that appears along with the CREATE sql statement<br />
+								3. Create a new database with default charset as utf8. <a href='#create_db'><b>Help</b></a><br>
+								4. Apply the dump to this newly created database. <a href='#store_db_dump'><b>Help</b></a><br>
+								5. Change the dbname into "new_databasename" in config.inc.php file parallel to index.php<br>
+
+								6. Now run the migration ( from Old version to latest version )<br /><br />
+							****************************************************************************************************
+							</ul>
+							<ul>
+							<li> <a name='take_db_dump'></a> <b>How to take database dump?</b><br />
+								1. Go inside mysql/bin directory from terminal (linux) or command prompt (windows)<br />
+								2. Execute the following command to take database dump<br />&nbsp;&nbsp;
+									mysqldump --user=mysql_username --password=mysql-password -h hostname --port=mysql_port &nbsp;database_name &gt; dump_filename<br />&nbsp;&nbsp;
+									You can find the MySQL credentials in config.inc.php file.<br />
+							<li> <a name='create_db'></a> <b>How to create a database?</b><br />
+								1. Go inside mysql/bin directory from terminal (linux) or command prompt (windows)<br />
+								2. Execute the following command to enter into mysql prompt<br />&nbsp;&nbsp;
+									mysql --user=mysql_username --password=mysql-password -h hostname --port=mysql_port<br />&nbsp;&nbsp;
+									You can find the MySQL credentials in config.inc.php file.<br />
+								3. Execute the following command to create a new database<br />&nbsp;&nbsp;
+									create database new_db_name;<br />&nbsp;&nbsp;
+									You can set utf8 as default character set for the database on creation time through the following command:<br />&nbsp;&nbsp;
+									create database new_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
+									To change the default character set for an existing database you can use<br />&nbsp;&nbsp;
+									alter database old_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
+									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
+							<li><a name='store_db_dump'></a> <b>How to store the data from database dump file to a new database?</b><br />
+								1. Edit the database dump file<br />&nbsp;&nbsp;
+									SET FOREIGN_KEY_CHECKS = 0; =&gt; add this line at the start of the dump file.<br />&nbsp;&nbsp;
+									SET FOREIGN_KEY_CHECKS = 1; =&gt; add this line at the end of the dump file.<br />
+								2. Go inside mysql/bin directory from terminal (linux) or command prompt (windows) and ensure that the database dump file is available here.<br />
+								3. Execute the following command to store the database dump to new database<br />&nbsp;&nbsp;
+									mysql --user=mysql_username --password=mysql-password -h hostname --force --port=mysql_port &nbsp;database_name &lt;  dump_filename <br />&nbsp;&nbsp;
+									You can find the MySQL credentials in config.inc.php file<br />
+							<li><b>How to use the newly migrated database?</b><br />
+									Once we done the migration, we have to restore the following folders from old vtiger installation to new installation<br />&nbsp;&nbsp;
+									storage/ - which contains the attachment files<br />&nbsp;&nbsp;
+									test/ - which contains some image files<br />&nbsp;&nbsp;
+									user_privileges/ - which contains the access privileges for the users and some more files
+						   </ul>
+						   </div>
+						   </span>
+						   <br/>
+						</td>
+					   </tr>
+					   <!-- Migration Notes - ENDS -->
+
+
+
 					   <tr>
 						<td colspan="2" class="hdrNameBg">
 							<span class="genHeaderGray">{$MOD.LBL_STEP} 1 : </span>
@@ -60,8 +133,14 @@
 					   </tr>
 					   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
 					   <tr bgcolor="#FFFFFF">
+				
+						<td></td>
+						<td>{if !$MIG_CHECK}&nbsp;<font color='red'><b>Versions in database and source file are same. You cannot do 5.x migration. Please check the db and then do necessary steps.</b></font><br><br>{$CHARSET_CHECK}</td>{/if}
+				           </tr>
+					   <tr><td colspan="2" bgcolor="#FFFFFF" height="10"></td></tr>
+					   <tr bgcolor="#FFFFFF">
 						<td align="right" valign="top">
-							<input type="radio" name="radio" id="patch" value="patch" onclick="this.form.action.value='PatchApply'; showSource();"/>
+							<input type="radio" name="radio" id="patch" value="patch"  {if !$MIG_CHECK} disabled {/if} onclick="this.form.action.value='PatchApply'; showSource();"/>
 						</td>
 						<td>
 							<b>Upgrade my vtiger 5.x version to Current Version ({$CURRENT_VERSION})</b><br /><br />
@@ -87,6 +166,8 @@
 							   <tr>
 								<td width="10%">&nbsp;</td>
 								<td width="90%">
+								<b><font color="red">
+NOTE&nbsp;:&nbsp;{$APP.add_at_end_of_file} {$APP.before_migration}</font></b><br>// trim descriptions, titles in listviews to this value<br>$listview_max_textlength = 40;<br><br>
 									Source vtiger Version
 									{$SOURCE_VERSION}
 								</td>
@@ -137,7 +218,7 @@
 			var tagName = document.getElementById('source_version');
 			var source_version = tagName.options[tagName.selectedIndex].text;
 			{/literal}
-                        if(confirm("{$APP.DATABASE_CHANGE_CONFIRMATION}"+source_version+"{$APP.TO}"+current_version))
+                        if(confirm("{$APP.DATABASE_CHANGE_CONFIRMATION}"+source_version+"{$APP.TO}"+current_version+"?"))
                         {literal}
 				return true;
 			else

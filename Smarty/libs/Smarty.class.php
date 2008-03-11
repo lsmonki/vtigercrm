@@ -27,9 +27,10 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.12
+ * @version 2.6.18
  */
 
+/* $Id$ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -174,7 +175,7 @@ class Smarty
      *
      * @var integer
      */
-    var $cache_lifetime  =  180;
+    var $cache_lifetime  =  3600;
 
     /**
      * Only used when $caching is enabled. If true, then If-Modified-Since headers
@@ -463,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.12';
+    var $_version              = '2.6.18';
 
     /**
      * current template inclusion depth
@@ -1211,7 +1212,7 @@ class Smarty
                                 header('HTTP/1.1 304 Not Modified');
 
                         } else {
-                            @header('Last-Modified: '.$_gmt_mtime);
+                            header('Last-Modified: '.$_gmt_mtime);
                             echo $_smarty_results;
                         }
                     } else {
@@ -1230,7 +1231,7 @@ class Smarty
             } else {
                 $this->_cache_info['template'][$resource_name] = true;
                 if ($this->cache_modified_check && $display) {
-                    @header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+                    header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
                 }
             }
         }

@@ -22,9 +22,8 @@ function getPermittedBlocks($module, $disp_view)
 	
         $tabid = getTabid($module);
         $block_detail = Array();
-        $query="select blockid,blocklabel,show_title from vtiger_blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
-
-        $result = $adb->query($query);
+        $query="select blockid,blocklabel,show_title from vtiger_blocks where tabid=? and $disp_view=0 and visible = 0 order by sequence";
+        $result = $adb->pquery($query, array($tabid));
         $noofrows = $adb->num_rows($result);
 	$blockid_list ='(';
 	for($i=0; $i<$noofrows; $i++)
@@ -65,7 +64,7 @@ function getPermittedFieldsQuery($module, $disp_view)
   	else
   	{
 		$profileList = getCurrentUserProfileList();
-		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+		$sql = "SELECT vtiger_field.columnname, vtiger_field.fieldlabel, vtiger_field.tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". implode(",", $profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
 	}
 
 	$log->debug("Exit from the function getPermittedFieldsQuery($module, $disp_view). Return value = $sql");
@@ -122,8 +121,6 @@ function getFieldsListFromQuery($query)
 					when 'Accounts' then concat('Accounts ::: ',vtiger_ProductRelatedToAccount.accountname) 
 					when 'Potentials' then concat('Potentials ::: ',vtiger_ProductRelatedToPotential.potentialname) 
 				    End as 'Related To',";
-			//This will export as 3 seperate columns for each Leads, Accounts and Potentials
-			//$fields .= "  case vtiger_crmentityRelatedTo.setype when 'Leads' then vtiger_ProductRelatedToLead.lastname End as 'Lead Name', case vtiger_crmentityRelatedTo.setype when 'Accounts' then vtiger_ProductRelatedToAccount.accountname End as 'Account Name', case vtiger_crmentityRelatedTo.setype when 'Potentials' then vtiger_ProductRelatedToPotential.potentialname End as 'Potential Name',";
 		}
 		elseif($tablename == 'vtiger_products' && $columnName == 'contactid')//Product - Contact
 		{
@@ -144,19 +141,34 @@ function getFieldsListFromQuery($query)
 		elseif($tablename == 'vtiger_senotesrel' && $columnName == 'crmid')//Notes - Related To
 		{
 			$fields .= "case vtiger_crmentityRelatedTo.setype 
-					when 'Leads' then concat('Leads ::: ',vtiger_NoteRelatedToLead.lastname,' ',vtiger_NoteRelatedToLead.firstname) 
-					when 'Accounts' then concat('Accounts ::: ',vtiger_NoteRelatedToAccount.accountname) 
-					when 'Potentials' then concat('Potentials ::: ',vtiger_NoteRelatedToPotential.potentialname) 
-					when 'Products' then concat('Products ::: ',vtiger_NoteRelatedToProduct.productname) 
-					when 'Invoice' then concat('Invoice ::: ',vtiger_NoteRelatedToInvoice.subject) 
-					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_NoteRelatedToPO.subject) 
-					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_NoteRelatedToSO.subject) 
+					when 'Leads' then concat('Leads ::: ',vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) 
+					when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname) 
+					when 'Potentials' then concat('Potentials ::: ',vtiger_potential.potentialname) 
+					when 'Products' then concat('Products ::: ',vtiger_products.productname) 
+					when 'Invoice' then concat('Invoice ::: ',vtiger_invoice.subject) 
+					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_purchaseorder.subject) 
+					when 'Quotes' then concat('Quotes ::: ',vtiger_quotes.subject)
+					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_salesorder.subject) 
+					when 'HelpDesk' then concat('HelpDesk ::: ',vtiger_troubletickets.title)
 				     End as 'Related To',";
 		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
 		{
 			$fields .= $tablename.".name as '".$fieldlabel."',";
 		}
+		//By Pavani...Handling mismatch field and table name for trouble tickets
+                elseif($tablename == 'vtiger_troubletickets' && $columnName == 'product_id')//Ticket - Product
+                {
+                         $fields .= "vtiger_products.productname as '".$fieldlabel."',";
+                }
+                elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
+                {
+                         $fields .= "case vtiger_crmentityRelatedTo.setype
+                                        when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname)
+					when 'Contacts' then concat('Contacts ::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
+                                     End as 'Related To',";
+                }
+
 		else
 		{
 			$fields .= $tablename.".".$columnName. " as '" .$fieldlabel."',";

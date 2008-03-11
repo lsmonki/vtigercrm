@@ -25,7 +25,6 @@ global $oCustomView;
 $error_msg = '';
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 $cv_module = $_REQUEST['module'];
@@ -77,6 +76,8 @@ if($recordid == "")
 
 	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
+        $data_type[] = $oCustomView->data_type;
+        $smarty->assign("DATATYPE",$data_type);
 }
 else
 {
@@ -136,6 +137,7 @@ else
 		{
 			$val = Array();
 			for($x=0;$x<count($temp_val);$x++)
+			if(trim($temp_val[$x] != ""))
 				$val[$x] = getDisplayDate(trim($temp_val[$x]));
 			$advfilterlist[$i-1]["value"] = implode(", ",$val);
 			$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
@@ -157,6 +159,8 @@ else
 	{
 		$smarty->assign("CUSTOMACTIONBUTTON",$cactionhtml);
 	}
+        $data_type[] = $oCustomView->data_type;
+        $smarty->assign("DATATYPE",$data_type);
 }
 
 $smarty->assign("RETURN_MODULE", $cv_module);
@@ -233,7 +237,7 @@ $smarty->display("CustomView.tpl");
 
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
-	global $oCustomView;
+	global $oCustomView, $current_language;
 	global $app_list_strings;
 	$advfilter = array();
 	$mod_strings = return_specified_module_language($current_language,$module);
@@ -247,8 +251,6 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 		{
 			foreach($columnslist[$module][$key] as $field=>$fieldlabel)
 			{
-				//Here we have to change the typeofdata for special cases like Contacts - Birthdate
-				$field = changeTypeOfData($field);
 				if(!in_array($fieldlabel,$check_dup))
 				{
 					if(isset($mod_strings[$fieldlabel]))
@@ -323,7 +325,8 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	*/	
 function getStdFilterHTML($module,$selected="")
 {
-	global $app_list_strings;
+	global $app_list_strings, $current_language,$app_strings,$current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	global $oCustomView;
 	$stdfilter = array();
 	$result = $oCustomView->getStdCriteriaByModule($module);
@@ -347,28 +350,42 @@ function getStdFilterHTML($module,$selected="")
 					$filter['selected'] = "selected";
 				}else
 				{
-					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
-					$filter['selected'] ="";
+						$filter['value'] = $key;
+						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+						$filter['selected'] ="";
 				}
-			}else
+			}
+			else
+			{
+				if($key == $selected)
 				{
-					if($key == $selected)
-					{
-						$filter['value'] = $key;
-						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-						$filter['selected'] = 'selected';
-					}else
-					{
-						$filter['value'] = $key;
-						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-						$filter['selected'] ='';
-					}
+					$filter['value'] = $key;
+					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+					$filter['selected'] = 'selected';
+				}else
+				{
+					$filter['value'] = $key;
+					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+					$filter['selected'] ='';
 				}
+			}
 			$stdfilter[]=$filter;
-		}
-	}
+			//added to fix ticket #5117. If a user doesn't have permission for a field and it has been used to fileter a custom view, it should be get displayed to him as Not Accessible.
+			if(!$is_admin && $selected != '' && $filter['selected'] == '')
+			{
+				$keys = explode(":",$selected);
+				if(getFieldVisibilityPermission($module,$current_user->id,$keys[2]) != '0')
+				{
+					$filter['value'] = "not_accessible";
+					$filter['text'] = $app_strings["LBL_NOT_ACCESSIBLE"];
+					$filter['selected'] = "selected";
+					$stdfilter[]=$filter;
+				}
+			}
 
+		}
+
+	}
 	return $stdfilter;
 }
 
@@ -403,76 +420,4 @@ function getAdvCriteriaHTML($selected="")
 
 	return $AdvCriteria;
 }
-//step4
-
-
-/**	function used to change the Type of Data for advanced filters
-	@param string $field - field details in the format of tablename:columnname:fieldname:Module_fieldlabel:typeofdata
-	return string $field - changed field details in the format of tablename:columnname:fieldname:Module_fieldlabel:typeofdata
- */
-function changeTypeOfData($field)
-{
-	global $adb;
-	//$adb->println("Entering into function changeTypeOfData($field)");
-
-	//Add the field details in this array if you want to change the advance filter field details
-	//Array in which we have to specify as, existing value => new value
-	$new_field_details = Array(
-				"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:V"=>"vtiger_contactsubdetails:birthday:birthday:Contacts_Birthdate:D",
-				"vtiger_faq:product_id:product_id:Faq_Product_Name:I"=>"vtiger_faq:product_id:product_id:Faq_Product_Name:V",
-				"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I"=>"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V",
-"vtiger_campaign:product_id:product_id:Campaigns_Product:I"=>"vtiger_campaign:product_id:product_id:Campaigns_Product:V",
-"vtiger_account:email1:email1:Accounts_Email:E"=>"vtiger_account:email1:email1:Accounts_Email:V",
-"vtiger_account:email2:email2:Accounts_Other_Email:E"=>"vtiger_account:email2:email2:Accounts_Other_Email:V",
-"vtiger_contactdetails:email:email:Contacts_Email:E"=>"vtiger_contactdetails:email:email:Contacts_Email:V",
-"vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:E"=>"vtiger_contactdetails:yahooid:yahooid:Contacts_Yahoo_Id:V",
-"vtiger_account:accountname:accountname:Contacts_Account_Name:I"=>"vtiger_account:accountname:accountname:Contacts_Account_Name:V",
-"vtiger_account:parentid:account_id:Accounts_Member_Of:I"=>"vtiger_account:parentid:account_id:Accounts_Member_Of:V",
-"vtiger_leaddetails:email:email:Leads_Email:E"=>"vtiger_leaddetails:email:email:Leads_Email:V",
-"vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:E"=>"vtiger_leaddetails:yahooid:yahooid:Leads_Yahoo_Id:V",
-"vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:I"=>"vtiger_cntactivityrel:contactid:contact_id:Calendar_Contact_Name:V",
-"vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:I"=>"vtiger_seactivityrel:crmid:parent_id:Calendar_Related_to:V",
-"vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I"=>"vtiger_senotesrel:crmid:parent_id:Notes_Related_to:V",
-"vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:N"=>"vtiger_potential:campaignid:campaignid:Potentials_Campaign_Source:V",
-"vtiger_account:accountname:accountname:Accounts_Member_Of:I"=>"vtiger_account:accountname:accountname:Accounts_Member_Of:V",
-"vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I"=>"vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:V",
-"vtiger_quotes:inventorymanager:assigned_user_id1:Quotes_Inventory_Manager:I"=>"vtiger_quotes:inventorymanager:assigned_user_id1:Quotes_Inventory_Manager:V",
-"vtiger_account:accountname:accountname:Quotes_Account_Name:I"=>"vtiger_account:accountname:accountname:Quotes_Account_Name:V",
-"vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:I"=>"vtiger_salesorder:potentialid:potential_id:SalesOrder_Potential_Name:V",
-"vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:I"=>"vtiger_salesorder:quoteid:quote_id:SalesOrder_Quote_Name:V",
-"vtiger_salesorder:contactid:contact_id:SalesOrder_Contact_Name:I"=>"vtiger_salesorder:contactid:contact_id:SalesOrder_Contact_Name:V",
-"vtiger_account:accountname:accountname:SalesOrder_Account_Name:I"=>"vtiger_account:accountname:accountname:SalesOrder_Account_Name:V",
-"vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:I"=>"vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:V",
-"vtiger_invoice:contactid:contact_id:Invoice_Contact_Name:I"=>"vtiger_invoice:contactid:contact_id:Invoice_Contact_Name:V",
-"vtiger_account:accountname:accountname:Invoice_Account_Name:I"=>"vtiger_account:accountname:accountname:Invoice_Account_Name:V", 
-"vtiger_products:discontinued:discontinued:Products_Product_Active:V"=>"vtiger_products:discontinued:discontinued:Products_Product_Active:C",
-"vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:I"=>"vtiger_products:vendor_id:vendor_id:Products_Vendor_Name:V",
-"vtiger_pricebook:active:active:PriceBooks_Active:V"=>"vtiger_pricebook:active:active:PriceBooks_Active:C",
-"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I"=>"vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:V",
-"vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I"=>"vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:V",
-"vtiger_faq:product_id:product_id:Faq_Product_Name:I"=>"vtiger_faq:product_id:product_id:Faq_Product_Name:V",
-"vtiger_vendor:email:email:Vendors_Email:E"=>"vtiger_vendor:email:email:Vendors_Email:V",
-"vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I"=>"vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:V",
-"vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:I"=>"vtiger_purchaseorder:contactid:contact_id:PurchaseOrder_Contact_Name:V",
-        "vtiger_products:handler:assigned_user_id:Products_Handler:I"=>"vtiger_products:handler:assigned_user_id:Products_Handler:V",
-        "vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:C"=>"vtiger_activity:activitytype:activitytype:Calendar_Activity_Type:V",
-	"vtiger_activity:time_start::Calendar_Start_Time:I"=>"vtiger_activity:time_start::Calendar_Start_Time:V",
-	"vtiger_activity:time_end:time_end:Calendar_End_Time:T"=>"vtiger_activity:time_end:time_end:Calendar_End_Time:V",
-	"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Calendar_Contact_Name:V",
-	"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:SalesOrder_Contact_Name:V",
-	"vtiger_contactdetails:lastname:lastname:PurchaseOrder_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:PurchaseOrder_Contact_Name:V",
-	"vtiger_contactdetails:lastname:lastname:Invoice_Contact_Name:I"=>"vtiger_contactdetails:lastname:lastname:Invoice_Contact_Name:V",
-"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:O"=>"vtiger_recurringevents:recurringtype:recurringtype:Calendar_Recurrence:V",
-			  );
-
-	if(isset($new_field_details[$field]))
-	{
-		$field = $new_field_details[$field];
-	}
-
-	//$adb->println("Exit from function changeTypeOfData($field). Return => $field");
-	return $field;
-}
-
-
 ?>

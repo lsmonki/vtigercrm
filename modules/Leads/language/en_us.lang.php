@@ -134,7 +134,6 @@ $mod_strings = Array(
 'Mobile'=>'Mobile',
 'Company'=>'Company',
 'Fax'=>'Fax',
-'Designation'=>'Designation',
 'Email'=>'Email',
 'Lead Source'=>'Lead Source',
 'Website'=>'Website',
@@ -143,7 +142,7 @@ $mod_strings = Array(
 'Industry'=>'Industry',
 'Rating'=>'Rating',
 'No Of Employees'=>'No Of Employees',
-'Assigned To'=>'Assigned to',
+'Assigned To'=>'Assigned To',
 'Yahoo Id'=>'Yahoo Id',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
@@ -229,6 +228,10 @@ $mod_strings = Array(
 'Pre Qualified'=>'Pre Qualified',
 'Qualified'=>'Qualified',
 'Warm'=>'Warm',
+
+// Added/Updated for vtiger CRM 5.0.4
+
+'Designation'=>'Title',
      
 
 );

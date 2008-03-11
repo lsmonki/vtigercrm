@@ -19,8 +19,8 @@ if($_REQUEST['ajax_action'] == 'check_dup_map_name')
 {
 	$map_name=$_REQUEST['name'];
 	global $adb;
-	$query="select * from vtiger_import_maps where deleted=0 and name='".$map_name."'";
-	$Result = $adb->query($query);
+	$query="select * from vtiger_import_maps where deleted=0 and name=?";
+	$Result = $adb->pquery($query, array($map_name));
 	$noofrows = $adb->num_rows($Result);
 	if($noofrows > 0)
 		echo "false"; //Map name already exists
@@ -32,8 +32,8 @@ else
 
 	if($_REQUEST['delete_map'] != '')
 	{
-		$query = "update vtiger_import_maps set deleted=1 where id = ".$_REQUEST['mapping'];
-		$adb->query($query);
+		$query = "update vtiger_import_maps set deleted=1 where id = ?";
+		$adb->pquery($query, array($_REQUEST['mapping']));
 	}
 
 	$mapping_file = new ImportMap();

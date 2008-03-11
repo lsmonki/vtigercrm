@@ -31,11 +31,14 @@ if($ajaxaction == "DETAILVIEW")
 		 $cntObj->id = $crmid;
 		 $cntObj->mode = "edit";
 		 $cntObj->save("Contacts");
-
-		 $email_res = $adb->query("select email from vtiger_contactdetails where contactid=".$cntObj->id);
+		 if($cntObj->column_fields['notify_owner'] == 1 )
+		 {
+			 sendNotificationToOwner('Contacts',&$cntObj);
+		 }
+		 $email_res = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($cntObj->id));
 		 $email = $adb->query_result($email_res,0,'email');
 
-		 $check_available = $adb->query("select * from vtiger_portalinfo where id=".$cntObj->id);
+		 $check_available = $adb->pquery("select * from vtiger_portalinfo where id=?", array($cntObj->id));
 		 $update = '';
 		 if($fieldname =='email')
 		 {
@@ -43,10 +46,10 @@ if($ajaxaction == "DETAILVIEW")
 			 $update = false;
 			 if($active != '' && $active == 1)
 			 {
-				$sql = "update vtiger_portalinfo set user_name='".$fieldvalue."',isactive='".$active."' where id=".$crmid;
-				$adb->query($sql);
+				$sql = "update vtiger_portalinfo set user_name=?,isactive=? where id=?";
+				$adb->pquery($sql, array($fieldvalue, $active, $crmid));
 				$email = $fieldvalue;
-				$result = $adb->query("select user_password from vtiger_portalinfo where id=".$cntObj->id);
+				$result = $adb->pquery("select user_password from vtiger_portalinfo where id=?", array($cntObj->id));
 				$password = $adb->query_result($result,0,'user_password');
 				$update = true;
 		 	 }
@@ -60,24 +63,27 @@ if($ajaxaction == "DETAILVIEW")
 				if($confirm == '' && $fieldvalue == 1)
 				{
 					$password = makeRandomPassword();
-					$sql = "insert into vtiger_portalinfo (id,user_name,user_password,type,isactive) values(".$cntObj->id.",'".$email."','".$password."','C',1)";
-					$adb->query($sql);
+					$sql = "insert into vtiger_portalinfo (id,user_name,user_password,type,isactive) values(?,?,?,?,?)";
+					$params = array($cntObj->id, $email, $password, 'C', 1);
+					$adb->pquery($sql, $params);
 					$insert = true;
 
 				}
 				elseif($confirm == 0 && $fieldvalue == 1)
 				{
-					$sql = "update vtiger_portalinfo set user_name='".$email."', isactive=1 where id=".$cntObj->id;
-					$adb->query($sql);
-					$result = $adb->query("select user_password from vtiger_portalinfo where id=".$cntObj->id);
+					$sql = "update vtiger_portalinfo set user_name=?, isactive=1 where id=?";
+					$params = array($email, $cntObj->id);
+					$adb->pquery($sql, $params);
+					
+					$result = $adb->pquery("select user_password from vtiger_portalinfo where id=?", array($cntObj->id));
 					$password = $adb->query_result($result,0,'user_password');
 					$update = true;
 
 				}
 				elseif($confirm == 1 && $fieldvalue == 0)
 				{
-					$sql = "update vtiger_portalinfo set isactive=0 where id=".$cntObj->id;
-					$adb->query($sql);
+					$sql = "update vtiger_portalinfo set isactive=0 where id=?";
+					$adb->pquery($sql, array($cntObj->id));
 				}
 			}
 		}

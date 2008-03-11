@@ -18,7 +18,6 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script type="text/javascript">
 var gVTModule = '{$smarty.request.module}';
 function sensex_info()
@@ -212,6 +211,8 @@ function AddressSync(Addform,id)
 	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
+<!--added to fix 4600-->
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form>
 
 

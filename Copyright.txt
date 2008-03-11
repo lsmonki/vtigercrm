@@ -68,30 +68,30 @@ For Linux
 
 10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at http://magpierss.sourceforge.net/
 
-10. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
+11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
 
-11. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
+12. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
 
-12. Mailfeed used under GNU GPL downloaded from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright   
+13. Mailfeed used under GNU GPL downloaded from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright   
 
-13. Smarty Template Engine for PHP used under the GNU LGPL available at available at <vtiger CRM Home>/vtigerCRM/Smarty/COPYING.lib
+14. Smarty Template Engine for PHP used under the GNU LGPL available at available at <vtiger CRM Home>/vtigerCRM/Smarty/COPYING.lib
 
-14. freetag is used under dual license BSD and LGPL downloaded from http://www.getluky.net available at <vtiger CRM Home>/vtigerCRM/include/freetag/license.txt
+15. freetag is used under dual license BSD and LGPL downloaded from http://www.getluky.net available at <vtiger CRM Home>/vtigerCRM/include/freetag/license.txt
 
-15. Image_Canvas is used under GNU LGPL downloaded from http://pear.php.net/pepr/pepr-proposal-show.php?id=212 available at http://www.gnu.org/copyleft/lesser.html 
+16. Image_Canvas is used under GNU LGPL downloaded from http://pear.php.net/pepr/pepr-proposal-show.php?id=212 available at http://www.gnu.org/copyleft/lesser.html 
 
-16. Image_Color is used under PHP license 3.0 downloaded from http://pear.php.net/package/Image_Color available at http://www.php.net/license/3_0.txt
+17. Image_Color is used under PHP license 3.0 downloaded from http://pear.php.net/package/Image_Color available at http://www.php.net/license/3_0.txt
 
-17. Image_Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
+18. Image_Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
 
-18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
+19. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
 
-19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
+20. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
-20. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
-21. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
+21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
+22. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
 
-22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
+23. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
 
 The licenses of the Open Source components are reproduced in full below.
 
@@ -1600,5 +1600,7 @@ http://www.linuxscope.net/articles/mailAttachmentsPHP.html
 8. Image Crossfade Redux for enabling fade effect to images. We have downloaded package from http://slayeroffice.com/code/imageCrossFade/xfade2.html
 
 9. Calculator for enabling calculations in vtiger CRM. We have downloaded package from http://www.hmhd.com/steve
+
+10. TCPDF package to create PDF reports and documents. We have downloaded package from http://tcpdf.sourceforge.net
 
 We are grateful to the creators of the respective products for providing such a beautiful utilities.

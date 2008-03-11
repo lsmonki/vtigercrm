@@ -31,6 +31,9 @@ $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
 $tab_type = 'Calendar';
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 $focus->column_fields["activitytype"] = 'Task';
 if(isset($_REQUEST['record']))
 {
@@ -57,14 +60,36 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 		$status = $_REQUEST['eventstatus'];	
 		$activity_type = "Events";	
 	}
-	ChangeStatus($status,$return_id,$activity_type);
+	if(isPermitted("Calendar","EditView",$_REQUEST['record']) == 'yes')
+	{
+		ChangeStatus($status,$return_id,$activity_type);
+	}
+	else
+	{
+		echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tbody><tr>
+			<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
+			</tr>
+			<tr>
+			<td class='small' align='right' nowrap='nowrap'>			   	
+			<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>								   						     </td>
+			</tr>
+			</tbody></table> 
+		</div>";
+		echo "</td></tr></table>";die;
+	}
 	$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
 	if($mail_data['sendnotification'] == 1)
 	{
 		getEventNotification($activity_type,$mail_data['subject'],$mail_data);
 	}
-	$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
-	$invitee_res = $adb->query($invitee_qry);
+	$invitee_qry = "select * from vtiger_invitees where activityid=?";
+	$invitee_res = $adb->pquery($invitee_qry, array($return_id));
 	$count = $adb->num_rows($invitee_res);
 	if($count != 0)
 	{
@@ -85,7 +110,10 @@ else
 	{
 		if(isset($_REQUEST[$fieldname]))
 		{
-			$value = $_REQUEST[$fieldname];
+			if(is_array($_REQUEST[$fieldname]))
+				$value = $_REQUEST[$fieldname];
+			else
+				$value = trim($_REQUEST[$fieldname]);
 			$focus->column_fields[$fieldname] = $value;
 			if(($fieldname == 'notime') && ($focus->column_fields[$fieldname]))
 			{	
@@ -102,19 +130,18 @@ else
 	else
 	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
-	$heldevent_id = $focus->id;
 	/* For Followup START -- by Minnie */
 	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
 	{
+		$heldevent_id = $focus->id;
 		$focus->column_fields['subject'] = '[Followup] '.$focus->column_fields['subject'];
 		$focus->column_fields['date_start'] = $_REQUEST['followup_date'];
-		$focus->column_fields['due_date'] = $_REQUEST['followup_date'];
+		$focus->column_fields['due_date'] = $_REQUEST['followup_due_date'];
 		$focus->column_fields['time_start'] = $_REQUEST['followup_time_start'];
 		$focus->column_fields['time_end'] = $_REQUEST['followup_time_end'];
 		$focus->column_fields['eventstatus'] = 'Planned';
 		$focus->mode = 'create';
 		$focus->save($tab_type);
-
 	}
 	/* For Followup END -- by Minnie */
 	$return_id = $focus->id;
@@ -131,30 +158,6 @@ else
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
 	$return_id = $_REQUEST['return_id'];
 
-if($_REQUEST['mode'] != 'edit' && $_REQUEST['return_module'] == 'Products')
-{
-	if($_REQUEST['product_id'] != '')
-		$crmid = $_REQUEST['product_id'];
-	if($crmid != $_REQUEST['parent_id'])
-	{
-		$sql = "insert into vtiger_seactivityrel (activityid, crmid) values('".$focus->id."','".$crmid."')";
-		$adb->query($sql);
-	}
-}
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts" && $_REQUEST['activity_mode'] == 'Events')
-{
-	        if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
-	        {
-	                $sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-	                $adb->query($sql);
-			if(!empty($heldevent_id)){
-				$sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$heldevent_id.")";
-				$adb->query($sql);
-			}
-	        }
-}
-									
-									
 $activemode = "";
 if($activity_mode != '') 
 	$activemode = "&activity_mode=".$activity_mode;
@@ -200,17 +203,47 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 {
 	//split the string and store in an array
 	$storearray = explode (";",$_REQUEST['contactidlist']);
+	$del_sql = "delete from vtiger_cntactivityrel where activityid=?";
+	$adb->pquery($del_sql, array($record));
 	foreach($storearray as $id)
 	{
 		if($id != '')
 		{
 			$record = $focus->id;
-			$sql = "insert into vtiger_cntactivityrel values (".$id.",".$record.")";
-			$adb->query($sql);
+			$sql = "insert into vtiger_cntactivityrel values (?,?)";
+			$adb->pquery($sql, array($id, $record));
+			if(!empty($heldevent_id)) {
+				$sql = "insert into vtiger_cntactivityrel values (?,?)";
+				$adb->pquery($sql, array($id, $heldevent_id));
+			}
 		}
 	}
 }
 
+//to delete contact account relation while editing event
+if(isset($_REQUEST['deletecntlist']) && $_REQUEST['deletecntlist'] != '' && $_REQUEST['mode'] == 'edit')
+{
+	//split the string and store it in an array
+	$storearray = explode (";",$_REQUEST['deletecntlist']);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$record = $focus->id;
+			$sql = "delete from vtiger_cntactivityrel where contactid=? and activityid=?";
+			$adb->pquery($sql, array($id, $record));
+		}
+	}
+
+}
+
+//to delete activity and its parent table relation
+if(isset($_REQUEST['del_actparent_rel']) && $_REQUEST['del_actparent_rel'] != '' && $_REQUEST['mode'] == 'edit')
+{
+	$parnt_id = $_REQUEST['del_actparent_rel'];
+	$sql= 'delete from vtiger_seactivityrel where crmid=? and activityid=?';
+	$adb->pquery($sql, array($parnt_id, $record));
+}
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	$view=$_REQUEST['view'];
@@ -239,6 +272,5 @@ if($_REQUEST['start'] !='')
 if($_REQUEST['maintab'] == 'Calendar')
 	header("Location: index.php?action=".$return_action."&module=".$return_module."&view=".$view."&hour=".$hour."&day=".$day."&month=".$month."&year=".$year."&record=".$return_id."&viewOption=".$viewOption."&subtab=".$subtab."&parenttab=$parenttab");
 else
-	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab");
-
+	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
 ?>

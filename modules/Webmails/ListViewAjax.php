@@ -34,7 +34,6 @@ global $current_user;
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -48,7 +47,7 @@ $MailBox = new MailBox($mailbox);
 $mods = parsePHPModules();
 
 if(!$MailBox->mbox || !isset($mods["imap"]) || $mods["imap"] == "") {
-	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+	echo "<center><font color='red'><h3>".$mod_strings['LBL_CONFIGURE_MAIL_SETTINGS']."</h3></font></center>";
 	exit();
 }
 
@@ -57,7 +56,7 @@ $degraded_service='false';
 if($MailBox->mail_protocol == "imap" || $MailBox->mail_protocol == "pop3")
 	$degraded_service='true';
 
-$save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
+$save_path=$root_directory.'modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
 // Get the list of mails for this mailbox
@@ -97,9 +96,9 @@ if (is_array($overview))
         {
                 $mails[$val->msgno] = $val;
                 $hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);
-                $val->from = utf8_decode(imap_utf8(addslashes($val->from)));
-                $val->to = utf8_decode(imap_utf8(addslashes($val->to)));
-                $val->subject = utf8_decode(imap_utf8($val->subject));
+                $val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
+                $val->to = utf8_decode(utf8_encode(imap_utf8(addslashes($val->to))));
+                $val->subject = utf8_decode(utf8_encode(imap_utf8($val->subject)));
 		$to = str_replace("<",":",$val->to);
 		$to_list = str_replace(">","",$to);
 		$from = str_replace("<",":",$val->from);
@@ -209,7 +208,7 @@ if (is_array($list)) {
 			if($tmpval[0] != ".")
 			{
 				if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-				$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li style="padding-left:0px;"><img src="themes/'.$theme.'/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($unread_msgs > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 				else
@@ -223,7 +222,7 @@ if (is_array($list)) {
 			{
 				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-				$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li ><img src="themes/'.$theme.'/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($box->unseen > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 				else

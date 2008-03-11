@@ -42,7 +42,6 @@ global $theme;
 global $currentModule;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -54,11 +53,33 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 }
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
+//Added for multi select check box for contacts and leads in Campaigns related lists..
+//Alter the $related_array and check the selected item on previous page.
+foreach($related_array as $mod_key=>$mod_val)
+{
+        if($mod_key == "Contacts" || $mod_key == "Leads")
+        {
+                $rel_checked=$_REQUEST[$mod_key.'_all'];
+                $rel_check_split=explode(";",$rel_checked);
+                if (is_array($mod_val))
+                {
+                        $mod_val["checked"]=array();
+                        foreach($mod_val['entries'] as $key=>$val)
+                        {
+                                if(in_array($key,$rel_check_split))
+                                        $related_array[$mod_key]["checked"][$key] = 'checked';
+                                else
+                                        $related_array[$mod_key]["checked"][$key] = '';
+                        }
+                }
+        }
+}
+
 $smarty->assign("RELATEDLISTS", $related_array);
 
 /* To get Contacts CustomView -START */
-$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Contacts');
-$result = $adb->query($sql);
+$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
+$result = $adb->pquery($sql, array(getTabid('Contacts')));
 $chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
 while($cvrow=$adb->fetch_array($result))
 {
@@ -69,8 +90,8 @@ $smarty->assign("CONTCVCOMBO",$chtml);
 /* To get Contacts CustomView -END */
 
 /* To get Leads CustomView -START */
-$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Leads');
-$result = $adb->query($sql);
+$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
+$result = $adb->pquery($sql, array(getTabid('Leads')));
 $lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
 while($cvrow=$adb->fetch_array($result))
 {
@@ -79,7 +100,8 @@ while($cvrow=$adb->fetch_array($result))
 $lhtml .= "</select>";
 $smarty->assign("LEADCVCOMBO",$lhtml);
 /* To get Leads CustomView -END */
-
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

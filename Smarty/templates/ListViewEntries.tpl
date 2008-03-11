@@ -18,7 +18,13 @@
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
-     <input name="allids" type="hidden" value="{$ALLIDS}">
+     <input name="action" type="hidden">
+     <input name="where_export" type="hidden" value="{php} echo to_html($_SESSION['export_where']);{/php}">
+     <input name="step" type="hidden">
+     <input name="allids" type="hidden" id="allids" value="{$ALLIDS}">
+     <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
+     <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
+     <input name="current_page_boxes" id="current_page_boxes" type="hidden" value="{$CURRENT_PAGE_BOXES}">
 				<!-- List View Master Holder starts -->
 				<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 				<tr>
@@ -33,10 +39,12 @@
                                              <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
-                                        {elseif $button_check eq 's_cmail'}
+					{elseif $button_check eq 's_cmail'}
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					{elseif $button_check eq 'mailer_exp'}
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
 					{elseif $button_check eq 'c_owner'}
 						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
 						     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
@@ -60,7 +68,7 @@
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
+                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
                             {if $ALL eq 'All'}
 							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
 							<span class="small">|</span>
@@ -88,7 +96,7 @@
 			<table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small">
 			<!-- Table Headers -->
 			<tr>
-            <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+            <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
  			<td class="lvtCol">{$header}</td>
 				{/foreach}
@@ -96,7 +104,7 @@
 			<!-- Table Contents -->
 			{foreach item=entity key=entity_id from=$LISTENTITY}
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-			<td width="2%"><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick="check_object(this)"></td>
 			{foreach item=data from=$entity}	
 			<td>{$data}</td>
 	        {/foreach}
@@ -194,6 +202,8 @@
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					 {elseif $button_check eq 'mailer_exp'}
+                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
 					{elseif $button_check eq 'c_owner'}
 				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
                                                      <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>

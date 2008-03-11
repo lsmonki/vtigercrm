@@ -9,7 +9,6 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 
 global $theme, $app_strings, $mod_strings;
 $theme_path="themes/".$theme."/";

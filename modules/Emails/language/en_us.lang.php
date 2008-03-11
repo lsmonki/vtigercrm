@@ -107,7 +107,6 @@ $mod_strings = Array(
 //Added for 4GA
 'Date & Time Sent'=>'Date & Time Sent',
 'Sales Enity Module'=>'Sales Enity Module',
-'Activtiy Type'=>'Activtiy Type',
 'Related To'=>'Related To',
 'Assigned To'=>'Assigned To',
 'Subject'=>'Subject',
@@ -142,7 +141,6 @@ $mod_strings = Array(
 'SELECT_EMAIL'=>'Select Email IDs',
 'Sender'=>'Sender',
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'Your Incoming Mail Server is not configured',
-'LBL_MAILSELECT_INFO'=>'has the follwoing Email IDs associated.Please Select the Email IDs to which,the mail should be sent',
 'LBL_MAILSELECT_INFO1'=>'The following Email ID types are associated to the selected',
 'LBL_MAILSELECT_INFO2'=>'Select the Email ID types to which,the email should be sent',
 'LBL_MULTIPLE'=>'Multiple',
@@ -164,7 +162,6 @@ $mod_strings = Array(
 'LBL_CONF_MAILSERVER_ERROR'=>'Please configure your outgoing mailserver under Settings ---> Outgoing Server link',
 'LBL_VTIGER_EMAIL_CLIENT'=>'vtiger Webmail Client',
 'LBL_MAILSELECT_INFO3'=>'You don\'t have permission to view email id(s) of the selected Record(s).',
-'LBL_NO_RECORDS' => 'No Records in this folder',
 //Added  for script alerts
 'FEATURE_AVAILABLE_INFO' => 'This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait f
 or an update!',
@@ -174,6 +171,11 @@ or an update!',
 'LBL_EXCEED_MAX' => 'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than ',
 'LBL_BYTES' => ' bytes',
 'LBL_CHECK_USER_MAILID' => 'Please check the current user mailid.It should be a valid mailid to send Emails',
+
+// Added/Updated for vtiger CRM 5.0.4
+'Activity Type'=>'Activity Type',
+'LBL_MAILSELECT_INFO'=>'has the following Email IDs associated.Please Select the Email IDs to which,the mail should be sent',
+'LBL_NO_RECORDS' => 'No Records Found',
 
 );
 

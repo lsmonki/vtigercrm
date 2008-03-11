@@ -21,10 +21,14 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $mod_strings,$app_strings,$theme,$currentModule;
+global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 $focus = new Leads();
 $smarty = new vtigerCRM_Smarty;
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->id = $_REQUEST['record'];
@@ -59,7 +63,11 @@ $smarty->assign("APP", $app_strings);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$lead_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$lead_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$lead_name);
 
 if(isset($cust_fld))
 {
@@ -91,8 +99,6 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Lead');
 
-
-$smarty->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
 //create the html select code here and assign it
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));

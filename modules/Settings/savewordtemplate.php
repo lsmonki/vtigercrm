@@ -16,7 +16,12 @@ require_once('include/utils/utils.php');
 
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 // Arbitrary File Upload Vulnerability fix - Philip
-$binFile =  preg_replace('/\s+/', '_', $_FILES['binFile']['name']);
+if(isset($_REQUEST['binFile_hidden'])) {
+	$file = $_REQUEST['binFile_hidden'];
+} else {
+	$file = $_FILES['binFile']['name'];
+}
+$binFile =  preg_replace('/\s+/', '_', $file);
     $ext_pos = strrpos($binFile, ".");
 
         $ext = substr($binFile, $ext_pos + 1);
@@ -26,12 +31,13 @@ $binFile =  preg_replace('/\s+/', '_', $_FILES['binFile']['name']);
                 $binFile .= ".txt";
         }
 $_FILES["binFile"]["name"] = $binFile;
-$strDescription = urlencode(($_REQUEST['txtDescription']));
+$strDescription = $_REQUEST['txtDescription'];
 // Vulnerability fix ends
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
-  $filename = basename($binFile);
+  //$filename = basename($binFile);
+  $filename = ltrim(basename(" ".$binFile)); //allowed filenames start with UTF-8 characters 
   $filetype= $_FILES['binFile']['type'];
   $filesize = $_FILES['binFile']['size'];
 
@@ -64,7 +70,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		
 		$ret_module = $_REQUEST['return_module'];
 		//$ret_module = $_REQUEST['target_module'];
-		$parent_type;		
+		$parent_type = '';		
 		if($_REQUEST['return_module'] == 'Leads')
 		{
 			$parent_type = 'Lead';
@@ -87,15 +93,14 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		{
 			if($result!=false && $savefile=="true")
 			{
-			$module = $_REQUEST['target_module'];
-			$sql = "INSERT INTO vtiger_wordtemplates ";
-			$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
-			$sql .= "VALUES (".$genQueryId.",'".$module."',".$adb->formatString('vtiger_wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
-			$sql .= "'$filename', '$filesize', '$filetype')";
+				$module = $_REQUEST['target_module'];
+				$sql = "INSERT INTO vtiger_wordtemplates ";
+				$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) values (?,?,?,?,?,?,?,?,?)";
+				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), $parent_type, $adb->getEmptyBlob(false), $strDescription, $filename, $filesize, $filetype);
+				$result = $adb->pquery($sql, $params);
 
-			$result = $adb->query($sql);
-			   $result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
-			   deleteFile($uploaddir,$filename);
+				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='". mysql_real_escape_string($filename) ."'",$data);
+			   	deleteFile($uploaddir,$filename);
 			   	header("Location: index.php?action=listwordtemplates&module=Settings&parenttab=Settings");	
 			}
 		   	elseif($savefile=="false")

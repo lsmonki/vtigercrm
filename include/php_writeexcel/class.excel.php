@@ -28,7 +28,7 @@ class Excel_Workbook extends writeexcel_workbook {
 /*		if ($pref_lang == "ru") {
 		    header ('<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">');
 		} else {
-		    header ('<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">');
+		    header ('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">');
 		}
 */      header("Content-type: application/x-msexcel");
         header("Content-Disposition: inline; filename=$filename");

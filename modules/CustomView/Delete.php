@@ -19,8 +19,8 @@ $parenttab = $_REQUEST["parenttab"];
 
 if(isset($cvid) && $cvid != '')
 {
-	$deletesql = "delete from vtiger_customview where cvid =".$cvid;
-	$deleteresult = $adb->query($deletesql);
+	$deletesql = "delete from vtiger_customview where cvid =?";
+	$deleteresult = $adb->pquery($deletesql, array($cvid));
 	$_SESSION['lvs'][$module]["viewname"] = '';
 }
 if(isset($smodule) && $smodule != '')

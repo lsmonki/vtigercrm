@@ -11,7 +11,6 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
-<script language="javascript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
@@ -48,6 +47,8 @@
 							<input type="hidden" name="return_action" value="ListView"  style="margin:0px">
 							<input type="hidden" name="return_id" style="margin:0px">
 							<input type="hidden" name="forumDisplay" style="margin:0px">
+                                                        <input type="hidden" name="hour_format" id="hour_format" value="{$HOUR_FORMAT}" style="margin:0px">
+                                                        <input type="hidden" name="start_hour" id="start_hour" value="{$START_HOUR}" style="margin:0px">
 							{if $CATEGORY eq 'Settings'}
 							<input type="hidden" name="parenttab" value="{$PARENTTAB}" style="margin:0px">
 							{/if}	
@@ -119,6 +120,7 @@
 										   {assign var=keyval value=$data.value}
 										   {assign var=keytblname value=$data.tablename}
 										   {assign var=keyfldname value=$data.fldname}
+										   {assign var=keyfldid value=$data.fldid}
 										   {assign var=keyoptions value=$data.options}
 										   {assign var=keysecid value=$data.secid}
 										   {assign var=keyseclink value=$data.link}
@@ -168,11 +170,33 @@
 									</div>
 								
 									<br>
+									<!-- Tag Cloud Display -->
+									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<tr>
+										<td class="big">
+										<strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+										</td>
+										<td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('tagcloud_disp');"></td>
+									</tr>
+									</table>
+									<div style="float: none; display: none;" id="tagcloud_disp">
+									<table border="0" cellpadding="5" cellspacing="0" width="100%">
+										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.LBL_TAG_CLOUD}</td>
+											{if $TAGCLOUDVIEW eq 'true'}
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td>
+                                                                                                {else}
+												<td class="dvtCellInfo" align="center" width="5%">
+												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td>
+											{/if}
+										</tr>
+                                                                        </table>                                                                                                                   </div>
+                                                                                                                                                                                                   <br>
 									<!-- My Groups -->
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">	
-										<strong>6. {$UMOD.LBL_MY_GROUPS}</strong>
+										<strong>7. {$UMOD.LBL_MY_GROUPS}</strong>
 										 </td>
 										 <td class="small" align="right">
 										{if $GROUP_COUNT > 0}
@@ -193,7 +217,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 										<tr>
 										 <td class="big">	
-										<strong>7. {$UMOD.LBL_LOGIN_HISTORY}</strong>
+										<strong>8. {$UMOD.LBL_LOGIN_HISTORY}</strong>
 										 </td>
 										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
 										</tr>

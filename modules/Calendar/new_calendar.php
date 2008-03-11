@@ -9,10 +9,9 @@
 *
  ********************************************************************************/
 
-global $theme,$current_user;
+global $theme,$current_user,$app_strings;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
-require_once($theme_path."layout_utils.php");
 require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
 $mysel= $_REQUEST['view'];
@@ -62,7 +61,7 @@ if ( isset($_REQUEST['year']))
 {
         if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
         {
-                print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+		print("<font color='red'>".$app_strings['LBL_CAL_LIMIT_MSG']."</font>");
                 exit;
         }
         $date_data['year'] = $_REQUEST['year'];
@@ -82,8 +81,10 @@ if(empty($date_data))
 	);
 	
 }
-$calendar_arr['calendar'] = new Calendar($mysel,$date_data); 
-if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
+$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
+if($current_user->hour_format != '') 
+	$calendar_arr['calendar']->hour_format=$current_user->hour_format;
+if ($viewBox == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year'))
 {
         $calendar_arr['calendar']->add_Activities($current_user);
 }

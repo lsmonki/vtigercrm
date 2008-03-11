@@ -18,8 +18,8 @@ if(isset($_REQUEST[record]))
 	if(!isset($_REQUEST[starred])) $starred = 0;
 	$starred = $_REQUEST[starred];
 	
-	$sSQL = "update vtiger_rss set starred=".$starred." where vtiger_rssid=".$recordid;
-	$result = $adb->query($sSQL);
+	$sSQL = "update vtiger_rss set starred=? where vtiger_rssid=?";
+	$result = $adb->pquery($sSQL, array($starred, $recordid));
 }
 header("Location: index.php?module=Rss&action=index");
 ?>

@@ -96,7 +96,7 @@ if(isset($_REQUEST['change_status']) && $_REQUEST['change_status']=='true')
 }
 elseif(isset($_REQUEST['change_owner']) && $_REQUEST['change_owner']=='true')
 {
-	$result=$adb->query("select * from vtiger_users");
+	$result=$adb->pquery("select * from vtiger_users", array());
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
 		$useridlist[$i]=$adb->query_result($result,$i,'id');

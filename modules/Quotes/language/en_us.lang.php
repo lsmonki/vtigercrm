@@ -173,6 +173,13 @@ $mod_strings = Array(
 'BlueDart'=>'BlueDart',
 'Sales Tax'=>'Sales Tax',                       
 
+//Added for Reports (5.0.4)
+'Tax Type'=>'Tax Type',
+'Discount Percent'=>'Discount Percent',
+'Discount Amount'=>'Discount Amount',
+'Terms & Conditions'=>'Terms & Conditions',
+'Adjustment'=>'Adjustment',
+'S&H Amount'=>'S&H Amount',
 
 );
 

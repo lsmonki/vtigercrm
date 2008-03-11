@@ -86,7 +86,9 @@ class SugarBean
 		$firstPass = 0;
 		$insKeys = '(';
 		$insValues = '(';
+		$insParams = array();
 		$updKeyValues='';
+		$updParams = array();
 		foreach($this->column_fields as $field)
 		{
 			// Do not write out the id vtiger_field on the update statement.
@@ -121,28 +123,31 @@ class SugarBean
 				*/
 				if($isUpdate)
 				{
-					$updKeyValues = $updKeyValues.$field."=".$this->db->formatString($this->table_name,$field,from_html($this->$field,$isUpdate));
+					$updKeyValues = $updKeyValues.$field."=?";
+					array_push($updParams, from_html($this->$field,$isUpdate));
 				}
 				else
 				{
 					$insKeys = $insKeys.$field;
-					$insValues = $insValues.$this->db->formatString($this->table_name,$field,from_html($this->$field,$isUpdate));
+					$insValues = $insValues.'?';
+					array_push($insParams, from_html($this->$field,$isUpdate));
 				}
 			}
 		}
 
 		if($isUpdate)
 		{
-			$query = $query.$updKeyValues." WHERE ID = '$this->id'";
+			$query = $query.$updKeyValues." WHERE ID = ?";
+			array_push($updParams, $this->id);
 			$this->log->info("Update $this->object_name: ".$query);
+			$this->db->pquery($query, $updParams, true);
 		}
 		else
 		{
 			$query = $query.$insKeys.") VALUES ".$insValues.")";
-	        	$this->log->info("Insert: ".$query);
+	        $this->log->info("Insert: ".$query);
+			$this->db->pquery($query, $insParams, true);
 		}
-
-		$this->db->query($query, true);
 
 		// If this is not an update then store the id for later.
 		if(!$isUpdate && !$this->new_schema && !$this->new_with_id)
@@ -215,9 +220,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$query = "SELECT * FROM $this->table_name ";
 		
 		if($where != "")
-			$query .= "where ($where) AND deleted=0";
+			$query .= " where ($where) AND deleted=0";
 		else
-			$query .= "where deleted=0";
+			$query .= " where deleted=0";
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
@@ -255,9 +260,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$query = "SELECT * FROM $this->table_name ";
 		
 		if($where != "")
-			$query .= "where ($where) AND deleted=0";
+			$query .= " where ($where) AND deleted=0";
 		else
-			$query .= "where deleted=0";
+			$query .= " where deleted=0";
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
@@ -346,8 +351,8 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	*/
 	function mark_deleted($id)
 	{
-		$query = "UPDATE $this->table_name set deleted=1 where id='$id'";
-		$this->db->query($query, true,"Error marking record deleted: ");
+		$query = "UPDATE $this->table_name set deleted=1 where id=?";
+		$this->db->pquery($query, array($id), true,"Error marking record deleted: ");
 
 		$this->mark_relationships_deleted($id);
 

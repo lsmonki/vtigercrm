@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Rss/Rss.php');
@@ -21,9 +20,9 @@ if(isset($_REQUEST["record"]))
 {
 	global $adb;
 	$query = 'update vtiger_rss set starred=0';
-	$adb->query($query);
-	$query = 'update vtiger_rss set starred=1 where rssid ='.$_REQUEST["record"]; 
-	$adb->query($query);
+	$adb->pquery($query, array());
+	$query = 'update vtiger_rss set starred=1 where rssid =?'; 
+	$adb->pquery($query, array($_REQUEST["record"]));
 	echo $_REQUEST["record"];
 }
 elseif(isset($_REQUEST["rssurl"]))

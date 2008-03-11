@@ -507,7 +507,7 @@ $cvadvfilters = Array(
 			Array(
                           Array('columnname'=>'vtiger_purchaseorder:postatus:postatus:PurchaseOrder_Status:V',
                                 'comparator'=>'e',
-                                 'value'=>'Recieved Shipment'
+                                 'value'=>'Received Shipment'
                                  )
 			 ),
 
@@ -566,9 +566,9 @@ function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 	if($genCVid != "")
 	{
 
-		$customviewsql = "insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype)";
-		$customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
-		$customviewresult = $adb->query($customviewsql);
+		$customviewsql = "insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(?,?,?,?,?)";
+		$customviewparams = array($genCVid, $viewname, $setdefault, $setmetrics, $cvmodule);
+		$customviewresult = $adb->pquery($customviewsql, $customviewparams);
 	}
 	return $genCVid;
 }
@@ -584,9 +584,9 @@ function insertCvColumns($CVid,$columnslist)
 	{
 		for($i=0;$i<count($columnslist);$i++)
 		{
-			$columnsql = "insert into vtiger_cvcolumnlist (cvid,columnindex,columnname)";
-			$columnsql .= " values (".$CVid.",".$i.",'".$columnslist[$i]."')";
-			$columnresult = $adb->query($columnsql);
+			$columnsql = "insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values(?,?,?)";
+			$columnparams = array($CVid, $i, $columnslist[$i]);
+			$columnresult = $adb->pquery($columnsql, $columnparams);
 		}
 	}
 }
@@ -604,12 +604,9 @@ function insertCvStdFilter($CVid,$filtercolumn,$filtercriteria,$startdate,$endda
 	global $adb;
 	if($CVid != "")
 	{
-		$stdfiltersql = "insert into vtiger_cvstdfilter(cvid,columnname,stdfilter,startdate,enddate)";
-		$stdfiltersql .= " values (".$CVid.",'".$filtercolumn."',";
-		$stdfiltersql .= "'".$filtercriteria."',";
-		$stdfiltersql .= "'".$startdate."',";
-		$stdfiltersql .= "'".$enddate."')";
-		$stdfilterresult = $adb->query($stdfiltersql);
+		$stdfiltersql = "insert into vtiger_cvstdfilter(cvid,columnname,stdfilter,startdate,enddate) values (?,?,?,?,?)";
+		$stdfilterparams = array($CVid, $filtercolumn, $filtercriteria, $startdate, $enddate);
+		$stdfilterresult = $adb->pquery($stdfiltersql, $stdfilterparams);
 	}
 }
 
@@ -626,11 +623,9 @@ function insertCvAdvFilter($CVid,$filters)
 	{
 		foreach($filters as $i=>$filter)
 		{
-			$advfiltersql = "insert into vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value)";
-			$advfiltersql .= " values (".$CVid.",".$i.",'".$filter['columnname']."',";
-			$advfiltersql .= "'".$filter['comparator']."',";
-			$advfiltersql .= "'".$filter['value']."')";
-			$advfilterresult = $adb->query($advfiltersql);
+			$advfiltersql = "insert into vtiger_cvadvfilter(cvid,columnindex,columnname,comparator,value) values (?,?,?,?,?)";
+			$advfilterparams = array($CVid, $i, $filter['columnname'], $filter['comparator'], $filter['value']);
+			$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);
 		}
 	}
 }

@@ -52,7 +52,7 @@ $output ='<div id="DeleteLay" class="layerPopup">
 	     
 		global $adb;	
          	$sql = "select * from vtiger_users";
-	        $result = $adb->query($sql);
+	        $result = $adb->pquery($sql, array());
          	$temprow = $adb->fetch_array($result);
          	do
          	{

@@ -11,21 +11,22 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
-$rolename = addslashes($_REQUEST['roleName']);
+$rolename = $_REQUEST['roleName'];
 $mode = $_REQUEST['mode'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
 	if($mode != 'edit')
 	{
-		$query = 'select rolename from vtiger_role where rolename="'.$rolename.'"';
+		$query = 'select rolename from vtiger_role where rolename=?';
+		$params = array($rolename);
 	}
 	else
 	{
 		$roleid=$_REQUEST['roleid'];
-		$query = 'select rolename from vtiger_role where rolename="'.$rolename.'" and roleid !="'.$roleid.'"';
-
+		$query = 'select rolename from vtiger_role where rolename=? and roleid !=?';
+		$params = array($rolename, $roleid);
 	}
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, $params);
 	if($adb->num_rows($result) > 0)
 	{
 		echo 'Role name already exists';
@@ -53,6 +54,10 @@ elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	$profile_array = explode(';',$selected_col_string);
 	//Inserting into vtiger_role Table
 	$roleId = createRole($rolename,$parentRoleId,$profile_array);
+	if($roleId != '')
+	{
+		insertRole2Picklist($roleId,$parentRoleId);
+	}
 	 	
 }
 

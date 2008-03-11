@@ -93,8 +93,27 @@ function SaveSite(id)
 }
 function setSite(oUrllist)
 {
-	var url = oUrllist.options[oUrllist.options.selectedIndex].value;
-	document.getElementById('locatesite').src = url;
+	//var url = oUrllist.options[oUrllist.options.selectedIndex].value;
+	var id = oUrllist.options[oUrllist.options.selectedIndex].value;
+	document.getElementById('locatesite').src = mysitesArray[id];
+}
+//added as an enhancement to set default value
+function defaultMysites(oSelectlist)
+{
+	var id = $("urllist").value;
+	$("status").style.display="block";
+	 new Ajax.Request(
+        	'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                	method: 'post',
+                        postBody:'action=PortalAjax&mode=ajax&file=Save&module=Portal&check=true&passing_var='+id,
+                        onComplete: function(response) {
+					//alert(response.responseText);
+					$("status").style.display="none";
+                        }
+                }
+	);
+	
 }
 
 var oRegex = new Object() ;

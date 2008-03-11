@@ -31,7 +31,7 @@ function hndCancel(valuespanid,textareapanid,fieldlabel)
 	  else		
 	  	getObj(globaltxtboxid).checked = false; 
   }
-  else if(globaluitype != '53')	  
+  else if(globaluitype != '53' && globaluitype != '33')	  
 	  getObj(globaltxtboxid).value = globaltempvalue; 
   globaltempvalue = '';
   itsonview=false;
@@ -100,9 +100,11 @@ function handleEdit()
      return false;
 }
 
-function trim(str)
-{
-	return(str.replace(/\s+$/,''));
+//Asha: Function changed to trim both leading and trailing spaces.
+function trim(str) {
+	var s = str.replace(/\s+$/,'');
+	s = s.replace(/^\s+/,'');
+	return s;
 }
 
 var genUiType = "";
@@ -131,20 +133,38 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		else if(assign_type_G == true)
 		{
 			var txtBox= 'txtbox_G'+fieldLabel;
-			var group_name = $(txtBox).options[$(txtBox).selectedIndex].text; 
+			var group_name = encodeURIComponent($(txtBox).options[$(txtBox).selectedIndex].text); 
 			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
 		}
 
-	}else if(globaluitype == 33)
+	}
+	else if(uitype == 15 || uitype == 16 || uitype == 111)
+	{	
+		var txtBox= "txtbox_"+ fieldLabel;
+		var not_access =document.getElementById(txtBox);
+                 pickval = not_access.options[not_access.selectedIndex].value;
+			if(pickval == alert_arr.LBL_NOT_ACCESSIBLE)
+			{
+				document.getElementById(editArea).style.display='none';
+				document.getElementById(dtlView).style.display='block';
+     				itsonview=false; //to show the edit link again after hiding the editdiv.
+				return false;
+			}
+	}
+	else if(globaluitype == 33)
 	{
 	  var txtBox= "txtbox_"+ fieldLabel;
 	  var oMulSelect = $(txtBox);
 	  var r = new Array();
+	  var notaccess_label = new Array();
 	  for (iter=0;iter < oMulSelect.options.length ; iter++)
 	  {
-      if (oMulSelect.options[iter].selected)
-        r[r.length] = oMulSelect.options[iter].value;
-      }
+      	      if (oMulSelect.options[iter].selected)
+		{
+			r[r.length] = oMulSelect.options[iter].value;
+			notaccess_label[notaccess_label.length] = oMulSelect.options[iter].text;
+		}
+      	  }
 	}else
 	{
 		var txtBox= "txtbox_"+ fieldLabel;
@@ -168,7 +188,21 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	{
 		if(document.getElementById(txtBox).checked == true)
 		{
-			tagValue = "1";
+			if(module == "Contacts")
+			{
+				var obj = getObj("email");
+				if((fieldName == "portal") && (obj == null || obj.value == ''))
+				{
+					tagValue = "0";
+					alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+					return false;
+				}
+				else
+					tagValue = "1";
+
+			}
+			else
+				tagValue = "1";
 		}else
 		{
 			tagValue = "0";
@@ -194,11 +228,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		tagValue = trim(document.getElementById(txtBox).value);
 		if(module == "Contacts")
                 {
-                        var port_obj = getObj('portal').checked;
-                        if(fieldName == "email" && tagValue == '' && port_obj == true)
+			if(getObj('portal'))
                         {
-                                alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                return false;
+                                var port_obj = getObj('portal').checked;
+                                if(fieldName == "email" && tagValue == '' && port_obj == true)
+                                {
+                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        return false;
+                                }
                         }
                 }
 	}
@@ -231,9 +268,22 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         }
                 }
             );
+	tagValue = get_converted_html(tagValue);
 	if(uitype == '13' || uitype == '104')
 	{
-		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
+		var temp_fieldname = 'internal_mailer_'+fieldName;
+		if($(temp_fieldname))
+		{
+			var mail_chk_arr = $(temp_fieldname).innerHTML.split("####");
+			var fieldId = mail_chk_arr[0];
+			var internal_mailer_flag = mail_chk_arr[1];
+			if(internal_mailer_flag == 1)
+				var email_link = "<a href=\"javascript:InternalMailer("+crmId+","+fieldId+",'"+fieldName+"','"+module+"','record_id');\">"+tagValue+"&nbsp;</a>";
+			else
+				var email_link = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
+		}
+		
+		getObj(dtlView).innerHTML = email_link;
 		if(fieldName == "email" || fieldName == "email1"){
 			var priEmail = getObj("pri_email");
 			if(priEmail)
@@ -282,21 +332,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	{
 		if(tagValue == '1')
 		{
-			if(module == "Contacts")
-                        {
-                                var obj = getObj("email");
-                                if((fieldName == "portal") && (obj.value == ''))
-                                {
-                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-                                        return false;
-
-                                }
-                                else
-                                        getObj(dtlView).innerHTML = alert_arr.YES;
-
-                        }
-                        else
-                                getObj(dtlView).innerHTML = alert_arr.YES;
+			getObj(dtlView).innerHTML = alert_arr.YES;
 		}else
 		{
 			getObj(dtlView).innerHTML = alert_arr.NO;
@@ -364,26 +400,38 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = popObj.value;
 		}
-	}else if(uitype == '33')
+	}
+	else if(uitype == '111' || uitype == '15' || uitype == '16' )
+        {
+                        var notaccess =document.getElementById(txtBox);
+                        tagValue = notaccess.options[notaccess.selectedIndex].text;
+			if(tagValue == alert_arr.LBL_NOT_ACCESSIBLE)
+				getObj(dtlView).innerHTML = "<font color='red'>"+get_converted_html(tagValue)+"</font>";
+			else
+				getObj(dtlView).innerHTML = get_converted_html(tagValue);
+        }
+	else if(uitype == '33')
   	{
 		/* Wordwrap a long list of multi-select combo box items at the
                  * item separator string */
                 var DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
 
                 var lineLength = 0;
-                for(var i=0; i < r.length; i++) {
-                        lineLength += r[i].length + 2; // + 2 for item separator string
-                        if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
-                                lineLength = r[i].length + 2; // reset.
-                            r[i] = '<br/>&nbsp;' + r[i]; // prepend newline.
-                        }
+                for(var i=0; i < notaccess_label.length; i++) {
+                        lineLength += notaccess_label[i].length + 2; // + 2 for item separator string
+                        /*if(lineLength > DETAILVIEW_WORDWRAP_WIDTH && i > 0) {
+                                lineLength = notaccess_label[i].length + 2; // reset.
+                            	notaccess_label[i] = '<br/>&nbsp;' + notaccess_label[i]; // prepend newline.
+                        }*/
+			notaccess_label[i] = get_converted_html(notaccess_label[i]);
                         // Prevent a browser splitting multiword items:
-                        r[i] = r[i].replace(/ /g, '&nbsp;');
+                        //notaccess_label[i] = notaccess_label[i].replace(/ /g, '&nbsp;');
+                        notaccess_label[i] = notaccess_label[i].replace(alert_arr.LBL_NOT_ACCESSIBLE,"<font color='red'>"+alert_arr.LBL_NOT_ACCESSIBLE+"</font>"); // for Not accessible label.
                 }
                 /* Join items with item separator string (which must match string in DetailViewUI.tpl,
                  * EditViewUtils.php and CRMEntity.php)!!
                  */
-       		getObj(dtlView).innerHTML = r.join(", ");
+       		getObj(dtlView).innerHTML = notaccess_label.join(", ");
 	}else if(uitype == '19'){
 		var desc = tagValue.replace(/(^|[\n ])([\w]+?:\/\/.*?[^ \"\n\r\t<]*)/g, "$1<a href=\"$2\" target=\"_blank\">$2</a>");
 		desc = desc.replace(/(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:\/[^ \"\t\n\r<]*)?)/g, "$1<a href=\"http://$2\" target=\"_blank\">$2</a>");
@@ -400,15 +448,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	itsonview=false;
 }
 
-// Replace the % sign with %25 to make sure the AJAX url is going wel. 
-function escapeAll(tagValue) 
-{ 
- 	return escape(tagValue.replace(/%/g, '%25')); 
-}
- 
 function SaveTag(tagfield,crmId,module)
 {
 	var tagValue = $(tagfield).value;
+	tagValue = encodeURIComponent(tagValue);
 	$("vtbusy_info").style.display="inline";
 	new Ajax.Request(
 		'index.php',
@@ -455,4 +498,3 @@ function setSelectValue(fieldLabel)
 
 	oHdTxtBox.value = oSelCombo.options[oSelCombo.selectedIndex].text;
 }
-

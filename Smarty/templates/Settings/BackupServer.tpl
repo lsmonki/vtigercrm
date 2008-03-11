@@ -87,12 +87,12 @@
 							{if $BKP_SERVER_MODE neq 'edit'}
 							<td class="small" align=right>
 								<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-								<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="clearBackupServer();" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
+								<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="document.tandc.enable_backup.checked=false;clearBackupServer(this);" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
 							</td>
 							{else}
 							<td class="small" align=right>
 								<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()">&nbsp;&nbsp;
-							    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+							    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="backupenable_check()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 							</td>
 							{/if}
 						</tr>
@@ -130,53 +130,85 @@ function validate() {
 		if (!emptyCheck("server_username","ftp User Name","text")) return false
 				if (!emptyCheck("server_password","ftp Password","text")) return false
 			return true;
-
 }
 
-function clearBackupServer()
+function clearBackupServer(Obj)
 {
-new Ajax.Request('index.php',
-                        {queue: {position: 'end', scope: 'command'},
-                                method: 'post',
-                                postBody: 'module=Settings&action=SettingsAjax&ajax=true&file=BackupServerConfig&opmode=del',
-                                onComplete: function(response) {
-                                $("BackupServerContents").innerHTML=response.responseText;
-                                }
+	new Ajax.Request('index.php',
+        	{queue: {position: 'end', scope: 'command'},
+                	method: 'post',
+                        postBody: 'module=Settings&action=SettingsAjax&ajax=true&file=BackupServerConfig&opmode=del',
+                        onComplete: function(response) {
+	                        $("BackupServerContents").innerHTML=response.responseText;
                         }
-                );	
+                }
+        );
+	backupenabled(Obj);	
 }
 
 function backupenabled(ochkbox)
 {
+	
 	if(ochkbox.checked == true)
-	{
-		$('bckcontents').style.display='block';
-		var status='enabled';
-		$('view_info').innerHTML = 'Backup Enabled';
-		$('view_info').style.display = 'block';		
-		
-			
-	}
+        {
+                $('bckcontents').style.display='block';
+                var status='enabled';
+                $('view_info').innerHTML = 'Backup Enabled, confirm with the FTP details';
+                $('view_info').style.display = 'block';
+
+                new Ajax.Request('index.php',
+                	{queue: {position: 'end', scope: 'command'},
+                 	       method: 'post',
+                        	postBody: 'module=Settings&action=SettingsAjax&file=SaveEnableBackup&ajax=true&GetBackupDetail=true',
+                        	onComplete: function(response) {
+                                	if(response.responseText.indexOf('FAILURE') > -1)
+                                	{
+                                        	document.location.href = "index.php?module=Settings&parenttab=Settings&action=BackupServerConfig&bkp_server_mode=edit";
+                                        	return false;
+                                	}
+                        	}
+                	}
+                );
+
+
+        }
 	else
 	{
 		$('bckcontents').style.display='none';
-		var status = 'disabled';	
-	     	$('view_info').innerHTML = 'Backup Disabled';
-	     	$('view_info').style.display = 'block';		
-	}
-             $("status").style.display="block";
-	     new Ajax.Request(
-                'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                        method: 'post',
-                        postBody: 'module=Settings&action=SettingsAjax&file=SaveEnableBackup&ajax=true&enable_backup='+status,
-                        onComplete: function(response) {
-                                $("status").style.display="none";
-                        }
-                }
+                var status = 'disabled';
+                $('view_info').innerHTML = 'Backup Disabled';
+                $('view_info').style.display = 'block';
+        }
+	
+	new Ajax.Request('index.php',
+        	{queue: {position: 'end', scope: 'command'},
+        		method: 'post',
+                	postBody: 'module=Settings&action=SettingsAjax&file=SaveEnableBackup&ajax=true&enable_backup='+status,
+                	onComplete: function(response) {
+                		$("status").style.display="none";
+                	}
+        	}
         );
 			
 	setTimeout("hide('view_info')",3000);
+}
+
+function backupenable_check()
+{
+        new Ajax.Request('index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Settings&action=SettingsAjax&file=SaveEnableBackup&ajax=true&GetBackupDetail=true',
+                        onComplete: function(response) {
+                                if(response.responseText.indexOf('FAILURE') > -1)
+                                {
+                                        document.tandc.enable_backup.checked = false;
+                                        backupenabled(document.tandc.enable_backup);
+                                        window.history.back();
+                                }
+                        }
+                }
+	);
 }
 
 </script>

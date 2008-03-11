@@ -11,7 +11,6 @@
 -->*}
 <script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script>
 {literal}
@@ -116,21 +115,40 @@ function validate() {
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>1. {$MOD.LBL_SELECT_MODULE}</strong></td>
+						<td class="big"><strong>1. {$MOD.LBL_SELECT_MODULE} & Role </strong></td>
 						<td class="small" align=right>&nbsp;</td>
 					</tr>
 					</table>
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 						<tr class="small">
-                        	<td width="35%" class="small cellLabel"><strong>{$MOD.LBL_SELECT_CRM_MODULE}</strong></td>
-	                        <td width="65%" class="cellText" >
-					<select name="pickmodule" class="detailedViewTextBox" onChange="changeModule(this);">
+                       			 	<td width="15%" class="small cellLabel"><strong>{$MOD.LBL_SELECT_ROLE} </strong></td>
+				    <td width="28%" class="cellText" >
+						<select name="pickrole" id="pickid" class="detailedViewTextBox" onChange="changeModule();">
+						{foreach key=roleid item=role from=$ROLE_LISTS}
+							{if $SEL_ROLEID eq $roleid}
+							<option value="{$roleid}" selected>{$role}</option>
+							{else}
+							<option value="{$roleid}">{$role}</option>
+							{/if}
+						{/foreach}
+						</select>
+				</td>
+
+                        	<td width="25%" class="small cellLabel"><strong>{$MOD.LBL_SELECT_CRM_MODULE} </strong></td>
+	                        <td width="32%" class="cellText" >
+					<select name="pickmodule" id="pickmodule" class="detailedViewTextBox" onChange="changeModule();">
 					{foreach key=tabid item=module from=$MODULE_LISTS}
+						{if $SEL_MODULE eq $module}
+						<option value="{$module}" selected>{$APP.$module}</option>
+						{else}
 						<option value="{$module}">{$APP.$module}</option>
+						{/if}
 					{/foreach}
 					</select>
 				</td>
+
                       </tr>
+		      
 					</table>
 					<br>
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
@@ -168,16 +186,22 @@ function validate() {
 </tbody>
 </table>
 <div id="editdiv" style="display:block;position:absolute;width:510px;"></div>
+<div id="deletediv"  style="display:block;position:absolute;"></div>
+<div id="transferdiv"  style="display:block;position:absolute;width:300px;z-index:50000000"></div>
 {literal}
 <script>
+
+var selected_values='';
 function SavePickList(fieldname,module,uitype)
 {
+	var oRolePick = $('pickid');
+	var role=oRolePick.options[oRolePick.selectedIndex].value;
+
 	$("status").style.display = "inline";
 	Effect.Puff($('editdiv'),{duration:2});
-	var body = escape($("picklist_values").value);
-
+	var body = escapeAll($("picklist_values").value);
 	new Ajax.Request(
-        	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body+'&uitype='+uitype,
+        	'index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&roleid='+role+'&listarea='+body+'&uitype='+uitype,
 	        {queue: {position: 'end', scope: 'command'},
         		method: 'get',
 		        postBody: null,
@@ -189,15 +213,19 @@ function SavePickList(fieldname,module,uitype)
         	}
 	);
 }
-function changeModule(pickmodule)
+function changeModule()
 {
 	$("status").style.display="inline";
-	var module=pickmodule.options[pickmodule.options.selectedIndex].value;
+	var oModulePick = $('pickmodule')
+	var module=oModulePick.options[oModulePick.selectedIndex].value;
+	var oRolePick = $('pickid');
+	var role=oRolePick.options[oRolePick.selectedIndex].value;
+	
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module='+module,
+                        postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module='+module+'&roleid='+role,
                         onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("picklist_datas").innerHTML=response.responseText;
@@ -207,12 +235,15 @@ function changeModule(pickmodule)
 }
 function fetchEditPickList(module,fieldname,uitype)
 {
+	var oRolePick = $('pickid');
+	var role=oRolePick.options[oRolePick.selectedIndex].value;
+
 	$("status").style.display="inline";
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname+'&uitype='+uitype,
+                        postBody: 'action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname+'&roleid='+role+'&uitype='+uitype,
 			onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("editdiv").innerHTML=response.responseText;
@@ -225,10 +256,13 @@ function fetchEditPickList(module,fieldname,uitype)
 function picklist_validate(mode,fieldname,module,uitype)
 {
 	
-	//alert(trim($("picklist_values").value));
-	
 	var pick_arr=new Array();
 	pick_arr=trim($("picklist_values").value).split('\n');	
+	var noneditpick_arr=new Array();
+	if($('nonedit_pl')){
+	 	noneditpick_arr = trim($("nonedit_pl").innerHTML).split('<br>');
+	}
+	pick_arr = pick_arr.concat(noneditpick_arr)
 	var len=pick_arr.length;
 	for(i=0;i<len;i++)
 	{
@@ -239,29 +273,151 @@ function picklist_validate(mode,fieldname,module,uitype)
 		{
 			var valnext;
 			valnext=pick_arr[j];
-			if(trim(valone) == trim(valnext))
+			var temp = valnext.toLowerCase();
+			if(temp.match('(script).*(/script)'))
+                        {
+				valnext = temp.replace(/</g,'&lt;');
+		                valnext = valnext.replace(/>/g,'&gt;');
+                        }
+			if(trim(valone).toUpperCase() == trim(valnext).toUpperCase())
 			{
-				{/literal}
-                                alert("{$APP.DUPLICATE_ENTRIES_FOUND}"+valone+"'");
-                                return false;
-                                {literal}
+				alert("Duplicate entries found for the value '"+valone+"'");
+				return false;
 			}
 		}
 		i = curr_iter		
 
 	}
-	if(mode == 'edit')
+	if(mode != 'nonedit')
 	{
 		if(trim($("picklist_values").value) == '')
 		{
-			{/literal}
-                        alert("{$APP.PICKLIST_CANNOT_BE_EMPTY}");
-                        $("picklist_values").focus();
-                        return false;
-                        {literal}
+			alert("Picklist value cannot be empty");
+			$("picklist_values").focus();	
+			return false;
 		}
 	}
 	SavePickList(fieldname,module,uitype)	
+}
+function pickListDelete(mod)
+{
+
+	var oDelPick = $('allpick');
+	var fld_name=oDelPick.options[oDelPick.selectedIndex].value;
+	var fld_label=oDelPick.options[oDelPick.selectedIndex].text;
+	
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=delete&file=DeletePickList&fld_module='+mod+'&fieldname='+fld_name+'&fieldlabel='+fld_label,
+			onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("deletediv").style.display ='block';
+                                        $("deletediv").innerHTML=response.responseText;
+					//Effect.Grow('deletediv');
+                	}
+                }
+        );
+
+
+}
+function delPickList(obj,module,nonedit_flag)
+{
+	var oDelPick = $('allpick');
+	var fld_name=oDelPick.options[oDelPick.selectedIndex].value;
+	var fld_label=oDelPick.options[oDelPick.selectedIndex].text;
+	var oAvlPick = $('availPickList');
+	var selectedColStr = "";
+	var val_count=0;
+	var xPos = findPosX(obj);
+	var yPos = findPosX 	
+	
+	if (oAvlPick.options.selectedIndex > -1)
+	{
+		
+		for (var k=0;k < oAvlPick.options.length;k++) 
+		{
+			
+			if(oAvlPick.options[k].selected == true)
+			{
+				selectedColStr += escapeAll(oAvlPick.options[k].value)+ ",";
+				val_count++;
+			}
+		}
+		if(val_count == oAvlPick.options.length && nonedit_flag == false)
+		{
+			alert(alert_arr.LBL_CANT_REMOVE);
+			return false;
+		}
+
+			str_length=selectedColStr.length;
+			selected_values  = (selectedColStr.substr(0,str_length-1));
+			
+
+			$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=transfer&file=DeletePickList&fld_module='+module+'&fieldname='+fld_name+'&fieldlabel='+fld_label+'&selectedFields='+selected_values,
+			onComplete: function(response) {
+                                        $("status").style.display="none";
+					$("transferdiv").style.display ='block';
+                                        $("transferdiv").innerHTML=response.responseText;
+					$("transferdiv").style.display='block';
+					fnvshobj(obj,"transferdiv");
+							
+					
+                	}
+                }
+        );
+
+
+		
+	}
+	else
+	{
+		alert(alert_arr.LBL_SELECT_PICKLIST);
+	}
+		
+}
+function pickReplace(module,fld_name)
+{
+	
+	var replaceObj = $('replacePick');
+	var relplaceValue =replaceObj.options[replaceObj.selectedIndex].value;
+
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=replace&file=DeletePickList&fld_module='+module+'&fieldname='+fld_name+'&replaceFields='+relplaceValue+'&selectedFields='+selected_values,
+			onComplete: function(response) {
+						 var str = response.responseText
+                                              if(str.indexOf('SUCCESS') > -1)
+                                              {
+							changeModule();
+							Myhide('deletediv');
+
+                                              }else
+                                              {
+                                                      alert(str);
+                                              }
+					
+                                        $("status").style.display="none";
+					
+                	}
+                }
+        );
+	
+}
+function Myhide(lay)
+{
+	$(lay).style.display='None';
+	$('transferdiv').style.display='None';
 }
 </script>
 {/literal}

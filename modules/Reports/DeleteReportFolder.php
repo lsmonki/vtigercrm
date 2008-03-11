@@ -17,21 +17,29 @@ $local_log =& LoggerManager::getLogger('index');
 $rfid = $_REQUEST['record'];
 if($rfid != "")
 {
-	$sql .= "delete from vtiger_reportfolder where folderid=".$rfid;
-	$result = $adb->query($sql);
+	$sql .= "delete from vtiger_reportfolder where folderid=?";
+	$result = $adb->pquery($sql, array($rfid));
 	if($result!=false)
-	{
-		header("Location: index.php?action=ReportsAjax&mode=ajax&file=ListView&module=Reports");
-	}else
-	{
-		include('themes/'.$theme.'/header.php');
-		$errormessage = "<font color='red'><B>Error Message<ul>
-		<li><font color='red'>Error while deleting the record</font>
-		</ul></B></font> <br>" ;
-		echo $errormessage;
-	}   
+        {
+                $pquery = "delete from vtiger_report where folderid=?";
+                $res = $adb->pquery($pquery, array($rfid));
+                if ($res != "")
+                        header("Location: index.php?action=ReportsAjax&mode=ajax&file=ListView&module=Reports");
+                else {
+                        include('themes/'.$theme.'/header.php');
+                        $errormessage = "<font color='red'><B>Error Message<ul>
+                        <li><font color='red'>Error while deleting the reports of the folder</font>
+                        </ul></B></font> <br>" ;
+                        echo $errormessage;
+                }
+        }else
+        {
+                include('themes/'.$theme.'/header.php');
+                $errormessage = "<font color='red'><B>Error Message<ul>
+                <li><font color='red'>Error while deleting the folder</font>
+                </ul></B></font> <br>" ;
+                echo $errormessage;
+        }
 }
-
-
-   	
+  	
 ?>

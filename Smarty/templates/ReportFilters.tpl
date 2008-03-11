@@ -41,12 +41,12 @@
 		</tr>
 		<tr>
 		<td class="dvtCellInfo" width="60%">
-		<select name="stdDateFilterField" class="detailedViewTextBox">
+		<select name="stdDateFilterField" class="detailedViewTextBox" onchange='standardFilterDisplay();'>
 		{$BLOCK1_STD}
 		</select>
 		</td>
 		<td class="dvtCellInfo" width="25%">
-		<select name="stdDateFilter" id="stdDateFilter" onchange='showDateRange( this.options[ this.selectedIndex ].value )' class="txtBox">
+		<select name="stdDateFilter" id="stdDateFilter" onchange='showDateRange( this.options[ this.selectedIndex ].value )' class="repBox">
 		{$BLOCKCRITERIA_STD}
 		</select>
 		</td>
@@ -98,12 +98,12 @@
 		</select>
 		</td>
 		<td class="dvtCellLabel">
-		<select name="fop1" id="fop1" class="txtBox" style="width:100px;">
+		<select name="fop1" id="fop1" class="repBox" style="width:100px;">
 		<option value="">{$MOD.LBL_NONE}</option>
 		{$FOPTION1}
 		</select>
 		</td>
-		<td class="dvtCellLabel"><input name="fval1" id="fval1" class="txtBox" type="text" value="{$VALUE1}"></td>
+		<td class="dvtCellLabel"><input name="fval1" id="fval1" class="repBox" type="text" value="{$VALUE1}"></td>
 		<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
@@ -114,12 +114,12 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo">
-		<select name="fop2" id="fop2" class="txtBox" style="width:100px;">
+		<select name="fop2" id="fop2" class="repBox" style="width:100px;">
 		<option value="">{$MOD.LBL_NONE}</option>
         {$FOPTION2}
 		</select>
 		</td>
-		<td class="dvtCellInfo"><input name="fval2" id="fval2" class="txtBox" type="text" value="{$VALUE2}"></td>
+		<td class="dvtCellInfo"><input name="fval2" id="fval2" class="repBox" type="text" value="{$VALUE2}"></td>
 		<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
@@ -130,12 +130,12 @@
 		</select>
 		</td>
 		<td class="dvtCellLabel">
-		<select name="fop3" id="fop3" class="txtBox" style="width:100px;">
+		<select name="fop3" id="fop3" class="repBox" style="width:100px;">
 		<option value="">{$MOD.LBL_NONE}</option>
 		{$FOPTION3}
 		</select>
 		</td>
-		<td class="dvtCellLabel"><input name="fval3" id="fval3" class="txtBox" type="text" value="{$VALUE3}"></td>
+		<td class="dvtCellLabel"><input name="fval3" id="fval3" class="repBox" type="text" value="{$VALUE3}"></td>
 		<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
@@ -146,12 +146,12 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo">
-		<select name="fop4" id="fop4" class="txtBox" style="width:100px;">
+		<select name="fop4" id="fop4" class="repBox" style="width:100px;">
 		<option value="">{$MOD.LBL_NONE}</option>
 		{$FOPTION4}
 		</select>
 		</td>
-		<td class="dvtCellInfo"><input name="fval4" id="fval4" class="txtBox" type="text" value="{$VALUE4}"></td>
+		<td class="dvtCellInfo"><input name="fval4" id="fval4" class="repBox" type="text" value="{$VALUE4}"></td>
 		<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
@@ -162,12 +162,12 @@
 		</select>
 		</td>
 		<td class="dvtCellLabel">
-		<select name="fop5" id="fop5" class="txtBox" style="width:100px;">
+		<select name="fop5" id="fop5" class="repBox" style="width:100px;">
 		<option value="">{$MOD.LBL_NONE}</option>
 		{$FOPTION5}
 		</select>
 		</td>
-		<td class="dvtCellLabel"><input name="fval5" id="fval5" class="txtBox" type="text" value="{$VALUE5}"></td>
+		<td class="dvtCellLabel"><input name="fval5" id="fval5" class="repBox" type="text" value="{$VALUE5}"></td>
 		<td class="dvtCellLabel">&nbsp;</td>
 		</tr>
 		</tbody>
@@ -191,6 +191,12 @@ for(var i=1;i<=5;i++)
 	if(obj.selectedIndex != 0)
 		updatefOptions(obj, 'fop'+i);
 }
+</script>
+
+<script>
+// If current user has no access to date fields, we should disable selection
+// Fix for: #4670
+standardFilterDisplay();
 </script>
 
 {/literal}

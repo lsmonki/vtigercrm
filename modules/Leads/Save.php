@@ -26,6 +26,8 @@ $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
 $curr_symbol=$rate_symbol['symbol'];
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
 if(isset($_REQUEST['record']))
 {
@@ -42,7 +44,10 @@ foreach($focus->column_fields as $fieldname => $val)
 {
     	if(isset($_REQUEST[$fieldname]))
 	{
-          $value = $_REQUEST[$fieldname];
+		if(is_array($_REQUEST[$fieldname]))
+			$value = $_REQUEST[$fieldname];
+		else
+			$value = trim($_REQUEST[$fieldname]);	
             $log->info("the value is ".$value);
           $focus->column_fields[$fieldname] = $value;
         }
@@ -53,7 +58,6 @@ foreach($focus->column_fields as $fieldname => $val)
         }
         
 }
-
 $focus->save("Leads");
 
 $return_id = $focus->id;
@@ -74,14 +78,13 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns
 {
 	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
 	{
-		$sql = "insert into vtiger_campaignleadrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-		$adb->query($sql);
+		 $sql = "delete from vtiger_campaignleadrel where leadid = ?";
+		 $adb->pquery($sql, array($focus->id));
+		 $sql = "insert into vtiger_campaignleadrel values (?,?)";
+		 $adb->pquery($sql, array($_REQUEST['return_id'], $focus->id));
 	}
 }
-
-
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname");
-
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 /** Function to save the Lead custom fields info into database
  *  @param integer $entity_id - leadid
 */
@@ -91,14 +94,14 @@ function save_customfields($entity_id)
 	 $log->debug("save custom vtiger_field invoked ".$entity_id);
 	global $adb;
 	$dbquery="select * from customfields where module='Leads'";
-	$result = $adb->query($dbquery);
-	$custquery = "select * from leadcf where leadid='".$entity_id."'";
-        $cust_result = $adb->query($custquery);
+	$result = $adb->pquery($dbquery, array());
+	$custquery = "select * from leadcf where leadid=?";
+    $cust_result = $adb->pquery($custquery, array($entity_id));
 	if($adb->num_rows($result) != 0)
 	{
 		
 		$columns='';
-		$values='';
+		$params = array();
 		$update='';
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
@@ -123,12 +126,13 @@ function save_customfields($entity_id)
 				//Update Block
 				if($i == 0)
 				{
-					$update = $colName.'="'.$fldvalue.'"';
+					$update = $colName.'=?';
 				}
 				else
 				{
-					$update .= ', '.$colName.'="'.$fldvalue.'"';
+					$update .= ', '.$colName.'=?';
 				}
+				array_push($params, $fldvalue);
 			}
 			else
 			{
@@ -136,13 +140,13 @@ function save_customfields($entity_id)
 				if($i == 0)
 				{
 					$columns='leadid, '.$colName;
-					$values='"'.$entity_id.'", "'.$fldvalue.'"';
+					array_push($params, $entity_id);
 				}
 				else
 				{
 					$columns .= ', '.$colName;
-					$values .= ', "'.$fldvalue.'"';
 				}
+				array_push($params, $fldvalue);
 			}
 			
 				
@@ -150,14 +154,15 @@ function save_customfields($entity_id)
 		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
-			$query = 'update leadcf SET '.$update.' where leadid="'.$entity_id.'"'; 
-			$adb->query($query);
+			$query = 'update leadcf SET '.$update.' where leadid=?'; 
+			array_push($params, $entity_id);
+			$adb->pquery($query, $params);
 		}
 		else
 		{
 			//Insert Block
-			$query = 'insert into leadcf ('.$columns.') values('.$values.')';
-			$adb->query($query);
+			$query = 'insert into leadcf ('.$columns.') values('. generateQuestionMarks($params) .')';
+			$adb->pquery($query, $params);
 		}
 		
 	}

@@ -162,24 +162,24 @@ class freetag {
 			return false;
 		}		
 		global $adb;
-		$tag = $adb->quote($tag, get_magic_quotes_gpc());
+		
+		$where = "tag = ? ";
+		$params = array($tag);
 
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
-		} else {
-			$tagger_sql = "";
-		}
+			$where .= "AND tagger_id = ? ";
+			array_push($params, $tagger_id);
+		} 
+		
 		$prefix = $this->_table_prefix;
 
 		$sql = "SELECT DISTINCT object_id
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
-			WHERE tag = $tag
-			$tagger_sql
+			WHERE $where
 			ORDER BY object_id ASC
-			LIMIT $offset, $limit
-			";
+			LIMIT $offset, $limit";
         echo $sql;
-		$rs = $adb->query($sql) or die("Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[] = $rs->fields['object_id'];
@@ -209,23 +209,23 @@ class freetag {
 			return false;
 		}		
 		global $adb;
-		$tag = $adb->quote($tag, get_magic_quotes_gpc());
+		
+		$where = "tag = ? ";
+		$params = array($tag);
 
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
-		} else {
-			$tagger_sql = "";
-		}
+			$where .= "AND tagger_id = ? ";
+			array_push($params, $tagger_id);
+		} 
 		$prefix = $this->_table_prefix;
 
 		$sql = "SELECT DISTINCT object_id
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
-			WHERE tag = $tag
-			$tagger_sql
+			WHERE $where
 			ORDER BY object_id ASC
 			";
         	//echo $sql;
-		$rs = $adb->query($sql) or die("Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[] = $rs->fields['object_id'];
@@ -257,8 +257,10 @@ class freetag {
 		if (count($tagArray) == 0) {
 			return $retarr;
 		}
+		$params = array($tagArray);
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
+			$tagger_sql = "AND tagger_id = ?";
+			array_push($params, $tagger_id);
 		} else {
 			$tagger_sql = "";
 		}
@@ -268,7 +270,6 @@ class freetag {
 		}
 
 		$tagArray = array_unique($tagArray);
-		$tag_sql = join(",", $tagArray);
 		$numTags = count($tagArray);
 		$prefix = $this->_table_prefix;
 
@@ -278,14 +279,13 @@ class freetag {
 		$sql = "SELECT ${prefix}freetagged_objects.object_id, tag, COUNT(DISTINCT tag) AS uniques
 			FROM ${prefix}freetagged_objects 
 			INNER JOIN ${prefix}freetags ON (${prefix}freetagged_objects.tag_id = ${prefix}freetags.id)
-			WHERE ${prefix}freetags.tag IN ($tag_sql)
+			WHERE ${prefix}freetags.tag IN (". generateQuestionMarks($tagArray) .")
 			$tagger_sql
 			GROUP BY ${prefix}freetagged_objects.object_id
 			HAVING uniques = $numTags
-			LIMIT $offset, $limit
-			";
+			LIMIT $offset, $limit";
 		$this->debug_text("Tag combo: " . join("+", $tagArray) . " SQL: $sql");
-		$rs = $adb->query($sql) or die("Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Error: $sql");
 		while(!$rs->EOF) {
 			$retarr[] = $rs->fields['object_id'];
 			$rs->MoveNext();
@@ -315,21 +315,22 @@ class freetag {
 		}		
 		global $adb;
 
+		$where = "id = ? ";
+		$params = array($tag_id);
+		
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
-		} else {
-			$tagger_sql = "";
-		}
+			$where .= "AND tagger_id = ?";
+			array_push($params, $tagger_id);
+		} 
+	
 		$prefix = $this->_table_prefix;
 
 		$sql = "SELECT DISTINCT object_id
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
-			WHERE id = $tag_id
-			$tagger_sql
+			WHERE $where
 			ORDER BY object_id ASC
-			LIMIT $offset, $limit
-			";
-		$rs = $adb->query($sql) or die("Error: $sql");
+			LIMIT $offset, $limit ";
+		$rs = $adb->pquery($sql, $params) or die("Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[] = $rs->fields['object_id'];
@@ -361,13 +362,15 @@ class freetag {
 	function get_tags_on_object($object_id, $offset = 0, $limit = 10, $tagger_id = NULL) {
 		if(!isset($object_id)) {
 			return false;
-		}		
+		}	
+		
+		$where = "object_id = ? ";
+		$params = array($object_id);
+			
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
-		} else {
-			$tagger_sql = "";
-		}
-		global $adb;
+			$where .= "AND tagger_id = ? ";
+			array_push($params, $tagger_id);
+		} 
 
 		if($limit <= 0) {
 			$limit_sql = "";
@@ -376,15 +379,16 @@ class freetag {
 		}
 		$prefix = $this->_table_prefix;
 
+		global $adb;
+
 		$sql = "SELECT DISTINCT tag, raw_tag, tagger_id, id
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
-			WHERE object_id = $object_id
-			$tagger_sql
+			WHERE $where
 			ORDER BY id ASC
 			$limit_sql
 			";
 			//echo ' <br><br>get_tags_on_object sql is ' .$sql;
-		$rs = $adb->query($sql) or die("Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[] = array(
@@ -420,53 +424,52 @@ class freetag {
 		}
 		global $adb;
 
-		$normalized_tag = $adb->quote($this->normalize_tag($tag));
-
-		$tag = $adb->quote($tag);
+		$normalized_tag = $this->normalize_tag($tag);
 		$prefix = $this->_table_prefix;
-
+		$params = array();
 		// First, check for duplicate of the normalized form of the tag on this object.
 		// Dynamically switch between allowing duplication between vtiger_users on the constructor param 'block_multiuser_tag_on_object'.
 		// If it's set not to block multiuser tags, then modify the existence
 		// check to look for a tag by this particular user. Otherwise, the following
 		// query will reveal whether that tag exists on that object for ANY user.
 		if ($this->_block_multiuser_tag_on_object == 0) {
-			$tagger_sql = " AND tagger_id = $tagger_id";
-		}
+			$tagger_sql = " AND tagger_id = ? ";
+			array_push($params, $tagger_id);
+		} else $tagger_sql = "";
 		$sql = "SELECT COUNT(*) as count 
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
 			WHERE 1=1 
 			$tagger_sql
-			AND object_id = $object_id
-			AND tag = $normalized_tag
-			";
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+			AND object_id = ?
+			AND tag = ? ";
+			
+		array_push($params, $object_id, $normalized_tag);
+		$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");
 		if($rs->fields['count'] > 0) {
 			return true;
 		}
 		// Then see if a raw tag in this form exists.
 		$sql = "SELECT id 
 			FROM ${prefix}freetags 
-			WHERE raw_tag = $tag
-			";
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+			WHERE raw_tag = ? ";
+		$rs = $adb->pquery($sql, array($tag)) or die("Syntax Error: $sql");
 		if(!$rs->EOF) {
 			$tag_id = $rs->fields['id'];
 		} else {
 			// Add new tag! 
 			$tag_id = $adb->getUniqueId('vtiger_freetags');
-			$sql = "INSERT INTO ${prefix}freetags (id,tag, raw_tag) VALUES ($tag_id,$normalized_tag, $tag)";
-			$rs = $adb->query($sql) or die("Syntax Error: $sql");
+			$sql = "INSERT INTO ${prefix}freetags (id, tag, raw_tag) VALUES (?,?,?)";
+			$params = array($tag_id, $normalized_tag, $tag);
+			$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");
 			
 		}
 		if(!($tag_id > 0)) {
 			return false;
 		}
 		$sql = "INSERT INTO ${prefix}freetagged_objects
-			(tag_id, tagger_id, object_id, tagged_on, module)
-			VALUES ($tag_id, $tagger_id, $object_id, NOW(), '$module')
-			";
-		$rs = $adb->query($sql) or die("Syntax error: $sql");
+			(tag_id, tagger_id, object_id, tagged_on, module) VALUES (?,?,?, NOW(),?)";
+		$params = array($tag_id, $tagger_id, $object_id, $module);
+		$rs = $adb->pquery($sql, $params) or die("Syntax error: $sql");
 
 		return true;
 	}
@@ -527,12 +530,9 @@ class freetag {
 		if($tag_id > 0) {
 
 			$sql = "DELETE FROM ${prefix}freetagged_objects
-				WHERE tagger_id = $tagger_id
-				AND object_id = $object_id
-				AND tag_id = $tag_id
-				LIMIT 1
-				";	
-				$rs = $adb->query($sql) or die("Syntax Error: $sql");	
+				WHERE tagger_id = ? AND object_id = ? AND tag_id = ? LIMIT 1";
+			$params = array($tagger_id, $object_id, $tag_id);
+			$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");	
 			return true;
 		} else {
 			return false;	
@@ -556,10 +556,8 @@ class freetag {
 		$prefix = $this->_table_prefix;
 		if($object_id > 0) {
 			$sql = "DELETE FROM ${prefix}freetagged_objects
-				WHERE 
-				object_id = $object_id
-				";	
-				$rs = $adb->query($sql) or die("Syntax Error: $sql");	
+				WHERE object_id = ? ";	
+				$rs = $adb->pquery($sql, array($object_id)) or die("Syntax Error: $sql");	
 			return true;
 		} else {
 			return false;	
@@ -592,10 +590,8 @@ class freetag {
 		if($object_id > 0) {
 
 			$sql = "DELETE FROM ${prefix}freetagged_objects
-				WHERE tagger_id = $tagger_id
-				AND object_id = $object_id
-				";	
-				$rs = $adb->query($sql) or die("Syntax Error: $sql");	
+				WHERE tagger_id = ? AND object_id = ?";	
+			$rs = $adb->pquery($sql, array($tagger_id, $object_id)) or die("Syntax Error: $sql");	
 			return true;
 		} else {
 			return false;	
@@ -623,14 +619,9 @@ class freetag {
 		
 		$prefix = $this->_table_prefix;
 
-		$tag = $adb->quote($tag, get_magic_quotes_gpc());
-
 		$sql = "SELECT id FROM ${prefix}freetags
-			WHERE 
-			tag = $tag
-			LIMIT 1
-			";	
-			$rs = $adb->query($sql) or die("Syntax Error: $sql");	
+			WHERE tag = ? LIMIT 1 ";	
+			$rs = $adb->pquery($sql, array($tag)) or die("Syntax Error: $sql");	
 		return $rs->fields['id'];
 
 	}
@@ -655,14 +646,9 @@ class freetag {
 		global $adb;
 		$prefix = $this->_table_prefix;
 
-		$tag = $adb->quote($tag, get_magic_quotes_gpc());
-
 		$sql = "SELECT id FROM ${prefix}freetags
-			WHERE 
-			raw_tag = $tag
-			LIMIT 1
-			";	
-			$rs = $adb->query($sql) or die("Syntax Error: $sql");	
+			WHERE raw_tag = ? LIMIT 1 ";	
+			$rs = $adb->pquery($sql, array($tag)) or die("Syntax Error: $sql");	
 		return $rs->fields['id'];
 
 	}
@@ -806,8 +792,10 @@ class freetag {
 
 	function get_most_popular_tags($tagger_id = NULL, $offset = 0, $limit = 25) {
 		global $adb;
+		$params = array();
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
+			$tagger_sql = "AND tagger_id = ?";
+			array_push($params, $tagger_id);
 		} else {
 			$tagger_sql = "";
 		}
@@ -819,10 +807,9 @@ class freetag {
 			$tagger_sql
 			GROUP BY tag
 			ORDER BY count DESC, tag ASC
-			LIMIT $offset, $limit
-			";
+			LIMIT $offset, $limit";
 
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[] = array(
@@ -849,8 +836,10 @@ class freetag {
 	 */
 	function count_tags($tagger_id = NULL) {
 		global $adb;
+		$params = array();
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
+			$tagger_sql = "AND tagger_id = ?";
+			array_push($params, $tagger_id);
 		} else {
 			$tagger_sql = "";
 		}
@@ -862,7 +851,7 @@ class freetag {
 			$tagger_sql
 			";
 
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");
 		if(!$rs->EOF) {
 			return $rs->fields['count'];
 		}
@@ -923,14 +912,14 @@ class freetag {
 		{	
 			foreach($tag_list[0] as $tag => $qty) {
 				$size = $min_font_size + ($qty - $min_qty) * 3;
-				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].','.$obj_id.');"><img src="'.$image_path.'del_tag.gif"></span></span>';
+				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. urlencode($tag) . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].','.$obj_id.');"><img src="'.$image_path.'del_tag.gif"></span></span>';
 
 		}
 		}else
 		{
 			foreach($tag_list[0] as $tag => $qty) {
 				$size = $min_font_size + ($qty - $min_qty) * 3;
-				$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
+				$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. urlencode($tag) . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
 
 			}
 
@@ -1034,7 +1023,6 @@ class freetag {
 			return $retarr;
 		}
 		global $adb;
-		$tag = $adb->quote($tag, get_magic_quotes_gpc());
 
 		// This query was written using a double join for PHP. If you're trying to eke
 		// additional performance and are running MySQL 4.X, you might want to try a subselect
@@ -1046,13 +1034,12 @@ class freetag {
 			INNER JOIN ${prefix}freetags t1 ON ( t1.id = o1.tag_id )
 			INNER JOIN ${prefix}freetagged_objects o2 ON ( o1.object_id = o2.object_id )
 			INNER JOIN ${prefix}freetags t2 ON ( t2.id = o2.tag_id )
-			WHERE t2.tag = $tag AND t1.tag != $tag
+			WHERE t2.tag = ? AND t1.tag != ?
 			GROUP BY o1.tag_id
 			ORDER BY quantity DESC
-			LIMIT 0, $max
-			";
+			LIMIT 0, ?";
 
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+		$rs = $adb->pquery($sql, array($tag, $tag, $max)) or die("Syntax Error: $sql");
 		while(!$rs->EOF) {
 			$retarr[$rs->fields['tag']] = $rs->fields['quantity'];
 			$rs->MoveNext();
@@ -1109,7 +1096,7 @@ class freetag {
 
 		$tagArray = array();
 		foreach ($tagItems as $tagItem) {
-			$tagArray[] = $adb->quote($tagItem['tag']);
+			$tagArray[] = $tagItem['tag'];
 		}
 		$tagArray = array_unique($tagArray);
 
@@ -1118,21 +1105,18 @@ class freetag {
 			return $retarr; // Return empty set of matches
 		}
 
-		$tagList = join(',', $tagArray);
-
 		$prefix = $this->_table_prefix;
 
 		$sql = "SELECT matches.object_id, COUNT( matches.object_id ) AS num_common_tags
 			FROM ${prefix}freetagged_objects as matches
 			INNER JOIN ${prefix}freetags as tags ON ( tags.id = matches.tag_id )
-			WHERE tags.tag IN ($tagList)
+			WHERE tags.tag IN (". generateQuestionMarks($tagArray) .")
 			GROUP BY matches.object_id
-			HAVING num_common_tags >= $threshold
+			HAVING num_common_tags >= ?
 			ORDER BY num_common_tags DESC
-			LIMIT 0, $max_objects
-			";
+			LIMIT 0, ? ";
 
-		$rs = $adb->query($sql) or die("Syntax Error: $sql, Error: " . $adb->ErrorMsg());
+		$rs = $adb->pquery($sql, array($tagArray, $threshold, $max_objects)) or die("Syntax Error: $sql, Error: " . $adb->ErrorMsg());
 		while(!$rs->EOF) {
 			$retarr[] = array (
 				'object_id' => $rs->fields['object_id'],

@@ -16,7 +16,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['V'] = ['is','isn','bwt','ewt','cts','dcts'];
@@ -27,16 +26,16 @@ typeofdata['C'] = ['is','isn'];
 typeofdata['DT'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['D'] = ['is','isn','lst','grt','lsteq','grteq'];
 var fLabels = new Array();
-fLabels['is'] = '{$APP.is}';
-fLabels['isn'] = '{$APP.is_not}';
-fLabels['bwt'] = '{$APP.begins_with}';
-fLabels['ewt'] = '{$APP.ends_with}';
-fLabels['cts'] = '{$APP.contains}';
-fLabels['dcts'] = '{$APP.does_not_contains}';
-fLabels['lst'] = '{$APP.less_than}';
-fLabels['grt'] = '{$APP.greater_than}';
-fLabels['lsteq'] = '{$APP.less_or_equal}';
-fLabels['grteq'] = '{$APP.greater_or_equal}';
+fLabels['is'] = "{$APP.is}";
+fLabels['isn'] = "{$APP.is_not}";
+fLabels['bwt'] = "{$APP.begins_with}";
+fLabels['ewt'] = "{$APP.ends_with}";
+fLabels['cts'] = "{$APP.contains}";
+fLabels['dcts'] = "{$APP.does_not_contains}";
+fLabels['lst'] = "{$APP.less_than}";
+fLabels['grt'] = "{$APP.greater_than}";
+fLabels['lsteq'] = "{$APP.less_or_equal}";
+fLabels['grteq'] = "{$APP.greater_or_equal}";
 var noneLabel;
 {literal}
 function trimfValues(value)
@@ -143,7 +142,7 @@ function callSearch(searchtype)
     	{rdelim}
    	gPopupAlphaSearchUrl = '';
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-        search_txt_val=document.basicSearch.search_text.value;
+	search_txt_val=encodeURIComponent(document.basicSearch.search_text.value);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
@@ -159,7 +158,8 @@ function callSearch(searchtype)
                         var srchvalue_name = getObj("Srch_value"+jj);
                         urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-                        urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+                        urlstring = urlstring+'Srch_value'+jj+'='+encodeURIComponent(srchvalue_name.value)+'&';
+
                 {rdelim}
                 for (i=0;i<getObj("matchtype").length;i++){ldelim}
                         if (getObj("matchtype")[i].checked==true)
@@ -172,7 +172,7 @@ function callSearch(searchtype)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody:urlstring +'query=true&file=ListView&module={$MODULE}&action={$MODULE}Ajax&ajax=true',
+			postBody:urlstring +'query=true&file=ListView&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
@@ -200,7 +200,7 @@ function alphabetic(module,url,dataid)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody: 'module='+module+'&action='+module+'Ajax&file=ListView&ajax=true&'+url,
+			postBody: 'module='+module+'&action='+module+'Ajax&file=ListView&ajax=true&search=true&'+url,
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
 				result = response.responseText.split('&#&#&#');
@@ -365,6 +365,9 @@ function alphabetic(module,url,dataid)
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
      <input name="allids" type="hidden" value="{$ALLIDS}">
+     <input name="selectedboxes" id="selectedboxes" type="hidden" value="{$SELECTEDIDS}">
+     <input name="allselectedboxes" id="allselectedboxes" type="hidden" value="{$ALLSELECTEDIDS}">
+     <input name="current_page_boxes" id="current_page_boxes" type="hidden" value="{$CURRENT_PAGE_BOXES}">
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr >
 		      <td>
@@ -399,7 +402,7 @@ function alphabetic(module,url,dataid)
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
+                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
                                                     {if $ALL eq 'All'}
 							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
 							<span class="small">|</span>
@@ -421,14 +424,14 @@ function alphabetic(module,url,dataid)
                          <div  class="calDIV" style="overflow:auto;">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small" class="small">
 			      <tr>
-             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect_ListView(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
         			 <td class="lvtCol">{$header}</td>
 			         {/foreach}
 			      </tr>
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
 			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-				 <td width="2%"><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+				 <td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick=check_object(this); toggleSelectAll(this.name,"selectall")></td>
 				 {foreach item=data from=$entity}	
 				 <td>{$data}</td>
 	                         {/foreach}
@@ -537,16 +540,18 @@ function alphabetic(module,url,dataid)
 	<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%">
-	         <form name="change_ownerform_name">
-	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
-					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
-					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-						{$CHANGE_OWNER}
-					</select>
-					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-						{$CHANGE_GROUP_OWNER}
-					</select>
-					</form>
+	        <form name="change_ownerform_name">
+		        <input type = "radio" id= "user_checkbox" name = "user_lead_owner"  {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup();{/if}  checked>{$APP.LBL_USER}&nbsp;
+			{if $CHANGE_GROUP_OWNER neq ''}
+			<input type = "radio" id = "group_checkbox" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
+			<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+                                {$CHANGE_GROUP_OWNER}
+                        </select>
+			{/if}
+			<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
+				{$CHANGE_OWNER}
+			</select>
+		</form>
 	</td>
 </tr>
 <tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
@@ -578,7 +583,7 @@ function ajaxChangeStatus(statusname)
 	else if(statusname == 'owner')
 	{
 		
-	   if(document.change_ownerform_name.user_lead_owner[0].checked)
+	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;

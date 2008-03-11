@@ -17,7 +17,6 @@ global $app_list_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -89,7 +88,7 @@ $smarty->assign("MODSHARING", $custom_access);
  */
 function getSharingRuleList($module)
 {
-	global $adb;
+	global $adb,$mod_strings;
 
 	$tabid=getTabid($module);
 	$dataShareTableArray=getDataShareTableandColumnArray();
@@ -100,8 +99,8 @@ function getSharingRuleList($module)
 	{
 
 		$colNameArr=explode("::",$colName);
-		$query = "select ".$table_name.".* from ".$table_name." inner join vtiger_datashare_module_rel on ".$table_name.".shareid=vtiger_datashare_module_rel.shareid where vtiger_datashare_module_rel.tabid=".$tabid;
-		$result=$adb->query($query);
+		$query = "select ".$table_name.".* from ".$table_name." inner join vtiger_datashare_module_rel on ".$table_name.".shareid=vtiger_datashare_module_rel.shareid where vtiger_datashare_module_rel.tabid=?";
+		$result=$adb->pquery($query, array($tabid));
 		$num_rows=$adb->num_rows($result);
 
 		$share_colName=$colNameArr[0];
@@ -122,11 +121,11 @@ function getSharingRuleList($module)
 
 			if($permission == 0)
 			{
-				$perr_out = 'Read Only';
+				$perr_out = $mod_strings['Read Only '];
 			}
 			elseif($permission == 1)
 			{
-				$perr_out = 'Read / Write';
+				$perr_out = $mod_strings['Read/Write'];
 			}
 
 			$access_permission [] = $shareid;

@@ -13,7 +13,6 @@
 -->*}
 
 <script type="text/javascript" src="include/js/Inventory.js"></script>
-<script type="text/javascript" src="include/js/general.js"></script>
 <!-- Added to display the Product Details -->
 <script type="text/javascript">
 if(!e)
@@ -30,6 +29,12 @@ function displayCoords(currObj,obj,mode,curr_row)
 		if(curr_productid == '')
 		{ldelim}
 			alert("{$APP.PLEASE_SELECT_PRODUCT}");
+			return false;
+		{rdelim}
+		var curr_quantity = document.getElementById("qty"+curr_row).value;
+		if(curr_quantity == '')
+		{ldelim}
+			alert("{$APP.PLEASE_FILL_QUANTITY}");
 			return false;
 		{rdelim}
 	{rdelim}
@@ -178,7 +183,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small" id="setComment">
 				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
 				<br>
-				[<a href="javascript:;" onclick="getObj('comment1').value='';";>{$APP.LBL_CLEAR_COMMENT}</a>]
+				[<a href="javascript:;" onclick="getObj('{$comment}').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
 			</td>
 		   </tr>
 		</table>
@@ -194,7 +199,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop" valign="top">
-		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/>
+		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice'}stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -491,6 +496,7 @@ so we will get that array, parse that array and fill the details
 		{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
 			<script>calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no});</script>
 	{/foreach}
+		{if $MODULE eq 'Invoice'}       <script>stock_alert('{$row_no}');</script>{/if}
 {/foreach}
 
 

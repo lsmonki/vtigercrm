@@ -275,13 +275,17 @@ function replace_specialchars(&$xmlstring) {
 // find duplicate entrys and count them, show this value befor the duplicated name
 function finddups( $arrInput ) {
   $result = array();
-  $buffer = array_count_values($arrInput);
-  foreach ($buffer as $key => $value) {
-    if( $value > 1 ) {
-      $result[] = "(" . $value . "x) " . $key;
-    } else {
-      $result[] = $key;
-    }
+  //Pinaki: Fix for ticket #4462
+  if($arrInput!=null)
+  {
+  	$buffer = array_count_values($arrInput);
+  	foreach ($buffer as $key => $value) {
+    	if( $value > 1 ) {
+      		$result[] = "(" . $value . "x) " . $key;
+    	} else {
+      		$result[] = $key;
+    	}
+  	}	
   }
   return $result;
 }

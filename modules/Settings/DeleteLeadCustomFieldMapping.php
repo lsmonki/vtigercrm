@@ -16,8 +16,8 @@ $id=$_REQUEST['id'];
 
 if($id !='')
 {
-	$sql="update vtiger_convertleadmapping set accountfid ='NULL',contactfid='NULL',potentialfid='NULL' where cfmid=".$id;
-	$result = $adb->query($sql);
+	$sql="update vtiger_convertleadmapping set accountfid ='NULL',contactfid='NULL',potentialfid='NULL' where cfmid=?";
+	$result = $adb->pquery($sql, array($id));
 }
 
 

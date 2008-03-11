@@ -26,23 +26,26 @@
 <input type="hidden" id="user_dateformat" name="user_dateformat" value="{$DATEFORMAT}">
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
-typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['V'] = ['e','n','s','ew','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
 typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
 typeofdata['DT'] = ['e','n','l','g','m','h'];
 typeofdata['D'] = ['e','n','l','g','m','h'];
+typeofdata['NN'] = ['e','n','l','g','m','h'];
+typeofdata['E'] = ['e','n','s','ew','c','k'];
 var fLabels = new Array();
-fLabels['e'] = 'equals';
-fLabels['n'] = 'not equal to';
-fLabels['s'] = 'starts with';
-fLabels['c'] = 'contains';
-fLabels['k'] = 'does not contain';
-fLabels['l'] = 'less than';
-fLabels['g'] = 'greater than';
-fLabels['m'] = 'less or equal';
-fLabels['h'] = 'greater or equal';
+fLabels['e'] = alert_arr.EQUALS;
+fLabels['n'] = alert_arr.NOT_EQUALS_TO;
+fLabels['s'] = alert_arr.STARTS_WITH;
+fLabels['ew'] = alert_arr.ENDS_WITH;
+fLabels['c'] = alert_arr.CONTAINS;
+fLabels['k'] = alert_arr.DOES_NOT_CONTAINS;
+fLabels['l'] = alert_arr.LESS_THAN;
+fLabels['g'] = alert_arr.GREATER_THAN;
+fLabels['m'] = alert_arr.LESS_OR_EQUALS;
+fLabels['h'] = alert_arr.GREATER_OR_EQUALS;
 var noneLabel;
 function goto_CustomAction(module)
 {ldelim}
@@ -160,16 +163,26 @@ function mandatoryCheck()
 					 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
-                    {/foreach}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
+				{/foreach}
 			{/foreach}
           	        {$CHOOSECOLUMN1}
 	              </select></td>
@@ -181,15 +194,25 @@ function mandatoryCheck()
                               	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN2}
@@ -202,15 +225,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN3}
@@ -223,15 +256,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN4}
@@ -247,15 +290,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN5}
@@ -268,15 +321,25 @@ function mandatoryCheck()
                                    	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN6}
@@ -289,15 +352,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN7}
@@ -310,15 +383,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					</option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN8}
@@ -333,15 +416,25 @@ function mandatoryCheck()
                                     	 {assign var=option_values value=$text.text}
 		   		         <option {$text.selected} value={$text.value}>
 			{if $MOD.$option_values neq ''}
-				{$MOD.$option_values}
-
-			{elseif $APP.$option_values neq ''}
-				{$APP.$option_values}
-
-			{else}
-				{$option_values}
-			{/if}
-</option>
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$MOD.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$MOD.$option_values}
+                                {/if}
+                        {elseif $APP.$option_values neq ''}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$APP.$option_values}   {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$APP.$option_values}
+                                {/if}
+                        {else}
+                                {if $DATATYPE.0.$option_values eq 'M'}
+                                        {$option_values}    {$APP.LBL_REQUIRED_SYMBOL}
+                                {else}
+                                        {$option_values}
+                                {/if}
+                        {/if}
+					 </option>
                                 {/foreach}
                         {/foreach}
                         {$CHOOSECOLUMN9}
@@ -411,7 +504,7 @@ function mandatoryCheck()
 			  <tr>
 			     <td width="75%" align="right" class="dvtCellLabel">{$MOD.LBL_Select_a_Column} :</td>
 			     <td width="25%" class="dvtCellInfo">
-				<select name="stdDateFilterField" class="select">
+				<select name="stdDateFilterField" class="select" onchange="standardFilterDisplay();">
 				{foreach item=stdfilter from=$STDFILTERCOLUMNS}
 					<option {$stdfilter.selected} value={$stdfilter.value}>{$stdfilter.text}</option>	
 				{/foreach}
@@ -691,5 +784,6 @@ for(var i=1;i<=5;i++)
 	if(obj.selectedIndex != 0)
 		updatefOptions(obj, 'fop'+i);
 }
+standardFilterDisplay();
 {/literal}
 </script>

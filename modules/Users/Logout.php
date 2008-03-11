@@ -27,15 +27,15 @@ require_once('include/db_backup/ftp.php');
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/enable_backup.php');
 
-global $adb, $enable_backup;
+global $adb, $enable_backup,$current_user;
 
-if($enable_backup == 'true')
+if($enable_backup == 'true' && is_admin($current_user) == true)
 {
 	$ftpserver = '';
 	$ftpuser = '';
 	$ftppassword = '';
-	$query = "select * from vtiger_systems where server_type='backup'";
-	$result = $adb->query($query);
+	$query = "select * from vtiger_systems where server_type=?";
+	$result = $adb->pquery($query, array('backup'));
 	$num_rows = $adb->num_rows($result);
 	if($num_rows > 0)
 	{

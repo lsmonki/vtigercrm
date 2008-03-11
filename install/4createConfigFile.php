@@ -45,8 +45,8 @@ session_start();
 
 // vtiger CRM version number; do not edit!
 
-$vtiger_version = "5.0.3";
-$release_date = "31 May 2007";
+$vtiger_version = "5.0.4";
+$release_date = "10 March 2008";
 
 
 if (isset($_REQUEST['db_hostname']))
@@ -83,6 +83,9 @@ if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
+if (isset($_REQUEST['standarduser_email'])) $standarduser_email = $_REQUEST['standarduser_email'];
+
+if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 
 if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
 
@@ -90,17 +93,15 @@ if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code
 
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
 
-if (isset($_REQUEST['mail_server'])) $mail_server = $_REQUEST['mail_server'];
-
-if (isset($_REQUEST['mail_server_username'])) $mail_server_username = $_REQUEST['mail_server_username'];
-
-if (isset($_REQUEST['mail_server_password'])) $mail_server_password = $_REQUEST['mail_server_password'];
-
 if (isset($_REQUEST['ftpserver'])) $ftpserver = $_REQUEST['ftpserver'];
 
 if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
 
 if (isset($_REQUEST['ftppassword'])) $ftppassword = $_REQUEST['ftppassword'];
+
+// If vtiger charset is set (based on database charset check from last page) use it
+if (isset($_REQUEST['vt_charset'])) $vt_charset = $_REQUEST['vt_charset'];
+else $vt_charset = 'UTF-8';
 
 // update default port
 if ($db_port == '')
@@ -109,11 +110,11 @@ if ($db_port == '')
 	{
 		$db_port = "3306";
 	}
-	elseif($db_type = 'pgsql')
+	elseif($db_type == 'pgsql')
 	{
 		$db_port = "5432";
 	}
-	elseif($db_type = 'oci8')
+	elseif($db_type == 'oci8')
 	{
 		$db_port = '1521';
 	}
@@ -127,7 +128,7 @@ $cache_dir = 'cache/';
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Config File Creation</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -210,12 +211,11 @@ $cache_dir = 'cache/';
 				      			$buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
 				      			$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
 				      			$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
-				      			/* replace mail variable */
-				      			$buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
-				      			$buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
-						      	$buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
 						      	$buffer = str_replace( "_DB_STAT_", "true", $buffer);
-				
+
+								/* replace charset variable */
+								$buffer = str_replace( "_VT_CHARSET_", $vt_charset, $buffer);
+
 						      	/* replace master currency variable */
 				      			$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
 
@@ -333,11 +333,6 @@ $cache_dir = 'cache/';
 	$config .= "// upload_dir default value prepended by cache_dir = upload/\n";
 	$config .= "\$tmp_dir = '$cache_dir"."upload/';\n\n";
 
-	$config .= "// mail server parameters\n";
-	$config .= "\$mail_server = '$mail_server';\n";
-	$config .= "\$mail_server_username = '$mail_server_username';\n";
-	$config .= "\$mail_server_password = '$mail_server_password';\n\n";
-	
 	$config .= "// maximum file size for uploaded files in bytes also used when uploading import files\n";
 	$config .= "// upload_maxsize default value = 3000000\n";
 	$config .= "\$upload_maxsize = 3000000;\n\n";
@@ -411,7 +406,7 @@ $cache_dir = 'cache/';
 	$config .= "// Master currency name\n";
  	$config .= "\$currency_name = '$currency_name';\n";
  	$config .= "// Default charset if the language specific character set is not found.\n";
- 	$config .= "\$default_charset = 'ISO-8859-1';\n";
+ 	$config .= "\$default_charset = 'UTF-8';\n";
  	$config .= "// Default language in case all or part of the user's language pack is not available.\n";
  	$config .= "\$default_language = 'en_us';\n";
  	$config .= "// Translation String Prefix - This will add the language pack name to every translation string in the display.\n";
@@ -449,6 +444,8 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+				 <input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                 <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />

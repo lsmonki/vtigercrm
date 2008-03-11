@@ -47,10 +47,10 @@ if($focus->is_authenticated())
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'));
- 	    $query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";	
-			
-		$adb->query($query);
+		$date_var = $adb->formatDate(date('YmdHis'), true);
+ 	    $query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
+		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);				
+		$adb->pquery($query, $params);
 	}
 
 	
@@ -106,7 +106,7 @@ if($focus->is_authenticated())
 		$authenticated_user_language = $default_language;	
 	}
 
-	$_SESSION['authenticated_user_theme'] = $authenticated_user_theme;
+	$_SESSION['vtiger_authenticated_user_theme'] = $authenticated_user_theme;
 	$_SESSION['authenticated_user_language'] = $authenticated_user_language;
 	
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
@@ -125,7 +125,11 @@ if($focus->is_authenticated())
 	{
 		unlink($tmp_file_name);
 	}
-	header("Location: index.php");
+	$arr = $_SESSION['lastpage'];
+	if(isset($_SESSION['lastpage']))
+		header("Location: index.php?".$arr[0]);
+	else
+		header("Location: index.php");
 }
 else
 {

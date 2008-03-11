@@ -12,23 +12,25 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 
-$groupName = trim($_REQUEST['groupName']);
-$description = $_REQUEST['description'];
+$groupName = from_html(trim($_REQUEST['groupName']));
+$description = from_html($_REQUEST['description']);
 $mode = $_REQUEST['mode'];
 
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
         if($mode != 'edit')
         {
-                $query = 'select groupname from vtiger_groups where groupname="'.$groupName.'"';
+                $query = 'select groupname from vtiger_groups where groupname=?';
+				$params = array($groupName);
         }
         else
         {
                 $groupid = $_REQUEST['groupid'];
-                $query = 'select groupname from vtiger_groups  where groupname="'.$groupName.'" and groupid !='.$groupid;
+                $query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
+				$params = array($groupName, $groupid);
 
         }
-        $result = $adb->query($query);
+        $result = $adb->pquery($query, $params);
         if($adb->num_rows($result) > 0)
         {
                 echo 'A Group in the specified name "'.$groupName.'" already exists';

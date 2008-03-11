@@ -198,12 +198,15 @@ function ghide(argg2)
 
 function switchClass(myModule,toStatus) {
 	var x=document.getElementById(myModule);
-	if (toStatus=="on") {
-		x.className="dvtSelectedCell";
+	if($(x))
+	{
+		if (toStatus=="on") {
+			x.className="dvtSelectedCell";
 		}
-	if (toStatus=="off") {
-		x.className="dvtUnSelectedCell";
+		if (toStatus=="off") {
+			x.className="dvtUnSelectedCell";
 		}
+	}
 		
 }
 
@@ -213,183 +216,6 @@ function enableCalstarttime()
 		document.SharingForm.start_hour.disabled = false;
 	else	
 		document.SharingForm.start_hour.disabled = true;
-}
-function maincheck_form()
-{
-	formSelectColumnString('inviteesid','selectedusers');
-	starthour = parseInt(document.EditView.starthr.value,10);
-        startmin  = parseInt(document.EditView.startmin.value,10);
-        startformat = document.EditView.startfmt.value;
-        endhour = parseInt(document.EditView.endhr.value,10);
-        endmin  = parseInt(document.EditView.endmin.value,10);
-        endformat = document.EditView.endfmt.value;
-	followupformat = document.EditView.followup_startfmt.value;
-        followuphour = parseInt(document.EditView.followup_starthr.value,10);
-        followupmin = parseInt(document.EditView.followup_startmin.value,10);
-
-	if(startformat != '')
-	{
-		if(startformat == 'pm')
-		{
-			if(starthour == 12)
-				starthour = 12;
-			else
-				starthour = starthour + 12;
-		}
-		else
-		{
-			if(starthour == 12)
-				starthour = 0;
-			else
-				starthour = starthour;
-		}
-	}
-	if(endformat != '')
-	{
-		if(endformat == 'pm')
-		{
-			if(endhour == 12)
-				endhour = 12;
-			else
-				endhour = endhour + 12;
-		}
-		else
-		{
-			if(endhour == 12)
-				endhour = 0;
-			else
-				endhour = endhour;
-		}
-	}
-	var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-        var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-	var dateelements1=splitDateVal(dateval1);
-        var dateelements2=splitDateVal(dateval2);
-        dd1=dateelements1[0]
-       	mm1=dateelements1[1]
-        yyyy1=dateelements1[2]
-
-       	dd2=dateelements2[0]
-        mm2=dateelements2[1]
-       	yyyy2=dateelements2[2]
-
-	var date1=new Date()
-        var date2=new Date()
-
-       	date1.setYear(yyyy1)
-        date1.setMonth(mm1-1)
-       	date1.setDate(dd1)
-
-        date2.setYear(yyyy2)
-       	date2.setMonth(mm2-1)
-        date2.setDate(dd2)
-
-	durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
-       	if(durationinmin >= 60)
-       	{
-       		hour = durationinmin/60;
-       		minute = durationinmin%60;
-       	}
-       	else
-       	{
-       		hour = 0;
-       		minute = durationinmin;
-        }
-	document.EditView.duration_hours.value = hour;
-	document.EditView.duration_minutes.value = minute;
-	event_starthour = _2digit(starthour);
-	event_startmin = _2digit(startmin);
-	event_endhour = _2digit(endhour);
-	event_endmin = _2digit(endmin);
-        document.EditView.time_start.value = event_starthour+':'+event_startmin;
-        document.EditView.time_end.value = event_endhour+':'+event_endmin;
-	if(formValidate())
-	{
-		var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-		var dateelements3=splitDateVal(dateval3);
-
-		dd3=dateelements3[0]
-                mm3=dateelements3[1]
-                yyyy3=dateelements3[2]
-
-		var date3=new Date()
-		
-		date3.setYear(yyyy3)
-                date3.setMonth(mm3-1)
-                date3.setDate(dd3)
-
-		// Added for Aydin Kurt-Elli requirement START -by Minnie
-                if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block' )
-                {
-                        if(!dateValidate('followup_date','Followup Date','OTH'))
-                        {
-                                return false;
-                        }
-                        if(followupformat != '')
-                        {
-                                if(followupformat == 'pm')
-                                {
-                                        if(followuphour == 12)
-                                                followuphour = 12;
-                                        else
-                                                followuphour = followuphour + 12;
-                                }
-                                else
-                                {
-                                        if(followuphour == 12)
-                                                followuphour = 0;
-                                        else
-                                                followuphour = followuphour;
-                                }
-                        }
-
-                        if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
-			{
-			 	if (date3 <= date2)
-                                {
-                                        if((followuphour*60+followupmin) <= (endhour*60+endmin))
-                                        {
-                                                alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
-                                                document.EditView.followup_starthr.focus();
-                                                return false;
-                                        }
-                                }
-                        }
-                        else
-                                return false;
-
-                        followupendhour = followuphour;
-                        followupendmin = followupmin + 5;
-                        if(followupendmin == 60)
-                        {
-                                followupendmin = 0;
-                                followupendhour = followupendhour + 1;
-                        }
-			followuphour = _2digit(followuphour);
-			followupmin = _2digit(followupmin);
-			followupendhour = _2digit(followupendhour);
-			followupendmin = _2digit(followupendmin);
-                        document.EditView.followup_time_start.value = followuphour+':'+followupmin;
-                        document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
-                }
-                // Added for Aydin Kurt-Elli requirement END -by Minnie
-		//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
-		if(document.EditView.recurringtype.value =="Monthly")
-		{
-			if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
-			{
-				alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
-				document.EditView.repeatMonth_date.focus();
-				return false;
-			}
-		}
-		//end
-
-		return true;
-	}
-	else return false;
-
-
 }
 function check_form()
 {
@@ -448,7 +274,7 @@ function check_form()
 			else
 			{
 				if(endhour == 12)
-					endhour == 0;
+					endhour = 0;
 				else
 					endhour = endhour;
 			}
@@ -498,6 +324,7 @@ function check_form()
 			date3.setYear(yyyy3)
                         date3.setMonth(mm3-1)
                         date3.setDate(dd3)
+
                 	if (date2<=date1)
                 	{
                         	if((endhour*60+endmin) <= (starthour*60+startmin))
@@ -566,27 +393,34 @@ function check_form()
                                         }
                                 }
                                 else return false;
-
-                                followupendhour = followuphour;
-                                followupendmin = followupmin + 5;
-                                if(followupendmin == 60)
+                             //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
+                                date3.setMinutes(followupmin);
+                                date3.setHours(followuphour);
+                                if(document.EditView.activitytype[0].checked == true)
                                 {
-                                        followupendmin = 0;
-                                        followupendhour = followupendhour + 1;
+                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
                                 }
+                                if(document.EditView.activitytype[1].checked == true)
+                                {
+                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
+                                }
+				var tempdate = getdispDate(date3);
+
 				followuphour = _2digit(followuphour);
 			        followupmin = _2digit(followupmin);
-				followupendhour = _2digit(followupendhour);
-			        followupendmin = _2digit(followupendmin);
+				followupendhour = _2digit(date3.getHours());
+			        followupendmin = _2digit(date3.getMinutes());		
+			        document.EditView.followup_due_date.value = tempdate; 
                                 document.EditView.followup_time_start.value = followuphour+':'+followupmin;
                                 document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
+				//end
                         }
                         // Added for Aydin Kurt-Elli requirement END -by Minnie -->
 
 			//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
-                        if(document.EditView.recurringtype.value =="Monthly")
+                        if((getObj("recurringcheck")) && (document.EditView.recurringcheck.checked == true) && (document.EditView.recurringtype.value =="Monthly"))
                         {
-                                if((document.EditView.repeatMonth[0].checked == true) && (isNaN(document.EditView.repeatMonth_date.value)))
+				if((document.EditView.repeatMonth[0].checked == true) && ((parseInt(parseFloat(document.EditView.repeatMonth_date.value))!=document.EditView.repeatMonth_date.value) || document.EditView.repeatMonth_date.value=='' || parseInt(document.EditView.repeatMonth_date.value)>'31' || document.EditView.repeatMonth_date.value<='0'))
                                 {
                                         alert(alert_arr.INVALID +' "'+document.EditView.repeatMonth_date.value+'" ');
                                         document.EditView.repeatMonth_date.focus();
@@ -599,27 +433,20 @@ function check_form()
                         //added to check Start Date & Time,if Activity Status is Planned.//start
                         if(document.EditView.eventstatus.value == "Planned")
                         {
-                                var currdate=new Date()
                                 var chkdate=new Date()
 				chkdate.setMinutes(event_startmin)
 				chkdate.setHours(event_starthour)
                                 chkdate.setYear(yyyy1)
                                 chkdate.setMonth(mm1-1)
                                 chkdate.setDate(dd1)
+				if(!comparestartdate(chkdate)) return false;
 
-                                if(!compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE"))
-                                {
-                                        getObj("date_start").focus();
-                                        return false;
-                                }
-                                else return true
                         }
-                        //end
 
 		}	
 		else
 			return false;
-		if(document.EditView.recurringcheck.checked == false)
+		if(getObj("recurringcheck") && document.EditView.recurringcheck.checked == false)
                 {
                         document.EditView.recurringtype.value = '--None--';
                 }
@@ -716,13 +543,15 @@ function incUser(avail_users,sel_users)
 	{
 		if (availListObj.options[i].selected==true) 
 		{
+			var rowFound = false;
+			var existingObj = null;
 			for (j=0;j<selectedColumnsObj.length;j++) 
 			{
 				if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
 				{
-					var rowFound=true
-						var existingObj=selectedColumnsObj.options[j]
-						break
+					rowFound=true;
+					existingObj=selectedColumnsObj.options[j]
+					break
 				}
 			}
 			if (rowFound!=true) 
@@ -738,7 +567,7 @@ function incUser(avail_users,sel_users)
 			}
 			else 
 			{
-				existingObj.selected=true
+				if (existingObj != null) existingObj.selected=true
 			}
 		}
 	}
@@ -757,6 +586,36 @@ function rmvUser(sel_users)
 }
 
 
+// function to delete activity related contact in calendar
+var del_ids = new Array();
+function removeActContacts()
+{
+	var avail_contacts = getObj('parentid');
+	// this block is to remove contacts and get deleted contact ids
+	if(avail_contacts.options.selectedIndex > -1)
+	{
+		for(m = 0; m < avail_contacts.options.length; m++)
+		{
+			if(avail_contacts.options[m].selected == true)
+			{
+				del_ids.push(avail_contacts.options[m].value);
+				avail_contacts.options[m] = null;
+				removeActContacts();
+			}
+		}
+	}
+	document.EditView.deletecntlist.value = del_ids.join(";");
+	
+	// this block is to get available id list
+	var avail_ids = new Array();
+	for(n=0; n<avail_contacts.options.length;n++)
+	{
+		avail_ids.push(avail_contacts.options[n].value);	
+	}
+	document.EditView.contactidlist.value = avail_ids.join(";");
+	
+}
+//end
 function formSelectColumnString(usr,col)
 {
 	
@@ -881,7 +740,57 @@ function updateStatus(record,status,view,hour,day,month,year,type){
 	}
 }
 
-function getcalAction(obj,Lay,id,view,hour,dateVal,type,isShared){
+function cal_navigation(type,urlstring,start)
+{
+	var url = urlstring;
+	$("status").style.display="inline";
+	if(type == 'event')
+        {
+		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav&viewOption='+OptionData+url+start+'&subtab='+type,
+                                onComplete: function(response) {
+					//alert(response.responseText);
+                                        if(OptionData == 'listview')
+                                        {
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("listView").innerHTML=result[0];
+						$("status").style.display="none";
+                                        }
+                                        if(OptionData == 'hourview')
+					{
+                                                result = response.responseText.split('####');
+                                                $("total_activities").innerHTML = result[1];
+                                                $("hrView").innerHTML=result[0];
+						$("status").style.display="none";
+                                        }
+                                }
+                        }
+                );
+        }
+	if(type == 'todo')
+        {
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Calendar&action=CalendarAjax&file=ActivityAjax&ajax=true&n_type=nav'+url+start+'&subtab=todo',
+                                onComplete: function(response) {
+                                        result = response.responseText.split('####');
+                                        $("total_activities").innerHTML = result[1];
+                                        $("mnuTab2").innerHTML=result[0];
+					$("status").style.display="none";
+                                }
+                        }
+                );
+        }	
+}
+
+function getcalAction(obj,Lay,id,view,hour,dateVal,type){
     var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
@@ -937,14 +846,9 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type,isShared){
     if(pending) pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
 
     if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&return_action=index&activity_mode="+activity_mode+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&viewOption="+OptionData+"&subtab="+type+"&maintab=Calendar";
-    if(isShared == "shared")
-    {
-	if(actdelete) actdelete.href="javascript:alert('"+alert_arr.SHARED_EVENT_DEL_MSG+"')";	
-    }
-    else
-    {
-	if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
-    }	
+
+    if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
+
     if(changeowner) changeowner.href="javascript:dispLayer('act_changeowner');";
 
 }
@@ -958,7 +862,7 @@ function dispLayer(lay)
 //check whether user form selected or group form selected
 function checkgroup()
 {
-	if(document.change_owner.user_lead_owner[1].checked)
+	if($("group_checkbox").checked)
 	{
 		  document.change_owner.lead_group_owner.style.display = "block";
 	          document.change_owner.lead_owner.style.display = "none";
@@ -980,8 +884,8 @@ function calendarChangeOwner()
         var hour   = document.change_owner.hour.value;
         var subtab = document.change_owner.subtab.value;
 
-	var checked = document.change_owner.user_lead_owner[0].checked;
-	if(checked==true)
+	//var checked = document.change_owner.user_lead_owner[0].checked;
+	if($("user_checkbox").checked)
 	{
 		var user_id = document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
 		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';
@@ -1297,7 +1201,6 @@ function changeEndtime_StartTime()
 
 function calDuedatetime(type)
 {
-        var datefmt = document.EditView.dateformat.value;
         var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
         var dateelements1=splitDateVal(dateval1);
         dd1=parseInt(dateelements1[0],10);
@@ -1307,25 +1210,11 @@ function calDuedatetime(type)
         //date1.setDate(dd1+1);
         date1.setYear(yyyy1);
         date1.setMonth(mm1-1,dd1+1);
-        var yy = date1.getFullYear();
-        var mm = parseInt(date1.getMonth(),10) + 1;
-        var dd = date1.getDate();
+	var tempdate = getdispDate(date1);
         var date = document.EditView.date_start.value;
         var hour = parseInt(document.EditView.starthr.value,10);
         var min = parseInt(document.EditView.startmin.value,10);
         var fmt = document.EditView.startfmt.value;
-	dd = _2digit(dd);
-        mm = _2digit(mm);	
-        if(datefmt == '%d-%m-%Y')
-        {
-                var tempdate = dd+'-'+mm+'-'+yy;
-        }else if(datefmt == '%m-%d-%Y')
-        {
-                var tempdate = mm+'-'+dd+'-'+yy;
-        }else
-        {
-                var tempdate = yy+'-'+mm+'-'+dd;
-        }
 	if(type == 'meeting')
         {
                 if(fmt == 'pm')
@@ -1492,3 +1381,27 @@ function cal_fnvshobj(obj,Lay){
     tagName.style.visibility = "visible";
 }
 
+/**this is for to add a option element while selecting contact in add event page
+   lvalue ==> is a contact id
+   ltext ==> is a contact name
+**/
+function addOption(lvalue,ltext)	
+{
+	var optObj = document.createElement('OPTION')
+	if (browser_ie) optObj.innerText = ltext;
+        else if(browser_nn4 || browser_nn6) optObj.text = ltext;
+	else optObj.text = ltext;
+	optObj.value = lvalue;
+	document.getElementById('parentid').appendChild(optObj);
+}
+
+function getdispDate(tempDate)
+{
+	var datefmt = document.EditView.dateformat.value;
+        var dd = _2digit(parseInt(tempDate.getDate(),10));
+        var mm = _2digit(parseInt(tempDate.getMonth(),10)+1);
+	var yy = tempDate.getFullYear();
+	if(datefmt == '%d-%m-%Y') return dd+'-'+mm+'-'+yy;
+	else if(datefmt == '%m-%d-%Y') return mm+'-'+dd+'-'+yy;
+	else return yy+'-'+mm+'-'+dd;
+}

@@ -19,6 +19,7 @@ global $app_strings,$mod_strings,$current_language,$theme,$log;
 $current_module_strings = return_module_language($current_language, 'Products');
 
 $productid = $_REQUEST['return_id'];
+$parenttab = $_REQUEST['parenttab'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -35,7 +36,7 @@ $focus = new PriceBooks();
 //Retreive the list of PriceBooks
 $list_query = getListQuery("PriceBooks");
 
-$list_query .= ' ORDER BY pricebookid DESC ';
+$list_query .= ' and vtiger_pricebook.active<>0  ORDER BY pricebookid DESC ';
 
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
@@ -43,8 +44,8 @@ $num_rows = $adb->num_rows($list_result);
 $record_string= "Total No of PriceBooks : ".$num_rows;
 
 //Retreiving the array of already releated products
-$sql1="select vtiger_crmentity.crmid, vtiger_pricebookproductrel.pricebookid,vtiger_products.unit_price from vtiger_pricebookproductrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebookproductrel.productid inner join vtiger_products on vtiger_products.productid=vtiger_pricebookproductrel.productid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=".$productid;
-$res1 = $adb->query($sql1);
+$sql1="select vtiger_crmentity.crmid, vtiger_pricebookproductrel.pricebookid,vtiger_products.unit_price from vtiger_pricebookproductrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebookproductrel.productid inner join vtiger_products on vtiger_products.productid=vtiger_pricebookproductrel.productid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=?";
+$res1 = $adb->pquery($sql1, array($productid));
 $num_prod_rows = $adb->num_rows($res1);
 $pbk_array = Array();
 $unit_price = getUnitPrice($productid);
@@ -97,7 +98,8 @@ $list_header = '';
 $list_header .= '<tr>';
 $list_header .='<td class="lvtCol" width="9%"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice("'.$unit_price.'") \'></td>';
 $list_header .= '<td class="lvtCol" width="45%">'.$mod_strings['LBL_PRICEBOOK'].'</td>';
-$list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
+if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+	$list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
 $list_header .= '<td class="lvtCol" width="23%">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
 $list_header .= '</tr>';
 
@@ -115,7 +117,10 @@ for($i=0; $i<$num_rows; $i++)
 		$field_name=$entity_id."_listprice";
 		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
 		$list_body .= '<td>'.$adb->query_result($list_result,$i,"bookname").'</td>';
-		$list_body .= '<td>'.$unit_price.'</td><td>';
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+			$list_body .= '<td>'.$unit_price.'</td>';
+
+		$list_body .='<td>';
 		if(isPermitted("PriceBooks","EditView","") == 'yes')
 			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'">';
 		else
@@ -134,6 +139,7 @@ if($sorder !='')
 
 $smarty->assign("LISTENTITY", $list_body);
 $smarty->assign("RETURN_ID", $productid);
+$smarty->assign("CATEGORY", $parenttab);
 
 $smarty->display("AddProductToPriceBooks.tpl");
 

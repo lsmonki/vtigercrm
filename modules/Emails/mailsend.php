@@ -34,8 +34,14 @@ if($focus->column_fields["assigned_user_id"]==0 && $_REQUEST['assigned_group_nam
 	$grp_obj = new GetGroupUsers();
 	$grp_obj->getAllUsersInGroup(getGrpId($_REQUEST['assigned_group_name']));
 	$users_list = constructList($grp_obj->group_users,'INTEGER');
-	$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users where id in ".$users_list;
-	$res = $adb->query($sql);
+	if (count($users_list) > 0) {
+		$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users where id in (". generateQuestionMarks($users_list) .")";
+		$params = array($users_list);
+	} else {
+		$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users";
+		$params = array();
+	}
+	$res = $adb->pquery($sql, $params);
 	$user_email = '';
 	while ($user_info = $adb->fetch_array($res))
 	{
@@ -70,13 +76,13 @@ if($to_email == '' && $cc == '' && $bcc == '')
 }
 else
 {
-	$query1 = "select email1 from vtiger_users where id =".$current_user->id;
-	$res1 = $adb->query($query1);
+	$query1 = "select email1 from vtiger_users where id =?";
+	$res1 = $adb->pquery($query1, array($current_user->id));
 	$val = $adb->query_result($res1,0,"email1");
 //	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
 	
-	$query = 'update vtiger_emaildetails set email_flag ="SENT",from_email ='."'$val'".' where emailid='.$focus->id;
-	$adb->query($query);
+	$query = 'update vtiger_emaildetails set email_flag ="SENT",from_email =? where emailid=?';
+	$adb->pquery($query, array($val, $focus->id));
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
 	{
@@ -85,7 +91,7 @@ else
 	}
 	elseif($mail_status == 1 && $to_email == '')//Mail send success only for CC and BCC but the 'to' email is empty 
 	{
-		$adb->query($query);
+		$adb->pquery($query, array($val, $focus->id));
 		$errorheader1 = 1;
 		$mail_status_str = "cc_success=0&&&";
 	}
@@ -100,6 +106,9 @@ else
 $parentid= $_REQUEST['parent_id'];
 $myids=explode("|",$parentid);
 $all_to_emailids = Array();
+$from_name = $current_user->user_name;
+$from_address = $current_user->column_fields['email1'];
+
 for ($i=0;$i<(count($myids)-1);$i++)
 {
 	$realid=explode("@",$myids[$i]);
@@ -108,10 +117,10 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	if($realid[1] == -1)
         {
                 //handle the mail send to vtiger_users
-                $emailadd = $adb->query_result($adb->query("select email1 from vtiger_users where id=$mycrmid"),0,'email1');
+                $emailadd = $adb->query_result($adb->pquery("select email1 from vtiger_users where id=?", array($mycrmid)),0,'email1');
                 $pmodule = 'Users';
-                $description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-                $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+		$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+                $mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id);
                 $all_to_emailids []= $emailadd;
                 $mail_status_str .= $emailadd."=".$mail_status."&&&";
         }
@@ -122,8 +131,8 @@ for ($i=0;$i<(count($myids)-1);$i++)
 		for ($j=1;$j<$nemail;$j++)
 		{
 			$temp=$realid[$j];
-			$myquery='Select columnname from vtiger_field where fieldid='.$adb->quote($temp);
-			$fresult=$adb->query($myquery);			
+			$myquery='Select columnname from vtiger_field where fieldid=?';
+			$fresult=$adb->pquery($myquery, array($temp));			
 			if ($pmodule=='Contacts')
 			{
 				require_once('modules/Contacts/Contacts.php');
@@ -152,14 +161,21 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
 
 //This is to convert the html encoded string to original html entities so that in mail description contents will be displayed correctly
-	$focus->column_fields['description'] = from_html($focus->column_fields['description']);
+	//$focus->column_fields['description'] = from_html($focus->column_fields['description']);
 
 			if($emailadd != '')
 			{
-				$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
+				$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+				$pos = strpos($description, '$logo$');
+				if ($pos !== false)
+				{
+
+					$description =str_replace('$logo$','<img src="cid:logo" />',$description);
+					$logo=1;
+				}
 				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
 				{
-					$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+					$mail_status = send_mail('Emails',$emailadd,$from_name,$from_address,$_REQUEST['subject'],$description,'','','all',$focus->id,$logo);
 				}	
 
 				$all_to_emailids []= $emailadd;
@@ -194,19 +210,19 @@ else
 {
 	global $adb;
 	$date_var = date('Ymd');
-	$query = 'update vtiger_activity set date_start ='.$date_var.' where activityid = '.$returnid;
-	$adb->query($query);
+	$query = 'update vtiger_activity set date_start =? where activityid = ?';
+	$adb->pquery($query, array($date_var, $returnid));
 }
 //The following function call is used to parse and form a encoded error message and then pass to result page
 $mail_error_str = getMailErrorString($mail_status_str);
 $adb->println("Mail Sending Process has been finished.\n\n");
 if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
 {
-	//this will fix #1211
+	/*this will fix #1211*/
 	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	//$inputs="<script>window.self.close();</script>";
 	echo $inputs;
 }
 //header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
-
 
 ?>

@@ -26,6 +26,9 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $focus = new Vendors();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 setObjectValuesFromRequest($focus);
 
 $focus->save("Vendors");
@@ -41,6 +44,5 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname&smodule=VENDOR");
-
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname&smodule=VENDOR&start=".$_REQUEST['pagenumber'].$search);
 ?>

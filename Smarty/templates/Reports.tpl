@@ -173,13 +173,24 @@ function AddFolder()
                 return false;
                 {literal}
 	}
+	else if((getObj('folder_name').value).match(/['"\+]/) || (getObj('folder_desc').value).match(/['"\+]/))
+        {
+                alert(alert_arr.NO_QUOTES+alert_arr.NAME_DESC);
+                return false;
+        }	
+	/*else if((!CharValidation(getObj('folder_name').value,'namespace')) || (!CharValidation(getObj('folder_desc').value,'namespace')))
+	{
+			alert(alert_arr.NO_SPECIAL+alert_arr.NAME_DESC);
+			return false;
+	}*/
 	else
 	{
+		var foldername = encodeURIComponent(getObj('folder_name').value);
 		new Ajax.Request(
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+getObj('folder_name').value,
+                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+foldername,
                                 onComplete: function(response) {
 				var folderid = getObj('folder_id').value;
 				var resresult =response.responseText.split("::");
@@ -208,12 +219,13 @@ function AddFolder()
 				else
 					{
 						fninvsh('orgLay');
-						var foldername = getObj('folder_name').value;
-						var folderdesc = getObj('folder_desc').value;
+						var folderdesc = encodeURIComponent(getObj('folder_desc').value);
 						getObj('folder_name').value = '';
 						getObj('folder_desc').value = '';
-						foldername = foldername.replace(/&/gi,'*amp*')
-						folderdesc = folderdesc.replace(/&/gi,'*amp*')
+						foldername = foldername.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                foldername = foldername.replace(/&/gi,'*amp*');
+                                                folderdesc = folderdesc.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                folderdesc = folderdesc.replace(/&/gi,'*amp*');
 						if(mode == 'save')
 						{
 							url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;

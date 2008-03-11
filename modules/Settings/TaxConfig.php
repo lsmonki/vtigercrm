@@ -20,7 +20,6 @@ $smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $tax_details = getAllTaxes();
 $sh_tax_details = getAllTaxes('all','sh');
@@ -134,10 +133,10 @@ function updateTaxPercentages($new_percentages, $sh='')
 		if($new_val != '')
 		{
 			if($sh != '' && $sh == 'sh')
-				$query = "update vtiger_shippingtaxinfo set percentage=\"$new_val\" where taxid=\"$taxid\"";
+				$query = "update vtiger_shippingtaxinfo set percentage=? where taxid=?";
 			else
-				$query = "update vtiger_inventorytaxinfo set percentage = \"$new_val\" where taxid=\"$taxid\"";
-			$adb->query($query);
+				$query = "update vtiger_inventorytaxinfo set percentage =? where taxid=?";
+			$adb->pquery($query, array($new_val, $taxid));
 		}
 	}
 
@@ -159,10 +158,10 @@ function updateTaxLabels($new_labels, $sh='')
 		if($new_val != '')
 		{
 			if($sh != '' && $sh == 'sh')
-				$query = "update vtiger_shippingtaxinfo set taxlabel= \"$new_val\" where taxid=\"$taxid\"";
+				$query = "update vtiger_shippingtaxinfo set taxlabel= ? where taxid=?";
 			else
-				$query = "update vtiger_inventorytaxinfo set taxlabel = \"$new_val\" where taxid=\"$taxid\"";
-			$adb->query($query);
+				$query = "update vtiger_inventorytaxinfo set taxlabel = ? where taxid=?";
+			$adb->pquery($query, array($new_val, $taxid));
 		}
 	}
 
@@ -181,10 +180,10 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 
 	//First we will check whether the tax is already available or not
 	if($sh != '' && $sh == 'sh')
-		$check_query = "select taxlabel from vtiger_shippingtaxinfo where taxlabel='".addslashes($taxlabel)."'";
+		$check_query = "select taxlabel from vtiger_shippingtaxinfo where taxlabel=?";
 	else
-		$check_query = "select taxlabel from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'";
-	$check_res = $adb->query($check_query);
+		$check_query = "select taxlabel from vtiger_inventorytaxinfo where taxlabel=?";
+	$check_res = $adb->pquery($check_query, array($taxlabel));
 
 	if($adb->num_rows($check_res) > 0)
 		return "<font color='red'>This tax is already available</font>";
@@ -203,17 +202,18 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 		$taxname = "tax".$taxid;
 		$query = "alter table vtiger_inventoryproductrel add column $taxname decimal(7,3) default NULL";
 	}
-	$res = $adb->query($query);
+	$res = $adb->pquery($query, array());
 
 	//if the tax is added as a column then we should add this tax in the list of taxes
 	if($res)
 	{
-		if($sh != '' && $sh == 'sh')
-			$query1 = "insert into vtiger_shippingtaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
+		if($sh != '' && $sh == 'sh') 
+			$query1 = "insert into vtiger_shippingtaxinfo values(?,?,?,?,?)";
 		else
-			$query1 = "insert into vtiger_inventorytaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
+			$query1 = "insert into vtiger_inventorytaxinfo values(?,?,?,?,?)";
 
-		$res1 = $adb->query($query1);
+		$params1 = array($taxid, $taxname, $taxlabel, $taxvalue, 0);
+		$res1 = $adb->pquery($query1, $params1);
 	}
 
 	$log->debug("Exit from function addTaxType($taxlabel, $taxvalue)");
@@ -235,9 +235,9 @@ function changeDeleted($taxname, $deleted, $sh='')
 	$log->debug("Entering into function changeDeleted($taxname, $deleted, $sh)");
 
 	if($sh == 'sh')
-		$adb->query("update vtiger_shippingtaxinfo set deleted=$deleted where taxname=\"$taxname\"");
+		$adb->pquery("update vtiger_shippingtaxinfo set deleted=? where taxname=?", array($deleted, $taxname));
 	else
-		$adb->query("update vtiger_inventorytaxinfo set deleted=$deleted where taxname=\"$taxname\"");
+		$adb->pquery("update vtiger_inventorytaxinfo set deleted=? where taxname=?", array($deleted, $taxname));
 	$log->debug("Exit from function changeDeleted($taxname, $deleted, $sh)");
 }
 

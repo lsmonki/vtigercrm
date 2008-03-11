@@ -36,7 +36,7 @@ $theme_path="themes/".$theme."/";
                 </tr>
 <?php
    $sql = "select * from vtiger_emailtemplates order by templateid desc";
-   $result = $adb->query($sql);
+   $result = $adb->pquery($sql, array());
    $temprow = $adb->fetch_array($result);
    
 $cnt=1;

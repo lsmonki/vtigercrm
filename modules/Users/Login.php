@@ -21,7 +21,6 @@
  ********************************************************************************/
 $theme_path="themes/".$theme."/";
 $image_path="include/images/";
-require_once($theme_path.'layout_utils.php');
 
 global $app_language;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel
@@ -73,6 +72,8 @@ if(isset($_SESSION["login_error"]))
 }
 
 ?>
+<!--Added to display the footer in the login page by Dina--!>
+<style type="text/css">@import url("themes/<?php echo $theme; ?>/style.css");</style>
 <script type="text/javascript" language="JavaScript">
 <!-- Begin
 function set_focus() {
@@ -93,6 +94,7 @@ function set_focus() {
 			<td align="right"><img src="themes/images/honestCRMTop.gif"></td>
 		</tr>
 	</table>
+	<!-- key to check session_out in Ajax key=s18i14i22a19 -->
 	<!-- Login Starts -->
 	<table border="0" cellspacing="0" cellpadding="0" width=700>
 		<tr>

@@ -33,7 +33,7 @@ class PHPMailer
      * Sets the CharSet of the message.
      * @var string
      */
-    var $CharSet           = "iso-8859-1";
+    var $CharSet           = "UTF-8";
 
     /**
      * Sets the Content-type of the message.
@@ -366,13 +366,13 @@ class PHPMailer
         switch($this->Mailer)
         {
              case "sendmail":
-                $result = $this->SendmailSend($header, html_entity_decode($body));
+                $result = $this->SendmailSend($header, html_entity_decode($body,ENT_COMPAT,$this->CharSet));
                 break;
             case "mail":
-                $result = $this->MailSend($header, html_entity_decode($body));
+                $result = $this->MailSend($header, html_entity_decode($body,ENT_COMPAT,$this->CharSet));
                 break;
             case "smtp":
-                $result = $this->SmtpSend($header, html_entity_decode($body));
+                $result = $this->SmtpSend($header, html_entity_decode($body,ENT_COMPAT,$this->CharSet));
                 break;
             default:
             $this->SetError($this->Mailer . $this->Lang("mailer_not_supported"));
@@ -535,7 +535,15 @@ class PHPMailer
         while($index < count($hosts) && $connection == false)
         {
             if(strstr($hosts[$index], ":"))
-                list($host, $port) = explode(":", $hosts[$index]);
+	    {
+		    #list($host, $port) = explode(":", $hosts[$index]);
+		    $hostA = explode(':', $hosts[$index]);
+		    if (is_numeric(end($hostA)))
+		    	$port = array_pop($hostA);
+		    else
+		    	$port = $this->Port;
+		    $host = implode(':', $hostA);
+	    }
             else
             {
                 $host = $hosts[$index];
@@ -594,10 +602,11 @@ class PHPMailer
      * @return bool
      */
     function SetLanguage($lang_type, $lang_path = "language/") {
-        if(file_exists($lang_path.'phpmailer.lang-'.$lang_type.'.php'))
-            include($lang_path.'phpmailer.lang-'.$lang_type.'.php');
-        else if(file_exists($lang_path.'phpmailer.lang-en.php'))
-            include($lang_path.'phpmailer.lang-en.php');
+	global $root_directory;
+        if(file_exists($root_directory.'/modules/Emails/'.$lang_path.'phpmailer.lang-'.$lang_type.'.php'))
+            include($root_directory.'/modules/Emails/'.$lang_path.'phpmailer.lang-'.$lang_type.'.php');
+        else if(file_exists($root_directory.'/modules/Emails/'.$lang_path.'phpmailer.lang-en.php'))
+            include($root_directory.'/modules/Emails/'.$lang_path.'phpmailer.lang-en.php');
         else
         {
             $this->SetError("Could not load language file");
@@ -1458,8 +1467,10 @@ class PHPMailer
      * @return string
      */
     function Lang($key) {
+    	require_once('config.inc.php');
+		global $default_language;
         if(count($this->language) < 1)
-            $this->SetLanguage("en"); // set the default language
+            $this->SetLanguage($default_language);
     
         if(isset($this->language[$key]))
             return $this->language[$key];

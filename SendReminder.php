@@ -37,9 +37,8 @@ $log->debug(" invoked SendReminder ");
 $app_strings = return_application_language($current_language);
 
 //modified query for recurring events -Jag
- 	$query="select vtiger_crmentity.crmid,vtiger_seactivityrel.crmid as setype,vtiger_activity.*,vtiger_activity_reminder.reminder_time,vtiger_activity_reminder.reminder_sent,vtiger_activity_reminder.recurringid,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_activity_reminder on vtiger_activity.activityid=vtiger_activity_reminder.activity_id left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid where DATE_FORMAT(vtiger_activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and vtiger_crmentity.crmid != 0 and vtiger_activity.eventstatus = 'Planned' and vtiger_activity_reminder.reminder_sent = 0 group by vtiger_activity.activityid,vtiger_recurringevents.recurringid";
-
-$result = $adb->query($query);
+$query="select vtiger_crmentity.crmid,vtiger_seactivityrel.crmid as setype,vtiger_activity.*,vtiger_activity_reminder.reminder_time,vtiger_activity_reminder.reminder_sent,vtiger_activity_reminder.recurringid,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_activity_reminder on vtiger_activity.activityid=vtiger_activity_reminder.activity_id left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid where DATE_FORMAT(vtiger_activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and vtiger_crmentity.crmid != 0 and vtiger_activity.eventstatus = 'Planned' and vtiger_activity_reminder.reminder_sent = 0 group by vtiger_activity.activityid,vtiger_recurringevents.recurringid";
+$result = $adb->pquery($query, array());
 
 if($adb->num_rows($result) >= 1)
 {
@@ -77,8 +76,8 @@ if($adb->num_rows($result) >= 1)
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
 			$log->debug(" InSide  REMINDER");
-			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =".$activity_id." and vtiger_users.deleted=0"; 
-			$user_result = $adb->query($query_user);		
+			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =? and vtiger_users.deleted=0"; 
+			$user_result = $adb->pquery($query_user, array($activity_id));		
 			if($adb->num_rows($user_result)>=1)
 			{
 				while($user_result_row = $adb->fetch_array($user_result))
@@ -94,27 +93,27 @@ if($adb->num_rows($result) >= 1)
 			$from ="reminders@localserver.com";
 			
 			// Retriving the Subject and message from reminder table		
-			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=7";
-			$result_main = $adb->query($sql);
+			$sql = "select active,notificationsubject,notificationbody from vtiger_notificationscheduler where schedulednotificationid=8";
+			$result_main = $adb->pquery($sql, array());
 
 			$subject = $app_strings['Reminder'].$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n ".$app_strings['Subject']." : ".$activity_sub."\n ". $parent_content ." ".$app_strings['Date & Time']." : ".$date_start." ".$time_start."\n\n ".$app_strings['Visit_Link']." <a href='".$site_URL."/index.php?action=DetailView&module=Calendar&record=".$activity_id."&activity_mode=".$activitymode."'>".$app_strings['Click here']."</a>";
 
 			if(count($to_addr) >=1)
 			{
 				send_mail($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
-				$upd_query = "UPDATE vtiger_activity_reminder SET reminder_sent=1 where activity_id=".$activity_id;
+				$upd_query = "UPDATE vtiger_activity_reminder SET reminder_sent=1 where activity_id=?";
+				$upd_params = array($activity_id);
 
 				if($recur_id!=0)
 				{
-					$upd_query.=" and recurringid =".$recur_id;
+					$upd_query.=" and recurringid =?";
+					array_push($upd_params, $recur_id);
 				}
 
-				$adb->query($upd_query);
-
-				
+				$adb->pquery($upd_query, $upd_params);
 				
 			}
 		}
@@ -148,10 +147,8 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 
 
 	$mail->IsSMTP();                                      // set mailer to use SMTP
-
-	if($mail_server=='')
-	{
-		$mailserverresult=$adb->query("select * from vtiger_systems where server_type='email'");
+	
+		$mailserverresult=$adb->pquery("select * from vtiger_systems where server_type='email'", array());
 		$mail_server = $adb->query_result($mailserverresult,0,'server');
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
@@ -160,10 +157,12 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 		$_REQUEST['server']=$mail_server;
 		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
 
-	}	
-
+	
 	$mail->Host = $mail_server;			// specify main and backup server
-	$mail->SMTPAuth = $smtp_auth;			// turn on SMTP authentication
+	if($smtp_auth == 'true')
+		$mail->SMTPAuth = true;
+	else
+		$mail->SMTPAuth = false;
 	$mail->Username = $mail_server_username ;	// SMTP username
 	$mail->Password = $mail_server_password ;	// SMTP password
 	$mail->From = $from;
@@ -225,14 +224,15 @@ function getParentMailId($returnmodule,$parentid)
         }
 	if($parentid != '')
 	{
-	        $query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
-	        $mailid = $adb->query_result($adb->query($query),0,'email');
+	        $query = 'select * from '.$tablename.' where '.$idname.' = ?';
+			$res = $adb->pquery($query, array($parentid));
+	        $mailid = $adb->query_result($res,0,'email');
 	}
         if($mailid == '' && $returnmodule =='Contacts')
         {
-                $mailid = $adb->query_result($adb->query($query),0,'otheremail');
+                $mailid = $adb->query_result($res,0,'otheremail');
                 if($mailid == '')
-                        $mailid = $adb->query_result($adb->query($query),0,'yahooid');
+                        $mailid = $adb->query_result($res,0,'yahooid');
         }
 	return $mailid;
 }
@@ -247,8 +247,8 @@ function getParentInfo($value)
  	$parent_module = getSalesEntityType($value);
 	if($parent_module == "Leads")
 	{
-		$sql = "select * from vtiger_leaddetails where leadid=".$value;
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_leaddetails where leadid=?";
+		$result = $adb->pquery($sql, array($value));
 		$first_name = $adb->query_result($result,0,"firstname");
 		$last_name = $adb->query_result($result,0,"lastname");
 
@@ -256,16 +256,16 @@ function getParentInfo($value)
 	}
 	elseif($parent_module == "Accounts")
 	{
-		$sql = "select * from  vtiger_account where accountid=".$value;
-		$result = $adb->query($sql);
+		$sql = "select * from  vtiger_account where accountid=?";
+		$result = $adb->pquery($sql, array($value));
 		$account_name = $adb->query_result($result,0,"accountname");
 
 		$parent_name =$account_name;
 	}
 	elseif($parent_module == "Potentials")
 	{
-		$sql = "select * from  vtiger_potential where potentialid=".$value;
-		$result = $adb->query($sql);
+		$sql = "select * from  vtiger_potential where potentialid=?";
+		$result = $adb->pquery($sql, array($value));
 		$potentialname = $adb->query_result($result,0,"potentialname");
 
 		$parent_name =$potentialname;

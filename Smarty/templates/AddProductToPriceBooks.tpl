@@ -82,7 +82,7 @@ function addtopricebook()
 							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
-						else if(isNaN(elem[i].value))
+						else if(isNaN(elem[i].value)|| elem[i].value <= 0)
                 	                        {
         	                                        alert(alert_arr.INVALID_LIST_PRICE);
                                                 	return false;
@@ -100,7 +100,7 @@ function addtopricebook()
 		}
 	}
 {/literal}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}&parenttab={$CATEGORY}"
 {rdelim}
 
 

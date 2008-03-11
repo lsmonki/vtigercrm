@@ -24,10 +24,11 @@
 <script src="include/js/general.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="modules/Products/multifile.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
-<input type="hidden" name="send_mail">
+<input type="hidden" name="send_mail" >
 <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 <input type="hidden" name="user_id" value="{$USER_ID}">
 <input type="hidden" name="filename" value="{$FILENAME}">
@@ -108,12 +109,34 @@
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
 	<td class="cellText" style="padding: 5px;">
-		<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>
+		<!--<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>-->
+		<input name="del_file_list" type="hidden" value="">
+					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+						<input id="my_file_element" type="file" name="{$elements.2.0}" tabindex="7" onchange="validateFilename(this);">
+						<input type="hidden" name="{$elements.2.0}_hidden" value="" />
+																	</div>
+					<script>
+						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						multi_selector.count = 0
+						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
+					</script>
 		<div id="attach_temp_cont" style="display:none;">
 		<table class="small" width="100% ">
+		
+	{if $smarty.request.attachment != ''}
+                <tr><td width="100%" colspan="2">{$smarty.request.attachment}<input type="hidden" value="{$smarty.request.attachment}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
+
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
 			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
-		{/foreach}	
+		{/foreach}
+		<input type='hidden' name='att_id_list' value='{$ATT_ID_LIST}' />
+	{/if}
+
+		{if $WEBMAIL eq 'true'}
+		{foreach item="attach_files" from=$webmail_attachments}
+                        <tr ><td width="90%">{$attach_files}</td></tr>
+                {/foreach}	
+		{/if}
 		</table>	
 		</div>	
 		{$elements.3.0}
@@ -121,7 +144,7 @@
    </tr>
    <tr>
 	<td colspan="3" class="mailSubHeader" style="padding: 5px;" align="center">
-		 <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="crmbutton small edit" onclick="window.open('index.php?module=Users&action=lookupemailtemplates','emailtemplate','top=100,left=200,height=400,width=500,menubar=no,addressbar=no,status=yes')" type="button" name="button" value=" {$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}  ">
+		 <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="crmbutton small edit" onclick="window.open('index.php?module=Users&action=lookupemailtemplates','emailtemplate','top=100,left=200,height=400,width=500,resizable=yes,scrollbars=yes,menubar=no,addressbar=no,status=yes')" type="button" name="button" value=" {$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}  ">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="return email_validate(this.form,'save');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL} " >&nbsp;
 		<input name="{$MOD.LBL_SEND}" value=" {$APP.LBL_SEND} " class="crmbutton small save" type="button" onclick="return email_validate(this.form,'send');">&nbsp;
 		<input name="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" type="button" onClick="window.close()">
@@ -132,6 +155,9 @@
 	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true' or $RET_ERROR eq 1}
 		<input type="hidden" name="from_add" value="{$from_add}">
+		<input type="hidden" name="att_module" value="Webmails">
+		<input type="hidden" name="mailid" value="{$mailid}">
+		<input type="hidden" name="mailbox" value="{$mailbox}">
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
                 <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}
@@ -187,7 +213,8 @@ function email_validate(oform,mode)
                                         return false;
                                 }
                         }
-                        else if(trim(arr[i]) != "" && !/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(trim(arr[i])))
+			//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
+			else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
                         {
                                 alert(cc_err_msg+": "+arr[i]);
                                 return false;
@@ -203,7 +230,7 @@ function email_validate(oform,mode)
 		arr = str.split(",");
 		for(var i=0; i<=arr.length-1; i++)
 		{
-			if(trim(arr[i]) != "" && !/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(trim(arr[i])))
+			if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
 			{
 				alert(bcc_err_msg+": "+arr[i]);
 				return false;	

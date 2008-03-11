@@ -16,8 +16,8 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
-$query = "SELECT * FROM vtiger_notificationscheduler";
-$result = $adb->query($query);
+$query = "SELECT * FROM vtiger_notificationscheduler order by schedulednotificationid";
+$result = $adb->pquery($query, array());
 if($adb->num_rows($result) >=1)
 {
 	$notifiy_array = Array();

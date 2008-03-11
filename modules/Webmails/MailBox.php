@@ -37,6 +37,9 @@ class MailBox {
 
 	function MailBox($mailbox = '') {
 		global $current_user;
+		require_once('include/utils/encryption.php');
+		$oencrypt = new Encryption();
+	
 		$this->db = new PearDatabase();
 		$this->db->println("Entering MailBox($mailbox)");
 
@@ -51,7 +54,7 @@ class MailBox {
 		$this->boxinfo = $this->db->fetch_array($tmp);
 
 		$this->login_username=trim($this->boxinfo["mail_username"]); 
-		$this->secretkey=trim($this->boxinfo["mail_password"]); 
+		$this->secretkey=$oencrypt->decrypt(trim($this->boxinfo["mail_password"])); 
 		$this->imapServerAddress=gethostbyname(trim($this->boxinfo["mail_servername"])); 
 		$this->mail_protocol=$this->boxinfo["mail_protocol"]; 
 		$this->ssltype=$this->boxinfo["ssltype"]; 
@@ -107,7 +110,7 @@ class MailBox {
 			$port = "110";
 		else
 		{
-	    		if($mods["imap"]["SSL Support"] == "enabled" && $this->ssltype == "tls")
+	    		if($mods["imap"]["SSL Support"] == "enabled" && ($this->ssltype == "tls" || $this->ssltype == "ssl"))
 				$port = "993";
 			else
 				$port = "143";
@@ -154,11 +157,12 @@ class MailBox {
 			}
 		}
 
-		$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port.$connectString."}".$this->mailbox;
+		//$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port.$connectString."}".$this->mailbox;
+		$connectString = "{".$this->imapServerAddress.":".$port."/".$this->mail_protocol.$connectString."}".$this->mailbox;
 		//Reference - http://forums.vtiger.com/viewtopic.php?p=33478#33478 - which has no tls or validate-cert
 		$connectString1 = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."}".$this->mailbox; 
 
-		$this->db->println("Done Building Connection String.. Connecting to box");
+		$this->db->println("Done Building Connection String.. $connectString  Connecting to box");
 		//checking the imap support in php
 		if(!function_exists('imap_open'))
 		{
@@ -173,7 +177,7 @@ class MailBox {
 			{
 				global $current_user,$mod_strings;
 				$this->db->println("CONNECTION ERROR - Could not be connected to the server using imap_open function through the connection strings $connectString and $connectString1");
-				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> Here </a>. Please <a href='index.php?module=Emails&action=index&parenttab=My Home Page'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
+				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> ".$mod_strings['LBL_HERE']."</a>. ".$mod_strings['LBL_PLEASE']." <a href='index.php?module=Emails&action=index&parenttab=".$_REQUEST['parenttab']."'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
 				exit;
 			}
 		}

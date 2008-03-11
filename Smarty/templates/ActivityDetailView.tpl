@@ -13,7 +13,6 @@
 -->*}
 <script type="text/javascript" src="modules/{$MODULE}/Calendar.js"></script>
 <script type="text/javascript" src="include/js/reflection.js"></script>
-<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
@@ -23,7 +22,7 @@
 <script>
 function tagvalidate()
 {ldelim}
-	if(document.getElementById('txtbox_tagfields').value != '')
+	if(trim(document.getElementById('txtbox_tagfields').value) != '')
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
@@ -144,7 +143,13 @@ function DeleteTag(id,recordid)
 							 <tr>
 								{if $LABEL.eventstatus neq ''}
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.eventstatus}</b></td>
-								<td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.eventstatus}</td>
+								<td class="cellInfo" align="left" nowrap valign="top">
+									{if $ACTIVITYDATA.eventstatus eq $APP.LBL_NOT_ACCESSIBLE}
+										<font color="red">{$ACTIVITYDATA.eventstatus}</font>
+										{else}
+											{$ACTIVITYDATA.eventstatus}
+									{/if}
+								</td>
 								{/if}
 								{if $LABEL.assigned_user_id neq ''}
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.assigned_user_id}</b></td>
@@ -155,7 +160,13 @@ function DeleteTag(id,recordid)
 							 <tr>
 								{if $LABEL.taskpriority neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.taskpriority}</b></td>
-                                                                <td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.taskpriority}</td>
+                                                                <td class="cellInfo" align="left" nowrap valign="top">
+									{if $ACTIVITYDATA.taskpriority eq $APP.LBL_NOT_ACCESSIBLE}
+										<font color="red" >{$ACTIVITYDATA.taskpriority}</font>
+									{else}
+										{$ACTIVITYDATA.taskpriority}
+									{/if}
+								</td>
 								{/if}
 								{if $LABEL.sendnotification neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.sendnotification}</b></td>
@@ -196,9 +207,13 @@ function DeleteTag(id,recordid)
                                         					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 					                                        <td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');dispLayer('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.reminder_time neq ''}
 										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');dispLayer('addEventAlarmUI');ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.recurringtype neq ''}
 										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');dispLayer('addEventRelatedtoUI');ghide('addEventRepeatUI');">{$MOD.LBL_LIST_RELATED_TO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -273,8 +288,12 @@ function DeleteTag(id,recordid)
 											<td width="30%" valign="top" align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>	
 											<td width="70%" valign="top" align=left>
 											{foreach item=contactname key=cntid from=$CONTACTS}
-	                                                                                {$contactname.0}&nbsp;{$contactname.1}<br>
-                                                                                        {/foreach}
+	                                        	{$contactname.0}
+	                                            {if $IS_PERMITTED_CNT_FNAME == '0'}
+	                                            	&nbsp;{$contactname.1}
+	                                            {/if}
+	                                            <br>
+                                            {/foreach}
 										</tr>
 									</table>
 									</div>
@@ -308,10 +327,18 @@ function DeleteTag(id,recordid)
 									</tr>
 									<tr>
 										{if $LABEL.taskstatus neq ''}
-                                                					<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskstatus}</td>
+											<td class="cellInfo" align="left" valign="top">
+											{if $ACTIVITYDATA.taskstatus eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                	<font color="red">{$ACTIVITYDATA.taskstatus}</font>
+											{else} {$ACTIVITYDATA.taskstatus}{/if}
+                                                					</td>
 										{/if}
 										{if $LABEL.taskpriority neq ''}		
-											<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskpriority}</td>
+											<td class="cellInfo" align="left" valign="top">
+											{if $ACTIVITYDATA.taskpriority eq $APP.LBL_NOT_ACCESSIBLE}
+											<font color="red">{$ACTIVITYDATA.taskpriority}</font>
+											{else}{$ACTIVITYDATA.taskpriority}{/if}
+											</td>
 										{/if}
 										<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 									</tr>
@@ -344,15 +371,23 @@ function DeleteTag(id,recordid)
                                                         </tr>
                                                      </table>
 						     <br>
+						     {if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') } 
 						     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr>
 								<td>
 									<table border="0" cellpadding="3" cellspacing="0" width="100%">
 									<tr>
 										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                                                                <td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a>
-										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;
-                                                                                <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+										{if $LABEL.sendnotification neq ''}
+                                                                                        {assign var='class_val' value='dvtUnSelectedCell'}
+	                                                                                <td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');dispLayer('addTaskAlarmUI');ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</td></a></td>
+										{else}
+                                                                                        {assign var='class_val' value='dvtSelectedCell'}
+                                                                                {/if}
+										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
+										{if ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
+                                                                                <td id="cellTabRelatedto" class={$class_val} align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');dispLayer('addTaskRelatedtoUI');ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+										{/if}
 
                                                                                 <td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 									</tr>
@@ -364,27 +399,32 @@ function DeleteTag(id,recordid)
                                                                 <!-- Notification UI -->
                                                                         <DIV id="addTaskAlarmUI" style="display:block;width:100%">
 									{if $LABEL.sendnotification neq ''}
+									{assign var='vision' value='none'}
                                                                         <table width="100%" cellpadding="5" cellspacing="0" border="0">
                                                                                 <tr>
                                                                                         <td width="30%" align=right><b>{$MOD.LBL_SENDNOTIFICATION}</b></td>
                                                                                         <td width="70%" align=left>{$ACTIVITYDATA.sendnotification}</td>
                                                                                 </tr>
                                                                         </table>
-									{/if}
+									{else}
+                                                                        {assign var='vision' value='block'}
+                                                                        {/if}
                                                                         </DIV>
-									<div id="addTaskRelatedtoUI" style="display:none;width:100%">
-									{if $LABEL.parent_id neq ''}
-                                                                        <table width="100%" cellpadding="5" cellspacing="0" border="0">
+									<div id="addTaskRelatedtoUI" style="display:{$vision};width:100%">
+									<table width="100%" cellpadding="5" cellspacing="0" border="0">
                                                                                 <tr>
+										{if $LABEL.parent_id neq ''}
                                                                                         <td width="30%" align=right><b>{$LABEL.parent_id}</b></td>
                                                                                         <td width="70%" align=left>{$ACTIVITYDATA.parent_name}</td>
+										{/if}
                                                                                 </tr>
                                                                                 <tr>
-                                                                                        <td align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
-											<td align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
+										{if $LABEL.contact_id neq ''}
+                                                                                        <td width="30%" align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
+											<td width="70%" align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
+										{/if}
                                                                                 </tr>
                                                                         </table>
-									{/if}
                                                                         </div>
 								</td>
 							</tr>
@@ -393,7 +433,8 @@ function DeleteTag(id,recordid)
 
                      	                      </td>
 					   </tr>
-                </tr>
+                </table>
+		{/if}
 		<tr>
 			<td style="padding:10px">
 		           <table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -416,39 +457,28 @@ function DeleteTag(id,recordid)
 			   </table>
 			</td>
 		</tr>
+		</form>
 	</table>
 	</td>
 	<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
 
+		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>
 			<td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
 		</tr>
 		<tr>
-                      	<td><div id="tagdiv" style="display:visible;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/></div></td>
+                      	<td><div id="tagdiv" style="display:visible;"><form method="POST" action="javascript:void(0);" onsubmit="return tagvalidate();"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="submit" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" /></form></div></td>
                 </tr>
 		<tr>
 			<td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 		</tr>
 		</table>
 		<!-- End Tag cloud display -->
-			<!-- Mail Merge-->
+		{/if}
 				<br>
-				{if $MERGEBUTTON eq 'permitted'}
-  				<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
-      				<tr>
-      					   <td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
-      				</tr>
-      				<tr style="height:25px">
-      						<td class="rightMailMergeContent">
-          						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
-          						<input class="crmbutton small create" value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input>
-      					  </td>
-      				</tr>
-  				</table>
-				{/if}
 			</td>
 		</tr>
 		</table>
@@ -492,7 +522,7 @@ getTagCloud();
 </script>
 </td>
 
-</tr></table></form>
+</tr></table>
 </td></tr></table>
 </td></tr></table>
 </td></tr></table>

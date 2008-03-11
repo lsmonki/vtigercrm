@@ -54,7 +54,6 @@ $the_script  = <<<EOQ
 function set_fieldfocus(errorMessage,oMiss_field){
 		alert("$err_missing_required_fields" + errorMessage);
 		oMiss_field.focus();	
-		exit();
 }
 
 function verify_data(form) {
@@ -99,18 +98,22 @@ function verify_data(form) {
 
 	if (isError == true) {
 		set_fieldfocus(errorMessage,oField_miss);
+		return false;
 	}
-	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
+	form.email1.value = trim(form.email1.value);
+	if (form.email1.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
 		alert("$the_emailid"+form.email1.value+"$email_field_is");
 		form.email1.focus();
 		return false;
 	}
-	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
+	form.email2.value = trim(form.email2.value);
+	if (form.email2.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
 		alert("$the_emailid"+form.email2.value+"$other_email_field_is");
 		form.email2.focus();
 		return false;
 	}
-	if (trim(form.yahoo_id.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (trim(form.yahoo_id.value) != "" && !(form.yahoo_id.value.indexOf('yahoo') > -1))) {
+	form.yahoo_id.value = trim(form.yahoo_id.value);
+	if (form.yahoo_id.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.yahoo_id.value) || (trim(form.yahoo_id.value) != "" && !(form.yahoo_id.value.indexOf('yahoo') > -1))) {
 		alert("$the_emailid"+form.yahoo_id.value+"$yahoo_email_field_is");
 		form.yahoo_id.focus();
 		return false;
@@ -118,7 +121,7 @@ function verify_data(form) {
 
 
 
-	if(! upload_filter("imagename", "jpg|gif|bmp|png") )
+	if(! upload_filter("imagename", "jpg|gif|bmp|png|JPG|GIF|BMP|PNG") )
 	{
 		form.imagename.focus();
 		return false;
@@ -130,11 +133,12 @@ function verify_data(form) {
 		if(trim(form.user_password.value) != trim(form.confirm_password.value))
 		{
 			set_fieldfocus("The password does't match",form.user_password);
+			return false;
 		}
 		check_duplicate();
 	}else
 	{
-		$('user_status').disabled = false;
+	//	$('user_status').disabled = false;
 		form.submit();
 	}
 }

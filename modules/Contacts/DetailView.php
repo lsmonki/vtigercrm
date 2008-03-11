@@ -53,10 +53,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
 
-global $theme;
+global $theme, $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Contact detail view");
 
@@ -72,7 +71,11 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if(useInternalMailer() == 1) 
 	$smarty->assign("INT_MAILER","true");
 
-$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$contact_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$contact_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$contact_name);
 
 $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
@@ -98,7 +101,9 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 
 if(isPermitted("Contacts","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
+
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -108,6 +113,10 @@ if(isPermitted("Contacts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+        if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
 	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
@@ -132,7 +141,7 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
-$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+$sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 $smarty->assign("accountid",$accountid);
@@ -141,12 +150,9 @@ if($singlepane_view == 'true')
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
-//added for email link in detailv view
-$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=13;";
-$queryres = $adb->query($querystr);
-$fieldid = $adb->query_result($queryres,0,'fieldid');
-$smarty->assign("FIELD_ID",$fieldid);
-
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");

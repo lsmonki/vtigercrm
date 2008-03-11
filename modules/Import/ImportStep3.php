@@ -27,6 +27,9 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/ImportMap.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
@@ -66,7 +69,6 @@ global $site_URL;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Upload Step 3");
 
@@ -98,7 +100,9 @@ $import_object_array = Array(
 				"Accounts"=>"ImportAccount",
 				"Contacts"=>"ImportContact",
 				"Potentials"=>"ImportOpportunity",
-				"Products"=>"ImportProduct"
+				"Products"=>"ImportProduct",
+				"HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -191,6 +195,13 @@ if (file_exists($_REQUEST['tmp_file']))
 $datarows = $ret_value['rows'];
 
 $ret_field_count = $ret_value['field_count'];
+
+//we have to get all picklist entries and add with the corresponding picklist table
+if(isset($datarows) && is_array($datarows))
+{
+        //This file will be included only once at the first time. Will not be included when we redirect from ImportSave
+        include("modules/Import/picklist_addition.php");
+}
 
 $saved_ids = array();
 

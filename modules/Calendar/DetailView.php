@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/calendarLayout.php');
 include_once 'modules/Calendar/header.php';
-global $mod_strings, $currentModule,$adb;
+global $mod_strings, $currentModule,$adb, $current_user;
 if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
@@ -41,8 +41,8 @@ $activity_mode = $_REQUEST['activity_mode'];
 
 if($activity_mode =='' || strlen($activity_mode) < 1)
 {
-	$query = "select activitytype from vtiger_activity where activityid=".$_REQUEST['record'];
-	$result = $adb->query($query);
+	$query = "select activitytype from vtiger_activity where activityid=?";
+	$result = $adb->pquery($query, array($_REQUEST['record']));
 	$actType = $adb->query_result($result,0,'activitytype');
 	if( $actType == 'Task')
 	{
@@ -107,7 +107,21 @@ foreach($act_data as $block=>$entry)
 		foreach($value as $label=>$field)
 		{
 			$fldlabel[$field['fldname']] = $label;
-			$finaldata[$field['fldname']] = $field['value'];
+			if($field['ui'] == 15 || $field['ui'] == 16 || $field['ui'] == 111)
+			{
+				foreach($field['options'] as $index=>$arr_val)
+				{
+					if($arr_val[2] == "selected")
+					$finaldata[$field['fldname']] = $arr_val[0];
+				}
+			}
+			else
+			{
+				$fldvalue = $field['value'];
+				if($field['fldname'] == 'description') { $fldvalue = nl2br($fldvalue); }
+				$finaldata[$field['fldname']] = $fldvalue;
+			}	
+			
 			$finaldata[$field['fldname'].'link'] = $field['link'];
 		}
 	}
@@ -157,7 +171,7 @@ if($activity_mode == 'Task')
 elseif($activity_mode == 'Events')
 {
 	$data['visibility'] = $finaldata['visibility'];
-	if($mod_strings[$finaldata['taskstatus']] != '')
+	if($mod_strings[$finaldata['eventstatus']] != '')
 		$data['eventstatus'] = $mod_strings[$finaldata['eventstatus']];
 	else
 		$data['eventstatus'] = $finaldata['eventstatus'];
@@ -175,8 +189,8 @@ elseif($activity_mode == 'Events')
 	else
 		$data['set_reminder'] = $mod_strings['LBL_NO'];
 	//To set recurring details
-	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
-	$res = $adb->query($query);
+	$query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
+	$res = $adb->pquery($query, array($focus->id));
 	$rows = $adb->num_rows($res);
 	if($rows != 0)
 	{
@@ -248,8 +262,8 @@ elseif($activity_mode == 'Events')
 		$data['recurringcheck'] = $mod_strings['LBL_NO'];
 		$data['repeat_month_str'] = '';
 	}
-	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
-	$result = $adb->query($sql);
+	$sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
+	$result = $adb->pquery($sql, array($focus->id));
 	$num_rows=$adb->num_rows($result);
 	$invited_users=Array();
 	for($i=0;$i<$num_rows;$i++)
@@ -261,6 +275,9 @@ elseif($activity_mode == 'Events')
 	$smarty->assign("INVITEDUSERS",$invited_users);
 	$related_array = getRelatedLists("Calendar", $focus);
 	$smarty->assign("CONTACTS",$related_array['Contacts']['entries']);
+	
+	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');
+	$smarty->assign("IS_PERMITTED_CNT_FNAME",$is_fname_permitted);
 
 
 }
@@ -268,7 +285,6 @@ elseif($activity_mode == 'Events')
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Calendar-Activities detail view");
 $category = getParentTab();

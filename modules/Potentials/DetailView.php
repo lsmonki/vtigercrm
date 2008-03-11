@@ -46,7 +46,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Potential detail view");
 
@@ -98,12 +97,13 @@ if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
-	$smarty->assign("BASE_ACCOUNT",getAccountName($focus->column_fields[account_id]));	
 }
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->display("DetailView.tpl");
 ?>

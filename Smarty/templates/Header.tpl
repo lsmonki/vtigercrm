@@ -13,7 +13,6 @@
 <html>
 <head>
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
-	<link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
@@ -38,7 +37,11 @@
 	<tr>
 		<td valign=top><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
 		<td width=100% align=center>
-		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee>		
+		{if $APP.$MODULE_NAME eq 'Dashboards'}
+		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT|escape}</marquee>
+		{else}
+                <marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT}</marquee>
+                {/if}		
 		</td>
 		<td class=small nowrap>
 			<table border=0 cellspacing=0 cellpadding=0>
@@ -104,6 +107,7 @@
 			<td style="height:19px;background-color:#ffffef" >
 				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 				<input type="hidden" name="module" value="Home" style="margin:0px">
+				<input type="hidden" name="parenttab" value="{$CATEGORY}" style="margin:0px">
 				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
 			</td>
 			<td style="background-color:#cccccc">
@@ -142,8 +146,7 @@
 <div id="calculator_cont" style="position:absolute; z-index:10000" ></div>
 	{include file="Clock.tpl"}
 
-
-<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
+<div id="qcform" style="position:absolute;width:500px;top:80px;left:450px;z-index:5000;"></div>
 
 <script>
 var gVTModule = '{$smarty.request.module}';
@@ -376,28 +379,14 @@ function getFormValidate(divValidate)
                var mm=dateelements[1]
                var yyyy=dateelements[2]
 
-               var currdate=new Date()
                var chkdate=new Date()
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-
-       	       chktime = new Date()
-	       chktime.setMinutes(minval)
-               chktime.setHours(hourval)
-               chktime.setYear(yyyy)
-               chktime.setMonth(mm-1)
-               chktime.setDate(dd)
-                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
-                        window.document.QcEditView[datefield].focus()
-                        return false
-                }
-                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
-                {
-                        window.document.QcEditView[timefield].focus()
-                        return false
-                }
-                else return true
+	       chkdate.setMinutes(minval)
+               chkdate.setHours(hourval)
+		if(!comparestartdate(chkdate)) return false;
+		
 
 	 }//end
 	return true;
@@ -463,7 +452,7 @@ function openwin()
 	{foreach name=trackinfo item=trackelements from=$TRACINFO}
 	<tr>
 		<td class="trackerListBullet small" align="center" width="12">{$smarty.foreach.trackinfo.iteration}</td>
-		<td class="trackerList small"> <a href="index.php?module={$trackelements.module_name}&action=DetailView&record={$trackelements.crmid}">{$trackelements.item_summary}</a> </td><td class="trackerList small">&nbsp;</td></tr>
+		<td class="trackerList small"> <a href="index.php?module={$trackelements.module_name}&action=DetailView&record={$trackelements.crmid}&parenttab={$CATEGORY}">{$trackelements.item_summary}</a> </td><td class="trackerList small">&nbsp;</td></tr>
 	{/foreach}
 	</table>
 </div>

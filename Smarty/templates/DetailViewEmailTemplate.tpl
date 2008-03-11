@@ -59,7 +59,7 @@
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_DESCRIPTION}</strong></td>
-						<td class="cellText small" valign=top>{$DESCRIPTION}</td>
+						<td class="cellText small" valign=top>&nbsp;{$DESCRIPTION}</td>
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_FOLDER}</strong></td>

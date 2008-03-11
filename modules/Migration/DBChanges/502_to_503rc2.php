@@ -103,6 +103,9 @@ ExecuteQuery("alter table vtiger_seproductsrel add column setype varchar(100)");
 //we have to update setype for all existing entries which will be NULL before execute the following query
 ExecuteQuery("update  vtiger_seproductsrel,vtiger_crmentity set vtiger_seproductsrel.setype=vtiger_crmentity.setype  where vtiger_crmentity.crmid=vtiger_seproductsrel.crmid");
 
+
+ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+
 //echo "<br><font color='red'>&nbsp; 5.0.2 ==> 5.0.3 Database changes has been done.</font><br>";
 
 $migrationlog->debug("\n\nDB Changes from 5.0.2 to 5.0.3 RC2 -------- Ends \n\n");

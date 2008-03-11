@@ -419,7 +419,7 @@ class jpgraph {
 				$ls_i = 0;
 				foreach ($datay as $key=>$value) {
 					if($ls_i != 0) $where .= ", ";
-					$where .= "'$key'";
+					$where .= "'".addslashes($key)."'";
 					$ls_i++;
 				}
 				$where .= ")";
@@ -741,7 +741,7 @@ class jpgraph {
 				$ss_i = 0;
 				foreach ($datax as $key=>$value) {
 					if($ss_i != 0) $where .= ", ";
-					$where .= "'$key'";
+					$where .= "'".addslashes($key)."'";
 					$ss_i++;
 				}
 				$where .= ")";
@@ -1011,7 +1011,7 @@ class jpgraph {
 				$ls_i = 0;
 				foreach ($legends as $key=>$value) {
 					if($ls_i != 0) $where .= ", ";
-					$where .= "'$key'";
+					$where .= "'".addslashes($key)."'";
 					$ls_i++;
 				}
 				$where .= ")";

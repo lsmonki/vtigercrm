@@ -14,8 +14,9 @@ global $adb;
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$query="UPDATE vtiger_inventorynotification set notificationsubject='".$_REQUEST['notifysubject']."', notificationbody='".$_REQUEST['notifybody']."' where notificationid=".$_REQUEST['record'];
-	$adb->query($query);	
+	$query="UPDATE vtiger_inventorynotification set notificationsubject=?, notificationbody=? where notificationid=?";
+	$params = array($_REQUEST['notifysubject'], $_REQUEST['notifybody'], $_REQUEST['record']);
+	$adb->pquery($query, $params);	
 }
 $loc = "Location: index.php?action=SettingsAjax&file=listinventorynotifications&module=Settings&directmode=ajax";
 header($loc);

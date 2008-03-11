@@ -99,18 +99,37 @@ function searchMapLocation(addressType)
         if (addressType == 'Main')
         {
 		if(fieldname.indexOf('lane') > -1)
-                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]))
+	                        mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('lane')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('pobox') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('pobox')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('city') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('city')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('city')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('city')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('state') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('state')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('state')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('state')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('country') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('country')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('country')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('country')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('code') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('code')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('code')]))
+	                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('code')]).innerHTML+' ';
+		}
         }
+	mapParameter = removeHTMLFormatting(mapParameter);
         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
 

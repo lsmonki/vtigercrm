@@ -16,7 +16,8 @@
 		<table border=0 cellspacing=0 cellpadding=5>
 		<tr>
 			<td align=left><a href="#" onclick="fetchContents('manage');"><img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" border=0 /></a></td>
-			<td class=small align=left><a href="#" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_SITES}</a></td>
+			<td class=small align=left><a href="#" onclick="fetchContents('manage');">{$MOD.LBL_MANAGE_SITES}</a>			     </td>
+			<td align="right"><input type="button" name="setdefault" value=" {$MOD.LBL_SET_DEFAULT_BUTTON}  " class="crmbutton small create" onClick="defaultMysites(this);"/>
 		</tr>
 		</table>
 			
@@ -35,9 +36,14 @@
 <td align=left width=90% >
 	<select id="urllist" name="urllist" style="width: 99%;" class="small" onChange="setSite(this);">
 	{foreach item=portaldetails key=sno from=$PORTALS}
-	<option value="{$portaldetails.portalurl}">{$portaldetails.portalname}</option>
+	{if $portaldetails.set_def eq 1}
+		<option selected value="{$portaldetails.portalid}">{$portaldetails.portalname}</option>
+	{else}
+		<option value="{$portaldetails.portalid}">{$portaldetails.portalname}</option>
+	{/if}
+	<!--<option value="{$portaldetails.portalurl}">{$portaldetails.portalname}</option>-->
 	{/foreach}
-	</select>
+	</select>	
 </td>
 </tr>
 <tr>

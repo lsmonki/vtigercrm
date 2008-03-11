@@ -10,7 +10,6 @@
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/Rss/Rss.js"></script>
-<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script>
 {literal}
@@ -57,6 +56,8 @@ function DeleteRssFeeds(id)
         	);
 	}
    }
+   else
+	alert(alert_arr.LBL_NO_FEEDS_SELECTED);	     	
 }
 function SaveRssFeeds()
 {
@@ -166,6 +167,7 @@ function SaveRssFeeds()
 	
 	
 	<div id="PopupLay" class="layerPopup">
+	<form onSubmit="SaveRssFeeds(); return false;">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 	<tr>
 	<td class="layerPopupHeading" align="left"><img src="{$IMAGE_PATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
@@ -192,10 +194,11 @@ function SaveRssFeeds()
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 	<tr>
 	<td align="center">
-	<input type="button" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="SaveRssFeeds();"/>&nbsp;&nbsp;
+	<input type="submit" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save"/>&nbsp;&nbsp;
 	</td>
 	</tr>
 	</table>
+	</form>
 	</div>
 
 <script type="text/javascript" language="Javascript">

@@ -9,15 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/effects.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/builder.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dragdrop.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/controls.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/slider.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
-<script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
 <script language="javascript">
 function getHomeActivities(mode,view)
 
@@ -85,7 +77,7 @@ function getHomeActivities(mode,view)
  		                                                                                <td style="padding-right:5px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td> 
  		                                                                        {/if} 
  		                                                                        {if $CHAT_DISPLAY eq 'true'} 
- 		                                                                                <td style="padding-right:5px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0></a></td>     
+ 		                                                                                <td style="padding-right:5px"><a href="javascript:;" onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0></a></td>     
  		                                                                        {/if} 
 									<td style="padding-right:5px"><img src="{$IMAGE_PATH}btnL3Tracker.gif" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border=0 onClick="fnvshobj(this,'tracker');"></td>
 								</tr>
@@ -128,7 +120,7 @@ function getHomeActivities(mode,view)
 							{if $tabledetail neq ''}
 								<div class="MatrixLayer" style="float:left;" id="{$tabledetail.Title.2}">
 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-								<tr style="cursor:move;height:20px;">
+								<tr class="headerrow">
 									<td align="left" class="homePageMatrixHdr" ><b>{$tabledetail.Title.1}</b></td>
 									<td align="right" class="homePageMatrixHdr" ><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 								</tr>
@@ -159,7 +151,7 @@ function getHomeActivities(mode,view)
 								<tr>
 									<td colspan="2" align="right" valign="bottom">
 									{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
-									 <a href="index.php?module={$modulename}&action=index&search_field=assigned_user_id&searchtype=BasicSearch&search_text={$CURRENTUSER}&query=true">{$APP.LBL_MORE}..</a>
+									 <a href="index.php?module={$modulename}&action=index&search_field=assigned_user_id&searchtype=BasicSearch&search_text={$CURRENTUSER}&query=true&viewname=all">{$APP.LBL_MORE}..</a>
 									{else}
 										&nbsp;	
 									{/if}
@@ -171,7 +163,7 @@ function getHomeActivities(mode,view)
 							{else}
 								<div class="MatrixLayer" style="float:left;width:93%;" id="homepagedb">
 									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
-										<tr style="cursor:move;">
+										<tr class="headerrow">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 										</tr>
@@ -204,6 +196,7 @@ function getHomeActivities(mode,view)
                         <div id="pendingActivities">
                                 {include file="pendingActivities.tpl"}
                         </div><br>
+{if $TAG_CLOUD_DISPLAY eq 'true'}
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 <tr>
 <td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
@@ -212,6 +205,7 @@ function getHomeActivities(mode,view)
 <td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 </tr>
 </table>
+{/if}
 
 
 
@@ -225,7 +219,7 @@ function getHomeActivities(mode,view)
 {literal}
 <script  language="javascript">
 Sortable.create("MainMatrix",
-{constraint:false,tag:'div',overlap:'horizontal',
+{constraint:false,tag:'div',overlap:'horizontal',handle:'headerrow',
 onUpdate:function(){
 //	alert(Sortable.serialize('MainMatrix')); 
 }

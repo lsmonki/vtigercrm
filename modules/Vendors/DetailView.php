@@ -32,7 +32,6 @@ global $app_strings,$mod_strings,$theme,$currentModule,$singlepane_view;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -78,14 +77,8 @@ if($singlepane_view == 'true')
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
-//added for email link in detailv view
-$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=13;";
-$queryres = $adb->query($querystr);
-$fieldid = $adb->query_result($queryres,0,'fieldid');
-$smarty->assign("FIELD_ID",$fieldid);
 
 $smarty->assign("SinglePane_View", $singlepane_view);
-
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

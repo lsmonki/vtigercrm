@@ -14,6 +14,7 @@ global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
 $record = $_REQUEST['record'];
+$parenttab = $_REQUEST['parenttab'];
 
 if($singlepane_view == 'true') $action = "DetailView";
 else $action = "CallRelatedList";
@@ -27,9 +28,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		if($id != '')
 		{
 			if($dest_mod == 'Products')
-				$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parentid"].",".$id.",'Contacts')");	
+				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parentid"], $id, 'Contacts'));	
 			elseif($dest_mod == 'Campaigns')
-				$adb->query("insert into vtiger_campaigncontrel values(".$id.",".$_REQUEST["parentid"].")");
+				$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($id, $_REQUEST["parentid"]));
 		}
 	}
 	$record = $_REQUEST["parentid"];
@@ -37,17 +38,17 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	if($dest_mod == 'Products')
-		$adb->query("insert into vtiger_seproductsrel values (".$_REQUEST["parid"].",".$_REQUEST["entityid"].",'Contacts')");
+		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Contacts'));
 	elseif($dest_mod == 'Campaigns')
-		$adb->query("insert into vtiger_campaigncontrel values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")");
+		$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($_REQUEST["entityid"], $_REQUEST["parid"]));
 	$record = $_REQUEST["parid"];
 }
 elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
 {	
-	$sql = "insert into vtiger_contpotentialrel values(".$record.",".$_REQUEST["pot_id"].")";
-	$adb->query($sql);
+	$sql = "insert into vtiger_contpotentialrel values(?,?)";
+	$adb->pquery($sql, array($record, $_REQUEST["pot_id"]));
 }
 
-header("Location: index.php?action=$action&module=Contacts&record=".$record);
+header("Location: index.php?action=$action&module=Contacts&record=$record&parenttab=$parenttab");
 
 ?>

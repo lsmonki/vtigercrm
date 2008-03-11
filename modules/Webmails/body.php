@@ -33,7 +33,7 @@ $status=imap_setflag_full($MailBox->mbox,$mailid,"\\Seen");
 $attach_tab=array();
 $email->loadMail($attach_tab);
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$email->charsets."\">\n";
-$subject = decode_header($email->subject);
+$subject = utf8_decode(utf8_encode(imap_utf8($email->subject)));
 $from = decode_header($email->from);
 $to = decode_header($email->to_header);
 $cc = decode_header($email->cc_header);
@@ -101,7 +101,7 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 //Need to put this along with the subject block*/
 echo $email->att;
 if(!$_REQUEST['fullview'])
-	echo '<div style="overflow:auto;height:400px;padding:5;">';
+	echo '<div style="overflow:auto;height:386px;width:737px;padding:5;">';
 else
 	echo '<div style="padding:5;">';
 echo $content['body'];
@@ -158,12 +158,5 @@ echo '</div>';
 //test ended by Richie
 
 imap_close($MailBox->mbox);
-function decode_header($string){
-	$elements = imap_mime_header_decode($string);
-	for ($i=0; $i<count($elements); $i++) {
-    		$result .= $elements[$i]->text;
-	}
-	return $result;
-}
 
 ?>

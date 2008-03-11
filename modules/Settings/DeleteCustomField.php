@@ -18,16 +18,16 @@ $colName = $_REQUEST["colName"];
 $uitype = $_REQUEST["uitype"];
 
 //Deleting the CustomField from the Custom Field Table
-$query='delete from vtiger_field where fieldid="'.$id.'"';
-$adb->query($query);
+$query='delete from vtiger_field where fieldid=?';
+$adb->pquery($query, array($id));
 
 //Deleting from vtiger_profile2field table
-$query='delete from vtiger_profile2field where fieldid="'.$id.'"';
-$adb->query($query);
+$query='delete from vtiger_profile2field where fieldid=?';
+$adb->pquery($query, array($id));
 
 //Deleting from vtiger_def_org_field table
-$query='delete from vtiger_def_org_field where fieldid="'.$id.'"';
-$adb->query($query);
+$query='delete from vtiger_def_org_field where fieldid=?';
+$adb->pquery($query, array($id));
 
 //Drop the column in the corresponding module table
 $delete_module_tables = Array(
@@ -46,36 +46,40 @@ $delete_module_tables = Array(
 				"Campaigns"=>"vtiger_campaignscf",
 			     );
 
-$dbquery = 'alter table '.$delete_module_tables[$fld_module].' drop column '.$colName;
-$adb->query($dbquery);
+$dbquery = 'alter table '. mysql_real_escape_string($delete_module_tables[$fld_module]) .' drop column '. mysql_real_escape_string($colName);
+$adb->pquery($dbquery, array());
 
 //To remove customfield entry from vtiger_field table
-$dbquery = 'delete from vtiger_field where tablename= "'.$delete_module_tables[$fld_module].'" and fieldname="'.$colName.'"';
-
-$adb->query($dbquery);
+$dbquery = 'delete from vtiger_field where tablename= ? and fieldname=?';
+$adb->pquery($dbquery, array($delete_module_tables[$fld_module], $colName));
 //we have to remove the entries in customview and report related tables which have this field ($colName)
-$adb->query("delete from vtiger_cvcolumnlist where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_cvstdfilter where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_cvadvfilter where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_selectcolumn where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_relcriteria where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_reportsortcol where columnname like '%".$colName."%'");
-$adb->query("delete from vtiger_reportdatefilter where datecolumnname like '%".$colName."%'");
-$adb->query("delete from vtiger_reportsummary where columnname like '%".$colName."%'");
+$adb->pquery("delete from vtiger_cvcolumnlist where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_cvstdfilter where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_cvadvfilter where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_selectcolumn where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_relcriteria where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_reportsortcol where columnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_reportdatefilter where datecolumnname like ?", array('%'.$colName.'%'));
+$adb->pquery("delete from vtiger_reportsummary where columnname like ?", array('%'.$colName.'%'));
 
 
 //Deleting from convert lead mapping vtiger_table- Jaguar
 if($fld_module=="Leads")
 {
-	$deletequery = 'delete from vtiger_convertleadmapping where leadfid='.$id;
-	$adb->query($deletequery);
+	$deletequery = 'delete from vtiger_convertleadmapping where leadfid=?';
+	$adb->pquery($deletequery, array($id));
+}elseif($fld_module=="Accounts" || $fld_module=="Contacts" || $fld_module=="Potentials")
+{
+	$map_del_id = array("Accounts"=>"accountfid","Contacts"=>"contactfid","Potentials"=>"potentialfid");
+	$map_del_q = "update vtiger_convertleadmapping set ".$map_del_id[$fld_module]."=0 where ".$map_del_id[$fld_module]."=?";
+	$adb->pquery($map_del_q, array($id));
 }
 
 //HANDLE HERE - we have to remove the table for other picklist type values which are text area and multiselect combo box 
 if($uitype == 15)
 {
-	$deltablequery = 'drop table '.$colName;
-	$adb->query($deltablequery);
+	$deltablequery = 'drop table vtiger_'.mysql_real_escape_string($colName);
+	$adb->pquery($deltablequery, array());
 }
 
 

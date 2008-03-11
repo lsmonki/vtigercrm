@@ -11,24 +11,35 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('database/DatabaseConnection.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 global $current_language, $currentModule;
 
 if(isset($_REQUEST['fld_module']) && $_REQUEST['fld_module'] != '')
+{
 	$fld_module = $_REQUEST['fld_module'];
-else	
+	$roleid = $_REQUEST['roleid'];
+}
+else
+{
 	$fld_module = 'Potentials';
+	$roleid='H2';
+}
 
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
 	$uitype = $_REQUEST['uitype'];
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MODULE_LISTS",getPickListModules());
+$smarty->assign("ROLE_LISTS",getrole2picklist());
 
-$picklists_entries = getUserFldArray($fld_module);
+$picklists_entries = getUserFldArray($fld_module,$roleid);
+
+$available_module_picklist = get_available_module_picklist($picklists_entries);
+$smarty->assign("ALL_LISTS",$available_module_picklist);
+
+
 if((sizeof($picklists_entries) %3) != 0)
 	$value = (sizeof($picklists_entries) + 3 - (sizeof($picklists_entries))%3); 
 else
@@ -49,6 +60,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("UITYPE", $uitype);
+$smarty->assign("SEL_ROLEID",$roleid);
+$smarty->assign("SEL_MODULE",$fld_module);
 
 if($_REQUEST['directmode'] != 'ajax')
 	$smarty->display("Settings/PickList.tpl");
@@ -61,13 +74,15 @@ else
 	 *  			$fieldlist = Array(Array('fieldlabel'=>$fieldlabel,'generatedtype'=>$generatedtype,'columnname'=>$columnname,'fieldname'=>$fieldname,'value'=>picklistvalues))	
 	 */
 
-function getUserFldArray($fld_module)
+function getUserFldArray($fld_module,$roleid)
 {
 	global $adb;
 	$user_fld = Array();
 	$tabid = getTabid($fldmodule);
-	$query = "select fieldlabel,generatedtype,columnname,fieldname,uitype from vtiger_field where displaytype = 1 and (tabid = ".getTabid($fld_module)." AND uitype IN (15,16, 111,33)) OR (tabid = ".getTabid($fld_module)." AND fieldname='salutationtype')";
-	$result = $adb->query($query);
+	$query="select vtiger_field.fieldlabel,vtiger_field.columnname,vtiger_field.fieldname, vtiger_field.uitype, vtiger_role2picklist.* from vtiger_field inner join vtiger_picklist on vtiger_field.fieldname = vtiger_picklist.name inner join vtiger_role2picklist on vtiger_role2picklist.picklistid = vtiger_picklist.picklistid where displaytype in(1,5) and vtiger_field.tabid=? and vtiger_field.uitype in (15,16,111,55,33) or  (vtiger_field.tabid=? and fieldname='salutationtype' and fieldname !='vendortype') and vtiger_role2picklist.roleid=? group by vtiger_field.fieldname order by vtiger_picklist.picklistid ASC";
+	//$query = "select fieldlabel,generatedtype,columnname,fieldname,uitype from vtiger_field where displaytype = 1 and (tabid = ".getTabid($fld_module)." AND uitype IN (15,16, 111,33)) OR (tabid = ".getTabid($fld_module)." AND fieldname='salutationtype')";
+	$params = array(getTabid($fld_module), getTabid($fld_module), $roleid);
+	$result = $adb->pquery($query, $params);
 	$noofrows = $adb->num_rows($result);
     if($noofrows > 0)
     {
@@ -85,7 +100,7 @@ function getUserFldArray($fld_module)
 					$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
 					$user_fld['fieldname'] = $adb->query_result($result,$i,"fieldname");	
 					$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
-					$user_fld['value'] = getPickListValues($user_fld['fieldname']); 
+					$user_fld['value'] = getPickListValues($user_fld['fieldname'],$roleid); 
 					$fieldlist[] = $user_fld;
 				}
 			}
@@ -96,7 +111,7 @@ function getUserFldArray($fld_module)
 					$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
 					$user_fld['fieldname'] = $adb->query_result($result,$i,"fieldname");	
 					$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
-					$user_fld['value'] = getPickListValues($user_fld['fieldname']); 
+					$user_fld['value'] = getPickListValues($user_fld['fieldname'],$roleid); 
 					$fieldlist[] = $user_fld;
 			}
     	}
@@ -110,11 +125,11 @@ function getUserFldArray($fld_module)
 	 *  			$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)	
 	 */
 
-function getPickListValues($tablename)
+function getPickListValues($tablename,$roleid)
 {
-	global $adb;	
-	$query = "select * from vtiger_".$tablename." order by sortorderid";
-	$result = $adb->query($query);
+	global $adb;
+	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";
+	$result = $adb->pquery($query, array($roleid));
 	$fldVal = Array();
 	while($row = $adb->fetch_array($result))
 	{
@@ -130,11 +145,32 @@ function getPickListModules()
 {
 	global $adb;
 	$query = 'select distinct vtiger_field.fieldname,vtiger_field.tabid,tablabel,uitype from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,16, 111,33) and vtiger_field.tabid != 29 order by vtiger_field.tabid ASC';
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, array());
 	while($row = $adb->fetch_array($result))
 	{
 		$modules[$row['tabid']] = $row['tablabel']; 
 	}
 	return $modules;
+}
+function getrole2picklist()
+{
+	global $adb;
+	$query = "select rolename,roleid from vtiger_role where roleid not in('H1') order by roleid";
+	$result = $adb->pquery($query, array());
+	while($row = $adb->fetch_array($result))
+	{
+		$role[$row['roleid']] = $row['rolename'];
+	}
+	return $role;
+
+}
+function get_available_module_picklist($picklist_details)
+{
+	$avail_pick_values = $picklist_details;
+	foreach($avail_pick_values as $key => $val)
+	{
+		$module_pick[$avail_pick_values[$key]['fieldname']] = getTranslatedString($avail_pick_values[$key]['fieldlabel']);
+	}
+	return $module_pick;	
 }
 ?>

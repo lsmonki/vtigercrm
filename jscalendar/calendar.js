@@ -1293,7 +1293,7 @@ Calendar.prototype.showAt = function (x, y) {
 Calendar.prototype.showAtElement = function (el, opts) {
 	var self = this;
 	var p = Calendar.getAbsolutePos(el);
-	if (!opts || typeof opts != "string") {
+	if (!opts || opts == "Br" || typeof opts != "string") {
 		this.showAt(p.x, p.y + el.offsetHeight);
 		return true;
 	}

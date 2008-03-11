@@ -137,16 +137,14 @@ class ImportOpportunity extends Potentials {
 		$query = '';
 
 		// if user is defining the vtiger_account id to be associated with this contact..
-		$acc_name = trim(addslashes($acc_name));
+		$acc_name = trim($acc_name);
 
 		//Modified the query to get the available account only ie., which is not deleted
-		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname=? and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+		$this->log->info($query);
+		$result = $adb->pquery($query, array($acc_name));
 
-                $this->log->info($query);
-
-                $result = $adb->query($query);
-
-                $row = $this->db->fetchByAssoc($result, -1, false);
+         $row = $this->db->fetchByAssoc($result, -1, false);
 
 		$adb->println("fetched account");
 		$adb->println($row);
@@ -207,12 +205,12 @@ class ImportOpportunity extends Potentials {
 			return; 
 		}
 
-		$campaign_name = trim(addslashes($campaign_name));
+		$campaign_name = trim($campaign_name);
 
 		//Query to get the available campaign which is not deleted
-		$query = "select campaignid from vtiger_campaign inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid WHERE vtiger_campaign.campaignname='{$campaign_name}' and vtiger_crmentity.deleted=0";
+		$query = "select campaignid from vtiger_campaign inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid WHERE vtiger_campaign.campaignname=? and vtiger_crmentity.deleted=0";
 
-		$campaignid = $adb->query_result($adb->query($query),0,'campaignid');
+		$campaignid = $adb->query_result($adb->pquery($query, array($campaign_name)),0,'campaignid');
 
 		if($campaignid == '' || !isset($campaignid))
 			$campaignid = 0;
@@ -261,10 +259,7 @@ class ImportOpportunity extends Potentials {
 		$this->db = new PearDatabase();
 
 		$this->db->println("IMP ImportOpportunity");
-		$colf = getColumnFields("Potentials");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
-		
+		$this->initImportableFields("Potentials");		
 		
 		$this->db->println($this->importable_fields);
 	}
